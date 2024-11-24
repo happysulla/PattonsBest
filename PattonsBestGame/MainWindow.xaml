@@ -5,8 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Pattons_Best"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
-    </Grid>
+        Name="myWindowMain" IsEnabled="False" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" ResizeMode="CanResizeWithGrip" WindowStyle="None"
+        MinWidth="352" MinHeight="597" MaxWidth="352" MaxHeight="597" Cursor="Wait" Visibility="Hidden">
 </Window>
