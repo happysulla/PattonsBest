@@ -2,13 +2,13 @@
 using System.Collections;
 using System.Text;
 
-namespace BarbarianPrince
+namespace Pattons_Best
 {
     //-------------------------------------------------------------------
     [Serializable]
     public class Stack : IStack
     {
-        public ITerritory Territory { get; set; } = null;
+        public ITerritory Territory { get; set; }
         public IMapItems MapItems { get; set; } = new MapItems();
         public Stack(ITerritory t)
         {

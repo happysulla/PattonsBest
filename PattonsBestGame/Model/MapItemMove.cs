@@ -10,23 +10,23 @@ namespace Pattons_Best
    public class MapItemMove : IMapItemMove
    {
       public bool CtorError { get; } = false;
-      public IMapItem MapItem { set; get; } = null;        // Represents the map item that is being moved
-      public ITerritory OldTerritory { set; get; } = null; // Represents the old territory that the MapItem is being moved from.
-      public ITerritory NewTerritory { set; get; } = null; // Represents the new territory that the MapItem is being moved to.
-      public IMapPath BestPath { set; get; } = null;
+      public IMapItem MapItem { set; get; }         // Represents the map item that is being moved
+      public ITerritory OldTerritory { set; get; }  // Represents the old territory that the MapItem is being moved from.
+      public ITerritory NewTerritory { set; get; }  // Represents the new territory that the MapItem is being moved to.
+      public IMapPath BestPath { set; get; }
       //------------------------------------------------------------------------------
-      public MapItemMove() // default constructor
-      {
-      }
-      public MapItemMove(ITerritory oldT, ITerritory newT)
-      {
-         OldTerritory = oldT;
-         NewTerritory = newT;
-      }
+      //public MapItemMove() // default constructor
+      //{
+      //}
+      //public MapItemMove(ITerritory oldT, ITerritory newT)
+      //{
+      //   OldTerritory = oldT;
+      //   NewTerritory = newT;
+      //}
       public MapItemMove(ITerritories territories, IMapItem movingMapItem, ITerritory newTerritory) // Do not move into overstacked region
       {
          MapItem = movingMapItem;
-         OldTerritory = movingMapItem.Territory;
+         OldTerritory = movingMapItem.TerritoryCurrent;
          BestPath = GetBestPath(territories, OldTerritory, newTerritory, 100);
          if (null == BestPath)
          {
@@ -50,13 +50,13 @@ namespace Pattons_Best
          NewTerritory = mim.NewTerritory;
          BestPath = new MapPath(mim.BestPath);
       }
-      public MapItemMove(IMapItem movingMapItem, ITerritory oldTerritory, ITerritory newTerritory, IMapPath bestPath)
-      {
-         MapItem = movingMapItem;
-         OldTerritory = oldTerritory;
-         NewTerritory = newTerritory;
-         BestPath = new MapPath(bestPath);
-      }
+      //public MapItemMove(IMapItem movingMapItem, ITerritory oldTerritory, ITerritory newTerritory, IMapPath bestPath)
+      //{
+      //   MapItem = movingMapItem;
+      //   OldTerritory = oldTerritory;
+      //   NewTerritory = newTerritory;
+      //   BestPath = new MapPath(bestPath);
+      //}
       //------------------------------------------------------------------------------
       static public double GetDistance(ITerritory startT, ITerritory endT)
       {
@@ -71,7 +71,7 @@ namespace Pattons_Best
       {
          IMapPaths paths = new MapPaths();
          if (moveFactor < 1)
-            return null;
+            return new MapPath(endT.Name);
          IMapPaths adjPaths = new MapPaths();
          if (startT.Name == endT.Name)
          {
@@ -242,7 +242,7 @@ namespace Pattons_Best
       private readonly ArrayList myList;
       public MapItemMoves() { myList = new ArrayList(); }
       public void Add(IMapItemMove mim) { myList.Add(mim); }
-      public IMapItemMove RemoveAt(int index)
+      public IMapItemMove? RemoveAt(int index)
       {
          IMapItemMove mim = (IMapItemMove)myList[index];
          myList.RemoveAt(index);
@@ -265,7 +265,7 @@ namespace Pattons_Best
          }
          return null;
       }
-      public IMapItemMove Remove(IMapItem mi)
+      public IMapItemMove? Remove(IMapItem mi)
       {
          foreach (object o in myList)
          {

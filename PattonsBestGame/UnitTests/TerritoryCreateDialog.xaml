@@ -1,0 +1,33 @@
+﻿<Window x:Class="Pattons_Best.TerritoryCreateDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Create Territory Dialog" Height="199" Width="576">
+    <Grid RenderTransformOrigin="0.499,0.526" HorizontalAlignment="Center" Width="556" Margin="0,0,0,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Label Width="120" Content="Choose a name:"/>
+            <TextBox x:Name="myTextBoxName" Margin="0,4,-1,0" VerticalAlignment="Top" Width="412"/>
+        </StackPanel>
+        <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Width="94" VerticalAlignment="Center" Height="26" Margin="12,0,0,0">Choose a type:</Label>
+      <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
+      </StackPanel>
+      <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal" Width="357">
+      </StackPanel>
+        <Button Grid.Row="5" HorizontalAlignment="Center" Margin="0,13,0,0" Click="OkButton_Click" Width="70" Height="20" VerticalAlignment="Top">OK</Button>
+        <Button Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" Margin="0,13,0,0" IsCancel="True" Width="70" Height="20" VerticalAlignment="Top">Cancel</Button>
+    </Grid>
+</Window>

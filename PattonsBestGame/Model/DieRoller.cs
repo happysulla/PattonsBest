@@ -21,34 +21,35 @@ namespace Pattons_Best
       private const double ACCELERATION_RATIO = 0.05;    // how fast the animation decelerates
       private const double BUTTON_BOARDER = 15;         // add for the button border
       private const double ZOOM_DICE = 1.707;
-      private RollEndCallback myCallbackEndRoll = null;
-      private LoadEndCallback myCallbackEndLoad = null;
+      private RollEndCallback? myCallbackEndRoll;
+      private LoadEndCallback myCallbackEndLoad;
       private int myDieRollResults = 0;
       public bool CtorError { get; } = false;
       //-----------------------------------------------------------
-      private Canvas myCanvas = null;
-      public List<Button> theDice = null;
+      private Canvas myCanvas;
+      public List<Button> theDice = new List<Button>();
       private int myLoadedCount = 0;
       private Mutex myMutex = new Mutex();
       public Mutex DieMutex { get=>myMutex; }
       //-----------------------------------------------------------
-      public DieRoller(Canvas c, LoadEndCallback callback = null)
+      public DieRoller(Canvas? c, LoadEndCallback? callback = null)
       {
-         myCallbackEndLoad = callback;
-         myCanvas = c;
-         if (null == theDice)
+         myCallbackEndLoad = callback ?? throw new ArgumentNullException(nameof(callback));
+         myCanvas = c ?? throw new ArgumentNullException(nameof(c));
+         if (false == ReadDiceXml(c))
          {
-            theDice = new List<Button>();
-            if (false == ReadDiceXml(c))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "DiceRoller() ReadDiceXml() return false");
-               CtorError = true;
-            }
+            Logger.Log(LogEnum.LE_ERROR, "DiceRoller(): ReadDiceXml() return false");
+            CtorError = true;
          }
       }
       //-----------------------------------------------------------
       public void HideDie()
       {
+         if( null == theDice)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "HideDie(): theDice=null");
+            return;
+         }
          foreach (Button b in theDice)
          {
             b.Visibility = Visibility.Hidden;
@@ -57,6 +58,11 @@ namespace Pattons_Best
       }
       public int RollStationaryDie(Canvas c, RollEndCallback cb)
       {
+         if (null == theDice)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "RollStationaryDie(): theDice=null");
+            return 0;
+         }
          myDieRollResults = 0;
          myCallbackEndRoll = cb;
          ScrollViewer sv = (ScrollViewer)c.Parent;
@@ -75,6 +81,7 @@ namespace Pattons_Best
       }
       public int RollStationaryDice(Canvas c, RollEndCallback cb)
       {
+
          myDieRollResults = 0;
          myCallbackEndRoll = cb;
          ScrollViewer sv = (ScrollViewer)c.Parent;
@@ -186,12 +193,12 @@ namespace Pattons_Best
       private bool ReadDiceXml(Canvas c)
       {
          IMapItems mapItems = new MapItems();
-         XmlTextReader reader = null;
+         string filename = ConfigFileReader.theConfigDirectory + "DiceRolls.xml";
          try
          {
             // Load the reader with the data file and ignore all white space nodes.
-            string filename = ConfigFileReader.theConfigDirectory + "DiceRolls.xml";
-            reader = new XmlTextReader(filename) { WhitespaceHandling = WhitespaceHandling.None };
+
+            XmlTextReader reader = new XmlTextReader(filename) { WhitespaceHandling = WhitespaceHandling.None };
             while (reader.Read())
             {
                if (reader.Name == "DiceRoll")
@@ -237,13 +244,8 @@ namespace Pattons_Best
          } // try
          catch (Exception e)
          {
-            Console.WriteLine("Territory.CreateTerritories(): Exception:  e.Message={0} while reading reader.Name={1}", e.Message, reader.Name);
+            Console.WriteLine("Territory.CreateTerritories(): Exception:  e.Message={0} while reading filename={1}", e.Message, filename);
             return false;
-         }
-         finally
-         {
-            if (reader != null)
-               reader.Close();
          }
       }
       private int RollStationaryDie(IMapPoint mp, int randomNum)

@@ -5,6 +5,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using Microsoft.Win32;
 using System.Xml.Serialization;
+using System.Xml;
+using System.Reflection.PortableExecutable;
 
 namespace Pattons_Best
 {
@@ -13,30 +15,44 @@ namespace Pattons_Best
       public static string theGamesDirectory = "";
       public static bool theIsCheckFileExist = false;
       //--------------------------------------------------
-      public static string AssemblyDirectory
+      public static string? AssemblyDirectory
       {
          get
          {
             string codeBase = System.Reflection.Assembly.GetExecutingAssembly().Location;
             UriBuilder uri = new UriBuilder(codeBase);
-            string path = Uri.UnescapeDataString(uri.Path);
+            string? path = Uri.UnescapeDataString(uri.Path);
+            if (null == path)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "AssemblyDirectory(): path=null for codeBase=" + codeBase);
+               return null;
+            }
             return Path.GetDirectoryName(path);
          }
       }
       //--------------------------------------------------
-      public static IGameInstance OpenGame()
+      public static IGameInstance? OpenGame()
       {
-         FileStream fileStream = null;
+         IGameInstance? gi = null;
+         FileStream? fileStream = null;
          try
          {
             if (false == Directory.Exists(theGamesDirectory)) // create directory if does not exists
                Directory.CreateDirectory(theGamesDirectory);
             string filename = theGamesDirectory + "Checkpoint.bpg";
             fileStream = new FileStream(filename, FileMode.Open);
-            BinaryFormatter formatter = new BinaryFormatter();
-            IGameInstance gi = (GameInstance)formatter.Deserialize(fileStream);
-            Logger.Log(LogEnum.LE_GAME_INIT, "OpenGame(): gi=" + gi.ToString());
-            fileStream.Close();
+            XmlSerializer serializer = new XmlSerializer(typeof(GameInstance)); // read from file
+            if( null != serializer )
+            {
+               gi = (GameInstance)serializer.Deserialize(fileStream);
+               if( null != gi )
+                  Logger.Log(LogEnum.LE_GAME_INIT, "OpenGame(): gi=" + gi.ToString());
+               fileStream.Close();
+            }
+            else
+            {
+               Logger.Log(LogEnum.LE_ERROR, "OpenGame(): serializer=null");
+            }
             return gi;
          }
          catch (Exception e)
@@ -65,9 +81,10 @@ namespace Pattons_Best
          {
             string filename = theGamesDirectory + "Checkpoint.bpg";
             fileStream = File.OpenWrite(filename);
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(fileStream, gi);
-            fileStream.Close();
+            XmlWriter writer = XmlWriter.Create (fileStream);
+            XmlSerializer serializer = new XmlSerializer(typeof(GameInstance));
+            serializer.Serialize(writer, gi);
+            writer.Close();
             theIsCheckFileExist = true;
             return true;
          }
@@ -81,7 +98,7 @@ namespace Pattons_Best
          }
       }
       //--------------------------------------------------
-      public static IGameInstance OpenGameFromFile()
+      public static IGameInstance? OpenGameFromFile()
       {
          try
          {
@@ -94,9 +111,10 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "OpenGameFromFile(): path=" + theGamesDirectory + " e=" + e.ToString());
             return null;
          }
-         FileStream fileStream = null;
+         FileStream? fileStream = null;
          try
          {
+            IGameInstance? gi = null;
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.InitialDirectory = theGamesDirectory;
             dlg.RestoreDirectory = true;
@@ -104,13 +122,21 @@ namespace Pattons_Best
             if (true == dlg.ShowDialog())
             {
                fileStream = new FileStream(dlg.FileName, FileMode.Open);
-               XmlSerializer formatter = new XmlSerializer();
-               IGameInstance gi = (GameInstance)formatter.Deserialize(fileStream);
-               Logger.Log(LogEnum.LE_GAME_INIT, "OpenGameFromFile(): gi=" + gi.ToString());
-               fileStream.Close();
-               theGamesDirectory = Path.GetDirectoryName(dlg.FileName); // save off the directory user chosen
-               theGamesDirectory += "\\";
-               Directory.SetCurrentDirectory(AssemblyDirectory);
+               XmlSerializer formatter = new XmlSerializer(typeof(GameInstance));
+               if (null != formatter)
+               {
+                  XmlReader xw = XmlReader.Create(fileStream);
+                  gi = (GameInstance)formatter.Deserialize(xw);
+                  if( null == gi )
+                  {
+
+                  }
+                  Logger.Log(LogEnum.LE_GAME_INIT, "OpenGameFromFile(): gi=" + gi.ToString());
+                  fileStream.Close();
+                  theGamesDirectory = Path.GetDirectoryName(dlg.FileName); // save off the directory user chosen
+                  theGamesDirectory += "\\";
+                  Directory.SetCurrentDirectory(AssemblyDirectory);
+               }
                return gi;
             }
          }
@@ -120,7 +146,11 @@ namespace Pattons_Best
             if (null != fileStream)
                fileStream.Close();
          }
-         Directory.SetCurrentDirectory(AssemblyDirectory);
+         string? path = AssemblyDirectory;
+         if( null == path )
+            Logger.Log(LogEnum.LE_ERROR, "OpenGameFromFile(): AssemblyDirectory=null");
+         else
+            Directory.SetCurrentDirectory(path);
          return null;
       }
       //--------------------------------------------------
@@ -147,9 +177,10 @@ namespace Pattons_Best
             if (true == dlg.ShowDialog())
             {
                fileStream = File.OpenWrite(theGamesDirectory + filename);
-               BinaryFormatter formatter = new BinaryFormatter();
-               formatter.Serialize(fileStream, gi);
-               fileStream.Close();
+               XmlWriter writer = XmlWriter.Create(fileStream);
+               XmlSerializer serializer = new XmlSerializer(typeof(GameInstance)); // write to file
+               serializer.Serialize(writer, gi);
+               writer.Close();
                theGamesDirectory = Path.GetDirectoryName(dlg.FileName); // save off the directory user chosen
                theGamesDirectory += "\\";
             }

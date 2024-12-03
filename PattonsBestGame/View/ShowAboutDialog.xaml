@@ -1,0 +1,35 @@
+﻿<Window x:Class="Pattons_Best.ShowAboutDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Pattons_Best"
+        mc:Ignorable="d"
+        Name="myAboutDialog"
+        Title="About Barbarian Prince" MinHeight="400" MinWidth="400" MaxHeight="800" MaxWidth="800" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" ResizeMode="NoResize" Topmost="True">
+    <Grid>
+      <Grid.RowDefinitions>
+         <RowDefinition Height="Auto"></RowDefinition>
+         <RowDefinition Height="Auto"></RowDefinition>
+         <RowDefinition Height="Auto"></RowDefinition>
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+      </Grid.ColumnDefinitions>
+      <StackPanel Name="myStackPanelHeader" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center"  HorizontalAlignment="Left" >
+         <TextBox Name="myTextBox" Width="Auto" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" SelectionTextBrush="{x:Null}"  Margin="0,0,10,0" >
+            Digital Version: 1.0 Date: July 10, 2024
+         </TextBox>
+         <TextBlock TextWrapping="Wrap" Width="Auto" Foreground="{x:Null}" >
+            <Hyperlink NavigateUri="https://github.com/happysulla/BarbarianPrince" RequestNavigate="Hyperlink_RequestNavigate">  GitHub  </Hyperlink>
+         </TextBlock>
+      </StackPanel>
+      <TextBlock  x:Name="myTextBlock" Grid.Row="1" TextWrapping="Wrap" Width="Auto" >
+         <LineBreak/>
+          <Italic>1981 Charles S. Roberts Best Fantasy Board Game Winner:</Italic> Barbarian Prince is a solitaire game of heroic adventure in a forgotten age of barbarism and sorcery. The turns takes you through a sequence of encounters
+          which is different each time you play the game. For each encounter, you as the Barbarian Prince Cal Arath must make the decisions which will make your quest successful - or may cost you your life.
+      </TextBlock>
+      <StackPanel Name="myStackPanelButtons" Grid.Row="2" Grid.ColumnSpan="1"  Orientation="Horizontal" VerticalAlignment="Center"  HorizontalAlignment="Center" Margin="5,5,5,5" >
+         <Button x:Name="myButtonOK" HorizontalAlignment="Center" Width="70" Height="30" VerticalAlignment="Top" Margin="0,10,0,0" FontSize="14" Click="ButtonOk_Click" IsDefault="True">OK</Button>
+      </StackPanel>
+   </Grid>
+</Window>

@@ -15,11 +15,11 @@ namespace Pattons_Best
    public class MapImage : IMapImage
    {
       public static string theImageDirectory = "";      
-      public System.Windows.Media.Imaging.BitmapImage myBitmapImage = null;
+      public System.Windows.Media.Imaging.BitmapImage? myBitmapImage = null;
       public string Name { get; set; } = "";
       public bool IsAnimated { get; set; } = false;
-      public Image ImageControl { get; set; } = null;
-      public ImageAnimationController AnimationController { get; set; } = null;
+      public Image? ImageControl { get; set; } = null;
+      public ImageAnimationController AnimationController { get; set; }
       //--------------------------------------------
       public MapImage()
       {
@@ -35,6 +35,11 @@ namespace Pattons_Best
             myBitmapImage.UriSource = new Uri(fullImagePath, UriKind.Absolute);
             myBitmapImage.EndInit();
             ImageControl = new Image { Source = myBitmapImage, Stretch = Stretch.Fill, Name = imageName };
+            if( null == ImageControl)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MapImage(): 0 imageName=" + imageName );
+               return;
+            }
             ImageBehavior.SetAnimatedSource(ImageControl, myBitmapImage);
             ImageBehavior.SetAutoStart(ImageControl, true);
             ImageBehavior.SetRepeatBehavior(ImageControl, new RepeatBehavior(1));

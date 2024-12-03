@@ -15,7 +15,10 @@ namespace Pattons_Best
 {
     public partial class MainWindow : Window
     {
-        public MainWindow()
+      private IGameEngine? myGameEngine = null;
+      private GameViewerWindow? myGameViewerWindow = null;
+      //-----------------------------------------------------------------------
+      public MainWindow()
         {
             InitializeComponent();
          try
@@ -24,7 +27,13 @@ namespace Pattons_Best
             string codeBase = System.Reflection.Assembly.GetExecutingAssembly().Location;
             UriBuilder uri = new UriBuilder(codeBase);
             string path = Uri.UnescapeDataString(uri.Path);
-            string assemblyDir = System.IO.Path.GetDirectoryName(path);
+            string? assemblyDir = System.IO.Path.GetDirectoryName(path);
+            if( null == assemblyDir )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MainWindow(): GameInstance() ctor error");
+               Application.Current.Shutdown();
+               return;
+            }
             MapImage.theImageDirectory = assemblyDir + @"\images\";
             ConfigFileReader.theConfigDirectory = assemblyDir + @"\config\";
             string appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -81,5 +90,11 @@ namespace Pattons_Best
             return;
          }
       }
-    }
+      //-----------------------------------------------------------------------
+      public void UpdateViews(ref IGameInstance gi, GameAction action)
+      {
+         foreach (IView v in myGameEngine.Views)
+            v.UpdateView(ref gi, action);
+      }
+   }
 }

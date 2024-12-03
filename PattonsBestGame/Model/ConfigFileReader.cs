@@ -13,7 +13,7 @@ namespace Pattons_Best
       public Dictionary<string, string> Entries { get => myEntries; }
       private Dictionary<string, string> myRecordTitles = new Dictionary<string, string>();
       public Dictionary<string, string> RecordTitles { get => myRecordTitles; }
-      private StreamReader myStreamReader = null;
+      private StreamReader? myStreamReader = null;
       public ConfigFileReader(string filename)
       {
          const int MAX_RECORDS_IN_FILE = 5000;

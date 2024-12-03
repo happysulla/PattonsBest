@@ -11,13 +11,13 @@
     {
         int Count { get; }
         void Add(IMapItemMove mim);
-        IMapItemMove RemoveAt(int index);
+        IMapItemMove? RemoveAt(int index);
         void Insert(int index, IMapItemMove mim);
         void Clear();
         bool Contains(IMapItemMove mim);
         int IndexOf(IMapItemMove mim);
         void Remove(IMapItemMove mim);
-        IMapItemMove Remove(IMapItem mi);
+        IMapItemMove? Remove(IMapItem mi);
         IMapItemMove Find(IMapItem mi);
         IMapItemMoves Shuffle();
         IMapItemMove this[int index] { get; set; }

@@ -22,5 +22,77 @@ namespace Pattons_Best.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public double ZoomCanvas {
+            get {
+                return ((double)(this["ZoomCanvas"]));
+            }
+            set {
+                this["ZoomCanvas"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double ScrollViewerHeight {
+            get {
+                return ((double)(this["ScrollViewerHeight"]));
+            }
+            set {
+                this["ScrollViewerHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double ScrollViewerWidth {
+            get {
+                return ((double)(this["ScrollViewerWidth"]));
+            }
+            set {
+                this["ScrollViewerWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string GameOptions {
+            get {
+                return ((string)(this["GameOptions"]));
+            }
+            set {
+                this["GameOptions"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string GameDirectoryName {
+            get {
+                return ((string)(this["GameDirectoryName"]));
+            }
+            set {
+                this["GameDirectoryName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string WindowPlacement {
+            get {
+                return ((string)(this["WindowPlacement"]));
+            }
+            set {
+                this["WindowPlacement"] = value;
+            }
+        }
     }
 }

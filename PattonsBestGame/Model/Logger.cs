@@ -20,6 +20,7 @@ namespace Pattons_Best
       LE_MOVE_STACKING,
       LE_MOVE_COUNT,
       //-------------
+      LE_RESET_ROLL_STATE,
       LE_VIEW_DICE_MOVING,
       LE_VIEW_UPDATE_MENU,
       LE_VIEW_UPDATE_STATUS_BAR,
