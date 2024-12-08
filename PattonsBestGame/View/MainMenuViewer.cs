@@ -13,17 +13,17 @@ namespace Pattons_Best
    class MainMenuViewer : IView
    {
       private readonly Menu myMainMenu;                     // Top level menu items: File | View | Options | Help
-      private readonly MenuItem myMenuItemTopLevel1;
-      private readonly MenuItem myMenuItemTopLevel2;
-      private readonly MenuItem myMenuItemTopLevel21;
-      private readonly MenuItem myMenuItemTopLevel22;
-      private readonly MenuItem myMenuItemTopLevel3;
-      private readonly MenuItem myMenuItemTopLevel31;
-      private readonly MenuItem myMenuItemTopLevel4;
+      private readonly MenuItem myMenuItemTopLevel1 = new MenuItem();
+      private readonly MenuItem myMenuItemTopLevel2 = new MenuItem();
+      private readonly MenuItem myMenuItemTopLevel3 = new MenuItem();
+      private readonly MenuItem myMenuItemTopLevel4 = new MenuItem();
+      private readonly MenuItem myMenuItemTopLevel21 = new MenuItem();
+      private readonly MenuItem myMenuItemTopLevel22 = new MenuItem();
+      private readonly MenuItem myMenuItemTopLevel31 = new MenuItem();
       private readonly IGameEngine myGameEngine;
       private IGameInstance myGameInstance;
       public bool IsPathShown { get; set; } = true;
-      public Options NewGameOptions { get; set; }
+      public Options? NewGameOptions { get; set; } = null;
       //-----------------------------------------------------------------------
       public MainMenuViewer(Menu mi, IGameEngine ge, IGameInstance gi) // Constructor creates default top level menus that get changed with UpdateView() based on GamePhase and GameAction
       {
@@ -45,13 +45,11 @@ namespace Pattons_Best
                   myMenuItemTopLevel2 = menuItem;
                   myMenuItemTopLevel2.Header = "_Edit";
                   myMenuItemTopLevel2.Visibility = Visibility.Visible;
-                  myMenuItemTopLevel21 = new MenuItem();
                   myMenuItemTopLevel21.Header = "_Undo";
                   myMenuItemTopLevel21.InputGestureText = "Ctrl+U";
                   myMenuItemTopLevel21.IsEnabled = false;
                   myMenuItemTopLevel21.Click += MenuItemEditUndo_Click;
                   myMenuItemTopLevel2.Items.Add(myMenuItemTopLevel21);
-                  myMenuItemTopLevel22 = new MenuItem();
                   myMenuItemTopLevel22.Header = "_Revert To Daybreak";
                   myMenuItemTopLevel22.InputGestureText = "Ctrl+R";
                   myMenuItemTopLevel22.Click += MenuItemEditRecover_Click;
@@ -64,7 +62,6 @@ namespace Pattons_Best
                   myMenuItemTopLevel3 = menuItem;
                   myMenuItemTopLevel3.Header = "_View";
                   myMenuItemTopLevel3.Visibility = Visibility.Visible;
-                  myMenuItemTopLevel31 = new MenuItem();
                   myMenuItemTopLevel31.Header = "_Path";
                   myMenuItemTopLevel31.InputGestureText = "Ctrl+P";
                   myMenuItemTopLevel31.IsCheckable = true;
@@ -254,7 +251,7 @@ namespace Pattons_Best
       }
       public void MenuItemEditRecover_Click(object sender, RoutedEventArgs e)
       {
-         IGameInstance gi = GameLoadMgr.OpenGame();
+         IGameInstance? gi = GameLoadMgr.OpenGame();
          if (null != gi)
          {
             myGameInstance = gi;

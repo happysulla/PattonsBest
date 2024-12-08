@@ -8,7 +8,8 @@ namespace Pattons_Best
    {
       private double myX = 0.0; public double X { get => myX; set => myX = value; }
       private double myY = 0.0; public double Y { get => myY; set => myY = value; }
-      private Point myCenterPoint = new Point(); public Point CenterPoint { get => myCenterPoint; set => myCenterPoint = value; }
+      private Point myCenterPoint = new Point();
+      public Point CenterPoint { get => myCenterPoint; set => myCenterPoint = value; }
       public MapPoint() { }
       public MapPoint(double x, double y) { myX = x; myY = y; }
       public override String ToString()

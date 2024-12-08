@@ -14,7 +14,7 @@ namespace Pattons_Best
       public bool CtorError { get; } = false;
       private string myKey = "";
       public string Key { get => myKey; }
-      private TextBlock myTextBlockDisplay;
+      private TextBlock myTextBlockDisplay = new TextBlock();
       public TextBlock TextBoxDiplay { get => myTextBlockDisplay; }
       public static bool theIsCheckBoxChecked = false;
       private bool myIsReopen = false;
@@ -27,7 +27,13 @@ namespace Pattons_Best
       {
          InitializeComponent();
          myIsReopen = false; // Tell parent to reopen on font change
-         BitmapImage img = MapItem.theMapImages.GetBitmapImage("Parchment");
+         BitmapImage? img = MapItem.theMapImages.GetBitmapImage("Parchment");
+         if( null == img)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "BannerDialog(): GetBitmapImage(Parchment) return null");
+            CtorError = true;
+            return;
+         }
          ImageBrush brush = new ImageBrush(img);
          this.Background = brush;
          //-------------------------------

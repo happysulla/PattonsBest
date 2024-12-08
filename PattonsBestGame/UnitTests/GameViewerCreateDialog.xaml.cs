@@ -2,6 +2,7 @@
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -10,7 +11,7 @@ namespace Pattons_Best
    public partial class GameViewerCreateDialog : System.Windows.Window
    {
       private bool myIsFirstShowing = true;
-      private DockPanel TopPanel { get; set; }
+      private DockPanel? TopPanel { get; set; } = null;
       Canvas? myCanvas = null;
       ScrollViewer? myScrollViewer = null;
       public GameViewerCreateDialog(DockPanel topPanel)
@@ -20,14 +21,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "GameViewerCreateDialog() dockPanel=null");
             return;
          }
-         else
-         {
-            TopPanel = new DockPanel();
-         }
          TopPanel = topPanel;
          DockPanel? dockPanelInside = null;
          DockPanel? dockPanelControls = null;
-         myCanvas = null;
          Image? image = null;
          foreach (UIElement ui0 in TopPanel.Children) // top panel holds myMainMenu, myDockePanelInside, and myStatusBar
          {
@@ -58,6 +54,16 @@ namespace Pattons_Best
                break;
             }
          }
+         if (null == myScrollViewer)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GameViewerCreateDialog() myScrollViewer=null");
+            return;
+         }
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GameViewerCreateDialog() image=myCanvas");
+            return;
+         }
          if (null == image)
          {
             Logger.Log(LogEnum.LE_ERROR, "GameViewerCreateDialog() image=null");
@@ -68,6 +74,11 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "GameViewerCreateDialog() dockPanelControls=null");
             return;
          }
+         if (null == dockPanelInside)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GameViewerCreateDialog() dockPanelInside=null");
+            return;
+         }
          InitializeComponent();
          myTextBoxScaleTransform.Text = Utilities.ZoomCanvas.ToString();
          myTextBoxImageSizeX.Text = image.ActualWidth.ToString();
@@ -76,8 +87,7 @@ namespace Pattons_Best
          myTextBoxCanvasSizeY.Text = myCanvas.ActualHeight.ToString();
          myTextBoxScrollViewerSizeX.Text = myScrollViewer.ActualWidth.ToString();
          myTextBoxScrollViewerSizeY.Text = myScrollViewer.ActualHeight.ToString();
-
-
+         //--------------------------------------------------------------------------
          myTextBoxVScrollableHeight.Text = myScrollViewer.ScrollableHeight.ToString();
          myTextBoxVerticalOffset.Text = myScrollViewer.VerticalOffset.ToString();
          myTextBoxScrollableHeightPercent.Text = myScrollViewer.ScrollableHeight.ToString();
@@ -85,7 +95,7 @@ namespace Pattons_Best
          myTextBoxScrollableHeightPercent.Text = heightPercent.ToString();
          double heightNormalized = myScrollViewer.ScrollableHeight / Utilities.ZoomCanvas;
          myTextBoxScrollableHeightNormalized.Text = heightNormalized.ToString();
-
+         //--------------------------------------------------------------------------
          myTextBoxScrollableWidth.Text = myScrollViewer.ScrollableWidth.ToString();
          myTextBoxHorizontalOffset.Text = myScrollViewer.HorizontalOffset.ToString();
          myTextBoxScrollableWidthPercent.Text = myScrollViewer.ScrollableWidth.ToString();
@@ -93,28 +103,33 @@ namespace Pattons_Best
          myTextBoxScrollableWidthPercent.Text = widthPercent.ToString();
          double widthNormalized = myScrollViewer.ScrollableWidth / Utilities.ZoomCanvas;
          myTextBoxScrollableWidthNormalized.Text = widthNormalized.ToString();
-
+         //--------------------------------------------------------------------------
          myTextBoxDockPanelControlsSizeX.Text = dockPanelControls.ActualWidth.ToString();
          myTextBoxDockPanelSizeX.Text = dockPanelInside.ActualWidth.ToString();
          myTextBoxDockPanelSizeY.Text = dockPanelInside.ActualHeight.ToString();
          myTextBoxTopPanelSizeX.Text = TopPanel.ActualWidth.ToString();
          myTextBoxTopPanelSizeY.Text = TopPanel.ActualHeight.ToString();
-
+         //--------------------------------------------------------------------------
          myTextBoxScreenSizeX.Text = System.Windows.SystemParameters.PrimaryScreenWidth.ToString();
          myTextBoxScreenSizeY.Text = System.Windows.SystemParameters.PrimaryScreenHeight.ToString();
          myTextBoxVerticalThumbSizeX.Text = System.Windows.SystemParameters.VerticalScrollBarButtonHeight.ToString();
          myTextBoxVerticalThumbSizeY.Text = System.Windows.SystemParameters.VerticalScrollBarWidth.ToString();
-
+         //--------------------------------------------------------------------------
          myCanvas.MouseLeftButtonDown += this.MouseLeftButtonDown_Canvas;
          myCanvas.MouseRightButtonDown += this.MouseRIghtButtonDown_Canvas;
       }
       private void ButtonApply_Click(object sender, RoutedEventArgs e)
       {
-         DockPanel dockPanelInside = null;
-         DockPanel dockPanelControls = null;
-         ScrollViewer scrollViewer = null;
-         Canvas canvas = null;
-         Image image = null;
+         if (null == TopPanel)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ButtonApply_Click() TopPanel=null");
+            return;
+         }
+         DockPanel? dockPanelInside = null;
+         DockPanel? dockPanelControls = null;
+         ScrollViewer? scrollViewer = null;
+         Canvas? canvas = null;
+         Image? image = null;
          foreach (UIElement ui0 in TopPanel.Children)
          {
             if (ui0 is DockPanel)
@@ -144,14 +159,29 @@ namespace Pattons_Best
                break;
             }
          }
+         if (null == scrollViewer)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ButtonApply_Click() scrollViewer=null");
+            return;
+         }
+         if (null == canvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ButtonApply_Click() canvas=null");
+            return;
+         }
          if (null == image)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GameViewerCreateDialog() image=null");
+            Logger.Log(LogEnum.LE_ERROR, "ButtonApply_Click() image=null");
             return;
          }
          if (null == dockPanelControls)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GameViewerCreateDialog() dockPanelControls=null");
+            Logger.Log(LogEnum.LE_ERROR, "ButtonApply_Click() dockPanelControls=null");
+            return;
+         }
+         if (null == dockPanelInside)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ButtonApply_Click() dockPanelInside=null");
             return;
          }
          dockPanelInside.Height = Double.Parse(myTextBoxDockPanelSizeY.Text);
@@ -170,7 +200,12 @@ namespace Pattons_Best
       }
       private void TextBoxScaleTransform_TextChanged(object sender, TextChangedEventArgs e)
       {
-         Canvas canvas = null;
+         if (null == TopPanel)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TextBoxScaleTransform_TextChanged() TopPanel=null");
+            return;
+         }
+         Canvas? canvas = null;
          foreach (UIElement ui0 in TopPanel.Children)
          {
             if (ui0 is DockPanel dockPanelInside)
@@ -191,7 +226,7 @@ namespace Pattons_Best
          }
          if (null == canvas)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GameViewerCreateDialog() canvas=null");
+            Logger.Log(LogEnum.LE_ERROR, "TextBoxScaleTransform_TextChanged() canvas=null");
             return;
          }
          if (false == myIsFirstShowing) // do not zoom when window is first shown
@@ -203,10 +238,19 @@ namespace Pattons_Best
          {
             myIsFirstShowing = false;
          }
-
       }
       private void MouseLeftButtonDown_Canvas(object sender, MouseButtonEventArgs e)
       {
+         if (null == myScrollViewer)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseLeftButtonDown_Canvas() myScrollViewer=null");
+            return;
+         }
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseLeftButtonDown_Canvas(): myCanvas=null");
+            return;
+         }
          System.Windows.Point p = e.GetPosition(myCanvas);
          double percentHeightB = (p.Y / myCanvas.ActualHeight);
          double percentHeight = percentHeightB;
@@ -256,6 +300,11 @@ namespace Pattons_Best
       }
       private void MouseRIghtButtonDown_Canvas(object sender, MouseButtonEventArgs e)
       {
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseRIghtButtonDown_Canvas(): myCanvas=null");
+            return;
+         }
          System.Windows.Point p = e.GetPosition(myCanvas);
          double percentHeight = 100.0 * (p.Y / myCanvas.ActualHeight);
          double percentWidth = 100.0 * (p.X / myCanvas.ActualWidth);
@@ -270,8 +319,7 @@ namespace Pattons_Best
          sb.Append("\t%=");
          string spHeight = percentHeight.ToString("##");
          sb.Append(spHeight);
-
-
+         //-------------------------------
          MessageBox.Show(sb.ToString());
          e.Handled = true;
       }

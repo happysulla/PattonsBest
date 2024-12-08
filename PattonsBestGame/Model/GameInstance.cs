@@ -88,30 +88,22 @@ namespace Pattons_Best
                      if( null == name )
                      {
                         Logger.Log(LogEnum.LE_ERROR, "ReadTerritoriesXml(): Territory=null");
-                        return null;
+                        return territories;
                      }
                      Territory t = new Territory(name);
-                     reader.Read(); // read the type
-                     string? typeOfTerritory = reader.GetAttribute("value");
-                     if (null == typeOfTerritory)
-                     {
-                        Logger.Log(LogEnum.LE_ERROR, "ReadTerritoriesXml(): typeOfTerritory=null");
-                        return null;
-                     }
-                     t.Type = typeOfTerritory;
                      reader.Read(); // read the center point
                      string? value = reader.GetAttribute("X");
                      if (null == value)
                      {
                         Logger.Log(LogEnum.LE_ERROR, "ReadTerritoriesXml(): X=null");
-                        return null;
+                        return territories;
                      }
                      Double X = Double.Parse(value);
                      value = reader.GetAttribute("Y");
                      if (null == value)
                      {
                         Logger.Log(LogEnum.LE_ERROR, "ReadTerritoriesXml(): Y=null");
-                        return null;
+                        return territories;
                      }
                      Double Y = Double.Parse(value);
                      t.CenterPoint = new MapPoint(X, Y);
@@ -123,7 +115,7 @@ namespace Pattons_Best
                            if (null == value)
                            {
                               Logger.Log(LogEnum.LE_ERROR, "ReadTerritoriesXml(): adjacent=null");
-                              return null;
+                              return territories;
                            }
                            t.Adjacents.Add(value);
                         }
@@ -133,14 +125,14 @@ namespace Pattons_Best
                            if (null == value)
                            {
                               Logger.Log(LogEnum.LE_ERROR, "ReadTerritoriesXml(): adjacent X=null");
-                              return null;
+                              return territories;
                            }
                            Double X1 = Double.Parse(value);
                            value = reader.GetAttribute("Y");
                            if (null == value)
                            {
                               Logger.Log(LogEnum.LE_ERROR, "ReadTerritoriesXml(): adjacent Y=null");
-                              return null;
+                              return territories;
                            }
                            Double Y1 = Double.Parse(value);
                            t.Points.Add(new MapPoint(X1, Y1));

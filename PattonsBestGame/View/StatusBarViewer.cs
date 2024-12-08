@@ -11,10 +11,10 @@ namespace Pattons_Best
    class StatusBarViewer : IView
    {
       private readonly StatusBar myStatusBar;
-      private IGameInstance? myGameInstance = null;
-      private IGameEngine? myGameEngine = null;
-      private Canvas? myCanvas = null;
-      private Cursor? myTargetCursor = null;
+      private IGameInstance myGameInstance;
+      private IGameEngine myGameEngine;
+      private Canvas myCanvas;
+      private Cursor? myTargetCursor;
       //---------------------------------------------
       private readonly FontFamily myFontFam = new FontFamily("Tahoma");
       private readonly FontFamily myFontFam1 = new FontFamily("Courier New");

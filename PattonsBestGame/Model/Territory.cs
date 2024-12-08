@@ -10,12 +10,15 @@ namespace Pattons_Best
    public class Territory : ITerritory
    {
       [NonSerialized] static public ITerritories theTerritories = new Territories();
-      public string Name { get; set; } = "";
-      public string Type { get; set; } = "";
+      public string Name { get; set; } = "Offboard";
       public List<String> Adjacents { get; set; } = new List<String>();
       public IMapPoint CenterPoint { get; set; } = new MapPoint();
       public List<IMapPoint> Points { get; set; } = new List<IMapPoint>();
       //---------------------------------------------------------------
+      public Territory() 
+      { 
+
+      }
       public Territory(string name) { Name = name; }
       public override String ToString()
       {
@@ -39,12 +42,7 @@ namespace Pattons_Best
       private readonly ArrayList myList;
       public Territories() { myList = new ArrayList(); }
       public void Add(ITerritory t) { myList.Add(t); }
-      public ITerritory RemoveAt(int index)
-      {
-         ITerritory t = (ITerritory)myList[index];
-         myList.RemoveAt(index);
-         return t;
-      }
+
       public void Insert(int index, ITerritory t) { myList.Insert(index, t); }
       public int Count { get { return myList.Count; } }
       public void Clear() { myList.Clear(); }
@@ -61,7 +59,7 @@ namespace Pattons_Best
       public IEnumerator GetEnumerator() { return myList.GetEnumerator(); }
       public int IndexOf(ITerritory t) { return myList.IndexOf(t); }
       public void Remove(ITerritory t) { myList.Remove(t); }
-      public ITerritory Find(string tName)
+      public ITerritory? Find(string tName)
       {
          foreach (Object o in myList)
          {
@@ -71,7 +69,13 @@ namespace Pattons_Best
          }
          return null;
       }
-      public ITerritory Remove(string tName)
+      public ITerritory? RemoveAt(int index)
+      {
+         ITerritory? t = myList[index] as ITerritory;
+         myList.RemoveAt(index);
+         return t;
+      }
+      public ITerritory? Remove(string tName)
       {
          foreach (Object o in myList)
          {
@@ -84,9 +88,13 @@ namespace Pattons_Best
          }
          return null;
       }
-      public ITerritory this[int index]
+      public ITerritory? this[int index]
       {
-         get { return (ITerritory)(myList[index]); }
+         get 
+         {  
+            ITerritory? t = myList[index] as ITerritory;
+            return t; 
+         }
          set { myList[index] = value; }
       }
       public override String ToString()
@@ -106,17 +114,11 @@ namespace Pattons_Best
    //---------------------------------------------------------------
    public static class TerritoryExtensions
    {
-      public static ITerritory Find(this IList<ITerritory> territories, String name)
+      public static ITerritory? Find(this IList<ITerritory> territories, String name)
       {
          try
          {
-            //int index1 = nameAndSector.IndexOf(":");
-            //string sSector = nameAndSector.Substring(0, index1);
-            //string name = nameAndSector.Substring(index1 + 1);
-            //int sector = Int32.Parse(sSector);
-            IEnumerable<ITerritory> results = from territory in territories
-                                              where territory.Name == name
-                                              select territory;
+            IEnumerable<ITerritory> results = from territory in territories where territory.Name == name select territory;
             if (0 < results.Count())
                return results.First();
          }

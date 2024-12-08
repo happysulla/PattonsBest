@@ -12,11 +12,11 @@ namespace Pattons_Best
    public class RuleDialogViewer
    {
       public bool CtorError { get; } = false;
-      private Dictionary<string, string> myRules;
+      private Dictionary<string, string> myRules = new Dictionary<string, string>();
       public Dictionary<string, string> Rules { get => myRules; }
-      private Dictionary<string, string> myTables;
+      private Dictionary<string, string> myTables = new Dictionary<string, string>();
       public Dictionary<string, string> Tables { get => myTables; }
-      private Dictionary<string, string> myEvents;
+      private Dictionary<string, string> myEvents = new Dictionary<string, string>();
       public Dictionary<string, string> Events { get => myEvents; set => myEvents = value; } // this property is used for unit testing - 05COnfigFileMgrUnitTesting
       private Dictionary<string, TableDialog> myTableDialogs = new Dictionary<string, TableDialog>();
       private Dictionary<string, BannerDialog> myBannerDialogs = new Dictionary<string, BannerDialog>();
@@ -35,12 +35,6 @@ namespace Pattons_Best
             CtorError = true;
             return;
          }
-         if (null == myTables)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "RuleDialogViewer(): myTables=null");
-            CtorError = true;
-            return;
-         }
          if (false == CreateRules())
          {
             Logger.Log(LogEnum.LE_ERROR, "RuleDialogViewer(): CreateRules() returned false");
@@ -55,14 +49,14 @@ namespace Pattons_Best
             if (null == myRules)
             {
                Logger.Log(LogEnum.LE_ERROR, "GetRuleTitle(): myRules=null for key=" + key);
-               return null;
+               return "ERROR";
             }
             string multilineString = myRules[key];
             int indexOfStart = multilineString.IndexOf(key);
             if (-1 == indexOfStart)
             {
                Logger.Log(LogEnum.LE_ERROR, "GetRuleTitle(): IndexOf() returned -1 for key=" + key);
-               return null;
+               return "ERROR";
             }
             indexOfStart += key.Length + 1; // add one to get past preceeding space
             string startOfTitle = multilineString.Substring(indexOfStart);
@@ -73,7 +67,7 @@ namespace Pattons_Best
          catch (Exception e2)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetRuleTitle(): e=" + e2.ToString() + " for key=" + key);
-            return null;
+            return "ERROR";
          }
       }
       public string GetEventTitle(string key)
@@ -83,14 +77,14 @@ namespace Pattons_Best
             if (null == myEvents)
             {
                Logger.Log(LogEnum.LE_ERROR, "GetEventTitle(): myEvents=null for key=" + key);
-               return null;
+               return "ERROR";
             }
             string multilineString = myEvents[key];
             int indexOfStart = multilineString.IndexOf(key);
             if (-1 == indexOfStart)
             {
                Logger.Log(LogEnum.LE_ERROR, "GetEventTitle(): IndexOf() returned -1 for key=" + key);
-               return null;
+               return "ERROR";
             }
             indexOfStart += key.Length + 1; // add one to get past preceeding space
             string startOfTitle = multilineString.Substring(indexOfStart);
@@ -101,7 +95,7 @@ namespace Pattons_Best
          catch (Exception e2)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetEventTitle(): e=" + e2.ToString() + " for key=" + key);
-            return null;
+            return "ERROR";
          }
       }
       public bool ShowRule(string key)
@@ -214,7 +208,6 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ShowTable(): reached default key=" + key);
                   return false;
             }
-            dialog.Closed += TableDialog_Closed;
             IEnumerable<Button> buttons = FindButtons(dialog.myFlowDocumentScrollViewer.Document);
             foreach (Button button in buttons)
                button.Click += Button_Click;
@@ -368,24 +361,49 @@ namespace Pattons_Best
             {
                if (i is InlineUIContainer)
                {
-                  var inlineUiContainer = i as InlineUIContainer;
-                  Button button = ((InlineUIContainer)inlineUiContainer).Child as Button;
-                  if (null != button)
+                  InlineUIContainer? inlineUiContainer = i as InlineUIContainer;
+                  if( null == inlineUiContainer )
                   {
-                     buttons.Add(button);
+                     Logger.Log(LogEnum.LE_ERROR, "FindButtons(): inlineUiContainer=null");
+                  }
+                  else
+                  {
+                     Button? button = inlineUiContainer.Child as Button;
+                     if (null == button)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "FindButtons(): button=null");
+                     }
+                     else
+                     {
+                        buttons.Add(button);
+                     }
                   }
                }
                else if (i is Figure)
                {
-                  var figure = i as Figure;
-                  var buttons1 = figure.Blocks.SelectMany(blocks => FindButtons(blocks));
-                  buttons.AddRange(buttons1);
+                  Figure? figure = i as Figure;
+                  if( null == figure )
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "FindButtons(): figure=null");
+                  }
+                  else
+                  {
+                     var buttons1 = figure.Blocks.SelectMany(blocks => FindButtons(blocks));
+                     buttons.AddRange(buttons1);
+                  }
                }
                else if (i is Floater)
                {
-                  var floater = i as Floater;
-                  var buttons2 = floater.Blocks.SelectMany(blocks => FindButtons(blocks));
-                  buttons.AddRange(buttons2);
+                  Floater? floater = i as Floater;
+                  if( null != floater)
+                  {
+                     var buttons2 = floater.Blocks.SelectMany(blocks => FindButtons(blocks));
+                     buttons.AddRange(buttons2);
+                  }
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "FindButtons(): floater=null");
+                  }
                }
             }
             return buttons;
@@ -396,8 +414,17 @@ namespace Pattons_Best
          }
          if (block is BlockUIContainer)
          {
-            Button b = ((BlockUIContainer)block).Child as Button;
-            return b == null ? new List<Button>() : new List<Button>(new[] { b });
+            BlockUIContainer blockUIContainer = (BlockUIContainer)block;
+            Button? b = blockUIContainer.Child as Button;
+            if( null == b )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "FindButtons(): b=null");
+               return new List<Button>();
+            }
+            else
+            {
+               return new List<Button>(new[] { b });
+            }
          }
          if (block is List)
          {
@@ -406,8 +433,10 @@ namespace Pattons_Best
          throw new InvalidOperationException("Unknown block type: " + block.GetType());
       }
       //--------------------------------------------------------------------
-      private void BannerDialog_Closed(object sender, EventArgs e)
+      private void BannerDialog_Closed(object? sender, EventArgs e)
       {
+         if (null == sender)
+            return;
          BannerDialog dialog = (BannerDialog)sender;
          foreach (Inline inline in dialog.TextBoxDiplay.Inlines)
          {
@@ -421,8 +450,10 @@ namespace Pattons_Best
          if (true == dialog.IsReopen)
             this.ShowRule(dialog.Key);
       }
-      private void EventDialog_Closed(object sender, EventArgs e)
+      private void EventDialog_Closed(object? sender, EventArgs e)
       {
+         if (null == sender)
+            return;
          BannerDialog dialog = (BannerDialog)sender;
          foreach (Inline inline in dialog.TextBoxDiplay.Inlines)
          {
@@ -435,11 +466,6 @@ namespace Pattons_Best
          }
          if (true == dialog.IsReopen)
             this.ShowEventDialog(dialog.Key);
-      }
-      private void TableDialog_Closed(object sender, EventArgs e)
-      {
-         TableDialog dialog = (TableDialog)sender;
-         myTableDialogs[dialog.Key] = null;
       }
       private void Button_Click(object sender, RoutedEventArgs e)
       {

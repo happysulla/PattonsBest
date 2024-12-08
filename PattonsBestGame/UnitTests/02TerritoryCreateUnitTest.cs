@@ -15,9 +15,9 @@ namespace Pattons_Best
 {
    public class TerritoryCreateUnitTest : IUnitTest
    {
-      private DockPanel? myDockPanel = null;
-      private IGameInstance? myGameInstance = null;
-      Canvas? myCanvas = null;
+      private DockPanel myDockPanel;
+      private IGameInstance myGameInstance;
+      Canvas myCanvas;
       public bool isDragging = false;
       UIElement? myItem = null;
       private System.Windows.Point myPreviousLocation;
@@ -77,11 +77,10 @@ namespace Pattons_Best
                }
             }
          }
-         if (null == myCanvas) // log error and return if canvas not found
+         if( null == myCanvas )
          {
-            Logger.Log(LogEnum.LE_ERROR, "GameViewerCreateUnitTest() myCanvas=null");
-            CtorError = true;
-            return;
+            myCanvas = new Canvas();
+            Console.WriteLine("TerritoryCreateUnitTest(): myCanvas not found");
          }
          myGameInstance = gi;
       }
@@ -315,9 +314,10 @@ namespace Pattons_Best
       public void CreateEllipse(ITerritory territory)
       {
          SolidColorBrush aSolidColorBrush1 = new SolidColorBrush{ Color = Color.FromArgb(100, 255, 255, 0) };
+         string territoryName = territory.Name;
          Ellipse aEllipse = new Ellipse
          {
-            Tag = Utilities.RemoveSpaces(territory.ToString()),
+            Tag = Utilities.RemoveSpaces(territoryName),
             Fill = aSolidColorBrush1,
             StrokeThickness = 1,
             Stroke = Brushes.Red,
@@ -355,18 +355,25 @@ namespace Pattons_Best
       public XmlDocument CreateXml(ITerritories territories)
       {
          XmlDocument aXmlDocument = new XmlDocument();
+         if (null == aXmlDocument.DocumentElement)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): aXmlDocument.DocumentElement=null");
+            return aXmlDocument;
+         }
          aXmlDocument.LoadXml("<Territories></Territories>");
          foreach (Territory t in territories)
          {
-            XmlElement terrElem = aXmlDocument.CreateElement("Territory");  // name of territory
+            XmlElement? terrElem = aXmlDocument.CreateElement("Territory");  // name of territory
             terrElem.SetAttribute("value", t.Name);
             aXmlDocument.DocumentElement.AppendChild(terrElem);
-            XmlElement typeElem = aXmlDocument.CreateElement("type"); // type of territory, open, farmland, forest, hills, mountains, desert, swamp
-            typeElem.SetAttribute("value", t.Type.ToString());
-            aXmlDocument.DocumentElement.LastChild.AppendChild(typeElem);
             XmlElement pointElem = aXmlDocument.CreateElement("point"); // center point for this territory
             pointElem.SetAttribute("X", t.CenterPoint.X.ToString());
             pointElem.SetAttribute("Y", t.CenterPoint.Y.ToString());
+            if (null == aXmlDocument.DocumentElement.LastChild)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): aXmlDocument.DocumentElement.LastChild=null");
+               return aXmlDocument;
+            }
             aXmlDocument.DocumentElement.LastChild.AppendChild(pointElem);
             foreach (string s in t.Adjacents) // List of adjacent territories
             {
@@ -396,7 +403,7 @@ namespace Pattons_Best
          foreach (Territory anchorTerritory in territories)
          {
             string anchorName = Utilities.RemoveSpaces(anchorTerritory.ToString());
-            Ellipse anchorEllipse = null; // Find the corresponding ellipse for this anchor territory
+            Ellipse? anchorEllipse = null; // Find the corresponding ellipse for this anchor territory
             foreach (UIElement ui in myCanvas.Children)
             {
                if (ui is Ellipse)
@@ -419,7 +426,7 @@ namespace Pattons_Best
             // At this point, the anchorEllipse and the anchorTerritory are found.
             foreach (string s in anchorTerritory.Adjacents)
             {
-               ITerritory adjacentTerritory = null;
+               ITerritory? adjacentTerritory = null;
                foreach (ITerritory t in territories) // Find the River Territory corresponding to this name
                {
                   if (t.ToString() == s)
@@ -433,8 +440,8 @@ namespace Pattons_Best
                   MessageBox.Show("Not Found s=" + s);
                   return false;
                }
-               string adjacentName = Utilities.RemoveSpaces(adjacentTerritory.ToString());
-               Ellipse adjacentEllipse = null; // Find the corresponding ellipse for this territory
+               string adjacentName = Utilities.RemoveSpaces(adjacentTerritory.Name);
+               Ellipse? adjacentEllipse = null; // Find the corresponding ellipse for this territory
                foreach (UIElement ui in myCanvas.Children)
                {
                   if (ui is Ellipse)
@@ -489,7 +496,6 @@ namespace Pattons_Best
          if (true == dialog.ShowDialog())
          {
             Territory territory = new Territory(dialog.myTextBoxName.Text) { CenterPoint = new MapPoint(p.X, p.Y) };
-            territory.Type = dialog.RadioOutputText;
             CreateEllipse(territory);
             Territory.theTerritories.Add(territory);
          }
@@ -537,7 +543,17 @@ namespace Pattons_Best
             if (this.myItem is Ellipse)
             {
                Ellipse ellipse = (Ellipse)myItem;
-               string tag = ellipse.Tag.ToString();
+               if( null == ellipse.Tag)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "MouseUp(): ellipse.Tag=null");
+                  return;
+               }
+               string? tag = ellipse.Tag.ToString();
+               if (null == tag)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "MouseUp(): tag=null");
+                  return;
+               }
                foreach (Territory t in Territory.theTerritories)
                {
                   string name = Utilities.RemoveSpaces(t.ToString());
@@ -560,7 +576,7 @@ namespace Pattons_Best
       {
          System.Windows.Point p = e.GetPosition(myCanvas);
          Console.WriteLine("TerritoryCreateUnitTest.MouseLeftButtonDownVerifyTerritory(): {0}", p.ToString());
-         ITerritory selectedTerritory = null;
+         ITerritory? selectedTerritory = null;
          foreach (UIElement ui in myCanvas.Children)
          {
             if (ui is Ellipse)
@@ -568,7 +584,12 @@ namespace Pattons_Best
                Ellipse ellipse = (Ellipse)ui;
                if (true == ui.IsMouseOver)
                {
-                  string tag = ellipse.Tag.ToString();
+                  string? tag = ellipse.Tag.ToString();
+                  if (null == tag)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "MouseLeftButtonDownVerifyTerritory(): tag=null");
+                     return;
+                  }
                   foreach (Territory t in Territory.theTerritories)
                   {
                      string name = Utilities.RemoveSpaces(t.ToString());
@@ -592,7 +613,6 @@ namespace Pattons_Best
          dialog.myButtonOk.Focus();
          if (true == dialog.ShowDialog())
          {
-            selectedTerritory.Type = dialog.RadioOutputText;
             selectedTerritory.CenterPoint.X = Double.Parse(dialog.CenterPointX);
             myXColumn = selectedTerritory.CenterPoint.X; // Want the same X value as specified in the last dialog. This lines up dots.
             selectedTerritory.CenterPoint.Y = Double.Parse(dialog.CenterPointY);
@@ -612,7 +632,7 @@ namespace Pattons_Best
                Ellipse selectedEllipse = (Ellipse)ui;
                if (true == ui.IsMouseOver)
                {
-                  Territory selectedTerritory = null;  // Find the corresponding Territory that user selected
+                  Territory? selectedTerritory = null;  // Find the corresponding Territory that user selected
                   foreach (Territory t in Territory.theTerritories)
                   {
                      if (selectedEllipse.Tag.ToString() == Utilities.RemoveSpaces(t.ToString()))

@@ -65,6 +65,21 @@ namespace Pattons_Best
       }
       public bool Command(ref IGameInstance gi) // Performs function based on CommandName string
       {
+         if( null == myDockPanel )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Command(): myDockPanel=null");
+            return false;
+         }
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Command(): myCanvas=null");
+            return false;
+         }
+         if (null == myScrollViewerCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Command(): myScrollViewerCanvas=null");
+            return false;
+         }
          if (CommandName == myCommandNames[0])
          {
             GameViewerCreateDialog dialog = new GameViewerCreateDialog(myDockPanel); // Get the name from user
@@ -91,6 +106,11 @@ namespace Pattons_Best
       }
       public bool NextTest(ref IGameInstance gi) // Move to the next test in this class's unit tests
       {
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "NextTest(): myCanvas=null");
+            return false;
+         }
          if (HeaderName == myHeaderNames[0])
          {
             ++myIndexName;
@@ -120,6 +140,11 @@ namespace Pattons_Best
       }
       public bool Cleanup(ref IGameInstance gi) // Remove an elipses from the canvas and save off Territories.xml file
       {
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Cleanup(): myCanvas=null");
+            return false;
+         }
          //--------------------------------------------------
          // Remove any existing UI elements from the Canvas
          List<UIElement> results = new List<UIElement>();
@@ -159,6 +184,11 @@ namespace Pattons_Best
       }
       private void CreateEllipse(double x, double y)
       {
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateEllipse(): myCanvas=null");
+            return;
+         }
          List<UIElement> results = new List<UIElement>(); // Remove old ellipse
          foreach (UIElement ui in myCanvas.Children)
          {
@@ -183,6 +213,11 @@ namespace Pattons_Best
       }
       private void CreateMarquee(Canvas canvas)
       {
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateMarquee(): myCanvas=null");
+            return;
+         }
          List<UIElement> elements = new List<UIElement>();
          foreach (UIElement ui in myCanvas.Children)
          {

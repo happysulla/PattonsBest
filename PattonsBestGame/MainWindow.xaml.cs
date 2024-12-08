@@ -13,14 +13,14 @@ using System.Windows.Shapes;
 
 namespace Pattons_Best
 {
-    public partial class MainWindow : Window
-    {
+   public partial class MainWindow : Window
+   {
       private IGameEngine? myGameEngine = null;
       private GameViewerWindow? myGameViewerWindow = null;
       //-----------------------------------------------------------------------
       public MainWindow()
-        {
-            InitializeComponent();
+      {
+         InitializeComponent();
          try
          {
             //--------------------------------------------
@@ -28,7 +28,7 @@ namespace Pattons_Best
             UriBuilder uri = new UriBuilder(codeBase);
             string path = Uri.UnescapeDataString(uri.Path);
             string? assemblyDir = System.IO.Path.GetDirectoryName(path);
-            if( null == assemblyDir )
+            if (null == assemblyDir)
             {
                Logger.Log(LogEnum.LE_ERROR, "MainWindow(): GameInstance() ctor error");
                Application.Current.Shutdown();
@@ -91,8 +91,10 @@ namespace Pattons_Best
          }
       }
       //-----------------------------------------------------------------------
-      public void UpdateViews(ref IGameInstance gi, GameAction action)
+      public void UpdateViews(IGameInstance gi, GameAction action)
       {
+         if (null == myGameEngine)
+            return;
          foreach (IView v in myGameEngine.Views)
             v.UpdateView(ref gi, action);
       }

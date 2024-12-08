@@ -310,7 +310,13 @@ namespace Pattons_Best
       }
       private bool CreateButtonMapItem(IMapItem mi, int counterCount)
       {
-         string territoryName = Utilities.RemoveSpaces(mi.TerritoryCurrent.ToString());
+         string? tName = mi.TerritoryCurrent.ToString();
+         if (null == tName)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateButtonMapItem(): tName=null");
+            return false;
+         }
+         string territoryName = Utilities.RemoveSpaces(tName);
          ITerritory territory = Territory.theTerritories.Find(territoryName);
          if (null == territory)
          {
@@ -512,7 +518,12 @@ namespace Pattons_Best
          {
             if (0 < gi.MapItemMoves.Count)
             {
-               IMapItemMove mim2 = gi.MapItemMoves[0];
+               IMapItemMove? mim2 = gi.MapItemMoves[0];
+               if( null == mim2 )
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): mim2=null");
+                  return false;
+               }
                IMapItem mi = mim2.MapItem;
                if (false == MovePathAnimate(mim2))
                {
@@ -521,8 +532,18 @@ namespace Pattons_Best
                   gi.MapItemMoves.Clear();
                   return false;
                }
-               mi.TerritoryCurrent = mim2.NewTerritory;
+               if (null == mim2)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): mim2=null");
+                  return false;
+               }
+               if (null == mim2.NewTerritory)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): mim2.NewTerritory=null");
+                  return false;
+               }
                mi.TerritoryStarting = mim2.NewTerritory;
+               mi.TerritoryCurrent = mi.TerritoryStarting; 
             }
          }
          catch (Exception e)
@@ -665,13 +686,13 @@ namespace Pattons_Best
       private void MouseDownPolygonTravel(object sender, MouseButtonEventArgs e)
       {
          System.Windows.Point canvasPoint = e.GetPosition(myCanvas);
-         Polygon? clickedPolygon = (Polygon)sender;
+         Polygon? clickedPolygon = sender as Polygon;
          if (null == clickedPolygon)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonTravel(): clickedPolygon=null for " + clickedPolygon.Tag.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonTravel(): clickedPolygon=null");
             return;
          }
-         myTerritorySelected = Territory.theTerritories.Find(Utilities.RemoveSpaces(clickedPolygon.Tag.ToString()));
+         myTerritorySelected = Territory.theTerritories.Find(Utilities.RemoveSpaces(clickedPolygon.Name));
          if (null == myTerritorySelected)
          {
             Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonTravel(): selectedTerritory=null for " + clickedPolygon.Tag.ToString());
@@ -896,7 +917,7 @@ namespace Pattons_Best
    }
    public static class MyGameViewerWindowExtensions
    {
-      public static Button Find(this IList<Button> list, string name)
+      public static Button? Find(this IList<Button> list, string name)
       {
          IEnumerable<Button> results = from button in list
                                        where button.Name == name

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Data.Common;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,22 +16,21 @@ namespace Pattons_Best
    public class MapImage : IMapImage
    {
       public static string theImageDirectory = "";      
-      public System.Windows.Media.Imaging.BitmapImage? myBitmapImage = null;
-      public string Name { get; set; } = "";
+      public System.Windows.Media.Imaging.BitmapImage myBitmapImage;
+      public string Name { get; set; } = string.Empty;
       public bool IsAnimated { get; set; } = false;
-      public Image? ImageControl { get; set; } = null;
-      public ImageAnimationController AnimationController { get; set; }
+      private Image myImage = new Image();
+      public Image ImageControl { get=>myImage; set=>myImage=value; }
+      private ImageAnimationController? myAnimationController = null;
+      public ImageAnimationController? AnimationController { get=>myAnimationController; set=>myAnimationController=value; }
       //--------------------------------------------
-      public MapImage()
-      {
-      }
       public MapImage(string imageName)
       {
          string fullImagePath = MapImage.theImageDirectory + Utilities.RemoveSpaces(imageName) + ".gif";
+         Name = imageName;
+         myBitmapImage = new BitmapImage();
          try
          {
-            Name = imageName;
-            myBitmapImage = new BitmapImage();
             myBitmapImage.BeginInit();
             myBitmapImage.UriSource = new Uri(fullImagePath, UriKind.Absolute);
             myBitmapImage.EndInit();
@@ -38,32 +38,31 @@ namespace Pattons_Best
             if( null == ImageControl)
             {
                Logger.Log(LogEnum.LE_ERROR, "MapImage(): 0 imageName=" + imageName );
+            }
+            else
+            {
+               ImageBehavior.SetAnimatedSource(ImageControl, myBitmapImage);
+               ImageBehavior.SetAutoStart(ImageControl, true);
+               ImageBehavior.SetRepeatBehavior(ImageControl, new RepeatBehavior(1));
+               ImageBehavior.AddAnimationCompletedHandler(ImageControl, ImageAnimationLoaded);
                return;
             }
-            ImageBehavior.SetAnimatedSource(ImageControl, myBitmapImage);
-            ImageBehavior.SetAutoStart(ImageControl, true);
-            ImageBehavior.SetRepeatBehavior(ImageControl, new RepeatBehavior(1));
-            ImageBehavior.AddAnimationCompletedHandler(ImageControl, ImageAnimationLoaded);
          }
          catch (DirectoryNotFoundException dirException)
          {
             Logger.Log(LogEnum.LE_ERROR, "MapImage(): 1 imageName=" + fullImagePath + "\n" + dirException.ToString());
-            return;
          }
          catch (FileNotFoundException fileException)
          {
             Logger.Log(LogEnum.LE_ERROR, "MapImage(): 2  imageName=" + fullImagePath + "\n" + fileException.ToString());
-            return;
          }
          catch (IOException ioException)
          {
             Logger.Log(LogEnum.LE_ERROR, "MapImage(): 3 imageName=" + fullImagePath + "\n" + ioException.ToString());
-            return;
          }
          catch ( Exception e )
          {
             Logger.Log(LogEnum.LE_ERROR, "MapImage(): 4 imageName=" + fullImagePath + "\n" + e.ToString());
-            return;
          }
       }
       public MapImage(MapImage mii)
@@ -78,7 +77,6 @@ namespace Pattons_Best
          try
          {
             ImageControl = (Image)sender;
-            // Logger.Log(LogEnum.LE_GAME_INIT, "ImageAnimationLoaded(): name=" + ImageControl.Name);
             AnimationController = ImageBehavior.GetAnimationController(ImageControl);
             if (null == AnimationController)
                Logger.Log(LogEnum.LE_ERROR, "ImageAnimationCompleted(): controller=null");
@@ -87,22 +85,34 @@ namespace Pattons_Best
          }
          catch (DirectoryNotFoundException dirException)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ImageAnimationLoaded(): 1 imageName=" + ImageControl.Name + "\n" + dirException.ToString());
+            if( null == ImageControl )
+                Logger.Log(LogEnum.LE_ERROR, "ImageAnimationLoaded(): 1 imagecontrol=null \n" + dirException.ToString());
+            else
+                Logger.Log(LogEnum.LE_ERROR, "ImageAnimationLoaded(): 1 imageName=" + ImageControl.Name + "\n" + dirException.ToString());
             return;
          }
          catch (FileNotFoundException fileException)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ImageAnimationLoaded(): 2 imageName=" + ImageControl.Name + "\n" + fileException.ToString());
+            if (null == ImageControl)
+               Logger.Log(LogEnum.LE_ERROR, "ImageAnimationLoaded(): 2 imagecontrol=null \n" + fileException.ToString());
+            else
+               Logger.Log(LogEnum.LE_ERROR, "ImageAnimationLoaded(): 2 imageName=" + ImageControl.Name + "\n" + fileException.ToString());
             return;
          }
          catch (IOException ioException)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ImageAnimationLoaded(): 3 imageName=" + ImageControl.Name + "\n" + ioException.ToString());
+            if (null == ImageControl)
+               Logger.Log(LogEnum.LE_ERROR, "ImageAnimationLoaded(): 3 imagecontrol=null \n" + ioException.ToString());
+            else
+               Logger.Log(LogEnum.LE_ERROR, "ImageAnimationLoaded(): 3 imageName=" + ImageControl.Name + "\n" + ioException.ToString());
             return;
          }
          catch (Exception ex)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ImageAnimationLoaded(): 4 imageName=" + ImageControl.Name + "\n" + ex.ToString());
+            if (null == ImageControl)
+               Logger.Log(LogEnum.LE_ERROR, "ImageAnimationLoaded(): 4 imagecontrol=null \n" + ex.ToString());
+            else
+               Logger.Log(LogEnum.LE_ERROR, "ImageAnimationLoaded(): 4 imageName=" + ImageControl.Name + "\n" + ex.ToString());
             return;
          }
       }
@@ -114,12 +124,6 @@ namespace Pattons_Best
       private readonly ArrayList myList;
       public MapImages() { myList = new ArrayList(); }
       public void Add(IMapImage mii) { myList.Add(mii); }
-      public IMapImage RemoveAt(int index)
-      {
-         IMapImage mii = (IMapImage)myList[index];
-         myList.RemoveAt(index);
-         return mii;
-      }
       public void Insert(int index, IMapImage mii) { myList.Insert(index, mii); }
       public int Count { get { return myList.Count; } }
       public void Clear() { myList.Clear(); }
@@ -127,12 +131,23 @@ namespace Pattons_Best
       public IEnumerator GetEnumerator() { return myList.GetEnumerator(); }
       public int IndexOf(IMapImage mii) { return myList.IndexOf(mii); }
       public void Remove(IMapImage mii) { myList.Remove(mii); }
-      public IMapImage this[int index]
+      public IMapImage? RemoveAt(int index)
       {
-         get { return (IMapImage)(myList[index]); }
+         IMapImage? mii = myList[index] as IMapImage;
+         if (null == mii) return null;
+         myList.RemoveAt(index);
+         return mii;
+      }
+      public IMapImage? this[int index]
+      {
+         get 
+         {
+            IMapImage? image = myList[index] as IMapImage;
+            return image; 
+         }
          set { myList[index] = value; }
       }
-      public IMapImage Find(string pathToMatch)
+      public IMapImage? Find(string pathToMatch)
       {
          foreach (Object o in myList)
          {
@@ -142,17 +157,27 @@ namespace Pattons_Best
          }
          return null;
       }
-      public BitmapImage GetBitmapImage(string imageName)
+      public BitmapImage? GetBitmapImage(string imageName)
       {
          foreach (Object o in myList)
          {
-            MapImage mii = (MapImage)o;
+            MapImage? mii = o as MapImage;
+            if( null == mii )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetBitmapImage(): mii is not a MapImage");
+               return null;
+            }
             if (mii.Name == imageName)
+            {
+               if( null == mii.myBitmapImage)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetBitmapImage(): mii.myBitmapImage=null");
+                  return null;
+               }
                return mii.myBitmapImage;
+            }
          }
-         MapImage miiToAdd = new MapImage(imageName);
-         myList.Add(miiToAdd);
-         return miiToAdd.myBitmapImage;
+         return null;
       }
    }
 }

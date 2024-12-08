@@ -21,17 +21,16 @@ namespace Pattons_Best
       public bool CtorError { get; } = false;
       private IGameEngine myGameEngine;
       private IGameInstance myGameInstance;
-      private ITerritories myTerritories;
+      private ITerritories? myTerritories;
       //--------------------------------------------------------------------
-      private IDieRoller myDieRoller;
+      private IDieRoller? myDieRoller = null;
       public int DieRoll { set; get; } = 0;
       //--------------------------------------------------------------------
-      public RuleDialogViewer myRulesMgr;
+      public RuleDialogViewer? myRulesMgr;
       //--------------------------------------------------------------------
-      private ScrollViewer myScrollViewerTextBlock;
-      private StackPanel myStackPanel;
-      private Canvas myCanvas;
-      private TextBlock myTextBlock;
+      private ScrollViewer? myScrollViewerTextBlock;
+      private Canvas? myCanvas = null;
+      private TextBlock? myTextBlock = null;
       //--------------------------------------------------------------------
       private readonly FontFamily myFontFam1 = new FontFamily("Courier New");
       //--------------------------------------------------------------------
@@ -73,13 +72,6 @@ namespace Pattons_Best
             return;
          }
          myScrollViewerTextBlock = sv;
-         if (null == sp)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewer(): sp=null");
-            CtorError = true;
-            return;
-         }
-         myStackPanel = sp;
          //--------------------------------------------------------
          if (myScrollViewerTextBlock.Content is TextBlock)
             myTextBlock = (TextBlock)myScrollViewerTextBlock.Content;  // Find the TextBox in the visual tree
@@ -143,6 +135,11 @@ namespace Pattons_Best
       //--------------------------------------------------------------------
       public void UpdateView(ref IGameInstance gi, GameAction action)
       {
+         if (null == myScrollViewerTextBlock)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateView() myScrollViewerTextBlock=null");
+            return;
+         }
          gi.IsGridActive = true;
          switch (action)
          {
@@ -455,6 +452,21 @@ namespace Pattons_Best
       //--------------------------------------------------------------------
       private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
       {
+         if( null == myCanvas )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): myCanvas=null");
+            return;
+         }
+         if (null == myDieRoller)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): myDieRoller=null");
+            return;
+         }
+         if (null == myTextBlock)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): myTextBlock=null");
+            return;
+         }
          System.Windows.Point p = e.GetPosition((UIElement)sender);
          HitTestResult result = VisualTreeHelper.HitTest(myTextBlock, p);  // Get the Point where the hit test occurrs
          foreach (Inline item in myTextBlock.Inlines)

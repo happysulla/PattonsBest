@@ -258,26 +258,39 @@ namespace Pattons_Best
       {
          XmlDocument aXmlDocument = new XmlDocument();
          aXmlDocument.LoadXml("<Territories></Territories>");
+         if( null == aXmlDocument.DocumentElement)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): aXmlDocument.DocumentElement=null");
+            return aXmlDocument;
+         }
          foreach (Territory t in territories)
          {
             XmlElement territoryElem = aXmlDocument.CreateElement("Territory");  // name of territory
             territoryElem.SetAttribute("value", t.Name);
             aXmlDocument.DocumentElement.AppendChild(territoryElem);
             //----------------------------------------------------
-            XmlElement typeElem = aXmlDocument.CreateElement("type"); // type of territory, open, farmland, forest, hills, mountains, desert, swamp
-            typeElem.SetAttribute("value", t.Type.ToString());
-            aXmlDocument.DocumentElement.LastChild.AppendChild(typeElem);
-            //----------------------------------------------------
             XmlElement pointElem = aXmlDocument.CreateElement("point"); // center point for this territory
             pointElem.SetAttribute("X", t.CenterPoint.X.ToString());
             pointElem.SetAttribute("Y", t.CenterPoint.Y.ToString());
-            aXmlDocument.DocumentElement.LastChild.AppendChild(pointElem);
+            XmlNode? lastchild = aXmlDocument.DocumentElement.LastChild;
+            if (lastchild == null)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): lastchild=null");
+               return aXmlDocument;
+            }
+            lastchild.AppendChild(pointElem);
             //----------------------------------------------------
             foreach (string s in t.Adjacents) // List of adjacent territories
             {
                XmlElement adjacentElem = aXmlDocument.CreateElement("adjacent");
                adjacentElem.SetAttribute("value", s);
-               aXmlDocument.DocumentElement.LastChild.AppendChild(adjacentElem);
+               lastchild = aXmlDocument.DocumentElement.LastChild;
+               if (lastchild == null)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): lastchild=null");
+                  return aXmlDocument;
+               }
+               lastchild.AppendChild(adjacentElem);
             }
             foreach (IMapPoint p in t.Points) // Points that make up the polygon of this territory
             {
@@ -285,7 +298,13 @@ namespace Pattons_Best
                XmlElement regionPointElem = aXmlDocument.CreateElement("regionPoint");
                regionPointElem.SetAttribute("X", p.X.ToString());
                regionPointElem.SetAttribute("Y", p.Y.ToString());
-               aXmlDocument.DocumentElement.LastChild.AppendChild(regionPointElem);
+               lastchild = aXmlDocument.DocumentElement.LastChild;
+               if (lastchild == null)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): lastchild=null");
+                  return aXmlDocument;
+               }
+               lastchild.AppendChild(regionPointElem);
             }
          }
          return aXmlDocument;
@@ -293,14 +312,30 @@ namespace Pattons_Best
       //--------------------------------------------------------
       void MouseDownEllipse(object sender, MouseButtonEventArgs e)
       {
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse(): myCanvas=null");
+            return;
+         }
          System.Windows.Point canvasPoint = e.GetPosition(myCanvas);
          IMapPoint mp = new MapPoint(canvasPoint.X, canvasPoint.Y);
          Console.WriteLine("MouseDownEllipse.MouseDown(): {0}", mp.ToString());
          ITerritory matchingTerritory = null; // Find the corresponding Territory
          Ellipse mousedEllipse = (Ellipse)sender;
-         foreach (ITerritory t in Territory.theTerritories)
+         foreach (ITerritory? t in Territory.theTerritories)
          {
-            if (mousedEllipse.Tag.ToString() == Utilities.RemoveSpaces(t.ToString()))
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse.MouseDown(): t=null");
+               return;
+            }
+            string? tName = t.ToString();
+            if (null == tName)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse.MouseDown(): tName=null");
+               return;
+            }
+            if (mousedEllipse.Tag.ToString() == Utilities.RemoveSpaces(tName))
             {
                matchingTerritory = t;
                break;
@@ -352,6 +387,11 @@ namespace Pattons_Best
       }
       void MouseDownPolygon(object sender, MouseButtonEventArgs e)
       {
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygon(): myCanvas=null");
+            return;
+         }
          System.Windows.Point canvasPoint = e.GetPosition(myCanvas);
          IMapPoint mp = new MapPoint(canvasPoint.X, canvasPoint.Y);
          Console.WriteLine("TerritoryRegionUnitTest.MouseDownPolygon(): {0}", mp.ToString());
@@ -359,10 +399,16 @@ namespace Pattons_Best
          {
             // This function removes an existing polygon when it is clicked if no achor territory exists
             Polygon aPolygon = (Polygon)sender;
-            ITerritory matchingTerritory = null;
+            ITerritory? matchingTerritory = null;
             foreach (ITerritory t in Territory.theTerritories)
             {
-               if (aPolygon.Tag.ToString() == Utilities.RemoveSpaces(t.ToString()))
+               string? tName = t.ToString();
+               if( null == tName )
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygon(): tName=null");
+                  continue;
+               }
+               if (aPolygon.Tag.ToString() == Utilities.RemoveSpaces(tName))
                {
                   matchingTerritory = t;
                   break;

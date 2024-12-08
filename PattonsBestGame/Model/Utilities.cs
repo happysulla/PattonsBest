@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
 using System.Xml;
+using System.Data.Common;
 namespace Pattons_Best
 {
    public class Utilities
@@ -158,39 +159,45 @@ namespace Pattons_Best
             return "";
          }
       }
-      public static T Deserialize<T>(String s_xml)
+      public static T? Deserialize<T>(String s_xml)
       {
          try // XML serializer does not work for Interfaces
          {
             StringReader reader = new StringReader(s_xml);
             XmlReader xw = XmlReader.Create(reader);
             XmlSerializer serializer = new XmlSerializer(typeof(T));
-            object obj = serializer.Deserialize(xw);  
+            object? obj = serializer.Deserialize(xw);  
+            if(null == obj)
+            {
+               var type = typeof(T);
+               Logger.Log(LogEnum.LE_ERROR, "Deserialize(): serializer returned null for s=" + s_xml + " T=" + type.ToString());
+               return default;
+            }
             return (T)obj;
          }
          catch (DirectoryNotFoundException dirException)
          {
             var type = typeof(T);
             Logger.Log(LogEnum.LE_ERROR, "Deserialize(): s=" + s_xml + " T=" + type.ToString() + "\ndirException=" + dirException.ToString());
-            return default(T);
+            return default;
          }
          catch (FileNotFoundException fileException)
          {
             var type = typeof(T);
             Logger.Log(LogEnum.LE_ERROR, "Deserialize(): s=" + s_xml + " T=" + type.ToString() + "\nfileException=" + fileException.ToString());
-            return default(T);
+            return default;
          }
          catch (IOException ioException)
          {
             var type = typeof(T);
             Logger.Log(LogEnum.LE_ERROR, "Deserialize(): s=" + s_xml + " T=" + type.ToString() + "\nioException=" + ioException.ToString());
-            return default(T);
+            return default;
          }
          catch (Exception ex)
          {
             var type = typeof(T);
             Logger.Log(LogEnum.LE_ERROR, "Deserialize(): s=" + s_xml + " T=" + type.ToString() + "\nex=" + ex.ToString());
-            return default(T);
+            return default;
          }
       }
    }

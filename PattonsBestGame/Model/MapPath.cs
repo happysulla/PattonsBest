@@ -8,34 +8,22 @@ namespace Pattons_Best
    [Serializable]
    class MapPath : IMapPath
    {
-      private string myName;
-      public string Name
-      {
-         get { return myName; }
-         set { myName = value; }
-      }
+      public string Name { get; set; } = string.Empty;
       private double myMetric = 0;
-      public double Metric
-      {
-         get { return myMetric; }
-         set { myMetric = value; }
-      }
+      public double Metric { get; set; }
       private List<ITerritory> myTerritories = new List<ITerritory>();
-      public List<ITerritory> Territories
-      {
-         get { return myTerritories; }
-      }
+      public List<ITerritory> Territories { get=>myTerritories; }
       //-----------------------------------------------------------
       public MapPath()
       {
       }
       public MapPath(String pathName)
       {
-         myName = pathName;
+         Name = pathName;
       }
       public MapPath(IMapPath path)
       {
-         myName = path.Name;
+         Name = path.Name;
          myMetric = path.Metric;
          foreach (ITerritory t in path.Territories)
             myTerritories.Add(t);
@@ -65,12 +53,7 @@ namespace Pattons_Best
       private ArrayList myList;
       public MapPaths() { myList = new ArrayList(); }
       public void Add(IMapPath path) { myList.Add(path); }
-      public IMapPath RemoveAt(int index)
-      {
-         IMapPath path = (IMapPath)myList[index];
-         myList.RemoveAt(index);
-         return path;
-      }
+
       public void Insert(int index, IMapPath path) { myList.Insert(index, path); }
       public int Count { get { return myList.Count; } }
       public void Clear() { myList.Clear(); }
@@ -78,27 +61,37 @@ namespace Pattons_Best
       public IEnumerator GetEnumerator() { return myList.GetEnumerator(); }
       public int IndexOf(IMapPath path) { return myList.IndexOf(path); }
       public void Remove(IMapPath path) { myList.Remove(path); }
-      public IMapPath Find(IMapPath pathToMatch)
+      public IMapPath? Find(IMapPath pathToMatch)
       {
          foreach (Object o in myList)
          {
-            IMapPath path = (IMapPath)o;
+            IMapPath? path = o as IMapPath;
+            if( null == path )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MapPath.Find(pathToMatch): path=null");
+               return null;
+            }
             if (path.Name == pathToMatch.Name)
                return path;
          }
          return null;
       }
-      public IMapPath Find(string pathName)
+      public IMapPath? Find(string pathName)
       {
          foreach (Object o in myList)
          {
-            IMapPath path = (IMapPath)o;
+            IMapPath? path = (IMapPath)o;
+            if (null == path)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MapPath.Find(pathToMatch): path=null");
+               return null;
+            }
             if (path.Name == pathName)
                return path;
          }
          return null;
       }
-      public IMapPath Remove(string pathName)
+      public IMapPath? Remove(string pathName)
       {
          foreach (Object o in myList)
          {
@@ -111,9 +104,21 @@ namespace Pattons_Best
          }
          return null;
       }
-      public IMapPath this[int index]
+      public IMapPath? RemoveAt(int index)
       {
-         get { return (IMapPath)(myList[index]); }
+         IMapPath? path = myList[index] as IMapPath;
+         if (null == path)
+            return null;
+         myList.RemoveAt(index);
+         return path;
+      }
+      public IMapPath? this[int index]
+      {
+         get 
+         { 
+            IMapPath? mp = myList[index] as IMapPath;
+            return mp; 
+         }
          set { myList[index] = value; }
       }
    }

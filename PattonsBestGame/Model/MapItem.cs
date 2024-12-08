@@ -3,6 +3,7 @@ using System.Text;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Xml.Linq;
 using WpfAnimatedGif;
 using Button = System.Windows.Controls.Button;
 using Label = System.Windows.Controls.Label;
@@ -33,13 +34,13 @@ namespace Pattons_Best
    {
       [NonSerialized] private static Random theRandom = new Random();
       [NonSerialized] public static IMapImages theMapImages = new MapImages();
+      [NonSerialized] private static BitmapImage? theBloodSpot = theMapImages.GetBitmapImage("OBlood1");
       private const double PERCENT_MAPITEM_COVERED = 40.0;
-      [NonSerialized] private static BitmapImage theBloodSpot = theMapImages.GetBitmapImage("OBlood1");
       //--------------------------------------------------
-      public string? Name { get; set; } = "";
-      public string? TopImageName { get; set; } = "";
-      public string? BottomImageName { get; set; } = "";
-      public string? OverlayImageName { get; set; } = "";
+      public string Name { get; set; } = string.Empty;
+      public string TopImageName { get; set; } = string.Empty;
+      public string BottomImageName { get; set; } = string.Empty;
+      public string OverlayImageName { get; set; } = string.Empty;
       public List<BloodSpot> myWoundSpots = new List<BloodSpot>();
       public List<BloodSpot> WoundSpots { get => myWoundSpots; }
       public double Zoom { get; set; } = 1.0;
@@ -47,8 +48,10 @@ namespace Pattons_Best
       //--------------------------------------------------
       public int MovementUsed { get; set; } = 0;
       //--------------------------------------------------
-      public ITerritory TerritoryCurrent { get; set; } = Territory.theTerritories.Find("Offboard");
-      public ITerritory TerritoryStarting { get; set; } = Territory.theTerritories.Find("Offboard");
+      private ITerritory myTerritoryCurrent = new Territory("Offboard");
+      public ITerritory TerritoryCurrent { get => myTerritoryCurrent; set => myTerritoryCurrent = value; }
+      private ITerritory myTerritoryStarting = new Territory("Offboard");
+      public ITerritory TerritoryStarting { get=>myTerritoryStarting; set=>myTerritoryStarting=value; }
       public IMapPoint Location { get; set; } = new MapPoint(0.0, 0.0);
       //--------------------------------------------------
       public bool IsMoved { get; set; } = false;
@@ -57,7 +60,9 @@ namespace Pattons_Best
       {
          set
          {
-            IMapImage mii = theMapImages.Find(this.TopImageName);
+            if (null == this.TopImageName)
+               return;
+            IMapImage? mii = theMapImages.Find(this.TopImageName);
             if (null == mii)
             {
                Logger.Log(LogEnum.LE_ERROR, "IsAnimated.set() could not find map image for " + this.TopImageName);
@@ -67,7 +72,9 @@ namespace Pattons_Best
          }
          get
          {
-            IMapImage mii = theMapImages.Find(this.TopImageName);
+            if (null == this.TopImageName)
+               return false;
+            IMapImage? mii = theMapImages.Find(this.TopImageName);
             if (null == mii)
             {
                Logger.Log(LogEnum.LE_ERROR, "IsAnimated.get() could not find map image for " + this.TopImageName);
@@ -77,7 +84,21 @@ namespace Pattons_Best
          }
       }
       //----------------------------------------------------------------------------
-      public MapItem() { }
+      public MapItem()
+      {
+      }
+      public MapItem(IMapItem mi)
+      {
+         this.Name = mi.Name;
+         this.Zoom = mi.Zoom;
+         this.IsHidden = mi.IsHidden;
+         this.TopImageName = mi.TopImageName;
+         this.BottomImageName = mi.BottomImageName;
+      }
+      protected MapItem(string name)
+      {
+         this.Name = name;
+      }
       public MapItem(string aName, double zoom, bool isHidden, bool isAnimated, string topImageName)
       {
          try
@@ -86,11 +107,10 @@ namespace Pattons_Best
             this.Zoom = zoom;
             this.IsHidden = isHidden;
             this.TopImageName = topImageName;
-            this.BottomImageName = null;
-            IMapImage mii = theMapImages.Find(topImageName);
+            IMapImage? mii = theMapImages.Find(topImageName);
             if (null == mii)
             {
-               mii = (IMapImage)new MapImage(topImageName);
+               mii = new MapImage(topImageName);
                theMapImages.Add(mii);
             }
             this.IsAnimated = isAnimated;
@@ -100,14 +120,6 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MapItem(): aName=" + aName + "\n Ex=" + ex.ToString());
             return;
          }
-      }
-      public MapItem(IMapItem mi)
-      {
-
-      }
-      protected MapItem(string name)
-      {
-         this.Name = name;
       }
       public MapItem(string aName, double zoom, bool isHidden, bool isAnimated, string topImageName, string bottomImageName, IMapPoint aStartingPoint)
       {
@@ -255,12 +267,6 @@ namespace Pattons_Best
          foreach (IMapItem item in mapItems) { this.Add(item); }
       }
       public void Add(IMapItem mi) { myList.Add(mi); }
-      public IMapItem RemoveAt(int index)
-      {
-         IMapItem mi = (IMapItem)myList[index];
-         myList.RemoveAt(index);
-         return mi;
-      }
       public void Insert(int index, IMapItem mi) { myList.Insert(index, mi); }
       public int Count { get { return myList.Count; } }
       public void Reverse() { myList.Reverse(); }
@@ -269,21 +275,24 @@ namespace Pattons_Best
       public IEnumerator GetEnumerator() { return myList.GetEnumerator(); }
       public int IndexOf(IMapItem mi) { return myList.IndexOf(mi); }
       public void Remove(IMapItem mi) { myList.Remove(mi); }
-      public IMapItem Find(string miName)
+      public IMapItem? Find(string miName)
       {
          foreach (Object o in myList)
          {
-            IMapItem mi = (IMapItem)o;
+            IMapItem? mi = o as IMapItem;
+            if (null == mi)
+               return null;
             if (miName == Utilities.RemoveSpaces(mi.Name))
                return mi;
          }
          return null;
       }
-      public IMapItem Remove(string miName)
+      public IMapItem? Remove(string miName)
       {
          foreach (Object o in myList)
          {
-            IMapItem mi = (IMapItem)o;
+            IMapItem? mi = (IMapItem)o;
+            if( null == mi) return null;
             if (miName == mi.Name)
             {
                myList.Remove(mi);
@@ -292,28 +301,40 @@ namespace Pattons_Best
          }
          return null;
       }
-      public IMapItem this[int index]
+      public IMapItem? RemoveAt(int index)
       {
-         get { return (IMapItem)(myList[index]); }
+         IMapItem? mi = myList[index] as IMapItem;
+         if (null == mi)
+            return null;
+         myList.RemoveAt(index);
+         return mi;
+      }
+      public IMapItem? this[int index]
+      {
+         get 
+         {
+            IMapItem? mi = myList[index] as IMapItem;
+            return mi; 
+         }
          set { myList[index] = value; }
       }
       public IMapItems Shuffle()
       {
          IMapItems newOrder = new MapItems();
-         // Random select card in myCards list and
-         // remove it.  Then add it to new list. 
          int count = myList.Count;
          for (int i = 0; i < count; i++)
          {
             int index = Utilities.RandomGenerator.Next(myList.Count);
             if (index < myList.Count)
             {
-               IMapItem randomIndex = (IMapItem)myList[index];
+               IMapItem? randomMapItem = myList[index] as IMapItem;
                myList.RemoveAt(index);
-               newOrder.Add(randomIndex);
+               if (randomMapItem == null )
+                  Logger.Log(LogEnum.LE_ERROR, "Shuffle(): randomMapItem=null;");
+               else
+                  newOrder.Add(randomMapItem);
             }
          }
-
          return newOrder;
       }
       public void Rotate(int numOfRotates)
@@ -343,7 +364,7 @@ namespace Pattons_Best
    //--------------------------------------------------------------------------
    public static class MyMapItemExtensions
    {
-      public static IMapItem Find(this IList<IMapItem> list, string miName)
+      public static IMapItem? Find(this IList<IMapItem> list, string miName)
       {
          IEnumerable<IMapItem> results = from mi in list where mi.Name == miName select mi;
          if (0 < results.Count())

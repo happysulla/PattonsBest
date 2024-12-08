@@ -33,33 +33,28 @@ namespace Pattons_Best
       //--------------------------------------------------
       public static IGameInstance? OpenGame()
       {
-         IGameInstance? gi = null;
-         FileStream? fileStream = null;
          try
          {
             if (false == Directory.Exists(theGamesDirectory)) // create directory if does not exists
                Directory.CreateDirectory(theGamesDirectory);
             string filename = theGamesDirectory + "Checkpoint.bpg";
-            fileStream = new FileStream(filename, FileMode.Open);
+            FileStream fileStream = new FileStream(filename, FileMode.Open);
             XmlSerializer serializer = new XmlSerializer(typeof(GameInstance)); // read from file
             if( null != serializer )
             {
-               gi = (GameInstance)serializer.Deserialize(fileStream);
-               if( null != gi )
-                  Logger.Log(LogEnum.LE_GAME_INIT, "OpenGame(): gi=" + gi.ToString());
+               IGameInstance? gi = serializer.Deserialize(fileStream) as GameInstance;
                fileStream.Close();
+               return gi;
             }
             else
             {
                Logger.Log(LogEnum.LE_ERROR, "OpenGame(): serializer=null");
+               return null;
             }
-            return gi;
          }
          catch (Exception e)
          {
             Logger.Log(LogEnum.LE_ERROR, "OpenGame(): path=" + theGamesDirectory + " e =" + e.ToString());
-            if (null != fileStream)
-               fileStream.Close();
             return null;
          }
       }
@@ -76,11 +71,10 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SaveGameToFile(): path=" + theGamesDirectory + " e=" + e.ToString());
             return false;
          }
-         FileStream fileStream = null;
          try
          {
             string filename = theGamesDirectory + "Checkpoint.bpg";
-            fileStream = File.OpenWrite(filename);
+            FileStream fileStream = File.OpenWrite(filename);
             XmlWriter writer = XmlWriter.Create (fileStream);
             XmlSerializer serializer = new XmlSerializer(typeof(GameInstance));
             serializer.Serialize(writer, gi);
@@ -92,13 +86,11 @@ namespace Pattons_Best
          {
             Logger.Log(LogEnum.LE_ERROR, "SaveGameToFile(): path=" + theGamesDirectory + " e =" + ex.ToString());
             Console.WriteLine(ex.ToString());
-            if (null != fileStream)
-               fileStream.Close();
             return false;
          }
       }
       //--------------------------------------------------
-      public static IGameInstance? OpenGameFromFile()
+      public static IGameInstance OpenGameFromFile()
       {
          try
          {
@@ -109,49 +101,56 @@ namespace Pattons_Best
          catch(Exception e)
          {
             Logger.Log(LogEnum.LE_ERROR, "OpenGameFromFile(): path=" + theGamesDirectory + " e=" + e.ToString());
-            return null;
+            return new GameInstance();
          }
-         FileStream? fileStream = null;
          try
          {
-            IGameInstance? gi = null;
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.InitialDirectory = theGamesDirectory;
             dlg.RestoreDirectory = true;
             dlg.Filter = "Barbarin Prince Games|*.bpg";
+            IGameInstance? gi = null;
             if (true == dlg.ShowDialog())
             {
-               fileStream = new FileStream(dlg.FileName, FileMode.Open);
+               FileStream? fileStream = new FileStream(dlg.FileName, FileMode.Open);
                XmlSerializer formatter = new XmlSerializer(typeof(GameInstance));
                if (null != formatter)
                {
                   XmlReader xw = XmlReader.Create(fileStream);
-                  gi = (GameInstance)formatter.Deserialize(xw);
+                  gi = formatter.Deserialize(xw) as GameInstance;
                   if( null == gi )
-                  {
-
-                  }
+                     return new GameInstance();
                   Logger.Log(LogEnum.LE_GAME_INIT, "OpenGameFromFile(): gi=" + gi.ToString());
                   fileStream.Close();
-                  theGamesDirectory = Path.GetDirectoryName(dlg.FileName); // save off the directory user chosen
+                  string? gamesDirName = Path.GetDirectoryName(dlg.FileName);
+                  if( null == gamesDirName )
+                     Logger.Log(LogEnum.LE_ERROR, "OpenGameFromFile(): gamesDirName=null");
+                  else
+                     theGamesDirectory = gamesDirName; // save off the directory user chosen
                   theGamesDirectory += "\\";
+                  if (null == AssemblyDirectory)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "OpenGameFromFile(): AssemblyDirectory=null");
+                     return new GameInstance();
+                  }
                   Directory.SetCurrentDirectory(AssemblyDirectory);
                }
+               if (null == gi)
+                  return new GameInstance();
                return gi;
             }
          }
          catch (Exception e)
          {
             Logger.Log(LogEnum.LE_ERROR, "OpenGameFromFile(): path=" + theGamesDirectory + " e =" + e.ToString());
-            if (null != fileStream)
-               fileStream.Close();
          }
          string? path = AssemblyDirectory;
          if( null == path )
             Logger.Log(LogEnum.LE_ERROR, "OpenGameFromFile(): AssemblyDirectory=null");
          else
             Directory.SetCurrentDirectory(path);
-         return null;
+         Logger.Log(LogEnum.LE_ERROR, "OpenGameFromFile(): Reached default - Returning new GameInstance()");
+         return new GameInstance();
       }
       //--------------------------------------------------
       public static bool SaveGameAsToFile(IGameInstance gi)
@@ -166,7 +165,6 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SaveGameAsToFile(): path=" + theGamesDirectory + " e=" + e.ToString());
             return false;
          }
-         FileStream fileStream = null;
          try
          {
             SaveFileDialog dlg = new SaveFileDialog();
@@ -176,21 +174,30 @@ namespace Pattons_Best
             dlg.RestoreDirectory = true;
             if (true == dlg.ShowDialog())
             {
-               fileStream = File.OpenWrite(theGamesDirectory + filename);
+               FileStream fileStream = File.OpenWrite(theGamesDirectory + filename);
                XmlWriter writer = XmlWriter.Create(fileStream);
                XmlSerializer serializer = new XmlSerializer(typeof(GameInstance)); // write to file
                serializer.Serialize(writer, gi);
                writer.Close();
-               theGamesDirectory = Path.GetDirectoryName(dlg.FileName); // save off the directory user chosen
-               theGamesDirectory += "\\";
+               string? gamesDir = Path.GetDirectoryName(dlg.FileName); // save off the directory user chosen
+               if( null == gamesDir )
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "SaveGameAsToFile(): gamesDir=null filename=" + filename);
+                  Console.WriteLine("SaveGameAsToFile(): gamesDir=null filename=" + filename);
+                  return false;
+               }
+               else
+               {
+                  theGamesDirectory = gamesDir;
+                  theGamesDirectory += "\\";
+               }
+
             }
          }
          catch (Exception ex)
          {
             Logger.Log(LogEnum.LE_ERROR, "SaveGameAsToFile(): path=" + theGamesDirectory + " e =" + ex.ToString());
             Console.WriteLine(ex.ToString());
-            if (null != fileStream)
-               fileStream.Close();
             return false;
          }
          return true;

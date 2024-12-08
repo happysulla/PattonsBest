@@ -20,13 +20,20 @@ namespace Pattons_Best
 {
    public partial class ShowAboutDialog : Window
    {
+      public bool CtorError { get; } = false;
       public ShowAboutDialog()
       {
          InitializeComponent();
          //--------------------------------------
          StringBuilder sb = new StringBuilder();
          sb.Append("Verson: ");
-         Version version = Assembly.GetExecutingAssembly().GetName().Version;
+         Version? version = Assembly.GetExecutingAssembly().GetName().Version;
+         if( null == version )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowAboutDialog(): version=null");
+            CtorError = true;
+            return;
+         }
          sb.Append(version.ToString());
          sb.Append("_");
          DateTime linkTimeLocal = GetLinkerTime(Assembly.GetExecutingAssembly());

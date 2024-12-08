@@ -108,16 +108,21 @@ namespace Pattons_Best
          // quotation marks.
          StringBuilder sb = new StringBuilder();
          string key = "";
-         string aLine = null;
          const int TOTAL_LINES_IN_RECORD = 1000;
          int count = TOTAL_LINES_IN_RECORD; // record should be less than this many lines
-                                            //----------------------------------------------------
+         string? aLine = null;
+         //----------------------------------------------------
          while (0 < --count) // Find the key for the dictionary
          {
             int nextChar = sr.Peek();
             if (-1 == nextChar)  // break if reach end of file
                return true;
             aLine = sr.ReadLine(); // The first line is always assumed to have the first quotation mark and it should always have one quotation mark
+            if (null == aLine)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateRecord(): aLine=null");
+               return false;
+            }
             string[] aStringArray1 = aLine.Split('"');
             if (2 == aStringArray1.Length)
             {
@@ -128,12 +133,12 @@ namespace Pattons_Best
          }
          if (0 == count) // should break out of while loop prior to count reaching zero
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateRecord() when findng first line count>" + TOTAL_LINES_IN_RECORD.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "CreateRecord(): when findng first line count>" + TOTAL_LINES_IN_RECORD.ToString());
             return false;
          }
          if ("" == key)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateRecord() key is empty");
+            Logger.Log(LogEnum.LE_ERROR, "CreateRecord(): key is empty");
             return false;
          }
          //----------------------------------------------------
@@ -143,6 +148,11 @@ namespace Pattons_Best
          while (0 < --count) // create the value for the dictionary
          {
             aLine = sr.ReadLine();
+            if (null == aLine)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateRecord(): aLine=null");
+               return false;
+            }
             string[] aStringArray2 = aLine.Split('"'); // loop for quotation mark to find end of record
             switch (aStringArray2.Length)
             {

@@ -6,8 +6,8 @@ namespace Pattons_Best
 {
    [Serializable] public class Option
    {
-      public string Name { get; set; }
-      public bool IsEnabled { get; set; }
+      public string Name { get; set; } = string.Empty;
+      public bool IsEnabled { get; set; } = false;
       public Option()
       {
       }
@@ -28,32 +28,34 @@ namespace Pattons_Best
       public int Count { get => myList.Count; }
       public void Add(Option o) { myList.Add(o); }
       public void Add(System.Object o) { myList.Add(o); }
-      public Option RemoveAt(int index)
-      {
-         Option option = (Option)myList[index];
-         myList.RemoveAt(index);
-         return option;
-      }
       public void Insert(int index, Option o) { myList.Insert(index, o); }
       public void Clear() { myList.Clear(); }
       public bool Contains(Option o) { return myList.Contains(o); }
       public IEnumerator GetEnumerator() { return myList.GetEnumerator(); }
       public int IndexOf(Option o) { return myList.IndexOf(o); }
-      public Option Find(string name)
+      public Option? Find(string name)
       {
          int i = 0;
          foreach (Object o in myList)
          {
-            Option option = (Option)o;
+            Option? option = (Option)o;
+            if (null == option)
+               continue;
             if (name == option.Name)
                return option;
             ++i;
          }
          return null;
       }
-      public Option this[int index]
+      public Option? RemoveAt(int index)
       {
-         get { return (Option)(myList[index]); }
+         Option? option = myList[index] as Option;
+         myList.RemoveAt(index);
+         return option;
+      }
+      public Option? this[int index]
+      {
+         get { Option? o = myList[index] as Option; return o; }
          set { myList[index] = value; }
       }
       public Options Clone()

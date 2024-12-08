@@ -197,20 +197,39 @@ namespace Pattons_Best
          try
          {
             // Load the reader with the data file and ignore all white space nodes.
-
-            XmlTextReader reader = new XmlTextReader(filename) { WhitespaceHandling = WhitespaceHandling.None };
+            XmlTextReader? reader = new XmlTextReader(filename) { WhitespaceHandling = WhitespaceHandling.None };
+            if( null == reader )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadDiceXml(): reader=null");
+               return false;
+            }
             while (reader.Read())
             {
                if (reader.Name == "DiceRoll")
                {
                   if (reader.IsStartElement())
                   {
-                     string imageName = reader.GetAttribute("value");
+                     string? imageName = reader.GetAttribute("value");
+                     if( null == imageName )
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "ReadDiceXml(): imageName=null");
+                        return false;
+                     }
                      reader.Read();
-                     string zoomStr = reader.GetAttribute("value");
+                     string? zoomStr = reader.GetAttribute("value");
+                     if (null == zoomStr)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "ReadDiceXml(): zoomStr=null");
+                        return false;
+                     }
                      Double zoom = Double.Parse(zoomStr);
                      reader.Read();
-                     string topImageName = reader.GetAttribute("value");
+                     string? topImageName = reader.GetAttribute("value");
+                     if (null == topImageName)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "ReadDiceXml(): zoomStr=null");
+                        return false;
+                     }
                      //------------------------------------------------
                      BitmapImage bmi = new BitmapImage();
                      bmi.BeginInit();
@@ -244,7 +263,7 @@ namespace Pattons_Best
          } // try
          catch (Exception e)
          {
-            Console.WriteLine("Territory.CreateTerritories(): Exception:  e.Message={0} while reading filename={1}", e.Message, filename);
+            Console.WriteLine("ReadDiceXml(): Exception:  e.Message={0} while reading filename={1}", e.Message, filename);
             return false;
          }
       }

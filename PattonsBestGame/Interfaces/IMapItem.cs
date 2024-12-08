@@ -8,10 +8,10 @@ namespace Pattons_Best
    {
       //----------------------------------------
       // Basic Properties
-      string? Name { get; set; }
-      string? TopImageName { get; set; }
-      string? BottomImageName { get; set; }
-      string? OverlayImageName { get; set; }
+      string Name { get; set; }
+      string TopImageName { get; set; }
+      string BottomImageName { get; set; }
+      string OverlayImageName { get; set; }
       List<BloodSpot> WoundSpots { get; }
       double Zoom { get; set; }
       bool IsHidden { get; set; }
@@ -31,16 +31,17 @@ namespace Pattons_Best
    {
       int Count { get; }
       void Add(IMapItem mi);
-      IMapItem RemoveAt(int index);
+
       void Insert(int index, IMapItem mi);
       void Clear();
       bool Contains(IMapItem mi);
       int IndexOf(IMapItem mi);
       void Remove(IMapItem miName);
       void Reverse();
-      IMapItem Remove(string miName);
-      IMapItem Find(string miName);
-      IMapItem this[int index] { get; set; }
+      IMapItem? Remove(string miName);
+      IMapItem? RemoveAt(int index);
+      IMapItem? Find(string miName);
+      IMapItem? this[int index] { get; set; }
       IMapItems Shuffle();
       void Rotate(int numOfRotates);
    }

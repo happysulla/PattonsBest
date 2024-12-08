@@ -225,6 +225,11 @@ namespace Pattons_Best
       }
       private void CreateTriangles()
       {
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateTriangles(): myCanvas=null");
+            return;
+         }
          const double SIZE = 6.0;
          foreach (KeyValuePair<string, Polyline> kvp in myRivers)
          {
@@ -290,6 +295,11 @@ namespace Pattons_Best
       }
       private void CreateEllipses()
       {
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateEllipses(): myCanvas=null");
+            return;
+         }
          Ellipse aEllipseStart = new Ellipse();
          aEllipseStart.Name = "Start";
          aEllipseStart.Fill = Brushes.AliceBlue;
@@ -326,6 +336,11 @@ namespace Pattons_Best
       {
          XmlDocument aXmlDocument = new XmlDocument();
          aXmlDocument.LoadXml("<Rivers></Rivers>");
+         if( null == aXmlDocument.DocumentElement )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): aXmlDocument.DocumentElement=null");
+            return aXmlDocument;
+         }
          foreach (KeyValuePair<string, Polyline> kvp in myRivers)
          {
             XmlElement nameElem = aXmlDocument.CreateElement("River");  // name of river
@@ -344,6 +359,11 @@ namespace Pattons_Best
       //----------------------------------------------------------
       void MouseDownEllipse(object sender, MouseButtonEventArgs e)
       {
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse(): myCanvas=null");
+            return;
+         }
          System.Windows.Point canvasPoint = e.GetPosition(myCanvas);
          IMapPoint mp = new MapPoint(canvasPoint.X, canvasPoint.Y);
          Ellipse mousedEllipse = (Ellipse)sender;

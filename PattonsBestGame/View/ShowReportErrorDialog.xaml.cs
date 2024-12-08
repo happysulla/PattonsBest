@@ -20,12 +20,19 @@ namespace Pattons_Best
 {
    public partial class ShowReportErrorDialog : Window
    {
+      public bool CtorError { get; } = false;
       public ShowReportErrorDialog()
       {
          InitializeComponent();
          StringBuilder sb = new StringBuilder();
-         sb.Append("Verson: ");
-         Version version = Assembly.GetExecutingAssembly().GetName().Version;
+         sb.Append("Verson: ");   
+         Version? version = Assembly.GetExecutingAssembly().GetName().Version;
+         if( null == version )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowREportErrorDialog(): version=null");
+            CtorError = true; 
+            return;
+         }
          sb.Append(version.ToString());
          sb.Append("_");
          DateTime linkTimeLocal = GetLinkerTime(Assembly.GetExecutingAssembly());

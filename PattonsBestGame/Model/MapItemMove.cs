@@ -10,10 +10,10 @@ namespace Pattons_Best
    public class MapItemMove : IMapItemMove
    {
       public bool CtorError { get; } = false;
-      public IMapItem MapItem { set; get; }         // Represents the map item that is being moved
-      public ITerritory OldTerritory { set; get; }  // Represents the old territory that the MapItem is being moved from.
-      public ITerritory NewTerritory { set; get; }  // Represents the new territory that the MapItem is being moved to.
-      public IMapPath BestPath { set; get; }
+      public IMapItem MapItem { set; get; } = new MapItem();       // Represents the map item that is being moved
+      public ITerritory? OldTerritory { set; get; } = null; // Represents the old territory that the MapItem is being moved from.
+      public ITerritory? NewTerritory { set; get; } = null; // Represents the new territory that the MapItem is being moved to.
+      public IMapPath? BestPath { set; get; } = null;
       //------------------------------------------------------------------------------
       //public MapItemMove() // default constructor
       //{
@@ -23,10 +23,32 @@ namespace Pattons_Best
       //   OldTerritory = oldT;
       //   NewTerritory = newT;
       //}
+      public MapItemMove() // Default Contructor
+      {
+      }
+      public MapItemMove(IMapItemMove mim) // Copy Contructor
+      {
+         MapItem = mim.MapItem;
+         OldTerritory = mim.OldTerritory;
+         NewTerritory = mim.NewTerritory;
+         BestPath = mim.BestPath;
+      }
       public MapItemMove(ITerritories territories, IMapItem movingMapItem, ITerritory newTerritory) // Do not move into overstacked region
       {
          MapItem = movingMapItem;
          OldTerritory = movingMapItem.TerritoryCurrent;
+         if( null == OldTerritory )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MapItemMove(): OldTerritory=null");
+            CtorError = true;
+            return;
+         }
+         if (null == newTerritory)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MapItemMove(): newTerritory=null");
+            CtorError = true;
+            return;
+         }
          BestPath = GetBestPath(territories, OldTerritory, newTerritory, 100);
          if (null == BestPath)
          {
@@ -34,7 +56,6 @@ namespace Pattons_Best
             msg += MapItem.ToString();
             msg += " from ";
             msg += OldTerritory.Name;
-            BestPath = new MapPath(OldTerritory.ToString());
             Logger.Log(LogEnum.LE_ERROR, "MapItemMove(): Not able to find best path");
             CtorError = true;
             return;
@@ -43,20 +64,6 @@ namespace Pattons_Best
          int countOfTerritories = BestPath.Territories.Count;
          NewTerritory = BestPath.Territories[countOfTerritories - 1];
       }
-      public MapItemMove(IMapItemMove mim) // Copy Contructor
-      {
-         MapItem = mim.MapItem;
-         OldTerritory = mim.OldTerritory;
-         NewTerritory = mim.NewTerritory;
-         BestPath = new MapPath(mim.BestPath);
-      }
-      //public MapItemMove(IMapItem movingMapItem, ITerritory oldTerritory, ITerritory newTerritory, IMapPath bestPath)
-      //{
-      //   MapItem = movingMapItem;
-      //   OldTerritory = oldTerritory;
-      //   NewTerritory = newTerritory;
-      //   BestPath = new MapPath(bestPath);
-      //}
       //------------------------------------------------------------------------------
       static public double GetDistance(ITerritory startT, ITerritory endT)
       {
@@ -67,7 +74,7 @@ namespace Pattons_Best
          double distance = Math.Sqrt(xDelta * xDelta + yDelta * yDelta);
          return distance;
       }
-      public IMapPath GetBestPath(ITerritories territories, ITerritory startT, ITerritory endT, int moveFactor)
+      public IMapPath? GetBestPath(ITerritories territories, ITerritory startT, ITerritory endT, int moveFactor)
       {
          IMapPaths paths = new MapPaths();
          if (moveFactor < 1)
@@ -86,7 +93,12 @@ namespace Pattons_Best
             foreach (string adjTerritory in startT.Adjacents)
             {
                IMapPath path = new MapPath(adjTerritory);
-               ITerritory adj = territories.Find(adjTerritory);
+               ITerritory? adj = territories.Find(adjTerritory);
+               if (adj == null)
+               {
+                  Logger.Log(LogEnum.LE_VIEW_MIM, "GetBestPath(): adj=null");
+                  return null;
+               }
                path.Territories.Add(adj);
                path.Metric = GetDistance(adj, endT);
                paths.Add(path);
@@ -168,9 +180,7 @@ namespace Pattons_Best
                      }
                      // Exclude alternative paths that fold back on themselves, i.e.
                      // do not choose a Territory that is already on this MapPath.
-                     IEnumerable<ITerritory> results1 = from territory in path.Territories
-                                                        where territory.Name == adj2.Name
-                                                        select territory;
+                     IEnumerable<ITerritory> results1 = from territory in path.Territories where territory.Name == adj2.Name select territory;
                      if (0 < results1.Count())
                      {
                         //Console.WriteLine("     ==> ==> {0} is already in {1}", adj2.ToString(), path.ToString());
@@ -197,14 +207,18 @@ namespace Pattons_Best
                   }
                   else // Add the Territory with the lowest Metric to the path
                   {
-                     path.Territories.Add(lowestTerritory);
-                     path.Metric = lowestMetricScore;
+                     if( null != lowestTerritory)
+                     {
+                        path.Territories.Add(lowestTerritory);
+                        path.Metric = lowestMetricScore;
+                     }
                      //Console.WriteLine("     ==> Appending to {0}", path.ToString());
                   }
                } // end foreach (IMapPath path in paths)
             } // end for (int i = 0; i < moveFactor; ++i)
          } // end else startT is not equal to endT
-           // Determine from all paths which is the lowest metric
+         //--------------------------------------------
+         // Determine from all paths which is the lowest metric
          int i1 = 1;
          int count = paths.Count;
          if (count < 1)
@@ -242,12 +256,6 @@ namespace Pattons_Best
       private readonly ArrayList myList;
       public MapItemMoves() { myList = new ArrayList(); }
       public void Add(IMapItemMove mim) { myList.Add(mim); }
-      public IMapItemMove? RemoveAt(int index)
-      {
-         IMapItemMove mim = (IMapItemMove)myList[index];
-         myList.RemoveAt(index);
-         return mim;
-      }
       public void Insert(int index, IMapItemMove mim) { myList.Insert(index, mim); }
       public int Count { get { return myList.Count; } }
       public void Clear() { myList.Clear(); }
@@ -255,7 +263,7 @@ namespace Pattons_Best
       public IEnumerator GetEnumerator() { return myList.GetEnumerator(); }
       public int IndexOf(IMapItemMove mim) { return myList.IndexOf(mim); }
       public void Remove(IMapItemMove mim) { myList.Remove(mim); }
-      public IMapItemMove Find(IMapItem mi)
+      public IMapItemMove? Find(IMapItem mi)
       {
          foreach (object o in myList)
          {
@@ -278,6 +286,23 @@ namespace Pattons_Best
          }
          return null;
       }
+      public IMapItemMove? RemoveAt(int index)
+      {
+         IMapItemMove? mim = myList[index] as IMapItemMove;
+         if (null == mim)
+            return null;
+         myList.RemoveAt(index);
+         return mim;
+      }
+      public IMapItemMove? this[int index]
+      {
+         get 
+         {
+            IMapItemMove? mim = myList[index] as IMapItemMove;
+            return mim; 
+         }
+         set { myList[index] = value; }
+      }
       public IMapItemMoves Shuffle()
       {
          IMapItemMoves newOrder = new MapItemMoves();
@@ -289,17 +314,14 @@ namespace Pattons_Best
             int index = Utilities.RandomGenerator.Next(myList.Count);
             if (index < myList.Count)
             {
-               IMapItemMove randomIndex = (IMapItemMove)myList[index];
+               IMapItemMove? randomMim = myList[index] as IMapItemMove;
                myList.RemoveAt(index);
-               newOrder.Add(randomIndex);
+               if( null != randomMim ) 
+                  newOrder.Add(randomMim);
             }
          }
          return newOrder;
       }
-      public IMapItemMove this[int index]
-      {
-         get { return (IMapItemMove)myList[index]; }
-         set { myList[index] = value; }
-      }
+
    }
 }

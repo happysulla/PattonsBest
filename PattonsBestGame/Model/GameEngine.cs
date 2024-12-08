@@ -25,7 +25,7 @@ namespace Pattons_Best
       }
       public void PerformAction(ref IGameInstance gi, ref GameAction action, int dieRoll)
       {
-         IGameState state = GameState.GetGameState(gi.GamePhase); // First get the current game state. Then call performNextAction() on the game state.
+         IGameState? state = GameState.GetGameState(gi.GamePhase); // First get the current game state. Then call performNextAction() on the game state.
          if (null == state)
          {
             Logger.Log(LogEnum.LE_ERROR, "GameEngine.PerformAction(): s=null for p=" + gi.GamePhase.ToString());
@@ -40,7 +40,7 @@ namespace Pattons_Best
             sb1.Append(" r="); sb1.Append(returnStatus);
             Logger.Log(LogEnum.LE_ERROR, sb1.ToString());
          }
-         myMainWindow.UpdateViews(ref gi, action); // Update all registered views when performNextAction() is called
+         myMainWindow.UpdateViews(gi, action); // Update all registered views when performNextAction() is called
       }
       public bool CreateUnitTests(IGameInstance gi, DockPanel dp, EventViewer ev, IDieRoller dr)
       {
