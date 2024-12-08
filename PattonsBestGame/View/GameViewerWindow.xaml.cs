@@ -317,7 +317,7 @@ namespace Pattons_Best
             return false;
          }
          string territoryName = Utilities.RemoveSpaces(tName);
-         ITerritory territory = Territory.theTerritories.Find(territoryName);
+         ITerritory? territory = Territory.theTerritories.Find(territoryName);
          if (null == territory)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): TerritoryExtensions.Find() returned null");
@@ -338,7 +338,7 @@ namespace Pattons_Best
       //---------------------------------------
       private Options Deserialize(String s_xml)
       {
-         Options options = new Options();
+         Options? options = new Options();
          if (false == String.IsNullOrEmpty(s_xml))
          {
             try // XML serializer does not work for Interfaces
@@ -346,7 +346,8 @@ namespace Pattons_Best
                StringReader stringreader = new StringReader(s_xml);
                XmlReader xmlReader = XmlReader.Create(stringreader);
                XmlSerializer serializer = new XmlSerializer(typeof(Options)); // Sustem.IO.FileNotFoundException thrown but normal behavior - handled in XmlSerializer constructor
-               options = (Options)serializer.Deserialize(xmlReader);
+               Object? obj = serializer.Deserialize(xmlReader);
+               options = obj as Options;
             }
             catch (DirectoryNotFoundException dirException)
             {
@@ -365,6 +366,8 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Deserialize(): s=" + s_xml + "\nex=" + ex.ToString());
             }
          }
+         if (null == options)
+            options = new Options();
          if (0 == options.Count)
             options.SetOriginalGameOptions();
          return options;
@@ -376,7 +379,7 @@ namespace Pattons_Best
          sb.Append("Barbarian Prince - ");
          //--------------------------------
          string name = "CustomGame";
-         Option option = options.Find(name);
+         Option? option = options.Find(name);
          if (null == option)
             option = new Option(name, false);
          if (true == option.IsEnabled)
@@ -524,6 +527,11 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): mim2=null");
                   return false;
                }
+               if (null == mim2.OldTerritory)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): mim2.OldTerritory=null");
+                  return false;
+               }
                IMapItem mi = mim2.MapItem;
                if (false == MovePathAnimate(mim2))
                {
@@ -563,7 +571,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): b=null for n=" + mim.MapItem.Name);
             return false;
          }
-         Button b = myButtonMapItems.Find(Utilities.RemoveSpaces(mim.MapItem.Name));
+         Button? b = myButtonMapItems.Find(Utilities.RemoveSpaces(mim.MapItem.Name));
          if (null == b)
          {
             Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): b=null for n=" + mim.MapItem.Name);
@@ -575,6 +583,11 @@ namespace Pattons_Best
             double xStart = mim.MapItem.Location.X;
             double yStart = mim.MapItem.Location.Y;
             PathFigure aPathFigure = new PathFigure() { StartPoint = new System.Windows.Point(xStart, yStart) };
+            if (null == mim.BestPath)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): mim.BestPath=null for n=" + mim.MapItem.Name);
+               return false;
+            }
             int lastItemIndex = mim.BestPath.Territories.Count - 1;
             for (int i = 0; i < lastItemIndex; i++) // add intermediate movement points - not really used in Barbarian Prince as only move one hex at a time
             {
@@ -628,9 +641,19 @@ namespace Pattons_Best
       }
       private bool MovePathDisplay(IMapItemMove mim, int mapItemCount)
       {
+         if (null == mim.OldTerritory)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MovePathDisplay(): mim.OldTerritory=null");
+            return false;
+         }
          if (null == mim.NewTerritory)
          {
             Logger.Log(LogEnum.LE_ERROR, "MovePathDisplay(): mim.NewTerritory=null");
+            return false;
+         }
+         if (null == mim.BestPath)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MovePathDisplay(): mim.BestPath=null");
             return false;
          }
          //-----------------------------------------

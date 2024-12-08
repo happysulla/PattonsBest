@@ -160,6 +160,11 @@ namespace Pattons_Best
       }
       public bool Cleanup(ref IGameInstance gi) 
       {
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Cleanup(): myCanvas=null");
+            return false;
+         }
          try
          {
             string filename = ConfigFileReader.theConfigDirectory + "Rivers.xml";
@@ -351,7 +356,17 @@ namespace Pattons_Best
                XmlElement pointElem = aXmlDocument.CreateElement("point");
                pointElem.SetAttribute("X", p.X.ToString());
                pointElem.SetAttribute("Y", p.Y.ToString());
-               aXmlDocument.DocumentElement.LastChild.AppendChild(pointElem);
+               XmlNode? lastChild = aXmlDocument.DocumentElement.LastChild;
+               if (null == lastChild)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): lastChild=null");
+                  return aXmlDocument;
+               }
+               else
+               {
+                  lastChild.AppendChild(pointElem);
+               }
+
             }
          }
          return aXmlDocument;
@@ -368,7 +383,7 @@ namespace Pattons_Best
          IMapPoint mp = new MapPoint(canvasPoint.X, canvasPoint.Y);
          Ellipse mousedEllipse = (Ellipse)sender;
          //----------------------------------------
-         string name = null;
+         string? name = null;
          switch (myIndexName-1)
          {
             case 0: name = "Dienstal Branch"; break;

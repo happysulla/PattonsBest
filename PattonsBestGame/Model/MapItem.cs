@@ -132,7 +132,7 @@ namespace Pattons_Best
          this.BottomImageName = bottomImageName;
          try
          {
-            IMapImage mii = theMapImages.Find(topImageName);
+            IMapImage? mii = theMapImages.Find(topImageName);
             if (null == mii)
             {
                mii = (IMapImage)new MapImage(topImageName);
@@ -249,8 +249,15 @@ namespace Pattons_Best
          }
          else
          {
-            IMapImage mii = theMapImages.Find(mi.TopImageName);
-            g.Children.Add(mii.ImageControl);
+            IMapImage? mii = theMapImages.Find(mi.TopImageName);
+            if( null == mii )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SetButtonContent(): mii=null");
+            }
+            else
+            {
+               g.Children.Add(mii.ImageControl);
+            }
          }
          b.Content = g;
       }
@@ -330,7 +337,7 @@ namespace Pattons_Best
                IMapItem? randomMapItem = myList[index] as IMapItem;
                myList.RemoveAt(index);
                if (randomMapItem == null )
-                  Logger.Log(LogEnum.LE_ERROR, "Shuffle(): randomMapItem=null;");
+                  Logger.Log(LogEnum.LE_ERROR, "Shuffle(): randomMapItem=null");
                else
                   newOrder.Add(randomMapItem);
             }
@@ -341,10 +348,18 @@ namespace Pattons_Best
       {
          for (int j = 0; j < numOfRotates; j++)
          {
-            Object temp = myList[0];
-            for (int i = 0; i < myList.Count - 1; i++)
-               myList[i] = myList[i + 1];
-            myList[myList.Count - 1] = temp;
+            Object? temp = myList[0];
+            if( temp == null)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Rotate(): myList[0]=null");
+               return;
+            }
+            else
+            {
+               for (int i = 0; i < myList.Count - 1; i++)
+                  myList[i] = myList[i + 1];
+               myList[myList.Count - 1] = temp;
+            }
          }
       }
       public override String ToString()

@@ -19,9 +19,9 @@ namespace Pattons_Best
    public class EventViewer : IView
    {
       public bool CtorError { get; } = false;
-      private IGameEngine myGameEngine;
-      private IGameInstance myGameInstance;
-      private ITerritories? myTerritories;
+      private IGameEngine? myGameEngine = null;
+      private IGameInstance? myGameInstance = null;
+      private ITerritories? myTerritories = null;
       //--------------------------------------------------------------------
       private IDieRoller? myDieRoller = null;
       public int DieRoll { set; get; } = 0;
@@ -106,6 +106,11 @@ namespace Pattons_Best
       }
       private bool CreateEvents(IGameInstance gi)
       {
+         if( null == myRulesMgr )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateEvents(): myRulesMgr=null");
+            return false;
+         }
          try
          {
             string filename = ConfigFileReader.theConfigDirectory + "Events.txt";
@@ -135,6 +140,16 @@ namespace Pattons_Best
       //--------------------------------------------------------------------
       public void UpdateView(ref IGameInstance gi, GameAction action)
       {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myGameInstance=null");
+            return;
+         }
+         if (null == myRulesMgr)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myRulesMgr=null");
+            return;
+         }
          if (null == myScrollViewerTextBlock)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateView() myScrollViewerTextBlock=null");
@@ -192,14 +207,29 @@ namespace Pattons_Best
       }
       public bool OpenEvent(IGameInstance gi, string key)
       {
+         if (null == myScrollViewerTextBlock)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "OpenEvent(): myScrollViewerTextBlock=null");
+            return false;
+         }
          if (null == myTextBlock)
          {
             Logger.Log(LogEnum.LE_ERROR, "OpenEvent(): myTextBlock=null");
             return false;
          }
+         if (null == myRulesMgr)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "OpenEvent(): myRulesMgr=null");
+            return false;
+         }
          if (null == myRulesMgr.Events)
          {
             Logger.Log(LogEnum.LE_ERROR, "OpenEvent(): myRulesMgr.Events=null");
+            return false;
+         }
+         if (null == myDieRoller)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "OpenEvent(): myDieRoller=null");
             return false;
          }
          //------------------------------------
@@ -243,7 +273,7 @@ namespace Pattons_Best
          int dieNumIndex = 0;
          bool isModified = true;
          bool[] isDieShown = new bool[4] { true, false, false, false };
-         int[] eventDieRolls = null;
+         int[]? eventDieRolls = null;
          try
          {
             eventDieRolls = gi.DieResults[key];
@@ -301,7 +331,7 @@ namespace Pattons_Best
          AppendAtEnd(gi, key);
          myDieRoller.DieMutex.ReleaseMutex();
          //--------------------------------------------------
-         if (myGameInstance.EventDisplayed == myGameInstance.EventActive)
+         if (gi.EventDisplayed == gi.EventActive)
             myScrollViewerTextBlock.Background = Utilities.theBrushScrollViewerActive;
          else
             myScrollViewerTextBlock.Background = Utilities.theBrushScrollViewerInActive;
@@ -309,6 +339,11 @@ namespace Pattons_Best
       }
       public bool ShowRule(string key)
       {
+         if (null == myRulesMgr)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowRule(): myRulesMgr=null");
+            return false;
+         }
          if (false == myRulesMgr.ShowRule(key))
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowRule() key=" + key);
@@ -318,6 +353,11 @@ namespace Pattons_Best
       }
       public bool ShowTable(string key)
       {
+         if (null == myRulesMgr)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowTable(): myRulesMgr=null");
+            return false;
+         }
          if (false == myRulesMgr.ShowTable(key))
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowTable() key=" + key);
@@ -327,6 +367,16 @@ namespace Pattons_Best
       }
       public bool ShowRegion(string key)
       {
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowRegion(): myCanvas=null");
+            return false;
+         }
+         if (null == myTerritories)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowRegion(): myTerritories=null");
+            return false;
+         }
          // Remove any existing UI elements from the Canvas
          List<UIElement> results = new List<UIElement>();
          foreach (UIElement ui in myCanvas.Children)
@@ -337,7 +387,7 @@ namespace Pattons_Best
          foreach (UIElement ui1 in results)
             myCanvas.Children.Remove(ui1);
          //--------------------------------
-         ITerritory t = myTerritories.Find(key);
+         ITerritory? t = myTerritories.Find(key);
          if (null == t)
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowRegion(): Unable to find name=" + key);
@@ -365,7 +415,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetThumbnailState(): scrollViewer=null");
             return false;
          }
-         double percentHeight = (t.CenterPoint.Y / myCanvas.ActualHeight);
+         double percentHeight = (t.CenterPoint.Y / c.ActualHeight);
          double percentToScroll = 0.0;
          if (percentHeight < 0.25)
             percentToScroll = 0.0;
@@ -376,7 +426,7 @@ namespace Pattons_Best
          double amountToScroll = percentToScroll * scrollViewer.ScrollableHeight;
          scrollViewer.ScrollToVerticalOffset(amountToScroll);
          //--------------------------------------------------------------------
-         double percentWidth = (t.CenterPoint.X / myCanvas.ActualWidth);
+         double percentWidth = (t.CenterPoint.X / c.ActualWidth);
          if (percentWidth < 0.25)
             percentToScroll = 0.0;
          else if (0.75 < percentWidth)
@@ -395,7 +445,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): content=null for key=" + key);
             return;
          }
-         if ((key != myGameInstance.EventActive) && (false == content.StartsWith("e")))
+         if ((key != gi.EventActive) && (false == content.StartsWith("e")))
          {
             b.IsEnabled = false;
             return;
@@ -417,6 +467,11 @@ namespace Pattons_Best
       }
       private void ReplaceText(string keyword, string newString)
       {
+         if (null == myTextBlock)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReplaceText(): myTextBlock=null");
+            return;
+         }
          TextRange text = new TextRange(myTextBlock.ContentStart, myTextBlock.ContentEnd);
          TextPointer current = text.Start.GetInsertionPosition(LogicalDirection.Forward);
          while (current != null)
@@ -439,6 +494,16 @@ namespace Pattons_Best
       //--------------------------------------------------------------------
       public void ShowDieResult(int dieRoll)
       {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResult(): myGameInstance=null");
+            return;
+         }
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResult(): myGameEngine=null");
+            return;
+         }
          myGameInstance.EventActive = myGameInstance.EventDisplayed; // As soon as you roll the die, the current event becomes the active event
          GameAction action = myGameInstance.DieRollAction;
          StringBuilder sb11 = new StringBuilder("      ######ShowDieResult() :");
@@ -452,7 +517,12 @@ namespace Pattons_Best
       //--------------------------------------------------------------------
       private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
       {
-         if( null == myCanvas )
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): myGameInstance=null");
+            return;
+         }
+         if ( null == myCanvas )
          {
             Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): myCanvas=null");
             return;
@@ -516,6 +586,16 @@ namespace Pattons_Best
       }
       private void Button_Click(object sender, RoutedEventArgs e)
       {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Button_Click(): myGameInstance=null");
+            return;
+         }
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Button_Click(): myGameEngine=null");
+            return;
+         }
          GameAction action = GameAction.Error;
          Button b = (Button)sender;
          e.Handled = true;
@@ -554,6 +634,16 @@ namespace Pattons_Best
       private bool Button_ClickShowOther(string content, string name, out GameAction action)
       {
          action = GameAction.Error;
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): myGameInstance=null");
+            return false;
+         }
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): myGameEngine=null");
+            return false;
+         }
          switch (content)
          {
             default:

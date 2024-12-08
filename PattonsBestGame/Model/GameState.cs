@@ -34,6 +34,11 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "AddMapItemMove(): Invalid Parameter mim.NewTerritory=null" + " for start=" + mi.TerritoryStarting.ToString() + " for newT=" + newT.Name);
             return false;
          }
+         if (null == mim.BestPath)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "AddMapItemMove(): Invalid Parameter mim.BestPath=null" + " for start=" + mi.TerritoryStarting.ToString() + " for newT=" + newT.Name);
+            return false;
+         }
          if (0 == mim.BestPath.Territories.Count)
          {
             Logger.Log(LogEnum.LE_ERROR, "AddMapItemMove(): Invalid State Territories.Count=" + mim.BestPath.Territories.Count.ToString() + " for start=" + mi.TerritoryStarting.ToString() + " for newT=" + newT.Name);
@@ -77,7 +82,7 @@ namespace Pattons_Best
             case GameAction.RemoveSplashScreen:
                gi.Statistic.Clear();         // Clear any current statitics
                gi.Statistic.myNumGames = 1;  // Set played games to 1
-               Option option = gi.Options.Find("AutoSetup");
+               Option? option = gi.Options.Find("AutoSetup");
                if (null == option)
                {
                   option = new Option("AutoSetup", false);

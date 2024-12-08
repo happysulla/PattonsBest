@@ -72,6 +72,11 @@ namespace Pattons_Best
       }
       public bool Command(ref IGameInstance gi) // Performs function based on CommandName string
       {
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Command(): myCanvas=null");
+            return false;
+         }
          if (CommandName == myCommandNames[0])
          {
             //--------------------------------------------
@@ -138,6 +143,11 @@ namespace Pattons_Best
       }
       public bool Cleanup(ref IGameInstance gi) // Remove an elipses from the canvas and save off Territories.xml file
       {
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Cleanup(): myCanvas=null");
+            return false;
+         }
          // Remove any existing UI elements from the Canvas
          List<UIElement> results = new List<UIElement>();
          foreach (UIElement ui in myCanvas.Children)
@@ -185,7 +195,7 @@ namespace Pattons_Best
             IMapPoint selectedMp = mp;
             foreach (String s in myAnchorTerritory.Adjacents)
             {
-               Territory adjacentTerritory = null;
+               Territory? adjacentTerritory = null;
                foreach (Territory t in Territory.theTerritories)
                {
                   if (s == Utilities.RemoveSpaces(t.ToString()))
@@ -220,6 +230,11 @@ namespace Pattons_Best
       }
       public void CreateEllipses(ITerritories territories)
       {
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateEllipses(): myCanvas=null");
+            return;
+         }
          foreach (Territory t in territories)
          {
             Ellipse aEllipse = new Ellipse { Tag = Utilities.RemoveSpaces(t.ToString()) };
@@ -240,6 +255,11 @@ namespace Pattons_Best
       }
       public void CreatePolygons(ITerritories territories)
       {
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreatePolygons(): myCanvas=null");
+            return;
+         }
          foreach (Territory t in territories)
          {
             if (1 < t.Points.Count)
@@ -320,7 +340,7 @@ namespace Pattons_Best
          System.Windows.Point canvasPoint = e.GetPosition(myCanvas);
          IMapPoint mp = new MapPoint(canvasPoint.X, canvasPoint.Y);
          Console.WriteLine("MouseDownEllipse.MouseDown(): {0}", mp.ToString());
-         ITerritory matchingTerritory = null; // Find the corresponding Territory
+         ITerritory? matchingTerritory = null; // Find the corresponding Territory
          Ellipse mousedEllipse = (Ellipse)sender;
          foreach (ITerritory? t in Territory.theTerritories)
          {

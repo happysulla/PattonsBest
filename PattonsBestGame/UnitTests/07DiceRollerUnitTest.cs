@@ -211,6 +211,11 @@ namespace Pattons_Best
       }
       public bool Cleanup(ref IGameInstance gi)
       {
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Cleanup(): myCanvas=null");
+            return false;
+         }
          try
          {
             List<UIElement> results = new List<UIElement>(); // Remove all elements from Canvas
@@ -244,6 +249,11 @@ namespace Pattons_Best
       }
       private void RemoveEllipses()
       {
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "RemoveEllipses(): myCanvas=null");
+            return;
+         }
          List<UIElement> results = new List<UIElement>(); // Remove all elements from Canvas
          foreach (UIElement ui in myCanvas.Children)
          {

@@ -130,7 +130,7 @@ namespace Pattons_Best
                   // If a metric score is less than this number, it is set as
                   // the new threshold, i.e. trying to find the minimum metric score.
                   double lowestMetricScore = double.MaxValue; // Set to high number
-                  ITerritory lowestTerritory = null;
+                  ITerritory? lowestTerritory = null;
                   // A Territory is better if the distance between the center
                   // point of the territory and all other alternatives is 
                   // the smallest.
@@ -138,7 +138,12 @@ namespace Pattons_Best
                   foreach (string alternative in adj1.Adjacents)
                   {
                      //Console.WriteLine("     ==> Trying {0}", alternative);
-                     ITerritory adj2 = territories.Find(alternative);
+                     ITerritory? adj2 = territories.Find(alternative);
+                     if (adj2 == null)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "GetBestPath(): adj2=null for alternative=" + alternative);
+                        continue;
+                     }
                      // If the end territory is reached, no need to continue
                      // looking at alternates.
                      if (adj2.Name == endT.Name)
@@ -226,7 +231,12 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "GetBestPath(): did not reach " + startT.Name + " from " + endT.Name);
             return null;
          }
-         IMapPath bestPath = paths[0];
+         IMapPath? bestPath = paths[0];
+         if (bestPath == null)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetBestPath(): bestpath= null & did not reach " + startT.Name + " from " + endT.Name);
+            return null;
+         }
          foreach (IMapPath path in paths)
          {
             //Console.WriteLine("{0}.) {1}", i1.ToString(), path.ToString());
@@ -243,9 +253,15 @@ namespace Pattons_Best
          sb.Append("mi=");
          sb.Append(MapItem.Name);
          sb.Append(",oT=");
-         sb.Append(OldTerritory.Name);
+         if (null == OldTerritory)
+            sb.Append("null");
+         else
+            sb.Append(OldTerritory.Name);
          sb.Append(",nT=");
-         sb.Append(NewTerritory.Name);
+         if (null == NewTerritory)
+            sb.Append("null");
+         else
+            sb.Append(NewTerritory.Name);
          return sb.ToString();
       }
    }
