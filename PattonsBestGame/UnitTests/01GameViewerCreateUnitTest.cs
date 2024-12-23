@@ -13,9 +13,10 @@ namespace Pattons_Best
    public class GameViewerCreateUnitTest : IUnitTest
    {
       //--------------------------------------------------------------------
-      private DockPanel? myDockPanel = null;
+      private DockPanel? myDockPanelTop = null;
       private ScrollViewer? myScrollViewerCanvas = null;
       private Canvas? myCanvas = null;
+      private Canvas? myCanvasTank = null;
       private double myScrollingTime = 12.0;
       private readonly FontFamily myFontFam = new FontFamily("Tahoma");
       //--------------------------------------------------------------------
@@ -40,10 +41,10 @@ namespace Pattons_Best
          myCommandNames.Add("Show Center");
          myCommandNames.Add("Finish");
          //------------------------------------
-         myDockPanel = dp;
+         myDockPanelTop = dp; // top most dock panel that holds menu, statusbar, left dockpanel, and right dockpanel
          foreach (UIElement ui0 in dp.Children)
          {
-            if (ui0 is DockPanel dockPanelInside)
+            if (ui0 is DockPanel dockPanelInside) // DockPanel showing main play area
             {
                foreach (UIElement ui1 in dockPanelInside.Children)
                {
@@ -52,6 +53,14 @@ namespace Pattons_Best
                      myScrollViewerCanvas = (ScrollViewer)ui1;
                      if (myScrollViewerCanvas.Content is Canvas)
                         myCanvas = (Canvas)myScrollViewerCanvas.Content;  // Find the Canvas in the visual tree
+                  }
+                  if (ui1 is StackPanel myStackPanelControl) // DockPanel that holds the Map Image
+                  {
+                     foreach (UIElement ui2 in myStackPanelControl.Children)
+                     {
+                        if (ui2 is Canvas)
+                           myCanvasTank = (Canvas)ui2;
+                     }
                   }
                }
             }
@@ -62,12 +71,18 @@ namespace Pattons_Best
             CtorError = true;
             return;
          }
+         if (null == myCanvasTank) // log error and return if canvas not found
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GameViewerCreateUnitTest(): myCanvasTank=null");
+            CtorError = true;
+            return;
+         }
       }
       public bool Command(ref IGameInstance gi) // Performs function based on CommandName string
       {
-         if( null == myDockPanel )
+         if( null == myDockPanelTop)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Command(): myDockPanel=null");
+            Logger.Log(LogEnum.LE_ERROR, "Command(): myDockPanelTop=null");
             return false;
          }
          if (null == myCanvas)
@@ -75,14 +90,25 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Command(): myCanvas=null");
             return false;
          }
+         if (null == myCanvasTank)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Command(): myCanvasTank=null");
+            return false;
+         }
          if (null == myScrollViewerCanvas)
          {
             Logger.Log(LogEnum.LE_ERROR, "Command(): myScrollViewerCanvas=null");
             return false;
          }
+         //-----------------------------------------------------
          if (CommandName == myCommandNames[0])
          {
-            GameViewerCreateDialog dialog = new GameViewerCreateDialog(myDockPanel); // Get the name from user
+            GameViewerCreateDialog dialog = new GameViewerCreateDialog(myDockPanelTop); // Get the name from user
+            if( true == dialog.CtorError )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Command(): dialog.CtorError=true");
+               return false;
+            }
             dialog.Show();
          }
          else if (CommandName == myCommandNames[1])

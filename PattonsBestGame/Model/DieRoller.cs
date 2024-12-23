@@ -26,7 +26,7 @@ namespace Pattons_Best
       private int myDieRollResults = 0;
       public bool CtorError { get; } = false;
       //-----------------------------------------------------------
-      private Canvas myCanvas;
+      private Canvas? myCanvas;
       public List<Button> theDice = new List<Button>();
       private int myLoadedCount = 0;
       private Mutex myMutex = new Mutex();
@@ -35,7 +35,12 @@ namespace Pattons_Best
       public DieRoller(Canvas? c, LoadEndCallback? callback = null)
       {
          myCallbackEndLoad = callback ?? throw new ArgumentNullException(nameof(callback));
-         myCanvas = c ?? throw new ArgumentNullException(nameof(c));
+         if( null == c )
+         {
+            CtorError = true;
+            return;
+         }
+         myCanvas = c;
          if (false == ReadDiceXml(c))
          {
             Logger.Log(LogEnum.LE_ERROR, "DiceRoller(): ReadDiceXml() return false");
@@ -149,44 +154,6 @@ namespace Pattons_Best
             return 0;
          }
          myDieRollResults = die1 + die2;
-         return myDieRollResults;
-      }
-      public int Roll3MovingDice(Canvas c, RollEndCallback cb)
-      {
-         ScrollViewer sv = (ScrollViewer)c.Parent;
-         HideDie();
-         IMapPoint mp = GetCanvasCenter(sv, c);
-         IMapPoint mp1 = new MapPoint(mp.X, mp.Y - 0.65 * Utilities.theMapItemSize / Utilities.ZoomCanvas);
-         int randomNum = Utilities.RandomGenerator.Next(0, 6);
-         int die1 = RollMovingDie(sv, c, mp1, randomNum);
-         if (0 == die1)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "RollStationaryDice(): 1-Roll3MovingDice() returned 0");
-            return 0;
-         }
-         //--------------------------------------------------------
-         myDieRollResults = 0;
-         myCallbackEndRoll = cb;
-         IMapPoint mp2 = new MapPoint(mp.X, mp.Y + 0.65 * Utilities.theMapItemSize / Utilities.ZoomCanvas);
-         randomNum = Utilities.RandomGenerator.Next(6, 12);
-         int die2 = RollMovingDie(sv, c, mp2, randomNum);
-         if (0 == die2)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "RollStationaryDice(): 2-Roll3MovingDice() returned 0");
-            return 0;
-         }
-         //--------------------------------------------------------
-         myDieRollResults = 0;
-         myCallbackEndRoll = cb;
-         IMapPoint mp3 = new MapPoint(mp.X, mp.Y + 0.65 * Utilities.theMapItemSize / Utilities.ZoomCanvas);
-         randomNum = Utilities.RandomGenerator.Next(12, 18);
-         int die3 = RollMovingDie(sv, c, mp2, randomNum);
-         if (0 == die3)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "RollStationaryDice(): 3-Roll3MovingDice() returned 0");
-            return 0;
-         }
-         myDieRollResults = die1 + die2 + die3;
          return myDieRollResults;
       }
       //-----------------------------------------------------------

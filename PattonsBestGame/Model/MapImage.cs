@@ -177,7 +177,9 @@ namespace Pattons_Best
                return mii.myBitmapImage;
             }
          }
-         return null;
+         MapImage miiToAdd = new MapImage(imageName);
+         myList.Add(miiToAdd);
+         return miiToAdd.myBitmapImage;
       }
    }
 }

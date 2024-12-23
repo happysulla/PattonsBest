@@ -296,11 +296,7 @@ namespace Pattons_Best
          GameAction action = GameAction.ShowAboutDialog;
          myGameEngine.PerformAction(ref myGameInstance, ref action);
       }
-      public void MenuItemStart_Click(object sender, RoutedEventArgs e) // Setup the initial menu options
-      {
-         GameAction action = GameAction.UnitTestStart;
-         myGameEngine.PerformAction(ref myGameInstance, ref action);
-      }
+      //----------------------------------------------------------
       public void MenuItemCommand_Click(object sender, RoutedEventArgs e)
       {
          GameAction action = GameAction.UnitTestCommand;

@@ -34,11 +34,11 @@ namespace Pattons_Best
                Application.Current.Shutdown();
                return;
             }
-            MapImage.theImageDirectory = assemblyDir + @"\images\";
+            MapImage.theImageDirectory = assemblyDir + @"\Images\";
             ConfigFileReader.theConfigDirectory = assemblyDir + @"\config\";
             string appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            Logger.theLogDirectory = appDataDir + @"\Pattons_Best\Logs\";
-            GameLoadMgr.theGamesDirectory = appDataDir + @"\Pattons_Best\Games\";
+            Logger.theLogDirectory = appDataDir + @"\PattonsBest\Logs\";
+            GameLoadMgr.theGamesDirectory = appDataDir + @"\PattonsBest\Games\";
             //--------------------------------------------
             Utilities.InitializeRandomNumGenerators();
             //--------------------------------------------
@@ -66,17 +66,17 @@ namespace Pattons_Best
             //--------------------------------------------
             try // copy user documentation to folder where user data is kept
             {
-               string docs1Src = assemblyDir + @"\Docs\BP2-eventsbook_singleA4.pdf";
-               string docs2Src = assemblyDir + @"\Docs\BP2-rulesbook_singleA4.pdf";
-               string docsDir = appDataDir + @"\Pattons_Best\Docs\";
-               if (false == Directory.Exists(docsDir))
-                  Directory.CreateDirectory(docsDir);
-               string docs1Dest = assemblyDir + @"\Docs\BP2-eventsbook_singleA4.pdf";
-               if (false == File.Exists(docs1Dest))
-                  File.Copy(docs1Src, docs1Dest);
-               string docs2Dest = assemblyDir + @"\Docs\BP2-rulesbook_singleA4.pdf";
-               if (false == File.Exists(docs2Dest))
-                  File.Copy(docs1Src, docs2Dest);
+               //string docs1Src = assemblyDir + @"\Docs\BP2-eventsbook_singleA4.pdf";
+               //string docs2Src = assemblyDir + @"\Docs\BP2-rulesbook_singleA4.pdf";
+               //string docsDir = appDataDir + @"\Pattons_Best\Docs\";
+               //if (false == Directory.Exists(docsDir))
+               //   Directory.CreateDirectory(docsDir);
+               //string docs1Dest = assemblyDir + @"\Docs\BP2-eventsbook_singleA4.pdf";
+               //if (false == File.Exists(docs1Dest))
+               //   File.Copy(docs1Src, docs1Dest);
+               //string docs2Dest = assemblyDir + @"\Docs\BP2-rulesbook_singleA4.pdf";
+               //if (false == File.Exists(docs2Dest))
+               //   File.Copy(docs1Src, docs2Dest);
             }
             catch (Exception e)
             {
@@ -96,7 +96,13 @@ namespace Pattons_Best
          if (null == myGameEngine)
             return;
          foreach (IView v in myGameEngine.Views)
-            v.UpdateView(ref gi, action);
+         {
+            if (null == v )
+               Logger.Log(LogEnum.LE_ERROR, "UpdateView(): v=null");
+            else
+               v.UpdateView(ref gi, action);
+         }
+
       }
    }
 }

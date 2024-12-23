@@ -46,7 +46,7 @@ namespace Pattons_Best
          {
             XmlTextReader xr = new XmlTextReader(sr);
             myTextBlockDisplay = (TextBlock)XamlReader.Load(xr); // TextBox created in RuleManager.ShowRule()
-            myScrollViewerTextBlock.Content = myTextBlockDisplay;
+            myScrollViewerBanner.Content = myTextBlockDisplay;
             myTextBlockDisplay.MouseLeftButtonDown += Window_MouseLeftButtonDown;
             myTextBlockDisplay.MouseLeave += TextBlockDisplay_MouseLeave;
             myKey = key;
@@ -61,7 +61,7 @@ namespace Pattons_Best
       //-------------------------------------------------------------------------
       private void BannerLoaded(object sender, EventArgs e)
       {
-         myScrollViewerTextBlock.Height = myDockPanel.ActualHeight - myButtonClose.Height - 50;
+         myScrollViewerBanner.Height = myDockPanel.ActualHeight - myButtonClose.Height - 50;
          myTextBlockDisplay.Height = myTextBlockDisplay.ActualHeight;
       }
       private void ButtonClose_Click(object sender, RoutedEventArgs e)

@@ -76,9 +76,9 @@ namespace Pattons_Best
             string filename = theGamesDirectory + "Checkpoint.bpg";
             FileStream fileStream = File.OpenWrite(filename);
             XmlWriter writer = XmlWriter.Create (fileStream);
-            XmlSerializer serializer = new XmlSerializer(typeof(GameInstance));
-            serializer.Serialize(writer, gi);
-            writer.Close();
+            //XmlSerializer serializer = new XmlSerializer(typeof(GameInstance));
+            //serializer.Serialize(writer, gi);
+            //writer.Close();
             theIsCheckFileExist = true;
             return true;
          }

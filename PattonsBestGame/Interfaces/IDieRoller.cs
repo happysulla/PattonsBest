@@ -14,6 +14,5 @@ namespace Pattons_Best
       int RollStationaryDice(Canvas c, RollEndCallback cb);
       int RollMovingDie(Canvas c, RollEndCallback cb);
       int RollMovingDice(Canvas c, RollEndCallback cb);
-      int Roll3MovingDice(Canvas c, RollEndCallback cb);
    }
 }

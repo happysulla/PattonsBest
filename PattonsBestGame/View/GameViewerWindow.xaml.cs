@@ -145,10 +145,14 @@ namespace Pattons_Best
          mySplashScreen.Show();
          InitializeComponent();
          //---------------------------------------------------------------
-         Image imageMap = new Image() { Name = "Map", Width = 810, Height = 985, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("Map") };
+         Image imageMap = new Image() { Name = "Map", Width = 600, Height = 985, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("Map") };
          myCanvas.Children.Add(imageMap);
          Canvas.SetLeft(imageMap, 0);
          Canvas.SetTop(imageMap, 0);
+         Image imageTank = new Image() { Name = "Tank", Width = 750, Height = 588, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("m001M4") };
+         myCanvasTank.Children.Add(imageTank);
+         Canvas.SetLeft(imageTank, 0);
+         Canvas.SetTop(imageTank, 0);
          //---------------------------------------------------------------
          myGameEngine = ge;
          myGameInstance = gi;
@@ -207,7 +211,8 @@ namespace Pattons_Best
             return;
          }
          //---------------------------------------------------------------
-         myEventViewer = new EventViewer(myGameEngine, myGameInstance, myCanvas, myScrollViewerTextBlock, myStackPanelEndurance, Territory.theTerritories, myDieRoller);
+         myEventViewer = new EventViewer(myGameEngine, myGameInstance, myCanvas, myScrollViewerTextBlock, Territory.theTerritories, myDieRoller);
+         CanvasImageViewer civ = new CanvasImageViewer(myCanvas);
          //---------------------------------------------------------------
          // Implement the Model View Controller (MVC) pattern by registering views with
          // the game engine such that when the model data is changed, the views are updated.
@@ -289,8 +294,6 @@ namespace Pattons_Best
             case GameAction.SetupChooseFunOptions:
             case GameAction.SetupFinalize:
                this.Title = UpdateTitle(gi.Options);
-               if ( 1.0 == Utilities.ZoomCanvas)
-                  Utilities.ZoomCanvas = 2.0;
                myCanvas.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
                if (false == UpdateCanvas(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvas() returned error ");
@@ -755,7 +758,7 @@ namespace Pattons_Best
             myDockPanelInside.Height = mapPanelHeight;
             myScollViewerInside.Height = mapPanelHeight;
          }
-         double mapPanelWidth = myDockPanelTop.ActualWidth - myDockPanelControls.ActualWidth - System.Windows.SystemParameters.VerticalScrollBarWidth;
+         double mapPanelWidth = myDockPanelTop.ActualWidth - myStackPanelControl.ActualWidth - System.Windows.SystemParameters.VerticalScrollBarWidth;
          if (0 < mapPanelWidth) // need to resize so that scrollbar takes up panel not allocated to Control's DockPanel, i.e. where app controls are shown
             myScollViewerInside.Width = mapPanelWidth;
       }
@@ -767,7 +770,7 @@ namespace Pattons_Best
             myDockPanelInside.Height = mapPanelHeight;
             myScollViewerInside.Height = mapPanelHeight;
          }
-         double mapPanelWidth = myDockPanelTop.ActualWidth - myDockPanelControls.ActualWidth - System.Windows.SystemParameters.VerticalScrollBarWidth;
+         double mapPanelWidth = myDockPanelTop.ActualWidth - myStackPanelControl.ActualWidth - System.Windows.SystemParameters.VerticalScrollBarWidth;
          if (0 < mapPanelWidth) // need to resize so that scrollbar takes up panel not allocated to Control's DockPanel, i.e. where app controls are shown
             myScollViewerInside.Width = mapPanelWidth;
       }
@@ -815,12 +818,12 @@ namespace Pattons_Best
       //-------------CONTROLLER HELPER FUNCTIONS---------------------------------
       private void SaveDefaultsToSettings()
       {
-         WindowPlacement wp; // Persist window placement details to application settings
-         var hwnd = new WindowInteropHelper(this).Handle;
-         if (false == GetWindowPlacement(hwnd, out wp))
-            Logger.Log(LogEnum.LE_ERROR, "OnClosing(): GetWindowPlacement() returned false");
-         string sWinPlace = Utilities.Serialize<WindowPlacement>(wp);
-         Settings.Default.WindowPlacement = sWinPlace;
+         //WindowPlacement wp; // Persist window placement details to application settings
+         //var hwnd = new WindowInteropHelper(this).Handle;
+         //if (false == GetWindowPlacement(hwnd, out wp))
+         //   Logger.Log(LogEnum.LE_ERROR, "OnClosing(): GetWindowPlacement() returned false");
+         //string sWinPlace = Utilities.Serialize<WindowPlacement>(wp);
+         //Settings.Default.WindowPlacement = sWinPlace;
          //-------------------------------------------
          Settings.Default.ZoomCanvas = Utilities.ZoomCanvas;
          //-------------------------------------------
@@ -829,8 +832,8 @@ namespace Pattons_Best
          //-------------------------------------------
          Settings.Default.GameDirectoryName = GameLoadMgr.theGamesDirectory;
          //-------------------------------------------
-         string sOptions = Utilities.Serialize<Options>(myGameInstance.Options);
-         Settings.Default.GameOptions = sOptions;
+         //string sOptions = Utilities.Serialize<Options>(myGameInstance.Options);
+         //Settings.Default.GameOptions = sOptions;
          //-------------------------------------------
          Settings.Default.Save();
       }

@@ -25,7 +25,7 @@ namespace Pattons_Best
       //--------------------------------------------
       public static int MapItemNum { set; get; } = 0;
       //--------------------------------------------
-      public static Double ZoomCanvas { get; set; } = 1.0;
+      public static Double ZoomCanvas { get; set; } = 1.5;
       public static Double theMapItemOffset = 20;
       public static Double theMapItemSize = 40;  // size of a MapItem black
       public static int theStackSize = 1000;

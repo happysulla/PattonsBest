@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="ZoomCanvas" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">1</Value>
+      <Value Profile="(Default)">1.5</Value>
     </Setting>
     <Setting Name="ScrollViewerHeight" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0</Value>

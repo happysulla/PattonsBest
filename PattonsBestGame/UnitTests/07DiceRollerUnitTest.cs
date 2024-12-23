@@ -164,17 +164,6 @@ namespace Pattons_Best
                return false;
             }
          }
-         else if (CommandName == myCommandNames[5])
-         {
-            RemoveEllipses();
-            RollEndCallback callback = ShowResults;
-            int dice = myDieRoller.Roll3MovingDice(myCanvas, callback);
-            if (0 == dice) // Roll one die
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Command(): RollStationaryDie(myMapItemDie1) returned false");
-               return false;
-            }
-         }
          return true;
       }
       public bool NextTest(ref IGameInstance gi)

@@ -124,16 +124,16 @@ namespace Pattons_Best
          sb12.Append(previousPhase.ToString());
          if (previousPhase != gi.GamePhase)
          { sb12.Append("=>"); sb12.Append(gi.GamePhase.ToString()); }
-         sb12.Append("\t\ta="); sb12.Append(previousAction.ToString());
+         sb12.Append(" a="); sb12.Append(previousAction.ToString());
          if (previousAction != action)
          { sb12.Append("=>"); sb12.Append(action.ToString()); }
-         sb12.Append("\t\tdra="); sb12.Append(previousDieAction.ToString());
+         sb12.Append(" dra="); sb12.Append(previousDieAction.ToString());
          if (previousDieAction != gi.DieRollAction)
          { sb12.Append("=>"); sb12.Append(gi.DieRollAction.ToString()); }
-         sb12.Append("\t\te="); sb12.Append(previousEvent);
+         sb12.Append(" e="); sb12.Append(previousEvent);
          if (previousEvent != gi.EventActive)
          { sb12.Append("=>"); sb12.Append(gi.EventActive); }
-         sb12.Append("\t\tdr="); sb12.Append(dieRoll.ToString());
+         sb12.Append(" dr="); sb12.Append(dieRoll.ToString());
          if ("OK" == returnStatus)
             Logger.Log(LogEnum.LE_NEXT_ACTION, sb12.ToString());
          else
@@ -209,16 +209,16 @@ namespace Pattons_Best
          sb12.Append(previousPhase.ToString());
          if (previousPhase != gi.GamePhase)
          { sb12.Append("=>"); sb12.Append(gi.GamePhase.ToString()); }
-         sb12.Append("\t\ta="); sb12.Append(previousAction.ToString());
+         sb12.Append(" a="); sb12.Append(previousAction.ToString());
          if (previousAction != action)
          { sb12.Append("=>"); sb12.Append(action.ToString()); }
-         sb12.Append("\t\tdra="); sb12.Append(previousDieAction.ToString());
+         sb12.Append(" dra="); sb12.Append(previousDieAction.ToString());
          if (previousDieAction != gi.DieRollAction)
          { sb12.Append("=>"); sb12.Append(gi.DieRollAction.ToString()); }
-         sb12.Append("\t\te="); sb12.Append(previousEvent);
+         sb12.Append(" e="); sb12.Append(previousEvent);
          if (previousEvent != gi.EventActive)
          { sb12.Append("=>"); sb12.Append(gi.EventActive); }
-         sb12.Append("\t\tdr="); sb12.Append(dieRoll.ToString());
+         sb12.Append(" dr="); sb12.Append(dieRoll.ToString());
          if ("OK" == returnStatus)
             Logger.Log(LogEnum.LE_NEXT_ACTION, sb12.ToString());
          else
@@ -240,6 +240,31 @@ namespace Pattons_Best
          switch (action)
          {
             case GameAction.RemoveSplashScreen:
+               break;
+            case GameAction.UnitTestCommand: // call the unit test's Command() function
+               IUnitTest ut = gi.UnitTests[gi.GameTurn];
+               if (false == ut.Command(ref gi))
+               {
+                  returnStatus = "Command() returned false";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateUnitTest.PerformAction(): " + returnStatus);
+               }
+               break;
+            case GameAction.UnitTestNext: // call the unit test's NextTest() function
+               IUnitTest ut1 = gi.UnitTests[gi.GameTurn];
+               if (false == ut1.NextTest(ref gi))
+               {
+                  returnStatus = "NextTest() returned false";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateUnitTest.PerformAction(): " + returnStatus);
+               }
+               break;
+            case GameAction.UnitTestCleanup: // Call the unit test's NextTest() function
+               IUnitTest ut2 = gi.UnitTests[gi.GameTurn];
+               if (false == ut2.Cleanup(ref gi))
+               {
+                  returnStatus = "Cleanup() returned false";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateUnitTest.PerformAction(): " + returnStatus);
+               }
+               break;
             default:
                returnStatus = "Reached Default ERROR";
                Logger.Log(LogEnum.LE_ERROR, "GameStateUnitTest.PerformAction(): " + returnStatus);
@@ -247,27 +272,24 @@ namespace Pattons_Best
          }
          StringBuilder sb12 = new StringBuilder();
          if ("OK" != returnStatus)
-         {
-            sb12.Append("<<<<ERROR2::::::GameStateUnitTest.PerformAction(): ");
-            sb12.Append(returnStatus);
-         }
+            sb12.Append("<<<<ERROR2::::::GameStateUnitTest.PerformAction():");
          sb12.Append("===>p=");
          sb12.Append(previousPhase.ToString());
          if (previousPhase != gi.GamePhase)
          { sb12.Append("=>"); sb12.Append(gi.GamePhase.ToString()); }
-         sb12.Append("\t\ta="); sb12.Append(previousAction.ToString());
+         sb12.Append(" a=");
+         sb12.Append(previousAction.ToString());
          if (previousAction != action)
          { sb12.Append("=>"); sb12.Append(action.ToString()); }
-         sb12.Append("\t\tdra="); sb12.Append(previousDieAction.ToString());
+         sb12.Append(" dra=");
+         sb12.Append(previousDieAction.ToString());
          if (previousDieAction != gi.DieRollAction)
          { sb12.Append("=>"); sb12.Append(gi.DieRollAction.ToString()); }
-         sb12.Append("\t\te="); sb12.Append(previousEvent);
+         sb12.Append(" e=");
+         sb12.Append(previousEvent);
          if (previousEvent != gi.EventActive)
          { sb12.Append("=>"); sb12.Append(gi.EventActive); }
-         sb12.Append("\t\tes="); sb12.Append(previousStartEvent);
-         if (previousStartEvent != gi.EventStart)
-         { sb12.Append("=>"); sb12.Append(gi.EventStart); }
-         sb12.Append("\t\tdr="); sb12.Append(dieRoll.ToString());
+         sb12.Append(" dr="); sb12.Append(dieRoll.ToString());
          if ("OK" == returnStatus)
             Logger.Log(LogEnum.LE_NEXT_ACTION, sb12.ToString());
          else

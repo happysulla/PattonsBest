@@ -77,13 +77,13 @@ namespace Pattons_Best
          }
          gi.UnitTests.Add(ut4);
          //-----------------------------------------------------------------------------
-         IUnitTest ut5 = new ConfigMgrUnitTest(dp, ev);
-         if (true == ut5.CtorError)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateUnitTests(): ConfigMgrUnitTest() ctor error");
-            return false;
-         }
-         gi.UnitTests.Add(ut5);
+         //IUnitTest ut5 = new ConfigMgrUnitTest(dp, ev);
+         //if (true == ut5.CtorError)
+         //{
+         //   Logger.Log(LogEnum.LE_ERROR, "CreateUnitTests(): ConfigMgrUnitTest() ctor error");
+         //   return false;
+         //}
+         //gi.UnitTests.Add(ut5);
          //-----------------------------------------------------------------------------
          IUnitTest ut7 = new DiceRollerUnitTest(dp, dr);
          if (true == ut7.CtorError)

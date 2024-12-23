@@ -34,7 +34,7 @@ namespace Pattons_Best
       //--------------------------------------------------------------------
       private readonly FontFamily myFontFam1 = new FontFamily("Courier New");
       //--------------------------------------------------------------------
-      public EventViewer(IGameEngine ge, IGameInstance gi, Canvas c, ScrollViewer sv, StackPanel sp, ITerritories territories, IDieRoller dr)
+      public EventViewer(IGameEngine ge, IGameInstance gi, Canvas c, ScrollViewer sv, ITerritories territories, IDieRoller dr)
       {
          myDieRoller = dr;
          if (null == ge)
@@ -561,10 +561,6 @@ namespace Pattons_Best
                         {
                            case "DiceRoll":
                               myDieRoller.RollMovingDice(myCanvas, rollEndCallback);
-                              img.Visibility = Visibility.Hidden;
-                              return;
-                           case "Die3Roll":
-                              myDieRoller.Roll3MovingDice(myCanvas, rollEndCallback);
                               img.Visibility = Visibility.Hidden;
                               return;
                            default:
