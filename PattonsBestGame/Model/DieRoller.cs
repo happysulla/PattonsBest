@@ -555,6 +555,11 @@ namespace Pattons_Best
       }
       private void CreateEllipse(double x, double y)
       {
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateEllipse(): myCanvas=null");
+            return;
+         }
          // For debugging, show elipses of die boundaries
          SolidColorBrush brushBlack = new SolidColorBrush();
          Ellipse aEllipse = new Ellipse
@@ -587,6 +592,11 @@ namespace Pattons_Best
       }
       private void ImageAnimationCompleted(object sender, RoutedEventArgs e)
       {
+         if ( null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ImageAnimationCompleted(): myCanvas=null");
+            return;
+         }
          myMutex.WaitOne();
          Image img = (Image)sender;
          if (false == Reset(myCanvas, img))

@@ -16,6 +16,7 @@ namespace Pattons_Best
       Canvas? myCanvasMap = null;
       Canvas? myCanvasTank = null;
       ScrollViewer? myScrollViewer = null;
+      TextBlock? myTextBlock = null;
       public GameViewerCreateDialog(DockPanel topPanel)
       {
          if (null == topPanel)
@@ -26,40 +27,23 @@ namespace Pattons_Best
          }
          TopPanelTop = topPanel;
          DockPanel? dockPanelInside = null;
-         StackPanel? stackPanelControls = null;
+         DockPanel? dockPanelControls = null;
          Image? imageMap = null;
          Image? imageTank = null;
          ScrollViewer? scrollViewerTextBox = null;
-         TextBox? textBox = null;
          foreach (UIElement ui0 in TopPanelTop.Children) // top panel holds myMainMenu, myDockePanelInside, and myStatusBar
          {
-            if (ui0 is DockPanel) // myDockPanelInside holds myScrollViewerInside (which holds canvas) and myStackPanelControl
+            if (ui0 is DockPanel) 
             {
                dockPanelInside = (DockPanel)ui0;
-               foreach (UIElement ui1 in dockPanelInside.Children)
+               foreach (UIElement ui1 in dockPanelInside.Children)  // myDockPanelInside holds myStackPanelControl and myScrollViewerInside
                {
-                  if (ui1 is ScrollViewer)
+                  if (ui1 is DockPanel)
                   {
-                     myScrollViewer = (ScrollViewer)ui1;
-                     if (myScrollViewer.Content is Canvas)
+                     dockPanelControls = ui1 as DockPanel; 
+                     if (null != dockPanelControls)
                      {
-                        myCanvasMap = (Canvas)myScrollViewer.Content;
-                        foreach (UIElement ui2 in myCanvasMap.Children)
-                        {
-                           if (ui2 is Image)
-                           {
-                              imageMap = (Image)ui2;
-                              break;
-                           }
-                        }
-                     }
-                  }
-                  if (ui1 is StackPanel)
-                  {
-                     stackPanelControls = ui1 as StackPanel;
-                     if (null != stackPanelControls)
-                     {
-                        foreach (UIElement ui2 in stackPanelControls.Children)
+                        foreach (UIElement ui2 in dockPanelControls.Children)  // myStackPanelControl holds myCanvasTank and myScrollViewerTextBox
                         {
                            if (ui2 is Canvas)
                            {
@@ -73,11 +57,27 @@ namespace Pattons_Best
                                  }
                               }
                            }
-                           if (ui2 is ScrollViewer)
+                           else if (ui2 is ScrollViewer)  // myScrollViewerTextBox holds myTextBoxDisplay
                            {
                               scrollViewerTextBox = (ScrollViewer)ui2;
-                              if (scrollViewerTextBox.Content is TextBox)
-                                 textBox = (TextBox)scrollViewerTextBox.Content;
+                              if (scrollViewerTextBox.Content is TextBlock)
+                                 myTextBlock = (TextBlock)scrollViewerTextBox.Content;
+                           }
+                        }
+                     }
+                  }
+                  if (ui1 is ScrollViewer)
+                  {
+                     myScrollViewer = (ScrollViewer)ui1; // myScrollViewerInside holds myCanvasMap
+                     if (myScrollViewer.Content is Canvas)
+                     {
+                        myCanvasMap = (Canvas)myScrollViewer.Content;
+                        foreach (UIElement ui2 in myCanvasMap.Children)
+                        {
+                           if (ui2 is Image)
+                           {
+                              imageMap = (Image)ui2;
+                              break;
                            }
                         }
                      }
@@ -109,9 +109,9 @@ namespace Pattons_Best
             CtorError = true;
             return;
          }
-         if (null == stackPanelControls)
+         if (null == dockPanelControls)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GameViewerCreateDialog(): stackPanelControls=null");
+            Logger.Log(LogEnum.LE_ERROR, "GameViewerCreateDialog(): dockPanelControls=null");
             CtorError = true;
             return;
          }
@@ -133,60 +133,61 @@ namespace Pattons_Best
             CtorError = true;
             return;
          }
-         if (null == textBox)
+         if (null == myTextBlock)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GameViewerCreateDialog(): textBox=null");
+            Logger.Log(LogEnum.LE_ERROR, "GameViewerCreateDialog(): myTextBlock=null");
             return;
          }
          InitializeComponent();
          //---------------------------------------------------------------
-         myTextBoxScreenSizeX.Text = System.Windows.SystemParameters.PrimaryScreenWidth.ToString();
-         myTextBoxScreenSizeY.Text = System.Windows.SystemParameters.PrimaryScreenHeight.ToString();
          myTextBoxScaleTransform.Text = Utilities.ZoomCanvas.ToString();
-         myTextBoxTopPanelSizeX.Text = topPanel.ActualWidth.ToString();
-         myTextBoxTopPanelSizeY.Text = topPanel.ActualHeight.ToString();
-         myTextBoxInsideDockPanelSizeX.Text = dockPanelInside.ActualWidth.ToString();
-         myTextBoxInsideDockPanelSizeY.Text = dockPanelInside.ActualHeight.ToString();
-         myTextBoxVerticalThumbSizeX.Text = System.Windows.SystemParameters.VerticalScrollBarButtonHeight.ToString();
-         myTextBoxVerticalThumbSizeY.Text = System.Windows.SystemParameters.VerticalScrollBarWidth.ToString();
+         myTextBoxScreenSizeX.Text = System.Windows.SystemParameters.PrimaryScreenWidth.ToString("00.0");
+         myTextBoxScreenSizeY.Text = System.Windows.SystemParameters.PrimaryScreenHeight.ToString("00.0");
+
+         myTextBoxTopPanelSizeX.Text = topPanel.ActualWidth.ToString("00.0");
+         myTextBoxTopPanelSizeY.Text = topPanel.ActualHeight.ToString("00.0");
+         myTextBoxInsideDockPanelSizeX.Text = dockPanelInside.ActualWidth.ToString("00.0");
+         myTextBoxInsideDockPanelSizeY.Text = dockPanelInside.ActualHeight.ToString("00.0");
+         myTextBoxVerticalThumbSizeX.Text = System.Windows.SystemParameters.VerticalScrollBarButtonHeight.ToString("00.0");
+         myTextBoxVerticalThumbSizeY.Text = System.Windows.SystemParameters.VerticalScrollBarWidth.ToString("00.0");
          //---------------------------------------------------------------
-         // ScrollViewer, ImageCanvas, ImageMap
-         myTextBoxScrollViewerSizeX.Text = myScrollViewer.ActualWidth.ToString();
-         myTextBoxScrollViewerSizeY.Text = myScrollViewer.ActualHeight.ToString();
-         myTextBoxCanvasMapSizeX.Text = myCanvasMap.ActualWidth.ToString();
-         myTextBoxCanvasMapSizeY.Text = myCanvasMap.ActualHeight.ToString();
-         myTextBoxImageMapSizeX.Text = imageMap.ActualWidth.ToString();
-         myTextBoxImageMapSizeY.Text = imageMap.ActualHeight.ToString();
+         // myScollViewerInside, myCanvasMap, ImageMap
+         myTextBoxScrollViewerSizeX.Text = myScrollViewer.ActualWidth.ToString("00.0");
+         myTextBoxScrollViewerSizeY.Text = myScrollViewer.ActualHeight.ToString("00.0");
+         myTextBoxCanvasMapSizeX.Text = myCanvasMap.ActualWidth.ToString("00.0");
+         myTextBoxCanvasMapSizeY.Text = myCanvasMap.ActualHeight.ToString("00.0");
+         myTextBoxImageMapSizeX.Text = imageMap.ActualWidth.ToString("00.0");
+         myTextBoxImageMapSizeY.Text = imageMap.ActualHeight.ToString("00.0");
          //--------------------------------------------------------------------------
          // ScrollViewer Vertical
-         myTextBoxVScrollableHeight.Text = myScrollViewer.ScrollableHeight.ToString();
-         myTextBoxVerticalOffset.Text = myScrollViewer.VerticalOffset.ToString();
-         myTextBoxScrollableHeightPercent.Text = myScrollViewer.ScrollableHeight.ToString();
+         myTextBoxVScrollableHeight.Text = myScrollViewer.ScrollableHeight.ToString("00.0");
+         myTextBoxVerticalOffset.Text = myScrollViewer.VerticalOffset.ToString("00.0");
+         myTextBoxScrollableHeightPercent.Text = myScrollViewer.ScrollableHeight.ToString("00.0");
          int heightPercent = (int)(100.0 * (myScrollViewer.VerticalOffset / myScrollViewer.ScrollableHeight));
-         myTextBoxScrollableHeightPercent.Text = heightPercent.ToString();
+         myTextBoxScrollableHeightPercent.Text = heightPercent.ToString("00.0");
          double heightNormalized = myScrollViewer.ScrollableHeight / Utilities.ZoomCanvas;
-         myTextBoxScrollableHeightNormalized.Text = heightNormalized.ToString();
+         myTextBoxScrollableHeightNormalized.Text = heightNormalized.ToString("00.0");
          //--------------------------------------------------------------------------
          // ScrollViewer Horizontal
-         myTextBoxScrollableWidth.Text = myScrollViewer.ScrollableWidth.ToString();
-         myTextBoxHorizontalOffset.Text = myScrollViewer.HorizontalOffset.ToString();
-         myTextBoxScrollableWidthPercent.Text = myScrollViewer.ScrollableWidth.ToString();
+         myTextBoxScrollableWidth.Text = myScrollViewer.ScrollableWidth.ToString("00.0");
+         myTextBoxHorizontalOffset.Text = myScrollViewer.HorizontalOffset.ToString("00.0");
+         myTextBoxScrollableWidthPercent.Text = myScrollViewer.ScrollableWidth.ToString("00.0");
          double widthPercent = (int)(100.0 * (myScrollViewer.HorizontalOffset / myScrollViewer.ScrollableWidth));
-         myTextBoxScrollableWidthPercent.Text = widthPercent.ToString();
+         myTextBoxScrollableWidthPercent.Text = widthPercent.ToString("00.0");
          double widthNormalized = myScrollViewer.ScrollableWidth / Utilities.ZoomCanvas;
-         myTextBoxScrollableWidthNormalized.Text = widthNormalized.ToString();
+         myTextBoxScrollableWidthNormalized.Text = widthNormalized.ToString("00.0");
          //--------------------------------------------------------------------------
-         // StackPanel
-         myTextBoxStackPanelControlsSizeX.Text = stackPanelControls.ActualWidth.ToString();
-         myTextBoxStackPanelControlsSizeY.Text = stackPanelControls.ActualHeight.ToString();
-         myTextBoxCanvasTankSizeX.Text = myCanvasTank.ActualWidth.ToString();
-         myTextBoxCanvasTankSizeY.Text = myCanvasTank.ActualHeight.ToString();
-         myTextBoxImageTankSizeX.Text = imageTank.ActualWidth.ToString();
-         myTextBoxImageTankSizeY.Text = imageTank.ActualHeight.ToString();
-         myTextBoxScrollViewerTextSizeX.Text = scrollViewerTextBox.ActualWidth.ToString();
-         myTextBoxScrollViewerTextSizeY.Text = scrollViewerTextBox.ActualHeight.ToString();
-         textBox.Width = scrollViewerTextBox.ActualWidth;
-         textBox.Height = scrollViewerTextBox.ActualHeight;
+         // myDockPanelControl
+         myTextBoxDockPanelControlSizeX.Text = dockPanelControls.ActualWidth.ToString("00.0");
+         myTextBoxDockPanelControlSizeY.Text = dockPanelControls.ActualHeight.ToString("00.0");
+         myTextBoxCanvasTankSizeX.Text = myCanvasTank.ActualWidth.ToString("00.0");
+         myTextBoxCanvasTankSizeY.Text = myCanvasTank.ActualHeight.ToString("00.0");
+         myTextBoxImageTankSizeX.Text = imageTank.ActualWidth.ToString("00.0");
+         myTextBoxImageTankSizeY.Text = imageTank.ActualHeight.ToString("00.0");
+         myTextBoxScrollViewerTextSizeX.Text = scrollViewerTextBox.ActualWidth.ToString("00.0");
+         myTextBoxScrollViewerTextSizeY.Text = scrollViewerTextBox.ActualHeight.ToString("00.0");
+         myTextBlock.Width = scrollViewerTextBox.ActualWidth;
+         myTextBlock.Height = scrollViewerTextBox.ActualHeight;
          //--------------------------------------------------------------------------
          myCanvasMap.MouseLeftButtonDown += this.MouseLeftButtonDown_Canvas;
          myCanvasMap.MouseRightButtonDown += this.MouseRIghtButtonDown_Canvas;
@@ -199,40 +200,24 @@ namespace Pattons_Best
             return;
          }
          DockPanel? dockPanelInside = null;
-         StackPanel? stackPanelControls = null;
+         DockPanel? dockPanelControls = null;
          Image? imageMap = null;
          Image? imageTank = null;
          ScrollViewer? scrollViewerTextBox = null;
-         TextBox? textBox = null;
+         TextBlock? textBlock = null;
          foreach (UIElement ui0 in TopPanelTop.Children) // top panel holds myMainMenu, myDockePanelInside, and myStatusBar
          {
-            if (ui0 is DockPanel) // myDockPanelInside holds myScrollViewerInside (which holds canvas) and myStackPanelControl
+            if (ui0 is DockPanel)
             {
                dockPanelInside = (DockPanel)ui0;
-               foreach (UIElement ui1 in dockPanelInside.Children)
+               foreach (UIElement ui1 in dockPanelInside.Children)  // myDockPanelInside holds myStackPanelControl and myScrollViewerInside
                {
-                  if (ui1 is ScrollViewer)
+                  if (ui1 is DockPanel)
                   {
-                     myScrollViewer = (ScrollViewer)ui1;
-                     if (myScrollViewer.Content is Canvas)
+                     dockPanelControls = ui1 as DockPanel;
+                     if (null != dockPanelControls)
                      {
-                        myCanvasMap = (Canvas)myScrollViewer.Content;
-                        foreach (UIElement ui2 in myCanvasMap.Children)
-                        {
-                           if (ui2 is Image)
-                           {
-                              imageMap = (Image)ui2;
-                              break;
-                           }
-                        }
-                     }
-                  }
-                  if (ui1 is StackPanel)
-                  {
-                     stackPanelControls = ui1 as StackPanel;
-                     if (null != stackPanelControls)
-                     {
-                        foreach (UIElement ui2 in stackPanelControls.Children)
+                        foreach (UIElement ui2 in dockPanelControls.Children)  // myStackPanelControl holds myCanvasTank and myScrollViewerTextBox
                         {
                            if (ui2 is Canvas)
                            {
@@ -246,11 +231,27 @@ namespace Pattons_Best
                                  }
                               }
                            }
-                           if (ui2 is ScrollViewer)
+                           else if (ui2 is ScrollViewer)  // myScrollViewerTextBox holds myTextBoxDisplay
                            {
                               scrollViewerTextBox = (ScrollViewer)ui2;
-                              if( scrollViewerTextBox.Content is TextBox )
-                                 textBox = (TextBox)scrollViewerTextBox.Content; 
+                              if (scrollViewerTextBox.Content is TextBlock)
+                                 textBlock = (TextBlock)scrollViewerTextBox.Content;
+                           }
+                        }
+                     }
+                  }
+                  if (ui1 is ScrollViewer)
+                  {
+                     myScrollViewer = (ScrollViewer)ui1; // myScrollViewerInside holds myCanvasMap
+                     if (myScrollViewer.Content is Canvas)
+                     {
+                        myCanvasMap = (Canvas)myScrollViewer.Content;
+                        foreach (UIElement ui2 in myCanvasMap.Children)
+                        {
+                           if (ui2 is Image)
+                           {
+                              imageMap = (Image)ui2;
+                              break;
                            }
                         }
                      }
@@ -278,9 +279,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ButtonApply_Click(): imageMap=null");
             return;
          }
-         if (null == stackPanelControls)
+         if (null == dockPanelControls)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ButtonApply_Click(): stackPanelControls=null");
+            Logger.Log(LogEnum.LE_ERROR, "ButtonApply_Click(): dockPanelControls=null");
             return;
          }
          if (null == myCanvasTank)
@@ -298,26 +299,29 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ButtonApply_Click(): scrollViewerTextBox=null");
             return;
          }
-         if (null == textBox)
+         if (null == textBlock)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ButtonApply_Click(): textBox=null");
+            Logger.Log(LogEnum.LE_ERROR, "ButtonApply_Click(): textBlock=null");
             return;
          }
          dockPanelInside.Height = Double.Parse(myTextBoxInsideDockPanelSizeY.Text);
          dockPanelInside.Width = Double.Parse(myTextBoxInsideDockPanelSizeX.Text);
-         stackPanelControls.Width = Double.Parse(myTextBoxStackPanelControlsSizeX.Text);
-         myScrollViewer.Height = Double.Parse(myTextBoxScrollViewerSizeY.Text);
-         myScrollViewer.Width = Double.Parse(myTextBoxScrollViewerSizeX.Text);
-         myCanvasMap.Height = Double.Parse(myTextBoxCanvasMapSizeY.Text);
-         myCanvasMap.Width = Double.Parse(myTextBoxCanvasMapSizeX.Text);
-         imageMap.Height = Double.Parse(myTextBoxImageMapSizeY.Text);
-         imageMap.Width = Double.Parse(myTextBoxImageMapSizeX.Text);
+         //----------------------------------------------------------------------
+         dockPanelControls.Width = Double.Parse(myTextBoxDockPanelControlSizeX.Text);
          myCanvasTank.Height = Double.Parse(myTextBoxCanvasTankSizeY.Text);
          myCanvasTank.Width = Double.Parse(myTextBoxCanvasTankSizeX.Text);
          imageTank.Height = Double.Parse(myTextBoxImageTankSizeY.Text);
          imageTank.Width = Double.Parse(myTextBoxImageTankSizeX.Text);
-         textBox.Width = scrollViewerTextBox.ActualWidth;
-         textBox.Height = scrollViewerTextBox.ActualHeight;
+         double height = dockPanelInside.Height - myCanvasTank.Height;
+         myScrollViewer.Height = height;
+         myScrollViewer.Width = Double.Parse(myTextBoxScrollViewerSizeX.Text);
+         textBlock.Width = scrollViewerTextBox.ActualWidth;
+         textBlock.Height = height;
+         //----------------------------------------------------------------------
+         myCanvasMap.Height = Double.Parse(myTextBoxCanvasMapSizeY.Text);
+         myCanvasMap.Width = Double.Parse(myTextBoxCanvasMapSizeX.Text);
+         imageMap.Height = Double.Parse(myTextBoxImageMapSizeY.Text);
+         imageMap.Width = Double.Parse(myTextBoxImageMapSizeX.Text);
       }
       private void ButtonCancel_Click(object sender, RoutedEventArgs e)
       {

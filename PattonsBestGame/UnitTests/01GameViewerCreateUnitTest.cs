@@ -54,9 +54,9 @@ namespace Pattons_Best
                      if (myScrollViewerCanvas.Content is Canvas)
                         myCanvas = (Canvas)myScrollViewerCanvas.Content;  // Find the Canvas in the visual tree
                   }
-                  if (ui1 is StackPanel myStackPanelControl) // DockPanel that holds the Map Image
+                  if (ui1 is DockPanel dockPanelControl) // DockPanel that holds the Map Image
                   {
-                     foreach (UIElement ui2 in myStackPanelControl.Children)
+                     foreach (UIElement ui2 in dockPanelControl.Children)
                      {
                         if (ui2 is Canvas)
                            myCanvasTank = (Canvas)ui2;

@@ -10,9 +10,9 @@ namespace Pattons_Best
    internal class CanvasImageViewer : IView
    {
       public bool CtorError { get; } = false;
-      private Canvas myCanvas = null;
+      private Canvas? myCanvas = null;
       //-------------------------------------------------
-      public CanvasImageViewer(Canvas c)
+      public CanvasImageViewer(Canvas? c)
       {
          if (null == c)
          {
@@ -25,6 +25,11 @@ namespace Pattons_Best
       //-------------------------------------------------
       public void UpdateView(ref IGameInstance gi, GameAction action)
       {
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myCanvas=null");
+            return;
+         }
          switch (action)
          {
             case GameAction.EndGameWin:

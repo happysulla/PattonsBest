@@ -10,7 +10,7 @@
         BorderThickness="3" 
         Height="1080" Width="1920" 
         ResizeMode="CanResizeWithGrip" 
-        MinHeight="600" MinWidth="800"
+        MinHeight="700" MinWidth="800"
         WindowState="Maximized" 
         SizeChanged="SizeChangedGameViewerWindow" 
         ContentRendered="ContentRenderedGameViewerWindow"
@@ -23,17 +23,15 @@
          <MenuItem Header="_Help" x:Name="myMenuItemTopLevel4" InputGestureText="Ctrl+H" Width="120" />
       </Menu>
       <StatusBar x:Name="myStatusBar" DockPanel.Dock="Bottom"></StatusBar>
-      <DockPanel Name="myDockPanelInside" >
-         <StackPanel Name="myStackPanelControl" DockPanel.Dock="Left">
-            <Canvas Name="myCanvasTank" Width="800" Height="580"></Canvas>
-            <ScrollViewer Name="myScrollViewerTextBlock" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" Background="#FFB9EA9E" Width="700" HorizontalAlignment="Left" VerticalAlignment="Top">
-               <TextBlock Name="myTextBlockDisplay" FontFamily="Georgia" FontSize="24" TextWrapping="WrapWithOverflow" IsHyphenationEnabled="true" LineStackingStrategy="BlockLineHeight" Margin="0,0,0,0"  Background="#FFB9EA9E">
-                  TEST
-               </TextBlock>
+      <DockPanel Name="myDockPanelInside">
+         <DockPanel Name="myDockPanelControls" MinWidth="600"  MaxWidth="600" DockPanel.Dock="Left" Margin="0,0,0,0">
+            <Canvas Name="myCanvasTank" DockPanel.Dock="Top" MinWidth="600"  MaxWidth="600" MinHeight="500" MaxHeight="500" />
+            <ScrollViewer Name="myScrollViewerTextBlock" MinWidth="600" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" Background="#FFB9EA9E" HorizontalAlignment="Left" VerticalAlignment="Top" >
+               <TextBlock Name="myTextBlockDisplay" MinWidth="573" MaxWidth="573" FontFamily="Georgia" FontSize="24" TextWrapping="WrapWithOverflow" IsHyphenationEnabled="true" LineStackingStrategy="BlockLineHeight"  Background="#FFB9EA9E"/>
             </ScrollViewer>
-         </StackPanel>
-         <ScrollViewer Name="myScollViewerInside" Width="860" Height="1000"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0">
-            <Canvas Name="myCanvas" Width="600" Height="985" ></Canvas>
+         </DockPanel>
+         <ScrollViewer Name="myScollViewerInside" Width="800" Height="800"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Canvas Name="myCanvasMap" Width="800" Height="800" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ></Canvas>
          </ScrollViewer>
       </DockPanel>
    </DockPanel>

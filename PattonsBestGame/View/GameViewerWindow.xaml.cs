@@ -145,11 +145,11 @@ namespace Pattons_Best
          mySplashScreen.Show();
          InitializeComponent();
          //---------------------------------------------------------------
-         Image imageMap = new Image() { Name = "Map", Width = 600, Height = 985, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("Map") };
-         myCanvas.Children.Add(imageMap);
+         Image imageMap = new Image() { Name = "Map", Width = 600, Height = 600, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapMovement") };
+         myCanvasMap.Children.Add(imageMap);
          Canvas.SetLeft(imageMap, 0);
          Canvas.SetTop(imageMap, 0);
-         Image imageTank = new Image() { Name = "Tank", Width = 750, Height = 588, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("m001M4") };
+         Image imageTank = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("m001M4") };
          myCanvasTank.Children.Add(imageTank);
          Canvas.SetLeft(imageTank, 0);
          Canvas.SetTop(imageTank, 0);
@@ -172,8 +172,8 @@ namespace Pattons_Best
             GameLoadMgr.theGamesDirectory = Settings.Default.GameDirectoryName; // remember the game directory name
          //---------------------------------------------------------------
          Utilities.ZoomCanvas = Settings.Default.ZoomCanvas;
-         myCanvas.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas); // Constructor - revert to save zoom
-         StatusBarViewer sbv = new StatusBarViewer(myStatusBar, ge, gi, myCanvas);
+         myCanvasMap.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas); // Constructor - revert to save zoom
+         StatusBarViewer sbv = new StatusBarViewer(myStatusBar, ge, gi, myCanvasMap);
          //---------------------------------------------------------------
          Utilities.theBrushBlood.Color = Color.FromArgb(0xFF, 0xA4, 0x07, 0x07);
          Utilities.theBrushRegion.Color = Color.FromArgb(0x7F, 0x11, 0x09, 0xBB); // nearly transparent but slightly colored
@@ -203,7 +203,7 @@ namespace Pattons_Best
          myDashArray.Add(4);  // used for dotted lines
          myDashArray.Add(2);  // used for dotted lines
          //---------------------------------------------------------------
-         myDieRoller = new DieRoller(myCanvas, CloseSplashScreen); // Close the splash screen when die resources are loaded
+         myDieRoller = new DieRoller(myCanvasMap, CloseSplashScreen); // Close the splash screen when die resources are loaded
          if (true == myDieRoller.CtorError)
          {
             Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): myDieRoller.CtorError=true");
@@ -211,8 +211,8 @@ namespace Pattons_Best
             return;
          }
          //---------------------------------------------------------------
-         myEventViewer = new EventViewer(myGameEngine, myGameInstance, myCanvas, myScrollViewerTextBlock, Territory.theTerritories, myDieRoller);
-         CanvasImageViewer civ = new CanvasImageViewer(myCanvas);
+         myEventViewer = new EventViewer(myGameEngine, myGameInstance, myCanvasMap, myScrollViewerTextBlock, Territory.theTerritories, myDieRoller);
+         CanvasImageViewer civ = new CanvasImageViewer(myCanvasMap);
          //---------------------------------------------------------------
          // Implement the Model View Controller (MVC) pattern by registering views with
          // the game engine such that when the model data is changed, the views are updated.
@@ -241,25 +241,25 @@ namespace Pattons_Best
             System.Windows.Point hotPoint = new System.Windows.Point(Utilities.theMapItemOffset, sizeCursor * 0.5); // set the center of the MapItem as the hot point for the cursor
             Image img1 = new Image { Source = MapItem.theMapImages.GetBitmapImage("Target"), Width = sizeCursor, Height = sizeCursor };
             myTargetCursor = Utilities.ConvertToCursor(img1, hotPoint);
-            this.myCanvas.Cursor = myTargetCursor;
+            this.myCanvasMap.Cursor = myTargetCursor;
          }
          //-------------------------------------------------------
          else if ((GameAction.UpdateLoadingGame == action) || (GameAction.UpdateNewGame == action) )
          {
             myGameInstance = gi;
             myButtonMapItems.Clear();
-            foreach (UIElement ui in myCanvas.Children) // remove all buttons on map
+            foreach (UIElement ui in myCanvasMap.Children) // remove all buttons on map
             {
                if (ui is Button b)
                {
                   if (true == b.Name.Contains("Prince"))
                   {
-                     myCanvas.Children.Remove(ui);
+                     myCanvasMap.Children.Remove(ui);
                      break;
                   }
                }
             }
-            myCanvas.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas); // UploadNewGame - Return to previous saved zoom level
+            myCanvasMap.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas); // UploadNewGame - Return to previous saved zoom level
             this.Title = UpdateTitle(gi.Options);
          }
          switch (action)
@@ -287,14 +287,14 @@ namespace Pattons_Best
                SaveDefaultsToSettings();
                break;
             case GameAction.EndGameFinal:
-               myCanvas.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);  // EndGameFinal - show map for last time
+               myCanvasMap.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);  // EndGameFinal - show map for last time
                if (false == UpdateCanvas(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvas() returned error ");
                break;
             case GameAction.SetupChooseFunOptions:
             case GameAction.SetupFinalize:
                this.Title = UpdateTitle(gi.Options);
-               myCanvas.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
+               myCanvasMap.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
                if (false == UpdateCanvas(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvas() returned error ");
                break;
@@ -331,7 +331,7 @@ namespace Pattons_Best
          Canvas.SetTop(b, territory.CenterPoint.Y - mi.Zoom * Utilities.theMapItemOffset + (counterCount * Utilities.STACK));
          MapItem.SetButtonContent(b, mi, false, false, false, false); // This sets the image as the button's content
          myButtonMapItems.Add(b);
-         myCanvas.Children.Add(b);
+         myCanvasMap.Children.Add(b);
          Canvas.SetZIndex(b, counterCount);
          b.Click += ClickButtonMapItem;
          b.MouseEnter += MouseEnterMapItem;
@@ -471,7 +471,7 @@ namespace Pattons_Best
          //-------------------------------------------------------
          // Clean the Canvas of all marks
          List<UIElement> elements = new List<UIElement>();
-         foreach (UIElement ui in myCanvas.Children)
+         foreach (UIElement ui in myCanvasMap.Children)
          {
             if (ui is Polygon polygon)
                elements.Add(ui);
@@ -494,7 +494,7 @@ namespace Pattons_Best
                elements.Add(ui);
          }
          foreach (UIElement ui1 in elements)
-            myCanvas.Children.Remove(ui1);
+            myCanvasMap.Children.Remove(ui1);
          //-------------------------------------------------------
          if (GamePhase.UnitTest == gi.GamePhase)
             return true;
@@ -688,7 +688,7 @@ namespace Pattons_Best
          aPolyline.StrokeEndLineCap = PenLineCap.Triangle;
          aPolyline.Points = aPointCollection;
          aPolyline.StrokeDashArray = myDashArray;
-         myCanvas.Children.Add(aPolyline);
+         myCanvasMap.Children.Add(aPolyline);
          //-----------------------------------------
          myRectangleMoving = myRectangles[myBrushIndex];
          if (myRectangles.Count <= ++myBrushIndex)
@@ -711,7 +711,7 @@ namespace Pattons_Best
       }
       private void MouseDownPolygonTravel(object sender, MouseButtonEventArgs e)
       {
-         System.Windows.Point canvasPoint = e.GetPosition(myCanvas);
+         System.Windows.Point canvasPoint = e.GetPosition(myCanvasMap);
          Polygon? clickedPolygon = sender as Polygon;
          if (null == clickedPolygon)
          {
@@ -756,9 +756,12 @@ namespace Pattons_Best
          if (0 < mapPanelHeight) // Need to resize to take up panel content not taken by menu and status bar
          {
             myDockPanelInside.Height = mapPanelHeight;
+            myDockPanelControls.Height = mapPanelHeight;
             myScollViewerInside.Height = mapPanelHeight;
+            myScrollViewerTextBlock.Height = mapPanelHeight - 500;
+            myTextBlockDisplay.Height = mapPanelHeight - 527;
          }
-         double mapPanelWidth = myDockPanelTop.ActualWidth - myStackPanelControl.ActualWidth - System.Windows.SystemParameters.VerticalScrollBarWidth;
+         double mapPanelWidth = myDockPanelTop.ActualWidth - myDockPanelControls.ActualWidth - System.Windows.SystemParameters.VerticalScrollBarWidth;
          if (0 < mapPanelWidth) // need to resize so that scrollbar takes up panel not allocated to Control's DockPanel, i.e. where app controls are shown
             myScollViewerInside.Width = mapPanelWidth;
       }
@@ -768,9 +771,12 @@ namespace Pattons_Best
          if (0 < mapPanelHeight) // Need to resize to take up panel content not taken by menu and status bar
          {
             myDockPanelInside.Height = mapPanelHeight;
+            myDockPanelControls.Height = mapPanelHeight;
             myScollViewerInside.Height = mapPanelHeight;
+            myScrollViewerTextBlock.Height = mapPanelHeight - 500;
+            myTextBlockDisplay.Height = mapPanelHeight - 527;
          }
-         double mapPanelWidth = myDockPanelTop.ActualWidth - myStackPanelControl.ActualWidth - System.Windows.SystemParameters.VerticalScrollBarWidth;
+         double mapPanelWidth = myDockPanelTop.ActualWidth - myDockPanelControls.ActualWidth - System.Windows.SystemParameters.VerticalScrollBarWidth;
          if (0 < mapPanelWidth) // need to resize so that scrollbar takes up panel not allocated to Control's DockPanel, i.e. where app controls are shown
             myScollViewerInside.Width = mapPanelWidth;
       }
