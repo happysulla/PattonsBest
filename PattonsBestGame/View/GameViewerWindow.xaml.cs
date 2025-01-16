@@ -747,12 +747,12 @@ namespace Pattons_Best
          myDockPanelInside.Height = mapPanelHeight;
          myDockPanelControls.Height = mapPanelHeight;
          //-----------------------------------------------------
-         myScrollViewerTextBlock.Height = mapPanelHeight - myCanvasTank.ActualHeight;
+         myScrollViewerTextBlock.Height = mapPanelHeight - myCanvasTank.ActualHeight - 5;
          myTextBlockDisplay.Height = mapPanelHeight - myCanvasTank.ActualHeight;
-         myTextBlockDisplay.Width = myScrollViewerTextBlock.ActualWidth;
-         Visibility v = myScrollViewerTextBlock.ComputedVerticalScrollBarVisibility;
-         if (v == Visibility.Visible)
-            myTextBlockDisplay.Width -= System.Windows.SystemParameters.VerticalScrollBarWidth;
+         //myTextBlockDisplay.Width = myScrollViewerTextBlock.ActualWidth;
+         //Visibility v = myScrollViewerTextBlock.ComputedVerticalScrollBarVisibility;
+         //if (v == Visibility.Visible)
+         //   myTextBlockDisplay.Width -= System.Windows.SystemParameters.VerticalScrollBarWidth;
          //-----------------------------------------------------
          double mapPanelWidth = myDockPanelTop.ActualWidth - myDockPanelControls.ActualWidth - System.Windows.SystemParameters.VerticalScrollBarWidth;
          myScrollViewerMap.Width = mapPanelWidth;
@@ -764,12 +764,12 @@ namespace Pattons_Best
          myDockPanelInside.Height = mapPanelHeight;
          myDockPanelControls.Height = mapPanelHeight;
          //-----------------------------------------------------
-         myScrollViewerTextBlock.Height = mapPanelHeight - myCanvasTank.ActualHeight;
+         myScrollViewerTextBlock.Height = mapPanelHeight - myCanvasTank.ActualHeight - 5;
          myTextBlockDisplay.Height = mapPanelHeight - myCanvasTank.ActualHeight;
-         myTextBlockDisplay.Width = myScrollViewerTextBlock.ActualWidth;
-         Visibility v = myScrollViewerTextBlock.ComputedVerticalScrollBarVisibility;
-         if (v == Visibility.Visible)
-            myTextBlockDisplay.Width -= System.Windows.SystemParameters.VerticalScrollBarWidth;
+         //myTextBlockDisplay.Width = myScrollViewerTextBlock.ActualWidth;
+         //Visibility v = myScrollViewerTextBlock.ComputedVerticalScrollBarVisibility;
+         //if (v == Visibility.Visible)
+         //   myTextBlockDisplay.Width -= System.Windows.SystemParameters.VerticalScrollBarWidth;
          //-----------------------------------------------------
          double mapPanelWidth = myDockPanelTop.ActualWidth - myDockPanelControls.ActualWidth - System.Windows.SystemParameters.VerticalScrollBarWidth;
          myScrollViewerMap.Width = mapPanelWidth;
