@@ -113,7 +113,7 @@ namespace Pattons_Best
          }
          else if (CommandName == myCommandNames[1])
          {
-            CreateMarquee(myCanvas);
+            //CreateMarquee(myCanvas);
          }
          else if (CommandName == myCommandNames[2])
          {
@@ -144,11 +144,6 @@ namespace Pattons_Best
          else if (HeaderName == myHeaderNames[1])
          {
             ++myIndexName;
-            // Add Map back to Canvas
-            Image imageMap = new Image() { Name = "Map", Width = 810, Height = 985, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("Map") };
-            myCanvas.Children.Add(imageMap);
-            Canvas.SetLeft(imageMap, 0);
-            Canvas.SetTop(imageMap, 0);
          }
          else if (HeaderName == myHeaderNames[2])
          {

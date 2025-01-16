@@ -26,12 +26,12 @@
       <DockPanel Name="myDockPanelInside">
          <DockPanel Name="myDockPanelControls" MinWidth="600"  MaxWidth="600" DockPanel.Dock="Left" Margin="0,0,0,0">
             <Canvas Name="myCanvasTank" DockPanel.Dock="Top" MinWidth="600"  MaxWidth="600" MinHeight="500" MaxHeight="500" />
-            <ScrollViewer Name="myScrollViewerTextBlock" MinWidth="600" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" Background="#FFB9EA9E" HorizontalAlignment="Left" VerticalAlignment="Top" >
-               <TextBlock Name="myTextBlockDisplay" MinWidth="573" MaxWidth="573" FontFamily="Georgia" FontSize="24" TextWrapping="WrapWithOverflow" IsHyphenationEnabled="true" LineStackingStrategy="BlockLineHeight"  Background="#FFB9EA9E"/>
+            <ScrollViewer Name="myScrollViewerTextBlock" MinWidth="583" MaxWidth="600" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" Background="#FFB9EA9E" HorizontalAlignment="Left" VerticalAlignment="Top" >
+               <TextBlock Name="myTextBlockDisplay" MinWidth="563" MaxWidth="600" FontFamily="Georgia" FontSize="24" TextWrapping="WrapWithOverflow" IsHyphenationEnabled="true" LineStackingStrategy="BlockLineHeight"  Background="#FFB9EA9E" Margin="10,5,10,5"/>
             </ScrollViewer>
          </DockPanel>
-         <ScrollViewer Name="myScollViewerInside" Width="800" Height="800"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Canvas Name="myCanvasMap" Width="800" Height="800" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ></Canvas>
+         <ScrollViewer Name="myScrollViewerMap" Width="1132" Height="902"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" >
+            <Canvas Name="myCanvasMap" Width="1115" Height="880" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ></Canvas>
          </ScrollViewer>
       </DockPanel>
    </DockPanel>

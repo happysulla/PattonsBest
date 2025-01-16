@@ -39,6 +39,14 @@
                   <Label Name="myLabelTopPanelSizeY" Width="150" Height="30" Content="TopPanel Height:" HorizontalAlignment="Center"  />
                   <TextBox x:Name="myTextBoxTopPanelSizeY" Width="100" Height="20" Background="#FFCFCDCD" IsEnabled="False"/>
                </StackPanel>
+               <StackPanel Name="myStackPanelMenuSizeY"  Orientation="Horizontal">
+                  <Label Name="myLabelMenuSizeY" Width="150" Height="30" Content="Menu Height:" HorizontalAlignment="Center"  />
+                  <TextBox x:Name="myTextBoxMenuSizeY" Width="100" Height="20" Background="#FFCFCDCD" IsEnabled="False"/>
+               </StackPanel>
+               <StackPanel Name="myStackPanelStatusBarSizeY"  Orientation="Horizontal">
+                  <Label Name="myLabelStatusBarSizeY" Width="150" Height="30" Content="StatusBar Height:" HorizontalAlignment="Center"  />
+                  <TextBox x:Name="myTextBoxStatusBarSizeY" Width="100" Height="20" Background="#FFCFCDCD" IsEnabled="False"/>
+               </StackPanel>
             </StackPanel>
          </StackPanel>
          <StackPanel>
@@ -85,26 +93,34 @@
          </StackPanel>
          <StackPanel>
             <StackPanel Name="myStackPanelScrollViewerTextSizeX" Orientation="Horizontal" >
-               <Label Name="myLabelScrollViewerTextSizeX" Width="150" Height="30" Content="TextBox Width:" HorizontalAlignment="Center" />
+               <Label Name="myLabelScrollViewerTextSizeX" Width="150" Height="30" Content="SV Width:" HorizontalAlignment="Center" />
                <TextBox x:Name="myTextBoxScrollViewerTextSizeX" Width="100" Height="20" />
             </StackPanel>
             <StackPanel Name="myStackPanelScrollViewerTextSizeY" Orientation="Horizontal" >
-               <Label Name="myLabelScrollViewerTextSizeY" Width="150" Height="30" Content="TextBox Height:" HorizontalAlignment="Center" />
-               <TextBox x:Name="myTextBoxScrollViewerTextSizeY" Width="100" Height="20" />
+               <Label Name="myLabelScrollViewerTextSizeY" Width="150" Height="30" Content="SV Height:" HorizontalAlignment="Center" />
+               <TextBox x:Name="myTextBoxScrollViewerTextSizeY" Width="100" Height="20" Background="#FFCFCDCD" IsEnabled="False"/>
+            </StackPanel>
+            <StackPanel Name="myStackPanelTextBoxSizeX" Orientation="Horizontal" >
+               <Label Name="myLabelTextBoxSizeX" Width="150" Height="30" Content="TextBox Width:" HorizontalAlignment="Center" />
+               <TextBox x:Name="myTextBoxTextBoxSizeX" Width="100" Height="20" />
+            </StackPanel>
+            <StackPanel Name="myStackPanelTextBoxSizeY" Orientation="Horizontal" >
+               <Label Name="myLabelTextBoxSizeY" Width="150" Height="30" Content="TextBox Height:" HorizontalAlignment="Center" />
+               <TextBox x:Name="myTextBoxTextBoxSizeY" Width="100" Height="20" Background="#FFCFCDCD" IsEnabled="False"/>
             </StackPanel>
          </StackPanel>
       </StackPanel>
       <Separator Name="mySeparatorB" Height="5"/>
-      <!-- myScollViewerInside -->
+      <!-- myScrollViewerMap -->
       <StackPanel Name="myStackPanelScrollViewerOverall" Orientation="Horizontal" >
          <StackPanel>
-            <StackPanel Name="myStackPanelScrollViewerSizeX" Orientation="Horizontal" >
-               <Label Name="myLabelScrollViewerSizeX" Width="150" Height="30" Content="ScrollViewerInside Width:" HorizontalAlignment="Center" />
-               <TextBox x:Name="myTextBoxScrollViewerSizeX" Width="100" Height="20" />
+            <StackPanel Name="myStackPanelScrollViewerMapSizeX" Orientation="Horizontal" >
+               <Label Name="myLabelScrollViewerMapSizeX" Width="150" Height="30" Content="ScrollViewerMap Width:" HorizontalAlignment="Center" />
+               <TextBox x:Name="myTextBoxScrollViewerMapSizeX" Width="100" Height="20" />
             </StackPanel>
-            <StackPanel Name="myStackPanelScrollViewerSizeY"  Orientation="Horizontal">
-               <Label Name="myLabelScrollViewerSizeY" Width="150" Height="30" Content="ScrollViewerInside Height:" HorizontalAlignment="Center"  />
-               <TextBox x:Name="myTextBoxScrollViewerSizeY" Width="100" Height="20" />
+            <StackPanel Name="myStackPanelScrollViewerMapSizeY"  Orientation="Horizontal">
+               <Label Name="myLabelScrollViewerMaprSizeY" Width="150" Height="30" Content="ScrollViewerMap Height:" HorizontalAlignment="Center"  />
+               <TextBox x:Name="myTextBoxScrollViewerMapSizeY" Width="100" Height="20" />
             </StackPanel>
             <StackPanel Name="myStackPanelCanvasMapSizeX" Orientation="Horizontal" >
                <Label Name="myLabelCanvasMapSizeX" Width="150" Height="30" Content="CanvasMap Width:" HorizontalAlignment="Center" />

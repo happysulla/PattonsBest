@@ -109,15 +109,6 @@ namespace Pattons_Best
       //---------------------------------------------------------------------
       private readonly List<Button> myButtonMapItems = new List<Button>();
       private readonly SplashDialog mySplashScreen;
-      private Button[] myButtonTimeTrackDays = new Button[7];
-      private Button[] myButtonTimeTrackWeeks = new Button[15];
-      private Button[] myButtonFoodSupply1s = new Button[10];
-      private Button[] myButtonFoodSupply10s = new Button[10];
-      private Button[] myButtonFoodSupply100s = new Button[5];
-      private Button[] myButtonEndurances = new Button[12];
-      private readonly List<Button> myButtonDailyAcions = new List<Button>();
-      private readonly string[] myButtonDailyContents = new string[MAX_DAILY_ACTIONS] { "Travel", "Rest", "News", "Hire", "Audience", "Offering", "Search Ruins", "Search Cache", "Search Clue", "Arch Travel", "Follow", "Rafting", "Air Travel", "Steal Gems", "Rescue", "Attack" };
-      //---------------------------------------------------------------------
       private ContextMenu myContextMenuButton = new ContextMenu();
       private readonly ContextMenu myContextMenuCanvas = new ContextMenu();
       private readonly DoubleCollection myDashArray = new DoubleCollection();
@@ -145,7 +136,7 @@ namespace Pattons_Best
          mySplashScreen.Show();
          InitializeComponent();
          //---------------------------------------------------------------
-         Image imageMap = new Image() { Name = "Map", Width = 600, Height = 600, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapMovement") };
+         Image imageMap = new Image() { Name = "Map", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapMovement") };
          myCanvasMap.Children.Add(imageMap);
          Canvas.SetLeft(imageMap, 0);
          Canvas.SetTop(imageMap, 0);
@@ -279,7 +270,7 @@ namespace Pattons_Best
                if (false == UpdateCanvas(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvas() returned error ");
                mySplashScreen.Close();
-               myScollViewerInside.UpdateLayout();
+               myScrollViewerMap.UpdateLayout();
                //UpdateScrollbarThumbnails(gi.Prince.Territory);
                break;
             case GameAction.UpdateGameOptions:
@@ -753,32 +744,36 @@ namespace Pattons_Best
       private void ContentRenderedGameViewerWindow(object sender, EventArgs e)
       {
          double mapPanelHeight = myDockPanelTop.ActualHeight - myMainMenu.ActualHeight - myStatusBar.ActualHeight;
-         if (0 < mapPanelHeight) // Need to resize to take up panel content not taken by menu and status bar
-         {
-            myDockPanelInside.Height = mapPanelHeight;
-            myDockPanelControls.Height = mapPanelHeight;
-            myScollViewerInside.Height = mapPanelHeight;
-            myScrollViewerTextBlock.Height = mapPanelHeight - 500;
-            myTextBlockDisplay.Height = mapPanelHeight - 527;
-         }
+         myDockPanelInside.Height = mapPanelHeight;
+         myDockPanelControls.Height = mapPanelHeight;
+         //-----------------------------------------------------
+         myScrollViewerTextBlock.Height = mapPanelHeight - myCanvasTank.ActualHeight;
+         myTextBlockDisplay.Height = mapPanelHeight - myCanvasTank.ActualHeight;
+         myTextBlockDisplay.Width = myScrollViewerTextBlock.ActualWidth;
+         Visibility v = myScrollViewerTextBlock.ComputedVerticalScrollBarVisibility;
+         if (v == Visibility.Visible)
+            myTextBlockDisplay.Width -= System.Windows.SystemParameters.VerticalScrollBarWidth;
+         //-----------------------------------------------------
          double mapPanelWidth = myDockPanelTop.ActualWidth - myDockPanelControls.ActualWidth - System.Windows.SystemParameters.VerticalScrollBarWidth;
-         if (0 < mapPanelWidth) // need to resize so that scrollbar takes up panel not allocated to Control's DockPanel, i.e. where app controls are shown
-            myScollViewerInside.Width = mapPanelWidth;
+         myScrollViewerMap.Width = mapPanelWidth;
+         myScrollViewerMap.Height = mapPanelHeight;
       }
       private void SizeChangedGameViewerWindow(object sender, SizeChangedEventArgs e)
       {
          double mapPanelHeight = myDockPanelTop.ActualHeight - myMainMenu.ActualHeight - myStatusBar.ActualHeight;
-         if (0 < mapPanelHeight) // Need to resize to take up panel content not taken by menu and status bar
-         {
-            myDockPanelInside.Height = mapPanelHeight;
-            myDockPanelControls.Height = mapPanelHeight;
-            myScollViewerInside.Height = mapPanelHeight;
-            myScrollViewerTextBlock.Height = mapPanelHeight - 500;
-            myTextBlockDisplay.Height = mapPanelHeight - 527;
-         }
+         myDockPanelInside.Height = mapPanelHeight;
+         myDockPanelControls.Height = mapPanelHeight;
+         //-----------------------------------------------------
+         myScrollViewerTextBlock.Height = mapPanelHeight - myCanvasTank.ActualHeight;
+         myTextBlockDisplay.Height = mapPanelHeight - myCanvasTank.ActualHeight;
+         myTextBlockDisplay.Width = myScrollViewerTextBlock.ActualWidth;
+         Visibility v = myScrollViewerTextBlock.ComputedVerticalScrollBarVisibility;
+         if (v == Visibility.Visible)
+            myTextBlockDisplay.Width -= System.Windows.SystemParameters.VerticalScrollBarWidth;
+         //-----------------------------------------------------
          double mapPanelWidth = myDockPanelTop.ActualWidth - myDockPanelControls.ActualWidth - System.Windows.SystemParameters.VerticalScrollBarWidth;
-         if (0 < mapPanelWidth) // need to resize so that scrollbar takes up panel not allocated to Control's DockPanel, i.e. where app controls are shown
-            myScollViewerInside.Width = mapPanelWidth;
+         myScrollViewerMap.Width = mapPanelWidth;
+         myScrollViewerMap.Height = mapPanelHeight;
       }
       private void ClosedGameViewerWindow(object sender, EventArgs e)
       {
@@ -804,9 +799,9 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "SetWindowPlacement() returned false");
             }
             if (0.0 != Settings.Default.ScrollViewerHeight)
-               myScollViewerInside.Height = Settings.Default.ScrollViewerHeight;
+               myScrollViewerMap.Height = Settings.Default.ScrollViewerHeight;
             if (0.0 != Settings.Default.ScrollViewerWidth)
-               myScollViewerInside.Width = Settings.Default.ScrollViewerWidth;
+               myScrollViewerMap.Width = Settings.Default.ScrollViewerWidth;
          }
          catch (Exception ex)
          {
@@ -833,8 +828,8 @@ namespace Pattons_Best
          //-------------------------------------------
          Settings.Default.ZoomCanvas = Utilities.ZoomCanvas;
          //-------------------------------------------
-         Settings.Default.ScrollViewerHeight = myScollViewerInside.Height;
-         Settings.Default.ScrollViewerWidth = myScollViewerInside.Width;
+         Settings.Default.ScrollViewerHeight = myScrollViewerMap.Height;
+         Settings.Default.ScrollViewerWidth = myScrollViewerMap.Width;
          //-------------------------------------------
          Settings.Default.GameDirectoryName = GameLoadMgr.theGamesDirectory;
          //-------------------------------------------
@@ -936,6 +931,21 @@ namespace Pattons_Best
             return false;
          }
          return true;
+      }
+      private IMapPoint GetCanvasCenter(ScrollViewer scrollViewer, Canvas canvas)
+      {
+         double x = 0.0;
+         if (canvas.ActualWidth < scrollViewer.ActualWidth / Utilities.ZoomCanvas)
+            x = canvas.ActualWidth / 2 + scrollViewer.HorizontalOffset;
+         else
+            x = scrollViewer.ActualWidth / (2 * Utilities.ZoomCanvas) + scrollViewer.HorizontalOffset / Utilities.ZoomCanvas;
+         double y = 0.0;
+         if (canvas.ActualHeight < scrollViewer.ActualHeight / Utilities.ZoomCanvas)
+            y = canvas.ActualHeight / 2 + scrollViewer.VerticalOffset;
+         else
+            y = scrollViewer.ActualHeight / (2 * Utilities.ZoomCanvas) + scrollViewer.VerticalOffset / Utilities.ZoomCanvas;
+         IMapPoint mp = (IMapPoint)new MapPoint(x, y);
+         return mp;
       }
       //-----------------------------------------------------------------------
       #region Win32 API declarations to set and get window placement
