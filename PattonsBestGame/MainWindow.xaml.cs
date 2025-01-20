@@ -15,6 +15,7 @@ namespace Pattons_Best
 {
    public partial class MainWindow : Window
    {
+      public static string theAssemblyDirectory = "";
       private IGameEngine? myGameEngine = null;
       private GameViewerWindow? myGameViewerWindow = null;
       //-----------------------------------------------------------------------
@@ -24,21 +25,19 @@ namespace Pattons_Best
          try
          {
             //--------------------------------------------
-            string codeBase = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            Assembly assem = Assembly.GetExecutingAssembly();
+            string codeBase = assem.Location;
             UriBuilder uri = new UriBuilder(codeBase);
             string path = Uri.UnescapeDataString(uri.Path);
-            string? assemblyDir = System.IO.Path.GetDirectoryName(path);
-            if (null == assemblyDir)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "MainWindow(): GameInstance() ctor error");
-               Application.Current.Shutdown();
-               return;
-            }
-            MapImage.theImageDirectory = assemblyDir + @"\Images\";
-            ConfigFileReader.theConfigDirectory = assemblyDir + @"\config\";
+            theAssemblyDirectory = System.IO.Path.GetDirectoryName(path);
+            MapImage.theImageDirectory = theAssemblyDirectory + @"\images\";
+            ConfigFileReader.theConfigDirectory = theAssemblyDirectory + @"\config\";
             string appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             Logger.theLogDirectory = appDataDir + @"\PattonsBest\Logs\";
             GameLoadMgr.theGamesDirectory = appDataDir + @"\PattonsBest\Games\";
+            GameFeat.theGameFeatDirectory = appDataDir + @"\PattonsBest\GameFeat\";
+            if (false == Directory.Exists(GameFeat.theGameFeatDirectory)) // create directory if does not exists
+               Directory.CreateDirectory(GameFeat.theGameFeatDirectory);
             //--------------------------------------------
             Utilities.InitializeRandomNumGenerators();
             //--------------------------------------------
@@ -66,17 +65,17 @@ namespace Pattons_Best
             //--------------------------------------------
             try // copy user documentation to folder where user data is kept
             {
-               //string docs1Src = assemblyDir + @"\Docs\BP2-eventsbook_singleA4.pdf";
-               //string docs2Src = assemblyDir + @"\Docs\BP2-rulesbook_singleA4.pdf";
-               //string docsDir = appDataDir + @"\Pattons_Best\Docs\";
-               //if (false == Directory.Exists(docsDir))
-               //   Directory.CreateDirectory(docsDir);
-               //string docs1Dest = assemblyDir + @"\Docs\BP2-eventsbook_singleA4.pdf";
-               //if (false == File.Exists(docs1Dest))
-               //   File.Copy(docs1Src, docs1Dest);
-               //string docs2Dest = assemblyDir + @"\Docs\BP2-rulesbook_singleA4.pdf";
-               //if (false == File.Exists(docs2Dest))
-               //   File.Copy(docs1Src, docs2Dest);
+               string docs1Src = theAssemblyDirectory + @"\Docs\Pattons_Best-Summary.pdf";
+               string docs2Src = theAssemblyDirectory + @"\Docs\PattonsBest-rules.pdf";
+               string docsDir = appDataDir + @"\BarbarianPrince\Docs\";
+               if (false == Directory.Exists(docsDir))
+                  Directory.CreateDirectory(docsDir);
+               string docs1Dest = docsDir + @"Pattons_Best-Summary.pdf";
+               if (false == File.Exists(docs1Dest))
+                  File.Copy(docs1Src, docs1Dest);
+               string docs2Dest = docsDir + @"PattonsBest-rules.pdf";
+               if (false == File.Exists(docs2Dest))
+                  File.Copy(docs2Src, docs2Dest);
             }
             catch (Exception e)
             {

@@ -166,6 +166,11 @@ namespace Pattons_Best
       }
       private void ShowSettings()
       {
+         if (null == this.TopPanel)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowSettings(): TopPanel=null");
+            return;
+         }
          if (null == myMenu)
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowSettings(): myMenu=null");

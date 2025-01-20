@@ -32,7 +32,11 @@
             </ScrollViewer>
          </DockPanel>
          <ScrollViewer Name="myScrollViewerMap" Width="1132" Height="902"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" >
-            <Canvas Name="myCanvasMap" Width="1115" Height="880" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ></Canvas>
+            <Canvas Name="myCanvasMap" Width="1115" Height="880" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+               <TextBlock Name="myTextBlockCanvas" MinWidth="573" MaxWidth="573" FontFamily="Georgia" FontSize="24" TextWrapping="WrapWithOverflow" IsHyphenationEnabled="true" LineStackingStrategy="BlockLineHeight"  Background="#FFB9EA9E" Margin="5,5,5,5">
+                Current Game Statistics:
+               </TextBlock>
+            </Canvas>
          </ScrollViewer>
       </DockPanel>
    </DockPanel>

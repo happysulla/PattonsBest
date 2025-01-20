@@ -47,8 +47,8 @@ namespace Pattons_Best
             // Create the territories and the regions marking the territories.
             // Keep a list of Territories used in the game.  All the information 
             // of Territories is static and does not change.
-            Territory.theTerritories = ReadTerritoriesXml();
-            if (null == Territory.theTerritories)
+            Territories.theMoveTerritories = ReadTerritoriesXml();
+            if (null == Territories.theMoveTerritories)
             {
                Logger.Log(LogEnum.LE_ERROR, "GameInstance(): ReadTerritoriesXml() returned null");
                CtorError = true;

@@ -202,7 +202,7 @@ namespace Pattons_Best
             return;
          }
          //---------------------------------------------------------------
-         myEventViewer = new EventViewer(myGameEngine, myGameInstance, myCanvasMap, myScrollViewerTextBlock, Territory.theTerritories, myDieRoller);
+         myEventViewer = new EventViewer(myGameEngine, myGameInstance, myCanvasMap, myScrollViewerTextBlock, Territories.theMoveTerritories, myDieRoller);
          CanvasImageViewer civ = new CanvasImageViewer(myCanvasMap);
          //---------------------------------------------------------------
          // Implement the Model View Controller (MVC) pattern by registering views with
@@ -260,6 +260,10 @@ namespace Pattons_Best
             case GameAction.ShowEventListing:
             case GameAction.ShowReportErrorDialog:
             case GameAction.ShowAboutDialog:
+            case GameAction.UnitTestStart:
+            case GameAction.UnitTestCommand:
+            case GameAction.UnitTestNext:
+            case GameAction.UnitTestCleanup:
                break;
             case GameAction.EndGameWin:
             case GameAction.EndGameLost:
@@ -311,7 +315,7 @@ namespace Pattons_Best
             return false;
          }
          string territoryName = Utilities.RemoveSpaces(tName);
-         ITerritory? territory = Territory.theTerritories.Find(territoryName);
+         ITerritory? territory = Territories.theMoveTerritories.Find(territoryName);
          if (null == territory)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): TerritoryExtensions.Find() returned null");
@@ -709,7 +713,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonTravel(): clickedPolygon=null");
             return;
          }
-         myTerritorySelected = Territory.theTerritories.Find(Utilities.RemoveSpaces(clickedPolygon.Name));
+         myTerritorySelected = Territories.theMoveTerritories.Find(Utilities.RemoveSpaces(clickedPolygon.Name));
          if (null == myTerritorySelected)
          {
             Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonTravel(): selectedTerritory=null for " + clickedPolygon.Tag.ToString());

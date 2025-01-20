@@ -9,8 +9,8 @@ namespace Pattons_Best
    [Serializable]
    public class Territory : ITerritory
    {
-      [NonSerialized] static public ITerritories theTerritories = new Territories();
       public string Name { get; set; } = "Offboard";
+      public string Type { get; set; } = "ERROR";
       public List<String> Adjacents { get; set; } = new List<String>();
       public IMapPoint CenterPoint { get; set; } = new MapPoint();
       public List<IMapPoint> Points { get; set; } = new List<IMapPoint>();
@@ -39,6 +39,12 @@ namespace Pattons_Best
    [Serializable]
    public class Territories : IEnumerable, ITerritories
    {
+      [NonSerialized] public const string MOVE_TERRITORIES = "TerritoriesMove.xml";
+      [NonSerialized] public const string BATTLE_TERRITORIES = "TerritoriesBattle.xml";
+      [NonSerialized] public const string TANK_TERRITORIES = "TerritoriesTank.xml";
+      [NonSerialized] static public ITerritories theMoveTerritories = new Territories();
+      [NonSerialized] static public ITerritories theBattleTerritories = new Territories();
+      [NonSerialized] static public ITerritories theTankTerritories = new Territories();
       private readonly ArrayList myList;
       public Territories() { myList = new ArrayList(); }
       public void Add(ITerritory t) { myList.Add(t); }

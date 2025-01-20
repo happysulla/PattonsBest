@@ -6,6 +6,7 @@ namespace Pattons_Best
    public interface ITerritory
    {
       string Name { get; set; }
+      string Type { get; set; }
       List<IMapPoint> Points { set; get; }
       IMapPoint CenterPoint { get; set; }
       List<String> Adjacents { get; }

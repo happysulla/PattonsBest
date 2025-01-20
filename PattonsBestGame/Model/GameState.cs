@@ -23,7 +23,7 @@ namespace Pattons_Best
       protected bool AddMapItemMove(IGameInstance gi, IMapItem mi, ITerritory newT)
       {
          //-------------------------------
-         MapItemMove mim = new MapItemMove(Territory.theTerritories, mi, newT);
+         MapItemMove mim = new MapItemMove(Territories.theMoveTerritories, mi, newT);
          if (true == mim.CtorError)
          {
             Logger.Log(LogEnum.LE_ERROR, "AddMapItemMove(): mim.CtorError=true for start=" + mi.TerritoryStarting.ToString() + " for newT=" + newT.Name);

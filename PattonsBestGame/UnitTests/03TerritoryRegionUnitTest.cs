@@ -91,7 +91,7 @@ namespace Pattons_Best
             }
             foreach (UIElement ui1 in results)
                myCanvas.Children.Remove(ui1);
-            foreach (ITerritory t in Territory.theTerritories)
+            foreach (ITerritory t in Territories.theMoveTerritories)
                t.Points.Clear();
          }
          else if (CommandName == myCommandNames[1])
@@ -108,8 +108,8 @@ namespace Pattons_Best
             }
             foreach (UIElement ui1 in results)
                myCanvas.Children.Remove(ui1);
-            CreateEllipses(Territory.theTerritories);
-            CreatePolygons(Territory.theTerritories);
+            CreateEllipses(Territories.theMoveTerritories);
+            CreatePolygons(Territories.theMoveTerritories);
          }
          else
          {
@@ -164,7 +164,7 @@ namespace Pattons_Best
          {
             string filename = ConfigFileReader.theConfigDirectory + "Territories.xml";
             System.IO.File.Delete(filename);  // delete old file
-            XmlDocument aXmlDocument = CreateXml(Territory.theTerritories); // create a new XML document based on Territories
+            XmlDocument aXmlDocument = CreateXml(Territories.theMoveTerritories); // create a new XML document based on Territories
             using (FileStream writer = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write))
             {
                XmlWriterSettings settings = new XmlWriterSettings { Indent = true, OmitXmlDeclaration = true, NewLineOnAttributes = false };
@@ -196,7 +196,7 @@ namespace Pattons_Best
             foreach (String s in myAnchorTerritory.Adjacents)
             {
                Territory? adjacentTerritory = null;
-               foreach (Territory t in Territory.theTerritories)
+               foreach (Territory t in Territories.theMoveTerritories)
                {
                   if (s == Utilities.RemoveSpaces(t.ToString()))
                   {
@@ -342,7 +342,7 @@ namespace Pattons_Best
          Console.WriteLine("MouseDownEllipse.MouseDown(): {0}", mp.ToString());
          ITerritory? matchingTerritory = null; // Find the corresponding Territory
          Ellipse mousedEllipse = (Ellipse)sender;
-         foreach (ITerritory? t in Territory.theTerritories)
+         foreach (ITerritory? t in Territories.theMoveTerritories)
          {
             if (null == t)
             {
@@ -420,7 +420,7 @@ namespace Pattons_Best
             // This function removes an existing polygon when it is clicked if no achor territory exists
             Polygon aPolygon = (Polygon)sender;
             ITerritory? matchingTerritory = null;
-            foreach (ITerritory t in Territory.theTerritories)
+            foreach (ITerritory t in Territories.theMoveTerritories)
             {
                string? tName = t.ToString();
                if( null == tName )

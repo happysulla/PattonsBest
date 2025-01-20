@@ -206,7 +206,7 @@ namespace Pattons_Best
       {
          double minDistance = 10;
          IMapPoint selectedMp = mp;
-         foreach (Territory t in Territory.theTerritories)
+         foreach (Territory t in Territories.theMoveTerritories)
          {
             foreach (IMapPoint mp1 in t.Points)
             {

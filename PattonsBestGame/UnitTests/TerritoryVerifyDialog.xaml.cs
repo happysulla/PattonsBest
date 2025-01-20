@@ -5,20 +5,30 @@ namespace Pattons_Best
 {
    public partial class TerritoryVerifyDialog : Window
    {
-      public String? RadioOutputText { get; set; }
+      public String RadioOutputText { get; set; } = "ERROR";
       public String CenterPointX { get; set; } = "";
       public String CenterPointY { get; set; } = "";
-      public bool IsTown { get; set; } = false;
-      public bool IsCastle { get; set; } = false;
-      public bool IsRuin { get; set; } = false;
-      public bool IsTemple { get; set; } = false;
-      public bool IsOasis { get; set; } = false;
       public TerritoryVerifyDialog(ITerritory t, double anX)
       {
          InitializeComponent();
          myTextBoxName.Text = t.Name;
-         myTextBoxCenterPointX.Text = t.CenterPoint.X.ToString();
-         myTextBoxCenterPointY.Text = t.CenterPoint.Y.ToString();
+         myTextBoxCenterPointX.Text = t.CenterPoint.X.ToString("000");
+         myTextBoxCenterPointY.Text = t.CenterPoint.Y.ToString("000");
+         switch (t.Type)
+         {
+            case "A":
+               myRadioButtonA.IsChecked = true;
+               break;
+            case "B":
+               myRadioButtonB.IsChecked = true;
+               break;
+            case "X":
+               myRadioButtonC.IsChecked = true;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "TerritoryVerifyDialog(): unk type=" + t.Type);
+               break;
+         }
       }
       private void OkButton_Click(object sender, RoutedEventArgs e)
       {
@@ -34,48 +44,8 @@ namespace Pattons_Best
          else
          {
             if (null != radioButton.Content)
-               RadioOutputText = radioButton.Content.ToString();
+               RadioOutputText = (string)radioButton.Content;
          }
-      }
-      private void CheckBox_Checked_IsTown(object sender, RoutedEventArgs e)
-      {
-         IsTown = true;
-      }
-      private void CheckBox_Checked_IsCastle(object sender, RoutedEventArgs e)
-      {
-         IsCastle = true;
-      }
-      private void CheckBox_Checked_IsRuin(object sender, RoutedEventArgs e)
-      {
-         IsRuin = true;
-      }
-      private void CheckBox_Checked_IsTemple(object sender, RoutedEventArgs e)
-      {
-         IsTemple = true;
-      }
-      private void CheckBox_Checked_IsOasis(object sender, RoutedEventArgs e)
-      {
-         IsOasis = true;
-      }
-      private void CheckBox_UnChecked_IsTown(object sender, RoutedEventArgs e)
-      {
-         IsTown = false;
-      }
-      private void CheckBox_UnChecked_IsCastle(object sender, RoutedEventArgs e)
-      {
-         IsCastle = false;
-      }
-      private void CheckBox_UnChecked_IsRuin(object sender, RoutedEventArgs e)
-      {
-         IsRuin = false;
-      }
-      private void CheckBox_UnChecked_IsTemple(object sender, RoutedEventArgs e)
-      {
-         IsTemple = false;
-      }
-      private void CheckBox_UnChecked_IsOasis(object sender, RoutedEventArgs e)
-      {
-         IsOasis = false;
       }
       private void TextBoxCenterPointX_TextChanged(object sender, TextChangedEventArgs e)
       {

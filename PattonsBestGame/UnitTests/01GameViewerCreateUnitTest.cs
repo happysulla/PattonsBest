@@ -15,7 +15,7 @@ namespace Pattons_Best
       //--------------------------------------------------------------------
       private DockPanel? myDockPanelTop = null;
       private ScrollViewer? myScrollViewerCanvas = null;
-      private Canvas? myCanvas = null;
+      private Canvas? myCanvasMap = null;
       private Canvas? myCanvasTank = null;
       private double myScrollingTime = 12.0;
       private readonly FontFamily myFontFam = new FontFamily("Tahoma");
@@ -52,7 +52,7 @@ namespace Pattons_Best
                   {
                      myScrollViewerCanvas = (ScrollViewer)ui1;
                      if (myScrollViewerCanvas.Content is Canvas)
-                        myCanvas = (Canvas)myScrollViewerCanvas.Content;  // Find the Canvas in the visual tree
+                        myCanvasMap = (Canvas)myScrollViewerCanvas.Content;  // Find the Canvas in the visual tree
                   }
                   if (ui1 is DockPanel dockPanelControl) // DockPanel that holds the Map Image
                   {
@@ -65,7 +65,7 @@ namespace Pattons_Best
                }
             }
          }
-         if (null == myCanvas) // log error and return if canvas not found
+         if (null == myCanvasMap) // log error and return if canvas not found
          {
             Logger.Log(LogEnum.LE_ERROR, "GameViewerCreateUnitTest(): myCanvas=null");
             CtorError = true;
@@ -85,7 +85,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Command(): myDockPanelTop=null");
             return false;
          }
-         if (null == myCanvas)
+         if (null == myCanvasMap)
          {
             Logger.Log(LogEnum.LE_ERROR, "Command(): myCanvas=null");
             return false;
@@ -113,11 +113,11 @@ namespace Pattons_Best
          }
          else if (CommandName == myCommandNames[1])
          {
-            //CreateMarquee(myCanvas);
+            CreateMarquee(myCanvasMap);
          }
          else if (CommandName == myCommandNames[2])
          {
-            IMapPoint mp = GetCanvasCenter(myScrollViewerCanvas, myCanvas);
+            IMapPoint mp = GetCanvasCenter(myScrollViewerCanvas, myCanvasMap);
             CreateEllipse(mp.X, mp.Y); // Add new elipses
          }
          else if (CommandName == myCommandNames[3])
@@ -132,7 +132,7 @@ namespace Pattons_Best
       }
       public bool NextTest(ref IGameInstance gi) // Move to the next test in this class's unit tests
       {
-         if (null == myCanvas)
+         if (null == myCanvasMap)
          {
             Logger.Log(LogEnum.LE_ERROR, "NextTest(): myCanvas=null");
             return false;
@@ -161,28 +161,34 @@ namespace Pattons_Best
       }
       public bool Cleanup(ref IGameInstance gi) // Remove an elipses from the canvas and save off Territories.xml file
       {
-         if (null == myCanvas)
+         if (null == myCanvasMap)
          {
             Logger.Log(LogEnum.LE_ERROR, "Cleanup(): myCanvas=null");
             return false;
          }
          //--------------------------------------------------
          // Remove any existing UI elements from the Canvas
-         List<UIElement> results = new List<UIElement>();
-         foreach (UIElement ui in myCanvas.Children)
+         List<UIElement> elements = new List<UIElement>();
+         foreach (UIElement ui in myCanvasMap.Children)
          {
-            if (ui is Ellipse)
-               results.Add(ui);
+            if (ui is Polygon polygon)
+               elements.Add(ui);
+            if (ui is Polyline polyline)
+               elements.Add(ui);
+            if (ui is Ellipse ellipse)
+               elements.Add(ui);
+            if (ui is Image img)
+               elements.Add(ui);
             if (ui is TextBlock tb)
-               results.Add(ui);
-            if (ui is Button b)
-            {
-               if (true == b.IsVisible)
-                  results.Add(ui);
-            }
+               elements.Add(ui);
          }
-         foreach (UIElement ui1 in results)
-            myCanvas.Children.Remove(ui1);
+         foreach (UIElement ui1 in elements)
+            myCanvasMap.Children.Remove(ui1);
+         //--------------------------------------------------
+         Image imageMap = new Image() { Name = "Map", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapMovement") };
+         myCanvasMap.Children.Add(imageMap);
+         Canvas.SetLeft(imageMap, 0);
+         Canvas.SetTop(imageMap, 0);
          //--------------------------------------------------
          ++gi.GameTurn;
          return true;
@@ -205,19 +211,19 @@ namespace Pattons_Best
       }
       private void CreateEllipse(double x, double y)
       {
-         if (null == myCanvas)
+         if (null == myCanvasMap)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateEllipse(): myCanvas=null");
             return;
          }
          List<UIElement> results = new List<UIElement>(); // Remove old ellipse
-         foreach (UIElement ui in myCanvas.Children)
+         foreach (UIElement ui in myCanvasMap.Children)
          {
             if (ui is Ellipse)
                results.Add(ui);
          }
          foreach (UIElement ui1 in results)
-            myCanvas.Children.Remove(ui1);
+            myCanvasMap.Children.Remove(ui1);
          //-------------------------------
          Ellipse aEllipse = new Ellipse
          {
@@ -230,17 +236,17 @@ namespace Pattons_Best
          };
          Canvas.SetLeft(aEllipse, x);
          Canvas.SetTop(aEllipse, y);
-         myCanvas.Children.Add(aEllipse);
+         myCanvasMap.Children.Add(aEllipse);
       }
       private void CreateMarquee(Canvas canvas)
       {
-         if (null == myCanvas)
+         if (null == canvas)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateMarquee(): myCanvas=null");
             return;
          }
          List<UIElement> elements = new List<UIElement>();
-         foreach (UIElement ui in myCanvas.Children)
+         foreach (UIElement ui in canvas.Children)
          {
             if (ui is Polygon polygon)
                elements.Add(ui);
@@ -254,18 +260,22 @@ namespace Pattons_Best
                elements.Add(ui);
          }
          foreach (UIElement ui1 in elements)
-            myCanvas.Children.Remove(ui1);
+            canvas.Children.Remove(ui1);
          //-------------------------------
-         TextBlock tbMarquee = new TextBlock() { Foreground = Brushes.Blue, FontFamily = myFontFam, FontSize = 24};
+         TextBlock tbMarquee = new TextBlock() { Foreground = Brushes.Blue, FontFamily = myFontFam, FontSize = 24 };
          tbMarquee.Inlines.Add(new Run("Current Game Statistics:") { FontWeight = FontWeights.Bold, FontStyle = FontStyles.Italic, TextDecorations = TextDecorations.Underline });
          tbMarquee.Inlines.Add(new LineBreak());
-         tbMarquee.Inlines.Add(new Run("Time in Jail = 30 days"));
-         myCanvas.ClipToBounds = true;
-         myCanvas.Children.Add(tbMarquee);
+         tbMarquee.Inlines.Add(new Run("Test 1"));
+         tbMarquee.Inlines.Add(new LineBreak());
+         tbMarquee.Inlines.Add(new Run("Test 2"));
+         tbMarquee.Inlines.Add(new LineBreak());
+         tbMarquee.Inlines.Add(new Run("Test 3"));
+         canvas.ClipToBounds = true;
+         canvas.Children.Add(tbMarquee);
          //-------------------------------
          DoubleAnimation doubleAnimation = new DoubleAnimation();
          doubleAnimation.From = -tbMarquee.ActualHeight;
-         doubleAnimation.To = myCanvas.ActualHeight;
+         doubleAnimation.To = canvas.ActualHeight;
          doubleAnimation.RepeatBehavior = RepeatBehavior.Forever;
          doubleAnimation.Duration = new Duration(TimeSpan.FromSeconds(myScrollingTime));
          tbMarquee.BeginAnimation(Canvas.BottomProperty, doubleAnimation);

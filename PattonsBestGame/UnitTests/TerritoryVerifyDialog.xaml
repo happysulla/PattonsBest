@@ -25,20 +25,11 @@
         </StackPanel>
         <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Width="94" VerticalAlignment="Center" Height="26" Margin="12,0,0,0" Content="Chosen Type:"/>
         <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
-            <RadioButton x:Name="myRadioButtonCountryside" GroupName="A" Padding="0,0,0,0" Width="87" Height="26" Content="Countryside" IsChecked="True" Checked="RadioButton_Checked"/>
-            <RadioButton x:Name="myRadioButtonFarmland" GroupName="A" Padding="0,0,0,0" Width="81" Height="26" Content="Farmland" Checked="RadioButton_Checked"/>
-            <RadioButton x:Name="myRadioButtonForest" GroupName="A" Padding="0,0,0,0" Width="73" Height="26" Content="Forest" Checked="RadioButton_Checked"/>
-            <RadioButton x:Name="myRadioButtonHill" GroupName="A" Padding="0,0,0,0" Width="65" Height="26" Content="Hills" Checked="RadioButton_Checked"/>
-            <RadioButton x:Name="myRadioButtonMountain" GroupName="A" Padding="0,0,0,0" Width="82" Height="26" Content="Mountains" Checked="RadioButton_Checked"/>
-            <RadioButton x:Name="myRadioButtonDesert" GroupName="A" Padding="0,0,0,0" Width="66" Height="26" Content="Desert" Checked="RadioButton_Checked"/>
-            <RadioButton x:Name="myRadioButtonSwamp" GroupName="A" Padding="0,0,0,0" Width="73" Height="26" Content="Swamp" Checked="RadioButton_Checked"/>
+         <RadioButton x:Name="myRadioButtonA" GroupName="A" Padding="0,0,0,0" Width="87" Height="26" Content="Countryside" IsChecked="True" Checked="RadioButton_Checked"/>
+         <RadioButton x:Name="myRadioButtonB" GroupName="A" Padding="0,0,0,0" Width="81" Height="26" Content="Farmland" Checked="RadioButton_Checked"/>
+         <RadioButton x:Name="myRadioButtonC" GroupName="A" Padding="0,0,0,0" Width="73" Height="26" Content="Forest" Checked="RadioButton_Checked"/>
         </StackPanel>
         <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal" Width="357">
-            <CheckBox x:Name="myCheckBoxTown" Width="64" Height="26" Content="Town?" Checked="CheckBox_Checked_IsTown" Unchecked="CheckBox_UnChecked_IsTown" IsChecked="False" />
-            <CheckBox x:Name="myCheckBoxCastle" Width="64" Height="26" Content="Castle?" Checked="CheckBox_Checked_IsCastle" Unchecked="CheckBox_UnChecked_IsCastle"/>
-            <CheckBox x:Name="myCheckBoxRuin" Width="64" Height="26" Content="Ruin?" Checked="CheckBox_Checked_IsRuin" Unchecked="CheckBox_UnChecked_IsRuin"/>
-            <CheckBox x:Name="myCheckBoxTemple" Width="64" Height="26" Content="Temple?" Checked="CheckBox_Checked_IsTemple" Unchecked="CheckBox_UnChecked_IsTemple" Margin="0,0,5,0" />
-            <CheckBox x:Name="myCheckBoxOasis" Width="64" Height="26" Content="Oasis?" Checked="CheckBox_Checked_IsOasis" Unchecked="CheckBox_UnChecked_IsOasis"/>
         </StackPanel>
         <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal" Width="356" Margin="0,26,0,29" Grid.RowSpan="3">
             <Label Width="21" Content="X:"/>
