@@ -221,7 +221,8 @@ namespace Pattons_Best
       }
       public void MenuItemFileOpen_Click(object sender, RoutedEventArgs e)
       {
-         IGameInstance gi = GameLoadMgr.OpenGameFromFile();
+         GameLoadMgr loadMgr = new GameLoadMgr();
+         IGameInstance? gi = loadMgr.OpenGameFromFile();
          if (null != gi)
          {
             myGameInstance = gi;
@@ -231,7 +232,8 @@ namespace Pattons_Best
       }
       public void MenuItemSaveAs_Click(object sender, RoutedEventArgs e)
       {
-         if (false == GameLoadMgr.SaveGameAsToFile(myGameInstance))
+         GameLoadMgr loadMgr = new GameLoadMgr();
+         if (false == loadMgr.SaveGameAsToFile(myGameInstance))
             Logger.Log(LogEnum.LE_ERROR, "MenuItemSave_Click(): GameLoadMgr.SaveGameAs() returned false");
       }
       public void MenuItemFileOptions_Click(object sender, RoutedEventArgs e)
@@ -251,7 +253,8 @@ namespace Pattons_Best
       }
       public void MenuItemEditRecover_Click(object sender, RoutedEventArgs e)
       {
-         IGameInstance? gi = GameLoadMgr.OpenGame();
+         GameLoadMgr loadMgr = new GameLoadMgr();
+         IGameInstance? gi = loadMgr.OpenGame();
          if (null != gi)
          {
             myGameInstance = gi;

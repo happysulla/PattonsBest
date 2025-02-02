@@ -13,20 +13,15 @@ namespace Pattons_Best
 {
    public class TerritoryRegionUnitTest : IUnitTest
    {
-      public static Double theEllipseOffset = 8;
+      private static Double theEllipseOffset = 8;
       //--------------------------------------------------------
+      private string? myFileName = null;
       private DockPanel? myDockPanel = null;
       private Canvas? myCanvas = null;
       private IGameInstance? myGameInstance = null;
-
       ITerritory? myAnchorTerritory = null;
       private List<Ellipse> myEllipses = new List<Ellipse>();
       private List<IMapPoint> myPoints = new List<IMapPoint>();
-      //--------------------------------------------------------
-      SolidColorBrush mySolidColorBrush0 = new SolidColorBrush { Color = Color.FromArgb(100, 100, 100, 0) }; // nearly transparent but slightly colored
-      SolidColorBrush mySolidColorBrush1 = new SolidColorBrush { Color = Color.FromArgb(010, 255, 100, 0) };
-      SolidColorBrush mySolidColorBrush2 = new SolidColorBrush { Color = Color.FromArgb(255, 0, 0, 0) };     // black fill
-      SolidColorBrush mySolidColorBrush3 = new SolidColorBrush { Color = Colors.Red };                       // red fill
       //--------------------------------------------------------
       public bool CtorError { get; } = false;
       private int myIndexName = 0;
@@ -47,6 +42,15 @@ namespace Pattons_Best
          myCommandNames.Add("Cleanup");
          //------------------------------------
          myDockPanel = dp;
+         //------------------------------------
+         if (null == gi)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): gi=null");
+            CtorError = true;
+            return;
+         }
+         myGameInstance = gi;
+         //------------------------------------
          foreach (UIElement ui0 in myDockPanel.Children)
          {
             if (ui0 is DockPanel dockPanelInside)
@@ -61,14 +65,19 @@ namespace Pattons_Best
                }
             }
          }
-         if (null == myCanvas) // log error and return if canvas not found
+         if (null == myCanvas)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GameViewerCreateUnitTest() myCanvas=null");
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): myCanvas=null");
             CtorError = true;
             return;
          }
-         //------------------------------------
-         this.myGameInstance = gi;
+         //----------------------------------
+         if (false == SetFileName())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): SetFileName() returned false");
+            CtorError = true;
+            return;
+         }
       }
       public bool Command(ref IGameInstance gi) // Performs function based on CommandName string
       {
@@ -91,25 +100,18 @@ namespace Pattons_Best
             }
             foreach (UIElement ui1 in results)
                myCanvas.Children.Remove(ui1);
-            foreach (ITerritory t in Territories.theMoveTerritories)
+            foreach (ITerritory t in Territories.theTerritories)
                t.Points.Clear();
+            if (false == NextTest(ref gi)) // automatically move next test
+            {
+               Logger.Log(LogEnum.LE_ERROR, "TerritoryRegionUnitTest.Command(): NextTest() returned false");
+               return false;
+            }
          }
          else if (CommandName == myCommandNames[1])
          {
-            //--------------------------------------------
-            // Remove all Ellipse and Polygons
-            List<UIElement> results = new List<UIElement>();
-            foreach (UIElement ui in myCanvas.Children)
-            {
-               if (ui is Ellipse)
-                  results.Add(ui);
-               if (ui is Polygon)
-                  results.Add(ui);
-            }
-            foreach (UIElement ui1 in results)
-               myCanvas.Children.Remove(ui1);
-            CreateEllipses(Territories.theMoveTerritories);
-            CreatePolygons(Territories.theMoveTerritories);
+            CreateEllipses(Territories.theTerritories);
+            CreatePolygons(Territories.theTerritories);
          }
          else
          {
@@ -148,9 +150,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Cleanup(): myCanvas=null");
             return false;
          }
-         // Remove any existing UI elements from the Canvas
+         //--------------------------------------------------
          List<UIElement> results = new List<UIElement>();
-         foreach (UIElement ui in myCanvas.Children)
+         foreach (UIElement ui in myCanvas.Children) // Remove any existing UI elements from the Canvas
          {
             if (ui is Ellipse)
                results.Add(ui);
@@ -159,31 +161,88 @@ namespace Pattons_Best
          }
          foreach (UIElement ui1 in results)
             myCanvas.Children.Remove(ui1);
-         // Delete Existing Territories.xml file and create a new one based on myGameEngine.Territories container
-         try
+         //--------------------------------------------------
+         if (false == CreateXml(Territories.theTerritories))
          {
-            string filename = ConfigFileReader.theConfigDirectory + "Territories.xml";
-            System.IO.File.Delete(filename);  // delete old file
-            XmlDocument aXmlDocument = CreateXml(Territories.theMoveTerritories); // create a new XML document based on Territories
-            using (FileStream writer = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write))
-            {
-               XmlWriterSettings settings = new XmlWriterSettings { Indent = true, OmitXmlDeclaration = true, NewLineOnAttributes = false };
-               using (XmlWriter xmlWriter = XmlWriter.Create(writer, settings)) // For XmlWriter, it uses the stream that was created: writer.
-               {
-                  aXmlDocument.Save(xmlWriter);
-               }
-            }
-         }
-         catch (Exception e)
-         {
-            Console.WriteLine("TerritoryUnitTest.Command() exeption={0}", e.Message);
+            Logger.Log(LogEnum.LE_ERROR, "Cleanup(): CreateXml() returned false");
             return false;
          }
+         //--------------------------------------------------
          ++gi.GameTurn;
          return true;
       }
       //--------------------------------------------------------
-      public bool CreatePoint(IMapPoint mp)
+      private bool SetFileName()
+      {
+         string? path = ConfigFileReader.theConfigDirectory;
+         if (null == path)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): path=null");
+            return false;
+         }
+         System.IO.DirectoryInfo? dirInfo = Directory.GetParent(path);
+         if (null == dirInfo)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): dirInfo=null");
+            return false;
+         }
+         //----------------------------------
+         string? path1 = dirInfo.FullName;
+         if (null == path1)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): path1=null");
+            return false;
+         }
+         dirInfo = Directory.GetParent(path1);
+         if (null == dirInfo)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): dirInfo=null");
+            return false;
+         }
+         //----------------------------------
+         string? path2 = dirInfo.FullName;
+         if (null == path2)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): path2=null");
+            return false;
+         }
+         dirInfo = Directory.GetParent(path2);
+         if (null == dirInfo)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): dirInfo=null");
+            return false;
+         }
+         //----------------------------------
+         string? path3 = dirInfo.FullName;
+         if (null == path3)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): path3=null");
+            return false;
+         }
+         dirInfo = Directory.GetParent(path3);
+         if (null == dirInfo)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): dirInfo=null");
+            return false;
+         }
+         //----------------------------------
+         string? path4 = dirInfo.FullName;
+         if (null == path4)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): path4=null");
+            return false;
+         }
+         dirInfo = Directory.GetParent(path4);
+         if (null == dirInfo)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): dirInfo=null");
+            return false;
+         }
+         //----------------------------------
+         myFileName = dirInfo.FullName + "\\Config\\" + Territories.FILENAME;
+         return true;
+      }
+      private bool CreatePoint(IMapPoint mp)
       {
          if (null != myAnchorTerritory) // Add points to the anchor territy that define the region
          {
@@ -196,7 +255,7 @@ namespace Pattons_Best
             foreach (String s in myAnchorTerritory.Adjacents)
             {
                Territory? adjacentTerritory = null;
-               foreach (Territory t in Territories.theMoveTerritories)
+               foreach (Territory t in Territories.theTerritories)
                {
                   if (s == Utilities.RemoveSpaces(t.ToString()))
                   {
@@ -219,16 +278,16 @@ namespace Pattons_Best
                      minDistance = distance;
                      selectedMp.X = mp1.X;
                      selectedMp.Y = mp1.Y;
-                     Console.WriteLine("\t\t==> {0} from {1} with d={2}", selectedMp.ToString(), adjacentTerritory.Name, distance);
+                     System.Diagnostics.Debug.WriteLine("\t\t==> {0} from {1} with d={2}", selectedMp.ToString(), adjacentTerritory.Name, distance);
                   }
                }
             }  // end foreach()
-            Console.WriteLine("\t\t++>{0} to {1}", selectedMp.ToString(), myAnchorTerritory.Name); // An adjacent point was not found.  Add the mouse click point as a new point.
+            System.Diagnostics.Debug.WriteLine("\t\t++>{0} to {1}", selectedMp.ToString(), myAnchorTerritory.Name); // An adjacent point was not found.  Add the mouse click point as a new point.
             myPoints.Add(selectedMp);
          }
          return true;
       }
-      public void CreateEllipses(ITerritories territories)
+      private void CreateEllipses(ITerritories territories)
       {
          if (null == myCanvas)
          {
@@ -238,7 +297,7 @@ namespace Pattons_Best
          foreach (Territory t in territories)
          {
             Ellipse aEllipse = new Ellipse { Tag = Utilities.RemoveSpaces(t.ToString()) };
-            aEllipse.Fill = Brushes.AliceBlue;
+            aEllipse.Fill = Brushes.Pink;
             aEllipse.StrokeThickness = 1;
             aEllipse.Stroke = Brushes.Red;
             aEllipse.Width = 15;
@@ -253,7 +312,7 @@ namespace Pattons_Best
             aEllipse.MouseDown += this.MouseDownEllipse;
          }
       }
-      public void CreatePolygons(ITerritories territories)
+      private void CreatePolygons(ITerritories territories)
       {
          if (null == myCanvas)
          {
@@ -274,60 +333,46 @@ namespace Pattons_Best
             }
          }
       }
-      public XmlDocument CreateXml(ITerritories territories)
+      private bool CreateXml(ITerritories territories)
       {
-         XmlDocument aXmlDocument = new XmlDocument();
-         aXmlDocument.LoadXml("<Territories></Territories>");
-         if( null == aXmlDocument.DocumentElement)
+         if (null == myFileName)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): aXmlDocument.DocumentElement=null");
-            return aXmlDocument;
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): myFileName=null");
+            return false;
          }
-         foreach (Territory t in territories)
+         try
          {
-            XmlElement territoryElem = aXmlDocument.CreateElement("Territory");  // name of territory
-            territoryElem.SetAttribute("value", t.Name);
-            aXmlDocument.DocumentElement.AppendChild(territoryElem);
-            //----------------------------------------------------
-            XmlElement pointElem = aXmlDocument.CreateElement("point"); // center point for this territory
-            pointElem.SetAttribute("X", t.CenterPoint.X.ToString());
-            pointElem.SetAttribute("Y", t.CenterPoint.Y.ToString());
-            XmlNode? lastchild = aXmlDocument.DocumentElement.LastChild;
-            if (lastchild == null)
+            System.IO.File.Delete(myFileName);           // Delete Existing Territories.xml file and create a new one based on myGameEngine.Territories container
+            //-----------------------------------------------------
+            System.Xml.XmlDocument aXmlDocument = new XmlDocument();
+            aXmlDocument.LoadXml("<Territories></Territories>");
+            if (null == aXmlDocument.DocumentElement)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): lastchild=null");
-               return aXmlDocument;
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): aXmlDocument.DocumentElement=null");
+               return false;
             }
-            lastchild.AppendChild(pointElem);
-            //----------------------------------------------------
-            foreach (string s in t.Adjacents) // List of adjacent territories
+            GameLoadMgr loadMgr = new GameLoadMgr();
+            if (false == loadMgr.CreateXmlTerritories(aXmlDocument, territories))
             {
-               XmlElement adjacentElem = aXmlDocument.CreateElement("adjacent");
-               adjacentElem.SetAttribute("value", s);
-               lastchild = aXmlDocument.DocumentElement.LastChild;
-               if (lastchild == null)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): lastchild=null");
-                  return aXmlDocument;
-               }
-               lastchild.AppendChild(adjacentElem);
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateXmlTerritories() returned false");
+               return false;
             }
-            foreach (IMapPoint p in t.Points) // Points that make up the polygon of this territory
+            //-----------------------------------------------------
+            using (FileStream writer = new FileStream(myFileName, FileMode.OpenOrCreate, FileAccess.Write))
             {
-               System.Windows.Point point = new System.Windows.Point(p.X, p.Y);
-               XmlElement regionPointElem = aXmlDocument.CreateElement("regionPoint");
-               regionPointElem.SetAttribute("X", p.X.ToString());
-               regionPointElem.SetAttribute("Y", p.Y.ToString());
-               lastchild = aXmlDocument.DocumentElement.LastChild;
-               if (lastchild == null)
+               XmlWriterSettings settings = new XmlWriterSettings { Indent = true, OmitXmlDeclaration = true, NewLineOnAttributes = false };
+               using (XmlWriter xmlWriter = XmlWriter.Create(writer, settings)) // For XmlWriter, it uses the stream that was created: writer.
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): lastchild=null");
-                  return aXmlDocument;
+                  aXmlDocument.Save(xmlWriter);
                }
-               lastchild.AppendChild(regionPointElem);
             }
          }
-         return aXmlDocument;
+         catch (Exception e)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Cleanup(): exeption=\n" + e.Message);
+            return false;
+         }
+         return true;
       }
       //--------------------------------------------------------
       void MouseDownEllipse(object sender, MouseButtonEventArgs e)
@@ -339,10 +384,10 @@ namespace Pattons_Best
          }
          System.Windows.Point canvasPoint = e.GetPosition(myCanvas);
          IMapPoint mp = new MapPoint(canvasPoint.X, canvasPoint.Y);
-         Console.WriteLine("MouseDownEllipse.MouseDown(): {0}", mp.ToString());
+         System.Diagnostics.Debug.WriteLine("MouseDownEllipse.MouseDown(): {0}", mp.ToString());
          ITerritory? matchingTerritory = null; // Find the corresponding Territory
          Ellipse mousedEllipse = (Ellipse)sender;
-         foreach (ITerritory? t in Territories.theMoveTerritories)
+         foreach (ITerritory? t in Territories.theTerritories)
          {
             if (null == t)
             {
@@ -370,24 +415,24 @@ namespace Pattons_Best
          {
             MessageBox.Show("Anchoring " + mousedEllipse.Tag.ToString());
             myAnchorTerritory = matchingTerritory; // If there is no anchor territory. Set it.
-            mousedEllipse.Fill = mySolidColorBrush3;
+            mousedEllipse.Fill = Brushes.Red;
             myCanvas.MouseDown += MouseDownCanvas;
             return;
          }
          if (matchingTerritory.ToString() == myAnchorTerritory.ToString())
          {
-            // If this is the matching territory is the anchor territory, the user
+            // If the matching territory is the anchor territory, the user
             // is requesting that they are done adding points for
             // defining the Region.  The Region is used set as part of the Territory. 
             MessageBox.Show("Saving " + mousedEllipse.Tag.ToString());
             PointCollection points = new PointCollection();
             foreach (IMapPoint mp1 in myPoints)
                points.Add(new System.Windows.Point(mp1.X, mp1.Y));
-            Polygon aPolygon = new Polygon { Fill = mySolidColorBrush3, Points = points, Tag = matchingTerritory.ToString() };
+            Polygon aPolygon = new Polygon { Fill = Brushes.Red, Points = points, Tag = matchingTerritory.ToString() };
             aPolygon.MouseDown += this.MouseDownPolygon;
-            aPolygon.Fill = mySolidColorBrush2;
+            aPolygon.Fill = Brushes.Black;
             myCanvas.Children.Add(aPolygon);
-            mousedEllipse.Fill = mySolidColorBrush2;
+            mousedEllipse.Fill = Brushes.Black;
             myAnchorTerritory.Points = new List<IMapPoint>(myPoints);
             myPoints.Clear();
             myAnchorTerritory = null;
@@ -414,13 +459,13 @@ namespace Pattons_Best
          }
          System.Windows.Point canvasPoint = e.GetPosition(myCanvas);
          IMapPoint mp = new MapPoint(canvasPoint.X, canvasPoint.Y);
-         Console.WriteLine("TerritoryRegionUnitTest.MouseDownPolygon(): {0}", mp.ToString());
+         System.Diagnostics.Debug.WriteLine("TerritoryRegionUnitTest.MouseDownPolygon(): {0}", mp.ToString());
          if (null == myAnchorTerritory)
          {
             // This function removes an existing polygon when it is clicked if no achor territory exists
             Polygon aPolygon = (Polygon)sender;
             ITerritory? matchingTerritory = null;
-            foreach (ITerritory t in Territories.theMoveTerritories)
+            foreach (ITerritory t in Territories.theTerritories)
             {
                string? tName = t.ToString();
                if( null == tName )

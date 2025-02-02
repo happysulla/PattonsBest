@@ -28,8 +28,15 @@ namespace Pattons_Best
       public bool IsUndoCommandAvailable { set; get; } = false;
       public String EndGameReason { set; get; } = "";
       //---------------------------------------------------------------
+      public IMapItems MapItems { set; get; } = new MapItems();
       public IMapItemMoves MapItemMoves { get; set; } = new MapItemMoves();
       public IStacks Stacks { get; set; } = new Stacks();
+      //------------------------------------------------
+      public ITerritory? NewTerritory { set; get; } = null;
+      private List<EnteredHex> myEnteredHexes = new List<EnteredHex>();
+      public List<EnteredHex> EnteredHexes { get => myEnteredHexes; }
+      //---------------------------------------------------------------
+      public int Day { get; set; } = 0;
       //---------------------------------------------------------------
       [NonSerialized] private List<IUnitTest> myUnitTests = new List<IUnitTest>();
       public List<IUnitTest> UnitTests { get => myUnitTests; }
@@ -44,115 +51,26 @@ namespace Pattons_Best
          }
          try
          {
-            // Create the territories and the regions marking the territories.
-            // Keep a list of Territories used in the game.  All the information 
-            // of Territories is static and does not change.
-            Territories.theMoveTerritories = ReadTerritoriesXml();
-            if (null == Territories.theMoveTerritories)
+            GameLoadMgr gameLoadMgr = new GameLoadMgr();
+            string filename = ConfigFileReader.theConfigDirectory + Territories.FILENAME;
+            XmlTextReader? reader = new XmlTextReader(filename) { WhitespaceHandling = WhitespaceHandling.None };
+            if( null == reader )
             {
-               Logger.Log(LogEnum.LE_ERROR, "GameInstance(): ReadTerritoriesXml() returned null");
-               CtorError = true;
+               Logger.Log(LogEnum.LE_ERROR, "GameInstance(): reader=null");
                return;
             }
+            if (false == gameLoadMgr.ReadXmlTerritories(reader, Territories.theTerritories))
+               Logger.Log(LogEnum.LE_ERROR, "GameInstance(): ReadTerritoriesXml() returned false");
          }
          catch (Exception e)
          {
-            MessageBox.Show("Exception in GameEngine() e=" + e.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "GameInstance(): ReadTerritoriesXml() exception=\n" + e.ToString());
+            return;
          }
       }
       public GameInstance(Options newGameOptions) // Constructor - set log levels
       {
          this.Options = newGameOptions;
-      }
-      //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-      public ITerritories ReadTerritoriesXml()
-      {
-         ITerritories territories = new Territories();
-         string filename = ConfigFileReader.theConfigDirectory + "Territories.xml";
-         try
-         {
-            // Load the reader with the data file and ignore all white space nodes.
-            XmlTextReader reader = new XmlTextReader(filename) { WhitespaceHandling = WhitespaceHandling.None };
-            if( null == reader )
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadTerritoriesXml(): reader=null;");
-               return territories;
-            }
-            while (reader.Read())
-            {
-               if (reader.Name == "Territory")
-               {
-                  if (reader.IsStartElement())
-                  {
-                     string? name = reader.GetAttribute("value");
-                     if( null == name )
-                     {
-                        Logger.Log(LogEnum.LE_ERROR, "ReadTerritoriesXml(): Territory=null");
-                        return territories;
-                     }
-                     Territory t = new Territory(name);
-                     reader.Read(); // read the center point
-                     string? value = reader.GetAttribute("X");
-                     if (null == value)
-                     {
-                        Logger.Log(LogEnum.LE_ERROR, "ReadTerritoriesXml(): X=null");
-                        return territories;
-                     }
-                     Double X = Double.Parse(value);
-                     value = reader.GetAttribute("Y");
-                     if (null == value)
-                     {
-                        Logger.Log(LogEnum.LE_ERROR, "ReadTerritoriesXml(): Y=null");
-                        return territories;
-                     }
-                     Double Y = Double.Parse(value);
-                     t.CenterPoint = new MapPoint(X, Y);
-                     while (reader.Read())
-                     {
-                        if ((reader.Name == "adjacent" && (reader.IsStartElement())))
-                        {
-                           value = reader.GetAttribute("value");
-                           if (null == value)
-                           {
-                              Logger.Log(LogEnum.LE_ERROR, "ReadTerritoriesXml(): adjacent=null");
-                              return territories;
-                           }
-                           t.Adjacents.Add(value);
-                        }
-                        else if ((reader.Name == "regionPoint" && (reader.IsStartElement())))
-                        {
-                           value = reader.GetAttribute("X");
-                           if (null == value)
-                           {
-                              Logger.Log(LogEnum.LE_ERROR, "ReadTerritoriesXml(): adjacent X=null");
-                              return territories;
-                           }
-                           Double X1 = Double.Parse(value);
-                           value = reader.GetAttribute("Y");
-                           if (null == value)
-                           {
-                              Logger.Log(LogEnum.LE_ERROR, "ReadTerritoriesXml(): adjacent Y=null");
-                              return territories;
-                           }
-                           Double Y1 = Double.Parse(value);
-                           t.Points.Add(new MapPoint(X1, Y1));
-                        }
-                        else
-                        {
-                           break;
-                        }
-                     }  // end while
-                     territories.Add(t);
-                  } // end if
-               } // end if
-            } // while (reader.Read())
-            return territories;
-         } // try
-         catch (Exception e)
-         {
-            Console.WriteLine("ReadTerritoriesXml(): Exception:  e.Message={0} while reading filename={1}", e.Message, filename);
-            return territories;
-         }
       }
       public override String ToString()
       {

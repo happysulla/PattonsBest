@@ -29,7 +29,14 @@ namespace Pattons_Best
             string codeBase = assem.Location;
             UriBuilder uri = new UriBuilder(codeBase);
             string path = Uri.UnescapeDataString(uri.Path);
-            theAssemblyDirectory = System.IO.Path.GetDirectoryName(path);
+            String? assemDir = System.IO.Path.GetDirectoryName(path);
+            if( null == assemDir)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MainWindow(): GameInstance() ctor error");
+               Application.Current.Shutdown();
+               return;
+            }
+            theAssemblyDirectory = assemDir; 
             MapImage.theImageDirectory = theAssemblyDirectory + @"\images\";
             ConfigFileReader.theConfigDirectory = theAssemblyDirectory + @"\config\";
             string appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);

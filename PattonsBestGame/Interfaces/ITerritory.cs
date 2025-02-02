@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using static Pattons_Best.Territory;
 
 namespace Pattons_Best
 {
    public interface ITerritory
    {
       string Name { get; set; }
+      TerritoryEnum Parent { get; set; }
       string Type { get; set; }
-      List<IMapPoint> Points { set; get; }
       IMapPoint CenterPoint { get; set; }
+      List<IMapPoint> Points { set; get; }
       List<String> Adjacents { get; }
    }
    //--------------------------------------------------------

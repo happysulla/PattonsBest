@@ -25,12 +25,16 @@
         </StackPanel>
         <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Width="94" VerticalAlignment="Center" Height="26" Margin="12,0,0,0" Content="Chosen Type:"/>
         <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
-         <RadioButton x:Name="myRadioButtonA" GroupName="A" Padding="0,0,0,0" Width="87" Height="26" Content="Countryside" IsChecked="True" Checked="RadioButton_Checked"/>
-         <RadioButton x:Name="myRadioButtonB" GroupName="A" Padding="0,0,0,0" Width="81" Height="26" Content="Farmland" Checked="RadioButton_Checked"/>
-         <RadioButton x:Name="myRadioButtonC" GroupName="A" Padding="0,0,0,0" Width="73" Height="26" Content="Forest" Checked="RadioButton_Checked"/>
-        </StackPanel>
+         <RadioButton x:Name="myRadioButtonA" GroupName="A" Padding="0,0,0,0" Width="87" Height="26" Content="A" IsChecked="True" Checked="RadioButtonType_Checked"/>
+         <RadioButton x:Name="myRadioButtonB" GroupName="A" Padding="0,0,0,0" Width="81" Height="26" Content="B" Checked="RadioButtonType_Checked"/>
+         <RadioButton x:Name="myRadioButtonC" GroupName="A" Padding="0,0,0,0" Width="73" Height="26" Content="C" Checked="RadioButtonType_Checked"/>
+         <RadioButton x:Name="myRadioButtonD" GroupName="A" Padding="0,0,0,0" Width="73" Height="26" Content="D" Checked="RadioButtonType_Checked"/>
+      </StackPanel>
         <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal" Width="357">
-        </StackPanel>
+         <RadioButton x:Name="myRadioButtonE" GroupName="A" Padding="0,0,0,0" Width="87" Height="26" Content="Map" IsChecked="True" Checked="RadioButtonParent_Checked"/>
+         <RadioButton x:Name="myRadioButtonF" GroupName="A" Padding="0,0,0,0" Width="81" Height="26" Content="Tank" Checked="RadioButtonParent_Checked"/>
+         <RadioButton x:Name="myRadioButtonG" GroupName="A" Padding="0,0,0,0" Width="73" Height="26" Content="Battle" Checked="RadioButtonParent_Checked"/>
+      </StackPanel>
         <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal" Width="356" Margin="0,26,0,29" Grid.RowSpan="3">
             <Label Width="21" Content="X:"/>
             <TextBox x:Name="myTextBoxCenterPointX" Width="64" Text="0" Height="22" TextChanged="TextBoxCenterPointX_TextChanged"/>

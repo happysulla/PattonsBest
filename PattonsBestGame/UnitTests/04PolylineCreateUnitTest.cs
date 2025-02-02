@@ -20,7 +20,7 @@ namespace Pattons_Best
       private IGameInstance? myGameInstance = null;
       private List<Ellipse> myEllipses = new List<Ellipse>();
       private List<IMapPoint> myPoints = new List<IMapPoint>();
-      private Dictionary<string, Polyline> myRivers = new Dictionary<string, Polyline>();
+      private Dictionary<string, Polyline> myPolyLines = new Dictionary<string, Polyline>();
       //--------------------------------------------------------
       private SolidColorBrush mySolidColorBrush3 = new SolidColorBrush { Color = Colors.DeepSkyBlue };
       //--------------------------------------------------------
@@ -35,21 +35,9 @@ namespace Pattons_Best
       {
          myIndexName = 0;
          myHeaderNames.Add("04-Start Polyline Test");
-         myHeaderNames.Add("04-Dienstal Branch");
-         myHeaderNames.Add("04-Largos River");
-         myHeaderNames.Add("04-Nesser River");
-         myHeaderNames.Add("04-Greater Nesser River");
-         myHeaderNames.Add("04-Lesser Nesser River");
-         myHeaderNames.Add("04-Trogoth River");
          myHeaderNames.Add("04-Finish");
          //------------------------------------
          myCommandNames.Add("00-Start");
-         myCommandNames.Add("01-Dienstal Branch");
-         myCommandNames.Add("02-Largos River");
-         myCommandNames.Add("03-Nesser River");
-         myCommandNames.Add("04-Greater Nesser River");
-         myCommandNames.Add("05-Lesser Nesser River");
-         myCommandNames.Add("06-Trogoth River");
          myCommandNames.Add("Cleanup");
          //------------------------------------
          myDockPanel = dp;
@@ -75,13 +63,17 @@ namespace Pattons_Best
          }
          //------------------------------------
          this.myGameInstance = gi;
-
-         myCanvas.MouseDown += MouseDownCanvas;
       }
       public bool Command(ref IGameInstance gi) // Performs function based on CommandName string
       {
+         if (null == myCanvas)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Command(): myCanvas=null");
+            return false;
+         }
          if (CommandName == myCommandNames[0])
          {
+            myCanvas.MouseDown += MouseDownCanvas;
             CreateEllipses();
             CreateTriangles();
             if( false == NextTest(ref gi))
@@ -90,26 +82,9 @@ namespace Pattons_Best
                return false;
             }
          }
-         else if (CommandName == myCommandNames[1])
-         {
-         }
-         else if (CommandName == myCommandNames[2])
-         {
-         }
-         else if (CommandName == myCommandNames[3])
-         {
-         }
-         else if (CommandName == myCommandNames[4])
-         {
-         }
-         else if (CommandName == myCommandNames[5])
-         {
-         }
-         else if (CommandName == myCommandNames[6])
-         {
-         }
          else
          {
+            myCanvas.MouseDown -= MouseDownCanvas;
             if (false == Cleanup(ref gi))
             {
                Logger.Log(LogEnum.LE_ERROR, "Command(): Cleanup() returned false");
@@ -121,30 +96,6 @@ namespace Pattons_Best
       public bool NextTest(ref IGameInstance gi) // Move to the next test in this class's unit tests
       {
          if (HeaderName == myHeaderNames[0])
-         {
-            ++myIndexName;
-         }
-         else if (HeaderName == myHeaderNames[1])
-         {
-            ++myIndexName;
-         }
-         else if (HeaderName == myHeaderNames[2])
-         {
-            ++myIndexName;
-         }
-         else if (HeaderName == myHeaderNames[3])
-         {
-            ++myIndexName;
-         }
-         else if (HeaderName == myHeaderNames[4])
-         {
-            ++myIndexName;
-         }
-         else if (HeaderName == myHeaderNames[5])
-         {
-            ++myIndexName;
-         }
-         else if (HeaderName == myHeaderNames[6])
          {
             ++myIndexName;
          }
@@ -163,25 +114,6 @@ namespace Pattons_Best
          if (null == myCanvas)
          {
             Logger.Log(LogEnum.LE_ERROR, "Cleanup(): myCanvas=null");
-            return false;
-         }
-         try
-         {
-            string filename = ConfigFileReader.theConfigDirectory + "Rivers.xml";
-            System.IO.File.Delete(filename);  // delete old file
-            XmlDocument aXmlDocument = CreateXml(); // create a new XML document based on Territories
-            using (FileStream writer = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write))
-            {
-               XmlWriterSettings settings = new XmlWriterSettings { Indent = true, OmitXmlDeclaration = true, NewLineOnAttributes = false };
-               using (XmlWriter xmlWriter = XmlWriter.Create(writer, settings)) // For XmlWriter, it uses the stream that was created: writer.
-               {
-                  aXmlDocument.Save(xmlWriter);
-               }
-            }
-         }
-         catch (Exception e)
-         {
-            Console.WriteLine("TerritoryUnitTest.Command() exeption={0}", e.Message);
             return false;
          }
          // Remove any existing UI elements from the Canvas
@@ -206,7 +138,7 @@ namespace Pattons_Best
       {
          double minDistance = 10;
          IMapPoint selectedMp = mp;
-         foreach (Territory t in Territories.theMoveTerritories)
+         foreach (Territory t in Territories.theTerritories)
          {
             foreach (IMapPoint mp1 in t.Points)
             {
@@ -236,7 +168,7 @@ namespace Pattons_Best
             return;
          }
          const double SIZE = 6.0;
-         foreach (KeyValuePair<string, Polyline> kvp in myRivers)
+         foreach (KeyValuePair<string, Polyline> kvp in myPolyLines)
          {
             int i = 0;
             double X1 = 0.0;
@@ -346,7 +278,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateXml(): aXmlDocument.DocumentElement=null");
             return aXmlDocument;
          }
-         foreach (KeyValuePair<string, Polyline> kvp in myRivers)
+         foreach (KeyValuePair<string, Polyline> kvp in myPolyLines)
          {
             XmlElement nameElem = aXmlDocument.CreateElement("River");  // name of river
             nameElem.SetAttribute("value", kvp.Key);
@@ -397,11 +329,11 @@ namespace Pattons_Best
          //----------------------------------------
          if ("Start" == mousedEllipse.Name)
          {
-            if( true == myRivers.ContainsKey(name))
+            if( true == myPolyLines.ContainsKey(name))
             {
-               Polyline polyline = myRivers[name];
+               Polyline polyline = myPolyLines[name];
                myCanvas.Children.Remove(polyline);
-               myRivers.Remove(name);
+               myPolyLines.Remove(name);
             }
             myPoints.Clear();
          }
@@ -411,7 +343,7 @@ namespace Pattons_Best
             foreach (IMapPoint mp1 in myPoints)
                points.Add(new System.Windows.Point(mp1.X, mp1.Y));
             Polyline polyline = new Polyline { Points = points, Stroke = mySolidColorBrush3, StrokeThickness = 4, Visibility = Visibility.Visible };
-            myRivers[name] = polyline;
+            myPolyLines[name] = polyline;
             Canvas.SetZIndex(polyline, 0);
             myCanvas.Children.Add(polyline);
          }

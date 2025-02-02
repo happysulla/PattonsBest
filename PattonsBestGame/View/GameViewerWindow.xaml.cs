@@ -95,17 +95,10 @@ namespace Pattons_Best
       private readonly SolidColorBrush mySolidColorBrushBlack = new SolidColorBrush();
       private readonly SolidColorBrush mySolidColorBrushGray = new SolidColorBrush();
       private readonly SolidColorBrush mySolidColorBrushGreen = new SolidColorBrush();
-      private readonly SolidColorBrush mySolidColorBrushStart = new SolidColorBrush() { Color = Colors.Gold };
       private readonly SolidColorBrush mySolidColorBrushRed = new SolidColorBrush();
       private readonly SolidColorBrush mySolidColorBrushPurple = new SolidColorBrush();
       private readonly SolidColorBrush mySolidColorBrushRosyBrown = new SolidColorBrush();
       private readonly SolidColorBrush mySolidColorBrushOrange = new SolidColorBrush();
-      private readonly SolidColorBrush mySolidColorBrushRest = new SolidColorBrush { Color = Colors.Yellow };
-      private readonly SolidColorBrush mySolidColorBrushSkyBlue = new SolidColorBrush { Color = Colors.LightBlue };
-      private readonly SolidColorBrush mySolidColorBrushWaterBlue = new SolidColorBrush { Color = Colors.DeepSkyBlue };
-      private readonly SolidColorBrush mySolidColorBrushWaterDark = new SolidColorBrush { Color = Colors.SteelBlue };
-      private readonly SolidColorBrush mySolidColorBrushFollow = new SolidColorBrush { Color = Colors.HotPink };
-      private readonly SolidColorBrush mySolidColorBrushPath = new SolidColorBrush { Color = Colors.White };
       //---------------------------------------------------------------------
       private readonly List<Button> myButtonMapItems = new List<Button>();
       private readonly SplashDialog mySplashScreen;
@@ -202,7 +195,7 @@ namespace Pattons_Best
             return;
          }
          //---------------------------------------------------------------
-         myEventViewer = new EventViewer(myGameEngine, myGameInstance, myCanvasMap, myScrollViewerTextBlock, Territories.theMoveTerritories, myDieRoller);
+         myEventViewer = new EventViewer(myGameEngine, myGameInstance, myCanvasMap, myScrollViewerTextBlock, Territories.theTerritories, myDieRoller);
          CanvasImageViewer civ = new CanvasImageViewer(myCanvasMap);
          //---------------------------------------------------------------
          // Implement the Model View Controller (MVC) pattern by registering views with
@@ -315,7 +308,7 @@ namespace Pattons_Best
             return false;
          }
          string territoryName = Utilities.RemoveSpaces(tName);
-         ITerritory? territory = Territories.theMoveTerritories.Find(territoryName);
+         ITerritory? territory = Territories.theTerritories.Find(territoryName);
          if (null == territory)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): TerritoryExtensions.Find() returned null");
@@ -713,7 +706,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonTravel(): clickedPolygon=null");
             return;
          }
-         myTerritorySelected = Territories.theMoveTerritories.Find(Utilities.RemoveSpaces(clickedPolygon.Name));
+         myTerritorySelected = Territories.theTerritories.Find(Utilities.RemoveSpaces(clickedPolygon.Name));
          if (null == myTerritorySelected)
          {
             Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonTravel(): selectedTerritory=null for " + clickedPolygon.Tag.ToString());
@@ -817,7 +810,8 @@ namespace Pattons_Best
       {
          base.OnClosing(e);
          SaveDefaultsToSettings();
-         if (false == GameLoadMgr.SaveGameToFile(myGameInstance))
+         GameLoadMgr loadMgr = new GameLoadMgr();
+         if (false == loadMgr.SaveGameToFile(myGameInstance))
             Logger.Log(LogEnum.LE_ERROR, "OnClosing(): SaveGameToFile() returned false");
       }
       //-------------CONTROLLER HELPER FUNCTIONS---------------------------------

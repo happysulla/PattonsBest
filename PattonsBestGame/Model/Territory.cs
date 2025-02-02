@@ -9,11 +9,19 @@ namespace Pattons_Best
    [Serializable]
    public class Territory : ITerritory
    {
+      public enum TerritoryEnum
+      {
+         Tank,
+         Movement,
+         Battle, 
+         Error
+      }
       public string Name { get; set; } = "Offboard";
+      public TerritoryEnum Parent { get; set; } = TerritoryEnum.Error;
       public string Type { get; set; } = "ERROR";
-      public List<String> Adjacents { get; set; } = new List<String>();
       public IMapPoint CenterPoint { get; set; } = new MapPoint();
       public List<IMapPoint> Points { get; set; } = new List<IMapPoint>();
+      public List<String> Adjacents { get; set; } = new List<String>();
       //---------------------------------------------------------------
       public Territory() 
       { 
@@ -39,12 +47,8 @@ namespace Pattons_Best
    [Serializable]
    public class Territories : IEnumerable, ITerritories
    {
-      [NonSerialized] public const string MOVE_TERRITORIES = "TerritoriesMove.xml";
-      [NonSerialized] public const string BATTLE_TERRITORIES = "TerritoriesBattle.xml";
-      [NonSerialized] public const string TANK_TERRITORIES = "TerritoriesTank.xml";
-      [NonSerialized] static public ITerritories theMoveTerritories = new Territories();
-      [NonSerialized] static public ITerritories theBattleTerritories = new Territories();
-      [NonSerialized] static public ITerritories theTankTerritories = new Territories();
+      [NonSerialized] public const string FILENAME = "Territories.xml";
+      [NonSerialized] static public ITerritories theTerritories = new Territories();
       private readonly ArrayList myList;
       public Territories() { myList = new ArrayList(); }
       public void Add(ITerritory t) { myList.Add(t); }

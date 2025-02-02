@@ -5,7 +5,8 @@ namespace Pattons_Best
 {
    public partial class TerritoryCreateDialog : Window
    {
-      public String? RadioOutputText { get; set; }
+      public String? RadioButtonType { get; set; }
+      public String? RadioButtonParent { get; set; }
       public bool IsTown { get; set; } = false;
       public TerritoryCreateDialog()
       {
@@ -17,7 +18,7 @@ namespace Pattons_Best
          this.DialogResult = true;
       }
       //------------------------------------------------
-      private void RadioButton_Checked(object sender, RoutedEventArgs e)
+      private void RadioButtonType_Checked(object sender, RoutedEventArgs e)
       {
          RadioButton? radioButton = (RadioButton)sender;
          if (null == radioButton)
@@ -27,7 +28,21 @@ namespace Pattons_Best
          else
          {
             if (null != radioButton.Content)
-               RadioOutputText = radioButton.Content.ToString();
+               RadioButtonType = radioButton.Content.ToString();
+         }
+      }
+      //------------------------------------------------
+      private void RadioButtonParent_Checked(object sender, RoutedEventArgs e)
+      {
+         RadioButton? radioButton = (RadioButton)sender;
+         if (null == radioButton)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "RadioButton_Checked(): radioButton=null");
+         }
+         else
+         {
+            if (null != radioButton.Content)
+               RadioButtonParent = radioButton.Content.ToString();
          }
       }
    }

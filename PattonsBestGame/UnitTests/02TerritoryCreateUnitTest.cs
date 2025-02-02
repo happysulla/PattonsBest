@@ -15,22 +15,19 @@ namespace Pattons_Best
 {
    public class TerritoryCreateUnitTest : IUnitTest
    {
+      private string? myFileName = null;
       private DockPanel myDockPanel;
       private IGameInstance? myGameInstance = null;
       Canvas? myCanvas = null;
       public bool isDragging = false;
       UIElement? myItem = null;
       private System.Windows.Point myPreviousLocation;
-      String? myTerritoriesName = null;
-      ITerritories? myTerritories = null;
       Territory? myAnchorTerritory = null;
       private double myXColumn = 0;
       private Dictionary<string, Polyline> myRivers = new Dictionary<string, Polyline>();
       private List<Ellipse> myEllipses = new List<Ellipse>();
       public static Double theEllipseDiameter = 30;
       public static Double theEllipseOffset = theEllipseDiameter / 2.0;
-      private int myIndexRaft = 0;
-      private int myIndexDownRiver = 0;
       private readonly SolidColorBrush mySolidColorBrushWaterBlue = new SolidColorBrush { Color = Colors.DeepSkyBlue };
       //-----------------------------------------
       private int myIndexName = 0;
@@ -39,7 +36,7 @@ namespace Pattons_Best
       private List<string> myCommandNames = new List<string>();
       public string HeaderName { get { return myHeaderNames[myIndexName]; } }
       public string CommandName { get { return myCommandNames[myIndexName]; } }
-      public TerritoryCreateUnitTest(DockPanel dp, IGameInstance gi, string tName)
+      public TerritoryCreateUnitTest(DockPanel dp, IGameInstance gi)
       {
          myIndexName = 0;
          myHeaderNames.Add("02-Delete Territories");
@@ -56,8 +53,16 @@ namespace Pattons_Best
          myCommandNames.Add("04-Verify Adjacents");
          myCommandNames.Add("05-Cleanup");
          //------------------------------------
-         myGameInstance = gi;
          myDockPanel = dp;
+         //------------------------------------
+         if (null == gi)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): gi=null");
+            CtorError = true;
+            return;
+         }
+         myGameInstance = gi;
+         //------------------------------------
          foreach (UIElement ui0 in myDockPanel.Children)
          {
             if (ui0 is DockPanel dockPanelInside)
@@ -79,38 +84,12 @@ namespace Pattons_Best
             return;
          }
          //----------------------------------
-         if (null == gi)
+         if( false == SetFileName())
          {
-            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): gi=null");
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): SetFileName() returned false");
             CtorError = true;
             return;
          }
-         myGameInstance = gi;
-         //----------------------------------
-         if (null == tName)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): tName=null");
-            CtorError = true;
-            return;
-         }
-         switch (tName)
-         {
-            case Territories.MOVE_TERRITORIES:
-               myTerritories = Territories.theMoveTerritories;
-               break;
-            case Territories.TANK_TERRITORIES:
-               myTerritories = Territories.theTankTerritories;
-               break;
-            case Territories.BATTLE_TERRITORIES:
-               myTerritories = Territories.theBattleTerritories;
-               break;
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): reached default with " + tName);
-               CtorError = true;
-               return;
-         }
-         myTerritoriesName = tName;
-         //----------------------------------
       }
       public bool Command(ref IGameInstance gi) // Performs function based on CommandName string
       {
@@ -119,24 +98,19 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Command(): myCanvas=null");
             return false;
          }
-         if (null == myTerritoriesName)
+         if (null == myFileName)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Command(): myTerritoriesName=null");
-            return false;
-         }
-         if (null == myTerritories)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Command(): myTerritories=null");
+            Logger.Log(LogEnum.LE_ERROR, "Command(): myFileName=null");
             return false;
          }
          //-----------------------------------
          if (CommandName == myCommandNames[0])
          {
-            string filename = ConfigFileReader.theConfigDirectory + myTerritoriesName;
-            System.IO.File.Delete(filename);  // delete old file
+            System.IO.File.Delete(myFileName);  // delete old file
+            Territories.theTerritories.Clear();
             if (false == NextTest(ref gi)) // automatically move next test
             {
-               Console.WriteLine("TerritoryCreateUnitTest.Command(): NextTest() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest.Command(): NextTest() returned false");
                return false;
             }
          }
@@ -154,7 +128,7 @@ namespace Pattons_Best
          }
          else if (CommandName == myCommandNames[4])
          {
-            if (false == ShowAdjacents(myTerritories))
+            if (false == ShowAdjacents(Territories.theTerritories))
             {
                Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest.Command(): ShowAdjacents() returned false");
                return false;
@@ -182,20 +156,10 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "NextTest(): myCanvas=null");
             return false;
          }
-         if (null == myTerritoriesName)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "NextTest(): myTerritoriesName=null");
-            return false;
-         }
-         if (null == myTerritories)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "NextTest(): myTerritories=null");
-            return false;
-         }
          //---------------------------------
          if (HeaderName == myHeaderNames[0])
          {
-            CreateEllipses(myTerritories);
+            CreateEllipses(Territories.theTerritories);
             myCanvas.MouseLeftButtonDown += this.MouseLeftButtonDownCreateTerritory;
             ++myIndexName;
          }
@@ -241,16 +205,6 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Cleanup(): myCanvas=null");
             return false;
          }
-         if (null == myTerritoriesName)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Cleanup(): myTerritoriesName=null");
-            return false;
-         }
-         if (null == myTerritories)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Cleanup(): myTerritories=null");
-            return false;
-         }
          //---------------------------------
          if (HeaderName == myHeaderNames[1])
          {
@@ -281,24 +235,9 @@ namespace Pattons_Best
          foreach (UIElement ui1 in results)
             myCanvas.Children.Remove(ui1);
          //--------------------------------------------------
-         // Delete Existing Territories.xml file and create a new one based on myGameEngine.Territories container
-         try
+         if ( false == CreateXml(Territories.theTerritories))
          {
-            string filename = ConfigFileReader.theConfigDirectory + myTerritoriesName;
-            System.IO.File.Delete(filename);  // delete old file
-            XmlDocument aXmlDocument = CreateXml(myTerritories); // create a new XML document based on Territories
-            using (FileStream writer = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write))
-            {
-               XmlWriterSettings settings = new XmlWriterSettings { Indent = true, OmitXmlDeclaration = true, NewLineOnAttributes = false };
-               using (XmlWriter xmlWriter = XmlWriter.Create(writer, settings)) // For XmlWriter, it uses the stream that was created: writer.
-               {
-                  aXmlDocument.Save(xmlWriter);
-               }
-            }
-         }
-         catch (Exception e)
-         {
-            Console.WriteLine("Cleanup(): exeption={0}", e.Message);
+            Logger.Log(LogEnum.LE_ERROR, "Cleanup(): CreateXml() returned false");
             return false;
          }
          //--------------------------------------------------
@@ -306,7 +245,77 @@ namespace Pattons_Best
          return true;
       }
       //--------------------------------------------------------------------
-      public void CreateEllipse(ITerritory territory)
+      private bool SetFileName()
+      {
+         string? path = ConfigFileReader.theConfigDirectory;
+         if (null == path)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): path=null");
+            return false;
+         }
+         System.IO.DirectoryInfo? dirInfo = Directory.GetParent(path);
+         if (null == dirInfo)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): dirInfo=null");
+            return false;
+         }
+         //----------------------------------
+         string? path1 = dirInfo.FullName;
+         if (null == path1)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): path1=null");
+            return false;
+         }
+         dirInfo = Directory.GetParent(path1);
+         if (null == dirInfo)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): dirInfo=null");
+            return false;
+         }
+         //----------------------------------
+         string? path2 = dirInfo.FullName;
+         if (null == path2)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): path2=null");
+            return false;
+         }
+         dirInfo = Directory.GetParent(path2);
+         if (null == dirInfo)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): dirInfo=null");
+            return false;
+         }
+         //----------------------------------
+         string? path3 = dirInfo.FullName;
+         if (null == path3)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): path3=null");
+            return false;
+         }
+         dirInfo = Directory.GetParent(path3);
+         if (null == dirInfo)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): dirInfo=null");
+            return false;
+         }
+         //----------------------------------
+         string? path4 = dirInfo.FullName;
+         if (null == path4)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): path4=null");
+            return false;
+         }
+         dirInfo = Directory.GetParent(path4);
+         if (null == dirInfo)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): dirInfo=null");
+            return false;
+         }
+         //----------------------------------
+         myFileName = dirInfo.FullName + "\\Config\\" + Territories.FILENAME;
+         return true;
+      }
+      private void CreateEllipse(ITerritory territory)
       {
          if (null == myCanvas)
          {
@@ -332,7 +341,7 @@ namespace Pattons_Best
          myCanvas.Children.Add(aEllipse);
          myEllipses.Add(aEllipse);
       }
-      public void CreateEllipses(ITerritories territories)
+      private void CreateEllipses(ITerritories territories)
       {
          if (null == myCanvas)
          {
@@ -357,50 +366,48 @@ namespace Pattons_Best
             myEllipses.Add(aEllipse);
          }
       }
-      public XmlDocument CreateXml(ITerritories territories)
+      private bool CreateXml(ITerritories territories)
       {
-         XmlDocument aXmlDocument = new XmlDocument();
-         if (null == aXmlDocument.DocumentElement)
+         if (null == myFileName)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): aXmlDocument.DocumentElement=null");
-            return aXmlDocument;
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): myFileName=null");
+            return false;
          }
-         aXmlDocument.LoadXml("<Territories></Territories>");
-         foreach (Territory t in territories)
+         try
          {
-            XmlElement? terrElem = aXmlDocument.CreateElement("Territory");  // name of territory
-            terrElem.SetAttribute("value", t.Name);
-            aXmlDocument.DocumentElement.LastChild.AppendChild(terrElem);
-            XmlElement typeElem = aXmlDocument.CreateElement("type"); 
-            typeElem.SetAttribute("value", t.Type);
-            aXmlDocument.DocumentElement.AppendChild(typeElem);
-            XmlElement pointElem = aXmlDocument.CreateElement("point"); // center point for this territory
-            pointElem.SetAttribute("X", t.CenterPoint.X.ToString());
-            pointElem.SetAttribute("Y", t.CenterPoint.Y.ToString());
-            if (null == aXmlDocument.DocumentElement.LastChild)
+            System.IO.File.Delete(myFileName);           // Delete Existing Territories.xml file and create a new one based on myGameEngine.Territories container
+            //-----------------------------------------------------
+            System.Xml.XmlDocument aXmlDocument = new XmlDocument();
+            aXmlDocument.LoadXml("<Territories></Territories>");
+            if (null == aXmlDocument.DocumentElement)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): aXmlDocument.DocumentElement.LastChild=null");
-               return aXmlDocument;
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): aXmlDocument.DocumentElement=null");
+               return false;
             }
-            aXmlDocument.DocumentElement.LastChild.AppendChild(pointElem);
-            foreach (string s in t.Adjacents) // List of adjacent territories
+            GameLoadMgr loadMgr = new GameLoadMgr();
+            if (false == loadMgr.CreateXmlTerritories(aXmlDocument, territories))
             {
-               XmlElement adjacentElem = aXmlDocument.CreateElement("adjacent");
-               adjacentElem.SetAttribute("value", s);
-               aXmlDocument.DocumentElement.LastChild.AppendChild(adjacentElem);
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateXmlTerritories() returned false");
+               return false;
             }
-            foreach (IMapPoint p in t.Points) // Points that make up the polygon of this territory
+            //-----------------------------------------------------
+            using (FileStream writer = new FileStream(myFileName, FileMode.OpenOrCreate, FileAccess.Write))
             {
-               System.Windows.Point point = new System.Windows.Point(p.X, p.Y);
-               XmlElement regionPointElem = aXmlDocument.CreateElement("regionPoint");
-               regionPointElem.SetAttribute("X", p.X.ToString());
-               regionPointElem.SetAttribute("Y", p.Y.ToString());
-               aXmlDocument.DocumentElement.LastChild.AppendChild(regionPointElem);
+               XmlWriterSettings settings = new XmlWriterSettings { Indent = true, OmitXmlDeclaration = true, NewLineOnAttributes = false };
+               using (XmlWriter xmlWriter = XmlWriter.Create(writer, settings)) // For XmlWriter, it uses the stream that was created: writer.
+               {
+                  aXmlDocument.Save(xmlWriter);
+               }
             }
          }
-         return aXmlDocument;
+         catch (Exception e)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Cleanup(): exeption=\n" + e.Message);
+            return false;
+         }
+         return true;
       }
-      public bool ShowAdjacents(ITerritories territories)
+      private bool ShowAdjacents(ITerritories territories)
       {
          if (null == myCanvas)
          {
@@ -501,11 +508,6 @@ namespace Pattons_Best
       //--------------------------------------------------------------------
       void MouseLeftButtonDownCreateTerritory(object sender, MouseButtonEventArgs e)
       {
-         if (null == myTerritories)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MouseLeftButtonDownCreateTerritory(): myTerritories=null");
-            return;
-         }
          SolidColorBrush aSolidColorBrush = new SolidColorBrush { Color = Color.FromArgb(100, 100, 100, 0) };
          System.Windows.Point p = e.GetPosition(myCanvas);
          TerritoryCreateDialog dialog = new TerritoryCreateDialog(); // Get the name from user
@@ -514,8 +516,22 @@ namespace Pattons_Best
          {
             Territory territory = new Territory(dialog.myTextBoxName.Text) { CenterPoint = new MapPoint(p.X, p.Y) };
             CreateEllipse(territory);
-            territory.Type = dialog.RadioOutputText;
-            myTerritories.Add(territory);
+            if( null == dialog.RadioButtonType)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MouseLeftButtonDownCreateTerritory(): dialog.RadioOutputText=null");
+               return;
+            }
+            territory.Type = dialog.RadioButtonType;
+            switch (dialog.RadioButtonParent)
+            {
+               case "Map": territory.Parent = Territory.TerritoryEnum.Movement; break;
+               case "Tank": territory.Parent = Territory.TerritoryEnum.Tank; break;
+               case "Battle": territory.Parent = Territory.TerritoryEnum.Battle; break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "MouseLeftButtonDownCreateTerritory(): reached default parent=" + dialog.RadioButtonParent);
+                  return;
+            }
+            Territories.theTerritories.Add(territory);
          }
       }
       void MouseDownSetCenterPoint(object sender, MouseButtonEventArgs e)
@@ -577,7 +593,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "MouseUp(): tag=null");
                   return;
                }
-               foreach (Territory t in myTerritories)
+               foreach (Territory t in Territories.theTerritories)
                {
                   string name = Utilities.RemoveSpaces(t.ToString());
                   if (tag == name)
@@ -618,7 +634,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "MouseLeftButtonDownVerifyTerritory(): tag=null");
                      return;
                   }
-                  foreach (Territory t in myTerritories)
+                  foreach (Territory t in Territories.theTerritories)
                   {
                      string name = Utilities.RemoveSpaces(t.ToString());
                      if (tag == name)
@@ -666,7 +682,7 @@ namespace Pattons_Best
                if (true == ui.IsMouseOver)
                {
                   Territory? selectedTerritory = null;  // Find the corresponding Territory that user selected
-                  foreach (Territory t in myTerritories)
+                  foreach (Territory t in Territories.theTerritories)
                   {
                      if (selectedEllipse.Tag.ToString() == Utilities.RemoveSpaces(t.ToString()))
                      {
@@ -720,7 +736,7 @@ namespace Pattons_Best
                         if (ui1 is Ellipse)
                         {
                            Ellipse ellipse1 = (Ellipse)ui1;
-                           foreach (Territory t in myTerritories)
+                           foreach (Territory t in Territories.theTerritories)
                            {
                               if (ellipse1.Tag.ToString() == Utilities.RemoveSpaces(t.ToString()))
                               {

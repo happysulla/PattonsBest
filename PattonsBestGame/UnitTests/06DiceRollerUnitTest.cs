@@ -27,19 +27,17 @@ namespace Pattons_Best
       {
          //------------------------------------------
          myIndexName = 0;
-         myHeaderNames.Add("07-Die Statistics");
-         myHeaderNames.Add("07-Die Rolling");
-         myHeaderNames.Add("07-Die Moving");
-         myHeaderNames.Add("07-Dice Rolling");
-         myHeaderNames.Add("07-Dice Moving");
-         myHeaderNames.Add("07-Dice Moving 3");
+         myHeaderNames.Add("06-Die Statistics");
+         myHeaderNames.Add("06-Die Rolling");
+         myHeaderNames.Add("06-Die Moving");
+         myHeaderNames.Add("06-Dice Rolling");
+         myHeaderNames.Add("06-Dice Moving");
          //------------------------------------------
          myCommandNames.Add("Get Stats");
          myCommandNames.Add("Roll Die");
          myCommandNames.Add("Roll Moving Die");
          myCommandNames.Add("Roll Dice");
          myCommandNames.Add("Roll Moving Dice");
-         myCommandNames.Add("Roll Moving Dice 3");
          //------------------------------------------
          myDockPanel = dp;
          foreach (UIElement ui0 in myDockPanel.Children)  // Find the Canvas in the visual tree
@@ -186,10 +184,6 @@ namespace Pattons_Best
          }
          else if (HeaderName == myHeaderNames[4])
          {
-            ++myIndexName;
-         }
-         else if (HeaderName == myHeaderNames[5])
-         {
             if (false == Cleanup(ref gi))
             {
                Logger.Log(LogEnum.LE_ERROR, "NextTest(): Cleanup() returned false");
@@ -227,7 +221,7 @@ namespace Pattons_Best
          }
          //-----------------------------------------------------------------------
          Logger.SetOff(LogEnum.LE_RESET_ROLL_STATE);
-         ++gi.GameTurn;
+         Application.Current.Shutdown();
          return true;
       }
       //--------------------------------------------------
