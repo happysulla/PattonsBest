@@ -25,12 +25,12 @@ namespace Pattons_Best
       public ConfigMgrUnitTest(DockPanel dp, EventViewer ev)
       {
          myIndexName = 0;
-         myHeaderNames.Add("05-Show Events");
          myHeaderNames.Add("05-Show Tables");
+         myHeaderNames.Add("05-Show Events");
          myHeaderNames.Add("05-Show Rules");
          //------------------------------------------
-         myCommandNames.Add("Show Event");
          myCommandNames.Add("Show Table");
+         myCommandNames.Add("Show Event");
          myCommandNames.Add("Show Rule");
          //------------------------------------------
          foreach (UIElement ui0 in dp.Children)
@@ -95,18 +95,6 @@ namespace Pattons_Best
          }
          if (CommandName == myCommandNames[0])
          {
-            string key = myEventViewer.myRulesMgr.Events.Keys.ElementAt(myKeyIndex);
-            if (false == myEventViewer.OpenEvent(gi, key))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Command(): OpenEvent() returned false key=" + gi.EventActive + " keyindex=" + myKeyIndex.ToString());
-               return false;
-            }
-            ++myKeyIndex;
-            if (myEventViewer.myRulesMgr.Events.Keys.Count <= myKeyIndex)
-               myKeyIndex = 0;
-         }
-         else if (CommandName == myCommandNames[1])
-         {
             string key = myEventViewer.myRulesMgr.Tables.Keys.ElementAt(myKeyIndex);
             if (false == myEventViewer.ShowTable(key))
             {
@@ -115,6 +103,18 @@ namespace Pattons_Best
             }
             ++myKeyIndex;
             if (myEventViewer.myRulesMgr.Tables.Keys.Count <= myKeyIndex)
+               myKeyIndex = 0;
+         }
+         else if(CommandName == myCommandNames[1])
+         {
+            string key = myEventViewer.myRulesMgr.Events.Keys.ElementAt(myKeyIndex);
+            if (false == myEventViewer.OpenEvent(gi, key))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Command(): OpenEvent() returned false key=" + gi.EventActive + " keyindex=" + myKeyIndex.ToString());
+               return false;
+            }
+            ++myKeyIndex;
+            if (myEventViewer.myRulesMgr.Events.Keys.Count <= myKeyIndex)
                myKeyIndex = 0;
          }
          else if (CommandName == myCommandNames[2])

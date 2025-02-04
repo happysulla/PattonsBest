@@ -196,6 +196,12 @@ namespace Pattons_Best
          }
          //---------------------------------------------------------------
          myEventViewer = new EventViewer(myGameEngine, myGameInstance, myCanvasMap, myScrollViewerTextBlock, Territories.theTerritories, myDieRoller);
+         if( true == myEventViewer.CtorError)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): myEventViewer.CtorError=true");
+            CtorError = true;
+            return;
+         }
          CanvasImageViewer civ = new CanvasImageViewer(myCanvasMap);
          //---------------------------------------------------------------
          // Implement the Model View Controller (MVC) pattern by registering views with

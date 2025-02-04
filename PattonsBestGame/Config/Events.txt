@@ -953,7 +953,7 @@ e023c	"<Bold>e023c Fight Wizard</Bold>
 <LineBreak/><LineBreak/> Roll one die: 
 <InlineUIContainer><Image Source='../images/dieRoll.gif' Name='DieRoll' Height='21'  Width='21' > </Image></InlineUIContainer>
 <LineBreak/><LineBreak/>
- <InlineUIContainer><Button Content='e305' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> - 1 Surprise<LineBreak/>
+ <InlineUIContainer><Button Content='e305' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> - 1 Attack<LineBreak/>
  <InlineUIContainer><Button Content='e306' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> - 2 Attacked <LineBreak/>
  <InlineUIContainer><Button Content='e024' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> - 3 and 4 - Wizard Attack<LineBreak/>
  <InlineUIContainer><Button Content='e308' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> - 5 Surprised<LineBreak/>
@@ -1204,8 +1204,9 @@ e038	"<Bold>e038 Cache under Stone</Bold>
  3 - <InlineUIContainer><Button Content='e182' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
  4 - <InlineUIContainer><Button Content='e185' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
  5 - <InlineUIContainer><Button Content='e187' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
- 6 - <InlineUIContainer><Button Content='e190' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
-<LineBreak/><InlineUIContainer><Image Name='E038EncounterRoll' Source='../images/Stone.gif' Height='320'  Width='600'> </Image></InlineUIContainer> "
+ 6 - <InlineUIContainer><Button Content='e190' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/>
+        <InlineUIContainer><Image Name='E038EncounterRoll' Source='../images/Stone.gif' Height='280'  Width='525'> </Image></InlineUIContainer> "
 e039	"<Bold>e039 Small Treasure Chest</Bold>
 <LineBreak/><LineBreak/>You find a locked chest. You know the lock may be booby trapped.
 <LineBreak/><LineBreak/><InlineUIContainer><Image Name='TreasureChest'  Source='../images/Chest.gif' Height='75'  Width='75'> </Image></InlineUIContainer> Click the chest to open.
@@ -2596,7 +2597,7 @@ e101a	"<Bold>e101a Talk to Harpy</Bold>
 <LineBreak/><LineBreak/>
  <InlineUIContainer><Button Content='r342' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> - 1 Inquiry<LineBreak/>
  <InlineUIContainer><Button Content='r329' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> - 2 Pass<LineBreak/>
- <InlineUIContainer><Button Content='r340' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> - 3 aand 4 - Looter<LineBreak/>
+ <InlineUIContainer><Button Content='r340' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> - 3 and 4 - Looter<LineBreak/>
  <InlineUIContainer><Button Content='r308' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> - 5 Surprised<LineBreak/>
  <InlineUIContainer><Button Content='r310' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> - 6 Surprised
 <LineBreak/><LineBreak/>Roll die:
@@ -4458,7 +4459,7 @@ e212n	"<Bold>e212n Staff of Command</Bold>
 <LineBreak/><LineBreak/>If you bring this possession to any hex north of the
  <InlineUIContainer><Button Content='Tragoth River' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 , you will command instant obedience throughout the Norhlands, regain your throne, and win the game! 
-<LineBreak/><LineBreak/>In the meantime, you are given a pair of warrior monks who have combat skill 5 and endurance 6. The monks have mounts and join your parrty to help with your journey northward. Click image to continue.
+<LineBreak/><LineBreak/>In the meantime, you are given a pair of warrior monks who have combat skill 5 and endurance 6. The monks have mounts and join your party to help with your journey northward. Click image to continue.
 <LineBreak/><LineBreak/>
                                   <InlineUIContainer><Image Source='../images/Staff.gif' Name='EncounterEnd' Height='300' Width='150'></Image></InlineUIContainer>"
 e213	"<Bold>e213 Rafting the Rivers</Bold> <InlineUIContainer><Button Content='r213' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>

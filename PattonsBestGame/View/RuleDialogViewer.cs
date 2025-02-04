@@ -167,7 +167,6 @@ namespace Pattons_Best
          catch (System.Collections.Generic.KeyNotFoundException e1)
          {
             // do nothing. This is expected first time dialog is created
-            Logger.Log(LogEnum.LE_GAME_INIT, "ShowTable(): Unable to find key=" + key + " e=" + e1.ToString());
          }
          try
          {
@@ -189,9 +188,9 @@ namespace Pattons_Best
             }
             switch (key)
             {
-               case "t207":
-                  dialog.Title = "r207 Travel Table";
-                  dialog.myFlowDocumentScrollViewer.Width = 900;
+               case "t001":
+                  dialog.Title = "Combat Calander";
+                  dialog.myFlowDocumentScrollViewer.Width = 400;
                   dialog.myFlowDocumentScrollViewer.Height = 300;
                   break;
                case "t220":

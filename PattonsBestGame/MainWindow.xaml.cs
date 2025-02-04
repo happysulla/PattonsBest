@@ -74,7 +74,7 @@ namespace Pattons_Best
             {
                string docs1Src = theAssemblyDirectory + @"\Docs\Pattons_Best-Summary.pdf";
                string docs2Src = theAssemblyDirectory + @"\Docs\PattonsBest-rules.pdf";
-               string docsDir = appDataDir + @"\BarbarianPrince\Docs\";
+               string docsDir = appDataDir + @"\PattonsBest\Docs\";
                if (false == Directory.Exists(docsDir))
                   Directory.CreateDirectory(docsDir);
                string docs1Dest = docsDir + @"Pattons_Best-Summary.pdf";
