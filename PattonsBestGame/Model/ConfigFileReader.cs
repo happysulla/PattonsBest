@@ -16,7 +16,7 @@ namespace Pattons_Best
       private StreamReader? myStreamReader = null;
       public ConfigFileReader(string filename)
       {
-         const int MAX_RECORDS_IN_FILE = 5000;
+         const int MAX_RECORDS_IN_FILE = 1000; // number of rows in spreadsheet
          try
          {
             if (false == ReplaceDoubleQuotesWithSingleQuote(filename)) // First remove all double quotes and replace with a single quote  "" ==> '
@@ -108,7 +108,7 @@ namespace Pattons_Best
          // quotation marks.
          StringBuilder sb = new StringBuilder();
          string key = "";
-         const int TOTAL_LINES_IN_RECORD = 1000;
+         const int TOTAL_LINES_IN_RECORD = 2000;  // number of lines in the XAML 
          int count = TOTAL_LINES_IN_RECORD; // record should be less than this many lines
          string? aLine = null;
          //----------------------------------------------------

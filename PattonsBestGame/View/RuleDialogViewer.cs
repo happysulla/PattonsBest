@@ -190,8 +190,8 @@ namespace Pattons_Best
             {
                case "t001":
                   dialog.Title = "Combat Calander";
-                  dialog.myFlowDocumentScrollViewer.Width = 400;
-                  dialog.myFlowDocumentScrollViewer.Height = 300;
+                  dialog.myFlowDocumentScrollViewer.Width = 1300;
+                  dialog.myFlowDocumentScrollViewer.Height = 900;
                   break;
                case "t220":
                   dialog.Title = "r220 Combat Table";

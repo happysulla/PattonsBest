@@ -1,4 +1,4 @@
-t001 "<Table>
+<Table>
 <Table.Columns>
    <TableColumn Width='320'/>
    <TableColumn Width='320'/>
@@ -994,4 +994,4 @@ t001 "<Table>
 	  </TableCell>
    </TableRow>
 </TableRowGroup>
-</Table>"
+</Table>
