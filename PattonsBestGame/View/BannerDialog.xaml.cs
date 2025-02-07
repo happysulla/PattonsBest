@@ -37,8 +37,8 @@ namespace Pattons_Best
          ImageBrush brush = new ImageBrush(img);
          this.Background = brush;
          //-------------------------------
-         Image imageAxes = new Image() { Source = MapItem.theMapImages.GetBitmapImage("CrossedAxes") };
-         myButtonClose.Content = imageAxes;
+         Image imageRifles = new Image() { Source = MapItem.theMapImages.GetBitmapImage("CrossedRifles") };
+         myButtonClose.Content = imageRifles;
          //-------------------------------
          myCheckBoxFont.IsChecked = theIsCheckBoxChecked;
          //-------------------------------

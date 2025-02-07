@@ -6,6 +6,38 @@ using System.Windows.Controls;
 
 namespace Pattons_Best
 {
+
+   public enum EnumScenario
+   {
+      Advance,
+      Battle,
+      Counterattack,
+      Retrofit
+   };
+   public enum EnumResistance
+   {
+      Light,
+      Medium,
+      Heavy,
+      None
+   };
+   [Serializable]
+   public struct CombatCalenderEntry
+   {
+      public string myDate;
+      public EnumScenario myType;
+      public int myProbability;
+      public EnumResistance myResistance;
+      public string myNote;
+      public CombatCalenderEntry(string d, EnumScenario t, int p, EnumResistance r, string n="")
+      {
+         myDate = d;
+         myType = t;
+         myProbability = p;
+         myResistance = r;
+         myNote = n;
+      }
+   };
    [Serializable]
    public enum GamePhase
    {
@@ -53,7 +85,7 @@ namespace Pattons_Best
       EndGameShowFeats,
       EndGameShowStats,
       EndGameClose,
-      EndGameFinal,      // Show the final location on map with final path
+      EndGameFinal,  
       EndGameExit,
       ExitGame,
 

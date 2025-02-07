@@ -101,7 +101,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Command(): ShowTable() returned false");
                return false;
             }
-            //++myKeyIndex;
+            ++myKeyIndex;
             if (myEventViewer.myRulesMgr.Tables.Keys.Count <= myKeyIndex)
                myKeyIndex = 0;
          }
