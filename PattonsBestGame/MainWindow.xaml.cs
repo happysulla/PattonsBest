@@ -1,15 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Reflection;
-using System.Text;
+using System.Runtime.Versioning;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Pattons_Best
 {
@@ -36,8 +31,9 @@ namespace Pattons_Best
                Application.Current.Shutdown();
                return;
             }
-            theAssemblyDirectory = assemDir; 
-            MapImage.theImageDirectory = theAssemblyDirectory + @"\images\";
+            theAssemblyDirectory = assemDir;
+            //--------------------------------------------
+            MapImage.theImageDirectory = theAssemblyDirectory + @"\Images\";
             ConfigFileReader.theConfigDirectory = theAssemblyDirectory + @"\config\";
             string appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             Logger.theLogDirectory = appDataDir + @"\PattonsBest\Logs\";

@@ -14,7 +14,7 @@ namespace Pattons_Best
       private ScrollViewer? myScrollViewerTextBlock = null;
       private Canvas? myCanvas = null;
       private EventViewer? myEventViewer = null;
-      private int myKeyIndex = 0;
+      private int myKeyIndex = 1;
       //----------------------------------------------------------------------------
       private int myIndexName = 0;
       private List<string> myHeaderNames = new List<string>();
@@ -25,13 +25,13 @@ namespace Pattons_Best
       public ConfigMgrUnitTest(DockPanel dp, EventViewer ev)
       {
          myIndexName = 0;
-         myHeaderNames.Add("05-Show Tables");
          myHeaderNames.Add("05-Show Events");
          myHeaderNames.Add("05-Show Rules");
+         myHeaderNames.Add("05-Show Tables");
          //------------------------------------------
-         myCommandNames.Add("Show Table");
          myCommandNames.Add("Show Event");
          myCommandNames.Add("Show Rule");
+         myCommandNames.Add("Show Table");
          //------------------------------------------
          foreach (UIElement ui0 in dp.Children)
          {
@@ -93,21 +93,10 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Command(): myEventViewer.myRulesMgr=null");
             return false;
          }
-         if (CommandName == myCommandNames[0])
-         {
-            string key = myEventViewer.myRulesMgr.Tables.Keys.ElementAt(myKeyIndex);
-            if (false == myEventViewer.ShowTable(key))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Command(): ShowTable() returned false");
-               return false;
-            }
-            ++myKeyIndex;
-            if (myEventViewer.myRulesMgr.Tables.Keys.Count <= myKeyIndex)
-               myKeyIndex = 0;
-         }
-         else if(CommandName == myCommandNames[1])
+         if(CommandName == myCommandNames[0])
          {
             string key = myEventViewer.myRulesMgr.Events.Keys.ElementAt(myKeyIndex);
+            gi.EventActive = key;
             if (false == myEventViewer.OpenEvent(gi, key))
             {
                Logger.Log(LogEnum.LE_ERROR, "Command(): OpenEvent() returned false key=" + gi.EventActive + " keyindex=" + myKeyIndex.ToString());
@@ -117,7 +106,7 @@ namespace Pattons_Best
             if (myEventViewer.myRulesMgr.Events.Keys.Count <= myKeyIndex)
                myKeyIndex = 0;
          }
-         else if (CommandName == myCommandNames[2])
+         else if (CommandName == myCommandNames[1])
          {
             string key = myEventViewer.myRulesMgr.Rules.Keys.ElementAt(myKeyIndex);
             if (false == myEventViewer.ShowRule(key))
@@ -127,6 +116,18 @@ namespace Pattons_Best
             }
             ++myKeyIndex;
             if (myEventViewer.myRulesMgr.Rules.Keys.Count <= myKeyIndex)
+               myKeyIndex = 0;
+         }
+         else if(CommandName == myCommandNames[3])
+         {
+            string key = myEventViewer.myRulesMgr.Tables.Keys.ElementAt(myKeyIndex);
+            if (false == myEventViewer.ShowTable(key))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Command(): ShowTable() returned false");
+               return false;
+            }
+            ++myKeyIndex;
+            if (myEventViewer.myRulesMgr.Tables.Keys.Count <= myKeyIndex)
                myKeyIndex = 0;
          }
          return true;

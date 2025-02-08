@@ -1,5 +1,8 @@
 ﻿using Pattons_Best.Properties;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;

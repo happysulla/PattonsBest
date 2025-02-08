@@ -8,6 +8,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml;
 using WpfAnimatedGif;
@@ -295,10 +296,17 @@ namespace Pattons_Best
                   InlineUIContainer ui = (InlineUIContainer)inline;
                   if (ui.Child is Button b)
                   {
-                     SetButtonState(gi, key, b);
+                     if (false == SetButtonState(gi, key, b))
+                        Logger.Log(LogEnum.LE_ERROR, "OpenEvent(): SetButtonState() returned false");
                   }
                   else if (ui.Child is Image img)
                   {
+                     string fullImagePath = MapImage.theImageDirectory + Utilities.RemoveSpaces(img.Name) + ".gif";
+                     System.Windows.Media.Imaging.BitmapImage bitImage = new BitmapImage();
+                     bitImage.BeginInit();
+                     bitImage.UriSource = new Uri(fullImagePath, UriKind.Absolute);
+                     bitImage.EndInit();
+                     img.Source = bitImage;
                      ImageBehavior.SetAnimatedSource(img, img.Source);
                      if ((true == img.Name.Contains("DieRoll")) || (true == img.Name.Contains("DiceRoll")) || (true == img.Name.Contains("Die3Roll")))
                      {
@@ -437,24 +445,26 @@ namespace Pattons_Best
          scrollViewer.ScrollToHorizontalOffset(amountToScroll);
          return true;
       }
-      private void SetButtonState(IGameInstance gi, string key, Button b)
+      private bool SetButtonState(IGameInstance gi, string key, Button b)
       {
          string content = (string)b.Content;
          if( null == content )
          {
             Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): content=null for key=" + key);
-            return;
+            return false;
          }
          if ((key != gi.EventActive) && (false == content.StartsWith("e")))
          {
             b.IsEnabled = false;
-            return;
+            return true;
          }
          switch (key)
          {
             default:
                break;
          }
+         b.Click += Button_Click;
+         return true;
       }
       private void AppendAtEnd(IGameInstance gi, string key)
       {

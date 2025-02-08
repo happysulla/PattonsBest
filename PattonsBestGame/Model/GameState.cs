@@ -2,6 +2,9 @@
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Windows.Navigation;
 
@@ -60,6 +63,49 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "UndoCommand():  gi.MapItemMoves.Clear()  a=" + action.ToString());
          gi.MapItemMoves.Clear();
       }
+      protected void PrintDiagnosticInfoToLog()
+      {
+         StringBuilder sb = new StringBuilder();
+         sb.Append("\n\tGameVersion=");
+         Assembly assem = Assembly.GetExecutingAssembly();
+         Version? version = assem.GetName().Version;
+         if( null != version )
+            sb.Append(version.ToString());
+         var attributes = assem.CustomAttributes;
+         foreach (var attribute in attributes)
+         {
+            if (attribute.AttributeType == typeof(TargetFrameworkAttribute))
+            {
+               var arg = attribute.ConstructorArguments.FirstOrDefault();
+               sb.Append("\n\tTargetFramework=");
+               sb.Append(arg.Value);
+               break;
+            }
+         }
+         sb.Append("\n\tOsVersion=");
+         sb.Append(System.Environment.OSVersion.Version.Build.ToString());
+         sb.Append("\n\tOS Desc=");
+         sb.Append(RuntimeInformation.OSDescription.ToString());
+         sb.Append("\n\tOS Arch=");
+         sb.Append(RuntimeInformation.OSArchitecture.ToString());
+         sb.Append("\n\tProcessorArch=");
+         sb.Append(RuntimeInformation.ProcessArchitecture.ToString());
+         sb.Append("\n\tnetVersion=");
+         sb.Append(Environment.Version.ToString());
+         //--------------------------------------------
+
+         //--------------------------------------------
+         System.Windows.Forms.Screen? screen = System.Windows.Forms.Screen.PrimaryScreen;
+         if( null != screen )
+         {
+            var dpi = screen.Bounds.Width / System.Windows.SystemParameters.PrimaryScreenWidth;
+            sb.Append("\n\tDPI=(");
+            sb.Append(dpi.ToString("000.0"));
+         }
+         sb.Append(")\n\tAppDir=");
+         sb.Append(MainWindow.theAssemblyDirectory);
+         Logger.Log(LogEnum.LE_GAME_INIT_VERSION, sb.ToString());
+      }
    }
    //-----------------------------------------------------
    class GameStateSetup : GameState
@@ -106,6 +152,7 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.DieRollActionNone;
                }
                AddStartingTestingOptions(gi);
+               PrintDiagnosticInfoToLog();
                break;
             case GameAction.SetupFinalize:
                gi.EventDisplayed = gi.EventActive = "e203"; // next screen to show
@@ -240,6 +287,7 @@ namespace Pattons_Best
          switch (action)
          {
             case GameAction.RemoveSplashScreen:
+               PrintDiagnosticInfoToLog();
                break;
             case GameAction.UnitTestCommand: // call the unit test's Command() function
                IUnitTest ut = gi.UnitTests[gi.GameTurn];

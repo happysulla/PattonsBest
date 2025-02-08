@@ -22,7 +22,7 @@
         ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" WindowStyle="None" SizeToContent="Manual" AllowsTransparency="True" Foreground="Black">
    <DockPanel Name="myDockPanel" MinWidth="612" MaxWidth="612" MinHeight="790" MaxHeight="790" Margin="15,0,0,0" >
          <DockPanel Name="myStackPanel" DockPanel.Dock="Top" IsEnabled="True" Background="{x:Null}">
-            <CheckBox x:Name="myCheckBoxFont" Content="Use More Readable Font?" VerticalAlignment="Bottom" HorizontalAlignment="Left" Unchecked="myCheckBoxFont_Unchecked" Click="myCheckBoxFont_Click" FontFamily="Modern No. 20"/>
+         <CheckBox x:Name="myCheckBoxFont" Content="Use More Readable Font?" VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="myCheckBoxFont_Clicked" FontFamily="Modern No. 20"/>
             <Button Name="myButtonClose" Width="50" Height="50" Click="ButtonClose_Click" VerticalAlignment="Top" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}" Margin="50,0,0,0" ></Button>
          </DockPanel>
          <ScrollViewer Name="myScrollViewerBanner" MinWidth="600" MaxWidth="600" Height="640" VerticalScrollBarVisibility="Auto" FontFamily="Georgia">

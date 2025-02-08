@@ -1,15 +1,15 @@
 ﻿
+using System;
 using System.Text;
 using System.Windows;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Collections.Generic;
 namespace Pattons_Best
 {
-   [XmlRootAttribute("GameInstance",IsNullable = false)]
-   [Serializable]
    public class GameInstance : IGameInstance
    {
-      [NonSerialized] static public Logger Logger = new Logger();
+      static public Logger Logger = new Logger();
       public bool CtorError { get; } = false;
       public Options Options { get; set; } = new Options();
       public GameStat Statistic { get; set; } = new GameStat();

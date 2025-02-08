@@ -12,6 +12,7 @@ namespace Pattons_Best
    {
       LE_ERROR,
       LE_GAME_INIT,
+      LE_GAME_INIT_VERSION,
       LE_GAME_END,
       LE_GAME_END_CHECK,
       LE_USER_ACTION,
@@ -72,6 +73,7 @@ namespace Pattons_Best
          //---------------------------------------------------------------------
          SetOn(LogEnum.LE_ERROR);
          SetOn(LogEnum.LE_GAME_INIT);
+         SetOn(LogEnum.LE_GAME_INIT_VERSION);
          SetOn(LogEnum.LE_USER_ACTION);
          SetOn(LogEnum.LE_NEXT_ACTION);
          return true;

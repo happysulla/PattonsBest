@@ -164,7 +164,7 @@ namespace Pattons_Best
             dialog.Focus();
             return true;
          }
-         catch (System.Collections.Generic.KeyNotFoundException e1)
+         catch (System.Collections.Generic.KeyNotFoundException)
          {
             // do nothing. This is expected first time dialog is created
          }

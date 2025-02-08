@@ -1,6 +1,8 @@
 r20.1	"<Bold>r20.1 Combat Calendar</Bold>
 <LineBreak/><LineBreak/>
-For each day of the campaign, the Combat Calendar shows either the notation 'Refitting' or a three part scenario code such as 'A-2-L'. When Patton's Division is refitting, it is in reserve absorbing replacements and retraining <InlineUIContainer><Button Content='r27.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. The presence of a scenario code, e.g., A-2-L, indicates: 
+For each day of the campaign, the Combat Calendar shows either the notation 'Refitting' or a three part scenario code such as 'A-2-L'. 
+<LineBreak/><LineBreak/>
+When Patton's Division is refitting, it is in reserve absorbing replacements and retraining <InlineUIContainer><Button Content='r27.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. The presence of a scenario code indicates: 
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r20.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Type of scenario <LineBreak/>
 <InlineUIContainer><Button Content='r20.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Probability of being in combat<LineBreak/>
@@ -28,12 +30,12 @@ r20.2	"<Bold>r20.2 Advance Scenario</Bold>
 <LineBreak/><LineBreak/>
 An Advance scenario represents the fluid situations that developed as the Division was driving through enemy territory and meeting only scattered groups of defenders. 
 <LineBreak/><LineBreak/>
-An Advance scenario follows the Sequence of Play as described in <InlineUIContainer><Button Content='r4.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+An Advance scenario follows the Sequence of Play <InlineUIContainer><Button Content='r4.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r20.3	"<Bold>r20.3 Battle Scenario</Bold>
 <LineBreak/><LineBreak/>
 A Battle scenario represents an assault by the Division against prepared and well-defended positions. Resistance will be higher than for advance scenarios. Only limited amounts of territory will be gained. 
 <LineBreak/><LineBreak/>
-Battle scenario follows the Sequence of Play as described in <InlineUIContainer><Button Content='r4.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+Battle scenario follows the Sequence of Play <InlineUIContainer><Button Content='r4.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r20.4	"<Bold>r20.4 CounterAttack Scenario</Bold>
 <LineBreak/><LineBreak/>
 A Counterattack scenario represents the Division on defense against an enemy counterattack. 
@@ -44,19 +46,19 @@ Because the enemy is coming at you, the Sequence of Play <InlineUIContainer><But
 3.) <InlineUIContainer><Button Content='r4.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> --> <InlineUIContainer><Button Content='r20.43' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for Battle"
 r20.41	"<Bold>r20.41 CounterAttack - Preparations</Bold>
 <LineBreak/><LineBreak/>
-For step <InlineUIContainer><Button Content='r4.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, you deploy automatically to Stopped/Hull Down state. Place a Hull Down marker on your tank. Steps <InlineUIContainer><Button Content='r4.42' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> through <InlineUIContainer><Button Content='r4.47' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> remain unchanged."
+For step <InlineUIContainer><Button Content='r4.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, you deploy automatically to Hull Down state. Place a Hull Down marker on your tank. Steps <InlineUIContainer><Button Content='r4.42' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> through <InlineUIContainer><Button Content='r4.47' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> remain unchanged."
 r20.42	"<Bold>r20.42 CounterAttack - Movement</Bold>
 <LineBreak/><LineBreak/>
 Delete step <InlineUIContainer><Button Content='r4.53' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> and all operations of step <InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> except for Ammo Resupply. 
 <LineBreak/><LineBreak/>
-Instead each 15 minutes, roll 1D on the Resistance Table to determine if a battle occurs. If not, mark off 15 minutes and roll again. 
+Instead each 15 minutes, roll 1D on the Resistance Table <InlineUIContainer><Button Content='t002' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> to determine if a battle occurs. If not, mark off 15 minutes and roll again. 
 <LineBreak/><LineBreak/>
 When daylight runs out, the day is over. Go to the Evening DeBriefing. If a battle does occur, mark off 15 minutes and go to Battle <InlineUIContainer><Button Content='r4.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r20.43	"<Bold>r20.43 CounterAttack - Battle</Bold>
 <LineBreak/><LineBreak/>
-Delete stesp <InlineUIContainer><Button Content='r4.61' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> and <InlineUIContainer><Button Content='r4.64' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. If no Ambush occurs, go to the Battle Round Sequence <InlineUIContainer><Button Content='r4.7' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. If an Ambush does occur, do not conduct Enemy Actions, but instead perform the following steps:
+Delete steps <InlineUIContainer><Button Content='r4.61' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> and <InlineUIContainer><Button Content='r4.64' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. If no Ambush occurs, go to the Battle Round Sequence <InlineUIContainer><Button Content='r4.7' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. If an Ambush does occur, do not conduct Enemy Actions, but instead perform the following steps:
 <LineBreak/><LineBreak/>
--- For your tank, go to battle Round Sequence and follow stesp <InlineUIContainer><Button Content='r4.72' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> through <InlineUIContainer><Button Content='r4.74' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
+-- For your tank, go to Battle Sequence <InlineUIContainer><Button Content='r4.72' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> -> <InlineUIContainer><Button Content='r4.74' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
 -- Perform step <InlineUIContainer><Button Content='r4.76' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>: Friendly Action Phase <LineBreak/>
 -- Perform step <InlineUIContainer><Button Content='r4.77' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>: Random Events Phase<LineBreak/>
 -- Go to step 4.7: Battle Round Sequence
@@ -65,10 +67,16 @@ If you clear the Battle Board, go to <InlineUIContainer><Button Content='r20.44'
 If you retreat from the Battle Board, go to <InlineUIContainer><Button Content='r20.45' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>"
 r20.44	"<Bold>r20.42 CounterAttack - Clear Battle Board</Bold>
 <LineBreak/><LineBreak/>
-If battle (or even your Ambush) clears the board of enemy units, return to Time Check to determine how mnay hours pass before a battle becomes possible again. Mark off the hours that pass, and go to Prepare for Battle <InlineUIContainer><Button Content='r20.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+If battle (or even your Ambush) clears the board of enemy units, return to Time Check to determine how many hours pass before a battle becomes possible again. 
+<LineBreak/><LineBreak/>
+Mark off the hours that pass, and go to Prepare for Battle <InlineUIContainer><Button Content='r20.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r20.45	"<Bold>r20.42 CounterAttack - Retreat from Battle Board</Bold>
 <LineBreak/><LineBreak/>
-If you retreat from the Battle Board, mark off 15 minutes and record the loss of one area. Move your Task Force marker one area on the Movement Board in the direction of the Exit marker by the shortest route. If two or more areas are equally close, you may choose either one. Go back to Prepare for Battle <InlineUIContainer><Button Content='r20.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+If you retreat from the Battle Board, mark off 15 minutes and record the loss of one area. 
+<LineBreak/><LineBreak/>
+Move your Task Force marker one area on the Movement Board in the direction of the Exit marker by the shortest route. If two or more areas are equally close, you may choose either one.
+<LineBreak/><LineBreak/>
+Go back to Prepare for Battle <InlineUIContainer><Button Content='r20.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 	
 	
 	

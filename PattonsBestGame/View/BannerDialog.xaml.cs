@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -59,7 +60,7 @@ namespace Pattons_Best
          }
       }
       //-------------------------------------------------------------------------
-      private void BannerLoaded(object sender, EventArgs e)
+      private void BannerLoaded(object sender, System.EventArgs e)
       {
          myScrollViewerBanner.Height = myDockPanel.ActualHeight - myButtonClose.Height - 50;
          myTextBlockDisplay.Height = myTextBlockDisplay.ActualHeight;
@@ -95,15 +96,9 @@ namespace Pattons_Best
       {
          myIsDragging = false;
       }
-      private void myCheckBoxFont_Unchecked(object sender, RoutedEventArgs e)
+      private void myCheckBoxFont_Clicked(object sender, RoutedEventArgs e)
       {
-         theIsCheckBoxChecked = false;
-         myIsReopen = true;
-         Close();
-      }
-      private void myCheckBoxFont_Click(object sender, RoutedEventArgs e)
-      {
-         theIsCheckBoxChecked = true;
+         theIsCheckBoxChecked = !theIsCheckBoxChecked;
          myIsReopen = true;
          Close();
       }
