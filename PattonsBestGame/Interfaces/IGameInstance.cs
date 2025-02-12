@@ -31,7 +31,7 @@ namespace Pattons_Best
       ITerritory? NewTerritory { set; get; }
       List<EnteredHex> EnteredHexes { get; }
       //---------------------------------------------------------------
-      public int Day { get; set; }
+      int Day { get; set; }
       //----------------------------------------------
       List<IUnitTest> UnitTests { get; }
    }

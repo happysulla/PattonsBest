@@ -43,7 +43,7 @@ namespace Pattons_Best
       //------------------------------------------------
       public GameInstance() // Constructor - set log levels
       {
-         if( false == Logger.SetInitial()) // tsetup logger
+         if ( false == Logger.SetInitial()) // tsetup logger
          {
             Logger.Log(LogEnum.LE_ERROR, "GameInstance(): SetInitial() returned false");
             CtorError = true;
@@ -61,6 +61,13 @@ namespace Pattons_Best
             }
             if (false == gameLoadMgr.ReadXmlTerritories(reader, Territories.theTerritories))
                Logger.Log(LogEnum.LE_ERROR, "GameInstance(): ReadTerritoriesXml() returned false");
+            //------------------------------------------------------------------------------------
+            if (false == SurnameMgr.SetInitial())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GameEngine(): SurnameMgr.InitNames() returned false");
+               CtorError = true;
+               return;
+            }
          }
          catch (Exception e)
          {

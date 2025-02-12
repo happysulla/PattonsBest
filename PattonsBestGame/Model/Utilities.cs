@@ -12,10 +12,24 @@ namespace Pattons_Best
 {
    public class Utilities
    {
-      private const int NUM_RANDOM_GEN = 13;
+      private static int NUM_NICK_NAMES = 126;
+      public static String[] theNickNames = new string[126]
+      { "MOTHER", "LITTLE WHILLIE", "TIN TURTLE", "WHIPPET", "DREADNAUGHT", "FLOATING COFFIN", "BAD BOY", "THE INVINCIBLE", "RONSON", "TOMMY COOKER",
+         "GIANT", "CASE CLOSED", "AND JUSTICE FOR ALL", "BIG DOG", "CRASHING THRU EM", "BLACK LABEL", "CORONA", "CHARIOT OF HELL", "CAUSE WE CAN", "CARNAGE", "ALWAYS CRAZY",
+         "BETTER RUN AND HIDE", "ACHTONG BABY", "CABALLO LOCO", "ANCIENT ONE", "CLOUD NINE", "BOHICA", "CHRONIC PAIN", "COMPLIMENTS OF USA", "BLIZHITCH", "ASHES TO ASHES", "BRAGGING RIGHTS",
+         "BERLIN OR BUST", "BLACK SPOT", "HANNIBAL", "CYCLOPS", "BAD MAMA JAMA", "CROWN ROYAL", "COWBOYS FROM HELL", "BLOOD SHED", "SECOND TO NONE", "CROOKLYN", "BLACK DEATH",
+         "A TIME TO KILL", "HOSTILE", "AMERICAN MADE", "CRIMINAL INTENT", "BRING IT ON", "BLOOD LUST", "CRAZY TRAIN", "ACE", "ALL TEXAN", "COLD STEEL", "BATTLEWAGON",
+         "BUT MISTER, WHY", "A CAN OF WOOPASS", "BLOOD IN BLOOD OUT", "ABSOLUTE 120 PROOF", "COPPERHEAD ROAD", "BLACK WIDOW", "BOSS HOG", "CAN'T KEEP EM", "CRUEL INTENTIONS", "COLD BEER", "CANCER STICK",
+         "AIN'T SKEERED", "BOUNTY HUNTER", "CALIFORNIA DREAMIN", "CHOPA CABANA", "COLOSUS", "ALL C N EYE", "BUFFALO SOLDIERS", "THE BEAST", "AFTERMATH", "APOCALYPSE", "COMBAT TESTED",
+         "CRAZY HORSE", "COJO", "A TANK", "BRAVEHEART", "CLASS 6", "HUCKLEBERRY", "CHARLIE MIKE", "BLACK KNIGHT YOU AIN'T", "COMANCHE", "WIDOW MAKER", "AMERICAN BADASS",
+         "AMERIICAN HELLRAISERS", "WE BAD", "CAMEL TOE", "COMING HOME SOON", "ABSOLUTE KRIEG", "CHAOTIC", "ASSASSIN", "BALL BUSTERS INC", "AKA GLAIATOR", "BEANER ON BOARD", "CONO",
+         "IRON KNIGHTS", "THE END", "BULLDOG", "CAN'T GET RIGHT", "CHOCOLATE CITY", "RENEGADE", "ANOTHER EPISODE", "CONCUSSION", "AGGRAVATED ASSAULT", "ABONDON ALL HOPE", "AMERICAN BAD ASS",
+         "DADDY'S BELT", "DIPLOMACY FAILED", "GROUND ZERO", "HOLD MY BEER", "ARMAGEDDON", "ATOMIC BLONDE", "BEATS WALKING", "BARBIE DREAMHOUSE", "BYE FELICIA", "CANDY MAN", "CAPITAL PUNISHMENT",
+         "CRUEL INTENTIONS", "DIRTY DEEDS", "MULLIGAN", "STAR LORD", "DROPPED AS A BABY", "CRIPPLING DEPRESSION"};
       public const int NO_RESULT = -100;
       public const int STACK = 1;
       public const double ZOOM = 1.25;
+      private const int NUM_RANDOM_GEN = 13;
       //--------------------------------------------
       public static SolidColorBrush theBrushBlood = new SolidColorBrush();
       public static SolidColorBrush theBrushRegion = new SolidColorBrush();
@@ -45,6 +59,11 @@ namespace Pattons_Best
                Thread.Sleep(theRandoms[theRandomIndex].Next(3));
             return theRandoms[theRandomIndex]; 
          }
+      }
+      static public string GetNickName()
+      {
+         int random = RandomGenerator.Next(NUM_NICK_NAMES);
+         return theNickNames[random];
       }
       //--------------------------------------------
       // Utilities Functions

@@ -70,6 +70,9 @@
     <None Update="Config\Rules.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Config\Surnames.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Config\Tables.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

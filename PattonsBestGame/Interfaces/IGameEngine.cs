@@ -6,7 +6,6 @@ using System.Windows.Controls;
 
 namespace Pattons_Best
 {
-
    public enum EnumScenario
    {
       Advance,
@@ -20,6 +19,77 @@ namespace Pattons_Best
       Medium,
       Heavy,
       None
+   };
+   public enum EnumModel
+   {
+      M4_A,
+      M4_B,
+      M4_C,
+      M4A1_A,
+      M4A1_B,
+      M4A1_C,
+      M4A3_A,
+      M4A3_B,
+      M4A3_C,
+      M4A3_75W_D,
+      M4A3_75W_E,
+      M4A3E2_75W_F,
+      M4A3E2_76W_F,
+      M4A1_76W_G,
+      M4A1_76W_H,
+      M4A3_76W_H,
+      M4A3_76W_G
+   };
+   public enum EnumWeather
+   {
+      Clear,
+      Overcast,
+      Fog,
+      Mud,
+      Mud_Overcast,
+      Snow
+   };
+   public enum EnumCrewRole
+   {
+      Commander,
+      Gunner,
+      Loader,
+      Driver,
+      Assistant
+   };
+   public enum EnumCrewRank
+   {
+      Private,
+      Corporeal,
+      Segeant,
+      Second_Lt,
+      First_Lt,
+      Captain
+   };
+   [Serializable]
+   public struct CrewMember
+   {
+      public EnumCrewRole myRole;
+      public EnumCrewRank myRank;
+      public string myName;
+      public int myRating;
+      public CrewMember(EnumCrewRole role, EnumCrewRank rank, string name, int rating)
+      {
+         myRole = role;
+         myRank = rank;
+         myName = name;
+         myRating = rating;
+      }
+   };
+   public enum EnumDecoration
+   {
+      BronzeStar,
+      SilverStar,
+      DistinguisedServiceCross,
+      MedalOfHonor,
+      PurpleHeart,
+      EuropeanCampain,
+      WW2Victory
    };
    [Serializable]
    public struct CombatCalenderEntry
@@ -43,7 +113,11 @@ namespace Pattons_Best
    {
       UnitTest,
       GameSetup,
-      StartGame,
+      MorningBriefing,
+      Preparations,
+      Movement,
+      Battle,
+      EveningDebriefing,
       EndGame,
       Error
    };
