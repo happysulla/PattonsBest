@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="900
              " d:DesignWidth="800">
-   <Grid Name="myGrid" MinWidth="600" Background="#FFF7FAF6" >
+   <Grid Name="myGrid" MinWidth="600" MaxWidth="800" MinHeight="880" MaxHeight="880" Background="#FFF7FAF6"  >
       <Grid.ColumnDefinitions>
          <ColumnDefinition Width="1*"/>
          <ColumnDefinition Width="1*"/>
@@ -20,16 +20,42 @@
          <RowDefinition Height="Auto"></RowDefinition>
          <RowDefinition Height="Auto"></RowDefinition>
       </Grid.RowDefinitions>
-      <Label Name="myLabelHeading" Grid.Row="0" Grid.ColumnSpan="2" FontSize="24" HorizontalAlignment="Center" FontFamily="Arial Rounded MT Bold">After Action Report</Label>
-      <StackPanel  Name="myStackPanelInfo" Grid.Row="1" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left">
-         <Label>DATE:</Label>
-         <Label>TANK NAME:</Label>
-         <Label>TANK MODEL:</Label>
-         <Label>SITUATION:</Label>
-         <Label>WEATHER:</Label>
+      <Label Name="myLabelHeading" Grid.Row="0" Grid.ColumnSpan="2" FontSize="32" HorizontalAlignment="Center" FontFamily="Arial Rounded MT Bold">After Action Report</Label>
+      <StackPanel  Name="myStackPanelInfo" Grid.Row="1" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left" Margin="0,0,0,0" >
+         <Grid Margin="20,0,20,0">
+            <Grid.ColumnDefinitions>
+               <ColumnDefinition Width="150"/>
+               <ColumnDefinition Width="250"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+               <RowDefinition Height="Auto"></RowDefinition>
+               <RowDefinition Height="Auto"></RowDefinition>
+               <RowDefinition Height="Auto"></RowDefinition>
+               <RowDefinition Height="Auto"></RowDefinition>
+               <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" FontFamily="Arial Rounded MT Bold" FontSize="14">DATE:</Label>
+            <Label Grid.Row="0" Grid.Column="1" FontFamily="Arial Rounded MT Bold" FontSize="14">
+               <Span TextDecorations="Underline">____07/27/44_____________________________________________</Span>
+            </Label>
+            <Label Grid.Row="1" Grid.Column="0" FontFamily="Arial Rounded MT Bold" FontSize="14">TANK NAME:</Label>
+            <Label Grid.Row="1" Grid.Column="1" FontFamily="Arial Rounded MT Bold" FontSize="14">_________________________________________________________</Label>
+            <Label Grid.Row="2" Grid.Column="0" FontFamily="Arial Rounded MT Bold" FontSize="14">TANK MODEL:</Label>
+            <Label Grid.Row="2" Grid.Column="1" FontFamily="Arial Rounded MT Bold" FontSize="14">
+               <Span TextDecorations="Underline">____M4_____________________________________________</Span>
+            </Label>
+            <Label Grid.Row="3" Grid.Column="0" FontFamily="Arial Rounded MT Bold" FontSize="14">SITUATION:</Label>
+            <Label Grid.Row="3" Grid.Column="1" FontFamily="Arial Rounded MT Bold" FontSize="14">
+               <Span TextDecorations="Underline">____Advance_____________________________________________</Span>
+            </Label>
+            <Label Grid.Row="4" Grid.Column="0" FontFamily="Arial Rounded MT Bold" FontSize="14">WEATHER:</Label>
+            <Label Grid.Row="4" Grid.Column="1" FontFamily="Arial Rounded MT Bold" FontSize="14">
+               <Span TextDecorations="Underline">____Clear_____________________________________________</Span></Label>
+         </Grid>
       </StackPanel>
-      <StackPanel  Name="myStackPanelCrew" Grid.Row="1" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Right">
-         <FlowDocumentReader Name="myFlowDocumentReader" VerticalAlignment="Top" HorizontalAlignment="Right">
+      <!--  ++++++++++++++++++++++++++++++++++++Crew Table++++++++++++++++++++++++++++++++++++ -->
+      <StackPanel  Name="myStackPanelCrew" Grid.Row="1" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Right"  >
+         <FlowDocumentScrollViewer x:Name="myFlowDocumentReaderCrew"  VerticalScrollBarVisibility="Disabled">
             <FlowDocument>
                <Table BorderBrush='Black' BorderThickness='1'>
                   <Table.Columns>
@@ -39,116 +65,761 @@
                      <TableColumn Width='60'/>
                   </Table.Columns>
                   <TableRowGroup>
+                     <TableRow  FontSize='14' >
+                        <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                           <Paragraph>
+                              <Run Text="Crew"/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                           <Paragraph>
+                              <Run Text="Rank"/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                           <Paragraph>
+                              <Run Text="Name"/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                           <Paragraph>
+                              <Run Text="Rating"/>
+                           </Paragraph>
+                        </TableCell>
+                     </TableRow>
+                  </TableRowGroup>
+                  <TableRowGroup>
+                     <TableRow  FontSize='14'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>
+                              <Run Text="Commander:"/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>
+                              <Run Text="Cpl."/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Left'>
+                           <Paragraph>
+                              <Run Text="Stewart"/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>
+                              <Run Text="4"/>
+                           </Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='14'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>
+                              <Run Text="Gunner:"/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>
+                              <Run Text="Cpl."/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Left'>
+                           <Paragraph>
+                              <Run Text="Murry"/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>
+                              <Run Text="3"/>
+                           </Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='14'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>
+                              <Run Text="Loader:"/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>
+                              <Run Text="Pvt."/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Left'>
+                           <Paragraph>
+                              <Run Text="Bugler"/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>
+                              <Run Text="1"/>
+                           </Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='14'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>
+                              <Run Text="Driver:"/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>
+                              <Run Text="Pvt."/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Left'>
+                           <Paragraph>
+                              <Run Text="Cooper"/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>
+                              <Run Text="1"/>
+                           </Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='14'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>
+                              <Run Text="Asst. Driver:"/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>
+                              <Run Text="Pvt."/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Left'>
+                           <Paragraph>
+                              <Run Text="Hutchinson"/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>
+                              <Run Text="1"/>
+                           </Paragraph>
+                        </TableCell>
+                     </TableRow>
+                  </TableRowGroup>
+               </Table>
+            </FlowDocument>
+         </FlowDocumentScrollViewer>
+      </StackPanel>
+      <!--  ++++++++++++++++++++++++++++++++++++Time Tracker++++++++++++++++++++++++++++++++++++ -->
+      <Border BorderBrush="Black" BorderThickness="1"  Grid.Row="2" Grid.ColumnSpan="2" Margin="10,0,10,0">
+         <Grid Name="myGridTime" >
+            <Grid.ColumnDefinitions>
+               <ColumnDefinition Width="1*"/>
+               <ColumnDefinition Width="2*"/>
+               <ColumnDefinition Width="1*"/>
+               <ColumnDefinition Width="2*"/>
+               <ColumnDefinition Width="1*"/>
+               <ColumnDefinition Width="2*"/>
+               <ColumnDefinition Width="1*"/>
+               <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+               <RowDefinition Height="2*"></RowDefinition>
+               <RowDefinition Height="*"></RowDefinition>
+               <RowDefinition Height="*"></RowDefinition>
+               <RowDefinition Height="*"></RowDefinition>
+               <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Label Name="myLabelTime" Grid.Row="0" Grid.ColumnSpan="8" FontSize="12" HorizontalAlignment="Center" FontFamily="Arial Rounded MT Bold">TIME</Label>
+            <Label Name="myLabelTime0500" Grid.Row="1" Grid.Column="0" FontSize="12" HorizontalAlignment="Center" FontFamily="Arial Rounded MT Bold">0500</Label>
+            <Label Name="myLabelTime0600" Grid.Row="2" Grid.Column="0" FontSize="12" HorizontalAlignment="Center" FontFamily="Arial Rounded MT Bold">0600</Label>
+            <Label Name="myLabelTime0700" Grid.Row="3" Grid.Column="0" FontSize="12" HorizontalAlignment="Center" FontFamily="Arial Rounded MT Bold">0700</Label>
+            <Label Name="myLabelTime0800" Grid.Row="4" Grid.Column="0" FontSize="12" HorizontalAlignment="Center" FontFamily="Arial Rounded MT Bold">0800</Label>
+            <Label Name="myLabelTime0900" Grid.Row="1" Grid.Column="2" FontSize="12" HorizontalAlignment="Center" FontFamily="Arial Rounded MT Bold">0900</Label>
+            <Label Name="myLabelTime1000" Grid.Row="2" Grid.Column="2" FontSize="12" HorizontalAlignment="Center" FontFamily="Arial Rounded MT Bold">1000</Label>
+            <Label Name="myLabelTime1100" Grid.Row="3" Grid.Column="2" FontSize="12" HorizontalAlignment="Center" FontFamily="Arial Rounded MT Bold">1100</Label>
+            <Label Name="myLabelTime1200" Grid.Row="4" Grid.Column="2" FontSize="12" HorizontalAlignment="Center" FontFamily="Arial Rounded MT Bold">1200</Label>
+            <Label Name="myLabelTime1300" Grid.Row="1" Grid.Column="4" FontSize="12" HorizontalAlignment="Center" FontFamily="Arial Rounded MT Bold">1300</Label>
+            <Label Name="myLabelTime1400" Grid.Row="2" Grid.Column="4" FontSize="12" HorizontalAlignment="Center" FontFamily="Arial Rounded MT Bold">1400</Label>
+            <Label Name="myLabelTime1500" Grid.Row="3" Grid.Column="4" FontSize="12" HorizontalAlignment="Center" FontFamily="Arial Rounded MT Bold">1500</Label>
+            <Label Name="myLabelTime1600" Grid.Row="4" Grid.Column="4" FontSize="12" HorizontalAlignment="Center" FontFamily="Arial Rounded MT Bold">1600</Label>
+            <Label Name="myLabelTime1700" Grid.Row="1" Grid.Column="6" FontSize="12" HorizontalAlignment="Center" FontFamily="Arial Rounded MT Bold">1700</Label>
+            <Label Name="myLabelTime1800" Grid.Row="2" Grid.Column="6" FontSize="12" HorizontalAlignment="Center" FontFamily="Arial Rounded MT Bold">1800</Label>
+            <Label Name="myLabelTime1900" Grid.Row="3" Grid.Column="6" FontSize="12" HorizontalAlignment="Center" FontFamily="Arial Rounded MT Bold">1900</Label>
+            <StackPanel Name="myStackPanel0500" Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+            </StackPanel>
+            <StackPanel Name="myStackPanel0600" Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+            </StackPanel>
+            <StackPanel Name="myStackPanel0700" Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+            </StackPanel>
+            <StackPanel Name="myStackPanel0800" Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+            </StackPanel>
+            <StackPanel Name="myStackPanel0900" Grid.Row="1" Grid.Column="3" Orientation="Horizontal">
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+            </StackPanel>
+            <StackPanel Name="myStackPanel1000" Grid.Row="2" Grid.Column="3" Orientation="Horizontal">
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+            </StackPanel>
+            <StackPanel Name="myStackPanel1100" Grid.Row="3" Grid.Column="3" Orientation="Horizontal">
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+            </StackPanel>
+            <StackPanel Name="myStackPanel1200" Grid.Row="4" Grid.Column="3" Orientation="Horizontal">
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+            </StackPanel>
+            <StackPanel Name="myStackPanel1300" Grid.Row="1" Grid.Column="5" Orientation="Horizontal">
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+            </StackPanel>
+            <StackPanel Name="myStackPanel1400" Grid.Row="2" Grid.Column="5" Orientation="Horizontal">
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+            </StackPanel>
+            <StackPanel Name="myStackPanel1500" Grid.Row="3" Grid.Column="5" Orientation="Horizontal">
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+            </StackPanel>
+            <StackPanel Name="myStackPanel1600" Grid.Row="4" Grid.Column="5" Orientation="Horizontal">
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+            </StackPanel>
+            <StackPanel Name="myStackPanel1700" Grid.Row="1" Grid.Column="7" Orientation="Horizontal">
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+            </StackPanel>
+            <StackPanel Name="myStackPanel1800" Grid.Row="2" Grid.Column="7" Orientation="Horizontal">
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+            </StackPanel>
+            <StackPanel Name="myStackPanel1900" Grid.Row="3" Grid.Column="7" Orientation="Horizontal">
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" />
+               <Rectangle  Height="15" Width="15" Stroke="Black" Fill="Black"/>
+               <Rectangle  Height="15" Width="15" Stroke="Black" Fill="Black"/>
+               <Rectangle  Height="15" Width="15" Stroke="Black" Fill="Black"/>
+            </StackPanel>
+         </Grid>
+      </Border>
+      <!--  ++++++++++++++++++++++++++++++++++++AMMO++++++++++++++++++++++++++++++++++++ -->
+      <StackPanel  Name="myStackPanelAmmo" Grid.Row="3" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left" Margin="0,0,0,0">
+         <FlowDocumentScrollViewer x:Name="myFlowDocumentReaderAmmo" IsEnabled="False"  VerticalAlignment="Top" HorizontalAlignment="Left" IsSelectionEnabled="False" VerticalScrollBarVisibility="Disabled" >
+            <FlowDocument>
+               <Table BorderBrush='Black' BorderThickness='1' CellSpacing="3">
+                  <Table.Columns>
+                     <TableColumn Width='150'/>
+                     <TableColumn Width='200'/>
+                  </Table.Columns>
+                  <TableRowGroup>
                      <TableRow  FontSize='12' >
-                        <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-                           <Paragraph>Crew</Paragraph>
-                        </TableCell>
-                        <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-                           <Paragraph>Rank</Paragraph>
-                        </TableCell>
-                        <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-                           <Paragraph>Name</Paragraph>
-                        </TableCell>
-                        <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-                           <Paragraph>Rating</Paragraph>
+                        <TableCell ColumnSpan='2' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                           <Paragraph>
+                              <Run Text="AMMO"/>
+                           </Paragraph>
                         </TableCell>
                      </TableRow>
                   </TableRowGroup>
                   <TableRowGroup>
                      <TableRow  FontSize='12'>
                         <TableCell TextAlignment='Right'>
-                           <Paragraph>Commander:</Paragraph>
-                        </TableCell>
-                        <TableCell TextAlignment='Center'>
-                           <Paragraph>Cpl.</Paragraph>
+                           <Paragraph>
+                              <Run Text="30. Calibre MG (30):"/>
+                           </Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Left'>
-                           <Paragraph>Stewart</Paragraph>
-                        </TableCell>
-                        <TableCell TextAlignment='Center'>
-                           <Paragraph>4</Paragraph>
+                           <Paragraph TextAlignment="Center">
+                              <Run Text="0"/>
+                           </Paragraph>
                         </TableCell>
                      </TableRow>
                      <TableRow  FontSize='12'>
                         <TableCell TextAlignment='Right'>
-                           <Paragraph>Gunner:</Paragraph>
-                        </TableCell>
-                        <TableCell TextAlignment='Center'>
-                           <Paragraph>Cpl.</Paragraph>
+                           <Paragraph>
+                              <Run Text="50. Calibre MG (6):"/>
+                           </Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Left'>
-                           <Paragraph>Murry</Paragraph>
-                        </TableCell>
-                        <TableCell TextAlignment='Center'>
-                           <Paragraph>3</Paragraph>
+                           <Paragraph TextAlignment="Center">
+                              <Run Text="0"/>
+                           </Paragraph>
                         </TableCell>
                      </TableRow>
                      <TableRow  FontSize='12'>
                         <TableCell TextAlignment='Right'>
-                           <Paragraph>Loader:</Paragraph>
-                        </TableCell>
-                        <TableCell TextAlignment='Center'>
-                           <Paragraph>Pvt.</Paragraph>
+                           <Paragraph>
+                              <Run Text="Smoke Bombs (14):"/>
+                           </Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Left'>
-                           <Paragraph>Bugler</Paragraph>
-                        </TableCell>
-                        <TableCell TextAlignment='Center'>
-                           <Paragraph>1</Paragraph>
+                           <Paragraph TextAlignment="Center">
+                              <Run Text="0"/>
+                           </Paragraph>
                         </TableCell>
                      </TableRow>
                      <TableRow  FontSize='12'>
                         <TableCell TextAlignment='Right'>
-                           <Paragraph>Driver:</Paragraph>
-                        </TableCell>
-                        <TableCell TextAlignment='Center'>
-                           <Paragraph>Pvt.</Paragraph>
+                           <Paragraph>
+                              <Run Text="Smoke Grenades (6):"/>
+                           </Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Left'>
-                           <Paragraph>Cooper</Paragraph>
-                        </TableCell>
-                        <TableCell TextAlignment='Center'>
-                           <Paragraph>1</Paragraph>
+                           <Paragraph TextAlignment="Center">
+                              <Run Text="0"/>
+                           </Paragraph>
                         </TableCell>
                      </TableRow>
                      <TableRow  FontSize='12'>
                         <TableCell TextAlignment='Right'>
-                           <Paragraph>Asst. Driver:</Paragraph>
-                        </TableCell>
-                        <TableCell TextAlignment='Center'>
-                           <Paragraph>Pvt.</Paragraph>
+                           <Paragraph>
+                              <Run Text="Periscopes (6):"/>
+                           </Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Left'>
-                           <Paragraph>Hutchinson</Paragraph>
+                           <Paragraph TextAlignment="Center">
+                              <Run Text="0"/>
+                           </Paragraph>
                         </TableCell>
-                        <TableCell TextAlignment='Center'>
-                           <Paragraph>1</Paragraph>
+                     </TableRow>
+                  </TableRowGroup>
+                  <TableRowGroup>
+                     <TableRow  FontSize='12' >
+                        <TableCell ColumnSpan='2' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                           <Paragraph>
+                              <Run Text="MAIN GUN"/>
+                           </Paragraph>
+                        </TableCell>
+                     </TableRow>
+                  </TableRowGroup>
+                  <TableRowGroup>
+                     <TableRow  FontSize='12'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>
+                              <Run Text="HE:"/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Left'>
+                           <Paragraph TextAlignment="Center">
+                              <Run Text="0"/>
+                           </Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='12'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>
+                              <Run Text="AP:"/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Left'>
+                           <Paragraph TextAlignment="Center">
+                              <Run Text="0"/>
+                           </Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='12'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>
+                              <Run Text="WP:"/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Left'>
+                           <Paragraph TextAlignment="Center">
+                              <Run Text="0"/>
+                           </Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='12'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>
+                              <Run Text="HCBI:"/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Left'>
+                           <Paragraph TextAlignment="Center">
+                              <Run Text="0"/>
+                           </Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='12'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>
+                              <Run Text="HVAP:"/>
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Left'>
+                           <Paragraph TextAlignment="Center">
+                              <Run Text="0"/>
+                           </Paragraph>
                         </TableCell>
                      </TableRow>
                   </TableRowGroup>
                </Table>
             </FlowDocument>
-         </FlowDocumentReader>
+         </FlowDocumentScrollViewer>
       </StackPanel>
-      <Grid Name="myGridTime" Grid.Row="2" Grid.ColumnSpan="2" Background="#FF67D841" >
-         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="2*"/>
-         </Grid.ColumnDefinitions>
-         <Grid.RowDefinitions>
-            <RowDefinition Height="2*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-         </Grid.RowDefinitions>
-         <Label Name="myLabelTime" Grid.Row="0" Grid.ColumnSpan="8" FontSize="24" HorizontalAlignment="Center" FontFamily="Arial Rounded MT Bold">TIME</Label>
-      </Grid>
+      <!--  ++++++++++++++++++++++++++++++++++++NOTES:++++++++++++++++++++++++++++++++++++ -->
+      <StackPanel  Name="myStackPanelNotes" Grid.Row="3" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left" Margin="0,10,0,0">
+         <ScrollViewer Name="myScrollViewerTextBlock" MaxWidth="600" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0">
+            <TextBlock Name="myTextBlockDisplay" MinWidth="380" MaxWidth="380" MinHeight="220" MaxHeight="220" FontFamily="Arial Rounded MT Bold" FontSize="12" TextWrapping="WrapWithOverflow" IsHyphenationEnabled="true" LineStackingStrategy="BlockLineHeight"  Margin="5,5,5,5" Background="#FFB9EA9E">
+               NOTES:
+            </TextBlock>
+         </ScrollViewer>
+      </StackPanel>
+      <!--  ++++++++++++++++++++++++++++++++++++VICTORY POINTS++++++++++++++++++++++++++++++++++++ -->
+      <StackPanel  Name="myStackPanelVictoryPoints" Grid.Row="4" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left" >
+         <FlowDocumentScrollViewer x:Name="myFlowDocumentReaderVictoryPoints"  VerticalAlignment="Top" HorizontalAlignment="Left" IsSelectionEnabled="False" VerticalScrollBarVisibility="Disabled" >
+            <FlowDocument>
+               <Table BorderBrush='Black' BorderThickness='1'>
+                  <Table.Columns>
+                     <TableColumn Width='150'/>
+                     <TableColumn Width='200'/>
+                  </Table.Columns>
+                  <TableRowGroup>
+                     <TableRow  FontSize='12' >
+                        <TableCell ColumnSpan='2' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                           <Paragraph>
+                              <Run Text="VICTORY POINTS"/>
+                           </Paragraph>
+                        </TableCell>
+                     </TableRow>
+                  </TableRowGroup>
+                  <TableRowGroup>
+                     <TableRow  FontSize='12'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>KO Light Truck, MG (1):</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>0</Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='12'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>KO Truck (1):</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>0</Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='12'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>KO SPW, PSW (2):</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>0</Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='12'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>KO SP Gun (6):</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>0</Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='12'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>KO PzIV (7):</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>0</Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='12'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>KO PzV (9):</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>0</Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='12'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>KO PzVI (12):</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>0</Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='12'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>KO AT Gun (4)</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>0</Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='12'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>KO Fortifed Position (+2):</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>0</Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='12'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>Each Captured Area (1):</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>0</Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='12'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>Capture Exit Area (10):</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>0</Paragraph>
+                        </TableCell>
+                     </TableRow>
+                  </TableRowGroup>
+                  <TableRowGroup>
+                     <TableRow  FontSize='12' >
+                        <TableCell ColumnSpan='2' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                           <Paragraph>
+                              <Run Text="FRIENDLY FORCE LOSSES"/>
+                           </Paragraph>
+                        </TableCell>
+                     </TableRow>
+                  </TableRowGroup>
+                  <TableRowGroup>
+                     <TableRow  FontSize='12'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>
+                              Tanks (-5/Tank):
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Left'>
+                           <Paragraph TextAlignment="Center">
+                              0
+                           </Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='12'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>
+                              Infantry (-3/Squad):
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Left'>
+                           <Paragraph TextAlignment="Center">
+                              0
+                           </Paragraph>
+                        </TableCell>
+                     </TableRow>
+                  </TableRowGroup>
+               </Table>
+            </FlowDocument>
+         </FlowDocumentScrollViewer>
+      </StackPanel>
+      <!--  ++++++++++++++++++++++++++++++++++++VP Totals++++++++++++++++++++++++++++++++++++ -->
+      <StackPanel  Name="myStackPanelTotals" Grid.Row="4" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left" >
+         <FlowDocumentScrollViewer x:Name="myFlowDocumentReaderTotals"  VerticalAlignment="Top" HorizontalAlignment="Left" IsSelectionEnabled="False" VerticalScrollBarVisibility="Disabled" >
+            <FlowDocument>
+               <Table BorderBrush='Black' BorderThickness='1'>
+                  <Table.Columns>
+                     <TableColumn Width='80'/>
+                     <TableColumn Width='60'/>
+                     <TableColumn Width='60'/>
+                     <TableColumn Width='60'/>
+                     <TableColumn Width='60'/>
+                  </Table.Columns>
+                  <TableRowGroup>
+                     <TableRow  FontSize='12' >
+                        <TableCell ColumnSpan='5' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                           <Paragraph>
+                              Victory Point Multipliers
+                           </Paragraph>
+                        </TableCell>
+                     </TableRow>
+                  </TableRowGroup>
+                  <TableRowGroup >
+                     <TableRow  FontSize='14' >
+                        <TableCell RowSpan="2" ColumnSpan="2" TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                           <Paragraph>
+                              <LineBreak/> ACTION
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="3" TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                           <Paragraph>Scenario
+                           </Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='14' >
+                        <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                           <Paragraph>
+                              A
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                           <Paragraph>
+                              B
+                           </Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                           <Paragraph>
+                              C
+                           </Paragraph>
+                        </TableCell>
+                     </TableRow>
+                  </TableRowGroup>
+                  <TableRowGroup>
+                     <TableRow  FontSize='14'>
+                        <TableCell ColumnSpan="2" TextAlignment='Right'>
+                           <Paragraph>KO German Unit:</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>x1</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>x1</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>x2</Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='14'>
+                        <TableCell ColumnSpan="2" TextAlignment='Right'>
+                           <Paragraph>Capture Map Area</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>x2</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>x2</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>--</Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='14'>
+                        <TableCell ColumnSpan="2" TextAlignment='Right'>
+                           <Paragraph>Lose Map Area:</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>x1</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>x3</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>x3</Paragraph>
+                        </TableCell>
+                     </TableRow>
+                  </TableRowGroup>
+               </Table>
+               <Table BorderBrush='Black' BorderThickness='1'>
+                  <Table.Columns>
+                     <TableColumn Width='125'/>
+                     <TableColumn Width='200'/>
+                  </Table.Columns>
+                  <TableRowGroup>
+                     <TableRow  FontSize='14' >
+                        <TableCell ColumnSpan='2' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                           <Paragraph>
+                              VP TOTALS
+                           </Paragraph>
+                        </TableCell>
+                     </TableRow>
+                  </TableRowGroup>
+                  <TableRowGroup>
+                     <TableRow  FontSize='14'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>Your Tank:</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>0</Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='14'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>Friendly Forces:</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>0</Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='14'>
+                        <TableCell TextAlignment='Right'>
+                           <Paragraph>Territory:</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>0</Paragraph>
+                        </TableCell>
+                     </TableRow>
+                  </TableRowGroup>
+               </Table>
+            </FlowDocument>
+         </FlowDocumentScrollViewer>
+      </StackPanel>
+      <!--  ++++++++++++++++++++++++++++++++++++DAY ENDED++++++++++++++++++++++++++++++++++++ -->
+      <StackPanel  Name="myStackPanelDayEnded" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left">
+         <Grid>
+            <Grid.ColumnDefinitions>
+               <ColumnDefinition Width="1*"/>
+               <ColumnDefinition Width="1*"/>
+               <ColumnDefinition Width="1*"/>
+               <ColumnDefinition Width="1*"/>
+               <ColumnDefinition Width="1*"/>
+               <ColumnDefinition Width="1*"/>
+               <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+               <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" FontFamily="Arial Rounded MT Bold" FontSize="14">DAY ENDED:</Label>
+            <Label Grid.Row="0" Grid.Column="1" FontFamily="Arial Rounded MT Bold" FontSize="14">Time:</Label>
+            <Label Grid.Row="0" Grid.Column="2" FontFamily="Arial Rounded MT Bold" FontSize="14">____________________________</Label>
+            <Label Grid.Row="0" Grid.Column="3" FontFamily="Arial Rounded MT Bold" FontSize="14">Breakdown:</Label>
+            <Label Grid.Row="0" Grid.Column="4" FontFamily="Arial Rounded MT Bold" FontSize="14">____________________________</Label>
+            <Label Grid.Row="0" Grid.Column="5" FontFamily="Arial Rounded MT Bold" FontSize="14">Knocked Out (KO):</Label>
+            <Label Grid.Row="0" Grid.Column="6" FontFamily="Arial Rounded MT Bold" FontSize="14">____________________________</Label>
+         </Grid>
+      </StackPanel>
    </Grid>
 </UserControl>
