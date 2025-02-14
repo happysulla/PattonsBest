@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pattons_Best.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -20,6 +21,7 @@ namespace Pattons_Best
       //----------------------------------------------
       int GameTurn { set; get; }
       GamePhase GamePhase { set; get; }
+      List<IAfterActionReport> Reports { get; set; }
       GameAction DieRollAction { set; get; } // Used in EventViewerPanel when die roll happens to indicate next event for die roll
       bool IsUndoCommandAvailable { set; get; } // Allow user to back up if selected wrong user action
       String EndGameReason { set; get; }

@@ -5,6 +5,7 @@ using System.Windows;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using Pattons_Best.Model;
 namespace Pattons_Best
 {
    public class GameInstance : IGameInstance
@@ -24,6 +25,7 @@ namespace Pattons_Best
       //------------------------------------------------
       public int GameTurn { get; set; } = 0;
       public GamePhase GamePhase { get; set; } = GamePhase.GameSetup;
+      public List<IAfterActionReport> Reports { get; set; } = new List<IAfterActionReport>();
       public GameAction DieRollAction { get; set; } = GameAction.DieRollActionNone;
       public bool IsUndoCommandAvailable { set; get; } = false;
       public String EndGameReason { set; get; } = "";

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pattons_Best.Model;
+using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
@@ -160,6 +161,8 @@ namespace Pattons_Best
                PrintDiagnosticInfoToLog();
                break;
             case GameAction.SetupFinalize:
+               IAfterActionReport report = new AfterActionReport( GameEngine.theCombatCalenderEntries[0] );
+               gi.Reports.Add(report);
                gi.EventDisplayed = gi.EventActive = "e203"; // next screen to show
                gi.DieRollAction = GameAction.DieRollActionNone;
                break;

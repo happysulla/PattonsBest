@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pattons_Best.Interfaces
+namespace Pattons_Best
 {
-   internal interface IActionItemReport
+   public interface IAfterActionReport
    {
-      int Day { get; set; }
+      string Day { get; set; }
       EnumScenario Situation { get; set; }
       int Probability { get; set; }
       EnumResistance Resistance { get; set; }

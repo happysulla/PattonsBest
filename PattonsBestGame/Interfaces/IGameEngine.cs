@@ -95,14 +95,14 @@ namespace Pattons_Best
    public struct CombatCalenderEntry
    {
       public string myDate;
-      public EnumScenario myType;
+      public EnumScenario mySituation;
       public int myProbability;
       public EnumResistance myResistance;
       public string myNote;
-      public CombatCalenderEntry(string d, EnumScenario t, int p, EnumResistance r, string n="")
+      public CombatCalenderEntry(string d, EnumScenario s, int p, EnumResistance r, string n="")
       {
          myDate = d;
-         myType = t;
+         mySituation = s;
          myProbability = p;
          myResistance = r;
          myNote = n;

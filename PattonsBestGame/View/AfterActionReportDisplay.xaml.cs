@@ -17,9 +17,20 @@ namespace Pattons_Best
 {
    public partial class AfterActionReportDisplay : UserControl
    {
-      public AfterActionReportDisplay()
+      public bool CtorError { get; } = false;
+      public AfterActionReportDisplay(IAfterActionReport report)
       {
          InitializeComponent();
+         if( false == DisplayReport(report))
+         {
+            CtorError = true;
+            Logger.Log(LogEnum.LE_ERROR, "CanvasImageViewer(): c=null");
+            return;
+         }
+      }
+      private bool DisplayReport(IAfterActionReport report)
+      {
+         return true;
       }
    }
 }

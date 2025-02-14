@@ -132,7 +132,7 @@ namespace Pattons_Best
          mySplashScreen.Show();
          InitializeComponent();
          //---------------------------------------------------------------
-         Image imageMap = new Image() { Name = "Map", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapMovement") };
+         Image imageMap = new Image() { Name = "Map", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapHistorical") };
          myCanvasMap.Children.Add(imageMap);
          Canvas.SetLeft(imageMap, 0);
          Canvas.SetTop(imageMap, 0);

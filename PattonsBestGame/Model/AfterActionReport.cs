@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Pattons_Best.Model
 {
-   internal class AfterActionReport
+   public class AfterActionReport : IAfterActionReport
    {
-      public int Day { get; set; } = 0;
+      public string Day { get; set; } = "";
       public EnumScenario Situation { get; set; }
       public int Probability { get; set; } = 0;
       public EnumResistance Resistance { get; set; }
@@ -44,6 +44,13 @@ namespace Pattons_Best.Model
       //----------------------------------------
       public List<EnumDecoration> Decorations { get; set; } = new List<EnumDecoration>();
       //----------------------------------------
-      public List<String> Notes { get; set; } = new List<String>();  
+      public List<String> Notes { get; set; } = new List<String>();
+      //---------------------------------------------------------------------------------
+      public AfterActionReport (CombatCalenderEntry entry)
+      {
+         Day = entry.myDate;
+         Situation = entry.mySituation;
+         Resistance = entry.myResistance;
+      }
    }
 }
