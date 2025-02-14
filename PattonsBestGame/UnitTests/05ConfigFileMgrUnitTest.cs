@@ -118,7 +118,7 @@ namespace Pattons_Best
             if (myEventViewer.myRulesMgr.Rules.Keys.Count <= myKeyIndex)
                myKeyIndex = 0;
          }
-         else if(CommandName == myCommandNames[3])
+         else if(CommandName == myCommandNames[2])
          {
             string key = myEventViewer.myRulesMgr.Tables.Keys.ElementAt(myKeyIndex);
             if (false == myEventViewer.ShowTable(key))

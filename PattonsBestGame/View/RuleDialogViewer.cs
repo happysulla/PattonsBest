@@ -188,8 +188,8 @@ namespace Pattons_Best
             }
             switch (key)
             {
-               case "t001":
-                  dialog.Title = "Combat Calander";
+               case "Calendar":
+                  dialog.Title = "Combat Calendar";
                   dialog.myFlowDocumentScrollViewer.Width = 1300;
                   dialog.myFlowDocumentScrollViewer.Height = 900;
                   break;
@@ -325,8 +325,8 @@ namespace Pattons_Best
       {
          try
          {
-            string filename = ConfigFileReader.theConfigDirectory + "Tables.txt";
-            ConfigFileReader cfr = new ConfigFileReader(filename);
+            string filename = ConfigFileReader.theConfigDirectory + "Tables.txt"; 
+            ConfigFileReader cfr = new ConfigFileReader(filename); // combat calender is added in this method
             if (true == cfr.CtorError)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateTables(): cfr.CtorError=true");
