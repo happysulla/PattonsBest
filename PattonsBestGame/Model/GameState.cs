@@ -160,11 +160,25 @@ namespace Pattons_Best
                AddStartingTestingOptions(gi);
                PrintDiagnosticInfoToLog();
                break;
-            case GameAction.SetupFinalize:
+            case GameAction.SetupShowMapHistorical:
+               gi.EventDisplayed = gi.EventActive = "e001";
+               break;
+            case GameAction.SetupShowMovementBoard:
+               gi.EventDisplayed = gi.EventActive = "e002";
+               break;
+            case GameAction.SetupShowBattleBoard:
+               gi.EventDisplayed = gi.EventActive = "e003";
+               break;
+            case GameAction.SetupShowTankCard:
+               gi.EventDisplayed = gi.EventActive = "e004";
+               break;
+            case GameAction.SetupShowAfterActionReport:
+               gi.EventDisplayed = gi.EventActive = "e005";
                IAfterActionReport report = new AfterActionReport( GameEngine.theCombatCalenderEntries[0] );
                gi.Reports.Add(report);
-               gi.EventDisplayed = gi.EventActive = "e203"; // next screen to show
-               gi.DieRollAction = GameAction.DieRollActionNone;
+               break;
+            case GameAction.SetupShowCombatCalendarCheck:
+               gi.EventDisplayed = gi.EventActive = "e006";
                break;
             case GameAction.EndGameClose:
                gi.GamePhase = GamePhase.EndGame;

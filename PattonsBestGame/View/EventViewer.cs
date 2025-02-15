@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -129,8 +130,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "CreateEvents(): myRulesMgr.Events.Count=0");
                return false;
             }
-            // For each event, create a dictionary entry. Assume no more than three die rolls per event
-            foreach (string key in myRulesMgr.Events.Keys)
+            foreach (string key in myRulesMgr.Events.Keys) // For each event, create a dictionary entry. There can be no more than three die rolls per event
                gi.DieResults[key] = new int[3] { Utilities.NO_RESULT, Utilities.NO_RESULT, Utilities.NO_RESULT };
          }
          catch (Exception e)
@@ -303,7 +303,10 @@ namespace Pattons_Best
                   }
                   else if (ui.Child is Image img)
                   {
-                     string fullImagePath = MapImage.theImageDirectory + Utilities.RemoveSpaces(img.Name) + ".gif";
+                     string imageName = img.Name;
+                     if (true == img.Name.Contains("Continue"))
+                        imageName = "Continue";
+                     string fullImagePath = MapImage.theImageDirectory + Utilities.RemoveSpaces(imageName) + ".gif";
                      System.Windows.Media.Imaging.BitmapImage bitImage = new BitmapImage();
                      bitImage.BeginInit();
                      bitImage.UriSource = new Uri(fullImagePath, UriKind.Absolute);
@@ -338,7 +341,11 @@ namespace Pattons_Best
          } // end while
            //--------------------------------------------------
          myDieRoller.DieMutex.WaitOne();
-         AppendAtEnd(gi, key);
+         if( false == UpdateEventContent(gi, key))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "OpenEvent(): UpdateEventContent() returned false");
+            return false;
+         }
          myDieRoller.DieMutex.ReleaseMutex();
          //--------------------------------------------------
          if (gi.EventDisplayed == gi.EventActive)
@@ -468,14 +475,40 @@ namespace Pattons_Best
          b.Click += Button_Click;
          return true;
       }
-      private void AppendAtEnd(IGameInstance gi, string key)
+      private bool UpdateEventContent(IGameInstance gi, string key)
       {
-         Logger.Log(LogEnum.LE_VIEW_APPEND_EVENT, "AppendAtEnd(): k=" + key + " d0=" + gi.DieResults[key][0].ToString() + " d1=" + gi.DieResults[key][1].ToString() + " d2=" + gi.DieResults[key][2].ToString());
+         Logger.Log(LogEnum.LE_VIEW_APPEND_EVENT, "UpdateEventContent(): k=" + key + " d0=" + gi.DieResults[key][0].ToString() + " d1=" + gi.DieResults[key][1].ToString() + " d2=" + gi.DieResults[key][2].ToString());
          switch (key)
          {
+            case "e006":
+               if( 0 == gi.Reports.Count)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.Reports.Count=0");
+                  return false;
+               }
+               IAfterActionReport report = gi.Reports[gi.Reports.Count - 1];
+               ReplaceText("DATE", report.Day);
+               switch(report.Resistance)
+               {
+                  case EnumResistance.Light:
+                     ReplaceText("RESISTANCE", "Light");
+                     break;
+                  case EnumResistance.Medium:
+                     ReplaceText("RESISTANCE", "Medium");
+                     break;
+                  case EnumResistance.Heavy:
+                     ReplaceText("RESISTANCE", "Heavy");
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default resistance=" + report.Resistance.ToString());
+                     return false;
+               }
+               ReplaceText("PROBABILITY", report.Probability.ToString());
+               break;
             default:
                break;
          }
+         return true;
       }
       private void ReplaceText(string keyword, string newString)
       {
@@ -529,6 +562,11 @@ namespace Pattons_Best
       //--------------------------------------------------------------------
       private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
       {
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): myGameEngine=null");
+            return;
+         }
          if (null == myGameInstance)
          {
             Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): myGameInstance=null");
@@ -549,6 +587,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): myTextBlock=null");
             return;
          }
+         GameAction action = GameAction.Error;
          System.Windows.Point p = e.GetPosition((UIElement)sender);
          HitTestResult result = VisualTreeHelper.HitTest(myTextBlock, p);  // Get the Point where the hit test occurrs
          foreach (Inline item in myTextBlock.Inlines)
@@ -574,6 +613,26 @@ namespace Pattons_Best
                            case "DiceRoll":
                               myDieRoller.RollMovingDice(myCanvas, rollEndCallback);
                               img.Visibility = Visibility.Hidden;
+                              return;
+                           case "Continue001":
+                              action = GameAction.SetupShowMovementBoard;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
+                           case "MapMovement":
+                              action = GameAction.SetupShowBattleBoard;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
+                           case "MapBattle":
+                              action = GameAction.SetupShowTankCard;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
+                           case "m001M4":
+                              action = GameAction.SetupShowAfterActionReport;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
+                           case "Continue005":
+                              action = GameAction.SetupShowCombatCalendarCheck;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
                            default:
                               break;// do nothing
@@ -658,6 +717,17 @@ namespace Pattons_Best
                if (false == ShowTable(content))
                {
                   Logger.Log(LogEnum.LE_ERROR, "Button_Click(): ShowTable() returned false for key=" + content);
+                  return false;
+               }
+               break;
+            case "Begin Game":
+               action = GameAction.SetupShowMapHistorical;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "Read Rules":
+               if (false == ShowRule("r1.1"))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): ShowRule(r1.1) returned false");
                   return false;
                }
                break;

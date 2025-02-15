@@ -163,7 +163,12 @@ namespace Pattons_Best
       EndGameExit,
       ExitGame,
 
-      SetupGameOptionChoice,
+      SetupShowMapHistorical,
+      SetupShowMovementBoard,
+      SetupShowBattleBoard,
+      SetupShowTankCard,
+      SetupShowAfterActionReport,
+      SetupShowCombatCalendarCheck,
       SetupChooseFunOptions,
       SetupFinalize,
       Error

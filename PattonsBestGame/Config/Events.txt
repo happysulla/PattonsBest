@@ -10,13 +10,39 @@ e001	"<Bold>e001 Fourth Armor Division Campaign</Bold> <InlineUIContainer><Butto
 <LineBreak/><LineBreak/>
 The campaign game of <Bold>Patton' Best</Bold> recreates the actions of the 4th Armored Division from late July 1944 through April 1945. 
 <LineBreak/><LineBreak/>
-Each day begins with a check of the Combat <InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> to see
- what the Division was doing on that day. The four possibilities are Refitting <InlineUIContainer><Button Content='r27.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, 
-an Advance scenario <InlineUIContainer><Button Content='r20.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, 
-a Battle scenario <InlineUIContainer><Button Content='r20.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, 
-or a Counterattack scenario <InlineUIContainer><Button Content='r20.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  Click image to continue.
+Each day begins with a check of the Combat <InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> to see what the Division was doing on that day. The four possibilities are Refitting <InlineUIContainer><Button Content='r27.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, an Advance scenario <InlineUIContainer><Button Content='r20.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, a Battle scenario <InlineUIContainer><Button Content='r20.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, or a Counterattack scenario <InlineUIContainer><Button Content='r20.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  Click image to continue.
 <LineBreak/><LineBreak/>
-                                            <InlineUIContainer><Image Name='Nothing' Source='../images/Nothing.gif' Height='100' Width='100'></Image></InlineUIContainer>"
+                                            <InlineUIContainer><Image Name='Continue001' Height='100' Width='100'></Image></InlineUIContainer>"
+e002	"<Bold>e002 Movement Board</Bold> <InlineUIContainer><Button Content='r2.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
+The movement board is a depiction fo typical Europena coutnryside and is used to show the ""big picture"" for the day. The movement board is divided into white lines into areas. Click image to continue.
+<LineBreak/><LineBreak/>
+A=Farms    B=Fields    C=Villiages  D=Woods<LineBreak/>
+#=Starting or exiting areas
+<LineBreak/><LineBreak/>
+                                   <InlineUIContainer><Image Name='MapMovement'  Height='200' Width='200'></Image></InlineUIContainer>"
+e003	"<Bold>e003 Battle Board</Bold> <InlineUIContainer><Button Content='r2.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
+The battle board is an abstract display used to resolve engagements with enemy forces. Your tank is placed in the center of this display and the action of an engagement revolves around it through the use of pieces representing enemy units and other informational markers. A detailed explanation is given in <InlineUIContainer><Button Content='r5.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Click image to continue.
+<LineBreak/><LineBreak/>
+                                   <InlineUIContainer><Image Name='MapBattle'  Height='200' Width='200'></Image></InlineUIContainer>"
+e004	"<Bold>e004 Tank Card</Bold> <InlineUIContainer><Button Content='r2.13' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
+The upper right image is the Tank Card. The game starts with the basic M4 Sherman tank, i.e., Tank Card #1. The Tank Card shows the tank model and other important information regarding the tank. The use of the Tank Card is described in <InlineUIContainer><Button Content='r5.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Click image to continue.
+<LineBreak/><LineBreak/>
+                                 <InlineUIContainer><Image Name='m001M4'  Height='200' Width='200'></Image></InlineUIContainer>"
+e005	"<Bold>e005 After Action Report (AAR)</Bold> <InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
+The events of each engagement or day of battle are recorded as they unfold on the After Action Report. At this time, you may elect to change the name of the tank or the names of your crew by clicking on the appropriate location on the form. When ready, click image to continue.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='Continue005' Height='100' Width='100'></Image></InlineUIContainer>"
+e006	"<Bold>e006 Combat Calender Check</Bold> <InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
+Date: DATE<LineBreak/>
+Resistance: RESISTANCE<LineBreak/>
+Probablility of Combat: PROBABILITY > <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer><LineBreak/>
+<LineBreak/><LineBreak/>
+Roll die to determine if possible combat. Must be equal or lower than probability."
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"
 e502	"<Bold>e502 Game Lost</Bold>

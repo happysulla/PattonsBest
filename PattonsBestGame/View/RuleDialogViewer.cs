@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.DirectoryServices.ActiveDirectory;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -18,9 +19,9 @@ namespace Pattons_Best
       public Dictionary<string, string> Tables { get => myTables; }
       private Dictionary<string, string> myEvents = new Dictionary<string, string>();
       public Dictionary<string, string> Events { get => myEvents; set => myEvents = value; } // this property is used for unit testing - 05COnfigFileMgrUnitTesting
-      private Dictionary<string, TableDialog> myTableDialogs = new Dictionary<string, TableDialog>();
-      private Dictionary<string, BannerDialog> myBannerDialogs = new Dictionary<string, BannerDialog>();
-      private Dictionary<string, BannerDialog> myEventDialogs = new Dictionary<string, BannerDialog>();
+      private Dictionary<string, TableDialog?> myTableDialogs = new Dictionary<string, TableDialog?>();
+      private Dictionary<string, BannerDialog?> myBannerDialogs = new Dictionary<string, BannerDialog?>();
+      private Dictionary<string, BannerDialog?> myEventDialogs = new Dictionary<string, BannerDialog?>();
       private IGameEngine myGameEngine;
       private IGameInstance myGameInstance;
       public IGameInstance GameInstance{ set => myGameInstance = value; } // the game instance changes when a Game is loaded
@@ -102,10 +103,14 @@ namespace Pattons_Best
       {
          try
          {
-            BannerDialog dialog = myBannerDialogs[key];
+            BannerDialog? dialog = myBannerDialogs[key];
             if (null != dialog)
             {
+               if( false == dialog.IsVisible )
+                  dialog.Show();
                dialog.Activate(); // bring to top
+               dialog.Topmost = true;
+               dialog.Topmost = false;
                dialog.Focus();
                return true;
             }
@@ -159,10 +164,13 @@ namespace Pattons_Best
       {
          try
          {
-            TableDialog dialog = myTableDialogs[key];
-            dialog.Activate(); // bring to top
-            dialog.Focus();
-            return true;
+            TableDialog? dialog = myTableDialogs[key];
+            if (null != dialog)
+            {
+               dialog.Activate(); // bring to top
+               dialog.Focus();
+               return true;
+            }
          }
          catch (System.Collections.Generic.KeyNotFoundException)
          {
@@ -207,6 +215,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ShowTable(): reached default key=" + key);
                   return false;
             }
+            dialog.Closed += TableDialog_Closed;
             IEnumerable<Button> buttons = FindButtons(dialog.myFlowDocumentScrollViewer.Document);
             foreach (Button button in buttons)
                button.Click += Button_Click;
@@ -242,7 +251,7 @@ namespace Pattons_Best
       {
          try
          {
-            BannerDialog dialog = myBannerDialogs[key];
+            BannerDialog? dialog = myBannerDialogs[key];
             if (null != dialog)
             {
                dialog.Activate(); // bring to top
@@ -446,6 +455,7 @@ namespace Pattons_Best
                   b.Click -= Button_Click;
             }
          }
+         myBannerDialogs[dialog.Key] = null;
          if (true == dialog.IsReopen)
             this.ShowRule(dialog.Key);
       }
@@ -465,6 +475,12 @@ namespace Pattons_Best
          }
          if (true == dialog.IsReopen)
             this.ShowEventDialog(dialog.Key);
+      }
+      private void TableDialog_Closed(object? sender, EventArgs e)
+      {
+         if( null == sender) return;
+         TableDialog dialog = (TableDialog)sender;
+         myTableDialogs[dialog.Key] = null;
       }
       private void Button_Click(object sender, RoutedEventArgs e)
       {

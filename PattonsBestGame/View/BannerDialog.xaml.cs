@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
@@ -47,6 +48,22 @@ namespace Pattons_Best
          {
             XmlTextReader xr = new XmlTextReader(sr);
             myTextBlockDisplay = (TextBlock)XamlReader.Load(xr); // TextBox created in RuleManager.ShowRule()
+            foreach (Inline inline in myTextBlockDisplay.Inlines)
+            {
+               if (inline is InlineUIContainer)
+               {
+                  InlineUIContainer ui = (InlineUIContainer)inline;
+                  if (ui.Child is Image img1)
+                  {
+                     string fullImagePath = MapImage.theImageDirectory + Utilities.RemoveSpaces(img1.Name) + ".gif";
+                     System.Windows.Media.Imaging.BitmapImage bitImage = new BitmapImage();
+                     bitImage.BeginInit();
+                     bitImage.UriSource = new Uri(fullImagePath, UriKind.Absolute);
+                     bitImage.EndInit();
+                     img1.Source = bitImage;
+                  }
+               }
+            }
             myScrollViewerBanner.Content = myTextBlockDisplay;
             myTextBlockDisplay.MouseLeftButtonDown += Window_MouseLeftButtonDown;
             myTextBlockDisplay.MouseLeave += TextBlockDisplay_MouseLeave;
