@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Windows.Input;
 
 namespace Pattons_Best
 {
@@ -16,6 +17,15 @@ namespace Pattons_Best
       private StreamReader? myStreamReader = null;
       public ConfigFileReader(string filename)
       {
+         if( true == filename.Contains("Tables"))
+         {
+            string filename1 = ConfigFileReader.theConfigDirectory + "CombatCalendar.xml"; // hard code adding the calendar
+            if (false == CreateCombatCalendar(filename1))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ConfigFileReader(): CreateCombatCalendar() returned false");
+               CtorError = true;
+            }
+         }
          const int MAX_RECORDS_IN_FILE = 1000; // number of rows in spreadsheet
          try
          {
@@ -55,6 +65,32 @@ namespace Pattons_Best
          }
       }
       //------------------------------------------------------------
+      private bool CreateCombatCalendar(string filename)
+      {
+         string key = "Calendar";
+         string text = "ERROR";
+         try
+         {
+
+            using StreamReader reader = new(filename);  // Open the text file using a stream reader.
+            text = reader.ReadToEnd(); // Read the stream as a string.
+         }
+         catch (IOException e)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateCombatCalendar(): e=" + e.ToString());
+            return false;
+         }
+         try
+         {
+            myEntries.Add(key, text); // create dictionary entry
+         }
+         catch (Exception e)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateCombatCalendar(): key=" + key + " e=" + e.ToString());
+            return false;
+         }
+         return true;
+      }
       private bool ReplaceDoubleQuotesWithSingleQuote(string filename)
       {
          try

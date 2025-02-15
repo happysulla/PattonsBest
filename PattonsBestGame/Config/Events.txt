@@ -7,9 +7,14 @@ However, the game lets you explore what may happen by showing inactive events. I
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Name='Read_Rules' Content='Read Rules' FontFamily='Courier New'  FontSize='12'> </Button></InlineUIContainer> or <InlineUIContainer><Button Name='Begin' Content='Begin Game' FontFamily='Courier New'  FontSize='12'> </Button></InlineUIContainer>"
 e001	"<Bold>e001 Fourth Armor Division Campaign</Bold> <InlineUIContainer><Button Content='r1.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
-<LineBreak/><LineBreak/>The campaign game of <Bold>Patton' Best</Bold> recreates the actions of the 4th Armored Division from late July 1944 through April 1945. 
 <LineBreak/><LineBreak/>
-Each day begins with a check of the Combat Calendar <InlineUIContainer><Button Content='cc' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> to see what the Division was doing on that day. The four possibilities are Refitting <InlineUIContainer><Button Content='r27.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, an Advance scenario <InlineUIContainer><Button Content='r20.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, a Battle scenario <InlineUIContainer><Button Content='r20.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, or a Counterattack scenario <InlineUIContainer><Button Content='r20.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  Click image to continue.
+The campaign game of <Bold>Patton' Best</Bold> recreates the actions of the 4th Armored Division from late July 1944 through April 1945. 
+<LineBreak/><LineBreak/>
+Each day begins with a check of the Combat <InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> to see
+ what the Division was doing on that day. The four possibilities are Refitting <InlineUIContainer><Button Content='r27.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, 
+an Advance scenario <InlineUIContainer><Button Content='r20.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, 
+a Battle scenario <InlineUIContainer><Button Content='r20.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, 
+or a Counterattack scenario <InlineUIContainer><Button Content='r20.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  Click image to continue.
 <LineBreak/><LineBreak/>
                                             <InlineUIContainer><Image Name='Nothing' Source='../images/Nothing.gif' Height='100' Width='100'></Image></InlineUIContainer>"
 e501	"<Bold>e501 Game Won!!!</Bold>

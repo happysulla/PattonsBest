@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
@@ -13,6 +14,7 @@ using System.Windows.Shapes;
 using System.Xml;
 using WpfAnimatedGif;
 using Button = System.Windows.Controls.Button;
+using Cursors = System.Windows.Input.Cursors;
 using Point = System.Windows.Point;
 
 namespace Pattons_Best
@@ -165,7 +167,7 @@ namespace Pattons_Best
             case GameAction.UpdateGameOptions:
                break;
             case GameAction.UpdateUndo:
-               myScrollViewerTextBlock.Cursor = Cursors.Arrow;
+               myScrollViewerTextBlock.Cursor = System.Windows.Input.Cursors.Arrow;
                gi.IsGridActive = false;
                if (false == OpenEvent(gi, gi.EventActive))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): OpenEvent() returned false ae=" + myGameInstance.EventActive + " a=" + action.ToString());
@@ -618,7 +620,7 @@ namespace Pattons_Best
          {
             if (false == ShowTable(key))
             {
-               Logger.Log(LogEnum.LE_ERROR, "Button_Click(): ShowTable() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "Button_Click(): ShowTable() returned false for key=" + key);
                return;
             }
          }
@@ -632,7 +634,7 @@ namespace Pattons_Best
          {
             if (false == Button_ClickShowOther(key, b.Name, out action))
             {
-               Logger.Log(LogEnum.LE_ERROR, "Button_Click(): CloseEvent() return false");
+               Logger.Log(LogEnum.LE_ERROR, "Button_Click(): CloseEvent() return false for key=" + key);
                return;
             }
          }
@@ -652,6 +654,13 @@ namespace Pattons_Best
          }
          switch (content)
          {
+            case "Calendar":
+               if (false == ShowTable(content))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Button_Click(): ShowTable() returned false for key=" + content);
+                  return false;
+               }
+               break;
             default:
                if (false == ShowRegion(content))
                {
