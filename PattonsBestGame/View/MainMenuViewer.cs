@@ -100,14 +100,11 @@ namespace Pattons_Best
                   MenuItem subItem43 = new MenuItem();
                   subItem43.Header = "_Tables...";
                   subItem43.InputGestureText = "F3";
+                  subItem42.Click += MenuItemHelpTables_Click;
                   myMenuItemTopLevel4.Items.Add(subItem43);
-                  MenuItem subItem44 = new MenuItem();
-                  subItem44.Header = "_After Action Report...";
-                  subItem44.InputGestureText = "F4";
-                  myMenuItemTopLevel4.Items.Add(subItem44);
                   MenuItem subItem45 = new MenuItem();
                   subItem45.Header = "Report Error...";
-                  subItem45.InputGestureText = "F5";
+                  subItem45.InputGestureText = "F4";
                   subItem45.Click += MenuItemHelpReportError_Click;
                   myMenuItemTopLevel4.Items.Add(subItem45);
                   MenuItem subItem46 = new MenuItem();
@@ -271,7 +268,7 @@ namespace Pattons_Best
       }
       public void MenuItemViewAfterActionReport(object sender, RoutedEventArgs e)
       {
-         GameAction action = GameAction.ShowInventory;
+         GameAction action = GameAction.ShowAfterActionReport;
          myGameEngine.PerformAction(ref myGameInstance, ref action);
       }
       public void MenuItemViewFeats_Click(object sender, RoutedEventArgs e)
@@ -287,6 +284,11 @@ namespace Pattons_Best
       public void MenuItemHelpEvents_Click(object sender, RoutedEventArgs e)
       {
          GameAction action = GameAction.ShowEventListing;
+         myGameEngine.PerformAction(ref myGameInstance, ref action);
+      }
+      public void MenuItemHelpTables_Click(object sender, RoutedEventArgs e)
+      {
+         GameAction action = GameAction.ShowTableListing;
          myGameEngine.PerformAction(ref myGameInstance, ref action);
       }
       public void MenuItemHelpReportError_Click(object sender, RoutedEventArgs e)

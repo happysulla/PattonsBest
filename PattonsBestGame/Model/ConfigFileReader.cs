@@ -95,7 +95,7 @@ namespace Pattons_Best
       {
          try
          {
-            // Open file and search for double quotes. Replace with single quote
+            // Open file and search for double quotes. Replace with single quot
             // Save file back to original name
             StreamReader sr = File.OpenText(filename);
             string fileContent = sr.ReadToEnd();

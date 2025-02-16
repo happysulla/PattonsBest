@@ -917,13 +917,10 @@ namespace Pattons_Best
             command = new RoutedCommand();
             keyGesture = new KeyGesture(Key.F3, ModifierKeys.None);
             InputBindings.Add(new KeyBinding(command, keyGesture));
+            CommandBindings.Add(new CommandBinding(command, mmv.MenuItemHelpTables_Click));
             //------------------------------------------------
             command = new RoutedCommand();
             keyGesture = new KeyGesture(Key.F4, ModifierKeys.None);
-            InputBindings.Add(new KeyBinding(command, keyGesture));
-            //------------------------------------------------
-            command = new RoutedCommand();
-            keyGesture = new KeyGesture(Key.F5, ModifierKeys.None);
             InputBindings.Add(new KeyBinding(command, keyGesture));
             CommandBindings.Add(new CommandBinding(command, mmv.MenuItemHelpReportError_Click));
             //------------------------------------------------

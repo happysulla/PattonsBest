@@ -198,12 +198,14 @@ namespace Pattons_Best
                   return;
                }
                IAfterActionReport aar = gi.Reports[ gi.Reports.Count - 1 ];
-               AfterActionReportDisplay dialogAfterActionReport = new AfterActionReportDisplay(aar);
-               if (true == dialogAfterActionReport.CtorError)
+               AfterActionReportUserControl aarUserControl = new AfterActionReportUserControl(aar);
+               if (true == aarUserControl.CtorError)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): RuleListingDialog CtorError=true");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): AfterActionReportUserControl CtorError=true");
                   return;
                }
+               AfterActionDialog dialogAAR = new AfterActionDialog(aar);
+               dialogAAR.Show();
                break;
             case GameAction.ShowReportErrorDialog:
                ShowReportErrorDialog dialogReportError = new ShowReportErrorDialog();

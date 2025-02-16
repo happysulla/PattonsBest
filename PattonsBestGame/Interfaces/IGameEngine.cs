@@ -49,48 +49,6 @@ namespace Pattons_Best
       Mud_Overcast,
       Snow
    };
-   public enum EnumCrewRole
-   {
-      Commander,
-      Gunner,
-      Loader,
-      Driver,
-      Assistant
-   };
-   public enum EnumCrewRank
-   {
-      Private,
-      Corporeal,
-      Segeant,
-      Second_Lt,
-      First_Lt,
-      Captain
-   };
-   [Serializable]
-   public struct CrewMember
-   {
-      public EnumCrewRole myRole;
-      public EnumCrewRank myRank;
-      public string myName;
-      public int myRating;
-      public CrewMember(EnumCrewRole role, EnumCrewRank rank, string name, int rating)
-      {
-         myRole = role;
-         myRank = rank;
-         myName = name;
-         myRating = rating;
-      }
-   };
-   public enum EnumDecoration
-   {
-      BronzeStar,
-      SilverStar,
-      DistinguisedServiceCross,
-      MedalOfHonor,
-      PurpleHeart,
-      EuropeanCampain,
-      WW2Victory
-   };
    [Serializable]
    public struct CombatCalenderEntry
    {

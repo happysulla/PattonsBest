@@ -6,6 +6,47 @@ using System.Threading.Tasks;
 
 namespace Pattons_Best
 {
+   public enum EnumCrewRole
+   {
+      Commander,
+      Gunner,
+      Loader,
+      Driver,
+      Assistant
+   };
+   public enum EnumCrewRank
+   {
+      Private,
+      Corporeal,
+      Sargent,
+      Second_Lt,
+      First_Lt,
+      Captain
+   };
+   public struct CrewMember
+   {
+      public EnumCrewRole myRole;
+      public EnumCrewRank myRank;
+      public string myName;
+      public int myRating;
+      public CrewMember(EnumCrewRole role, EnumCrewRank rank, int rating)
+      {
+         myRole = role;
+         myRank = rank;
+         myName = SurnameMgr.GetSurname();
+         myRating = rating;
+      }
+   };
+   public enum EnumDecoration
+   {
+      BronzeStar,
+      SilverStar,
+      DistinguisedServiceCross,
+      MedalOfHonor,
+      PurpleHeart,
+      EuropeanCampain,
+      WW2Victory
+   };
    public interface IAfterActionReport
    {
       string Day { get; set; }
@@ -14,7 +55,11 @@ namespace Pattons_Best
       EnumResistance Resistance { get; set; }
       string Name { get; set; }
       EnumWeather Weather { get; set; }
-      List<CrewMember> CrewerMembers { get; set; }
+      CrewMember Commander { get; set; } 
+      CrewMember Gunner { get; set; }
+      CrewMember Loader { get; set; }
+      CrewMember Driver { get; set; }
+      CrewMember Assistant { get; set; }
       //----------------------------------------
       int TimeOfDay { get; set; }
       int Ammo30CalibreMG { get; set; }

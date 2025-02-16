@@ -134,31 +134,43 @@ namespace Pattons_Best
             case GameAction.RemoveSplashScreen:
                gi.Statistic.Clear();         // Clear any current statitics
                gi.Statistic.myNumGames = 1;  // Set played games to 1
-               Option? option = gi.Options.Find("AutoSetup");
-               if (null == option)
+               //----------------------------------------------------
+               if (0 == GameEngine.theCombatCalenderEntries.Count)
                {
-                  option = new Option("AutoSetup", false);
-                  gi.Options.Add(option);
-               }
-               if (true == option.IsEnabled)
-               {
-                  if (false == PerformAutoSetup(ref gi, ref action))
-                  {
-                     returnStatus = "PerformAutoSetup() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
-                  }
-                  gi.EventDisplayed = gi.EventActive = "e203"; // next screen to show
-                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  returnStatus = "theCombatCalenderEntries.Count=0";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
                }
                else
                {
-                  gi.Options.SetOriginalGameOptions();
-                  gi.GamePhase = GamePhase.GameSetup;
-                  gi.EventDisplayed = gi.EventActive = "e000"; // next screen to show
-                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  IAfterActionReport report = new AfterActionReport(GameEngine.theCombatCalenderEntries[0]);
+                  gi.Reports.Add(report);
+                  //----------------------------------------------------
+                  Option? option = gi.Options.Find("AutoSetup");
+                  if (null == option)
+                  {
+                     option = new Option("AutoSetup", false);
+                     gi.Options.Add(option);
+                  }
+                  if (true == option.IsEnabled)
+                  {
+                     if (false == PerformAutoSetup(ref gi, ref action))
+                     {
+                        returnStatus = "PerformAutoSetup() returned false";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
+                     }
+                     gi.EventDisplayed = gi.EventActive = "e203"; // next screen to show
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else
+                  {
+                     gi.Options.SetOriginalGameOptions();
+                     gi.GamePhase = GamePhase.GameSetup;
+                     gi.EventDisplayed = gi.EventActive = "e000"; // next screen to show
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  AddStartingTestingOptions(gi);
+                  PrintDiagnosticInfoToLog();
                }
-               AddStartingTestingOptions(gi);
-               PrintDiagnosticInfoToLog();
                break;
             case GameAction.SetupShowMapHistorical:
                gi.EventDisplayed = gi.EventActive = "e001";
@@ -174,8 +186,6 @@ namespace Pattons_Best
                break;
             case GameAction.SetupShowAfterActionReport:
                gi.EventDisplayed = gi.EventActive = "e005";
-               IAfterActionReport report = new AfterActionReport( GameEngine.theCombatCalenderEntries[0] );
-               gi.Reports.Add(report);
                break;
             case GameAction.SetupShowCombatCalendarCheck:
                gi.EventDisplayed = gi.EventActive = "e006";

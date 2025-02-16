@@ -302,6 +302,7 @@ namespace Pattons_Best
          theCombatCalenderEntries.Add(new CombatCalenderEntry("04/17/44", EnumScenario.Counterattack, 2, EnumResistance.Light));
          theCombatCalenderEntries.Add(new CombatCalenderEntry("04/18/44", EnumScenario.Counterattack, 2, EnumResistance.Light));
          theCombatCalenderEntries.Add(new CombatCalenderEntry("Drive into Czechoslavakia", EnumScenario.Retrofit, 10, EnumResistance.None));
+         //--------------------------------------------------------------------
       }
    }
 }
