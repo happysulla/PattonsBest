@@ -19,8 +19,6 @@ namespace Pattons_Best
    {
       public bool CtorError { get; } = false;
       public IAfterActionReport Report { get; set; } = new AfterActionReport(new CombatCalenderEntry("07/27/43", EnumScenario.Advance, 3, EnumResistance.Light, "Corba Breakout"));
-      //------------------------------------
-      private System.Windows.Point myOffsetInWindow;
       //-------------------------------------------------------------------------------------
       public AfterActionDialog(IAfterActionReport report)
       {

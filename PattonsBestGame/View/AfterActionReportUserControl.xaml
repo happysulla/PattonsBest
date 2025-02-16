@@ -36,21 +36,23 @@
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0" FontFamily="Arial Rounded MT Bold" FontSize="14">DATE:</Label>
             <Label Grid.Row="0" Grid.Column="1" FontFamily="Arial Rounded MT Bold" FontSize="14">
-               <Span TextDecorations="Underline">____07/27/44_____________________________________________</Span>
+               <Span Name="mySpanDate" TextDecorations="Underline">__________________________________________________</Span>
             </Label>
             <Label Grid.Row="1" Grid.Column="0" FontFamily="Arial Rounded MT Bold" FontSize="14">TANK NAME:</Label>
-            <Label Grid.Row="1" Grid.Column="1" FontFamily="Arial Rounded MT Bold" FontSize="14">_________________________________________________________</Label>
+            <Label Grid.Row="1" Grid.Column="1" FontFamily="Arial Rounded MT Bold" FontSize="14">
+               <Span Name="mySpanTankName" TextDecorations="Underline">__________________________________________________</Span>
+            </Label>
             <Label Grid.Row="2" Grid.Column="0" FontFamily="Arial Rounded MT Bold" FontSize="14">TANK MODEL:</Label>
             <Label Grid.Row="2" Grid.Column="1" FontFamily="Arial Rounded MT Bold" FontSize="14">
-               <Span TextDecorations="Underline">____M4_____________________________________________</Span>
+               <Span Name="mySpanTankModel" TextDecorations="Underline">__________________________________________________</Span>
             </Label>
             <Label Grid.Row="3" Grid.Column="0" FontFamily="Arial Rounded MT Bold" FontSize="14">SITUATION:</Label>
             <Label Grid.Row="3" Grid.Column="1" FontFamily="Arial Rounded MT Bold" FontSize="14">
-               <Span TextDecorations="Underline">____Advance_____________________________________________</Span>
+               <Span Name="mySpanSituation" TextDecorations="Underline">__________________________________________________</Span>
             </Label>
             <Label Grid.Row="4" Grid.Column="0" FontFamily="Arial Rounded MT Bold" FontSize="14">WEATHER:</Label>
             <Label Grid.Row="4" Grid.Column="1" FontFamily="Arial Rounded MT Bold" FontSize="14">
-               <Span TextDecorations="Underline">____Clear_____________________________________________</Span></Label>
+               <Span Name="mySpanWeather" TextDecorations="Underline">__________________________________________________</Span></Label>
          </Grid>
       </StackPanel>
       <!--  ++++++++++++++++++++++++++++++++++++Crew Table++++++++++++++++++++++++++++++++++++ -->
@@ -97,17 +99,17 @@
                         </TableCell>
                         <TableCell TextAlignment='Center'>
                            <Paragraph>
-                              <Run Text="Cpl."/>
+                              <Run Name="myRunCommanderRank" Text="Sgt"/>
                            </Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Left'>
                            <Paragraph>
-                              <Run Text="Stewart"/>
+                              <Run Name="myRunCommanderName" Text="Stewart"/>
                            </Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
                            <Paragraph>
-                              <Run Text="4"/>
+                              <Run Name="myRunCommanderRating" Text="4"/>
                            </Paragraph>
                         </TableCell>
                      </TableRow>
@@ -119,17 +121,17 @@
                         </TableCell>
                         <TableCell TextAlignment='Center'>
                            <Paragraph>
-                              <Run Text="Cpl."/>
+                              <Run Text="Cpl"/>
                            </Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Left'>
                            <Paragraph>
-                              <Run Text="Murry"/>
+                              <Run Name="myRunGunnerName" Text="Murry"/>
                            </Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
                            <Paragraph>
-                              <Run Text="3"/>
+                              <Run Name="myRunGunnerRating" Text="3"/>
                            </Paragraph>
                         </TableCell>
                      </TableRow>
@@ -141,17 +143,17 @@
                         </TableCell>
                         <TableCell TextAlignment='Center'>
                            <Paragraph>
-                              <Run Text="Pvt."/>
+                              <Run Text="Pvt"/>
                            </Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Left'>
                            <Paragraph>
-                              <Run Text="Bugler"/>
+                              <Run Name="myRunLoaderName" Text="Bugler"/>
                            </Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
                            <Paragraph>
-                              <Run Text="1"/>
+                              <Run Name="myRunLoaderRating" Text="1"/>
                            </Paragraph>
                         </TableCell>
                      </TableRow>
@@ -163,17 +165,17 @@
                         </TableCell>
                         <TableCell TextAlignment='Center'>
                            <Paragraph>
-                              <Run Text="Pvt."/>
+                              <Run Text="Pvt"/>
                            </Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Left'>
                            <Paragraph>
-                              <Run Text="Cooper"/>
+                              <Run Name="myRunDriverName" Text="Cooper"/>
                            </Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
                            <Paragraph>
-                              <Run Text="1"/>
+                              <Run Name="myRunDriverRating" Text="1"/>
                            </Paragraph>
                         </TableCell>
                      </TableRow>
@@ -185,17 +187,17 @@
                         </TableCell>
                         <TableCell TextAlignment='Center'>
                            <Paragraph>
-                              <Run Text="Pvt."/>
+                              <Run Text="Pvt"/>
                            </Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Left'>
                            <Paragraph>
-                              <Run Text="Hutchinson"/>
+                              <Run Name="myRunAssistantName" Text="Hutchinson"/>
                            </Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
                            <Paragraph>
-                              <Run Text="1"/>
+                              <Run Name="myRunAssistantRating" Text="1"/>
                            </Paragraph>
                         </TableCell>
                      </TableRow>
@@ -374,7 +376,7 @@
                         </TableCell>
                         <TableCell TextAlignment='Left'>
                            <Paragraph TextAlignment="Center">
-                              <Run Text="0"/>
+                              <Run Name="myRunAmmo30Calibre"  Text="30"/>
                            </Paragraph>
                         </TableCell>
                      </TableRow>
@@ -386,7 +388,7 @@
                         </TableCell>
                         <TableCell TextAlignment='Left'>
                            <Paragraph TextAlignment="Center">
-                              <Run Text="0"/>
+                              <Run Name="myRunAmmo50Calibre"  Text="6"/>
                            </Paragraph>
                         </TableCell>
                      </TableRow>
@@ -398,7 +400,7 @@
                         </TableCell>
                         <TableCell TextAlignment='Left'>
                            <Paragraph TextAlignment="Center">
-                              <Run Text="0"/>
+                              <Run Name="myRunAmmoSmokeBombs"  Text="14"/>
                            </Paragraph>
                         </TableCell>
                      </TableRow>
@@ -410,7 +412,7 @@
                         </TableCell>
                         <TableCell TextAlignment='Left'>
                            <Paragraph TextAlignment="Center">
-                              <Run Text="0"/>
+                              <Run Name="myRunAmmoSmokeGrenades"  Text="6"/>
                            </Paragraph>
                         </TableCell>
                      </TableRow>
@@ -422,7 +424,7 @@
                         </TableCell>
                         <TableCell TextAlignment='Left'>
                            <Paragraph TextAlignment="Center">
-                              <Run Text="0"/>
+                              <Run Name="myRunAmmoPeriscopes"  Text="6"/>
                            </Paragraph>
                         </TableCell>
                      </TableRow>
@@ -445,7 +447,7 @@
                         </TableCell>
                         <TableCell TextAlignment='Left'>
                            <Paragraph TextAlignment="Center">
-                              <Run Text="0"/>
+                              <Run Name="myRunMainGunHE" Text="0"/>
                            </Paragraph>
                         </TableCell>
                      </TableRow>
@@ -457,7 +459,7 @@
                         </TableCell>
                         <TableCell TextAlignment='Left'>
                            <Paragraph TextAlignment="Center">
-                              <Run Text="0"/>
+                              <Run Name="myRunMainGunAP" Text="0"/>
                            </Paragraph>
                         </TableCell>
                      </TableRow>
@@ -469,7 +471,7 @@
                         </TableCell>
                         <TableCell TextAlignment='Left'>
                            <Paragraph TextAlignment="Center">
-                              <Run Text="0"/>
+                              <Run Name="myRunMainGunWP" Text="0"/>
                            </Paragraph>
                         </TableCell>
                      </TableRow>
@@ -481,7 +483,7 @@
                         </TableCell>
                         <TableCell TextAlignment='Left'>
                            <Paragraph TextAlignment="Center">
-                              <Run Text="0"/>
+                              <Run Name="myRunMainGunHCBI" Text="0"/>
                            </Paragraph>
                         </TableCell>
                      </TableRow>
@@ -493,7 +495,7 @@
                         </TableCell>
                         <TableCell TextAlignment='Left'>
                            <Paragraph TextAlignment="Center">
-                              <Run Text="0"/>
+                              <Run Name="myRunMainGunHVAP" Text="0"/>
                            </Paragraph>
                         </TableCell>
                      </TableRow>
@@ -534,7 +536,9 @@
                            <Paragraph>KO Light Truck, MG (1):</Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
-                           <Paragraph>0</Paragraph>
+                           <Paragraph>
+                              <Run Name="myRunVictoryPointsLight" Text="0"/>
+                           </Paragraph>
                         </TableCell>
                      </TableRow>
                      <TableRow  FontSize='12'>
@@ -542,7 +546,9 @@
                            <Paragraph>KO Truck (1):</Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
-                           <Paragraph>0</Paragraph>
+                           <Paragraph>
+                              <Run Name="myRunVictoryPointsTruck" Text="0"/>
+                           </Paragraph>
                         </TableCell>
                      </TableRow>
                      <TableRow  FontSize='12'>
@@ -550,7 +556,9 @@
                            <Paragraph>KO SPW, PSW (2):</Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
-                           <Paragraph>0</Paragraph>
+                           <Paragraph>
+                              <Run Name="myRunVictoryPointsSPW" Text="0"/>
+                           </Paragraph>
                         </TableCell>
                      </TableRow>
                      <TableRow  FontSize='12'>
@@ -558,7 +566,9 @@
                            <Paragraph>KO SP Gun (6):</Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
-                           <Paragraph>0</Paragraph>
+                           <Paragraph>
+                              <Run Name="myRunVictoryPointsSpGun" Text="0"/>
+                           </Paragraph>
                         </TableCell>
                      </TableRow>
                      <TableRow  FontSize='12'>
@@ -574,7 +584,9 @@
                            <Paragraph>KO PzV (9):</Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
-                           <Paragraph>0</Paragraph>
+                           <Paragraph>
+                              <Run Name="myRunVictoryPointsPzIV" Text="0"/>
+                           </Paragraph>
                         </TableCell>
                      </TableRow>
                      <TableRow  FontSize='12'>
@@ -590,7 +602,9 @@
                            <Paragraph>KO AT Gun (4)</Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
-                           <Paragraph>0</Paragraph>
+                           <Paragraph>
+                              <Run Name="myRunVictoryPointsAtGun" Text="0"/>
+                           </Paragraph>
                         </TableCell>
                      </TableRow>
                      <TableRow  FontSize='12'>
@@ -598,7 +612,9 @@
                            <Paragraph>KO Fortifed Position (+2):</Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
-                           <Paragraph>0</Paragraph>
+                           <Paragraph>
+                              <Run Name="myRunVictoryPointsPosition" Text="0"/>
+                           </Paragraph>
                         </TableCell>
                      </TableRow>
                      <TableRow  FontSize='12'>
@@ -614,7 +630,9 @@
                            <Paragraph>Capture Exit Area (10):</Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
-                           <Paragraph>0</Paragraph>
+                           <Paragraph>
+                              <Run Name="myRunVictoryPointsCaptureExit" Text="0"/>
+                           </Paragraph>
                         </TableCell>
                      </TableRow>
                   </TableRowGroup>
@@ -636,7 +654,7 @@
                         </TableCell>
                         <TableCell TextAlignment='Left'>
                            <Paragraph TextAlignment="Center">
-                              0
+                              <Run Name="myRunVictoryPointsLostTank" Text="0"/>
                            </Paragraph>
                         </TableCell>
                      </TableRow>
@@ -648,7 +666,7 @@
                         </TableCell>
                         <TableCell TextAlignment='Left'>
                            <Paragraph TextAlignment="Center">
-                              0
+                              <Run Name="myRunVictoryPointsLostInfantry" Text="0"/>
                            </Paragraph>
                         </TableCell>
                      </TableRow>
@@ -681,30 +699,21 @@
                   <TableRowGroup >
                      <TableRow  FontSize='14' >
                         <TableCell RowSpan="2" ColumnSpan="2" TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-                           <Paragraph>
-                              <LineBreak/> ACTION
-                           </Paragraph>
+                           <Paragraph> <LineBreak/> ACTION </Paragraph>
                         </TableCell>
                         <TableCell ColumnSpan="3" TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-                           <Paragraph>Scenario
-                           </Paragraph>
+                           <Paragraph>Scenario</Paragraph>
                         </TableCell>
                      </TableRow>
                      <TableRow  FontSize='14' >
                         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-                           <Paragraph>
-                              A
-                           </Paragraph>
+                           <Paragraph>A</Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-                           <Paragraph>
-                              B
-                           </Paragraph>
+                           <Paragraph> B</Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-                           <Paragraph>
-                              C
-                           </Paragraph>
+                           <Paragraph>C</Paragraph>
                         </TableCell>
                      </TableRow>
                   </TableRowGroup>
@@ -773,7 +782,9 @@
                            <Paragraph>Your Tank:</Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
-                           <Paragraph>0</Paragraph>
+                           <Paragraph>
+                              <Run Name="myRunVictoryPointsTotalTank" Text="0"/>
+                           </Paragraph>
                         </TableCell>
                      </TableRow>
                      <TableRow  FontSize='14'>
@@ -781,7 +792,9 @@
                            <Paragraph>Friendly Forces:</Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
-                           <Paragraph>0</Paragraph>
+                           <Paragraph>
+                              <Run Name="myRunVictoryPointsTotalFriendly" Text="0"/>
+                           </Paragraph>
                         </TableCell>
                      </TableRow>
                      <TableRow  FontSize='14'>
@@ -789,7 +802,9 @@
                            <Paragraph>Territory:</Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
-                           <Paragraph>0</Paragraph>
+                           <Paragraph>
+                              <Run Name="myRunVictoryPointsTotalTerritory" Text="0"/>
+                           </Paragraph>
                         </TableCell>
                      </TableRow>
                   </TableRowGroup>

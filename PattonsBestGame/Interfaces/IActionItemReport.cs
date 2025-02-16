@@ -16,12 +16,12 @@ namespace Pattons_Best
    };
    public enum EnumCrewRank
    {
-      Private,
-      Corporeal,
-      Sargent,
-      Second_Lt,
-      First_Lt,
-      Captain
+      Pvt,
+      Cpl,
+      Sgt,
+      Lt1,
+      Lt2,
+      Cpt
    };
    public struct CrewMember
    {
@@ -54,6 +54,7 @@ namespace Pattons_Best
       int Probability { get; set; }
       EnumResistance Resistance { get; set; }
       string Name { get; set; }
+      EnumModel Model { get; set; }
       EnumWeather Weather { get; set; }
       CrewMember Commander { get; set; } 
       CrewMember Gunner { get; set; }
@@ -66,7 +67,7 @@ namespace Pattons_Best
       int Ammo50CalibreMG { get; set; }
       int AmmoSmokeBomb { get; set; }
       int AmmoSmokeGrenade { get; set; }
-      int Periscope { get; set; }  
+      int AmmoPeriscope { get; set; }  
       int MainGunHE { get; set; }
       int MainGunAP { get; set; }
       int MainGunWP { get; set; }

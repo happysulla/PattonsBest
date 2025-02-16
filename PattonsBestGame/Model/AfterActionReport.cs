@@ -13,19 +13,20 @@ namespace Pattons_Best.Model
       public int Probability { get; set; } = 3;
       public EnumResistance Resistance { get; set; }
       public string Name { get; set; } = Utilities.GetNickName();
+      public EnumModel Model { get; set; } = EnumModel.M4_A;
       public EnumWeather Weather { get; set; } = EnumWeather.Clear;
-      public CrewMember Commander { get; set; } = new CrewMember(EnumCrewRole.Commander, EnumCrewRank.Sargent, 4);
-      public CrewMember Gunner { get; set; } = new CrewMember(EnumCrewRole.Gunner, EnumCrewRank.Corporeal, 3);
-      public CrewMember Loader { get; set; } = new CrewMember(EnumCrewRole.Loader, EnumCrewRank.Corporeal, 1);
-      public CrewMember Driver { get; set; } = new CrewMember(EnumCrewRole.Driver, EnumCrewRank.Private, 1);
-      public CrewMember Assistant { get; set; } = new CrewMember(EnumCrewRole.Assistant, EnumCrewRank.Private, 1);
+      public CrewMember Commander { get; set; } = new CrewMember(EnumCrewRole.Commander, EnumCrewRank.Sgt, 4);
+      public CrewMember Gunner { get; set; } = new CrewMember(EnumCrewRole.Gunner, EnumCrewRank.Cpl, 3);
+      public CrewMember Loader { get; set; } = new CrewMember(EnumCrewRole.Loader, EnumCrewRank.Cpl, 1);
+      public CrewMember Driver { get; set; } = new CrewMember(EnumCrewRole.Driver, EnumCrewRank.Pvt, 1);
+      public CrewMember Assistant { get; set; } = new CrewMember(EnumCrewRole.Assistant, EnumCrewRank.Pvt, 1);
       //----------------------------------------
       public int TimeOfDay { get; set; } = 0500;
       public int Ammo30CalibreMG { get; set; } = 30;
       public int Ammo50CalibreMG { get; set; } = 6;
       public int AmmoSmokeBomb { get; set; } = 14;
       public int AmmoSmokeGrenade { get; set; } = 6;
-      public int Periscope { get; set; } = 6;
+      public int AmmoPeriscope { get; set; } = 6;
       public int MainGunHE { get; set; } = 0;
       public int MainGunAP { get; set; } = 0;
       public int MainGunWP { get; set; } = 0;

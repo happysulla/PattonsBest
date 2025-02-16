@@ -132,10 +132,6 @@ namespace Pattons_Best
          mySplashScreen.Show();
          InitializeComponent();
          //---------------------------------------------------------------
-         Image imageMap = new Image() { Name = "Map", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapHistorical") };
-         myCanvasMap.Children.Add(imageMap);
-         Canvas.SetLeft(imageMap, 0);
-         Canvas.SetTop(imageMap, 0);
          Image imageTank = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("m001M4") };
          myCanvasTank.Children.Add(imageTank);
          Canvas.SetLeft(imageTank, 0);
@@ -209,6 +205,7 @@ namespace Pattons_Best
          //---------------------------------------------------------------
          // Implement the Model View Controller (MVC) pattern by registering views with
          // the game engine such that when the model data is changed, the views are updated.
+         ge.RegisterForUpdates(civ);
          ge.RegisterForUpdates(myMainMenuViewer);
          ge.RegisterForUpdates(myEventViewer);
          ge.RegisterForUpdates(sbv);
@@ -755,10 +752,6 @@ namespace Pattons_Best
          //-----------------------------------------------------
          myScrollViewerTextBlock.Height = mapPanelHeight - myCanvasTank.ActualHeight - 5;
          myTextBlockDisplay.Height = mapPanelHeight - myCanvasTank.ActualHeight;
-         //myTextBlockDisplay.Width = myScrollViewerTextBlock.ActualWidth;
-         //Visibility v = myScrollViewerTextBlock.ComputedVerticalScrollBarVisibility;
-         //if (v == Visibility.Visible)
-         //   myTextBlockDisplay.Width -= System.Windows.SystemParameters.VerticalScrollBarWidth;
          //-----------------------------------------------------
          double mapPanelWidth = myDockPanelTop.ActualWidth - myDockPanelControls.ActualWidth - System.Windows.SystemParameters.VerticalScrollBarWidth;
          myScrollViewerMap.Width = mapPanelWidth;

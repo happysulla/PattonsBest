@@ -32,6 +32,12 @@ namespace Pattons_Best
          }
          switch (action)
          {
+            case GameAction.RemoveSplashScreen:
+               ShowInitialScreen(myCanvas);
+               break;
+            case GameAction.SetupShowMapHistorical:
+               ShowHistoricalMap(myCanvas);
+               break;
             case GameAction.EndGameWin:
                ShowEndGameSuccess(myCanvas);
                break;
@@ -43,6 +49,31 @@ namespace Pattons_Best
          }
       }
       //-------------------------------------------------
+      private void ShowInitialScreen(Canvas c)
+      {
+         Image imageStart = new Image() { Name = "Map", Width = 1617, Height = 880, Source = MapItem.theMapImages.GetBitmapImage("Sherman3") };
+         c.Children.Add(imageStart);
+         double x = (c.ActualWidth - imageStart.Width) * 0.5;
+         double y = (c.ActualHeight - imageStart.Height) * 0.5;
+         Canvas.SetLeft(imageStart, x);
+         Canvas.SetTop(imageStart, y);
+
+         c.LayoutTransform = new ScaleTransform(1.0, 1.0);
+         BitmapImage bmi1 = new BitmapImage();
+         Image img = new Image { Source = bmi1, Height = c.ActualHeight, Width = c.ActualWidth, Stretch = Stretch.Fill };
+         ImageBehavior.SetAnimatedSource(img, bmi1);
+         c.Children.Add(img);
+         Canvas.SetLeft(img, 0);
+         Canvas.SetTop(img, 0);
+         Canvas.SetZIndex(img, 99999);
+      }
+      private void ShowHistoricalMap(Canvas c)
+      {
+         Image imageMap = new Image() { Name = "Map", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapHistorical") };
+         c.Children.Add(imageMap);
+         Canvas.SetLeft(imageMap, 0);
+         Canvas.SetTop(imageMap, 0);
+      }
       private void ShowEndGameSuccess(Canvas c)
       {
          c.LayoutTransform = new ScaleTransform(1.0, 1.0);
