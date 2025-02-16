@@ -50,6 +50,7 @@ namespace Pattons_Best.Model
       {
          Day = entry.myDate;
          Situation = entry.mySituation;
+         Probability = entry.myProbability;  
          Resistance = entry.myResistance;
       }
    }

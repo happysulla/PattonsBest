@@ -71,9 +71,9 @@ namespace Pattons_Best
                   subItem32.InputGestureText = "Ctrl+Shift+R";
                   myMenuItemTopLevel3.Items.Add(subItem32);
                   MenuItem subItem33 = new MenuItem();
-                  subItem33.Header = "_Inventory...";
-                  subItem33.InputGestureText = "Ctrl+I";
-                  subItem33.Click += MenuItemViewInventory_Click;
+                  subItem33.Header = "_After Action Report...";
+                  subItem33.InputGestureText = "Ctrl+A";
+                  subItem33.Click += MenuItemViewAfterActionReport;
                   myMenuItemTopLevel3.Items.Add(subItem33);
                   MenuItem subItem34 = new MenuItem();
                   subItem34.Header = "_Game Feats...";
@@ -98,11 +98,11 @@ namespace Pattons_Best
                   subItem42.Click += MenuItemHelpEvents_Click;
                   myMenuItemTopLevel4.Items.Add(subItem42);
                   MenuItem subItem43 = new MenuItem();
-                  subItem43.Header = "_Icons...";
+                  subItem43.Header = "_Tables...";
                   subItem43.InputGestureText = "F3";
                   myMenuItemTopLevel4.Items.Add(subItem43);
                   MenuItem subItem44 = new MenuItem();
-                  subItem44.Header = "_Character Description...";
+                  subItem44.Header = "_After Action Report...";
                   subItem44.InputGestureText = "F4";
                   myMenuItemTopLevel4.Items.Add(subItem44);
                   MenuItem subItem45 = new MenuItem();
@@ -269,7 +269,7 @@ namespace Pattons_Best
          else
             e.CanExecute = false;
       }
-      public void MenuItemViewInventory_Click(object sender, RoutedEventArgs e)
+      public void MenuItemViewAfterActionReport(object sender, RoutedEventArgs e)
       {
          GameAction action = GameAction.ShowInventory;
          myGameEngine.PerformAction(ref myGameInstance, ref action);

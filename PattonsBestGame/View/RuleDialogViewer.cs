@@ -201,16 +201,6 @@ namespace Pattons_Best
                   dialog.myFlowDocumentScrollViewer.Width = 1300;
                   dialog.myFlowDocumentScrollViewer.Height = 900;
                   break;
-               case "t220":
-                  dialog.Title = "r220 Combat Table";
-                  dialog.myFlowDocumentScrollViewer.Width = 410;
-                  dialog.myFlowDocumentScrollViewer.Height = 410;
-                  break;
-               case "t226":
-                  dialog.Title = "r226 Treasure Table";
-                  dialog.myFlowDocumentScrollViewer.Width = 400;
-                  dialog.myFlowDocumentScrollViewer.Height = 380;
-                  break;
                default:
                   Logger.Log(LogEnum.LE_ERROR, "ShowTable(): reached default key=" + key);
                   return false;

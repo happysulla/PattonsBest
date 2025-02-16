@@ -87,7 +87,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): title=null for key=" + key);
                   return false;
                }
-               System.Windows.Controls.Button b = new Button { Name = key, FontFamily = myFontFam, FontSize = 12, Margin = new Thickness(5), Content = key };
+               System.Windows.Controls.Button b = new Button { FontFamily = myFontFam, FontSize = 12, Margin = new Thickness(5), Content = key };
                b.Click += ButtonShowRule_Click;
                myGrid.Children.Add(b);
                Grid.SetRow(b, rowNum);
@@ -97,8 +97,6 @@ namespace Pattons_Best
                Grid.SetRow(label, rowNum);
                Grid.SetColumn(label, 1);
                ++rowNum;
-               if ("e195" == key)
-                  break;
             }
          }
          else
@@ -117,9 +115,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): title=null");
                   return false;
                }
-               if ("Travelling Event References" == title)
-                  continue;
-               System.Windows.Controls.Button b = new Button { Name = key, FontFamily = myFontFam, FontSize = 12, Margin = new Thickness(5), Content = key };
+               System.Windows.Controls.Button b = new Button { FontFamily = myFontFam, FontSize = 12, Margin = new Thickness(5), Content = key };
                b.Click += ButtonShowRule_Click;
                myGrid.Children.Add(b);
                Grid.SetRow(b, rowNum);

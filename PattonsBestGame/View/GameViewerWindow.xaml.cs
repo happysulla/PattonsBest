@@ -895,9 +895,9 @@ namespace Pattons_Best
             InputBindings.Add(new KeyBinding(command, keyGesture));
             //------------------------------------------------
             command = new RoutedCommand();
-            keyGesture = new KeyGesture(Key.I, ModifierKeys.Control);
+            keyGesture = new KeyGesture(Key.A, ModifierKeys.Control);
             InputBindings.Add(new KeyBinding(command, keyGesture));
-            CommandBindings.Add(new CommandBinding(command, mmv.MenuItemViewInventory_Click));
+            CommandBindings.Add(new CommandBinding(command, mmv.MenuItemViewAfterActionReport));
             //------------------------------------------------
             command = new RoutedCommand();
             keyGesture = new KeyGesture(Key.G, ModifierKeys.Control);

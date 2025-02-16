@@ -191,6 +191,20 @@ namespace Pattons_Best
                if (false == OpenEvent(gi, gi.EventActive))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): OpenEvent() returned false ae=" + myGameInstance.EventActive + " a=" + action.ToString());
                break;
+            case GameAction.ShowAfterActionReport:
+               if( 0 == gi.Reports.Count )
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView():  gi.Reports.Count=0");
+                  return;
+               }
+               IAfterActionReport aar = gi.Reports[ gi.Reports.Count - 1 ];
+               AfterActionReportDisplay dialogAfterActionReport = new AfterActionReportDisplay(aar);
+               if (true == dialogAfterActionReport.CtorError)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): RuleListingDialog CtorError=true");
+                  return;
+               }
+               break;
             case GameAction.ShowReportErrorDialog:
                ShowReportErrorDialog dialogReportError = new ShowReportErrorDialog();
                dialogReportError.Show();
@@ -198,6 +212,33 @@ namespace Pattons_Best
             case GameAction.ShowAboutDialog:
                ShowAboutDialog dialogAbout = new ShowAboutDialog();
                dialogAbout.Show();
+               break;
+            case GameAction.ShowRuleListing:
+               RuleListingDialog dialogRuleListing = new RuleListingDialog(myRulesMgr);
+               if (true == dialogRuleListing.CtorError)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): RuleListingDialog CtorError=true");
+                  return;
+               }
+               dialogRuleListing.Show();
+               break;
+            case GameAction.ShowEventListing:
+               RuleListingDialog dialogEventListing = new RuleListingDialog(myRulesMgr, true);
+               if (true == dialogEventListing.CtorError)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): RuleListingDialog CtorError=true");
+                  return;
+               }
+               dialogEventListing.Show();
+               break;
+            case GameAction.ShowTableListing:
+               RuleListingDialog dialogTableListing = new RuleListingDialog(myRulesMgr, true);
+               if (true == dialogTableListing.CtorError)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): TableListingDialog CtorError=true");
+                  return;
+               }
+               dialogTableListing.Show();
                break;
             case GameAction.EndGameLost:
             case GameAction.EndGameWin:

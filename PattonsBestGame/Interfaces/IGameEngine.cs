@@ -141,9 +141,11 @@ namespace Pattons_Best
       UpdateLoadingGameReturnToJail,
       UpdateUndo,
 
+      ShowAfterActionReport,
       ShowInventory,
       ShowRuleListing,
       ShowEventListing,
+      ShowTableListing,
       ShowGameFeats,
       ShowReportErrorDialog,
       ShowAboutDialog,
