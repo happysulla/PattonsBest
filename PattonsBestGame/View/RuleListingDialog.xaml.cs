@@ -11,8 +11,8 @@ namespace Pattons_Best
 {
    public partial class RuleListingDialog : Window
    {
-      private const int STARTING_RULE_ROW = 1;
-      private const int STARTING_EVENT_ROW = 1;
+      private const int STARTING_RULE_ROW = 0;
+      private const int STARTING_EVENT_ROW = 0;
       public bool CtorError = false;
       private RuleDialogViewer? myRulesManager = null;
       private Thickness myThickness = new Thickness(5, 2, 5, 2);

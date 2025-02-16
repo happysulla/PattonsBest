@@ -55,7 +55,10 @@ namespace Pattons_Best
                   InlineUIContainer ui = (InlineUIContainer)inline;
                   if (ui.Child is Image img1)
                   {
-                     string fullImagePath = MapImage.theImageDirectory + Utilities.RemoveSpaces(img1.Name) + ".gif";
+                     string imageName = img1.Name;
+                     if (true == img1.Name.Contains("Continue"))
+                        imageName = "Continue";
+                     string fullImagePath = MapImage.theImageDirectory + Utilities.RemoveSpaces(imageName) + ".gif";
                      System.Windows.Media.Imaging.BitmapImage bitImage = new BitmapImage();
                      bitImage.BeginInit();
                      bitImage.UriSource = new Uri(fullImagePath, UriKind.Absolute);

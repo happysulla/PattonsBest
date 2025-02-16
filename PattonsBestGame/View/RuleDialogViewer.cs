@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media.Imaging;
+using WpfAnimatedGif;
 
 namespace Pattons_Best
 {
@@ -264,7 +266,7 @@ namespace Pattons_Best
             if (true == BannerDialog.theIsCheckBoxChecked)
                sb.Append(@"<TextBlock xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' Name='myTextBlockDisplay' xml:space='preserve' Width='555' Height='690' FontFamily='Georgia' FontSize='20' TextWrapping='WrapWithOverflow' IsHyphenationEnabled='true' HorizontalAlignment='Left' VerticalAlignment='Top' Margin='15,0,0,0'>");
             else
-               sb.Append(@"<TextBlock xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' Name='myTextBlockDisplay' xml:space='preserve' Width='555' Height='690' FontFamily='Old English Text MT' FontSize='20' TextWrapping='WrapWithOverflow' IsHyphenationEnabled='true' HorizontalAlignment='Left' VerticalAlignment='Top' Margin='15,0,0,0'>");
+               sb.Append(@"<TextBlock xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' Name='myTextBlockDisplay' xml:space='preserve' Width='555' Height='690' FontFamily='Modern 20' FontSize='20' TextWrapping='WrapWithOverflow' IsHyphenationEnabled='true' HorizontalAlignment='Left' VerticalAlignment='Top' Margin='15,0,0,0'>");
             sb.Append(myEvents[key]);
             sb.Append(@"</TextBlock>");
             StringReader sr = new StringReader(sb.ToString());
@@ -281,7 +283,22 @@ namespace Pattons_Best
                {
                   InlineUIContainer ui = (InlineUIContainer)inline;
                   if (ui.Child is Button b)
+                  {
                      b.Click += Button_Click1;
+                  }
+                  else if(ui.Child is Image img)
+                  {
+                     string imageName = img.Name;
+                     if (true == img.Name.Contains("Continue"))
+                        imageName = "Continue";
+                     string fullImagePath = MapImage.theImageDirectory + Utilities.RemoveSpaces(imageName) + ".gif";
+                     System.Windows.Media.Imaging.BitmapImage bitImage = new BitmapImage();
+                     bitImage.BeginInit();
+                     bitImage.UriSource = new Uri(fullImagePath, UriKind.Absolute);
+                     bitImage.EndInit();
+                     img.Source = bitImage;
+                     ImageBehavior.SetAnimatedSource(img, img.Source);
+                  }
                }
             }
             myEventDialogs[key] = dialog;
