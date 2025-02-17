@@ -50,6 +50,14 @@ namespace Pattons_Best.Model
       public List<EnumDecoration> Decorations { get; set; } = new List<EnumDecoration>();
       //----------------------------------------
       public List<String> Notes { get; set; } = new List<String>();
+      //----------------------------------------
+      public int VictoryPtsTotalTank { get; set; } = 0;
+      public int VictoryPtsTotalFriendly { get; set; } = 0;
+      public int VictoryPtsTotalTerritory { get; set; } = 0;
+      //----------------------------------------
+      public string DayEndedTime { get; set; } = "";
+      public bool IsBreakdown { get; set; } = false;
+      public bool IsKnockedOut { get; set; } = false;
       //---------------------------------------------------------------------------------
       public AfterActionReport (CombatCalenderEntry entry)
       {

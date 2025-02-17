@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography.X509Certificates;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WpfAnimatedGif;
@@ -38,6 +39,10 @@ namespace Pattons_Best
             case GameAction.SetupShowMapHistorical:
                ShowHistoricalMap(myCanvas);
                break;
+            case GameAction.SetupShowAfterActionReport:
+               if( false == ShowAfterActionReport(gi, myCanvas))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowAfterActionReport() returned false");
+               break;
             case GameAction.EndGameWin:
                ShowEndGameSuccess(myCanvas);
                break;
@@ -73,6 +78,24 @@ namespace Pattons_Best
          c.Children.Add(imageMap);
          Canvas.SetLeft(imageMap, 0);
          Canvas.SetTop(imageMap, 0);
+      }
+      private bool ShowAfterActionReport(IGameInstance gi, Canvas c)
+      {
+         if( 0 == gi.Reports.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowAfterActionReport(): gi.Reports.Count = 0");
+            return false;
+         }
+         IAfterActionReport report = gi.Reports[gi.Reports.Count - 1];
+         AfterActionReportUserControl aarControl = new AfterActionReportUserControl(report, true);
+         c.Children.Clear();
+         c.Children.Add(aarControl);
+         c.UpdateLayout();  
+         double x = (c.ActualWidth - aarControl.ActualWidth) * 0.5;
+         double y = (c.ActualHeight - aarControl.ActualHeight) * 0.5;
+         Canvas.SetLeft(aarControl, x);
+         Canvas.SetTop(aarControl, y);
+         return true;
       }
       private void ShowEndGameSuccess(Canvas c)
       {

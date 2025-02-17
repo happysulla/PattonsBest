@@ -6,8 +6,9 @@
              xmlns:local="clr-namespace:Pattons_Best"
              mc:Ignorable="d" 
              d:DesignHeight="900
-             " d:DesignWidth="800">
-   <Grid Name="myGrid" MinWidth="600" MaxWidth="800" MinHeight="880" MaxHeight="880" Background="#FFF7FAF6"  >
+             " d:DesignWidth="800"
+             MouseDown="Window_MouseDown">
+   <Grid Name="myGrid" MinWidth="600" MaxWidth="800" MinHeight="880" MaxHeight="880" Background="#FFF7FAF6"   >
       <Grid.ColumnDefinitions>
          <ColumnDefinition Width="1*"/>
          <ColumnDefinition Width="1*"/>
@@ -21,6 +22,7 @@
          <RowDefinition Height="Auto"></RowDefinition>
       </Grid.RowDefinitions>
       <Label Name="myLabelHeading" Grid.Row="0" Grid.ColumnSpan="2" FontSize="32" HorizontalAlignment="Center" FontFamily="Arial Rounded MT Bold">After Action Report</Label>
+      <!--  ++++++++++++++++++++++++++++++++++++Info++++++++++++++++++++++++++++++++++++ -->
       <StackPanel  Name="myStackPanelInfo" Grid.Row="1" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left" Margin="0,0,0,0" >
          <Grid Margin="20,0,20,0">
             <Grid.ColumnDefinitions>
@@ -40,7 +42,7 @@
             </Label>
             <Label Grid.Row="1" Grid.Column="0" FontFamily="Arial Rounded MT Bold" FontSize="14">TANK NAME:</Label>
             <Label Grid.Row="1" Grid.Column="1" FontFamily="Arial Rounded MT Bold" FontSize="14">
-               <Span Name="mySpanTankName" TextDecorations="Underline">__________________________________________________</Span>
+               <Span Name="mySpanTankName" TextDecorations="Underline" IsEnabled="false" MouseDown="SpanTankName_MouseDown">__________________________________________________</Span>
             </Label>
             <Label Grid.Row="2" Grid.Column="0" FontFamily="Arial Rounded MT Bold" FontSize="14">TANK MODEL:</Label>
             <Label Grid.Row="2" Grid.Column="1" FontFamily="Arial Rounded MT Bold" FontSize="14">
@@ -62,9 +64,9 @@
                <Table BorderBrush='Black' BorderThickness='1'>
                   <Table.Columns>
                      <TableColumn Width='90'/>
-                     <TableColumn Width='60'/>
-                     <TableColumn Width='140'/>
-                     <TableColumn Width='60'/>
+                     <TableColumn Width='40'/>
+                     <TableColumn Width='160'/>
+                     <TableColumn Width='50'/>
                   </Table.Columns>
                   <TableRowGroup>
                      <TableRow  FontSize='14' >
@@ -104,7 +106,7 @@
                         </TableCell>
                         <TableCell TextAlignment='Left'>
                            <Paragraph>
-                              <Run Name="myRunCommanderName" Text="Stewart"/>
+                              <Span Name="mySpanCommanderName" TextDecorations="Underline" IsEnabled="false" MouseDown="SpanCommanderName_MouseDown" FontFamily="Courier New"> </Span>
                            </Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
@@ -126,7 +128,7 @@
                         </TableCell>
                         <TableCell TextAlignment='Left'>
                            <Paragraph>
-                              <Run Name="myRunGunnerName" Text="Murry"/>
+                              <Span Name="mySpanGunnerName" TextDecorations="Underline" IsEnabled="false" MouseDown="SpanGunnerName_MouseDown" FontFamily="Courier New"> </Span>
                            </Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
@@ -146,9 +148,9 @@
                               <Run Text="Pvt"/>
                            </Paragraph>
                         </TableCell>
-                        <TableCell TextAlignment='Left'>
+                        <TableCell TextAlignment='Left' >
                            <Paragraph>
-                              <Run Name="myRunLoaderName" Text="Bugler"/>
+                              <Span Name="mySpanLoaderName" TextDecorations="Underline" IsEnabled="false" MouseDown="SpanLoaderName_MouseDown" FontFamily="Courier New"> </Span>
                            </Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
@@ -170,7 +172,7 @@
                         </TableCell>
                         <TableCell TextAlignment='Left'>
                            <Paragraph>
-                              <Run Name="myRunDriverName" Text="Cooper"/>
+                              <Span Name="mySpanDriverName" TextDecorations="Underline" IsEnabled="false" MouseDown="SpanDriverName_MouseDown" FontFamily="Courier New"> </Span>
                            </Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
@@ -192,7 +194,7 @@
                         </TableCell>
                         <TableCell TextAlignment='Left'>
                            <Paragraph>
-                              <Run Name="myRunAssistantName" Text="Hutchinson"/>
+                              <Span Name="mySpanAssistantName" TextDecorations="Underline" IsEnabled="false" MouseDown="SpanAssistantName_MouseDown" FontFamily="Courier New"> </Span>
                            </Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
@@ -591,10 +593,22 @@
                      </TableRow>
                      <TableRow  FontSize='12'>
                         <TableCell TextAlignment='Right'>
+                           <Paragraph>KO PzV(9):</Paragraph>
+                        </TableCell>
+                        <TableCell TextAlignment='Center'>
+                           <Paragraph>
+                              <Run Name="myRunVictoryPointsPzV" Text="0"/>
+                           </Paragraph>
+                        </TableCell>
+                     </TableRow>
+                     <TableRow  FontSize='12'>
+                        <TableCell TextAlignment='Right'>
                            <Paragraph>KO PzVI (12):</Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
-                           <Paragraph>0</Paragraph>
+                           <Paragraph>
+                              <Run Name="myRunVictoryPointsPzVI" Text="0"/>
+                           </Paragraph>
                         </TableCell>
                      </TableRow>
                      <TableRow  FontSize='12'>
@@ -622,7 +636,9 @@
                            <Paragraph>Each Captured Area (1):</Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
-                           <Paragraph>0</Paragraph>
+                           <Paragraph>
+                              <Run Name="myRunVictoryPointsCaptureArea" Text="0"/>
+                           </Paragraph>
                         </TableCell>
                      </TableRow>
                      <TableRow  FontSize='12'>

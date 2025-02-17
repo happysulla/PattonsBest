@@ -91,5 +91,14 @@ namespace Pattons_Best
       List<EnumDecoration> Decorations { get; set; }
       //----------------------------------------
       List<String> Notes { get; set; }
+      //----------------------------------------
+      int VictoryPtsTotalTank { get; set; }
+      int VictoryPtsTotalFriendly { get; set; }
+      int VictoryPtsTotalTerritory { get; set; }
+      //----------------------------------------
+      string DayEndedTime { get; set; }
+      bool IsBreakdown { get; set; }
+      bool IsKnockedOut { get; set; }
+
    }
 }
