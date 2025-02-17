@@ -6,47 +6,6 @@ using System.Threading.Tasks;
 
 namespace Pattons_Best
 {
-   public enum EnumCrewRole
-   {
-      Commander,
-      Gunner,
-      Loader,
-      Driver,
-      Assistant
-   };
-   public enum EnumCrewRank
-   {
-      Pvt,
-      Cpl,
-      Sgt,
-      Lt1,
-      Lt2,
-      Cpt
-   };
-   public struct CrewMember
-   {
-      public EnumCrewRole myRole;
-      public EnumCrewRank myRank;
-      public string myName;
-      public int myRating;
-      public CrewMember(EnumCrewRole role, EnumCrewRank rank, int rating)
-      {
-         myRole = role;
-         myRank = rank;
-         myName = SurnameMgr.GetSurname();
-         myRating = rating;
-      }
-   };
-   public enum EnumDecoration
-   {
-      BronzeStar,
-      SilverStar,
-      DistinguisedServiceCross,
-      MedalOfHonor,
-      PurpleHeart,
-      EuropeanCampain,
-      WW2Victory
-   };
    public interface IAfterActionReport
    {
       string Day { get; set; }

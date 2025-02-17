@@ -22,16 +22,23 @@ namespace Pattons_Best
       public bool CtorError { get; } = false;
       public IAfterActionReport Report { get; set; }
       public bool myIsEditable = false;
-      public static SolidColorBrush theBrushActive = new SolidColorBrush() { Color=Color.FromArgb(0xFF,0xB9,0xEA,0x9E) };
+      private bool myIsEditableTankName = false;
+      private bool myIsEditableCommanderName = false;
+      private bool myIsEditableGunnerName = false;
+      private bool myIsEditableLoaderName = false;
+      private bool myIsEditableDriverName = false;
+      private bool myIsEditableAssistantName = false;
+      public static SolidColorBrush theBrushActive = new SolidColorBrush() { Color = Color.FromArgb(0xFF, 0xB9, 0xEA, 0x9E) };
       public static SolidColorBrush theBrushInActive = new SolidColorBrush() { Color = Colors.LightGray };
       private readonly FontFamily myFontFam0 = new FontFamily("Arial Rounded MT Bold");
       private readonly FontFamily myFontFam1 = new FontFamily("Courier New");
-      public AfterActionReportUserControl(IAfterActionReport report, bool isEditable=false)
+
+      public AfterActionReportUserControl(IAfterActionReport report, bool isEditable = false)
       {
          InitializeComponent();
          myIsEditable = isEditable;
          Report = report;
-         if( false == UpdateReport(report) )
+         if (false == UpdateReport(report))
          {
             Logger.Log(LogEnum.LE_ERROR, "AfterActionReportUserControl(): UpdateReport() returned false");
             CtorError = true;
@@ -47,7 +54,7 @@ namespace Pattons_Best
          s = AddSpaces(report.Name, HEADER_INFO_LEN);
          mySpanTankName.Inlines.Clear();
          mySpanTankName.Inlines.Add(new Run(s));
-         if( true == myIsEditable )
+         if (true == myIsEditable)
          {
             mySpanTankName.IsEnabled = true;
             mySpanTankName.Background = theBrushInActive;
@@ -73,7 +80,7 @@ namespace Pattons_Best
          if (true == myIsEditable)
          {
             mySpanCommanderName.IsEnabled = true;
-            mySpanCommanderName.Background = theBrushActive;
+            mySpanCommanderName.Background = theBrushInActive;
          }
          //----------------------------------
          myRunGunnerRating.Text = report.Gunner.myRating.ToString();
@@ -83,7 +90,7 @@ namespace Pattons_Best
          if (true == myIsEditable)
          {
             mySpanGunnerName.IsEnabled = true;
-            mySpanGunnerName.Background = theBrushActive;
+            mySpanGunnerName.Background = theBrushInActive;
          }
          //----------------------------------
          myRunLoaderRating.Text = report.Loader.myRating.ToString();
@@ -93,7 +100,7 @@ namespace Pattons_Best
          if (true == myIsEditable)
          {
             mySpanLoaderName.IsEnabled = true;
-            mySpanLoaderName.Background = theBrushActive;
+            mySpanLoaderName.Background = theBrushInActive;
          }
          //----------------------------------
          myRunDriverRating.Text = report.Driver.myRating.ToString();
@@ -103,7 +110,7 @@ namespace Pattons_Best
          if (true == myIsEditable)
          {
             mySpanDriverName.IsEnabled = true;
-            mySpanDriverName.Background = theBrushActive;
+            mySpanDriverName.Background = theBrushInActive;
          }
          //----------------------------------
          myRunAssistantRating.Text = report.Assistant.myRating.ToString();
@@ -113,7 +120,7 @@ namespace Pattons_Best
          if (true == myIsEditable)
          {
             mySpanAssistantName.IsEnabled = true;
-            mySpanAssistantName.Background = theBrushActive;
+            mySpanAssistantName.Background = theBrushInActive;
          }
          //----------------------------------
          myRunAmmo30Calibre.Text = report.Ammo30CalibreMG.ToString();
@@ -145,66 +152,142 @@ namespace Pattons_Best
       //-----------------------------------------------------------------------------------
       public string AddSpaces(string s, int length)
       {
-         if(length < s.Length )
+         if (length < s.Length)
          {
             s = s.Substring(0, length);
             return s;
          }
-         StringBuilder sb = new StringBuilder();  
+         StringBuilder sb = new StringBuilder();
          sb.Append(s);
          int count = length - s.Length;
-         for(int i=0; i< count; ++i )
+         for (int i = 0; i < count; ++i)
             sb.Append('_');
          return sb.ToString();
       }
       //-------------------------CONTROLLER FUNCTIONS--------------------------------
       private void SpanTankName_MouseDown(object sender, MouseButtonEventArgs e)
       {
+         ResetTextBoxes();
+         myIsEditableTankName = true;
          mySpanTankName.Inlines.Clear();
          mySpanTankName.Background = theBrushActive;
          string text = AddSpaces(" ", HEADER_INFO_LEN);
-         TextBox textbox = new TextBox() { Background=theBrushActive, IsEnabled=true, Text=text, TextWrapping=TextWrapping.NoWrap, FontFamily=myFontFam0, Focusable=true};
+         TextBox textbox = new TextBox() { Background = theBrushActive, IsEnabled = true, Text = text, TextWrapping = TextWrapping.NoWrap, FontFamily = myFontFam0, Focusable = true };
          mySpanTankName.Inlines.Add(new InlineUIContainer(textbox));
          textbox.PreviewTextInput += OverwriteTextBox_PreviewTextInput;
          textbox.Loaded += OverwriteTextBox_Loaded;
          e.Handled = true;
       }
-
-      private void Textbox_Loaded(object sender, RoutedEventArgs e)
-      {
-         throw new NotImplementedException();
-      }
-
       private void SpanCommanderName_MouseDown(object sender, MouseButtonEventArgs e)
       {
-
+         ResetTextBoxes();
+         myIsEditableCommanderName = true;
+         mySpanCommanderName.Inlines.Clear();
+         mySpanCommanderName.Background = theBrushActive;
+         string text = AddSpaces(" ", CREW_NAME_LEN);
+         TextBox textbox = new TextBox() { Background = theBrushActive, IsEnabled = true, Text = text, TextWrapping = TextWrapping.NoWrap, FontFamily = myFontFam0, Focusable = true };
+         mySpanCommanderName.Inlines.Add(new InlineUIContainer(textbox));
+         textbox.PreviewTextInput += OverwriteTextBox_PreviewTextInput;
+         textbox.Loaded += OverwriteTextBox_Loaded;
+         e.Handled = true;
       }
       private void SpanGunnerName_MouseDown(object sender, MouseButtonEventArgs e)
       {
-
+         ResetTextBoxes();
+         myIsEditableGunnerName = true;
+         mySpanGunnerName.Inlines.Clear();
+         mySpanGunnerName.Background = theBrushActive;
+         string text = AddSpaces(" ", CREW_NAME_LEN);
+         TextBox textbox = new TextBox() { Background = theBrushActive, IsEnabled = true, Text = text, TextWrapping = TextWrapping.NoWrap, FontFamily = myFontFam0, Focusable = true };
+         mySpanGunnerName.Inlines.Add(new InlineUIContainer(textbox));
+         textbox.PreviewTextInput += OverwriteTextBox_PreviewTextInput;
+         textbox.Loaded += OverwriteTextBox_Loaded;
+         e.Handled = true;
       }
       private void SpanLoaderName_MouseDown(object sender, MouseButtonEventArgs e)
       {
-
+         ResetTextBoxes();
+         myIsEditableLoaderName = true;
+         mySpanLoaderName.Inlines.Clear();
+         mySpanLoaderName.Background = theBrushActive;
+         string text = AddSpaces(" ", CREW_NAME_LEN);
+         TextBox textbox = new TextBox() { Background = theBrushActive, IsEnabled = true, Text = text, TextWrapping = TextWrapping.NoWrap, FontFamily = myFontFam0, Focusable = true };
+         mySpanLoaderName.Inlines.Add(new InlineUIContainer(textbox));
+         textbox.PreviewTextInput += OverwriteTextBox_PreviewTextInput;
+         textbox.Loaded += OverwriteTextBox_Loaded;
+         e.Handled = true;
       }
       private void SpanDriverName_MouseDown(object sender, MouseButtonEventArgs e)
       {
-
+         ResetTextBoxes();
+         myIsEditableDriverName = true;
+         mySpanDriverName.Inlines.Clear();
+         mySpanDriverName.Background = theBrushActive;
+         string text = AddSpaces(" ", CREW_NAME_LEN);
+         TextBox textbox = new TextBox() { Background = theBrushActive, IsEnabled = true, Text = text, TextWrapping = TextWrapping.NoWrap, FontFamily = myFontFam0, Focusable = true };
+         mySpanDriverName.Inlines.Add(new InlineUIContainer(textbox));
+         textbox.PreviewTextInput += OverwriteTextBox_PreviewTextInput;
+         textbox.Loaded += OverwriteTextBox_Loaded;
+         e.Handled = true;
       }
       private void SpanAssistantName_MouseDown(object sender, MouseButtonEventArgs e)
       {
-
+         ResetTextBoxes();
+         myIsEditableAssistantName = true;
+         mySpanAssistantName.Inlines.Clear();
+         mySpanAssistantName.Background = theBrushActive;
+         string text = AddSpaces(" ", CREW_NAME_LEN);
+         TextBox textbox = new TextBox() { Background = theBrushActive, IsEnabled = true, Text = text, TextWrapping = TextWrapping.NoWrap, FontFamily = myFontFam0, Focusable = true };
+         mySpanAssistantName.Inlines.Add(new InlineUIContainer(textbox));
+         textbox.PreviewTextInput += OverwriteTextBox_PreviewTextInput;
+         textbox.Loaded += OverwriteTextBox_Loaded;
+         e.Handled = true;
       }
       private void Window_MouseDown(object sender, MouseButtonEventArgs e)
       {
-         if(true == mySpanTankName.IsEnabled)
+         ResetTextBoxes();
+         e.Handled = true;
+      }
+      private void OverwriteTextBox_Loaded(object sender, RoutedEventArgs e)
+      {
+         if (null == sender)
+            return;
+         TextBox? textBox = sender as TextBox; // Need to put the focus on TextBox after it is loaded
+         if (null == textBox)
+            return;
+         textBox.Focus();
+         Keyboard.Focus(textBox);
+         e.Handled = true;
+      }
+      private void OverwriteTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+      {
+         if (null == sender)
+            return;
+         TextBox? textBox = sender as TextBox;
+         if (null == textBox)
+            return;
+         string uppercase = e.Text;
+         if( true == myIsEditableTankName)
+            uppercase = e.Text.ToUpper();
+         int caretIndex = textBox.CaretIndex;
+         if (caretIndex < textBox.Text.Length)
+            textBox.Text = textBox.Text.Remove(caretIndex, 1).Insert(caretIndex, uppercase);
+         else
+            textBox.Text = textBox.Text.Insert(caretIndex, uppercase);
+         textBox.CaretIndex = caretIndex + 1;
+         e.Handled = true;
+      }
+      private void ResetTextBoxes()
+      {
+         if (true == myIsEditableTankName)
          {
-            if( 0 < mySpanTankName.Inlines.Count )
+            myIsEditableTankName = false;
+            if (0 < mySpanTankName.Inlines.Count)
             {
                Inline inline = mySpanTankName.Inlines.FirstInline;
-               if( inline is InlineUIContainer uiContainer)
+               if (inline is InlineUIContainer uiContainer)
                {
-                  if( uiContainer.Child is TextBox textbox)
+                  if (uiContainer.Child is TextBox textbox)
                      Report.Name = textbox.Text;
                }
             }
@@ -214,34 +297,101 @@ namespace Pattons_Best
             mySpanTankName.Inlines.Clear();
             mySpanTankName.Inlines.Add(new Run(s));
          }
-      //------------------------------------------------------
+         if (true == myIsEditableCommanderName)
+         {
+            myIsEditableCommanderName = false;
+            CrewMember commander = Report.Commander;
+            if (0 < mySpanCommanderName.Inlines.Count)
+            {
+               Inline inline = mySpanCommanderName.Inlines.FirstInline;
+               if (inline is InlineUIContainer uiContainer)
+               {
+                  if (uiContainer.Child is TextBox textbox)
+                     commander.myName = textbox.Text;
+               }
+            }
+            mySpanCommanderName.Background = theBrushInActive;
+            mySpanCommanderName.Inlines.Clear();
+            String s = AddSpaces(commander.myName, CREW_NAME_LEN);
+            mySpanCommanderName.Inlines.Clear();
+            mySpanCommanderName.Inlines.Add(new Run(s));
+         }
+         if (true == myIsEditableGunnerName)
+         {
+            myIsEditableGunnerName = false;
+            CrewMember gunner = Report.Gunner;
+            if (0 < mySpanGunnerName.Inlines.Count)
+            {
+               Inline inline = mySpanGunnerName.Inlines.FirstInline;
+               if (inline is InlineUIContainer uiContainer)
+               {
+                  if (uiContainer.Child is TextBox textbox)
+                     gunner.myName = textbox.Text;
+               }
+            }
+            mySpanGunnerName.Background = theBrushInActive;
+            mySpanGunnerName.Inlines.Clear();
+            String s = AddSpaces(gunner.myName, CREW_NAME_LEN);
+            mySpanGunnerName.Inlines.Clear();
+            mySpanGunnerName.Inlines.Add(new Run(s));
+         }
+         if (true == myIsEditableLoaderName)
+         {
+            myIsEditableLoaderName = false;
+            CrewMember loader = Report.Loader;
+            if (0 < mySpanLoaderName.Inlines.Count)
+            {
+               Inline inline = mySpanLoaderName.Inlines.FirstInline;
+               if (inline is InlineUIContainer uiContainer)
+               {
+                  if (uiContainer.Child is TextBox textbox)
+                     loader.myName = textbox.Text;
+               }
+            }
+            mySpanLoaderName.Background = theBrushInActive;
+            mySpanLoaderName.Inlines.Clear();
+            String s = AddSpaces(loader.myName, CREW_NAME_LEN);
+            mySpanLoaderName.Inlines.Clear();
+            mySpanLoaderName.Inlines.Add(new Run(s));
+         }
+         if (true == myIsEditableDriverName)
+         {
+            myIsEditableDriverName = false;
+            CrewMember driver = Report.Driver;
+            if (0 < mySpanDriverName.Inlines.Count)
+            {
+               Inline inline = mySpanDriverName.Inlines.FirstInline;
+               if (inline is InlineUIContainer uiContainer)
+               {
+                  if (uiContainer.Child is TextBox textbox)
+                     driver.myName = textbox.Text;
+               }
+            }
+            mySpanDriverName.Background = theBrushInActive;
+            mySpanDriverName.Inlines.Clear();
+            String s = AddSpaces(driver.myName, CREW_NAME_LEN);
+            mySpanDriverName.Inlines.Clear();
+            mySpanDriverName.Inlines.Add(new Run(s));
+         }
+         if (true == myIsEditableAssistantName)
+         {
+            myIsEditableAssistantName = false;
+            CrewMember assistant = Report.Assistant;
+            if (0 < mySpanAssistantName.Inlines.Count)
+            {
+               Inline inline = mySpanAssistantName.Inlines.FirstInline;
+               if (inline is InlineUIContainer uiContainer)
+               {
+                  if (uiContainer.Child is TextBox textbox)
+                     assistant.myName = textbox.Text;
+               }
+            }
+            mySpanAssistantName.Background = theBrushInActive;
+            mySpanAssistantName.Inlines.Clear();
+            String s = AddSpaces(assistant.myName, CREW_NAME_LEN);
+            mySpanAssistantName.Inlines.Clear();
+            mySpanAssistantName.Inlines.Add(new Run(s));
+         }
       }
-      private void OverwriteTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-      {
-         if (null == sender)
-            return;
-         TextBox? textBox = sender as TextBox;
-         if (null == textBox)
-            return;
-         int caretIndex = textBox.CaretIndex;
-         if (caretIndex < textBox.Text.Length)
-            textBox.Text = textBox.Text.Remove(caretIndex, 1).Insert(caretIndex, e.Text);
-         else
-            textBox.Text = textBox.Text.Insert(caretIndex, e.Text);
-         textBox.CaretIndex = caretIndex + 1;
-         e.Handled = true;
-      }
-      private void OverwriteTextBox_Loaded(object sender, RoutedEventArgs e)
-      {
-         if (null == sender)
-            return;
-         TextBox? textBox = sender as TextBox;
-         if (null == textBox)
-            return;
-         textBox.Focus();
-         Keyboard.Focus(textBox);
-         e.Handled = true;
-      }
-
    }
 }

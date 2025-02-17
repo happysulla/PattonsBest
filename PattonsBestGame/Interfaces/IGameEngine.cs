@@ -20,6 +20,38 @@ namespace Pattons_Best
       Heavy,
       None
    };
+   public enum EnumCrewRole
+   {
+      Commander,
+      Gunner,
+      Loader,
+      Driver,
+      Assistant
+   };
+   public struct CrewMember
+   {
+      public EnumCrewRole myRole;
+      public string myRank;
+      public string myName;
+      public int myRating;
+      public CrewMember(EnumCrewRole role, string rank, int rating)
+      {
+         myRole = role;
+         myRank = rank;
+         myName = SurnameMgr.GetSurname();
+         myRating = rating;
+      }
+   };
+   public enum EnumDecoration
+   {
+      ED_BronzeStar,
+      ED_SilverStar,
+      ED_DistinguisedServiceCross,
+      ED_MedalOfHonor,
+      ED_PurpleHeart,
+      ED_EuropeanCampain,
+      ED_WW2Victory
+   };
    public enum EnumModel
    {
       M4_A,
