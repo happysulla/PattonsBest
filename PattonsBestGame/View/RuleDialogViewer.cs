@@ -199,7 +199,7 @@ namespace Pattons_Best
                return false;
             }
             StringBuilder sb = new StringBuilder();
-            sb.Append(@"<FlowDocument xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' Name='myFlowDocument'>");
+            sb.Append(@"<FlowDocument xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' Name='myFlowDocument' TextAlignment='Center'>");
             sb.Append(myTables[key]);
             sb.Append(@"</FlowDocument>");
             StringReader sr = new StringReader(sb.ToString());
@@ -218,7 +218,7 @@ namespace Pattons_Best
                   break;
                case "Weather":
                   dialog.Title = "Weather";
-                  dialog.myFlowDocumentScrollViewer.Width = 620;
+                  dialog.myFlowDocumentScrollViewer.Width = 700;
                   dialog.myFlowDocumentScrollViewer.Height = 800;
                   break;
                default:

@@ -58,9 +58,9 @@
          </Grid>
       </StackPanel>
       <!--  ++++++++++++++++++++++++++++++++++++Crew Table++++++++++++++++++++++++++++++++++++ -->
-      <StackPanel  Name="myStackPanelCrew" Grid.Row="1" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Right"  >
-         <FlowDocumentScrollViewer x:Name="myFlowDocumentReaderCrew"  VerticalScrollBarVisibility="Disabled">
-            <FlowDocument>
+      <StackPanel  Name="myStackPanelCrew" Grid.Row="1" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center"  >
+            <FlowDocumentScrollViewer x:Name="myFlowDocumentScrollViewerCrew"  VerticalScrollBarVisibility="Disabled" Background="#FF1E1E1E">
+             <FlowDocument Name="myFlowDocumentCrew" TextAlignment="Center">
                <Table BorderBrush='Black' BorderThickness='1' TextAlignment="Center">
                   <Table.Columns>
                      <TableColumn Width='90'/>
