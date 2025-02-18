@@ -101,6 +101,19 @@ namespace Pattons_Best
             return "ERROR";
          }
       }
+      public string GetTableTitle(string key)
+      {
+         switch(key)
+         {
+            case "Calendar":
+               return "Not Applicable";
+            case "Weather":
+               return "Orange";
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetTableTitle(): reached default key=" + key);
+               return "ERROR";
+         }
+      }
       public bool ShowRule(string key)
       {
          try
@@ -202,6 +215,11 @@ namespace Pattons_Best
                   dialog.Title = "Combat Calendar";
                   dialog.myFlowDocumentScrollViewer.Width = 1300;
                   dialog.myFlowDocumentScrollViewer.Height = 900;
+                  break;
+               case "Weather":
+                  dialog.Title = "Weather";
+                  dialog.myFlowDocumentScrollViewer.Width = 620;
+                  dialog.myFlowDocumentScrollViewer.Height = 800;
                   break;
                default:
                   Logger.Log(LogEnum.LE_ERROR, "ShowTable(): reached default key=" + key);
@@ -501,19 +519,19 @@ namespace Pattons_Best
                return;
             }
          }
-         else if (true == key.StartsWith("t")) // rules based click
-         {
-            if (false == ShowTable(key))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Button_Click():  ShowTable() returned false");
-               return;
-            }
-         }
-         else if (true == key.StartsWith("e")) // rules based click
+         else if (true == key.StartsWith("e")) // event based click
          {
             if (false == ShowEvent(key))
             {
                Logger.Log(LogEnum.LE_ERROR, "Button_Click():  ShowEvent() returned false");
+               return;
+            }
+         }
+         else  // table based click
+         {
+            if (false == ShowTable(key))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Button_Click():  ShowTable() returned false");
                return;
             }
          }
@@ -530,15 +548,7 @@ namespace Pattons_Best
                return;
             }
          }
-         else if (true == key.StartsWith("t")) // rules based click
-         {
-            if (false == ShowTable(key))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Button_Click():  ShowTable() returned false");
-               return;
-            }
-         }
-         else if (true == key.StartsWith("e")) // rules based click
+         else if (true == key.StartsWith("e")) // event based click
          {
             if (false == ShowEventDialog(key))
             {
@@ -546,6 +556,15 @@ namespace Pattons_Best
                return;
             }
          }
+         else  // table based click
+         {
+            if (false == ShowTable(key))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Button_Click():  ShowTable() returned false");
+               return;
+            }
+         }
+
       }
    }
 }

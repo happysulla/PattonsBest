@@ -61,7 +61,7 @@
       <StackPanel  Name="myStackPanelCrew" Grid.Row="1" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Right"  >
          <FlowDocumentScrollViewer x:Name="myFlowDocumentReaderCrew"  VerticalScrollBarVisibility="Disabled">
             <FlowDocument>
-               <Table BorderBrush='Black' BorderThickness='1'>
+               <Table BorderBrush='Black' BorderThickness='1' TextAlignment="Center">
                   <Table.Columns>
                      <TableColumn Width='90'/>
                      <TableColumn Width='40'/>

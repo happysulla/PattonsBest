@@ -216,7 +216,7 @@ namespace Pattons_Best
                dialogAbout.Show();
                break;
             case GameAction.ShowRuleListing:
-               RuleListingDialog dialogRuleListing = new RuleListingDialog(myRulesMgr);
+               RuleListingDialog dialogRuleListing = new RuleListingDialog(myRulesMgr, false, false);
                if (true == dialogRuleListing.CtorError)
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): RuleListingDialog CtorError=true");
@@ -225,7 +225,7 @@ namespace Pattons_Best
                dialogRuleListing.Show();
                break;
             case GameAction.ShowEventListing:
-               RuleListingDialog dialogEventListing = new RuleListingDialog(myRulesMgr, true);
+               RuleListingDialog dialogEventListing = new RuleListingDialog(myRulesMgr, true, false);
                if (true == dialogEventListing.CtorError)
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): RuleListingDialog CtorError=true");
@@ -234,7 +234,7 @@ namespace Pattons_Best
                dialogEventListing.Show();
                break;
             case GameAction.ShowTableListing:
-               RuleListingDialog dialogTableListing = new RuleListingDialog(myRulesMgr, true);
+               RuleListingDialog dialogTableListing = new RuleListingDialog(myRulesMgr, false, true);
                if (true == dialogTableListing.CtorError)
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): TableListingDialog CtorError=true");
@@ -718,14 +718,6 @@ namespace Pattons_Best
                return;
             }
          }
-         else if (true == key.StartsWith("t")) // rules based click
-         {
-            if (false == ShowTable(key))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Button_Click(): ShowTable() returned false for key=" + key);
-               return;
-            }
-         }
          else if (true == key.StartsWith("e")) // event based click
          {
             myGameInstance.EventDisplayed = key;
@@ -771,6 +763,13 @@ namespace Pattons_Best
                if (false == ShowRule("r1.1"))
                {
                   Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): ShowRule(r1.1) returned false");
+                  return false;
+               }
+               break;
+            case "Weather":
+               if (false == ShowTable(content))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Button_Click(): ShowTable() returned false for key=" + content);
                   return false;
                }
                break;

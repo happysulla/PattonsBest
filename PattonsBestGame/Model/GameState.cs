@@ -125,10 +125,18 @@ namespace Pattons_Best
          string returnStatus = "OK";
          switch (action)
          {
+            case GameAction.ShowInventory:
+            case GameAction.ShowGameFeats:
+            case GameAction.ShowRuleListing:
+            case GameAction.ShowEventListing:
+            case GameAction.ShowTableListing:
+            case GameAction.ShowReportErrorDialog:
+            case GameAction.ShowAboutDialog:
+            case GameAction.UpdateEventViewerDisplay:
+            case GameAction.EndGameShowFeats:
+               break;
             case GameAction.UpdateEventViewerActive: // Only change active event
                gi.EventDisplayed = gi.EventActive; // next screen to show
-               break;
-            case GameAction.UpdateEventViewerDisplay: // Only change active event
                break;
             case GameAction.UpdateNewGame:
             case GameAction.RemoveSplashScreen:
@@ -478,6 +486,7 @@ namespace Pattons_Best
             case GameAction.ShowGameFeats:
             case GameAction.ShowRuleListing:
             case GameAction.ShowEventListing:
+            case GameAction.ShowTableListing:
             case GameAction.ShowReportErrorDialog:
             case GameAction.ShowAboutDialog:
             case GameAction.UpdateEventViewerDisplay:

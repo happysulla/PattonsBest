@@ -20,28 +20,6 @@ namespace Pattons_Best
       Heavy,
       None
    };
-   public enum EnumCrewRole
-   {
-      Commander,
-      Gunner,
-      Loader,
-      Driver,
-      Assistant
-   };
-   public struct CrewMember
-   {
-      public EnumCrewRole myRole;
-      public string myRank;
-      public string myName;
-      public int myRating;
-      public CrewMember(EnumCrewRole role, string rank, int rating)
-      {
-         myRole = role;
-         myRank = rank;
-         myName = SurnameMgr.GetSurname();
-         myRating = rating;
-      }
-   };
    public enum EnumDecoration
    {
       ED_BronzeStar,
@@ -80,6 +58,20 @@ namespace Pattons_Best
       Mud,
       Mud_Overcast,
       Snow
+   };
+   public struct CrewMember
+   {
+      public string myRole;
+      public string myRank;
+      public string myName;
+      public int myRating;
+      public CrewMember(string role, string rank, int rating)
+      {
+         myRole = role;
+         myRank = rank;
+         myName = SurnameMgr.GetSurname();
+         myRating = rating;
+      }
    };
    [Serializable]
    public struct CombatCalenderEntry

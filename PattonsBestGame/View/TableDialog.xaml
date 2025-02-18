@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         HorizontalContentAlignment="Center" VerticalContentAlignment="Center" UseLayoutRounding="True" WindowStartupLocation="CenterScreen" ShowInTaskbar="False" Topmost="True"  SizeToContent="WidthAndHeight" ResizeMode="NoResize" Cursor="Arrow" >
-    <FlowDocumentScrollViewer Name="myFlowDocumentScrollViewer" BorderBrush="#FF151414" ScrollViewer.VerticalScrollBarVisibility="Auto" Cursor="Arrow">
+    <FlowDocumentScrollViewer Name="myFlowDocumentScrollViewer" BorderBrush="#FF151414" ScrollViewer.VerticalScrollBarVisibility="Auto" Cursor="Arrow" HorizontalAlignment="Center">
         <FlowDocument xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' Name='myFlowDocument'>
             <Paragraph TextDecorations="Underline">Stuff gets written here</Paragraph>
         </FlowDocument>

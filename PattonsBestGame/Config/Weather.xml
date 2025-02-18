@@ -1,4 +1,4 @@
-Weather	"               <Table BorderBrush='Black' BorderThickness='1' TextAlignment=""Center"">
+               <Table BorderBrush='Black' BorderThickness='1' TextAlignment="Center">
                   <Table.Columns>
                      <TableColumn Width='140'/>
                      <TableColumn Width='120'/>
@@ -17,10 +17,10 @@ Weather	"               <Table BorderBrush='Black' BorderThickness='1' TextAlign
                   </TableRowGroup>
                   <TableRowGroup >
                      <TableRow  FontSize='12' >
-                        <TableCell RowSpan=""2"" TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                        <TableCell RowSpan="2" TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
                            <Paragraph> <LineBreak/> Condition </Paragraph>
                         </TableCell>
-                        <TableCell ColumnSpan=""4"" TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                        <TableCell ColumnSpan="4" TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
                            <Paragraph>MONTH</Paragraph>
                         </TableCell>
                      </TableRow>
@@ -39,68 +39,4 @@ Weather	"               <Table BorderBrush='Black' BorderThickness='1' TextAlign
                         </TableCell>
                      </TableRow>
                   </TableRowGroup>
-               </Table>"
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+               </Table>

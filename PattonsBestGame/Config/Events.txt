@@ -1,7 +1,8 @@
-e000	"<Bold>e000 Game Events Shown Here</Bold>
-<LineBreak/><LineBreak/>Active events show a green background. The game may only advance when a green background is displayed. Most often, the game advances by rolling die or clicking an image. 
+e000	"<Bold>e000 Welcome to Patton's Best Solo Tank Battle Game</Bold>
 <LineBreak/><LineBreak/>
-However, the game lets you explore what may happen by showing inactive events. Inactive events have a gray background. To return to the current active event, select the active event button in the status bar per the image.
+The game starts with a tutorial how to play. However, before starting, it is important to know that Active events are shown with a green background. The game may only advance when a green background is displayed. Most often, the game advances by rolling dice or clicking an image. 
+<LineBreak/><LineBreak/>
+You can explore what may happen by showing inactive events. Inactive events have a gray background. To return to the current active event, select the active event button in the status bar per the image.
 <LineBreak/>
                <InlineUIContainer><Image Name='Tutorial0' Height='70'  Width='370'> </Image></InlineUIContainer>
 <LineBreak/><LineBreak/>
@@ -33,7 +34,7 @@ The upper right image is the Tank Card. The game starts with the basic M4 Sherma
                                  <InlineUIContainer><Image Name='m001M4'  Height='200' Width='200'></Image></InlineUIContainer>"
 e005	"<Bold>e005 After Action Report (AAR)</Bold> <InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
-The events of each engagement or day of battle are recorded as they unfold on the After Action Report. At this time, you may elect to change the name of the tank or the names of your crew by clicking on the appropriate location on the form. When ready, click image to continue.
+The events of each engagement or day of battle are recorded as they unfold on the After Action Report. At this time, you may elect to change the name of the tank or the names of your crew by clicking on the appropriate location on the form. When ready, click image below to continue.
 <LineBreak/><LineBreak/>
                                             <InlineUIContainer><Image Name='Continue005' Height='100' Width='100'></Image></InlineUIContainer>"
 e006	"<Bold>e006 Combat Calender Check</Bold> <InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>

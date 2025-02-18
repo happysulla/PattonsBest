@@ -100,7 +100,7 @@ namespace Pattons_Best
                   MenuItem subItem43 = new MenuItem();
                   subItem43.Header = "_Tables...";
                   subItem43.InputGestureText = "F3";
-                  subItem42.Click += MenuItemHelpTables_Click;
+                  subItem43.Click += MenuItemHelpTables_Click;
                   myMenuItemTopLevel4.Items.Add(subItem43);
                   MenuItem subItem45 = new MenuItem();
                   subItem45.Header = "Report Error...";

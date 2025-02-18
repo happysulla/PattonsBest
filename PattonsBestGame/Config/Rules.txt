@@ -9,9 +9,16 @@ However, the game realizes its full interest when played as a campaign which all
 <InlineUIContainer><Button Content='r2.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Game Boards<LineBreak/>
 <InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> After Action Reports<LineBreak/>
 <InlineUIContainer><Button Content='r4.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Sequence of Play<LineBreak/>"
-r2.1	"<Bold>r1.1 Game Boards</Bold>
+r2.1	"<Bold>r2.1 Game Boards</Bold>
 <LineBreak/><LineBreak/>
-Patton's Best is played on a game board which is divided into three screens: the Movement Board, the Battle Board, and the Tank Card (upper left corner). Additionally, there is a section of tables that can be displayed as needed. There is an After Action Report which tracks the day's events."
+Patton's Best is played on game boards which are divided into separate displays:
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r2.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> the Movement Board<LineBreak/>
+<InlineUIContainer><Button Content='r2.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> the Battle Board<LineBreak/>
+<InlineUIContainer><Button Content='r2.13' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> the Tank Card (upper left corner)<LineBreak/>
+<InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> the After Action Report (AAR)<LineBreak/>
+<LineBreak/>
+Additionally, there are tables that can be displayed as needed by clicking appropriate buttons, One important table is the Combat Calendar <InlineUIContainer><Button Content='r4.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r2.11	"<Bold>r1.1 Movement Board</Bold>
 <LineBreak/><LineBreak/>
 The movement board is a depiction fo typical Europena coutnryside and is used to show the ""big picture"" for the day. The movement board is divided into white lines into areas:
@@ -41,36 +48,42 @@ r2.4	"<Bold>r2.4 After Action Report (AAR)</Bold>
 <LineBreak/><LineBreak/>
 The events of each engagement or day of battle are recorded as they unfold on the After Action Report. On this report record, the names and ratings of your crew, the passage of time, the amount of ammo your tank is carrying, and victory points score during play. The Notes section space is used to record temporary information, such as being lead tank, incapacitation of crew members, etc.
 <LineBreak/><LineBreak/>
-                     <InlineUIContainer><Image Name='AfterActionReport'  Height='320' Width='300'></Image></InlineUIContainer>"
+                     <InlineUIContainer><Image Name='AfterActionReport'  Height='320' Width='300'></Image></InlineUIContainer>
+<LineBreak/><LineBreak/>
+The AAR for the current day can be displayed clicking the menu item: <Bold>View | After Action Report...</Bold>"
 r4.0	"<Bold>r4.0 Sequence of Play</Bold> 
 <LineBreak/><LineBreak/>
 -- <InlineUIContainer><Button Content='r4.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Combat Calendar Check <LineBreak/>
 -- <InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Morning Briefing <LineBreak/>
--- <InlineUIContainer><Button Content='r4.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Time Check (Consult the Time Tables)<LineBreak/>
+-- <InlineUIContainer><Button Content='r4.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Consult the Time Tables<LineBreak/>
 -- <InlineUIContainer><Button Content='r4.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Prepare for Battle on Battle Board <LineBreak/>
 -- <InlineUIContainer><Button Content='r4.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Movement Sequence on Movement Board<LineBreak/>
 -- <InlineUIContainer><Button Content='r4.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Battle <LineBreak/>
 -- <InlineUIContainer><Button Content='r4.7' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Battle Round Sequence<LineBreak/>
 -- <InlineUIContainer><Button Content='r4.8' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> When your Tank is Target<LineBreak/>
 -- <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Evening Debriefing"
-r.4.1	"<Bold>r4.1 Combat Calendar Check</Bold> <InlineUIContainer><Button Content='r4.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+r4.1	"<Bold>r4.1 Combat Calendar Check</Bold> <InlineUIContainer><Button Content='r4.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
-Examine the Combat <InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> fro the next day of possible combat and roll 1 die roll. <LineBreak/>
-If the number rolled is greater than the number shown in the middel of the three part sceanrio code for the day (A-2-L is used for July 27, 1944), you avoid action and can check off the day as compleed. <LineBreak/>
+Performed at beginning of each day. Examine the Combat <InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for the chances of combat and roll 1 die roll. 
+<LineBreak/><LineBreak/>
+If the number rolled is greater than the number shown in the middle of the three part scenario code for the day (A-2-L is used for July 27, 1944), you avoid action and can check off the day as completed. 
+<LineBreak/><LineBreak/>
 If the number is less than or equal to the probability code, you trigger a day of possible combat. Go to <InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for the Morning Briefing. "
-r.4.2	"<Bold>r4.2 Morning Briefing Using the After Action Report (AAR)</Bold> <InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+r4.2	"<Bold>r4.2 Morning Briefing</Bold> 
 <LineBreak/><LineBreak/>
--- A new AAR is created with the new date and scenario code 
--- If a new tank is required, consule the Tank Replacement Table per <InlineUIContainer><Button Content='r24.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> <LineBreak/>
--- If not already done, give your new tank a name by clicking on the AAR<LineBreak/>
--- If necessary, record the names and ratings of your tank crew. See <InlineUIContainer><Button Content='r7.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for adding new men<LineBreak/>
--- The Weather table is used to determine weather<LineBreak/>
+Perform these actions using After Action Report (AAR) <InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>:
+<LineBreak/><LineBreak/>
+-- A new AAR is created with the new date and scenario code. 
+-- If a new tank is required, consult the Tank Replacement Table per <InlineUIContainer><Button Content='r24.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. <LineBreak/>
+-- If you want to change, give your new tank a name by clicking on the Tank Name.<LineBreak/>
+-- If you want to change, click on names of your crew members. You are the tank commander so change your name on that row. See <InlineUIContainer><Button Content='r7.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for adding new men<LineBreak/>
+-- The weather table is used to determine the weather for the day<LineBreak/>
 -- Load ammo per <InlineUIContainer><Button Content='r16.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. <LineBreak/>"
 r4.3	"<Bold>r4.3 Time Check Using the Time Tables</Bold> 
 <LineBreak/><LineBreak/>
-Determine the hours of sunrise and sunset for the current month. On the After Action Report (AAR), the time is blocked out accordingly. On the remaining time is available for play this day.
+Determine the hours of sunrise and sunset for the current month. On the After Action Report (AAR), the time is blocked out accordingly. Only the remaining time is available for play this day.
 <LineBreak/><LineBreak/>
-Determine the time and ammo already expended by rolling 1D on teh Time Elapsed Table. This roll determines the number of hours already passed and the amount of ammo already expected before the scenario begins. The AAR shows the elapsed time and the ammo used up. "
+Determine the time and ammo already expended by rolling 1D on the Time Elapsed Table. This roll determines the number of hours already passed and the amount of ammo already expected before the scenario begins. The AAR shows the elapsed time and the ammo used up. "
 r20.1	"<Bold>r20.1 Combat Calendar</Bold>
 <LineBreak/><LineBreak/>
 For each day of the campaign, the Combat <InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> shows either the notation 'Refitting' or a three part scenario code such as 'A-2-L'. 
@@ -92,9 +105,12 @@ Roll 1D. If the number rolled is less than or equal to the number shown on the s
 If the number rolled is higher than the code number, you miss combat this day. Mark the day off as completed on teh calender, and go on to the next day."
 r20.13	"<Bold>r20.13 Expected Enemy Resistance</Bold>
 <LineBreak/><LineBreak/>
-The resistance code for the day will affect the probabiliity of battle when a new area is entered on the Movement Board and the number of enemy units activated on the Battle Board. 
+The resistance code for the day will affect the probabiliity of battle when a new area is entered on the Movement Board 
+and the number of enemy units activated on the Battle Board. 
 <LineBreak/><LineBreak/>
-The expected enemy resistance will be needed when you consult the Resistance Table <InlineUIContainer><Button Content='t002' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> and Activation Table <InlineUIContainer><Button Content='t003' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+The expected enemy resistance will be needed when you consult the Resistance Table 
+<InlineUIContainer><Button Content='t002' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> and Activation Table 
+<InlineUIContainer><Button Content='t003' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
 L = Light<LineBreak/>
 M = Medium<LineBreak/>
@@ -109,7 +125,7 @@ r20.3	"<Bold>r20.3 Battle Scenario</Bold>
 A Battle scenario represents an assault by the Division against prepared and well-defended positions. Resistance will be higher than for advance scenarios. Only limited amounts of territory will be gained. 
 <LineBreak/><LineBreak/>
 Battle scenario follows the Sequence of Play <InlineUIContainer><Button Content='r4.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
-r20.4	"<Bold>r20.4 CounterAttack Scenario</Bold>
+r20.4	"<Bold>r20.4 Counterattack Scenario</Bold>
 <LineBreak/><LineBreak/>
 A Counterattack scenario represents the Division on defense against an enemy counterattack. 
 <LineBreak/><LineBreak/>
@@ -117,10 +133,10 @@ Because the enemy is coming at you, the Sequence of Play <InlineUIContainer><But
 1.) <InlineUIContainer><Button Content='r4.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> --> <InlineUIContainer><Button Content='r20.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for Preparations<LineBreak/>
 2.) <InlineUIContainer><Button Content='r4.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> --> <InlineUIContainer><Button Content='r20.42' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for Movement<LineBreak/>
 3.) <InlineUIContainer><Button Content='r4.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> --> <InlineUIContainer><Button Content='r20.43' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for Battle"
-r20.41	"<Bold>r20.41 CounterAttack - Preparations</Bold>
+r20.41	"<Bold>r20.41 Counterattack - Preparations</Bold>
 <LineBreak/><LineBreak/>
 For step <InlineUIContainer><Button Content='r4.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, you deploy automatically to Hull Down state. Place a Hull Down marker on your tank. Steps <InlineUIContainer><Button Content='r4.42' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> through <InlineUIContainer><Button Content='r4.47' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> remain unchanged."
-r20.42	"<Bold>r20.42 CounterAttack - Movement</Bold>
+r20.42	"<Bold>r20.42 Counterattack - Movement</Bold>
 <LineBreak/><LineBreak/>
 Delete step <InlineUIContainer><Button Content='r4.53' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> and all operations of step <InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> except for Ammo Resupply. 
 <LineBreak/><LineBreak/>
@@ -138,12 +154,12 @@ Delete steps <InlineUIContainer><Button Content='r4.61' FontFamily='Courier New'
 <LineBreak/><LineBreak/>
 If you clear the Battle Board, go to <InlineUIContainer><Button Content='r20.44' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> <LineBreak/>
 If you retreat from the Battle Board, go to <InlineUIContainer><Button Content='r20.45' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>"
-r20.44	"<Bold>r20.42 CounterAttack - Clear Battle Board</Bold>
+r20.44	"<Bold>r20.44 Counterattack - Clear Battle Board</Bold>
 <LineBreak/><LineBreak/>
 If battle (or even your Ambush) clears the board of enemy units, return to Time Check to determine how many hours pass before a battle becomes possible again. 
 <LineBreak/><LineBreak/>
 Mark off the hours that pass, and go to Prepare for Battle <InlineUIContainer><Button Content='r20.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
-r20.45	"<Bold>r20.42 CounterAttack - Retreat from Battle Board</Bold>
+r20.45	"<Bold>r20.45 Counterattack - Retreat from Battle Board</Bold>
 <LineBreak/><LineBreak/>
 If you retreat from the Battle Board, mark off 15 minutes and record the loss of one area. 
 <LineBreak/><LineBreak/>
