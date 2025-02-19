@@ -17,7 +17,7 @@ namespace Pattons_Best
       private Dictionary<string, string> myRecordTitles = new Dictionary<string, string>();
       public Dictionary<string, string> RecordTitles { get => myRecordTitles; }
       private StreamReader? myStreamReader = null;
-      public string[] theTables = new string[2] { "Calendar", "Weather" };
+      public string[] theTables = new string[3] { "Calendar", "Weather", "Time" };
          //-------------------------------------------------------------
       public ConfigFileReader(string filename)
       {

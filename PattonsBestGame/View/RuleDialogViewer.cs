@@ -15,6 +15,7 @@ namespace Pattons_Best
 {
    public class RuleDialogViewer
    {
+      private static SolidColorBrush theBrushOrange = new SolidColorBrush(Colors.Orange);
       public bool CtorError { get; } = false;
       private Dictionary<string, string> myRules = new Dictionary<string, string>();
       public Dictionary<string, string> Rules { get => myRules; }
@@ -109,6 +110,8 @@ namespace Pattons_Best
             case "Calendar":
                return "Not Applicable";
             case "Weather":
+               return "Orange";
+            case "Time":
                return "Orange";
             default:
                Logger.Log(LogEnum.LE_ERROR, "GetTableTitle(): reached default key=" + key);
@@ -219,9 +222,15 @@ namespace Pattons_Best
                   break;
                case "Weather":
                   dialog.Title = "Weather";
-                  dialog.Background = new SolidColorBrush(Colors.Orange);
+                  dialog.Background = theBrushOrange;
                   dialog.myFlowDocumentScrollViewer.Width = 670;
                   dialog.myFlowDocumentScrollViewer.Height = 650;
+                  break;
+               case "Time":
+                  dialog.Title = "Time Tables";
+                  dialog.Background = theBrushOrange;
+                  dialog.myFlowDocumentScrollViewer.Width = 610;
+                  dialog.myFlowDocumentScrollViewer.Height = 610;
                   break;
                default:
                   Logger.Log(LogEnum.LE_ERROR, "ShowTable(): reached default key=" + key);

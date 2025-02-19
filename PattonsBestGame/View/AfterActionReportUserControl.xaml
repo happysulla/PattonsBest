@@ -21,7 +21,7 @@
          <RowDefinition Height="Auto"></RowDefinition>
          <RowDefinition Height="Auto"></RowDefinition>
       </Grid.RowDefinitions>
-      <Label Name="myLabelHeading" Grid.Row="0" Grid.ColumnSpan="2" FontSize="32" HorizontalAlignment="Center" FontFamily="Arial Rounded MT Bold">After Action Report</Label>
+        <Label Name="myLabelHeading" Grid.Row="0" Grid.ColumnSpan="2" FontSize="32" HorizontalAlignment="Center" FontFamily="Arial Rounded MT Bold">After Action Report</Label>
       <!--  ++++++++++++++++++++++++++++++++++++Info++++++++++++++++++++++++++++++++++++ -->
       <StackPanel  Name="myStackPanelInfo" Grid.Row="1" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left" Margin="0,0,0,0" >
          <Grid Margin="20,0,20,0">
