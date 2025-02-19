@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows.Input;
+using System.Xml.Linq;
 
 namespace Pattons_Best
 {
@@ -15,16 +17,23 @@ namespace Pattons_Best
       private Dictionary<string, string> myRecordTitles = new Dictionary<string, string>();
       public Dictionary<string, string> RecordTitles { get => myRecordTitles; }
       private StreamReader? myStreamReader = null;
+      public string[] theTables = new string[2] { "Calendar", "Weather" };
+         //-------------------------------------------------------------
       public ConfigFileReader(string filename)
       {
          if( true == filename.Contains("Tables"))
          {
-            string filename1 = ConfigFileReader.theConfigDirectory + "CombatCalendar.xml"; // hard code adding the calendar
-            if (false == CreateCombatCalendar(filename1))
+            foreach( string s in theTables )
             {
-               Logger.Log(LogEnum.LE_ERROR, "ConfigFileReader(): CreateCombatCalendar() returned false");
-               CtorError = true;
+               string filename1 = ConfigFileReader.theConfigDirectory + s + ".xml";
+               if (false == CreateTable(s, filename1))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ConfigFileReader(): CreateTable() returned false for s=" + s);
+                  CtorError = true;
+                  return;
+               }
             }
+            return;
          }
          const int MAX_RECORDS_IN_FILE = 1000; // number of rows in spreadsheet
          try
@@ -65,9 +74,8 @@ namespace Pattons_Best
          }
       }
       //------------------------------------------------------------
-      private bool CreateCombatCalendar(string filename)
+      private bool CreateTable(string key, string filename)
       {
-         string key = "Calendar";
          string text = "ERROR";
          try
          {
@@ -77,7 +85,7 @@ namespace Pattons_Best
          }
          catch (IOException e)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateCombatCalendar(): e=" + e.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "CreateTable(): e=" + e.ToString());
             return false;
          }
          try
@@ -86,7 +94,7 @@ namespace Pattons_Best
          }
          catch (Exception e)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateCombatCalendar(): key=" + key + " e=" + e.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "CreateTable(): key=" + key + " e=" + e.ToString());
             return false;
          }
          return true;

@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WpfAnimatedGif;
 
@@ -218,8 +219,9 @@ namespace Pattons_Best
                   break;
                case "Weather":
                   dialog.Title = "Weather";
-                  dialog.myFlowDocumentScrollViewer.Width = 700;
-                  dialog.myFlowDocumentScrollViewer.Height = 800;
+                  dialog.Background = new SolidColorBrush(Colors.Orange);
+                  dialog.myFlowDocumentScrollViewer.Width = 670;
+                  dialog.myFlowDocumentScrollViewer.Height = 650;
                   break;
                default:
                   Logger.Log(LogEnum.LE_ERROR, "ShowTable(): reached default key=" + key);

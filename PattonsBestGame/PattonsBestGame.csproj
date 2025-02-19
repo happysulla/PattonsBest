@@ -59,7 +59,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Config\CombatCalendar.xml">
+    <None Update="Config\Calendar.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Config\DiceRolls.xml">
@@ -78,6 +78,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Config\Territories.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Config\Weather.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Docs\PattonsBest-rules.pdf">
