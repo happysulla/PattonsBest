@@ -43,7 +43,13 @@ Date: DATE<LineBreak/>
 Resistance: RESISTANCE<LineBreak/>
 Probablility of Combat: PROBABILITY > <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer><LineBreak/>
 <LineBreak/><LineBreak/>
-Roll die to determine if possible combat. Must be equal or lower than probability."
+If the roll is equal or less than the probability, start morning briefing <InlineUIContainer><Button Content='e007' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
+If the roll is greater than the probability, repeat this event for next day until combat does occur.<LineBreak/>"
+e008	"<Bold>e008 Morning Briefing - Weather Roll</Bold> 
+<LineBreak/><LineBreak/>
+Consult weather table <InlineUIContainer><Button Content='tWeather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> after rolling to determine weather for today:
+<InlineUIContainer><Image Name='DiceRoll' Height='21' Width='21' > </Image></InlineUIContainer><LineBreak/>
+"
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"
 e502	"<Bold>e502 Game Lost</Bold>
