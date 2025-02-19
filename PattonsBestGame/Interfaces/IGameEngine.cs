@@ -155,6 +155,8 @@ namespace Pattons_Best
       SetupShowCombatCalendarCheck,
       SetupChooseFunOptions,
       SetupFinalize,
+
+      CombatCalendarRoll,
       Error
    };
    public interface IGameEngine

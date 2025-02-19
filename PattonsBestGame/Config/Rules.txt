@@ -19,7 +19,7 @@ Patton's Best is played on game boards which are divided into separate displays:
 <InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> the After Action Report (AAR)<LineBreak/>
 <LineBreak/>
 Additionally, there are tables that can be displayed as needed by clicking appropriate buttons, One important table is the Combat Calendar <InlineUIContainer><Button Content='r4.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
-r2.11	"<Bold>r1.1 Movement Board</Bold>
+r2.11	"<Bold>r2.11 Movement Board</Bold>
 <LineBreak/><LineBreak/>
 The movement board is a depiction fo typical Europena coutnryside and is used to show the ""big picture"" for the day. The movement board is divided into white lines into areas:
 <LineBreak/><LineBreak/>
@@ -62,7 +62,7 @@ r4.0	"<Bold>r4.0 Sequence of Play</Bold>
 -- <InlineUIContainer><Button Content='r4.7' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Battle Round Sequence<LineBreak/>
 -- <InlineUIContainer><Button Content='r4.8' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> When your Tank is Target<LineBreak/>
 -- <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Evening Debriefing"
-r4.1	"<Bold>r4.1 Combat Calendar Check</Bold> <InlineUIContainer><Button Content='r4.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+r4.1	"<Bold>r4.1 Combat Calendar Check</Bold>
 <LineBreak/><LineBreak/>
 Performed at beginning of each day. Examine the Combat <InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for the chances of combat and roll 1 die roll. 
 <LineBreak/><LineBreak/>
@@ -84,6 +84,30 @@ r4.3	"<Bold>r4.3 Time Check Using the Time Tables</Bold>
 Determine the hours of sunrise and sunset for the current month. On the After Action Report (AAR), the time is blocked out accordingly. Only the remaining time is available for play this day.
 <LineBreak/><LineBreak/>
 Determine the time and ammo already expended by rolling 1D on the Time Elapsed Table. This roll determines the number of hours already passed and the amount of ammo already expected before the scenario begins. The AAR shows the elapsed time and the ammo used up. "
+r7.0	"<Bold>r7.0 Crew Ratings</Bold> 
+<LineBreak/><LineBreak/>
+Each crew member is given a numerical rating of his skill at his position. The rating range from 1 (poorest) to 10 (best). 
+<LineBreak/><LineBreak/>
+The higher the crew member's rating, the more successful he will be trying to spot enemy units, hit enemy units with his weapons, repair malfunctioning guns, etc. 
+<LineBreak/><LineBreak/>The crew ratings are recorded on the After Action Report (AAR) <InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r7.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Ratings for New Men<LineBreak/>
+<InlineUIContainer><Button Content='r7.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Rating Improvements<LineBreak/>"
+r7.1	"<Bold>r7.1 Ratings for New Men</Bold> 
+<LineBreak/><LineBreak/>
+Determine the rating for a new crew member by rolling 1D/2 rounded up. For example, a roll of five results in a rating of 3.  
+<LineBreak/><LineBreak/>When rolling for more than one new crewman, assign the rating after all have been rolled for. 
+<LineBreak/><LineBreak/>
+For example, if rolling for an entire crew, roll five ratings and then assign to men as you wish. It is suggested that the higher ratings be allocated in this order: Commander, Gunner, Driver, Loader, and Assistant Driver."
+r7.2	"<Bold>r7.2 Ratings Improvement</Bold> 
+<LineBreak/><LineBreak/>
+At the end of the day of action, check for each surviving crew member to see if his rating improves. Roll 1D separately for each. If the number rolled is higher than the current rating, the rating is increased by one. 
+<LineBreak/><LineBreak/>
+For example, your gunner has a rating of 5 and you roll a 9. The gunner's rating increases to 6.
+<LineBreak/><LineBreak/>
+Crew ratings cannot be greater than 10 and never decrease. Ratings cannot improve if you avoid action for the day per <InlineUIContainer><Button Content='r20.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+Ratings may also improve during refitting periods per <InlineUIContainer><Button Content='r27.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r20.1	"<Bold>r20.1 Combat Calendar</Bold>
 <LineBreak/><LineBreak/>
 For each day of the campaign, the Combat <InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> shows either the notation 'Refitting' or a three part scenario code such as 'A-2-L'. 

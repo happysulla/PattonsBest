@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
+using System.Windows.Input;
 using System.Windows.Navigation;
 
 namespace Pattons_Best
@@ -197,6 +198,10 @@ namespace Pattons_Best
                break;
             case GameAction.SetupShowCombatCalendarCheck:
                gi.EventDisplayed = gi.EventActive = "e006";
+               gi.DieRollAction = GameAction.CombatCalendarRoll;
+               break;
+            case GameAction.CombatCalendarRoll:
+               //gi.DieResults["e006"][0] = dieRoll;
                break;
             case GameAction.EndGameClose:
                gi.GamePhase = GamePhase.EndGame;
