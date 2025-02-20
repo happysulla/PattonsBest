@@ -105,18 +105,7 @@ namespace Pattons_Best
       }
       public string GetTableTitle(string key)
       {
-         switch(key)
-         {
-            case "Calendar":
-               return "Not Applicable";
-            case "Weather":
-               return "Orange";
-            case "Time":
-               return "Orange";
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "GetTableTitle(): reached default key=" + key);
-               return "ERROR";
-         }
+         return key;
       }
       public bool ShowRule(string key)
       {
@@ -221,13 +210,25 @@ namespace Pattons_Best
                   dialog.myFlowDocumentScrollViewer.Height = 900;
                   break;
                case "Weather":
-                  dialog.Title = "Weather";
+                  dialog.Title = "Weather Tables";
                   dialog.Background = theBrushOrange;
                   dialog.myFlowDocumentScrollViewer.Width = 670;
                   dialog.myFlowDocumentScrollViewer.Height = 650;
                   break;
                case "Time":
                   dialog.Title = "Time Tables";
+                  dialog.Background = theBrushOrange;
+                  dialog.myFlowDocumentScrollViewer.Width = 610;
+                  dialog.myFlowDocumentScrollViewer.Height = 610;
+                  break;
+               case "Wounds":
+                  dialog.Title = "Wounds Tables";
+                  dialog.Background = theBrushOrange;
+                  dialog.myFlowDocumentScrollViewer.Width = 610;
+                  dialog.myFlowDocumentScrollViewer.Height = 610;
+                  break;
+               case "Hit Location":
+                  dialog.Title = "Hit Location Table";
                   dialog.Background = theBrushOrange;
                   dialog.myFlowDocumentScrollViewer.Width = 610;
                   dialog.myFlowDocumentScrollViewer.Height = 610;

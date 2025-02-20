@@ -19,7 +19,7 @@ namespace Pattons_Best
       public GameEngine(MainWindow mainWindow)
       {
          myMainWindow = mainWindow;
-         CreateTables();
+         CreateCombatCalender();
       }
       public void RegisterForUpdates(IView view)
       {
@@ -98,7 +98,7 @@ namespace Pattons_Best
          return true;
       }
       //--------------------------------------------------------------
-      private void CreateTables()
+      private void CreateCombatCalender()
       {
          theCombatCalenderEntries.Add( new CombatCalenderEntry("07/27/44", EnumScenario.Advance, 3, EnumResistance.Light, "Corba Breakout"));
          theCombatCalenderEntries.Add(new CombatCalenderEntry("07/28/44", EnumScenario.Battle, 4, EnumResistance.Medium, "Coutances"));

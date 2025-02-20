@@ -110,7 +110,7 @@ namespace Pattons_Best
       }
       private bool CreateEvents(IGameInstance gi)
       {
-         if( null == myRulesMgr )
+         if (null == myRulesMgr)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateEvents(): myRulesMgr=null");
             return false;

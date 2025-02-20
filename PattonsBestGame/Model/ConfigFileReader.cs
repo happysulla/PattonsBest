@@ -10,6 +10,7 @@ namespace Pattons_Best
 {
    public class ConfigFileReader
    {
+      public string[] theTables = new string[10] { "Calendar", "Weather", "Time", "Wounds", "Hit Location", "Explosion", "Movement", "Bail Out", "Collateral", "Gun Malfunction" };
       public static string theConfigDirectory = "";
       public bool CtorError { get; } = false;
       private Dictionary<string, string> myEntries = new Dictionary<string, string>();
@@ -17,7 +18,6 @@ namespace Pattons_Best
       private Dictionary<string, string> myRecordTitles = new Dictionary<string, string>();
       public Dictionary<string, string> RecordTitles { get => myRecordTitles; }
       private StreamReader? myStreamReader = null;
-      public string[] theTables = new string[3] { "Calendar", "Weather", "Time" };
          //-------------------------------------------------------------
       public ConfigFileReader(string filename)
       {
