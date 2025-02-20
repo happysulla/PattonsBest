@@ -10,7 +10,10 @@ namespace Pattons_Best
 {
    public class ConfigFileReader
    {
-      public string[] theTables = new string[11] { "Calendar", "Weather", "Time", "Wounds", "Hit Location", "Explosion", "Movement", "Bail Out", "Collateral", "Gun Malfunction", "Sunrise-Sunset" };
+      public string[] theTables = new string[15] 
+           { "Calendar", "Ammo", "Weather", "Time", "Deployment", 
+             "Wounds", "Movement", "Hit Location", "Bogged Down", "Bail Out", "Explosion", "Collateral", "Brew Up",
+             "Gun Malfunction", "Sunrise-Sunset" };
       public static string theConfigDirectory = "";
       public bool CtorError { get; } = false;
       private Dictionary<string, string> myEntries = new Dictionary<string, string>();

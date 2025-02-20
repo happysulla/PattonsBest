@@ -209,6 +209,12 @@ namespace Pattons_Best
                   dialog.myFlowDocumentScrollViewer.Width = 1300;
                   dialog.myFlowDocumentScrollViewer.Height = 900;
                   break;
+               case "Ammo":
+                  dialog.Title = "Ammo Tables";
+                  dialog.Background = theBrushOrange;
+                  dialog.myFlowDocumentScrollViewer.Width = 610;
+                  dialog.myFlowDocumentScrollViewer.Height = 380;
+                  break;
                case "Weather":
                   dialog.Title = "Weather Tables";
                   dialog.Background = theBrushOrange;
@@ -220,6 +226,12 @@ namespace Pattons_Best
                   dialog.Background = theBrushOrange;
                   dialog.myFlowDocumentScrollViewer.Width = 610;
                   dialog.myFlowDocumentScrollViewer.Height = 610;
+                  break;
+               case "Deployment":
+                  dialog.Title = "Deployment Tables";
+                  dialog.Background = theBrushOrange;
+                  dialog.myFlowDocumentScrollViewer.Width = 525;
+                  dialog.myFlowDocumentScrollViewer.Height = 370;
                   break;
                case "Wounds":
                   dialog.Title = "Wounds Tables";
