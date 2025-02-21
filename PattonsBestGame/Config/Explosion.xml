@@ -1,274 +1,42 @@
 <Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='Orange'>
-	<Table.Columns>
-		<TableColumn Width='80'/>
-		<TableColumn Width='160'/>
-		<TableColumn Width='160'/>
-		<TableColumn Width='160'/>
-	</Table.Columns>
-	<TableRowGroup>
-		<TableRow  FontSize='14' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>
-					<LineBreak/>TIME ELAPSED TABLE<LineBreak/>
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-	</TableRowGroup>
-	<TableRowGroup >
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' >
-				<Paragraph>
-					<Run FontStyle='Italic'>Use the same roll for both determinations:</Run>
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' >
-				<Paragraph>
-					<Bold>Time Expended  = </Bold>1D/2 (round down ) + 1 hours past sunrise
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' >
-				<Paragraph>
-					<Bold>Ammo Expended = </Bold>1D (x2 HE) and (x1 ,30 calibre MG ammo boxes checked off)
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-	</TableRowGroup>
-	<TableRowGroup>
-		<TableRow  FontSize='14' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>
-					<LineBreak/>
-					SUNRISE-SUNSET CHART
-					<LineBreak/>
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-	</TableRowGroup>
-	<TableRowGroup >
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>Month</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>Sunrise</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>Sunset</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>July, August</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>05:00</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>19:15</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' >
-				<Paragraph>September</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>05:30</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>18:15</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>October</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>06:30</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>17:15</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' >
-				<Paragraph>November</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>07:15</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>16:15</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>December</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>07:45</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>16:00</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' >
-				<Paragraph>January</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>07:45</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>16:30</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>February</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>07:15</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>17:30</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' >
-				<Paragraph>March</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>06:15</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>18:00</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>April</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>05:15</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>19:00</Paragraph>
-			</TableCell>
-		</TableRow>
-	</TableRowGroup>
-	<TableRowGroup>
-		<TableRow  FontSize='14' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>
-					<LineBreak/>
-					TIME USE TABLE
-					<LineBreak/>
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>Time</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>Activity</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed'>
-				<Paragraph>15m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left' Background='OrangeRed'>
-				<Paragraph>Enter new area on improved road.</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center'>
-				<Paragraph>30m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left'>
-				<Paragraph>Enter new area on dirt road.</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed'>
-				<Paragraph>45m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left' Background='OrangeRed'>
-				<Paragraph>Enter new area on no road.</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' >
-				<Paragraph>15m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left'>
-				<Paragraph>Combat occurs when entering a new area.</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed'>
-				<Paragraph>15m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left' Background='OrangeRed'>
-				<Paragraph>Check any one additional area for estimated enemy resistance.</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' >
-				<Paragraph>60m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left'>
-				<Paragraph>Attempt to replenish ammo -- roll 1D: (1-7 = arrives) (8-10 = fails).</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed'>
-				<Paragraph>30m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left' Background='OrangeRed'>
-				<Paragraph>Call for artillery --  roll 1D: (1-7 = arrives) (8-10 = fails).</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' >
-				<Paragraph>30m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left'>
-				<Paragraph>Call for air strike -- roll 1D: (1-4 = arrives) (5-10 = fails).</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed'>
-				<Paragraph>30m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left' Background='OrangeRed'>
-				<Paragraph>
-					<Run>Replace incapacitated crewman per </Run>
-					<InlineUIContainer>
-						<Button Content='r19.3' FontFamily='Courier New'  FontSize='10'></Button>
-					</InlineUIContainer>
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-	</TableRowGroup>
-	<TableRowGroup>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>
-					<Run>NOTES:</Run>
-					<InlineUIContainer>
-						<Button Content='Weather' FontFamily='Courier New'  FontSize='10'></Button>
-					</InlineUIContainer>
-					<LineBreak/>
-					(1) No air strikes possible with overcast, fog, or falling snow.<LineBreak/>
-					(2) Movement +15m during mud, fog, rain, ground snow, or deep snow.
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-	</TableRowGroup>
+   <TableRowGroup>
+      <TableRow  FontSize='16' >
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <LineBreak/>TANK EXPLOSION TABLE<LineBreak/>
+               <Italic>
+                  <Run FontSize='10' Text='Tank explodes on a modified die roll of 100 or more. An explosion kills the entire crew.'></Run>
+               </Italic>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <TableRowGroup>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left'>
+            <Paragraph>
+               <Bold>
+                  <Run Text='  Die Roll Modifier:'></Run>
+               </Bold>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='10' >
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='  +5 Hull Hit'></Run>
+               <LineBreak/>
+               <Run Text='  +5 Hit from 88L or 88LL'></Run>
+               <LineBreak/>
+               <Run Text='  +1 For each 2 rounds (round up) of extra ammo on board'></Run>
+               <LineBreak/>
+               <Run Text='  +5 Tank does not have wet stowage per '></Run>
+               <InlineUIContainer>
+                  <Button Content='Brew Up' FontFamily='Courier New'  FontSize='8'></Button>
+               </InlineUIContainer>
+               <Run Text=' Table'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
 </Table>

@@ -6,10 +6,17 @@
 		<TableColumn Width='160'/>
 	</Table.Columns>
 	<TableRowGroup>
+      <TableRow  FontSize='16' >
+         <TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <LineBreak/>TIME TABLES<LineBreak/>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
 		<TableRow  FontSize='14' >
 			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
-					<LineBreak/>TIME ELAPSED TABLE<LineBreak/>
+					TIME ELAPSED TABLE
 				</Paragraph>
 			</TableCell>
 		</TableRow>
@@ -41,9 +48,7 @@
 		<TableRow  FontSize='14' >
 			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
-					<LineBreak/>
 					SUNRISE-SUNSET CHART
-					<LineBreak/>
 				</Paragraph>
 			</TableCell>
 		</TableRow>
@@ -164,9 +169,7 @@
 		<TableRow  FontSize='14' >
 			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
-					<LineBreak/>
 					TIME USE TABLE
-					<LineBreak/>
 				</Paragraph>
 			</TableCell>
 		</TableRow>

@@ -20,7 +20,7 @@
             Digital Version: 1.0 Date: July 10, 2024
          </TextBox>
          <TextBlock TextWrapping="Wrap" Width="Auto" Foreground="{x:Null}" >
-            <Hyperlink NavigateUri="https://github.com/happysulla/BarbarianPrince" RequestNavigate="Hyperlink_RequestNavigate">  GitHub  </Hyperlink>
+            <Hyperlink NavigateUri="https://github.com/happysulla/PattonsBest" RequestNavigate="Hyperlink_RequestNavigate">  GitHub  </Hyperlink>
          </TextBlock>
       </StackPanel>
       <TextBlock  x:Name="myTextBlock" Grid.Row="1" TextWrapping="Wrap" Width="Auto" Padding="10">

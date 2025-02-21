@@ -331,10 +331,7 @@
                   <Run Text=' Show all displacement of enemy units due to movement of your tank'></Run>
                </Italic>
                <LineBreak/>
-               <Run Text='     ^     = Direction of movement of tank'></Run>
-               <LineBreak/>
-               <Run Text='     *     = Enemy unit'></Run>
-               <LineBreak/>
+               <Run Text='     ^      = Direction of movement of tank'></Run>
                <Run Text='     ->    = Displacement of enemy unit due to your tank move'></Run>
                <LineBreak/>
             </Paragraph>

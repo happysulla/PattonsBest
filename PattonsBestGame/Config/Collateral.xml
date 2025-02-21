@@ -1,349 +1,185 @@
 <Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='Orange'>
    <Table.Columns>
-      <TableColumn Width='140'/>
-      <TableColumn Width='120'/>
-      <TableColumn Width='120'/>
-      <TableColumn Width='120'/>
-      <TableColumn Width='120'/>
+      <TableColumn Width='80'/>
+      <TableColumn Width='320'/>
    </Table.Columns>
    <TableRowGroup>
       <TableRow  FontSize='16' >
-         <TableCell ColumnSpan='5' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+         <TableCell ColumnSpan='2' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
             <Paragraph>
-               WEATHER
+               COLLATERAL DAMAGE TABLE
             </Paragraph>
          </TableCell>
       </TableRow>
    </TableRowGroup>
    <TableRowGroup >
       <TableRow  FontSize='12' >
-         <TableCell RowSpan="2" TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
             <Paragraph>
-               <LineBreak/> Condition
+               <Run Text='Die Roll'></Run>
             </Paragraph>
          </TableCell>
-         <TableCell ColumnSpan="4" TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-            <Paragraph>MONTH</Paragraph>
-         </TableCell>
-      </TableRow>
-      <TableRow  FontSize='12' >
-         <TableCell TextAlignment='Center' >
-            <Paragraph>Jul/Aug</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' >
-            <Paragraph>Sep/Oct/Nov</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' >
-            <Paragraph>Dec/Jan/Feb</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center'>
-            <Paragraph>Mar/Apr</Paragraph>
-         </TableCell>
-      </TableRow>
-   </TableRowGroup>
-   <TableRowGroup>
-      <TableRow  FontSize='12' >
-         <TableCell TextAlignment='Left' Background='OrangeRed'>
-            <Paragraph>Clear</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' Background='OrangeRed'>
-            <Paragraph>1-69</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' Background='OrangeRed'>
-            <Paragraph>1-81</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' Background='OrangeRed'>
-            <Paragraph>1-44</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' Background='OrangeRed'>
-            <Paragraph>1-53</Paragraph>
-         </TableCell>
-      </TableRow>
-      <TableRow  FontSize='12' >
-         <TableCell TextAlignment='Left'>
-            <Paragraph>Overcast</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' >
-            <Paragraph>70-88</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' >
-            <Paragraph>62-72</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' >
-            <Paragraph>45-50</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' >
-            <Paragraph>54-71</Paragraph>
-         </TableCell>
-      </TableRow>
-      <TableRow  FontSize='12' >
-         <TableCell TextAlignment='Left' Background='OrangeRed'>
-            <Paragraph>Fog</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' Background='OrangeRed'>
-            <Paragraph>89-91</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' Background='OrangeRed'>
-            <Paragraph>73-75</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' Background='OrangeRed'>
-            <Paragraph>N/A</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' Background='OrangeRed'>
-            <Paragraph>72-75</Paragraph>
-         </TableCell>
-      </TableRow>
-      <TableRow  FontSize='12' >
-         <TableCell TextAlignment='Left'>
-            <Paragraph>Mud</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' >
-            <Paragraph>92-97</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' >
-            <Paragraph>76-91</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' >
-            <Paragraph>N/A</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' >
-            <Paragraph>76-91</Paragraph>
-         </TableCell>
-      </TableRow>
-      <TableRow  FontSize='12' >
-         <TableCell TextAlignment='Left' Background='OrangeRed'>
-            <Paragraph>Mud/Overcast</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' Background='OrangeRed'>
-            <Paragraph>98-100</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' Background='OrangeRed'>
-            <Paragraph>92-97</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' Background='OrangeRed'>
-            <Paragraph>51-58</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' Background='OrangeRed'>
-            <Paragraph>92-97</Paragraph>
-         </TableCell>
-      </TableRow>
-      <TableRow  FontSize='12' >
-         <TableCell TextAlignment='Left'>
+         <TableCell TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
             <Paragraph>
-               <Run>Snow</Run>
-               <Run Typography.Variants='Superscript'>2</Run>
+               <Run Text='     Effect'></Run>
             </Paragraph>
          </TableCell>
-         <TableCell TextAlignment='Center' >
-            <Paragraph>N/A</Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Center' >
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' Background='OrangeRed' >
             <Paragraph>
-               <Run>98-100</Run>
-               <Run Typography.Variants='Superscript'>1</Run>
+               <Run Text='1-50'></Run>
             </Paragraph>
          </TableCell>
-         <TableCell TextAlignment='Center' >
-            <Paragraph>59-100</Paragraph>
+         <TableCell TextAlignment='Left' Background='OrangeRed' >
+            <Paragraph>
+               <Run Text='     No effect'></Run>
+            </Paragraph>
          </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
          <TableCell TextAlignment='Center' >
             <Paragraph>
-               <Run>98-100</Run>
-               <Run Typography.Variants='Superscript'>1</Run>
+               <Run Text='51-52'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='     Driver periscope broken'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' Background='OrangeRed' >
+            <Paragraph>
+               <Run Text='53-54'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' Background='OrangeRed' >
+            <Paragraph>
+               <Run Text='     Assistant driver periscope broken'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='55-57'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='     Gunner periscope broken'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' Background='OrangeRed' >
+            <Paragraph>
+               <Run Text='58-60'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' Background='OrangeRed' >
+            <Paragraph>
+               <Run Text='     Loader periscope broken'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='61-63'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='     Commander periscope broken'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' Background='OrangeRed' >
+            <Paragraph>
+               <Run Text='66-70'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' Background='OrangeRed' >
+            <Paragraph>
+               <Run Text='     .50 caliber AA MG broken'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='71-75'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='     Driver possible wounded if not buttoned up'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' Background='OrangeRed' >
+            <Paragraph>
+               <Run Text='76-80'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' Background='OrangeRed' >
+            <Paragraph>
+               <Run Text='     Assistant driver possibly wounded if not buttoned up'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='81-90'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='     Loader possibly wounded if not buttoned'></Run>
+
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' Background='OrangeRed' >
+            <Paragraph>
+               <Run Text='91-100'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' Background='OrangeRed' >
+            <Paragraph>
+               <Run Text='     Commander possibly wounded if not buttoned up'></Run>
             </Paragraph>
          </TableCell>
       </TableRow>
    </TableRowGroup>
    <TableRowGroup>
       <TableRow  FontSize='10' >
-         <TableCell ColumnSpan='5' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+         <TableCell ColumnSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
             <Paragraph>
-               NOTES:<LineBreak/>
-               1.) March and November Only<LineBreak/>
-               2.) Check for severity of snow on the Snow Table
-            </Paragraph>
-         </TableCell>
-      </TableRow>
-   </TableRowGroup>
-   <TableRowGroup>
-      <TableRow  FontSize='16' >
-         <TableCell ColumnSpan='5' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-            <Paragraph>
-               SNOW TABLE
+               <Bold>
+                  <Run FontSize='12' Text='  Die Roll Modifier:'></Run>
+               </Bold>
                <LineBreak/>
-               <Run FontSize='10'> (Dec-Feb = +1, Mar &amp; Nov = -1)</Run>
-            </Paragraph>
-         </TableCell>
-      </TableRow>
-   </TableRowGroup>
-   <TableRowGroup >
-      <TableRow FontSize='12' >
-         <TableCell ColumnSpan='2' TextAlignment='Right' >
-            <Paragraph>
-               <Run Text='DieRoll       '/>
-            </Paragraph>
-         </TableCell>
-         <TableCell ColumnSpan='3' TextAlignment='Left' >
-            <Paragraph>
-               <Run Text='     Condition'/>
-            </Paragraph>
-         </TableCell>
-      </TableRow>
-   </TableRowGroup>
-   <TableRowGroup>
-      <TableRow  FontSize='12' >
-         <TableCell ColumnSpan='2' TextAlignment='Right' Background='OrangeRed'>
-            <Paragraph>
-               <Run Text='0-1       '/>
-            </Paragraph>
-         </TableCell>
-         <TableCell ColumnSpan='3' TextAlignment='Left' Background='OrangeRed'>
-            <Paragraph>
-               <Run Text='     Falling Snow'/>
-            </Paragraph>
-         </TableCell>
-      </TableRow>
-      <TableRow  FontSize='12' >
-         <TableCell ColumnSpan='2' TextAlignment='Right'>
-            <Paragraph>
-               <Run Text='2-3      '/>
-            </Paragraph>
-         </TableCell>
-         <TableCell ColumnSpan='3' TextAlignment='Left'>
-            <Paragraph>
-               <Run Text='     Ground Snow'/>
-            </Paragraph>
-         </TableCell>
-      </TableRow>
-      <TableRow  FontSize='12' >
-         <TableCell ColumnSpan='2' TextAlignment='Right' Background='OrangeRed'>
-            <Paragraph>
-               <Run Text='4-5       '/>
-            </Paragraph>
-         </TableCell>
-         <TableCell ColumnSpan='3' TextAlignment='Left' Background='OrangeRed'>
-            <Paragraph>
-               <Run Text='     Ground Snow and Falling Snow'/>
-            </Paragraph>
-         </TableCell>
-      </TableRow>
-      <TableRow  FontSize='12' >
-         <TableCell ColumnSpan='2' TextAlignment='Right' >
-            <Paragraph>
-               <Run Text='6-7       '/>
-            </Paragraph>
-         </TableCell>
-         <TableCell ColumnSpan='3' TextAlignment='Left'>
-            <Paragraph>
-               <Run Text='     Ground Snow'/>
-            </Paragraph>
-         </TableCell>
-      </TableRow>
-      <TableRow  FontSize='12' >
-         <TableCell ColumnSpan='2' TextAlignment='Right' Background='OrangeRed'>
-            <Paragraph>
-               <Run Text='8-9       '/>
-            </Paragraph>
-         </TableCell>
-         <TableCell ColumnSpan='3' TextAlignment='Left' Background='OrangeRed'>
-            <Paragraph>
-               <Run Text='     Deep Snow'/>
-            </Paragraph>
-         </TableCell>
-      </TableRow>
-      <TableRow  FontSize='12' >
-         <TableCell ColumnSpan='2' TextAlignment='Right' >
-            <Paragraph>
-               <Run Text='10-11       '/>
-            </Paragraph>
-         </TableCell>
-         <TableCell ColumnSpan='3' TextAlignment='Left'>
-            <Paragraph>
-               <Run Text='     Deep Snow and Falling Snow'/>
-            </Paragraph>
-         </TableCell>
-      </TableRow>
-   </TableRowGroup>
-   <TableRowGroup >
-      <TableRow FontSize='16' >
-         <TableCell ColumnSpan='5' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-            <Paragraph>WEATHER EFFECTS</Paragraph>
-         </TableCell>
-      </TableRow>
-      <TableRow FontSize='12' >
-         <TableCell ColumnSpan='5' TextAlignment='Left' Background='OrangeRed' FontSize='10'>
-            <Paragraph>
-               <Bold>Clear Weather:</Bold>
-               <LineBreak/><Run Text='    No Effect'></Run>
-            </Paragraph>
-         </TableCell>
-      </TableRow>
-      <TableRow FontSize='12' >
-         <TableCell ColumnSpan='5' TextAlignment='Left' FontSize='10'>
-            <Paragraph>
-               <Bold>Fog:</Bold>
-               <LineBreak/><Run Text='    (1) Spotting and combat possible at short range only'></Run>
-               <LineBreak/><Run Text='    (2) Treat all direct fire as passing through smoke'></Run>
-            </Paragraph>
-         </TableCell>
-      </TableRow>
-      <TableRow FontSize='12' >
-         <TableCell ColumnSpan='5' TextAlignment='Left' Background='OrangeRed' FontSize='10'>
-            <Paragraph>
-               <Bold>Mud and Deep Snow</Bold>
+               <Run FontSize='10' Text='  (1) Broken periscopes prevent spotting, firing weapons (other than smoke mortars),'></Run>
                <LineBreak/>
-               <Run Text='    (1) See '/>
+               <Run FontSize='10' Text='        or driving the tank unless the hatch is open.'></Run>
+               <LineBreak/>
+               <Run FontSize='10' Text='  (2) If the gunsight is broken, the main gun cannot be fired again this day'></Run>
+               <LineBreak/>
+               <Run FontSize='10' Text='  (3) A broken AA MG may not be fired for the remainder of the day.'></Run>
+               <LineBreak/>
+               <Run FontSize='10' Text='  (4) Roll on the '></Run>
                <InlineUIContainer>
-                  <Button Content='Movement' FontFamily='Courier New'  FontSize='8'></Button>
+                  <Button Content='Wounds' FontFamily='Courier New'  FontSize='8'></Button>
                </InlineUIContainer>
-               <Run Text='Table'/>
-               <LineBreak/>
-               <Run Text='    (2) See '></Run>
-               <InlineUIContainer>
-                  <Button Content='Time' FontFamily='Courier New'  FontSize='8'></Button>
-               </InlineUIContainer>
-               <Run Text=' Table'></Run>
-               <LineBreak/>
-               <Run Text='    (3) Reduced HE effect'></Run>
-            </Paragraph>
-         </TableCell>
-      </TableRow>
-      <TableRow FontSize='12' >
-         <TableCell ColumnSpan='5' TextAlignment='Left' FontSize='10'>
-            <Paragraph>
-               <Bold>Overcast:</Bold>
-               <LineBreak/>
-               <Run Text='    (1) No air strikes are possible'></Run>
-               <LineBreak/>
-               <Run Text='    (2) If no rain, roll 1D at the beginning of each hour (1-8 = no effect) (9-10 = rain starts)'></Run>
-               <LineBreak/>
-               <Run Text='    (3) If rain, roll 1D at the beginning of each hour  (1-5 = rain stops) (6-10 = rain continues)'></Run>
-         </Paragraph>
-         </TableCell>
-      </TableRow>
-      <TableRow FontSize='12' >
-         <TableCell ColumnSpan='5' TextAlignment='Left' Background='OrangeRed' FontSize='10'>
-            <Paragraph>
-               <Bold>Rain</Bold>
-               <LineBreak/>
-               <Run Text='    (1) Rapid smoke depletion'></Run>
-               <LineBreak/>
-               <Run Text='    (2) After two hours of rain in one day, mud conditions exists'></Run>     
-            </Paragraph>
-         </TableCell>
-      </TableRow>
-      <TableRow FontSize='12' >
-         <TableCell ColumnSpan='5' TextAlignment='Left' FontSize='10'>
-            <Paragraph>
-               <Bold>Falling Snow:</Bold>
-               <LineBreak/>
-               <Run Text='    (1) Spotting and combat possible at short range only'></Run>
-               <LineBreak/>
-               <Run Text='    (2) Treat all direct fire as passing through smoke'></Run>
-               <LineBreak/>
-               <Run Text='    (3) If snow, roll 1D at the beginning of each hour (1-8 = snow continues) (9-10 = snow stops)'></Run>
-               <LineBreak/>
-               <Run Text='    (4) If no snow, roll 1D at the beginning of each hour (1-8 = no snow continues) (9-10 = snow starts)'></Run>           
+               <Run Text=' Table for wounded crewman.'></Run>
             </Paragraph>
          </TableCell>
       </TableRow>

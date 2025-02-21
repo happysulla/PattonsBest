@@ -58,7 +58,14 @@ namespace Pattons_Best
       }
       private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
       {
-         Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+         try
+         {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });
+         }
+         catch (Exception ex)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Hyperlink_RequestNavigate(): failed e.URI=" + e.Uri.ToString() + "\n" + ex.ToString());
+         }
          e.Handled = true;
       }
       private void ButtonOk_Click(object sender, RoutedEventArgs e)

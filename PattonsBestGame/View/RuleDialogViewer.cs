@@ -215,17 +215,29 @@ namespace Pattons_Best
                   dialog.myFlowDocumentScrollViewer.Width = 610;
                   dialog.myFlowDocumentScrollViewer.Height = 380;
                   break;
-               case "Weather":
-                  dialog.Title = "Weather Tables";
+               case "Bail Out":
+                  dialog.Title = "Bail Out Table";
                   dialog.Background = theBrushOrange;
-                  dialog.myFlowDocumentScrollViewer.Width = 670;
-                  dialog.myFlowDocumentScrollViewer.Height = 650;
+                  dialog.myFlowDocumentScrollViewer.Width = 300;
+                  dialog.myFlowDocumentScrollViewer.Height = 200;
                   break;
-               case "Time":
-                  dialog.Title = "Time Tables";
+               case "Bogged Down":
+                  dialog.Title = "Bogged Down Movement Table";
                   dialog.Background = theBrushOrange;
-                  dialog.myFlowDocumentScrollViewer.Width = 610;
-                  dialog.myFlowDocumentScrollViewer.Height = 610;
+                  dialog.myFlowDocumentScrollViewer.Width = 350;
+                  dialog.myFlowDocumentScrollViewer.Height = 255;
+                  break;
+               case "Brew Up":
+                  dialog.Title = "Brew Up Table";
+                  dialog.Background = theBrushOrange;
+                  dialog.myFlowDocumentScrollViewer.Width = 370;
+                  dialog.myFlowDocumentScrollViewer.Height = 210;
+                  break;
+               case "Collateral":
+                  dialog.Title = "Collateral Damage Table";
+                  dialog.Background = theBrushOrange;
+                  dialog.myFlowDocumentScrollViewer.Width = 450;
+                  dialog.myFlowDocumentScrollViewer.Height = 340;
                   break;
                case "Deployment":
                   dialog.Title = "Deployment Tables";
@@ -233,8 +245,14 @@ namespace Pattons_Best
                   dialog.myFlowDocumentScrollViewer.Width = 525;
                   dialog.myFlowDocumentScrollViewer.Height = 370;
                   break;
-               case "Wounds":
-                  dialog.Title = "Wounds Tables";
+               case "Explosion":
+                  dialog.Title = "Tank Explosion Table";
+                  dialog.Background = theBrushOrange;
+                  dialog.myFlowDocumentScrollViewer.Width = 300;
+                  dialog.myFlowDocumentScrollViewer.Height = 200;
+                  break;
+               case "Hit Location":
+                  dialog.Title = "Hit Location Table";
                   dialog.Background = theBrushOrange;
                   dialog.myFlowDocumentScrollViewer.Width = 610;
                   dialog.myFlowDocumentScrollViewer.Height = 610;
@@ -245,8 +263,20 @@ namespace Pattons_Best
                   dialog.myFlowDocumentScrollViewer.Width = 810;
                   dialog.myFlowDocumentScrollViewer.Height = 890;
                   break;
-               case "Hit Location":
-                  dialog.Title = "Hit Location Table";
+               case "Time":
+                  dialog.Title = "Time Tables";
+                  dialog.Background = theBrushOrange;
+                  dialog.myFlowDocumentScrollViewer.Width = 610;
+                  dialog.myFlowDocumentScrollViewer.Height = 580;
+                  break;
+               case "Weather":
+                  dialog.Title = "Weather Tables";
+                  dialog.Background = theBrushOrange;
+                  dialog.myFlowDocumentScrollViewer.Width = 680;
+                  dialog.myFlowDocumentScrollViewer.Height = 670;
+                  break;
+               case "Wounds":
+                  dialog.Title = "Wounds Tables";
                   dialog.Background = theBrushOrange;
                   dialog.myFlowDocumentScrollViewer.Width = 610;
                   dialog.myFlowDocumentScrollViewer.Height = 610;
@@ -442,14 +472,8 @@ namespace Pattons_Best
                   else
                   {
                      Button? button = inlineUiContainer.Child as Button;
-                     if (null == button)
-                     {
-                        Logger.Log(LogEnum.LE_ERROR, "FindButtons(): button=null");
-                     }
-                     else
-                     {
+                     if (null != button)
                         buttons.Add(button);
-                     }
                   }
                }
                else if (i is Figure)
@@ -522,19 +546,13 @@ namespace Pattons_Best
                   InlineUIContainer? inlineUiContainer = i as InlineUIContainer;
                   if (null == inlineUiContainer)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "FindButtons(): inlineUiContainer=null");
+                     Logger.Log(LogEnum.LE_ERROR, "FindImages(): inlineUiContainer=null");
                   }
                   else
                   {
                      Image? img = inlineUiContainer.Child as Image;
-                     if (null == img)
-                     {
-                        Logger.Log(LogEnum.LE_ERROR, "FindButtons(): button=null");
-                     }
-                     else
-                     {
+                     if (null != img)
                         images.Add(img);
-                     }
                   }
                }
                else if (i is Figure)
@@ -542,7 +560,7 @@ namespace Pattons_Best
                   Figure? figure = i as Figure;
                   if (null == figure)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "FindButtons(): figure=null");
+                     Logger.Log(LogEnum.LE_ERROR, "FindImages(): figure=null");
                   }
                   else
                   {
@@ -560,7 +578,7 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "FindButtons(): floater=null");
+                     Logger.Log(LogEnum.LE_ERROR, "FindImages(): floater=null");
                   }
                }
             }

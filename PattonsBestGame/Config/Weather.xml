@@ -10,6 +10,15 @@
       <TableRow  FontSize='16' >
          <TableCell ColumnSpan='5' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
             <Paragraph>
+               WEATHER TABLES
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <TableRowGroup>
+      <TableRow  FontSize='14' >
+         <TableCell ColumnSpan='5' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
                WEATHER
             </Paragraph>
          </TableCell>
@@ -166,7 +175,7 @@
       </TableRow>
    </TableRowGroup>
    <TableRowGroup>
-      <TableRow  FontSize='16' >
+      <TableRow  FontSize='14' >
          <TableCell ColumnSpan='5' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
             <Paragraph>
                SNOW TABLE
@@ -265,7 +274,7 @@
       </TableRow>
    </TableRowGroup>
    <TableRowGroup >
-      <TableRow FontSize='16' >
+      <TableRow FontSize='14' >
          <TableCell ColumnSpan='5' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
             <Paragraph>WEATHER EFFECTS</Paragraph>
          </TableCell>
