@@ -239,6 +239,12 @@ namespace Pattons_Best
                   dialog.myFlowDocumentScrollViewer.Width = 610;
                   dialog.myFlowDocumentScrollViewer.Height = 610;
                   break;
+               case "Movement":
+                  dialog.Title = "Movement Tables";
+                  dialog.Background = theBrushOrange;
+                  dialog.myFlowDocumentScrollViewer.Width = 810;
+                  dialog.myFlowDocumentScrollViewer.Height = 890;
+                  break;
                case "Hit Location":
                   dialog.Title = "Hit Location Table";
                   dialog.Background = theBrushOrange;
@@ -253,6 +259,16 @@ namespace Pattons_Best
             IEnumerable<Button> buttons = FindButtons(dialog.myFlowDocumentScrollViewer.Document);
             foreach (Button button in buttons)
                button.Click += Button_Click;
+            IEnumerable<Image> images = FindImages(dialog.myFlowDocumentScrollViewer.Document);
+            foreach (Image iamge in images)
+            {
+               string fullImagePath = MapImage.theImageDirectory + Utilities.RemoveSpaces(iamge.Name) + ".gif";
+               System.Windows.Media.Imaging.BitmapImage bitImage = new BitmapImage();
+               bitImage.BeginInit();
+               bitImage.UriSource = new Uri(fullImagePath, UriKind.Absolute);
+               bitImage.EndInit();
+               iamge.Source = bitImage;
+            }
             myTableDialogs[key] = dialog;
             dialog.Show();
             return true;
@@ -486,6 +502,91 @@ namespace Pattons_Best
          if (block is List)
          {
             return ((List)block).ListItems.SelectMany(listItem => listItem.Blocks.SelectMany(innerBlock => FindButtons(innerBlock)));
+         }
+         throw new InvalidOperationException("Unknown block type: " + block.GetType());
+      }
+      private IEnumerable<Image> FindImages(FlowDocument document)
+      {
+         return document.Blocks.SelectMany(block => FindImages(block));
+      }
+      private IEnumerable<Image> FindImages(Block block)
+      {
+         if (block is Paragraph)
+         {
+            List<Image> images = new List<Image>();
+            var para = ((Paragraph)block).Inlines;
+            foreach (var i in para)
+            {
+               if (i is InlineUIContainer)
+               {
+                  InlineUIContainer? inlineUiContainer = i as InlineUIContainer;
+                  if (null == inlineUiContainer)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "FindButtons(): inlineUiContainer=null");
+                  }
+                  else
+                  {
+                     Image? img = inlineUiContainer.Child as Image;
+                     if (null == img)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "FindButtons(): button=null");
+                     }
+                     else
+                     {
+                        images.Add(img);
+                     }
+                  }
+               }
+               else if (i is Figure)
+               {
+                  Figure? figure = i as Figure;
+                  if (null == figure)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "FindButtons(): figure=null");
+                  }
+                  else
+                  {
+                     var img = figure.Blocks.SelectMany(blocks => FindImages(blocks));
+                     images.AddRange(img);
+                  }
+               }
+               else if (i is Floater)
+               {
+                  Floater? floater = i as Floater;
+                  if (null != floater)
+                  {
+                     var img = floater.Blocks.SelectMany(blocks => FindImages(blocks));
+                     images.AddRange(img);
+                  }
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "FindButtons(): floater=null");
+                  }
+               }
+            }
+            return images;
+         }
+         if (block is Table)
+         {
+            return ((Table)block).RowGroups.SelectMany(x => x.Rows).SelectMany(x => x.Cells).SelectMany(x => x.Blocks).SelectMany(innerBlock => FindImages(innerBlock));
+         }
+         if (block is BlockUIContainer)
+         {
+            BlockUIContainer blockUIContainer = (BlockUIContainer)block;
+            Image? img = blockUIContainer.Child as Image;
+            if (null == img)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "FindImages(): img=null");
+               return new List<Image>();
+            }
+            else
+            {
+               return new List<Image>(new[] { img });
+            }
+         }
+         if (block is List)
+         {
+            return ((List)block).ListItems.SelectMany(listItem => listItem.Blocks.SelectMany(innerBlock => FindImages(innerBlock)));
          }
          throw new InvalidOperationException("Unknown block type: " + block.GetType());
       }
