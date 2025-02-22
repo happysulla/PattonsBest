@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        HorizontalContentAlignment="Center" VerticalContentAlignment="Center" UseLayoutRounding="True" WindowStartupLocation="CenterScreen" ShowInTaskbar="False" Topmost="True" Cursor="Arrow" ResizeMode="CanMinimize" SizeToContent="WidthAndHeight" >
+        HorizontalContentAlignment="Center" VerticalContentAlignment="Center" UseLayoutRounding="True" WindowStartupLocation="CenterScreen" ShowInTaskbar="False" Topmost="True" Cursor="Arrow" ResizeMode="CanResizeWithGrip" SizeToContent="WidthAndHeight" VerticalAlignment="Center" HorizontalAlignment="Center" Loaded="TableDialog_Loaded" >
    <FlowDocumentScrollViewer Name="myFlowDocumentScrollViewer" BorderBrush="#FF151414" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" Cursor="Arrow" HorizontalAlignment="Center">
         <FlowDocument xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' Name='myFlowDocument'>
             <Paragraph TextDecorations="Underline">Stuff gets written here</Paragraph>

@@ -15,7 +15,7 @@ namespace Pattons_Best
 {
    public class RuleDialogViewer
    {
-      private static SolidColorBrush theBrushOrange = new SolidColorBrush(Colors.Orange);
+      private const double theExtraWidth = 0;
       public bool CtorError { get; } = false;
       private Dictionary<string, string> myRules = new Dictionary<string, string>();
       public Dictionary<string, string> Rules { get => myRules; }
@@ -202,89 +202,6 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ShowTable(): TableDialog() ctor error");
                return false;
             }
-            switch (key)
-            {
-               case "Calendar":
-                  dialog.Title = "Combat Calendar";
-                  dialog.myFlowDocumentScrollViewer.Width = 1300;
-                  dialog.myFlowDocumentScrollViewer.Height = 900;
-                  break;
-               case "Ammo":
-                  dialog.Title = "Ammo Tables";
-                  dialog.Background = theBrushOrange;
-                  dialog.myFlowDocumentScrollViewer.Width = 610;
-                  dialog.myFlowDocumentScrollViewer.Height = 380;
-                  break;
-               case "Bail Out":
-                  dialog.Title = "Bail Out Table";
-                  dialog.Background = theBrushOrange;
-                  dialog.myFlowDocumentScrollViewer.Width = 300;
-                  dialog.myFlowDocumentScrollViewer.Height = 200;
-                  break;
-               case "Bogged Down":
-                  dialog.Title = "Bogged Down Movement Table";
-                  dialog.Background = theBrushOrange;
-                  dialog.myFlowDocumentScrollViewer.Width = 350;
-                  dialog.myFlowDocumentScrollViewer.Height = 255;
-                  break;
-               case "Brew Up":
-                  dialog.Title = "Brew Up Table";
-                  dialog.Background = theBrushOrange;
-                  dialog.myFlowDocumentScrollViewer.Width = 370;
-                  dialog.myFlowDocumentScrollViewer.Height = 210;
-                  break;
-               case "Collateral":
-                  dialog.Title = "Collateral Damage Table";
-                  dialog.Background = theBrushOrange;
-                  dialog.myFlowDocumentScrollViewer.Width = 450;
-                  dialog.myFlowDocumentScrollViewer.Height = 340;
-                  break;
-               case "Deployment":
-                  dialog.Title = "Deployment Tables";
-                  dialog.Background = theBrushOrange;
-                  dialog.myFlowDocumentScrollViewer.Width = 525;
-                  dialog.myFlowDocumentScrollViewer.Height = 370;
-                  break;
-               case "Explosion":
-                  dialog.Title = "Tank Explosion Table";
-                  dialog.Background = theBrushOrange;
-                  dialog.myFlowDocumentScrollViewer.Width = 300;
-                  dialog.myFlowDocumentScrollViewer.Height = 200;
-                  break;
-               case "Hit Location":
-                  dialog.Title = "Hit Location Table";
-                  dialog.Background = theBrushOrange;
-                  dialog.myFlowDocumentScrollViewer.Width = 610;
-                  dialog.myFlowDocumentScrollViewer.Height = 610;
-                  break;
-               case "Movement":
-                  dialog.Title = "Movement Tables";
-                  dialog.Background = theBrushOrange;
-                  dialog.myFlowDocumentScrollViewer.Width = 810;
-                  dialog.myFlowDocumentScrollViewer.Height = 890;
-                  break;
-               case "Time":
-                  dialog.Title = "Time Tables";
-                  dialog.Background = theBrushOrange;
-                  dialog.myFlowDocumentScrollViewer.Width = 610;
-                  dialog.myFlowDocumentScrollViewer.Height = 580;
-                  break;
-               case "Weather":
-                  dialog.Title = "Weather Tables";
-                  dialog.Background = theBrushOrange;
-                  dialog.myFlowDocumentScrollViewer.Width = 680;
-                  dialog.myFlowDocumentScrollViewer.Height = 670;
-                  break;
-               case "Wounds":
-                  dialog.Title = "Wounds Tables";
-                  dialog.Background = theBrushOrange;
-                  dialog.myFlowDocumentScrollViewer.Width = 610;
-                  dialog.myFlowDocumentScrollViewer.Height = 610;
-                  break;
-               default:
-                  Logger.Log(LogEnum.LE_ERROR, "ShowTable(): reached default key=" + key);
-                  return false;
-            }
             dialog.Closed += TableDialog_Closed;
             IEnumerable<Button> buttons = FindButtons(dialog.myFlowDocumentScrollViewer.Document);
             foreach (Button button in buttons)
@@ -301,6 +218,8 @@ namespace Pattons_Best
             }
             myTableDialogs[key] = dialog;
             dialog.Show();
+            dialog.MaxWidth = dialog.MinWidth + theExtraWidth;
+            dialog.MaxHeight = dialog.MinHeight + theExtraWidth;
             return true;
          }
          catch (Exception e2)

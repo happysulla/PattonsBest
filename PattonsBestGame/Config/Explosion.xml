@@ -1,4 +1,7 @@
 <Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='Orange'>
+   <Table.Columns>
+      <TableColumn Width='280'/>
+   </Table.Columns>
    <TableRowGroup>
       <TableRow  FontSize='16' >
          <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>

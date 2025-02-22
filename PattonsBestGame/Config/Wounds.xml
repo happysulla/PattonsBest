@@ -1,6 +1,6 @@
 <Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='Orange'>
 	<Table.Columns>
-		<TableColumn Width='80'/>
+		<TableColumn Width='100'/>
 		<TableColumn Width='160'/>
 		<TableColumn Width='160'/>
 		<TableColumn Width='160'/>
@@ -9,266 +9,260 @@
 		<TableRow  FontSize='14' >
 			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
-					<LineBreak/>TIME ELAPSED TABLE<LineBreak/>
+					<LineBreak/>WOUNDS TABLE<LineBreak/>
 				</Paragraph>
 			</TableCell>
 		</TableRow>
 	</TableRowGroup>
 	<TableRowGroup >
 		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' >
+			<TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
-					<Run FontStyle='Italic'>Use the same roll for both determinations:</Run>
+					Die Roll
 				</Paragraph>
 			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' >
-				<Paragraph>
-					<Bold>Time Expended  = </Bold>1D/2 (round down ) + 1 hours past sunrise
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' >
-				<Paragraph>
-					<Bold>Ammo Expended = </Bold>1D (x2 HE) and (x1 ,30 calibre MG ammo boxes checked off)
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-	</TableRowGroup>
-	<TableRowGroup>
-		<TableRow  FontSize='14' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>
-					<LineBreak/>
-					SUNRISE-SUNSET CHART
-					<LineBreak/>
-				</Paragraph>
-			</TableCell>
+         <TableCell TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Run Text='  Wound'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Run Text='  Effects'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Run Text='  Effects Bailing Out'></Run>
+            </Paragraph>
+         </TableCell>
 		</TableRow>
 	</TableRowGroup>
 	<TableRowGroup >
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>Month</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>Sunrise</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>Sunset</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>July, August</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>05:00</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>19:15</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' >
-				<Paragraph>September</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>05:30</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>18:15</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>October</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>06:30</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>17:15</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' >
-				<Paragraph>November</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>07:15</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>16:15</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>December</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>07:45</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>16:00</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' >
-				<Paragraph>January</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>07:45</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>16:30</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>February</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>07:15</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>17:30</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' >
-				<Paragraph>March</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>06:15</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>18:00</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>April</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>05:15</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>19:00</Paragraph>
-			</TableCell>
-		</TableRow>
-	</TableRowGroup>
-	<TableRowGroup>
-		<TableRow  FontSize='14' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>
-					<LineBreak/>
-					TIME USE TABLE
-					<LineBreak/>
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>Time</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>Activity</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed'>
-				<Paragraph>15m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left' Background='OrangeRed'>
-				<Paragraph>Enter new area on improved road.</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center'>
-				<Paragraph>30m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left'>
-				<Paragraph>Enter new area on dirt road.</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed'>
-				<Paragraph>45m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left' Background='OrangeRed'>
-				<Paragraph>Enter new area on no road.</Paragraph>
-			</TableCell>
-		</TableRow>
+      <!--.......................Row1...............-->
 		<TableRow  FontSize='12' >
 			<TableCell TextAlignment='Center' >
-				<Paragraph>15m.</Paragraph>
+				<Paragraph>1-42</Paragraph>
 			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left'>
-				<Paragraph>Combat occurs when entering a new area.</Paragraph>
+			<TableCell TextAlignment='Left'  Background='OrangeRed'>
+				<Paragraph><Run Text='  Near Miss'></Run></Paragraph>
 			</TableCell>
+			<TableCell TextAlignment='Left'  Background='OrangeRed'>
+				<Paragraph><Run Text='  None'></Run></Paragraph>
+			</TableCell>
+         <TableCell TextAlignment='Left'  Background='OrangeRed'>
+            <Paragraph>
+               <Run Text='  None'></Run>
+            </Paragraph>
+         </TableCell>
 		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed'>
-				<Paragraph>15m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left' Background='OrangeRed'>
-				<Paragraph>Check any one additional area for estimated enemy resistance.</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' >
-				<Paragraph>60m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left'>
-				<Paragraph>Attempt to replenish ammo -- roll 1D: (1-7 = arrives) (8-10 = fails).</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed'>
-				<Paragraph>30m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left' Background='OrangeRed'>
-				<Paragraph>Call for artillery --  roll 1D: (1-7 = arrives) (8-10 = fails).</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' >
-				<Paragraph>30m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left'>
-				<Paragraph>Call for air strike -- roll 1D: (1-4 = arrives) (5-10 = fails).</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed'>
-				<Paragraph>30m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left' Background='OrangeRed'>
-				<Paragraph>
-					<Run>Replace incapacitated crewman per </Run>
-					<InlineUIContainer>
-						<Button Content='r19.3' FontFamily='Courier New'  FontSize='10'></Button>
-					</InlineUIContainer>
-				</Paragraph>
-			</TableCell>
-		</TableRow>
+      <!--.......................Row2...............-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' >
+            <Paragraph>1-42</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='  Near Miss'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='  None'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left'>
+            <Paragraph>
+               <Run Text='  None'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!--.......................Row3...............-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' >
+            <Paragraph>43-47</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left'  Background='OrangeRed'>
+            <Paragraph>
+               <Run Text='  Unconscious'></Run>
+               <Run Typography.Variants='Superscript'>1 2</Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left'  Background='OrangeRed'>
+            <Paragraph>
+               <Run Text='  Incapacitated'></Run>
+               <Run Typography.Variants='Superscript'>3</Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left'  Background='OrangeRed'>
+            <Paragraph>
+               <Run Text='  Cannot bail'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!--.......................Row3...............-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' >
+            <Paragraph>48-72</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='  Light wound'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='  None'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left'>
+            <Paragraph>
+               <Run Text='  None'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!--.......................Row4...............-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' >
+            <Paragraph>73-87</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left'  Background='OrangeRed'>
+            <Paragraph>
+               <Run Text='  Light wound'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left'  Background='OrangeRed'>
+            <Paragraph>
+               <Run Text='  Out one week'></Run>
+               <Run Typography.Variants='Superscript'>3</Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left'  Background='OrangeRed'>
+            <Paragraph>
+               <Run Text='  None'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!--.......................Row5...............-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' >
+            <Paragraph>88-92</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='  Serious wound'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='  Out 1D week'></Run>
+               <Run Typography.Variants='Superscript'>3</Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left'>
+            <Paragraph>
+               <Run Text='  Bail +2'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!--.......................Row6...............-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' >
+            <Paragraph>93-97</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left'  Background='OrangeRed'>
+            <Paragraph>
+               <Run Text='  Serious wound'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left'  Background='OrangeRed'>
+            <Paragraph>
+               <Run Text='  Sent home'></Run>
+               <Run Typography.Variants='Superscript'>3</Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left'  Background='OrangeRed'>
+            <Paragraph>
+               <Run Text='  Cannot bail'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!--.......................Row7...............-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='98-100'></Run>
+               <Run Typography.Variants='Superscript'>4</Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='  Killed'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='  Incapacitated'></Run>
+               <Run Typography.Variants='Superscript'>3</Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left'>
+            <Paragraph>
+               <Run Text='  Cannot bail'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
 	</TableRowGroup>
 	<TableRowGroup>
 		<TableRow  FontSize='12' >
 			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
-					<Run>NOTES:</Run>
-					<InlineUIContainer>
-						<Button Content='Weather' FontFamily='Courier New'  FontSize='10'></Button>
-					</InlineUIContainer>
-					<LineBreak/>
-					(1) No air strikes possible with overcast, fog, or falling snow.<LineBreak/>
-					(2) Movement +15m during mud, fog, rain, ground snow, or deep snow.
+               <Bold><Run Text='  Die Roll Modifer'></Run></Bold><LineBreak/>
+               <Run Text='  (?) See '></Run>
+               <InlineUIContainer>
+                  <Button Content='Hit Location' FontFamily='Courier New'  FontSize='8'></Button>
+               </InlineUIContainer>
+               <Run Text='  Table for modifications to die rolls due to the location of hits.'></Run> <LineBreak/>
+               <Run Text='  (?) Crewmans rating when rolling for wounds after bail out or when attempting a rescue. See '></Run>
+               <InlineUIContainer>
+                  <Button Content='r19.1' FontFamily='Courier New'  FontSize='8'></Button>
+               </InlineUIContainer>
+               <Run Text='.'></Run><LineBreak/>
+               <Run Text='  -20 For minefield attacks. See '></Run>
+               <InlineUIContainer>
+                  <Button Content='Minefield' FontFamily='Courier New'  FontSize='8'></Button>
+               </InlineUIContainer>
+               <Run Text=' Attack Table.'></Run><LineBreak/>
+               <Run Text='  -10 Harassing Fire: if all non-US controlled close zones are under Advancing Fire and no enemy light weapons or MG units are nearer than long range.'></Run><LineBreak/>
+               <Run Text='  +5 For any crewman during an AA MG or Sub MG and rolling for wounds due to'/>
+               <InlineUIContainer>
+                  <Button Content='Collateral' FontFamily='Courier New'  FontSize='8'></Button>
+               </InlineUIContainer>
+               <Run Text=' Damage Table.'></Run>
+               <LineBreak/>
 				</Paragraph>
 			</TableCell>
 		</TableRow>
 	</TableRowGroup>
+   <TableRowGroup>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Run>NOTES:</Run><LineBreak/>
+               <Run Text='(1) Unconscious result applies to wounds caused only by gunfire knocking out your tank or minefield attacks. Otherwise, treat this result as a light wound with no other affect.'></Run><LineBreak/>
+               <Run Text='(2) Unconscious men are temporarily incapacitated. During the Crew Actions Phase '></Run>
+               <InlineUIContainer>
+                  <Button Content='r4.74' FontFamily='Courier New'  FontSize='10'></Button>
+               </InlineUIContainer>
+               <Run Text=' attempt to recover. Roll 1D: (1-5 = become conscious)'></Run><LineBreak/>
+               <Run Text='(3) Crewmen incapacitated per '></Run>
+               <InlineUIContainer>
+                  <Button Content='r19.22' FontFamily='Courier New'  FontSize='10'></Button>
+               </InlineUIContainer>
+               <Run Text='.'></Run><LineBreak/>
+               <Run Text='(4) An unmodified roll of 100 is always crewman killed. '></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
 </Table>

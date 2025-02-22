@@ -12,8 +12,8 @@ namespace Pattons_Best
    {
       public string[] theTables = new string[15] 
            { "Calendar", "Ammo", "Weather", "Time", "Deployment", 
-             "Wounds", "Movement", "Hit Location", "Bogged Down", "Bail Out", "Explosion", "Collateral", "Brew Up",
-             "Gun Malfunction", "Sunrise-Sunset" };
+             "Wounds", "Minefield", "Movement", "Hit Location", "Bogged Down", "Bail Out", "Explosion", "Collateral", "Brew Up",
+             "Gun Malfunction"};
       public static string theConfigDirectory = "";
       public bool CtorError { get; } = false;
       private Dictionary<string, string> myEntries = new Dictionary<string, string>();
