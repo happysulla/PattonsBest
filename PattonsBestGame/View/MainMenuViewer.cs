@@ -67,8 +67,9 @@ namespace Pattons_Best
                   myMenuItemTopLevel31.IsCheckable = true;
                   myMenuItemTopLevel3.Items.Add(myMenuItemTopLevel31);
                   MenuItem subItem32 = new MenuItem();
-                  subItem32.Header = "_Rivers";
-                  subItem32.InputGestureText = "Ctrl+Shift+R";
+                  subItem32.Header = "_Combat Calendar...";
+                  subItem32.InputGestureText = "Ctrl+Shift+C";
+                  subItem32.Click += MenuItemViewCombatCalendar;
                   myMenuItemTopLevel3.Items.Add(subItem32);
                   MenuItem subItem33 = new MenuItem();
                   subItem33.Header = "_After Action Report...";
@@ -265,6 +266,11 @@ namespace Pattons_Best
             e.CanExecute = true;
          else
             e.CanExecute = false;
+      }
+      public void MenuItemViewCombatCalendar(object sender, RoutedEventArgs e)
+      {
+         GameAction action = GameAction.ShowCombatCalendar;
+         myGameEngine.PerformAction(ref myGameInstance, ref action);
       }
       public void MenuItemViewAfterActionReport(object sender, RoutedEventArgs e)
       {

@@ -13,13 +13,12 @@ namespace Pattons_Best
    {
       private const int STARTING_RULE_ROW = 0;
       private const int STARTING_EVENT_ROW = 0;
-      private const int STARTING_TABLE_ROW = 0;
       public bool CtorError = false;
       private RuleDialogViewer? myRulesManager = null;
       private Thickness myThickness = new Thickness(5, 2, 5, 2);
       private readonly FontFamily myFontFam = new FontFamily("Courier New");
       //----------------------------------------------------------------
-      public RuleListingDialog(RuleDialogViewer rm, bool isEventDialog, bool isTableDialog)
+      public RuleListingDialog(RuleDialogViewer rm, bool isEventDialog)
       {
          InitializeComponent();
          if (null == rm)
@@ -39,16 +38,6 @@ namespace Pattons_Best
                myGrid.RowDefinitions.Add(rowDef);
             }
          }
-         else if(true == isTableDialog)
-         {
-            this.Title = "Table Listing";
-            int numToDisplay = myRulesManager.Tables.Keys.Count - STARTING_TABLE_ROW + 2; // add one for header row and one for separator
-            for (int i = 0; i < numToDisplay; ++i)
-            {
-               RowDefinition rowDef = new RowDefinition();
-               myGrid.RowDefinitions.Add(rowDef);
-            }
-         }
          else
          {
             int numToDisplay = myRulesManager.Rules.Keys.Count - STARTING_RULE_ROW + 2; // add one for header row and one for separator
@@ -58,21 +47,19 @@ namespace Pattons_Best
                myGrid.RowDefinitions.Add(rowDef);
             }
          }
-         UpdateGridRowHeader(isEventDialog, isTableDialog);
-         if (false == UpdateGridRows(isEventDialog, isTableDialog))
+         UpdateGridRowHeader(isEventDialog);
+         if (false == UpdateGridRows(isEventDialog))
          {
             Logger.Log(LogEnum.LE_ERROR, "RuleListingDialog(): UpdateGridRows() returned false");
             CtorError = true;
             return;
          }
       }
-      private void UpdateGridRowHeader(bool isEventDialog, bool isTableDialog)
+      private void UpdateGridRowHeader(bool isEventDialog)
       {
          string content = "Rule Title";
          if (true == isEventDialog)
             content = "Event Title";
-         else if (true == isTableDialog)
-            content = "Table Title";
          Label labelRuleNum = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "Number" };
          myGrid.Children.Add(labelRuleNum);
          Grid.SetRow(labelRuleNum, 0);
@@ -87,7 +74,7 @@ namespace Pattons_Best
          Grid.SetColumn(r1, 0);
          Grid.SetColumnSpan(r1, 2);
       }
-      private bool UpdateGridRows(bool isEventDialog, bool isTableDialog)
+      private bool UpdateGridRows(bool isEventDialog)
       {
          if( null == myRulesManager)
          {
@@ -103,32 +90,6 @@ namespace Pattons_Best
                int eventNum = i + STARTING_EVENT_ROW;
                string key = myRulesManager.Events.Keys.ElementAt(eventNum);
                string title = myRulesManager.GetEventTitle(key);
-               if (null == title)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): title=null for key=" + key);
-                  return false;
-               }
-               System.Windows.Controls.Button b = new Button { FontFamily = myFontFam, FontSize = 12, Margin = new Thickness(5), Content = key };
-               b.Click += ButtonShowRule_Click;
-               myGrid.Children.Add(b);
-               Grid.SetRow(b, rowNum);
-               Grid.SetColumn(b, 0);
-               Label label = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Center, Content = title };
-               myGrid.Children.Add(label);
-               Grid.SetRow(label, rowNum);
-               Grid.SetColumn(label, 1);
-               ++rowNum;
-            }
-         }
-         else if (true == isTableDialog)
-         {
-            int numToDisplay = myRulesManager.Tables.Keys.Count - STARTING_EVENT_ROW; // add one for header row and one for separator
-            int rowNum = 2;
-            for (int i = 0; i < numToDisplay; ++i)
-            {
-               int eventNum = i + STARTING_EVENT_ROW;
-               string key = myRulesManager.Tables.Keys.ElementAt(eventNum);
-               string title = myRulesManager.GetTableTitle(key);
                if (null == title)
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): title=null for key=" + key);

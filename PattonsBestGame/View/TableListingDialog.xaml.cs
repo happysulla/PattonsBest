@@ -16,9 +16,35 @@ namespace Pattons_Best
 {
    public partial class TableListingDialog : Window
    {
-      public TableListingDialog()
+      public bool CtorError = false;
+      private RuleDialogViewer? myRulesManager = null;
+      public TableListingDialog(RuleDialogViewer rm)
       {
          InitializeComponent();
+         if (null == rm)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "RuleListingDialog(): rm=null");
+            CtorError = true;
+            return;
+         }
+         myRulesManager = rm;
+         this.Title = "Table Listing";
+      }
+      //-------------------------------------------------------------------
+      private void ButtonShowRule_Click(object sender, RoutedEventArgs e)
+      {
+         if (null == myRulesManager)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): myRulesManager=null");
+            return;
+         }
+         Button b = (Button)sender;
+         string key = (string)b.Content;
+         if (false == myRulesManager.ShowTable(key))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Button_Click():  ShowTable() returned false");
+            return;
+         }
       }
    }
 }

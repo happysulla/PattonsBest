@@ -207,6 +207,13 @@ namespace Pattons_Best
                AfterActionDialog dialogAAR = new AfterActionDialog(aar);
                dialogAAR.Show();
                break;
+            case GameAction.ShowCombatCalendar:
+               if( false == myRulesMgr.ShowTable("Calendar"))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): SmyRulesMgr.ShowTable(Calendar)=false");
+                  return;
+               }
+               break;
             case GameAction.ShowReportErrorDialog:
                ShowReportErrorDialog dialogReportError = new ShowReportErrorDialog();
                dialogReportError.Show();
@@ -216,7 +223,7 @@ namespace Pattons_Best
                dialogAbout.Show();
                break;
             case GameAction.ShowRuleListing:
-               RuleListingDialog dialogRuleListing = new RuleListingDialog(myRulesMgr, false, false);
+               RuleListingDialog dialogRuleListing = new RuleListingDialog(myRulesMgr, false);
                if (true == dialogRuleListing.CtorError)
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): RuleListingDialog CtorError=true");
@@ -225,7 +232,7 @@ namespace Pattons_Best
                dialogRuleListing.Show();
                break;
             case GameAction.ShowEventListing:
-               RuleListingDialog dialogEventListing = new RuleListingDialog(myRulesMgr, true, false);
+               RuleListingDialog dialogEventListing = new RuleListingDialog(myRulesMgr, true);
                if (true == dialogEventListing.CtorError)
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): RuleListingDialog CtorError=true");
@@ -234,7 +241,7 @@ namespace Pattons_Best
                dialogEventListing.Show();
                break;
             case GameAction.ShowTableListing:
-               RuleListingDialog dialogTableListing = new RuleListingDialog(myRulesMgr, false, true);
+               TableListingDialog dialogTableListing = new TableListingDialog(myRulesMgr);
                if (true == dialogTableListing.CtorError)
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): TableListingDialog CtorError=true");

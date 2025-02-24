@@ -153,7 +153,8 @@
                <LineBreak/>
                PART II: EFFECT ON ENEMY UNITS
                <LineBreak/>
-               <Run FontSize='10'> The unmodified number rolled on the white die determines the effect of movement on the positioning of ememy units as follows:</Run>
+               <Italic><Run FontSize='10'> The unmodified number rolled on the white die determines the effect of movement on the positioning of ememy units as follows:</Run>
+               </Italic>
             </Paragraph>
          </TableCell>
       </TableRow>

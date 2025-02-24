@@ -126,6 +126,8 @@ namespace Pattons_Best
          string returnStatus = "OK";
          switch (action)
          {
+            case GameAction.ShowCombatCalendar:
+            case GameAction.ShowAfterActionReport:
             case GameAction.ShowInventory:
             case GameAction.ShowGameFeats:
             case GameAction.ShowRuleListing:
@@ -487,6 +489,8 @@ namespace Pattons_Best
          string previousEvent = gi.EventActive;
          switch (action)
          {
+            case GameAction.ShowCombatCalendar:
+            case GameAction.ShowAfterActionReport:
             case GameAction.ShowInventory:
             case GameAction.ShowGameFeats:
             case GameAction.ShowRuleListing:

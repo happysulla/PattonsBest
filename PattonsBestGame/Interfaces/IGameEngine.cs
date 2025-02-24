@@ -123,6 +123,7 @@ namespace Pattons_Best
       UpdateLoadingGameReturnToJail,
       UpdateUndo,
 
+      ShowCombatCalendar,
       ShowAfterActionReport,
       ShowInventory,
       ShowRuleListing,

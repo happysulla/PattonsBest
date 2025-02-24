@@ -1,0 +1,524 @@
+<Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='LightBlue'>
+   <Table.Columns>
+      <TableColumn Width='100'/>
+      <TableColumn Width='300'/>
+      <TableColumn Width='300'/>
+   </Table.Columns>
+   <TableRowGroup>
+      <TableRow  FontSize='16' >
+         <TableCell ColumnSpan='3' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <LineBreak/>ENEMY AP % TO KILL<LineBreak/>
+               <Italic>
+                  <Run FontSize='10' Text='Roll the number shown or less to kill your tank'></Run>
+               </Italic>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <!-- Row 1-->
+   <TableRowGroup>
+      <TableRow  FontSize='12' >
+         <TableCell BorderBrush='Black' BorderThickness='1'>
+            <!-- Table 1-->
+            <Table>
+               <TableRowGroup>
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center' >
+                        <Paragraph>
+                           <Run Text='   '></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center' >
+                        <Paragraph>
+                           Armor Class
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='10' >
+                     <TableCell TextAlignment='Center' Background='DodgerBlue'>
+                        <Paragraph>
+                           I<LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='10' >
+                     <TableCell TextAlignment='Center' >
+                        <Paragraph>
+                           II<LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='10' >
+                     <TableCell TextAlignment='Center' Background='DodgerBlue'>
+                        <Paragraph>
+                           III<LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+            </Table>
+         </TableCell>
+         <TableCell BorderBrush='Black' BorderThickness='1'>
+            <!-- Table 2-->
+            <Table>
+               <TableRowGroup>
+                  <TableRow  FontSize='12' >
+                     <TableCell ColumnSpan='3' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                        <Paragraph>50L GUN</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  >
+                     <TableCell TextAlignment='Center'  >
+                        <Paragraph>Front</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'  >
+                        <Paragraph>Side</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'  >
+                        <Paragraph>Rear</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Row 3-->
+                  <TableRow   >
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>17/08/03</Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>
+                           T 42/28/17<LineBreak/>H 72/58/42
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>
+                           T 58/42/28<LineBreak/>H 83/72/58
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Row 4-->
+                  <TableRow  >
+                     <TableCell FontSize='10' TextAlignment='Center'  >
+                        <Paragraph>
+                           T 17/08/03<LineBreak/>H 03
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  >
+                        <Paragraph>
+                           T 42/28/17<LineBreak/>H 72/58/42
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  >
+                        <Paragraph>
+                           T 58/42/28<LineBreak/>H 83/72/58
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Row 5-->
+                  <TableRow  >
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>02/01/01<LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>
+                           T 03<LineBreak/>H 17/08/03
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>
+                           T 03<LineBreak/>H 28/17/08
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+            </Table>
+         </TableCell>
+         <TableCell BorderBrush='Black' BorderThickness='1'>
+            <!-- Table 3-->
+            <Table>
+               <TableRowGroup>
+                  <TableRow  FontSize='12' >
+                     <TableCell ColumnSpan='3' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                        <Paragraph>75L GUN</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center'  >
+                        <Paragraph>Front</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'  >
+                        <Paragraph>Side</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'  >
+                        <Paragraph>Rear</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Row 3-->
+                  <TableRow  FontSize='12' >
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>72/58/42</Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>
+                           T 92/83/72<LineBreak/>H 95/95/92
+                     </Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>
+                           T 95/92/83<LineBreak/>H 95
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Row 4-->
+                  <TableRow  FontSize='12' >
+                     <TableCell FontSize='10' TextAlignment='Center'  >
+                        <Paragraph>T 72/58/42<LineBreak/>H 28/17/08</Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  >
+                        <Paragraph>T 92/83/72<LineBreak/>H 95/95/92</Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  >
+                        <Paragraph>
+                           T 95/92/83<LineBreak/>H 95
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Row 5-->
+                  <TableRow  FontSize='12' >
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>03</Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>
+                           T 28/17/08<LineBreak/>H 72/58/42
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>
+                           T 42/28/17<LineBreak/>H 83/72/58
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+            </Table>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <!-- Row 2-->
+   <TableRowGroup>
+      <TableRow  FontSize='12' >
+         <TableCell BorderBrush='Black' BorderThickness='1'>
+            <Table>
+               <TableRowGroup>
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center' >
+                        <Paragraph>
+                           <Run Text='   '></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='12'>
+                     <TableCell>
+                        <Paragraph>
+                           <Run Text='Armor Class'></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='10' >
+                     <TableCell TextAlignment='Center' Background='DodgerBlue'>
+                        <Paragraph>
+                           I
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='10' >
+                     <TableCell TextAlignment='Center' >
+                        <Paragraph>
+                           II<LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='10' >
+                     <TableCell TextAlignment='Center' Background='DodgerBlue'>
+                        <Paragraph>
+                           III<LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+            </Table>
+         </TableCell>
+         <TableCell BorderBrush='Black' BorderThickness='1'>
+            <Table>
+               <TableRowGroup>
+                  <TableRow  FontSize='12' >
+                     <TableCell ColumnSpan='3' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                        <Paragraph>75LL GUN</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  >
+                     <TableCell TextAlignment='Center'  >
+                        <Paragraph>Front</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'  >
+                        <Paragraph>Side</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'  >
+                        <Paragraph>Rear</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Row 3-->
+                  <TableRow   >
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>95</Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>
+                           95
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>
+                           95
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Row 4-->
+                  <TableRow  >
+                     <TableCell FontSize='10' TextAlignment='Center'  >
+                        <Paragraph>T 95<LineBreak/>H 95/92/83</Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  >
+                        <Paragraph>
+                           95
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  >
+                        <Paragraph>
+                           95
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Row 5-->
+                  <TableRow  >
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>17/08/03</Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>
+                           T 95/92/83<LineBreak/>H 95
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>
+                           T 95/95/92<LineBreak/>H 95
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+            </Table>
+         </TableCell>
+         <TableCell BorderBrush='Black' BorderThickness='1'>
+            <Table>
+               <TableRowGroup>
+                  <TableRow  FontSize='12' >
+                     <TableCell ColumnSpan='3' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                        <Paragraph>88L GUN</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center'  >
+                        <Paragraph>Front</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'  >
+                        <Paragraph>Side</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'  >
+                        <Paragraph>Rear</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Row 3-->
+                  <TableRow  FontSize='12' >
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>95/92/93</Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>
+                           95
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>
+                           95
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Row 4-->
+                  <TableRow  FontSize='12' >
+                     <TableCell FontSize='10' TextAlignment='Center'  >
+                        <Paragraph>
+                           T 95/92/83<LineBreak/>H 72/58/42
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  >
+                        <Paragraph>
+                           95
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  >
+                        <Paragraph>
+                           95
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Row 5-->
+                  <TableRow  FontSize='12' >
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>03</Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>
+                           T 72/58/06<LineBreak/>H 95/92/83
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>
+                           T 83/72/58<LineBreak/>H 95/95/92
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+            </Table>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <!-- Row 3-->
+   <TableRowGroup>
+      <TableRow  FontSize='12' >
+         <TableCell BorderBrush='Black' BorderThickness='1'>
+            <Table>
+               <TableRowGroup>
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center' >
+                        <Paragraph>
+                           <Run Text='   '></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='12'>
+                     <TableCell>
+                        <Paragraph>
+                           <Run Text='Armor Class'></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='10' >
+                     <TableCell TextAlignment='Center' Background='DodgerBlue'>
+                        <Paragraph>
+                           I
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='10' >
+                     <TableCell TextAlignment='Center' >
+                        <Paragraph>
+                           II
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='10' >
+                     <TableCell TextAlignment='Center' Background='DodgerBlue'>
+                        <Paragraph>
+                           III
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+            </Table>
+         </TableCell>
+         <TableCell BorderBrush='Black' BorderThickness='1'>
+            <Table>
+               <TableRowGroup>
+                  <TableRow  FontSize='12' >
+                     <TableCell ColumnSpan='3' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                        <Paragraph>88LL GUN</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  >
+                     <TableCell TextAlignment='Center'  >
+                        <Paragraph>Front</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'  >
+                        <Paragraph>Side</Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'  >
+                        <Paragraph>Rear</Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Row 3-->
+                  <TableRow   >
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>95</Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>
+                           95
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>
+                           95
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Row 4-->
+                  <TableRow  >
+                     <TableCell FontSize='10' TextAlignment='Center'  >
+                        <Paragraph>95</Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  >
+                        <Paragraph>
+                           95
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  >
+                        <Paragraph>
+                           95
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Row 5-->
+                  <TableRow  >
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>72/58/42</Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>
+                           95
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell FontSize='10' TextAlignment='Center'  Background='DodgerBlue'>
+                        <Paragraph>
+                           <Run Text='  '></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+            </Table>
+         </TableCell>
+         <TableCell BorderBrush='Black' BorderThickness='1' TextAlignment='Left'>
+            <Paragraph>
+               <LineBreak/>
+               <!--<LineBreak/>-->
+               <LineBreak/>
+               <Bold>NOTES:</Bold>
+               <LineBreak/>
+               <Run Text=' (1)  T = Turret    H = Hull'/><LineBreak/>
+               <Run Text=' (2) close/medium/long = Number needed'/>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+</Table>

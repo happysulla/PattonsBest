@@ -1,0 +1,73 @@
+<Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='Orange'>
+   <Table.Columns>
+      <TableColumn Width='100'/>
+      <TableColumn Width='140'/>
+   </Table.Columns>
+   <TableRowGroup>
+      <TableRow  FontSize='16' >
+         <TableCell ColumnSpan='2' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <LineBreak/>BAIL OUT TABLE<LineBreak/>
+               <Italic><Run FontSize='10' Text='Incapacitated men may not roll'></Run></Italic>
+               </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <TableRowGroup >
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Right' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Run Text='Die Roll     '></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Run Text='     Effect'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Right' Background='OrangeRed' >
+            <Paragraph>
+               <Run Text='1-10     '></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' Background='OrangeRed' >
+            <Paragraph>
+               <Run Text='     Crewman out'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Right' >
+            <Paragraph>
+               <Run Text='11+     '></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='     Unable to bail out'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <TableRowGroup>
+      <TableRow  FontSize='10' >
+         <TableCell ColumnSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Bold>
+                  <Run FontSize='12' Text='  Die Roll Modifier:'></Run>
+               </Bold>
+               <LineBreak/>
+               <Run FontSize='10' Text='  (1) As per '></Run>
+               <InlineUIContainer>
+                  <Button Content='Wounds' FontFamily='Courier New'  FontSize='8'></Button>
+               </InlineUIContainer>
+               <Run FontSize='10' Text=' Table'></Run>
+               <LineBreak/>
+               <Run FontSize='10' Text='  (2) Loader in tank with no longer hatch adds one'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+</Table>

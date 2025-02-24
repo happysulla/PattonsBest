@@ -254,6 +254,8 @@ namespace Pattons_Best
          }
          switch (action)
          {
+            case GameAction.ShowCombatCalendar:
+            case GameAction.ShowAfterActionReport:
             case GameAction.ShowInventory:
             case GameAction.ShowRuleListing:
             case GameAction.ShowEventListing:
@@ -885,6 +887,11 @@ namespace Pattons_Best
             //------------------------------------------------
             command = new RoutedCommand();
             keyGesture = new KeyGesture(Key.R, ModifierKeys.Control | ModifierKeys.Shift);
+            //------------------------------------------------
+            command = new RoutedCommand();
+            keyGesture = new KeyGesture(Key.C, ModifierKeys.Control | ModifierKeys.Shift);
+            InputBindings.Add(new KeyBinding(command, keyGesture));
+            CommandBindings.Add(new CommandBinding(command, mmv.MenuItemViewCombatCalendar));
             InputBindings.Add(new KeyBinding(command, keyGesture));
             //------------------------------------------------
             command = new RoutedCommand();

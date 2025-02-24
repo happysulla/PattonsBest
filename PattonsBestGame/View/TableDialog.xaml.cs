@@ -16,6 +16,9 @@ namespace Pattons_Best
    public partial class TableDialog : Window
    {
       private static SolidColorBrush theBrushOrange = new SolidColorBrush(Colors.Orange);
+      private static SolidColorBrush theBrushBlue = new SolidColorBrush(Colors.LightBlue);
+      private static SolidColorBrush theBrushGreen = new SolidColorBrush(Colors.LightGreen);
+      private static SolidColorBrush theBrushTan = new SolidColorBrush(Colors.Tan);
       public bool CtorError { get; } = false;
       private string myKey = "";
       public string Key { get => myKey; }
@@ -43,19 +46,31 @@ namespace Pattons_Best
       {
          Close();
       }
-
       private void TableDialog_Loaded(object sender, RoutedEventArgs e)
       {
          switch (Key)
          {
-            case "Calendar":
-               this.Title = "Combat Calendar";
-               this.myFlowDocumentScrollViewer.Width = 1300;
-               this.myFlowDocumentScrollViewer.Height = 900;
+            case "Activation":
+               this.Title = "Activation Tables";
+               this.Background = theBrushTan;
+               this.Width = this.MinWidth = this.MaxWidth = 620;
+               this.MinHeight = this.MaxHeight = 400;
                break;
             case "Ammo":
                this.Title = "Ammo Tables";
                this.Background = theBrushOrange;
+               this.Width = this.MinWidth = this.MaxWidth = 620;
+               this.MinHeight = this.MaxHeight = 400;
+               break;
+            case "AP To Kill (75)":
+               this.Title = "AP To Kill (75)";
+               this.Background = theBrushGreen;
+               this.Width = this.MinWidth = this.MaxWidth = 620;
+               this.MinHeight = this.MaxHeight = 400;
+               break;
+            case "AP To Kill (76)":
+               this.Title = "AP To Kill (76)";
+               this.Background = theBrushGreen;
                this.Width = this.MinWidth = this.MaxWidth = 620;
                this.MinHeight = this.MaxHeight = 400;
                break;
@@ -77,6 +92,11 @@ namespace Pattons_Best
                this.Width = this.MinWidth = this.MaxWidth = 375;
                this.MinHeight = this.MaxHeight = 260;
                break;
+            case "Calendar":
+               this.Title = "Combat Calendar";
+               this.Width = this.MinWidth = this.MaxWidth = 1300;
+               this.MinHeight = this.MaxHeight = 900;
+               break;
             case "Collateral":
                this.Title = "Collateral Damage Table";
                this.Background = theBrushOrange;
@@ -89,21 +109,87 @@ namespace Pattons_Best
                this.Width = this.MinWidth = this.MaxWidth = 540;
                this.MinHeight = this.MaxHeight = 400;
                break;
+            case "Enemy Advance":
+               this.Title = "Enemy Action: Advance Scenario";
+               this.Background = theBrushBlue;
+               this.Width = this.MinWidth = this.MaxWidth = 620;
+               this.MinHeight = this.MaxHeight = 400;
+               break;
+            case "Enemy AP To Hit":
+               this.Title = "Enemy AP To Hit";
+               this.Background = theBrushBlue;
+               this.Width = this.MinWidth = this.MaxWidth = 620;
+               this.MinHeight = this.MaxHeight = 400;
+               break;
+            case "Enemy AP To Kill":
+               this.Title = "Enemy AP % To Kill";
+               this.Background = theBrushBlue;
+               this.Width = this.MinWidth = this.MaxWidth = 760;
+               this.MinHeight = this.MaxHeight = 500;
+               break;
+            case "Enemy Appearance":
+               this.Title = "Enemy Appearance Table";
+               this.Background = theBrushTan;
+               this.Width = this.MinWidth = this.MaxWidth = 620;
+               this.MinHeight = this.MaxHeight = 400;
+               break;
+            case "Enemy Battle":
+               this.Title = "Enemy Action: Battle Scenario";
+               this.Background = theBrushBlue;
+               this.Width = this.MinWidth = this.MaxWidth = 620;
+               this.MinHeight = this.MaxHeight = 400;
+               break;
+            case "Enemy Counterattack":
+               this.Title = "Enemy Action: CounterAttack Scenario";
+               this.Background = theBrushBlue;
+               this.Width = this.MinWidth = this.MaxWidth = 620;
+               this.MinHeight = this.MaxHeight = 400;
+               break;
+            case "Exit Areas":
+               this.Title = "Exit Areas";
+               this.Background = theBrushTan;
+               this.Width = this.MinWidth = this.MaxWidth = 620;
+               this.MinHeight = this.MaxHeight = 400;
+               break;
             case "Explosion":
                this.Title = "Tank Explosion Table";
                this.Background = theBrushOrange;
                this.Width = this.MinWidth = this.MaxWidth = 340;
                this.MinHeight = this.MaxHeight = 210;
                break;
+            case "Friendly Action":
+               this.Title = "Friendly Action";
+               this.Background = theBrushBlue;
+               this.Width = this.MinWidth = this.MaxWidth = 340;
+               this.MinHeight = this.MaxHeight = 210;
+               break;
+            case "Gun Malfunction":
+               this.Title = "Gun Malfunction Repair Table";
+               this.Background = theBrushGreen;
+               this.Width = this.MinWidth = this.MaxWidth = 340;
+               this.MinHeight = this.MaxHeight = 210;
+               break;
+            case "HE to Kill (75)":
+               this.Title = "HE to Kill (75) Vehicles";
+               this.Background = theBrushGreen;
+               this.Width = this.MinWidth = this.MaxWidth = 340;
+               this.MinHeight = this.MaxHeight = 210;
+               break;
+            case "HE to Kill (76)":
+               this.Title = "HE to Kill (75) Vehicles";
+               this.Background = theBrushGreen;
+               this.Width = this.MinWidth = this.MaxWidth = 340;
+               this.MinHeight = this.MaxHeight = 210;
+               break;
             case "Hit Location":
                this.Title = "Hit Location Table";
-               this.Background = theBrushOrange;
+               this.Background = theBrushBlue;
                this.Width = this.MinWidth = this.MaxWidth = 620;
                this.MinHeight = this.MaxHeight = 360;
                break;
             case "Minefield":
                this.Title = "Minefield Attack Table";
-               this.Background = theBrushOrange;
+               this.Background = theBrushBlue;
                this.Width = this.MinWidth = this.MaxWidth = 810;
                this.MinHeight = this.MaxHeight = 930;
                break;
@@ -113,9 +199,63 @@ namespace Pattons_Best
                this.Width = this.MinWidth = this.MaxWidth = 810;
                this.MinHeight = this.MaxHeight = 930;
                break;
+            case "Panzerfaust":
+               this.Title = "Panzerfaust Attack Tables";
+               this.Background = theBrushBlue;
+               this.Width = this.MinWidth = this.MaxWidth = 810;
+               this.MinHeight = this.MaxHeight = 930;
+               break;
+            case "Placement":
+               this.Title = "Battle Board Placement Tables";
+               this.Background = theBrushTan;
+               this.Width = this.MinWidth = this.MaxWidth = 810;
+               this.MinHeight = this.MaxHeight = 930;
+               break;
+            case "Random Events":
+               this.Title = "Random Events Table";
+               this.Background = theBrushGreen;
+               this.Width = this.MinWidth = this.MaxWidth = 810;
+               this.MinHeight = this.MaxHeight = 930;
+               break;
+            case "Rate of Fire":
+               this.Title = "Rate of Fire Table";
+               this.Background = theBrushGreen;
+               this.Width = this.MinWidth = this.MaxWidth = 810;
+               this.MinHeight = this.MaxHeight = 930;
+               break;
+            case "Resistance":
+               this.Title = "Resistance Table";
+               this.Background = theBrushTan;
+               this.Width = this.MinWidth = this.MaxWidth = 810;
+               this.MinHeight = this.MaxHeight = 930;
+               break;
+            case "Sherman MG":
+               this.Title = "Sherman Machine Guns vs Infantry Targets";
+               this.Background = theBrushGreen;
+               this.Width = this.MinWidth = this.MaxWidth = 810;
+               this.MinHeight = this.MaxHeight = 930;
+               break;
+            case "Spotting":
+               this.Title = "Spotting Table";
+               this.Background = theBrushTan;
+               this.Width = this.MinWidth = this.MaxWidth = 810;
+               this.MinHeight = this.MaxHeight = 930;
+               break;
             case "Time":
                this.Title = "Time Tables";
                this.Background = theBrushOrange;
+               this.Width = this.MinWidth = this.MaxWidth = 620;
+               this.MinHeight = this.MaxHeight = 610;
+               break;
+            case "To Hit Target":
+               this.Title = "To Hit Target";
+               this.Background = theBrushGreen;
+               this.Width = this.MinWidth = this.MaxWidth = 620;
+               this.MinHeight = this.MaxHeight = 610;
+               break;
+            case "To Kill Infantry":
+               this.Title = "To Kill Infantry Targets";
+               this.Background = theBrushGreen;
                this.Width = this.MinWidth = this.MaxWidth = 620;
                this.MinHeight = this.MaxHeight = 610;
                break;

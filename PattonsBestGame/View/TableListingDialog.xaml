@@ -5,17 +5,124 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Pattons_Best"
         Name ="myDialogTableListing"
-        Title="Table Listing" Height="800" Width="900" MinWidth="450" MaxWidth="900" WindowStartupLocation="CenterScreen">
+        Title="Table Listing" Height="550" Width="700" MinHeight="450" MaxHeight="1100" MinWidth="450" MaxWidth="1100" WindowStartupLocation="CenterScreen">
    <ScrollViewer Name="myScrollViewer" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0">
       <Grid Name="myGrid" >
-         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-         </Grid.RowDefinitions>
          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
          </Grid.ColumnDefinitions>
+         <!-- First Row and 1st Column-->
+         <Grid Name="myGridBlue" Background="LightBlue" Grid.Row="0" Grid.Column="0">
+            <Grid.RowDefinitions>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+               <ColumnDefinition Width="150"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="0" Grid.Column="0" Content="Enemy Battle" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="1" Grid.Column="0" Content="Enemy Advance" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="2" Grid.Column="0" Content="Enemy Counterattack" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="3" Grid.Column="0" Content="Enemy AP To Hit" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="4" Grid.Column="0" Content="Enemy AP To Kill" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="5" Grid.Column="0" Content="Friendly Action" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="6" Grid.Column="0" Content="Hit Location" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="7" Grid.Column="0" Content="Minefield" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="8" Grid.Column="0" Content="Panzerfaust" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="9" Grid.Column="0" Content="Random Events" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+         </Grid>
+         <!-- First Row and 2nd Column-->
+         <Grid Name="myGridGreen" Background="LightGreen" Grid.Row="0" Grid.Column="1">
+            <Grid.RowDefinitions>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+               <ColumnDefinition Width="150"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="0" Grid.Column="0" Content="AP To Kill (75)" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="1" Grid.Column="0" Content="AP To Kill (76)" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="2" Grid.Column="0" Content="Gun Malfunction" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="3" Grid.Column="0" Content="HE to Kill (75)" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="4" Grid.Column="0" Content="HE to Kill (76)" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="5" Grid.Column="0" Content="Rate of Fire" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="6" Grid.Column="0" Content="Sherman MG" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="7" Grid.Column="0" Content="To Hit Target" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="8" Grid.Column="0" Content="To Kill Infantry" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+         </Grid>
+         <!-- First Row and 3rd Column-->
+         <Grid Name="myGridMapBoard" Background="Tan" Grid.Row="0" Grid.Column="2">
+            <Grid.RowDefinitions>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+               <ColumnDefinition Width="150"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="0" Grid.Column="0" Content="Activation" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="1" Grid.Column="0" Content="Enemy Appearance" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="2" Grid.Column="0" Content="Exit Areas" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="3" Grid.Column="0" Content="Placement" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="4" Grid.Column="0" Content="Resistance" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="5" Grid.Column="0" Content="Spotting" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+         </Grid>
+         <!-- First Row and 4th Column-->
+         <Grid Name="myGridOrange" Background="Orange" Grid.Row="0" Grid.Column="3">
+            <Grid.RowDefinitions>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+               <ColumnDefinition Width="150"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="0" Grid.Column="0" Content="Ammo" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="1" Grid.Column="0" Content="Bail Out" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="2" Grid.Column="0" Content="Bogged Down" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="3" Grid.Column="0" Content="Brew Up" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="4" Grid.Column="0" Content="Collateral" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="5" Grid.Column="0" Content="Deployment" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="6" Grid.Column="0" Content="Explosion" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="7" Grid.Column="0" Content="Hit Location" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="8" Grid.Column="0" Content="Movement" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="9" Grid.Column="0" Content="Time" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="10" Grid.Column="0" Content="Weather" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="11" Grid.Column="0" Content="Wounds" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+         </Grid>
       </Grid>
    </ScrollViewer>
 </Window>
