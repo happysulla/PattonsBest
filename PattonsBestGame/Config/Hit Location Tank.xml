@@ -1,0 +1,190 @@
+<Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='Orange'>
+   <Table.Columns>
+      <TableColumn Width='80'/>
+      <TableColumn Width='160'/>
+      <TableColumn Width='160'/>
+      <TableColumn Width='160'/>
+   </Table.Columns>
+   <TableRowGroup>
+      <TableRow  FontSize='14' >
+         <TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <LineBreak/>HIT LOCATION CREW WOUNDS EFFECTS<LineBreak/>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <TableRowGroup >
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='4' TextAlignment='Left' >
+            <Paragraph>
+               <Run FontStyle='Italic' Text='The location of gunfire or Panzerfaust hit which penetrates the tank affects the wound possibilities of the tank crew by modifying the dice rolls on the '></Run>
+               <InlineUIContainer>
+                  <Button Content='Wounds' FontFamily='Courier New'  FontSize='8'></Button>
+               </InlineUIContainer>
+               <Run FontStyle='Italic' Text=' Table as follows:'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <TableRowGroup >
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Run Text=' Location'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell ColumnSpan='3' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph><Run Text='  Effect'></Run></Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row1.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' Background='OrangeRed' >
+            <Paragraph><Run Text='  T F'></Run></Paragraph>
+         </TableCell>
+         <TableCell ColumnSpan='2' TextAlignment='Left' Background='OrangeRed' >
+            <Paragraph><Run Text='  Driver &amp; Assistant (-20)'></Run></Paragraph>
+         </TableCell>
+         <TableCell RowSpan='10' TextAlignment='Center' >
+            <Paragraph>
+               <LineBreak/>
+               <InlineUIContainer>
+                  <Image Name='MapBattleFacing' ></Image>
+               </InlineUIContainer>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row2.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='  T R'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell ColumnSpan='2'  TextAlignment='Left'  >
+            <Paragraph>
+               <Run Text='  Driver &amp; Assistant (-20); Gunner (+10); Loader (-10)'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row3.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' Background='OrangeRed' >
+            <Paragraph>
+               <Run Text='  T L'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell ColumnSpan='2' TextAlignment='Left' Background='OrangeRed' >
+            <Paragraph>
+               <Run Text='  Driver &amp; Assistant (-20); Gunner (-10); Loader (+10)'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row4.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left'  >
+            <Paragraph>
+               <Run Text='  T B'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell ColumnSpan='2' TextAlignment='Left'  >
+            <Paragraph>
+               <Run Text='  Driver &amp; Assistant (-20); Commander (+10)'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row5.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' Background='OrangeRed' >
+            <Paragraph>
+               <Run Text='  H F'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell ColumnSpan='2' TextAlignment='Left' Background='OrangeRed' >
+            <Paragraph>
+               <Run Text='  Driver &amp; Assistant (+10); Commander (-10)'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row6.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left'  >
+            <Paragraph>
+               <Run Text='  H FR'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell ColumnSpan='2' TextAlignment='Left'  >
+            <Paragraph>
+               <Run Text='  Driver &amp; Loader (-10); Assistant &amp; Gunner (+10)'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row7.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' Background='OrangeRed' >
+            <Paragraph>
+               <Run Text='  H BR'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell ColumnSpan='2' TextAlignment='Left' Background='OrangeRed' >
+            <Paragraph>
+               <Run Text='  Driver &amp; Assistant (-40); Others (-30)'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row8.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='  H FL'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell ColumnSpan='2' TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='  Driver &amp; Loader (+10); Assistant &amp; Gunner (-10)'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row9.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' Background='OrangeRed' >
+            <Paragraph>
+               <Run Text='  H BL'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell ColumnSpan='2' TextAlignment='Left' Background='OrangeRed' >
+            <Paragraph>
+               <Run Text='  Driver &amp; Assistant (-40); Others (-30)'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row10.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left'  >
+            <Paragraph>
+               <Run Text='  H B'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell ColumnSpan='2' TextAlignment='Left'  >
+            <Paragraph>
+               <Run Text='  Driver &amp; Assistant (-40); Others (-30)'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <TableRowGroup>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Bold><Run>NOTES: </Run></Bold>
+               <Run Text='   T = Turrent'></Run>
+               <Run Text='   H = Hull'></Run>
+               <Run Text='   R = Right side'></Run>
+               <Run Text='   L = Light side'></Run>
+               <Run Text='   B = Back'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+</Table>

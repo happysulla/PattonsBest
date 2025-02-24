@@ -220,7 +220,7 @@
                <Bold><Run Text='  Die Roll Modifer'></Run></Bold><LineBreak/>
                <Run Text='  (?) See '></Run>
                <InlineUIContainer>
-                  <Button Content='Hit Location' FontFamily='Courier New'  FontSize='8'></Button>
+                  <Button Content='Hit Location Crew' FontFamily='Courier New'  FontSize='8'></Button>
                </InlineUIContainer>
                <Run Text='  Table for modifications to die rolls due to the location of hits.'></Run> <LineBreak/>
                <Run Text='  (?) Crewmans rating when rolling for wounds after bail out or when attempting a rescue. See '></Run>

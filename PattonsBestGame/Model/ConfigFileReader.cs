@@ -10,11 +10,11 @@ namespace Pattons_Best
 {
    public class ConfigFileReader
    {
-      public string[] theTables = new string[31] 
+      public string[] theTables = new string[32] 
            { "Ammo", "AP To Kill (75)", "AP To Kill (76)", "Bail Out", "Bogged Down", "Brew Up", "Calendar", "Collateral", "Deployment",
              "Enemy Advance", "Enemy AP To Hit", "Enemy AP To Kill", "Enemy Battle",  "Enemy Counterattack", 
              "Explosion",  "Friendly Action",  "Gun Malfunction", "HE to Kill (75)", "HE to Kill (76)",
-             "Hit Location", "Minefield", "Movement", "Panzerfaust", "Random Events", "Rate of Fire", 
+             "Hit Location Crew", "Hit Location Tank", "Minefield", "Movement", "Panzerfaust", "Random Events", "Rate of Fire", 
              "Sherman MG",  "Time", "To Hit Target", "To Kill Infantry", "Weather", "Wounds"
            };
       public static string theConfigDirectory = "";

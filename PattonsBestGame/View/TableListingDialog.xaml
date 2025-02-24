@@ -37,7 +37,7 @@
             <Button Grid.Row="3" Grid.Column="0" Content="Enemy AP To Hit" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
             <Button Grid.Row="4" Grid.Column="0" Content="Enemy AP To Kill" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
             <Button Grid.Row="5" Grid.Column="0" Content="Friendly Action" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
-            <Button Grid.Row="6" Grid.Column="0" Content="Hit Location" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="6" Grid.Column="0" Content="Hit Location Tank" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
             <Button Grid.Row="7" Grid.Column="0" Content="Minefield" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
             <Button Grid.Row="8" Grid.Column="0" Content="Panzerfaust" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
             <Button Grid.Row="9" Grid.Column="0" Content="Random Events" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
@@ -117,7 +117,7 @@
             <Button Grid.Row="4" Grid.Column="0" Content="Collateral" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
             <Button Grid.Row="5" Grid.Column="0" Content="Deployment" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
             <Button Grid.Row="6" Grid.Column="0" Content="Explosion" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
-            <Button Grid.Row="7" Grid.Column="0" Content="Hit Location" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
+            <Button Grid.Row="7" Grid.Column="0" Content="Hit Location Crew" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
             <Button Grid.Row="8" Grid.Column="0" Content="Movement" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
             <Button Grid.Row="9" Grid.Column="0" Content="Time" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
             <Button Grid.Row="10" Grid.Column="0" Content="Weather" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="110"/>
