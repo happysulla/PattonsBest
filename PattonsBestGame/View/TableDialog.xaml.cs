@@ -181,7 +181,13 @@ namespace Pattons_Best
                this.Width = this.MinWidth = this.MaxWidth = 340;
                this.MinHeight = this.MaxHeight = 210;
                break;
-            case "Hit Location":
+            case "Hit Location Crew":
+               this.Title = "Hit Location Crew Wound Effects";
+               this.Background = theBrushOrange;
+               this.Width = this.MinWidth = this.MaxWidth = 620;
+               this.MinHeight = this.MaxHeight = 360;
+               break;
+            case "Hit Location Tank":
                this.Title = "Hit Location Table";
                this.Background = theBrushBlue;
                this.Width = this.MinWidth = this.MaxWidth = 620;
@@ -272,7 +278,7 @@ namespace Pattons_Best
                this.MinHeight = this.MaxHeight = 510;
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "ShowTable(): reached default key=" + Key);
+               Logger.Log(LogEnum.LE_ERROR, "TableDialog_Loaded(): reached default key=" + Key);
                break;
          }
       }
