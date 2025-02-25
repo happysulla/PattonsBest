@@ -219,7 +219,7 @@ namespace Pattons_Best
                break;
             case "Random Events":
                this.Title = "Random Events Table";
-               this.Background = theBrushGreen;
+               this.Background = theBrushBlue;
                this.Width = this.MinWidth = this.MaxWidth = 810;
                this.MinHeight = this.MaxHeight = 930;
                break;

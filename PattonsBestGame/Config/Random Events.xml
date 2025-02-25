@@ -1,73 +1,350 @@
-<Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='Orange'>
-   <Table.Columns>
-      <TableColumn Width='100'/>
-      <TableColumn Width='140'/>
-   </Table.Columns>
-   <TableRowGroup>
-      <TableRow  FontSize='16' >
-         <TableCell ColumnSpan='2' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-            <Paragraph>
-               <LineBreak/>BAIL OUT TABLE<LineBreak/>
-               <Italic><Run FontSize='10' Text='Incapacitated men may not roll'></Run></Italic>
-               </Paragraph>
-         </TableCell>
-      </TableRow>
-   </TableRowGroup>
-   <TableRowGroup >
-      <TableRow  FontSize='12' >
-         <TableCell TextAlignment='Right' BorderBrush='Black' BorderThickness='1'>
-            <Paragraph>
-               <Run Text='Die Roll     '></Run>
-            </Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
-            <Paragraph>
-               <Run Text='     Effect'></Run>
-            </Paragraph>
-         </TableCell>
-      </TableRow>
-      <TableRow  FontSize='12' >
-         <TableCell TextAlignment='Right' Background='OrangeRed' >
-            <Paragraph>
-               <Run Text='1-10     '></Run>
-            </Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Left' Background='OrangeRed' >
-            <Paragraph>
-               <Run Text='     Crewman out'></Run>
-            </Paragraph>
-         </TableCell>
-      </TableRow>
-      <TableRow  FontSize='12' >
-         <TableCell TextAlignment='Right' >
-            <Paragraph>
-               <Run Text='11+     '></Run>
-            </Paragraph>
-         </TableCell>
-         <TableCell TextAlignment='Left' >
-            <Paragraph>
-               <Run Text='     Unable to bail out'></Run>
-            </Paragraph>
-         </TableCell>
-      </TableRow>
-   </TableRowGroup>
-   <TableRowGroup>
-      <TableRow  FontSize='10' >
-         <TableCell ColumnSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
-            <Paragraph>
-               <Bold>
-                  <Run FontSize='12' Text='  Die Roll Modifier:'></Run>
-               </Bold>
-               <LineBreak/>
-               <Run FontSize='10' Text='  (1) As per '></Run>
-               <InlineUIContainer>
-                  <Button Content='Wounds' FontFamily='Courier New'  FontSize='8'></Button>
-               </InlineUIContainer>
-               <Run FontSize='10' Text=' Table'></Run>
-               <LineBreak/>
-               <Run FontSize='10' Text='  (2) Loader in tank with no longer hatch adds one'></Run>
-            </Paragraph>
-         </TableCell>
-      </TableRow>
-   </TableRowGroup>
+<Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='LightBlue'>
+	<Table.Columns>
+		<TableColumn Width='240'/>
+		<TableColumn Width='120'/>
+		<TableColumn Width='120'/>
+		<TableColumn Width='120'/>
+	</Table.Columns>
+	<TableRowGroup>
+		<TableRow  FontSize='14' >
+			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+				<Paragraph>
+					<LineBreak/>RANDOM EVENTS TABLE<LineBreak/>
+					<Run FontStyle='Italic' Text='Under the column of the scenario being played, roll 2D to determine which random event occurs.'></Run>
+				</Paragraph>
+			</TableCell>
+		</TableRow>
+	</TableRowGroup>
+	<TableRowGroup >
+		<!-- .......................row1.......................-->
+		<TableRow  FontSize='12' >
+			<TableCell RowSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1' >
+				<Paragraph>
+					<LineBreak/>
+					<Run Text='   Event'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell ColumnSpan='3' TextAlignment='Center' BorderBrush='Black' BorderThickness='1' >
+				<Paragraph>
+					<Run Text='Scenario'></Run>
+				</Paragraph>
+			</TableCell>
+		</TableRow>
+		<TableRow  FontSize='12' >
+			<TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+				<Paragraph>
+					<Run Text='Advance'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+				<Paragraph>
+					<Run Text='Battle'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+				<Paragraph>
+					<Run Text='Counterattack'></Run>
+				</Paragraph>
+			</TableCell>
+		</TableRow>
+		<!-- .......................row2.......................-->
+		<TableRow  FontSize='12' >
+			<TableCell TextAlignment='Left' Background='DodgerBlue'>
+				<Paragraph>
+					<Run Text='   1) Time Passes'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' Background='DodgerBlue'>
+				<Paragraph>
+					<Run Text='01-05'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' Background='DodgerBlue'>
+				<Paragraph>
+					<Run Text='01-05'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' Background='DodgerBlue'>
+				<Paragraph>
+					<Run Text='01-05'></Run>
+				</Paragraph>
+			</TableCell>
+		</TableRow>
+		<!-- .......................row3.......................-->
+		<TableRow  FontSize='12' >
+			<TableCell TextAlignment='Left' >
+				<Paragraph>
+					<Run Text='   2) Friendly Artillery'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' >
+				<Paragraph>
+					<Run Text='06-15'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'>
+				<Paragraph>
+					<Run Text='06-20'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' >
+				<Paragraph>
+					<Run Text='06-25'></Run>
+				</Paragraph>
+			</TableCell>
+		</TableRow>
+		<!-- .......................row4.......................-->
+		<TableRow  FontSize='12' >
+			<TableCell TextAlignment='Left' Background='DodgerBlue'>
+				<Paragraph>
+					<Run Text='   3) Enemy Artillery'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' Background='DodgerBlue'>
+				<Paragraph>
+					<Run Text='16-20'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' Background='DodgerBlue'>
+				<Paragraph>
+					<Run Text='21-30'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' Background='DodgerBlue'>
+				<Paragraph>
+					<Run Text='26-35'></Run>
+				</Paragraph>
+			</TableCell>
+		</TableRow>
+		<!-- .......................row5.......................-->
+		<TableRow  FontSize='12' >
+			<TableCell TextAlignment='Left' >
+				<Paragraph>
+					<Run Text='   4) Mines'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' >
+				<Paragraph>
+					<Run Text='21-25'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'>
+				<Paragraph>
+					<Run Text='31-35'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' >
+				<Paragraph>
+					<Run Text='---'></Run>
+				</Paragraph>
+			</TableCell>
+		</TableRow>
+		<!-- .......................row6.......................-->
+		<TableRow  FontSize='12' >
+			<TableCell TextAlignment='Left' Background='DodgerBlue'>
+				<Paragraph>
+					<Run Text='   5) Panzerfaust Attack'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' Background='DodgerBlue'>
+				<Paragraph>
+					<Run Text='26-30'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' Background='DodgerBlue'>
+				<Paragraph>
+					<Run Text='36-40'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' Background='DodgerBlue'>
+				<Paragraph>
+					<Run Text='36-40'></Run>
+				</Paragraph>
+			</TableCell>
+		</TableRow>
+		<!-- .......................row7.......................-->
+		<TableRow  FontSize='12' >
+			<TableCell TextAlignment='Left' >
+				<Paragraph>
+					<Run Text='   6) Harrasing Fire'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' >
+				<Paragraph>
+					<Run Text='31-35'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'>
+				<Paragraph>
+					<Run Text='41-45'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' >
+				<Paragraph>
+					<Run Text='41-45'></Run>
+				</Paragraph>
+			</TableCell>
+		</TableRow>
+		<!-- .......................row8.......................-->
+		<TableRow  FontSize='12' >
+			<TableCell TextAlignment='Left' Background='DodgerBlue'>
+				<Paragraph>
+					<Run Text='   7) Friendly Advance'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' Background='DodgerBlue'>
+				<Paragraph>
+					<Run Text='36-60'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' Background='DodgerBlue'>
+				<Paragraph>
+					<Run Text='46-60'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' Background='DodgerBlue'>
+				<Paragraph>
+					<Run Text='46-50'></Run>
+				</Paragraph>
+			</TableCell>
+		</TableRow>
+		<!-- .......................row9.......................-->
+		<TableRow  FontSize='12' >
+			<TableCell TextAlignment='Left' >
+				<Paragraph>
+					<Run Text='   8) Enemy Reinforcement'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' >
+				<Paragraph>
+					<Run Text='61-80'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'>
+				<Paragraph>
+					<Run Text='61-80'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' >
+				<Paragraph>
+					<Run Text='51-75'></Run>
+				</Paragraph>
+			</TableCell>
+		</TableRow>
+		<!-- .......................row10.......................-->
+		<TableRow  FontSize='12' >
+			<TableCell TextAlignment='Left' Background='DodgerBlue'>
+				<Paragraph>
+					<Run Text='   9) Enemy Advance'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' Background='DodgerBlue'>
+				<Paragraph>
+					<Run Text='---'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' Background='DodgerBlue'>
+				<Paragraph>
+					<Run Text='81-85'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' Background='DodgerBlue'>
+				<Paragraph>
+					<Run Text='76-90'></Run>
+				</Paragraph>
+			</TableCell>
+		</TableRow>
+		<!-- .......................row11.......................-->
+		<TableRow  FontSize='12' >
+			<TableCell TextAlignment='Left' >
+				<Paragraph>
+					<Run Text='   10) Flanking Fire'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' >
+				<Paragraph>
+					<Run Text='81-100+'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'>
+				<Paragraph>
+					<Run Text='86-100+'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' >
+				<Paragraph>
+					<Run Text='91-100+'></Run>
+				</Paragraph>
+			</TableCell>
+		</TableRow>
+	</TableRowGroup>
+	<TableRowGroup>
+		<TableRow  FontSize='12' >
+			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+				<Paragraph>
+					<Bold>
+						<Run>NOTES:</Run>
+						<LineBreak/>
+					</Bold>
+					<Bold><Run Text=' (1) Time Passes:'></Run></Bold>
+					<Run Text=' Mark 15 minutes off the time on the Action Item Report (AAR)'></Run>
+					<InlineUIContainer>
+						<Button Content='r2.4' FontFamily='Courier New'  FontSize='8'></Button>
+					</InlineUIContainer>
+					<Run Text='.'></Run>
+					<LineBreak/>
+					<Bold><Run Text=' (2) Friendly Artillery:'></Run></Bold>
+					<Run Text=' Roll against each  enemy unit on the '></Run>
+					<InlineUIContainer>
+						<Button Content='Friendly Action' FontFamily='Courier New'  FontSize='8'></Button>
+					</InlineUIContainer>
+					<Run Text=' Table.'></Run>
+					<LineBreak/>
+					<Bold><Run Text=' (3) Enemy Artillery:'></Run></Bold>
+					<Run Text=' Roll 1D to knock out (KO) friendly infantry units: (1-6 = 1 KO), (7-9 = 2 KO), (10 = 3KO). Roll also on the '></Run>
+					<InlineUIContainer>
+						<Button Content='Collateral' FontFamily='Courier New'  FontSize='8'></Button>
+					</InlineUIContainer>
+					<Run Text=' Damage Table for additional affects against your tank or crew.'></Run>
+					<LineBreak/>
+					<Bold><Run Text=' (4) Mines:'></Run></Bold>
+					<Run Text=' No effect if not moving; if moving see the '></Run>
+					<InlineUIContainer>
+						<Button Content='Minefield' FontFamily='Courier New'  FontSize='8'></Button>
+					</InlineUIContainer>
+					<Run Text=' Attack Table.'></Run>
+					<LineBreak/>
+					<Bold><Run Text=' (5) Panzerfaust Attack:'></Run></Bold>
+					<Run Text=' See the '></Run>
+					<InlineUIContainer>
+						<Button Content='Panzerfaust' FontFamily='Courier New'  FontSize='8'></Button>
+					</InlineUIContainer>
+					<Run Text=' Attack Table.'></Run>
+					<LineBreak/>
+					<Bold><Run Text=' (6) Harassing Fire:'></Run></Bold>
+					<Run Text=' Your tank is sprayed with small weapons fire. Roll on the '></Run>
+					<InlineUIContainer>
+						<Button Content='Collateral' FontFamily='Courier New'  FontSize='8'></Button>
+					</InlineUIContainer>
+					<Run Text=' Damage Table.'></Run>
+					<LineBreak/>
+					<Bold><Run Text=' (7) Friendly Advance:'></Run></Bold>
+					<Run Text=' Place one US control marker in a secotr of your choice that is empty of enemy units and adjacent to a sector already US controlled. Ignore this event if no sector applies.'></Run>
+					<LineBreak/>
+					<Bold><Run Text=' (8) Enemy Reinforcements:'></Run></Bold>
+					<Run Text=' Activate one additional enemy unit for an Advance Scenario and two additional units for Battle or Counterattack Scenarios.'></Run>
+					<LineBreak/>
+					<Run Text=' (9) Enemy Advance:'></Run>
+					<Run Text=' Remove one US Control marker from the Battle Board sector adjacent ao an enemy unit. If two sectors are eligible, roll 1D: (1-5 = left hand) and (6-10 = right hand). Ignore this event if no sector qualifies.'></Run>
+					<LineBreak/>
+					<Run Text=' (10) Flanking Fire:'></Run>
+					<Run Text=' Roll against each enemy unit on the '></Run>
+					<InlineUIContainer>
+						<Button Content='Friendly Action' FontFamily='Courier New'  FontSize='8'></Button>
+					</InlineUIContainer>
+					<Run Text=' Table with a die roll modifier of -10.'></Run>
+				</Paragraph>
+			</TableCell>
+		</TableRow>
+	</TableRowGroup>
 </Table>
