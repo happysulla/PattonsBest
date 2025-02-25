@@ -78,7 +78,7 @@ namespace Pattons_Best
                this.Title = "Bail Out Table";
                this.Background = theBrushOrange;
                this.Width = this.MinWidth = this.MaxWidth = 310;
-               this.MinHeight = this.MaxHeight = 220;
+               this.MinHeight = this.MaxHeight = 230;
                break;
             case "Bogged Down":
                this.Title = "Bogged Down Movement Table";
@@ -107,7 +107,7 @@ namespace Pattons_Best
                this.Title = "Deployment Tables";
                this.Background = theBrushOrange;
                this.Width = this.MinWidth = this.MaxWidth = 540;
-               this.MinHeight = this.MaxHeight = 400;
+               this.MinHeight = this.MaxHeight = 410;
                break;
             case "Enemy Advance":
                this.Title = "Enemy Action: Advance Scenario";
@@ -118,8 +118,8 @@ namespace Pattons_Best
             case "Enemy AP To Hit":
                this.Title = "Enemy AP To Hit";
                this.Background = theBrushBlue;
-               this.Width = this.MinWidth = this.MaxWidth = 620;
-               this.MinHeight = this.MaxHeight = 400;
+               this.Width = this.MinWidth = this.MaxWidth = 550;
+               this.MinHeight = this.MaxHeight = 460;
                break;
             case "Enemy AP To Kill":
                this.Title = "Enemy AP % To Kill";
@@ -190,8 +190,8 @@ namespace Pattons_Best
             case "Hit Location Tank":
                this.Title = "Hit Location Table";
                this.Background = theBrushBlue;
-               this.Width = this.MinWidth = this.MaxWidth = 620;
-               this.MinHeight = this.MaxHeight = 360;
+               this.Width = this.MinWidth = this.MaxWidth = 380;
+               this.MinHeight = this.MaxHeight = 330;
                break;
             case "Minefield":
                this.Title = "Minefield Attack Table";
