@@ -20,7 +20,7 @@
 		<TableRow  FontSize='12' >
 			<TableCell RowSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1' >
 				<Paragraph>
-					<LineBreak/>
+               <LineBreak/>
 					<Run Text='   Event'></Run>
 				</Paragraph>
 			</TableCell>
@@ -334,10 +334,10 @@
 					<Bold><Run Text=' (8) Enemy Reinforcements:'></Run></Bold>
 					<Run Text=' Activate one additional enemy unit for an Advance Scenario and two additional units for Battle or Counterattack Scenarios.'></Run>
 					<LineBreak/>
-					<Run Text=' (9) Enemy Advance:'></Run>
+               <Bold><Run Text=' (9) Enemy Advance:'></Run></Bold>
 					<Run Text=' Remove one US Control marker from the Battle Board sector adjacent ao an enemy unit. If two sectors are eligible, roll 1D: (1-5 = left hand) and (6-10 = right hand). Ignore this event if no sector qualifies.'></Run>
 					<LineBreak/>
-					<Run Text=' (10) Flanking Fire:'></Run>
+                  <Bold><Run Text=' (10) Flanking Fire:'></Run></Bold>
 					<Run Text=' Roll against each enemy unit on the '></Run>
 					<InlineUIContainer>
 						<Button Content='Friendly Action' FontFamily='Courier New'  FontSize='8'></Button>

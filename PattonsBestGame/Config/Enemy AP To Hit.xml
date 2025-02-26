@@ -291,7 +291,7 @@
 			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
 					<Bold>
-						<Run>NOTES:</Run>
+                  <Bold><Run>NOTES:</Run></Bold>
 						<LineBreak/>
 					</Bold>
 					<Run Text=' (1) P = Prohibited'></Run>

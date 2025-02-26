@@ -1,141 +1,658 @@
-<Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='Orange'>
-	<Table.Columns>
-		<TableColumn Width='80'/>
-		<TableColumn Width='160'/>
-		<TableColumn Width='160'/>
-		<TableColumn Width='160'/>
-	</Table.Columns>
-	<TableRowGroup>
-		<TableRow  FontSize='18' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>
-					<LineBreak/>AMMO TABLES<LineBreak/>
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-	</TableRowGroup>
-	<TableRowGroup>
-		<TableRow  FontSize='14' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>
-					AMMO AVAILAILITY
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' Background='OrangeRed'>
-			<Paragraph>
-				<Bold>High Explosives (HE):</Bold> Unlimited for all guns.
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' >
-			<Paragraph>
-				<Bold>Armor Piercing (AP):</Bold> Unlimited for all guns.
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' Background='OrangeRed'>
-			<Paragraph>
-				<Bold>White Phasphorous Smoke (WP):</Bold> 75mm only - unlimited.
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' >
-			<Paragraph>
-				<Bold>Hexachlorothane - Base Initiating Smoke (HCBI):</Bold> 75mm only - 1D rounds for your tank each day.
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' Background='OrangeRed'>
-			<Paragraph>
-				<Bold>High Velocity Armor Piercing (HVAP):</Bold> 76mm only - roll 1D for rounds (1-3 = 1) (4-7 = 2) (8-10 = 3).
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	</TableRowGroup>
-	<TableRowGroup >
-		<TableRow  FontSize='14' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>EXTRA AMMO</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>To determine how many extra rounds of main gun ammo you are ordered to load into your tank, roll 1D</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' >
-				<Paragraph>Die Roll</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>Advance</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>Battle</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>Counterattack</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>1-2</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>3-6</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>20/10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>None/10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>7-10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>30/10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>10/10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>10/10</Paragraph>
-			</TableCell>
-		</TableRow>
-	</TableRowGroup>
-	<TableRowGroup>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>
-					<Run>NOTES:</Run>
-					<LineBreak/>
-					(1) Extra main gun rounds / Extra .30 calibre MG ammo boxes.<LineBreak/>
-					(2) Even if you are not required to carry extra ammo, you may voluntarily carry up to 30 main gun rounds and 10 .30 calibre MG ammo boxes.
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-	</TableRowGroup>
+<Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='LightGreen'>
+   <Table.Columns>
+      <TableColumn Width='120'/>
+      <TableColumn Width='250'/>
+      <TableColumn Width='250'/>
+   </Table.Columns>
+   <TableRowGroup>
+      <TableRow  FontSize='16' >
+         <TableCell ColumnSpan='3' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               AP TO KILL (75)
+               <LineBreak/>
+               <Italic>
+                  <Run FontSize='10' Text='Roll the number shown or less to Kill.'></Run>
+               </Italic>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <TableRowGroup>
+      <TableRow >
+         <TableCell TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+            <Table>
+               <TableRowGroup>
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center' BorderBrush='LightGreen' BorderThickness='1'>
+                        <Paragraph>
+                           <Run> </Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center' >
+                        <Paragraph>
+                           <Run Text='Target'></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Left' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='  Pz IV'></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Left' >
+                        <Paragraph>
+                           <Run Text='  Pz V'></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Left' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='  Pz VIe'></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Left' >
+                        <Paragraph>
+                           <Run Text='  Pz VIb'></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Left' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='  STuG IIIg'></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Left' >
+                        <Paragraph>
+                           <Run Text='  MARDER II'></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Left' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='  MARDER III'></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Left' >
+                        <Paragraph>
+                           <Run Text='  JgdPz IV'></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Left' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='  JgdPz 38t'></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Left' >
+                        <Paragraph>
+                           <Run Text='  PSW, SPW'></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Left' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='  TRUCK'></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+            </Table>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Table>
+               <Table.Columns>
+                  <TableColumn Width='80'/>
+                  <TableColumn Width='80'/>
+                  <TableColumn Width='80'/>
+               </Table.Columns>
+               <TableRowGroup>
+                  <TableRow  FontSize='12' >
+                     <TableCell ColumnSpan='3' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                        <Paragraph>
+                           <Run>NORMAL HIT</Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center' >
+                        <Paragraph>
+                           <Run Text='Front'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' >
+                        <Paragraph>
+                           <Run Text='Side'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' >
+                        <Paragraph>
+                           <Run Text='Rear'></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Pz IV -->
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='T 58/42/28'></Run>
+                           <LineBreak/>
+                           <Run Text='H 28/17/03'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='T 83/72/58'></Run>
+                           <LineBreak/>
+                           <Run Text='H 92/83/72'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='T 92/83/72'></Run>
+                           <LineBreak/>
+                           <Run Text='H 95/92/83'></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Pz V -->
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>
+                           <Run Text='nc'></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>
+                           <Run Text='58/42/28'></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' >
+                        <Paragraph>
+                           <Run Text='72/58/42'></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Pz VIe -->
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='nc'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='28/17/08'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='42/28/17'></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Pz VIb -->
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>
+                           <Run Text='nc'></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>
+                           <Run Text='T 03/nc/nc'></Run>
+                           <LineBreak/>
+                           <Run Text='H 28/17/08'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' >
+                        <Paragraph>
+                           <Run Text='T 08/03/nc'></Run>
+                           <LineBreak/>
+                           <Run Text='H 42/28/17'></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- STuG IIIg -->
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='28/17/08'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='92/83/72'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='95/92/83'></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- MARDER II -->
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>
+                           <Run Text='T 95/92/83'></Run>
+                           <LineBreak/>
+                           <Run Text='H 92/83/72'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>
+                           <Run Text='T 095'></Run>
+                           <LineBreak/>
+                           <Run Text='H 95/95/92'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' >
+                        <Paragraph>
+                           <Run Text='95'></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- MARDER III -->
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='T 95/95/92'></Run>
+                           <LineBreak/>
+                           <Run Text='H 95/92/83'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='T 095'></Run>
+                           <LineBreak/>
+                           <Run Text='H 95/95/92'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- JgdPz IV -->
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>
+                           <Run Text='nc'></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>
+                           <Run Text='T 83/72/58'></Run>
+                           <LineBreak/>
+                           <Run Text='H 92/83/72'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' >
+                        <Paragraph>
+                           <Run Text='T 92/83/72'></Run>
+                           <LineBreak/>
+                           <Run Text='H 95/92/83'></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- JgdPz 38t -->
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='nc'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='92/83/72'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='97/92/83'></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- PSW, SPW -->
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center'  >
+                        <Paragraph>
+                           <Run Text='95'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'  >
+                        <Paragraph>
+                           <Run Text='95'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'  >
+                        <Paragraph>
+                           <Run Text='95'></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- TRUCK -->
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='75'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='75'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='75'></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+            </Table>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Table>
+               <Table.Columns>
+                  <TableColumn Width='80'/>
+                  <TableColumn Width='80'/>
+                  <TableColumn Width='80'/>
+               </Table.Columns>
+               <TableRowGroup>
+                  <TableRow  FontSize='12' >
+                     <TableCell ColumnSpan='3' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+                        <Paragraph>
+                           <Run>CRITICAL HIT</Run>
+                           <Run Typography.Variants='Superscript'>3</Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center' >
+                        <Paragraph>
+                           <Run Text='Front'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' >
+                        <Paragraph>
+                           <Run Text='Side'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' >
+                        <Paragraph>
+                           <Run Text='Rear'></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Pz IV -->
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Pz V -->
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>
+                           <Run Text='T 100/100/97'></Run>
+                           <LineBreak/>
+                           <Run Text='H 83/72/58'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' >
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Pz VIe -->
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='100/100/97'></Run>
+                            </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                         </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- Pz VIb -->
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>
+                           <Run Text='T 83/72/58'></Run>
+                           <LineBreak/>
+                           <Run Text='H nc'></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' >
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- STuG IIIg -->
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- MARDER II -->
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' >
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- MARDER III -->
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- JgdPz IV -->
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' >
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                           <LineBreak/>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- JgdPz 38t -->
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- PSW, SPW -->
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center'  >
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'  >
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center'  >
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+                  <!-- TRUCK -->
+                  <TableRow  FontSize='12' >
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                        </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text=' '></Run>
+                        </Paragraph>
+                     </TableCell>
+                  </TableRow>
+               </TableRowGroup>
+            </Table>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <TableRowGroup>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='3' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Run>  NOTES:</Run>
+               <LineBreak/>
+               <Run Text='   (1) T = Turret, H = Hull, nc = no chance'></Run>
+               <LineBreak/>
+               <Run Text='   (2) close/medium/long range'></Run>
+               <LineBreak/>
+               <Run Text='   (3) All critical hits other than those shown are automatic kill'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
 </Table>

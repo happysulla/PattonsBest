@@ -16,7 +16,7 @@ Each day begins with a check of the Combat <InlineUIContainer><Button Content='C
                                             <InlineUIContainer><Image Name='Continue001' Height='100' Width='100'></Image></InlineUIContainer>"
 e002	"<Bold>e002 Movement Board</Bold> <InlineUIContainer><Button Content='r2.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
-The movement board is a depiction fo typical Europena coutnryside and is used to show the ""big picture"" for the day. The movement board is divided into white lines into areas. Click image to continue.
+The movement board is a depiction fo typical European countryside and is used to show the ""big picture"" for the day. The movement board is divided into white lines into areas. Click image to continue.
 <LineBreak/><LineBreak/>
 A=Farms    B=Fields    C=Villiages  D=Woods<LineBreak/>
 #=Starting or exiting areas
@@ -37,14 +37,14 @@ e005	"<Bold>e005 After Action Report (AAR)</Bold> <InlineUIContainer><Button Con
 The events of each engagement or day of battle are recorded as they unfold on the After Action Report. At this time, you may elect to change the name of the tank or the names of your crew by clicking on the appropriate location on the form. When ready, click image below to continue.
 <LineBreak/><LineBreak/>
                                             <InlineUIContainer><Image Name='Continue005' Height='100' Width='100'></Image></InlineUIContainer>"
-e006	"<Bold>e006 Combat Calender Check</Bold> <InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+e006	"<Bold>e006 Combat Calendar Check</Bold> <InlineUIContainer><Button Content='r4.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
-Date: DATE<LineBreak/>
-Resistance: RESISTANCE<LineBreak/>
+Date from Combat <InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>: DATE<LineBreak/>
+Expected Resistance: RESISTANCE<LineBreak/>
 Probablility of Combat: PROBABILITY > <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer><LineBreak/>
-<LineBreak/><LineBreak/>
-If the roll is equal or less than the probability, start morning briefing <InlineUIContainer><Button Content='e007' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
-If the roll is greater than the probability, repeat this event for next day until combat does occur.<LineBreak/>"
+<LineBreak/>
+If the roll is equal or less than the probability, start morning briefing <InlineUIContainer><Button Content='e007' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/><LineBreak/>
+If the roll is greater than the probability, move to the next day."
 e008	"<Bold>e008 Morning Briefing - Weather Roll</Bold> 
 <LineBreak/><LineBreak/>
 Consult weather table <InlineUIContainer><Button Content='tWeather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> after rolling to determine weather for today:

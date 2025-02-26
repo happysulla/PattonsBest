@@ -39,9 +39,18 @@ namespace Pattons_Best
             case GameAction.SetupShowMapHistorical:
                ShowHistoricalMap(myCanvas);
                break;
+            case GameAction.SetupShowMovementBoard:
+               ShowMovementMap(myCanvas);
+               break;
+            case GameAction.SetupShowBattleBoard:
+               ShowBattleMap(myCanvas);
+               break;
             case GameAction.SetupShowAfterActionReport:
                if( false == ShowAfterActionReport(gi, myCanvas))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowAfterActionReport() returned false");
+               break;
+            case GameAction.SetupShowCombatCalendarCheck:
+               ShowCombatCalendar(myCanvas);
                break;
             case GameAction.EndGameWin:
                ShowEndGameSuccess(myCanvas);
@@ -56,32 +65,40 @@ namespace Pattons_Best
       //-------------------------------------------------
       private void ShowInitialScreen(Canvas c)
       {
-         Image imageStart = new Image() { Name = "Map", Width = 1617, Height = 880, Source = MapItem.theMapImages.GetBitmapImage("Sherman3") };
-         c.Children.Add(imageStart);
-         double x = (c.ActualWidth - imageStart.Width) * 0.5;
-         double y = (c.ActualHeight - imageStart.Height) * 0.5;
-         Canvas.SetLeft(imageStart, x);
-         Canvas.SetTop(imageStart, y);
-
-         c.LayoutTransform = new ScaleTransform(1.0, 1.0);
-         BitmapImage bmi1 = new BitmapImage();
-         Image img = new Image { Source = bmi1, Height = c.ActualHeight, Width = c.ActualWidth, Stretch = Stretch.Fill };
-         ImageBehavior.SetAnimatedSource(img, bmi1);
+         Image img = new Image() { Name = "Map", Width = 1617, Height = 880, Source = MapItem.theMapImages.GetBitmapImage("Sherman3") };
          c.Children.Add(img);
-         Canvas.SetLeft(img, 0);
-         Canvas.SetTop(img, 0);
-         Canvas.SetZIndex(img, 99999);
+         double x = (c.ActualWidth - img.Width) * 0.5;
+         double y = (c.ActualHeight - img.Height) * 0.5;
+         Canvas.SetLeft(img, x);
+         Canvas.SetTop(img, y);
       }
       private void ShowHistoricalMap(Canvas c)
       {
-         Image imageMap = new Image() { Name = "Map", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapHistorical") };
-         c.Children.Add(imageMap);
-         Canvas.SetLeft(imageMap, 0);
-         Canvas.SetTop(imageMap, 0);
+         c.Children.Clear();
+         Image img = new Image() { Name = "Map", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapHistorical") };
+         c.Children.Add(img);
+         Canvas.SetLeft(img, 0);
+         Canvas.SetTop(img, 0);
+      }
+      private void ShowMovementMap(Canvas c)
+      {
+         c.Children.Clear();
+         Image img = new Image() { Name = "Map", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapMovement") };
+         c.Children.Add(img);
+         Canvas.SetLeft(img, 0);
+         Canvas.SetTop(img, 0);
+      }
+      private void ShowBattleMap(Canvas c)
+      {
+         c.Children.Clear();
+         Image img = new Image() { Name = "Map", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapBattle") };
+         c.Children.Add(img);
+         Canvas.SetLeft(img, 0);
+         Canvas.SetTop(img, 0);
       }
       private bool ShowAfterActionReport(IGameInstance gi, Canvas c)
       {
-         if( 0 == gi.Reports.Count)
+         if (0 == gi.Reports.Count)
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowAfterActionReport(): gi.Reports.Count = 0");
             return false;
@@ -90,12 +107,20 @@ namespace Pattons_Best
          AfterActionReportUserControl aarControl = new AfterActionReportUserControl(report, true);
          c.Children.Clear();
          c.Children.Add(aarControl);
-         c.UpdateLayout();  
+         c.UpdateLayout();
          double x = (c.ActualWidth - aarControl.ActualWidth) * 0.5;
          double y = (c.ActualHeight - aarControl.ActualHeight) * 0.5;
          Canvas.SetLeft(aarControl, x);
          Canvas.SetTop(aarControl, y);
          return true;
+      }
+      private void ShowCombatCalendar(Canvas c)
+      {
+         c.Children.Clear();
+         Image img = new Image() { Name = "Map", Width = 1115, Height = 880, Source = MapItem.theMapImages.GetBitmapImage("CombatCalendar") };
+         c.Children.Add(img);
+         Canvas.SetLeft(img, 0);
+         Canvas.SetTop(img, 0);
       }
       private void ShowEndGameSuccess(Canvas c)
       {

@@ -65,14 +65,14 @@ namespace Pattons_Best
             case "AP To Kill (75)":
                this.Title = "AP To Kill (75)";
                this.Background = theBrushGreen;
-               this.Width = this.MinWidth = this.MaxWidth = 620;
-               this.MinHeight = this.MaxHeight = 400;
+               this.Width = this.MinWidth = this.MaxWidth = 680;
+               this.MinHeight = this.MaxHeight = 510;
                break;
             case "AP To Kill (76)":
                this.Title = "AP To Kill (76)";
                this.Background = theBrushGreen;
-               this.Width = this.MinWidth = this.MaxWidth = 620;
-               this.MinHeight = this.MaxHeight = 400;
+               this.Width = this.MinWidth = this.MaxWidth = 680;
+               this.MinHeight = this.MaxHeight = 510;
                break;
             case "Bail Out":
                this.Title = "Bail Out Table";
@@ -172,14 +172,14 @@ namespace Pattons_Best
             case "HE to Kill (75)":
                this.Title = "HE to Kill (75) Vehicles";
                this.Background = theBrushGreen;
-               this.Width = this.MinWidth = this.MaxWidth = 340;
-               this.MinHeight = this.MaxHeight = 210;
+               this.Width = this.MinWidth = this.MaxWidth = 680;
+               this.MinHeight = this.MaxHeight = 510;
                break;
             case "HE to Kill (76)":
                this.Title = "HE to Kill (75) Vehicles";
                this.Background = theBrushGreen;
-               this.Width = this.MinWidth = this.MaxWidth = 340;
-               this.MinHeight = this.MaxHeight = 210;
+               this.Width = this.MinWidth = this.MaxWidth = 680;
+               this.MinHeight = this.MaxHeight = 510;
                break;
             case "Hit Location Crew":
                this.Title = "Hit Location Crew Wound Effects";
@@ -220,8 +220,8 @@ namespace Pattons_Best
             case "Random Events":
                this.Title = "Random Events Table";
                this.Background = theBrushBlue;
-               this.Width = this.MinWidth = this.MaxWidth = 810;
-               this.MinHeight = this.MaxHeight = 930;
+               this.Width = this.MinWidth = this.MaxWidth = 620;
+               this.MinHeight = this.MaxHeight = 450;
                break;
             case "Rate of Fire":
                this.Title = "Rate of Fire Table";
