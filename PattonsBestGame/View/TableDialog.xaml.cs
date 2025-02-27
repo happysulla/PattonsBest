@@ -136,14 +136,14 @@ namespace Pattons_Best
             case "Enemy Battle":
                this.Title = "Enemy Action: Battle Scenario";
                this.Background = theBrushBlue;
-               this.Width = this.MinWidth = this.MaxWidth = 620;
-               this.MinHeight = this.MaxHeight = 400;
+               this.Width = this.MinWidth = this.MaxWidth = 570;
+               this.MinHeight = this.MaxHeight = 810;
                break;
             case "Enemy Counterattack":
                this.Title = "Enemy Action: CounterAttack Scenario";
                this.Background = theBrushBlue;
-               this.Width = this.MinWidth = this.MaxWidth = 620;
-               this.MinHeight = this.MaxHeight = 400;
+               this.Width = this.MinWidth = this.MaxWidth = 570;
+               this.MinHeight = this.MaxHeight = 740;
                break;
             case "Exit Areas":
                this.Title = "Exit Areas";
