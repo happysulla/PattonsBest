@@ -4,12 +4,13 @@
 		<TableColumn Width='100'/>
 		<TableColumn Width='100'/>
 		<TableColumn Width='100'/>
+		<TableColumn Width='100'/>
 	</Table.Columns>
 	<TableRowGroup>
 		<TableRow  FontSize='18' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+			<TableCell ColumnSpan='5' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
-					<LineBreak/>ENEMY ACTION: BATTLE SCENARIO<LineBreak/>
+					<LineBreak/>ENEMY ACTION: ADVANCE SCENARIO<LineBreak/>
 					<Run FontSize='12' FontStyle='Italic' Text='For each enemy unit on the Battle Board, roll 2D:'></Run>
 				</Paragraph>
 			</TableCell>
@@ -23,7 +24,7 @@
 					<Bold>ACTION</Bold>
 				</Paragraph>
 			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Center' >
+			<TableCell ColumnSpan='4' TextAlignment='Center' >
 				<Paragraph>
 					<Bold>
 						<Run Text='UNIT'> </Run>
@@ -36,6 +37,14 @@
 				<Paragraph>
 					<Bold>
 						<Run Text='SPG/Tank'> </Run>
+						<Run Typography.Variants='Superscript'>1</Run>
+					</Bold>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+				<Paragraph>
+					<Bold>
+						<Run Text='Trk/PSW/SPW'> </Run>
 						<Run Typography.Variants='Superscript'>1</Run>
 					</Bold>
 				</Paragraph>
@@ -69,6 +78,9 @@
 				<Paragraph>1-10</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
+				<Paragraph>1-30</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
 				<Paragraph>21-30</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
@@ -82,12 +94,15 @@
 				</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  >
-				<Paragraph>11-15</Paragraph>
+				<Paragraph>11-20</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'  >
+				<Paragraph>31-40</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  >
 				<Paragraph>NA</Paragraph>
 			</TableCell>
-			<TableCell TextAlignment='Center'  >
+			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
 				<Paragraph>11-20</Paragraph>
 			</TableCell>
 		</TableRow>
@@ -98,7 +113,10 @@
 				</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
-				<Paragraph>16-20</Paragraph>
+				<Paragraph>21-30</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
+				<Paragraph>41-50</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
 				<Paragraph>NA</Paragraph>
@@ -114,12 +132,15 @@
 				</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  >
-				<Paragraph>21-25</Paragraph>
+				<Paragraph>31-40</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'  >
+				<Paragraph>51-60</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  >
 				<Paragraph>NA</Paragraph>
 			</TableCell>
-			<TableCell TextAlignment='Center'  >
+			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
 				<Paragraph>31-40</Paragraph>
 			</TableCell>
 		</TableRow>
@@ -130,7 +151,10 @@
 				</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
-				<Paragraph>26-35</Paragraph>
+				<Paragraph>41-60</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
+				<Paragraph>61-90</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
 				<Paragraph>1-20</Paragraph>
@@ -146,12 +170,15 @@
 				</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  >
-				<Paragraph>36-40</Paragraph>
+				<Paragraph>61-65</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'  >
+				<Paragraph>91-95</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  >
 				<Paragraph>NA</Paragraph>
 			</TableCell>
-			<TableCell TextAlignment='Center'  >
+			<TableCell TextAlignment='Center'>
 				<Paragraph>61-95</Paragraph>
 			</TableCell>
 		</TableRow>
@@ -163,15 +190,18 @@
 			</TableCell>
 			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
 				<Paragraph>
-					<Run Text='41-85'></Run>
+					<Run Text='61-65'></Run>
 					<Run Typography.Variants='Superscript'>3</Run>
 				</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
 				<Paragraph>
-					<Run Text='31-80'></Run>
+					<Run Text='NA'></Run>
 					<Run Typography.Variants='Superscript'>4</Run>
 				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
+				<Paragraph>31-65</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
 				<Paragraph>NA</Paragraph>
@@ -184,13 +214,16 @@
 				</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  >
-				<Paragraph>86-90</Paragraph>
+				<Paragraph>81-85</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  >
-				<Paragraph>81-90</Paragraph>
+				<Paragraph>96-100+</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  >
-				<Paragraph>NA</Paragraph>
+				<Paragraph>66-70</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'  >
+				<Paragraph>96-100+</Paragraph>
 			</TableCell>
 		</TableRow>
 		<TableRow  FontSize='12' >
@@ -203,13 +236,16 @@
 				<Paragraph>91-100+</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
-				<Paragraph>91-100+</Paragraph>
+				<Paragraph>NA</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
 				<Paragraph>
-					<Run Text='96-100+'></Run>
+					<Run Text='71-100+'></Run>
 					<Run Typography.Variants='Superscript'>5</Run>
 				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
+				<Paragraph>NA</Paragraph>
 			</TableCell>
 		</TableRow>
 	</TableRowGroup>

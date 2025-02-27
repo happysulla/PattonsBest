@@ -112,8 +112,8 @@ namespace Pattons_Best
             case "Enemy Advance":
                this.Title = "Enemy Action: Advance Scenario";
                this.Background = theBrushBlue;
-               this.Width = this.MinWidth = this.MaxWidth = 620;
-               this.MinHeight = this.MaxHeight = 400;
+               this.Width = this.MinWidth = this.MaxWidth = 570;
+               this.MinHeight = this.MaxHeight = 810;
                break;
             case "Enemy AP To Hit":
                this.Title = "Enemy AP To Hit";
