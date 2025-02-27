@@ -18,7 +18,7 @@ namespace Pattons_Best
       private static SolidColorBrush theBrushOrange = new SolidColorBrush(Colors.Orange);
       private static SolidColorBrush theBrushBlue = new SolidColorBrush(Colors.LightBlue);
       private static SolidColorBrush theBrushGreen = new SolidColorBrush(Colors.LightGreen);
-      private static SolidColorBrush theBrushTan = new SolidColorBrush(Colors.Tan);
+      private static SolidColorBrush theBrushTan = new SolidColorBrush(Colors.AntiqueWhite);
       public bool CtorError { get; } = false;
       private string myKey = "";
       public string Key { get => myKey; }
@@ -214,8 +214,8 @@ namespace Pattons_Best
             case "Placement":
                this.Title = "Battle Board Placement Tables";
                this.Background = theBrushTan;
-               this.Width = this.MinWidth = this.MaxWidth = 810;
-               this.MinHeight = this.MaxHeight = 930;
+               this.Width = this.MinWidth = this.MaxWidth = 790;
+               this.MinHeight = this.MaxHeight = 630;
                break;
             case "Random Events":
                this.Title = "Random Events Table";
