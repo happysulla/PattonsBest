@@ -1,141 +1,182 @@
-<Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='Orange'>
+<Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='AntiqueWhite'>
 	<Table.Columns>
-		<TableColumn Width='80'/>
-		<TableColumn Width='160'/>
-		<TableColumn Width='160'/>
-		<TableColumn Width='160'/>
+		<TableColumn Width='100'/>
+		<TableColumn Width='200'/>
+      <TableColumn Width='200'/>
+      <TableColumn Width='100'/>
 	</Table.Columns>
 	<TableRowGroup>
 		<TableRow  FontSize='18' >
 			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
-					<LineBreak/>AMMO TABLES<LineBreak/>
+					<LineBreak/>SPOTTING TABLE<LineBreak/>
+               <Italic>
+                  <Run FontSize='12' Text='If the roll is less than or equal to the crew members rating, the target is spotted. If the roll is less than 1/2 (round up) of the rating, the target is also identified. '></Run>
+               </Italic>
 				</Paragraph>
 			</TableCell>
 		</TableRow>
 	</TableRowGroup>
 	<TableRowGroup>
-		<TableRow  FontSize='14' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+		<TableRow  FontSize='12' >
+         <TableCell  TextAlignment='Center' >
+            <Paragraph>
+               <Bold>
+                  <Run Text=' '></Run>
+               </Bold>
+            </Paragraph>
+         </TableCell>
+			<TableCell  TextAlignment='Center' >
 				<Paragraph>
-					AMMO AVAILAILITY
-				</Paragraph>
+               <Bold><Run Text='Die Roll     '></Run></Bold>
+            </Paragraph>
 			</TableCell>
+         <TableCell ColumnSpan='2' TextAlignment='Left' >
+            <Paragraph>
+               <Bold><Run Text='  Result'></Run></Bold>
+            </Paragraph>
+         </TableCell>
 		</TableRow>
 	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' Background='OrangeRed'>
-			<Paragraph>
-				<Bold>High Explosives (HE):</Bold> Unlimited for all guns.
-			</Paragraph>
+      <TableCell TextAlignment='Center'>
+         <Paragraph><Run Text=' '></Run></Paragraph>
+      </TableCell>
+		<TableCell TextAlignment='Center' Background='White'>
+			<Paragraph><Run Text='1'></Run>
+            <Run Typography.Variants='Superscript'>1</Run>
+         </Paragraph>
 		</TableCell>
+      <TableCell TextAlignment='Left' Background='White'>
+         <Paragraph>
+            <Run Text='  Target Spotted and Identified'></Run>
+         </Paragraph>
+      </TableCell>
+      <TableCell TextAlignment='Center'>
+         <Paragraph><Run Text=' '></Run></Paragraph>
+      </TableCell>
 	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' >
-			<Paragraph>
-				<Bold>Armor Piercing (AP):</Bold> Unlimited for all guns.
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' Background='OrangeRed'>
-			<Paragraph>
-				<Bold>White Phasphorous Smoke (WP):</Bold> 75mm only - unlimited.
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' >
-			<Paragraph>
-				<Bold>Hexachlorothane - Base Initiating Smoke (HCBI):</Bold> 75mm only - 1D rounds for your tank each day.
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' Background='OrangeRed'>
-			<Paragraph>
-				<Bold>High Velocity Armor Piercing (HVAP):</Bold> 76mm only - roll 1D for rounds (1-3 = 1) (4-7 = 2) (8-10 = 3).
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	</TableRowGroup>
-	<TableRowGroup >
-		<TableRow  FontSize='14' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>EXTRA AMMO</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>To determine how many extra rounds of main gun ammo you are ordered to load into your tank, roll 1D</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' >
-				<Paragraph>Die Roll</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>Advance</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>Battle</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>Counterattack</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>1-2</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>3-6</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>20/10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>None/10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>7-10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>30/10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>10/10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>10/10</Paragraph>
-			</TableCell>
-		</TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text=' '></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph><Run Text='&lt;= Rating'></Run></Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='  Target Spotted'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text=' '></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text=' '></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='&gt; Rating'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' Background='White'>
+            <Paragraph>
+               <Run Text='  Target Not Spotted'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text=' '></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text=' '></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='9-10'></Run>
+               <Run Typography.Variants='Superscript'>2</Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='  Target Not Spotted'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text=' '></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
 	</TableRowGroup>
 	<TableRowGroup>
 		<TableRow  FontSize='12' >
 			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
-					<Run>NOTES:</Run>
-					<LineBreak/>
-					(1) Extra main gun rounds / Extra .30 calibre MG ammo boxes.<LineBreak/>
-					(2) Even if you are not required to carry extra ammo, you may voluntarily carry up to 30 main gun rounds and 10 .30 calibre MG ammo boxes.
+               <Bold><Run>Die Roll Modifiers:</Run></Bold>
 				</Paragraph>
 			</TableCell>
 		</TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='2' TextAlignment='Left' >
+            <Paragraph>
+               
+               <Run>+3 Crew member buttoned up</Run><LineBreak/>
+               <Run>+2 Commander spotting from vision cupola </Run><LineBreak/>
+               <Run>+1 Sherman is moving </Run><LineBreak/>
+               <Run>+1 Target in woods, building, fortification, or hull down </Run><LineBreak/>
+               <Run>+1 During falling snow or fog weather</Run>
+               <Run Typography.Variants='Superscript'>3</Run>
+               <Run Text='per '></Run>
+               <InlineUIContainer>
+                  <Button Content='Weather' FontFamily='Courier New'  FontSize='8'></Button>
+               </InlineUIContainer>
+               <LineBreak/>
+               <Run>+1 Per smoke marker</Run><LineBreak/>
+               <Run>+1 Small target</Run> <LineBreak/>
+            </Paragraph>
+         </TableCell>
+         <TableCell ColumnSpan='2' TextAlignment='Left' >
+            <Paragraph>
+               -1 Large target<LineBreak/>
+               -1 Target at medium range<LineBreak/>
+               -2 Very large target<LineBreak/>
+               -2 Target at close range<LineBreak/>
+               -2 Taget fired weapons last turn<LineBreak/>
+               -3 Target is moving<LineBreak/>
+               -3 Target spotted in previous round<LineBreak/>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
 	</TableRowGroup>
+   <!-- Notes -->
+   <TableRowGroup>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Run>NOTES:</Run>
+               <LineBreak/>
+               <Run Text=' (1) An unmodified roll of "1" always spots the target and identifies it.'></Run>
+               <LineBreak/>
+               <Run Text=' (2) Unmodified rolls of "9" and "10" always means the target is hidden from view in its current position and spotting is impossible.'></Run>
+               <LineBreak/>
+               <Run Text=' (3) During falling snow and fog, spotting is only possible at close range.'></Run>
+               <LineBreak/>
+               <Run Text=' (4) The sectors each crewman is eligible to spot are listed on the Tank Card.'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
 </Table>

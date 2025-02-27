@@ -128,10 +128,10 @@ namespace Pattons_Best
                this.MinHeight = this.MaxHeight = 500;
                break;
             case "Enemy Appearance":
-               this.Title = "Enemy Appearance Table";
+               this.Title = "Enemy Vehicle/Gun Appearance Table";
                this.Background = theBrushTan;
-               this.Width = this.MinWidth = this.MaxWidth = 620;
-               this.MinHeight = this.MaxHeight = 400;
+               this.Width = this.MinWidth = this.MaxWidth = 570;
+               this.MinHeight = this.MaxHeight = 390;
                break;
             case "Enemy Battle":
                this.Title = "Enemy Action: Battle Scenario";
@@ -220,8 +220,8 @@ namespace Pattons_Best
             case "Random Events":
                this.Title = "Random Events Table";
                this.Background = theBrushBlue;
-               this.Width = this.MinWidth = this.MaxWidth = 620;
-               this.MinHeight = this.MaxHeight = 450;
+               this.Width = this.MinWidth = this.MaxWidth = 670;
+               this.MinHeight = this.MaxHeight = 560;
                break;
             case "Rate of Fire":
                this.Title = "Rate of Fire Table";
@@ -244,8 +244,8 @@ namespace Pattons_Best
             case "Spotting":
                this.Title = "Spotting Table";
                this.Background = theBrushTan;
-               this.Width = this.MinWidth = this.MaxWidth = 810;
-               this.MinHeight = this.MaxHeight = 930;
+               this.Width = this.MinWidth = this.MaxWidth = 660;
+               this.MinHeight = this.MaxHeight = 450;
                break;
             case "Time":
                this.Title = "Time Tables";
