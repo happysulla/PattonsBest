@@ -14,8 +14,24 @@
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="1*"/>
          </Grid.ColumnDefinitions>
+         <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10*"/>
+         </Grid.RowDefinitions>
          <!-- First Row and 1st Column-->
-         <Grid Name="myGridBlue" Background="LightBlue" Grid.Row="0" Grid.Column="0">
+         <StackPanel Grid.Row="0" Grid.Column="0" Background="LightBlue">
+            <Label Content="Enemy:" FontSize="18" Margin="10,10,0,0" />
+         </StackPanel>
+         <StackPanel Grid.Row="0" Grid.Column="1" Background="LightGreen">
+            <Label Content="Your Tank:" FontSize="18" Margin="10,10,0,0"/>
+         </StackPanel>
+         <StackPanel Grid.Row="0" Grid.Column="2" Background="AntiqueWhite">
+            <Label Content="Maps:" FontSize="18" Margin="10,10,0,0"/>
+         </StackPanel>
+         <StackPanel Grid.Row="0" Grid.Column="3" Background="Orange">
+            <Label Content="Situational:" FontSize="18" Margin="10,10,0,0"/>
+         </StackPanel>
+         <Grid Name="myGridBlue" Background="LightBlue" Grid.Row="1" Grid.Column="0">
             <Grid.RowDefinitions>
                <RowDefinition Height="Auto"/>
                <RowDefinition Height="Auto"/>
@@ -43,7 +59,7 @@
             <Button Grid.Row="9" Grid.Column="0" Content="Random Events" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
          </Grid>
          <!-- First Row and 2nd Column-->
-         <Grid Name="myGridGreen" Background="LightGreen" Grid.Row="0" Grid.Column="1">
+         <Grid Name="myGridGreen" Background="LightGreen" Grid.Row="1" Grid.Column="1">
             <Grid.RowDefinitions>
                <RowDefinition Height="Auto"/>
                <RowDefinition Height="Auto"/>
@@ -69,7 +85,7 @@
             <Button Grid.Row="8" Grid.Column="0" Content="To Kill Infantry" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
          </Grid>
          <!-- First Row and 3rd Column-->
-         <Grid Name="myGridMapBoard" Background="Tan" Grid.Row="0" Grid.Column="2">
+         <Grid Name="myGridMapBoard" Background="AntiqueWhite" Grid.Row="1" Grid.Column="2">
             <Grid.RowDefinitions>
                <RowDefinition Height="Auto"/>
                <RowDefinition Height="Auto"/>
@@ -92,7 +108,7 @@
             <Button Grid.Row="5" Grid.Column="0" Content="Spotting" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
          </Grid>
          <!-- First Row and 4th Column-->
-         <Grid Name="myGridOrange" Background="Orange" Grid.Row="0" Grid.Column="3">
+         <Grid Name="myGridOrange" Background="Orange" Grid.Row="1" Grid.Column="3">
             <Grid.RowDefinitions>
                <RowDefinition Height="Auto"/>
                <RowDefinition Height="Auto"/>

@@ -448,7 +448,7 @@
 					<TableRowGroup>
 						<TableRow  FontSize='12' >
 							<TableCell TextAlignment='Center' Background='DodgerBlue'>
-								<Paragraph><Bold><Run Text='SPW/Tank'></Run></Bold></Paragraph>      
+								<Paragraph><Bold><Run Text='SPG/Tank'></Run></Bold></Paragraph>      
 							</TableCell>
 							<TableCell TextAlignment='Center' Background='DodgerBlue'>
 								<Paragraph>

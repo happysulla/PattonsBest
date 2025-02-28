@@ -53,8 +53,8 @@ namespace Pattons_Best
             case "Activation":
                this.Title = "Activation Tables";
                this.Background = theBrushTan;
-               this.Width = this.MinWidth = this.MaxWidth = 620;
-               this.MinHeight = this.MaxHeight = 400;
+               this.Width = this.MinWidth = this.MaxWidth = 470;
+               this.MinHeight = this.MaxHeight = 510;
                break;
             case "Ammo":
                this.Title = "Ammo Tables";
@@ -112,7 +112,7 @@ namespace Pattons_Best
             case "Enemy Advance":
                this.Title = "Enemy Action: Advance Scenario";
                this.Background = theBrushBlue;
-               this.Width = this.MinWidth = this.MaxWidth = 570;
+               this.Width = this.MinWidth = this.MaxWidth = 710;
                this.MinHeight = this.MaxHeight = 810;
                break;
             case "Enemy AP To Hit":
@@ -148,8 +148,8 @@ namespace Pattons_Best
             case "Exit Areas":
                this.Title = "Exit Areas";
                this.Background = theBrushTan;
-               this.Width = this.MinWidth = this.MaxWidth = 620;
-               this.MinHeight = this.MaxHeight = 400;
+               this.Width = this.MinWidth = this.MaxWidth = 640;
+               this.MinHeight = this.MaxHeight = 340;
                break;
             case "Explosion":
                this.Title = "Tank Explosion Table";
@@ -232,8 +232,8 @@ namespace Pattons_Best
             case "Resistance":
                this.Title = "Resistance Table";
                this.Background = theBrushTan;
-               this.Width = this.MinWidth = this.MaxWidth = 810;
-               this.MinHeight = this.MaxHeight = 930;
+               this.Width = this.MinWidth = this.MaxWidth = 470;
+               this.MinHeight = this.MaxHeight = 270;
                break;
             case "Sherman MG":
                this.Title = "Sherman Machine Guns vs Infantry Targets";

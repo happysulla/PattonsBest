@@ -6,11 +6,11 @@
 		<TableColumn Width='80'/>
 	</Table.Columns>
 	<TableRowGroup>
-		<TableRow  FontSize='14' >
+		<TableRow  FontSize='18' >
 			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
-					<LineBreak/>ENEMY AP TO TABLE<LineBreak/>
-					<Run FontStyle='Italic' Text='Roll the number shown or less to hit your tank.'></Run>
+					<LineBreak/>ENEMY AP TO HIT<LineBreak/>
+					<Run FontSize='12' FontStyle='Italic' Text='Roll the number shown or less to hit your tank.'></Run>
 				</Paragraph>
 			</TableCell>
 		</TableRow>
@@ -300,7 +300,7 @@
 					<LineBreak/>
 					<Run Text=' (3) Base numbers To Hit are halved for each Smoke Marker the fire encounters from the firers zone to the targets zone, inclusive.'></Run>
 					<LineBreak/>
-					<Run Text=' (4) Base numbers to Hit are halved during fog or falling snow. See '></Run>
+					<Run Text=' (4) Base numbers To Hit are halved during fog or falling snow. See '></Run>
 					<InlineUIContainer>
 						<Button Content='Weather' FontFamily='Courier New'  FontSize='8'></Button>
 					</InlineUIContainer>

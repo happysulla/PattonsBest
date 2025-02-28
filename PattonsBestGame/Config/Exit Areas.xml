@@ -1,141 +1,430 @@
-<Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='Orange'>
+<Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='AntiqueWhite'>
 	<Table.Columns>
-		<TableColumn Width='80'/>
-		<TableColumn Width='160'/>
-		<TableColumn Width='160'/>
-		<TableColumn Width='160'/>
+		<TableColumn Width='50'/>
+		<TableColumn Width='50'/>
+		<TableColumn Width='50'/>
+		<TableColumn Width='50'/>
+      <TableColumn Width='50'/>
+      <TableColumn Width='50'/>
+      <TableColumn Width='50'/>
+      <TableColumn Width='50'/>
+      <TableColumn Width='50'/>
+      <TableColumn Width='50'/>
+      <TableColumn Width='50'/>
 	</Table.Columns>
 	<TableRowGroup>
 		<TableRow  FontSize='18' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+			<TableCell ColumnSpan='11' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
-					<LineBreak/>AMMO TABLES<LineBreak/>
+					<LineBreak/>EXIT AREAS<LineBreak/>
 				</Paragraph>
 			</TableCell>
 		</TableRow>
 	</TableRowGroup>
 	<TableRowGroup>
-		<TableRow  FontSize='14' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+		<TableRow  FontSize='12' >
+         <TableCell RowSpan='2' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               Die<LineBreak/>Roll
+            </Paragraph>
+         </TableCell>
+			<TableCell ColumnSpan='10' TextAlignment='Center' >
 				<Paragraph>
-					AMMO AVAILAILITY
+					STARTING AREA
 				</Paragraph>
 			</TableCell>
 		</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' Background='OrangeRed'>
-			<Paragraph>
-				<Bold>High Explosives (HE):</Bold> Unlimited for all guns.
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' >
-			<Paragraph>
-				<Bold>Armor Piercing (AP):</Bold> Unlimited for all guns.
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' Background='OrangeRed'>
-			<Paragraph>
-				<Bold>White Phasphorous Smoke (WP):</Bold> 75mm only - unlimited.
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' >
-			<Paragraph>
-				<Bold>Hexachlorothane - Base Initiating Smoke (HCBI):</Bold> 75mm only - 1D rounds for your tank each day.
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' Background='OrangeRed'>
-			<Paragraph>
-				<Bold>High Velocity Armor Piercing (HVAP):</Bold> 76mm only - roll 1D for rounds (1-3 = 1) (4-7 = 2) (8-10 = 3).
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	</TableRowGroup>
-	<TableRowGroup >
-		<TableRow  FontSize='14' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>EXTRA AMMO</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>To determine how many extra rounds of main gun ammo you are ordered to load into your tank, roll 1D</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' >
-				<Paragraph>Die Roll</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>Advance</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>Battle</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>Counterattack</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>1-2</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>3-6</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>20/10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>None/10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>7-10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>30/10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>10/10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>10/10</Paragraph>
-			</TableCell>
-		</TableRow>
-	</TableRowGroup>
-	<TableRowGroup>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>
-					<Run>NOTES:</Run>
-					<LineBreak/>
-					(1) Extra main gun rounds / Extra .30 calibre MG ammo boxes.<LineBreak/>
-					(2) Even if you are not required to carry extra ammo, you may voluntarily carry up to 30 main gun rounds and 10 .30 calibre MG ammo boxes.
-				</Paragraph>
-			</TableCell>
-		</TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>1</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>2</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>3</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>4</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>5</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>6</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>7</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>8</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>9</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>10</Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- ROW 1-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>1</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>8</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>8</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>8</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>8</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>8</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>8</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>5</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>5</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>5</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>5</Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- ROW 2-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' >
+            <Paragraph>2</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>8</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>8</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>8</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>8</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>8</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>4</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>4</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>5</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>5</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>5</Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- ROW 3-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>3</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>7</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>7</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>7</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>7</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>7</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>3</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>3</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>4</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>4</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>4</Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- ROW 4-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' >
+            <Paragraph>4</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>7</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>6</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>6</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>6</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>3</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>2</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>2</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>4</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>4</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>4</Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- ROW 5-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>5</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>6</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>5</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>5</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>2</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>2</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>2</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>2</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>3</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>3</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>3</Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- ROW 6-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' >
+            <Paragraph>6</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>5</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>5</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>5</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>1</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>1</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>1</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>1</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>2</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>2</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>8</Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- ROW 7-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>7</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>5</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>4</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>10</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>10</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>10</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>10</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>10</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>2</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>2</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>7</Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- ROW 8-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' >
+            <Paragraph>8</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>4</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>4</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>10</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>10</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>10</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>10</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>10</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>1</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>7</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>6</Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- ROW 9-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>9</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>4</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>3</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>9</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>9</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>9</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>9</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>9</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>10</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>6</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>6</Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- ROW 10-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' >
+            <Paragraph>10</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>3</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>9</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>9</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>9</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>9</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>9</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>9</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>6</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>5</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>5</Paragraph>
+         </TableCell>
+      </TableRow>
 	</TableRowGroup>
 </Table>

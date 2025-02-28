@@ -1,140 +1,132 @@
-<Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='Orange'>
+<Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='AntiqueWhite'>
 	<Table.Columns>
 		<TableColumn Width='80'/>
-		<TableColumn Width='160'/>
-		<TableColumn Width='160'/>
-		<TableColumn Width='160'/>
+		<TableColumn Width='80'/>
+		<TableColumn Width='80'/>
+		<TableColumn Width='80'/>
+      <TableColumn Width='80'/>
 	</Table.Columns>
 	<TableRowGroup>
 		<TableRow  FontSize='18' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+			<TableCell ColumnSpan='5' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
-					<LineBreak/>AMMO TABLES<LineBreak/>
+					<LineBreak/>RESISTANCE TABLE<LineBreak/>
 				</Paragraph>
 			</TableCell>
 		</TableRow>
 	</TableRowGroup>
 	<TableRowGroup>
-		<TableRow  FontSize='14' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+		<TableRow  FontSize='12' >
+         <TableCell RowSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Bold>
+                  <Run Text='  Area'></Run>
+                  <LineBreak/>
+                  <Run Text='  Resistance'></Run>
+               </Bold>
+            </Paragraph>
+         </TableCell>
+			<TableCell ColumnSpan='3' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
-					AMMO AVAILAILITY
+					Expected Resistance for the Day
 				</Paragraph>
 			</TableCell>
+         <TableCell RowSpan='2' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Bold>
+               <Run Text='Combat'></Run>
+               <LineBreak/>
+               <Run Text='Occurs'></Run>
+               </Bold>
+            </Paragraph>
+         </TableCell>
 		</TableRow>
 	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' Background='OrangeRed'>
-			<Paragraph>
-				<Bold>High Explosives (HE):</Bold> Unlimited for all guns.
-			</Paragraph>
-		</TableCell>
+      <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+         <Paragraph>
+            <Bold>Light</Bold>
+         </Paragraph>
+      </TableCell>
+      <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+         <Paragraph>
+            <Bold>Medium</Bold>
+         </Paragraph>
+      </TableCell>
+      <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+         <Paragraph>
+            <Bold>Heavy</Bold>
+         </Paragraph>
+      </TableCell>
 	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' >
-			<Paragraph>
-				<Bold>Armor Piercing (AP):</Bold> Unlimited for all guns.
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' Background='OrangeRed'>
-			<Paragraph>
-				<Bold>White Phasphorous Smoke (WP):</Bold> 75mm only - unlimited.
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' >
-			<Paragraph>
-				<Bold>Hexachlorothane - Base Initiating Smoke (HCBI):</Bold> 75mm only - 1D rounds for your tank each day.
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' Background='OrangeRed'>
-			<Paragraph>
-				<Bold>High Velocity Armor Piercing (HVAP):</Bold> 76mm only - roll 1D for rounds (1-3 = 1) (4-7 = 2) (8-10 = 3).
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	</TableRowGroup>
-	<TableRowGroup >
-		<TableRow  FontSize='14' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>EXTRA AMMO</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>To determine how many extra rounds of main gun ammo you are ordered to load into your tank, roll 1D</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' >
-				<Paragraph>Die Roll</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>Advance</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>Battle</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>Counterattack</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>1-2</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>3-6</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>20/10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>None/10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>7-10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>30/10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>10/10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>10/10</Paragraph>
-			</TableCell>
-		</TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' Background='White' >
+            <Paragraph><Bold><Run Text='  LIGHT'></Run></Bold></Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White' >
+            <Paragraph>1-7</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White' >
+            <Paragraph>1-5</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White' >
+            <Paragraph>1-4</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White' >
+            <Paragraph>8+</Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Bold>
+                  <Run Text='  MEDIUM'></Run>
+               </Bold>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>8-10+</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>6-9</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>5-8</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>6+</Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' Background='White' >
+            <Paragraph>
+               <Bold>
+                  <Run Text='  HEAVY'></Run>
+               </Bold>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White' >
+            <Paragraph>---</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White' >
+            <Paragraph>10+</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White' >
+            <Paragraph>9-10+</Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White' >
+            <Paragraph>4+</Paragraph>
+         </TableCell>
+      </TableRow>
 	</TableRowGroup>
 	<TableRowGroup>
 		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+			<TableCell ColumnSpan='5' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
-					<Run>NOTES:</Run>
+               <Bold><Run>NOTES:</Run></Bold>
 					<LineBreak/>
-					(1) Extra main gun rounds / Extra .30 calibre MG ammo boxes.<LineBreak/>
-					(2) Even if you are not required to carry extra ammo, you may voluntarily carry up to 30 main gun rounds and 10 .30 calibre MG ammo boxes.
-				</Paragraph>
+					(1) Rolls for Resistance &amp; Battle in A area are +1.<LineBreak/>
+               (2) Rolls for Resistance &amp; Battle in C area are +2.
+            </Paragraph>
 			</TableCell>
 		</TableRow>
 	</TableRowGroup>

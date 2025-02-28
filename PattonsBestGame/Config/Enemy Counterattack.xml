@@ -430,7 +430,7 @@
 							<TableCell TextAlignment='Center' Background='DodgerBlue'>
 								<Paragraph>
 									<Bold>
-										<Run Text='SPW/Tank'></Run>
+										<Run Text='SPG/Tank'></Run>
 									</Bold>
 								</Paragraph>
 							</TableCell>

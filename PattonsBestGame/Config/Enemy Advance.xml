@@ -1,10 +1,10 @@
 <Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='LightBlue'>
 	<Table.Columns>
 		<TableColumn Width='200'/>
-		<TableColumn Width='100'/>
-		<TableColumn Width='100'/>
-		<TableColumn Width='100'/>
-		<TableColumn Width='100'/>
+		<TableColumn Width='110'/>
+		<TableColumn Width='110'/>
+		<TableColumn Width='110'/>
+		<TableColumn Width='110'/>
 	</Table.Columns>
 	<TableRowGroup>
 		<TableRow  FontSize='18' >
@@ -44,7 +44,7 @@
 			<TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
 					<Bold>
-						<Run Text='Trk/PSW/SPW'> </Run>
+						<Run Text='Trk/SPW/PSW'> </Run>
 						<Run Typography.Variants='Superscript'>1</Run>
 					</Bold>
 				</Paragraph>
@@ -102,7 +102,7 @@
 			<TableCell TextAlignment='Center'  >
 				<Paragraph>NA</Paragraph>
 			</TableCell>
-			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
+			<TableCell TextAlignment='Center' >
 				<Paragraph>11-20</Paragraph>
 			</TableCell>
 		</TableRow>
@@ -140,7 +140,7 @@
 			<TableCell TextAlignment='Center'  >
 				<Paragraph>NA</Paragraph>
 			</TableCell>
-			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
+			<TableCell TextAlignment='Center' >
 				<Paragraph>31-40</Paragraph>
 			</TableCell>
 		</TableRow>
@@ -173,7 +173,10 @@
 				<Paragraph>61-65</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  >
-				<Paragraph>91-95</Paragraph>
+            <Paragraph>
+            <Run Text='91-95'></Run>
+            <Run Typography.Variants='Superscript'>3</Run>
+            </Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  >
 				<Paragraph>NA</Paragraph>
@@ -190,18 +193,20 @@
 			</TableCell>
 			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
 				<Paragraph>
-					<Run Text='61-65'></Run>
-					<Run Typography.Variants='Superscript'>3</Run>
+					<Run Text='66-80'></Run>
+					<Run Typography.Variants='Superscript'>4</Run>
 				</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
 				<Paragraph>
 					<Run Text='NA'></Run>
-					<Run Typography.Variants='Superscript'>4</Run>
 				</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
-				<Paragraph>31-65</Paragraph>
+				<Paragraph>
+            <Run Text='31-65'></Run>
+            <Run Typography.Variants='Superscript'>3</Run>
+            </Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
 				<Paragraph>NA</Paragraph>
@@ -241,7 +246,6 @@
 			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
 				<Paragraph>
 					<Run Text='71-100+'></Run>
-					<Run Typography.Variants='Superscript'>5</Run>
 				</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
@@ -251,7 +255,7 @@
 	</TableRowGroup>
 	<TableRowGroup>
 		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+			<TableCell ColumnSpan='5' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
 					<Bold>
 						<Run Text='NOTES:'></Run>
@@ -261,11 +265,13 @@
 					<LineBreak/>
 					<Run Text='(2) Ambush turns: DICE ROLL + 20.'></Run>
 					<LineBreak/>
-					<Run Text='(3) Fires at your tank instead if you are firing at its front. If you are firing at its side or rear, it moves back (MOVE-B).'></Run>
+               <Run Text='(3) Trucks do nothing.'></Run>
+               <LineBreak/>
+					<Run Text='(4) Fires at your tank instead if you are firing at its front. If you are firing at its side or rear, it moves back (MOVE-B).'></Run>
 					<LineBreak/>
-					<Run Text='(4) Fires at your tank isntead if you are firing at it.'></Run>
+					<Run Text='(5) Fires at your tank instead if you are firing at it.'></Run>
 					<LineBreak/>
-					<Run Text='(5) MG and LW fire versus your tank is resolved on the '></Run>
+					<Run Text='(6) PSW, SPW, MG, and LW fire versus your tank is resolved on the '></Run>
 					<InlineUIContainer>
 						<Button Content='Collateral' FontFamily='Courier New'  FontSize='8'></Button>
 					</InlineUIContainer>
@@ -276,7 +282,7 @@
 	</TableRowGroup>
 	<TableRowGroup>
 		<TableRow  FontSize='18' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+			<TableCell ColumnSpan='5' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
 					<Run Text='ENEMY FIRE COMBAT'></Run>
 					<Run Typography.Variants='Superscript'>1</Run>
@@ -287,7 +293,7 @@
 	<TableRowGroup>
 		<!--SPG/Tank/AT-->
 		<TableRow>
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+			<TableCell ColumnSpan='5' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
 				<Table>
 					<Table.Columns>
 						<TableColumn Width='2*'/>
@@ -461,7 +467,7 @@
 			</TableCell>
 		</TableRow>
 		<TableRow>
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+			<TableCell ColumnSpan='5' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
 				<Table>
 					<Table.Columns>
 						<TableColumn Width='2*'/>
@@ -514,7 +520,7 @@
 							<TableCell TextAlignment='Center' Background='DodgerBlue'>
 								<Paragraph>
 									<Bold>
-										<Run Text='SPW/Tank'></Run>
+										<Run Text='SPG/Tank'></Run>
 									</Bold>
 								</Paragraph>
 							</TableCell>
@@ -538,7 +544,7 @@
 							<TableCell TextAlignment='Center'>
 								<Paragraph>
 									<Bold>
-										<Run Text='LW'></Run>
+										<Run Text='SPW/LW'></Run>
 									</Bold>
 								</Paragraph>
 							</TableCell>
@@ -562,7 +568,7 @@
 							<TableCell TextAlignment='Center' Background='DodgerBlue'>
 								<Paragraph>
 									<Bold>
-										<Run Text='MG'></Run>
+										<Run Text='MG/PSW'></Run>
 									</Bold>
 								</Paragraph>
 							</TableCell>
@@ -589,7 +595,7 @@
 	</TableRowGroup>
 	<TableRowGroup>
 		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+			<TableCell ColumnSpan='5' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
 					<Bold>
 						<Run Text='NOTES:'></Run>
