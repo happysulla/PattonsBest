@@ -1,6 +1,6 @@
 <Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='LightBlue'>
 	<Table.Columns>
-		<TableColumn Width='160'/>
+		<TableColumn Width='80'/>
 		<TableColumn Width='80'/>
 		<TableColumn Width='80'/>
 		<TableColumn Width='80'/>
@@ -21,8 +21,8 @@
 			<TableCell ColumnSpan='2' TextAlignment='Center' BorderBrush='Black' BorderThickness='1' >
 				<Table>
 					<Table.Columns>
-						<TableColumn Width='80'/>
-						<TableColumn Width='80'/>
+						<TableColumn Width='*'/>
+						<TableColumn Width='*'/>
 					</Table.Columns>
 					<TableRowGroup>
 						<TableRow  FontSize='12' >
@@ -86,8 +86,8 @@
 			<TableCell ColumnSpan='2' TextAlignment='Center' BorderBrush='Black' BorderThickness='1' >
 				<Table>
 					<Table.Columns>
-						<TableColumn Width='80'/>
-						<TableColumn Width='80'/>
+						<TableColumn Width='*'/>
+						<TableColumn Width='*'/>
 					</Table.Columns>
 					<TableRowGroup>
 						<TableRow  FontSize='12' >

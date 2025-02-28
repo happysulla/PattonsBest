@@ -160,8 +160,8 @@ namespace Pattons_Best
             case "Friendly Action":
                this.Title = "Friendly Action";
                this.Background = theBrushBlue;
-               this.Width = this.MinWidth = this.MaxWidth = 340;
-               this.MinHeight = this.MaxHeight = 210;
+               this.Width = this.MinWidth = this.MaxWidth = 550;
+               this.MinHeight = this.MaxHeight = 680;
                break;
             case "Gun Malfunction":
                this.Title = "Gun Malfunction Repair Table";
@@ -190,14 +190,14 @@ namespace Pattons_Best
             case "Hit Location Tank":
                this.Title = "Hit Location Table";
                this.Background = theBrushBlue;
-               this.Width = this.MinWidth = this.MaxWidth = 380;
-               this.MinHeight = this.MaxHeight = 330;
+               this.Width = this.MinWidth = this.MaxWidth = 390;
+               this.MinHeight = this.MaxHeight = 320;
                break;
             case "Minefield":
                this.Title = "Minefield Attack Table";
                this.Background = theBrushBlue;
-               this.Width = this.MinWidth = this.MaxWidth = 810;
-               this.MinHeight = this.MaxHeight = 930;
+               this.Width = this.MinWidth = this.MaxWidth = 630;
+               this.MinHeight = this.MaxHeight = 280;
                break;
             case "Movement":
                this.Title = "Movement Tables";
@@ -208,8 +208,8 @@ namespace Pattons_Best
             case "Panzerfaust":
                this.Title = "Panzerfaust Attack Tables";
                this.Background = theBrushBlue;
-               this.Width = this.MinWidth = this.MaxWidth = 810;
-               this.MinHeight = this.MaxHeight = 930;
+               this.Width = this.MinWidth = this.MaxWidth = 510;
+               this.MinHeight = this.MaxHeight = 620;
                break;
             case "Placement":
                this.Title = "Battle Board Placement Tables";
@@ -245,7 +245,7 @@ namespace Pattons_Best
                this.Title = "Spotting Table";
                this.Background = theBrushTan;
                this.Width = this.MinWidth = this.MaxWidth = 660;
-               this.MinHeight = this.MaxHeight = 450;
+               this.MinHeight = this.MaxHeight = 460;
                break;
             case "Time":
                this.Title = "Time Tables";

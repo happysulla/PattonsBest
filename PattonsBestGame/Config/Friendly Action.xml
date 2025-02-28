@@ -1,128 +1,235 @@
-<Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='Orange'>
+<Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='LightBlue'>
 	<Table.Columns>
-		<TableColumn Width='80'/>
-		<TableColumn Width='160'/>
-		<TableColumn Width='160'/>
-		<TableColumn Width='160'/>
+		<TableColumn Width='120'/>
+		<TableColumn Width='120'/>
+		<TableColumn Width='120'/>
+		<TableColumn Width='120'/>
 	</Table.Columns>
 	<TableRowGroup>
 		<TableRow  FontSize='18' >
 			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
-					<LineBreak/>AMMO TABLES<LineBreak/>
+					<LineBreak/>FRIENDLY ACTION TABLE<LineBreak/>
+					<Run FontSize='12' FontStyle='Italic' Text='Roll 2D for each enemy unit on the Battle Board to see if the unit is KO or obscured by smoke due to Friendly Action. '></Run>
+					<Run FontSize='12' FontStyle='Italic' Text='If the number rolled (after modification) is within the range of numbers under KO, the unit is eliminated. '></Run>
+					<Run FontSize='12' FontStyle='Italic' Text='If the number is equal to the smoke number or higher, place a Smoke marker in the units zone. '></Run>
 				</Paragraph>
 			</TableCell>
 		</TableRow>
 	</TableRowGroup>
 	<TableRowGroup>
-		<TableRow  FontSize='14' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+		<!-- Header	-->	
+		<TableRow  FontSize='12' >
+			<TableCell ColumnSpan='2' TextAlignment='Right' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
-					AMMO AVAILAILITY
+					<Bold>
+						<Run Text='UNIT TYPE     '></Run>
+					</Bold>
+				</Paragraph>
+			</TableCell>
+			<TableCell  TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+				<Paragraph>
+					<Bold>
+						<Run Text='KO'> </Run>
+						<Run Typography.Variants='Superscript'>1</Run>
+					</Bold>
+				</Paragraph>
+			</TableCell>
+			<TableCell  TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+				<Paragraph>
+					<Bold>
+						<Run Text='SMOKE'> </Run>
+						<Run Typography.Variants='Superscript'>2</Run>
+					</Bold>
 				</Paragraph>
 			</TableCell>
 		</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' Background='OrangeRed'>
-			<Paragraph>
-				<Bold>High Explosives (HE):</Bold> Unlimited for all guns.
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' >
-			<Paragraph>
-				<Bold>Armor Piercing (AP):</Bold> Unlimited for all guns.
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' Background='OrangeRed'>
-			<Paragraph>
-				<Bold>White Phasphorous Smoke (WP):</Bold> 75mm only - unlimited.
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' >
-			<Paragraph>
-				<Bold>Hexachlorothane - Base Initiating Smoke (HCBI):</Bold> 75mm only - 1D rounds for your tank each day.
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' Background='OrangeRed'>
-			<Paragraph>
-				<Bold>High Velocity Armor Piercing (HVAP):</Bold> 76mm only - roll 1D for rounds (1-3 = 1) (4-7 = 2) (8-10 = 3).
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	</TableRowGroup>
-	<TableRowGroup >
-		<TableRow  FontSize='14' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>EXTRA AMMO</Paragraph>
+		<!-- LW,MG	-->	
+		<TableRow  FontSize='12' >
+			<TableCell ColumnSpan='2' TextAlignment='Right' Background='DodgerBlue'>
+				<Paragraph>
+					<Bold>
+						<Run Text='LW,MG     '> </Run>
+					</Bold>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' Background='DodgerBlue'>
+				<Paragraph>
+					<Bold>
+						<Run Text='1-30'> </Run>
+					</Bold>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' Background='DodgerBlue'>
+				<Paragraph>
+					<Bold>
+						<Run Text=' '> </Run>
+					</Bold>
+				</Paragraph>
 			</TableCell>
 		</TableRow>
+		<!-- AT GUN	-->
 		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>To determine how many extra rounds of main gun ammo you are ordered to load into your tank, roll 1D</Paragraph>
+			<TableCell ColumnSpan='2' TextAlignment='Right' >
+				<Paragraph>
+					<Bold>
+						<Run Text='AT GUN     '> </Run>
+					</Bold>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'  >
+				<Paragraph>1-20</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'  >
+				<Paragraph>80+</Paragraph>
 			</TableCell>
 		</TableRow>
+		<!-- TRUCK	-->
 		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' >
-				<Paragraph>Die Roll</Paragraph>
+			<TableCell ColumnSpan='2' TextAlignment='Right' Background='DodgerBlue'>
+				<Paragraph>
+					<Bold>
+						<Run Text='TRUCK     '> </Run>
+					</Bold>
+				</Paragraph>
 			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>Advance</Paragraph>
+			<TableCell TextAlignment='Center' Background='DodgerBlue' >
+				<Paragraph>1-60</Paragraph>
 			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>Battle</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>Counterattack</Paragraph>
+			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
+				<Paragraph> </Paragraph>
 			</TableCell>
 		</TableRow>
+		<!-- SPW/PSW	-->
 		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>1-2</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>3-6</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>20/10</Paragraph>
+			<TableCell ColumnSpan='2' TextAlignment='Right' >
+				<Paragraph>
+					<Bold>
+						<Run Text='SPW/PSW     '> </Run>
+					</Bold>
+				</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center' >
-				<Paragraph>None/10</Paragraph>
+				<Paragraph>1-40</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  >
-				<Paragraph>None</Paragraph>
+				<Paragraph> </Paragraph>
 			</TableCell>
 		</TableRow>
+		<!-- Pz IV	-->
 		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>7-10</Paragraph>
+			<TableCell ColumnSpan='2' TextAlignment='Right' Background='DodgerBlue'>
+				<Paragraph>
+					<Bold>
+						<Run Text='Pz IV     '> </Run>
+					</Bold>
+				</Paragraph>
 			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>30/10</Paragraph>
+			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
+				<Paragraph>1-30</Paragraph>
 			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>10/10</Paragraph>
+			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
+				<Paragraph>90+</Paragraph>
 			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>10/10</Paragraph>
+		</TableRow>
+		<!-- Pz V	-->
+		<TableRow  FontSize='12' >
+			<TableCell ColumnSpan='2' TextAlignment='Right'>
+				<Paragraph>
+					<Bold>
+						<Run Text='Pz V     '> </Run>
+					</Bold>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'  >
+				<Paragraph>1-20</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center' >
+				<Paragraph>80+</Paragraph>
+			</TableCell>
+		</TableRow>
+		<!-- Pz VI	-->
+		<TableRow  FontSize='12' >
+			<TableCell ColumnSpan='2' TextAlignment='Right' Background='DodgerBlue'>
+				<Paragraph>
+					<Bold>
+						<Run Text=' Pz VI     '> </Run>
+					</Bold>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
+				<Paragraph>1-10</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
+				<Paragraph>60+</Paragraph>
+			</TableCell>
+		</TableRow>
+		<!-- STuG IIIg	-->
+		<TableRow  FontSize='12' >
+			<TableCell ColumnSpan='2' TextAlignment='Right' >
+				<Paragraph>
+					<Bold>
+						<Run Text='STuG IIIg     '> </Run>
+					</Bold>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'  >
+				<Paragraph>
+					<Run Text='1-30'></Run>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'  >
+				<Paragraph>
+					<Run Text='90+'></Run>
+				</Paragraph>
+			</TableCell>
+		</TableRow>
+		<!-- MARDER II, III	-->
+		<TableRow  FontSize='12' >
+			<TableCell ColumnSpan='2' TextAlignment='Right' Background='DodgerBlue'>
+				<Paragraph>
+					<Bold>
+						<Run Text='MARDER II, III     '> </Run>
+					</Bold>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
+				<Paragraph>1-50</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
+				<Paragraph> </Paragraph>
+			</TableCell>
+		</TableRow>
+		<!-- JdgPz IV	-->
+		<TableRow  FontSize='12' >
+			<TableCell ColumnSpan='2' TextAlignment='Right' >
+				<Paragraph>
+					<Bold>
+						<Run Text='JdgPz IV     '> </Run>
+					</Bold>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'  >
+				<Paragraph>1-20</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'  >
+				<Paragraph>80+</Paragraph>
+			</TableCell>
+		</TableRow>
+		<!-- JdgPz 38t	-->
+		<TableRow  FontSize='12' >
+			<TableCell ColumnSpan='2' TextAlignment='Right' Background='DodgerBlue'>
+				<Paragraph>
+					<Bold>
+						<Run Text='JdgPz 38t     '> </Run>
+					</Bold>
+				</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
+				<Paragraph>1-20</Paragraph>
+			</TableCell>
+			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
+				<Paragraph>80+</Paragraph>
 			</TableCell>
 		</TableRow>
 	</TableRowGroup>
@@ -130,10 +237,61 @@
 		<TableRow  FontSize='12' >
 			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
-					<Run>NOTES:</Run>
+					<Bold>
+						<Run Text='Die Roll modifiers (To KO only):'></Run>
+					</Bold>
 					<LineBreak/>
-					(1) Extra main gun rounds / Extra .30 calibre MG ammo boxes.<LineBreak/>
-					(2) Even if you are not required to carry extra ammo, you may voluntarily carry up to 30 main gun rounds and 10 .30 calibre MG ammo boxes.
+					<Run Text='-10 Flanking Fire'></Run>
+					<LineBreak/>
+					<Run Text='-10 Air Strikes versus vehicles'></Run>
+					<LineBreak/>
+					<Run Text='-3 For each sector marked US Control'></Run>
+					<LineBreak/>
+					<Run Text='-3 Artillery versus LW, MG, or AT gun targets in Woods'></Run>
+					<LineBreak/>
+					<Run Text='+1 Versus LW or MG for each friendly infantry squad lost '></Run>
+					<LineBreak/>
+					<Run Text='+2 Versus vehicle targets for each friendly tank lost '></Run>
+					<LineBreak/>
+					<Run Text='+10 For each smoke marker in the targets zone '></Run>
+					<LineBreak/>
+					<Run Text='+10 During fog or falling snow weather'></Run>
+					<LineBreak/>
+					<Run Text='+10 Advancing Fire or Artillery Fire versus vehicles (except trucks)'></Run>
+				</Paragraph>
+			</TableCell>
+		</TableRow>
+	</TableRowGroup>
+	<TableRowGroup>
+		<TableRow  FontSize='12' >
+			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+				<Paragraph>
+					<Bold>
+						<Run Text='NOTES:'></Run>
+					</Bold>
+					<LineBreak/>
+					<Run Text='(1) A roll of 01, 02, or 03 is always a KO regardless of modifiers.'></Run>
+					<LineBreak/>
+					<Run Text='(2) Dice roll modifiers apply only To KO numbers. The numbers rolled before any modifications determine whether smoke is placed or not.'></Run>
+					<LineBreak/>
+					<Run Text='(3) During fog or falling snow '></Run>
+					<InlineUIContainer>
+						<Button Content='Weather' FontFamily='Courier New'  FontSize='8'></Button>
+					</InlineUIContainer>
+					<Run Text=', no Friendly Action of any type other than artillery may be resolved against units in Sectors 6-8 at either medium or long range. '></Run>
+				</Paragraph>
+			</TableCell>
+		</TableRow>
+	</TableRowGroup>
+	<TableRowGroup>
+		<TableRow  FontSize='12' >
+			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+				<Paragraph>
+					<Bold>
+						<Run Text='ADVANCING FIRE:'></Run>
+					</Bold>
+					<LineBreak/>
+					<Run Text='Place six Advance Fire markers anywhere in Sectors 4-5, 9-10, or in the close/medium range for Sectors 6-8. For every three friendly tank losses (round up), omit one Advance Fire marker. Advancing Fire expends 1D/2 (round down) HE rounds and .30 calibre MG ammo boxes.'></Run>
 				</Paragraph>
 			</TableCell>
 		</TableRow>
