@@ -132,9 +132,9 @@
 		<TableRow  FontSize='12' >
 			<TableCell ColumnSpan='2' TextAlignment='Left' >
 				<Paragraph>
-			        <Run Text='  1-7   = hit'></Run>
+			        <Run Text='  1-7   = Hit'></Run>
 					<LineBreak/>
-					<Run Text='  8-10 = miss'></Run>
+					<Run Text='  8-10 = Miss'></Run>
 				</Paragraph>
 			</TableCell>
 		</TableRow>
@@ -167,7 +167,7 @@
 				<Paragraph>
 					<Run Text='  1-8   = Sherman KO' ></Run>
 					<LineBreak/>
-					<Run Text='  9-10 = no effect'></Run>
+					<Run Text='  9-10 = No effect'></Run>
 				</Paragraph>
 			</TableCell>
 		</TableRow>

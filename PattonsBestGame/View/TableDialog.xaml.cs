@@ -166,8 +166,8 @@ namespace Pattons_Best
             case "Gun Malfunction":
                this.Title = "Gun Malfunction Repair Table";
                this.Background = theBrushGreen;
-               this.Width = this.MinWidth = this.MaxWidth = 340;
-               this.MinHeight = this.MaxHeight = 210;
+               this.Width = this.MinWidth = this.MaxWidth = 470;
+               this.MinHeight = this.MaxHeight = 430;
                break;
             case "HE to Kill (75)":
                this.Title = "HE to Kill (75) Vehicles";
@@ -226,8 +226,8 @@ namespace Pattons_Best
             case "Rate of Fire":
                this.Title = "Rate of Fire Table";
                this.Background = theBrushGreen;
-               this.Width = this.MinWidth = this.MaxWidth = 810;
-               this.MinHeight = this.MaxHeight = 930;
+               this.Width = this.MinWidth = this.MaxWidth = 460;
+               this.MinHeight = this.MaxHeight = 350;
                break;
             case "Resistance":
                this.Title = "Resistance Table";
@@ -238,8 +238,8 @@ namespace Pattons_Best
             case "Sherman MG":
                this.Title = "Sherman Machine Guns vs Infantry Targets";
                this.Background = theBrushGreen;
-               this.Width = this.MinWidth = this.MaxWidth = 810;
-               this.MinHeight = this.MaxHeight = 930;
+               this.Width = this.MinWidth = this.MaxWidth = 560;
+               this.MinHeight = this.MaxHeight = 650;
                break;
             case "Spotting":
                this.Title = "Spotting Table";

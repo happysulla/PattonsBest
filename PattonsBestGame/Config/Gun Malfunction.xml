@@ -1,274 +1,123 @@
-<Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='Orange'>
-	<Table.Columns>
-		<TableColumn Width='80'/>
-		<TableColumn Width='160'/>
-		<TableColumn Width='160'/>
-		<TableColumn Width='160'/>
-	</Table.Columns>
-	<TableRowGroup>
-		<TableRow  FontSize='14' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>
-					<LineBreak/>TIME ELAPSED TABLE<LineBreak/>
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-	</TableRowGroup>
-	<TableRowGroup >
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' >
-				<Paragraph>
-					<Run FontStyle='Italic'>Use the same roll for both determinations:</Run>
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' >
-				<Paragraph>
-					<Bold>Time Expended  = </Bold>1D/2 (round down ) + 1 hours past sunrise
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' >
-				<Paragraph>
-					<Bold>Ammo Expended = </Bold>1D (x2 HE) and (x1 ,30 calibre MG ammo boxes checked off)
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-	</TableRowGroup>
-	<TableRowGroup>
-		<TableRow  FontSize='14' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>
-					<LineBreak/>
-					SUNRISE-SUNSET CHART
-					<LineBreak/>
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-	</TableRowGroup>
-	<TableRowGroup >
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>Month</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>Sunrise</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>Sunset</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>July, August</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>05:00</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>19:15</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' >
-				<Paragraph>September</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>05:30</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>18:15</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>October</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>06:30</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>17:15</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' >
-				<Paragraph>November</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>07:15</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>16:15</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>December</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>07:45</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>16:00</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' >
-				<Paragraph>January</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>07:45</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>16:30</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>February</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>07:15</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>17:30</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' >
-				<Paragraph>March</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>06:15</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>18:00</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='2' TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>April</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>05:15</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>19:00</Paragraph>
-			</TableCell>
-		</TableRow>
-	</TableRowGroup>
-	<TableRowGroup>
-		<TableRow  FontSize='14' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>
-					<LineBreak/>
-					TIME USE TABLE
-					<LineBreak/>
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>Time</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>Activity</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed'>
-				<Paragraph>15m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left' Background='OrangeRed'>
-				<Paragraph>Enter new area on improved road.</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center'>
-				<Paragraph>30m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left'>
-				<Paragraph>Enter new area on dirt road.</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed'>
-				<Paragraph>45m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left' Background='OrangeRed'>
-				<Paragraph>Enter new area on no road.</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' >
-				<Paragraph>15m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left'>
-				<Paragraph>Combat occurs when entering a new area.</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed'>
-				<Paragraph>15m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left' Background='OrangeRed'>
-				<Paragraph>Check any one additional area for estimated enemy resistance.</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' >
-				<Paragraph>60m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left'>
-				<Paragraph>Attempt to replenish ammo -- roll 1D: (1-7 = arrives) (8-10 = fails).</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed'>
-				<Paragraph>30m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left' Background='OrangeRed'>
-				<Paragraph>Call for artillery --  roll 1D: (1-7 = arrives) (8-10 = fails).</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' >
-				<Paragraph>30m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left'>
-				<Paragraph>Call for air strike -- roll 1D: (1-4 = arrives) (5-10 = fails).</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed'>
-				<Paragraph>30m.</Paragraph>
-			</TableCell>
-			<TableCell ColumnSpan='3' TextAlignment='Left' Background='OrangeRed'>
-				<Paragraph>
-					<Run>Replace incapacitated crewman per </Run>
-					<InlineUIContainer>
-						<Button Content='r19.3' FontFamily='Courier New'  FontSize='10'></Button>
-					</InlineUIContainer>
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-	</TableRowGroup>
-	<TableRowGroup>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>
-					<Run>NOTES:</Run>
-					<InlineUIContainer>
-						<Button Content='Weather' FontFamily='Courier New'  FontSize='10'></Button>
-					</InlineUIContainer>
-					<LineBreak/>
-					(1) No air strikes possible with overcast, fog, or falling snow.<LineBreak/>
-					(2) Movement +15m during mud, fog, rain, ground snow, or deep snow.
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-	</TableRowGroup>
+<Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='LightGreen'>
+   <Table.Columns>
+      <TableColumn Width='200'/>
+      <TableColumn Width='200'/>
+   </Table.Columns>
+   <TableRowGroup>
+      <TableRow  FontSize='18' >
+         <TableCell ColumnSpan='2' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <LineBreak/>GUN MALFUNCTION REPAIR TABLE<LineBreak/>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Italic>
+                  <Run FontSize='12' Text='Malfunctioning guns can be repaired by the following crewman: '></Run><LineBreak/>
+                  <Run FontSize='12' Text='     Loader: main gun, coaxial MG, AA MG (Tanks 14 &amp; 16 only)'></Run><LineBreak/>
+                  <Run FontSize='12' Text='     Assistant driver: bow MG '></Run><LineBreak/>
+                  <Run FontSize='12' Text='     Commander: AA MG (except for Tanks 14 &amp; 16 only)'></Run><LineBreak/>
+                  <Run FontSize='12' Text='     Gunner: may assist Loader repairing main gun'></Run><LineBreak/>
+                  <Run FontSize='12' Text='A tank with a broken main gun is finished for the day once combat in this area is resolved. To attempt the repair, roll 2D:'></Run>
+               </Italic>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <TableRowGroup>
+      <!-- Header	-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Right' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Bold>
+                  <Run Text='Die Roll     '></Run>
+               </Bold>
+            </Paragraph>
+         </TableCell>
+         <TableCell  TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Bold>
+                  <Run Text='     Result'> </Run>
+               </Bold>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- row1	-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Right' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Bold>
+                  <Run Text='1-20     '> </Run>
+               </Bold>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' Background='DarkSeaGreen' >
+            <Paragraph>
+               <Run Text='     Gun repaired'> </Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- row2	-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Right' >
+            <Paragraph>
+               <Bold>
+                  <Run Text='21-90     '> </Run>
+               </Bold>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='     No Effect'> </Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- row3	-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Right' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Bold>
+                  <Run Text='91-100+     '> </Run>
+               </Bold>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='     Gun broken remainder of day'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <TableRowGroup>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Bold>
+                  <Run Text='  Die Roll Modifier:'></Run>
+               </Bold>
+               <LineBreak/>
+               <Run Text='   -(?) Crewmans rating'></Run>
+               <LineBreak/>
+               <Run Text='   -(?) Gunner rating if assisting main gun repair'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <TableRowGroup>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Bold>
+                  <Run Text='  NOTES:'></Run>
+               </Bold>
+               <LineBreak/>
+               <Run Text=' (1) A roll of 98-100 before any modifications always equals gun broken.'></Run>
+               <LineBreak/>
+               <Run Text=' (2) Once a battle is resolved, immediately attempt to repair any malfunctioning guns. Roll normall on the repair table. If the gun does not break, it is automatically repaired.'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
 </Table>

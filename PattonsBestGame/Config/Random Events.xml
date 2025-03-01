@@ -6,12 +6,12 @@
 		<TableColumn Width='120'/>
 	</Table.Columns>
 	<TableRowGroup>
-		<TableRow  FontSize='14' >
+		<TableRow  FontSize='18' >
 			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
 					<LineBreak/>RANDOM EVENTS TABLE<LineBreak/>
-					<Run FontStyle='Italic' Text='Under the column of the scenario being played, roll 2D to determine which random event occurs.'></Run>
-				</Paragraph>
+               <Run FontSize='12' FontStyle='Italic' Text='Under the column of the scenario being played, roll 2D to determine which random event occurs.'></Run>
+            </Paragraph>
 			</TableCell>
 		</TableRow>
 	</TableRowGroup>
@@ -283,7 +283,7 @@
 			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
 				<Paragraph>
 					<Bold>
-						<Run>NOTES:</Run>
+						<Run>EVENT DESCRIPTIONS:</Run>
 						<LineBreak/>
 					</Bold>
 					<Bold><Run Text=' (1) Time Passes:'></Run></Bold>

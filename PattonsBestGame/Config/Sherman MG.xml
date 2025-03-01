@@ -1,141 +1,548 @@
-<Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='Orange'>
-	<Table.Columns>
-		<TableColumn Width='80'/>
-		<TableColumn Width='160'/>
-		<TableColumn Width='160'/>
-		<TableColumn Width='160'/>
-	</Table.Columns>
-	<TableRowGroup>
-		<TableRow  FontSize='18' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>
-					<LineBreak/>AMMO TABLES<LineBreak/>
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-	</TableRowGroup>
-	<TableRowGroup>
-		<TableRow  FontSize='14' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>
-					AMMO AVAILAILITY
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' Background='OrangeRed'>
-			<Paragraph>
-				<Bold>High Explosives (HE):</Bold> Unlimited for all guns.
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' >
-			<Paragraph>
-				<Bold>Armor Piercing (AP):</Bold> Unlimited for all guns.
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' Background='OrangeRed'>
-			<Paragraph>
-				<Bold>White Phasphorous Smoke (WP):</Bold> 75mm only - unlimited.
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' >
-			<Paragraph>
-				<Bold>Hexachlorothane - Base Initiating Smoke (HCBI):</Bold> 75mm only - 1D rounds for your tank each day.
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	<TableRow  FontSize='12' >
-		<TableCell ColumnSpan='4' TextAlignment='Left' Background='OrangeRed'>
-			<Paragraph>
-				<Bold>High Velocity Armor Piercing (HVAP):</Bold> 76mm only - roll 1D for rounds (1-3 = 1) (4-7 = 2) (8-10 = 3).
-			</Paragraph>
-		</TableCell>
-	</TableRow>
-	</TableRowGroup>
-	<TableRowGroup >
-		<TableRow  FontSize='14' >
-			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>EXTRA AMMO</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>To determine how many extra rounds of main gun ammo you are ordered to load into your tank, roll 1D</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' >
-				<Paragraph>Die Roll</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>Advance</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>Battle</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>Counterattack</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>1-2</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>3-6</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>20/10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' >
-				<Paragraph>None/10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center'  >
-				<Paragraph>None</Paragraph>
-			</TableCell>
-		</TableRow>
-		<TableRow  FontSize='12' >
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>7-10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>30/10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>10/10</Paragraph>
-			</TableCell>
-			<TableCell TextAlignment='Center' Background='OrangeRed' >
-				<Paragraph>10/10</Paragraph>
-			</TableCell>
-		</TableRow>
-	</TableRowGroup>
-	<TableRowGroup>
-		<TableRow  FontSize='12' >
-			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
-				<Paragraph>
-					<Run>NOTES:</Run>
-					<LineBreak/>
-					(1) Extra main gun rounds / Extra .30 calibre MG ammo boxes.<LineBreak/>
-					(2) Even if you are not required to carry extra ammo, you may voluntarily carry up to 30 main gun rounds and 10 .30 calibre MG ammo boxes.
-				</Paragraph>
-			</TableCell>
-		</TableRow>
-	</TableRowGroup>
+<Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='LightGreen' >
+   <Table.Columns>
+      <TableColumn Width='140'/>
+      <TableColumn Width='100'/>
+      <TableColumn Width='60'/>
+      <TableColumn Width='60'/>
+      <TableColumn Width='60'/>
+      <TableColumn Width='60'/>
+   </Table.Columns>
+   <TableRowGroup>
+      <TableRow  FontSize='18' >
+         <TableCell ColumnSpan='6' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <LineBreak/>SHERMAN MACHINE GUN vs INFANTRY TARGETS
+               <LineBreak/>
+               <Italic>
+                  <Run FontSize='12' Text='Infantry targets are LW, MG, and AT. Roll the base number shown or less To Kill:'></Run>
+               </Italic>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <!-- Top Table-->
+   <TableRowGroup>
+      <TableRow  FontSize='12' >
+         <TableCell RowSpan='2' ColumnSpan='2' TextAlignment='Right' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Bold>
+                  <LineBreak/>
+                  <Run Text='Base # to KO Infatry Targets    '></Run>
+               </Bold>
+            </Paragraph>
+         </TableCell>
+         <TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               MACHINE GUNS
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Bold>
+                  <Run Text='Bow'></Run>
+               </Bold>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Bold>
+                  <Run Text='Co-Axial'></Run>
+               </Bold>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Bold>
+                  <Run Text='AA'></Run>
+               </Bold>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Bold>
+                  <Run Text='Sub'></Run>
+               </Bold>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='2' TextAlignment='Right' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Bold>
+                  <Run Text='CLOSE RANGE     '></Run>
+               </Bold>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='20'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='25'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='30'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='10'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='2' TextAlignment='Right' >
+            <Paragraph>
+               <Bold>
+                  <Run Text='MEDIUM RANGE     '></Run>
+               </Bold>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='00'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='20'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='20'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='nc'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='2' TextAlignment='Right' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Bold>
+                  <Run Text='LONG RANGE     '></Run>
+               </Bold>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='00'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='15'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='10'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='nc'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <!-- Bottom Table -->
+   <TableRowGroup>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='6' TextAlignment='Left' BorderBrush='Black' BorderThickness='1' Background='Black'>
+            <Paragraph>
+               <Bold>
+                  <Run Text=''></Run>
+               </Bold>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='6' TextAlignment='Left' >
+            <Paragraph>
+               <Bold>
+                  <Run Text='  Die Roll Modifer:'></Run>
+               </Bold>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='2' TextAlignment='Left' Background='DarkSeaGreen'>
+            <Paragraph><Run Text='     Crew Members Rating'></Run></Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph><Run Text='-(?)'></Run></Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='-(?)'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='-(?)'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='-(?)'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='2' TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='     vs. LW Moving in Open'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='-10'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='-15'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='-15'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='-5'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='2' TextAlignment='Left' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='     Advancing Fire'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='+10'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='+10'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='+10'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='-10'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='2' TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='     Sherman Moving or Pivoting'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='+10'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='+10'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='+10'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='+10'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='2' TextAlignment='Left' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='     Target in Woods'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='+10'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='+10'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='+10'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='+10'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='2' TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='     vs AT Gun or Target in Building'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='+15'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='+15'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='+15'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='+15'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='2' TextAlignment='Left' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='     vs Target in Fortification'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='+20'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='+20'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='+20'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='+20'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='2' TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='     Per Smoke Marker'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='x1/2'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='x1/2'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='x1/2'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='x1/2'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='2' TextAlignment='Left' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='     Firing through Fog or Falling Snow'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='x1/2'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='x1/2'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='x1/2'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='x1/2'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='2' TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='     Sherman hull down'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='P'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='---'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='---'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='---'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <!-- Unmodified Roll -->
+   <TableRowGroup>
+      <TableRow  FontSize='10' >
+         <TableCell TextAlignment='Left' >
+            <Paragraph><Run Text=' '></Run></Paragraph>
+         </TableCell>
+         <TableCell ColumnSpan='2' TextAlignment='Left' >
+            <Paragraph>
+               <Bold><Run> Unmodified Rolls:</Run></Bold>
+            </Paragraph>
+         </TableCell>
+         <TableCell ColumnSpan='3' TextAlignment='Center' >
+            <Paragraph>
+               <Run Text=' '></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='10' >
+         <TableCell TextAlignment='Center' >
+            <Paragraph><Run Text=' '></Run></Paragraph>
+         </TableCell>
+         <TableCell  TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph><Run Text='Automatic Kill'></Run></Paragraph>
+         </TableCell>
+         <TableCell  ColumnSpan='2' TextAlignment='Center' Background='DarkSeaGreen'>
+            <Paragraph>
+               <Run Text='01,02,03'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell ColumnSpan='2' TextAlignment='Center' >
+            <Paragraph>
+               <Run Text=' '></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='10' >
+         <TableCell  TextAlignment='Center' >
+            <Paragraph>
+               <Run Text=' '></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell  TextAlignment='Center' >
+            <Paragraph>
+               <InlineUIContainer>
+                  <Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='8'></Button>
+               </InlineUIContainer>
+            </Paragraph>
+         </TableCell>
+         <TableCell ColumnSpan='2' TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='98,99,100'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell ColumnSpan='2' TextAlignment='Center' >
+            <Paragraph>
+               <Run Text=' '></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <!-- Notes -->
+   <TableRowGroup>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='6' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Bold><Run>NOTES:</Run></Bold>
+               <LineBreak/>
+               <Run Text=' (1) P = Prohibited'></Run>
+               <LineBreak/>
+               <Run Text=' (2) --- = No effect'></Run>
+               <LineBreak/>
+               <Run Text=' (3) nc = no chance To Kill'></Run>
+               <LineBreak/>
+               <Run Text=' (4) Base number To Kill are havled for each Smoke marker the fire encounters from the firers zone to the targets zone, inclusive.'></Run>
+               <LineBreak/>
+               <Run Text=' (5) During fog or falling snow '></Run>
+               <InlineUIContainer>
+                  <Button Content='Weather' FontFamily='Courier New'  FontSize='8'></Button>
+               </InlineUIContainer>
+               <Run Text=' , base numbers To Kill are halved and only targets at close range may be targeted.'></Run>
+               <LineBreak/>
+               <Run Text=' (6) Ammo use: mark off one box of MG ammo if the colored die = 1-3.'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <!-- Advancing Fire -->
+   <TableRowGroup>
+      <TableRow  FontSize='12' >
+         <TableCell ColumnSpan='6' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Bold><Run>ADVANCING FIRE -- </Run> </Bold>
+               <Run Text=' Roll 2D: '></Run>
+               <LineBreak/>
+               <Run Text='   1-30 = one ammo box expended'></Run>
+               <LineBreak/>
+               <Run Text='   31-97 = no special effect'></Run>
+               <LineBreak/>
+               <Run Text='   98-100 = gun malfunction'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
 </Table>
