@@ -1,0 +1,175 @@
+<Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='LightGreen'>
+	<Table.Columns>
+		<TableColumn Width='80'/>
+		<TableColumn Width='80'/>
+		<TableColumn Width='80'/>
+		<TableColumn Width='80'/>
+	</Table.Columns>
+	<TableRowGroup>
+		<TableRow  FontSize='14' >
+			<TableCell ColumnSpan='4' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+				<Paragraph>
+					<LineBreak/>HIT LOCATION TABLE<LineBreak/>
+					<Run FontStyle='Italic' Text='Roll 1D for each hit by gunfire or panzerfaust attack to determine location of hit: '></Run>
+				</Paragraph>
+			</TableCell>
+		</TableRow>
+	</TableRowGroup>
+	<TableRowGroup >
+		<!-- .......................row1.......................-->
+		<TableRow  FontSize='12' >
+			<TableCell ColumnSpan='2' TextAlignment='Center' BorderBrush='Black' BorderThickness='1' >
+				<Table>
+					<Table.Columns>
+						<TableColumn Width='*'/>
+						<TableColumn Width='*'/>
+					</Table.Columns>
+					<TableRowGroup>
+						<TableRow  FontSize='12' >
+							<TableCell ColumnSpan='2' TextAlignment='Center' >
+								<Paragraph>
+									<Run Text='NORMAL TARGET'></Run>
+								</Paragraph>
+							</TableCell>
+						</TableRow>
+						<TableRow  FontSize='12' >
+							<TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+								<Paragraph>
+									<Run Text='Die Roll'></Run>
+								</Paragraph>
+							</TableCell>
+							<TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+								<Paragraph>
+									<Run Text='Location'></Run>
+								</Paragraph>
+							</TableCell>
+						</TableRow>
+						<TableRow  FontSize='12' >
+							<TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+								<Paragraph>
+									<Run Text='1-4'></Run>
+								</Paragraph>
+							</TableCell>
+							<TableCell TextAlignment='Center'  Background='DarkSeaGreen'>
+								<Paragraph>
+									<Run Text='Turret'></Run>
+								</Paragraph>
+							</TableCell>
+						</TableRow>
+						<TableRow  FontSize='12' >
+							<TableCell TextAlignment='Center'>
+								<Paragraph>
+									<Run Text='5-9'></Run>
+								</Paragraph>
+							</TableCell>
+							<TableCell TextAlignment='Center'>
+								<Paragraph>
+									<Run Text='Hull'></Run>
+								</Paragraph>
+							</TableCell>
+						</TableRow>
+						<TableRow  FontSize='12' >
+							<TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+								<Paragraph>
+									<Run Text='10'></Run>
+								</Paragraph>
+							</TableCell>
+							<TableCell TextAlignment='Center'  Background='DarkSeaGreen'>
+								<Paragraph>
+									<Run Text='Track'></Run>
+								</Paragraph>
+							</TableCell>
+						</TableRow>
+					</TableRowGroup>
+				</Table>
+			</TableCell>
+			<TableCell ColumnSpan='2' TextAlignment='Center' BorderBrush='Black' BorderThickness='1' >
+				<Table>
+					<Table.Columns>
+						<TableColumn Width='*'/>
+						<TableColumn Width='*'/>
+					</Table.Columns>
+					<TableRowGroup>
+						<TableRow  FontSize='12' >
+							<TableCell ColumnSpan='2' TextAlignment='Center'>
+								<Paragraph>
+									<Run Text='HULL DOWN TARGET'></Run>
+								</Paragraph>
+							</TableCell>
+						</TableRow>
+						<TableRow  FontSize='12' >
+							<TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+								<Paragraph>
+									<Run Text='Die Roll'></Run>
+								</Paragraph>
+							</TableCell>
+							<TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+								<Paragraph>
+									<Run Text='Location'></Run>
+								</Paragraph>
+							</TableCell>
+						</TableRow>
+						<TableRow  FontSize='12' >
+							<TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+								<Paragraph>
+									<Run Text='1-5'></Run>
+								</Paragraph>
+							</TableCell>
+							<TableCell TextAlignment='Center'  Background='DarkSeaGreen'>
+								<Paragraph>
+									<Run Text='Turret'></Run>
+								</Paragraph>
+							</TableCell>
+						</TableRow>
+						<TableRow  FontSize='12' >
+							<TableCell TextAlignment='Center'>
+								<Paragraph>
+									<Run Text='6+'></Run>
+								</Paragraph>
+							</TableCell>
+							<TableCell TextAlignment='Center'>
+								<Paragraph>
+									<Run Text='Hull'></Run>
+								</Paragraph>
+							</TableCell>
+						</TableRow>
+						<TableRow  FontSize='12' >
+							<TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+								<Paragraph>
+									<Run Text=' '></Run>
+								</Paragraph>
+							</TableCell>
+							<TableCell TextAlignment='Center'  Background='DarkSeaGreen'>
+								<Paragraph>
+									<Run Text=' '></Run>
+								</Paragraph>
+							</TableCell>
+						</TableRow>
+					</TableRowGroup>
+				</Table>
+			</TableCell>
+		</TableRow>
+	</TableRowGroup>
+	<TableRowGroup>
+		<TableRow  FontSize='12' >
+			<TableCell ColumnSpan='4' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+				<Paragraph>
+					<Bold>
+						<Run>NOTES:</Run><LineBreak/>
+					</Bold>
+					<Run Text='A track hit automatically disables the vehicle.'></Run> 
+					<Run Text=' Mark it with a Thrown Track marker.'></Run>
+					<Run Text=' Do not roll on the '></Run>
+					<InlineUIContainer>
+						<Button Content='Enemy AP To Kill' FontFamily='Courier New'  FontSize='8'></Button>
+					</InlineUIContainer>
+					<Run Text=' or '></Run>
+					<InlineUIContainer>
+						<Button Content='Panzerfaust' FontFamily='Courier New'  FontSize='8'></Button>
+					</InlineUIContainer>
+					<Run Text=' Tables for a track hit.'></Run>
+				</Paragraph>
+			</TableCell>
+		</TableRow>
+	</TableRowGroup>
+</Table>

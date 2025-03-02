@@ -187,6 +187,12 @@ namespace Pattons_Best
                this.Width = this.MinWidth = this.MaxWidth = 620;
                this.MinHeight = this.MaxHeight = 360;
                break;
+            case "Hit Location":
+               this.Title = "Hit Location Table";
+               this.Background = theBrushGreen;
+               this.Width = this.MinWidth = this.MaxWidth = 390;
+               this.MinHeight = this.MaxHeight = 320;
+               break;
             case "Hit Location Tank":
                this.Title = "Hit Location Table";
                this.Background = theBrushBlue;
@@ -256,14 +262,14 @@ namespace Pattons_Best
             case "To Hit Target":
                this.Title = "To Hit Target";
                this.Background = theBrushGreen;
-               this.Width = this.MinWidth = this.MaxWidth = 620;
-               this.MinHeight = this.MaxHeight = 610;
+               this.Width = this.MinWidth = this.MaxWidth = 600;
+               this.MinHeight = this.MaxHeight = 770;
                break;
             case "To Kill Infantry":
                this.Title = "To Kill Infantry Targets";
                this.Background = theBrushGreen;
-               this.Width = this.MinWidth = this.MaxWidth = 620;
-               this.MinHeight = this.MaxHeight = 610;
+               this.Width = this.MinWidth = this.MaxWidth = 600;
+               this.MinHeight = this.MaxHeight = 380;
                break;
             case "Weather":
                this.Title = "Weather Tables";

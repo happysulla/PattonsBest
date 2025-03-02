@@ -70,6 +70,7 @@
                <RowDefinition Height="Auto"/>
                <RowDefinition Height="Auto"/>
                <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                <ColumnDefinition Width="150"/>
@@ -79,10 +80,11 @@
             <Button Grid.Row="2" Grid.Column="0" Content="Gun Malfunction" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
             <Button Grid.Row="3" Grid.Column="0" Content="HE to Kill (75)" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
             <Button Grid.Row="4" Grid.Column="0" Content="HE to Kill (76)" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
-            <Button Grid.Row="5" Grid.Column="0" Content="Rate of Fire" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
-            <Button Grid.Row="6" Grid.Column="0" Content="Sherman MG" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
-            <Button Grid.Row="7" Grid.Column="0" Content="To Hit Target" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
-            <Button Grid.Row="8" Grid.Column="0" Content="To Kill Infantry" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
+            <Button Grid.Row="5" Grid.Column="0" Content="Hit Location" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
+            <Button Grid.Row="6" Grid.Column="0" Content="Rate of Fire" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
+            <Button Grid.Row="7" Grid.Column="0" Content="Sherman MG" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
+            <Button Grid.Row="8" Grid.Column="0" Content="To Hit Target" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
+            <Button Grid.Row="9" Grid.Column="0" Content="To Kill Infantry" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
          </Grid>
          <!-- First Row and 3rd Column-->
          <Grid Name="myGridMapBoard" Background="AntiqueWhite" Grid.Row="1" Grid.Column="2">
