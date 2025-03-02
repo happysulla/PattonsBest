@@ -254,6 +254,11 @@ namespace Pattons_Best
          }
          switch (action)
          {
+            case GameAction.SetupShowMapHistorical:
+            case GameAction.SetupShowMovementBoard:
+            case GameAction.SetupShowBattleBoard:
+            case GameAction.SetupShowAfterActionReport:
+            case GameAction.SetupShowCombatCalendarCheck:
             case GameAction.ShowCombatCalendar:
             case GameAction.ShowAfterActionReport:
             case GameAction.ShowInventory:
@@ -265,6 +270,8 @@ namespace Pattons_Best
             case GameAction.UnitTestCommand:
             case GameAction.UnitTestNext:
             case GameAction.UnitTestCleanup:
+               break;
+            case GameAction.CombatCalendarRoll:
                break;
             case GameAction.EndGameWin:
             case GameAction.EndGameLost:

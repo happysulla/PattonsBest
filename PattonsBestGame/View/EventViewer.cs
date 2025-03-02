@@ -374,9 +374,17 @@ namespace Pattons_Best
                            else
                            {
                               img.Visibility = Visibility.Hidden;
-                              Button b1 = new Button() { Content = eventDieRolls[dieNumIndex].ToString(), FontFamily = myFontFam1, FontSize = 12, Height = 16, Width = 48 };
-                              myTextBlock.Inlines.InsertAfter(inline, new InlineUIContainer(b1));
-                              b1.Click += Button_Click;
+                              if (false == gi.IsMultipleSelectForDieResult)
+                              {
+                                 Run newInline = new Run(eventDieRolls[dieNumIndex].ToString());  // Insert the die roll number result
+                                 myTextBlock.Inlines.InsertBefore(inline, newInline); // If modified, need to start again
+                              }
+                              else
+                              {
+                                 Button b1 = new Button() { Content = eventDieRolls[dieNumIndex].ToString(), FontFamily = myFontFam1, FontSize = 12, Height = 16, Width = 48 };
+                                 myTextBlock.Inlines.InsertAfter(inline, new InlineUIContainer(b1));
+                                 b1.Click += Button_Click;
+                              }
                               isModified = true;
                               ++dieNumIndex;
                               isDieShown[dieCount] = false;

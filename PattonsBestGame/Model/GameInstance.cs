@@ -15,6 +15,7 @@ namespace Pattons_Best
       public Options Options { get; set; } = new Options();
       public GameStat Statistic { get; set; } = new GameStat();
       //------------------------------------------------
+      public bool IsMultipleSelectForDieResult { set; get; } = false;
       public bool IsGridActive { set; get; } = false;
       public string EventActive { get; set; } = "e000";
       public string EventDisplayed { set; get; } = "e000";

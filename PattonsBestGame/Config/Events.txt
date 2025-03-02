@@ -37,14 +37,19 @@ e005	"<Bold>e005 After Action Report (AAR)</Bold> <InlineUIContainer><Button Con
 The events of each engagement or day of battle are recorded as they unfold on the After Action Report. At this time, you may elect to change the name of the tank or the names of your crew by clicking on the appropriate location on the form. When ready, click image below to continue.
 <LineBreak/><LineBreak/>
                                             <InlineUIContainer><Image Name='Continue005' Height='100' Width='100'></Image></InlineUIContainer>"
-e006	"<Bold>e006 Combat Calendar Check</Bold> <InlineUIContainer><Button Content='r4.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+e006	"<Bold>e006 Combat Calendar Check</Bold> 
+<InlineUIContainer><Button Content='r4.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
-Date from Combat <InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>: DATE<LineBreak/>
+Roll for possible combat today. If die &lt;= probability, start morning briefing per 
+<InlineUIContainer><Button Content='e007' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  
+Otherwise continue with next day check.
+<LineBreak/><LineBreak/>
+Date from Combat Calendar: DATE<LineBreak/>
 Expected Resistance: RESISTANCE<LineBreak/>
-Probablility of Combat: PROBABILITY > <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer><LineBreak/>
-<LineBreak/>
-If the roll is equal or less than the probability, start morning briefing <InlineUIContainer><Button Content='e007' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/><LineBreak/>
-If the roll is greater than the probability, move to the next day."
+Probablility of Combat: PROBABILITY &gt;= <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>
+<LineBreak/><LineBreak/>
+"
 e008	"<Bold>e008 Morning Briefing - Weather Roll</Bold> 
 <LineBreak/><LineBreak/>
 Consult weather table <InlineUIContainer><Button Content='tWeather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> after rolling to determine weather for today:

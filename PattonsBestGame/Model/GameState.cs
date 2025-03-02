@@ -203,7 +203,7 @@ namespace Pattons_Best
                gi.DieRollAction = GameAction.CombatCalendarRoll;
                break;
             case GameAction.CombatCalendarRoll:
-               //gi.DieResults["e006"][0] = dieRoll;
+               gi.DieResults["e006"][0] = dieRoll;
                break;
             case GameAction.EndGameClose:
                gi.GamePhase = GamePhase.EndGame;

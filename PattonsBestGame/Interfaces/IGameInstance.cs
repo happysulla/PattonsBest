@@ -12,6 +12,7 @@ namespace Pattons_Best
       Options Options { get; set; }
       GameStat Statistic { get; set; }
       //----------------------------------------------
+      bool IsMultipleSelectForDieResult { set; get; } // In EventViewer, show buttons instead of die results for user to choose from
       bool IsGridActive { set; get; } // True if there is some EventViewer manager active
       string EventActive { set; get; }
       string EventDisplayed { set; get; }

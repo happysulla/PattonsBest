@@ -31,6 +31,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myCanvas=null");
             return;
          }
+         return;
          switch (action)
          {
             case GameAction.RemoveSplashScreen:
