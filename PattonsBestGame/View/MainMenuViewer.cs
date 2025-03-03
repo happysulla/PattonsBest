@@ -269,12 +269,12 @@ namespace Pattons_Best
       }
       public void MenuItemViewCombatCalendar(object sender, RoutedEventArgs e)
       {
-         GameAction action = GameAction.ShowCombatCalendar;
+         GameAction action = GameAction.ShowCombatCalendarDialog;
          myGameEngine.PerformAction(ref myGameInstance, ref action);
       }
       public void MenuItemViewAfterActionReport(object sender, RoutedEventArgs e)
       {
-         GameAction action = GameAction.ShowAfterActionReport;
+         GameAction action = GameAction.ShowAfterActionReportDialog;
          myGameEngine.PerformAction(ref myGameInstance, ref action);
       }
       public void MenuItemViewFeats_Click(object sender, RoutedEventArgs e)
@@ -284,12 +284,12 @@ namespace Pattons_Best
       }
       public void MenuItemHelpRules_Click(object sender, RoutedEventArgs e)
       {
-         GameAction action = GameAction.ShowRuleListing;
+         GameAction action = GameAction.ShowRuleListingDialog;
          myGameEngine.PerformAction(ref myGameInstance, ref action);
       }
       public void MenuItemHelpEvents_Click(object sender, RoutedEventArgs e)
       {
-         GameAction action = GameAction.ShowEventListing;
+         GameAction action = GameAction.ShowEventListingDialog;
          myGameEngine.PerformAction(ref myGameInstance, ref action);
       }
       public void MenuItemHelpTables_Click(object sender, RoutedEventArgs e)

@@ -74,23 +74,6 @@ namespace Pattons_Best
       }
    };
    [Serializable]
-   public struct CombatCalenderEntry
-   {
-      public string myDate;
-      public EnumScenario mySituation;
-      public int myProbability;
-      public EnumResistance myResistance;
-      public string myNote;
-      public CombatCalenderEntry(string d, EnumScenario s, int p, EnumResistance r, string n="")
-      {
-         myDate = d;
-         mySituation = s;
-         myProbability = p;
-         myResistance = r;
-         myNote = n;
-      }
-   };
-   [Serializable]
    public enum GamePhase
    {
       UnitTest,
@@ -123,11 +106,11 @@ namespace Pattons_Best
       UpdateLoadingGameReturnToJail,
       UpdateUndo,
 
-      ShowCombatCalendar,
-      ShowAfterActionReport,
-      ShowInventory,
-      ShowRuleListing,
-      ShowEventListing,
+      ShowCombatCalendarDialog,
+      ShowAfterActionReportDialog,
+      ShowInventoryDialog,
+      ShowRuleListingDialog,
+      ShowEventListingDialog,
       ShowTableListing,
       ShowGameFeats,
       ShowReportErrorDialog,
@@ -155,9 +138,13 @@ namespace Pattons_Best
       SetupShowAfterActionReport,
       SetupShowCombatCalendarCheck,
       SetupChooseFunOptions,
+      SetupCombatCalendarRoll,
       SetupFinalize,
 
-      CombatCalendarRoll,
+      MorningBriefingBegin,
+      MorningBriefingCalendarRoll,
+      MorningBriefingWeatherRoll,
+      MorningBriefingEnd,
       Error
    };
    public interface IGameEngine

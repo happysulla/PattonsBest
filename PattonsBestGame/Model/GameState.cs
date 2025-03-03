@@ -22,7 +22,7 @@ namespace Pattons_Best
             case GamePhase.UnitTest: return new GameStateUnitTest();
             case GamePhase.GameSetup: return new GameStateSetup();
             case GamePhase.MorningBriefing: return new GameStateMorningBriefing();
-            case GamePhase.Preparations: return new GameStatePreparations();
+            case GamePhase.Preparations: return new GameStateBattlePrep();
             case GamePhase.Movement: return new GameStateMovement();
             case GamePhase.Battle: return new GameStateBattle();
             case GamePhase.EveningDebriefing: return new GameStateEveningDebriefing();
@@ -124,19 +124,21 @@ namespace Pattons_Best
          GameAction previousDieAction = gi.DieRollAction;
          string previousEvent = gi.EventActive;
          string returnStatus = "OK";
+         string key = gi.EventActive;
          switch (action)
          {
-            case GameAction.ShowCombatCalendar:
-            case GameAction.ShowAfterActionReport:
-            case GameAction.ShowInventory:
+            case GameAction.ShowCombatCalendarDialog:
+            case GameAction.ShowAfterActionReportDialog:
+            case GameAction.ShowInventoryDialog:
             case GameAction.ShowGameFeats:
-            case GameAction.ShowRuleListing:
-            case GameAction.ShowEventListing:
+            case GameAction.ShowRuleListingDialog:
+            case GameAction.ShowEventListingDialog:
             case GameAction.ShowTableListing:
             case GameAction.ShowReportErrorDialog:
             case GameAction.ShowAboutDialog:
-            case GameAction.UpdateEventViewerDisplay:
             case GameAction.EndGameShowFeats:
+               break;
+            case GameAction.UpdateEventViewerDisplay: // Only change active event
                break;
             case GameAction.UpdateEventViewerActive: // Only change active event
                gi.EventDisplayed = gi.EventActive; // next screen to show
@@ -146,14 +148,15 @@ namespace Pattons_Best
                gi.Statistic.Clear();         // Clear any current statitics
                gi.Statistic.myNumGames = 1;  // Set played games to 1
                //----------------------------------------------------
-               if (0 == GameEngine.theCombatCalenderEntries.Count)
+               ICombatCalendarEntry? entry = GameEngine.theCombatCalendarEntries[0];
+               if( null == entry )
                {
-                  returnStatus = "theCombatCalenderEntries.Count=0";
+                  returnStatus = "PerformAutoSetup() returned false";
                   Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
                }
                else
                {
-                  IAfterActionReport report = new AfterActionReport(GameEngine.theCombatCalenderEntries[0]);
+                  IAfterActionReport report = new AfterActionReport(entry);
                   gi.Reports.Add(report);
                   //----------------------------------------------------
                   Option? option = gi.Options.Find("AutoSetup");
@@ -200,10 +203,12 @@ namespace Pattons_Best
                break;
             case GameAction.SetupShowCombatCalendarCheck:
                gi.EventDisplayed = gi.EventActive = "e006";
-               gi.DieRollAction = GameAction.CombatCalendarRoll;
+               gi.DieRollAction = GameAction.SetupCombatCalendarRoll;
                break;
-            case GameAction.CombatCalendarRoll:
-               gi.DieResults["e006"][0] = dieRoll;
+            case GameAction.SetupCombatCalendarRoll:
+               gi.GamePhase = GamePhase.MorningBriefing;
+               dieRoll = 9; // <cgs> TEST
+               gi.DieResults[key][0] = dieRoll;
                break;
             case GameAction.EndGameClose:
                gi.GamePhase = GamePhase.EndGame;
@@ -252,12 +257,74 @@ namespace Pattons_Best
          GameAction previousDieAction = gi.DieRollAction;
          string previousEvent = gi.EventActive;
          string returnStatus = "OK";
+         string key = gi.EventActive;
          switch (action)
          {
+            case GameAction.ShowCombatCalendarDialog:
+            case GameAction.ShowAfterActionReportDialog:
+            case GameAction.ShowInventoryDialog:
+            case GameAction.ShowRuleListingDialog:
+            case GameAction.ShowEventListingDialog:
+            case GameAction.ShowReportErrorDialog:
+            case GameAction.ShowAboutDialog:
+               break;
+            case GameAction.SetupShowMapHistorical:
+            case GameAction.SetupShowMovementBoard:
+            case GameAction.SetupShowBattleBoard:
+            case GameAction.SetupShowTankCard:
+            case GameAction.SetupShowAfterActionReport:
+            case GameAction.SetupShowCombatCalendarCheck:
+               break;
+            case GameAction.UpdateEventViewerDisplay: // Only change active event
+               break;
             case GameAction.UpdateEventViewerActive: // Only change active event
                gi.EventDisplayed = gi.EventActive; // next screen to show
                break;
-            case GameAction.UpdateEventViewerDisplay: // Only change active event
+            case GameAction.MorningBriefingCalendarRoll:
+               dieRoll = 9; // <cgs> TEST
+               gi.DieResults[key][0] = dieRoll;
+               break;
+            case GameAction.MorningBriefingBegin:
+               gi.EventDisplayed = gi.EventActive = "e007";
+               gi.DieRollAction = GameAction.MorningBriefingWeatherRoll;
+
+               break;
+            case GameAction.MorningBriefingWeatherRoll:
+               gi.DieResults[key][0] = dieRoll;
+               break;
+            case GameAction.MorningBriefingEnd:
+               ++gi.Day;
+               ICombatCalendarEntry? newEntry = GameEngine.theCombatCalendarEntries[gi.Day];
+               if (null == newEntry)
+               {
+                  returnStatus = "newEntry=null";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(): " + returnStatus);
+               }
+               else
+               {
+                  IAfterActionReport? lastReport = gi.Reports.RemoveLast(); // remove it from list
+                  if (null == lastReport)
+                  {
+                     returnStatus = "lastReport=null";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(): " + returnStatus);
+                  }
+                  else
+                  {
+                     IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport);
+                     if (null == newEntry)
+                     {
+                        returnStatus = "newEntry=null";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(): " + returnStatus);
+                     }
+                     else
+                     {
+                        gi.Reports.Add(newReport);
+                        gi.EventDisplayed = gi.EventActive = "e006";
+                        gi.DieResults[gi.EventActive][0] = Utilities.NO_RESULT;
+                        gi.DieRollAction = GameAction.MorningBriefingCalendarRoll;
+                     }
+                  }
+               }
                break;
             case GameAction.EndGameClose:
                gi.GamePhase = GamePhase.EndGame;
@@ -290,7 +357,7 @@ namespace Pattons_Best
       }
    }
    //-----------------------------------------------------
-   class GameStatePreparations : GameState
+   class GameStateBattlePrep : GameState
    {
       public override string PerformAction(ref IGameInstance gi, ref GameAction action, int dieRoll)
       {
@@ -301,10 +368,10 @@ namespace Pattons_Best
          string returnStatus = "OK";
          switch (action)
          {
+            case GameAction.UpdateEventViewerDisplay: // Only change active event
+               break;
             case GameAction.UpdateEventViewerActive: // Only change active event
                gi.EventDisplayed = gi.EventActive; // next screen to show
-               break;
-            case GameAction.UpdateEventViewerDisplay: // Only change active event
                break;
             case GameAction.EndGameClose:
                gi.GamePhase = GamePhase.EndGame;
@@ -314,7 +381,7 @@ namespace Pattons_Best
          }
          StringBuilder sb12 = new StringBuilder();
          if ("OK" != returnStatus)
-            sb12.Append("<<<<ERROR2::::::GameStatePreparations.PerformAction():");
+            sb12.Append("<<<<ERROR2::::::GameStateBattlePrep.PerformAction():");
          sb12.Append("===>p=");
          sb12.Append(previousPhase.ToString());
          if (previousPhase != gi.GamePhase)
@@ -489,12 +556,12 @@ namespace Pattons_Best
          string previousEvent = gi.EventActive;
          switch (action)
          {
-            case GameAction.ShowCombatCalendar:
-            case GameAction.ShowAfterActionReport:
-            case GameAction.ShowInventory:
+            case GameAction.ShowCombatCalendarDialog:
+            case GameAction.ShowAfterActionReportDialog:
+            case GameAction.ShowInventoryDialog:
             case GameAction.ShowGameFeats:
-            case GameAction.ShowRuleListing:
-            case GameAction.ShowEventListing:
+            case GameAction.ShowRuleListingDialog:
+            case GameAction.ShowEventListingDialog:
             case GameAction.ShowTableListing:
             case GameAction.ShowReportErrorDialog:
             case GameAction.ShowAboutDialog:

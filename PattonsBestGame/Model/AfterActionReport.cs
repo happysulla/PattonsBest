@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -59,27 +60,116 @@ namespace Pattons_Best.Model
       public bool IsBreakdown { get; set; } = false;
       public bool IsKnockedOut { get; set; } = false;
       //---------------------------------------------------------------------------------
-      public AfterActionReport (CombatCalenderEntry entry)
+      public AfterActionReport(ICombatCalendarEntry entry)
       {
-         Day = entry.myDate;
-         Situation = entry.mySituation;
-         Probability = entry.myProbability;  
-         Resistance = entry.myResistance;
+         Day = entry.Date;
+         Situation = entry.Situation;
+         Probability = entry.Probability;
+         Resistance = entry.Resistance;
       }
-      public AfterActionReport(CombatCalenderEntry entry, IAfterActionReport aar)
+      public AfterActionReport(ICombatCalendarEntry entry, IAfterActionReport aar)
       {
-         Day = entry.myDate;
-         Situation = entry.mySituation;
-         Probability = entry.myProbability;
-         Resistance = entry.myResistance;
+         Day = entry.Date;
+         Situation = entry.Situation;
+         Probability = entry.Probability;
+         Resistance = entry.Resistance;
          //------------------------------
          this.Name = aar.Name;
          this.Commander = aar.Commander;
-         this.Gunner = aar.Gunner;  
+         this.Gunner = aar.Gunner;
          this.Loader = aar.Loader;
          this.Driver = aar.Driver;
-         this.Assistant = aar.Assistant;  
-         this.Decorations = aar.Decorations; 
+         this.Assistant = aar.Assistant;
+         this.Decorations = aar.Decorations;
+      }
+   }
+   //===================================================================
+   public class AfterActionReports : IEnumerable, IAfterActionReports
+   {
+      private readonly ArrayList myList;
+      public AfterActionReports() { myList = new ArrayList(); }
+      public IEnumerator GetEnumerator() { return myList.GetEnumerator(); }
+      public int Count { get { return myList.Count; } }
+      public IAfterActionReport? Find(string day)
+      {
+         foreach (Object o in myList)
+         {
+            IAfterActionReport aar = (IAfterActionReport)o;
+            if (day == Utilities.RemoveSpaces(aar.Day))
+               return aar;
+         }
+         return null;
+      }
+      public IAfterActionReport? GetLast()
+      {
+         if (0 == myList.Count)
+            return null;
+         IAfterActionReport? lastReport = this[myList.Count - 1];
+         return lastReport;
+      }
+      public void Add(IAfterActionReport aar) { myList.Add(aar); }
+      public IAfterActionReport? RemoveAt(int index)
+      {
+         IAfterActionReport? aar = myList[index] as IAfterActionReport;
+         myList.RemoveAt(index);
+         return aar;
+      }
+      public void Insert(int index, IAfterActionReport aar) { myList.Insert(index, aar); }
+      public void Clear() { myList.Clear(); }
+      public bool Contains(IAfterActionReport aar)
+      {
+         foreach (Object o in myList)
+         {
+            IAfterActionReport aar1 = (IAfterActionReport)o;
+            if (aar.Day == aar1.Day) // match on name
+               return true;
+         }
+         return false;
+      }
+      public int IndexOf(IAfterActionReport aar) { return myList.IndexOf(aar); }
+      public void Remove(IAfterActionReport aar)
+      {
+         foreach (Object o in myList)
+         {
+            IAfterActionReport aar1 = (IAfterActionReport)o;
+            if (aar.Day == Utilities.RemoveSpaces(aar1.Day))
+            {
+               myList.Remove(aar1);
+               return;
+            }
+         }
+      }
+      public IAfterActionReport? Remove(string day)
+      {
+         foreach (Object o in myList)
+         {
+            IAfterActionReport aar = (IAfterActionReport)o;
+            if (day == aar.Day)
+            {
+               myList.Remove(aar);
+               return aar;
+            }
+         }
+         return null;
+      }
+      public IAfterActionReport? RemoveLast()
+      {
+         if (0 == myList.Count)
+            return null;
+         IAfterActionReport? lastReport = RemoveAt(myList.Count - 1);
+         return lastReport;
+      }
+
+      public IAfterActionReport? this[int index]
+      {
+         get
+         {
+            if (null == myList[index])
+               return null;
+            IAfterActionReport? aar = myList[index] as IAfterActionReport;
+            return aar;
+         }
+         set { myList[index] = value; }
       }
    }
 }

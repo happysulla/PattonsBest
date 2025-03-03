@@ -28,7 +28,7 @@
             <Canvas Name="myCanvasTank" DockPanel.Dock="Top" MinWidth="600"  MaxWidth="600" MinHeight="500" MaxHeight="500" />
             <Separator Name="mySeparator4" DockPanel.Dock="Top" Height="5"/>
             <ScrollViewer Name="myScrollViewerTextBlock" MaxWidth="600" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" Background="#FFB9EA9E">
-               <TextBlock Name="myTextBlockDisplay" MinWidth="573" MaxWidth="573" FontFamily="Georgia" FontSize="24" TextWrapping="WrapWithOverflow" IsHyphenationEnabled="true" LineStackingStrategy="BlockLineHeight"  Background="#FFB9EA9E" Margin="5,5,5,5"/>
+               <TextBlock Name="myTextBlockDisplay" MinWidth="573" MaxWidth="573" FontFamily="Georgia" FontSize="24" TextWrapping="WrapWithOverflow" IsHyphenationEnabled="true" LineStackingStrategy="BlockLineHeight"  Margin="5,5,5,5"/>
             </ScrollViewer>
          </DockPanel>
          <ScrollViewer Name="myScrollViewerMap" Width="1132" Height="902"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" >

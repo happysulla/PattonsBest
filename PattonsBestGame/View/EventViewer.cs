@@ -191,13 +191,13 @@ namespace Pattons_Best
                if (false == OpenEvent(gi, gi.EventActive))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): OpenEvent() returned false ae=" + myGameInstance.EventActive + " a=" + action.ToString());
                break;
-            case GameAction.ShowAfterActionReport:
-               if( 0 == gi.Reports.Count )
+            case GameAction.ShowAfterActionReportDialog:
+               IAfterActionReport? aar = gi.Reports.GetLast();
+               if (null == aar)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView():  gi.Reports.Count=0");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView():  gi.Reports.GetLast()=null");
                   return;
                }
-               IAfterActionReport aar = gi.Reports[ gi.Reports.Count - 1 ];
                AfterActionReportUserControl aarUserControl = new AfterActionReportUserControl(aar);
                if (true == aarUserControl.CtorError)
                {
@@ -207,7 +207,7 @@ namespace Pattons_Best
                AfterActionDialog dialogAAR = new AfterActionDialog(aar);
                dialogAAR.Show();
                break;
-            case GameAction.ShowCombatCalendar:
+            case GameAction.ShowCombatCalendarDialog:
                if( false == myRulesMgr.ShowTable("Calendar"))
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): SmyRulesMgr.ShowTable(Calendar)=false");
@@ -222,7 +222,7 @@ namespace Pattons_Best
                ShowAboutDialog dialogAbout = new ShowAboutDialog();
                dialogAbout.Show();
                break;
-            case GameAction.ShowRuleListing:
+            case GameAction.ShowRuleListingDialog:
                RuleListingDialog dialogRuleListing = new RuleListingDialog(myRulesMgr, false);
                if (true == dialogRuleListing.CtorError)
                {
@@ -231,7 +231,7 @@ namespace Pattons_Best
                }
                dialogRuleListing.Show();
                break;
-            case GameAction.ShowEventListing:
+            case GameAction.ShowEventListingDialog:
                RuleListingDialog dialogEventListing = new RuleListingDialog(myRulesMgr, true);
                if (true == dialogEventListing.CtorError)
                {
@@ -248,6 +248,11 @@ namespace Pattons_Best
                   return;
                }
                dialogTableListing.Show();
+               break;
+            case GameAction.UpdateEventViewerDisplay:
+               gi.IsGridActive = false;
+               if (false == OpenEvent(gi, gi.EventDisplayed))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): OpenEvent() returned false ae=" + myGameInstance.EventActive + " a=" + action.ToString());
                break;
             case GameAction.EndGameLost:
             case GameAction.EndGameWin:
@@ -407,9 +412,16 @@ namespace Pattons_Best
          myDieRoller.DieMutex.ReleaseMutex();
          //--------------------------------------------------
          if (gi.EventDisplayed == gi.EventActive)
+         {
             myScrollViewerTextBlock.Background = Utilities.theBrushScrollViewerActive;
+            myTextBlock.Background = Utilities.theBrushScrollViewerActive;
+         }
          else
+         {
             myScrollViewerTextBlock.Background = Utilities.theBrushScrollViewerInActive;
+            myTextBlock.Background = Utilities.theBrushScrollViewerInActive;
+         }
+            
          return true;
       }
       public bool ShowRule(string key)
@@ -535,7 +547,19 @@ namespace Pattons_Best
       }
       private bool UpdateEventContent(IGameInstance gi, string key)
       {
+         if( null == myTextBlock)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): myTextBlock=null");
+            return false;
+         }
          Logger.Log(LogEnum.LE_VIEW_APPEND_EVENT, "UpdateEventContent(): k=" + key + " d0=" + gi.DieResults[key][0].ToString() + " d1=" + gi.DieResults[key][1].ToString() + " d2=" + gi.DieResults[key][2].ToString());
+         IAfterActionReport? report = gi.Reports.GetLast();
+         if( null == report )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent():  gi.Reports.GetLast()");
+            return false;
+         }
+         int firstDieResult = gi.DieResults[key][0];
          switch (key)
          {
             case "e006":
@@ -544,7 +568,6 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.Reports.Count=0");
                   return false;
                }
-               IAfterActionReport report = gi.Reports[gi.Reports.Count - 1];
                ReplaceText("DATE", report.Day);
                switch(report.Resistance)
                {
@@ -562,6 +585,32 @@ namespace Pattons_Best
                      return false;
                }
                ReplaceText("PROBABILITY", report.Probability.ToString());
+               if (Utilities.NO_RESULT == firstDieResult) // skip today action
+               {
+
+                  Image img = new Image { Source = MapItem.theMapImages.GetBitmapImage("Morning"), Width = 300, Height = 150, };
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                               "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(img));
+               }
+               else if (report.Probability < firstDieResult) // skip today action
+               {
+                  Image img = new Image { Source = MapItem.theMapImages.GetBitmapImage("Sherman4"), Width = 300, Height = 190, Name = "GotoCalenderCheck" }; 
+                  myTextBlock.Inlines.Add(new Run("                               "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(img));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("No combat for today. Sleep good tonight. Click image to continue."));
+               }
+               else 
+               {
+                  Image img = new Image { Source = MapItem.theMapImages.GetBitmapImage("Combat"), Width = 150, Height = 150, Name = "GotoMorningBriefing" };
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                     "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(img));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Possible combat. Click image to continue."));
+               }
                break;
             default:
                break;
@@ -645,7 +694,20 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): myTextBlock=null");
             return;
          }
+         //------------------------------------------------------------------------
          GameAction action = GameAction.Error;
+         if (myGameInstance.EventActive != myGameInstance.EventDisplayed) // if an image is clicked, only take action if on active screen
+         {
+            ReturnToActiveEventDialog dialog = new ReturnToActiveEventDialog(); // Get the name from user
+            dialog.Topmost = true;
+            if (true == dialog.ShowDialog())
+            {
+               GameAction actionGoto = GameAction.UpdateEventViewerActive;
+               myGameEngine.PerformAction(ref myGameInstance, ref actionGoto);
+            }
+            return;
+         }
+         //------------------------------------------------------------------------
          System.Windows.Point p = e.GetPosition((UIElement)sender);
          HitTestResult result = VisualTreeHelper.HitTest(myTextBlock, p);  // Get the Point where the hit test occurrs
          foreach (Inline item in myTextBlock.Inlines)
@@ -690,6 +752,14 @@ namespace Pattons_Best
                               return;
                            case "Continue005":
                               action = GameAction.SetupShowCombatCalendarCheck;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
+                           case "GotoMorningBriefing":
+                              action = GameAction.MorningBriefingBegin;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
+                           case "GotoCalenderCheck":
+                              action = GameAction.MorningBriefingEnd;
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
                            default:

@@ -18,12 +18,13 @@ namespace Pattons_Best
    public partial class AfterActionDialog : Window
    {
       public bool CtorError { get; } = false;
-      public IAfterActionReport Report { get; set; } = new AfterActionReport(new CombatCalenderEntry("07/27/43", EnumScenario.Advance, 3, EnumResistance.Light, "Corba Breakout"));
+      public IAfterActionReport? Report { get; set; } = null;
       //-------------------------------------------------------------------------------------
       public AfterActionDialog(IAfterActionReport report)
       {
          InitializeComponent();
          Title = "After Action Report for " + report.Day;
+         Report = report;
          //-------------------------------
          AfterActionReportUserControl userControl = new AfterActionReportUserControl(report);
          if (true == CtorError)
@@ -33,7 +34,6 @@ namespace Pattons_Best
             return;
          }
          myScrollViewerClient.Content = userControl;
-         //-------------------------------
       }
 
    }

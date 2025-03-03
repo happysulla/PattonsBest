@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 using WpfAnimatedGif;
 
 namespace Pattons_Best
@@ -31,7 +34,6 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myCanvas=null");
             return;
          }
-         return;
          switch (action)
          {
             case GameAction.RemoveSplashScreen:
@@ -47,11 +49,15 @@ namespace Pattons_Best
                ShowBattleMap(myCanvas);
                break;
             case GameAction.SetupShowAfterActionReport:
-               if( false == ShowAfterActionReport(gi, myCanvas))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowAfterActionReport() returned false");
+               if (false == ShowAfterActionReportDialog(gi, myCanvas, true))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowAfterActionReportDialog() returned false for a=" + action.ToString());
+               break;
+            case GameAction.MorningBriefingWeatherRoll:
+               if ( false == ShowAfterActionReportDialog(gi, myCanvas, false))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowAfterActionReportDialog() returned false for a=" + action.ToString());
                break;
             case GameAction.SetupShowCombatCalendarCheck:
-               ShowCombatCalendar(myCanvas);
+               ShowCombatCalendarDialog(myCanvas);
                break;
             case GameAction.EndGameWin:
                ShowEndGameSuccess(myCanvas);
@@ -64,9 +70,39 @@ namespace Pattons_Best
          }
       }
       //-------------------------------------------------
+      private void CleanCanvas(Canvas c)
+      {
+         List<UIElement> elements = new List<UIElement>();
+         foreach (UIElement ui in c.Children)
+         {
+            if (ui is AfterActionReportUserControl)
+               elements.Add(ui);
+            if (ui is Polygon polygon)
+               elements.Add(ui);
+            if (ui is Polyline polyline)
+               elements.Add(ui);
+            if (ui is Ellipse ellipse)
+            {
+               if ("CenterPoint" != ellipse.Name) // CenterPoint is a unit test ellipse
+                  elements.Add(ui);
+            }
+            if (ui is System.Windows.Controls.Label label)  // A Game Feat Label
+               elements.Add(ui);
+            if (ui is Image img)
+            {
+               if (true == img.Name.Contains("Die"))
+                  continue;
+               elements.Add(ui);
+            }
+            if (ui is TextBlock tb)
+               elements.Add(ui);
+         }
+         foreach (UIElement ui1 in elements)
+            c.Children.Remove(ui1);
+      }
       private void ShowInitialScreen(Canvas c)
       {
-         Image img = new Image() { Name = "Map", Width = 1617, Height = 880, Source = MapItem.theMapImages.GetBitmapImage("Sherman3") };
+         Image img = new Image() { Name = "Canvas", Width = 1617, Height = 880, Source = MapItem.theMapImages.GetBitmapImage("Sherman3") };
          c.Children.Add(img);
          double x = (c.ActualWidth - img.Width) * 0.5;
          double y = (c.ActualHeight - img.Height) * 0.5;
@@ -75,38 +111,38 @@ namespace Pattons_Best
       }
       private void ShowHistoricalMap(Canvas c)
       {
-         c.Children.Clear();
-         Image img = new Image() { Name = "Map", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapHistorical") };
+         CleanCanvas(c);
+         Image img = new Image() { Name = "Canvas", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapHistorical") };
          c.Children.Add(img);
          Canvas.SetLeft(img, 0);
          Canvas.SetTop(img, 0);
       }
       private void ShowMovementMap(Canvas c)
       {
-         c.Children.Clear();
-         Image img = new Image() { Name = "Map", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapMovement") };
+         CleanCanvas(c);
+         Image img = new Image() { Name = "Canvas", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapMovement") };
          c.Children.Add(img);
          Canvas.SetLeft(img, 0);
          Canvas.SetTop(img, 0);
       }
       private void ShowBattleMap(Canvas c)
       {
-         c.Children.Clear();
-         Image img = new Image() { Name = "Map", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapBattle") };
+         CleanCanvas(c);
+         Image img = new Image() { Name = "Canvas", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapBattle") };
          c.Children.Add(img);
          Canvas.SetLeft(img, 0);
          Canvas.SetTop(img, 0);
       }
-      private bool ShowAfterActionReport(IGameInstance gi, Canvas c)
+      private bool ShowAfterActionReportDialog(IGameInstance gi, Canvas c, bool isEditable)
       {
-         if (0 == gi.Reports.Count)
+         IAfterActionReport? report = gi.Reports.GetLast();
+         if (null == report)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowAfterActionReport(): gi.Reports.Count = 0");
+            Logger.Log(LogEnum.LE_ERROR, "ShowAfterActionReportDialog():  gi.Reports.GetLast()=null");
             return false;
          }
-         IAfterActionReport report = gi.Reports[gi.Reports.Count - 1];
-         AfterActionReportUserControl aarControl = new AfterActionReportUserControl(report, true);
-         c.Children.Clear();
+         AfterActionReportUserControl aarControl = new AfterActionReportUserControl(report, isEditable);
+         CleanCanvas(c);
          c.Children.Add(aarControl);
          c.UpdateLayout();
          double x = (c.ActualWidth - aarControl.ActualWidth) * 0.5;
@@ -115,10 +151,10 @@ namespace Pattons_Best
          Canvas.SetTop(aarControl, y);
          return true;
       }
-      private void ShowCombatCalendar(Canvas c)
+      private void ShowCombatCalendarDialog(Canvas c)
       {
-         c.Children.Clear();
-         Image img = new Image() { Name = "Map", Width = 1115, Height = 880, Source = MapItem.theMapImages.GetBitmapImage("CombatCalendar") };
+         CleanCanvas(c);
+         Image img = new Image() { Name = "Canvas", Width = 1115, Height = 880, Source = MapItem.theMapImages.GetBitmapImage("CombatCalendar") };
          c.Children.Add(img);
          Canvas.SetLeft(img, 0);
          Canvas.SetTop(img, 0);

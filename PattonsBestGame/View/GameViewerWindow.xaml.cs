@@ -163,7 +163,8 @@ namespace Pattons_Best
          Utilities.theBrushRegionClear.Color = Color.FromArgb(0, 0, 0x01, 0x0); // nearly transparent but slightly colored
          Utilities.theBrushControlButton.Color = Color.FromArgb(0xFF, 0x43, 0x33, 0xFF); // menu blue
          Utilities.theBrushScrollViewerActive.Color = Color.FromArgb(0xFF, 0xB9, 0xEA, 0x9E); // light green 
-         Utilities.theBrushScrollViewerInActive.Color = Color.FromArgb(0x17, 0x00, 0x00, 0x00); // gray
+         //Utilities.theBrushScrollViewerInActive.Color = Color.FromArgb(0x17, 0x00, 0x00, 0x00); // gray
+         Utilities.theBrushScrollViewerInActive.Color = Colors.LightGray;
          //---------------------------------------------------------------                                                                         
          mySolidColorBrushClear.Color = Color.FromArgb(0, 0, 1, 0); // Create standard color brushes
          mySolidColorBrushBlack.Color = Colors.Black;
@@ -254,24 +255,30 @@ namespace Pattons_Best
          }
          switch (action)
          {
-            case GameAction.SetupShowMapHistorical:
-            case GameAction.SetupShowMovementBoard:
-            case GameAction.SetupShowBattleBoard:
-            case GameAction.SetupShowAfterActionReport:
-            case GameAction.SetupShowCombatCalendarCheck:
-            case GameAction.ShowCombatCalendar:
-            case GameAction.ShowAfterActionReport:
-            case GameAction.ShowInventory:
-            case GameAction.ShowRuleListing:
-            case GameAction.ShowEventListing:
-            case GameAction.ShowReportErrorDialog:
-            case GameAction.ShowAboutDialog:
             case GameAction.UnitTestStart:
             case GameAction.UnitTestCommand:
             case GameAction.UnitTestNext:
             case GameAction.UnitTestCleanup:
                break;
-            case GameAction.CombatCalendarRoll:
+            case GameAction.ShowCombatCalendarDialog:
+            case GameAction.ShowAfterActionReportDialog:
+            case GameAction.ShowInventoryDialog:
+            case GameAction.ShowRuleListingDialog:
+            case GameAction.ShowEventListingDialog:
+            case GameAction.ShowReportErrorDialog:
+            case GameAction.ShowAboutDialog:
+               break;
+            case GameAction.SetupShowMapHistorical:
+            case GameAction.SetupShowMovementBoard:
+            case GameAction.SetupShowBattleBoard:
+            case GameAction.SetupShowTankCard:
+            case GameAction.SetupShowAfterActionReport:
+            case GameAction.SetupShowCombatCalendarCheck:
+            case GameAction.SetupCombatCalendarRoll:
+               break;
+            case GameAction.MorningBriefingBegin:
+            case GameAction.MorningBriefingCalendarRoll:
+            case GameAction.MorningBriefingEnd:
                break;
             case GameAction.EndGameWin:
             case GameAction.EndGameLost:
@@ -489,7 +496,7 @@ namespace Pattons_Best
                elements.Add(ui);
             if (ui is Image img)
             {
-               if ("Map" == img.Name)
+               if ("Canvas" == img.Name)
                   continue;
                elements.Add(ui);
             }

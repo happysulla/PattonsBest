@@ -60,4 +60,21 @@ namespace Pattons_Best
       bool IsKnockedOut { get; set; }
 
    }
+   public interface IAfterActionReports : System.Collections.IEnumerable
+   {
+      int Count { get; }
+      void Add(IAfterActionReport aar);
+
+      void Insert(int index, IAfterActionReport aar);
+      void Clear();
+      bool Contains(IAfterActionReport aar);
+      IAfterActionReport? Find(string day);
+      IAfterActionReport? GetLast();
+      int IndexOf(IAfterActionReport aar);
+      void Remove(IAfterActionReport aar);
+      IAfterActionReport? Remove(string day);
+      IAfterActionReport? RemoveAt(int index);
+      IAfterActionReport? RemoveLast();
+      IAfterActionReport? this[int index] { get; set; }
+   }
 }
