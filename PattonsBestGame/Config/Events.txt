@@ -7,11 +7,16 @@ You can explore what may happen by showing inactive events. Inactive events have
                <InlineUIContainer><Image Name='Tutorial0' Height='70'  Width='370'> </Image></InlineUIContainer>
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Name='Read_Rules' Content='Read Rules' FontFamily='Courier New'  FontSize='12'> </Button></InlineUIContainer> or <InlineUIContainer><Button Name='Begin' Content='Begin Game' FontFamily='Courier New'  FontSize='12'> </Button></InlineUIContainer>"
-e001	"<Bold>e001 Fourth Armor Division Campaign</Bold> <InlineUIContainer><Button Content='r1.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+e001	"<Bold>e001 Fourth Armor Division Campaign</Bold> 
+<InlineUIContainer><Button Content='r1.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
 The campaign game of <Bold>Patton' Best</Bold> recreates the actions of the 4th Armored Division from late July 1944 through April 1945. 
 <LineBreak/><LineBreak/>
-Each day begins with a check of the Combat <InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> to see what the Division was doing on that day. The four possibilities are Refitting <InlineUIContainer><Button Content='r27.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, an Advance scenario <InlineUIContainer><Button Content='r20.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, a Battle scenario <InlineUIContainer><Button Content='r20.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, or a Counterattack scenario <InlineUIContainer><Button Content='r20.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  Click image to continue.
+Each day begins with a check of the Combat 
+<InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> to see what the Division was doing on that day. The four possibilities are Refitting 
+<InlineUIContainer><Button Content='r27.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, an Advance scenario <InlineUIContainer><Button Content='r20.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, a Battle scenario 
+<InlineUIContainer><Button Content='r20.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, or a Counterattack scenario 
+<InlineUIContainer><Button Content='r20.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  Click image to continue.
 <LineBreak/><LineBreak/>
                                             <InlineUIContainer><Image Name='Continue001' Height='100' Width='100'></Image></InlineUIContainer>"
 e002	"<Bold>e002 Movement Board</Bold> <InlineUIContainer><Button Content='r2.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
@@ -50,7 +55,7 @@ Expected Resistance: RESISTANCE<LineBreak/>
 Probablility of Combat: PROBABILITY &gt;= 
 <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/>"
-e007	"<Bold>e007 Morning Briefing - Weather Roll</Bold> 
+e007	"<Bold>e007 Morning Briefing - Weather Roll</Bold> <InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
 The 
 <InlineUIContainer><Button Content='Weather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 

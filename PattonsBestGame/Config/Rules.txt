@@ -106,13 +106,13 @@ r4.2	"<Bold>r4.2 Morning Briefing</Bold>
 <LineBreak/><LineBreak/>
 Perform these actions using After Action Report (AAR) <InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>:
 <LineBreak/><LineBreak/>
--- A new AAR is created with the new date and scenario code. 
--- If a new tank is required, consult the Tank Replacement Table per <InlineUIContainer><Button Content='r24.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. <LineBreak/>
--- If you want to change, give your new tank a name by clicking on the Tank Name.<LineBreak/>
--- If you want to change, click on names of your crew members. You are the tank commander so change your name on that row. See 
-<InlineUIContainer><Button Content='r7.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for adding new men<LineBreak/>
--- The weather table is used to determine the weather for the day<LineBreak/>
--- Load ammo per <InlineUIContainer><Button Content='r16.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. <LineBreak/>"
+-- A new AAR is created with the new date and scenario code. <LineBreak/><LineBreak/>
+-- If a new tank is required, consult the Tank Replacement Table per <InlineUIContainer><Button Content='r24.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. <LineBreak/><LineBreak/>
+-- As part of setup or when you have a new tank, you can change name by clicking on the Tank Name.<LineBreak/><LineBreak/>
+-- As part of setup or when you have a new tank, see 
+<InlineUIContainer><Button Content='r7.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for adding new men. Click on names of your crewmen if you want to change their names. <LineBreak/><LineBreak/>
+-- The <InlineUIContainer><Button Content='Weather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table is used to determine the weather for the day.<LineBreak/><LineBreak/>
+-- Load ammo per <InlineUIContainer><Button Content='r16.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. "
 r4.3	"<Bold>r4.3 Time Check Using the Time Tables</Bold> 
 <LineBreak/><LineBreak/>
 Determine the hours of sunrise and sunset for the current month. On the After Action Report (AAR), the time is blocked out accordingly. Only the remaining time is available for play this day.
@@ -131,7 +131,7 @@ The higher the crew member's rating, the more successful he will be trying to sp
 r7.1	"<Bold>r7.1 Ratings for New Men</Bold> 
 <LineBreak/><LineBreak/>
 Determine the rating for a new crew member by rolling 1D/2 rounded up. For example, a roll of five results in a rating of 3.  
-<LineBreak/><LineBreak/>When rolling for more than one new crewman, assign the rating after all have been rolled for. 
+<LineBreak/><LineBreak/>When rolling for more than one new crewman, assign the rating after all rolls have been performed for all new men. 
 <LineBreak/><LineBreak/>
 For example, if rolling for an entire crew, roll five ratings and then assign to men as you wish. It is suggested that the higher ratings be allocated in this order: Commander, Gunner, Driver, Loader, and Assistant Driver."
 r7.2	"<Bold>r7.2 Ratings Improvement</Bold> 
@@ -197,13 +197,13 @@ r19.21	"<Bold>r19.21 Non-Serious Wounds</Bold>
 As long as a crew member does not take a wound that puts him out of action for a week or more, he may continue to function normally."
 r19.22	"<Bold>r19.22 Serious Wounds</Bold> 
 <LineBreak/><LineBreak/>
-If a crew member takes a wound that uts him out of action for one week or more, he is incapacitated and immediately ceases performing any crew actions. 
+If a crew member takes a wound that puts him out of action for one week or more, he is incapacitated and immediately ceases performing any crew actions. 
 Note incapacitated crewmen in the notes section of the After Action Report (AAR) 
 <InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
 <LineBreak/><LineBreak/>
 The assistant driver may move through the tank to replace any one incapacitated crewmen. An incapacitated driver is moved to the assistant driver's position, and incapacitated men in the turret are placed on the turret floor.
 <LineBreak/><LineBreak/>
-While occupying any other position except driver, the assistant driver's rating is havled (rounded down). This change takes one full round."
+While occupying any other position except driver, the assistant driver's rating is halved (rounded down). This change takes one full round."
 r19.3	"<Bold>r19.3 Replacing Crew Casualties</Bold> 
 <LineBreak/><LineBreak/>
 A tank with one or more incapacitated crew members must continue to function to the best of its remaining ability until either the battle ends, the tank is knocked out, or the tank is able to retreat out of the area 
@@ -227,6 +227,15 @@ r19.33	"<Bold>r19.33 Crewmen Rejoining Crew</Bold>
 <LineBreak/><LineBreak/> Wounded crewmen who are out for a number of weeks may rejoin your crew the day after their period of convalescence is over.
 <LineBreak/><LineBreak/>For example, a man wounded on the 5th of the month and is out one week is eligible to rejoin your crew the morning of the 13th. 
 <LineBreak/><LineBreak/>If you do not bring back crewmen when they are eligible, they may never rejoin. Returning crewmen retain the crew ratings they had when wounded."
+r20.0	"<Bold>r20.0 Campaign</Bold>
+<LineBreak/><LineBreak/>The campaign recreates actions of the 4th Armored Division from late July, 1944 through April, 1945. Each day the 4th Armored saw action,
+there is a chance your tank will fight; when the Division is refitting, you will be resting. Each day begins with a check of the Combat <InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r20.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>Combat Calendar<LineBreak/>
+<InlineUIContainer><Button Content='r20.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Advance Scenario<LineBreak/>
+<InlineUIContainer><Button Content='r20.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Battle Scenario<LineBreak/>
+<InlineUIContainer><Button Content='r20.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> CounterAttack Scenario<LineBreak/>
+"
 r20.1	"<Bold>r20.1 Combat Calendar</Bold>
 <LineBreak/><LineBreak/>
 For each day of the campaign, the Combat <InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
@@ -307,11 +316,11 @@ Delete steps <InlineUIContainer><Button Content='r4.61' FontFamily='Courier New'
 If no Ambush occurs, go to the Battle Round Sequence 
 <InlineUIContainer><Button Content='r4.7' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. If an Ambush does occur, do not conduct Enemy Actions, but instead perform the following steps:
 <LineBreak/><LineBreak/>
--- For your tank, go to Battle Sequence <InlineUIContainer><Button Content='r4.72' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> -> 
+For your tank, go to Battle Sequence <InlineUIContainer><Button Content='r4.72' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> -> 
 <InlineUIContainer><Button Content='r4.74' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
--- Perform step <InlineUIContainer><Button Content='r4.76' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>: Friendly Action Phase <LineBreak/>
--- Perform step <InlineUIContainer><Button Content='r4.77' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>: Random Events Phase<LineBreak/>
--- Go to step 4.7: Battle Round Sequence
+Perform step <InlineUIContainer><Button Content='r4.76' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>: Friendly Action Phase <LineBreak/>
+Perform step <InlineUIContainer><Button Content='r4.77' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>: Random Events Phase<LineBreak/>
+Go to Battle Round Sequence <InlineUIContainer><Button Content='r4.7' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
 If you clear the Battle Board, go to <InlineUIContainer><Button Content='r20.44' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> <LineBreak/>
 If you retreat from the Battle Board, go to <InlineUIContainer><Button Content='r20.45' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>"
@@ -327,113 +336,25 @@ If you retreat from the Battle Board, mark off 15 minutes and record the loss of
 Move your Task Force marker one area on the Movement Board in the direction of the Exit marker by the shortest route. If two or more areas are equally close, you may choose either one.
 <LineBreak/><LineBreak/>
 Go back to Prepare for Battle <InlineUIContainer><Button Content='r20.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+r21.0	"<Bold>r21.0 Time</Bold>
+<LineBreak/><LineBreak/>
+The length of a day of battle is determined by the passage of time. On the After Action Report (AAR) 
+<InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+is a section to mark time, where the hours 0500 through 1900 are each divided into four 15 minute blocks. The exception is 1900 because sunset will occur no later than 19:15.
+<LineBreak/><LineBreak/>
+During the Time Check Phase <InlineUIContainer><Button Content='r4.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+of the sequence of play, the <InlineUIContainer><Button Content='Sunrise-Sunset' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table is used to determine the nours of sunrise and sunset. 
+<LineBreak/><LineBreak/>Time is marked out according to rolls on this table.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r21.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Sunrise <LineBreak/>
+<InlineUIContainer><Button Content='r21.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Marking Time<LineBreak/>
+<InlineUIContainer><Button Content='r21.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Sunset"
+r21.1	"<Bold>r21.1 Sunrise</Bold>
+<LineBreak/><LineBreak/>"
+r21.2	"<Bold>r21.2 Marking Time</Bold>
+<LineBreak/><LineBreak/>"
+r21.3	"<Bold>r21.3 Sunset</Bold>
+<LineBreak/><LineBreak/>"
 	
 	
 	
