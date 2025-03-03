@@ -47,13 +47,16 @@ Otherwise continue with next day check.
 <LineBreak/><LineBreak/>
 Date from Combat Calendar: DATE<LineBreak/>
 Expected Resistance: RESISTANCE<LineBreak/>
-Probablility of Combat: PROBABILITY &gt;= <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>
+Probablility of Combat: PROBABILITY &gt;= 
+<InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/>"
 e007	"<Bold>e007 Morning Briefing - Weather Roll</Bold> 
 <LineBreak/><LineBreak/>
-Consult weather table <InlineUIContainer><Button Content='tWeather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> after rolling to determine weather for today:
-<InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer><LineBreak/>
-"
+The 
+<InlineUIContainer><Button Content='Weather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+ Table determines weather for today:  
+<InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>
+<LineBreak/>"
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"
 e502	"<Bold>e502 Game Lost</Bold>

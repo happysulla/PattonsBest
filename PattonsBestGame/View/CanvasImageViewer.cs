@@ -52,7 +52,7 @@ namespace Pattons_Best
                if (false == ShowAfterActionReportDialog(gi, myCanvas, true))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowAfterActionReportDialog() returned false for a=" + action.ToString());
                break;
-            case GameAction.MorningBriefingWeatherRoll:
+            case GameAction.MorningBriefingBegin:
                if ( false == ShowAfterActionReportDialog(gi, myCanvas, false))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowAfterActionReportDialog() returned false for a=" + action.ToString());
                break;

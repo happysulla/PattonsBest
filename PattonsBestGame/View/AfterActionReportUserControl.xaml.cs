@@ -33,7 +33,7 @@ namespace Pattons_Best
       public static SolidColorBrush theBrushInActive = new SolidColorBrush() { Color = Colors.LightGray };
       private readonly FontFamily myFontFam0 = new FontFamily("Arial Rounded MT Bold");
       private readonly FontFamily myFontFam1 = new FontFamily("Courier New");
-
+      //-----------------------------------------------------------------------------------
       public AfterActionReportUserControl(IAfterActionReport report, bool isEditable = false)
       {
          InitializeComponent();
@@ -55,11 +55,9 @@ namespace Pattons_Best
          s = AddSpaces(report.Name, HEADER_INFO_LEN);
          mySpanTankName.Inlines.Clear();
          mySpanTankName.Inlines.Add(new Run(s));
-         if (true == myIsEditable)
-         {
-            mySpanTankName.IsEnabled = true;
+         mySpanTankName.IsEnabled = myIsEditable;
+         if (true == mySpanTankName.IsEnabled)
             mySpanTankName.Background = theBrushInActive;
-         }
          //----------------------------------
          s = AddSpaces(report.Model.ToString(), HEADER_INFO_LEN);
          mySpanTankModel.Inlines.Clear();
@@ -78,51 +76,41 @@ namespace Pattons_Best
          s = AddSpaces(report.Commander.myName, CREW_NAME_LEN);
          mySpanCommanderName.Inlines.Clear();
          mySpanCommanderName.Inlines.Add(new Run(s));
-         if (true == myIsEditable)
-         {
-            mySpanCommanderName.IsEnabled = true;
+         mySpanCommanderName.IsEnabled = myIsEditable;
+         if (true == mySpanCommanderName.IsEnabled)
             mySpanCommanderName.Background = theBrushInActive;
-         }
          //----------------------------------
          myRunGunnerRating.Text = report.Gunner.myRating.ToString();
          s = AddSpaces(report.Gunner.myName, CREW_NAME_LEN);
          mySpanGunnerName.Inlines.Clear();
          mySpanGunnerName.Inlines.Add(new Run(s));
-         if (true == myIsEditable)
-         {
-            mySpanGunnerName.IsEnabled = true;
+         mySpanGunnerName.IsEnabled = myIsEditable;
+         if (true == mySpanGunnerName.IsEnabled)
             mySpanGunnerName.Background = theBrushInActive;
-         }
          //----------------------------------
          myRunLoaderRating.Text = report.Loader.myRating.ToString();
          s = AddSpaces(report.Loader.myName, CREW_NAME_LEN);
          mySpanLoaderName.Inlines.Clear();
          mySpanLoaderName.Inlines.Add(new Run(s));
-         if (true == myIsEditable)
-         {
-            mySpanLoaderName.IsEnabled = true;
+         mySpanLoaderName.IsEnabled = myIsEditable;
+         if (true == mySpanLoaderName.IsEnabled)
             mySpanLoaderName.Background = theBrushInActive;
-         }
          //----------------------------------
          myRunDriverRating.Text = report.Driver.myRating.ToString();
          s = AddSpaces(report.Driver.myName, CREW_NAME_LEN);
          mySpanDriverName.Inlines.Clear();
          mySpanDriverName.Inlines.Add(new Run(s));
-         if (true == myIsEditable)
-         {
-            mySpanDriverName.IsEnabled = true;
+         mySpanDriverName.IsEnabled = myIsEditable;
+         if (true == mySpanDriverName.IsEnabled)
             mySpanDriverName.Background = theBrushInActive;
-         }
          //----------------------------------
          myRunAssistantRating.Text = report.Assistant.myRating.ToString();
          s = AddSpaces(report.Assistant.myName, CREW_NAME_LEN);
          mySpanAssistantName.Inlines.Clear();
          mySpanAssistantName.Inlines.Add(new Run(s));
-         if (true == myIsEditable)
-         {
-            mySpanAssistantName.IsEnabled = true;
+         mySpanAssistantName.IsEnabled = myIsEditable;
+         if (true == mySpanAssistantName.IsEnabled)
             mySpanAssistantName.Background = theBrushInActive;
-         }
          //----------------------------------
          myRunAmmo30Calibre.Text = report.Ammo30CalibreMG.ToString();
          myRunAmmo50Calibre.Text = report.Ammo50CalibreMG.ToString();
@@ -150,7 +138,6 @@ namespace Pattons_Best
          //----------------------------------
          return true;
       }
-      //-----------------------------------------------------------------------------------
       public string AddSpaces(string s, int length)
       {
          if (length < s.Length)
@@ -168,6 +155,8 @@ namespace Pattons_Best
       //-------------------------CONTROLLER FUNCTIONS--------------------------------
       private void SpanTankName_MouseDown(object sender, MouseButtonEventArgs e)
       {
+         if (false == myIsEditable)
+            return;
          ResetTextBoxes();
          myIsEditableTankName = true;
          mySpanTankName.Inlines.Clear();
@@ -181,6 +170,8 @@ namespace Pattons_Best
       }
       private void SpanCommanderName_MouseDown(object sender, MouseButtonEventArgs e)
       {
+         if (false == myIsEditable)
+            return;
          ResetTextBoxes();
          myIsEditableCommanderName = true;
          mySpanCommanderName.Inlines.Clear();
@@ -194,6 +185,8 @@ namespace Pattons_Best
       }
       private void SpanGunnerName_MouseDown(object sender, MouseButtonEventArgs e)
       {
+         if (false == myIsEditable)
+            return;
          ResetTextBoxes();
          myIsEditableGunnerName = true;
          mySpanGunnerName.Inlines.Clear();
@@ -207,6 +200,8 @@ namespace Pattons_Best
       }
       private void SpanLoaderName_MouseDown(object sender, MouseButtonEventArgs e)
       {
+         if (false == myIsEditable)
+            return;
          ResetTextBoxes();
          myIsEditableLoaderName = true;
          mySpanLoaderName.Inlines.Clear();
@@ -220,6 +215,8 @@ namespace Pattons_Best
       }
       private void SpanDriverName_MouseDown(object sender, MouseButtonEventArgs e)
       {
+         if (false == myIsEditable)
+            return;
          ResetTextBoxes();
          myIsEditableDriverName = true;
          mySpanDriverName.Inlines.Clear();
@@ -233,6 +230,8 @@ namespace Pattons_Best
       }
       private void SpanAssistantName_MouseDown(object sender, MouseButtonEventArgs e)
       {
+         if (false == myIsEditable)
+            return;
          ResetTextBoxes();
          myIsEditableAssistantName = true;
          mySpanAssistantName.Inlines.Clear();

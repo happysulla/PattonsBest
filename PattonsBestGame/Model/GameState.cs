@@ -281,7 +281,7 @@ namespace Pattons_Best
                gi.EventDisplayed = gi.EventActive; // next screen to show
                break;
             case GameAction.MorningBriefingCalendarRoll:
-               dieRoll = 9; // <cgs> TEST
+               dieRoll = 0; // <cgs> TEST
                gi.DieResults[key][0] = dieRoll;
                break;
             case GameAction.MorningBriefingBegin:
