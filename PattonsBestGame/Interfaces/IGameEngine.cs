@@ -142,6 +142,8 @@ namespace Pattons_Best
       SetupFinalize,
 
       MorningBriefingBegin,
+      MorningBriefingAssignCrewRating,
+      MorningBriefingAssignCrewRatingEnd,
       MorningBriefingCalendarRoll,
       MorningBriefingWeatherRoll,
       MorningBriefingEnd,

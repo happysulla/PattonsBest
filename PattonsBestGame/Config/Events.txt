@@ -39,7 +39,9 @@ The upper right image is the Tank Card. The game starts with the basic M4 Sherma
                                  <InlineUIContainer><Image Name='m001M4'  Height='200' Width='200'></Image></InlineUIContainer>"
 e005	"<Bold>e005 After Action Report (AAR)</Bold> <InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
-The events of each engagement or day of battle are recorded as they unfold on the After Action Report. At this time, you may elect to change the name of the tank or the names of your crew by clicking on the appropriate location on the form. When ready, click image below to continue.
+The events of each engagement or day of battle are recorded as they unfold on the After Action Report. At this time, you may elect to change the name of the tank or the names of your crew by clicking on the appropriate location on the form. 
+<LineBreak/><LineBreak/>When ready, click image below to assign crew ratings to your new crew per 
+<InlineUIContainer><Button Content='r7.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
                                             <InlineUIContainer><Image Name='Continue005' Height='100' Width='100'></Image></InlineUIContainer>"
 e006	"<Bold>e006 Combat Calendar Check</Bold> 

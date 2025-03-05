@@ -158,6 +158,11 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateView() myScrollViewerTextBlock=null");
             return;
          }
+         if (null == myDieRoller)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateView() myDieRoller=null");
+            return;
+         }
          gi.IsGridActive = true;
          switch (action)
          {
@@ -248,6 +253,13 @@ namespace Pattons_Best
                   return;
                }
                dialogTableListing.Show();
+               break;
+            case GameAction.MorningBriefingAssignCrewRating:
+               EventViewerE071CrewMgr newCrewMgr = new EventViewerE071CrewMgr(myGameInstance, myCanvas, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
+               if (true == newCrewMgr.CtorError)
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): newCrewMgr.CtorError=true");
+               else if (false == newCrewMgr.AssignNewCrewRatings(ShowE071CrewRatings))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): AssignNewCrewRatings() returned false");
                break;
             case GameAction.UpdateEventViewerDisplay:
                gi.IsGridActive = false;
@@ -666,6 +678,31 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
          myGameEngine.PerformAction(ref myGameInstance, ref action, dieRoll);
       }
+      public bool ShowE071CrewRatings()
+      {
+         if( null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowE071CrewRatings(): myGameInstance=null");
+            return false;
+         }
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowE071CrewRatings(): myGameEngine=null");
+            return false;
+         }
+         GameAction outAction = GameAction.Error;
+         if( GamePhase.GameSetup == myGameInstance.GamePhase ) 
+            outAction = GameAction.SetupShowCombatCalendarCheck;
+         else
+            outAction = GameAction.MorningBriefingAssignCrewRatingEnd;
+         StringBuilder sb11 = new StringBuilder("     ######ShowE071CrewRatings() :");
+         sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
+         sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
+         sb11.Append(" a="); sb11.Append(outAction.ToString());
+         Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+         return true;
+      }
       //--------------------------------------------------------------------
       private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
       {
@@ -751,7 +788,7 @@ namespace Pattons_Best
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
                            case "Continue005":
-                              action = GameAction.SetupShowCombatCalendarCheck;
+                              action = GameAction.MorningBriefingAssignCrewRating;
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
                            case "GotoMorningBriefing":

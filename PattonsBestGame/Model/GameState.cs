@@ -148,7 +148,7 @@ namespace Pattons_Best
                gi.Statistic.Clear();         // Clear any current statitics
                gi.Statistic.myNumGames = 1;  // Set played games to 1
                //----------------------------------------------------
-               ICombatCalendarEntry? entry = GameEngine.theCombatCalendarEntries[0];
+               ICombatCalendarEntry? entry = TableMgr.theCombatCalendarEntries[0];
                if( null == entry )
                {
                   returnStatus = "PerformAutoSetup() returned false";
@@ -284,6 +284,8 @@ namespace Pattons_Best
                dieRoll = 0; // <cgs> TEST
                gi.DieResults[key][0] = dieRoll;
                break;
+            case GameAction.MorningBriefingAssignCrewRating:
+               break;
             case GameAction.MorningBriefingBegin:
                gi.EventDisplayed = gi.EventActive = "e007";
                gi.DieRollAction = GameAction.MorningBriefingWeatherRoll;
@@ -294,7 +296,7 @@ namespace Pattons_Best
                break;
             case GameAction.MorningBriefingEnd:
                ++gi.Day;
-               ICombatCalendarEntry? newEntry = GameEngine.theCombatCalendarEntries[gi.Day];
+               ICombatCalendarEntry? newEntry = TableMgr.theCombatCalendarEntries[gi.Day];
                if (null == newEntry)
                {
                   returnStatus = "newEntry=null";
