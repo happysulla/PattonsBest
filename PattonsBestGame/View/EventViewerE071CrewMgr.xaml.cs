@@ -238,7 +238,7 @@ namespace Pattons_Best
          switch (myState)
          {
             case E071Enum.ROLL_RATING:
-               foreach(IMapItem mi in myAssignables)
+               foreach (IMapItem mi in myAssignables)
                {
                   Button b = CreateButton(mi, NO_ENABLE, false, IS_STATS, NO_ADORN, NO_CURSOR);
                   myStackPanelAssignable.Children.Add(b);
@@ -279,7 +279,7 @@ namespace Pattons_Best
             int rowNum = i + STARTING_ASSIGNED_ROW;
             GridRow row = myGridRows[i];
             //------------------------------------
-            if( null == row.myMapItem)
+            if (null == row.myMapItem)
             {
                Rectangle r = new Rectangle()
                {
@@ -348,7 +348,13 @@ namespace Pattons_Best
       private Button CreateButton(IMapItem mi, bool isEnabled, bool isRectangleAdded, bool isStatsShown, bool isAdornmentsShown, bool isCursor)
       {
          System.Windows.Controls.Button b = new System.Windows.Controls.Button { };
-         b.Name = mi.Name;
+         ICrewMember? crewMember = (ICrewMember)mi;
+         if (null == crewMember)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateButton(): crewMember=null");
+            return b;
+         }
+         b.Name = crewMember.Role;
          if (true == isCursor)
          {
             b.Width = Utilities.theMapItemSize;
@@ -439,52 +445,101 @@ namespace Pattons_Best
             return;
          }
          //--------------------------------------------------
+         if (E071Enum.ASSIGN_CREWMEN == myState) // if any crewman is not assigned, continue in same state
+         {
+            myState = E071Enum.END;
+            for (int j = 0; j < myMaxRowCount; ++j)
+            {
+               if (null == myGridRows[j].myMapItem)
+                  myState = E071Enum.ASSIGN_CREWMEN;
+            }
+         }
+         //--------------------------------------------------
          System.Windows.Point p = e.GetPosition((UIElement)sender);
          HitTestResult result = VisualTreeHelper.HitTest(myGrid, p);  // Get the Point where the hit test occurrs
          foreach (UIElement ui in myGrid.Children)
          {
-            if (ui is StackPanel panel)
+            if (null != myMapItemDragged) // If dragging something, check if dragged to rectangle either in StackPanel or GridRow
             {
-               foreach (UIElement ui1 in panel.Children)
+               if (ui is StackPanel panel)  // First check all rectangles in the myStackPanelAssignable
                {
-                  if (ui1 is Image img) // Check all images within the myStackPanelAssignable
+                  foreach (UIElement ui1 in panel.Children)
                   {
-                     if (result.VisualHit == img)
+                     if (ui1 is Rectangle rect)
                      {
-                        string name = (string)img.Tag;
-                        if ("AAR" == name)
-                           myState = E071Enum.END;
-                        if ("DieRoll" == name)
+                        if (result.VisualHit == rect)
                         {
-                           if (false == myIsRollInProgress)
-                           {
-                              myIsRollInProgress = true;
-                              RollEndCallback callback = ShowDieResults;
-                              myDieRoller.RollMovingDie(myCanvas, callback);
-                              img.Visibility = Visibility.Hidden;
-                           }
+                           myAssignables.Add(myMapItemDragged);
+                           myGrid.Cursor = Cursors.Arrow;
+                           myMapItemDragged = null;
+                           if (false == UpdateGrid())
+                              Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): UpdateGrid() return false");
                            return;
                         }
-                        if (false == UpdateGrid())
-                           Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): UpdateGrid() return false");
-                        return;
                      }
                   }
                }
-            }
-            if (ui is Image img1) // next check all images within the Grid Rows
-            {
-               if (result.VisualHit == img1)
+               else if (ui is Rectangle rect) // next check all rectangles in the grid rows
                {
-                  if (false == myIsRollInProgress)
+                  if (result.VisualHit == rect)
                   {
-                     myRollResultRowNum = Grid.GetRow(img1);
-                     myIsRollInProgress = true;
-                     RollEndCallback callback = ShowDieResults;
-                     myDieRoller.RollMovingDie(myCanvas, callback);
-                     img1.Visibility = Visibility.Hidden;
+                     myGrid.Cursor = Cursors.Arrow;
+                     int rowNum = Grid.GetRow(rect);
+                     int i = rowNum - STARTING_ASSIGNED_ROW;
+                     myGridRows[i].myMapItem = myMapItemDragged;
+                     
+                     myMapItemDragged = null;
+                     if (false == UpdateGrid())
+                        Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): UpdateGrid() return false");
+                     return;
                   }
-                  return;
+               }
+            } // end if (null != myMapItemDragged)
+            else //----------------------NOT DRAGGING-------------------------------------
+            {
+               if (ui is StackPanel panel)
+               {
+                  foreach (UIElement ui1 in panel.Children)
+                  {
+                     if (ui1 is Image img) // Check all images within the myStackPanelAssignable
+                     {
+                        if (result.VisualHit == img)
+                        {
+                           string name = (string)img.Tag;
+                           if ("AAR" == name)
+                              myState = E071Enum.END;
+                           if ("DieRoll" == name)
+                           {
+                              if (false == myIsRollInProgress)
+                              {
+                                 myIsRollInProgress = true;
+                                 RollEndCallback callback = ShowDieResults;
+                                 myDieRoller.RollMovingDie(myCanvas, callback);
+                                 img.Visibility = Visibility.Hidden;
+                              }
+                              return;
+                           }
+                           if (false == UpdateGrid())
+                              Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): UpdateGrid() return false");
+                           return;
+                        }
+                     }
+                  }
+               }
+               if (ui is Image img1) // next check all images within the Grid Rows
+               {
+                  if (result.VisualHit == img1)
+                  {
+                     if (false == myIsRollInProgress)
+                     {
+                        myRollResultRowNum = Grid.GetRow(img1);
+                        myIsRollInProgress = true;
+                        RollEndCallback callback = ShowDieResults;
+                        myDieRoller.RollMovingDie(myCanvas, callback);
+                        img1.Visibility = Visibility.Hidden;
+                     }
+                     return;
+                  }
                }
             }
          }
@@ -493,19 +548,50 @@ namespace Pattons_Best
       {
          Button b = (Button)sender;
          int rowNum = Grid.GetRow(b);
-         if (null != myMapItemDragged) // If dragging and clicked on same map item, end the dragging operation
+         if (null != myMapItemDragged) 
          {
-            if (myMapItemDragged.Name != b.Name && STARTING_ASSIGNED_ROW <= rowNum)
+            ICrewMember? crewMember = (ICrewMember)myMapItemDragged;
+            if (null == crewMember)
             {
-               int i = rowNum - STARTING_ASSIGNED_ROW;
-               myGridRows[i].myMapItem = myMapItemDragged; // take position of this assignable mapitem in this row
+               Logger.Log(LogEnum.LE_ERROR, "Button_Click(): crewMember=null");
+               return;
+            }
+            if (crewMember.Role != b.Name) // dropping on another button
+            {
+               if (STARTING_ASSIGNED_ROW <= rowNum) // only support dropping on grid row - all other drops just disable the move
+               {
+                  int i = rowNum - STARTING_ASSIGNED_ROW;
+                  if( null == myGridRows[i].myMapItem )
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Button_Click(): myGridRows[i].myMapItem=null for b.Name=" + b.Name);
+                     return;
+                  }
+                  GridRow gridRow = myGridRows[i];
+                  if (null == gridRow.myMapItem)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Button_Click(): gridRow=null for b.Name = " + b.Name);
+                     return;
+                  }
+                  myAssignables.Add(gridRow.myMapItem); // return the existing MapItem to unassigned panel
+                  gridRow.myMapItem = myMapItemDragged; // take position of this assignable mapitem in this row
+               }
             }
             myMapItemDragged = null;
             myGrid.Cursor = Cursors.Arrow;
          }
          else
          {
-            myMapItemDragged = myAssignables.Find(b.Name);
+            foreach(IMapItem mi in myAssignables)
+            {
+               ICrewMember? crewMember = (ICrewMember)mi;
+               if (null == crewMember)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Button_Click(): crewMember=null");
+                  return;
+               }
+               if( crewMember.Role == b.Name )
+                  myMapItemDragged = mi;
+            }
             if (null == myMapItemDragged)
             {
                Logger.Log(LogEnum.LE_ERROR, "Button_Click(): mi=null for b.Name=" + b.Name);
@@ -516,6 +602,10 @@ namespace Pattons_Best
             {
                int i = rowNum - STARTING_ASSIGNED_ROW;
                myGridRows[i].myMapItem = null;
+            }
+            else
+            {
+               myAssignables.Remove(b.Name);
             }
          }
          if (false == UpdateGrid())

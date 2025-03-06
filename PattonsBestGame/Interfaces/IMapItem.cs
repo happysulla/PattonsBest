@@ -30,7 +30,6 @@ namespace Pattons_Best
    {
       int Count { get; }
       void Add(IMapItem mi);
-
       void Insert(int index, IMapItem mi);
       void Clear();
       bool Contains(IMapItem mi);
