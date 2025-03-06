@@ -254,6 +254,7 @@ namespace Pattons_Best
                }
                dialogTableListing.Show();
                break;
+            case GameAction.SetupAssignCrewRating:
             case GameAction.MorningBriefingAssignCrewRating:
                EventViewerE071CrewMgr newCrewMgr = new EventViewerE071CrewMgr(myGameInstance, myCanvas, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == newCrewMgr.CtorError)
@@ -788,7 +789,7 @@ namespace Pattons_Best
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
                            case "Continue005":
-                              action = GameAction.MorningBriefingAssignCrewRating;
+                              action = GameAction.SetupAssignCrewRating;
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
                            case "GotoMorningBriefing":

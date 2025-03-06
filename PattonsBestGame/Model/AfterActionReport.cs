@@ -16,11 +16,11 @@ namespace Pattons_Best.Model
       public string Name { get; set; } = Utilities.GetNickName();
       public EnumModel Model { get; set; } = EnumModel.M4_A;
       public EnumWeather Weather { get; set; } = EnumWeather.Clear;
-      public CrewMember Commander { get; set; } = new CrewMember("Commander", "Sgt", 0);
-      public CrewMember Gunner { get; set; } = new CrewMember("Gunner", "Cpl", 0);
-      public CrewMember Loader { get; set; } = new CrewMember("Loader", "Cpl", 0);
-      public CrewMember Driver { get; set; } = new CrewMember("Driver", "Pvt", 0);
-      public CrewMember Assistant { get; set; } = new CrewMember("Assistant", "Pvt", 0);
+      public IMapItem Commander { get; set; } = new CrewMember("Commander", "Sgt", "c07Commander");
+      public IMapItem Gunner { get; set; } = new CrewMember("Gunner", "Cpl", "c11Gunner");
+      public IMapItem Loader { get; set; } = new CrewMember("Loader", "Cpl", "c09Loader");
+      public IMapItem Driver { get; set; } = new CrewMember("Driver", "Pvt", "c08Driver");
+      public IMapItem Assistant { get; set; } = new CrewMember("Assistant", "Pvt", "c10Assistant");
       //----------------------------------------
       public int TimeOfDay { get; set; } = 0500;
       public int Ammo30CalibreMG { get; set; } = 30;

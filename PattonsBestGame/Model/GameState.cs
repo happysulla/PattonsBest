@@ -156,8 +156,8 @@ namespace Pattons_Best
                }
                else
                {
-                  IAfterActionReport report = new AfterActionReport(entry);
-                  gi.Reports.Add(report);
+                  IAfterActionReport report1 = new AfterActionReport(entry);
+                  gi.Reports.Add(report1);
                   //----------------------------------------------------
                   Option? option = gi.Options.Find("AutoSetup");
                   if (null == option)
@@ -200,6 +200,23 @@ namespace Pattons_Best
                break;
             case GameAction.SetupShowAfterActionReport:
                gi.EventDisplayed = gi.EventActive = "e005";
+               break;
+            case GameAction.SetupAssignCrewRating:
+               gi.NewMembers.Clear();
+               IAfterActionReport? report = gi.Reports.GetLast();
+               if( null == report )
+               {
+                  returnStatus = "gi.Reports.GetLast() returned null";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(SetupAssignCrewRating): " + returnStatus);
+               }
+               else
+               {
+                  gi.NewMembers.Add(report.Commander);
+                  gi.NewMembers.Add(report.Gunner);
+                  gi.NewMembers.Add(report.Loader);
+                  gi.NewMembers.Add(report.Driver);
+                  gi.NewMembers.Add(report.Assistant);
+               }
                break;
             case GameAction.SetupShowCombatCalendarCheck:
                gi.EventDisplayed = gi.EventActive = "e006";
@@ -285,11 +302,11 @@ namespace Pattons_Best
                gi.DieResults[key][0] = dieRoll;
                break;
             case GameAction.MorningBriefingAssignCrewRating:
+               // do nothing
                break;
             case GameAction.MorningBriefingBegin:
                gi.EventDisplayed = gi.EventActive = "e007";
                gi.DieRollAction = GameAction.MorningBriefingWeatherRoll;
-
                break;
             case GameAction.MorningBriefingWeatherRoll:
                gi.DieResults[key][0] = dieRoll;

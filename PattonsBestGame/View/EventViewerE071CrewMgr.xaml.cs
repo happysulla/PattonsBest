@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfAnimatedGif;
+using static Pattons_Best.EventViewer_TBD_Mgr;
 using static Pattons_Best.EventViewerE071CrewMgr;
 
 namespace Pattons_Best
@@ -20,10 +21,20 @@ namespace Pattons_Best
    public partial class EventViewerE071CrewMgr : UserControl
    {
       public delegate bool EndCrewMgrCallback();
+      private const int MAX_CREW_LEN = 5;
       private const int STARTING_ASSIGNED_ROW = 6;
+      private const bool IS_ENABLE = true;
+      private const bool NO_ENABLE = false;
+      private const bool IS_STATS = true;
+      private const bool NO_STATS = false;
+      private const bool IS_ADORN = true;
+      private const bool NO_ADORN = false;
+      private const bool IS_CURSOR = true;
+      private const bool NO_CURSOR = false;
       public enum E071Enum
       {
          ROLL_RATING,
+         ASSIGN_CREWMEN,
          END
       };
       public bool CtorError { get; } = false;
@@ -35,15 +46,15 @@ namespace Pattons_Best
       //---------------------------------------------------
       public struct GridRow
       {
-         public IMapItem myMapItem;
+         public IMapItem? myMapItem;
          public int myDieRoll;
-         public GridRow(IMapItem mi)
+         public GridRow()
          {
-            myMapItem = mi;
+            myMapItem = null;
             myDieRoll = Utilities.NO_RESULT;
          }
       };
-      private GridRow[] myGridRows = new GridRow[5]; // five possible crew members
+      private GridRow[] myGridRows = new GridRow[MAX_CREW_LEN]; // five possible crew members
       //---------------------------------------------------
       private IGameInstance? myGameInstance;
       private readonly Canvas? myCanvas;
@@ -51,6 +62,11 @@ namespace Pattons_Best
       private RuleDialogViewer? myRulesMgr;
       private IDieRoller? myDieRoller;
       //---------------------------------------------------
+      private IMapItems myAssignables = new MapItems();    // listing of new crewmen 
+      private IMapItem? myMapItemDragged = null;
+      //---------------------------------------------------
+      private readonly Dictionary<string, Cursor> myCursors = new Dictionary<string, Cursor>();
+      private readonly DoubleCollection myDashArray = new DoubleCollection();
       private readonly SolidColorBrush mySolidColorBrushBlack = new SolidColorBrush() { Color = Colors.Black };
       private readonly FontFamily myFontFam = new FontFamily("Tahoma");
       //-------------------------------------------------------------------------------------
@@ -98,6 +114,8 @@ namespace Pattons_Best
          }
          myDieRoller = dr;
          //--------------------------------------------------
+         myDashArray.Add(4);  // used for dotted lines
+         myDashArray.Add(2);  // used for dotted lines
          myGrid.MouseDown += Grid_MouseDown;
       }
       public bool AssignNewCrewRatings(EndCrewMgrCallback callback)
@@ -126,6 +144,24 @@ namespace Pattons_Best
          {
             Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewRatings(): myDieRoller=null");
             return false;
+         }
+         //--------------------------------------------------
+         myGridRows = new GridRow[MAX_CREW_LEN];
+         myState = E071Enum.ROLL_RATING;
+         myMaxRowCount = myGameInstance.NewMembers.Count;
+         myIsRollInProgress = false;
+         myRollResultRowNum = 0;
+         myCallback = callback;
+         System.Windows.Point hotPoint = new System.Windows.Point(Utilities.theMapItemOffset, Utilities.theMapItemOffset); // set the center of the MapItem as the hot point for the cursor
+         myCursors.Clear();
+         int i = 0;
+         foreach (IMapItem mi in myGameInstance.NewMembers)
+         {
+            myAssignables.Add(mi);
+            myGridRows[i] = new GridRow();
+            Button b = CreateButton(mi, IS_ENABLE, false, NO_STATS, NO_ADORN, IS_CURSOR);
+            myCursors[mi.Name] = Utilities.ConvertToCursor(b, hotPoint);
+            ++i;
          }
          //--------------------------------------------------
          if (false == UpdateGrid())
@@ -185,6 +221,10 @@ namespace Pattons_Best
          switch (myState)
          {
             case E071Enum.ROLL_RATING:
+               myTextBlockInstructions.Inlines.Add(new Run("Roll all dice for all rows."));
+               break;
+            case E071Enum.ASSIGN_CREWMEN:
+               myTextBlockInstructions.Inlines.Add(new Run("Click and drag crew members to rectangles."));
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "UpdateUserInstructions(): reached default state=" + myState.ToString());
@@ -198,6 +238,21 @@ namespace Pattons_Best
          switch (myState)
          {
             case E071Enum.ROLL_RATING:
+               foreach(IMapItem mi in myAssignables)
+               {
+                  Button b = CreateButton(mi, NO_ENABLE, false, IS_STATS, NO_ADORN, NO_CURSOR);
+                  myStackPanelAssignable.Children.Add(b);
+               }
+               break;
+            case E071Enum.ASSIGN_CREWMEN:
+               foreach (IMapItem mi in myAssignables)
+               {
+                  bool isRectangleBorderAdded = false; // If dragging a map item, show rectangle around that MapItem
+                  if (null != myMapItemDragged && mi.Name == myMapItemDragged.Name)
+                     isRectangleBorderAdded = true;
+                  Button b = CreateButton(mi, IS_ENABLE, isRectangleBorderAdded, IS_STATS, NO_ADORN, NO_CURSOR);
+                  myStackPanelAssignable.Children.Add(b);
+               }
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): reached default s=" + myState.ToString());
@@ -222,11 +277,65 @@ namespace Pattons_Best
          for (int i = 0; i < myMaxRowCount; ++i)
          {
             int rowNum = i + STARTING_ASSIGNED_ROW;
-            IMapItem mi = myGridRows[i].myMapItem;
+            GridRow row = myGridRows[i];
             //------------------------------------
+            if( null == row.myMapItem)
+            {
+               Rectangle r = new Rectangle()
+               {
+                  Visibility = Visibility.Visible,
+                  Stroke = mySolidColorBrushBlack,
+                  Fill = Brushes.Transparent,
+                  StrokeThickness = 2.0,
+                  StrokeDashArray = myDashArray,
+                  Width = Utilities.ZOOM * Utilities.theMapItemSize,
+                  Height = Utilities.ZOOM * Utilities.theMapItemSize
+               };
+               myGrid.Children.Add(r);
+               Grid.SetRow(r, rowNum);
+               Grid.SetColumn(r, 0);
+            }
+            else
+            {
+               Button b = CreateButton(row.myMapItem, IS_ENABLE, false, IS_STATS, NO_ADORN, NO_CURSOR);
+               myGrid.Children.Add(b);
+               Grid.SetRow(b, rowNum);
+               Grid.SetColumn(b, 0);
+            }
+            //------------------------------------------
+            if (Utilities.NO_RESULT == row.myDieRoll)
+            {
+               BitmapImage bmi = new BitmapImage();
+               bmi.BeginInit();
+               bmi.UriSource = new Uri(MapImage.theImageDirectory + "dieRoll.gif", UriKind.Absolute);
+               bmi.EndInit();
+               Image img = new Image { Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+               ImageBehavior.SetAnimatedSource(img, bmi);
+               myGrid.Children.Add(img);
+               Grid.SetRow(img, rowNum);
+               Grid.SetColumn(img, 1);
+            }
+            else
+            {
+               string dieRollLabel = myGridRows[i].myDieRoll.ToString();
+               Label label = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = dieRollLabel };
+               myGrid.Children.Add(label);
+               Grid.SetRow(label, rowNum);
+               Grid.SetColumn(label, 1);
+               //-------------------------------
+               int rating = (int)Math.Ceiling((double)row.myDieRoll / 2.0);
+               Label labelResult = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = rating.ToString() };
+               myGrid.Children.Add(labelResult);
+               Grid.SetRow(labelResult, rowNum);
+               Grid.SetColumn(labelResult, 2);
+            }
+            //------------------------------------------
             switch (myState)
             {
                case E071Enum.ROLL_RATING:
+
+                  break;
+               case E071Enum.ASSIGN_CREWMEN:
                   break;
                default:
                   Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): reached default s=" + myState.ToString());
@@ -236,21 +345,55 @@ namespace Pattons_Best
          return true;
       }
       //------------------------------------------------------------------------------------
-      private Button CreateButton(IMapItem mi)
+      private Button CreateButton(IMapItem mi, bool isEnabled, bool isRectangleAdded, bool isStatsShown, bool isAdornmentsShown, bool isCursor)
       {
-         System.Windows.Controls.Button b = new Button { };
-         b.Name = Utilities.RemoveSpaces(mi.Name);
-         b.Width = Utilities.ZOOM * Utilities.theMapItemSize;
-         b.Height = Utilities.ZOOM * Utilities.theMapItemSize;
-         b.BorderThickness = new Thickness(1);
-         b.BorderBrush = Brushes.Black;
+         System.Windows.Controls.Button b = new System.Windows.Controls.Button { };
+         b.Name = mi.Name;
+         if (true == isCursor)
+         {
+            b.Width = Utilities.theMapItemSize;
+            b.Height = Utilities.theMapItemSize;
+         }
+         else
+         {
+            b.Width = Utilities.ZOOM * Utilities.theMapItemSize;
+            b.Height = Utilities.ZOOM * Utilities.theMapItemSize;
+         }
+         if (false == isRectangleAdded)
+         {
+            b.BorderThickness = new Thickness(0);
+         }
+         else
+         {
+            b.BorderThickness = new Thickness(1);
+            b.BorderBrush = Brushes.Black;
+         }
          b.Background = new SolidColorBrush(Colors.Transparent);
          b.Foreground = new SolidColorBrush(Colors.Transparent);
+         if (true == isEnabled)
+         {
+            b.IsEnabled = isEnabled;
+            b.Click += this.Button_Click;
+         }
          MapItem.SetButtonContent(b, mi, false, true); // This sets the image as the button's content
          return b;
       }
       public void ShowDieResults(int dieRoll)
       {
+         int i = myRollResultRowNum - STARTING_ASSIGNED_ROW;
+         if (i < 0)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowCombatResults(): 0 > i=" + i.ToString());
+            return;
+         }
+         myGridRows[i].myDieRoll = dieRoll;
+         //------------------------------------
+         myState = E071Enum.ASSIGN_CREWMEN;
+         for (int j = 0; j < myMaxRowCount; ++j)
+         {
+            if (Utilities.NO_RESULT == myGridRows[j].myDieRoll)
+               myState = E071Enum.ROLL_RATING;
+         }
          if (false == UpdateGrid())
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateGrid() return false");
          myIsRollInProgress = false;
@@ -344,6 +487,41 @@ namespace Pattons_Best
                   return;
                }
             }
+         }
+      }
+      private void Button_Click(object sender, RoutedEventArgs e)
+      {
+         Button b = (Button)sender;
+         int rowNum = Grid.GetRow(b);
+         if (null != myMapItemDragged) // If dragging and clicked on same map item, end the dragging operation
+         {
+            if (myMapItemDragged.Name != b.Name && STARTING_ASSIGNED_ROW <= rowNum)
+            {
+               int i = rowNum - STARTING_ASSIGNED_ROW;
+               myGridRows[i].myMapItem = myMapItemDragged; // take position of this assignable mapitem in this row
+            }
+            myMapItemDragged = null;
+            myGrid.Cursor = Cursors.Arrow;
+         }
+         else
+         {
+            myMapItemDragged = myAssignables.Find(b.Name);
+            if (null == myMapItemDragged)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Button_Click(): mi=null for b.Name=" + b.Name);
+               return;
+            }
+            myGrid.Cursor = myCursors[myMapItemDragged.Name]; // change cursor of button being dragged
+            if (STARTING_ASSIGNED_ROW <= rowNum)
+            {
+               int i = rowNum - STARTING_ASSIGNED_ROW;
+               myGridRows[i].myMapItem = null;
+            }
+         }
+         if (false == UpdateGrid())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Button_Click(): UpdateGrid() return false");
+            return;
          }
       }
    }

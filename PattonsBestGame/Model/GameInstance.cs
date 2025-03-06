@@ -41,6 +41,8 @@ namespace Pattons_Best
       //---------------------------------------------------------------
       public int Day { get; set; } = 0;
       //---------------------------------------------------------------
+      public IMapItems NewMembers { set; get; } = new MapItems();
+      //---------------------------------------------------------------
       [NonSerialized] private List<IUnitTest> myUnitTests = new List<IUnitTest>();
       public List<IUnitTest> UnitTests { get => myUnitTests; }
       //------------------------------------------------

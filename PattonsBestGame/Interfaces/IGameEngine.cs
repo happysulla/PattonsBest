@@ -59,20 +59,6 @@ namespace Pattons_Best
       Mud_Overcast,
       Snow
    };
-   public struct CrewMember
-   {
-      public string myRole;
-      public string myRank;
-      public string myName;
-      public int myRating;
-      public CrewMember(string role, string rank, int rating)
-      {
-         myRole = role;
-         myRank = rank;
-         myName = SurnameMgr.GetSurname();
-         myRating = rating;
-      }
-   };
    [Serializable]
    public enum GamePhase
    {
@@ -136,6 +122,7 @@ namespace Pattons_Best
       SetupShowBattleBoard,
       SetupShowTankCard,
       SetupShowAfterActionReport,
+      SetupAssignCrewRating,
       SetupShowCombatCalendarCheck,
       SetupChooseFunOptions,
       SetupCombatCalendarRoll,

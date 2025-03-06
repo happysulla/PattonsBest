@@ -15,11 +15,11 @@ namespace Pattons_Best
       string Name { get; set; }
       EnumModel Model { get; set; }
       EnumWeather Weather { get; set; }
-      CrewMember Commander { get; set; } 
-      CrewMember Gunner { get; set; }
-      CrewMember Loader { get; set; }
-      CrewMember Driver { get; set; }
-      CrewMember Assistant { get; set; }
+      IMapItem Commander { get; set; }
+      IMapItem Gunner { get; set; }
+      IMapItem Loader { get; set; }
+      IMapItem Driver { get; set; }
+      IMapItem Assistant { get; set; }
       //----------------------------------------
       int TimeOfDay { get; set; }
       int Ammo30CalibreMG { get; set; }

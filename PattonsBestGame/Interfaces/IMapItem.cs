@@ -18,8 +18,6 @@ namespace Pattons_Best
       bool IsAnimated { get; set; }
       IMapPoint Location { get; set; }
       //----------------------------------------
-      int MovementUsed { get; set; }
-      //----------------------------------------
       ITerritory TerritoryCurrent { get; set; }
       ITerritory TerritoryStarting { get; set; }
       //----------------------------------------
@@ -27,6 +25,7 @@ namespace Pattons_Best
       void Flip();
       void Unflip();
    }
+   //==========================================
    public interface IMapItems : System.Collections.IEnumerable
    {
       int Count { get; }
@@ -44,5 +43,12 @@ namespace Pattons_Best
       IMapItem? this[int index] { get; set; }
       IMapItems Shuffle();
       void Rotate(int numOfRotates);
+   }
+   //==========================================
+   public interface ICrewMember : IMapItem
+   {
+      string Role { get; set; }
+      string Rank { get; set; }
+      int Rating { get; set; }
    }
 }

@@ -33,8 +33,10 @@ namespace Pattons_Best
       //------------------------------------------------
       ITerritory? NewTerritory { set; get; }
       List<EnteredHex> EnteredHexes { get; }
-      //---------------------------------------------------------------
+      //------------------------------------------------
       int Day { get; set; }
+      //------------------------------------------------
+      IMapItems NewMembers { set; get; }
       //----------------------------------------------
       List<IUnitTest> UnitTests { get; }
    }

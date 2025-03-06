@@ -1391,21 +1391,6 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(node) returned null");
                return false;
             }
-
-            //--------------------------------
-            elem = aXmlDocument.CreateElement("MovementUsed");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(MovementUsed) returned null");
-               return false;
-            }
-            elem.SetAttribute("value", mi.MovementUsed.ToString());
-            node = miNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(node) returned null");
-               return false;
-            }
          }
          return true;
       }

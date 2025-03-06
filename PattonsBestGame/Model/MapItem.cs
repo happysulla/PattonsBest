@@ -49,8 +49,6 @@ namespace Pattons_Best
       public double Zoom { get; set; } = 1.0;
       public bool IsHidden { get; set; } = false;
       //--------------------------------------------------
-      public int MovementUsed { get; set; } = 0;
-      //--------------------------------------------------
       private ITerritory myTerritoryCurrent = new Territory("Offboard");
       public ITerritory TerritoryCurrent { get => myTerritoryCurrent; set => myTerritoryCurrent = value; }
       private ITerritory myTerritoryStarting = new Territory("Offboard");
@@ -263,6 +261,19 @@ namespace Pattons_Best
             }
          }
          b.Content = g;
+      }
+   }
+   //----------------------------------------------------------------------------
+   public class CrewMember : MapItem, ICrewMember
+   {
+      public string Role { get; set; } = string.Empty;
+      public string Rank { get; set; } = string.Empty;
+      public int Rating { get; set; } = 0;
+      public CrewMember(string role, string rank, string topImageName)
+         : base(SurnameMgr.GetSurname(), 1.0, false, false, topImageName)
+      {
+         Role = role;
+         Rank = rank;
       }
    }
    //--------------------------------------------------------------------------

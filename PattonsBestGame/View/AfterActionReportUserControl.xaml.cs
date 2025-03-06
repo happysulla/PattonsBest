@@ -71,41 +71,71 @@ namespace Pattons_Best
          mySpanWeather.Inlines.Clear();
          mySpanWeather.Inlines.Add(new Run(s));
          //----------------------------------
-         myRunCommanderRank.Text = report.Commander.myRank.ToString();
-         myRunCommanderRating.Text = report.Commander.myRating.ToString();
-         s = AddSpaces(report.Commander.myName, CREW_NAME_LEN);
+         ICrewMember? commander = report.Commander as ICrewMember;
+         if( null == commander )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): commander=null");
+            return false;
+         }
+         myRunCommanderRank.Text = commander.Rank;
+         myRunCommanderRating.Text = commander.Rating.ToString();
+         s = AddSpaces(commander.Name, CREW_NAME_LEN);
          mySpanCommanderName.Inlines.Clear();
          mySpanCommanderName.Inlines.Add(new Run(s));
          mySpanCommanderName.IsEnabled = myIsEditable;
          if (true == mySpanCommanderName.IsEnabled)
             mySpanCommanderName.Background = theBrushInActive;
          //----------------------------------
-         myRunGunnerRating.Text = report.Gunner.myRating.ToString();
-         s = AddSpaces(report.Gunner.myName, CREW_NAME_LEN);
+         ICrewMember? gunner = report.Gunner as ICrewMember;
+         if (null == gunner)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): gunner=null");
+            return false;
+         }
+         myRunGunnerRating.Text = gunner.Rating.ToString();
+         s = AddSpaces(gunner.Name, CREW_NAME_LEN);
          mySpanGunnerName.Inlines.Clear();
          mySpanGunnerName.Inlines.Add(new Run(s));
          mySpanGunnerName.IsEnabled = myIsEditable;
          if (true == mySpanGunnerName.IsEnabled)
             mySpanGunnerName.Background = theBrushInActive;
          //----------------------------------
-         myRunLoaderRating.Text = report.Loader.myRating.ToString();
-         s = AddSpaces(report.Loader.myName, CREW_NAME_LEN);
+         ICrewMember? loader = report.Loader as ICrewMember;
+         if (null == loader)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): loader=null");
+            return false;
+         }
+         myRunLoaderRating.Text = loader.Rating.ToString();
+         s = AddSpaces(loader.Name, CREW_NAME_LEN);
          mySpanLoaderName.Inlines.Clear();
          mySpanLoaderName.Inlines.Add(new Run(s));
          mySpanLoaderName.IsEnabled = myIsEditable;
          if (true == mySpanLoaderName.IsEnabled)
             mySpanLoaderName.Background = theBrushInActive;
          //----------------------------------
-         myRunDriverRating.Text = report.Driver.myRating.ToString();
-         s = AddSpaces(report.Driver.myName, CREW_NAME_LEN);
+         ICrewMember? driver = report.Driver as ICrewMember;
+         if (null == driver)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): loader=null");
+            return false;
+         }
+         myRunDriverRating.Text = driver.Rating.ToString();
+         s = AddSpaces(driver.Name, CREW_NAME_LEN);
          mySpanDriverName.Inlines.Clear();
          mySpanDriverName.Inlines.Add(new Run(s));
          mySpanDriverName.IsEnabled = myIsEditable;
          if (true == mySpanDriverName.IsEnabled)
             mySpanDriverName.Background = theBrushInActive;
          //----------------------------------
-         myRunAssistantRating.Text = report.Assistant.myRating.ToString();
-         s = AddSpaces(report.Assistant.myName, CREW_NAME_LEN);
+         ICrewMember? assistant = report.Assistant as ICrewMember;
+         if (null == assistant)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): assistant=null");
+            return false;
+         }
+         myRunAssistantRating.Text = assistant.Rating.ToString();
+         s = AddSpaces(assistant.Name, CREW_NAME_LEN);
          mySpanAssistantName.Inlines.Clear();
          mySpanAssistantName.Inlines.Add(new Run(s));
          mySpanAssistantName.IsEnabled = myIsEditable;
@@ -300,95 +330,95 @@ namespace Pattons_Best
          if (true == myIsEditableCommanderName)
          {
             myIsEditableCommanderName = false;
-            CrewMember commander = Report.Commander;
+            IMapItem commander = Report.Commander;
             if (0 < mySpanCommanderName.Inlines.Count)
             {
                Inline inline = mySpanCommanderName.Inlines.FirstInline;
                if (inline is InlineUIContainer uiContainer)
                {
                   if (uiContainer.Child is TextBox textbox)
-                     commander.myName = textbox.Text;
+                     commander.Name = textbox.Text;
                }
             }
             mySpanCommanderName.Background = theBrushInActive;
             mySpanCommanderName.Inlines.Clear();
-            String s = AddSpaces(commander.myName, CREW_NAME_LEN);
+            String s = AddSpaces(commander.Name, CREW_NAME_LEN);
             mySpanCommanderName.Inlines.Clear();
             mySpanCommanderName.Inlines.Add(new Run(s));
          }
          if (true == myIsEditableGunnerName)
          {
             myIsEditableGunnerName = false;
-            CrewMember gunner = Report.Gunner;
+            IMapItem gunner = Report.Gunner;
             if (0 < mySpanGunnerName.Inlines.Count)
             {
                Inline inline = mySpanGunnerName.Inlines.FirstInline;
                if (inline is InlineUIContainer uiContainer)
                {
                   if (uiContainer.Child is TextBox textbox)
-                     gunner.myName = textbox.Text;
+                     gunner.Name = textbox.Text;
                }
             }
             mySpanGunnerName.Background = theBrushInActive;
             mySpanGunnerName.Inlines.Clear();
-            String s = AddSpaces(gunner.myName, CREW_NAME_LEN);
+            String s = AddSpaces(gunner.Name, CREW_NAME_LEN);
             mySpanGunnerName.Inlines.Clear();
             mySpanGunnerName.Inlines.Add(new Run(s));
          }
          if (true == myIsEditableLoaderName)
          {
             myIsEditableLoaderName = false;
-            CrewMember loader = Report.Loader;
+            IMapItem loader = Report.Loader;
             if (0 < mySpanLoaderName.Inlines.Count)
             {
                Inline inline = mySpanLoaderName.Inlines.FirstInline;
                if (inline is InlineUIContainer uiContainer)
                {
                   if (uiContainer.Child is TextBox textbox)
-                     loader.myName = textbox.Text;
+                     loader.Name = textbox.Text;
                }
             }
             mySpanLoaderName.Background = theBrushInActive;
             mySpanLoaderName.Inlines.Clear();
-            String s = AddSpaces(loader.myName, CREW_NAME_LEN);
+            String s = AddSpaces(loader.Name, CREW_NAME_LEN);
             mySpanLoaderName.Inlines.Clear();
             mySpanLoaderName.Inlines.Add(new Run(s));
          }
          if (true == myIsEditableDriverName)
          {
             myIsEditableDriverName = false;
-            CrewMember driver = Report.Driver;
+            IMapItem driver = Report.Driver;
             if (0 < mySpanDriverName.Inlines.Count)
             {
                Inline inline = mySpanDriverName.Inlines.FirstInline;
                if (inline is InlineUIContainer uiContainer)
                {
                   if (uiContainer.Child is TextBox textbox)
-                     driver.myName = textbox.Text;
+                     driver.Name = textbox.Text;
                }
             }
             mySpanDriverName.Background = theBrushInActive;
             mySpanDriverName.Inlines.Clear();
-            String s = AddSpaces(driver.myName, CREW_NAME_LEN);
+            String s = AddSpaces(driver.Name, CREW_NAME_LEN);
             mySpanDriverName.Inlines.Clear();
             mySpanDriverName.Inlines.Add(new Run(s));
          }
          if (true == myIsEditableAssistantName)
          {
             myIsEditableAssistantName = false;
-            CrewMember assistant = Report.Assistant;
+            IMapItem assistant = Report.Assistant;
             if (0 < mySpanAssistantName.Inlines.Count)
             {
                Inline inline = mySpanAssistantName.Inlines.FirstInline;
                if (inline is InlineUIContainer uiContainer)
                {
                   if (uiContainer.Child is TextBox textbox)
-                     assistant.myName = textbox.Text;
+                     assistant.Name = textbox.Text;
                }
             }
             mySpanAssistantName.Background = theBrushInActive;
             mySpanAssistantName.Inlines.Clear();
-            String s = AddSpaces(assistant.myName, CREW_NAME_LEN);
+            String s = AddSpaces(assistant.Name, CREW_NAME_LEN);
             mySpanAssistantName.Inlines.Clear();
             mySpanAssistantName.Inlines.Add(new Run(s));
          }
