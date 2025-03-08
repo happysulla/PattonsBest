@@ -18,6 +18,7 @@ using System.Xml.Serialization;
 using Button = System.Windows.Controls.Button;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Point = System.Windows.Point;
+using Pattons_Best.Model;
 
 namespace Pattons_Best
 {
@@ -141,12 +142,24 @@ namespace Pattons_Best
          myGameInstance = gi;
          gi.GamePhase = GamePhase.GameSetup;
          myMainMenuViewer = new MainMenuViewer(myMainMenu, ge, gi);
+         //---------------------------------------------------------------
+         ICombatCalendarEntry? entry = TableMgr.theCombatCalendarEntries[0];
+         if (null == entry)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): entry=null");
+            CtorError = true;
+            return;
+         }
+         IAfterActionReport report1 = new AfterActionReport(entry);
+         gi.Reports.Add(report1);
+         //---------------------------------------------------------------
          if (false == AddHotKeys(myMainMenuViewer))
          {
             Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): AddHotKeys() returned false");
             CtorError = true;
             return;
          }
+         //---------------------------------------------------------------
          Options options = Deserialize(Settings.Default.GameOptions);
          myMainMenuViewer.NewGameOptions = options;
          gi.Options = options; // use the new game options for setting up the first game

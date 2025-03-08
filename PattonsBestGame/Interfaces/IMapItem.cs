@@ -29,7 +29,7 @@ namespace Pattons_Best
    public interface IMapItems : System.Collections.IEnumerable
    {
       int Count { get; }
-      void Add(IMapItem mi);
+      void Add(IMapItem? mi);
       void Insert(int index, IMapItem mi);
       void Clear();
       bool Contains(IMapItem mi);

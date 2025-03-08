@@ -101,7 +101,8 @@ Performed at beginning of each day. Examine the Combat <InlineUIContainer><Butto
 <LineBreak/><LineBreak/>
 If the number rolled is greater than the number shown in the middle of the three part scenario code for the day (A-2-L is used for July 27, 1944), you avoid action and can check off the day as completed. 
 <LineBreak/><LineBreak/>
-If the number is less than or equal to the probability code, you trigger a day of possible combat. Go to <InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for the Morning Briefing. "
+If the number is less than or equal to the probability code, you trigger a day of possible combat. Go to 
+<InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for the Morning Briefing. "
 r4.2	"<Bold>r4.2 Morning Briefing</Bold> 
 <LineBreak/><LineBreak/>
 Perform these actions using After Action Report (AAR) <InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>:
@@ -144,6 +145,66 @@ Crew ratings cannot be greater than 10 and never decrease. Ratings cannot improv
 <InlineUIContainer><Button Content='r20.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
 Ratings may also improve during refitting periods per <InlineUIContainer><Button Content='r27.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r16.0	"<Bold>r16.0 Ammunition (Ammo)</Bold> 
+<LineBreak/><LineBreak/>
+Ammo is loaded into your tank at the beginning of each scenerio as part of morning briefing 
+<InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+<LineBreak/><LineBreak/>
+Each model and variant of the Sherman tank has a limit on its normal load and ammo, both for its man gun and MGs as shown on it Tank Card 
+.  
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r16.0a' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Details<LineBreak/>
+<InlineUIContainer><Button Content='r16.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Ammo Types<LineBreak/>
+<InlineUIContainer><Button Content='r16.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Loading Ammo"
+r16.0a	"<Bold>r16.0a Ammo Details</Bold> 
+<LineBreak/><LineBreak/>
+-- Both the 75 and 76L fired AP and HE rounds. <LineBreak/><LineBreak/>
+-- Additionally, the 75 can fire two types of smoke rounds: WP and HCBI.<LineBreak/><LineBreak/>
+-- Additionally, the 76L can fire HVAP ammo.<LineBreak/><LineBreak/>
+-- All tanks carried .50 calibre ammo for AAMG and .30 calibre ammo for the bow and co-axial MG. MG ammo was stored in boxes of 250 bullets per box.<LineBreak/><LineBreak/>
+-- The normal load for a Sherman tank included six smoke grenades and 14 smoke bombs for the 2"" smoke mortar.<LineBreak/><LineBreak/>
+-- In earlier models, ammo was stored in sponson boxes in the hull sides. In later models, ammo was stored in the floor and between the drivers in boxes flooded with a solution of glycol to retard fires (i.e., wet stowage).<LineBreak/><LineBreak/>
+-- Extra main gun and MG ammo could be stuffed into the tank if desired, but at the cost of increased crew discomfort and danger. See 
+<InlineUIContainer><Button Content='Brew Up' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  and Tank 
+<InlineUIContainer><Button Content='Explosion' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Tables."
+r16.1	"<Bold>r16.1 Ammo Types</Bold> 
+<LineBreak/><LineBreak/>
+-- <Bold>Armor Piercing (AP):</Bold> AP rounds were designed to maximize muzzle velocity to achieve penetration of enemy armor vehicles and then explode inside.<LineBreak/>
+-- <Bold>High Explosives (HE):</Bold> HE rounds maximized the amount of explosive contained to destroy and neutralize unarmored targets with blast and shrapnel.<LineBreak/>
+-- <Bold>White Phosphorous (WP):</Bold> WP (nick-named willy peter) ignited phosphorous upon detonation. They were used to put smoke on an enemy position to restrict their ability to see.<LineBreak/>
+-- <Bold>Hexachlorothane Base Initiating (HBCI):</Bold> HCBI rounds were chemical smoke used to obsure friendly positions where the fire of WP rounds would be dangerous.<LineBreak/>
+-- <Bold>High Velocity Armor AP (HVAP):</Bold> AHVAP rounds were a special &quot;hot&quot; round with a rigid core and increased muzzle velocity. 
+They were offically issued only to tank destroyer units, but all 76 gun crews scrounged a couple for use in an emergency against German tanks."
+r16.2	"<Bold>r16.2 Loading Ammo</Bold> 
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r16.21' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Ammo Amounts<LineBreak/>
+<InlineUIContainer><Button Content='r16.22' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Extra Ammo <LineBreak/>
+<InlineUIContainer><Button Content='r16.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Ammo Ready Rack"
+r16.21	"<Bold>r16.21 Ammo Amounts</Bold> 
+<LineBreak/><LineBreak/>
+Ammo is loaded during the Morning Briefing phase 
+<InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  phase showing on the After Action Report 
+<InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+how much of each ammo type is carried. 
+<LineBreak/><LineBreak/>
+Consult the 
+<InlineUIContainer><Button Content='Ammo' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table for the amount of each type is available."
+r16.22	"<Bold>r16.22  Extra Ammo </Bold> 
+<LineBreak/><LineBreak/>
+Roll 1D on the Extra 
+<InlineUIContainer><Button Content='Ammo' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table to determine if you are required to carry extra ammo. If not required, you may voluntarily carry up to 30 additional main gun rounds and 10 additional MG boxes.
+ <LineBreak/><LineBreak/>Extra ammo can result in more danger to the crew. See 
+<InlineUIContainer><Button Content='Brew Up' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  and Tank 
+<InlineUIContainer><Button Content='Explosion' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Tables."
+r16.23	"<Bold>r16.23 Ammo Ready Rack</Bold> 
+<LineBreak/><LineBreak/>
+On the Tank Card, mark the number and types of rounds loaded into your ready rack with the Rounds Left markers. Reloading from the ready rack during battle increases the chance of achieving 
+<InlineUIContainer><Button Content='Rate of Fire' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+additional attacks. Each Sherman variant has a ready rack that cannot be exceeded.
+<LineBreak/><LineBreak/>
+             <InlineUIContainer><Image Name='ReadyRack'  Height='270' Width='350'></Image></InlineUIContainer>"
 r19.0	"<Bold>r19.0 Crew Casualties</Bold> 
 <LineBreak/><LineBreak/>
 When playing, it is possible for the crewmen of your tank to be wounded or killed. Crew casualties can occur when you tank is knocked out 

@@ -13,8 +13,8 @@ namespace Pattons_Best
       int Probability { get; set; }
       EnumResistance Resistance { get; set; }
       string Name { get; set; }
-      EnumModel Model { get; set; }
-      EnumWeather Weather { get; set; }
+      int TankCardNum { get; set; }
+      string Weather { get; set; }
       IMapItem Commander { get; set; }
       IMapItem Gunner { get; set; }
       IMapItem Loader { get; set; }
@@ -58,7 +58,6 @@ namespace Pattons_Best
       string DayEndedTime { get; set; }
       bool IsBreakdown { get; set; }
       bool IsKnockedOut { get; set; }
-
    }
    public interface IAfterActionReports : System.Collections.IEnumerable
    {

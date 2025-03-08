@@ -34,7 +34,9 @@ The battle board is an abstract display used to resolve engagements with enemy f
                                    <InlineUIContainer><Image Name='MapBattle'  Height='200' Width='200'></Image></InlineUIContainer>"
 e004	"<Bold>e004 Tank Card</Bold> <InlineUIContainer><Button Content='r2.13' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
-The upper right image is the Tank Card. The game starts with the basic M4 Sherman tank, i.e., Tank Card #1. The Tank Card shows the tank model and other important information regarding the tank. The use of the Tank Card is described in <InlineUIContainer><Button Content='r5.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Click image to continue.
+The upper right image is the Tank Card. The game starts with the basic M4 Sherman tank, i.e., Tank Card #1. 
+The Tank Card shows the tank model and other important information regarding the tank. The use of the Tank Card is described in 
+<InlineUIContainer><Button Content='r5.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Click image to continue.
 <LineBreak/><LineBreak/>
                                  <InlineUIContainer><Image Name='m001M4'  Height='200' Width='200'></Image></InlineUIContainer>"
 e005	"<Bold>e005 After Action Report (AAR)</Bold> <InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
@@ -64,6 +66,30 @@ The
  Table determines weather for today:  
 <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/>"
+e008	"<Bold>e008 Type of Snow</Bold> 
+<LineBreak/><LineBreak/>
+Snow is in the forecast. Roll for type of snow on the
+<InlineUIContainer><Button Content='Weather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+ Table:  
+<InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>
+<LineBreak/>"
+e009	"<Bold>e008 Ammo Load Limits</Bold> <InlineUIContainer><Button Content='r16.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
+See 
+<InlineUIContainer><Button Content='r16.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+for ammo types. See 
+<InlineUIContainer><Button Content='r16.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+for loading ammo. The Tank Card limits the number of normal main gun ammo allowed to AMMO_NORMAL_LOAD. Extra ammo is added in a later step 
+<InlineUIContainer><Button Content='e009b' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+-- <Bold>AP:</Bold> Unlimited<LineBreak/>
+-- <Bold>HE:</Bold> Unlimited"
+e009a	"<Bold>e009a Loading Normal Ammo</Bold> <InlineUIContainer><Button Content='r16.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
+"
+e009b	"<Bold>e009b Loading Extra Ammo</Bold> <InlineUIContainer><Button Content='r16.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
+"
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"
 e502	"<Bold>e502 Game Lost</Bold>

@@ -57,6 +57,46 @@ namespace Pattons_Best
          gi.MapItemMoves.Insert(0, mim); // add at front
          return true;
       }
+      protected bool AssignNewCrewMembers(IGameInstance gi)
+      {
+         IAfterActionReport? aar = gi.Reports.GetLast();
+         if (null == aar)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewMembers(): aar is null");
+            return false;
+         }
+         foreach (IMapItem mi in gi.NewMembers)
+         {
+            ICrewMember? crewMember = mi as ICrewMember;
+            if (crewMember == null)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewMembers(): crewMember is null");
+               return false;
+            }
+            switch (crewMember.Role)
+            {
+               case "Commander":
+                  aar.Commander = crewMember;
+                  break;
+               case "Gunner":
+                  aar.Gunner = crewMember;
+                  break;
+               case "Loader":
+                  aar.Loader = crewMember;
+                  break;
+               case "Driver":
+                  aar.Driver = crewMember;
+                  break;
+               case "Assistant":
+                  aar.Assistant = crewMember;
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewMembers(): Reached Default with role= " + crewMember.Role);
+                  return false;
+            }
+         }
+         return true;
+      }
       protected bool LoadGame(ref IGameInstance gi, ref GameAction action)
       {
          gi.Stacks.Clear();
@@ -219,13 +259,14 @@ namespace Pattons_Best
                }
                break;
             case GameAction.SetupShowCombatCalendarCheck:
+               gi.GamePhase = GamePhase.MorningBriefing;
                gi.EventDisplayed = gi.EventActive = "e006";
                gi.DieRollAction = GameAction.SetupCombatCalendarRoll;
-               break;
-            case GameAction.SetupCombatCalendarRoll:
-               gi.GamePhase = GamePhase.MorningBriefing;
-               dieRoll = 9; // <cgs> TEST
-               gi.DieResults[key][0] = dieRoll;
+               if( false == AssignNewCrewMembers(gi))
+               {
+                  returnStatus = "AssignNewCrewMembers() returned false";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(SetupAssignCrewRating): " + returnStatus);
+               }
                break;
             case GameAction.EndGameClose:
                gi.GamePhase = GamePhase.EndGame;
@@ -275,81 +316,88 @@ namespace Pattons_Best
          string previousEvent = gi.EventActive;
          string returnStatus = "OK";
          string key = gi.EventActive;
-         switch (action)
+         IAfterActionReport? lastReport = gi.Reports.GetLast(); // remove it from list
+         if (null == lastReport)
          {
-            case GameAction.ShowCombatCalendarDialog:
-            case GameAction.ShowAfterActionReportDialog:
-            case GameAction.ShowInventoryDialog:
-            case GameAction.ShowRuleListingDialog:
-            case GameAction.ShowEventListingDialog:
-            case GameAction.ShowReportErrorDialog:
-            case GameAction.ShowAboutDialog:
-               break;
-            case GameAction.SetupShowMapHistorical:
-            case GameAction.SetupShowMovementBoard:
-            case GameAction.SetupShowBattleBoard:
-            case GameAction.SetupShowTankCard:
-            case GameAction.SetupShowAfterActionReport:
-            case GameAction.SetupShowCombatCalendarCheck:
-               break;
-            case GameAction.UpdateEventViewerDisplay: // Only change active event
-               break;
-            case GameAction.UpdateEventViewerActive: // Only change active event
-               gi.EventDisplayed = gi.EventActive; // next screen to show
-               break;
-            case GameAction.MorningBriefingCalendarRoll:
-               dieRoll = 0; // <cgs> TEST
-               gi.DieResults[key][0] = dieRoll;
-               break;
-            case GameAction.MorningBriefingAssignCrewRating:
-               // do nothing
-               break;
-            case GameAction.MorningBriefingBegin:
-               gi.EventDisplayed = gi.EventActive = "e007";
-               gi.DieRollAction = GameAction.MorningBriefingWeatherRoll;
-               break;
-            case GameAction.MorningBriefingWeatherRoll:
-               gi.DieResults[key][0] = dieRoll;
-               break;
-            case GameAction.MorningBriefingEnd:
-               ++gi.Day;
-               ICombatCalendarEntry? newEntry = TableMgr.theCombatCalendarEntries[gi.Day];
-               if (null == newEntry)
-               {
-                  returnStatus = "newEntry=null";
-                  Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(): " + returnStatus);
-               }
-               else
-               {
-                  IAfterActionReport? lastReport = gi.Reports.RemoveLast(); // remove it from list
-                  if (null == lastReport)
+            returnStatus = "lastReport=null";
+            Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(): " + returnStatus);
+         }
+         else
+         {
+            switch (action)
+            {
+               case GameAction.ShowCombatCalendarDialog:
+               case GameAction.ShowAfterActionReportDialog:
+               case GameAction.ShowInventoryDialog:
+               case GameAction.ShowRuleListingDialog:
+               case GameAction.ShowEventListingDialog:
+               case GameAction.ShowReportErrorDialog:
+               case GameAction.ShowAboutDialog:
+                  break;
+               case GameAction.SetupShowMapHistorical:
+               case GameAction.SetupShowMovementBoard:
+               case GameAction.SetupShowBattleBoard:
+               case GameAction.SetupShowTankCard:
+               case GameAction.SetupShowAfterActionReport:
+               case GameAction.SetupShowCombatCalendarCheck:
+                  break;
+               case GameAction.UpdateEventViewerDisplay: // Only change active event
+                  break;
+               case GameAction.UpdateEventViewerActive: // Only change active event
+                  gi.EventDisplayed = gi.EventActive; // next screen to show
+                  break;
+               case GameAction.MorningBriefingAssignCrewRating: // handled in EventViewer by showing dialog
+                  break;
+               case GameAction.MorningBriefingCalendarRoll:
+               case GameAction.SetupCombatCalendarRoll:
+                  dieRoll = 0; // <cgs> TEST
+                  gi.DieResults[key][0] = dieRoll;
+                  break;
+               case GameAction.MorningBriefingBegin:
+                  gi.EventDisplayed = gi.EventActive = "e007";
+                  gi.DieRollAction = GameAction.MorningBriefingWeatherRoll;
+                  break;
+               case GameAction.MorningBriefingWeatherRoll:
+                  dieRoll = 50; // <cgs> TEST
+                  gi.DieResults[key][0] = dieRoll;
+                  string weatherRolled = TableMgr.GetWeather(dieRoll);
+                  lastReport.Weather = weatherRolled;
+                  break;
+               case GameAction.MorningBriefingAmmoLoad:
+                  if (true == lastReport.Weather.Contains("Snow"))
+                     gi.EventDisplayed = gi.EventActive = "e008"; // first need to roll for snow
+                  else
+                     gi.EventDisplayed = gi.EventActive = "e009";
+                  break;
+               case GameAction.MorningBriefingAmmoLoadNormal:
+                  gi.EventDisplayed = gi.EventActive = "e009a";
+                  break;
+               case GameAction.MorningBriefingSnowRoll:
+                  gi.DieResults[key][0] = dieRoll;
+                  break;
+               case GameAction.MorningBriefingEnd:
+                  ++gi.Day;
+                  ICombatCalendarEntry? newEntry = TableMgr.theCombatCalendarEntries[gi.Day];
+                  if (null == newEntry)
                   {
-                     returnStatus = "lastReport=null";
+                     returnStatus = "newEntry=null";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(): " + returnStatus);
                   }
                   else
                   {
                      IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport);
-                     if (null == newEntry)
-                     {
-                        returnStatus = "newEntry=null";
-                        Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(): " + returnStatus);
-                     }
-                     else
-                     {
-                        gi.Reports.Add(newReport);
-                        gi.EventDisplayed = gi.EventActive = "e006";
-                        gi.DieResults[gi.EventActive][0] = Utilities.NO_RESULT;
-                        gi.DieRollAction = GameAction.MorningBriefingCalendarRoll;
-                     }
+                     gi.Reports.Add(newReport);
+                     gi.EventDisplayed = gi.EventActive = "e006";
+                     gi.DieResults[gi.EventActive][0] = Utilities.NO_RESULT;
+                     gi.DieRollAction = GameAction.MorningBriefingCalendarRoll;
                   }
-               }
-               break;
-            case GameAction.EndGameClose:
-               gi.GamePhase = GamePhase.EndGame;
-               break;
-            default:
-               break;
+                  break;
+               case GameAction.EndGameClose:
+                  gi.GamePhase = GamePhase.EndGame;
+                  break;
+               default:
+                  break;
+            }
          }
          StringBuilder sb12 = new StringBuilder();
          if ("OK" != returnStatus)

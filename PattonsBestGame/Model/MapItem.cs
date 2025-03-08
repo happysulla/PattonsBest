@@ -287,7 +287,7 @@ namespace Pattons_Best
          myList = new ArrayList();
          foreach (IMapItem item in mapItems) { this.Add(item); }
       }
-      public void Add(IMapItem mi) { myList.Add(mi); }
+      public void Add(IMapItem? mi) { myList.Add(mi); }
       public void Insert(int index, IMapItem mi) { myList.Insert(index, mi); }
       public int Count { get { return myList.Count; } }
       public void Reverse() { myList.Reverse(); }

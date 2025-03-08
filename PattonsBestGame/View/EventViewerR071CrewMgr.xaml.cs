@@ -13,21 +13,18 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfAnimatedGif;
-using static Pattons_Best.EventViewer_TBD_Mgr;
-using static Pattons_Best.EventViewerE071CrewMgr;
 
 namespace Pattons_Best
 {
-   public partial class EventViewerE071CrewMgr : UserControl
+   public partial class EventViewerR071CrewMgr : UserControl
    {
       public delegate bool EndCrewMgrCallback();
-      private const int MAX_CREW_LEN = 5;
+      private const int MAX_GRID_LEN = 5;
       private const int STARTING_ASSIGNED_ROW = 6;
       private const bool IS_ENABLE = true;
       private const bool NO_ENABLE = false;
       private const bool IS_STATS = true;
       private const bool NO_STATS = false;
-      private const bool IS_ADORN = true;
       private const bool NO_ADORN = false;
       private const bool IS_CURSOR = true;
       private const bool NO_CURSOR = false;
@@ -35,6 +32,7 @@ namespace Pattons_Best
       {
          ROLL_RATING,
          ASSIGN_CREWMEN,
+         SHOW_RESULTS,
          END
       };
       public bool CtorError { get; } = false;
@@ -44,7 +42,7 @@ namespace Pattons_Best
       private int myRollResultRowNum = 0;
       private bool myIsRollInProgress = false;
       //---------------------------------------------------
-      public struct GridRow
+      private class GridRow
       {
          public IMapItem? myMapItem;
          public int myDieRoll;
@@ -54,7 +52,7 @@ namespace Pattons_Best
             myDieRoll = Utilities.NO_RESULT;
          }
       };
-      private GridRow[] myGridRows = new GridRow[MAX_CREW_LEN]; // five possible crew members
+      private GridRow[] myGridRows = new GridRow[MAX_GRID_LEN]; // five possible crew members
       //---------------------------------------------------
       private IGameInstance? myGameInstance;
       private readonly Canvas? myCanvas;
@@ -70,13 +68,13 @@ namespace Pattons_Best
       private readonly SolidColorBrush mySolidColorBrushBlack = new SolidColorBrush() { Color = Colors.Black };
       private readonly FontFamily myFontFam = new FontFamily("Tahoma");
       //-------------------------------------------------------------------------------------
-      public EventViewerE071CrewMgr(IGameInstance? gi, Canvas? c, ScrollViewer? sv, RuleDialogViewer? rdv, IDieRoller dr)
+      public EventViewerR071CrewMgr(IGameInstance? gi, Canvas? c, ScrollViewer? sv, RuleDialogViewer? rdv, IDieRoller dr)
       {
          InitializeComponent();
          //--------------------------------------------------
          if (null == gi) // check parameter inputs
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerCrewMgr(): gi=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerR071CrewMgr(): gi=null");
             CtorError = true;
             return;
          }
@@ -84,7 +82,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == c) // check parameter inputs
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerCrewMgr(): c=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerR071CrewMgr(): c=null");
             CtorError = true;
             return;
          }
@@ -92,7 +90,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == sv)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerCrewMgr(): sv=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerR071CrewMgr(): sv=null");
             CtorError = true;
             return;
          }
@@ -100,7 +98,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == rdv)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerCrewMgr(): rdv=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerR071CrewMgr(): rdv=null");
             CtorError = true;
             return;
          }
@@ -108,7 +106,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == dr)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerCrewMgr(): dr=true");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerR071CrewMgr(): dr=true");
             CtorError = true;
             return;
          }
@@ -146,7 +144,7 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------------
-         myGridRows = new GridRow[MAX_CREW_LEN];
+         myGridRows = new GridRow[MAX_GRID_LEN];
          myState = E071Enum.ROLL_RATING;
          myMaxRowCount = myGameInstance.NewMembers.Count;
          myIsRollInProgress = false;
@@ -202,6 +200,16 @@ namespace Pattons_Best
       {
          if (E071Enum.END == myState)
          {
+            for (int i = 0; i < myMaxRowCount; i++)
+            {
+               ICrewMember? crewMember = myGridRows[i].myMapItem as ICrewMember;
+               if( null == crewMember )
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): crewMember=null");
+                  return false;
+               }
+               crewMember.Rating = (int) Math.Ceiling((double)(myGridRows[i].myDieRoll)/2.0);
+            }
             if (null == myCallback)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myCallback=null");
@@ -225,6 +233,9 @@ namespace Pattons_Best
                break;
             case E071Enum.ASSIGN_CREWMEN:
                myTextBlockInstructions.Inlines.Add(new Run("Click and drag crew members to rectangles."));
+               break;
+            case E071Enum.SHOW_RESULTS:
+               myTextBlockInstructions.Inlines.Add(new Run("Click image to continue."));
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "UpdateUserInstructions(): reached default state=" + myState.ToString());
@@ -253,6 +264,10 @@ namespace Pattons_Best
                   Button b = CreateButton(mi, IS_ENABLE, isRectangleBorderAdded, IS_STATS, NO_ADORN, NO_CURSOR);
                   myStackPanelAssignable.Children.Add(b);
                }
+               break;
+            case E071Enum.SHOW_RESULTS:
+               Image img1 = new Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+               myStackPanelAssignable.Children.Add(img1);
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): reached default s=" + myState.ToString());
@@ -328,18 +343,6 @@ namespace Pattons_Best
                myGrid.Children.Add(labelResult);
                Grid.SetRow(labelResult, rowNum);
                Grid.SetColumn(labelResult, 2);
-            }
-            //------------------------------------------
-            switch (myState)
-            {
-               case E071Enum.ROLL_RATING:
-
-                  break;
-               case E071Enum.ASSIGN_CREWMEN:
-                  break;
-               default:
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): reached default s=" + myState.ToString());
-                  return false;
             }
          }
          return true;
@@ -445,16 +448,6 @@ namespace Pattons_Best
             return;
          }
          //--------------------------------------------------
-         if (E071Enum.ASSIGN_CREWMEN == myState) // if any crewman is not assigned, continue in same state
-         {
-            myState = E071Enum.END;
-            for (int j = 0; j < myMaxRowCount; ++j)
-            {
-               if (null == myGridRows[j].myMapItem)
-                  myState = E071Enum.ASSIGN_CREWMEN;
-            }
-         }
-         //--------------------------------------------------
          System.Windows.Point p = e.GetPosition((UIElement)sender);
          HitTestResult result = VisualTreeHelper.HitTest(myGrid, p);  // Get the Point where the hit test occurrs
          foreach (UIElement ui in myGrid.Children)
@@ -486,9 +479,20 @@ namespace Pattons_Best
                      myGrid.Cursor = Cursors.Arrow;
                      int rowNum = Grid.GetRow(rect);
                      int i = rowNum - STARTING_ASSIGNED_ROW;
+                     myAssignables.Remove(myMapItemDragged);
                      myGridRows[i].myMapItem = myMapItemDragged;
-                     
                      myMapItemDragged = null;
+                     //--------------------------------------------------
+                     if (E071Enum.ASSIGN_CREWMEN == myState) // if any crewman is not assigned, continue in same state
+                     {
+                        myState = E071Enum.SHOW_RESULTS;
+                        for (int j = 0; j < myMaxRowCount; ++j)
+                        {
+                           if (null == myGridRows[j].myMapItem)
+                              myState = E071Enum.ASSIGN_CREWMEN;
+                        }
+                     }
+                     //--------------------------------------------------
                      if (false == UpdateGrid())
                         Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): UpdateGrid() return false");
                      return;
@@ -505,10 +509,9 @@ namespace Pattons_Best
                      {
                         if (result.VisualHit == img)
                         {
-                           string name = (string)img.Tag;
-                           if ("AAR" == name)
+                           if ("Continue" == img.Name)
                               myState = E071Enum.END;
-                           if ("DieRoll" == name)
+                           if ("DieRoll" == img.Name)
                            {
                               if (false == myIsRollInProgress)
                               {
@@ -561,19 +564,14 @@ namespace Pattons_Best
                if (STARTING_ASSIGNED_ROW <= rowNum) // only support dropping on grid row - all other drops just disable the move
                {
                   int i = rowNum - STARTING_ASSIGNED_ROW;
-                  if( null == myGridRows[i].myMapItem )
+                  if ( null == myGridRows[i].myMapItem)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "Button_Click(): myGridRows[i].myMapItem=null for b.Name=" + b.Name);
                      return;
                   }
-                  GridRow gridRow = myGridRows[i];
-                  if (null == gridRow.myMapItem)
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "Button_Click(): gridRow=null for b.Name = " + b.Name);
-                     return;
-                  }
-                  myAssignables.Add(gridRow.myMapItem); // return the existing MapItem to unassigned panel
-                  gridRow.myMapItem = myMapItemDragged; // take position of this assignable mapitem in this row
+                  myAssignables.Add(myGridRows[i].myMapItem);   // add existing one back to myAssignables
+                  myAssignables.Remove(myMapItemDragged); // Remove dragged map item from myAssignables
+                  myGridRows[i].myMapItem = myMapItemDragged;   // grid row updated
                }
             }
             myMapItemDragged = null;
@@ -608,6 +606,17 @@ namespace Pattons_Best
                myAssignables.Remove(b.Name);
             }
          }
+         //--------------------------------------------------
+         if (E071Enum.ASSIGN_CREWMEN == myState) // if any crewman is not assigned, continue in same state
+         {
+            myState = E071Enum.SHOW_RESULTS;
+            for (int j = 0; j < myMaxRowCount; ++j)
+            {
+               if (null == myGridRows[j].myMapItem)
+                  myState = E071Enum.ASSIGN_CREWMEN;
+            }
+         }
+         //--------------------------------------------------
          if (false == UpdateGrid())
          {
             Logger.Log(LogEnum.LE_ERROR, "Button_Click(): UpdateGrid() return false");

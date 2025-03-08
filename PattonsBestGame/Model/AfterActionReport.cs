@@ -14,8 +14,8 @@ namespace Pattons_Best.Model
       public int Probability { get; set; } = 3;
       public EnumResistance Resistance { get; set; }
       public string Name { get; set; } = Utilities.GetNickName();
-      public EnumModel Model { get; set; } = EnumModel.M4_A;
-      public EnumWeather Weather { get; set; } = EnumWeather.Clear;
+      public int TankCardNum { get; set; } = 1;
+      public string Weather { get; set; } = "Clear";
       public IMapItem Commander { get; set; } = new CrewMember("Commander", "Sgt", "c07Commander");
       public IMapItem Gunner { get; set; } = new CrewMember("Gunner", "Cpl", "c11Gunner");
       public IMapItem Loader { get; set; } = new CrewMember("Loader", "Cpl", "c09Loader");

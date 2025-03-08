@@ -15,7 +15,7 @@
          <TableCell ColumnSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
             <Paragraph>
                <Italic>
-                  <Run FontSize='12' Text='Rate of Fire is determined by the To Hit dice roll for the tanks main gun. If the number rolled is less than or equal to the guns Rate of Fire base number (after all modifications), the gun may be immediately fired agains.'></Run>
+                  <Run FontSize='12' Text='Rate of Fire is determined by the To Hit dice roll for the tanks main gun. If the number rolled is less than or equal to the guns Rate of Fire base number (after all modifications), the gun may be immediately fired again.'></Run>
                </Italic>
             </Paragraph>
          </TableCell>

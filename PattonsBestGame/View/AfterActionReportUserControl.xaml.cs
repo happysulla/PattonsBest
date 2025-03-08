@@ -59,7 +59,8 @@ namespace Pattons_Best
          if (true == mySpanTankName.IsEnabled)
             mySpanTankName.Background = theBrushInActive;
          //----------------------------------
-         s = AddSpaces(report.Model.ToString(), HEADER_INFO_LEN);
+         TankCard card = new TankCard(report.TankCardNum);
+         s = AddSpaces(card.myModel, HEADER_INFO_LEN);
          mySpanTankModel.Inlines.Clear();
          mySpanTankModel.Inlines.Add(new Run(s));
          //----------------------------------
@@ -67,7 +68,7 @@ namespace Pattons_Best
          mySpanSituation.Inlines.Clear();
          mySpanSituation.Inlines.Add(new Run(s));
          //----------------------------------
-         s = AddSpaces(report.Weather.ToString(), HEADER_INFO_LEN);
+         s = AddSpaces(report.Weather, HEADER_INFO_LEN);
          mySpanWeather.Inlines.Clear();
          mySpanWeather.Inlines.Add(new Run(s));
          //----------------------------------

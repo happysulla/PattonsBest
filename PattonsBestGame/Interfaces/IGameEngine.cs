@@ -50,15 +50,6 @@ namespace Pattons_Best
       M4A3_76W_H,
       M4A3_76W_G
    };
-   public enum EnumWeather
-   {
-      Clear,
-      Overcast,
-      Fog,
-      Mud,
-      Mud_Overcast,
-      Snow
-   };
    [Serializable]
    public enum GamePhase
    {
@@ -133,6 +124,10 @@ namespace Pattons_Best
       MorningBriefingAssignCrewRatingEnd,
       MorningBriefingCalendarRoll,
       MorningBriefingWeatherRoll,
+      MorningBriefingWeatherRollEnd,
+      MorningBriefingSnowRoll,
+      MorningBriefingAmmoLoad,
+      MorningBriefingAmmoLoadNormal,
       MorningBriefingEnd,
       Error
    };

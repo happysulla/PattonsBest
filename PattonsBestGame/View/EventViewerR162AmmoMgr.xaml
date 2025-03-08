@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="Pattons_Best.EventViewerR162AmmoMgr"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Pattons_Best"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+   <Grid Name="myGrid" MinWidth="600" MaxWidth="600" Background="#FFB9EA9E" >
+      <Grid.ColumnDefinitions>
+         <ColumnDefinition Name="myColDef1" Width="1*"/>
+         <ColumnDefinition Width="2*"/>
+         <ColumnDefinition Width="1*"/>
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+         <RowDefinition Height="Auto"></RowDefinition>
+         <RowDefinition Height="Auto"></RowDefinition>
+         <RowDefinition Height="Auto"></RowDefinition>
+         <RowDefinition Height="Auto"></RowDefinition>
+         <RowDefinition Height="Auto"></RowDefinition>
+         <RowDefinition Height="Auto"></RowDefinition>
+         <RowDefinition Height="Auto"></RowDefinition>
+         <RowDefinition Height="Auto"></RowDefinition>
+         <RowDefinition Height="Auto"></RowDefinition>
+         <RowDefinition Height="Auto"></RowDefinition>
+         <RowDefinition Height="Auto"></RowDefinition>
+         <RowDefinition Height="Auto"></RowDefinition>
+      </Grid.RowDefinitions>
+      <StackPanel Grid.Row="0" Grid.ColumnSpan="3" Orientation="Horizontal">
+         <TextBlock Name="myTextBlockHeader" Text=" Ratings for New Men" FontWeight="Bold" FontFamily='Georgia' FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+         <Button Content='r7.1' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" />
+      </StackPanel>
+      <Rectangle Grid.Row="1" Grid.ColumnSpan="3" Margin="5" Height="1" Fill="Black"/>
+      <TextBlock Grid.Row="2" Grid.ColumnSpan="3" Name="myTextBlockInstructions" FontFamily='Georgia' FontSize="16" VerticalAlignment="Bottom"  HorizontalAlignment="Left" Margin="2,0,0,5">
+        Determine rating for crew by rolling 1D/2 rounded up. When assigning multiple,
+        <LineBreak/>assign ratings after all crew members rolled.
+      </TextBlock>
+      <StackPanel Grid.Row="3" Grid.ColumnSpan="3" Name="myStackPanelAssignable" DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5,0,0,0">
+         <Rectangle  Height="42" Width="42" Stroke="Black" />
+      </StackPanel>
+      <Rectangle Grid.Row="4" Grid.ColumnSpan="3" Margin="5" Height="1" Fill="Black"/>
+      <!--Table Header Row-->
+      <TextBlock Grid.Row="5" Grid.Column="0" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock1">Ammo Type</TextBlock>
+      <TextBlock Grid.Row="5" Grid.Column="1" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock2">Normal</TextBlock>
+      <TextBlock Grid.Row="5" Grid.Column="2" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock3">Extra</TextBlock>
+   </Grid>
+</UserControl>

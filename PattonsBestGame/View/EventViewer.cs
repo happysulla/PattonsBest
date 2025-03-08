@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -256,10 +257,17 @@ namespace Pattons_Best
                break;
             case GameAction.SetupAssignCrewRating:
             case GameAction.MorningBriefingAssignCrewRating:
-               EventViewerE071CrewMgr newCrewMgr = new EventViewerE071CrewMgr(myGameInstance, myCanvas, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
+               EventViewerR071CrewMgr newCrewMgr = new EventViewerR071CrewMgr(myGameInstance, myCanvas, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == newCrewMgr.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): newCrewMgr.CtorError=true");
-               else if (false == newCrewMgr.AssignNewCrewRatings(ShowE071CrewRatings))
+               else if (false == newCrewMgr.AssignNewCrewRatings(ShowR071CrewRatings))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): AssignNewCrewRatings() returned false");
+               break;
+            case GameAction.MorningBriefingAmmoLoad:
+               EventViewerR162AmmoMgr newAmmoLoadMgr = new EventViewerR162AmmoMgr(myGameInstance, myCanvas, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
+               if (true == newAmmoLoadMgr.CtorError)
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): newAmmoLoadMgr.CtorError=true");
+               else if (false == newAmmoLoadMgr.LoadAmmo(ShowR162AmmoLoad))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): AssignNewCrewRatings() returned false");
                break;
             case GameAction.UpdateEventViewerDisplay:
@@ -374,6 +382,8 @@ namespace Pattons_Best
                      string imageName = img.Name;
                      if (true == img.Name.Contains("Continue"))
                         imageName = "Continue";
+                     else if( true == img.Name.Contains("DieRoll"))
+                        imageName = "DieRoll";
                      string fullImagePath = MapImage.theImageDirectory + Utilities.RemoveSpaces(imageName) + ".gif";
                      System.Windows.Media.Imaging.BitmapImage bitImage = new BitmapImage();
                      bitImage.BeginInit();
@@ -576,11 +586,6 @@ namespace Pattons_Best
          switch (key)
          {
             case "e006":
-               if( 0 == gi.Reports.Count)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.Reports.Count=0");
-                  return false;
-               }
                ReplaceText("DATE", report.Day);
                switch(report.Resistance)
                {
@@ -600,30 +605,114 @@ namespace Pattons_Best
                ReplaceText("PROBABILITY", report.Probability.ToString());
                if (Utilities.NO_RESULT == firstDieResult) // skip today action
                {
-
-                  Image img = new Image { Source = MapItem.theMapImages.GetBitmapImage("Morning"), Width = 300, Height = 150, };
+                  Image imgSun = new Image { Source = MapItem.theMapImages.GetBitmapImage("Morning"), Width = 300, Height = 150, };
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("                               "));
-                  myTextBlock.Inlines.Add(new InlineUIContainer(img));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgSun));
                }
                else if (report.Probability < firstDieResult) // skip today action
                {
-                  Image img = new Image { Source = MapItem.theMapImages.GetBitmapImage("Sherman4"), Width = 300, Height = 190, Name = "GotoCalenderCheck" }; 
+                  Image imgSkip = new Image { Source = MapItem.theMapImages.GetBitmapImage("Sherman4"), Width = 300, Height = 190, Name = "GotoMorningBriefingEnd" }; 
                   myTextBlock.Inlines.Add(new Run("                               "));
-                  myTextBlock.Inlines.Add(new InlineUIContainer(img));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgSkip));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("No combat for today. Sleep good tonight. Click image to continue."));
                }
                else 
                {
-                  Image img = new Image { Source = MapItem.theMapImages.GetBitmapImage("Combat"), Width = 150, Height = 150, Name = "GotoMorningBriefing" };
+                  Image imgBrief = new Image { Source = MapItem.theMapImages.GetBitmapImage("Combat"), Width = 150, Height = 150, Name = "GotoMorningBriefing" };
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("                                     "));
-                  myTextBlock.Inlines.Add(new InlineUIContainer(img));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgBrief));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Possible combat. Click image to continue."));
                }
+               break;
+            case "e007":
+               if ( Utilities.NO_RESULT < gi.DieResults[key][0] )
+               {
+                  Image? imgWeather = null;
+                  switch (report.Weather)
+                  {
+                     case "Clear":
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherClear"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        break;
+                     case "Overcast":
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherClear"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        break;
+                     case "Fog":
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherClear"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        break;
+                     case "Mud":
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherClear"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        break;
+                     case "Mud/Overcast":
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherClear"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        break;
+                     case "Snow":
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherClear"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        break;
+                     default:
+                        break;
+                  }
+                  if( null == imgWeather)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): img=null for key=" + key);
+                     return false;
+                  }
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Weather calls for " + report.Weather + ":"));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                     "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgWeather));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
+            case "e008":
+               break;
+            case "e009":
+               TankCard card = new TankCard(report.TankCardNum);
+               ReplaceText("AMMO_NORMAL_LOAD", card.myNumMainGunRound.ToString());
+               if ("75" == card.myMainGun)
+               {
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("-- WP:") { FontWeight = FontWeights.Bold });
+                  myTextBlock.Inlines.Add(new Run(" Unlimited "));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("-- HBCI:") { FontWeight = FontWeights.Bold });
+                  myTextBlock.Inlines.Add(new Run(" 10 rounds "));
+               }
+               //-----------------------------------------------
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("                                     "));
+               Image imgContinue = new Image { Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = 100, Height = 100, Name = "GotoMorningAmmoLimitsEnd" };
+               myTextBlock.Inlines.Add(new InlineUIContainer(imgContinue));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               break;
+            case "e009a":
+               myTextBlock.Inlines.Add(new Run("AP: "));
+               Button b1 = new Button() { Content = " - ", Name = "ApSubtract", FontFamily = myFontFam1, FontSize = 12 };
+               b1.Click += Button_Click;
+               myTextBlock.Inlines.Add(new InlineUIContainer(b1));
+               myTextBlock.Inlines.Add(new Run(" " + report.MainGunAP.ToString() + " ") { FontSize = 16 });
+               Button b2 = new Button() { Content = " + ", Name = "ApAdd", FontFamily = myFontFam1, FontSize = 12 };
+               b2.Click += Button_Click;
+               myTextBlock.Inlines.Add(new InlineUIContainer(b2));
+               myTextBlock.Inlines.Add(new LineBreak());
+               //-----------------------------------------------
+               Image img = new Image { Source = MapItem.theMapImages.GetBitmapImage("c09Loader"), Width = 150, Height = 150, Name = "GotoMorningAmmoLoadExtra" };
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("                                     "));
+               myTextBlock.Inlines.Add(new InlineUIContainer(img));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("Click image to continue."));
                break;
             default:
                break;
@@ -679,16 +768,16 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
          myGameEngine.PerformAction(ref myGameInstance, ref action, dieRoll);
       }
-      public bool ShowE071CrewRatings()
+      public bool ShowR071CrewRatings()
       {
          if( null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowE071CrewRatings(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowR071CrewRatings(): myGameInstance=null");
             return false;
          }
          if (null == myGameEngine)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowE071CrewRatings(): myGameEngine=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowR071CrewRatings(): myGameEngine=null");
             return false;
          }
          GameAction outAction = GameAction.Error;
@@ -696,7 +785,32 @@ namespace Pattons_Best
             outAction = GameAction.SetupShowCombatCalendarCheck;
          else
             outAction = GameAction.MorningBriefingAssignCrewRatingEnd;
-         StringBuilder sb11 = new StringBuilder("     ######ShowE071CrewRatings() :");
+         StringBuilder sb11 = new StringBuilder("     ######ShowR071CrewRatings() :");
+         sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
+         sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
+         sb11.Append(" a="); sb11.Append(outAction.ToString());
+         Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+         return true;
+      }
+      public bool ShowR162AmmoLoad()
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowR071CrewRatings(): myGameInstance=null");
+            return false;
+         }
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowR071CrewRatings(): myGameEngine=null");
+            return false;
+         }
+         GameAction outAction = GameAction.Error;
+         if (GamePhase.GameSetup == myGameInstance.GamePhase)
+            outAction = GameAction.SetupShowCombatCalendarCheck;
+         else
+            outAction = GameAction.MorningBriefingAssignCrewRatingEnd;
+         StringBuilder sb11 = new StringBuilder("     ######ShowR071CrewRatings() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
          sb11.Append(" a="); sb11.Append(outAction.ToString());
@@ -790,13 +904,22 @@ namespace Pattons_Best
                               return;
                            case "Continue005":
                               action = GameAction.SetupAssignCrewRating;
+                              action = GameAction.SetupShowCombatCalendarCheck; // <cgs> TEST
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
                            case "GotoMorningBriefing":
                               action = GameAction.MorningBriefingBegin;
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
-                           case "GotoCalenderCheck":
+                           case "WeatherRollEnd":
+                              action = GameAction.MorningBriefingAmmoLoad;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
+                           case "GotoMorningAmmoLimitsEnd":
+                              action = GameAction.MorningBriefingAmmoLoadNormal;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
+                           case "GotoMorningBriefingEnd":
                               action = GameAction.MorningBriefingEnd;
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
