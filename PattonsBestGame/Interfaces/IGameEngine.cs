@@ -124,10 +124,11 @@ namespace Pattons_Best
       MorningBriefingAssignCrewRatingEnd,
       MorningBriefingCalendarRoll,
       MorningBriefingWeatherRoll,
-      MorningBriefingWeatherRollEnd,
       MorningBriefingSnowRoll,
+      MorningBriefingWeatherRollEnd,
       MorningBriefingAmmoLoad,
-      MorningBriefingAmmoLoadNormal,
+      MorningBriefingAmmoReadyRackLoad,
+      MorningBriefingTimeCheck,
       MorningBriefingEnd,
       Error
    };

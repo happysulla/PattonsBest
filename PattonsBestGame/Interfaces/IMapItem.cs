@@ -16,6 +16,8 @@ namespace Pattons_Best
       double Zoom { get; set; }
       bool IsHidden { get; set; }
       bool IsAnimated { get; set; }
+      bool IsMoved { get; set; }
+      int Count { get; set; }
       IMapPoint Location { get; set; }
       //----------------------------------------
       ITerritory TerritoryCurrent { get; set; }

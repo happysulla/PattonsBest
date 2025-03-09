@@ -31,17 +31,17 @@ namespace Pattons_Best
       public bool IsUndoCommandAvailable { set; get; } = false;
       public String EndGameReason { set; get; } = "";
       //---------------------------------------------------------------
-      public IMapItems MapItems { set; get; } = new MapItems();
-      public IMapItemMoves MapItemMoves { get; set; } = new MapItemMoves();
-      public IStacks Stacks { get; set; } = new Stacks();
+      public IMapItems MainMapItems { set; get; } = new MapItems();
+      public IMapItems NewMembers { set; get; } = new MapItems();
+      public IMapItems ReadyRacks { set; get; } = new MapItems();
       //------------------------------------------------
       public ITerritory? NewTerritory { set; get; } = null;
       private List<EnteredHex> myEnteredHexes = new List<EnteredHex>();
       public List<EnteredHex> EnteredHexes { get => myEnteredHexes; }
       //---------------------------------------------------------------
       public int Day { get; set; } = 0;
-      //---------------------------------------------------------------
-      public IMapItems NewMembers { set; get; } = new MapItems();
+      public IMapItemMoves MapItemMoves { get; set; } = new MapItemMoves();
+      public IStacks Stacks { get; set; } = new Stacks();
       //---------------------------------------------------------------
       [NonSerialized] private List<IUnitTest> myUnitTests = new List<IUnitTest>();
       public List<IUnitTest> UnitTests { get => myUnitTests; }
@@ -66,17 +66,17 @@ namespace Pattons_Best
             }
             if (false == gameLoadMgr.ReadXmlTerritories(reader, Territories.theTerritories))
                Logger.Log(LogEnum.LE_ERROR, "GameInstance(): ReadTerritoriesXml() returned false");
-            //------------------------------------------------------------------------------------
-            if (false == SurnameMgr.SetInitial())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "GameEngine(): SurnameMgr.InitNames() returned false");
-               CtorError = true;
-               return;
-            }
          }
          catch (Exception e)
          {
             Logger.Log(LogEnum.LE_ERROR, "GameInstance(): ReadTerritoriesXml() exception=\n" + e.ToString());
+            return;
+         }
+         //------------------------------------------------------------------------------------
+         if (false == SurnameMgr.SetInitial())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GameEngine(): SurnameMgr.InitNames() returned false");
+            CtorError = true;
             return;
          }
       }

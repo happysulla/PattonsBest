@@ -1187,7 +1187,7 @@ namespace Pattons_Best
             return null;
          }
          //------------------------------------------
-         if (false == CreateXmlMapItems(aXmlDocument, gi.MapItems))
+         if (false == CreateXmlMapItems(aXmlDocument, gi.MainMapItems))
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateXmlGameStat() returned false");
             return null;

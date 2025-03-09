@@ -34,7 +34,7 @@ namespace Pattons_Best
       public RuleDialogViewer? myRulesMgr;
       //--------------------------------------------------------------------
       private ScrollViewer? myScrollViewerTextBlock;
-      private Canvas? myCanvas = null;
+      private Canvas? myCanvasMain = null;
       private TextBlock? myTextBlock = null;
       //--------------------------------------------------------------------
       private readonly FontFamily myFontFam1 = new FontFamily("Courier New");
@@ -62,7 +62,7 @@ namespace Pattons_Best
             CtorError = true;
             return;
          }
-         myCanvas = c;
+         myCanvasMain = c;
          if (null == territories)
          {
             Logger.Log(LogEnum.LE_ERROR, "EventViewer(): territories=null");
@@ -257,18 +257,20 @@ namespace Pattons_Best
                break;
             case GameAction.SetupAssignCrewRating:
             case GameAction.MorningBriefingAssignCrewRating:
-               EventViewerR071CrewMgr newCrewMgr = new EventViewerR071CrewMgr(myGameInstance, myCanvas, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
+               EventViewerR071CrewMgr newCrewMgr = new EventViewerR071CrewMgr(myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == newCrewMgr.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): newCrewMgr.CtorError=true");
                else if (false == newCrewMgr.AssignNewCrewRatings(ShowR071CrewRatings))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): AssignNewCrewRatings() returned false");
                break;
             case GameAction.MorningBriefingAmmoLoad:
-               EventViewerR162AmmoMgr newAmmoLoadMgr = new EventViewerR162AmmoMgr(myGameInstance, myCanvas, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
+               EventViewerR162AmmoMgr newAmmoLoadMgr = new EventViewerR162AmmoMgr(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == newAmmoLoadMgr.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): newAmmoLoadMgr.CtorError=true");
                else if (false == newAmmoLoadMgr.LoadAmmo(ShowR162AmmoLoad))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): AssignNewCrewRatings() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): LoadAmmo() returned false");
+               break;
+            case GameAction.MorningBriefingAmmoReadyRackLoad:
                break;
             case GameAction.UpdateEventViewerDisplay:
                gi.IsGridActive = false;
@@ -477,9 +479,9 @@ namespace Pattons_Best
       }
       public bool ShowRegion(string key)
       {
-         if (null == myCanvas)
+         if (null == myCanvasMain)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowRegion(): myCanvas=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowRegion(): myCanvasMain=null");
             return false;
          }
          if (null == myTerritories)
@@ -489,13 +491,13 @@ namespace Pattons_Best
          }
          // Remove any existing UI elements from the Canvas
          List<UIElement> results = new List<UIElement>();
-         foreach (UIElement ui in myCanvas.Children)
+         foreach (UIElement ui in myCanvasMain.Children)
          {
             if (ui is Polygon)
                results.Add(ui);
          }
          foreach (UIElement ui1 in results)
-            myCanvas.Children.Remove(ui1);
+            myCanvasMain.Children.Remove(ui1);
          //--------------------------------
          ITerritory? t = myTerritories.Find(key);
          if (null == t)
@@ -504,7 +506,7 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------
-         if (false == SetThumbnailState(myCanvas, t))
+         if (false == SetThumbnailState(myCanvasMain, t))
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowRegion(): SetThumbnailState returned false name=" + key);
             return false;
@@ -513,7 +515,7 @@ namespace Pattons_Best
          foreach (IMapPoint mp1 in t.Points)
             points.Add(new System.Windows.Point(mp1.X, mp1.Y));
          Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Tag = t.ToString() };
-         myCanvas.Children.Add(aPolygon);
+         myCanvasMain.Children.Add(aPolygon);
          return true;
       }
       //--------------------------------------------------------------------
@@ -689,27 +691,8 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new Run("                                     "));
-               Image imgContinue = new Image { Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = 100, Height = 100, Name = "GotoMorningAmmoLimitsEnd" };
+               Image imgContinue = new Image { Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = 100, Height = 100, Name = "GotoMorningAmmoLimitsSetEnd" };
                myTextBlock.Inlines.Add(new InlineUIContainer(imgContinue));
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new Run("Click image to continue."));
-               break;
-            case "e009a":
-               myTextBlock.Inlines.Add(new Run("AP: "));
-               Button b1 = new Button() { Content = " - ", Name = "ApSubtract", FontFamily = myFontFam1, FontSize = 12 };
-               b1.Click += Button_Click;
-               myTextBlock.Inlines.Add(new InlineUIContainer(b1));
-               myTextBlock.Inlines.Add(new Run(" " + report.MainGunAP.ToString() + " ") { FontSize = 16 });
-               Button b2 = new Button() { Content = " + ", Name = "ApAdd", FontFamily = myFontFam1, FontSize = 12 };
-               b2.Click += Button_Click;
-               myTextBlock.Inlines.Add(new InlineUIContainer(b2));
-               myTextBlock.Inlines.Add(new LineBreak());
-               //-----------------------------------------------
-               Image img = new Image { Source = MapItem.theMapImages.GetBitmapImage("c09Loader"), Width = 150, Height = 150, Name = "GotoMorningAmmoLoadExtra" };
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new Run("                                     "));
-               myTextBlock.Inlines.Add(new InlineUIContainer(img));
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new Run("Click image to continue."));
@@ -797,20 +780,16 @@ namespace Pattons_Best
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowR071CrewRatings(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowR162AmmoLoad(): myGameInstance=null");
             return false;
          }
          if (null == myGameEngine)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowR071CrewRatings(): myGameEngine=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowR162AmmoLoad(): myGameEngine=null");
             return false;
          }
-         GameAction outAction = GameAction.Error;
-         if (GamePhase.GameSetup == myGameInstance.GamePhase)
-            outAction = GameAction.SetupShowCombatCalendarCheck;
-         else
-            outAction = GameAction.MorningBriefingAssignCrewRatingEnd;
-         StringBuilder sb11 = new StringBuilder("     ######ShowR071CrewRatings() :");
+         GameAction outAction = GameAction.MorningBriefingTimeCheck;
+         StringBuilder sb11 = new StringBuilder("     ######ShowR162AmmoLoad() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
          sb11.Append(" a="); sb11.Append(outAction.ToString());
@@ -831,9 +810,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): myGameInstance=null");
             return;
          }
-         if ( null == myCanvas )
+         if ( null == myCanvasMain )
          {
-            Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): myCanvas=null");
+            Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): myCanvasMain=null");
             return;
          }
          if (null == myDieRoller)
@@ -874,7 +853,7 @@ namespace Pattons_Best
                      RollEndCallback rollEndCallback = ShowDieResult;
                      if (true == img.Name.Contains("DieRoll"))
                      {
-                        myDieRoller.RollMovingDie(myCanvas, rollEndCallback);
+                        myDieRoller.RollMovingDie(myCanvasMain, rollEndCallback);
                         img.Visibility = Visibility.Hidden;
                         return;
                      }
@@ -883,7 +862,7 @@ namespace Pattons_Best
                         switch (img.Name)
                         {
                            case "DiceRoll":
-                              myDieRoller.RollMovingDice(myCanvas, rollEndCallback);
+                              myDieRoller.RollMovingDice(myCanvasMain, rollEndCallback);
                               img.Visibility = Visibility.Hidden;
                               return;
                            case "Continue001":
@@ -912,11 +891,11 @@ namespace Pattons_Best
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
                            case "WeatherRollEnd":
-                              action = GameAction.MorningBriefingAmmoLoad;
+                              action = GameAction.MorningBriefingWeatherRollEnd;
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
-                           case "GotoMorningAmmoLimitsEnd":
-                              action = GameAction.MorningBriefingAmmoLoadNormal;
+                           case "GotoMorningAmmoLimitsSetEnd":
+                              action = GameAction.MorningBriefingAmmoLoad;
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
                            case "GotoMorningBriefingEnd":

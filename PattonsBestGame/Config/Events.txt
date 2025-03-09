@@ -73,7 +73,7 @@ Snow is in the forecast. Roll for type of snow on the
  Table:  
 <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/>"
-e009	"<Bold>e008 Ammo Load Limits</Bold> <InlineUIContainer><Button Content='r16.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+e009	"<Bold>e008 Ammo Loading Limits</Bold> <InlineUIContainer><Button Content='r16.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
 See 
 <InlineUIContainer><Button Content='r16.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
@@ -84,11 +84,13 @@ for loading ammo. The Tank Card limits the number of normal main gun ammo allowe
 <LineBreak/><LineBreak/>
 -- <Bold>AP:</Bold> Unlimited<LineBreak/>
 -- <Bold>HE:</Bold> Unlimited"
-e009a	"<Bold>e009a Loading Normal Ammo</Bold> <InlineUIContainer><Button Content='r16.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+e010	"<Bold>e010 Time Check</Bold> 
+<InlineUIContainer><Button Content='r4.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
-"
-e009b	"<Bold>e009b Loading Extra Ammo</Bold> <InlineUIContainer><Button Content='r16.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
-<LineBreak/><LineBreak/>
+Determine sunrise and sunset for current month using the <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. The same die roll is used to determine the ammo expended:
+<InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>.
+
 "
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"

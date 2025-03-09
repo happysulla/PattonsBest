@@ -363,14 +363,16 @@ namespace Pattons_Best
                   string weatherRolled = TableMgr.GetWeather(dieRoll);
                   lastReport.Weather = weatherRolled;
                   break;
-               case GameAction.MorningBriefingAmmoLoad:
+               case GameAction.MorningBriefingWeatherRollEnd:
                   if (true == lastReport.Weather.Contains("Snow"))
                      gi.EventDisplayed = gi.EventActive = "e008"; // first need to roll for snow
                   else
                      gi.EventDisplayed = gi.EventActive = "e009";
                   break;
-               case GameAction.MorningBriefingAmmoLoadNormal:
-                  gi.EventDisplayed = gi.EventActive = "e009a";
+               case GameAction.MorningBriefingAmmoReadyRackLoad:
+                  break;
+               case GameAction.MorningBriefingTimeCheck:
+                  gi.EventDisplayed = gi.EventActive = "e010";
                   break;
                case GameAction.MorningBriefingSnowRoll:
                   gi.DieResults[key][0] = dieRoll;

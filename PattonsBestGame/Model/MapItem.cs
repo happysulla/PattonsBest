@@ -48,15 +48,6 @@ namespace Pattons_Best
       public List<BloodSpot> WoundSpots { get => myWoundSpots; }
       public double Zoom { get; set; } = 1.0;
       public bool IsHidden { get; set; } = false;
-      //--------------------------------------------------
-      private ITerritory myTerritoryCurrent = new Territory("Offboard");
-      public ITerritory TerritoryCurrent { get => myTerritoryCurrent; set => myTerritoryCurrent = value; }
-      private ITerritory myTerritoryStarting = new Territory("Offboard");
-      public ITerritory TerritoryStarting { get=>myTerritoryStarting; set=>myTerritoryStarting=value; }
-      public IMapPoint Location { get; set; } = new MapPoint(0.0, 0.0);
-      //--------------------------------------------------
-      public bool IsMoved { get; set; } = false;
-      private bool myIsFlipped = false;
       public bool IsAnimated
       {
          set
@@ -84,6 +75,16 @@ namespace Pattons_Best
             return mii.IsAnimated;
          }
       }
+      public bool IsMoved { get; set; } = false;
+      public int Count { get; set; } = 0;
+      //--------------------------------------------------
+      public IMapPoint Location { get; set; } = new MapPoint(0.0, 0.0);
+      private ITerritory myTerritoryCurrent = new Territory("Offboard");
+      public ITerritory TerritoryCurrent { get => myTerritoryCurrent; set => myTerritoryCurrent = value; }
+      private ITerritory myTerritoryStarting = new Territory("Offboard");
+      public ITerritory TerritoryStarting { get => myTerritoryStarting; set => myTerritoryStarting = value; }
+      //--------------------------------------------------
+      private bool myIsFlipped = false;
       //----------------------------------------------------------------------------
       public MapItem()
       {
@@ -95,6 +96,12 @@ namespace Pattons_Best
          this.IsHidden = mi.IsHidden;
          this.TopImageName = mi.TopImageName;
          this.BottomImageName = mi.BottomImageName;
+      }
+      public MapItem(string name, string topImageName, ITerritory territory) :  
+         this(name, 1.0, false, false, topImageName) 
+      {
+         TerritoryCurrent = territory;
+         TerritoryStarting = territory;
       }
       protected MapItem(string name)
       {
@@ -197,7 +204,7 @@ namespace Pattons_Best
          sb.Append(this.Name);
          sb.Append(">T=<");
          sb.Append(this.TerritoryCurrent.Name);
-            return sb.ToString();
+         return sb.ToString();
       }
       //---------------------------------------------------------------------------- static functions
       public static void Shuffle(ref List<IMapItem> mapItems)
@@ -251,7 +258,7 @@ namespace Pattons_Best
          else
          {
             IMapImage? mii = theMapImages.Find(mi.TopImageName);
-            if( null == mii )
+            if (null == mii)
             {
                Logger.Log(LogEnum.LE_ERROR, "SetButtonContent(): mii=null");
             }
@@ -313,7 +320,7 @@ namespace Pattons_Best
          foreach (Object o in myList)
          {
             IMapItem? mi = (IMapItem)o;
-            if( null == mi) return null;
+            if (null == mi) return null;
             if (miName == mi.Name)
             {
                myList.Remove(mi);
@@ -332,10 +339,10 @@ namespace Pattons_Best
       }
       public IMapItem? this[int index]
       {
-         get 
+         get
          {
             IMapItem? mi = myList[index] as IMapItem;
-            return mi; 
+            return mi;
          }
          set { myList[index] = value; }
       }
@@ -350,7 +357,7 @@ namespace Pattons_Best
             {
                IMapItem? randomMapItem = myList[index] as IMapItem;
                myList.RemoveAt(index);
-               if (randomMapItem == null )
+               if (randomMapItem == null)
                   Logger.Log(LogEnum.LE_ERROR, "Shuffle(): randomMapItem=null");
                else
                   newOrder.Add(randomMapItem);
@@ -363,7 +370,7 @@ namespace Pattons_Best
          for (int j = 0; j < numOfRotates; j++)
          {
             Object? temp = myList[0];
-            if( temp == null)
+            if (temp == null)
             {
                Logger.Log(LogEnum.LE_ERROR, "Rotate(): myList[0]=null");
                return;

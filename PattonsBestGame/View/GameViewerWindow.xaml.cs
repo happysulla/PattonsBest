@@ -104,7 +104,8 @@ namespace Pattons_Best
       private readonly SolidColorBrush mySolidColorBrushRosyBrown = new SolidColorBrush();
       private readonly SolidColorBrush mySolidColorBrushOrange = new SolidColorBrush();
       //---------------------------------------------------------------------
-      private readonly List<Button> myButtonMapItems = new List<Button>();
+      private readonly List<Button> myButtonMains = new List<Button>();
+      private readonly List<Button> myButtonTanks = new List<Button>();
       private readonly SplashDialog mySplashScreen;
       private ContextMenu myContextMenuButton = new ContextMenu();
       private readonly ContextMenu myContextMenuCanvas = new ContextMenu();
@@ -251,7 +252,7 @@ namespace Pattons_Best
          else if ((GameAction.UpdateLoadingGame == action) || (GameAction.UpdateNewGame == action) )
          {
             myGameInstance = gi;
-            myButtonMapItems.Clear();
+            myButtonMains.Clear();
             foreach (UIElement ui in myCanvasMap.Children) // remove all buttons on map
             {
                if (ui is Button b)
@@ -292,6 +293,10 @@ namespace Pattons_Best
             case GameAction.MorningBriefingBegin:
             case GameAction.MorningBriefingCalendarRoll:
             case GameAction.MorningBriefingEnd:
+               break;
+            case GameAction.MorningBriefingAmmoReadyRackLoad:
+               if( false == UpdateCanvasTank(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                break;
             case GameAction.EndGameWin:
             case GameAction.EndGameLost:
@@ -346,15 +351,28 @@ namespace Pattons_Best
          ITerritory? territory = Territories.theTerritories.Find(territoryName);
          if (null == territory)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): TerritoryExtensions.Find() returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateButtonMapItem(): TerritoryExtensions.Find() returned null");
             return false;
          }
          System.Windows.Controls.Button b = new Button { ContextMenu = myContextMenuButton, Name = Utilities.RemoveSpaces(mi.Name), Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
          Canvas.SetLeft(b, territory.CenterPoint.X - mi.Zoom * Utilities.theMapItemOffset + (counterCount * Utilities.STACK));
          Canvas.SetTop(b, territory.CenterPoint.Y - mi.Zoom * Utilities.theMapItemOffset + (counterCount * Utilities.STACK));
          MapItem.SetButtonContent(b, mi, false, false, false, false); // This sets the image as the button's content
-         myButtonMapItems.Add(b);
-         myCanvasMap.Children.Add(b);
+         if( "Tank" == territory.CanvasName)
+         {
+            myButtonTanks.Add(b);
+            myCanvasTank.Children.Add(b);
+         }
+         else if ("Main" == territory.CanvasName)
+         {
+            myButtonMains.Add(b);
+            myCanvasMap.Children.Add(b);
+         }
+         else
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateButtonMapItem(): reached default  for territory.CanvasName=" + territory.CanvasName);
+            return false;
+         }
          Canvas.SetZIndex(b, counterCount);
          b.Click += ClickButtonMapItem;
          b.MouseEnter += MouseEnterMapItem;
@@ -489,6 +507,74 @@ namespace Pattons_Best
          }
          return sb.ToString();
       }
+      private bool UpdateCanvasTank(IGameInstance gi, GameAction action)
+      {
+         //-------------------------------------------------------
+         // Clean the Canvas of all marks
+         List<UIElement> elements = new List<UIElement>();
+         foreach (UIElement ui in myCanvasMap.Children)
+         {
+            if (ui is Image img)
+            {
+               if ("CanvasTank" == img.Name)
+                  continue;
+               elements.Add(ui);
+            }
+         }
+         foreach (UIElement ui1 in elements)
+            myCanvasMap.Children.Remove(ui1);
+         //-------------------------------------------------------
+         if (GamePhase.UnitTest == gi.GamePhase)
+            return true;
+         //-------------------------------------------------------
+         foreach(IMapItem mi in gi.ReadyRacks)
+         {
+            if( null == mi )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): mi=null");
+               return false;
+            }
+            Button? b = myButtonTanks.Find(mi.Name);
+            if (null != b)
+            {
+               b.BeginAnimation(Canvas.LeftProperty, null); // end animation offset
+               b.BeginAnimation(Canvas.TopProperty, null);  // end animation offset
+               ITerritory t = mi.TerritoryCurrent;
+               Double x = t.CenterPoint.X - (mi.Zoom * Utilities.theMapItemOffset);
+               Double y = t.CenterPoint.Y - (mi.Zoom * Utilities.theMapItemOffset);
+               Canvas.SetLeft(b, x);
+               Canvas.SetTop(b, y);
+               Canvas.SetZIndex(b, 9999);
+            }
+            else
+            {
+               if (false == CreateButtonMapItem(mi, 0))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): CreateButtonMapItem() returned false");
+                  return false;
+               }
+            }
+         }
+         //-------------------------------------------------------
+         try
+         {
+            switch (action)
+            {
+               case GameAction.EndGameClose:
+                  GameAction outActionClose = GameAction.EndGameExit;
+                  myGameEngine.PerformAction(ref gi, ref outActionClose);
+                  break;
+               default:
+                  break;
+            }
+         }
+         catch (Exception e)
+         {
+            Console.WriteLine("UpdateCanvas() - EXCEPTION THROWN a=" + action.ToString() + "\ne={0}", e.ToString());
+            return false;
+         }
+         return true;
+      }
       private bool UpdateCanvas(IGameInstance gi, GameAction action, bool isOnlyLastLegRemoved = false)
       {
          //-------------------------------------------------------
@@ -597,7 +683,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): b=null for n=" + mim.MapItem.Name);
             return false;
          }
-         Button? b = myButtonMapItems.Find(Utilities.RemoveSpaces(mim.MapItem.Name));
+         Button? b = myButtonMains.Find(Utilities.RemoveSpaces(mim.MapItem.Name));
          if (null == b)
          {
             Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): b=null for n=" + mim.MapItem.Name);

@@ -46,8 +46,9 @@ namespace Pattons_Best
             myDieRoll = Utilities.NO_RESULT;
          }
       };
-      private GridRow[] myGridRows = new GridRow[5]; // five possible crew members
+      private GridRow[] myGridRows = new GridRow[4];
       //---------------------------------------------------
+      private IGameEngine? myGameEngine;
       private IGameInstance? myGameInstance;
       private readonly Canvas? myCanvas;
       private readonly ScrollViewer? myScrollViewer;
@@ -78,9 +79,17 @@ namespace Pattons_Best
       private readonly FontFamily myFontFam = new FontFamily("Tahoma");
       private readonly FontFamily myFontFam1 = new FontFamily("Courier New");
       //-------------------------------------------------------------------------------------
-      public EventViewerR162AmmoMgr(IGameInstance? gi, Canvas? c, ScrollViewer? sv, RuleDialogViewer? rdv, IDieRoller dr)
+      public EventViewerR162AmmoMgr(IGameEngine? ge, IGameInstance? gi, Canvas? c, ScrollViewer? sv, RuleDialogViewer? rdv, IDieRoller dr)
       {
          InitializeComponent();
+         //--------------------------------------------------
+         if (null == ge) // check parameter inputs
+         {
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerR162AmmoMgr(): ge=null");
+            CtorError = true;
+            return;
+         }
+         myGameEngine = ge;
          //--------------------------------------------------
          if (null == gi) // check parameter inputs
          {
@@ -126,6 +135,11 @@ namespace Pattons_Best
       }
       public bool LoadAmmo(EndAmmoLoadCallback callback)
       {
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): myGameEngine=null");
+            return false;
+         }
          if (null == myGameInstance)
          {
             Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): myGameInstance=null");
@@ -152,11 +166,27 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------------
-         myGridRows = new GridRow[5];
          myState = E162Enum.LOAD_NORMAL;
          myIsRollInProgress = false;
          myCallback = callback;
          //--------------------------------------------------
+         ITerritory? t = Territories.theTerritories.Find("ReadyRackHe");
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackHe");
+            return false;
+         }
+         IMapItem rr1 = new MapItem("ReadyRackHe", "c12RoundsLeft", t);
+         myGameInstance.ReadyRacks.Add(rr1);
+         t = Territories.theTerritories.Find("ReadyRackAp");
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackAp");
+            return false;
+         }
+         IMapItem rr2 = new MapItem("ReadyRackAp", "c12RoundsLeft", t);
+         //--------------------------------------------------
+         myGameInstance.ReadyRacks.Add(rr2);
          IAfterActionReport? lastReport = myGameInstance.Reports.GetLast(); // remove it from list
          if (null == lastReport)
          {
@@ -185,11 +215,35 @@ namespace Pattons_Best
             myUnassignedCount -= myHbciRoundCount;
             myWpRoundCount = 10;
             myUnassignedCount -= myWpRoundCount;
+            t = Territories.theTerritories.Find("ReadyRackWp");
+            if( null == t )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackWp");
+               return false;
+            }
+            IMapItem rr3 = new MapItem("ReadyRackWp", "c12RoundsLeft", t);
+            myGameInstance.ReadyRacks.Add(rr3);
+            t = Territories.theTerritories.Find("ReadyRackHbci");
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackHbci");
+               return false;
+            }
+            IMapItem rr4 = new MapItem("ReadyRackHbci", "c12RoundsLeft", t );
+            myGameInstance.ReadyRacks.Add(rr4);
          }
          else
          {
             myHvapRoundCountOringal = myHvapRoundCount = lastReport.MainGunHVAP;
             myUnassignedCount -= myHvapRoundCount;
+            t = Territories.theTerritories.Find("ReadyRackAp");
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackAp");
+               return false;
+            }
+            IMapItem rr3 = new MapItem("ReadyRackHvap", "c12RoundsLeft", t );
+            myGameInstance.ReadyRacks.Add(rr3);
          }
          // Assign 60% or freaming rounds to HE
          myHeRoundCount = (int)Math.Ceiling((double)myUnassignedCount * 0.6);
@@ -847,6 +901,11 @@ namespace Pattons_Best
       }
       private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
       {
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): myGameEngine=null");
+            return;
+         }
          if (null == myGameInstance)
          {
             Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): myGameInstance=null");
@@ -898,9 +957,15 @@ namespace Pattons_Best
                         if ("MainGunRound" == img.Name)
                         {
                            if( E162Enum.LOAD_NORMAL == myState )
+                           {
                               myState = E162Enum.LOAD_EXTRA_CHECK;
+                           }
                            else
+                           {
                               myState = E162Enum.READY_RACK;
+                              GameAction action = GameAction.MorningBriefingAmmoReadyRackLoad;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           }
                         }
                         else if ("AfterActionReport" == img.Name)
                         {
@@ -1018,6 +1083,11 @@ namespace Pattons_Best
       }
       private void ButtonReadyRackChange_Click(object sender, RoutedEventArgs e)
       {
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ButtonReadyRackChange_Click(): myGameEngine=null");
+            return;
+         }
          Button b = (Button)sender;
          switch (b.Name)
          {
@@ -1065,6 +1135,8 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ButtonAmmoChange_Click(): reached default with key=" + b.Name);
                break;
          }
+         GameAction action = GameAction.MorningBriefingAmmoReadyRackLoad;
+         myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
          if (false == UpdateGrid())
             Logger.Log(LogEnum.LE_ERROR, "ButtonAmmoChange_Click(): UpdateGrid() return false");
       }

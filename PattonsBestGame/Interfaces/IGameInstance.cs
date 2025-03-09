@@ -27,17 +27,18 @@ namespace Pattons_Best
       bool IsUndoCommandAvailable { set; get; } // Allow user to back up if selected wrong user action
       String EndGameReason { set; get; }
       //----------------------------------------------
-      IMapItems MapItems { set; get; }
-      IMapItemMoves MapItemMoves { set; get; }
-      IStacks Stacks { set; get; }
+      IMapItems MainMapItems { set; get; }
+      IMapItems NewMembers { set; get; }
+      IMapItems ReadyRacks { set; get; }
       //------------------------------------------------
       ITerritory? NewTerritory { set; get; }
       List<EnteredHex> EnteredHexes { get; }
       //------------------------------------------------
       int Day { get; set; }
       //------------------------------------------------
-      IMapItems NewMembers { set; get; }
-      //----------------------------------------------
+      IMapItemMoves MapItemMoves { set; get; }
+      IStacks Stacks { set; get; }
+      //------------------------------------------------
       List<IUnitTest> UnitTests { get; }
    }
 }
