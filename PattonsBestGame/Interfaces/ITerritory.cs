@@ -7,7 +7,7 @@ namespace Pattons_Best
    public interface ITerritory
    {
       string Name { get; set; }
-      TerritoryEnum Parent { get; set; }
+      string CanvasName { get; set; }
       string Type { get; set; }
       IMapPoint CenterPoint { get; set; }
       List<IMapPoint> Points { set; get; }

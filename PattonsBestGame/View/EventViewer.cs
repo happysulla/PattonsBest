@@ -605,7 +605,7 @@ namespace Pattons_Best
                ReplaceText("PROBABILITY", report.Probability.ToString());
                if (Utilities.NO_RESULT == firstDieResult) // skip today action
                {
-                  Image imgSun = new Image { Source = MapItem.theMapImages.GetBitmapImage("Morning"), Width = 300, Height = 150, };
+                  Image imgSun = new Image { Source = MapItem.theMapImages.GetBitmapImage("Morning"), Width = 300, Height = 150 };
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("                               "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imgSun));

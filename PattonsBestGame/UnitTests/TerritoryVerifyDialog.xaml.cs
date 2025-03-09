@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Shapes;
 using static Pattons_Best.Territory;
 namespace Pattons_Best
 {
@@ -10,7 +11,7 @@ namespace Pattons_Best
       public String RadioOutputParent { get; set; } = "ERROR";
       public String CenterPointX { get; set; } = "";
       public String CenterPointY { get; set; } = "";
-      public TerritoryVerifyDialog(ITerritory t, double anX)
+      public TerritoryVerifyDialog(ITerritory t)
       {
          InitializeComponent();
          myTextBoxName.Text = t.Name;
@@ -34,21 +35,11 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "TerritoryVerifyDialog(): unk type=" + t.Type);
                break;
          }
-         switch (t.Parent)
-         {
-            case TerritoryEnum.Movement:
-               myRadioButtonE.IsChecked = true;
-               break;
-            case TerritoryEnum.Tank:
-               myRadioButtonF.IsChecked = true;
-               break;
-            case TerritoryEnum.Battle:
-               myRadioButtonG.IsChecked = true;
-               break;
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "TerritoryVerifyDialog(): unk type=" + t.Type);
-               break;
-         }
+         if ("Main" == t.CanvasName)
+            myRadioButtonE.IsChecked = true;
+         else
+            myRadioButtonF.IsChecked = true;
+
       }
       private void OkButton_Click(object sender, RoutedEventArgs e)
       {

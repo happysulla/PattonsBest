@@ -9,15 +9,8 @@ namespace Pattons_Best
    [Serializable]
    public class Territory : ITerritory
    {
-      public enum TerritoryEnum
-      {
-         Tank,
-         Movement,
-         Battle, 
-         Error
-      }
       public string Name { get; set; } = "Offboard";
-      public TerritoryEnum Parent { get; set; } = TerritoryEnum.Error;
+      public string CanvasName { get; set; } = "Main";
       public string Type { get; set; } = "ERROR";
       public IMapPoint CenterPoint { get; set; } = new MapPoint();
       public List<IMapPoint> Points { get; set; } = new List<IMapPoint>();

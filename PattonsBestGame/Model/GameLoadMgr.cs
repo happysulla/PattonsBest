@@ -272,15 +272,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(Parent)=null");
                return false;
             }
-            switch (sAttribute)
-            {
-               case "Tank": territory.Parent = Territory.TerritoryEnum.Tank; break;
-               case "Movement": territory.Parent = Territory.TerritoryEnum.Movement; break;
-               case "Battle": territory.Parent = Territory.TerritoryEnum.Battle; break;
-               default:
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): reached default sAttribute=" + sAttribute);
-                  return false;
-            }
+            territory.CanvasName = sAttribute;
             //--------------------------------------
             reader.Read();
             if (false == reader.IsStartElement())
@@ -466,7 +458,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(terrElem) returned null");
                return false;
             }
-            elem.SetAttribute("value", t.Parent.ToString());
+            elem.SetAttribute("value", t.CanvasName);
             XmlNode? node = territoryNode.AppendChild(elem);
             if (null == node)
             {
