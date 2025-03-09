@@ -20,11 +20,14 @@ namespace Pattons_Best
    {
       public delegate bool EndAmmoLoadCallback();
       private const int STARTING_ASSIGNED_ROW = 6;
+      private const int MAX_VOLUNTARY_ROUNDS = 30;
       public enum E162Enum
       {
          LOAD_NORMAL,
          LOAD_EXTRA_CHECK,
+         LOAD_EXTRA_CHECK_SHOW,
          LOAD_EXTRA,
+         LOAD_EXTRA_VOLUNTARILY,
          READY_RACK,
          END
       };
@@ -32,7 +35,6 @@ namespace Pattons_Best
       private EndAmmoLoadCallback? myCallback = null;
       private E162Enum myState = E162Enum.LOAD_NORMAL;
       private bool myIsRollInProgress = false;
-      private int myRollResultRowNum = 0;
       //---------------------------------------------------
       public struct GridRow
       {
@@ -51,6 +53,7 @@ namespace Pattons_Best
       private readonly ScrollViewer? myScrollViewer;
       private RuleDialogViewer? myRulesMgr;
       private IDieRoller? myDieRoller;
+      private string myDieRollResult="";
       //---------------------------------------------------
       private string myMainGun = "75";
       private int myUnassignedCount = 0;
@@ -61,8 +64,15 @@ namespace Pattons_Best
       private int myHbciRoundCountOriginal = 0;
       private int myHvapRoundCount = 0;
       private int myHvapRoundCountOringal = 0;
-      private int myMaxReadyRackCount = 0;
+      private int myExtraAmmo = -1;
+      private int myUnassignedReadyRack = 0;
+      private int myHeReadyRackCount = 0;
+      private int myApReadyRackCount = 0;
+      private int myWpReadyRackCount = 0;
+      private int myHbciReadyRackCount = 0;
+      private int myHvapReadyRackCount = 0;
       //---------------------------------------------------
+      private readonly Thickness myMarginAssignPanel = new Thickness(20, 0, 0, 0);
       private readonly Thickness myMarginLeft = new Thickness(0, 0, 5, 0);
       private readonly Thickness myMarginRight = new Thickness(5, 0, 0, 0);
       private readonly FontFamily myFontFam = new FontFamily("Tahoma");
@@ -145,7 +155,6 @@ namespace Pattons_Best
          myGridRows = new GridRow[5];
          myState = E162Enum.LOAD_NORMAL;
          myIsRollInProgress = false;
-         myRollResultRowNum = 0;
          myCallback = callback;
          //--------------------------------------------------
          IAfterActionReport? lastReport = myGameInstance.Reports.GetLast(); // remove it from list
@@ -155,7 +164,7 @@ namespace Pattons_Best
             return false;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
-         myMaxReadyRackCount = card.myMaxReadyRackCount;
+         myUnassignedReadyRack = card.myMaxReadyRackCount;
          myUnassignedCount = card.myNumMainGunRound;
          myMainGun = card.myMainGun;
          myApRoundCount = 0;
@@ -163,6 +172,13 @@ namespace Pattons_Best
          myWpRoundCount = 0;
          myHbciRoundCount = 0;
          myHvapRoundCount = 0;
+         myExtraAmmo = -1;
+         myDieRollResult = "";
+         myApReadyRackCount = 0;
+         myHeReadyRackCount = 0;
+         myWpReadyRackCount = 0;
+         myHbciReadyRackCount = 0;
+         myHvapReadyRackCount = 0;
          if ("75" == myMainGun)
          {
             myHbciRoundCountOriginal = myHbciRoundCount = lastReport.MainGunHCBI;
@@ -238,16 +254,37 @@ namespace Pattons_Best
          switch (myState)
          {
             case E162Enum.LOAD_NORMAL:
-               myTextBlockInstructions.Inlines.Add(new Run("Assign ammo up to maximum load."));
+               if( 0 < myUnassignedCount )
+                  myTextBlockInstructions.Inlines.Add(new Run("Adjust normal ammo type."));
+               else
+                  myTextBlockInstructions.Inlines.Add(new Run("Adjust normal ammo type or click gun round image to continue."));
                break;
             case E162Enum.LOAD_EXTRA_CHECK:
                myTextBlockInstructions.Inlines.Add(new Run("Roll to determine if extra ammo required."));
+               myR1621.Visibility = Visibility.Hidden;
+               myR1622.Visibility = Visibility.Visible;
+               break;
+            case E162Enum.LOAD_EXTRA_CHECK_SHOW:
+               myTextBlockInstructions.Inlines.Add(new Run("Click anywhere to continue."));
                break;
             case E162Enum.LOAD_EXTRA:
-               myTextBlockInstructions.Inlines.Add(new Run("Assign extra ammo."));
+               if (0 < myUnassignedCount)
+                  myTextBlockInstructions.Inlines.Add(new Run("Adjust normal ammo type."));
+               else
+                  myTextBlockInstructions.Inlines.Add(new Run("Adjust normal ammo type or click gun round image to continue."));
+               myR1621.Visibility = Visibility.Hidden;
+               myR1622.Visibility = Visibility.Visible;
+               break;
+            case E162Enum.LOAD_EXTRA_VOLUNTARILY:
+                  myTextBlockInstructions.Inlines.Add(new Run("Voluntarily add extra rounds --or-- Click gun round image to continue."));
                break;
             case E162Enum.READY_RACK:
-               myTextBlockInstructions.Inlines.Add(new Run("Prepare the ready rack."));
+               if (0 < myUnassignedReadyRack)
+                  myTextBlockInstructions.Inlines.Add(new Run("Adjust ready rack."));
+               else
+                  myTextBlockInstructions.Inlines.Add(new Run("Adjust ready rack or AAR image to continue."));
+               myR1622.Visibility = Visibility.Hidden;
+               myR1623.Visibility = Visibility.Visible;
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "UpdateUserInstructions(): reached default state=" + myState.ToString());
@@ -258,19 +295,56 @@ namespace Pattons_Best
       private bool UpdateAssignablePanel()
       {
          myStackPanelAssignable.Children.Clear(); // clear out assignable panel 
+         Label label = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Margin = myMarginAssignPanel};
          switch (myState)
          {
             case E162Enum.LOAD_NORMAL:
             case E162Enum.LOAD_EXTRA:
-               Rectangle r = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
-               myStackPanelAssignable.Children.Add(r);
-               string ammo = "Main Ammo=" + myUnassignedCount.ToString();
-               Label label = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = ammo.ToString() };
+               if ( 0 < myUnassignedCount )
+               {
+                  Rectangle r = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  myStackPanelAssignable.Children.Add(r);
+               }
+               else
+               {
+                  Image img1 = new Image { Name = "MainGunRound", Source = MapItem.theMapImages.GetBitmapImage("MainGunRound"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  myStackPanelAssignable.Children.Add(img1);
+               }
+               label.Content = "Unassigned Ammo = " + myUnassignedCount.ToString();
                myStackPanelAssignable.Children.Add(label);
                break;
             case E162Enum.LOAD_EXTRA_CHECK:
+               BitmapImage bitMapDieRoll = new BitmapImage();
+               bitMapDieRoll.BeginInit();
+               bitMapDieRoll.UriSource = new Uri(MapImage.theImageDirectory + "DieRoll.gif", UriKind.Absolute);
+               bitMapDieRoll.EndInit();
+               Image imgDieRoll = new Image { Name = "DieRoll", Source = bitMapDieRoll, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+               ImageBehavior.SetAnimatedSource(imgDieRoll, bitMapDieRoll);
+               myStackPanelAssignable.Children.Add(imgDieRoll);
+               break;
+            case E162Enum.LOAD_EXTRA_CHECK_SHOW:
+               label.Content = myDieRollResult;
+               myStackPanelAssignable.Children.Add(label);
+               break;
+            case E162Enum.LOAD_EXTRA_VOLUNTARILY:
+               Image img2 = new Image { Name = "MainGunRound", Source = MapItem.theMapImages.GetBitmapImage("MainGunRound"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+               myStackPanelAssignable.Children.Add(img2);
+               label.Content = "Unassigned Ammo = " + myUnassignedCount.ToString();
+               myStackPanelAssignable.Children.Add(label);
                break;
             case E162Enum.READY_RACK:
+               if (0 < myUnassignedReadyRack)
+               {
+                  Rectangle r = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  myStackPanelAssignable.Children.Add(r);
+               }
+               else
+               {
+                  Image img1 = new Image { Name = "AfterActionReport", Source = MapItem.theMapImages.GetBitmapImage("AfterActionReport"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  myStackPanelAssignable.Children.Add(img1);
+               }
+               label.Content = "Main Ammo=" + myUnassignedReadyRack.ToString();
+               myStackPanelAssignable.Children.Add(label);
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): reached default s=" + myState.ToString());
@@ -279,6 +353,26 @@ namespace Pattons_Best
          return true;
       }
       private bool UpdateGridRows()
+      {
+         if( E162Enum.READY_RACK == myState )
+         {
+            if( false == UpdateGridRowsReadyRack())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): UpdateGridRowsReadyRack() returned false");
+               return false;
+            }
+         }
+         else
+         {
+            if (false == UpdateGridRowsAmmo())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): UpdateGridRowsAmmo() returned false");
+               return false;
+            }
+         }
+         return true;
+      }
+      private bool UpdateGridRowsAmmo()
       {
          //------------------------------------------------------------
          // Clear out existing Grid Row data
@@ -291,7 +385,7 @@ namespace Pattons_Best
          }
          foreach (UIElement ui1 in results)
             myGrid.Children.Remove(ui1);
-         //------------------------------------------------------------
+         //=========================================
          int rowNum = 0 + STARTING_ASSIGNED_ROW;
          Label labelforHeName = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "HE" };
          myGrid.Children.Add(labelforHeName);
@@ -299,15 +393,15 @@ namespace Pattons_Best
          Grid.SetColumn(labelforHeName, 0);
          //-----------------------------------------
          StackPanel stackpanelHe = new StackPanel() { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Orientation = Orientation.Horizontal };
-         Button bMinusHe10 = new Button() { Name = "bMinusHe10", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset + 5, FontFamily = myFontFam1, Content = "-10" , Margin= myMarginLeft };
-         if (10 < myHeRoundCount)
+         Button bMinusHe10 = new Button() { Name = "bMinusHe10", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset + 5, FontFamily = myFontFam1, Content = "-10", Margin = myMarginLeft };
+         if ((9 < myHeRoundCount) && ( (E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState) ) )
          {
             bMinusHe10.Click += ButtonAmmoChange_Click;
             bMinusHe10.IsEnabled = true;
          }
          stackpanelHe.Children.Add(bMinusHe10);
          Button bMinusHe = new Button() { Name = "bMinusHe", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "-" };
-         if (0 < myHeRoundCount)
+         if ((0 < myHeRoundCount) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
          {
             bMinusHe.Click += ButtonAmmoChange_Click;
             bMinusHe.IsEnabled = true;
@@ -318,14 +412,14 @@ namespace Pattons_Best
             labelforHe.Content = "0" + myHeRoundCount.ToString();
          stackpanelHe.Children.Add(labelforHe);
          Button bPlusHe = new Button() { Name = "bPlusHe", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "+" };
-         if (0 < myUnassignedCount)
+         if ((0 < myUnassignedCount) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
          {
             bPlusHe.Click += ButtonAmmoChange_Click;
             bPlusHe.IsEnabled = true;
          }
          stackpanelHe.Children.Add(bPlusHe);
          Button bPlusHe10 = new Button() { Name = "bPlusHe10", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset + 5, FontFamily = myFontFam1, Content = "+10", Margin = myMarginRight };
-         if (10 < myUnassignedCount)
+         if ((9 < myUnassignedCount) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
          {
             bPlusHe10.Click += ButtonAmmoChange_Click;
             bPlusHe10.IsEnabled = true;
@@ -334,7 +428,7 @@ namespace Pattons_Best
          myGrid.Children.Add(stackpanelHe);
          Grid.SetRow(stackpanelHe, rowNum);
          Grid.SetColumn(stackpanelHe, 1);
-         //------------------------------------------------------------
+         //=========================================
          rowNum = 1 + STARTING_ASSIGNED_ROW;
          Label labelforApName = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "AP" };
          myGrid.Children.Add(labelforApName);
@@ -342,15 +436,15 @@ namespace Pattons_Best
          Grid.SetColumn(labelforApName, 0);
          //-----------------------------------------
          StackPanel stackpanelAp = new StackPanel() { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Orientation = Orientation.Horizontal };
-         Button bMinusAp10 = new Button() { Name= "bMinusAp10", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset + 5, FontFamily = myFontFam1, Content = "-10", Margin = myMarginLeft };
-         if (10 < myApRoundCount)
+         Button bMinusAp10 = new Button() { Name = "bMinusAp10", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset + 5, FontFamily = myFontFam1, Content = "-10", Margin = myMarginLeft };
+         if ((9 < myApRoundCount) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
          {
             bMinusAp10.Click += ButtonAmmoChange_Click;
             bMinusAp10.IsEnabled = true;
          }
          stackpanelAp.Children.Add(bMinusAp10);
          Button bMinusAp = new Button() { Name = "bMinusAp", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "-" };
-         if (0 < myApRoundCount)
+         if ((0 < myApRoundCount) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
          {
             bMinusAp.Click += ButtonAmmoChange_Click;
             bMinusAp.IsEnabled = true;
@@ -361,14 +455,14 @@ namespace Pattons_Best
             labelforAp.Content = "0" + myApRoundCount.ToString();
          stackpanelAp.Children.Add(labelforAp);
          Button bPlusAp = new Button() { Name = "bPlusAp", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "+" };
-         if (0 < myUnassignedCount)
+         if ((0 < myUnassignedCount) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
          {
             bPlusAp.Click += ButtonAmmoChange_Click;
             bPlusAp.IsEnabled = true;
          }
          stackpanelAp.Children.Add(bPlusAp);
          Button bPlusAp10 = new Button() { Name = "bPlusAp10", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset + 5, FontFamily = myFontFam1, Content = "+10", Margin = myMarginRight };
-         if (10 < myUnassignedCount)
+         if ((9 < myUnassignedCount) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
          {
             bPlusAp10.Click += ButtonAmmoChange_Click;
             bPlusAp10.IsEnabled = true;
@@ -380,6 +474,7 @@ namespace Pattons_Best
          //------------------------------------------------------------
          if ("75" == myMainGun)
          {
+            //=========================================
             rowNum = 2 + STARTING_ASSIGNED_ROW;
             Label labelforWpName = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "WP" };
             myGrid.Children.Add(labelforWpName);
@@ -388,32 +483,32 @@ namespace Pattons_Best
             //-----------------------------------------
             StackPanel stackpanelWp = new StackPanel() { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Orientation = Orientation.Horizontal };
             Button bMinusWp10 = new Button() { Name = "bMinusWp10", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset + 5, FontFamily = myFontFam1, Content = "-05", Margin = myMarginLeft };
-            if (5 < myWpRoundCount)
+            if ((4 < myWpRoundCount) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
             {
                bMinusWp10.Click += ButtonAmmoChange_Click;
                bMinusWp10.IsEnabled = true;
             }
             stackpanelWp.Children.Add(bMinusWp10);
             Button bMinusWp = new Button() { Name = "bMinusWp", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "-" };
-            if (0 < myWpRoundCount)
+            if ((0 < myWpRoundCount) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
             {
                bMinusWp.Click += ButtonAmmoChange_Click;
                bMinusWp.IsEnabled = true;
             }
             stackpanelWp.Children.Add(bMinusWp);
             Label labelforWp = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myWpRoundCount.ToString() };
-            if (myWpRoundCount < 10)
+            if ((myWpRoundCount < 10) && (E162Enum.LOAD_EXTRA_CHECK != myState))
                labelforWp.Content = "0" + myWpRoundCount.ToString();
             stackpanelWp.Children.Add(labelforWp);
             Button bPlusWp = new Button() { Name = "bPlusWp", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "+" };
-            if (0 < myUnassignedCount)
+            if ((0 < myUnassignedCount) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
             {
                bPlusWp.Click += ButtonAmmoChange_Click;
                bPlusWp.IsEnabled = true;
             }
             stackpanelWp.Children.Add(bPlusWp);
-            Button bPlusWp10 = new Button() { Name = "bPlusWp10", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset +5, FontFamily = myFontFam1, Content = "+05", Margin = myMarginRight };
-            if (5 < myUnassignedCount)
+            Button bPlusWp10 = new Button() { Name = "bPlusWp10", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset + 5, FontFamily = myFontFam1, Content = "+05", Margin = myMarginRight };
+            if ((4 < myUnassignedCount) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
             {
                bPlusWp10.Click += ButtonAmmoChange_Click;
                bPlusWp10.IsEnabled = true;
@@ -422,7 +517,7 @@ namespace Pattons_Best
             myGrid.Children.Add(stackpanelWp);
             Grid.SetRow(stackpanelWp, rowNum);
             Grid.SetColumn(stackpanelWp, 1);
-            //-----------------------------------------
+            //=========================================
             rowNum = 3 + STARTING_ASSIGNED_ROW;
             Label labelforHbciName = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "HBCI" };
             myGrid.Children.Add(labelforHbciName);
@@ -431,7 +526,7 @@ namespace Pattons_Best
             //-----------------------------------------
             StackPanel stackpanelHbci = new StackPanel() { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Orientation = Orientation.Horizontal };
             Button bMinusHbci = new Button() { Name = "bMinusHbci", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "-" };
-            if (0 < myHbciRoundCount)
+            if ((0 < myHbciRoundCount) && (E162Enum.LOAD_EXTRA_CHECK != myState))
             {
                bMinusHbci.Click += ButtonAmmoChange_Click;
                bMinusHbci.IsEnabled = true;
@@ -442,7 +537,7 @@ namespace Pattons_Best
                labelforHbci.Content = "0" + myHbciRoundCount.ToString();
             stackpanelHbci.Children.Add(labelforHbci);
             Button bPlusHbci = new Button() { Name = "bPlusHbci", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "+" };
-            if ((0 < myUnassignedCount) && (myHvapRoundCount < myHbciRoundCountOriginal))
+            if ((0 < myUnassignedCount) && (myHvapRoundCount < myHbciRoundCountOriginal) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
             {
                bPlusHbci.Click += ButtonAmmoChange_Click;
                bPlusHbci.IsEnabled = true;
@@ -454,15 +549,16 @@ namespace Pattons_Best
          }
          else
          {
+            //=========================================
             rowNum = 2 + STARTING_ASSIGNED_ROW;
             Label labelforHvapName = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "HVAP" };
-            myGrid.Children.Add(labelforHvapName); 
+            myGrid.Children.Add(labelforHvapName);
             Grid.SetRow(labelforHvapName, rowNum);
             Grid.SetColumn(labelforHvapName, 0);
             //-----------------------------------------
             StackPanel stackpanelHvap = new StackPanel() { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Orientation = Orientation.Horizontal };
             Button bMinusHvap = new Button() { Name = "bMinusHvap", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "-" };
-            if (0 < myHvapRoundCount)
+            if ((0 < myHvapRoundCount) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
             {
                bMinusHvap.Click += ButtonAmmoChange_Click;
                bMinusHvap.IsEnabled = true;
@@ -473,9 +569,177 @@ namespace Pattons_Best
                labelforHvap.Content = "0" + myHvapRoundCount.ToString();
             stackpanelHvap.Children.Add(labelforHvap);
             Button bPlusHvap = new Button() { Name = "bPlusHvap", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "+" };
-            if ((0 < myUnassignedCount) && (myHvapRoundCount < myHvapRoundCountOringal))
+            if ((0 < myUnassignedCount) && (myHvapRoundCount < myHvapRoundCountOringal) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
             {
                bPlusHvap.Click += ButtonAmmoChange_Click;
+               bPlusHvap.IsEnabled = true;
+            }
+            stackpanelHvap.Children.Add(bPlusHvap);
+            //------------------------------------
+            myGrid.Children.Add(stackpanelHvap);
+            Grid.SetRow(stackpanelHvap, rowNum);
+            Grid.SetColumn(stackpanelHvap, 1);
+         }
+         return true;
+      }
+      private bool UpdateGridRowsReadyRack()
+      {
+         //------------------------------------------------------------
+         // Clear out existing Grid Row data
+         List<UIElement> results = new List<UIElement>();
+         foreach (UIElement ui in myGrid.Children)
+         {
+            int rowNum0 = Grid.GetRow(ui);
+            if (STARTING_ASSIGNED_ROW <= rowNum0)
+               results.Add(ui);
+         }
+         foreach (UIElement ui1 in results)
+            myGrid.Children.Remove(ui1);
+         //=========================================
+         int rowNum = 0 + STARTING_ASSIGNED_ROW;
+         Label labelforHeName = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "HE" };
+         myGrid.Children.Add(labelforHeName);
+         Grid.SetRow(labelforHeName, rowNum);
+         Grid.SetColumn(labelforHeName, 0);
+         //-----------------------------------------
+         StackPanel stackpanelHe = new StackPanel() { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Orientation = Orientation.Horizontal };
+         Button bMinusHe = new Button() { Name = "bMinusHe", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "-" };
+         if (0 < myHeReadyRackCount) 
+         {
+            bMinusHe.Click += ButtonReadyRackChange_Click;
+            bMinusHe.IsEnabled = true;
+         }
+         stackpanelHe.Children.Add(bMinusHe);
+         Label labelforHe = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myHeReadyRackCount.ToString() };
+         if (myHeReadyRackCount < 10)
+            labelforHe.Content = "0" + myHeReadyRackCount.ToString();
+         stackpanelHe.Children.Add(labelforHe);
+         Button bPlusHe = new Button() { Name = "bPlusHe", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "+" };
+         if (0 < myUnassignedReadyRack)
+         {
+            bPlusHe.Click += ButtonReadyRackChange_Click;
+            bPlusHe.IsEnabled = true;
+         }
+         stackpanelHe.Children.Add(bPlusHe);
+         myGrid.Children.Add(stackpanelHe);
+         Grid.SetRow(stackpanelHe, rowNum);
+         Grid.SetColumn(stackpanelHe, 1);
+         //=========================================
+         rowNum = 1 + STARTING_ASSIGNED_ROW;
+         Label labelforApName = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "AP" };
+         myGrid.Children.Add(labelforApName);
+         Grid.SetRow(labelforApName, rowNum);
+         Grid.SetColumn(labelforApName, 0);
+         //-----------------------------------------
+         StackPanel stackpanelAp = new StackPanel() { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Orientation = Orientation.Horizontal };
+         Button bMinusAp = new Button() { Name = "bMinusAp", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "-" };
+         if (0 < myApReadyRackCount) 
+         {
+            bMinusAp.Click += ButtonReadyRackChange_Click;
+            bMinusAp.IsEnabled = true;
+         }
+         stackpanelAp.Children.Add(bMinusAp);
+         Label labelforAp = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myApReadyRackCount.ToString() };
+         if (myApReadyRackCount < 10)
+            labelforAp.Content = "0" + myApReadyRackCount.ToString();
+         stackpanelAp.Children.Add(labelforAp);
+         Button bPlusAp = new Button() { Name = "bPlusAp", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "+" };
+         if ((0 < myUnassignedReadyRack) && (E162Enum.LOAD_EXTRA_CHECK != myState))
+         {
+            bPlusAp.Click += ButtonReadyRackChange_Click;
+            bPlusAp.IsEnabled = true;
+         }
+         stackpanelAp.Children.Add(bPlusAp);
+         myGrid.Children.Add(stackpanelAp);
+         Grid.SetRow(stackpanelAp, rowNum);
+         Grid.SetColumn(stackpanelAp, 1);
+         //------------------------------------------------------------
+         if ("75" == myMainGun)
+         {
+            //=========================================
+            rowNum = 2 + STARTING_ASSIGNED_ROW;
+            Label labelforWpName = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "WP" };
+            myGrid.Children.Add(labelforWpName);
+            Grid.SetRow(labelforWpName, rowNum);
+            Grid.SetColumn(labelforWpName, 0);
+            //-----------------------------------------
+            StackPanel stackpanelWp = new StackPanel() { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Orientation = Orientation.Horizontal };
+            Button bMinusWp = new Button() { Name = "bMinusWp", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "-" };
+            if (0 < myWpReadyRackCount) 
+            {
+               bMinusWp.Click += ButtonReadyRackChange_Click;
+               bMinusWp.IsEnabled = true;
+            }
+            stackpanelWp.Children.Add(bMinusWp);
+            Label labelforWp = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myWpRoundCount.ToString() };
+            if ((myWpReadyRackCount < 10) && (E162Enum.LOAD_EXTRA_CHECK != myState))
+               labelforWp.Content = "0" + myWpReadyRackCount.ToString();
+            stackpanelWp.Children.Add(labelforWp);
+            Button bPlusWp = new Button() { Name = "bPlusWp", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "+" };
+            if ((0 < myUnassignedReadyRack) && (E162Enum.LOAD_EXTRA_CHECK != myState))
+            {
+               bPlusWp.Click += ButtonReadyRackChange_Click;
+               bPlusWp.IsEnabled = true;
+            }
+            stackpanelWp.Children.Add(bPlusWp);
+            myGrid.Children.Add(stackpanelWp);
+            Grid.SetRow(stackpanelWp, rowNum);
+            Grid.SetColumn(stackpanelWp, 1);
+            //=========================================
+            rowNum = 3 + STARTING_ASSIGNED_ROW;
+            Label labelforHbciName = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "HBCI" };
+            myGrid.Children.Add(labelforHbciName);
+            Grid.SetRow(labelforHbciName, rowNum);
+            Grid.SetColumn(labelforHbciName, 0);
+            //-----------------------------------------
+            StackPanel stackpanelHbci = new StackPanel() { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Orientation = Orientation.Horizontal };
+            Button bMinusHbci = new Button() { Name = "bMinusHbci", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "-" };
+            if (0 < myHbciReadyRackCount) 
+            {
+               bMinusHbci.Click += ButtonReadyRackChange_Click;
+               bMinusHbci.IsEnabled = true;
+            }
+            stackpanelHbci.Children.Add(bMinusHbci);
+            Label labelforHbci = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myHbciReadyRackCount.ToString() };
+            if (myHbciReadyRackCount < 10)
+               labelforHbci.Content = "0" + myHbciReadyRackCount.ToString();
+            stackpanelHbci.Children.Add(labelforHbci);
+            Button bPlusHbci = new Button() { Name = "bPlusHbci", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "+" };
+            if ((0 < myUnassignedReadyRack) && (myHvapRoundCount < myHbciRoundCountOriginal))
+            {
+               bPlusHbci.Click += ButtonReadyRackChange_Click;
+               bPlusHbci.IsEnabled = true;
+            }
+            stackpanelHbci.Children.Add(bPlusHbci);
+            myGrid.Children.Add(stackpanelHbci);
+            Grid.SetRow(stackpanelHbci, rowNum);
+            Grid.SetColumn(stackpanelHbci, 1);
+         }
+         else
+         {
+            //=========================================
+            rowNum = 2 + STARTING_ASSIGNED_ROW;
+            Label labelforHvapName = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "HVAP" };
+            myGrid.Children.Add(labelforHvapName);
+            Grid.SetRow(labelforHvapName, rowNum);
+            Grid.SetColumn(labelforHvapName, 0);
+            //-----------------------------------------
+            StackPanel stackpanelHvap = new StackPanel() { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Orientation = Orientation.Horizontal };
+            Button bMinusHvap = new Button() { Name = "bMinusHvap", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "-" };
+            if (0 < myHvapReadyRackCount) 
+            {
+               bMinusHvap.Click += ButtonReadyRackChange_Click;
+               bMinusHvap.IsEnabled = true;
+            }
+            stackpanelHvap.Children.Add(bMinusHvap);
+            Label labelforHvap = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myHvapReadyRackCount.ToString() };
+            if (myHvapReadyRackCount < 10)
+               labelforHvap.Content = "0" + myHvapReadyRackCount.ToString();
+            stackpanelHvap.Children.Add(labelforHvap);
+            Button bPlusHvap = new Button() { Name = "bPlusHvap", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "+" };
+            if ((0 < myUnassignedReadyRack) && (myHvapRoundCount < myHvapRoundCountOringal))
+            {
+               bPlusHvap.Click += ButtonReadyRackChange_Click;
                bPlusHvap.IsEnabled = true;
             }
             stackpanelHvap.Children.Add(bPlusHvap);
@@ -489,6 +753,73 @@ namespace Pattons_Best
       //------------------------------------------------------------------------------------
       public void ShowDieResults(int dieRoll)
       {
+         dieRoll = 10; // <cgs> TEST
+         StringBuilder sb = new StringBuilder(dieRoll.ToString());
+         sb.Append(": ");
+         if ( null == myGameInstance )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance=null");
+            return;
+         }
+         ICombatCalendarEntry? entry = TableMgr.theCombatCalendarEntries[myGameInstance.Day];
+         if (null == entry)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ICombatCalendarEntry=null");
+            return;
+         }
+         if ( 6 < dieRoll )
+         {
+            switch (entry.Situation)
+            {
+               case EnumScenario.Advance:
+                  myExtraAmmo = 20;
+                  sb.Append("Required to take extra ammo");
+                  break;
+               case EnumScenario.Battle:
+                  myExtraAmmo = 0;
+                  sb.Append("Required to take extra ammo");
+                  break;
+               case EnumScenario.Counterattack:
+                  sb.Append("May voluntarily take extra ammo");
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): reached default=" + entry.ToString());
+                  return;
+            }
+         }
+         else if (2 < dieRoll)
+         {
+            switch (entry.Situation)
+            {
+               case EnumScenario.Advance:
+                  myExtraAmmo = 30;
+                  sb.Append("Required to take extra ammo");
+                  break;
+               case EnumScenario.Battle:
+               case EnumScenario.Counterattack:
+                  myExtraAmmo = 10;
+                  sb.Append("Required to take extra ammo");
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): reached default=" + entry.ToString());
+                  return;
+            }
+         }
+         else
+         {
+            sb.Append("May voluntarily take extra ammo");
+         }
+         myDieRollResult = sb.ToString();
+         if ( 0 < myExtraAmmo )
+         {
+            myUnassignedCount += myExtraAmmo;
+            myState = E162Enum.LOAD_EXTRA;
+         }
+         else
+         {
+            myUnassignedCount += MAX_VOLUNTARY_ROUNDS;
+         }
+         myState = E162Enum.LOAD_EXTRA_CHECK_SHOW;
          if (false == UpdateGrid())
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateGrid() return false");
          myIsRollInProgress = false;
@@ -503,8 +834,16 @@ namespace Pattons_Best
          }
          Button b = (Button)sender;
          string key = (string)b.Content;
-         if (false == myRulesMgr.ShowRule(key))
-            Logger.Log(LogEnum.LE_ERROR, "ButtonRule_Click(): myRulesMgr.ShowRule() returned false key=" + key);
+         if (true == key.StartsWith("r")) // rules based click
+         {
+            if (false == myRulesMgr.ShowRule(key))
+               Logger.Log(LogEnum.LE_ERROR, "ButtonRule_Click(): myRulesMgr.ShowRule() returned false key=" + key);
+         }
+         else
+         {
+            if (false == myRulesMgr.ShowTable(key))
+               Logger.Log(LogEnum.LE_ERROR, "Button_Click(): ShowTable() returned false for key=" + key);
+         }
       }
       private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
       {
@@ -533,6 +872,16 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): myDieRoller=null");
             return;
          }
+         if( E162Enum.LOAD_EXTRA_CHECK_SHOW == myState)
+         {
+            if (0 < myExtraAmmo)
+               myState = E162Enum.LOAD_EXTRA;
+            else
+               myState = E162Enum.LOAD_EXTRA_VOLUNTARILY;
+            if (false == UpdateGrid())
+               Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): UpdateGrid() return false");
+            return;
+         }
          //--------------------------------------------------
          System.Windows.Point p = e.GetPosition((UIElement)sender);
          HitTestResult result = VisualTreeHelper.HitTest(myGrid, p);  // Get the Point where the hit test occurrs
@@ -546,10 +895,18 @@ namespace Pattons_Best
                   {
                      if (result.VisualHit == img)
                      {
-                        string name = (string)img.Tag;
-                        if ("AAR" == name)
+                        if ("MainGunRound" == img.Name)
+                        {
+                           if( E162Enum.LOAD_NORMAL == myState )
+                              myState = E162Enum.LOAD_EXTRA_CHECK;
+                           else
+                              myState = E162Enum.READY_RACK;
+                        }
+                        else if ("AfterActionReport" == img.Name)
+                        {
                            myState = E162Enum.END;
-                        if ("DieRoll" == name)
+                        }
+                        if ("DieRoll" == img.Name)
                         {
                            if (false == myIsRollInProgress)
                            {
@@ -573,7 +930,6 @@ namespace Pattons_Best
                {
                   if (false == myIsRollInProgress)
                   {
-                     myRollResultRowNum = Grid.GetRow(img1);
                      myIsRollInProgress = true;
                      RollEndCallback callback = ShowDieResults;
                      myDieRoller.RollMovingDie(myCanvas, callback);
@@ -652,6 +1008,58 @@ namespace Pattons_Best
             case "bPlusHvap":
                myHvapRoundCount += 1;
                myUnassignedCount -= 1;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "ButtonAmmoChange_Click(): reached default with key=" + b.Name);
+               break;
+         }
+         if (false == UpdateGrid())
+            Logger.Log(LogEnum.LE_ERROR, "ButtonAmmoChange_Click(): UpdateGrid() return false");
+      }
+      private void ButtonReadyRackChange_Click(object sender, RoutedEventArgs e)
+      {
+         Button b = (Button)sender;
+         switch (b.Name)
+         {
+            case "bMinusHe":
+               myHeReadyRackCount -= 1;
+               myUnassignedReadyRack += 1;
+               break;
+            case "bPlusHe":
+               myHeReadyRackCount += 1;
+               myUnassignedReadyRack -= 1;
+               break;
+            case "bMinusAp":
+               myApReadyRackCount -= 1;
+               myUnassignedReadyRack += 1;
+               break;
+            case "bPlusAp":
+               myApReadyRackCount += 1;
+               myUnassignedReadyRack -= 1;
+               break;
+            case "bMinusWp":
+               myWpReadyRackCount -= 1;
+               myUnassignedReadyRack += 1;
+               break;
+            case "bPlusWp":
+               myWpReadyRackCount += 1;
+               myUnassignedReadyRack -= 1;
+               break;
+            case "bMinusHbci":
+               myHbciReadyRackCount -= 1;
+               myUnassignedReadyRack += 1;
+               break;
+            case "bPlusHbci":
+               myHbciReadyRackCount += 1;
+               myUnassignedReadyRack -= 1;
+               break;
+            case "bMinusHvap":
+               myHvapReadyRackCount -= 1;
+               myUnassignedReadyRack += 1;
+               break;
+            case "bPlusHvap":
+               myHvapReadyRackCount += 1;
+               myUnassignedReadyRack -= 1;
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "ButtonAmmoChange_Click(): reached default with key=" + b.Name);

@@ -27,13 +27,16 @@
          <RowDefinition Height="Auto"></RowDefinition>
       </Grid.RowDefinitions>
       <StackPanel Grid.Row="0" Grid.ColumnSpan="3" Orientation="Horizontal">
-         <TextBlock Name="myTextBlockHeader" Text=" Ratings for New Men" FontWeight="Bold" FontFamily='Georgia' FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>
-         <Button Content='r7.1' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" />
+         <TextBlock Name="myTextBlockHeader" Text=" Ammunition (Ammo)" FontWeight="Bold" FontFamily='Georgia' FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+         <Button Name="myAmmoTable" Content='Ammo' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Visible"/>
+         <Button Name="myR16" Content='r16.0' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Visible"/>
+         <Button Name="myR1621" Content='r16.21' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Visible"/>
+         <Button Name="myR1622" Content='r16.22' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Hidden"/>
+         <Button Name="myR1623" Content='r16.23' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Hidden"/>
       </StackPanel>
       <Rectangle Grid.Row="1" Grid.ColumnSpan="3" Margin="5" Height="1" Fill="Black"/>
       <TextBlock Grid.Row="2" Grid.ColumnSpan="3" Name="myTextBlockInstructions" FontFamily='Georgia' FontSize="16" VerticalAlignment="Bottom"  HorizontalAlignment="Left" Margin="2,0,0,5">
         Determine rating for crew by rolling 1D/2 rounded up. When assigning multiple,
-        <LineBreak/>assign ratings after all crew members rolled.
       </TextBlock>
       <StackPanel Grid.Row="3" Grid.ColumnSpan="3" Name="myStackPanelAssignable" DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5,0,0,0">
          <Rectangle  Height="42" Width="42" Stroke="Black" />
