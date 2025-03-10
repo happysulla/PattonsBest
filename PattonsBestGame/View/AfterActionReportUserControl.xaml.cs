@@ -149,6 +149,12 @@ namespace Pattons_Best
          myRunAmmoSmokeGrenades.Text = report.AmmoSmokeGrenade.ToString();
          myRunAmmoPeriscopes.Text = report.AmmoPeriscope.ToString();
          //----------------------------------
+         myRunMainGunHE.Text = report.MainGunHE.ToString();
+         myRunMainGunAP.Text = report.MainGunAP.ToString();
+         myRunMainGunWP.Text = report.MainGunWP.ToString();
+         myRunMainGunHBCI.Text = report.MainGunHBCI.ToString();
+         myRunMainGunHVAP.Text = report.MainGunHVAP.ToString();
+         //----------------------------------
          myRunVictoryPointsLight.Text = report.VictoryPtsKiaLightWeapon.ToString();
          myRunVictoryPointsTruck.Text = report.VictoryPtsKiaTruck.ToString();
          myRunVictoryPointsSPW.Text = report.VictoryPtsKiaSpwOrPsw.ToString();

@@ -30,7 +30,7 @@ namespace Pattons_Best
       int MainGunHE { get; set; }
       int MainGunAP { get; set; }
       int MainGunWP { get; set; }
-      int MainGunHCBI { get; set; }
+      int MainGunHBCI { get; set; }
       int MainGunHVAP { get; set; }
       //----------------------------------------
       int VictoryPtsKiaLightWeapon { get; set; }

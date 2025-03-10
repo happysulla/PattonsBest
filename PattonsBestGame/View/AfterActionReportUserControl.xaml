@@ -485,7 +485,7 @@
                         </TableCell>
                         <TableCell TextAlignment='Left'>
                            <Paragraph TextAlignment="Center">
-                              <Run Name="myRunMainGunHCBI" Text="0"/>
+                              <Run Name="myRunMainGunHBCI" Text="0"/>
                            </Paragraph>
                         </TableCell>
                      </TableRow>
