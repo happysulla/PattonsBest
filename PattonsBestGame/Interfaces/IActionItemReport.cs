@@ -21,7 +21,8 @@ namespace Pattons_Best
       IMapItem Driver { get; set; }
       IMapItem Assistant { get; set; }
       //----------------------------------------
-      int TimeOfDay { get; set; }
+      int TimeOfDayHour { get; set; }
+      int TimeOfDayMin { get; set; }
       int Ammo30CalibreMG { get; set; }
       int Ammo50CalibreMG { get; set; }
       int AmmoSmokeBomb { get; set; }

@@ -373,6 +373,12 @@ namespace Pattons_Best
                   break;
                case GameAction.MorningBriefingTimeCheck:
                   gi.EventDisplayed = gi.EventActive = "e010";
+                  gi.DieRollAction = GameAction.MorningBriefingTimeCheckRoll;
+                  break;
+               case GameAction.MorningBriefingTimeCheckRoll:
+                  dieRoll = 1; // <cgs> TEST
+                  gi.DieResults[key][0] = dieRoll;
+                  lastReport.TimeOfDayHour = (int)Math.Floor( (double)dieRoll * 0.5) + 1;
                   break;
                case GameAction.MorningBriefingSnowRoll:
                   gi.DieResults[key][0] = dieRoll;

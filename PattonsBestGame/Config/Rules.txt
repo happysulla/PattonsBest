@@ -114,7 +114,7 @@ Perform these actions using After Action Report (AAR) <InlineUIContainer><Button
 <InlineUIContainer><Button Content='r7.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for adding new men. Click on names of your crewmen if you want to change their names. <LineBreak/><LineBreak/>
 -- The <InlineUIContainer><Button Content='Weather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table is used to determine the weather for the day.<LineBreak/><LineBreak/>
 -- Load ammo per <InlineUIContainer><Button Content='r16.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. "
-r4.3	"<Bold>r4.3 Time Check Using the Time Tables</Bold> 
+r4.3	"<Bold>r4.3 Time Check Using the Time Tables</Bold> <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
 Determine the hours of sunrise and sunset for the current month. On the After Action Report (AAR), the time is blocked out accordingly. Only the remaining time is available for play this day.
 <LineBreak/><LineBreak/>
@@ -180,7 +180,7 @@ r16.2	"<Bold>r16.2 Loading Ammo</Bold>
 <InlineUIContainer><Button Content='r16.21' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Ammo Amounts<LineBreak/>
 <InlineUIContainer><Button Content='r16.22' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Extra Ammo <LineBreak/>
 <InlineUIContainer><Button Content='r16.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Ammo Ready Rack"
-r16.21	"<Bold>r16.21 Ammo Amounts</Bold> 
+r16.21	"<Bold>r16.21 Ammo Limits</Bold> 
 <LineBreak/><LineBreak/>
 Ammo is loaded during the Morning Briefing phase 
 <InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  phase showing on the After Action Report 

@@ -129,6 +129,7 @@ namespace Pattons_Best
       MorningBriefingAmmoLoad,
       MorningBriefingAmmoReadyRackLoad,
       MorningBriefingTimeCheck,
+      MorningBriefingTimeCheckRoll,
       MorningBriefingEnd,
       Error
    };

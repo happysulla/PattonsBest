@@ -86,12 +86,11 @@ for loading ammo. The Tank Card limits the number of normal main gun ammo allowe
 -- <Bold>HE:</Bold> Unlimited"
 e010	"<Bold>e010 Time Check</Bold> 
 <InlineUIContainer><Button Content='r4.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
-<InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
-Determine sunrise and sunset for current month using the <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. The same die roll is used to determine the ammo expended:
-<InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>.
-
-"
+Determine sunrise and sunset for current month using the <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. Roll 1D/2  on the 
+<InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table. The Time Table also provides the timed used for each action take. Additionally, the same die roll is used to determine the ammo expended:  
+<InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>
+<LineBreak/><LineBreak/>"
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"
 e502	"<Bold>e502 Game Lost</Bold>
