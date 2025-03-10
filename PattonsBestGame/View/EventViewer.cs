@@ -973,13 +973,6 @@ namespace Pattons_Best
          }
          switch (content)
          {
-            case "Calendar":
-               if (false == ShowTable(content))
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "Button_Click(): ShowTable() returned false for key=" + content);
-                  return false;
-               }
-               break;
             case "Begin Game":
                action = GameAction.SetupShowMapHistorical;
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
@@ -991,17 +984,10 @@ namespace Pattons_Best
                   return false;
                }
                break;
-            case "Weather":
+            default:
                if (false == ShowTable(content))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "Button_Click(): ShowTable() returned false for key=" + content);
-                  return false;
-               }
-               break;
-            default:
-               if (false == ShowRegion(content))
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): ShowRegion() return false c=" + content + " ae=" + myGameInstance.EventActive + " a=" + action.ToString());
+                  Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): ShowTable() returned false for key=" + content);
                   return false;
                }
                break;

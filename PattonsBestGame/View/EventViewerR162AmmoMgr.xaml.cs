@@ -170,21 +170,22 @@ namespace Pattons_Best
          myIsRollInProgress = false;
          myCallback = callback;
          //--------------------------------------------------
-         ITerritory? t = Territories.theTerritories.Find("ReadyRackHe");
+         ITerritory? t = Territories.theTerritories.Find("ReadyRackHe0");
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackHe");
+            Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackHe0");
             return false;
          }
-         IMapItem rr1 = new MapItem("ReadyRackHe", "c12RoundsLeft", t);
+         IMapItem rr1 = new MapItem("ReadyRackHe", 0.9, "c12RoundsLeft", t);
+         //--------------------------------------------------
          myGameInstance.ReadyRacks.Add(rr1);
-         t = Territories.theTerritories.Find("ReadyRackAp");
+         t = Territories.theTerritories.Find("ReadyRackAp0");
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackAp");
+            Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackAp0");
             return false;
          }
-         IMapItem rr2 = new MapItem("ReadyRackAp", "c12RoundsLeft", t);
+         IMapItem rr2 = new MapItem("ReadyRackAp", 0.9, "c12RoundsLeft", t);
          //--------------------------------------------------
          myGameInstance.ReadyRacks.Add(rr2);
          IAfterActionReport? lastReport = myGameInstance.Reports.GetLast(); // remove it from list
@@ -211,38 +212,39 @@ namespace Pattons_Best
          myHvapReadyRackCount = 0;
          if ("75" == myMainGun)
          {
-            myHbciRoundCountOriginal = myHbciRoundCount = lastReport.MainGunHCBI;
+            myHbciRoundCountOriginal = myHbciRoundCount = 10;
             myUnassignedCount -= myHbciRoundCount;
-            myWpRoundCount = 10;
+            myWpRoundCount = 5;
             myUnassignedCount -= myWpRoundCount;
-            t = Territories.theTerritories.Find("ReadyRackWp");
+            t = Territories.theTerritories.Find("ReadyRackWp0");
             if( null == t )
             {
-               Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackWp");
+               Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackWp0");
                return false;
             }
-            IMapItem rr3 = new MapItem("ReadyRackWp", "c12RoundsLeft", t);
+            IMapItem rr3 = new MapItem("ReadyRackWp", 0.9, "c12RoundsLeft", t);
+            //--------------------------------------------------
             myGameInstance.ReadyRacks.Add(rr3);
-            t = Territories.theTerritories.Find("ReadyRackHbci");
+            t = Territories.theTerritories.Find("ReadyRackHbci0");
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackHbci");
+               Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackHbci0");
                return false;
             }
-            IMapItem rr4 = new MapItem("ReadyRackHbci", "c12RoundsLeft", t );
+            IMapItem rr4 = new MapItem("ReadyRackHbci", 0.9, "c12RoundsLeft", t );
             myGameInstance.ReadyRacks.Add(rr4);
          }
          else
          {
             myHvapRoundCountOringal = myHvapRoundCount = lastReport.MainGunHVAP;
             myUnassignedCount -= myHvapRoundCount;
-            t = Territories.theTerritories.Find("ReadyRackAp");
+            t = Territories.theTerritories.Find("ReadyRackHvap0");
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackAp");
+               Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackHvap0");
                return false;
             }
-            IMapItem rr3 = new MapItem("ReadyRackHvap", "c12RoundsLeft", t );
+            IMapItem rr3 = new MapItem("ReadyRackHvap", 0.9, "c12RoundsLeft", t );
             myGameInstance.ReadyRacks.Add(rr3);
          }
          // Assign 60% or freaming rounds to HE
@@ -336,7 +338,7 @@ namespace Pattons_Best
                if (0 < myUnassignedReadyRack)
                   myTextBlockInstructions.Inlines.Add(new Run("Adjust ready rack."));
                else
-                  myTextBlockInstructions.Inlines.Add(new Run("Adjust ready rack or AAR image to continue."));
+                  myTextBlockInstructions.Inlines.Add(new Run("Adjust ready rack --or-- Click AAR image to continue."));
                myR1622.Visibility = Visibility.Hidden;
                myR1623.Visibility = Visibility.Visible;
                break;
@@ -379,6 +381,8 @@ namespace Pattons_Best
             case E162Enum.LOAD_EXTRA_CHECK_SHOW:
                label.Content = myDieRollResult;
                myStackPanelAssignable.Children.Add(label);
+               Rectangle r1 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+               myStackPanelAssignable.Children.Add(r1);
                break;
             case E162Enum.LOAD_EXTRA_VOLUNTARILY:
                Image img2 = new Image { Name = "MainGunRound", Source = MapItem.theMapImages.GetBitmapImage("MainGunRound"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
@@ -389,8 +393,8 @@ namespace Pattons_Best
             case E162Enum.READY_RACK:
                if (0 < myUnassignedReadyRack)
                {
-                  Rectangle r = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
-                  myStackPanelAssignable.Children.Add(r);
+                  Rectangle r2 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  myStackPanelAssignable.Children.Add(r2);
                }
                else
                {
@@ -580,7 +584,7 @@ namespace Pattons_Best
             //-----------------------------------------
             StackPanel stackpanelHbci = new StackPanel() { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Orientation = Orientation.Horizontal };
             Button bMinusHbci = new Button() { Name = "bMinusHbci", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "-" };
-            if ((0 < myHbciRoundCount) && (E162Enum.LOAD_EXTRA_CHECK != myState))
+            if ((0 < myHbciRoundCount) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
             {
                bMinusHbci.Click += ButtonAmmoChange_Click;
                bMinusHbci.IsEnabled = true;
@@ -591,7 +595,7 @@ namespace Pattons_Best
                labelforHbci.Content = "0" + myHbciRoundCount.ToString();
             stackpanelHbci.Children.Add(labelforHbci);
             Button bPlusHbci = new Button() { Name = "bPlusHbci", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "+" };
-            if ((0 < myUnassignedCount) && (myHvapRoundCount < myHbciRoundCountOriginal) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
+            if ((0 < myUnassignedCount) && (myHbciRoundCount < myHbciRoundCountOriginal) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
             {
                bPlusHbci.Click += ButtonAmmoChange_Click;
                bPlusHbci.IsEnabled = true;
@@ -698,7 +702,7 @@ namespace Pattons_Best
             labelforAp.Content = "0" + myApReadyRackCount.ToString();
          stackpanelAp.Children.Add(labelforAp);
          Button bPlusAp = new Button() { Name = "bPlusAp", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "+" };
-         if ((0 < myUnassignedReadyRack) && (E162Enum.LOAD_EXTRA_CHECK != myState))
+         if (0 < myUnassignedReadyRack) 
          {
             bPlusAp.Click += ButtonReadyRackChange_Click;
             bPlusAp.IsEnabled = true;
@@ -730,7 +734,7 @@ namespace Pattons_Best
                labelforWp.Content = "0" + myWpReadyRackCount.ToString();
             stackpanelWp.Children.Add(labelforWp);
             Button bPlusWp = new Button() { Name = "bPlusWp", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "+" };
-            if ((0 < myUnassignedReadyRack) && (E162Enum.LOAD_EXTRA_CHECK != myState))
+            if (0 < myUnassignedReadyRack) 
             {
                bPlusWp.Click += ButtonReadyRackChange_Click;
                bPlusWp.IsEnabled = true;
@@ -759,7 +763,7 @@ namespace Pattons_Best
                labelforHbci.Content = "0" + myHbciReadyRackCount.ToString();
             stackpanelHbci.Children.Add(labelforHbci);
             Button bPlusHbci = new Button() { Name = "bPlusHbci", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "+" };
-            if ((0 < myUnassignedReadyRack) && (myHvapRoundCount < myHbciRoundCountOriginal))
+            if ((0 < myUnassignedReadyRack) && (myHbciReadyRackCount < myHbciRoundCountOriginal))
             {
                bPlusHbci.Click += ButtonReadyRackChange_Click;
                bPlusHbci.IsEnabled = true;
@@ -791,7 +795,7 @@ namespace Pattons_Best
                labelforHvap.Content = "0" + myHvapReadyRackCount.ToString();
             stackpanelHvap.Children.Add(labelforHvap);
             Button bPlusHvap = new Button() { Name = "bPlusHvap", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "+" };
-            if ((0 < myUnassignedReadyRack) && (myHvapRoundCount < myHvapRoundCountOringal))
+            if ((0 < myUnassignedReadyRack) && (myHvapReadyRackCount < myHvapRoundCountOringal))
             {
                bPlusHvap.Click += ButtonReadyRackChange_Click;
                bPlusHvap.IsEnabled = true;
@@ -807,7 +811,7 @@ namespace Pattons_Best
       //------------------------------------------------------------------------------------
       public void ShowDieResults(int dieRoll)
       {
-         dieRoll = 10; // <cgs> TEST
+         dieRoll = 0; // <cgs> TEST
          StringBuilder sb = new StringBuilder(dieRoll.ToString());
          sb.Append(": ");
          if ( null == myGameInstance )
@@ -1088,46 +1092,68 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ButtonReadyRackChange_Click(): myGameEngine=null");
             return;
          }
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ButtonReadyRackChange_Click(): myGameInstance=null");
+            return;
+         }
+         IMapItem? rr = null;
+         bool isCountIncrease = false;
          Button b = (Button)sender;
          switch (b.Name)
          {
             case "bMinusHe":
+               rr = myGameInstance.ReadyRacks[0];
                myHeReadyRackCount -= 1;
                myUnassignedReadyRack += 1;
                break;
             case "bPlusHe":
+               rr = myGameInstance.ReadyRacks[0];
+               isCountIncrease = true;
                myHeReadyRackCount += 1;
                myUnassignedReadyRack -= 1;
                break;
             case "bMinusAp":
+               rr = myGameInstance.ReadyRacks[1];
                myApReadyRackCount -= 1;
                myUnassignedReadyRack += 1;
                break;
             case "bPlusAp":
+               rr = myGameInstance.ReadyRacks[1];
+               isCountIncrease = true;
                myApReadyRackCount += 1;
                myUnassignedReadyRack -= 1;
                break;
             case "bMinusWp":
+               rr = myGameInstance.ReadyRacks[2];
                myWpReadyRackCount -= 1;
                myUnassignedReadyRack += 1;
                break;
             case "bPlusWp":
+               rr = myGameInstance.ReadyRacks[2];
+               isCountIncrease = true;
                myWpReadyRackCount += 1;
                myUnassignedReadyRack -= 1;
                break;
             case "bMinusHbci":
+               rr = myGameInstance.ReadyRacks[3];
                myHbciReadyRackCount -= 1;
                myUnassignedReadyRack += 1;
                break;
             case "bPlusHbci":
+               rr = myGameInstance.ReadyRacks[3];
+               isCountIncrease = true;
                myHbciReadyRackCount += 1;
                myUnassignedReadyRack -= 1;
                break;
             case "bMinusHvap":
+               rr = myGameInstance.ReadyRacks[2];
                myHvapReadyRackCount -= 1;
                myUnassignedReadyRack += 1;
                break;
             case "bPlusHvap":
+               rr = myGameInstance.ReadyRacks[2];
+               isCountIncrease = true;
                myHvapReadyRackCount += 1;
                myUnassignedReadyRack -= 1;
                break;
@@ -1135,6 +1161,23 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ButtonAmmoChange_Click(): reached default with key=" + b.Name);
                break;
          }
+         if (null == rr)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ButtonReadyRackChange_Click(): rr=null");
+            return;
+         }
+         if (true == isCountIncrease)
+            rr.Count++;
+         else
+            rr.Count--;
+         string tName = rr.Name + rr.Count.ToString();
+         ITerritory? newT = Territories.theTerritories.Find(tName);
+         if (null == newT)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ButtonReadyRackChange_Click(): newT=null for " + tName);
+            return;
+         }
+         rr.TerritoryCurrent = newT;
          GameAction action = GameAction.MorningBriefingAmmoReadyRackLoad;
          myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
          if (false == UpdateGrid())

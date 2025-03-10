@@ -97,8 +97,8 @@ namespace Pattons_Best
          this.TopImageName = mi.TopImageName;
          this.BottomImageName = mi.BottomImageName;
       }
-      public MapItem(string name, string topImageName, ITerritory territory) :  
-         this(name, 1.0, false, false, topImageName) 
+      public MapItem(string name, double zoom, string topImageName, ITerritory territory) :  
+         this(name, zoom, false, false, topImageName) 
       {
          TerritoryCurrent = territory;
          TerritoryStarting = territory;

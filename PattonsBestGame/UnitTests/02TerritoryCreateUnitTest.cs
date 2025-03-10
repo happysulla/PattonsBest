@@ -598,8 +598,11 @@ namespace Pattons_Best
          if (true == dialog.ShowDialog())
          {
             Territory territory = new Territory(dialog.myTextBoxName.Text) { CenterPoint = new MapPoint(p.X, p.Y) };
-            territory.Type = dialog.RadioButtonType;
-            territory.CanvasName = dialog.RadioButtonParent;
+            territory.CanvasName = TerritoryCreateDialog.theParentChecked;
+            if( "Main" == territory.CanvasName)
+               territory.Type = TerritoryCreateDialog.theTypeChecked;
+            else
+               territory.Type = TerritoryCreateDialog.theCardChecked;
             CreateEllipse(territory);
             Territories.theTerritories.Add(territory);
          }

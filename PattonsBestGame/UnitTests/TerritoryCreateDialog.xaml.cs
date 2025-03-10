@@ -6,11 +6,9 @@ namespace Pattons_Best
 {
    public partial class TerritoryCreateDialog : Window
    {
-      private static string theTypeChecked = "A";
-      private static string theCardChecked = "1";
-      private static string theParentChecked = "Main";
-      public String RadioButtonType { get; set; } = new string(String.Empty);
-      public String RadioButtonParent { get; set; } = new string(String.Empty);
+      public static string theTypeChecked = "A";
+      public static string theCardChecked = "1";
+      public static string theParentChecked = "Main";
       public bool IsTown { get; set; } = false;
       public TerritoryCreateDialog()
       {
@@ -99,7 +97,6 @@ namespace Pattons_Best
                String output = (String)radioButton.Content;
                if (null != output)
                {
-                  RadioButtonType = output;
                   if ("Tank" == theParentChecked)
                      theCardChecked = output;
                   else
@@ -123,7 +120,7 @@ namespace Pattons_Best
             {
                String output = (String)radioButton.Content;
                if (null != output)
-                  theParentChecked = RadioButtonParent = output;
+                  theParentChecked = output;
             }
          }
          UpdateView();
