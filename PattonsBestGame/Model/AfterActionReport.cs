@@ -22,8 +22,11 @@ namespace Pattons_Best.Model
       public IMapItem Driver { get; set; } = new CrewMember("Driver", "Pvt", "c08Driver");
       public IMapItem Assistant { get; set; } = new CrewMember("Assistant", "Pvt", "c10Assistant");
       //----------------------------------------
-      public int TimeOfDayHour { get; set; } = 5;
-      public int TimeOfDayMin { get; set; } = 0;
+      public int SunriseHour { get; set; } = 5;
+      public int SunriseMin { get; set; } = 0;
+      public int SunsetHour { get; set; } = 19;
+      public int SunsetMin { get; set; } = 15; 
+      //----------------------------------------
       public int Ammo30CalibreMG { get; set; } = 30;
       public int Ammo50CalibreMG { get; set; } = 6;
       public int AmmoSmokeBomb { get; set; } = 14;

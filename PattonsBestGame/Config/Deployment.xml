@@ -20,7 +20,7 @@
 				<Paragraph>
                <Italic>Determine the deployment of your tank by rolling 2D on one of the following tables. Consult Table II only if you command an M4A3E2 tank model
 						(either Tank #12 or Tank #13). If you tank is deployed either moving or hull down, mark it on the Battle Board with counter.
-						If the number you roll is within the range of numbers under the column "Lead Tank,", your tnak is also the lead tank of your formation.
+						If the number you roll is within the range of numbers under the column "Lead Tank", your tank is also the lead tank of your formation.
 						Note that you are lead tank in the Notes section of the After Action Report (AAR)
 					<InlineUIContainer>
 						<Button Content='r2.4' FontFamily='Courier New'  FontSize='10'></Button>

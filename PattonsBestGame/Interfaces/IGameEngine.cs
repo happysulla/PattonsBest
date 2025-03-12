@@ -131,6 +131,9 @@ namespace Pattons_Best
       MorningBriefingTimeCheck,
       MorningBriefingTimeCheckRoll,
       MorningBriefingEnd,
+
+      PreparationsStart,
+      PreparationsDeploymentRoll,
       Error
    };
    public interface IGameEngine

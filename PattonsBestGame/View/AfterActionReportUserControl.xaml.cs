@@ -143,6 +143,12 @@ namespace Pattons_Best
          if (true == mySpanAssistantName.IsEnabled)
             mySpanAssistantName.Background = theBrushInActive;
          //----------------------------------
+         if( false == UpdateReportTimeTrack( report ))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): UpdateReportTimeTrack() returned false");
+            return false;
+         }
+         //----------------------------------
          myRunAmmo30Calibre.Text = report.Ammo30CalibreMG.ToString();
          myRunAmmo50Calibre.Text = report.Ammo50CalibreMG.ToString();
          myRunAmmoSmokeBombs.Text = report.AmmoSmokeBomb.ToString();
@@ -175,7 +181,64 @@ namespace Pattons_Best
          //----------------------------------
          return true;
       }
-      public string AddSpaces(string s, int length)
+      private bool UpdateReportTimeTrack(IAfterActionReport report)
+      {
+         int hour = 5;
+         foreach (UIElement ui0 in myGridTime.Children)
+         {
+            if(ui0 is StackPanel sp)
+            {
+               if( false == UpdateReportTimeTrackRow(sp, hour, report) )
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateReportTimeTrackRow(): returned false");
+                  return false;
+               }
+               hour++;
+            }
+         }
+         return true;
+      }
+      private bool UpdateReportTimeTrackRow(StackPanel sp, int hour, IAfterActionReport report)
+      {
+         int min = 0;
+         foreach (UIElement ui in sp.Children)
+         {
+            Logger.Log(LogEnum.LE_VIEW_TIME_TRACK, "UpdateReportTimeTrackRow(): Updating " + sp.Name + " min=" + min.ToString());
+            if (true == ui is Rectangle)
+            {
+               Rectangle? rect = ui as Rectangle;
+               if (null == rect)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateReportTimeTrackRow(): Rectangle not found");
+                  return false;
+               }
+               if (hour < report.SunriseHour )
+               {
+                  rect.Fill = Brushes.Black;
+               }
+               else if (hour == report.SunriseHour)
+               {
+                  if( min < report.SunriseMin)
+                     rect.Fill = Brushes.Black;
+               }
+               else
+               {
+                  if( report.SunsetHour < hour )
+                  {
+                     rect.Fill = Brushes.Black;
+                  }
+                  else if ( hour == report.SunsetHour)
+                  {
+                     if (report.SunriseMin < min)
+                        rect.Fill = Brushes.Black;
+                  }
+               }
+            }
+            min += 15;
+         }
+         return true;
+      }
+      private string AddSpaces(string s, int length)
       {
          if (length < s.Length)
          {

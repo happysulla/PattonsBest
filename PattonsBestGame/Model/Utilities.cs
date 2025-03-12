@@ -65,6 +65,18 @@ namespace Pattons_Best
          int random = RandomGenerator.Next(NUM_NICK_NAMES);
          return theNickNames[random];
       }
+      static public string GetTime(int hour, int min)
+      {
+         StringBuilder sb = new StringBuilder();
+         if (hour < 10)
+            sb.Append('0');
+         sb.Append(hour.ToString());
+         sb.Append(':');
+         if( min < 15 )
+            sb.Append('0');
+         sb.Append(min.ToString());
+         return sb.ToString();
+      }
       //--------------------------------------------
       // Utilities Functions
       public static void InitializeRandomNumGenerators()

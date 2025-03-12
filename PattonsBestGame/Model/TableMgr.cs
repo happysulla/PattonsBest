@@ -19,6 +19,97 @@ namespace Pattons_Best
       {
          return "Clear";
       }
+      public static string GetMonth( int day )
+      {
+         if (day < 5)
+            return "Jul";
+         if (day < 37)
+            return "Aug";
+         if (day < 58)
+            return "Sep";
+         if (day < 70)
+            return "Oct";
+         if (day < 92)
+            return "Nov";
+         if (day < 110)
+            return "Dec";
+         if (day < 137)
+            return "Jan";
+         if (day < 147)
+            return "Feb";
+         if (day < 174)
+            return "Mar";
+         if (day < 193)
+            return "Apr";
+         Logger.Log(LogEnum.LE_ERROR, "GetMonth(): reached default day=" + day.ToString());
+         return "ERROR";
+      }
+      public static bool SetTimeTrack(IAfterActionReport lastReport, int day)
+      {
+         switch (GetMonth(day))
+         {
+            case "Jul":
+            case "Aug":
+               lastReport.SunriseHour = 5;
+               lastReport.SunriseMin = 0;
+               lastReport.SunsetHour = 19;
+               lastReport.SunsetMin = 15;
+               break;
+            case "Sep":
+               lastReport.SunriseHour = 5;
+               lastReport.SunriseMin = 30;
+               lastReport.SunsetHour = 18;
+               lastReport.SunsetMin = 15;
+               break;
+            case "Oct":
+               lastReport.SunriseHour = 6;
+               lastReport.SunriseMin = 30;
+               lastReport.SunsetHour = 17;
+               lastReport.SunsetMin = 15;
+               break;
+            case "Nov":
+               lastReport.SunriseHour = 7;
+               lastReport.SunriseMin = 15;
+               lastReport.SunsetHour = 16;
+               lastReport.SunsetMin = 15;
+               break;
+            case "Dec":
+               lastReport.SunriseHour = 7;
+               lastReport.SunriseMin = 45;
+               lastReport.SunsetHour = 16;
+               lastReport.SunsetMin = 00;
+               break;
+            case "Jan":
+               lastReport.SunriseHour = 7;
+               lastReport.SunriseMin = 45;
+               lastReport.SunsetHour = 16;
+               lastReport.SunsetMin = 30;
+               break;
+            case "Feb":
+               lastReport.SunriseHour = 7;
+               lastReport.SunriseMin = 15;
+               lastReport.SunsetHour = 17;
+               lastReport.SunsetMin = 30;
+               break;
+            case "Mar":
+               lastReport.SunriseHour = 6;
+               lastReport.SunriseMin = 15;
+               lastReport.SunsetHour = 18;
+               lastReport.SunsetMin = 00;
+               break;
+            case "Apr":
+               lastReport.SunriseHour = 5;
+               lastReport.SunriseMin = 15;
+               lastReport.SunsetHour = 19;
+               lastReport.SunsetMin = 00;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTimeCheckRoll): reached default day=" + day.ToString());
+               return false;
+         }
+
+         return true;
+      }
       //-------------------------------------------
       private void CreateCombatCalender()
       {

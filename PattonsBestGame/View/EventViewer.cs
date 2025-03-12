@@ -584,6 +584,13 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent():  gi.Reports.GetLast()");
             return false;
          }
+         ICombatCalendarEntry? entry = TableMgr.theCombatCalendarEntries[gi.Day];
+         if( null == entry )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): entry=null for day=" + gi.Day);
+            return false;
+         }
+         //--------------------------------------------------------------------------
          int firstDieResult = gi.DieResults[key][0];
          switch (key)
          {
@@ -696,6 +703,31 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               break;
+            case "e010":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  StringBuilder sbE010 = new StringBuilder("On ");
+                  sbE010.Append(entry.Date);
+                  sbE010.Append(": Sunset = ");
+                  sbE010.Append(Utilities.GetTime(report.SunriseHour, report.SunriseMin));
+                  sbE010.Append(" and Sunrise = ");
+                  sbE010.Append(Utilities.GetTime(report.SunsetHour, report.SunsetMin));
+                  myTextBlock.Inlines.Add(new Run(sbE010.ToString()));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  int heLost = firstDieResult * 2;
+                  sbE010 = new StringBuilder(" HE Expended = " + heLost.ToString() + "   and   .30MG expended = " + firstDieResult.ToString());
+                  myTextBlock.Inlines.Add(new Run(sbE010.ToString()));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                           "));
+                  Image imgClock = new Image { Source = MapItem.theMapImages.GetBitmapImage("MilitaryWatch"), Width = 200, Height = 100, Name = "PreparationsStart" };
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgClock));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
                break;
             default:
                break;
@@ -900,6 +932,10 @@ namespace Pattons_Best
                               return;
                            case "GotoMorningBriefingEnd":
                               action = GameAction.MorningBriefingEnd;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
+                           case "PreparationsStart":
+                              action = GameAction.PreparationsStart;
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
                            default:

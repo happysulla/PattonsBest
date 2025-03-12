@@ -35,10 +35,13 @@ namespace Pattons_Best
       List<EnteredHex> EnteredHexes { get; }
       //------------------------------------------------
       int Day { get; set; }
+      
       //------------------------------------------------
       IMapItemMoves MapItemMoves { set; get; }
       IStacks Stacks { set; get; }
       //------------------------------------------------
       List<IUnitTest> UnitTests { get; }
+      //=========================================================
+
    }
 }

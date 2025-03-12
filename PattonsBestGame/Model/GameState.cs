@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Navigation;
 
@@ -376,12 +377,24 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.MorningBriefingTimeCheckRoll;
                   break;
                case GameAction.MorningBriefingTimeCheckRoll:
-                  dieRoll = 1; // <cgs> TEST
+                  dieRoll = 7; // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
-                  lastReport.TimeOfDayHour = (int)Math.Floor( (double)dieRoll * 0.5) + 1;
+                  if( false == TableMgr.SetTimeTrack(lastReport, gi.Day))
+                  {
+                     returnStatus = "TableMgr.SetTimeTrack() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(): " + returnStatus);
+                  }
+                  lastReport.SunriseHour += (int)Math.Floor((double)dieRoll * 0.5) + 1;
+                  lastReport.MainGunHE -= dieRoll * 2;
+                  lastReport.Ammo30CalibreMG -= dieRoll;
                   break;
                case GameAction.MorningBriefingSnowRoll:
                   gi.DieResults[key][0] = dieRoll;
+                  break;
+               case GameAction.PreparationsStart:
+                  gi.GamePhase = GamePhase.Preparations;
+                  gi.EventDisplayed = gi.EventActive = "e011";
+                  gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
                   break;
                case GameAction.MorningBriefingEnd:
                   ++gi.Day;
@@ -441,18 +454,32 @@ namespace Pattons_Best
          GameAction previousDieAction = gi.DieRollAction;
          string previousEvent = gi.EventActive;
          string returnStatus = "OK";
-         switch (action)
+         string key = gi.EventActive;
+         IAfterActionReport? lastReport = gi.Reports.GetLast(); // remove it from list
+         if (null == lastReport)
          {
-            case GameAction.UpdateEventViewerDisplay: // Only change active event
-               break;
-            case GameAction.UpdateEventViewerActive: // Only change active event
-               gi.EventDisplayed = gi.EventActive; // next screen to show
-               break;
-            case GameAction.EndGameClose:
-               gi.GamePhase = GamePhase.EndGame;
-               break;
-            default:
-               break;
+            returnStatus = "lastReport=null";
+            Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(): " + returnStatus);
+         }
+         else
+         {
+            switch (action)
+            {
+               case GameAction.UpdateEventViewerDisplay: // Only change active event
+                  break;
+               case GameAction.UpdateEventViewerActive: // Only change active event
+                  gi.EventDisplayed = gi.EventActive; // next screen to show
+                  break;
+               case GameAction.EndGameClose:
+                  gi.GamePhase = GamePhase.EndGame;
+                  break;
+               case GameAction.PreparationsDeploymentRoll:
+                  dieRoll = 7; // <cgs> TEST
+                  gi.DieResults[key][0] = dieRoll;
+                  break;
+               default:
+                  break;
+            }
          }
          StringBuilder sb12 = new StringBuilder();
          if ("OK" != returnStatus)

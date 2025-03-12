@@ -120,6 +120,24 @@ Determine the hours of sunrise and sunset for the current month. On the After Ac
 <LineBreak/><LineBreak/>
 Determine the time and ammo already expended by rolling 1D on the Time Elapsed Table. This roll determines the number of hours already passed and the 
 amount of ammo already expected before the scenario begins. The AAR shows the elapsed time and the ammo used up. "
+r4.4	"<Bold>r4.4 Prepare for Battle</Bold>
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r4.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Deployment <LineBreak/>
+<InlineUIContainer><Button Content='r4.42' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Hatches <LineBreak/>
+<InlineUIContainer><Button Content='r4.43' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Gun Load<LineBreak/>
+<InlineUIContainer><Button Content='r4.43' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Tank &amp; Turrent Orientation<LineBreak/>
+<InlineUIContainer><Button Content='r4.44' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Mark Loader Spot<LineBreak/>
+<InlineUIContainer><Button Content='r4.45' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Place <LineBreak/>
+<InlineUIContainer><Button Content='r4.46' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Place Use Control Markers<LineBreak/>
+<InlineUIContainer><Button Content='r4.47' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Mark Current Weather"
+r4.41	"<Bold>r4.41 Deployment</Bold>
+<LineBreak/><LineBreak/>
+Determine your tank&quot;s deployment from the 
+<InlineUIContainer><Button Content='Deployment' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table.
+ Your tank is marked as moving or hull down by having a counter placed on the Battle Board. 
+<LineBreak/><LineBreak/>
+If you tank is the lead tank, it is recorded on Notes section of the After Action Report (AAR) 
+<InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r7.0	"<Bold>r7.0 Crew Ratings</Bold> 
 <LineBreak/><LineBreak/>
 Each crew member is given a numerical rating of his skill at his position. The rating range from 1 (poorest) to 10 (best). 

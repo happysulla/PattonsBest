@@ -249,10 +249,8 @@
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
-               <Rectangle  Height="15" Width="15" Stroke="Black" />
             </StackPanel>
             <StackPanel Name="myStackPanel0600" Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
-               <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
@@ -263,10 +261,8 @@
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
-               <Rectangle  Height="15" Width="15" Stroke="Black" />
             </StackPanel>
             <StackPanel Name="myStackPanel0800" Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
-               <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
@@ -277,10 +273,8 @@
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
-               <Rectangle  Height="15" Width="15" Stroke="Black" />
             </StackPanel>
             <StackPanel Name="myStackPanel1000" Grid.Row="2" Grid.Column="3" Orientation="Horizontal">
-               <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
@@ -291,10 +285,8 @@
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
-               <Rectangle  Height="15" Width="15" Stroke="Black" />
             </StackPanel>
             <StackPanel Name="myStackPanel1200" Grid.Row="4" Grid.Column="3" Orientation="Horizontal">
-               <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
@@ -305,10 +297,8 @@
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
-               <Rectangle  Height="15" Width="15" Stroke="Black" />
             </StackPanel>
             <StackPanel Name="myStackPanel1400" Grid.Row="2" Grid.Column="5" Orientation="Horizontal">
-               <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
@@ -319,10 +309,8 @@
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
-               <Rectangle  Height="15" Width="15" Stroke="Black" />
             </StackPanel>
             <StackPanel Name="myStackPanel1600" Grid.Row="4" Grid.Column="5" Orientation="Horizontal">
-               <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
@@ -333,17 +321,14 @@
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
-               <Rectangle  Height="15" Width="15" Stroke="Black" />
             </StackPanel>
             <StackPanel Name="myStackPanel1800" Grid.Row="2" Grid.Column="7" Orientation="Horizontal">
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
-               <Rectangle  Height="15" Width="15" Stroke="Black" />
             </StackPanel>
             <StackPanel Name="myStackPanel1900" Grid.Row="3" Grid.Column="7" Orientation="Horizontal">
-               <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" />
                <Rectangle  Height="15" Width="15" Stroke="Black" Fill="Black"/>
                <Rectangle  Height="15" Width="15" Stroke="Black" Fill="Black"/>
