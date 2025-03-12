@@ -198,7 +198,6 @@ namespace Pattons_Best
          myUnassignedReadyRack = card.myMaxReadyRackCount;
          myUnassignedCount = card.myNumMainGunRound;
          myMainGun = card.myMainGun;
-         myUnassignedCount = 0;
          myApRoundCount = 0;
          myHeRoundCount = 0;
          myWpRoundCount = 0;
@@ -247,9 +246,12 @@ namespace Pattons_Best
          myHeRoundCount = (int)Math.Ceiling((double)myUnassignedCount * 0.6);
          myUnassignedCount -= myHeRoundCount;
          myApRoundCount = myUnassignedCount; // assign remaining rounds to AP
-         // Assign default rack with 60%
-         myApReadyRackCount = (int)Math.Ceiling((double)myUnassignedReadyRack * 0.6);
-         myHeReadyRackCount = myUnassignedReadyRack - myHeRoundCount;
+         myUnassignedCount = 0;
+         // Assign default rack with 60% HE
+         myHeReadyRackCount = (int)Math.Ceiling((double)myUnassignedReadyRack * 0.6);
+         myUnassignedReadyRack-= myHeReadyRackCount;
+         myApReadyRackCount = myUnassignedReadyRack;
+         myUnassignedReadyRack = 0;
          myWpReadyRackCount = 0;
          myHbciReadyRackCount = 0;
          myHvapReadyRackCount = 0;
@@ -297,9 +299,9 @@ namespace Pattons_Best
       {
          if (E162Enum.END == myState)
          {
-            if( false == UpdateReadyRack())
+            if( false == UpdateAmmoLoad())
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): UpdateReadyRack returned false");
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): UpdateAmmoLoad() returned false");
                return false;
             }
             if (null == myCallback)
@@ -819,17 +821,17 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool UpdateReadyRack()
+      private bool UpdateAmmoLoad()
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateAmmoLoad(): myGameInstance=null");
             return false;
          }
          IAfterActionReport? report = myGameInstance.Reports.GetLast();
          if (null == report)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): report=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateAmmoLoad(): report=null");
             return false;
          }
          report.MainGunHE = myHeRoundCount;
@@ -840,6 +842,100 @@ namespace Pattons_Best
          report.Ammo30CalibreMG = 30;
          if (-1 < myExtraAmmo)
             report.Ammo30CalibreMG += 10;
+         return true;
+      }
+      private bool UpdateReadyRack()
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): myGameInstance=null");
+            return false;
+         }
+         IMapItem? rrHe = myGameInstance.ReadyRacks[0];
+         if( null == rrHe )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): rrHe=null");
+            return false;
+         }
+         rrHe.Count = myHeReadyRackCount;
+         string tName = rrHe.Name + rrHe.Count.ToString();
+         ITerritory? newT = Territories.theTerritories.Find(tName);
+         if (null == newT)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): newT=null for " + tName);
+            return false;
+         }
+         rrHe.TerritoryCurrent = newT;
+         //------------------------------------------
+         IMapItem? rrAp = myGameInstance.ReadyRacks[1];
+         if (null == rrAp)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): rrAp=null");
+            return false;
+         }
+         rrAp.Count = myApReadyRackCount;
+         tName = rrAp.Name + rrAp.Count.ToString();
+         newT = Territories.theTerritories.Find(tName);
+         if (null == newT)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): newT=null for " + tName);
+            return false;
+         }
+         rrAp.TerritoryCurrent = newT;
+         //------------------------------------------
+         if ( "75" == myMainGun )
+         {
+            IMapItem? rrWp = myGameInstance.ReadyRacks[2];
+            if (null == rrWp)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): rrAp=null");
+               return false;
+            }
+            rrWp.Count = myWpReadyRackCount;
+            tName = rrWp.Name + rrWp.Count.ToString();
+            newT = Territories.theTerritories.Find(tName);
+            if (null == newT)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): newT=null for " + tName);
+               return false;
+            }
+            rrWp.TerritoryCurrent = newT;
+            //------------------------------------------
+            IMapItem? rrHbci = myGameInstance.ReadyRacks[3];
+            if (null == rrHbci)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): rrAp=null");
+               return false;
+            }
+            rrHbci.Count = myHbciReadyRackCount;
+            tName = rrHbci.Name + rrHbci.Count.ToString();
+            newT = Territories.theTerritories.Find(tName);
+            if (null == newT)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): newT=null for " + tName);
+               return false;
+            }
+            rrHbci.TerritoryCurrent = newT;
+         }
+         else
+         {
+            IMapItem? rrHvap = myGameInstance.ReadyRacks[2];
+            if (null == rrHvap)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): rrHvap=null");
+               return false;
+            }
+            rrHvap.Count = myHvapReadyRackCount;
+            tName = rrHvap.Name + rrHvap.Count.ToString();
+            newT = Territories.theTerritories.Find(tName);
+            if (null == newT)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): newT=null for " + tName);
+               return false;
+            }
+            rrHvap.TerritoryCurrent = newT;
+         }
+         //------------------------------------------
          return true;
       }
       //------------------------------------------------------------------------------------

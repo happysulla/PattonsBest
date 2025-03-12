@@ -361,6 +361,7 @@ namespace Pattons_Best
                case GameAction.MorningBriefingWeatherRoll:
                   dieRoll = 50; // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
+                  gi.DieRollAction = GameAction.DieRollActionNone;
                   string weatherRolled = TableMgr.GetWeather(dieRoll);
                   lastReport.Weather = weatherRolled;
                   break;
@@ -379,7 +380,8 @@ namespace Pattons_Best
                case GameAction.MorningBriefingTimeCheckRoll:
                   dieRoll = 7; // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
-                  if( false == TableMgr.SetTimeTrack(lastReport, gi.Day))
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  if ( false == TableMgr.SetTimeTrack(lastReport, gi.Day))
                   {
                      returnStatus = "TableMgr.SetTimeTrack() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(): " + returnStatus);
@@ -390,6 +392,7 @@ namespace Pattons_Best
                   break;
                case GameAction.MorningBriefingSnowRoll:
                   gi.DieResults[key][0] = dieRoll;
+                  gi.DieRollAction = GameAction.DieRollActionNone;
                   break;
                case GameAction.PreparationsStart:
                   gi.GamePhase = GamePhase.Preparations;
@@ -476,6 +479,7 @@ namespace Pattons_Best
                case GameAction.PreparationsDeploymentRoll:
                   dieRoll = 7; // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
+                  gi.DieRollAction = GameAction.DieRollActionNone;
                   break;
                default:
                   break;

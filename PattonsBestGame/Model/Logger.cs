@@ -77,7 +77,7 @@ namespace Pattons_Best
          SetOn(LogEnum.LE_GAME_INIT_VERSION);
          SetOn(LogEnum.LE_USER_ACTION);
          SetOn(LogEnum.LE_NEXT_ACTION);
-         SetOn(LogEnum.LE_VIEW_TIME_TRACK);
+         //SetOn(LogEnum.LE_VIEW_TIME_TRACK);
          return true;
       }
       static public void SetOn(LogEnum logLevel)
