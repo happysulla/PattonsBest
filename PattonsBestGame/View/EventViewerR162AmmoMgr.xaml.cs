@@ -198,6 +198,7 @@ namespace Pattons_Best
          myUnassignedReadyRack = card.myMaxReadyRackCount;
          myUnassignedCount = card.myNumMainGunRound;
          myMainGun = card.myMainGun;
+         myUnassignedCount = 0;
          myApRoundCount = 0;
          myHeRoundCount = 0;
          myWpRoundCount = 0;
@@ -205,11 +206,6 @@ namespace Pattons_Best
          myHvapRoundCount = 0;
          myExtraAmmo = -1;
          myDieRollResult = "";
-         myApReadyRackCount = 0;
-         myHeReadyRackCount = 0;
-         myWpReadyRackCount = 0;
-         myHbciReadyRackCount = 0;
-         myHvapReadyRackCount = 0;
          if ("75" == myMainGun)
          {
             myHbciRoundCountOriginal = myHbciRoundCount = 10;
@@ -251,7 +247,14 @@ namespace Pattons_Best
          myHeRoundCount = (int)Math.Ceiling((double)myUnassignedCount * 0.6);
          myUnassignedCount -= myHeRoundCount;
          myApRoundCount = myUnassignedCount; // assign remaining rounds to AP
-         myUnassignedCount = 0;
+         // Assign default rack with 60%
+         myHeRoundCount = (int)Math.Ceiling((double)myUnassignedReadyRack * 0.6);
+         myHeReadyRackCount = myUnassignedReadyRack - myHeRoundCount;
+         if (false == UpdateReadyRack())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): UpdateReadyRack returned false");
+            return false;
+         }
          //--------------------------------------------------
          if (false == UpdateGrid())
          {
@@ -291,25 +294,11 @@ namespace Pattons_Best
       {
          if (E162Enum.END == myState)
          {
-            if (null == myGameInstance)
+            if( false == UpdateReadyRack())
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myGameInstance=null");
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): UpdateReadyRack returned false");
                return false;
             }
-            IAfterActionReport? report = myGameInstance.Reports.GetLast();
-            if( null == report)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): report=null");
-               return false;
-            }
-            report.MainGunHE = myHeRoundCount;
-            report.MainGunAP = myApRoundCount;
-            report.MainGunWP = myWpRoundCount;
-            report.MainGunHBCI = myHbciRoundCount;
-            report.MainGunHVAP = myHvapRoundCount;
-            report.Ammo30CalibreMG = 30;
-            if( -1 < myExtraAmmo )
-               report.Ammo30CalibreMG += 10;
             if (null == myCallback)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myCallback=null");
@@ -825,6 +814,29 @@ namespace Pattons_Best
             Grid.SetRow(stackpanelHvap, rowNum);
             Grid.SetColumn(stackpanelHvap, 1);
          }
+         return true;
+      }
+      private bool UpdateReadyRack()
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myGameInstance=null");
+            return false;
+         }
+         IAfterActionReport? report = myGameInstance.Reports.GetLast();
+         if (null == report)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): report=null");
+            return false;
+         }
+         report.MainGunHE = myHeRoundCount;
+         report.MainGunAP = myApRoundCount;
+         report.MainGunWP = myWpRoundCount;
+         report.MainGunHBCI = myHbciRoundCount;
+         report.MainGunHVAP = myHvapRoundCount;
+         report.Ammo30CalibreMG = 30;
+         if (-1 < myExtraAmmo)
+            report.Ammo30CalibreMG += 10;
          return true;
       }
       //------------------------------------------------------------------------------------
