@@ -248,8 +248,11 @@ namespace Pattons_Best
          myUnassignedCount -= myHeRoundCount;
          myApRoundCount = myUnassignedCount; // assign remaining rounds to AP
          // Assign default rack with 60%
-         myHeRoundCount = (int)Math.Ceiling((double)myUnassignedReadyRack * 0.6);
+         myApReadyRackCount = (int)Math.Ceiling((double)myUnassignedReadyRack * 0.6);
          myHeReadyRackCount = myUnassignedReadyRack - myHeRoundCount;
+         myWpReadyRackCount = 0;
+         myHbciReadyRackCount = 0;
+         myHvapReadyRackCount = 0;
          if (false == UpdateReadyRack())
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): UpdateReadyRack returned false");
