@@ -593,7 +593,7 @@ namespace Pattons_Best
          System.Windows.Point p = e.GetPosition(myCanvasMain);
          if( p.X < 0.0 )
             p = e.GetPosition(myCanvasTank);
-         TerritoryCreateDialog dialog = new TerritoryCreateDialog(); // Get the name from user
+         TerritoryCreateDialog dialog = new TerritoryCreateDialog(myCanvasMain, myCanvasTank); // Get the name from user
          dialog.myTextBoxName.Focus();
          if (true == dialog.ShowDialog())
          {
