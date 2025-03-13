@@ -233,7 +233,7 @@ namespace Pattons_Best
          ge.RegisterForUpdates(this); // needs to be last so that canvas updates after all actions taken
          Logger.Log(LogEnum.LE_GAME_INIT, "GameViewerWindow(): \nzoomCanvas=" + Settings.Default.ZoomCanvas.ToString() + "\nwp=" + Settings.Default.WindowPlacement + "\noptions=" + Settings.Default.GameOptions);
 #if UT1
-            if (false == ge.CreateUnitTests(gi, myDockPanelTop, myEventViewer, myDieRoller))
+            if (false == ge.CreateUnitTests(gi, myDockPanelTop, myEventViewer, myDieRoller, civ))
             {
                Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): CreateUnitTests() returned false");
                CtorError = true;
@@ -614,12 +614,40 @@ namespace Pattons_Best
          if (GamePhase.UnitTest == gi.GamePhase)
             return true;
          //-------------------------------------------------------
+         foreach (IMapItem mi in gi.MainMapItems)
+         {
+            if (null == mi)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): mi=null");
+               return false;
+            }
+            Button? b = myButtonMains.Find(mi.Name);
+            if (null != b)
+            {
+               b.BeginAnimation(Canvas.LeftProperty, null); // end animation offset
+               b.BeginAnimation(Canvas.TopProperty, null);  // end animation offset
+               ITerritory t = mi.TerritoryCurrent;
+               Double x = t.CenterPoint.X - (mi.Zoom * Utilities.theMapItemOffset);
+               Double y = t.CenterPoint.Y - (mi.Zoom * Utilities.theMapItemOffset);
+               Canvas.SetLeft(b, x);
+               Canvas.SetTop(b, y);
+               Canvas.SetZIndex(b, 9999);
+            }
+            else
+            {
+               if (false == CreateButtonMapItem(mi, 0))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): CreateButtonMapItem() returned false");
+                  return false;
+               }
+            }
+         }
+         //-------------------------------------------------------
          try
          {
             switch (action)
             {
                case GameAction.PreparationsStart:
-
                   break;
                case GameAction.EndGameClose:
                   GameAction outActionClose = GameAction.EndGameExit;

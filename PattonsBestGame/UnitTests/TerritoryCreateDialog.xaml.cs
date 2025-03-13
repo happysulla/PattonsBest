@@ -122,22 +122,14 @@ namespace Pattons_Best
             return;
          }
          string content = (string)radioButton.Content;
+         theTypeChecked = content;
          switch (content)
          {
             case "A":
             case "B":
             case "C":
             case "D":
-               Image imgMove = new Image() { Name = "CanvasMain", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapMovement") };
-               myCanvasMain.Children.Add(imgMove);
-               Canvas.SetLeft(imgMove, 0);
-               Canvas.SetTop(imgMove, 0);
-               break;
-            case "M":
-               Image imgBattle = new Image() { Name = "CanvasMain", Width = 1000, Height = 890, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapBattle") };
-               myCanvasMain.Children.Add(imgBattle);
-               Canvas.SetLeft(imgBattle, 0);
-               Canvas.SetTop(imgBattle, 0);
+            case "Battle":
                break;
             default:
                int tankNum = Int32.Parse(content);

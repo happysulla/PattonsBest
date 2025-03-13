@@ -45,7 +45,7 @@ namespace Pattons_Best
          }
          myMainWindow.UpdateViews(gi, action); // Update all registered views when performNextAction() is called
       }
-      public bool CreateUnitTests(IGameInstance gi, DockPanel dp, EventViewer ev, IDieRoller dr)
+      public bool CreateUnitTests(IGameInstance gi, DockPanel dp, EventViewer ev, IDieRoller dr, CanvasImageViewer civ)
       {
         //-----------------------------------------------------------------------------
          IUnitTest ut1 = new GameViewerCreateUnitTest(dp);
@@ -56,7 +56,7 @@ namespace Pattons_Best
          }
          gi.UnitTests.Add(ut1);
          //-----------------------------------------------------------------------------
-         IUnitTest ut2 = new TerritoryCreateUnitTest(dp, gi);
+         IUnitTest ut2 = new TerritoryCreateUnitTest(dp, gi, civ);
          if (true == ut2.CtorError)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateUnitTests(): TerritoryCreateUnitTest() ctor error");

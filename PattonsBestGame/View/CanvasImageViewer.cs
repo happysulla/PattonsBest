@@ -11,7 +11,7 @@ using WpfAnimatedGif;
 
 namespace Pattons_Best
 {
-   internal class CanvasImageViewer : IView
+   public class CanvasImageViewer : IView
    {
       public bool CtorError { get; } = false;
       private Canvas? myCanvas = null;
@@ -91,7 +91,7 @@ namespace Pattons_Best
          }
       }
       //-------------------------------------------------
-      private void CleanCanvas(Canvas c)
+      public void CleanCanvas(Canvas c)
       {
          List<UIElement> elements = new List<UIElement>();
          foreach (UIElement ui in c.Children)
@@ -121,6 +121,23 @@ namespace Pattons_Best
          foreach (UIElement ui1 in elements)
             c.Children.Remove(ui1);
       }
+      public void ShowMovementMap(Canvas c)
+      {
+         CleanCanvas(c);
+         Image img = new Image() { Name = "CanvasMain", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapMovement") };
+         c.Children.Add(img);
+         Canvas.SetLeft(img, 0);
+         Canvas.SetTop(img, 0);
+      }
+      public void ShowBattleMap(Canvas c)
+      {
+         CleanCanvas(c);
+         Image img = new Image() { Name = "CanvasMain", Width = 1000, Height = 890, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapBattle") };
+         c.Children.Add(img);
+         Canvas.SetLeft(img, 0);
+         Canvas.SetTop(img, 0);
+      }
+      //-------------------------------------------------
       private void ShowInitialScreen(Canvas c)
       {
          Image img = new Image() { Name = "CanvasMain", Width = 1617, Height = 880, Source = MapItem.theMapImages.GetBitmapImage("Sherman3") };
@@ -134,22 +151,6 @@ namespace Pattons_Best
       {
          CleanCanvas(c);
          Image img = new Image() { Name = "CanvasMain", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapHistorical") };
-         c.Children.Add(img);
-         Canvas.SetLeft(img, 0);
-         Canvas.SetTop(img, 0);
-      }
-      private void ShowMovementMap(Canvas c)
-      {
-         CleanCanvas(c);
-         Image img = new Image() { Name = "CanvasMain", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapMovement") };
-         c.Children.Add(img);
-         Canvas.SetLeft(img, 0);
-         Canvas.SetTop(img, 0);
-      }
-      private void ShowBattleMap(Canvas c)
-      {
-         CleanCanvas(c);
-         Image img = new Image() { Name = "CanvasMain", Width = 1000, Height = 890, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapBattle") };
          c.Children.Add(img);
          Canvas.SetLeft(img, 0);
          Canvas.SetTop(img, 0);

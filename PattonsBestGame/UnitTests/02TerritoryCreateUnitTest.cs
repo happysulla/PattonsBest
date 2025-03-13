@@ -15,19 +15,21 @@ namespace Pattons_Best
 {
    public class TerritoryCreateUnitTest : IUnitTest
    {
+      public static Double theEllipseDiameter = 30;
+      public static Double theEllipseOffset = theEllipseDiameter / 2.0;
+      //-----------------------------------------
       private string? myFileName = null;
       private DockPanel myDockPanelTop;
       private IGameInstance? myGameInstance = null;
-      Canvas? myCanvasTank = null;
-      Canvas? myCanvasMain = null;
-      public bool myIsDraggingMain = false;
-      public bool myIsDraggingTank = false;
-      UIElement? myItem = null;
-      private System.Windows.Point myPreviousLocation;
-      Territory? myAnchorTerritory = null;
+      private CanvasImageViewer? myCanvasImageViewer = null;
+      private Canvas? myCanvasTank = null;
+      private Canvas? myCanvasMain = null;
+      private bool myIsDraggingMain = false;
+      private bool myIsDraggingTank = false;
+      private bool myIsBattleMapShown = false;
+      private UIElement? myEllipseSelected = null;
+      private Territory? myAnchorTerritory = null;
       private List<Ellipse> myEllipses = new List<Ellipse>();
-      public static Double theEllipseDiameter = 30;
-      public static Double theEllipseOffset = theEllipseDiameter / 2.0;
       private readonly SolidColorBrush mySolidColorBrushWaterBlue = new SolidColorBrush { Color = Colors.DeepSkyBlue };
       //-----------------------------------------
       private int myIndexName = 0;
@@ -36,7 +38,7 @@ namespace Pattons_Best
       private List<string> myCommandNames = new List<string>();
       public string HeaderName { get { return myHeaderNames[myIndexName]; } }
       public string CommandName { get { return myCommandNames[myIndexName]; } }
-      public TerritoryCreateUnitTest(DockPanel dp, IGameInstance gi)
+      public TerritoryCreateUnitTest(DockPanel dp, IGameInstance gi, CanvasImageViewer civ)
       {
          myIndexName = 0;
          myHeaderNames.Add("02-Delete Territories");
@@ -47,7 +49,7 @@ namespace Pattons_Best
          myHeaderNames.Add("02-Final");
          //------------------------------------
          myCommandNames.Add("00-Delete File");
-         myCommandNames.Add("01-Click Center of Hex");
+         myCommandNames.Add("01-Switch Main Image");
          myCommandNames.Add("02-Click Elispse to Move");
          myCommandNames.Add("03-Click Ellispe to Verify");
          myCommandNames.Add("04-Verify Adjacents");
@@ -62,6 +64,14 @@ namespace Pattons_Best
             return;
          }
          myGameInstance = gi;
+         //------------------------------------
+         if (null == civ)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): civ=null");
+            CtorError = true;
+            return;
+         }
+         myCanvasImageViewer = civ;
          //------------------------------------
          foreach (UIElement ui0 in myDockPanelTop.Children)
          {
@@ -123,6 +133,11 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Command(): myFileName=null");
             return false;
          }
+         if (null == myCanvasImageViewer)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Command(): myCanvasImageViewer=null");
+            return false;
+         }
          //-----------------------------------
          if (CommandName == myCommandNames[0])
          {
@@ -136,7 +151,16 @@ namespace Pattons_Best
          }
          else if (CommandName == myCommandNames[1]) //  Create territories on Move Map
          {
-
+            if( true == myIsBattleMapShown )
+            {
+               myIsBattleMapShown = false;
+               myCanvasImageViewer.ShowMovementMap(myCanvasMain);
+            }
+            else
+            {
+               myIsBattleMapShown = true;
+               myCanvasImageViewer.ShowBattleMap(myCanvasMain);
+            }
          }
          else if (CommandName == myCommandNames[2]) // set centerpoints
          {
@@ -631,9 +655,8 @@ namespace Pattons_Best
                   if (false == myIsDraggingTank)
                   {
                      MessageBox.Show(ellipse.Tag.ToString());
-                     myPreviousLocation = p;
                      this.myIsDraggingTank = true;
-                     this.myItem = ui;
+                     this.myEllipseSelected = ui;
                   }
                }
             }
@@ -648,9 +671,8 @@ namespace Pattons_Best
                   if (false == myIsDraggingMain)
                   {
                      MessageBox.Show(ellipse.Tag.ToString());
-                     myPreviousLocation = p;
                      this.myIsDraggingMain = true;
-                     this.myItem = ui;
+                     this.myEllipseSelected = ui;
                   }
                }
             }
@@ -660,20 +682,20 @@ namespace Pattons_Best
       {
          if (true == myIsDraggingMain)
          {
-            if (null != myItem)
+            if (null != myEllipseSelected)
             {
                System.Windows.Point newPoint = e.GetPosition(myCanvasMain);
-               Canvas.SetTop(myItem, newPoint.Y - theEllipseOffset);
-               Canvas.SetLeft(myItem, newPoint.X - theEllipseOffset);
+               Canvas.SetTop(myEllipseSelected, newPoint.Y - theEllipseOffset);
+               Canvas.SetLeft(myEllipseSelected, newPoint.X - theEllipseOffset);
             }
          }
          else if (true == myIsDraggingTank)
          {
-            if (null != myItem)
+            if (null != myEllipseSelected)
             {
                System.Windows.Point newPoint = e.GetPosition(myCanvasTank);
-               Canvas.SetTop(myItem, newPoint.Y - theEllipseOffset);
-               Canvas.SetLeft(myItem, newPoint.X - theEllipseOffset);
+               Canvas.SetTop(myEllipseSelected, newPoint.Y - theEllipseOffset);
+               Canvas.SetLeft(myEllipseSelected, newPoint.X - theEllipseOffset);
             }
          }
       }
@@ -686,11 +708,11 @@ namespace Pattons_Best
             newPoint = e.GetPosition(myCanvasTank);
          this.myIsDraggingTank = false;
          this.myIsDraggingMain = false;
-         if (this.myItem != null)
+         if (this.myEllipseSelected != null)
          {
-            if (this.myItem is Ellipse)
+            if (this.myEllipseSelected is Ellipse)
             {
-               Ellipse ellipse = (Ellipse)myItem;
+               Ellipse ellipse = (Ellipse)myEllipseSelected;
                if( null == ellipse.Tag)
                {
                   Logger.Log(LogEnum.LE_ERROR, "MouseUp(): ellipse.Tag=null");
@@ -709,7 +731,7 @@ namespace Pattons_Best
                   {
                      t.CenterPoint.X = newPoint.X;
                      t.CenterPoint.Y = newPoint.Y;
-                     this.myItem = null;
+                     this.myEllipseSelected = null;
                      break;
                   }
                }
@@ -717,7 +739,7 @@ namespace Pattons_Best
          }
          else
          {
-            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest.MouseUp() this.myItem != null");
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest.MouseUp() this.myEllipseSelected != null");
          }
       }
       void MouseLeftButtonDownVerifyTerritory(object sender, MouseButtonEventArgs e)
@@ -764,7 +786,7 @@ namespace Pattons_Best
          }
          if (null == selectedTerritory)
          {
-            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest.MouseUp() this.myItem != null");
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest.MouseUp() this.myEllipseSelected != null");
             return;
          }
          TerritoryVerifyDialog dialog = new TerritoryVerifyDialog(selectedTerritory);
