@@ -15,8 +15,9 @@ namespace Pattons_Best
    {
       public bool CtorError { get; } = false;
       private Canvas? myCanvas = null;
+      private IDieRoller? myDieRoller = null;
       //-------------------------------------------------
-      public CanvasImageViewer(Canvas? c)
+      public CanvasImageViewer(Canvas? c, IDieRoller? dr)
       {
          if (null == c)
          {
@@ -25,6 +26,14 @@ namespace Pattons_Best
             return;
          }
          myCanvas = c;
+         //------------------------
+         if (null == dr)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CanvasImageViewer(): dr=null");
+            CtorError = true;
+            return;
+         }
+         myDieRoller = dr;
       }
       //-------------------------------------------------
       public void UpdateView(ref IGameInstance gi, GameAction action)
@@ -32,6 +41,11 @@ namespace Pattons_Best
          if (null == myCanvas)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myCanvas=null");
+            return;
+         }
+         if (null == myDieRoller)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myDieRoller=null");
             return;
          }
          switch (action)
@@ -43,12 +57,16 @@ namespace Pattons_Best
                ShowHistoricalMap(myCanvas);
                break;
             case GameAction.SetupShowMovementBoard:
+               myDieRoller.HideDie();
                ShowMovementMap(myCanvas);
                break;
             case GameAction.SetupShowBattleBoard:
+            case GameAction.PreparationsStart:
+               myDieRoller.HideDie();
                ShowBattleMap(myCanvas);
                break;
             case GameAction.SetupShowAfterActionReport:
+               myDieRoller.HideDie();
                if (false == ShowAfterActionReportDialog(gi, myCanvas, true))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowAfterActionReportDialog() returned false for a=" + action.ToString());
                break;
@@ -105,7 +123,7 @@ namespace Pattons_Best
       }
       private void ShowInitialScreen(Canvas c)
       {
-         Image img = new Image() { Name = "Canvas", Width = 1617, Height = 880, Source = MapItem.theMapImages.GetBitmapImage("Sherman3") };
+         Image img = new Image() { Name = "CanvasMain", Width = 1617, Height = 880, Source = MapItem.theMapImages.GetBitmapImage("Sherman3") };
          c.Children.Add(img);
          double x = (c.ActualWidth - img.Width) * 0.5;
          double y = (c.ActualHeight - img.Height) * 0.5;
@@ -115,7 +133,7 @@ namespace Pattons_Best
       private void ShowHistoricalMap(Canvas c)
       {
          CleanCanvas(c);
-         Image img = new Image() { Name = "Canvas", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapHistorical") };
+         Image img = new Image() { Name = "CanvasMain", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapHistorical") };
          c.Children.Add(img);
          Canvas.SetLeft(img, 0);
          Canvas.SetTop(img, 0);
@@ -123,7 +141,7 @@ namespace Pattons_Best
       private void ShowMovementMap(Canvas c)
       {
          CleanCanvas(c);
-         Image img = new Image() { Name = "Canvas", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapMovement") };
+         Image img = new Image() { Name = "CanvasMain", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapMovement") };
          c.Children.Add(img);
          Canvas.SetLeft(img, 0);
          Canvas.SetTop(img, 0);
@@ -131,7 +149,7 @@ namespace Pattons_Best
       private void ShowBattleMap(Canvas c)
       {
          CleanCanvas(c);
-         Image img = new Image() { Name = "Canvas", Width = 1115, Height = 880, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapBattle") };
+         Image img = new Image() { Name = "CanvasMain", Width = 1000, Height = 890, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapBattle") };
          c.Children.Add(img);
          Canvas.SetLeft(img, 0);
          Canvas.SetTop(img, 0);
@@ -157,7 +175,7 @@ namespace Pattons_Best
       private void ShowCombatCalendarDialog(Canvas c)
       {
          CleanCanvas(c);
-         Image img = new Image() { Name = "Canvas", Width = 1115, Height = 880, Source = MapItem.theMapImages.GetBitmapImage("CombatCalendar") };
+         Image img = new Image() { Name = "CanvasMain", Width = 1115, Height = 880, Source = MapItem.theMapImages.GetBitmapImage("CombatCalendar") };
          c.Children.Add(img);
          Canvas.SetLeft(img, 0);
          Canvas.SetTop(img, 0);

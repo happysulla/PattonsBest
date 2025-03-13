@@ -35,7 +35,10 @@ namespace Pattons_Best
       List<EnteredHex> EnteredHexes { get; }
       //------------------------------------------------
       int Day { get; set; }
-      
+      //------------------------------------------------
+      bool IsHulledDown { set; get; }
+      bool IsMoving { set; get; }
+      bool IsLeadTank { set; get; }
       //------------------------------------------------
       IMapItemMoves MapItemMoves { set; get; }
       IStacks Stacks { set; get; }

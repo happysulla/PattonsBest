@@ -216,7 +216,13 @@ namespace Pattons_Best
             CtorError = true;
             return;
          }
-         CanvasImageViewer civ = new CanvasImageViewer(myCanvasMap);
+         CanvasImageViewer civ = new CanvasImageViewer(myCanvasMap, myDieRoller);
+         if (true == civ.CtorError)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): civ.CtorError=true");
+            CtorError = true;
+            return;
+         }
          //---------------------------------------------------------------
          // Implement the Model View Controller (MVC) pattern by registering views with
          // the game engine such that when the model data is changed, the views are updated.
@@ -304,8 +310,8 @@ namespace Pattons_Best
                break;
             case GameAction.RemoveSplashScreen:
                this.Title = UpdateTitle(gi.Options);
-               if (false == UpdateCanvas(gi, action))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvas() returned error ");
+               if (false == UpdateCanvasMain(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                mySplashScreen.Close();
                myScrollViewerMap.UpdateLayout();
                //UpdateScrollbarThumbnails(gi.Prince.Territory);
@@ -316,19 +322,19 @@ namespace Pattons_Best
                break;
             case GameAction.EndGameFinal:
                myCanvasMap.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);  // EndGameFinal - show map for last time
-               if (false == UpdateCanvas(gi, action))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvas() returned error ");
+               if (false == UpdateCanvasMain(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
             case GameAction.SetupChooseFunOptions:
             case GameAction.SetupFinalize:
                this.Title = UpdateTitle(gi.Options);
                myCanvasMap.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
-               if (false == UpdateCanvas(gi, action))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvas() returned error ");
+               if (false == UpdateCanvasMain(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
             default:
-               if (false == UpdateCanvas(gi, action))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvas() returned error ");
+               if (false == UpdateCanvasMain(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
          }
          //UpdateScrollbarThumbnails(gi.Prince.Territory);
@@ -570,12 +576,12 @@ namespace Pattons_Best
          }
          catch (Exception e)
          {
-            Console.WriteLine("UpdateCanvas() - EXCEPTION THROWN a=" + action.ToString() + "\ne={0}", e.ToString());
+            Console.WriteLine("UpdateCanvasMain() - EXCEPTION THROWN a=" + action.ToString() + "\ne={0}", e.ToString());
             return false;
          }
          return true;
       }
-      private bool UpdateCanvas(IGameInstance gi, GameAction action, bool isOnlyLastLegRemoved = false)
+      private bool UpdateCanvasMain(IGameInstance gi, GameAction action, bool isOnlyLastLegRemoved = false)
       {
          //-------------------------------------------------------
          // Clean the Canvas of all marks
@@ -595,7 +601,7 @@ namespace Pattons_Best
                elements.Add(ui);
             if (ui is Image img)
             {
-               if ("Canvas" == img.Name)
+               if ( true == img.Name.Contains("Canvas"))
                   continue;
                elements.Add(ui);
             }
@@ -612,6 +618,9 @@ namespace Pattons_Best
          {
             switch (action)
             {
+               case GameAction.PreparationsStart:
+
+                  break;
                case GameAction.EndGameClose:
                   GameAction outActionClose = GameAction.EndGameExit;
                   myGameEngine.PerformAction(ref gi, ref outActionClose);
@@ -622,7 +631,7 @@ namespace Pattons_Best
          }
          catch (Exception e)
          {
-            Console.WriteLine("UpdateCanvas() - EXCEPTION THROWN a=" + action.ToString() + "\ne={0}", e.ToString());
+            Console.WriteLine("UpdateCanvasMain() - EXCEPTION THROWN a=" + action.ToString() + "\ne={0}", e.ToString());
             return false;
          }
          return true;

@@ -462,7 +462,7 @@ namespace Pattons_Best
          if (null == lastReport)
          {
             returnStatus = "lastReport=null";
-            Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(): " + returnStatus);
+            Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
          }
          else
          {
@@ -480,6 +480,11 @@ namespace Pattons_Best
                   dieRoll = 7; // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
+                  if (false == TableMgr.SetDeployment(gi, dieRoll))
+                  {
+                     returnStatus = "TableMgr.SetDeployment() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
+                  }
                   break;
                default:
                   break;

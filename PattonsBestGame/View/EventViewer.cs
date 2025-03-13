@@ -729,6 +729,30 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
+            case "e011":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  StringBuilder sbE011 = new StringBuilder();
+                  sbE011.Append(" Is Hulled Down =  ");
+                  sbE011.Append( gi.IsHulledDown.ToString() );
+                  sbE011.Append("\n Is Moving  = ");
+                  sbE011.Append(gi.IsMoving.ToString());
+                  sbE011.Append("\n Is Lead Tank  = ");
+                  sbE011.Append(gi.IsMoving.ToString());
+                  myTextBlock.Inlines.Add(new Run(sbE011.ToString()));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("      "));
+                  Image imgMoving = new Image { Source = MapItem.theMapImages.GetBitmapImage("c13Moving"), Width = 100, Height = 100, Name = "PreparationsStart" };
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgMoving));
+                  myTextBlock.Inlines.Add(new Run("      "));
+                  Image imgHullDown = new Image { Source = MapItem.theMapImages.GetBitmapImage("c14HullDown"), Width = 100, Height = 100, Name = "PreparationsStart" };
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgHullDown));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
             default:
                break;
          }

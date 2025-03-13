@@ -34,6 +34,9 @@ namespace Pattons_Best
       public IMapItems MainMapItems { set; get; } = new MapItems();
       public IMapItems NewMembers { set; get; } = new MapItems();
       public IMapItems ReadyRacks { set; get; } = new MapItems();
+      public bool IsHulledDown { set; get; } = false;
+      public bool IsMoving { set; get; } = false;
+      public bool IsLeadTank { set; get; } = false;
       //------------------------------------------------
       public ITerritory? NewTerritory { set; get; } = null;
       private List<EnteredHex> myEnteredHexes = new List<EnteredHex>();
