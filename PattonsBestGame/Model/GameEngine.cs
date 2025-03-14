@@ -64,7 +64,7 @@ namespace Pattons_Best
          }
          gi.UnitTests.Add(ut2);
          //-----------------------------------------------------------------------------
-         IUnitTest ut3 = new TerritoryRegionUnitTest(dp, gi);
+         IUnitTest ut3 = new TerritoryRegionUnitTest(dp, gi, civ);
          if (true == ut3.CtorError)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateUnitTests(): TerritoryRegionUnitTest() ctor error");

@@ -742,7 +742,7 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run(sbE011.ToString()));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("      "));
+                  myTextBlock.Inlines.Add(new Run("                          "));
                   Image imgMoving = new Image { Source = MapItem.theMapImages.GetBitmapImage("c13Moving"), Width = 100, Height = 100, Name = "PreparationsStart" };
                   myTextBlock.Inlines.Add(new InlineUIContainer(imgMoving));
                   myTextBlock.Inlines.Add(new Run("      "));

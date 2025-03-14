@@ -123,13 +123,12 @@ amount of ammo already expected before the scenario begins. The AAR shows the el
 r4.4	"<Bold>r4.4 Prepare for Battle</Bold>
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r4.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Deployment <LineBreak/>
-<InlineUIContainer><Button Content='r4.42' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Hatches <LineBreak/>
+<InlineUIContainer><Button Content='r4.42' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Hatches<LineBreak/>
 <InlineUIContainer><Button Content='r4.43' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Gun Load<LineBreak/>
-<InlineUIContainer><Button Content='r4.43' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Tank &amp; Turrent Orientation<LineBreak/>
-<InlineUIContainer><Button Content='r4.44' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Mark Loader Spot<LineBreak/>
-<InlineUIContainer><Button Content='r4.45' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Place <LineBreak/>
-<InlineUIContainer><Button Content='r4.46' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Place Use Control Markers<LineBreak/>
-<InlineUIContainer><Button Content='r4.47' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Mark Current Weather"
+<InlineUIContainer><Button Content='r4.44' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Tank &amp; Turrent Orientation<LineBreak/>
+<InlineUIContainer><Button Content='r4.45' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Mark Spot<LineBreak/>
+<InlineUIContainer><Button Content='r4.46' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Final Preparations
+"
 r4.41	"<Bold>r4.41 Deployment</Bold>
 <LineBreak/><LineBreak/>
 Determine your tank&apos;s deployment from the 
@@ -138,6 +137,33 @@ Determine your tank&apos;s deployment from the
 <LineBreak/><LineBreak/>
 If you tank is the lead tank, it is recorded on Notes section of the After Action Report (AAR) 
 <InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r4.42	"<Bold>r4.42 Hatches</Bold>
+<LineBreak/><LineBreak/>
+Place Open Hatch Makers with it on the tank card for any crewmember you do not want buttoned up.
+<LineBreak/><LineBreak/>
+                                     <InlineUIContainer><Image Name='c15OpenHatch'  Height='100' Width='100'></Image></InlineUIContainer>"
+r4.43	"<Bold>r4.43 Gun Load</Bold>
+<LineBreak/><LineBreak/>
+Mark the type of round you want loaded into the main gun before any action begins by placing the Gun Load Marker on the Tank Card in the correct ammo type box.
+<LineBreak/><LineBreak/>
+                                     <InlineUIContainer><Image Name='c17GunLoad'  Height='100' Width='100'></Image></InlineUIContainer>"
+r4.44	"<Bold>r4.44 Tank &amp; Turrent Orientation</Bold>
+<LineBreak/><LineBreak/>
+Place the Sherman tank counter for the tank model you are using in the center of the Battle Board. If you want the turret to face a different sector than the tank itself, place a Turret marker on the tank counter accordingly.
+<LineBreak/><LineBreak/>
+                                     <InlineUIContainer><Image Name='c16Turret'  Height='100' Width='100'></Image></InlineUIContainer>"
+r4.45	"<Bold>r4.45  Mark Loader Spot</Bold>
+<LineBreak/><LineBreak/>
+If the loader is buttoned up or does not have a hatch, mark the sector he will be searching by placing the Loader Spot marker just outside the long range zone of a sector. If the commander is also buttoned up and does not have a vision cupola, place the Commander Spot marker similiarly for the sector hew will be searching. See 
+<InlineUIContainer><Button Content='r17.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/> 
+            <InlineUIContainer><Image Name='c18LoaderSpot'  Height='100' Width='100'></Image></InlineUIContainer>           
+      <InlineUIContainer><Image Name='c19CommanderSpot'  Height='100' Width='100'></Image></InlineUIContainer>"
+r4.46	"<Bold>r4.46  Final Preparations</Bold>
+<LineBreak/><LineBreak/>
+Place US Control Markers in Sectors 1, 2, and 3 on the Battle Board. The current weather is marked with the correct markers in the top left of the Battle Board.
+<LineBreak/><LineBreak/> 
+                                     <InlineUIContainer><Image Name='c28UsControl'  Height='100' Width='100'></Image></InlineUIContainer>  "
 r7.0	"<Bold>r7.0 Crew Ratings</Bold> 
 <LineBreak/><LineBreak/>
 Each crew member is given a numerical rating of his skill at his position. The rating range from 1 (poorest) to 10 (best). 

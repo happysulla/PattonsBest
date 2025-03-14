@@ -92,7 +92,6 @@ namespace Pattons_Best
                      if (sv.Content is Canvas canvas)
                         myCanvasMain = canvas;  // Find the Canvas in the visual tree
                   }
-
                }
             }
          }
@@ -161,6 +160,7 @@ namespace Pattons_Best
                myIsBattleMapShown = true;
                myCanvasImageViewer.ShowBattleMap(myCanvasMain);
             }
+            CreateEllipses(Territories.theTerritories);
          }
          else if (CommandName == myCommandNames[2]) // set centerpoints
          {
@@ -436,6 +436,7 @@ namespace Pattons_Best
       }
       private void CreateEllipses(ITerritories territories)
       {
+         myEllipses.Clear();
          if (null == myCanvasTank)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateEllipses(): myCanvasTank=null");
@@ -449,6 +450,16 @@ namespace Pattons_Best
          SolidColorBrush aSolidColorBrush0 = new SolidColorBrush { Color = Color.FromArgb(100, 100, 100, 0) }; // nearly transparent but slightly colored
          foreach (Territory t in territories)
          {
+            if( true == myIsBattleMapShown)
+            {
+               if (("A" == t.Type) || ("B" == t.Type) || ("C" == t.Type) || ("D" == t.Type))
+                  continue;
+            }
+            else
+            {
+               if ("Battle" == t.Type) 
+                  continue;
+            }
             Ellipse aEllipse = new Ellipse { Tag = Utilities.RemoveSpaces(t.ToString()) };
             aEllipse.Fill = aSolidColorBrush0;
             aEllipse.StrokeThickness = 1;

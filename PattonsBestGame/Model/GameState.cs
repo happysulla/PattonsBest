@@ -238,6 +238,16 @@ namespace Pattons_Best
                break;
             case GameAction.SetupShowTankCard:
                gi.EventDisplayed = gi.EventActive = "e004";
+               ITerritory? tCenter = Territories.theTerritories.Find("Home");
+               if (null == tCenter)
+               {
+                  returnStatus = "tCenter=null";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(SetupShowTankCard): " + returnStatus);
+               }
+               else
+               {
+                  gi.MainMapItems.Add(new MapItem("Mud", 2.0, "t001M475-1", tCenter));
+               }
                break;
             case GameAction.SetupShowAfterActionReport:
                gi.EventDisplayed = gi.EventActive = "e005";
@@ -362,8 +372,11 @@ namespace Pattons_Best
                   dieRoll = 50; // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
-                  string weatherRolled = TableMgr.GetWeather(dieRoll);
-                  lastReport.Weather = weatherRolled;
+                  if( false == SetWeather(gi, dieRoll))
+                  {
+                     returnStatus = "SetWeather() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(): " + returnStatus);
+                  }
                   break;
                case GameAction.MorningBriefingWeatherRollEnd:
                   if (true == lastReport.Weather.Contains("Snow"))
@@ -445,6 +458,47 @@ namespace Pattons_Best
          else
             Logger.Log(LogEnum.LE_ERROR, sb12.ToString());
          return returnStatus;
+      }
+      private bool SetWeather(IGameInstance gi, int dieRoll)
+      {
+         IAfterActionReport? report = gi.Reports.GetLast(); // remove it from list
+         if (null == report)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetWeatherCounters(): report=null");
+            return false;
+         }
+         string weatherRolled = TableMgr.GetWeather(dieRoll);
+         ITerritory? w1 = Territories.theTerritories.Find("Weather1");
+         if (null == w1) 
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetWeatherCounters(): w1=null");
+            return false;
+         }
+         ITerritory? w2 = Territories.theTerritories.Find("Weather2");
+         if (null == w2)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetWeatherCounters(): w2=null");
+            return false;
+         }
+         const double zoom = 1.3;
+         switch (weatherRolled)
+         {
+            case "Clear": gi.MainMapItems.Add(new MapItem("Clear", zoom, "c20Clear", w1)); break;
+            case "Overcast": gi.MainMapItems.Add(new MapItem("Overcast", zoom, "c21Overcast", w1)); break;
+            case "Fog": gi.MainMapItems.Add(new MapItem("Fog", zoom, "c22Fog", w1)); break;
+            case "Mud": gi.MainMapItems.Add(new MapItem("Mud", zoom, "c23Mud", w1)); break;
+            case "Mud/Overcast": gi.MainMapItems.Add(new MapItem("Mud", zoom, "c23Mud", w1)); gi.MainMapItems.Add(new MapItem("Overcast", 1.0, "c21Overcast", w2)); break;
+            case "Falling Snow": gi.MainMapItems.Add(new MapItem("Falling Snow", zoom, "c26SnowFalling", w1)); break;
+            case "Ground Snow": gi.MainMapItems.Add(new MapItem("Ground Snow", zoom, "c27SnowGround", w1)); break;
+            case "Deep Snow": gi.MainMapItems.Add(new MapItem("Deep Snow", zoom, "c25SnowDeep", w1)); break;
+            case "Ground/Falling Snow": gi.MainMapItems.Add(new MapItem("Ground Snow", zoom, "c27SnowGround", w1)); gi.MainMapItems.Add(new MapItem("Falling Snow", 1.0, "c26SnowFalling", w2)); break;
+            case "Deep/Falling Snow": gi.MainMapItems.Add(new MapItem("Deep Snow", zoom, "c25SnowDeep", w1)); gi.MainMapItems.Add(new MapItem("Falling Snow", 1.0, "c26SnowFalling", w2)); break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "SetWeatherCounters(): reached default weatherRoll=" + weatherRolled);
+               return false;
+         }
+         report.Weather = weatherRolled;
+         return true;
       }
    }
    //-----------------------------------------------------
