@@ -739,15 +739,18 @@ namespace Pattons_Best
                   sbE011.Append(gi.IsMoving.ToString());
                   sbE011.Append("\n Is Lead Tank  = ");
                   sbE011.Append(gi.IsMoving.ToString());
+                  Image imge011 = new Image { Width = 100, Height = 100, Name = "PreparationsStart" };
+                  if (true == gi.IsHulledDown)
+                     imge011.Source = MapItem.theMapImages.GetBitmapImage("c14HullDown");
+                  else if( true == gi.IsMoving )
+                     imge011.Source = MapItem.theMapImages.GetBitmapImage("c13Moving");
+                  else
+                     imge011.Source = MapItem.theMapImages.GetBitmapImage("c13Continue");
                   myTextBlock.Inlines.Add(new Run(sbE011.ToString()));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("                          "));
-                  Image imgMoving = new Image { Source = MapItem.theMapImages.GetBitmapImage("c13Moving"), Width = 100, Height = 100, Name = "PreparationsStart" };
-                  myTextBlock.Inlines.Add(new InlineUIContainer(imgMoving));
-                  myTextBlock.Inlines.Add(new Run("      "));
-                  Image imgHullDown = new Image { Source = MapItem.theMapImages.GetBitmapImage("c14HullDown"), Width = 100, Height = 100, Name = "PreparationsStart" };
-                  myTextBlock.Inlines.Add(new InlineUIContainer(imgHullDown));
+                  myTextBlock.Inlines.Add(new Run("                                           "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge011));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));

@@ -433,7 +433,7 @@
     <None Update="Images\StarReward.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Images\t001M475-1.gif">
+    <None Update="Images\t001.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Images\Tutorial0.gif">

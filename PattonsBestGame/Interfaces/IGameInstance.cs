@@ -32,6 +32,7 @@ namespace Pattons_Best
       IMapItems ReadyRacks { set; get; }
       //------------------------------------------------
       ITerritory? NewTerritory { set; get; }
+      ITerritory Home { get; set; } 
       List<EnteredHex> EnteredHexes { get; }
       //------------------------------------------------
       int Day { get; set; }

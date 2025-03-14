@@ -155,6 +155,8 @@ namespace Pattons_Best
             if (dieRoll < 21)
             {
                gi.IsHulledDown = true;
+               IMapItem miHulledDown = new MapItem("HullDown", 1.0, "c14HullDown", gi.Home);
+               gi.MainMapItems.Add(miHulledDown);
                gi.IsMoving = false;
                gi.IsLeadTank = false;
             }
