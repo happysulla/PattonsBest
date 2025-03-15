@@ -134,6 +134,10 @@ namespace Pattons_Best
 
       PreparationsStart,
       PreparationsDeploymentRoll,
+      PreparationsHatchesEnd,
+      PreparationsTurretEnd,
+      PreparationsLoaderEnd,
+      PreparationsSpotterEnd,
       Error
    };
    public interface IGameEngine

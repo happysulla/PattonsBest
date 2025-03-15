@@ -17,6 +17,8 @@ namespace Pattons_Best
       //------------------------------------------------
       public bool IsMultipleSelectForDieResult { set; get; } = false;
       public bool IsGridActive { set; get; } = false;
+      public bool IsHatchesActive { set; get; } = false;
+      public bool IsPrepActive { set; get; } = false;
       public string EventActive { get; set; } = "e000";
       public string EventDisplayed { set; get; } = "e000";
       public string EventStart { set; get; } = "e000";
@@ -39,6 +41,7 @@ namespace Pattons_Best
       public bool IsLeadTank { set; get; } = false;
       //------------------------------------------------
       public ITerritory? NewTerritory { set; get; } = null;
+      public ITerritory Home { get; set; } = new Territory();
       private List<EnteredHex> myEnteredHexes = new List<EnteredHex>();
       public List<EnteredHex> EnteredHexes { get => myEnteredHexes; }
       //---------------------------------------------------------------
@@ -69,6 +72,12 @@ namespace Pattons_Best
             }
             if (false == gameLoadMgr.ReadXmlTerritories(reader, Territories.theTerritories))
                Logger.Log(LogEnum.LE_ERROR, "GameInstance(): ReadTerritoriesXml() returned false");
+            ITerritory? tHome = Territories.theTerritories.Find("Home");
+            if (null == tHome)
+               Logger.Log(LogEnum.LE_ERROR, "GameInstance(): tHome=null");
+            else
+               this.Home = tHome;
+
          }
          catch (Exception e)
          {

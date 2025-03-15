@@ -302,7 +302,7 @@ namespace Pattons_Best
             // are part of any other region.  If a point is found
             // that is very close, assume that is the correct
             // point to add instead of the mouse click.
-            double minDistance = 10;
+            double minDistance = 20;
             IMapPoint selectedMp = mp;
             foreach (String s in myAnchorTerritory.Adjacents)
             {
@@ -488,8 +488,14 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MouseDownSetCenterPoint(): myCanvasMain=null");
             return;
          }
-         System.Windows.Point canvasPoint = e.GetPosition(myCanvasMain);
-         IMapPoint mp = new MapPoint(canvasPoint.X, canvasPoint.Y);
+         System.Windows.Point p = e.GetPosition(myCanvasMain);
+         bool isMainCanvas = true;
+         if (p.X < 0.0)
+         {
+            p = e.GetPosition(myCanvasTank);
+            isMainCanvas = false;
+         }
+         IMapPoint mp = new MapPoint(p.X, p.Y);
          System.Diagnostics.Debug.WriteLine("MouseDownEllipse.MouseDown(): {0}", mp.ToString());
          ITerritory? matchingTerritory = null; // Find the corresponding Territory
          Ellipse mousedEllipse = (Ellipse)sender;
@@ -522,7 +528,10 @@ namespace Pattons_Best
             MessageBox.Show("Anchoring " + mousedEllipse.Tag.ToString());
             myAnchorTerritory = matchingTerritory; // If there is no anchor territory. Set it.
             mousedEllipse.Fill = Brushes.Red;
-            myCanvasMain.MouseDown += MouseDownCanvas;
+            if (true == isMainCanvas)
+               myCanvasMain.MouseDown += MouseDownCanvas;
+            else
+               myCanvasTank.MouseDown += MouseDownCanvas;
             return;
          }
          if (matchingTerritory.ToString() == myAnchorTerritory.ToString())
@@ -537,12 +546,20 @@ namespace Pattons_Best
             Polygon aPolygon = new Polygon { Fill = Brushes.Red, Points = points, Tag = matchingTerritory.ToString() };
             aPolygon.MouseDown += this.MouseDownPolygon;
             aPolygon.Fill = Brushes.Black;
-            myCanvasMain.Children.Add(aPolygon);
             mousedEllipse.Fill = Brushes.Black;
             myAnchorTerritory.Points = new List<IMapPoint>(myPoints);
             myPoints.Clear();
             myAnchorTerritory = null;
-            myCanvasMain.MouseDown -= MouseDownCanvas;
+            if (true == isMainCanvas)
+            {
+               myCanvasMain.MouseDown -= MouseDownCanvas;
+               myCanvasMain.Children.Add(aPolygon);
+            }
+            else
+            {
+               myCanvasTank.MouseDown -= MouseDownCanvas;
+               myCanvasTank.Children.Add(aPolygon);
+            }
          }
          e.Handled = true;
       }
@@ -550,8 +567,10 @@ namespace Pattons_Best
       {
          // This function adds points to the myPoints collection when an anchor territory is active.
          // The points to add are either new ones or ones that exist from adjacent territories.
-         System.Windows.Point canvasPoint = e.GetPosition(myCanvasMain);
-         IMapPoint mp = new MapPoint(canvasPoint.X, canvasPoint.Y);
+         System.Windows.Point p = e.GetPosition(myCanvasMain);
+         if (p.X < 0.0)
+            p = e.GetPosition(myCanvasTank);
+         IMapPoint mp = new MapPoint(p.X, p.Y);
          if (false == CreatePoint(mp))
             Logger.Log(LogEnum.LE_ERROR, "MouseDownCanvas->CreatePoint()");
          e.Handled = true;
@@ -568,8 +587,14 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygon(): myCanvasMain=null");
             return;
          }
-         System.Windows.Point canvasPoint = e.GetPosition(myCanvasMain);
-         IMapPoint mp = new MapPoint(canvasPoint.X, canvasPoint.Y);
+         System.Windows.Point p = e.GetPosition(myCanvasMain);
+         bool isMainCanvas = true;
+         if (p.X < 0.0)
+         {
+            p = e.GetPosition(myCanvasTank);
+            isMainCanvas = false;
+         }
+         IMapPoint mp = new MapPoint(p.X, p.Y);
          System.Diagnostics.Debug.WriteLine("TerritoryRegionUnitTest.MouseDownPolygon(): {0}", mp.ToString());
          if (null == myAnchorTerritory)
          {
@@ -597,7 +622,10 @@ namespace Pattons_Best
             else if ((null == myAnchorTerritory) || matchingTerritory.ToString() == myAnchorTerritory.ToString())
             {
                matchingTerritory.Points.Clear();
-               myCanvasMain.Children.Remove(aPolygon);
+               if (true == isMainCanvas)
+                  myCanvasMain.Children.Remove(aPolygon);
+               else
+                  myCanvasTank.Children.Remove(aPolygon);
             }
          }
          else

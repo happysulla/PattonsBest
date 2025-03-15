@@ -276,6 +276,7 @@ namespace Pattons_Best
       public string Role { get; set; } = string.Empty;
       public string Rank { get; set; } = string.Empty;
       public int Rating { get; set; } = 0;
+      public bool IsButtonedUp { get; set; } = false;
       public CrewMember(string role, string rank, string topImageName)
          : base(SurnameMgr.GetSurname(), 1.0, false, false, topImageName)
       {

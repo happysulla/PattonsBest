@@ -238,16 +238,6 @@ namespace Pattons_Best
                break;
             case GameAction.SetupShowTankCard:
                gi.EventDisplayed = gi.EventActive = "e004";
-               ITerritory? tCenter = Territories.theTerritories.Find("Home");
-               if (null == tCenter)
-               {
-                  returnStatus = "tCenter=null";
-                  Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(SetupShowTankCard): " + returnStatus);
-               }
-               else
-               {
-                  gi.MainMapItems.Add(new MapItem("Mud", 2.0, "t001M475-1", tCenter));
-               }
                break;
             case GameAction.SetupShowAfterActionReport:
                gi.EventDisplayed = gi.EventActive = "e005";
@@ -372,11 +362,6 @@ namespace Pattons_Best
                   dieRoll = 50; // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
-                  if( false == SetWeather(gi, dieRoll))
-                  {
-                     returnStatus = "SetWeather() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(): " + returnStatus);
-                  }
                   break;
                case GameAction.MorningBriefingWeatherRollEnd:
                   if (true == lastReport.Weather.Contains("Snow"))
@@ -411,6 +396,12 @@ namespace Pattons_Best
                   gi.GamePhase = GamePhase.Preparations;
                   gi.EventDisplayed = gi.EventActive = "e011";
                   gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
+                  gi.MainMapItems.Add(new MapItem("Tank1", 2.0, "t001", gi.Home));
+                  if (false == SetWeather(gi, gi.DieResults["e007"][0]))
+                  {
+                     returnStatus = "SetWeather() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(): " + returnStatus);
+                  }
                   break;
                case GameAction.MorningBriefingEnd:
                   ++gi.Day;
@@ -533,12 +524,22 @@ namespace Pattons_Best
                case GameAction.PreparationsDeploymentRoll:
                   dieRoll = 7; // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
+                  gi.EventDisplayed = gi.EventActive = "e012";
                   gi.DieRollAction = GameAction.DieRollActionNone;
+                  gi.IsPrepActive = true;
                   if (false == TableMgr.SetDeployment(gi, dieRoll))
                   {
                      returnStatus = "TableMgr.SetDeployment() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
                   }
+                  break;
+               case GameAction.PreparationsHatchesEnd:
+                  break;
+               case GameAction.PreparationsTurretEnd:
+                  break;
+               case GameAction.PreparationsLoaderEnd:
+                  break;
+               case GameAction.PreparationsSpotterEnd:
                   break;
                default:
                   break;

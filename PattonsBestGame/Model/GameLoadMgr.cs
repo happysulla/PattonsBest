@@ -412,7 +412,7 @@ namespace Pattons_Best
             if (0 < count3)
                reader.Read(); // get past </Adjacents> tag
             //--------------------------------------
-            territories.Add(territory);
+            territories.Add(territory);            
             reader.Read(); // get past </Territory> tag
          }
          if (0 < count)

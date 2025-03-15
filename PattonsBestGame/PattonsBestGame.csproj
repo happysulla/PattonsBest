@@ -24,7 +24,9 @@
     <Optimize>True</Optimize>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);UT1</DefineConstants>
+  </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="Interfaces\Window1.xaml.cs" />
@@ -433,7 +435,7 @@
     <None Update="Images\StarReward.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Images\t001M475-1.gif">
+    <None Update="Images\t001.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Images\Tutorial0.gif">
