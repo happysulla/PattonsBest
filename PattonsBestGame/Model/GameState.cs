@@ -394,7 +394,6 @@ namespace Pattons_Best
                   break;
                case GameAction.PreparationsStart:
                   gi.GamePhase = GamePhase.Preparations;
-                  gi.EventDisplayed = gi.EventActive = "e011";
                   gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
                   gi.MainMapItems.Add(new MapItem("Tank1", 2.0, "t001", gi.Home));
                   if (false == SetWeather(gi, gi.DieResults["e007"][0]))
