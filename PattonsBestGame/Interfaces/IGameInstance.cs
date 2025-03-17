@@ -31,6 +31,9 @@ namespace Pattons_Best
       IMapItems MainMapItems { set; get; }
       IMapItems NewMembers { set; get; }
       IMapItems ReadyRacks { set; get; }
+      IMapItems Hatches { set; get; }
+      IMapItems GunLoads { set; get; }
+      IMapItem? Turret { set; get; }
       //------------------------------------------------
       ITerritory? NewTerritory { set; get; }
       ITerritory Home { get; set; } 
@@ -41,12 +44,13 @@ namespace Pattons_Best
       bool IsHulledDown { set; get; }
       bool IsMoving { set; get; }
       bool IsLeadTank { set; get; }
+      bool IsLoaderSpotted { set; get; }
       //------------------------------------------------
       IMapItemMoves MapItemMoves { set; get; }
       IStacks Stacks { set; get; }
       //------------------------------------------------
       List<IUnitTest> UnitTests { get; }
       //=========================================================
-
+      ICrewMember? GetCrewMember(string name);
    }
 }

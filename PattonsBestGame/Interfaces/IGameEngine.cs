@@ -82,6 +82,7 @@ namespace Pattons_Best
       UpdateLoadingGame,
       UpdateLoadingGameReturnToJail,
       UpdateUndo,
+      UpdateToPreparations,
 
       ShowCombatCalendarDialog,
       ShowAfterActionReportDialog,
@@ -132,12 +133,20 @@ namespace Pattons_Best
       MorningBriefingTimeCheckRoll,
       MorningBriefingEnd,
 
-      PreparationsStart,
+      PreparationsDeployment,
       PreparationsDeploymentRoll,
-      PreparationsHatchesEnd,
-      PreparationsTurretEnd,
-      PreparationsLoaderEnd,
-      PreparationsSpotterEnd,
+      PreparationsHatches,
+      PreparationsShowHatchAction,
+      PreparationsGunLoad,
+      PreparationsLoader,
+      PreparationsGunLoadSelect,
+      PreparationsTurret,
+      PreparationsTurretRotateLeft,
+      PreparationsTurretRotateRight,
+      PreparationsLoaderSpot,
+      PreparationsLoaderSpotSet,
+      PreparationsCommanderSpot,
+      PreparationsCommanderSpotSet,
       Error
    };
    public interface IGameEngine

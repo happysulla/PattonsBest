@@ -616,7 +616,7 @@ namespace Pattons_Best
                {
                   Image imgSun = new Image { Source = MapItem.theMapImages.GetBitmapImage("Morning"), Width = 300, Height = 150 };
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("                               "));
+                  myTextBlock.Inlines.Add(new Run("                           "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imgSun));
                }
                else if (report.Probability < firstDieResult) // skip today action
@@ -673,7 +673,7 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Weather calls for " + report.Weather + ":"));
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("                                     "));
+                  myTextBlock.Inlines.Add(new Run("                                        "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imgWeather));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -721,8 +721,8 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run(sbE010.ToString()));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("                           "));
-                  Image imgClock = new Image { Source = MapItem.theMapImages.GetBitmapImage("MilitaryWatch"), Width = 200, Height = 100, Name = "PreparationsStart" };
+                  myTextBlock.Inlines.Add(new Run("                                   "));
+                  Image imgClock = new Image { Source = MapItem.theMapImages.GetBitmapImage("MilitaryWatch"), Width = 200, Height = 100, Name = "PreparationsDeployment" };
                   myTextBlock.Inlines.Add(new InlineUIContainer(imgClock));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -739,7 +739,7 @@ namespace Pattons_Best
                   sbE011.Append(gi.IsMoving.ToString());
                   sbE011.Append("\n Is Lead Tank  = ");
                   sbE011.Append(gi.IsMoving.ToString());
-                  Image imge011 = new Image { Width = 100, Height = 100, Name = "PreparationsStart" };
+                  Image imge011 = new Image { Width = 100, Height = 100, Name = "PreparationsDeploymentEnd" };
                   if (true == gi.IsHulledDown)
                      imge011.Source = MapItem.theMapImages.GetBitmapImage("c14HullDown");
                   else if( true == gi.IsMoving )
@@ -751,6 +751,19 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("                                           "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge011));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
+            case "e015":
+               if (true == gi.IsLoaderSpotted)
+               {
+                  Image imge015 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c18LoaderSpot"), Width = 100, Height = 100, Name = "PreparationsCommanderSpot" };
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                           "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge015));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
@@ -961,12 +974,28 @@ namespace Pattons_Best
                               action = GameAction.MorningBriefingEnd;
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
-                           case "PreparationsStart":
-                              action = GameAction.PreparationsStart;
+                           case "PreparationsDeployment":
+                              action = GameAction.PreparationsDeployment;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
+                           case "PreparationsDeploymentEnd":
+                              action = GameAction.PreparationsHatches;
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
                            case "c15OpenHatch":
-                              action = GameAction.PreparationsHatchesEnd;
+                              action = GameAction.PreparationsGunLoad;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
+                           case "c17GunLoad":
+                              action = GameAction.PreparationsTurret;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
+                           case "c16Turret":
+                              action = GameAction.PreparationsLoaderSpot;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
+                           case "PreparationsCommanderSpot":
+                              action = GameAction.PreparationsCommanderSpot;
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
                            default:
@@ -1040,8 +1069,17 @@ namespace Pattons_Best
          }
          switch (content)
          {
+            case "  -  ":
+               action = GameAction.PreparationsTurretRotateLeft;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "  +  ":
+               action = GameAction.PreparationsTurretRotateRight;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
             case "Begin Game":
                action = GameAction.SetupShowMapHistorical;
+               action = GameAction.UpdateToPreparations; // <cgs> TEST
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Read Rules":

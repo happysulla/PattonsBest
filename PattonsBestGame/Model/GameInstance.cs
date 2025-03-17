@@ -36,9 +36,14 @@ namespace Pattons_Best
       public IMapItems MainMapItems { set; get; } = new MapItems();
       public IMapItems NewMembers { set; get; } = new MapItems();
       public IMapItems ReadyRacks { set; get; } = new MapItems();
+      public IMapItems Hatches { set; get; } = new MapItems();
+      public IMapItems GunLoads { set; get; } = new MapItems();
+      public IMapItem? Turret { set; get; } = null;
+      //---------------------------------------------------------------
       public bool IsHulledDown { set; get; } = false;
       public bool IsMoving { set; get; } = false;
       public bool IsLeadTank { set; get; } = false;
+      public bool IsLoaderSpotted { set; get; } = false;
       //------------------------------------------------
       public ITerritory? NewTerritory { set; get; } = null;
       public ITerritory Home { get; set; } = new Territory();
@@ -51,7 +56,7 @@ namespace Pattons_Best
       //---------------------------------------------------------------
       [NonSerialized] private List<IUnitTest> myUnitTests = new List<IUnitTest>();
       public List<IUnitTest> UnitTests { get => myUnitTests; }
-      //------------------------------------------------
+      //==============================================================
       public GameInstance() // Constructor - set log levels
       {
          if ( false == Logger.SetInitial()) // tsetup logger
@@ -106,7 +111,39 @@ namespace Pattons_Best
          sb.Append("]");
          return sb.ToString();
       }
-      //------------------------------------------------
+      //---------------------------------------------------------------
+      public ICrewMember? GetCrewMember(string name)
+      {
+         IAfterActionReport? report = this.Reports.GetLast();
+         if (null == report)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetCrewMember(): report=null");
+            return null;
+         }
+         ICrewMember? crewmember = null;
+         switch (name)
+         {
+            case "Driver":
+               crewmember = (ICrewMember)report.Driver;
+               break;
+            case "Assistant":
+               crewmember = (ICrewMember)report.Assistant;
+               break;
+            case "Loader":
+               crewmember = (ICrewMember)report.Loader;
+               break;
+            case "Gunner":
+               crewmember = (ICrewMember)report.Gunner;
+               break;
+            case "Commander":
+               crewmember = (ICrewMember)report.Commander;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetCrewMember(): reached default name=" + name);
+               break;
+         }
+         return crewmember;
+      }
    }
 }
 

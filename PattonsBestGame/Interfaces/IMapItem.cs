@@ -53,5 +53,6 @@ namespace Pattons_Best
       string Rank { get; set; }
       int Rating { get; set; }
       bool IsButtonedUp { get; set; }
+      int Sector { get; set; }
    }
 }

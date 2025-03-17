@@ -79,9 +79,9 @@ namespace Pattons_Best
       public int Count { get; set; } = 0;
       //--------------------------------------------------
       public IMapPoint Location { get; set; } = new MapPoint(0.0, 0.0);
-      private ITerritory myTerritoryCurrent = new Territory("Offboard");
+      protected ITerritory myTerritoryCurrent = new Territory("Offboard");
       public ITerritory TerritoryCurrent { get => myTerritoryCurrent; set => myTerritoryCurrent = value; }
-      private ITerritory myTerritoryStarting = new Territory("Offboard");
+      protected ITerritory myTerritoryStarting = new Territory("Offboard");
       public ITerritory TerritoryStarting { get => myTerritoryStarting; set => myTerritoryStarting = value; }
       //--------------------------------------------------
       private bool myIsFlipped = false;
@@ -97,15 +97,21 @@ namespace Pattons_Best
          this.TopImageName = mi.TopImageName;
          this.BottomImageName = mi.BottomImageName;
       }
-      public MapItem(string name, double zoom, string topImageName, ITerritory territory) :  
-         this(name, zoom, false, false, topImageName) 
+      protected MapItem(string name)
+      {
+         this.Name = name;
+      }
+      public MapItem(string name, double zoom, string topImageName, ITerritory territory) :
+         this(name, zoom, false, false, topImageName)
       {
          TerritoryCurrent = territory;
          TerritoryStarting = territory;
       }
-      protected MapItem(string name)
+      public MapItem(string name, double zoom, string topImageName, string bottomImageName, ITerritory territory) :  
+         this(name, zoom, false, false, topImageName, bottomImageName) 
       {
-         this.Name = name;
+         TerritoryCurrent = territory;
+         TerritoryStarting = territory;
       }
       public MapItem(string aName, double zoom, bool isHidden, bool isAnimated, string topImageName)
       {
@@ -120,6 +126,35 @@ namespace Pattons_Best
             {
                mii = new MapImage(topImageName);
                theMapImages.Add(mii);
+            }
+            this.IsAnimated = isAnimated;
+         }
+         catch (Exception ex)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MapItem(): aName=" + aName + "\n Ex=" + ex.ToString());
+            return;
+         }
+      }
+      public MapItem(string aName, double zoom, bool isHidden, bool isAnimated, string topImageName, string buttomImageName)
+      {
+         try
+         {
+            this.Name = aName;
+            this.Zoom = zoom;
+            this.IsHidden = isHidden;
+            this.TopImageName = topImageName;
+            IMapImage? miiTop = theMapImages.Find(topImageName);
+            if (null == miiTop)
+            {
+               miiTop = new MapImage(topImageName);
+               theMapImages.Add(miiTop);
+            }
+            this.TopImageName = topImageName;
+            IMapImage? miiBottom = theMapImages.Find(buttomImageName);
+            if (null == miiBottom)
+            {
+               miiBottom = new MapImage(buttomImageName);
+               theMapImages.Add(miiBottom);
             }
             this.IsAnimated = isAnimated;
          }
@@ -277,6 +312,7 @@ namespace Pattons_Best
       public string Rank { get; set; } = string.Empty;
       public int Rating { get; set; } = 0;
       public bool IsButtonedUp { get; set; } = false;
+      public int Sector { get; set; } = 0;
       public CrewMember(string role, string rank, string topImageName)
          : base(SurnameMgr.GetSurname(), 1.0, false, false, topImageName)
       {

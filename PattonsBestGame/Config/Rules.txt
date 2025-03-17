@@ -249,6 +249,120 @@ On the Tank Card, mark the number and types of rounds loaded into your ready rac
 additional attacks. Each Sherman variant has a ready rack that cannot be exceeded.
 <LineBreak/><LineBreak/>
              <InlineUIContainer><Image Name='ReadyRack'  Height='270' Width='350'></Image></InlineUIContainer>"
+r17.0	"<Bold>r17.0 Spotting</Bold> 
+<LineBreak/><LineBreak/>
+Spotting is the attempt by your members to see and identify enemy units on the Battle Board. The placement of activated enemy units on the board does not mean that you see them. You know they are there perhaps because you have heard them or by radio reports. Until a crewman spots the unit, you do not see them and cannot shoot at it.
+<LineBreak/><LineBreak/>
+Enemy units on the Battle Board can be either:  1.) Unspotted,  2.) Spotted but not identified,  3.) Spotted and identified, &amp;  4.) Hidden<LineBreak/><LineBreak/>
+Spotting is attmpted during the Spotting Phase 
+<InlineUIContainer><Button Content='r4.72' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+of the Battle Round Sequence by referring to the 
+<InlineUIContainer><Button Content='Spotting' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r17.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Spotting Procedure<LineBreak/>
+<InlineUIContainer><Button Content='r17.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Spotting Restrictions <LineBreak/>
+<InlineUIContainer><Button Content='r17.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Hidden Units <LineBreak/>
+<InlineUIContainer><Button Content='r17.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Unidentified Units"
+r17.1	"<Bold>r17.1 Spotting Procedure</Bold> 
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r17.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Spotting Roll<LineBreak/>
+<InlineUIContainer><Button Content='r17.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Spotting Results <LineBreak/>
+<InlineUIContainer><Button Content='r17.13' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Spotting Modifiers <LineBreak/>
+<InlineUIContainer><Button Content='r17.14' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Automatic Spotting Failure <LineBreak/>
+<InlineUIContainer><Button Content='r17.14' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Spotting Continuation"
+r17.11	"<Bold>r17.11 Spotting Roll</Bold> 
+<LineBreak/><LineBreak/>
+For each crewman attempting to spot a enemy unit, roll 1D. If the roll is less than or equal to the crewman's rating, he has spotted the unit. Mark the unit with a Spotted marker.
+<LineBreak/><LineBreak/>
+                                     <InlineUIContainer><Image Name='c32Spotted'  Height='100' Width='100'></Image></InlineUIContainer>  "
+r17.12	"<Bold>r17.12 Spotting Results</Bold> 
+<LineBreak/><LineBreak/>
+If the roll is equal to half or less than half of the crewman's rating (rounded down), he has also identified the unit. Consult the 
+<InlineUIContainer><Button Content='Apperance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table to detemine the specifc type of previously unidentified enemy tanks, SPs, and AT guns."
+r17.13	"<Bold>r17.13 Spotting Modifiers</Bold> 
+<LineBreak/><LineBreak/>
+There are a number of factors that can modify the spotting die roll as listed in the 
+<InlineUIContainer><Button Content='Spotting' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table. Small, large, and very large targets are identifed with S, L, and VL on the counters."
+r17.14	"<Bold>r17.14 Automatic Spotting Failure</Bold> 
+<LineBreak/><LineBreak/>
+A spotting attempt roll of 9 or 10 before any modifications always means the unit is hidden from view in its current position andn spotting is impossible by any other crewman this round. Mark any hidden unit with a Hidden Marker.
+<LineBreak/><LineBreak/>
+You may not attempt to spot a hidden unit. A spotted unit cannot become hidden unless either it or your tank moves in following rounds.
+<LineBreak/><LineBreak/>
+                                     <InlineUIContainer><Image Name='c31Hidden'  Height='100' Width='100'></Image></InlineUIContainer>  "
+r17.15	"<Bold>r17.15 Spotting Continuation</Bold> 
+<LineBreak/><LineBreak/>
+An enemy unit that is neither spotted nor hidden remains unspotted and can be looked  for next round. Unspotted units have no marker."
+r17.2	"<Bold>r17.2 Spotting Restrictions</Bold> 
+<LineBreak/><LineBreak/>
+Whether a crew member may attempt to spot and where he may look depends on whether he is buttoned up or not, where he is facing, and what action he is peforming.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r17.21' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Sector Restrictions<LineBreak/>
+<InlineUIContainer><Button Content='r17.22' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Crew Action Restrictions <LineBreak/>
+<InlineUIContainer><Button Content='r17.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Hatches Restrictions <LineBreak/>
+<InlineUIContainer><Button Content='r17.24' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Weather Restrictions <LineBreak/>
+<InlineUIContainer><Button Content='r17.24' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Smoke Restrictions"
+r17.21	"<Bold>r17.21 Sector Restrictions</Bold> 
+<LineBreak/><LineBreak/>
+The sectors in which each crewman may attempt to spot are noted on the Tank Card 
+<InlineUIContainer><Button Content='r17.21' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+Each crewman may attempt to spot every unit in the sector he can see. For example, the commander can spot into all sectors on an open hatch and thus may attempt to spot every enemy unit on the Battle Board."
+r17.22	"<Bold>r17.22 Crew Action Restrictions</Bold> 
+<LineBreak/><LineBreak/>
+Performing certain crew actions may prevent a crewman from attempting to spot. Crew actions that allow spotting to continue have a spotting symbole on their marker.
+<LineBreak/><LineBreak/>
+A crewman is considred to be performing an action until the next opportunity to change the Crew Action marker. For example, if the loader was ordered to repair the co-axial MG and has done so, he is assumed to be involved in that action throught the Spotting Phase and cannot attempt to spot."
+r17.23	"<Bold>r17.23 Hatches Restrictions</Bold> 
+<LineBreak/><LineBreak/>
+Crewmen with closed hatches (other than the gunner) that have broken periscopes may not spot. The gunner may spot if either his sight or periscope is unbroken."
+r17.24	"<Bold>r17.24 Weather Restrictions</Bold> 
+<LineBreak/><LineBreak/>
+During falling snow and fog weather, spotting is only possible at close range."
+r17.25	"<Bold>r17.25 Smoke Restrictions</Bold> 
+<LineBreak/><LineBreak/>
+Spotting rolls are +1 for each Smoke marker on your tank, in the zone with the unit you are attempting to spot, or in any zones between."
+r17.3	"<Bold>r17.3 Hidden Units</Bold> 
+<LineBreak/><LineBreak/>
+Hidden enemy units cannot be spotted, cannot be fired on, and cannot fire at you. This chagnes when your tank moves or the hidden unit moves during the Eney Action Phase 
+<InlineUIContainer><Button Content='r17.21' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+If either event occurs, remove the Hidden marker. You may attempt to spot this unit during the next Spotting Phase.
+<LineBreak/><LineBreak/>
+                                     <InlineUIContainer><Image Name='c31Hidden'  Height='100' Width='100'></Image></InlineUIContainer> "
+r17.4	"<Bold>r17.4 Unidentified Units</Bold> 
+<LineBreak/><LineBreak/>
+Enemy trucks, PSW, SPW, LW, and MG units are always identified. 
+<LineBreak/><LineBreak/>
+When a PSW/SPW is activiated, roll immediately on the 
+<InlineUIContainer><Button Content='Appearance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table to see which appears.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r17.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Unidentified Tanks<LineBreak/>
+<InlineUIContainer><Button Content='r17.42' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Crew Action Restrictions <LineBreak/>"
+r17.41	"<Bold>r17.41 Unidentified Tanks</Bold> 
+<LineBreak/><LineBreak/>
+When an enemy tank, SPG, or AT gun unit is activated and first placed on the Battle Board, they are placed with their red side up. This indicates they are unidentified. 
+<LineBreak/><LineBreak/>
+As a tank commander, you know either a tank, SPG, or AT gun is present; but you do not know which type of each unit is there until you identify it during the Spotting Phase. 
+<LineBreak/><LineBreak/>
+All unidentified units are:<LineBreak/>
+-- Tanks -> Pz VIe<LineBreak/>
+-- SP Vehicles -> STuG IIIg<LineBreak/>
+-- AT guns -> Pak 43 (88LL)
+<LineBreak/><LineBreak/>
+When one of these is successfully identified, consult the 
+<InlineUIContainer><Button Content='Appearance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+ Table to determine what type of unit is actually present."
+r17.42	"<Bold>r17.42 Unidentified Example</Bold> 
+<LineBreak/><LineBreak/>
+An unidentified tank is placed at medium range to your tanks's front. During the Spotting Phase, your gunner rolls sufficiently low to identify the vehicle. You immediately roll a 5 on the 
+<InlineUIContainer><Button Content='Appearance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+resulting in the identification of the tank as a Pz IV. Replace the red Pz VIe counter with a black Pz IV counter.
+<LineBreak/><LineBreak/>
+Unidentified units are treated as the unit pictured for all purposes until identified. It is critical to identify counters as quickly as possible. Continue attempting to spot unidentified to spot unidentified units until they are identified."
 r19.0	"<Bold>r19.0 Crew Casualties</Bold> 
 <LineBreak/><LineBreak/>
 When playing, it is possible for the crewmen of your tank to be wounded or killed. Crew casualties can occur when you tank is knocked out 

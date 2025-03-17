@@ -1,4 +1,4 @@
-﻿<Territories count="127">
+﻿<Territories count="130">
   <Territory value="000">
     <Parent value="Main" />
     <Type value="B" />
@@ -1232,7 +1232,7 @@
   <Territory value="GunLoadHe">
     <Parent value="Tank" />
     <Type value="None" />
-    <CenterPoint X="0373.75" Y="0201.35" />
+    <CenterPoint X="0374.66" Y="0201.35" />
     <Points count="4">
       <regionPoint X="0356.55" Y="0184.14" />
       <regionPoint X="0394.58" Y="0184.14" />
@@ -1256,7 +1256,7 @@
   <Territory value="GunLoadWp">
     <Parent value="Tank" />
     <Type value="1" />
-    <CenterPoint X="0500.55" Y="0201.35" />
+    <CenterPoint X="0501.45" Y="0201.35" />
     <Points count="4">
       <regionPoint X="0483.34" Y="0184.14" />
       <regionPoint X="0520.47" Y="0184.14" />
@@ -1265,7 +1265,7 @@
     </Points>
     <Adjacents count="0" />
   </Territory>
-  <Territory value="GunLoadHcbi">
+  <Territory value="GunLoadHbci">
     <Parent value="Tank" />
     <Type value="B" />
     <CenterPoint X="0563.94" Y="0201.35" />
@@ -1352,12 +1352,12 @@
   <Territory value="AssistantHatch">
     <Parent value="Tank" />
     <Type value="1" />
-    <CenterPoint X="0192.62" Y="0199.54" />
+    <CenterPoint X="0192.62" Y="0202.26" />
     <Points count="4">
       <regionPoint X="0174.51" Y="0183.24" />
       <regionPoint X="0212.55" Y="0183.24" />
       <regionPoint X="0210.74" Y="0217.65" />
-      <regionPoint X="0175.42" Y="0216.75" />
+      <regionPoint X="0175.42" Y="0217.65" />
     </Points>
     <Adjacents count="0" />
   </Territory>
@@ -1368,8 +1368,8 @@
     <Points count="4">
       <regionPoint X="0170.89" Y="0291.92" />
       <regionPoint X="0207.11" Y="0292.82" />
-      <regionPoint X="0208.02" Y="0325.43" />
-      <regionPoint X="0170.89" Y="0325.43" />
+      <regionPoint X="0208.02" Y="0327.43" />
+      <regionPoint X="0170.89" Y="0327.43" />
     </Points>
     <Adjacents count="0" />
   </Territory>
@@ -1426,13 +1426,6 @@
     <Parent value="Tank" />
     <Type value="1" />
     <CenterPoint X="0528.00" Y="0266.00" />
-    <Points count="0" />
-    <Adjacents count="0" />
-  </Territory>
-  <Territory value="ReadyRackHe7">
-    <Parent value="Tank" />
-    <Type value="1" />
-    <CenterPoint X="0540.00" Y="0266.00" />
     <Points count="0" />
     <Adjacents count="0" />
   </Territory>
@@ -1499,13 +1492,6 @@
     <Points count="0" />
     <Adjacents count="0" />
   </Territory>
-  <Territory value="ReadyRackAp7">
-    <Parent value="Tank" />
-    <Type value="1" />
-    <CenterPoint X="0540.00" Y="0302.00" />
-    <Points count="0" />
-    <Adjacents count="0" />
-  </Territory>
   <Territory value="ReadyRackAp8">
     <Parent value="Tank" />
     <Type value="1" />
@@ -1566,13 +1552,6 @@
     <Parent value="Tank" />
     <Type value="1" />
     <CenterPoint X="0528.00" Y="0338.00" />
-    <Points count="0" />
-    <Adjacents count="0" />
-  </Territory>
-  <Territory value="ReadyRackWp7">
-    <Parent value="Tank" />
-    <Type value="1" />
-    <CenterPoint X="0540.00" Y="0338.00" />
     <Points count="0" />
     <Adjacents count="0" />
   </Territory>
@@ -1639,13 +1618,6 @@
     <Points count="0" />
     <Adjacents count="0" />
   </Territory>
-  <Territory value="ReadyRackHbci7">
-    <Parent value="Tank" />
-    <Type value="1" />
-    <CenterPoint X="0540.00" Y="0374.00" />
-    <Points count="0" />
-    <Adjacents count="0" />
-  </Territory>
   <Territory value="ReadyRackHbci8">
     <Parent value="Tank" />
     <Type value="1" />
@@ -1674,7 +1646,7 @@
   <Territory value="2C">
     <Parent value="Main" />
     <Type value="Battle" />
-    <CenterPoint X="0494.50" Y="0666.26" />
+    <CenterPoint X="0494.78" Y="0655.68" />
     <Points count="5">
       <regionPoint X="0519.24" Y="0592.29" />
       <regionPoint X="0585.35" Y="0710.02" />
@@ -1784,7 +1756,7 @@
   <Territory value="2M">
     <Parent value="Main" />
     <Type value="Battle" />
-    <CenterPoint X="0495.69" Y="0752.59" />
+    <CenterPoint X="0493.88" Y="0750.78" />
     <Points count="5">
       <regionPoint X="0402.41" Y="0706.40" />
       <regionPoint X="0585.35" Y="0708.21" />
@@ -1923,7 +1895,7 @@
   <Territory value="2L">
     <Parent value="Main" />
     <Type value="Battle" />
-    <CenterPoint X="0497.12" Y="0851.00" />
+    <CenterPoint X="0494.78" Y="0844.96" />
     <Points count="5">
       <regionPoint X="0351.69" Y="0793.34" />
       <regionPoint X="0634.25" Y="0794.25" />
@@ -2119,6 +2091,55 @@
       <regionPoint X="0116.28" Y="0022.42" />
       <regionPoint X="0061.42" Y="0021.90" />
     </Points>
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="Spot4">
+    <Parent value="Main" />
+    <Type value="Battle" />
+    <CenterPoint X="0062.78" Y="0302.47" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="Spot6">
+    <Parent value="Main" />
+    <Type value="Battle" />
+    <CenterPoint X="0497.50" Y="0053.42" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="Spot9">
+    <Parent value="Main" />
+    <Type value="Battle" />
+    <CenterPoint X="0929.50" Y="0304.29" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="Spot1">
+    <Parent value="Main" />
+    <Type value="Battle" />
+    <CenterPoint X="0872.44" Y="0798.78" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="Spot2">
+    <Parent value="Main" />
+    <Type value="Battle" />
+    <CenterPoint X="0494.78" Y="0875.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="Spot3">
+    <Parent value="Main" />
+    <Type value="Battle" />
+    <CenterPoint X="0113.50" Y="0789.72" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="DeploymentState">
+    <Parent value="Main" />
+    <Type value="Battle" />
+    <CenterPoint X="0543.69" Y="0552.44" />
+    <Points count="0" />
     <Adjacents count="0" />
   </Territory>
 </Territories>

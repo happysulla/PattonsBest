@@ -168,6 +168,12 @@ namespace Pattons_Best
          string key = gi.EventActive;
          switch (action)
          {
+            case GameAction.UpdateToPreparations:
+               gi.GamePhase = GamePhase.Preparations;
+               gi.EventDisplayed = gi.EventActive = "e011";
+               gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
+               gi.MainMapItems.Add(new MapItem("Sherman1", 2.0, "t001", gi.Home));
+               break;
             case GameAction.ShowCombatCalendarDialog:
             case GameAction.ShowAfterActionReportDialog:
             case GameAction.ShowInventoryDialog:
@@ -317,7 +323,7 @@ namespace Pattons_Best
          string previousEvent = gi.EventActive;
          string returnStatus = "OK";
          string key = gi.EventActive;
-         IAfterActionReport? lastReport = gi.Reports.GetLast(); // remove it from list
+         IAfterActionReport? lastReport = gi.Reports.GetLast(); 
          if (null == lastReport)
          {
             returnStatus = "lastReport=null";
@@ -392,10 +398,11 @@ namespace Pattons_Best
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   break;
-               case GameAction.PreparationsStart:
+               case GameAction.PreparationsDeployment:
                   gi.GamePhase = GamePhase.Preparations;
+                  gi.EventDisplayed = gi.EventActive = "e011";
                   gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
-                  gi.MainMapItems.Add(new MapItem("Tank1", 2.0, "t001", gi.Home));
+                  gi.MainMapItems.Add(new MapItem("Sherman1", 2.0, "t001", gi.Home));
                   if (false == SetWeather(gi, gi.DieResults["e007"][0]))
                   {
                      returnStatus = "SetWeather() returned false";
@@ -502,7 +509,7 @@ namespace Pattons_Best
          string previousEvent = gi.EventActive;
          string returnStatus = "OK";
          string key = gi.EventActive;
-         IAfterActionReport? lastReport = gi.Reports.GetLast(); // remove it from list
+         IAfterActionReport? lastReport = gi.Reports.GetLast(); 
          if (null == lastReport)
          {
             returnStatus = "lastReport=null";
@@ -521,24 +528,75 @@ namespace Pattons_Best
                   gi.GamePhase = GamePhase.EndGame;
                   break;
                case GameAction.PreparationsDeploymentRoll:
-                  dieRoll = 7; // <cgs> TEST
+                  dieRoll = 88; // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
-                  gi.EventDisplayed = gi.EventActive = "e012";
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   gi.IsPrepActive = true;
-                  if (false == TableMgr.SetDeployment(gi, dieRoll))
+                  if (false == SetDeployment(gi, dieRoll))
                   {
-                     returnStatus = "TableMgr.SetDeployment() returned false";
+                     returnStatus = "SetDeployment() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
                   }
                   break;
-               case GameAction.PreparationsHatchesEnd:
+               case GameAction.PreparationsHatches:
+                  gi.EventDisplayed = gi.EventActive = "e012";
                   break;
-               case GameAction.PreparationsTurretEnd:
+               case GameAction.PreparationsGunLoad:
+                  gi.EventDisplayed = gi.EventActive = "e013";
+                  ITerritory? t = Territories.theTerritories.Find("GunLoadHe");
+                  if( null == t )
+                  {
+                     returnStatus = "theTerritories.Find() returned null for GunLoadHe";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsGunLoad): " + returnStatus);
+                  }
+                  else
+                  {
+                     IMapItem gunLoad = new MapItem("GunLoad", 1.0, "c17GunLoad", t);
+                     gi.GunLoads.Add(gunLoad);
+                  }
                   break;
-               case GameAction.PreparationsLoaderEnd:
+               case GameAction.PreparationsGunLoadSelect:
                   break;
-               case GameAction.PreparationsSpotterEnd:
+               case GameAction.PreparationsTurret:
+                  gi.EventDisplayed = gi.EventActive = "e014";
+                  gi.MainMapItems.Add(new MapItem("Turret", 2.0, "c16Turret", gi.Home));
+                  break;
+               case GameAction.PreparationsTurretRotateLeft:
+                  IMapItem? turretL = gi.MainMapItems.Find("Turret");
+                  if (null == turretL)
+                  {
+                     returnStatus = "turret=null";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsTurretRotateRight): " + returnStatus);
+                  }
+                  else
+                  {
+                     turretL.Count--;
+                     if (turretL.Count < 0)
+                        turretL.Count = 5;
+                  }
+                  break;
+               case GameAction.PreparationsTurretRotateRight:
+                  IMapItem? turretR = gi.MainMapItems.Find("Turret");
+                  if (null == turretR)
+                  {
+                     returnStatus = "turret=null";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsTurretRotateLeft): " + returnStatus);
+                  }
+                  else
+                  {
+                     turretR.Count++;
+                     if (5 < turretR.Count)
+                        turretR.Count = 0;
+                  }
+                  break;
+               case GameAction.PreparationsLoader:
+                  gi.EventDisplayed = gi.EventActive = "e015";
+                  break;
+               case GameAction.PreparationsLoaderSpot:
+                  gi.EventDisplayed = gi.EventActive = "e015";
+                  break;
+               case GameAction.PreparationsCommanderSpot:
+                  gi.EventDisplayed = gi.EventActive = "e016";
                   break;
                default:
                   break;
@@ -566,6 +624,92 @@ namespace Pattons_Best
          else
             Logger.Log(LogEnum.LE_ERROR, sb12.ToString());
          return returnStatus;
+      }
+      private bool SetDeployment(IGameInstance gi, int dieRoll)
+      {
+         ITerritory? tState = Territories.theTerritories.Find("DeploymentState");
+         if (null == tState)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetDeployment(): tState=null");
+            return false;
+         }
+         IAfterActionReport? report = gi.Reports.GetLast(); // remove it from list
+         if (null == report)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetDeployment(): gi.Reports.GetLast() returned null");
+            return false;
+         }
+         if ((12 == report.TankCardNum) || (13 == report.TankCardNum))
+         {
+            if (dieRoll < 9)
+            {
+               gi.IsHulledDown = true;
+               gi.IsMoving = false;
+               gi.IsLeadTank = false;
+               gi.MainMapItems.Add(new MapItem("HullDown", 0.85, "c14HullDown", tState));
+            }
+            else if (dieRoll < 37)
+            {
+               gi.IsHulledDown = false;
+               gi.IsMoving = false;
+               if ((31 < dieRoll) && (dieRoll < 37))
+                  gi.IsLeadTank = true;
+               else
+                  gi.IsLeadTank = false;
+            }
+            else if (dieRoll < 101)
+            {
+               gi.IsHulledDown = false;
+               gi.IsMoving = true;
+               if (63 < dieRoll)
+                  gi.IsLeadTank = true;
+               else
+                  gi.IsLeadTank = false;
+               gi.MainMapItems.Add(new MapItem("Moving", 0.85, "c13Moving", tState));
+            }
+            else
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SetDeployment(): 12-13 reached default dieRoll=" + dieRoll.ToString());
+               return false;
+            }
+         }
+         else
+         {
+            if (dieRoll < 21)
+            {
+               gi.IsHulledDown = true;
+               gi.IsMoving = false;
+               gi.IsLeadTank = false;
+               IMapItem miHulledDown = new MapItem("HullDown", 0.85, "c14HullDown", tState);
+               gi.MainMapItems.Add(miHulledDown);
+            }
+            else if (dieRoll < 58)
+            {
+               gi.IsHulledDown = false;
+               gi.IsMoving = false;
+               if (57 == dieRoll)
+                  gi.IsLeadTank = true;
+               else
+                  gi.IsLeadTank = false;
+            }
+            else if (dieRoll < 101)
+            {
+               gi.IsHulledDown = false;
+               gi.IsMoving = true;
+               if (90 < dieRoll)
+                  gi.IsLeadTank = true;
+               else
+                  gi.IsLeadTank = false;
+               IMapItem miMoving = new MapItem("Moving", 0.85, "c13Moving", tState);
+               gi.MainMapItems.Add(miMoving);
+            }
+            else
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SetDeployment(): 12-13 reached default dieRoll=" + dieRoll.ToString());
+               return false;
+            }
+         }
+         return true;
       }
    }
    //-----------------------------------------------------

@@ -61,7 +61,8 @@ namespace Pattons_Best
                ShowMovementMap(myCanvas);
                break;
             case GameAction.SetupShowBattleBoard:
-            case GameAction.PreparationsStart:
+            case GameAction.PreparationsDeployment:
+            case GameAction.UpdateToPreparations:
                myDieRoller.HideDie();
                ShowBattleMap(myCanvas);
                break;

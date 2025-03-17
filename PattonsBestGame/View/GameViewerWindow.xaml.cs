@@ -19,13 +19,16 @@ using Button = System.Windows.Controls.Button;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Point = System.Windows.Point;
 using Pattons_Best.Model;
+using System.Diagnostics;
 
 namespace Pattons_Best
 {
    public partial class GameViewerWindow : Window, IView
    {
       private const int MAX_DAILY_ACTIONS = 16;
-      private const Double MARQUEE_SCROLL_ANMINATION_TIME = 30;
+      private const Double MARQUEE_SCROLL_ANMINATION_TIME = 30.0;
+      private const Double ELLIPSE_DIAMETER = 40.0;
+      private const Double ELLIPSE_RADIUS = ELLIPSE_DIAMETER / 2.0;
       public bool CtorError { get; } = false;
       //---------------------------------------------------------------------
       [Serializable]
@@ -114,6 +117,7 @@ namespace Pattons_Best
       private readonly List<Brush> myBrushes = new List<Brush>();
       private readonly List<Rectangle> myRectangles = new List<Rectangle>();
       private readonly List<Polygon> myPolygons = new List<Polygon>();
+      private readonly List<Ellipse> myEllipses = new List<Ellipse>();
       private Rectangle? myRectangleMoving = null;               // Not used - Rectangle that is moving with button
       private Rectangle myRectangleSelected = new Rectangle(); // Player has manually selected this button
       private ITerritory? myTerritorySelected = null;
@@ -169,8 +173,8 @@ namespace Pattons_Best
             GameLoadMgr.theGamesDirectory = Settings.Default.GameDirectoryName; // remember the game directory name
          //---------------------------------------------------------------
          Utilities.ZoomCanvas = Settings.Default.ZoomCanvas;
-         myCanvasMap.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas); // Constructor - revert to save zoom
-         StatusBarViewer sbv = new StatusBarViewer(myStatusBar, ge, gi, myCanvasMap);
+         myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas); // Constructor - revert to save zoom
+         StatusBarViewer sbv = new StatusBarViewer(myStatusBar, ge, gi, myCanvasMain);
          //---------------------------------------------------------------
          Utilities.theBrushBlood.Color = Color.FromArgb(0xFF, 0xA4, 0x07, 0x07);
          Utilities.theBrushRegion.Color = Color.FromArgb(0x7F, 0x11, 0x09, 0xBB); // nearly transparent but slightly colored
@@ -201,7 +205,7 @@ namespace Pattons_Best
          myDashArray.Add(4);  // used for dotted lines
          myDashArray.Add(2);  // used for dotted lines
          //---------------------------------------------------------------
-         myDieRoller = new DieRoller(myCanvasMap, CloseSplashScreen); // Close the splash screen when die resources are loaded
+         myDieRoller = new DieRoller(myCanvasMain, CloseSplashScreen); // Close the splash screen when die resources are loaded
          if (true == myDieRoller.CtorError)
          {
             Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): myDieRoller.CtorError=true");
@@ -209,14 +213,14 @@ namespace Pattons_Best
             return;
          }
          //---------------------------------------------------------------
-         myEventViewer = new EventViewer(myGameEngine, myGameInstance, myCanvasMap, myScrollViewerTextBlock, Territories.theTerritories, myDieRoller);
-         if( true == myEventViewer.CtorError)
+         myEventViewer = new EventViewer(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, Territories.theTerritories, myDieRoller);
+         if (true == myEventViewer.CtorError)
          {
             Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): myEventViewer.CtorError=true");
             CtorError = true;
             return;
          }
-         CanvasImageViewer civ = new CanvasImageViewer(myCanvasMap, myDieRoller);
+         CanvasImageViewer civ = new CanvasImageViewer(myCanvasMain, myDieRoller);
          if (true == civ.CtorError)
          {
             Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): civ.CtorError=true");
@@ -252,26 +256,26 @@ namespace Pattons_Best
             System.Windows.Point hotPoint = new System.Windows.Point(Utilities.theMapItemOffset, sizeCursor * 0.5); // set the center of the MapItem as the hot point for the cursor
             Image img1 = new Image { Source = MapItem.theMapImages.GetBitmapImage("Target"), Width = sizeCursor, Height = sizeCursor };
             myTargetCursor = Utilities.ConvertToCursor(img1, hotPoint);
-            this.myCanvasMap.Cursor = myTargetCursor;
+            this.myCanvasMain.Cursor = myTargetCursor;
          }
          //-------------------------------------------------------
-         else if ((GameAction.UpdateLoadingGame == action) || (GameAction.UpdateNewGame == action) )
+         else if ((GameAction.UpdateLoadingGame == action) || (GameAction.UpdateNewGame == action))
          {
             myGameInstance = gi;
             myButtonMains.Clear();
-            foreach (UIElement ui in myCanvasMap.Children) // remove all buttons on map
+            foreach (UIElement ui in myCanvasMain.Children) // remove all buttons on map
             {
                if (ui is Button b)
                {
                   if (true == b.Name.Contains("Prince"))
                   {
-                     myCanvasMap.Children.Remove(ui);
+                     myCanvasMain.Children.Remove(ui);
                      break;
                   }
                }
             }
-            myCanvasMap.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas); // UploadNewGame - Return to previous saved zoom level
-            this.Title = UpdateTitle(gi.Options);
+            myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas); // UploadNewGame - Return to previous saved zoom level
+            this.Title = UpdateViewTitle(gi.Options);
          }
          switch (action)
          {
@@ -301,34 +305,66 @@ namespace Pattons_Best
             case GameAction.MorningBriefingEnd:
                break;
             case GameAction.MorningBriefingAmmoReadyRackLoad:
-               if( false == UpdateCanvasTank(gi, action))
+            case GameAction.PreparationsHatches:
+            case GameAction.PreparationsGunLoad:
+            case GameAction.PreparationsGunLoadSelect:
+               if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               break;
+            case GameAction.PreparationsTurret:
+               if (false == UpdateCanvasTank(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               if (false == UpdateCanvasMain(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
+               break;
+            case GameAction.PreparationsTurretRotateLeft:
+            case GameAction.PreparationsTurretRotateRight:
+               Button? button = myButtonMains.Find("Turret");
+               if (null == button)
+               {
+                  Logger.Log(LogEnum.LE_END_ENUM, "UpdateView(): myButtonMains.Find(Turret)=null");
+               }
+               else
+               {
+                  IMapItem? turret = myGameInstance.MainMapItems.Find("Turret");
+                  if (null == turret)
+                  {
+                     Logger.Log(LogEnum.LE_END_ENUM, "ClickButtonMapItem(): MainMapItems.Find(Turret)=null");
+                     return;
+                  }
+                  else
+                  {
+                     RotateTransform rotateTransform = new RotateTransform();
+                     button.RenderTransformOrigin = new Point(0.5, 0.5);
+                     rotateTransform.Angle = turret.Count * 60.0;
+                     button.RenderTransform = rotateTransform;
+                  }
+               }
                break;
             case GameAction.EndGameWin:
             case GameAction.EndGameLost:
                SaveDefaultsToSettings();
                break;
             case GameAction.RemoveSplashScreen:
-               this.Title = UpdateTitle(gi.Options);
+               this.Title = UpdateViewTitle(gi.Options);
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                mySplashScreen.Close();
                myScrollViewerMap.UpdateLayout();
-               //UpdateScrollbarThumbnails(gi.Prince.Territory);
                break;
             case GameAction.UpdateGameOptions:
-               this.Title = UpdateTitle(gi.Options);
+               this.Title = UpdateViewTitle(gi.Options);
                SaveDefaultsToSettings();
                break;
             case GameAction.EndGameFinal:
-               myCanvasMap.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);  // EndGameFinal - show map for last time
+               myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);  // EndGameFinal - show map for last time
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
             case GameAction.SetupChooseFunOptions:
             case GameAction.SetupFinalize:
-               this.Title = UpdateTitle(gi.Options);
-               myCanvasMap.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
+               this.Title = UpdateViewTitle(gi.Options);
+               myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
@@ -339,94 +375,10 @@ namespace Pattons_Best
          }
          //UpdateScrollbarThumbnails(gi.Prince.Territory);
       }
-      //-----------------------SUPPORTING FUNCTIONS--------------------
-      private void CloseSplashScreen() // callback function that removes splash screen when dice are loaded
-      {
-         GameAction outAction = GameAction.RemoveSplashScreen;
-         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
-      }
-      private bool CreateButtonMapItem(IMapItem mi, int counterCount)
-      {
-         string? tName = mi.TerritoryCurrent.ToString();
-         if (null == tName)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateButtonMapItem(): tName=null");
-            return false;
-         }
-         string territoryName = Utilities.RemoveSpaces(tName);
-         ITerritory? territory = Territories.theTerritories.Find(territoryName);
-         if (null == territory)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateButtonMapItem(): TerritoryExtensions.Find() returned null");
-            return false;
-         }
-         System.Windows.Controls.Button b = new Button { ContextMenu = myContextMenuButton, Name = Utilities.RemoveSpaces(mi.Name), Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
-         Canvas.SetLeft(b, territory.CenterPoint.X - mi.Zoom * Utilities.theMapItemOffset + (counterCount * Utilities.STACK));
-         Canvas.SetTop(b, territory.CenterPoint.Y - mi.Zoom * Utilities.theMapItemOffset + (counterCount * Utilities.STACK));
-         MapItem.SetButtonContent(b, mi, false, false, false, false); // This sets the image as the button's content
-         if( "Tank" == territory.CanvasName)
-         {
-            myButtonTanks.Add(b);
-            myCanvasTank.Children.Add(b);
-         }
-         else if ("Main" == territory.CanvasName)
-         {
-            myButtonMains.Add(b);
-            myCanvasMap.Children.Add(b);
-         }
-         else
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateButtonMapItem(): reached default  for territory.CanvasName=" + territory.CanvasName);
-            return false;
-         }
-         Canvas.SetZIndex(b, counterCount);
-         b.Click += ClickButtonMapItem;
-         b.MouseEnter += MouseEnterMapItem;
-         b.MouseLeave += MouseLeaveMapItem;
-         return true;
-      }
-      //---------------------------------------
-      private Options Deserialize(String s_xml)
-      {
-         Options? options = new Options();
-         if (false == String.IsNullOrEmpty(s_xml))
-         {
-            try // XML serializer does not work for Interfaces
-            {
-               StringReader stringreader = new StringReader(s_xml);
-               XmlReader xmlReader = XmlReader.Create(stringreader);
-               XmlSerializer serializer = new XmlSerializer(typeof(Options)); // Sustem.IO.FileNotFoundException thrown but normal behavior - handled in XmlSerializer constructor
-               Object? obj = serializer.Deserialize(xmlReader);
-               options = obj as Options;
-            }
-            catch (DirectoryNotFoundException dirException)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Deserialize(): s=" + s_xml + "\ndirException=" + dirException.ToString());
-            }
-            catch (FileNotFoundException fileException)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Deserialize(): s=" + s_xml + "\nfileException=" + fileException.ToString());
-            }
-            catch (IOException ioException)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Deserialize(): s=" + s_xml + "\nioException=" + ioException.ToString());
-            }
-            catch (Exception ex)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Deserialize(): s=" + s_xml + "\nex=" + ex.ToString());
-            }
-         }
-         if (null == options)
-            options = new Options();
-         if (0 == options.Count)
-            options.SetOriginalGameOptions();
-         return options;
-      }
-      //---------------------------------------
-      private string UpdateTitle(Options options)
+      private string UpdateViewTitle(Options options)
       {
          StringBuilder sb = new StringBuilder();
-         sb.Append("Barbarian Prince - ");
+         sb.Append("Patton's Best - ");
          //--------------------------------
          string name = "CustomGame";
          Option? option = options.Find(name);
@@ -513,31 +465,178 @@ namespace Pattons_Best
          }
          return sb.ToString();
       }
+      //-----------------------SUPPORTING FUNCTIONS--------------------
+      private void CloseSplashScreen() // callback function that removes splash screen when dice are loaded
+      {
+         GameAction outAction = GameAction.RemoveSplashScreen;
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+      }
+      private bool CreateButtonMapItem(IMapItem mi, int counterCount)
+      {
+         string? tName = mi.TerritoryCurrent.ToString();
+         if (null == tName)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateButtonMapItem(): tName=null");
+            return false;
+         }
+         string territoryName = Utilities.RemoveSpaces(tName);
+         ITerritory? territory = Territories.theTerritories.Find(territoryName);
+         if (null == territory)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateButtonMapItem(): TerritoryExtensions.Find() returned null");
+            return false;
+         }
+         System.Windows.Controls.Button b = new Button { ContextMenu = myContextMenuButton, Name = mi.Name, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
+         Canvas.SetLeft(b, territory.CenterPoint.X - mi.Zoom * Utilities.theMapItemOffset + (counterCount * Utilities.STACK));
+         Canvas.SetTop(b, territory.CenterPoint.Y - mi.Zoom * Utilities.theMapItemOffset + (counterCount * Utilities.STACK));
+         MapItem.SetButtonContent(b, mi, false, false, false, false); // This sets the image as the button's content
+         if ("Tank" == territory.CanvasName)
+         {
+            myButtonTanks.Add(b);
+            myCanvasTank.Children.Add(b);
+         }
+         else if ("Main" == territory.CanvasName)
+         {
+            myButtonMains.Add(b);
+            myCanvasMain.Children.Add(b);
+         }
+         else
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateButtonMapItem(): reached default  for territory.CanvasName=" + territory.CanvasName);
+            return false;
+         }
+         if( "Turret" == mi.Name )
+            Canvas.SetZIndex(b, 9999);
+         else
+            Canvas.SetZIndex(b, counterCount);
+         b.Click += ClickButtonMapItem;
+         b.MouseEnter += MouseEnterMapItem;
+         b.MouseLeave += MouseLeaveMapItem;
+         return true;
+      }
+      //---------------------------------------
+      private Options Deserialize(String s_xml)
+      {
+         Options? options = new Options();
+         if (false == String.IsNullOrEmpty(s_xml))
+         {
+            try // XML serializer does not work for Interfaces
+            {
+               StringReader stringreader = new StringReader(s_xml);
+               XmlReader xmlReader = XmlReader.Create(stringreader);
+               XmlSerializer serializer = new XmlSerializer(typeof(Options)); // Sustem.IO.FileNotFoundException thrown but normal behavior - handled in XmlSerializer constructor
+               Object? obj = serializer.Deserialize(xmlReader);
+               options = obj as Options;
+            }
+            catch (DirectoryNotFoundException dirException)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Deserialize(): s=" + s_xml + "\ndirException=" + dirException.ToString());
+            }
+            catch (FileNotFoundException fileException)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Deserialize(): s=" + s_xml + "\nfileException=" + fileException.ToString());
+            }
+            catch (IOException ioException)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Deserialize(): s=" + s_xml + "\nioException=" + ioException.ToString());
+            }
+            catch (Exception ex)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Deserialize(): s=" + s_xml + "\nex=" + ex.ToString());
+            }
+         }
+         if (null == options)
+            options = new Options();
+         if (0 == options.Count)
+            options.SetOriginalGameOptions();
+         return options;
+      }
+      //---------------------------------------
       private bool UpdateCanvasTank(IGameInstance gi, GameAction action)
       {
-         //-------------------------------------------------------
          // Clean the Canvas of all marks
          List<UIElement> elements = new List<UIElement>();
-         foreach (UIElement ui in myCanvasMap.Children)
+         foreach (UIElement ui in myCanvasTank.Children)
          {
+            if (ui is Polygon polygon)
+               elements.Add(ui);
             if (ui is Image img)
             {
-               if ("CanvasTank" == img.Name)
+               if (true == img.Name.Contains("TankMat"))
                   continue;
                elements.Add(ui);
             }
          }
          foreach (UIElement ui1 in elements)
-            myCanvasMap.Children.Remove(ui1);
+            myCanvasTank.Children.Remove(ui1);
          //-------------------------------------------------------
          if (GamePhase.UnitTest == gi.GamePhase)
             return true;
          //-------------------------------------------------------
-         foreach(IMapItem mi in gi.ReadyRacks)
+         if (false == UpdateCanvasTankMapItems(gi.ReadyRacks))
          {
-            if( null == mi )
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasTankMapItems(ReadyRacks) returned false");
+            return false;
+         }
+         //-------------------------------------------------------
+         if (false == UpdateCanvasTankMapItems(gi.Hatches))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasTankMapItems(Hatches) returned false");
+            return false;
+         }
+         //-------------------------------------------------------
+         if (false == UpdateCanvasTankMapItems(gi.GunLoads))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasTankMapItems(GunLoads) returned false");
+            return false;
+         }
+         //-------------------------------------------------------
+         try
+         {
+            switch (action)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): mi=null");
+               case GameAction.PreparationsHatches:
+                  if (false == UpdateCanvasTankHatches(gi, action))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasTankHatches() returned false");
+                     return false;
+                  }
+                  break;
+               case GameAction.PreparationsGunLoad:
+               case GameAction.PreparationsGunLoadSelect:
+                  foreach( Button b in myButtonTanks )
+                  {
+                     if (true == b.Name.Contains("OpenHatch"))
+                        b.IsEnabled = false;
+                  }
+                  if (false == UpdateCanvasTankGunLoad(gi, action))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasTankGunLoad() returned false");
+                     return false;
+                  }
+                  break;
+               case GameAction.EndGameClose:
+                  GameAction outActionClose = GameAction.EndGameExit;
+                  myGameEngine.PerformAction(ref gi, ref outActionClose);
+                  break;
+               default:
+                  break;
+            }
+         }
+         catch (Exception e)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): EXCEPTION THROWN a=" + action.ToString() + "\ne=" + e.ToString());
+            return false;
+         }
+         return true;
+      }
+      private bool UpdateCanvasTankMapItems(IMapItems mapItems)
+      {
+         foreach (IMapItem mi in mapItems)
+         {
+            if (null == mi)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankMapItems(): mi=null");
                return false;
             }
             Button? b = myButtonTanks.Find(mi.Name);
@@ -556,37 +655,136 @@ namespace Pattons_Best
             {
                if (false == CreateButtonMapItem(mi, 0))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): CreateButtonMapItem() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankMapItems(): CreateButtonMapItem() returned false");
                   return false;
                }
             }
          }
-         //-------------------------------------------------------
+         return true;
+      }
+      private bool UpdateCanvasTankHatches(IGameInstance gi, GameAction action)
+      {
+         myPolygons.Clear();
+         IAfterActionReport? report = gi.Reports.GetLast();
+         if (null == report)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankHatches(): report=null");
+            return false;
+         }
+         TankCard tankCard = new TankCard(report.TankCardNum);
+         //--------------------------------
+         string[] crewmembers = new string[4] { "Driver", "Assistant", "Commander", "Loader" };
          try
          {
-            switch (action)
+            foreach (string crewmember in crewmembers)
             {
-               case GameAction.EndGameClose:
-                  GameAction outActionClose = GameAction.EndGameExit;
-                  myGameEngine.PerformAction(ref gi, ref outActionClose);
-                  break;
-               default:
-                  break;
+               if ((crewmember == "Loader") && (false == tankCard.myIsLoaderHatch))
+                  continue;
+               ICrewMember? cm = myGameInstance.GetCrewMember(crewmember);
+               if (null == cm)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): cm=null for " + crewmember);
+                  return false;
+               }
+               if (false == cm.IsButtonedUp)
+               {
+                  string tName = crewmember + "Hatch";
+                  ITerritory? t = Territories.theTerritories.Find(tName);
+                  if (null == t)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankHatches(): cannot find tName=" + tName);
+                     return false;
+                  }
+                  PointCollection points = new PointCollection();
+                  foreach (IMapPoint mp1 in t.Points)
+                     points.Add(new System.Windows.Point(mp1.X, mp1.Y));
+                  Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = t.ToString() };
+                  myPolygons.Add(aPolygon);
+                  myCanvasTank.Children.Add(aPolygon);
+                  aPolygon.MouseDown += MouseDownPolygonHatches;
+               }
             }
          }
          catch (Exception e)
          {
-            Console.WriteLine("UpdateCanvasMain() - EXCEPTION THROWN a=" + action.ToString() + "\ne={0}", e.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankHatches(): EXCEPTION THROWN a=" + action.ToString() + "\ne=" + e.ToString());
             return false;
          }
          return true;
       }
+      private bool UpdateCanvasTankGunLoad(IGameInstance gi, GameAction action)
+      {
+         myPolygons.Clear();
+         IAfterActionReport? report = gi.Reports.GetLast();
+         if (null == report)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankHatches(): report=null");
+            return false;
+         }
+         //--------------------------------
+         string[] gunLoads = new string[5] { "He", "Ap", "Wp", "Hbci", "Hvap" };
+         try
+         {
+            foreach (string gunload in gunLoads)
+            {
+               switch (gunload)
+               {
+                  case "He":
+                     if (0 == report.MainGunHE)
+                        continue;
+                     break;
+                  case "Ap":
+                     if (0 == report.MainGunAP)
+                        continue;
+                     break;
+                  case "Wp":
+                     if (0 == report.MainGunWP)
+                        continue;
+                     break;
+                  case "Hbci":
+                     if (0 == report.MainGunHBCI)
+                        continue;
+                     break;
+                  case "Hvap":
+                     if (0 == report.MainGunHVAP)
+                        continue;
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankGunLoad(): reached default gunload=" + gunload);
+                     return false;
+               }
+               string tName = "GunLoad" + gunload;
+               ITerritory? t = Territories.theTerritories.Find(tName);
+               if (null == t)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankHatches(): cannot find tName=" + tName);
+                  return false;
+               }
+               PointCollection points = new PointCollection();
+               foreach (IMapPoint mp1 in t.Points)
+                  points.Add(new System.Windows.Point(mp1.X, mp1.Y));
+               Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = t.ToString() };
+               myPolygons.Add(aPolygon);
+               myCanvasTank.Children.Add(aPolygon);
+               aPolygon.MouseDown += MouseDownPolygonGunLoad;
+            }
+         }
+         catch (Exception e)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankHatches(): EXCEPTION THROWN a=" + action.ToString() + "\n" + e.ToString());
+            return false;
+         }
+         Button? b = myButtonTanks.Find("GunLoad");
+         if (null != b)
+            Canvas.SetZIndex(b, 99999);
+         return true;
+      }
+      //---------------------------------------
       private bool UpdateCanvasMain(IGameInstance gi, GameAction action, bool isOnlyLastLegRemoved = false)
       {
-         //-------------------------------------------------------
          // Clean the Canvas of all marks
          List<UIElement> elements = new List<UIElement>();
-         foreach (UIElement ui in myCanvasMap.Children)
+         foreach (UIElement ui in myCanvasMain.Children)
          {
             if (ui is Polygon polygon)
                elements.Add(ui);
@@ -594,14 +792,14 @@ namespace Pattons_Best
                elements.Add(ui);
             if (ui is Ellipse ellipse)
             {
-               if("CenterPoint" != ellipse.Name) // CenterPoint is a unit test ellipse
+               if ("CenterPoint" != ellipse.Name) // CenterPoint is a unit test ellipse
                   elements.Add(ui);
             }
             if (ui is Label label)  // A Game Feat Label
                elements.Add(ui);
             if (ui is Image img)
             {
-               if ( true == img.Name.Contains("Canvas"))
+               if (true == img.Name.Contains("Canvas"))
                   continue;
                elements.Add(ui);
             }
@@ -609,7 +807,7 @@ namespace Pattons_Best
                elements.Add(ui);
          }
          foreach (UIElement ui1 in elements)
-            myCanvasMap.Children.Remove(ui1);
+            myCanvasMain.Children.Remove(ui1);
          //-------------------------------------------------------
          if (GamePhase.UnitTest == gi.GamePhase)
             return true;
@@ -631,7 +829,6 @@ namespace Pattons_Best
                Double y = t.CenterPoint.Y - (mi.Zoom * Utilities.theMapItemOffset);
                Canvas.SetLeft(b, x);
                Canvas.SetTop(b, y);
-               Canvas.SetZIndex(b, 9999);
             }
             else
             {
@@ -647,7 +844,12 @@ namespace Pattons_Best
          {
             switch (action)
             {
-               case GameAction.PreparationsStart:
+               case GameAction.PreparationsLoaderSpot:
+                  if (false == UpdateCanvasMainSpotting(gi, action))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMainSpotting() returned false");
+                     return false;
+                  }
                   break;
                case GameAction.EndGameClose:
                   GameAction outActionClose = GameAction.EndGameExit;
@@ -659,8 +861,40 @@ namespace Pattons_Best
          }
          catch (Exception e)
          {
-            Console.WriteLine("UpdateCanvasMain() - EXCEPTION THROWN a=" + action.ToString() + "\ne={0}", e.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): EXCEPTION THROWN a=" + action.ToString() + "\n" + e.ToString());
             return false;
+         }
+         return true;
+      }
+      private bool UpdateCanvasMainSpotting(IGameInstance gi, GameAction action)
+      {
+         myEllipses.Clear();
+         string[] sectors = new string[6] { "Spot1", "Spot2", "Spot3", "Spot4", "Spot6", "Spot9" };
+         foreach(string s in sectors)
+         {
+            ITerritory? t = Territories.theTerritories.Find(s);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankHatches(): cannot find tName=" + s);
+               return false;
+            }
+            Ellipse aEllipse = new Ellipse
+            {
+               Name = t.Name,
+               Fill = Utilities.theBrushRegion,
+               StrokeThickness = 3,
+               Stroke = Utilities.theBrushRegion,
+               Width = ELLIPSE_DIAMETER,
+               Height = ELLIPSE_DIAMETER
+            };
+            System.Windows.Point p = new System.Windows.Point(t.CenterPoint.X, t.CenterPoint.Y);
+            p.X -= ELLIPSE_RADIUS;
+            p.Y -= ELLIPSE_RADIUS;
+            Canvas.SetLeft(aEllipse, p.X);
+            Canvas.SetTop(aEllipse, p.Y);
+            myCanvasMain.Children.Add(aEllipse);
+            myEllipses.Add(aEllipse);
+            aEllipse.MouseDown += MouseDownEllipseSpotting;
          }
          return true;
       }
@@ -671,7 +905,7 @@ namespace Pattons_Best
             if (0 < gi.MapItemMoves.Count)
             {
                IMapItemMove? mim2 = gi.MapItemMoves[0];
-               if( null == mim2 )
+               if (null == mim2)
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): mim2=null");
                   return false;
@@ -700,7 +934,7 @@ namespace Pattons_Best
                   return false;
                }
                mi.TerritoryStarting = mim2.NewTerritory;
-               mi.TerritoryCurrent = mi.TerritoryStarting; 
+               mi.TerritoryCurrent = mi.TerritoryStarting;
             }
          }
          catch (Exception e)
@@ -834,7 +1068,7 @@ namespace Pattons_Best
          aPolyline.StrokeEndLineCap = PenLineCap.Triangle;
          aPolyline.Points = aPointCollection;
          aPolyline.StrokeDashArray = myDashArray;
-         myCanvasMap.Children.Add(aPolyline);
+         myCanvasMain.Children.Add(aPolyline);
          //-----------------------------------------
          myRectangleMoving = myRectangles[myBrushIndex];
          if (myRectangles.Count <= ++myBrushIndex)
@@ -846,8 +1080,171 @@ namespace Pattons_Best
          return true;
       }
       //-------------CONTROLLER FUNCTIONS---------------------------------
+      private void MouseDownPolygonHatches(object sender, MouseButtonEventArgs e)
+      {
+         Polygon? clickedPolygon = sender as Polygon;
+         if (null == clickedPolygon)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): clickedPolygon=null");
+            return;
+         }
+         ITerritory? t = Territories.theTerritories.Find(clickedPolygon.Name);
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): t=null for " + clickedPolygon.Name.ToString());
+            return;
+         }
+         string[] crewmembers = new string[4] { "Driver", "Assistant", "Commander", "Loader" };
+         foreach (string crewmember in crewmembers)
+         {
+            if (true == t.Name.Contains(crewmember))
+            {
+               ICrewMember? cm = myGameInstance.GetCrewMember(crewmember);
+               if (null == cm)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): myGameInstance.Driver=null for " + clickedPolygon.Name.ToString());
+                  return;
+               }
+               cm.IsButtonedUp = true;
+               IMapItem mi = new MapItem(crewmember + "OpenHatch", 1.0, "c15OpenHatch", t);
+               myGameInstance.Hatches.Add(mi);
+               break;
+            }
+         }
+         GameAction outAction = GameAction.PreparationsHatches;
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+      }
+      private void MouseDownCloseHatches(object sender, MouseButtonEventArgs e)
+      {
+         Polygon? clickedPolygon = sender as Polygon;
+         if (null == clickedPolygon)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): clickedPolygon=null");
+            return;
+         }
+         ITerritory? t = Territories.theTerritories.Find(clickedPolygon.Name);
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): t=null for " + clickedPolygon.Name.ToString());
+            return;
+         }
+         string[] crewmembers = new string[4] { "Driver", "Assistant", "Commander", "Loader" };
+         foreach (string crewmember in crewmembers)
+         {
+            if (true == t.Name.Contains(crewmember))
+            {
+               ICrewMember? cm = myGameInstance.GetCrewMember(crewmember);
+               if (null == cm)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): myGameInstance.Driver=null for " + clickedPolygon.Name.ToString());
+                  return;
+               }
+               cm.IsButtonedUp = false;
+               IMapItem mi = new MapItem(crewmember + "OpenHatch", 1.0, "c15OpenHatch", t);
+               myGameInstance.Hatches.Add(mi);
+               break;
+            }
+         }
+         GameAction outAction = GameAction.PreparationsHatches;
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+      }
+      private void MouseDownPolygonGunLoad(object sender, MouseButtonEventArgs e)
+      {
+         Polygon? clickedPolygon = sender as Polygon;
+         if (null == clickedPolygon)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): clickedPolygon=null");
+            return;
+         }
+         ITerritory? t = Territories.theTerritories.Find(clickedPolygon.Name);
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): t=null for " + clickedPolygon.Name.ToString());
+            return;
+         }
+         IMapItem? gunLoad = myGameInstance.GunLoads[0];
+         if (null == gunLoad)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): t=null for " + clickedPolygon.Name.ToString());
+            return;
+         }
+         gunLoad.TerritoryCurrent = t;
+         GameAction outAction = GameAction.PreparationsGunLoadSelect;
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+      }
+      private void MouseDownEllipseSpotting(object sender, MouseButtonEventArgs e)
+      {
+         Ellipse? ellipse = sender as Ellipse;
+         if (null == ellipse)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipseSpotting(): ellipse=null");
+            return;
+         }
+         ITerritory? t = Territories.theTerritories.Find(ellipse.Name);
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipseSpotting(): t=null for " + ellipse.Name.ToString());
+            return;
+         }
+         if( false == myGameInstance.IsLoaderSpotted)
+         {
+            myGameInstance.IsLoaderSpotted = true;
+            IMapItem? spotter = myGameInstance.MainMapItems.Find("LoaderSpot");
+            if (null == spotter)
+               myGameInstance.MainMapItems.Add(new MapItem("LoaderSpot", 1.0, "c18LoaderSpot", t));
+            else
+               spotter.TerritoryCurrent = t;
+            GameAction outAction = GameAction.PreparationsLoaderSpotSet;
+            myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+         }
+         else
+         {
+            IMapItem? spotter = myGameInstance.MainMapItems.Find("CommanderSpot");
+            if (null == spotter)
+               myGameInstance.MainMapItems.Add(new MapItem("CommanderSpot", 1.0, "c19CommanderSpot", t));
+            else
+               spotter.TerritoryCurrent = t;
+            GameAction outAction = GameAction.PreparationsCommanderSpotSet;
+            myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+         }
+
+      }
       private void ClickButtonMapItem(object sender, RoutedEventArgs e)
       {
+         Button? button = sender as Button;
+         if (null == button)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): button = null");
+            return;
+         }
+         if( true == button.Name.Contains("OpenHatch"))
+         {
+            string[] crewmembers = new string[4] { "Driver", "Assistant", "Commander", "Loader" };
+            foreach (string s in crewmembers)
+            {
+               ICrewMember? crewMember = myGameInstance.GetCrewMember(s);
+               if (null == crewMember)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): s=" + s);
+                  return;
+               }
+               if (true == button.Name.Contains(s))
+               {
+                  crewMember.IsButtonedUp = false;
+                  myGameInstance.Hatches.Remove(button.Name);
+                  this.myButtonTanks.Remove(button);
+                  GameAction outAction = GameAction.PreparationsHatches;
+                  myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+                  myCanvasTank.Children.Remove(button);
+                  return;
+               }
+            }
+         }
+         if (true == button.Name.Contains("Turret"))
+         {
+            GameAction outAction = GameAction.PreparationsTurretRotateRight;
+            myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+         }
       }
       private void MouseEnterMapItem(object sender, System.Windows.Input.MouseEventArgs e)
       {
@@ -857,7 +1254,7 @@ namespace Pattons_Best
       }
       private void MouseDownPolygonTravel(object sender, MouseButtonEventArgs e)
       {
-         System.Windows.Point canvasPoint = e.GetPosition(myCanvasMap);
+         System.Windows.Point canvasPoint = e.GetPosition(myCanvasMain);
          Polygon? clickedPolygon = sender as Polygon;
          if (null == clickedPolygon)
          {

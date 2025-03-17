@@ -101,9 +101,40 @@ Determine your tank&apos;s deployment from the
 e012	"<Bold>e012 Hatches</Bold> 
 <InlineUIContainer><Button Content='r4.42' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
-Left click on hatches on the Tank Card to toggle adding counter. Click image below to continue.
+Left click on hatches on the Tank Card to toggle adding counter. If already open, click button to remove open hatch. 
 <LineBreak/><LineBreak/>
-                                               <InlineUIContainer><Image Name='c15OpenHatch'  Height='80' Width='80'></Image></InlineUIContainer>"""
+                                                  <InlineUIContainer><Image Name='c15OpenHatch'  Height='80' Width='80'></Image></InlineUIContainer>
+<LineBreak/><LineBreak/>
+Click image in this text box when satisfied and want to continue."
+e013	"<Bold>e013 Gun Load</Bold> 
+<InlineUIContainer><Button Content='r4.43' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<LineBreak/><LineBreak/>
+Mark the type of round you want loaded in the main gun before any action begins by clicking the highlighted box on the Tank Card in the correct ammo type box. Click image below to continue.
+<LineBreak/><LineBreak/>
+                                                  <InlineUIContainer><Image Name='c17GunLoad'  Height='80' Width='80'></Image></InlineUIContainer>"
+e014	"<Bold>e014 Tank &amp; Turret Orientation</Bold> 
+<InlineUIContainer><Button Content='r4.44' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<LineBreak/><LineBreak/>
+The Sherman tank counter is placed at the center of the battle board. If you want the turret to face a different sector, click tank counter on center of Battle Board. 
+Alternatively, select buttons here:
+<LineBreak/><LineBreak/>
+                                   <InlineUIContainer><Button Content='  -  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<InlineUIContainer><Image Name='c16Turret'  Height='150' Width='150'></Image></InlineUIContainer> 
+<InlineUIContainer><Button Content='  +  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
+When you are satisfied with the current turret orientation, click turret image between buttons to continue."
+e015	"<Bold>e015 Loader Spotting</Bold> 
+<InlineUIContainer><Button Content='r4.45' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+<InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<LineBreak/><LineBreak/>
+If the loader is buttoned up or does not have a hatch, mark the sector he will be searching by left clicking on dot just outside the long range zone of the sector. 
+<LineBreak/><LineBreak/>"
+e016	"<Bold>e016 Commander Spotting</Bold> 
+<InlineUIContainer><Button Content='r4.45' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+<InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<LineBreak/><LineBreak/>
+If the Commander is buttoned up or does not have a vision cupola, mark the sector he will be searching by right clicking on dot just outside the long range zone of the sector. 
+<LineBreak/><LineBreak/>"
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"
 e502	"<Bold>e502 Game Lost</Bold>
