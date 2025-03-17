@@ -166,7 +166,7 @@ Place US Control Markers in Sectors 1, 2, and 3 on the Battle Board. The current
                                      <InlineUIContainer><Image Name='c28UsControl'  Height='100' Width='100'></Image></InlineUIContainer>  "
 r4.5	"<Bold>r4.5  Movement Sequence</Bold>
 <LineBreak/><LineBreak/>
-The Movement Sequence is performed on the Movement Board.
+The Movement Sequence is performed on the Movement Board using the following steps:
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r4.51' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Mark Start Area <LineBreak/>
 <InlineUIContainer><Button Content='r4.52' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Mark Exit Area<LineBreak/>
@@ -182,7 +182,7 @@ Place the Task Force marker representing your friendly forces on that area.
 r4.52	"<Bold>r4.52  Mark Exit Area</Bold>
 <LineBreak/><LineBreak/>
 On the <InlineUIContainer><Button Content='Exit Areas' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-Table, roll 1D adn cross reference the number with the Start Area marker 
+Table, roll 1D and cross reference the number with the Start Area marker 
 <InlineUIContainer><Button Content='r4.51' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
 Mark the area with the Exit Area marker.
 <LineBreak/><LineBreak/>
@@ -190,10 +190,10 @@ Mark the area with the Exit Area marker.
 r4.53	"<Bold>r4.53 Enemy Strength Check</Bold>
 <LineBreak/><LineBreak/>
 Check any one adjacent area to your task force for estimating enemy strength. Consult the 
-<InlineUIContainer><Button Content='r4.51' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<InlineUIContainer><Button Content='Resistance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 Table after rolling die. Mark the area with a Light, Medium, or Heavy marker.
 <LineBreak/><LineBreak/>
-      <InlineUIContainer><Image Name='c36Light'  Height='100' Width='100'></Image></InlineUIContainer>           
+      <InlineUIContainer><Image Name='c36Light'  Height='100' Width='100'></Image></InlineUIContainer>
       <InlineUIContainer><Image Name='c37Medium'  Height='100' Width='100'></Image></InlineUIContainer>
       <InlineUIContainer><Image Name='c38Heavy'  Height='100' Width='100'></Image></InlineUIContainer>"
 r4.54	"<Bold>r4.54  Operations</Bold>
