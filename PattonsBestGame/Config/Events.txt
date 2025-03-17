@@ -141,6 +141,42 @@ e017	"<Bold>e017 Preparations Final</Bold>
 US Control markers are placed on sectors 1, 2, and 3. The Weather is displayed on top left of Battle Board.
 <LineBreak/><LineBreak/>
                                             <InlineUIContainer><Image Name='Continue017' Height='100' Width='100'></Image></InlineUIContainer>"
+e018	"<Bold>e018 Set Start Area</Bold> 
+<InlineUIContainer><Button Content='r4.51' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+<LineBreak/><LineBreak/>
+Around the edge of the Movement Board, there are 10 areas number 1-10. The area is marked with the Start Area and Task Force markers. 
+<LineBreak/><LineBreak/>
+Die Roll =  <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>
+<LineBreak/><LineBreak/>"
+e019	"<Bold>e019 Set Exit Area</Bold> 
+<InlineUIContainer><Button Content='r4.52' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+<LineBreak/><LineBreak/>
+On the <InlineUIContainer><Button Content='Exit Areas' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table, roll 1D and cross reference the number with the Start Area marker 
+<InlineUIContainer><Button Content='r4.51' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  
+<LineBreak/><LineBreak/>
+Die Roll =  <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer> 
+<LineBreak/><LineBreak/>"
+e020	"<Bold>e020 Enemy Strenth Check</Bold> 
+<InlineUIContainer><Button Content='r4.53' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+<LineBreak/><LineBreak/>
+Check any one adjacent area to your task force for estimating enemy strength. Click on one of the adjacent regions highlighted blue.
+<LineBreak/><LineBreak/>
+Roll 1D and consult the <InlineUIContainer><Button Content='r4.51' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table. The area is marked with a Light, Medium, or Heavy marker.
+<LineBreak/><LineBreak/>
+Die Roll =  <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer> 
+<LineBreak/><LineBreak/>"
+e021	"<Bold>e021 Choose Operations</Bold> 
+<InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+<LineBreak/><LineBreak/>
+Choose one of following options:<LineBreak/>
+ <InlineUIContainer><Button Content='Additional' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Area Check<LineBreak/>
+ <InlineUIContainer><Button Content='Artillery' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Support <LineBreak/>
+ <InlineUIContainer><Button Content='Air' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Strike  <LineBreak/>
+ <InlineUIContainer><Button Content='Attempt' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Resupply <LineBreak/>
+Alternatively, click on an adjacent highlighted area on the Movement Board to enter that area.
+<LineBreak/><LineBreak/>"
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"
 e502	"<Bold>e502 Game Lost</Bold>

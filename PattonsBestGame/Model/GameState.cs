@@ -767,6 +767,7 @@ namespace Pattons_Best
          GameAction previousAction = action;
          GameAction previousDieAction = gi.DieRollAction;
          string previousEvent = gi.EventActive;
+         string key = gi.EventActive;
          string returnStatus = "OK";
          switch (action)
          {
@@ -776,6 +777,8 @@ namespace Pattons_Best
             case GameAction.UpdateEventViewerDisplay: // Only change active event
                break;
             case GameAction.MovementStartAreaSet:
+               gi.DieResults[key][0] = dieRoll;
+               gi.EventDisplayed = gi.EventActive = "e018";
                break;
             case GameAction.EndGameClose:
                gi.GamePhase = GamePhase.EndGame;

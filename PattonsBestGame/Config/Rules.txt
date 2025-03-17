@@ -164,6 +164,78 @@ r4.46	"<Bold>r4.46  Final Preparations</Bold>
 Place US Control Markers in Sectors 1, 2, and 3 on the Battle Board. The current weather is marked with the correct markers in the top left of the Battle Board.
 <LineBreak/><LineBreak/> 
                                      <InlineUIContainer><Image Name='c28UsControl'  Height='100' Width='100'></Image></InlineUIContainer>  "
+r4.5	"<Bold>r4.5  Movement Sequence</Bold>
+<LineBreak/><LineBreak/>
+The Movement Sequence is performed on the Movement Board.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r4.51' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Mark Start Area <LineBreak/>
+<InlineUIContainer><Button Content='r4.52' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Mark Exit Area<LineBreak/>
+<InlineUIContainer><Button Content='r4.53' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Strength Check<LineBreak/>
+<InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Operations"
+r4.51	"<Bold>r4.51  Mark Start Area</Bold>
+<LineBreak/><LineBreak/>
+Around the edge of the Movement Board, there are 10 areas number 1-10. Roll 1D to determine which of the ten is the start area for this scenario. Also, mark the area with a Start Area marker.
+Place the Task Force marker representing your friendly forces on that area.
+<LineBreak/><LineBreak/>
+                    <InlineUIContainer><Image Name='c33StartArea'  Height='100' Width='100'></Image></InlineUIContainer>           
+      <InlineUIContainer><Image Name='c35TaskForce'  Height='100' Width='100'></Image></InlineUIContainer>"
+r4.52	"<Bold>r4.52  Mark Exit Area</Bold>
+<LineBreak/><LineBreak/>
+On the <InlineUIContainer><Button Content='Exit Areas' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table, roll 1D adn cross reference the number with the Start Area marker 
+<InlineUIContainer><Button Content='r4.51' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+Mark the area with the Exit Area marker.
+<LineBreak/><LineBreak/>
+                                     <InlineUIContainer><Image Name='c34ExitArea'  Height='100' Width='100'></Image></InlineUIContainer>  "
+r4.53	"<Bold>r4.53 Enemy Strength Check</Bold>
+<LineBreak/><LineBreak/>
+Check any one adjacent area to your task force for estimating enemy strength. Consult the 
+<InlineUIContainer><Button Content='r4.51' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table after rolling die. Mark the area with a Light, Medium, or Heavy marker.
+<LineBreak/><LineBreak/>
+      <InlineUIContainer><Image Name='c36Light'  Height='100' Width='100'></Image></InlineUIContainer>           
+      <InlineUIContainer><Image Name='c37Medium'  Height='100' Width='100'></Image></InlineUIContainer>
+      <InlineUIContainer><Image Name='c38Heavy'  Height='100' Width='100'></Image></InlineUIContainer>"
+r4.54	"<Bold>r4.54  Operations</Bold>
+<LineBreak/><LineBreak/>
+Choose one of following options. Each option takes time per the 
+<InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table. The time is marked off on the After Action Report (AAR) 
+<InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+Continue performing operations one after another recording time used for each option chosen. When daylight runs out, the scenario ends. Go to Evening Debriefing 
+<InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r4.54.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Check Additional Area<LineBreak/>
+<InlineUIContainer><Button Content='r4.54.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Call for Artillery Support<LineBreak/>
+<InlineUIContainer><Button Content='r4.54.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Call for Air Strike<LineBreak/>
+<InlineUIContainer><Button Content='r4.54.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Attempt Resupply<LineBreak/>
+<InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Enter Adjacent Area"
+r4.54.1	"<Bold>r4.54.1  Check Additional Area</Bold>
+<LineBreak/><LineBreak/>
+Check any one additional adjacent area for estimated enemy strength by rolling on the 
+<InlineUIContainer><Button Content='Resistance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. 
+Mark the expected resistance by placing Light, Medium, or Heavy marker on the area. Continue with 
+<InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r4.54.2	"<Bold>r4.54.2  Call for Artillery Support</Bold>
+<LineBreak/><LineBreak/>
+Call to hit an area adjacent to your task force. Consult the 
+<InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+to see if Artillery Support arrives. If successful, place an Artillery Support marker on the area. Continue with 
+<InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r4.54.3	"<Bold>r4.54.3  Call for Air Strike</Bold>
+<LineBreak/><LineBreak/>
+Call to hit an area adjacent to your task force. Consult the 
+<InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+to see if Air Strike arrives. If successful, place an Air Strike marker on the area. Continue with 
+<InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r4.54.4	"<Bold>r4.54.4  Attempt Resupply</Bold>
+<LineBreak/><LineBreak/>
+Consult the 
+<InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+to see if resupply occurs. If successful, you may relead your tank with ammo. Continue with 
+<InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r4.54.5	"<Bold>r4.54.5  Enter Adjacent Area</Bold>
+<LineBreak/><LineBreak/>"
 r7.0	"<Bold>r7.0 Crew Ratings</Bold> 
 <LineBreak/><LineBreak/>
 Each crew member is given a numerical rating of his skill at his position. The rating range from 1 (poorest) to 10 (best). 
