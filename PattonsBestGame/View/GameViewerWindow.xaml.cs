@@ -845,7 +845,14 @@ namespace Pattons_Best
             switch (action)
             {
                case GameAction.PreparationsLoaderSpot:
-                  if (false == UpdateCanvasMainSpotting(gi, action))
+                  if (false == UpdateCanvasMainSpottingLoader(gi, action))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMainSpotting() returned false");
+                     return false;
+                  }
+                  break;
+               case GameAction.PreparationsCommanderSpot:
+                  if (false == UpdateCanvasMainSpottingCommander(gi, action))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMainSpotting() returned false");
                      return false;
@@ -866,7 +873,7 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool UpdateCanvasMainSpotting(IGameInstance gi, GameAction action)
+      private bool UpdateCanvasMainSpottingLoader(IGameInstance gi, GameAction action)
       {
          myEllipses.Clear();
          string[] sectors = new string[6] { "Spot1", "Spot2", "Spot3", "Spot4", "Spot6", "Spot9" };
@@ -894,7 +901,39 @@ namespace Pattons_Best
             Canvas.SetTop(aEllipse, p.Y);
             myCanvasMain.Children.Add(aEllipse);
             myEllipses.Add(aEllipse);
-            aEllipse.MouseDown += MouseDownEllipseSpotting;
+            aEllipse.MouseDown += MouseDownEllipseSpottingLoader;
+         }
+         return true;
+      }
+      private bool UpdateCanvasMainSpottingCommander(IGameInstance gi, GameAction action)
+      {
+         myEllipses.Clear();
+         string[] sectors = new string[6] { "CSpot1", "CSpot2", "CSpot3", "CSpot4", "CSpot6", "CSpot9" };
+         foreach (string s in sectors)
+         {
+            ITerritory? t = Territories.theTerritories.Find(s);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankHatches(): cannot find tName=" + s);
+               return false;
+            }
+            Ellipse aEllipse = new Ellipse
+            {
+               Name = t.Name,
+               Fill = Utilities.theBrushRegion,
+               StrokeThickness = 3,
+               Stroke = Utilities.theBrushRegion,
+               Width = ELLIPSE_DIAMETER,
+               Height = ELLIPSE_DIAMETER
+            };
+            System.Windows.Point p = new System.Windows.Point(t.CenterPoint.X, t.CenterPoint.Y);
+            p.X -= ELLIPSE_RADIUS;
+            p.Y -= ELLIPSE_RADIUS;
+            Canvas.SetLeft(aEllipse, p.X);
+            Canvas.SetTop(aEllipse, p.Y);
+            myCanvasMain.Children.Add(aEllipse);
+            myEllipses.Add(aEllipse);
+            aEllipse.MouseDown += MouseDownEllipseSpottingCommander;
          }
          return true;
       }
@@ -1172,7 +1211,7 @@ namespace Pattons_Best
          GameAction outAction = GameAction.PreparationsGunLoadSelect;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
-      private void MouseDownEllipseSpotting(object sender, MouseButtonEventArgs e)
+      private void MouseDownEllipseSpottingLoader(object sender, MouseButtonEventArgs e)
       {
          Ellipse? ellipse = sender as Ellipse;
          if (null == ellipse)
@@ -1186,28 +1225,35 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipseSpotting(): t=null for " + ellipse.Name.ToString());
             return;
          }
-         if( false == myGameInstance.IsLoaderSpotted)
-         {
-            myGameInstance.IsLoaderSpotted = true;
-            IMapItem? spotter = myGameInstance.MainMapItems.Find("LoaderSpot");
-            if (null == spotter)
-               myGameInstance.MainMapItems.Add(new MapItem("LoaderSpot", 1.0, "c18LoaderSpot", t));
-            else
-               spotter.TerritoryCurrent = t;
-            GameAction outAction = GameAction.PreparationsLoaderSpotSet;
-            myGameEngine.PerformAction(ref myGameInstance, ref outAction);
-         }
+         IMapItem? spotter = myGameInstance.MainMapItems.Find("LoaderSpot");
+         if (null == spotter)
+            myGameInstance.MainMapItems.Add(new MapItem("LoaderSpot", 1.0, "c18LoaderSpot", t));
          else
+            spotter.TerritoryCurrent = t;
+         GameAction outAction = GameAction.PreparationsLoaderSpotSet;
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+      }
+      private void MouseDownEllipseSpottingCommander(object sender, MouseButtonEventArgs e)
+      {
+         Ellipse? ellipse = sender as Ellipse;
+         if (null == ellipse)
          {
-            IMapItem? spotter = myGameInstance.MainMapItems.Find("CommanderSpot");
-            if (null == spotter)
-               myGameInstance.MainMapItems.Add(new MapItem("CommanderSpot", 1.0, "c19CommanderSpot", t));
-            else
-               spotter.TerritoryCurrent = t;
-            GameAction outAction = GameAction.PreparationsCommanderSpotSet;
-            myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipseSpotting(): ellipse=null");
+            return;
          }
-
+         ITerritory? t = Territories.theTerritories.Find(ellipse.Name);
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipseSpotting(): t=null for " + ellipse.Name.ToString());
+            return;
+         }
+         IMapItem? spotter = myGameInstance.MainMapItems.Find("CommanderSpot");
+         if (null == spotter)
+            myGameInstance.MainMapItems.Add(new MapItem("CommanderSpot", 1.0, "c19CommanderSpot", t));
+         else
+            spotter.TerritoryCurrent = t;
+         GameAction outAction = GameAction.PreparationsCommanderSpotSet;
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
       private void ClickButtonMapItem(object sender, RoutedEventArgs e)
       {

@@ -44,7 +44,6 @@ namespace Pattons_Best
       bool IsHulledDown { set; get; }
       bool IsMoving { set; get; }
       bool IsLeadTank { set; get; }
-      bool IsLoaderSpotted { set; get; }
       //------------------------------------------------
       IMapItemMoves MapItemMoves { set; get; }
       IStacks Stacks { set; get; }

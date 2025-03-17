@@ -43,7 +43,6 @@ namespace Pattons_Best
       public bool IsHulledDown { set; get; } = false;
       public bool IsMoving { set; get; } = false;
       public bool IsLeadTank { set; get; } = false;
-      public bool IsLoaderSpotted { set; get; } = false;
       //------------------------------------------------
       public ITerritory? NewTerritory { set; get; } = null;
       public ITerritory Home { get; set; } = new Territory();

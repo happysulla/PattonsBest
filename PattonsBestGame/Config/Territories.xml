@@ -1,4 +1,4 @@
-﻿<Territories count="130">
+﻿<Territories count="136">
   <Territory value="000">
     <Parent value="Main" />
     <Type value="B" />
@@ -1756,7 +1756,7 @@
   <Territory value="2M">
     <Parent value="Main" />
     <Type value="Battle" />
-    <CenterPoint X="0493.88" Y="0750.78" />
+    <CenterPoint X="0489.50" Y="0756.76" />
     <Points count="5">
       <regionPoint X="0402.41" Y="0706.40" />
       <regionPoint X="0585.35" Y="0708.21" />
@@ -1895,7 +1895,7 @@
   <Territory value="2L">
     <Parent value="Main" />
     <Type value="Battle" />
-    <CenterPoint X="0494.78" Y="0844.96" />
+    <CenterPoint X="0488.50" Y="0839.76" />
     <Points count="5">
       <regionPoint X="0351.69" Y="0793.34" />
       <regionPoint X="0634.25" Y="0794.25" />
@@ -2096,42 +2096,42 @@
   <Territory value="Spot4">
     <Parent value="Main" />
     <Type value="Battle" />
-    <CenterPoint X="0062.78" Y="0302.47" />
+    <CenterPoint X="0038.50" Y="0344.76" />
     <Points count="0" />
     <Adjacents count="0" />
   </Territory>
   <Territory value="Spot6">
     <Parent value="Main" />
     <Type value="Battle" />
-    <CenterPoint X="0497.50" Y="0053.42" />
+    <CenterPoint X="0479.50" Y="0050.76" />
     <Points count="0" />
     <Adjacents count="0" />
   </Territory>
   <Territory value="Spot9">
     <Parent value="Main" />
     <Type value="Battle" />
-    <CenterPoint X="0929.50" Y="0304.29" />
+    <CenterPoint X="0945.50" Y="0328.76" />
     <Points count="0" />
     <Adjacents count="0" />
   </Territory>
   <Territory value="Spot1">
     <Parent value="Main" />
     <Type value="Battle" />
-    <CenterPoint X="0872.44" Y="0798.78" />
+    <CenterPoint X="0888.50" Y="0783.76" />
     <Points count="0" />
     <Adjacents count="0" />
   </Territory>
   <Territory value="Spot2">
     <Parent value="Main" />
     <Type value="Battle" />
-    <CenterPoint X="0494.78" Y="0875.76" />
+    <CenterPoint X="0468.50" Y="0884.76" />
     <Points count="0" />
     <Adjacents count="0" />
   </Territory>
   <Territory value="Spot3">
     <Parent value="Main" />
     <Type value="Battle" />
-    <CenterPoint X="0113.50" Y="0789.72" />
+    <CenterPoint X="0104.50" Y="0782.76" />
     <Points count="0" />
     <Adjacents count="0" />
   </Territory>
@@ -2139,6 +2139,48 @@
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0543.69" Y="0552.44" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="CSpot4">
+    <Parent value="Main" />
+    <Type value="A" />
+    <CenterPoint X="0052.50" Y="0316.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="CSpot6">
+    <Parent value="Main" />
+    <Type value="A" />
+    <CenterPoint X="0514.50" Y="0050.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="CSpot9">
+    <Parent value="Main" />
+    <Type value="A" />
+    <CenterPoint X="0959.50" Y="0360.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="CSpot1">
+    <Parent value="Main" />
+    <Type value="A" />
+    <CenterPoint X="0861.50" Y="0808.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="CSpot2">
+    <Parent value="Main" />
+    <Type value="A" />
+    <CenterPoint X="0506.50" Y="0884.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="CSpot3">
+    <Parent value="Main" />
+    <Type value="A" />
+    <CenterPoint X="0125.50" Y="0804.76" />
     <Points count="0" />
     <Adjacents count="0" />
   </Territory>

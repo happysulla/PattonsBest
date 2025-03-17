@@ -757,9 +757,24 @@ namespace Pattons_Best
                }
                break;
             case "e015":
-               if (true == gi.IsLoaderSpotted)
+               IMapItem? loaderSpot = gi.MainMapItems.Find("LoaderSpot");
+               if (null != loaderSpot)
                {
                   Image imge015 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c18LoaderSpot"), Width = 100, Height = 100, Name = "PreparationsCommanderSpot" };
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                           "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge015));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
+            case "e016":
+               IMapItem? cmdrSpot = gi.MainMapItems.Find("CommanderSpot");
+               if (null != cmdrSpot)
+               {
+                  Image imge015 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c19CommanderSpot"), Width = 100, Height = 100, Name = "MovementSequenceStart" };
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("                                           "));
