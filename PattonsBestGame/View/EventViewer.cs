@@ -774,7 +774,7 @@ namespace Pattons_Best
                IMapItem? cmdrSpot = gi.MainMapItems.Find("CommanderSpot");
                if (null != cmdrSpot)
                {
-                  Image imge015 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c19CommanderSpot"), Width = 100, Height = 100, Name = "MovementSequenceStart" };
+                  Image imge015 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c19CommanderSpot"), Width = 100, Height = 100, Name = "PreparationsFinal" };
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("                                           "));
@@ -1011,6 +1011,14 @@ namespace Pattons_Best
                               return;
                            case "PreparationsCommanderSpot":
                               action = GameAction.PreparationsCommanderSpot;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
+                           case "PreparationsFinal":
+                              action = GameAction.PreparationsFinal;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
+                           case "Continue017":
+                              action = GameAction.MovementStartAreaSet;
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
                            default:

@@ -604,11 +604,6 @@ namespace Pattons_Best
                   break;
                case GameAction.PreparationsGunLoad:
                case GameAction.PreparationsGunLoadSelect:
-                  foreach( Button b in myButtonTanks )
-                  {
-                     if (true == b.Name.Contains("OpenHatch"))
-                        b.IsEnabled = false;
-                  }
                   if (false == UpdateCanvasTankGunLoad(gi, action))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasTankGunLoad() returned false");
@@ -1288,8 +1283,12 @@ namespace Pattons_Best
          }
          if (true == button.Name.Contains("Turret"))
          {
-            GameAction outAction = GameAction.PreparationsTurretRotateRight;
-            myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+            if( true == myGameInstance.IsTurretActive )
+            {
+               GameAction outAction = GameAction.PreparationsTurretRotateRight;
+               myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+            }
+            return;
          }
       }
       private void MouseEnterMapItem(object sender, System.Windows.Input.MouseEventArgs e)

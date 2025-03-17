@@ -135,6 +135,12 @@ e016	"<Bold>e016 Commander Spotting</Bold>
 <LineBreak/><LineBreak/>
 If the Commander is buttoned up or does not have a vision cupola, mark the sector he will be searching by right clicking on dot just outside the long range zone of the sector. 
 <LineBreak/><LineBreak/>"
+e017	"<Bold>e017 Preparations Final</Bold> 
+<InlineUIContainer><Button Content='r4.46' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+<LineBreak/><LineBreak/>
+US Control markers are placed on sectors 1, 2, and 3. The Weather is displayed on top left of Battle Board.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='Continue017' Height='100' Width='100'></Image></InlineUIContainer>"
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"
 e502	"<Bold>e502 Game Lost</Bold>

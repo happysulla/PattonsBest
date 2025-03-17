@@ -57,6 +57,7 @@ namespace Pattons_Best
                ShowHistoricalMap(myCanvas);
                break;
             case GameAction.SetupShowMovementBoard:
+            case GameAction.MovementStartAreaSet:
                myDieRoller.HideDie();
                ShowMovementMap(myCanvas);
                break;

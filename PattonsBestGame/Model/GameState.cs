@@ -279,6 +279,8 @@ namespace Pattons_Best
                gi.GamePhase = GamePhase.EndGame;
                break;
             default:
+               returnStatus = "reached default action=" + action.ToString();
+               Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
                break;
          }
          StringBuilder sb12 = new StringBuilder();
@@ -430,6 +432,8 @@ namespace Pattons_Best
                   gi.GamePhase = GamePhase.EndGame;
                   break;
                default:
+                  returnStatus = "reached default action=" + action.ToString();
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(): " + returnStatus);
                   break;
             }
          }
@@ -520,6 +524,8 @@ namespace Pattons_Best
             switch (action)
             {
                case GameAction.UpdateEventViewerDisplay: // Only change active event
+               case GameAction.PreparationsLoaderSpotSet:
+               case GameAction.PreparationsCommanderSpotSet:
                   break;
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
@@ -558,6 +564,7 @@ namespace Pattons_Best
                case GameAction.PreparationsGunLoadSelect:
                   break;
                case GameAction.PreparationsTurret:
+                  gi.IsTurretActive = true;
                   gi.EventDisplayed = gi.EventActive = "e014";
                   gi.MainMapItems.Add(new MapItem("Turret", 2.0, "c16Turret", gi.Home));
                   break;
@@ -589,16 +596,25 @@ namespace Pattons_Best
                         turretR.Count = 0;
                   }
                   break;
-               case GameAction.PreparationsLoader:
-                  gi.EventDisplayed = gi.EventActive = "e015";
-                  break;
                case GameAction.PreparationsLoaderSpot:
+                  gi.IsTurretActive = false;
                   gi.EventDisplayed = gi.EventActive = "e015";
                   break;
                case GameAction.PreparationsCommanderSpot:
                   gi.EventDisplayed = gi.EventActive = "e016";
                   break;
+               case GameAction.PreparationsFinal:
+                  gi.GamePhase = GamePhase.Movement;
+                  gi.EventDisplayed = gi.EventActive = "e017";
+                  if( false == SetUsControl(gi) )
+                  {
+                     returnStatus = "SetUsControl() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
+                  }
+                  break;
                default:
+                  returnStatus = "reached default for action=" + action.ToString();
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
                   break;
             }
          }
@@ -711,6 +727,36 @@ namespace Pattons_Best
          }
          return true;
       }
+      private bool SetUsControl(IGameInstance gi)
+      {
+         string name = "B1M";
+         ITerritory? t = Territories.theTerritories.Find(name);
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetDeployment(): tState=" + name);
+            return false;
+         }
+         gi.MainMapItems.Add(new MapItem("UsControl1", 1.0, "c28UsControl", t));
+         //--------------------------------------
+         name = "B2M";
+         t = Territories.theTerritories.Find(name);
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetDeployment(): tState=" + name);
+            return false;
+         }
+         gi.MainMapItems.Add(new MapItem("UsControl2", 1.0, "c28UsControl", t));
+         //--------------------------------------
+         name = "B3M";
+         t = Territories.theTerritories.Find(name);
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetDeployment(): tState=" + name);
+            return false;
+         }
+         gi.MainMapItems.Add(new MapItem("UsControl3", 1.0, "c28UsControl", t));
+         return true;
+      }
    }
    //-----------------------------------------------------
    class GameStateMovement : GameState
@@ -729,10 +775,14 @@ namespace Pattons_Best
                break;
             case GameAction.UpdateEventViewerDisplay: // Only change active event
                break;
+            case GameAction.MovementStartAreaSet:
+               break;
             case GameAction.EndGameClose:
                gi.GamePhase = GamePhase.EndGame;
                break;
             default:
+               returnStatus = "reached default for action=" + action.ToString();
+               Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                break;
          }
          StringBuilder sb12 = new StringBuilder();

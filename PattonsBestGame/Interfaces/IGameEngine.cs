@@ -147,6 +147,10 @@ namespace Pattons_Best
       PreparationsLoaderSpotSet,
       PreparationsCommanderSpot,
       PreparationsCommanderSpotSet,
+      PreparationsFinal,
+
+      MovementStartAreaSet,
+
       Error
    };
    public interface IGameEngine

@@ -32,10 +32,10 @@ namespace Pattons_Best.Model
       public int AmmoSmokeBomb { get; set; } = 14;
       public int AmmoSmokeGrenade { get; set; } = 6;
       public int AmmoPeriscope { get; set; } = 6;
-      public int MainGunHE { get; set; } = 0;
-      public int MainGunAP { get; set; } = 0;
-      public int MainGunWP { get; set; } = 0;
-      public int MainGunHBCI { get; set; } = 0;
+      public int MainGunHE { get; set; } = 50;
+      public int MainGunAP { get; set; } = 30;
+      public int MainGunWP { get; set; } = 7;
+      public int MainGunHBCI { get; set; } = 10;
       public int MainGunHVAP { get; set; } = 0;
       //----------------------------------------
       public int VictoryPtsKiaLightWeapon { get; set; } = 0;
