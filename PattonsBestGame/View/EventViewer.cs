@@ -784,6 +784,45 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
+            case "e018":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  Image imge015 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c33StartArea"), Width = 100, Height = 100, Name = "MovementExitAreaSet" };
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                           "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge015));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
+            case "e019":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  Image imge015 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c34ExitArea"), Width = 100, Height = 100, Name = "MovementEnemyStrengthCheck" };
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                           "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge015));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
+            case "e020":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  Image imge015 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c36Light"), Width = 100, Height = 100, Name = "MovementChooseOption" };
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                           "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge015));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
             default:
                break;
          }
@@ -1019,6 +1058,18 @@ namespace Pattons_Best
                               return;
                            case "Continue017":
                               action = GameAction.MovementStartAreaSet;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
+                           case "MovementExitAreaSet":
+                              action = GameAction.MovementExitAreaSet;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
+                           case "MovementEnemyStrengthCheck":
+                              action = GameAction.MovementEnemyStrengthCheck;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
+                           case "MovementChooseOption":
+                              action = GameAction.MovementChooseOption;
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
                            default:

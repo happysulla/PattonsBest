@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Graphics.Printing3D;
 
 namespace Pattons_Best
 {
    public class TableMgr
    {
       public static ICombatCalanderEntries theCombatCalendarEntries = new CombatCalendarEntries();
+      public static int[,] theExits = new int[10,10];
       //-------------------------------------------
       public TableMgr() 
       {
          CreateCombatCalender();
+         CreateExitTable();
       }
       //-------------------------------------------
       public static string GetWeather(int dieRoll)
@@ -319,9 +322,117 @@ namespace Pattons_Best
          theCombatCalendarEntries.Add(new CombatCalendarEntry("Drive into Czechoslavakia", EnumScenario.Retrofit, 10, EnumResistance.None)); // Day=192
          //--------------------------------------------------------------------
       }
-      private void CreateWeatherTable()
+      private void CreateExitTable()
       {
-
+         theExits[0,0] = 8;
+         theExits[0,1] = 8;
+         theExits[0,2] = 8;
+         theExits[0,3] = 8;
+         theExits[0,4] = 8;
+         theExits[0,5] = 8;
+         theExits[0,6] = 5;
+         theExits[0,7] = 5;
+         theExits[0,8] = 5;
+         theExits[0,9] = 5;
+         //----------------
+         theExits[1,0] = 8;
+         theExits[1,1] = 8;
+         theExits[1,2] = 8;
+         theExits[1,3] = 8;
+         theExits[1,4] = 8;
+         theExits[1,5] = 4;
+         theExits[1,6] = 4;
+         theExits[1,7] = 5;
+         theExits[1,8] = 5;
+         theExits[1,9] = 5;
+         //----------------
+         theExits[2,0] = 7;
+         theExits[2,1] = 7;
+         theExits[2,2] = 7;
+         theExits[2,3] = 7;
+         theExits[2,4] = 7;
+         theExits[2,5] = 3;
+         theExits[2,6] = 3;
+         theExits[2,7] = 4;
+         theExits[2,8] = 4;
+         theExits[2,9] = 4;
+         //----------------
+         theExits[3,0] = 7;
+         theExits[3,1] = 6;
+         theExits[3,2] = 6;
+         theExits[3,3] = 6;
+         theExits[3,4] = 3;
+         theExits[3,5] = 2;
+         theExits[3,6] = 2;
+         theExits[3,7] = 4;
+         theExits[3,8] = 4;
+         theExits[3,9] = 4;
+         //----------------
+         theExits[4,0] = 6;
+         theExits[4,1] = 5;
+         theExits[4,2] = 5;
+         theExits[4,3] = 2;
+         theExits[4,4] = 2;
+         theExits[4,5] = 2;
+         theExits[4,6] = 2;
+         theExits[4,7] = 3;
+         theExits[4,8] = 3;
+         theExits[4,9] = 3;
+         //----------------
+         theExits[5,0] = 5;
+         theExits[5,1] = 5;
+         theExits[5,2] = 5;
+         theExits[5,3] = 1;
+         theExits[5,4] = 1;
+         theExits[5,5] = 1;
+         theExits[5,6] = 1;
+         theExits[5,7] = 2;
+         theExits[5,8] = 2;
+         theExits[5,9] = 8;
+         //----------------
+         theExits[6,0] = 5;
+         theExits[6,1] = 4;
+         theExits[6,2] = 10;
+         theExits[6,3] = 10;
+         theExits[6,4] = 10;
+         theExits[6,5] = 10;
+         theExits[6,6] = 10;
+         theExits[6,7] = 2;
+         theExits[6,8] = 2;
+         theExits[6,9] = 7;
+         //----------------
+         theExits[7,0] = 4;
+         theExits[7,1] = 4;
+         theExits[7,2] = 10;
+         theExits[7,3] = 10;
+         theExits[7,4] = 10;
+         theExits[7,5] = 10;
+         theExits[7,6] = 10;
+         theExits[7,7] = 1;
+         theExits[7,8] = 7;
+         theExits[7,9] = 6;
+         //----------------
+         theExits[8,0] = 4;
+         theExits[8,1] = 3;
+         theExits[8,2] = 9;
+         theExits[8,3] = 9;
+         theExits[8,4] = 9;
+         theExits[8,5] = 9;
+         theExits[8,6] = 9;
+         theExits[8,7] = 10;
+         theExits[8,8] = 6;
+         theExits[8,9] = 5;
+         //----------------
+         theExits[9,0] = 3;
+         theExits[9,1] = 9;
+         theExits[9,2] = 9;
+         theExits[9,3] = 9;
+         theExits[9,4] = 9;
+         theExits[9,5] = 9;
+         theExits[9,6] = 9;
+         theExits[9,7] = 6;
+         theExits[9,8] = 5;
+         theExits[9,9] = 5;
       }
    }
 }

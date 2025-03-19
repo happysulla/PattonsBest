@@ -157,7 +157,7 @@ Table, roll 1D and cross reference the number with the Start Area marker
 <LineBreak/><LineBreak/>
 Die Roll =  <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer> 
 <LineBreak/><LineBreak/>"
-e020	"<Bold>e020 Enemy Strenth Check</Bold> 
+e020	"<Bold>e020 Enemy Strength Check</Bold> 
 <InlineUIContainer><Button Content='r4.53' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
 Check any one adjacent area to your task force for estimating enemy strength. Click on one of the adjacent regions highlighted blue.
@@ -170,12 +170,20 @@ Die Roll =  <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </
 e021	"<Bold>e021 Choose Operations</Bold> 
 <InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
-Choose one of following options:<LineBreak/>
- <InlineUIContainer><Button Content='Additional' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Area Check<LineBreak/>
- <InlineUIContainer><Button Content='Artillery' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Support <LineBreak/>
- <InlineUIContainer><Button Content='Air' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Strike  <LineBreak/>
- <InlineUIContainer><Button Content='Attempt' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Resupply <LineBreak/>
-Alternatively, click on an adjacent highlighted area on the Movement Board to enter that area.
+Choose one of following options. To see the options, select the &apos;e###&apos; button. To choose the option, select the other buttons. Each option uses up time per the  
+<InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+Table.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='e022' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+ Perform an additional <InlineUIContainer><Button Content='Area Check' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
+<InlineUIContainer><Button Content='e023' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Call for Artillery 
+<InlineUIContainer><Button Content='Support' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
+<InlineUIContainer><Button Content='e024' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Call for Air 
+<InlineUIContainer><Button Content='Strike' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
+<InlineUIContainer><Button Content='e025' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Attempt to <InlineUIContainer><Button Content='Resupply' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
+Alternatively, click on an adjacent highlighted area on the Movement Board to enter that area per 
+<InlineUIContainer><Button Content='e026' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>"
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"

@@ -606,7 +606,8 @@ namespace Pattons_Best
                case GameAction.PreparationsFinal:
                   gi.GamePhase = GamePhase.Movement;
                   gi.EventDisplayed = gi.EventActive = "e017";
-                  if( false == SetUsControl(gi) )
+                  gi.DieRollAction = GameAction.MovementStartAreaSetRoll;
+                  if ( false == SetUsControl(gi) )
                   {
                      returnStatus = "SetUsControl() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
@@ -777,8 +778,37 @@ namespace Pattons_Best
             case GameAction.UpdateEventViewerDisplay: // Only change active event
                break;
             case GameAction.MovementStartAreaSet:
-               gi.DieResults[key][0] = dieRoll;
                gi.EventDisplayed = gi.EventActive = "e018";
+               break;
+            case GameAction.MovementStartAreaSetRoll:
+               gi.DieResults[key][0] = dieRoll;
+               if( false == SetStartArea(gi, dieRoll))
+               {
+                  returnStatus = "SetStartArea() returned false";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+               }
+               break;
+            case GameAction.MovementExitAreaSet:
+               gi.EventDisplayed = gi.EventActive = "e019";
+               gi.DieRollAction = GameAction.MovementExitAreaSetRoll;
+               break;
+            case GameAction.MovementExitAreaSetRoll:
+               gi.DieResults[key][0] = dieRoll;
+               if (false == SetExitArea(gi, dieRoll))
+               {
+                  returnStatus = "SetExitArea() returned false";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+               }
+               break;
+            case GameAction.MovementEnemyStrengthCheck:
+               gi.EventDisplayed = gi.EventActive = "e020";
+               gi.DieRollAction = GameAction.MovementExitAreaSetRoll;
+               break;
+            case GameAction.MovementEnemyStrengthCheckRoll:
+               gi.DieResults[key][0] = dieRoll;
+               break;
+            case GameAction.MovementChooseOption:
+               gi.EventDisplayed = gi.EventActive = "e021";
                break;
             case GameAction.EndGameClose:
                gi.GamePhase = GamePhase.EndGame;
@@ -810,6 +840,55 @@ namespace Pattons_Best
          else
             Logger.Log(LogEnum.LE_ERROR, sb12.ToString());
          return returnStatus;
+      }
+      private bool SetStartArea(IGameInstance gi, int dieRoll)
+      {
+         string name = "M" + dieRoll.ToString() + "E";
+         ITerritory? t = Territories.theTerritories.Find(name);
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): tState=" + name);
+            return false;
+         }
+         IMapItem startArea = new MapItem("StartArea", 1.0, "c33StartArea", t);
+         startArea.Count = dieRoll;
+         gi.MainMapItems.Add(startArea);
+         return true;
+      }
+      private bool SetExitArea(IGameInstance gi, int dieRoll)
+      {
+         --dieRoll;
+         if (dieRoll < 0 || 9 < dieRoll)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetExitArea(): invalid dr=" + dieRoll.ToString());
+            return false;
+         }
+         //-------------------------------------
+         IMapItem? miStart = gi.MainMapItems.Find("StartArea");
+         if(null == miStart)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetExitArea(): tState=StartArea");
+            return false;
+         }
+         int sa = miStart.Count - 1;
+         if (sa < 0 || 9 < sa)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetExitArea(): invalid dr=" + dieRoll.ToString());
+            return false;
+         }
+         //-------------------------------------
+         int exitArea = TableMgr.theExits[dieRoll,sa];
+         string name = "M" + exitArea.ToString()  + "E";
+         ITerritory? t = Territories.theTerritories.Find(name);
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetExitArea(): tState=" + name);
+            return false;
+         }
+         IMapItem miExit = new MapItem("ExitArea", 1.0, "c34ExitArea", t);
+         miExit.Count = exitArea;
+         gi.MainMapItems.Add(miExit);
+         return true;
       }
    }
    //-----------------------------------------------------

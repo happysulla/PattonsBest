@@ -150,7 +150,12 @@ namespace Pattons_Best
       PreparationsFinal,
 
       MovementStartAreaSet,
-
+      MovementStartAreaSetRoll,
+      MovementExitAreaSet,
+      MovementExitAreaSetRoll,
+      MovementEnemyStrengthCheck,
+      MovementEnemyStrengthCheckRoll,
+      MovementChooseOption,
       Error
    };
    public interface IGameEngine
