@@ -790,6 +790,16 @@ namespace Pattons_Best
                if ("CenterPoint" != ellipse.Name) // CenterPoint is a unit test ellipse
                   elements.Add(ui);
             }
+            if(ui is Button button)
+            {
+               if (true == button.Name.Contains("Die"))
+                  continue;
+               if (null == gi.MainMapItems.Find(button.Name)) // if button is not in mapitems, delete button
+               {
+                  elements.Add(ui);
+                  myButtonMains.Remove(button);
+               }
+            }
             if (ui is Label label)  // A Game Feat Label
                elements.Add(ui);
             if (ui is Image img)

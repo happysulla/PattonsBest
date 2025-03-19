@@ -5,66 +5,67 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Create Territory Dialog" Height="300" Width="1500">
-   <Grid HorizontalAlignment="Center" Width="1500" Margin="0,0,0,20">
-      <Grid.RowDefinitions>
-         <RowDefinition Height="Auto"/>
-         <RowDefinition Height="40*"/>
-         <RowDefinition Height="40*"/>
-         <RowDefinition Height="40*"/>
-         <RowDefinition Height="40*"/>
-         <RowDefinition Height="Auto"/>
-         <RowDefinition Height="Auto"/>
-      </Grid.RowDefinitions>
-      <Grid.ColumnDefinitions>
-         <ColumnDefinition/>
-         <ColumnDefinition/>
-      </Grid.ColumnDefinitions>
-      <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
-         <Label Width="120" Content="Choose a name:"/>
-         <TextBox x:Name="myTextBoxName" Margin="0,4,-1,0" VerticalAlignment="Top" Width="412"/>
-      </StackPanel>
-      <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Width="94" VerticalAlignment="Center" Height="26" Margin="12,0,0,0">Choose a type:</Label>
-      <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
-         <Grid>
-            <Grid.RowDefinitions>
-               <RowDefinition Height="Auto"/>
-               <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <StackPanel Name="myStackPanelTerritory" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Orientation="Horizontal">
-               <RadioButton GroupName="A" Padding="0,0,0,0" Width="87" Height="26" Content="A" IsEnabled="true" />
-               <RadioButton GroupName="A" Padding="0,0,0,0" Width="81" Height="26" Content="B" IsEnabled="true" />
-               <RadioButton GroupName="A" Padding="0,0,0,0" Width="73" Height="26" Content="C" IsEnabled="true" />
-               <RadioButton GroupName="A" Padding="0,0,0,0" Width="73" Height="26" Content="D" IsEnabled="true" />
-               <RadioButton GroupName="A" Padding="0,0,0,0" Width="73" Height="26" Content="Battle" IsEnabled="true" />
-            </StackPanel>
-            <StackPanel Name="myStackPanelTankCard" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Orientation="Horizontal">
-               <RadioButton GroupName="C" Padding="0,0,0,0" Width="87" Height="26" Content="1" IsEnabled="true" />
-               <RadioButton GroupName="C" Padding="0,0,0,0" Width="87" Height="26" Content="2" IsEnabled="true" />
-               <RadioButton GroupName="C" Padding="0,0,0,0" Width="81" Height="26" Content="3" IsEnabled="true" />
-               <RadioButton GroupName="C" Padding="0,0,0,0" Width="73" Height="26" Content="4" IsEnabled="true" />
-               <RadioButton GroupName="C" Padding="0,0,0,0" Width="73" Height="26" Content="5" IsEnabled="true" />
-               <RadioButton GroupName="C" Padding="0,0,0,0" Width="87" Height="26" Content="6" IsEnabled="true" />
-               <RadioButton GroupName="C" Padding="0,0,0,0" Width="87" Height="26" Content="7" IsEnabled="true" />
-               <RadioButton GroupName="C" Padding="0,0,0,0" Width="81" Height="26" Content="8" IsEnabled="true" />
-               <RadioButton GroupName="C" Padding="0,0,0,0" Width="73" Height="26" Content="9" IsEnabled="true" />
-               <RadioButton GroupName="C" Padding="0,0,0,0" Width="73" Height="26" Content="10" IsEnabled="true" />
-               <RadioButton GroupName="C" Padding="0,0,0,0" Width="87" Height="26" Content="11" IsEnabled="true" />
-               <RadioButton GroupName="C" Padding="0,0,0,0" Width="87" Height="26" Content="12" IsEnabled="true" />
-               <RadioButton GroupName="C" Padding="0,0,0,0" Width="81" Height="26" Content="13" IsEnabled="true" />
-               <RadioButton GroupName="C" Padding="0,0,0,0" Width="73" Height="26" Content="14" IsEnabled="true" />
-               <RadioButton GroupName="C" Padding="0,0,0,0" Width="73" Height="26" Content="15" IsEnabled="true" />
-               <RadioButton GroupName="C" Padding="0,0,0,0" Width="87" Height="26" Content="16" IsEnabled="true" />
-               <RadioButton GroupName="C" Padding="0,0,0,0" Width="87" Height="26" Content="17" IsEnabled="true" />
-               <RadioButton GroupName="C" Padding="0,0,0,0" Width="81" Height="26" Content="18" IsEnabled="true" />
-            </StackPanel>
-         </Grid>
-      </StackPanel>
-      <Label Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" Width="94" VerticalAlignment="Center" Height="26" Margin="12,0,0,0">Choose a Parent:</Label>
-      <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal" Width="357">
-         <RadioButton Name="myRadioButtonMain" GroupName="B" Padding="0,0,0,0" Width="87" Height="26" Content="Main" />
-         <RadioButton Name="myRadioButtonTank" GroupName="B" Padding="0,0,0,0" Width="81" Height="26" Content="Tank" />
-      </StackPanel>
-      <Button Grid.Row="6" HorizontalAlignment="Center" Margin="0,13,0,0" Click="OkButton_Click" Width="70" Height="20" VerticalAlignment="Top">OK</Button>
-      <Button Grid.Row="6" Grid.Column="1" HorizontalAlignment="Center" Margin="0,13,0,0" IsCancel="True" Width="70" Height="20" VerticalAlignment="Top">Cancel</Button>
-   </Grid>
+    <Grid HorizontalAlignment="Center" Width="1500" Margin="0,0,0,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Label Width="120" Content="Choose a name:"/>
+            <TextBox x:Name="myTextBoxName" Margin="0,4,-1,0" VerticalAlignment="Top" Width="412"/>
+        </StackPanel>
+        <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Width="94" VerticalAlignment="Center" Height="26" Margin="12,0,0,0">Choose a type:</Label>
+        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Name="myStackPanelTerritory" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Orientation="Horizontal">
+                    <RadioButton GroupName="A" Padding="0,0,0,0" Width="87" Height="26" Content="A" IsEnabled="true" />
+                    <RadioButton GroupName="A" Padding="0,0,0,0" Width="81" Height="26" Content="B" IsEnabled="true" />
+                    <RadioButton GroupName="A" Padding="0,0,0,0" Width="73" Height="26" Content="C" IsEnabled="true" />
+                    <RadioButton GroupName="A" Padding="0,0,0,0" Width="73" Height="26" Content="D" IsEnabled="true" />
+                    <RadioButton GroupName="A" Padding="0,0,0,0" Width="73" Height="26" Content="E" IsEnabled="true" />
+                    <RadioButton GroupName="A" Padding="0,0,0,0" Width="73" Height="26" Content="Battle" IsEnabled="true" />
+                </StackPanel>
+                <StackPanel Name="myStackPanelTankCard" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Orientation="Horizontal">
+                    <RadioButton GroupName="C" Padding="0,0,0,0" Width="87" Height="26" Content="1" IsEnabled="true" />
+                    <RadioButton GroupName="C" Padding="0,0,0,0" Width="87" Height="26" Content="2" IsEnabled="true" />
+                    <RadioButton GroupName="C" Padding="0,0,0,0" Width="81" Height="26" Content="3" IsEnabled="true" />
+                    <RadioButton GroupName="C" Padding="0,0,0,0" Width="73" Height="26" Content="4" IsEnabled="true" />
+                    <RadioButton GroupName="C" Padding="0,0,0,0" Width="73" Height="26" Content="5" IsEnabled="true" />
+                    <RadioButton GroupName="C" Padding="0,0,0,0" Width="87" Height="26" Content="6" IsEnabled="true" />
+                    <RadioButton GroupName="C" Padding="0,0,0,0" Width="87" Height="26" Content="7" IsEnabled="true" />
+                    <RadioButton GroupName="C" Padding="0,0,0,0" Width="81" Height="26" Content="8" IsEnabled="true" />
+                    <RadioButton GroupName="C" Padding="0,0,0,0" Width="73" Height="26" Content="9" IsEnabled="true" />
+                    <RadioButton GroupName="C" Padding="0,0,0,0" Width="73" Height="26" Content="10" IsEnabled="true" />
+                    <RadioButton GroupName="C" Padding="0,0,0,0" Width="87" Height="26" Content="11" IsEnabled="true" />
+                    <RadioButton GroupName="C" Padding="0,0,0,0" Width="87" Height="26" Content="12" IsEnabled="true" />
+                    <RadioButton GroupName="C" Padding="0,0,0,0" Width="81" Height="26" Content="13" IsEnabled="true" />
+                    <RadioButton GroupName="C" Padding="0,0,0,0" Width="73" Height="26" Content="14" IsEnabled="true" />
+                    <RadioButton GroupName="C" Padding="0,0,0,0" Width="73" Height="26" Content="15" IsEnabled="true" />
+                    <RadioButton GroupName="C" Padding="0,0,0,0" Width="87" Height="26" Content="16" IsEnabled="true" />
+                    <RadioButton GroupName="C" Padding="0,0,0,0" Width="87" Height="26" Content="17" IsEnabled="true" />
+                    <RadioButton GroupName="C" Padding="0,0,0,0" Width="81" Height="26" Content="18" IsEnabled="true" />
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+        <Label Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" Width="94" VerticalAlignment="Center" Height="26" Margin="12,0,0,0">Choose a Parent:</Label>
+        <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal" Width="357">
+            <RadioButton Name="myRadioButtonMain" GroupName="B" Padding="0,0,0,0" Width="87" Height="26" Content="Main" />
+            <RadioButton Name="myRadioButtonTank" GroupName="B" Padding="0,0,0,0" Width="81" Height="26" Content="Tank" />
+        </StackPanel>
+        <Button Grid.Row="6" HorizontalAlignment="Center" Margin="0,13,0,0" Click="OkButton_Click" Width="70" Height="20" VerticalAlignment="Top">OK</Button>
+        <Button Grid.Row="6" Grid.Column="1" HorizontalAlignment="Center" Margin="0,13,0,0" IsCancel="True" Width="70" Height="20" VerticalAlignment="Top">Cancel</Button>
+    </Grid>
 </Window>
