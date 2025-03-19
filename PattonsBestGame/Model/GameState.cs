@@ -779,6 +779,12 @@ namespace Pattons_Best
                break;
             case GameAction.MovementStartAreaSet:
                gi.EventDisplayed = gi.EventActive = "e018";
+               IMapItem? turret = gi.MainMapItems.Remove("Turret");
+               if (null == turret)
+               {
+                  returnStatus = "gi.MainMapItems.Find(Turret) returned null";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
+               }
                break;
             case GameAction.MovementStartAreaSetRoll:
                gi.DieResults[key][0] = dieRoll;

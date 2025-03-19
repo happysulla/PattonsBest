@@ -15,8 +15,6 @@ namespace Pattons_Best
       {
          InitializeComponent();
          myTextBoxName.Text = t.Name;
-         myTextBoxCenterPointX.Text = t.CenterPoint.X.ToString("000");
-         myTextBoxCenterPointY.Text = t.CenterPoint.Y.ToString("000");
          switch (t.Type)
          {
             case "A":
@@ -31,15 +29,20 @@ namespace Pattons_Best
             case "D":
                myRadioButtonD.IsChecked = true;
                break;
+            case "E":
+               myRadioButtonE.IsChecked = true;
+               break;
+            case "Battle":
+               myRadioButtonF.IsChecked = true;
+               break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "TerritoryVerifyDialog(): unk type=" + t.Type);
                break;
          }
          if ("Main" == t.CanvasName)
-            myRadioButtonE.IsChecked = true;
+            myRadioButtonMain.IsChecked = true;
          else
-            myRadioButtonF.IsChecked = true;
-
+            myRadioButtonTank.IsChecked = true;
       }
       private void OkButton_Click(object sender, RoutedEventArgs e)
       {
@@ -70,14 +73,6 @@ namespace Pattons_Best
             if (null != radioButton.Content)
                RadioOutputParent = (string)radioButton.Content;
          }
-      }
-      private void TextBoxCenterPointX_TextChanged(object sender, TextChangedEventArgs e)
-      {
-         CenterPointX = myTextBoxCenterPointX.Text;
-      }
-      private void TextBoxCenterPointY_TextChanged(object sender, TextChangedEventArgs e)
-      {
-         CenterPointY = myTextBoxCenterPointY.Text;
       }
    }
 }
