@@ -31,6 +31,7 @@ namespace Pattons_Best
       private Territory? myAnchorTerritory = null;
       private List<Ellipse> myEllipses = new List<Ellipse>();
       private readonly SolidColorBrush mySolidColorBrushWaterBlue = new SolidColorBrush { Color = Colors.DeepSkyBlue };
+      private readonly FontFamily myFontFam = new FontFamily("Tahoma");
       //-----------------------------------------
       private int myIndexName = 0;
       public bool CtorError { get; } = false;
@@ -148,7 +149,7 @@ namespace Pattons_Best
                return false;
             }
          }
-         else if (CommandName == myCommandNames[1]) //  Create territories on Move Map
+         else if (CommandName == myCommandNames[1])  // Switch Main Image
          {
             if( true == myIsBattleMapShown )
             {
@@ -166,11 +167,11 @@ namespace Pattons_Best
          {
 
          }
-         else if (CommandName == myCommandNames[3])
+         else if (CommandName == myCommandNames[3]) // verify territories
          {
 
          }
-         else if (CommandName == myCommandNames[4])
+         else if (CommandName == myCommandNames[4]) // set adjacents
          {
             if (false == ShowAdjacents(Territories.theTerritories))
             {
@@ -178,7 +179,7 @@ namespace Pattons_Best
                return false;
             }
          }
-         else if (CommandName == myCommandNames[9])
+         else 
          {
             if (false == Cleanup(ref gi))
             {
@@ -213,44 +214,44 @@ namespace Pattons_Best
             myCanvasMain.MouseLeftButtonDown += this.MouseLeftButtonDownCreateTerritory;
             ++myIndexName;
          }
-         else if (HeaderName == myHeaderNames[1])
+         else if (HeaderName == myHeaderNames[1]) // Switch Main Image
          {
             myCanvasTank.MouseLeftButtonDown -= this.MouseLeftButtonDownCreateTerritory;
-            myCanvasTank.MouseLeftButtonDown += this.MouseDownSetCenterPoint;
+            myCanvasTank.MouseLeftButtonDown += this.MouseDownEllipseSetCenterPoint;
             myCanvasTank.MouseMove += MouseMove;
             myCanvasTank.MouseUp += MouseUp;
             //----------------------------
             myCanvasMain.MouseLeftButtonDown -= this.MouseLeftButtonDownCreateTerritory;
-            myCanvasMain.MouseLeftButtonDown += this.MouseDownSetCenterPoint;
+            myCanvasMain.MouseLeftButtonDown += this.MouseDownEllipseSetCenterPoint;
             myCanvasMain.MouseMove += MouseMove;
             myCanvasMain.MouseUp += MouseUp;
             ++myIndexName;
          }
-         else if (HeaderName == myHeaderNames[2])
+         else if (HeaderName == myHeaderNames[2]) // Click Elispse to Move
          {
             myCanvasTank.MouseMove -= MouseMove;
             myCanvasTank.MouseUp -= MouseUp;
-            myCanvasTank.MouseLeftButtonDown -= this.MouseDownSetCenterPoint;
-            myCanvasTank.MouseLeftButtonDown += this.MouseLeftButtonDownVerifyTerritory;
+            myCanvasTank.MouseLeftButtonDown -= this.MouseDownEllipseSetCenterPoint;
+            myCanvasTank.MouseLeftButtonDown += this.MouseDownEllipseVerify;
             //----------------------------
             myCanvasMain.MouseMove -= MouseMove;
             myCanvasMain.MouseUp -= MouseUp;
-            myCanvasMain.MouseLeftButtonDown -= this.MouseDownSetCenterPoint;
-            myCanvasMain.MouseLeftButtonDown += this.MouseLeftButtonDownVerifyTerritory;
+            myCanvasMain.MouseLeftButtonDown -= this.MouseDownEllipseSetCenterPoint;
+            myCanvasMain.MouseLeftButtonDown += this.MouseDownEllipseVerify;
             myAnchorTerritory = null;
             ++myIndexName;
          }
-         else if (HeaderName == myHeaderNames[3]) // 
+         else if (HeaderName == myHeaderNames[3]) // Click Ellispe to Verify
          {
-            myCanvasTank.MouseLeftButtonDown -= this.MouseLeftButtonDownVerifyTerritory;
+            myCanvasTank.MouseLeftButtonDown -= this.MouseDownEllipseVerify;
             myCanvasTank.MouseLeftButtonDown += this.MouseLeftButtonDownSetAdjacents;
             //----------------------------
-            myCanvasMain.MouseLeftButtonDown -= this.MouseLeftButtonDownVerifyTerritory;
+            myCanvasMain.MouseLeftButtonDown -= this.MouseDownEllipseVerify;
             myCanvasMain.MouseLeftButtonDown += this.MouseLeftButtonDownSetAdjacents;
             myAnchorTerritory = null;
             ++myIndexName;
          }
-         else
+         else  // Verify Adjacents
          {
             myCanvasTank.MouseLeftButtonDown -= this.MouseLeftButtonDownSetAdjacents;
             myCanvasMain.MouseLeftButtonDown -= this.MouseLeftButtonDownSetAdjacents;
@@ -282,17 +283,17 @@ namespace Pattons_Best
          }
          else if (HeaderName == myHeaderNames[2])
          {
-            myCanvasTank.MouseLeftButtonDown -= this.MouseDownSetCenterPoint;
+            myCanvasTank.MouseLeftButtonDown -= this.MouseDownEllipseSetCenterPoint;
             myCanvasTank.MouseMove -= MouseMove;
             myCanvasTank.MouseUp -= MouseUp;
-            myCanvasMain.MouseLeftButtonDown -= this.MouseDownSetCenterPoint;
+            myCanvasMain.MouseLeftButtonDown -= this.MouseDownEllipseSetCenterPoint;
             myCanvasMain.MouseMove -= MouseMove;
             myCanvasMain.MouseUp -= MouseUp;
          }
          else if (HeaderName == myHeaderNames[3])
          {
-            myCanvasTank.MouseLeftButtonDown -= this.MouseLeftButtonDownVerifyTerritory;
-            myCanvasMain.MouseLeftButtonDown -= this.MouseLeftButtonDownVerifyTerritory;
+            myCanvasTank.MouseLeftButtonDown -= this.MouseDownEllipseVerify;
+            myCanvasMain.MouseLeftButtonDown -= this.MouseDownEllipseVerify;
          }
          else if (HeaderName == myHeaderNames[4])
          {
@@ -413,10 +414,9 @@ namespace Pattons_Best
             return;
          }
          SolidColorBrush aSolidColorBrush1 = new SolidColorBrush{ Color = Colors.Black };
-         string territoryName = territory.Name;
          Ellipse aEllipse = new Ellipse
          {
-            Tag = Utilities.RemoveSpaces(territoryName),
+            Name = territory.Name,
             Fill = aSolidColorBrush1,
             StrokeThickness = 1,
             Stroke = Brushes.Red,
@@ -452,15 +452,15 @@ namespace Pattons_Best
          {
             if( true == myIsBattleMapShown)
             {
-               if (("A" == t.Type) || ("B" == t.Type) || ("C" == t.Type) || ("D" == t.Type))
+               if (("A" == t.Type) || ("B" == t.Type) || ("C" == t.Type) || ("D" == t.Type) || ("E" == t.Type))
                   continue;
             }
-            else
+            else 
             {
                if ("Battle" == t.Type) 
                   continue;
             }
-            Ellipse aEllipse = new Ellipse { Tag = Utilities.RemoveSpaces(t.ToString()) };
+            Ellipse aEllipse = new Ellipse () { Name = t.Name };
             aEllipse.Fill = aSolidColorBrush0;
             aEllipse.StrokeThickness = 1;
             aEllipse.Stroke = Brushes.Red;
@@ -471,11 +471,23 @@ namespace Pattons_Best
             p.Y -= theEllipseOffset;
             Canvas.SetLeft(aEllipse, p.X);
             Canvas.SetTop(aEllipse, p.Y);
-            if ("Main" == t.CanvasName)
-               myCanvasMain.Children.Add(aEllipse);
-            else
-               myCanvasTank.Children.Add(aEllipse);
             myEllipses.Add(aEllipse);
+            Label aLabel = new Label() { Foreground=Brushes.Red, FontFamily = myFontFam, FontWeight=FontWeights.Bold, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = t.Name };
+            p.X -= theEllipseOffset;
+            p.Y -= theEllipseOffset;
+            Canvas.SetLeft(aLabel, p.X);
+            Canvas.SetTop(aLabel, p.Y);
+            if ("Main" == t.CanvasName)
+            {
+               myCanvasMain.Children.Add(aEllipse);
+               myCanvasMain.Children.Add(aLabel);
+            }
+            else
+            {
+               myCanvasTank.Children.Add(aEllipse);
+               myCanvasTank.Children.Add(aLabel);
+            }
+               
          }
       }
       private bool CreateXml(ITerritories territories)
@@ -539,14 +551,25 @@ namespace Pattons_Best
          SolidColorBrush aSolidColorBrush4 = new SolidColorBrush { Color = Colors.Yellow };
          foreach (Territory anchorTerritory in territories)
          {
-            string anchorName = Utilities.RemoveSpaces(anchorTerritory.ToString());
+            if ("Tank" == anchorTerritory.CanvasName)
+               continue;
+            if (true == myIsBattleMapShown)
+            {
+               if ("Battle" != anchorTerritory.Type)
+                  continue;
+            }
+            else
+            {
+               if ("Battle" == anchorTerritory.Type)
+                  continue;
+            }
             Ellipse? anchorEllipse = null; // Find the corresponding ellipse for this anchor territory
             foreach (UIElement ui in myCanvasMain.Children)
             {
                if (ui is Ellipse)
                {
                   Ellipse ellipse = (Ellipse)ui;
-                  if (anchorName == ellipse.Tag.ToString())
+                  if (anchorTerritory.Name == ellipse.Name)
                   {
                      anchorEllipse = ellipse;
                      break;
@@ -555,7 +578,7 @@ namespace Pattons_Best
             }
             if (null == anchorEllipse)
             {
-               Logger.Log(LogEnum.LE_ERROR, anchorTerritory.ToString());
+               Logger.Log(LogEnum.LE_ERROR, "ShowAdjacents(): anchorEllipse=null for " + anchorTerritory.Name);
                return false;
             }
             if (0 < anchorTerritory.Adjacents.Count)
@@ -566,7 +589,7 @@ namespace Pattons_Best
                ITerritory? adjacentTerritory = null;
                foreach (ITerritory t in territories) // Find the River Territory corresponding to this name
                {
-                  if (t.ToString() == s)
+                  if (t.Name == s)
                   {
                      adjacentTerritory = t;
                      break;
@@ -574,7 +597,7 @@ namespace Pattons_Best
                }
                if (null == adjacentTerritory)
                {
-                  MessageBox.Show("Not Found s=" + s);
+                  MessageBox.Show("ShowAdjacents(): Not Found s=" + s);
                   return false;
                }
                string adjacentName = Utilities.RemoveSpaces(adjacentTerritory.Name);
@@ -584,7 +607,7 @@ namespace Pattons_Best
                   if (ui is Ellipse)
                   {
                      Ellipse ellipse = (Ellipse)ui;
-                     if (adjacentName == ellipse.Tag.ToString())
+                     if (adjacentName == ellipse.Name)
                      {
                         adjacentEllipse = ellipse;
                         break;
@@ -602,8 +625,8 @@ namespace Pattons_Best
                bool isReturnFound = false;
                foreach (String s1 in adjacentTerritory.Adjacents)
                {
-                  string returnName = Utilities.RemoveSpaces(s1);
-                  if (returnName == anchorName)
+                  string returnName = s1;
+                  if (returnName == anchorTerritory.Name)
                   {
                      isReturnFound = true; // Yes the adjacent River has a entry to return the River back to the anchor territory
                      break;
@@ -614,7 +637,10 @@ namespace Pattons_Best
                {
                   anchorEllipse.Fill = aSolidColorBrush3; // change color of two ellipses to signify error
                   adjacentEllipse.Fill = aSolidColorBrush2;
-                  StringBuilder sb = new StringBuilder("anchor="); sb.Append(anchorName); sb.Append(" NOT in list for adjacent="); sb.Append(adjacentName);
+                  StringBuilder sb = new StringBuilder("anchor="); 
+                  sb.Append(anchorTerritory.Name); 
+                  sb.Append(" NOT in list for adjacent="); 
+                  sb.Append(adjacentName);
                   MessageBox.Show(sb.ToString());
                   return false;
                }
@@ -642,16 +668,16 @@ namespace Pattons_Best
             Territories.theTerritories.Add(territory);
          }
       }
-      void MouseDownSetCenterPoint(object sender, MouseButtonEventArgs e)
+      void MouseDownEllipseSetCenterPoint(object sender, MouseButtonEventArgs e)
       {
          if (null == myCanvasTank)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownSetCenterPoint(): myCanvasTank=null");
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipseSetCenterPoint(): myCanvasTank=null");
             return;
          }
          if (null == myCanvasMain)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownSetCenterPoint(): myCanvasMain=null");
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipseSetCenterPoint(): myCanvasMain=null");
             return;
          }
          System.Windows.Point p = e.GetPosition(myCanvasMain);
@@ -665,7 +691,7 @@ namespace Pattons_Best
                {
                   if (false == myIsDraggingTank)
                   {
-                     MessageBox.Show(ellipse.Tag.ToString());
+                     MessageBox.Show(ellipse.Name);
                      this.myIsDraggingTank = true;
                      this.myEllipseSelected = ui;
                   }
@@ -681,7 +707,7 @@ namespace Pattons_Best
                {
                   if (false == myIsDraggingMain)
                   {
-                     MessageBox.Show(ellipse.Tag.ToString());
+                     MessageBox.Show(ellipse.Name);
                      this.myIsDraggingMain = true;
                      this.myEllipseSelected = ui;
                   }
@@ -719,26 +745,25 @@ namespace Pattons_Best
             newPoint = e.GetPosition(myCanvasTank);
          this.myIsDraggingTank = false;
          this.myIsDraggingMain = false;
-         if (this.myEllipseSelected != null)
+         if (null != this.myEllipseSelected)
          {
             if (this.myEllipseSelected is Ellipse)
             {
-               Ellipse ellipse = (Ellipse)myEllipseSelected;
-               if( null == ellipse.Tag)
+               Ellipse? ellipse = (Ellipse)myEllipseSelected;
+               if( null == ellipse)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "MouseUp(): ellipse.Tag=null");
+                  Logger.Log(LogEnum.LE_ERROR, "MouseUp(): ellipse=null");
                   return;
                }
-               string? tag = ellipse.Tag.ToString();
-               if (null == tag)
+               string? name1 = ellipse.Name;
+               if (null == name1)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "MouseUp(): tag=null");
+                  Logger.Log(LogEnum.LE_ERROR, "MouseUp(): name1=null");
                   return;
                }
                foreach (Territory t in Territories.theTerritories)
                {
-                  string name = Utilities.RemoveSpaces(t.ToString());
-                  if (tag == name)
+                  if (name1 == t.Name)
                   {
                      t.CenterPoint.X = newPoint.X;
                      t.CenterPoint.Y = newPoint.Y;
@@ -753,20 +778,20 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest.MouseUp() this.myEllipseSelected != null");
          }
       }
-      void MouseLeftButtonDownVerifyTerritory(object sender, MouseButtonEventArgs e)
+      void MouseDownEllipseVerify(object sender, MouseButtonEventArgs e)
       {
          if (null == myCanvasTank)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MouseLeftButtonDownVerifyTerritory(): myCanvasTank=null");
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipseVerify(): myCanvasTank=null");
             return;
          }
          if (null == myCanvasMain)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MouseLeftButtonDownVerifyTerritory(): myCanvasMain=null");
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipseVerify(): myCanvasMain=null");
             return;
          }
          System.Windows.Point p = e.GetPosition(myCanvasMain);
-         Console.WriteLine("TerritoryCreateUnitTest.MouseLeftButtonDownVerifyTerritory(): {0}", p.ToString());
+         Console.WriteLine("TerritoryCreateUnitTest.MouseDownEllipseVerify(): {0}", p.ToString());
          ITerritory? selectedTerritory = null;
          foreach (UIElement ui in myCanvasMain.Children)
          {
@@ -775,16 +800,16 @@ namespace Pattons_Best
                Ellipse ellipse = (Ellipse)ui;
                if (true == ui.IsMouseOver)
                {
-                  string? tag = ellipse.Tag.ToString();
-                  if (null == tag)
+                  string? name = ellipse.Name;
+                  if (null == name)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "MouseLeftButtonDownVerifyTerritory(): tag=null");
+                     Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipseVerify(): name=null");
                      return;
                   }
                   foreach (Territory t in Territories.theTerritories)
                   {
-                     string name = Utilities.RemoveSpaces(t.ToString());
-                     if (tag == name)
+                     string? name1 = t.Name;
+                     if (name1 == name)
                      {
                         selectedTerritory = t;
                         break;
@@ -804,17 +829,13 @@ namespace Pattons_Best
          dialog.myButtonOk.Focus();
          if (true == dialog.ShowDialog())
          {
-            selectedTerritory.CenterPoint.X = Double.Parse(dialog.CenterPointX);
-            selectedTerritory.CenterPoint.Y = Double.Parse(dialog.CenterPointY);
+            selectedTerritory.CanvasName = dialog.RadioOutputParent;
+            selectedTerritory.Type = dialog.RadioOutputType;
+
          }
       }
       void MouseLeftButtonDownSetAdjacents(object sender, MouseButtonEventArgs e)
       {
-         if (null == myCanvasTank)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MouseLeftButtonDownSetAdjacents(): myCanvasTank=null");
-            return;
-         }
          if (null == myCanvasMain)
          {
             Logger.Log(LogEnum.LE_ERROR, "MouseLeftButtonDownSetAdjacents(): myCanvasMain=null");
@@ -835,7 +856,7 @@ namespace Pattons_Best
                   Territory? selectedTerritory = null;  // Find the corresponding Territory that user selected
                   foreach (Territory t in Territories.theTerritories)
                   {
-                     if (selectedEllipse.Tag.ToString() == Utilities.RemoveSpaces(t.ToString()))
+                     if ( selectedEllipse.Name == t.Name )
                      {
                         selectedTerritory = t;
                         break;
@@ -843,13 +864,13 @@ namespace Pattons_Best
                   }
                   if (selectedTerritory == null) // Check for error
                   {
-                     MessageBox.Show("Unable to find " + selectedEllipse.Tag.ToString());
+                     MessageBox.Show("Unable to find " + selectedEllipse.Name);
                      return;
                   }
                   if (null == myAnchorTerritory)  // If there is no anchor territory. Set it.
                   {
                      StringBuilder sb = new StringBuilder("Anchoring: ");
-                     sb.Append(selectedEllipse.Tag.ToString());
+                     sb.Append(selectedEllipse.Name);
                      sb.Append(" ");
                      sb.Append(selectedTerritory.ToString());
                      sb.Append(" ");
@@ -876,8 +897,11 @@ namespace Pattons_Best
                   {
                      // If this is the matching territory is the anchor territory, the user is requesting that it they are done adding 
                      // to the adjacents ellipse. Clear the data so another one can be selected.
-                     StringBuilder sb = new StringBuilder("Saving"); sb.Append(selectedEllipse.Tag.ToString()); sb.Append(" "); sb.Append(myAnchorTerritory.ToString());
-                     sb.Append(" "); sb.Append(selectedTerritory.ToString()); sb.Append(" ");
+                     StringBuilder sb = new StringBuilder("Saving"); 
+                     sb.Append(selectedEllipse.Name); 
+                     sb.Append(" "); sb.Append(myAnchorTerritory.ToString());
+                     sb.Append(" "); sb.Append(selectedTerritory.ToString()); 
+                     sb.Append(" ");
                      Console.WriteLine("Saving {0} ", selectedTerritory.ToString());
                      MessageBox.Show(sb.ToString());
                      myAnchorTerritory = null;
@@ -889,7 +913,7 @@ namespace Pattons_Best
                            Ellipse ellipse1 = (Ellipse)ui1;
                            foreach (Territory t in Territories.theTerritories)
                            {
-                              if (ellipse1.Tag.ToString() == Utilities.RemoveSpaces(t.ToString()))
+                              if (ellipse1.Name == t.Name)
                               {
                                  if (0 == t.Adjacents.Count)
                                     ellipse1.Fill = aSolidColorBrush0;

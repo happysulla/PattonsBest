@@ -853,12 +853,22 @@ namespace Pattons_Best
          ITerritory? t = Territories.theTerritories.Find(name);
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): tState=" + name);
+            Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): startArea tState=" + name);
             return false;
          }
          IMapItem startArea = new MapItem("StartArea", 1.0, "c33StartArea", t);
          startArea.Count = dieRoll;
          gi.MainMapItems.Add(startArea);
+         //-----------------------------------------
+         name = "MTF" + dieRoll.ToString();
+         t = Territories.theTerritories.Find(name);
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): taskForceArea tState=" + name);
+            return false;
+         }
+         IMapItem taskForceArea = new MapItem("TaskForce", 1.0, "c35TaskForce", t);
+         gi.MainMapItems.Add(taskForceArea);
          return true;
       }
       private bool SetExitArea(IGameInstance gi, int dieRoll)

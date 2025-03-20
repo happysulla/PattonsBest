@@ -7,10 +7,8 @@ namespace Pattons_Best
 {
    public partial class TerritoryVerifyDialog : Window
    {
-      public String RadioOutputText { get; set; } = "ERROR";
+      public String RadioOutputType { get; set; } = "ERROR";
       public String RadioOutputParent { get; set; } = "ERROR";
-      public String CenterPointX { get; set; } = "";
-      public String CenterPointY { get; set; } = "";
       public TerritoryVerifyDialog(ITerritory t)
       {
          InitializeComponent();
@@ -22,6 +20,7 @@ namespace Pattons_Best
             case "C": myRadioButtonC.IsChecked = true; break;
             case "D": myRadioButtonD.IsChecked = true; break;
             case "E": myRadioButtonE.IsChecked = true; break;
+            case "R": myRadioButtonR.IsChecked = true; break;
             case "Battle": myRadioButtonF.IsChecked = true; break;
             case "1": myRadioButton1.IsChecked = true; break;
             case "2": myRadioButton2.IsChecked = true; break;
@@ -64,7 +63,7 @@ namespace Pattons_Best
          else
          {
             if (null != radioButton.Content)
-               RadioOutputText = (string)radioButton.Content;
+               RadioOutputType = (string)radioButton.Content;
          }
       }
       private void RadioButtonParent_Checked(object sender, RoutedEventArgs e)

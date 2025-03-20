@@ -1,4 +1,4 @@
-﻿<Territories count="137">
+﻿<Territories count="188">
   <Territory value="M000">
     <Parent value="Main" />
     <Type value="B" />
@@ -18,10 +18,10 @@
       <regionPoint X="0032.01" Y="0073.05" />
     </Points>
     <Adjacents count="4">
-      <adjacent value="001" />
-      <adjacent value="006" />
-      <adjacent value="005" />
-      <adjacent value="004" />
+      <adjacent value="M001" />
+      <adjacent value="M006" />
+      <adjacent value="M005" />
+      <adjacent value="M004" />
     </Adjacents>
   </Territory>
   <Territory value="M001">
@@ -39,12 +39,12 @@
       <regionPoint X="0273.37" Y="0082.56" />
     </Points>
     <Adjacents count="6">
-      <adjacent value="9E" />
-      <adjacent value="008" />
-      <adjacent value="002" />
-      <adjacent value="007" />
-      <adjacent value="006" />
-      <adjacent value="000" />
+      <adjacent value="MTF9" />
+      <adjacent value="M000" />
+      <adjacent value="M006" />
+      <adjacent value="M007" />
+      <adjacent value="M008" />
+      <adjacent value="M002" />
     </Adjacents>
   </Territory>
   <Territory value="M002">
@@ -62,11 +62,11 @@
       <regionPoint X="0664.13" Y="0075.32" />
     </Points>
     <Adjacents count="5">
-      <adjacent value="10E" />
-      <adjacent value="003" />
-      <adjacent value="009" />
-      <adjacent value="008" />
-      <adjacent value="001" />
+      <adjacent value="MTF10" />
+      <adjacent value="M001" />
+      <adjacent value="M008" />
+      <adjacent value="M009" />
+      <adjacent value="M003" />
     </Adjacents>
   </Territory>
   <Territory value="M003">
@@ -86,9 +86,9 @@
       <regionPoint X="0922.92" Y="0072.60" />
     </Points>
     <Adjacents count="3">
-      <adjacent value="002" />
-      <adjacent value="009" />
-      <adjacent value="010" />
+      <adjacent value="M002" />
+      <adjacent value="M009" />
+      <adjacent value="M010" />
     </Adjacents>
   </Territory>
   <Territory value="M004">
@@ -116,10 +116,10 @@
       <regionPoint X="0031.10" Y="0357.43" />
     </Points>
     <Adjacents count="4">
-      <adjacent value="000" />
-      <adjacent value="005" />
-      <adjacent value="011" />
-      <adjacent value="8E" />
+      <adjacent value="MTF8" />
+      <adjacent value="M000" />
+      <adjacent value="M005" />
+      <adjacent value="M011" />
     </Adjacents>
   </Territory>
   <Territory value="M005">
@@ -147,12 +147,12 @@
       <regionPoint X="0126.65" Y="0217.05" />
     </Points>
     <Adjacents count="6">
-      <adjacent value="017" />
-      <adjacent value="012" />
-      <adjacent value="006" />
-      <adjacent value="000" />
-      <adjacent value="004" />
-      <adjacent value="011" />
+      <adjacent value="M017" />
+      <adjacent value="M012" />
+      <adjacent value="M006" />
+      <adjacent value="M000" />
+      <adjacent value="M004" />
+      <adjacent value="M011" />
     </Adjacents>
   </Territory>
   <Territory value="M006">
@@ -186,12 +186,12 @@
       <regionPoint X="0249.37" Y="0180.83" />
     </Points>
     <Adjacents count="6">
-      <adjacent value="007" />
-      <adjacent value="013" />
-      <adjacent value="012" />
-      <adjacent value="005" />
-      <adjacent value="000" />
-      <adjacent value="001" />
+      <adjacent value="M007" />
+      <adjacent value="M013" />
+      <adjacent value="M012" />
+      <adjacent value="M005" />
+      <adjacent value="M000" />
+      <adjacent value="M001" />
     </Adjacents>
   </Territory>
   <Territory value="M007">
@@ -218,12 +218,12 @@
       <regionPoint X="0369.37" Y="0132.37" />
     </Points>
     <Adjacents count="6">
-      <adjacent value="006" />
-      <adjacent value="001" />
-      <adjacent value="008" />
-      <adjacent value="015" />
-      <adjacent value="0014" />
-      <adjacent value="013" />
+      <adjacent value="M006" />
+      <adjacent value="M001" />
+      <adjacent value="M008" />
+      <adjacent value="M015" />
+      <adjacent value="M014" />
+      <adjacent value="M013" />
     </Adjacents>
   </Territory>
   <Territory value="M008">
@@ -247,11 +247,11 @@
       <regionPoint X="0565.62" Y="0121.51" />
     </Points>
     <Adjacents count="5">
-      <adjacent value="007" />
-      <adjacent value="001" />
-      <adjacent value="002" />
-      <adjacent value="009" />
-      <adjacent value="015" />
+      <adjacent value="M002" />
+      <adjacent value="M009" />
+      <adjacent value="M015" />
+      <adjacent value="M007" />
+      <adjacent value="M001" />
     </Adjacents>
   </Territory>
   <Territory value="M009">
@@ -271,12 +271,12 @@
       <regionPoint X="0791.00" Y="0140.52" />
     </Points>
     <Adjacents count="6">
-      <adjacent value="002" />
-      <adjacent value="008" />
-      <adjacent value="015" />
-      <adjacent value="016" />
-      <adjacent value="010" />
-      <adjacent value="003" />
+      <adjacent value="M002" />
+      <adjacent value="M008" />
+      <adjacent value="M015" />
+      <adjacent value="M016" />
+      <adjacent value="M010" />
+      <adjacent value="M003" />
     </Adjacents>
   </Territory>
   <Territory value="M010">
@@ -296,11 +296,11 @@
       <regionPoint X="0962.62" Y="0198.49" />
     </Points>
     <Adjacents count="5">
-      <adjacent value="1E" />
-      <adjacent value="003" />
-      <adjacent value="009" />
-      <adjacent value="016" />
-      <adjacent value="021" />
+      <adjacent value="M003" />
+      <adjacent value="M009" />
+      <adjacent value="M016" />
+      <adjacent value="M021" />
+      <adjacent value="MTF1" />
     </Adjacents>
   </Territory>
   <Territory value="M011">
@@ -317,11 +317,11 @@
       <regionPoint X="0031.10" Y="0357.43" />
     </Points>
     <Adjacents count="5">
-      <adjacent value="038" />
-      <adjacent value="022" />
-      <adjacent value="017" />
-      <adjacent value="005" />
-      <adjacent value="004" />
+      <adjacent value="M038" />
+      <adjacent value="M022" />
+      <adjacent value="M017" />
+      <adjacent value="M005" />
+      <adjacent value="M004" />
     </Adjacents>
   </Territory>
   <Territory value="M012">
@@ -344,11 +344,11 @@
       <regionPoint X="0346.73" Y="0356.69" />
     </Points>
     <Adjacents count="5">
-      <adjacent value="006" />
-      <adjacent value="013" />
-      <adjacent value="018" />
-      <adjacent value="017" />
-      <adjacent value="005" />
+      <adjacent value="M006" />
+      <adjacent value="M013" />
+      <adjacent value="M018" />
+      <adjacent value="M017" />
+      <adjacent value="M005" />
     </Adjacents>
   </Territory>
   <Territory value="M013">
@@ -370,11 +370,11 @@
       <regionPoint X="0430.27" Y="0298.11" />
     </Points>
     <Adjacents count="5">
-      <adjacent value="012" />
-      <adjacent value="006" />
-      <adjacent value="007" />
-      <adjacent value="0014" />
-      <adjacent value="018" />
+      <adjacent value="M012" />
+      <adjacent value="M006" />
+      <adjacent value="M007" />
+      <adjacent value="M014" />
+      <adjacent value="M018" />
     </Adjacents>
   </Territory>
   <Territory value="M014">
@@ -397,12 +397,12 @@
       <regionPoint X="0529.40" Y="0250.56" />
     </Points>
     <Adjacents count="6">
-      <adjacent value="013" />
-      <adjacent value="007" />
-      <adjacent value="015" />
-      <adjacent value="019" />
-      <adjacent value="024" />
-      <adjacent value="018" />
+      <adjacent value="M013" />
+      <adjacent value="M018" />
+      <adjacent value="M024" />
+      <adjacent value="M019" />
+      <adjacent value="M015" />
+      <adjacent value="M007" />
     </Adjacents>
   </Territory>
   <Territory value="M015">
@@ -423,12 +423,12 @@
       <regionPoint X="0690.16" Y="0323.47" />
     </Points>
     <Adjacents count="6">
-      <adjacent value="0014" />
-      <adjacent value="007" />
-      <adjacent value="008" />
-      <adjacent value="009" />
-      <adjacent value="016" />
-      <adjacent value="019" />
+      <adjacent value="M014" />
+      <adjacent value="M007" />
+      <adjacent value="M008" />
+      <adjacent value="M009" />
+      <adjacent value="M016" />
+      <adjacent value="M019" />
     </Adjacents>
   </Territory>
   <Territory value="M016">
@@ -449,12 +449,12 @@
       <regionPoint X="0864.50" Y="0274.56" />
     </Points>
     <Adjacents count="6">
-      <adjacent value="019" />
-      <adjacent value="020" />
-      <adjacent value="021" />
-      <adjacent value="010" />
-      <adjacent value="009" />
-      <adjacent value="015" />
+      <adjacent value="M019" />
+      <adjacent value="M020" />
+      <adjacent value="M021" />
+      <adjacent value="M010" />
+      <adjacent value="M009" />
+      <adjacent value="M015" />
     </Adjacents>
   </Territory>
   <Territory value="M017">
@@ -482,13 +482,13 @@
       <regionPoint X="0333.14" Y="0419.63" />
     </Points>
     <Adjacents count="7">
-      <adjacent value="005" />
-      <adjacent value="012" />
-      <adjacent value="018" />
-      <adjacent value="023" />
-      <adjacent value="030" />
-      <adjacent value="022" />
-      <adjacent value="011" />
+      <adjacent value="M005" />
+      <adjacent value="M012" />
+      <adjacent value="M018" />
+      <adjacent value="M023" />
+      <adjacent value="M030" />
+      <adjacent value="M022" />
+      <adjacent value="M011" />
     </Adjacents>
   </Territory>
   <Territory value="M018">
@@ -511,12 +511,12 @@
       <regionPoint X="0492.76" Y="0412.68" />
     </Points>
     <Adjacents count="6">
-      <adjacent value="013" />
-      <adjacent value="0014" />
-      <adjacent value="024" />
-      <adjacent value="023" />
-      <adjacent value="017" />
-      <adjacent value="012" />
+      <adjacent value="M013" />
+      <adjacent value="M014" />
+      <adjacent value="M024" />
+      <adjacent value="M023" />
+      <adjacent value="M017" />
+      <adjacent value="M012" />
     </Adjacents>
   </Territory>
   <Territory value="M019">
@@ -544,12 +544,12 @@
       <regionPoint X="0721.39" Y="0419.02" />
     </Points>
     <Adjacents count="6">
-      <adjacent value="0014" />
-      <adjacent value="015" />
-      <adjacent value="016" />
-      <adjacent value="020" />
-      <adjacent value="025" />
-      <adjacent value="024" />
+      <adjacent value="M014" />
+      <adjacent value="M015" />
+      <adjacent value="M016" />
+      <adjacent value="M020" />
+      <adjacent value="M025" />
+      <adjacent value="M024" />
     </Adjacents>
   </Territory>
   <Territory value="M020">
@@ -570,11 +570,11 @@
       <regionPoint X="0875.37" Y="0395.01" />
     </Points>
     <Adjacents count="5">
-      <adjacent value="019" />
-      <adjacent value="016" />
-      <adjacent value="021" />
-      <adjacent value="026" />
-      <adjacent value="025" />
+      <adjacent value="M019" />
+      <adjacent value="M016" />
+      <adjacent value="M021" />
+      <adjacent value="M026" />
+      <adjacent value="M025" />
     </Adjacents>
   </Territory>
   <Territory value="M021">
@@ -593,11 +593,11 @@
       <regionPoint X="1024.09" Y="0491.91" />
     </Points>
     <Adjacents count="5">
-      <adjacent value="010" />
-      <adjacent value="016" />
-      <adjacent value="020" />
-      <adjacent value="026" />
-      <adjacent value="2E" />
+      <adjacent value="M010" />
+      <adjacent value="M016" />
+      <adjacent value="M020" />
+      <adjacent value="M026" />
+      <adjacent value="MTF2" />
     </Adjacents>
   </Territory>
   <Territory value="M022">
@@ -620,12 +620,12 @@
       <regionPoint X="0115.33" Y="0501.43" />
     </Points>
     <Adjacents count="6">
-      <adjacent value="038" />
-      <adjacent value="011" />
-      <adjacent value="017" />
-      <adjacent value="028" />
-      <adjacent value="030" />
-      <adjacent value="027" />
+      <adjacent value="M038" />
+      <adjacent value="M011" />
+      <adjacent value="M017" />
+      <adjacent value="M028" />
+      <adjacent value="M030" />
+      <adjacent value="M027" />
     </Adjacents>
   </Territory>
   <Territory value="M023">
@@ -646,12 +646,12 @@
       <regionPoint X="0449.75" Y="0540.37" />
     </Points>
     <Adjacents count="6">
-      <adjacent value="017" />
-      <adjacent value="018" />
-      <adjacent value="024" />
-      <adjacent value="032" />
-      <adjacent value="031" />
-      <adjacent value="030" />
+      <adjacent value="M017" />
+      <adjacent value="M018" />
+      <adjacent value="M024" />
+      <adjacent value="M032" />
+      <adjacent value="M031" />
+      <adjacent value="M030" />
     </Adjacents>
   </Territory>
   <Territory value="M024">
@@ -673,13 +673,13 @@
       <regionPoint X="0659.86" Y="0484.67" />
     </Points>
     <Adjacents count="7">
-      <adjacent value="023" />
-      <adjacent value="018" />
-      <adjacent value="0014" />
-      <adjacent value="019" />
-      <adjacent value="025" />
-      <adjacent value="033" />
-      <adjacent value="032" />
+      <adjacent value="M023" />
+      <adjacent value="M018" />
+      <adjacent value="M014" />
+      <adjacent value="M019" />
+      <adjacent value="M025" />
+      <adjacent value="M033" />
+      <adjacent value="M032" />
     </Adjacents>
   </Territory>
   <Territory value="M025">
@@ -698,11 +698,11 @@
       <regionPoint X="0847.79" Y="0595.61" />
     </Points>
     <Adjacents count="5">
-      <adjacent value="024" />
-      <adjacent value="019" />
-      <adjacent value="020" />
-      <adjacent value="026" />
-      <adjacent value="033" />
+      <adjacent value="M024" />
+      <adjacent value="M019" />
+      <adjacent value="M020" />
+      <adjacent value="M026" />
+      <adjacent value="M033" />
     </Adjacents>
   </Territory>
   <Territory value="M026">
@@ -724,11 +724,11 @@
       <regionPoint X="0910.88" Y="0534.02" />
     </Points>
     <Adjacents count="5">
-      <adjacent value="021" />
-      <adjacent value="020" />
-      <adjacent value="025" />
-      <adjacent value="033" />
-      <adjacent value="044" />
+      <adjacent value="M021" />
+      <adjacent value="M020" />
+      <adjacent value="M025" />
+      <adjacent value="M033" />
+      <adjacent value="M044" />
     </Adjacents>
   </Territory>
   <Territory value="M027">
@@ -749,12 +749,12 @@
       <regionPoint X="0030.65" Y="0802.55" />
     </Points>
     <Adjacents count="6">
-      <adjacent value="038" />
-      <adjacent value="022" />
-      <adjacent value="028" />
-      <adjacent value="035" />
-      <adjacent value="034" />
-      <adjacent value="6E" />
+      <adjacent value="M034" />
+      <adjacent value="M035" />
+      <adjacent value="M028" />
+      <adjacent value="M022" />
+      <adjacent value="M038" />
+      <adjacent value="MTF6" />
     </Adjacents>
   </Territory>
   <Territory value="M028">
@@ -773,11 +773,11 @@
       <regionPoint X="0176.46" Y="0693.42" />
     </Points>
     <Adjacents count="5">
-      <adjacent value="022" />
-      <adjacent value="027" />
-      <adjacent value="035" />
-      <adjacent value="036" />
-      <adjacent value="030" />
+      <adjacent value="M022" />
+      <adjacent value="M027" />
+      <adjacent value="M035" />
+      <adjacent value="M036" />
+      <adjacent value="M030" />
     </Adjacents>
   </Territory>
   <Territory value="M030">
@@ -800,12 +800,12 @@
       <regionPoint X="0324.54" Y="0661.72" />
     </Points>
     <Adjacents count="6">
-      <adjacent value="017" />
-      <adjacent value="023" />
-      <adjacent value="031" />
-      <adjacent value="036" />
-      <adjacent value="028" />
-      <adjacent value="022" />
+      <adjacent value="M017" />
+      <adjacent value="M023" />
+      <adjacent value="M031" />
+      <adjacent value="M036" />
+      <adjacent value="M028" />
+      <adjacent value="M022" />
     </Adjacents>
   </Territory>
   <Territory value="M031">
@@ -824,12 +824,12 @@
       <regionPoint X="0500.01" Y="0688.45" />
     </Points>
     <Adjacents count="6">
-      <adjacent value="030" />
-      <adjacent value="023" />
-      <adjacent value="032" />
-      <adjacent value="039" />
-      <adjacent value="037" />
-      <adjacent value="036" />
+      <adjacent value="M030" />
+      <adjacent value="M023" />
+      <adjacent value="M032" />
+      <adjacent value="M039" />
+      <adjacent value="M037" />
+      <adjacent value="M036" />
     </Adjacents>
   </Territory>
   <Territory value="M032">
@@ -847,11 +847,11 @@
       <regionPoint X="0658.51" Y="0629.57" />
     </Points>
     <Adjacents count="5">
-      <adjacent value="023" />
-      <adjacent value="024" />
-      <adjacent value="033" />
-      <adjacent value="039" />
-      <adjacent value="031" />
+      <adjacent value="M023" />
+      <adjacent value="M024" />
+      <adjacent value="M033" />
+      <adjacent value="M039" />
+      <adjacent value="M031" />
     </Adjacents>
   </Territory>
   <Territory value="M033">
@@ -871,13 +871,13 @@
       <regionPoint X="0758.58" Y="0759.08" />
     </Points>
     <Adjacents count="7">
-      <adjacent value="032" />
-      <adjacent value="024" />
-      <adjacent value="025" />
-      <adjacent value="026" />
-      <adjacent value="044" />
-      <adjacent value="041" />
-      <adjacent value="039" />
+      <adjacent value="M032" />
+      <adjacent value="M024" />
+      <adjacent value="M025" />
+      <adjacent value="M026" />
+      <adjacent value="M044" />
+      <adjacent value="M041" />
+      <adjacent value="M039" />
     </Adjacents>
   </Territory>
   <Territory value="M034">
@@ -891,8 +891,8 @@
       <regionPoint X="0031.10" Y="0856.89" />
     </Points>
     <Adjacents count="2">
-      <adjacent value="027" />
-      <adjacent value="035" />
+      <adjacent value="M027" />
+      <adjacent value="M035" />
     </Adjacents>
   </Territory>
   <Territory value="M035">
@@ -915,11 +915,11 @@
       <regionPoint X="0190.95" Y="0754.10" />
     </Points>
     <Adjacents count="5">
-      <adjacent value="034" />
-      <adjacent value="027" />
-      <adjacent value="028" />
-      <adjacent value="036" />
-      <adjacent value="040" />
+      <adjacent value="M034" />
+      <adjacent value="M027" />
+      <adjacent value="M028" />
+      <adjacent value="M036" />
+      <adjacent value="M040" />
     </Adjacents>
   </Territory>
   <Territory value="M036">
@@ -940,12 +940,12 @@
       <regionPoint X="0404.69" Y="0792.59" />
     </Points>
     <Adjacents count="6">
-      <adjacent value="035" />
-      <adjacent value="028" />
-      <adjacent value="030" />
-      <adjacent value="031" />
-      <adjacent value="037" />
-      <adjacent value="040" />
+      <adjacent value="M035" />
+      <adjacent value="M028" />
+      <adjacent value="M030" />
+      <adjacent value="M031" />
+      <adjacent value="M037" />
+      <adjacent value="M040" />
     </Adjacents>
   </Territory>
   <Territory value="M037">
@@ -966,11 +966,11 @@
       <regionPoint X="0487.78" Y="0742.34" />
     </Points>
     <Adjacents count="5">
-      <adjacent value="036" />
-      <adjacent value="031" />
-      <adjacent value="039" />
-      <adjacent value="040" />
-      <adjacent value="041" />
+      <adjacent value="M036" />
+      <adjacent value="M031" />
+      <adjacent value="M039" />
+      <adjacent value="M040" />
+      <adjacent value="M041" />
     </Adjacents>
   </Territory>
   <Territory value="M039">
@@ -989,11 +989,11 @@
       <regionPoint X="0637.67" Y="0778.10" />
     </Points>
     <Adjacents count="5">
-      <adjacent value="032" />
-      <adjacent value="033" />
-      <adjacent value="041" />
-      <adjacent value="037" />
-      <adjacent value="031" />
+      <adjacent value="M032" />
+      <adjacent value="M033" />
+      <adjacent value="M041" />
+      <adjacent value="M037" />
+      <adjacent value="M031" />
     </Adjacents>
   </Territory>
   <Territory value="M040">
@@ -1015,11 +1015,11 @@
       <regionPoint X="0653.52" Y="0855.99" />
     </Points>
     <Adjacents count="5">
-      <adjacent value="035" />
-      <adjacent value="036" />
-      <adjacent value="037" />
-      <adjacent value="041" />
-      <adjacent value="5E" />
+      <adjacent value="M035" />
+      <adjacent value="M036" />
+      <adjacent value="M037" />
+      <adjacent value="M041" />
+      <adjacent value="MTF5" />
     </Adjacents>
   </Territory>
   <Territory value="M041">
@@ -1035,12 +1035,12 @@
       <regionPoint X="0653.52" Y="0855.99" />
     </Points>
     <Adjacents count="6">
-      <adjacent value="4E" />
-      <adjacent value="039" />
-      <adjacent value="037" />
-      <adjacent value="040" />
-      <adjacent value="033" />
-      <adjacent value="044" />
+      <adjacent value="M040" />
+      <adjacent value="M037" />
+      <adjacent value="M039" />
+      <adjacent value="M033" />
+      <adjacent value="M044" />
+      <adjacent value="MTF4" />
     </Adjacents>
   </Territory>
   <Territory value="M044">
@@ -1059,10 +1059,10 @@
       <regionPoint X="0982.88" Y="0855.53" />
     </Points>
     <Adjacents count="4">
-      <adjacent value="3E" />
-      <adjacent value="033" />
-      <adjacent value="026" />
-      <adjacent value="041" />
+      <adjacent value="M026" />
+      <adjacent value="M033" />
+      <adjacent value="M041" />
+      <adjacent value="MTF3" />
     </Adjacents>
   </Territory>
   <Territory value="M1E">
@@ -1075,9 +1075,7 @@
       <regionPoint X="1114.46" Y="0314.41" />
       <regionPoint X="1080.05" Y="0309.88" />
     </Points>
-    <Adjacents count="1">
-      <adjacent value="010" />
-    </Adjacents>
+    <Adjacents count="0" />
   </Territory>
   <Territory value="M2E">
     <Parent value="Main" />
@@ -1089,9 +1087,7 @@
       <regionPoint X="1080.24" Y="0515.46" />
       <regionPoint X="1080.69" Y="0309.42" />
     </Points>
-    <Adjacents count="1">
-      <adjacent value="021" />
-    </Adjacents>
+    <Adjacents count="0" />
   </Territory>
   <Territory value="M3E">
     <Parent value="Main" />
@@ -1105,9 +1101,7 @@
       <regionPoint X="1107.41" Y="0875.46" />
       <regionPoint X="1108.77" Y="0598.78" />
     </Points>
-    <Adjacents count="1">
-      <adjacent value="044" />
-    </Adjacents>
+    <Adjacents count="0" />
   </Territory>
   <Territory value="M4E">
     <Parent value="Main" />
@@ -1119,9 +1113,7 @@
       <regionPoint X="1028.16" Y="0877.72" />
       <regionPoint X="0660.47" Y="0875.01" />
     </Points>
-    <Adjacents count="1">
-      <adjacent value="041" />
-    </Adjacents>
+    <Adjacents count="0" />
   </Territory>
   <Territory value="M5E">
     <Parent value="Main" />
@@ -1133,9 +1125,7 @@
       <regionPoint X="0661.67" Y="0877.72" />
       <regionPoint X="0293.52" Y="0879.08" />
     </Points>
-    <Adjacents count="1">
-      <adjacent value="040" />
-    </Adjacents>
+    <Adjacents count="0" />
   </Territory>
   <Territory value="M6E">
     <Parent value="Main" />
@@ -1147,9 +1137,7 @@
       <regionPoint X="0030.65" Y="0802.55" />
       <regionPoint X="0002.58" Y="0806.63" />
     </Points>
-    <Adjacents count="1">
-      <adjacent value="027" />
-    </Adjacents>
+    <Adjacents count="0" />
   </Territory>
   <Territory value="M7E">
     <Parent value="Main" />
@@ -1161,9 +1149,7 @@
       <regionPoint X="0031.10" Y="0637.28" />
       <regionPoint X="0001.22" Y="0646.34" />
     </Points>
-    <Adjacents count="1">
-      <adjacent value="038" />
-    </Adjacents>
+    <Adjacents count="0" />
   </Territory>
   <Territory value="M8E">
     <Parent value="Main" />
@@ -1175,9 +1161,7 @@
       <regionPoint X="0031.10" Y="0357.43" />
       <regionPoint X="0000.76" Y="0356.52" />
     </Points>
-    <Adjacents count="1">
-      <adjacent value="004" />
-    </Adjacents>
+    <Adjacents count="0" />
   </Territory>
   <Territory value="M9E">
     <Parent value="Main" />
@@ -1189,9 +1173,7 @@
       <regionPoint X="0661.87" Y="0024.15" />
       <regionPoint X="0241.19" Y="0024.60" />
     </Points>
-    <Adjacents count="1">
-      <adjacent value="001" />
-    </Adjacents>
+    <Adjacents count="0" />
   </Territory>
   <Territory value="M10E">
     <Parent value="Main" />
@@ -1203,9 +1185,7 @@
       <regionPoint X="0946.01" Y="0024.60" />
       <regionPoint X="0662.54" Y="0023.24" />
     </Points>
-    <Adjacents count="1">
-      <adjacent value="002" />
-    </Adjacents>
+    <Adjacents count="0" />
   </Territory>
   <Territory value="M038">
     <Parent value="Main" />
@@ -1223,15 +1203,15 @@
       <regionPoint X="0031.10" Y="0637.28" />
     </Points>
     <Adjacents count="4">
-      <adjacent value="7E" />
-      <adjacent value="027" />
-      <adjacent value="022" />
-      <adjacent value="011" />
+      <adjacent value="MTF7" />
+      <adjacent value="M011" />
+      <adjacent value="M022" />
+      <adjacent value="M027" />
     </Adjacents>
   </Territory>
   <Territory value="GunLoadHe">
     <Parent value="Tank" />
-    <Type value="None" />
+    <Type value="1" />
     <CenterPoint X="0374.66" Y="0201.35" />
     <Points count="4">
       <regionPoint X="0356.55" Y="0184.14" />
@@ -2144,42 +2124,42 @@
   </Territory>
   <Territory value="CSpot4">
     <Parent value="Main" />
-    <Type value="A" />
+    <Type value="Battle" />
     <CenterPoint X="0052.50" Y="0316.76" />
     <Points count="0" />
     <Adjacents count="0" />
   </Territory>
   <Territory value="CSpot6">
     <Parent value="Main" />
-    <Type value="A" />
+    <Type value="Battle" />
     <CenterPoint X="0514.50" Y="0050.76" />
     <Points count="0" />
     <Adjacents count="0" />
   </Territory>
   <Territory value="CSpot9">
     <Parent value="Main" />
-    <Type value="A" />
+    <Type value="Battle" />
     <CenterPoint X="0959.50" Y="0360.76" />
     <Points count="0" />
     <Adjacents count="0" />
   </Territory>
   <Territory value="CSpot1">
     <Parent value="Main" />
-    <Type value="A" />
+    <Type value="Battle" />
     <CenterPoint X="0861.50" Y="0808.76" />
     <Points count="0" />
     <Adjacents count="0" />
   </Territory>
   <Territory value="CSpot2">
     <Parent value="Main" />
-    <Type value="A" />
+    <Type value="Battle" />
     <CenterPoint X="0506.50" Y="0884.76" />
     <Points count="0" />
     <Adjacents count="0" />
   </Territory>
   <Territory value="CSpot3">
     <Parent value="Main" />
-    <Type value="A" />
+    <Type value="Battle" />
     <CenterPoint X="0125.50" Y="0804.76" />
     <Points count="0" />
     <Adjacents count="0" />
@@ -2187,7 +2167,384 @@
   <Territory value="MTF1">
     <Parent value="Main" />
     <Type value="E" />
-    <CenterPoint X="1088.17" Y="0175.68" />
+    <CenterPoint X="1097.50" Y="0176.76" />
+    <Points count="0" />
+    <Adjacents count="1">
+      <adjacent value="M010" />
+    </Adjacents>
+  </Territory>
+  <Territory value="MTF9">
+    <Parent value="Main" />
+    <Type value="E" />
+    <CenterPoint X="0306.50" Y="0010.76" />
+    <Points count="0" />
+    <Adjacents count="1">
+      <adjacent value="M001" />
+    </Adjacents>
+  </Territory>
+  <Territory value="MTF10">
+    <Parent value="Main" />
+    <Type value="E" />
+    <CenterPoint X="0792.50" Y="0010.76" />
+    <Points count="0" />
+    <Adjacents count="1">
+      <adjacent value="M002" />
+    </Adjacents>
+  </Territory>
+  <Territory value="MTF2">
+    <Parent value="Main" />
+    <Type value="E" />
+    <CenterPoint X="1094.50" Y="0344.76" />
+    <Points count="0" />
+    <Adjacents count="1">
+      <adjacent value="M021" />
+    </Adjacents>
+  </Territory>
+  <Territory value="MTF3">
+    <Parent value="Main" />
+    <Type value="E" />
+    <CenterPoint X="1096.50" Y="0721.76" />
+    <Points count="0" />
+    <Adjacents count="1">
+      <adjacent value="M044" />
+    </Adjacents>
+  </Territory>
+  <Territory value="MTF4">
+    <Parent value="Main" />
+    <Type value="E" />
+    <CenterPoint X="0749.50" Y="0866.76" />
+    <Points count="0" />
+    <Adjacents count="1">
+      <adjacent value="M041" />
+    </Adjacents>
+  </Territory>
+  <Territory value="MTF5">
+    <Parent value="Main" />
+    <Type value="E" />
+    <CenterPoint X="0350.50" Y="0865.76" />
+    <Points count="0" />
+    <Adjacents count="1">
+      <adjacent value="M040" />
+    </Adjacents>
+  </Territory>
+  <Territory value="MTF6">
+    <Parent value="Main" />
+    <Type value="E" />
+    <CenterPoint X="0013.50" Y="0713.76" />
+    <Points count="0" />
+    <Adjacents count="1">
+      <adjacent value="M027" />
+    </Adjacents>
+  </Territory>
+  <Territory value="MTF7">
+    <Parent value="Main" />
+    <Type value="E" />
+    <CenterPoint X="0013.50" Y="0496.76" />
+    <Points count="0" />
+    <Adjacents count="1">
+      <adjacent value="M038" />
+    </Adjacents>
+  </Territory>
+  <Territory value="MTF8">
+    <Parent value="Main" />
+    <Type value="E" />
+    <CenterPoint X="0014.50" Y="0135.76" />
+    <Points count="0" />
+    <Adjacents count="1">
+      <adjacent value="M004" />
+    </Adjacents>
+  </Territory>
+  <Territory value="M000R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0091.50" Y="0054.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M001R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0346.50" Y="0049.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M002R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0712.50" Y="0044.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M003R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="1051.50" Y="0042.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M004R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0066.50" Y="0179.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M005R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0203.50" Y="0252.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M006R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0328.50" Y="0132.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M007R">
+    <Parent value="Main" />
+    <Type value="A" />
+    <CenterPoint X="0418.50" Y="0119.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M008R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0612.50" Y="0116.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M009R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0891.50" Y="0100.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M010R">
+    <Parent value="Main" />
+    <Type value="A" />
+    <CenterPoint X="1040.50" Y="0244.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M011R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0061.50" Y="0397.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M012R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0461.50" Y="0367.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M013R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0526.50" Y="0334.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M014R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0605.50" Y="0266.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M015R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0803.50" Y="0249.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M016R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0981.50" Y="0309.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M017R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0293.50" Y="0481.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M018R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0586.50" Y="0392.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M019R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0778.50" Y="0433.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M020R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0935.50" Y="0447.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M021R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="1038.50" Y="0456.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M022R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0143.50" Y="0490.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M023R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0614.50" Y="0550.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M024R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0694.50" Y="0459.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M025R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0797.50" Y="0495.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M026R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0981.50" Y="0614.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M027R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0142.50" Y="0739.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M028R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0285.50" Y="0663.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M030R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0335.50" Y="0579.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M031R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0527.50" Y="0661.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M032R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0678.50" Y="0608.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M033R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0842.50" Y="0737.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M034R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0057.50" Y="0824.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M035R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0222.50" Y="0739.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M036R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0441.50" Y="0750.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M037R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0513.50" Y="0756.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M039R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0638.50" Y="0704.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M044R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0928.50" Y="0771.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M041R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0797.50" Y="0805.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M040R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0497.50" Y="0805.76" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="M038R">
+    <Parent value="Main" />
+    <Type value="R" />
+    <CenterPoint X="0066.50" Y="0571.76" />
     <Points count="0" />
     <Adjacents count="0" />
   </Territory>
