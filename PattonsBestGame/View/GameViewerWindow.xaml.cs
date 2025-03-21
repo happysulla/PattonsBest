@@ -20,6 +20,7 @@ using MenuItem = System.Windows.Controls.MenuItem;
 using Point = System.Windows.Point;
 using Pattons_Best.Model;
 using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace Pattons_Best
 {
@@ -473,36 +474,47 @@ namespace Pattons_Best
       }
       private bool CreateButtonMapItem(IMapItem mi, int counterCount)
       {
-         string? tName = mi.TerritoryCurrent.ToString();
-         if (null == tName)
+         ITerritory? t = Territories.theTerritories.Find(mi.TerritoryCurrent.Name);
+         if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateButtonMapItem(): tName=null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateButtonMapItem(): TerritoryExtensions.Find() returned null for " + t.Name);
             return false;
          }
-         string territoryName = Utilities.RemoveSpaces(tName);
-         ITerritory? territory = Territories.theTerritories.Find(territoryName);
-         if (null == territory)
+         if ("Main" == t.CanvasName)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateButtonMapItem(): TerritoryExtensions.Find() returned null");
-            return false;
+            switch (CanvasImageViewer.theMainImage)
+            {
+               case EnumMainImage.MI_Battle:
+                  if ("Battle" == t.Type)
+                     break;
+                  return true;
+               case EnumMainImage.MI_Move:
+                  if (("A" == t.Type) || ("B" == t.Type) || ("C" == t.Type) || ("D" == t.Type) || ("E" == t.Type) || ("R" == t.Type))
+                     break;
+                  return true;
+               case EnumMainImage.MI_Other:
+                  return true;
+               default:
+                  break;
+            }
          }
          System.Windows.Controls.Button b = new Button { ContextMenu = myContextMenuButton, Name = mi.Name, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
-         Canvas.SetLeft(b, territory.CenterPoint.X - mi.Zoom * Utilities.theMapItemOffset + (counterCount * Utilities.STACK));
-         Canvas.SetTop(b, territory.CenterPoint.Y - mi.Zoom * Utilities.theMapItemOffset + (counterCount * Utilities.STACK));
+         Canvas.SetLeft(b, t.CenterPoint.X - mi.Zoom * Utilities.theMapItemOffset + (counterCount * Utilities.STACK));
+         Canvas.SetTop(b, t.CenterPoint.Y - mi.Zoom * Utilities.theMapItemOffset + (counterCount * Utilities.STACK));
          MapItem.SetButtonContent(b, mi, false, false, false, false); // This sets the image as the button's content
-         if ("Tank" == territory.CanvasName)
+         if ("Tank" == t.CanvasName)
          {
             myButtonTanks.Add(b);
             myCanvasTank.Children.Add(b);
          }
-         else if ("Main" == territory.CanvasName)
+         else if ("Main" == t.CanvasName)
          {
             myButtonMains.Add(b);
             myCanvasMain.Children.Add(b);
          }
          else
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateButtonMapItem(): reached default  for territory.CanvasName=" + territory.CanvasName);
+            Logger.Log(LogEnum.LE_ERROR, "CreateButtonMapItem(): reached default  for territory.CanvasName=" + t.CanvasName);
             return false;
          }
          if( "Turret" == mi.Name )
@@ -794,10 +806,38 @@ namespace Pattons_Best
             {
                if (true == button.Name.Contains("Die"))
                   continue;
-               if (null == gi.MainMapItems.Find(button.Name)) // if button is not in mapitems, delete button
+               IMapItem? mi = gi.MainMapItems.Find(button.Name);
+               if (null == mi) // if button is not in mapitems, delete button
                {
                   elements.Add(ui);
                   myButtonMains.Remove(button);
+               }
+               else
+               {
+                  ITerritory t = mi.TerritoryCurrent;
+                  switch (CanvasImageViewer.theMainImage)
+                  {
+                     case EnumMainImage.MI_Battle:
+                        if ("Battle" != t.Type)
+                        {
+                           elements.Add(ui);
+                           myButtonMains.Remove(button);
+                        }
+                        break;
+                     case EnumMainImage.MI_Move:
+                        if (("A" != t.Type) && ("B" != t.Type) && ("C" != t.Type) && ("D" != t.Type) && ("E" != t.Type) && ("R" != t.Type))
+                        {
+                           elements.Add(ui);
+                           myButtonMains.Remove(button);
+                        }
+                        break;
+                     case EnumMainImage.MI_Other:
+                        elements.Add(ui);
+                        myButtonMains.Remove(button);
+                        break;
+                     default:
+                        break;
+                  }
                }
             }
             if (ui is Label label)  // A Game Feat Label

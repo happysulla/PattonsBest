@@ -11,9 +11,16 @@ using WpfAnimatedGif;
 
 namespace Pattons_Best
 {
+   public enum EnumMainImage
+   {
+      MI_Battle,
+      MI_Move,
+      MI_Other
+   }
    public class CanvasImageViewer : IView
    {
       public bool CtorError { get; } = false;
+      public static EnumMainImage theMainImage = EnumMainImage.MI_Other;
       private Canvas? myCanvas = null;
       private IDieRoller? myDieRoller = null;
       //-------------------------------------------------
@@ -51,23 +58,28 @@ namespace Pattons_Best
          switch (action)
          {
             case GameAction.RemoveSplashScreen:
+               theMainImage = EnumMainImage.MI_Other;
                ShowInitialScreen(myCanvas);
                break;
             case GameAction.SetupShowMapHistorical:
+               theMainImage = EnumMainImage.MI_Other;
                ShowHistoricalMap(myCanvas);
                break;
             case GameAction.SetupShowMovementBoard:
             case GameAction.MovementStartAreaSet:
+               theMainImage = EnumMainImage.MI_Move;
                ShowMovementMap(myCanvas);
                break;
             case GameAction.SetupShowBattleBoard:
             case GameAction.PreparationsDeployment:
             case GameAction.UpdateToPreparations:
                myDieRoller.HideDie();
+               theMainImage = EnumMainImage.MI_Battle;
                ShowBattleMap(myCanvas);
                break;
             case GameAction.SetupShowAfterActionReport:
                myDieRoller.HideDie();
+               theMainImage = EnumMainImage.MI_Other;
                if (false == ShowAfterActionReportDialog(gi, myCanvas, true))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowAfterActionReportDialog() returned false for a=" + action.ToString());
                break;
@@ -75,16 +87,20 @@ namespace Pattons_Best
             case GameAction.MorningBriefingWeatherRollEnd:
             case GameAction.MorningBriefingTimeCheck:
             case GameAction.MorningBriefingTimeCheckRoll:
+               theMainImage = EnumMainImage.MI_Other;
                if ( false == ShowAfterActionReportDialog(gi, myCanvas, false))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowAfterActionReportDialog() returned false for a=" + action.ToString());
                break;
             case GameAction.SetupShowCombatCalendarCheck:
+               theMainImage = EnumMainImage.MI_Other;
                ShowCombatCalendarDialog(myCanvas);
                break;
             case GameAction.EndGameWin:
+               theMainImage = EnumMainImage.MI_Other;
                ShowEndGameSuccess(myCanvas);
                break;
             case GameAction.EndGameLost:
+               theMainImage = EnumMainImage.MI_Other;
                ShowEndGameFail(myCanvas);
                break;
             default:
@@ -92,7 +108,7 @@ namespace Pattons_Best
          }
       }
       //-------------------------------------------------
-      public void CleanCanvas(Canvas c, bool IsBattleMap = false)
+      public void CleanCanvas(Canvas c)
       {
          List<UIElement> elements = new List<UIElement>();
          foreach (UIElement ui in c.Children)
@@ -132,7 +148,7 @@ namespace Pattons_Best
       }
       public void ShowBattleMap(Canvas c)
       {
-         CleanCanvas(c, true);
+         CleanCanvas(c);
          Image img = new Image() { Name = "CanvasMain", Width = 1000, Height = 890, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapBattle") };
          c.Children.Add(img);
          Canvas.SetLeft(img, 0);

@@ -726,6 +726,8 @@ namespace Pattons_Best
                return false;
             }
          }
+         if (true == gi.IsLeadTank)
+            report.Notes.Add("You are the Lead Tank!");
          return true;
       }
       private bool SetUsControl(IGameInstance gi)
@@ -906,6 +908,7 @@ namespace Pattons_Best
          gi.MainMapItems.Add(miExit);
          return true;
       }
+
    }
    //-----------------------------------------------------
    class GameStateBattle : GameState

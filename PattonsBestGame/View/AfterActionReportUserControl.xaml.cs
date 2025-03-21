@@ -179,6 +179,13 @@ namespace Pattons_Best
          myRunVictoryPointsTotalFriendly.Text = report.VictoryPtsTotalFriendly.ToString();
          myRunVictoryPointsTotalTerritory.Text = report.VictoryPtsTotalTerritory.ToString();
          //----------------------------------
+         StringBuilder sb = new StringBuilder();
+         foreach (String note in report.Notes)
+         {
+            sb.Append(note);
+            sb.Append("\n");
+         }
+         myTextBlockDisplay.Text = sb.ToString();
          return true;
       }
       private bool UpdateReportTimeTrack(IAfterActionReport report)

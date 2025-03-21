@@ -738,14 +738,14 @@ namespace Pattons_Best
                   sbE011.Append("\n Is Moving  = ");
                   sbE011.Append(gi.IsMoving.ToString());
                   sbE011.Append("\n Is Lead Tank  = ");
-                  sbE011.Append(gi.IsMoving.ToString());
+                  sbE011.Append(gi.IsLeadTank.ToString());
                   Image imge011 = new Image { Width = 100, Height = 100, Name = "PreparationsDeploymentEnd" };
                   if (true == gi.IsHulledDown)
                      imge011.Source = MapItem.theMapImages.GetBitmapImage("c14HullDown");
                   else if( true == gi.IsMoving )
                      imge011.Source = MapItem.theMapImages.GetBitmapImage("c13Moving");
                   else
-                     imge011.Source = MapItem.theMapImages.GetBitmapImage("c13Continue");
+                     imge011.Source = MapItem.theMapImages.GetBitmapImage("Continue");
                   myTextBlock.Inlines.Add(new Run(sbE011.ToString()));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
