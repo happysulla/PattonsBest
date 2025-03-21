@@ -591,18 +591,6 @@ namespace Pattons_Best
             return false;
          }
          //-------------------------------------------------------
-         if (false == UpdateCanvasTankMapItems(gi.Hatches))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasTankMapItems(Hatches) returned false");
-            return false;
-         }
-         //-------------------------------------------------------
-         if (false == UpdateCanvasTankMapItems(gi.GunLoads))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasTankMapItems(GunLoads) returned false");
-            return false;
-         }
-         //-------------------------------------------------------
          try
          {
             switch (action)
@@ -633,6 +621,18 @@ namespace Pattons_Best
          catch (Exception e)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): EXCEPTION THROWN a=" + action.ToString() + "\ne=" + e.ToString());
+            return false;
+         }
+         //-------------------------------------------------------
+         if (false == UpdateCanvasTankMapItems(gi.Hatches))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasTankMapItems(Hatches) returned false");
+            return false;
+         }
+         //-------------------------------------------------------
+         if (false == UpdateCanvasTankMapItems(gi.GunLoads))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasTankMapItems(GunLoads) returned false");
             return false;
          }
          return true;
@@ -693,7 +693,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): cm=null for " + crewmember);
                   return false;
                }
-               if (false == cm.IsButtonedUp)
+               if (true == cm.IsButtonedUp)
                {
                   string tName = crewmember + "Hatch";
                   ITerritory? t = Territories.theTerritories.Find(tName);
@@ -903,6 +903,13 @@ namespace Pattons_Best
                      return false;
                   }
                   break;
+               case GameAction.MovementEnemyStrengthChoice:
+                  if (false == UpdateCanvasMainEnemyStrengthCheck(gi, action))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMainEnemyStrengthCheck() returned false");
+                     return false;
+                  }
+                  break;
                case GameAction.EndGameClose:
                   GameAction outActionClose = GameAction.EndGameExit;
                   myGameEngine.PerformAction(ref gi, ref outActionClose);
@@ -979,6 +986,36 @@ namespace Pattons_Best
             myCanvasMain.Children.Add(aEllipse);
             myEllipses.Add(aEllipse);
             aEllipse.MouseDown += MouseDownEllipseSpottingCommander;
+         }
+         return true;
+      }
+      private bool UpdateCanvasMainEnemyStrengthCheck(IGameInstance gi, GameAction action)
+      {
+         myPolygons.Clear();
+         //--------------------------------
+         IMapItem? taskForce = gi.MainMapItems.Find("TaskForce");
+         if( null == taskForce)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainEnemyStrengthCheck(): taskForce=null");
+            return false;
+         }
+         //--------------------------------
+         List<String> sTerritories = taskForce.TerritoryCurrent.Adjacents;
+         foreach (string s in sTerritories)
+         {
+            ITerritory? t = Territories.theTerritories.Find(s);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasHexTravelToShowPolygons(): 1 t=null for " + s);
+               return false;
+            }
+            PointCollection points = new PointCollection();
+            foreach (IMapPoint mp1 in t.Points)
+               points.Add(new System.Windows.Point(mp1.X, mp1.Y));
+            Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = t.Name };
+            aPolygon.MouseDown += MouseDownPolygonShowEnemyStrength;
+            myPolygons.Add(aPolygon);
+            myCanvasMain.Children.Add(aPolygon);
          }
          return true;
       }
@@ -1189,40 +1226,6 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): myGameInstance.Driver=null for " + clickedPolygon.Name.ToString());
                   return;
                }
-               cm.IsButtonedUp = true;
-               IMapItem mi = new MapItem(crewmember + "OpenHatch", 1.0, "c15OpenHatch", t);
-               myGameInstance.Hatches.Add(mi);
-               break;
-            }
-         }
-         GameAction outAction = GameAction.PreparationsHatches;
-         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
-      }
-      private void MouseDownCloseHatches(object sender, MouseButtonEventArgs e)
-      {
-         Polygon? clickedPolygon = sender as Polygon;
-         if (null == clickedPolygon)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): clickedPolygon=null");
-            return;
-         }
-         ITerritory? t = Territories.theTerritories.Find(clickedPolygon.Name);
-         if (null == t)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): t=null for " + clickedPolygon.Name.ToString());
-            return;
-         }
-         string[] crewmembers = new string[4] { "Driver", "Assistant", "Commander", "Loader" };
-         foreach (string crewmember in crewmembers)
-         {
-            if (true == t.Name.Contains(crewmember))
-            {
-               ICrewMember? cm = myGameInstance.GetCrewMember(crewmember);
-               if (null == cm)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): myGameInstance.Driver=null for " + clickedPolygon.Name.ToString());
-                  return;
-               }
                cm.IsButtonedUp = false;
                IMapItem mi = new MapItem(crewmember + "OpenHatch", 1.0, "c15OpenHatch", t);
                myGameInstance.Hatches.Add(mi);
@@ -1254,6 +1257,24 @@ namespace Pattons_Best
          }
          gunLoad.TerritoryCurrent = t;
          GameAction outAction = GameAction.PreparationsGunLoadSelect;
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+      }
+      private void MouseDownPolygonShowEnemyStrength(object sender, MouseButtonEventArgs e)
+      {
+         Polygon? clickedPolygon = sender as Polygon;
+         if (null == clickedPolygon)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonShowEnemyStrength(): clickedPolygon=null");
+            return;
+         }
+         string tName = clickedPolygon.Name + "R";
+         myGameInstance.EnemyStrengthCheck = Territories.theTerritories.Find(tName);
+         if (null == myGameInstance.EnemyStrengthCheck)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonShowEnemyStrength(): t=null for " + clickedPolygon.Name.ToString());
+            return;
+         }
+         GameAction outAction = GameAction.MovementEnemyStrengthCheck;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
       private void MouseDownEllipseSpottingLoader(object sender, MouseButtonEventArgs e)
@@ -1321,7 +1342,7 @@ namespace Pattons_Best
                }
                if (true == button.Name.Contains(s))
                {
-                  crewMember.IsButtonedUp = false;
+                  crewMember.IsButtonedUp = true;
                   myGameInstance.Hatches.Remove(button.Name);
                   this.myButtonTanks.Remove(button);
                   GameAction outAction = GameAction.PreparationsHatches;

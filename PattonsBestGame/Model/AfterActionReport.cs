@@ -16,11 +16,11 @@ namespace Pattons_Best.Model
       public string Name { get; set; } = Utilities.GetNickName();
       public int TankCardNum { get; set; } = 1;
       public string Weather { get; set; } = "Clear";
-      public IMapItem Commander { get; set; } = new CrewMember("Commander", "Sgt", "c07Commander");
-      public IMapItem Gunner { get; set; } = new CrewMember("Gunner", "Cpl", "c11Gunner");
-      public IMapItem Loader { get; set; } = new CrewMember("Loader", "Cpl", "c09Loader");
-      public IMapItem Driver { get; set; } = new CrewMember("Driver", "Pvt", "c08Driver");
-      public IMapItem Assistant { get; set; } = new CrewMember("Assistant", "Pvt", "c10Assistant");
+      public ICrewMember Commander { get; set; } = new CrewMember("Commander", "Sgt", "c07Commander");
+      public ICrewMember Gunner { get; set; } = new CrewMember("Gunner", "Cpl", "c11Gunner");
+      public ICrewMember Loader { get; set; } = new CrewMember("Loader", "Cpl", "c09Loader");
+      public ICrewMember Driver { get; set; } = new CrewMember("Driver", "Pvt", "c08Driver");
+      public ICrewMember Assistant { get; set; } = new CrewMember("Assistant", "Pvt", "c10Assistant");
       //----------------------------------------
       public int SunriseHour { get; set; } = 5;
       public int SunriseMin { get; set; } = 0;

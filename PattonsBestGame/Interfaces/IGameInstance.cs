@@ -36,7 +36,8 @@ namespace Pattons_Best
       IMapItem? Turret { set; get; }
       //------------------------------------------------
       ITerritory? NewTerritory { set; get; }
-      ITerritory Home { get; set; } 
+      ITerritory Home { get; set; }
+      ITerritory? EnemyStrengthCheck { get; set; }
       List<EnteredHex> EnteredHexes { get; }
       //------------------------------------------------
       int Day { get; set; }

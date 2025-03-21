@@ -573,7 +573,24 @@ namespace Pattons_Best
       {
          Button b = (Button)sender;
          string key = (string)b.Content;
-         if (true == key.StartsWith("r")) // rules based click
+         if (true == key.StartsWith("A")) // rules based click
+         {
+            IAfterActionReport? aar = myGameInstance.Reports.GetLast();
+            if (null == aar)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateView():  gi.Reports.GetLast()=null");
+               return;
+            }
+            AfterActionReportUserControl aarUserControl = new AfterActionReportUserControl(aar);
+            if (true == aarUserControl.CtorError)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateView(): AfterActionReportUserControl CtorError=true");
+               return;
+            }
+            AfterActionDialog dialogAAR = new AfterActionDialog(aar);
+            dialogAAR.Show();
+         }
+         else if (true == key.StartsWith("r")) // rules based click
          {
             if (false == ShowRule(key))
             {

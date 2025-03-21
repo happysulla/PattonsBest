@@ -153,6 +153,7 @@ namespace Pattons_Best
       MovementStartAreaSetRoll,
       MovementExitAreaSet,
       MovementExitAreaSetRoll,
+      MovementEnemyStrengthChoice,
       MovementEnemyStrengthCheck,
       MovementEnemyStrengthCheckRoll,
       MovementChooseOption,

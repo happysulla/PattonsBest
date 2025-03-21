@@ -257,7 +257,7 @@ namespace Pattons_Best
                this.Title = "Time Tables";
                this.Background = theBrushOrange;
                this.Width = this.MinWidth = this.MaxWidth = 620;
-               this.MinHeight = this.MaxHeight = 610;
+               this.MinHeight = this.MaxHeight = 620;
                break;
             case "To Hit Target":
                this.Title = "To Hit Target";

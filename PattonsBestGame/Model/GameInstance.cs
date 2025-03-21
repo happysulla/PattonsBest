@@ -47,6 +47,7 @@ namespace Pattons_Best
       //------------------------------------------------
       public ITerritory? NewTerritory { set; get; } = null;
       public ITerritory Home { get; set; } = new Territory();
+      public ITerritory? EnemyStrengthCheck { get; set; } = null;
       private List<EnteredHex> myEnteredHexes = new List<EnteredHex>();
       public List<EnteredHex> EnteredHexes { get => myEnteredHexes; }
       //---------------------------------------------------------------
@@ -124,19 +125,19 @@ namespace Pattons_Best
          switch (name)
          {
             case "Driver":
-               crewmember = (ICrewMember)report.Driver;
+               crewmember = report.Driver;
                break;
             case "Assistant":
-               crewmember = (ICrewMember)report.Assistant;
+               crewmember = report.Assistant;
                break;
             case "Loader":
-               crewmember = (ICrewMember)report.Loader;
+               crewmember = report.Loader;
                break;
             case "Gunner":
-               crewmember = (ICrewMember)report.Gunner;
+               crewmember = report.Gunner;
                break;
             case "Commander":
-               crewmember = (ICrewMember)report.Commander;
+               crewmember = report.Commander;
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "GetCrewMember(): reached default name=" + name);

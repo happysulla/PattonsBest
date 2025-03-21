@@ -157,33 +157,61 @@ Table, roll 1D and cross reference the number with the Start Area marker
 <LineBreak/><LineBreak/>
 Die Roll =  <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer> 
 <LineBreak/><LineBreak/>"
-e020	"<Bold>e020 Enemy Strength Check</Bold> 
+e020	"<Bold>e020 Enemy Strength Check - Choose Area</Bold> 
 <InlineUIContainer><Button Content='r4.53' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
 Check any one adjacent area to your task force for estimating enemy strength. Click on one of the adjacent regions highlighted blue.
+<LineBreak/><LineBreak/>"
+e021	"<Bold>e020 Enemy Strength Check Roll</Bold> 
+<InlineUIContainer><Button Content='r4.53' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
-Roll 1D and consult the <InlineUIContainer><Button Content='r4.51' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Roll 1D and consult the <InlineUIContainer><Button Content='Resistance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 Table. The area is marked with a Light, Medium, or Heavy marker.
 <LineBreak/><LineBreak/>
 Die Roll =  <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer> 
 <LineBreak/><LineBreak/>"
-e021	"<Bold>e021 Choose Operations</Bold> 
+e022	"<Bold>e021 Choose Operations</Bold> 
 <InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
-Choose one of following options. To see the options, select the &apos;e###&apos; button. To choose the option, select the other buttons. Each option uses up time per the  
-<InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+Choose one of following options. To see the options, select the &apos;e###&apos; button. To choose the option, select the other buttons. Each option uses up time per the 
+<InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 Table.
 <LineBreak/><LineBreak/>
-<InlineUIContainer><Button Content='e022' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<InlineUIContainer><Button Content='e023' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
  Perform an additional <InlineUIContainer><Button Content='Area Check' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
-<InlineUIContainer><Button Content='e023' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Call for Artillery 
+<InlineUIContainer><Button Content='e024' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Call for Artillery 
 <InlineUIContainer><Button Content='Support' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
-<InlineUIContainer><Button Content='e024' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Call for Air 
+<InlineUIContainer><Button Content='e025' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Call for Air 
 <InlineUIContainer><Button Content='Strike' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
-<InlineUIContainer><Button Content='e025' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Attempt to <InlineUIContainer><Button Content='Resupply' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<InlineUIContainer><Button Content='e026' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Attempt to 
+<InlineUIContainer><Button Content='Resupply' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
+<InlineUIContainer><Button Content='e027' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Click on highlighted area to Enter
+<LineBreak/><LineBreak/>"
+e023	"<Bold>e023 Area Check</Bold> 
+<InlineUIContainer><Button Content='r4.54.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
-Alternatively, click on an adjacent highlighted area on the Movement Board to enter that area per 
-<InlineUIContainer><Button Content='e026' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+Check any one additional adjacent area for estimated enemy strength by rolling on the 
+<InlineUIContainer><Button Content='Resistance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. Click on one of the adjacent regions highlighted blue."
+e024	"<Bold>e024 Call for Artillery Support</Bold> 
+<InlineUIContainer><Button Content='r4.54.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+<LineBreak/><LineBreak/>
+Call to hit an area adjacent to your task force. Consult the 
+<InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+to see if Artillery Support arrives. If successful, an Artillery Support marker on the area. Click on one of the adjacent regions highlighted blue."
+e025	"<Bold>e025 Call for Air Strike</Bold> 
+<InlineUIContainer><Button Content='r4.54.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+<LineBreak/><LineBreak/>
+Call to hit an area adjacent to your task force. Consult the 
+<InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+to see if Air Strike arrives. If successful, an Air Strike marker is placed on the area."
+e026	"<Bold>e026 Attempt to Resupply</Bold> 
+<InlineUIContainer><Button Content='r4.54.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+<LineBreak/><LineBreak/>
+Consult the 
+<InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+to see if resupply occurs. If successful, you may relead your tank with ammo. "
+e027	"<Bold>e027 Enter Adjacent Area</Bold> 
+<InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>"
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"

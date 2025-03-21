@@ -598,10 +598,61 @@ namespace Pattons_Best
                   break;
                case GameAction.PreparationsLoaderSpot:
                   gi.IsTurretActive = false;
-                  gi.EventDisplayed = gi.EventActive = "e015";
+                  if ( null == lastReport.Loader)
+                  {
+                     returnStatus = "lastReport.Loader=null";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsLoaderSpot): " + returnStatus);
+                  }
+                  else
+                  {
+                     if(true == lastReport.Loader.IsButtonedUp)
+                     {
+                        gi.EventDisplayed = gi.EventActive = "e015";
+                     }
+                     else
+                     {
+                        if (null == lastReport.Commander)
+                        {
+                           returnStatus = "lastReport.Commander=null";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsLoaderSpot): " + returnStatus);
+                        }
+                        else
+                        {
+                           TankCard card = new TankCard(lastReport.TankCardNum);
+                           if ((true == lastReport.Commander.IsButtonedUp) && (false == card.myIsVisionCupola) )
+                              gi.EventDisplayed = gi.EventActive = "e016";
+                           else
+                              gi.EventDisplayed = gi.EventActive = "e017";
+                        }
+                     }
+                  }
                   break;
                case GameAction.PreparationsCommanderSpot:
-                  gi.EventDisplayed = gi.EventActive = "e016";
+                  if (null == lastReport.Commander)
+                  {
+                     returnStatus = "lastReport.Commander=null";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsLoaderSpot): " + returnStatus);
+                  }
+                  else
+                  {
+                     TankCard card = new TankCard(lastReport.TankCardNum);
+                     if ((true == lastReport.Commander.IsButtonedUp) && (false == card.myIsVisionCupola))
+                     {
+                        gi.EventDisplayed = gi.EventActive = "e016";
+                     }
+                     else
+                     {
+                        action = GameAction.PreparationsFinal;
+                        gi.GamePhase = GamePhase.Movement;
+                        gi.EventDisplayed = gi.EventActive = "e017";
+                        gi.DieRollAction = GameAction.MovementStartAreaSetRoll;
+                        if (false == SetUsControl(gi))
+                        {
+                           returnStatus = "SetUsControl() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
+                        }
+                     }
+                  }
                   break;
                case GameAction.PreparationsFinal:
                   gi.GamePhase = GamePhase.Movement;
@@ -808,15 +859,24 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                }
                break;
-            case GameAction.MovementEnemyStrengthCheck:
+            case GameAction.MovementEnemyStrengthChoice:
                gi.EventDisplayed = gi.EventActive = "e020";
                gi.DieRollAction = GameAction.MovementExitAreaSetRoll;
                break;
+            case GameAction.MovementEnemyStrengthCheck:
+               gi.EventDisplayed = gi.EventActive = "e021";
+               gi.DieRollAction = GameAction.MovementEnemyStrengthCheckRoll;
+               break;
             case GameAction.MovementEnemyStrengthCheckRoll:
                gi.DieResults[key][0] = dieRoll;
+               if (false == SetEnemyStrengthCounter(gi, dieRoll))
+               {
+                  returnStatus = "SetEnemyStrengthCounter() returned false";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+               }
                break;
             case GameAction.MovementChooseOption:
-               gi.EventDisplayed = gi.EventActive = "e021";
+               gi.EventDisplayed = gi.EventActive = "e022";
                break;
             case GameAction.EndGameClose:
                gi.GamePhase = GamePhase.EndGame;
@@ -908,7 +968,73 @@ namespace Pattons_Best
          gi.MainMapItems.Add(miExit);
          return true;
       }
-
+      private bool SetEnemyStrengthCounter(IGameInstance gi, int dieRoll)
+      {
+         if (null == gi.EnemyStrengthCheck)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetEnemyStrengthCounter(): gi.EnemyStrengthCheck=null");
+            return false;
+         }
+         if ("A" == gi.EnemyStrengthCheck.Type)
+            dieRoll += 1;
+         if ("C" == gi.EnemyStrengthCheck.Type)
+            dieRoll += 2;
+         //-----------------------------------------------
+         IAfterActionReport? report = gi.Reports.GetLast();
+         if (null == report)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetEnemyStrengthCounter(): report=null");
+            return false;
+         }
+         //-----------------------------------------------
+         EnumResistance resistance = EnumResistance.Heavy;
+         switch(report.Resistance)
+         {
+            case EnumResistance.Light:
+               if( dieRoll < 8 )
+                  resistance = EnumResistance.Light;
+               else
+                  resistance = EnumResistance.Medium;
+               break;
+            case EnumResistance.Medium:
+               if (dieRoll < 6)
+                  resistance = EnumResistance.Light;
+               else if (dieRoll < 10)
+                  resistance = EnumResistance.Medium;
+               break;
+            case EnumResistance.Heavy:
+               if (dieRoll < 5)
+                  resistance = EnumResistance.Light;
+               else if (dieRoll < 9)
+                  resistance = EnumResistance.Medium;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "SetEnemyStrengthCounter(): reached default resistence=" + report.Resistance.ToString());
+               return false;
+         }
+         //-------------------------------------
+         if( EnumResistance.Light == resistance )
+         {
+            IMapItem strengthMarker = new MapItem("StrengthLight", 1.0, "c36Light", gi.EnemyStrengthCheck);
+            gi.MainMapItems.Add(strengthMarker);
+         }
+         else if (EnumResistance.Medium == resistance)
+         {
+            IMapItem strengthMarker = new MapItem("StrengthMedium", 1.0, "c37Medium", gi.EnemyStrengthCheck);
+            gi.MainMapItems.Add(strengthMarker);
+         }
+         else if (EnumResistance.Heavy == resistance)
+         {
+            IMapItem strengthMarker = new MapItem("StrengthHeavy", 1.0, "c38Heavy", gi.EnemyStrengthCheck);
+            gi.MainMapItems.Add(strengthMarker);
+         }
+         else
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetEnemyStrengthCounter(): reached default resistence=" + resistance.ToString());
+            return false;
+         }
+         return true;
+      }
    }
    //-----------------------------------------------------
    class GameStateBattle : GameState

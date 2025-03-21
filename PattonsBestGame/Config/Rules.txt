@@ -105,7 +105,8 @@ If the number is less than or equal to the probability code, you trigger a day o
 <InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for the Morning Briefing. "
 r4.2	"<Bold>r4.2 Morning Briefing</Bold> 
 <LineBreak/><LineBreak/>
-Perform these actions using After Action Report (AAR) <InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>:
+Perform these actions using After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>:
 <LineBreak/><LineBreak/>
 -- A new AAR is created with the new date and scenario code. <LineBreak/><LineBreak/>
 -- If a new tank is required, consult the Tank Replacement Table per <InlineUIContainer><Button Content='r24.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. <LineBreak/><LineBreak/>
@@ -135,8 +136,8 @@ Determine your tank&apos;s deployment from the
 <InlineUIContainer><Button Content='Deployment' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table.
  Your tank is marked as moving or hull down by having a counter placed on the Battle Board. 
 <LineBreak/><LineBreak/>
-If you tank is the lead tank, it is recorded on Notes section of the After Action Report (AAR) 
-<InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+If you tank is the lead tank, it is recorded on Notes section of the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r4.42	"<Bold>r4.42 Hatches</Bold>
 <LineBreak/><LineBreak/>
 Place Open Hatch Makers with it on the tank card for any crewmember you do not want buttoned up.
@@ -200,16 +201,16 @@ r4.54	"<Bold>r4.54  Operations</Bold>
 <LineBreak/><LineBreak/>
 Choose one of following options. Each option takes time per the 
 <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-Table. The time is marked off on the After Action Report (AAR) 
-<InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+Table. The time is marked off on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
 Continue performing operations one after another recording time used for each option chosen. When daylight runs out, the scenario ends. Go to Evening Debriefing 
 <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r4.54.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Check Additional Area<LineBreak/>
 <InlineUIContainer><Button Content='r4.54.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Call for Artillery Support<LineBreak/>
 <InlineUIContainer><Button Content='r4.54.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Call for Air Strike<LineBreak/>
-<InlineUIContainer><Button Content='r4.54.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Attempt Resupply<LineBreak/>
-<InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Enter Adjacent Area"
+<InlineUIContainer><Button Content='r4.54.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Attempt Resupply<LineBreak/>
+<InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enter Adjacent Area"
 r4.54.1	"<Bold>r4.54.1  Check Additional Area</Bold>
 <LineBreak/><LineBreak/>
 Check any one additional adjacent area for estimated enemy strength by rolling on the 
@@ -235,13 +236,28 @@ Consult the
 to see if resupply occurs. If successful, you may relead your tank with ammo. Continue with 
 <InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r4.54.5	"<Bold>r4.54.5  Enter Adjacent Area</Bold>
-<LineBreak/><LineBreak/>"
+<LineBreak/><LineBreak/>
+Enter adjacent area by moving your Task Force marker into that area. 
+1.) Decide if you tank will use advancing fire per 
+<InlineUIContainer><Button Content='r22.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+2.) Consult <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table to determine if battle occurs. If no battle, convert the Resistance marker to US Control marker on the Movement board. If battle occurs, mark off 15 minutes, and go to 
+<InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+3) Record victory points for area now under US Control on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  If daylight remains, and not in Exit area, continue with
+<InlineUIContainer><Button Content='4.53' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+If daylight remains, and in Exit area, continue with
+<InlineUIContainer><Button Content='r4.51' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> with new start area.
+If no daylight remains, the day is finished. Go to If daylight remains, and in Exit area, continue with Evening Debriefing 
+<InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>"
 r7.0	"<Bold>r7.0 Crew Ratings</Bold> 
 <LineBreak/><LineBreak/>
 Each crew member is given a numerical rating of his skill at his position. The rating range from 1 (poorest) to 10 (best). 
 <LineBreak/><LineBreak/>
 The higher the crew member's rating, the more successful he will be trying to spot enemy units, hit enemy units with his weapons, repair malfunctioning guns, etc. 
-<LineBreak/><LineBreak/>The crew ratings are recorded on the After Action Report (AAR) <InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>The crew ratings are recorded on the After Action Report <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r7.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Ratings for New Men<LineBreak/>
 <InlineUIContainer><Button Content='r7.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Rating Improvements<LineBreak/>"
@@ -300,7 +316,7 @@ r16.21	"<Bold>r16.21 Ammo Limits</Bold>
 <LineBreak/><LineBreak/>
 Ammo is loaded during the Morning Briefing phase 
 <InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  phase showing on the After Action Report 
-<InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 how much of each ammo type is carried. 
 <LineBreak/><LineBreak/>
 Consult the 
@@ -490,7 +506,7 @@ r19.22	"<Bold>r19.22 Serious Wounds</Bold>
 <LineBreak/><LineBreak/>
 If a crew member takes a wound that puts him out of action for one week or more, he is incapacitated and immediately ceases performing any crew actions. 
 Note incapacitated crewmen in the notes section of the After Action Report (AAR) 
-<InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
 <LineBreak/><LineBreak/>
 The assistant driver may move through the tank to replace any one incapacitated crewmen. An incapacitated driver is moved to the assistant driver's position, and incapacitated men in the turret are placed on the turret floor.
 <LineBreak/><LineBreak/>
@@ -508,12 +524,12 @@ If the tank withdraws or the battle ends, replace incapacitated crewmen immediat
 <InlineUIContainer><Button Content='r19.32' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Crewmen Replacement Time Penalty<LineBreak/>
 <InlineUIContainer><Button Content='r19.33' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Crewmen Rejoining Crew"
 r19.31	"<Bold>r19.31 Replacing Crewmen Process</Bold> 
-<LineBreak/><LineBreak/>Replace incapacitated crew by writing name on the After Action Report (AAR) 
-<InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Roll for the ratings of the new men as desribed in the Crew Ratings rule 
+<LineBreak/><LineBreak/>Replace incapacitated crew by writing name on the After Action Report  
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Roll for the ratings of the new men as desribed in the Crew Ratings rule 
 <InlineUIContainer><Button Content='r7.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r19.32	"<Bold>r19.32 Crewmen Replacement Time Penalty</Bold> 
-<LineBreak/><LineBreak/>Replacing crewmen takes 30 minutes of game time. Mark off this time on the After Action Report (AAR) 
-<InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+<LineBreak/><LineBreak/>Replacing crewmen takes 30 minutes of game time. Mark off this time on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r19.33	"<Bold>r19.33 Crewmen Rejoining Crew</Bold> 
 <LineBreak/><LineBreak/> Wounded crewmen who are out for a number of weeks may rejoin your crew the day after their period of convalescence is over.
 <LineBreak/><LineBreak/>For example, a man wounded on the 5th of the month and is out one week is eligible to rejoin your crew the morning of the 13th. 
@@ -629,8 +645,8 @@ Move your Task Force marker one area on the Movement Board in the direction of t
 Go back to Prepare for Battle <InlineUIContainer><Button Content='r20.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r21.0	"<Bold>r21.0 Time</Bold>
 <LineBreak/><LineBreak/>
-The length of a day of battle is determined by the passage of time. On the After Action Report (AAR) 
-<InlineUIContainer><Button Content='r2.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+The length of a day of battle is determined by the passage of time. On the After Action Report  
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 is a section to mark time, where the hours 0500 through 1900 are each divided into four 15 minute blocks. The exception is 1900 because sunset will occur no later than 19:15.
 <LineBreak/><LineBreak/>
 During the Time Check Phase <InlineUIContainer><Button Content='r4.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 

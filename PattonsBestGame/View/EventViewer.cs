@@ -800,7 +800,7 @@ namespace Pattons_Best
             case "e019":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  Image imge015 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c34ExitArea"), Width = 100, Height = 100, Name = "MovementEnemyStrengthCheck" };
+                  Image imge015 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c34ExitArea"), Width = 100, Height = 100, Name = "MovementEnemyStrengthChoice" };
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("                                           "));
@@ -810,7 +810,7 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
-            case "e020":
+            case "e021":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
                   Image imge015 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c36Light"), Width = 100, Height = 100, Name = "MovementChooseOption" };
@@ -1064,8 +1064,8 @@ namespace Pattons_Best
                               action = GameAction.MovementExitAreaSet;
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
-                           case "MovementEnemyStrengthCheck":
-                              action = GameAction.MovementEnemyStrengthCheck;
+                           case "MovementEnemyStrengthChoice":
+                              action = GameAction.MovementEnemyStrengthChoice;
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
                            case "MovementChooseOption":
