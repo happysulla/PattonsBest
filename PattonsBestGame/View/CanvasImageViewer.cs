@@ -108,7 +108,7 @@ namespace Pattons_Best
          }
       }
       //-------------------------------------------------
-      public void CleanCanvas(Canvas c)
+      public void CleanCanvas(Canvas c, bool IsBattleMap = false)
       {
          List<UIElement> elements = new List<UIElement>();
          foreach (UIElement ui in c.Children)
@@ -148,7 +148,7 @@ namespace Pattons_Best
       }
       public void ShowBattleMap(Canvas c)
       {
-         CleanCanvas(c);
+         CleanCanvas(c, true);
          Image img = new Image() { Name = "CanvasMain", Width = 1000, Height = 890, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapBattle") };
          c.Children.Add(img);
          Canvas.SetLeft(img, 0);
