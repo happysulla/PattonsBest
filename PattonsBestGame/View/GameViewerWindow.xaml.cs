@@ -472,14 +472,41 @@ namespace Pattons_Best
          GameAction outAction = GameAction.RemoveSplashScreen;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
+      private bool UpdateCanvasMapItems(IMapItems mapItems)
+      {
+         foreach (IMapItem mi in mapItems)
+         {
+            if (null == mi)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMapItems(): mi=null");
+               return false;
+            }
+            Button? b = myButtonTanks.Find(mi.Name);
+            if (null != b)
+            {
+               b.BeginAnimation(Canvas.LeftProperty, null); // end animation offset
+               b.BeginAnimation(Canvas.TopProperty, null);  // end animation offset
+               ITerritory t = mi.TerritoryCurrent;
+               Double x = t.CenterPoint.X - (mi.Zoom * Utilities.theMapItemOffset);
+               Double y = t.CenterPoint.Y - (mi.Zoom * Utilities.theMapItemOffset);
+               Canvas.SetLeft(b, x);
+               Canvas.SetTop(b, y);
+               Canvas.SetZIndex(b, 9999);
+            }
+            else
+            {
+               if (false == CreateButtonMapItem(mi, 0))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMapItems(): CreateButtonMapItem() returned false");
+                  return false;
+               }
+            }
+         }
+         return true;
+      }
       private bool CreateButtonMapItem(IMapItem mi, int counterCount)
       {
-         ITerritory? t = Territories.theTerritories.Find(mi.TerritoryCurrent.Name);
-         if (null == t)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateButtonMapItem(): TerritoryExtensions.Find() returned null for " + t.Name);
-            return false;
-         }
+         ITerritory t = mi.TerritoryCurrent;
          if ("Main" == t.CanvasName)
          {
             switch (CanvasImageViewer.theMainImage)
@@ -585,9 +612,9 @@ namespace Pattons_Best
          if (GamePhase.UnitTest == gi.GamePhase)
             return true;
          //-------------------------------------------------------
-         if (false == UpdateCanvasTankMapItems(gi.ReadyRacks))
+         if (false == UpdateCanvasMapItems(gi.ReadyRacks))
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasTankMapItems(ReadyRacks) returned false");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasMapItems(ReadyRacks) returned false");
             return false;
          }
          //-------------------------------------------------------
@@ -624,48 +651,16 @@ namespace Pattons_Best
             return false;
          }
          //-------------------------------------------------------
-         if (false == UpdateCanvasTankMapItems(gi.Hatches))
+         if (false == UpdateCanvasMapItems(gi.Hatches))
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasTankMapItems(Hatches) returned false");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasMapItems(Hatches) returned false");
             return false;
          }
          //-------------------------------------------------------
-         if (false == UpdateCanvasTankMapItems(gi.GunLoads))
+         if (false == UpdateCanvasMapItems(gi.GunLoads))
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasTankMapItems(GunLoads) returned false");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasMapItems(GunLoads) returned false");
             return false;
-         }
-         return true;
-      }
-      private bool UpdateCanvasTankMapItems(IMapItems mapItems)
-      {
-         foreach (IMapItem mi in mapItems)
-         {
-            if (null == mi)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankMapItems(): mi=null");
-               return false;
-            }
-            Button? b = myButtonTanks.Find(mi.Name);
-            if (null != b)
-            {
-               b.BeginAnimation(Canvas.LeftProperty, null); // end animation offset
-               b.BeginAnimation(Canvas.TopProperty, null);  // end animation offset
-               ITerritory t = mi.TerritoryCurrent;
-               Double x = t.CenterPoint.X - (mi.Zoom * Utilities.theMapItemOffset);
-               Double y = t.CenterPoint.Y - (mi.Zoom * Utilities.theMapItemOffset);
-               Canvas.SetLeft(b, x);
-               Canvas.SetTop(b, y);
-               Canvas.SetZIndex(b, 9999);
-            }
-            else
-            {
-               if (false == CreateButtonMapItem(mi, 0))
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankMapItems(): CreateButtonMapItem() returned false");
-                  return false;
-               }
-            }
          }
          return true;
       }
@@ -857,6 +852,12 @@ namespace Pattons_Best
          if (GamePhase.UnitTest == gi.GamePhase)
             return true;
          //-------------------------------------------------------
+         if (false == UpdateCanvasMapItems(gi.Controls))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasMapItems(Controls) returned false");
+            return false;
+         }
+         //-------------------------------------------------------
          foreach (IMapItem mi in gi.MainMapItems)
          {
             if (null == mi)
@@ -1009,6 +1010,8 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasHexTravelToShowPolygons(): 1 t=null for " + s);
                return false;
             }
+            if (null != gi.Controls.Find(s + "R")) // if there is already a resistance marker in this territory, skip
+               continue;
             PointCollection points = new PointCollection();
             foreach (IMapPoint mp1 in t.Points)
                points.Add(new System.Windows.Point(mp1.X, mp1.Y));

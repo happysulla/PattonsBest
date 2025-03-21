@@ -82,7 +82,9 @@ namespace Pattons_Best
       UpdateLoadingGame,
       UpdateLoadingGameReturnToJail,
       UpdateUndo,
-      UpdateToPreparations,
+
+      TestingStartPreparations,
+      TestingStartMovement,
 
       ShowCombatCalendarDialog,
       ShowAfterActionReportDialog,

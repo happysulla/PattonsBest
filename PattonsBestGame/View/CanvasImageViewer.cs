@@ -67,12 +67,13 @@ namespace Pattons_Best
                break;
             case GameAction.SetupShowMovementBoard:
             case GameAction.MovementStartAreaSet:
+            case GameAction.TestingStartMovement:
                theMainImage = EnumMainImage.MI_Move;
                ShowMovementMap(myCanvas);
                break;
             case GameAction.SetupShowBattleBoard:
             case GameAction.PreparationsDeployment:
-            case GameAction.UpdateToPreparations:
+            case GameAction.TestingStartPreparations:
                myDieRoller.HideDie();
                theMainImage = EnumMainImage.MI_Battle;
                ShowBattleMap(myCanvas);

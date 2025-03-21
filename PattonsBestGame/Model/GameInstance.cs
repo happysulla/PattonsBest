@@ -38,6 +38,9 @@ namespace Pattons_Best
       public IMapItems ReadyRacks { set; get; } = new MapItems();
       public IMapItems Hatches { set; get; } = new MapItems();
       public IMapItems GunLoads { set; get; } = new MapItems();
+      public IMapItems Controls { set; get; } = new MapItems();
+      public IMapItems ArtillerySupports { get; set; } = new MapItems();
+      public IMapItems AirStrikes { get; set; } = new MapItems();
       public IMapItem? Turret { set; get; } = null;
       //---------------------------------------------------------------
       public bool IsHulledDown { set; get; } = false;
@@ -48,6 +51,7 @@ namespace Pattons_Best
       public ITerritory? NewTerritory { set; get; } = null;
       public ITerritory Home { get; set; } = new Territory();
       public ITerritory? EnemyStrengthCheck { get; set; } = null;
+      //------------------------------------------------
       private List<EnteredHex> myEnteredHexes = new List<EnteredHex>();
       public List<EnteredHex> EnteredHexes { get => myEnteredHexes; }
       //---------------------------------------------------------------

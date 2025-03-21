@@ -519,57 +519,6 @@ namespace Pattons_Best
          return true;
       }
       //--------------------------------------------------------------------
-      private bool SetThumbnailState(Canvas c, ITerritory t)
-      {
-         ScrollViewer scrollViewer = (ScrollViewer)c.Parent; // set thumbnails of scroll viewer to find the target hex
-         if (null == scrollViewer)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetThumbnailState(): scrollViewer=null");
-            return false;
-         }
-         double percentHeight = (t.CenterPoint.Y / c.ActualHeight);
-         double percentToScroll = 0.0;
-         if (percentHeight < 0.25)
-            percentToScroll = 0.0;
-         else if (0.75 < percentHeight)
-            percentToScroll = 1.0;
-         else
-            percentToScroll = percentHeight / 0.5 - 0.5;
-         double amountToScroll = percentToScroll * scrollViewer.ScrollableHeight;
-         scrollViewer.ScrollToVerticalOffset(amountToScroll);
-         //--------------------------------------------------------------------
-         double percentWidth = (t.CenterPoint.X / c.ActualWidth);
-         if (percentWidth < 0.25)
-            percentToScroll = 0.0;
-         else if (0.75 < percentWidth)
-            percentToScroll = 1.0;
-         else
-            percentToScroll = percentWidth / 0.5 - 0.5;
-         amountToScroll = percentToScroll * scrollViewer.ScrollableWidth;
-         scrollViewer.ScrollToHorizontalOffset(amountToScroll);
-         return true;
-      }
-      private bool SetButtonState(IGameInstance gi, string key, Button b)
-      {
-         string content = (string)b.Content;
-         if( null == content )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): content=null for key=" + key);
-            return false;
-         }
-         if ((key != gi.EventActive) && (false == content.StartsWith("e")))
-         {
-            b.IsEnabled = false;
-            return true;
-         }
-         switch (key)
-         {
-            default:
-               break;
-         }
-         b.Click += Button_Click;
-         return true;
-      }
       private bool UpdateEventContent(IGameInstance gi, string key)
       {
          if( null == myTextBlock)
@@ -774,11 +723,11 @@ namespace Pattons_Best
                IMapItem? cmdrSpot = gi.MainMapItems.Find("CommanderSpot");
                if (null != cmdrSpot)
                {
-                  Image imge015 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c19CommanderSpot"), Width = 100, Height = 100, Name = "PreparationsFinal" };
+                  Image imge016 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c19CommanderSpot"), Width = 100, Height = 100, Name = "PreparationsFinal" };
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("                                           "));
-                  myTextBlock.Inlines.Add(new InlineUIContainer(imge015));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge016));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
@@ -787,11 +736,9 @@ namespace Pattons_Best
             case "e018":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  Image imge015 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c33StartArea"), Width = 100, Height = 100, Name = "MovementExitAreaSet" };
-                  myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new LineBreak());
+                  Image imge018 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c33StartArea"), Width = 100, Height = 100, Name = "MovementExitAreaSet" };
                   myTextBlock.Inlines.Add(new Run("                                           "));
-                  myTextBlock.Inlines.Add(new InlineUIContainer(imge015));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge018));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
@@ -800,11 +747,9 @@ namespace Pattons_Best
             case "e019":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  Image imge015 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c34ExitArea"), Width = 100, Height = 100, Name = "MovementEnemyStrengthChoice" };
-                  myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new LineBreak());
+                  Image imge019 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c34ExitArea"), Width = 100, Height = 100, Name = "MovementEnemyStrengthChoice" };
                   myTextBlock.Inlines.Add(new Run("                                           "));
-                  myTextBlock.Inlines.Add(new InlineUIContainer(imge015));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge019));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
@@ -813,11 +758,26 @@ namespace Pattons_Best
             case "e021":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  Image imge015 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c36Light"), Width = 100, Height = 100, Name = "MovementChooseOption" };
-                  myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new LineBreak());
+                  if( null == gi.EnemyStrengthCheck )
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.EnemyStrenthCheck=null");
+                     return false;
+                  }
+                  Image imge020 = new Image { Width = 100, Height = 100, Name = "MovementChooseOption" };
+                  foreach(IMapItem mi in gi.Controls)
+                  {
+                     if( mi.TerritoryCurrent.Name == gi.EnemyStrengthCheck.Name)
+                     {
+                        if (1 == mi.Count)
+                           imge020.Source = MapItem.theMapImages.GetBitmapImage("c36Light");
+                        else if( 2 == mi.Count)
+                           imge020.Source = MapItem.theMapImages.GetBitmapImage("c37Medium");
+                        else
+                           imge020.Source = MapItem.theMapImages.GetBitmapImage("c38Heavy");
+                     }
+                  }
                   myTextBlock.Inlines.Add(new Run("                                           "));
-                  myTextBlock.Inlines.Add(new InlineUIContainer(imge015));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge020));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
@@ -853,6 +813,170 @@ namespace Pattons_Best
             }
             current = current.GetNextContextPosition(LogicalDirection.Forward);
          }
+      }
+      private bool SetThumbnailState(Canvas c, ITerritory t)
+      {
+         ScrollViewer scrollViewer = (ScrollViewer)c.Parent; // set thumbnails of scroll viewer to find the target hex
+         if (null == scrollViewer)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetThumbnailState(): scrollViewer=null");
+            return false;
+         }
+         double percentHeight = (t.CenterPoint.Y / c.ActualHeight);
+         double percentToScroll = 0.0;
+         if (percentHeight < 0.25)
+            percentToScroll = 0.0;
+         else if (0.75 < percentHeight)
+            percentToScroll = 1.0;
+         else
+            percentToScroll = percentHeight / 0.5 - 0.5;
+         double amountToScroll = percentToScroll * scrollViewer.ScrollableHeight;
+         scrollViewer.ScrollToVerticalOffset(amountToScroll);
+         //--------------------------------------------------------------------
+         double percentWidth = (t.CenterPoint.X / c.ActualWidth);
+         if (percentWidth < 0.25)
+            percentToScroll = 0.0;
+         else if (0.75 < percentWidth)
+            percentToScroll = 1.0;
+         else
+            percentToScroll = percentWidth / 0.5 - 0.5;
+         amountToScroll = percentToScroll * scrollViewer.ScrollableWidth;
+         scrollViewer.ScrollToHorizontalOffset(amountToScroll);
+         return true;
+      }
+      private bool SetButtonState(IGameInstance gi, string key, Button b)
+      {
+         string content = (string)b.Content;
+         if (null == content)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): content=null for key=" + key);
+            return false;
+         }
+         if ((key != gi.EventActive) && (false == content.StartsWith("e")))
+         {
+            b.IsEnabled = false;
+            return true;
+         }
+         switch (key)
+         {
+            case "e022":
+               if ("Strength Check" == content)
+               {
+                  if ((false == SetButtonStateEnemyStrenth(gi, b)))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): SetButtonStateEnemyStrenth() returned false");
+                     return false;
+                  }
+               }
+               else if ("Support" == content)
+               {
+                  if ((false == SetButtonArtillerySupport(gi, b)))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): SetButtonStateEnemyStrenth() returned false");
+                     return false;
+                  }
+               }
+               else if ("Strike" == content)
+               {
+                  if ((false == SetButtonAirStrike(gi, b)))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): SetButtonStateEnemyStrenth() returned false");
+                     return false;
+                  }
+               }
+               break;
+            default:
+               break;
+         }
+         b.Click += Button_Click;
+         return true;
+      }
+      private bool SetButtonStateEnemyStrenth(IGameInstance gi, Button b)
+      {
+         b.IsEnabled = false;
+         IMapItem? taskForce = gi.MainMapItems.Find("TaskForce");
+         if (null == taskForce)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetButtonStateEnemyStrenth(): taskForce=null");
+            return false;
+         }
+         //--------------------------------
+         List<String> sTerritories = taskForce.TerritoryCurrent.Adjacents;
+         foreach (string s in sTerritories )  // Look at each adjacent territory
+         {
+            if (true == s.Contains("E")) // Ignore Entry or Exit Areas
+               continue;
+            bool isMatch = false; // If any adjacent territory does not match something in the gi.Controls, enable the button
+            foreach (IMapItem mi in gi.Controls)
+            {
+               if (true == mi.TerritoryCurrent.Name.Contains(s)) 
+                  isMatch = true;
+            }
+            if( false == isMatch )
+            {
+               b.IsEnabled = true;
+               return true;
+            }
+         }
+         return true;
+      }
+      private bool SetButtonArtillerySupport(IGameInstance gi, Button b)
+      {
+         b.IsEnabled = false;
+         IMapItem? taskForce = gi.MainMapItems.Find("TaskForce");
+         if (null == taskForce)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetButtonStateEnemyStrenth(): taskForce=null");
+            return false;
+         }
+         //--------------------------------
+         List<String> sTerritories = taskForce.TerritoryCurrent.Adjacents;
+         foreach (string s in sTerritories)  // Look at each adjacent territory
+         {
+            if (true == s.Contains("E")) // Ignore Entry or Exit Areas
+               continue;
+            bool isMatch = false; // If any adjacent territory does not match something in the gi.Artillery, enable the button
+            foreach (IMapItem mi in gi.ArtillerySupports)
+            {
+               if (true == mi.TerritoryCurrent.Name.Contains(s))
+                  isMatch = true;
+            }
+            if (false == isMatch)
+            {
+               b.IsEnabled = true;
+               return true;
+            }
+         }
+         return true;
+      }
+      private bool SetButtonAirStrike(IGameInstance gi, Button b)
+      {
+         b.IsEnabled = false;
+         IMapItem? taskForce = gi.MainMapItems.Find("TaskForce");
+         if (null == taskForce)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetButtonStateEnemyStrenth(): taskForce=null");
+            return false;
+         }
+         //--------------------------------
+         List<String> sTerritories = taskForce.TerritoryCurrent.Adjacents;
+         foreach (string s in sTerritories)  // Look at each adjacent territory
+         {
+            if (true == s.Contains("E")) // Ignore Entry or Exit Areas
+               continue;
+            bool isMatch = false; // If any adjacent territory does not match something in the gi.AirStrikes, enable the button
+            foreach (IMapItem mi in gi.AirStrikes)
+            {
+               if (true == mi.TerritoryCurrent.Name.Contains(s))
+                  isMatch = true;
+            }
+            if (false == isMatch)
+            {
+               b.IsEnabled = true;
+               return true;
+            }
+         }
+         return true;
       }
       //--------------------------------------------------------------------
       public void ShowDieResult(int dieRoll)
@@ -1151,9 +1275,13 @@ namespace Pattons_Best
                action = GameAction.PreparationsTurretRotateRight;
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
+            case "Strength Check":
+               action = GameAction.MovementEnemyStrengthChoice;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
             case "Begin Game":
                action = GameAction.SetupShowMapHistorical;
-               action = GameAction.UpdateToPreparations; // <cgs> TEST
+               action = GameAction.TestingStartMovement; // <cgs> TEST
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Read Rules":

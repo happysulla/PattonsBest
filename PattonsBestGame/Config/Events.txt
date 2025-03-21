@@ -177,34 +177,29 @@ Choose one of following options. To see the options, select the &apos;e###&apos;
 <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 Table.
 <LineBreak/><LineBreak/>
-<InlineUIContainer><Button Content='e023' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
- Perform an additional <InlineUIContainer><Button Content='Area Check' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
-<InlineUIContainer><Button Content='e024' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Call for Artillery 
+<InlineUIContainer><Button Content='e020' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+ Perform an additional Enemy <InlineUIContainer><Button Content='Strength Check' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
+<InlineUIContainer><Button Content='e023' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Call for Artillery 
 <InlineUIContainer><Button Content='Support' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
-<InlineUIContainer><Button Content='e025' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Call for Air 
+<InlineUIContainer><Button Content='e024' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Call for Air 
 <InlineUIContainer><Button Content='Strike' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
-<InlineUIContainer><Button Content='e026' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Attempt to 
+<InlineUIContainer><Button Content='e025' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Attempt to 
 <InlineUIContainer><Button Content='Resupply' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
-<InlineUIContainer><Button Content='e027' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Click on highlighted area to Enter
+<InlineUIContainer><Button Content='e026' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Click on highlighted area to Enter
 <LineBreak/><LineBreak/>"
-e023	"<Bold>e023 Area Check</Bold> 
-<InlineUIContainer><Button Content='r4.54.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
-<LineBreak/><LineBreak/>
-Check any one additional adjacent area for estimated enemy strength by rolling on the 
-<InlineUIContainer><Button Content='Resistance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. Click on one of the adjacent regions highlighted blue."
-e024	"<Bold>e024 Call for Artillery Support</Bold> 
+e023	"<Bold>e024 Call for Artillery Support</Bold> 
 <InlineUIContainer><Button Content='r4.54.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
 Call to hit an area adjacent to your task force. Consult the 
 <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 to see if Artillery Support arrives. If successful, an Artillery Support marker on the area. Click on one of the adjacent regions highlighted blue."
-e025	"<Bold>e025 Call for Air Strike</Bold> 
+e024	"<Bold>e025 Call for Air Strike</Bold> 
 <InlineUIContainer><Button Content='r4.54.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
 Call to hit an area adjacent to your task force. Consult the 
 <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 to see if Air Strike arrives. If successful, an Air Strike marker is placed on the area."
-e026	"<Bold>e026 Attempt to Resupply</Bold> 
+e025	"<Bold>e026 Attempt to Resupply</Bold> 
 <InlineUIContainer><Button Content='r4.54.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
 Consult the 

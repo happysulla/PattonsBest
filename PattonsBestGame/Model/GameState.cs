@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Navigation;
@@ -168,11 +169,16 @@ namespace Pattons_Best
          string key = gi.EventActive;
          switch (action)
          {
-            case GameAction.UpdateToPreparations:
+            case GameAction.TestingStartPreparations:
                gi.GamePhase = GamePhase.Preparations;
                gi.EventDisplayed = gi.EventActive = "e011";
                gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
                gi.MainMapItems.Add(new MapItem("Sherman1", 2.0, "t001", gi.Home));
+               break;
+            case GameAction.TestingStartMovement:
+               gi.GamePhase = GamePhase.Movement;
+               gi.EventDisplayed = gi.EventActive = "e017";
+               gi.DieRollAction = GameAction.MovementStartAreaSetRoll;
                break;
             case GameAction.ShowCombatCalendarDialog:
             case GameAction.ShowAfterActionReportDialog:
@@ -876,6 +882,7 @@ namespace Pattons_Best
                }
                break;
             case GameAction.MovementChooseOption:
+               gi.DieResults["e021"][0] = Utilities.NO_RESULT;
                gi.EventDisplayed = gi.EventActive = "e022";
                break;
             case GameAction.EndGameClose:
@@ -922,15 +929,30 @@ namespace Pattons_Best
          startArea.Count = dieRoll;
          gi.MainMapItems.Add(startArea);
          //-----------------------------------------
-         name = "MTF" + dieRoll.ToString();
-         t = Territories.theTerritories.Find(name);
-         if (null == t)
+         if( 0 == t.Adjacents.Count )
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): taskForceArea tState=" + name);
+            Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): no adjacents for start area=" + name);
             return false;
          }
-         IMapItem taskForceArea = new MapItem("TaskForce", 1.0, "c35TaskForce", t);
+         ITerritory? adjacent = Territories.theTerritories.Find(t.Adjacents[0]); // should only be one adjacent to start area
+         if (null == adjacent)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): taskForceArea adjacent=" + t.Adjacents[0]);
+            return false;
+         }
+         IMapItem taskForceArea = new MapItem("TaskForce", 1.0, "c35TaskForce", adjacent);
          gi.MainMapItems.Add(taskForceArea);
+         //-----------------------------------------
+         string name1 = t.Adjacents[0] + "R";
+         ITerritory? controlled = Territories.theTerritories.Find(name1); // should only be one adjacent to start area
+         if (null == controlled)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): controlled not found name=" + name1);
+            return false;
+         }
+         IMapItem usControl = new MapItem(name1, 1.0, "c28UsControl", controlled);
+         usControl.Count = 0; // 0=us  1=light  2=medium  3=heavy
+         gi.Controls.Add(usControl);
          return true;
       }
       private bool SetExitArea(IGameInstance gi, int dieRoll)
@@ -1013,20 +1035,23 @@ namespace Pattons_Best
                return false;
          }
          //-------------------------------------
-         if( EnumResistance.Light == resistance )
+         if ( EnumResistance.Light == resistance )
          {
-            IMapItem strengthMarker = new MapItem("StrengthLight", 1.0, "c36Light", gi.EnemyStrengthCheck);
-            gi.MainMapItems.Add(strengthMarker);
+            IMapItem strengthMarker = new MapItem(gi.EnemyStrengthCheck.Name, 1.0, "c36Light", gi.EnemyStrengthCheck);
+            strengthMarker.Count = 1;
+            gi.Controls.Add(strengthMarker);
          }
          else if (EnumResistance.Medium == resistance)
          {
-            IMapItem strengthMarker = new MapItem("StrengthMedium", 1.0, "c37Medium", gi.EnemyStrengthCheck);
-            gi.MainMapItems.Add(strengthMarker);
+            IMapItem strengthMarker = new MapItem(gi.EnemyStrengthCheck.Name, 1.0, "c37Medium", gi.EnemyStrengthCheck);
+            strengthMarker.Count = 2;
+            gi.Controls.Add(strengthMarker);
          }
          else if (EnumResistance.Heavy == resistance)
          {
-            IMapItem strengthMarker = new MapItem("StrengthHeavy", 1.0, "c38Heavy", gi.EnemyStrengthCheck);
-            gi.MainMapItems.Add(strengthMarker);
+            IMapItem strengthMarker = new MapItem(gi.EnemyStrengthCheck.Name, 1.0, "c38Heavy", gi.EnemyStrengthCheck);
+            strengthMarker.Count = 3;
+            gi.Controls.Add(strengthMarker);
          }
          else
          {

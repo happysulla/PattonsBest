@@ -33,10 +33,13 @@ namespace Pattons_Best
       IMapItems ReadyRacks { set; get; }
       IMapItems Hatches { set; get; }
       IMapItems GunLoads { set; get; }
+      IMapItems Controls { set; get; }
+      IMapItems ArtillerySupports { get; set; }
+      IMapItems AirStrikes { get; set; }
       IMapItem? Turret { set; get; }
       //------------------------------------------------
-      ITerritory? NewTerritory { set; get; }
       ITerritory Home { get; set; }
+      ITerritory? NewTerritory { set; get; }
       ITerritory? EnemyStrengthCheck { get; set; }
       List<EnteredHex> EnteredHexes { get; }
       //------------------------------------------------
