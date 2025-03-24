@@ -27,7 +27,7 @@ namespace Pattons_Best
          "DADDY'S BELT", "DIPLOMACY FAILED", "GROUND ZERO", "HOLD MY BEER", "ARMAGEDDON", "ATOMIC BLONDE", "BEATS WALKING", "BARBIE DREAMHOUSE", "BYE FELICIA", "CANDY MAN", "CAPITAL PUNISHMENT",
          "CRUEL INTENTIONS", "DIRTY DEEDS", "MULLIGAN", "STAR LORD", "DROPPED AS A BABY", "CRIPPLING DEPRESSION"};
       public const int NO_RESULT = -100;
-      public const int STACK = 1;
+      public const int STACK = 3;
       public const double ZOOM = 1.25;
       private const int NUM_RANDOM_GEN = 13;
       //--------------------------------------------

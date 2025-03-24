@@ -771,13 +771,13 @@ namespace Pattons_Best
                      return false;
                   }
                   Image imge021 = new Image { Width = 100, Height = 100, Name = "MovementChooseOption" };
-                  foreach(IMapItem mi in gi.Controls)
+                  foreach(IMapItem mi in gi.MainMapItems)
                   {
                      if( mi.TerritoryCurrent.Name == gi.EnemyStrengthCheck.Name)
                      {
                         if (1 == mi.Count)
                            imge021.Source = MapItem.theMapImages.GetBitmapImage("c36Light");
-                        else if( 2 == mi.Count)
+                        else if (2 == mi.Count)
                            imge021.Source = MapItem.theMapImages.GetBitmapImage("c37Medium");
                         else
                            imge021.Source = MapItem.theMapImages.GetBitmapImage("c38Heavy");
@@ -917,14 +917,6 @@ namespace Pattons_Best
                      return false;
                   }
                }
-               else if ("Support" == content)
-               {
-                  if ((false == SetButtonArtillerySupport(gi, b)))
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): SetButtonStateEnemyStrenth() returned false");
-                     return false;
-                  }
-               }
                else if ("Strike" == content)
                {
                   if ((false == SetButtonAirStrike(gi, b)))
@@ -956,10 +948,13 @@ namespace Pattons_Best
             if (true == s.Contains("E")) // Ignore Entry or Exit Areas
                continue;
             bool isMatch = false; // If any adjacent territory does not match something in the gi.Controls, enable the button
-            foreach (IMapItem mi in gi.Controls)
+            foreach (IMapItem mi in gi.MainMapItems)
             {
-               if (true == mi.TerritoryCurrent.Name.Contains(s)) 
-                  isMatch = true;
+               if( true == mi.Name.Contains("Stength"))
+               {
+                  if (true == mi.TerritoryCurrent.Name.Contains(s))
+                     isMatch = true;
+               }
             }
             if( false == isMatch )
             {
@@ -969,62 +964,9 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool SetButtonArtillerySupport(IGameInstance gi, Button b)
-      {
-         b.IsEnabled = false;
-         IMapItem? taskForce = gi.MainMapItems.Find("TaskForce");
-         if (null == taskForce)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetButtonStateEnemyStrenth(): taskForce=null");
-            return false;
-         }
-         //--------------------------------
-         List<String> sTerritories = taskForce.TerritoryCurrent.Adjacents;
-         foreach (string s in sTerritories)  // Look at each adjacent territory
-         {
-            if (true == s.Contains("E")) // Ignore Entry or Exit Areas
-               continue;
-            bool isMatch = false; // If any adjacent territory does not match something in the gi.Artillery, enable the button
-            foreach (IMapItem mi in gi.ArtillerySupports)
-            {
-               if (true == mi.TerritoryCurrent.Name.Contains(s))
-                  isMatch = true;
-            }
-            if (false == isMatch)
-            {
-               b.IsEnabled = true;
-               return true;
-            }
-         }
-         return true;
-      }
       private bool SetButtonAirStrike(IGameInstance gi, Button b)
       {
-         b.IsEnabled = false;
-         IMapItem? taskForce = gi.MainMapItems.Find("TaskForce");
-         if (null == taskForce)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetButtonStateEnemyStrenth(): taskForce=null");
-            return false;
-         }
-         //--------------------------------
-         List<String> sTerritories = taskForce.TerritoryCurrent.Adjacents;
-         foreach (string s in sTerritories)  // Look at each adjacent territory
-         {
-            if (true == s.Contains("E")) // Ignore Entry or Exit Areas
-               continue;
-            bool isMatch = false; // If any adjacent territory does not match something in the gi.AirStrikes, enable the button
-            foreach (IMapItem mi in gi.AirStrikes)
-            {
-               if (true == mi.TerritoryCurrent.Name.Contains(s))
-                  isMatch = true;
-            }
-            if (false == isMatch)
-            {
-               b.IsEnabled = true;
-               return true;
-            }
-         }
+         b.IsEnabled = true;
          return true;
       }
       //--------------------------------------------------------------------

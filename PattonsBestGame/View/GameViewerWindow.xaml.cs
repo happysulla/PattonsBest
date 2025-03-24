@@ -522,20 +522,19 @@ namespace Pattons_Best
                Double y = t.CenterPoint.Y - (mi.Zoom * Utilities.theMapItemOffset);
                Canvas.SetLeft(b, x);
                Canvas.SetTop(b, y);
-               Canvas.SetZIndex(b, 9999);
             }
             else
             {
-               IStack? stack = stacks.Find(mi);
+               IStack? stack = stacks.Find(mi.TerritoryCurrent);
                if (null == stack)
                {
                   stack = new Stack(mi.TerritoryCurrent, mi);
-                  Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "UpdateCanvasMapItems(): Adding mi=" + mi.Name + " to NEW stack=" + stack.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "UpdateCanvasMapItems(): Adding mi=" + mi.Name + " to NEW stack@" + stack.ToString());
                   stacks.Add(stack);
                }
                else
                {
-                  Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "UpdateCanvasMapItems(): Adding mi=" + mi.Name + " to stack=" + stack.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "UpdateCanvasMapItems(): Adding mi=" + mi.Name + " to stack@" + stack.ToString());
                   stack.MapItems.Add(mi);
                }
                int offset = stack.MapItems.Count - 1;
@@ -552,8 +551,8 @@ namespace Pattons_Best
       {
          ITerritory t = mi.TerritoryCurrent;
          System.Windows.Controls.Button b = new Button { ContextMenu = myContextMenuButton, Name = mi.Name, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
-         Canvas.SetLeft(b, t.CenterPoint.X - mi.Zoom * Utilities.theMapItemOffset + (counterCount * Utilities.STACK));
-         Canvas.SetTop(b, t.CenterPoint.Y - mi.Zoom * Utilities.theMapItemOffset + (counterCount * Utilities.STACK));
+         Canvas.SetLeft(b, t.CenterPoint.X - mi.Zoom * Utilities.theMapItemOffset - (counterCount * Utilities.STACK));
+         Canvas.SetTop(b, t.CenterPoint.Y - mi.Zoom * Utilities.theMapItemOffset - (counterCount * Utilities.STACK));
          MapItem.SetButtonContent(b, mi, false, false, false, false); // This sets the image as the button's content
          if ("Tank" == t.CanvasName)
          {
@@ -571,9 +570,9 @@ namespace Pattons_Best
             return false;
          }
          if ("Turret" == mi.Name)
-            Canvas.SetZIndex(b, 9999);
+            Canvas.SetZIndex(b, 9000);
          else
-            Canvas.SetZIndex(b, counterCount);
+            Canvas.SetZIndex(b, 900 + counterCount);
          b.Click += ClickButtonMapItem;
          b.MouseEnter += MouseEnterMapItem;
          b.MouseLeave += MouseLeaveMapItem;
@@ -903,25 +902,6 @@ namespace Pattons_Best
          if (GamePhase.UnitTest == gi.GamePhase)
             return true;
          //-------------------------------------------------------
-         if (false == UpdateCanvasMapItems(gi.Stacks, gi.Controls))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasMapItems(Controls) returned false");
-            return false;
-         }
-         //-------------------------------------------------------
-         if (false == UpdateCanvasMapItems(gi.Stacks, gi.ArtillerySupports))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasMapItems(ArtillerySupports) returned false");
-            return false;
-         }
-         //-------------------------------------------------------
-         if (false == UpdateCanvasMapItems(gi.Stacks, gi.AirStrikes))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasMapItems(AirStrikes) returned false");
-            return false;
-         }
-         //-------------------------------------------------------
-
          if (false == UpdateCanvasMapItems(gi.Stacks, gi.MainMapItems))
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasMapItems(AirStrikes) returned false");
@@ -1068,10 +1048,13 @@ namespace Pattons_Best
                return false;
             }
             bool isControlAlreadyThere = false;
-            foreach( IMapItem control in gi.Controls)
+            foreach( IMapItem control in gi.MainMapItems)
             {
-               if (true == control.Name.Contains(s)) // if there is already a resistance marker in this territory, skip
-                  isControlAlreadyThere = true;
+               if( true == control.Name.Contains("Strength"))
+               {
+                  if (true == control.Name.Contains(s)) // if there is already a resistance marker in this territory, skip
+                     isControlAlreadyThere = true;
+               }
             }
             if (true == isControlAlreadyThere)
                continue;

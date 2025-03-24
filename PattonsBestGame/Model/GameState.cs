@@ -1040,11 +1040,11 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): controlled not found name=" + name1);
             return false;
          }
-         name1 += ("Us" + Utilities.MapItemNum.ToString());
+         name1 += ("UsControl" + Utilities.MapItemNum.ToString());
          Utilities.MapItemNum++;
          IMapItem usControl = new MapItem(name1, 1.0, "c28UsControl", controlled);
          usControl.Count = 0; // 0=us  1=light  2=medium  3=heavy
-         gi.Controls.Add(usControl);
+         gi.MainMapItems.Add(usControl);
          return true;
       }
       private bool SetExitArea(IGameInstance gi, int dieRoll)
@@ -1130,24 +1130,24 @@ namespace Pattons_Best
          string name = gi.EnemyStrengthCheck.Name;
          if (EnumResistance.Light == resistance)
          {
-            name += ("SL" + Utilities.MapItemNum.ToString());
+            name += ("StrengthLight" + Utilities.MapItemNum.ToString());
             IMapItem strengthMarker = new MapItem(name, 1.0, "c36Light", gi.EnemyStrengthCheck);
             strengthMarker.Count = 1;
-            gi.Controls.Add(strengthMarker);
+            gi.MainMapItems.Add(strengthMarker);
          }
          else if (EnumResistance.Medium == resistance)
          {
-            name += ("SM" + Utilities.MapItemNum.ToString());
+            name += ("StrengthMedium" + Utilities.MapItemNum.ToString());
             IMapItem strengthMarker = new MapItem(name, 1.0, "c37Medium", gi.EnemyStrengthCheck);
             strengthMarker.Count = 2;
-            gi.Controls.Add(strengthMarker);
+            gi.MainMapItems.Add(strengthMarker);
          }
          else if (EnumResistance.Heavy == resistance)
          {
-            name += ("SH" + Utilities.MapItemNum.ToString());
+            name += ("StrengthHeavy" + Utilities.MapItemNum.ToString());
             IMapItem strengthMarker = new MapItem(name, 1.0, "c38Heavy", gi.EnemyStrengthCheck);
             strengthMarker.Count = 3;
-            gi.Controls.Add(strengthMarker);
+            gi.MainMapItems.Add(strengthMarker);
          }
          else
          {
@@ -1166,20 +1166,27 @@ namespace Pattons_Best
          }
          if (dieRoll < 8)
          {
-            if (2 < gi.ArtillerySupports.Count) // May only have three artillery supports. Remove last one.
+            IMapItems artillerySupports = new MapItems();
+            foreach (IMapItem mi in gi.MainMapItems)
             {
-               IMapItem? mi = gi.ArtillerySupports.RemoveAt(0);
-               if (null == mi)
+               if (true == mi.Name.Contains("Artillery"))
+                  artillerySupports.Add(mi);
+            }
+            if (2 < artillerySupports.Count) // May only have three artillery supports. Remove last one.
+            {
+               IMapItem? artillerySupport = artillerySupports[0];
+               if (null == artillerySupport)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "SetArtillerySupportCounter(): mi=null");
+                  Logger.Log(LogEnum.LE_ERROR, "SetArtillerySupportCounter(): artillerySupport=null");
                   return false;
                }
-               gi.Stacks.Remove(mi);
+               gi.MainMapItems.Remove(artillerySupport);
+               gi.Stacks.Remove(artillerySupport);
             }
-            string name = gi.ArtillerySupportCheck.Name + "Art" + Utilities.MapItemNum.ToString();
+            string name = gi.ArtillerySupportCheck.Name + "Artillery" + Utilities.MapItemNum.ToString();
             Utilities.MapItemNum++;
             IMapItem artillerSupportMarker = new MapItem(name, 1.0, "c39ArtillerySupport", gi.ArtillerySupportCheck);
-            gi.ArtillerySupports.Add(artillerSupportMarker);
+            gi.MainMapItems.Add(artillerSupportMarker);
          }
          return true;
       }
@@ -1190,22 +1197,29 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetAirStrikeCounter(): gi.AirStrikeCheck=null");
             return false;
          }
+         IMapItems airStrikes = new MapItems();
+         foreach( IMapItem mi in gi.MainMapItems)
+         {
+            if( true == mi.Name.Contains("Air"))
+               airStrikes.Add(mi);
+         }
          if (dieRoll < 5)
          {
-            if (1 < gi.AirStrikes.Count) // May only have two air strikes. Remove last one.
+            if (1 < airStrikes.Count) // May only have two air strikes. Remove last one.
             {
-               IMapItem? mi = gi.AirStrikes.RemoveAt(0);
-               if (null == mi)
+               IMapItem? airStrike = airStrikes[0];
+               if (null == airStrike)
                {
                   Logger.Log(LogEnum.LE_ERROR, "SetAirStrikeCounter(): mi=null");
                   return false;
                }
-               gi.Stacks.Remove(mi);
+               gi.MainMapItems.Remove(airStrike);
+               gi.Stacks.Remove(airStrike);
             }
             string name = gi.AirStrikeCheck.Name + "Air" + Utilities.MapItemNum.ToString();
             Utilities.MapItemNum++;
             IMapItem airStrikeMarker = new MapItem(name, 1.0, "c40AirStrike", gi.AirStrikeCheck);
-            gi.AirStrikes.Add(airStrikeMarker);
+            gi.MainMapItems.Add(airStrikeMarker);
          }
          return true;
       }
