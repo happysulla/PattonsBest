@@ -131,6 +131,8 @@ namespace Pattons_Best
             case "D":
             case "E":
             case "R":
+            case "S":
+            case "T":
             case "Battle":
                break;
             default:

@@ -28,6 +28,7 @@ namespace Pattons_Best
       //------------------------------------------------
       public int GameTurn { get; set; } = 0;
       public GamePhase GamePhase { get; set; } = GamePhase.GameSetup;
+      public int Day { get; set; } = 0;
       public IAfterActionReports Reports { get; set; } = new AfterActionReports();
       public GameAction DieRollAction { get; set; } = GameAction.DieRollActionNone;
       public bool IsUndoCommandAvailable { set; get; } = false;
@@ -42,22 +43,24 @@ namespace Pattons_Best
       public IMapItems ArtillerySupports { get; set; } = new MapItems();
       public IMapItems AirStrikes { get; set; } = new MapItems();
       public IMapItem? Turret { set; get; } = null;
+      //------------------------------------------------
+      public ITerritory Home { get; set; } = new Territory();
+      public ITerritory? NewTerritory { set; get; } = null;
+      public ITerritory? EnemyStrengthCheck { get; set; } = null;
+      public ITerritory? ArtillerySupportCheck { get; set; } = null;
+      public ITerritory? AirStrikeCheck { get; set; } = null;
+      public ITerritory? EnteredArea { get; set; } = null;
       //---------------------------------------------------------------
+
       public bool IsHulledDown { set; get; } = false;
       public bool IsMoving { set; get; } = false;
       public bool IsLeadTank { set; get; } = false;
       public bool IsTurretActive { set; get; } = false;
       //------------------------------------------------
-      public ITerritory? NewTerritory { set; get; } = null;
-      public ITerritory Home { get; set; } = new Territory();
-      public ITerritory? EnemyStrengthCheck { get; set; } = null;
-      //------------------------------------------------
-      private List<EnteredHex> myEnteredHexes = new List<EnteredHex>();
-      public List<EnteredHex> EnteredHexes { get => myEnteredHexes; }
-      //---------------------------------------------------------------
-      public int Day { get; set; } = 0;
       public IMapItemMoves MapItemMoves { get; set; } = new MapItemMoves();
       public IStacks Stacks { get; set; } = new Stacks();
+      private List<EnteredHex> myEnteredHexes = new List<EnteredHex>();
+      public List<EnteredHex> EnteredHexes { get => myEnteredHexes; }
       //---------------------------------------------------------------
       [NonSerialized] private List<IUnitTest> myUnitTests = new List<IUnitTest>();
       public List<IUnitTest> UnitTests { get => myUnitTests; }

@@ -21,6 +21,8 @@ namespace Pattons_Best
             case "D": myRadioButtonD.IsChecked = true; break;
             case "E": myRadioButtonE.IsChecked = true; break;
             case "R": myRadioButtonR.IsChecked = true; break;
+            case "S": myRadioButtonS.IsChecked = true; break;
+            case "T": myRadioButtonT.IsChecked = true; break;
             case "Battle": myRadioButtonF.IsChecked = true; break;
             case "1": myRadioButton1.IsChecked = true; break;
             case "2": myRadioButton2.IsChecked = true; break;

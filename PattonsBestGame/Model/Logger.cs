@@ -20,6 +20,8 @@ namespace Pattons_Best
       LE_UNDO_COMMAND,
       LE_MOVE_STACKING,
       LE_MOVE_COUNT,
+      LE_SHOW_STACK_ADD,
+      LE_SHOW_STACK_DEL,
       //-------------
       LE_RESET_ROLL_STATE,
       LE_VIEW_DICE_MOVING,
@@ -77,6 +79,8 @@ namespace Pattons_Best
          SetOn(LogEnum.LE_GAME_INIT_VERSION);
          SetOn(LogEnum.LE_USER_ACTION);
          SetOn(LogEnum.LE_NEXT_ACTION);
+         SetOn(LogEnum.LE_SHOW_STACK_ADD);
+         SetOn(LogEnum.LE_SHOW_STACK_DEL);
          //SetOn(LogEnum.LE_VIEW_TIME_TRACK);
          return true;
       }

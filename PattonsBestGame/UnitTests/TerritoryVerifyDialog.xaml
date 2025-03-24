@@ -37,6 +37,8 @@
                <RadioButton Name="myRadioButtonD" GroupName="A" Padding="0,0,0,0" Width="73" Height="26" Content="D" IsEnabled="true" />
                <RadioButton Name="myRadioButtonE" GroupName="A" Padding="0,0,0,0" Width="73" Height="26" Content="E" IsEnabled="true" />
                <RadioButton Name="myRadioButtonR" GroupName="A" Padding="0,0,0,0" Width="73" Height="26" Content="R" IsEnabled="true" />
+               <RadioButton Name="myRadioButtonS" GroupName="A" Padding="0,0,0,0" Width="73" Height="26" Content="S" IsEnabled="true" />
+               <RadioButton Name="myRadioButtonT" GroupName="A" Padding="0,0,0,0" Width="73" Height="26" Content="T" IsEnabled="true" />
                <RadioButton Name="myRadioButtonF" GroupName="A" Padding="0,0,0,0" Width="73" Height="26" Content="Battle" IsEnabled="true" />
             </StackPanel>
             <StackPanel Name="myStackPanelTankCard" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Orientation="Horizontal">

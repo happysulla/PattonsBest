@@ -14,18 +14,30 @@ namespace Pattons_Best
       {
          Territory = t;
       }
+      public Stack(ITerritory t, IMapItem mi)
+      {
+         Territory = t;
+         MapItems.Add(mi);
+      }
       public void Rotate() { MapItems.Rotate(1); }
       public void Shuffle() { MapItems = MapItems.Shuffle(); }
       public override String ToString()
       {
          StringBuilder sb = new StringBuilder("");
          sb.Append(Territory.ToString());
-         sb.Append("==>");
-         foreach (IMapItem mi in MapItems)
+         sb.Append("==>(");
+         int count = MapItems.Count;
+         for(int i=0; i<count; ++i)
          {
-            sb.Append(mi.Name);
-            sb.Append(" ");
+            IMapItem? mi = MapItems[i];
+            if( null != mi)
+            {
+               sb.Append(mi.Name);
+               if (i != MapItems.Count - 1)
+                  sb.Append(" ");
+            }
          }
+         sb.Append(")");
          return sb.ToString();
       }
    }
@@ -80,7 +92,7 @@ namespace Pattons_Best
          }
          return null;
       }
-      public IStack? Remove(IMapItem mi)
+      public void Remove(IMapItem mi)
       {
          foreach (Object o in myList)
          {
@@ -90,11 +102,29 @@ namespace Pattons_Best
                if (mi.Name == mapItem.Name)
                {
                   stack.MapItems.Remove(mapItem);
-                  return stack;
+                  if (stack.MapItems.Count == 0)
+                     Remove(stack);
+                  return;
                }
             }
          }
-         return null;
+      }
+      public void Remove(string miName)
+      {
+         foreach (Object o in myList)
+         {
+            IStack stack = (IStack)o;
+            foreach (MapItem mapItem in stack.MapItems)
+            {
+               if (miName == mapItem.Name)
+               {
+                  stack.MapItems.Remove(mapItem);
+                  if (stack.MapItems.Count == 0)
+                     Remove(stack);
+                  return;
+               }
+            }
+         }
       }
       public IStack? RemoveAt(int index)
       {

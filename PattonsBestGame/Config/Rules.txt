@@ -173,14 +173,14 @@ The Movement Sequence is performed on the Movement Board using the following ste
 <InlineUIContainer><Button Content='r4.52' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Mark Exit Area<LineBreak/>
 <InlineUIContainer><Button Content='r4.53' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Strength Check<LineBreak/>
 <InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Operations"
-r4.51	"<Bold>r4.51  Mark Start Area</Bold>
+r4.51	"<Bold>r4.51 Mark Start Area</Bold>
 <LineBreak/><LineBreak/>
 Around the edge of the Movement Board, there are 10 areas number 1-10. Roll 1D to determine which of the ten is the start area for this scenario. Also, mark the area with a Start Area marker.
 Place the Task Force marker representing your friendly forces on that area.
 <LineBreak/><LineBreak/>
                     <InlineUIContainer><Image Name='c33StartArea'  Height='100' Width='100'></Image></InlineUIContainer>           
       <InlineUIContainer><Image Name='c35TaskForce'  Height='100' Width='100'></Image></InlineUIContainer>"
-r4.52	"<Bold>r4.52  Mark Exit Area</Bold>
+r4.52	"<Bold>r4.52 Mark Exit Area</Bold>
 <LineBreak/><LineBreak/>
 On the <InlineUIContainer><Button Content='Exit Areas' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 Table, roll 1D and cross reference the number with the Start Area marker 
@@ -221,13 +221,18 @@ r4.54.2	"<Bold>r4.54.2  Call for Artillery Support</Bold>
 <LineBreak/><LineBreak/>
 Call to hit an area adjacent to your task force. Consult the 
 <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-to see if Artillery Support arrives. If successful, place an Artillery Support marker on the area. Continue with 
-<InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+to see if Artillery Support arrives 
+<InlineUIContainer><Button Content='r23.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+If successful, place an Artillery Support marker on the area. Three Artillery Support markers are allowed and can be placed in the same area. Continue with 
+<InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. "
 r4.54.3	"<Bold>r4.54.3  Call for Air Strike</Bold>
 <LineBreak/><LineBreak/>
 Call to hit an area adjacent to your task force. Consult the 
 <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-to see if Air Strike arrives. If successful, place an Air Strike marker on the area. Continue with 
+to see if Air Strike arrives
+ <InlineUIContainer><Button Content='r23.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  If successful, place an Air Strike marker on the area. Two Air Strike markers are allowed and can be placed in the same area. Additionally, while waiting for air strike, a 15 minute operation can be chosen to happen in parallel. 
+<LineBreak/><LineBreak/>
+Continue with 
 <InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r4.54.4	"<Bold>r4.54.4  Attempt Resupply</Bold>
 <LineBreak/><LineBreak/>
@@ -238,6 +243,7 @@ to see if resupply occurs. If successful, you may relead your tank with ammo. Co
 r4.54.5	"<Bold>r4.54.5  Enter Adjacent Area</Bold>
 <LineBreak/><LineBreak/>
 Enter adjacent area by moving your Task Force marker into that area. 
+<LineBreak/><LineBreak/>
 1.) Decide if you tank will use advancing fire per 
 <InlineUIContainer><Button Content='r22.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
@@ -541,8 +547,7 @@ there is a chance your tank will fight; when the Division is refitting, you will
 <InlineUIContainer><Button Content='r20.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>Combat Calendar<LineBreak/>
 <InlineUIContainer><Button Content='r20.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Advance Scenario<LineBreak/>
 <InlineUIContainer><Button Content='r20.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Battle Scenario<LineBreak/>
-<InlineUIContainer><Button Content='r20.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> CounterAttack Scenario<LineBreak/>
-"
+<InlineUIContainer><Button Content='r20.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> CounterAttack Scenario<LineBreak/>"
 r20.1	"<Bold>r20.1 Combat Calendar</Bold>
 <LineBreak/><LineBreak/>
 For each day of the campaign, the Combat <InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
@@ -650,24 +655,118 @@ The length of a day of battle is determined by the passage of time. On the After
 is a section to mark time, where the hours 0500 through 1900 are each divided into four 15 minute blocks. The exception is 1900 because sunset will occur no later than 19:15.
 <LineBreak/><LineBreak/>
 During the Time Check Phase <InlineUIContainer><Button Content='r4.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-of the sequence of play, the <InlineUIContainer><Button Content='Sunrise-Sunset' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table is used to determine the nours of sunrise and sunset. 
+of the sequence of play, the <InlineUIContainer><Button Content='Sunrise-Sunset' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table is used to determine the hours of sunrise and sunset. 
 <LineBreak/><LineBreak/>Time is marked out according to rolls on this table.
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r21.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Sunrise <LineBreak/>
 <InlineUIContainer><Button Content='r21.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Marking Time<LineBreak/>
 <InlineUIContainer><Button Content='r21.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Sunset"
 r21.1	"<Bold>r21.1 Sunrise</Bold>
-<LineBreak/><LineBreak/>"
+<LineBreak/><LineBreak/>
+A certain amount of time is assumed to have passed this day before the current scenario begins. This time is determined by rolling 1D/2 +1 = the number of hours past sunrise. For example, assume the month is September (sunrise at 5:30), and the die roll is seven. The scenario actually begins at 9:30 (5:30 + [7/2=3.5 rounded down to 3] +1) = 9.30. The time is marked out on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>"
 r21.2	"<Bold>r21.2 Marking Time</Bold>
-<LineBreak/><LineBreak/>"
+<LineBreak/><LineBreak/>
+All operations performed on the Movement Board expend time as listed on the 
+<InlineUIContainer><Button Content='r21.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. 
+Once battle is triggered and you engage in combat on the Battle Board, the passage of time is represented by the random event ""Time Passes."" 
+<LineBreak/><LineBreak/>
+Each battle round, there is 5% chance of this event occurring. When it does, one block of time is marked off."
 r21.3	"<Bold>r21.3 Sunset</Bold>
-<LineBreak/><LineBreak/>"
-	
-	
-	
-	
-	
-	
+<LineBreak/><LineBreak/>
+Play continues, shifting back and forth from the Battle Board to the Movement Board as necessary, as long as daylight (unmarked time boxes) remain. If you mark out the last time box while performing an operation on the Movement Board that does not trigger a battle, the day ends immediately. You go to the Evening Debriefing 
+<InlineUIContainer><Button Content='4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+phase of the sequence of play. 
+<LineBreak/><LineBreak/>
+If the last time box is marked out during combat on the Battle Board , continue the engagement until it is resolved. Assume enough daylight remains to allow all combat to complete. When the engagement finishes, go  to the Evening Debriefing phase."
+r22.0	"<Bold>r22.0 Advancing Fire</Bold>
+<LineBreak/><LineBreak/>
+Advancing Fire represents blind HE and MG fire at places likely to be concealing unknown enemy units. It may take place both when you tank first enters a new map area and during Battle Rounds.
+<InlineUIContainer><Button Content='r22.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Entering a New Area <LineBreak/>
+<InlineUIContainer><Button Content='r22.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> During Battle Rounds<LineBreak/>"
+r22.1	"<Bold>r22.1 Advancing Fire - Entering a New Area</Bold>
+<LineBreak/><LineBreak/>
+When your tank force enters a new area on the Movement Board, you may have the task force conduct Advancing Fire. You make that choice during the Movement Sequence per 
+<InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+You may place a number of Advancing Fire markers on the Battle Board. If battle then occurs in the area, the Advancing Fire may remove enemy units appearing in the zones with the markers. 
+<LineBreak/><LineBreak/>
+Your tank itself takes no sepcific action as the Advancing Fire is considered the effort of the entire task force including your tank. However, ammo is expended by your tank whether a battle occurs or not. If battle does occur, following steps occur:
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r22.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Advancing Fire Ammo Use <LineBreak/>
+<InlineUIContainer><Button Content='r22.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Advancing Fire Markers<LineBreak/>
+<InlineUIContainer><Button Content='r22.13' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Advancing Fire Resolution"
+r22.11	"<Bold>r22.11 Advancing Fire Ammo Use</Bold>
+<LineBreak/><LineBreak/>
+Mark off 1D/2 (round down) HE rounds and .30 caliber MG ammo boxes regardless of whether the battle occurs or not. Mark off on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r22.12	"<Bold>r22.12 Advancing Fire Markers</Bold>
+<LineBreak/><LineBreak/>
+Place up to six Advance Fire markers anywhere on the Battle Board except in Sectors 1, 2, 3, and the long range sectors 6-8. You may place more than one in a zone. For every 3 friendly tank losses (roudned up), omit one Advance Fire marker.
+<LineBreak/><LineBreak/>
+                                                  <InlineUIContainer><Image Name='c44AdvanceFire'  Height='80' Width='80'></Image></InlineUIContainer>"
+r22.13	"<Bold>r22.13 Advancing Fire Resolution</Bold>
+<LineBreak/><LineBreak/>
+Advancing Fire is resolved in each Battle Board zone containing both an Advance Fire marker and enemy units during Battle Step 
+<InlineUIContainer><Button Content='r4.64' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+<LineBreak/><LineBreak/>
+For each, roll on the 
+<InlineUIContainer><Button Content='Friendly Action' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table against each unit in the zone. 
+<LineBreak/><LineBreak/>
+Enemy units kocked out are considered to be withdrawing and are not destroyed. No victory points are awarded. 
+<LineBreak/><LineBreak/>
+Remove the Advancing Fire markers from the Battle Board after resolving."
+r22.2	"<Bold>r22.2 Advancing Fire - Entering a New Area</Bold>
+<LineBreak/><LineBreak/>
+You may fire your tank's MGs into zones containing no spotted units as a type of Advancing Fire. Order correct crew action (for example, Fire Bow MG) and place the Advancing Fire marker for the MG (Bow MG Advance Fire) into the zone you want to fire. Place the marker after any tank movement or facing changes. This type of fire can KO enemy units which move into the zone and reduce the danger of Panzerfaust attacks per the
+<InlineUIContainer><Button Content='Panzerfaust' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Attack Tables.
+<LineBreak/><LineBreak/>
+-- During the Crew Action Phase, roll 2D:  (1-30 =  1 ammo box expected), (31-97 =  nothing), and (98-100 = MG malfunctions). 
+<LineBreak/><LineBreak/>
+-- Each enemy truck or infantry type that enters the zone may be immediately fired on by your MG according to the 
+<InlineUIContainer><Button Content='Sherman MG' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+vs. Infantry Targets Table. Any kills are recorded as victory points on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+ <LineBreak/><LineBreak/>
+-- Remove these Advancing Fire markers specific for your MGs at the beginning of the Orders Phase 
+<InlineUIContainer><Button Content='r4.73' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> of the next round
+<LineBreak/><LineBreak/>
+                                                  <InlineUIContainer><Image Name='c42FireBowMg'  Height='80' Width='80'></Image></InlineUIContainer>"
+r23.0	"<Bold>r23.0 Artillery Support and Air Strikes</Bold>
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r22.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Artillery Support <LineBreak/>
+<InlineUIContainer><Button Content='r22.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> AirStrikes<LineBreak/>
+"
+r23.1	"<Bold>r23.1 Artillery Support</Bold>
+<LineBreak/><LineBreak/>
+Artillery support can be called for during the Movement Sequence 
+<InlineUIContainer><Button Content='r4.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+This operation takes 15 minutes. Mark off the time and rol 1D as shown on the 
+<InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Use Table to see if the support arrives. It arrives on 1-7 roll. 
+<LineBreak/><LineBreak/>
+If successful, place an Artillery Support marker in the area where the artillery landed. If at any time during this day you enter the marked area (before reaching the exit area), the artillery support will attack all enemy units appearing. 
+<LineBreak/><LineBreak/>
+Additional artillery support may be called for, but no more than three support markers may be on the Movement Board at one time. You may voluntarily pick up an Artillery Support marker if you decide to attempt to place it elsewhere.
+<LineBreak/><LineBreak/>
+Artillery support takes effect in a newly entered area immediately after any appearing enemy units are placed on the Battle Board. Rsolve Arillery Support by rolling on the 
+<InlineUIContainer><Button Content='Friendly Action' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table against each enemy unit.
+<LineBreak/><LineBreak/>
+Enemy units destroyed by artillery support are immediately removed, and their victory points ar recorded under friendly forces of the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Roll again against each surviving enemy unit for each additional support marker.
+<LineBreak/><LineBreak/>
+                                                  <InlineUIContainer><Image Name='c39ArtillerySupport'  Height='80' Width='80'></Image></InlineUIContainer>"
+r23.2	"<Bold>r23.2 Air Strike</Bold>
+<LineBreak/><LineBreak/>
+Air Strikes function very similarly to artillery support
+<InlineUIContainer><Button Content='r23.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> with a few exceptions. 
+They use more time (30 minutes). They are less likely to arrive (1D = 1-4). They are more effective against armor targets. 
+<LineBreak/><LineBreak/>
+Also, air strikes may not be called for during overcast or falling snow weather. 
+<LineBreak/><LineBreak/>
+While the 30 minutes spent calling for air strike is passing, youuu may perform one additional 15 minute operation (such as call for arilltery support or chek an additional area for resistance.
+<LineBreak/><LineBreak/>
+                                                  <InlineUIContainer><Image Name='c40AirSupport'  Height='80' Width='80'></Image></InlineUIContainer>"
 	
 	
 	

@@ -118,7 +118,7 @@ namespace Pattons_Best
          sb.Append("\n\tGameVersion=");
          Assembly assem = Assembly.GetExecutingAssembly();
          Version? version = assem.GetName().Version;
-         if( null != version )
+         if (null != version)
             sb.Append(version.ToString());
          var attributes = assem.CustomAttributes;
          foreach (var attribute in attributes)
@@ -145,7 +145,7 @@ namespace Pattons_Best
 
          //--------------------------------------------
          System.Windows.Forms.Screen? screen = System.Windows.Forms.Screen.PrimaryScreen;
-         if( null != screen )
+         if (null != screen)
          {
             var dpi = screen.Bounds.Width / System.Windows.SystemParameters.PrimaryScreenWidth;
             sb.Append("\n\tDPI=(");
@@ -154,6 +154,15 @@ namespace Pattons_Best
          sb.Append(")\n\tAppDir=");
          sb.Append(MainWindow.theAssemblyDirectory);
          Logger.Log(LogEnum.LE_GAME_INIT_VERSION, sb.ToString());
+      }
+      protected void AdvanceTime(IAfterActionReport report, int minToAdd)
+      {
+         report.SunriseMin += minToAdd;
+         if (59 < report.SunriseMin)
+         {
+            report.SunriseHour++;
+            report.SunriseMin %= 60;
+         }
       }
    }
    //-----------------------------------------------------
@@ -169,6 +178,18 @@ namespace Pattons_Best
          string key = gi.EventActive;
          switch (action)
          {
+            case GameAction.ShowCombatCalendarDialog:
+            case GameAction.ShowAfterActionReportDialog:
+            case GameAction.ShowInventoryDialog:
+            case GameAction.ShowGameFeats:
+            case GameAction.ShowRuleListingDialog:
+            case GameAction.ShowEventListingDialog:
+            case GameAction.ShowTableListing:
+            case GameAction.ShowReportErrorDialog:
+            case GameAction.ShowAboutDialog:
+            case GameAction.EndGameShowFeats:
+            case GameAction.UpdateEventViewerDisplay: // Only change active event
+               break;
             case GameAction.TestingStartPreparations:
                gi.GamePhase = GamePhase.Preparations;
                gi.EventDisplayed = gi.EventActive = "e011";
@@ -180,19 +201,6 @@ namespace Pattons_Best
                gi.EventDisplayed = gi.EventActive = "e017";
                gi.DieRollAction = GameAction.MovementStartAreaSetRoll;
                break;
-            case GameAction.ShowCombatCalendarDialog:
-            case GameAction.ShowAfterActionReportDialog:
-            case GameAction.ShowInventoryDialog:
-            case GameAction.ShowGameFeats:
-            case GameAction.ShowRuleListingDialog:
-            case GameAction.ShowEventListingDialog:
-            case GameAction.ShowTableListing:
-            case GameAction.ShowReportErrorDialog:
-            case GameAction.ShowAboutDialog:
-            case GameAction.EndGameShowFeats:
-               break;
-            case GameAction.UpdateEventViewerDisplay: // Only change active event
-               break;
             case GameAction.UpdateEventViewerActive: // Only change active event
                gi.EventDisplayed = gi.EventActive; // next screen to show
                break;
@@ -202,7 +210,7 @@ namespace Pattons_Best
                gi.Statistic.myNumGames = 1;  // Set played games to 1
                //----------------------------------------------------
                ICombatCalendarEntry? entry = TableMgr.theCombatCalendarEntries[0];
-               if( null == entry )
+               if (null == entry)
                {
                   returnStatus = "PerformAutoSetup() returned false";
                   Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
@@ -257,7 +265,7 @@ namespace Pattons_Best
             case GameAction.SetupAssignCrewRating:
                gi.NewMembers.Clear();
                IAfterActionReport? report = gi.Reports.GetLast();
-               if( null == report )
+               if (null == report)
                {
                   returnStatus = "gi.Reports.GetLast() returned null";
                   Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(SetupAssignCrewRating): " + returnStatus);
@@ -275,7 +283,7 @@ namespace Pattons_Best
                gi.GamePhase = GamePhase.MorningBriefing;
                gi.EventDisplayed = gi.EventActive = "e006";
                gi.DieRollAction = GameAction.SetupCombatCalendarRoll;
-               if( false == AssignNewCrewMembers(gi))
+               if (false == AssignNewCrewMembers(gi))
                {
                   returnStatus = "AssignNewCrewMembers() returned false";
                   Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(SetupAssignCrewRating): " + returnStatus);
@@ -331,7 +339,7 @@ namespace Pattons_Best
          string previousEvent = gi.EventActive;
          string returnStatus = "OK";
          string key = gi.EventActive;
-         IAfterActionReport? lastReport = gi.Reports.GetLast(); 
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
             returnStatus = "lastReport=null";
@@ -344,19 +352,16 @@ namespace Pattons_Best
                case GameAction.ShowCombatCalendarDialog:
                case GameAction.ShowAfterActionReportDialog:
                case GameAction.ShowInventoryDialog:
+               case GameAction.ShowGameFeats:
                case GameAction.ShowRuleListingDialog:
                case GameAction.ShowEventListingDialog:
+               case GameAction.ShowTableListing:
                case GameAction.ShowReportErrorDialog:
                case GameAction.ShowAboutDialog:
-                  break;
-               case GameAction.SetupShowMapHistorical:
-               case GameAction.SetupShowMovementBoard:
-               case GameAction.SetupShowBattleBoard:
-               case GameAction.SetupShowTankCard:
-               case GameAction.SetupShowAfterActionReport:
-               case GameAction.SetupShowCombatCalendarCheck:
-                  break;
+               case GameAction.EndGameShowFeats:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
+                  break;
+               case GameAction.MorningBriefingAmmoLoad:
                   break;
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
@@ -393,7 +398,7 @@ namespace Pattons_Best
                   dieRoll = 7; // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
-                  if ( false == TableMgr.SetTimeTrack(lastReport, gi.Day))
+                  if (false == TableMgr.SetTimeTrack(lastReport, gi.Day))
                   {
                      returnStatus = "TableMgr.SetTimeTrack() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(): " + returnStatus);
@@ -476,7 +481,7 @@ namespace Pattons_Best
          }
          string weatherRolled = TableMgr.GetWeather(dieRoll);
          ITerritory? w1 = Territories.theTerritories.Find("Weather1");
-         if (null == w1) 
+         if (null == w1)
          {
             Logger.Log(LogEnum.LE_ERROR, "SetWeatherCounters(): w1=null");
             return false;
@@ -519,7 +524,7 @@ namespace Pattons_Best
          string previousEvent = gi.EventActive;
          string returnStatus = "OK";
          string key = gi.EventActive;
-         IAfterActionReport? lastReport = gi.Reports.GetLast(); 
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
             returnStatus = "lastReport=null";
@@ -529,7 +534,18 @@ namespace Pattons_Best
          {
             switch (action)
             {
+               case GameAction.ShowCombatCalendarDialog:
+               case GameAction.ShowAfterActionReportDialog:
+               case GameAction.ShowInventoryDialog:
+               case GameAction.ShowGameFeats:
+               case GameAction.ShowRuleListingDialog:
+               case GameAction.ShowEventListingDialog:
+               case GameAction.ShowTableListing:
+               case GameAction.ShowReportErrorDialog:
+               case GameAction.ShowAboutDialog:
+               case GameAction.EndGameShowFeats:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
+                  break;
                case GameAction.PreparationsLoaderSpotSet:
                case GameAction.PreparationsCommanderSpotSet:
                   break;
@@ -556,7 +572,7 @@ namespace Pattons_Best
                case GameAction.PreparationsGunLoad:
                   gi.EventDisplayed = gi.EventActive = "e013";
                   ITerritory? t = Territories.theTerritories.Find("GunLoadHe");
-                  if( null == t )
+                  if (null == t)
                   {
                      returnStatus = "theTerritories.Find() returned null for GunLoadHe";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsGunLoad): " + returnStatus);
@@ -604,14 +620,14 @@ namespace Pattons_Best
                   break;
                case GameAction.PreparationsLoaderSpot:
                   gi.IsTurretActive = false;
-                  if ( null == lastReport.Loader)
+                  if (null == lastReport.Loader)
                   {
                      returnStatus = "lastReport.Loader=null";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsLoaderSpot): " + returnStatus);
                   }
                   else
                   {
-                     if(true == lastReport.Loader.IsButtonedUp)
+                     if (true == lastReport.Loader.IsButtonedUp)
                      {
                         gi.EventDisplayed = gi.EventActive = "e015";
                      }
@@ -625,7 +641,7 @@ namespace Pattons_Best
                         else
                         {
                            TankCard card = new TankCard(lastReport.TankCardNum);
-                           if ((true == lastReport.Commander.IsButtonedUp) && (false == card.myIsVisionCupola) )
+                           if ((true == lastReport.Commander.IsButtonedUp) && (false == card.myIsVisionCupola))
                               gi.EventDisplayed = gi.EventActive = "e016";
                            else
                               gi.EventDisplayed = gi.EventActive = "e017";
@@ -652,9 +668,9 @@ namespace Pattons_Best
                         gi.GamePhase = GamePhase.Movement;
                         gi.EventDisplayed = gi.EventActive = "e017";
                         gi.DieRollAction = GameAction.MovementStartAreaSetRoll;
-                        if (false == SetUsControl(gi))
+                        if (false == SetUsControlOnBattleMap(gi))
                         {
-                           returnStatus = "SetUsControl() returned false";
+                           returnStatus = "SetUsControlOnBattleMap() returned false";
                            Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
                         }
                      }
@@ -664,9 +680,9 @@ namespace Pattons_Best
                   gi.GamePhase = GamePhase.Movement;
                   gi.EventDisplayed = gi.EventActive = "e017";
                   gi.DieRollAction = GameAction.MovementStartAreaSetRoll;
-                  if ( false == SetUsControl(gi) )
+                  if (false == SetUsControlOnBattleMap(gi))
                   {
-                     returnStatus = "SetUsControl() returned false";
+                     returnStatus = "SetUsControlOnBattleMap() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
                   }
                   break;
@@ -787,13 +803,13 @@ namespace Pattons_Best
             report.Notes.Add("You are the Lead Tank!");
          return true;
       }
-      private bool SetUsControl(IGameInstance gi)
+      private bool SetUsControlOnBattleMap(IGameInstance gi)
       {
          string name = "B1M";
          ITerritory? t = Territories.theTerritories.Find(name);
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetDeployment(): tState=" + name);
+            Logger.Log(LogEnum.LE_ERROR, "SetUsControlOnBattleMap(): tState=" + name);
             return false;
          }
          gi.MainMapItems.Add(new MapItem("UsControl1", 1.0, "c28UsControl", t));
@@ -802,7 +818,7 @@ namespace Pattons_Best
          t = Territories.theTerritories.Find(name);
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetDeployment(): tState=" + name);
+            Logger.Log(LogEnum.LE_ERROR, "SetUsControlOnBattleMap(): tState=" + name);
             return false;
          }
          gi.MainMapItems.Add(new MapItem("UsControl2", 1.0, "c28UsControl", t));
@@ -811,7 +827,7 @@ namespace Pattons_Best
          t = Territories.theTerritories.Find(name);
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetDeployment(): tState=" + name);
+            Logger.Log(LogEnum.LE_ERROR, "SetUsControlOnBattleMap(): tState=" + name);
             return false;
          }
          gi.MainMapItems.Add(new MapItem("UsControl3", 1.0, "c28UsControl", t));
@@ -821,6 +837,7 @@ namespace Pattons_Best
    //-----------------------------------------------------
    class GameStateMovement : GameState
    {
+      private static bool theIs1stEnemyStrengthCheck = true;
       public override string PerformAction(ref IGameInstance gi, ref GameAction action, int dieRoll)
       {
          GamePhase previousPhase = gi.GamePhase;
@@ -829,69 +846,142 @@ namespace Pattons_Best
          string previousEvent = gi.EventActive;
          string key = gi.EventActive;
          string returnStatus = "OK";
-         switch (action)
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
          {
-            case GameAction.UpdateEventViewerActive: // Only change active event
-               gi.EventDisplayed = gi.EventActive; // next screen to show
-               break;
-            case GameAction.UpdateEventViewerDisplay: // Only change active event
-               break;
-            case GameAction.MovementStartAreaSet:
-               gi.EventDisplayed = gi.EventActive = "e018";
-               IMapItem? turret = gi.MainMapItems.Remove("Turret");
-               if (null == turret)
-               {
-                  returnStatus = "gi.MainMapItems.Find(Turret) returned null";
-                  Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
-               }
-               break;
-            case GameAction.MovementStartAreaSetRoll:
-               gi.DieResults[key][0] = dieRoll;
-               if( false == SetStartArea(gi, dieRoll))
-               {
-                  returnStatus = "SetStartArea() returned false";
+            returnStatus = "lastReport=null";
+            Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+         }
+         else
+         {
+            switch (action)
+            {
+               case GameAction.ShowCombatCalendarDialog:
+               case GameAction.ShowAfterActionReportDialog:
+               case GameAction.ShowInventoryDialog:
+               case GameAction.ShowGameFeats:
+               case GameAction.ShowRuleListingDialog:
+               case GameAction.ShowEventListingDialog:
+               case GameAction.ShowTableListing:
+               case GameAction.ShowReportErrorDialog:
+               case GameAction.ShowAboutDialog:
+               case GameAction.EndGameShowFeats:
+               case GameAction.UpdateEventViewerDisplay: // Only change active event
+                  break;
+               case GameAction.UpdateEventViewerActive: // Only change active event
+                  gi.EventDisplayed = gi.EventActive; // next screen to show
+                  break;
+               case GameAction.MovementStartAreaSet:
+                  theIs1stEnemyStrengthCheck = true;
+                  gi.EventDisplayed = gi.EventActive = "e018";
+                  break;
+               case GameAction.MovementStartAreaSetRoll:
+                  gi.DieResults[key][0] = dieRoll;
+                  if (false == SetStartArea(gi, dieRoll))
+                  {
+                     returnStatus = "SetStartArea() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.MovementExitAreaSet:
+                  gi.EventDisplayed = gi.EventActive = "e019";
+                  gi.DieRollAction = GameAction.MovementExitAreaSetRoll;
+                  break;
+               case GameAction.MovementExitAreaSetRoll:
+                  gi.DieResults[key][0] = dieRoll;
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  if (false == SetExitArea(gi, dieRoll))
+                  {
+                     returnStatus = "SetExitArea() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.MovementEnemyStrengthChoice:
+                  gi.EventDisplayed = gi.EventActive = "e020";
+                  gi.DieRollAction = GameAction.MovementExitAreaSetRoll;
+                  break;
+               case GameAction.MovementEnemyStrengthCheck:
+                  if (false == theIs1stEnemyStrengthCheck)
+                     AdvanceTime(lastReport, 15);
+                  gi.EventDisplayed = gi.EventActive = "e021";
+                  gi.DieRollAction = GameAction.MovementEnemyStrengthCheckRoll;
+                  break;
+               case GameAction.MovementEnemyStrengthCheckRoll:
+                  theIs1stEnemyStrengthCheck = false;
+                  gi.DieResults[key][0] = dieRoll;
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  if (false == SetEnemyStrengthCounter(gi, dieRoll))
+                  {
+                     returnStatus = "SetEnemyStrengthCounter() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.MovementChooseOption:
+                  gi.DieResults["e021"][0] = Utilities.NO_RESULT;
+                  gi.DieResults["e024"][0] = Utilities.NO_RESULT;
+                  gi.DieResults["e026"][0] = Utilities.NO_RESULT;
+                  gi.DieResults["e027"][0] = Utilities.NO_RESULT;
+                  gi.EnemyStrengthCheck = null;
+                  gi.ArtillerySupportCheck = null;
+                  gi.AirStrikeCheck = null;
+                  gi.EventDisplayed = gi.EventActive = "e022";
+                  break;
+               case GameAction.MovementArtillerySupportChoice:
+                  gi.EventDisplayed = gi.EventActive = "e023";
+                  break;
+               case GameAction.MovementArtillerySupportCheck:
+                  gi.EventDisplayed = gi.EventActive = "e024";
+                  AdvanceTime(lastReport, 15);
+                  gi.DieRollAction = GameAction.MovementArtillerySupportCheckRoll;
+                  break;
+               case GameAction.MovementArtillerySupportCheckRoll:
+                  gi.DieResults[key][0] = dieRoll;
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  if (false == SetArtillerySupportCounter(gi, dieRoll))
+                  {
+                     returnStatus = "SetArtillerySupportCounter() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.MovementAirStrikeChoice:
+                  gi.EventDisplayed = gi.EventActive = "e025";
+                  break;
+               case GameAction.MovementAirStrikeCheck:
+                  gi.EventDisplayed = gi.EventActive = "e026";
+                  AdvanceTime(lastReport, 30);
+                  gi.DieRollAction = GameAction.MovementAirStrikeCheckRoll;
+                  break;
+               case GameAction.MovementAirStrikeCheckRoll:
+                  gi.DieResults[key][0] = dieRoll;
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  if (false == SetAirStrikeCounter(gi, dieRoll))
+                  {
+                     returnStatus = "SetAirStrikeCounter() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.MovementResupplyCheck:
+                  AdvanceTime(lastReport, 60);
+                  gi.EventDisplayed = gi.EventActive = "e027";
+                  gi.DieRollAction = GameAction.MovementResupplyCheckRoll;
+                  break;
+               case GameAction.MovementResupplyCheckRoll:
+                  gi.DieResults[key][0] = dieRoll;
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  break;
+               case GameAction.MovementEnterArea:
+                  AdvanceTime(lastReport, 60);
+                  gi.EventDisplayed = gi.EventActive = "e028";
+
+                  break;
+               case GameAction.EndGameClose:
+                  gi.GamePhase = GamePhase.EndGame;
+                  break;
+               default:
+                  returnStatus = "reached default for action=" + action.ToString();
                   Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
-               }
-               break;
-            case GameAction.MovementExitAreaSet:
-               gi.EventDisplayed = gi.EventActive = "e019";
-               gi.DieRollAction = GameAction.MovementExitAreaSetRoll;
-               break;
-            case GameAction.MovementExitAreaSetRoll:
-               gi.DieResults[key][0] = dieRoll;
-               if (false == SetExitArea(gi, dieRoll))
-               {
-                  returnStatus = "SetExitArea() returned false";
-                  Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
-               }
-               break;
-            case GameAction.MovementEnemyStrengthChoice:
-               gi.EventDisplayed = gi.EventActive = "e020";
-               gi.DieRollAction = GameAction.MovementExitAreaSetRoll;
-               break;
-            case GameAction.MovementEnemyStrengthCheck:
-               gi.EventDisplayed = gi.EventActive = "e021";
-               gi.DieRollAction = GameAction.MovementEnemyStrengthCheckRoll;
-               break;
-            case GameAction.MovementEnemyStrengthCheckRoll:
-               gi.DieResults[key][0] = dieRoll;
-               if (false == SetEnemyStrengthCounter(gi, dieRoll))
-               {
-                  returnStatus = "SetEnemyStrengthCounter() returned false";
-                  Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
-               }
-               break;
-            case GameAction.MovementChooseOption:
-               gi.DieResults["e021"][0] = Utilities.NO_RESULT;
-               gi.EventDisplayed = gi.EventActive = "e022";
-               break;
-            case GameAction.EndGameClose:
-               gi.GamePhase = GamePhase.EndGame;
-               break;
-            default:
-               returnStatus = "reached default for action=" + action.ToString();
-               Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
-               break;
+                  break;
+            }
          }
          StringBuilder sb12 = new StringBuilder();
          if ("OK" != returnStatus)
@@ -922,14 +1012,14 @@ namespace Pattons_Best
          ITerritory? t = Territories.theTerritories.Find(name);
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): startArea tState=" + name);
+            Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): startArea not found for " + name);
             return false;
          }
          IMapItem startArea = new MapItem("StartArea", 1.0, "c33StartArea", t);
          startArea.Count = dieRoll;
          gi.MainMapItems.Add(startArea);
          //-----------------------------------------
-         if( 0 == t.Adjacents.Count )
+         if (0 == t.Adjacents.Count)
          {
             Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): no adjacents for start area=" + name);
             return false;
@@ -950,6 +1040,8 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): controlled not found name=" + name1);
             return false;
          }
+         name1 += ("Us" + Utilities.MapItemNum.ToString());
+         Utilities.MapItemNum++;
          IMapItem usControl = new MapItem(name1, 1.0, "c28UsControl", controlled);
          usControl.Count = 0; // 0=us  1=light  2=medium  3=heavy
          gi.Controls.Add(usControl);
@@ -965,7 +1057,7 @@ namespace Pattons_Best
          }
          //-------------------------------------
          IMapItem? miStart = gi.MainMapItems.Find("StartArea");
-         if(null == miStart)
+         if (null == miStart)
          {
             Logger.Log(LogEnum.LE_ERROR, "SetExitArea(): tState=StartArea");
             return false;
@@ -977,8 +1069,8 @@ namespace Pattons_Best
             return false;
          }
          //-------------------------------------
-         int exitArea = TableMgr.theExits[dieRoll,sa];
-         string name = "M" + exitArea.ToString()  + "E";
+         int exitArea = TableMgr.theExits[dieRoll, sa];
+         string name = "M" + exitArea.ToString() + "E";
          ITerritory? t = Territories.theTerritories.Find(name);
          if (null == t)
          {
@@ -1010,10 +1102,10 @@ namespace Pattons_Best
          }
          //-----------------------------------------------
          EnumResistance resistance = EnumResistance.Heavy;
-         switch(report.Resistance)
+         switch (report.Resistance)
          {
             case EnumResistance.Light:
-               if( dieRoll < 8 )
+               if (dieRoll < 8)
                   resistance = EnumResistance.Light;
                else
                   resistance = EnumResistance.Medium;
@@ -1035,21 +1127,25 @@ namespace Pattons_Best
                return false;
          }
          //-------------------------------------
-         if ( EnumResistance.Light == resistance )
+         string name = gi.EnemyStrengthCheck.Name;
+         if (EnumResistance.Light == resistance)
          {
-            IMapItem strengthMarker = new MapItem(gi.EnemyStrengthCheck.Name, 1.0, "c36Light", gi.EnemyStrengthCheck);
+            name += ("SL" + Utilities.MapItemNum.ToString());
+            IMapItem strengthMarker = new MapItem(name, 1.0, "c36Light", gi.EnemyStrengthCheck);
             strengthMarker.Count = 1;
             gi.Controls.Add(strengthMarker);
          }
          else if (EnumResistance.Medium == resistance)
          {
-            IMapItem strengthMarker = new MapItem(gi.EnemyStrengthCheck.Name, 1.0, "c37Medium", gi.EnemyStrengthCheck);
+            name += ("SM" + Utilities.MapItemNum.ToString());
+            IMapItem strengthMarker = new MapItem(name, 1.0, "c37Medium", gi.EnemyStrengthCheck);
             strengthMarker.Count = 2;
             gi.Controls.Add(strengthMarker);
          }
          else if (EnumResistance.Heavy == resistance)
          {
-            IMapItem strengthMarker = new MapItem(gi.EnemyStrengthCheck.Name, 1.0, "c38Heavy", gi.EnemyStrengthCheck);
+            name += ("SH" + Utilities.MapItemNum.ToString());
+            IMapItem strengthMarker = new MapItem(name, 1.0, "c38Heavy", gi.EnemyStrengthCheck);
             strengthMarker.Count = 3;
             gi.Controls.Add(strengthMarker);
          }
@@ -1057,6 +1153,59 @@ namespace Pattons_Best
          {
             Logger.Log(LogEnum.LE_ERROR, "SetEnemyStrengthCounter(): reached default resistence=" + resistance.ToString());
             return false;
+         }
+         Utilities.MapItemNum++;
+         return true;
+      }
+      private bool SetArtillerySupportCounter(IGameInstance gi, int dieRoll)
+      {
+         if (null == gi.ArtillerySupportCheck)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetArtillerySupportCounter(): gi.ArtillerySupportCheck=null");
+            return false;
+         }
+         if (dieRoll < 8)
+         {
+            if (2 < gi.ArtillerySupports.Count) // May only have three artillery supports. Remove last one.
+            {
+               IMapItem? mi = gi.ArtillerySupports.RemoveAt(0);
+               if (null == mi)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "SetArtillerySupportCounter(): mi=null");
+                  return false;
+               }
+               gi.Stacks.Remove(mi);
+            }
+            string name = gi.ArtillerySupportCheck.Name + "Art" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            IMapItem artillerSupportMarker = new MapItem(name, 1.0, "c39ArtillerySupport", gi.ArtillerySupportCheck);
+            gi.ArtillerySupports.Add(artillerSupportMarker);
+         }
+         return true;
+      }
+      private bool SetAirStrikeCounter(IGameInstance gi, int dieRoll)
+      {
+         if (null == gi.AirStrikeCheck)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetAirStrikeCounter(): gi.AirStrikeCheck=null");
+            return false;
+         }
+         if (dieRoll < 5)
+         {
+            if (1 < gi.AirStrikes.Count) // May only have two air strikes. Remove last one.
+            {
+               IMapItem? mi = gi.AirStrikes.RemoveAt(0);
+               if (null == mi)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "SetAirStrikeCounter(): mi=null");
+                  return false;
+               }
+               gi.Stacks.Remove(mi);
+            }
+            string name = gi.AirStrikeCheck.Name + "Air" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            IMapItem airStrikeMarker = new MapItem(name, 1.0, "c40AirStrike", gi.AirStrikeCheck);
+            gi.AirStrikes.Add(airStrikeMarker);
          }
          return true;
       }
@@ -1073,10 +1222,18 @@ namespace Pattons_Best
          string returnStatus = "OK";
          switch (action)
          {
-            case GameAction.UpdateEventViewerActive: // Only change active event
-               gi.EventDisplayed = gi.EventActive; // next screen to show
+            case GameAction.ShowCombatCalendarDialog:
+            case GameAction.ShowAfterActionReportDialog:
+            case GameAction.ShowInventoryDialog:
+            case GameAction.ShowRuleListingDialog:
+            case GameAction.ShowEventListingDialog:
+            case GameAction.ShowReportErrorDialog:
+            case GameAction.ShowAboutDialog:
                break;
             case GameAction.UpdateEventViewerDisplay: // Only change active event
+               break;
+            case GameAction.UpdateEventViewerActive: // Only change active event
+               gi.EventDisplayed = gi.EventActive; // next screen to show
                break;
             case GameAction.EndGameClose:
                gi.GamePhase = GamePhase.EndGame;
@@ -1120,10 +1277,18 @@ namespace Pattons_Best
          string returnStatus = "OK";
          switch (action)
          {
-            case GameAction.UpdateEventViewerActive: // Only change active event
-               gi.EventDisplayed = gi.EventActive; // next screen to show
+            case GameAction.ShowCombatCalendarDialog:
+            case GameAction.ShowAfterActionReportDialog:
+            case GameAction.ShowInventoryDialog:
+            case GameAction.ShowRuleListingDialog:
+            case GameAction.ShowEventListingDialog:
+            case GameAction.ShowReportErrorDialog:
+            case GameAction.ShowAboutDialog:
                break;
             case GameAction.UpdateEventViewerDisplay: // Only change active event
+               break;
+            case GameAction.UpdateEventViewerActive: // Only change active event
+               gi.EventDisplayed = gi.EventActive; // next screen to show
                break;
             case GameAction.EndGameClose:
                gi.GamePhase = GamePhase.EndGame;

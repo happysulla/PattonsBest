@@ -23,6 +23,7 @@ namespace Pattons_Best
       //----------------------------------------------
       int GameTurn { set; get; }
       GamePhase GamePhase { set; get; }
+      int Day { get; set; }
       IAfterActionReports Reports { get; set; }
       GameAction DieRollAction { set; get; } // Used in EventViewerPanel when die roll happens to indicate next event for die roll
       bool IsUndoCommandAvailable { set; get; } // Allow user to back up if selected wrong user action
@@ -41,9 +42,9 @@ namespace Pattons_Best
       ITerritory Home { get; set; }
       ITerritory? NewTerritory { set; get; }
       ITerritory? EnemyStrengthCheck { get; set; }
-      List<EnteredHex> EnteredHexes { get; }
-      //------------------------------------------------
-      int Day { get; set; }
+      ITerritory? ArtillerySupportCheck { get; set; }
+      ITerritory? AirStrikeCheck { get; set; }
+      ITerritory? EnteredArea { get; set; }
       //------------------------------------------------
       bool IsHulledDown { set; get; }
       bool IsMoving { set; get; }
@@ -52,6 +53,7 @@ namespace Pattons_Best
       //------------------------------------------------
       IMapItemMoves MapItemMoves { set; get; }
       IStacks Stacks { set; get; }
+      List<EnteredHex> EnteredHexes { get; }
       //------------------------------------------------
       List<IUnitTest> UnitTests { get; }
       //=========================================================

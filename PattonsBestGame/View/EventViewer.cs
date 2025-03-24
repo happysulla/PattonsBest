@@ -32,6 +32,7 @@ namespace Pattons_Best
       public int DieRoll { set; get; } = 0;
       //--------------------------------------------------------------------
       public RuleDialogViewer? myRulesMgr;
+      public AfterActionDialog? myAfterActionDialog = null;
       //--------------------------------------------------------------------
       private ScrollViewer? myScrollViewerTextBlock;
       private Canvas? myCanvasMain = null;
@@ -198,20 +199,23 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): OpenEvent() returned false ae=" + myGameInstance.EventActive + " a=" + action.ToString());
                break;
             case GameAction.ShowAfterActionReportDialog:
-               IAfterActionReport? aar = gi.Reports.GetLast();
-               if (null == aar)
+               if (null == myAfterActionDialog)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView():  gi.Reports.GetLast()=null");
-                  return;
+                  IAfterActionReport? aar = gi.Reports.GetLast();
+                  if (null == aar)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateView():  gi.Reports.GetLast()=null");
+                     return;
+                  }
+                  AfterActionReportUserControl aarUserControl = new AfterActionReportUserControl(aar);
+                  if (true == aarUserControl.CtorError)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateView(): AfterActionReportUserControl CtorError=true");
+                     return;
+                  }
+                  myAfterActionDialog = new AfterActionDialog(aar, CloseAfterActionDialog);
+                  myAfterActionDialog.Show();
                }
-               AfterActionReportUserControl aarUserControl = new AfterActionReportUserControl(aar);
-               if (true == aarUserControl.CtorError)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): AfterActionReportUserControl CtorError=true");
-                  return;
-               }
-               AfterActionDialog dialogAAR = new AfterActionDialog(aar);
-               dialogAAR.Show();
                break;
             case GameAction.ShowCombatCalendarDialog:
                if( false == myRulesMgr.ShowTable("Calendar"))
@@ -264,6 +268,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): AssignNewCrewRatings() returned false");
                break;
             case GameAction.MorningBriefingAmmoLoad:
+            case GameAction.MovementAmmoLoad:
                EventViewerR162AmmoMgr newAmmoLoadMgr = new EventViewerR162AmmoMgr(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == newAmmoLoadMgr.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): newAmmoLoadMgr.CtorError=true");
@@ -285,6 +290,8 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): OpenEvent() returned false ae=" + myGameInstance.EventActive + " a=" + action.ToString());
                break;
          }
+         if( null != myAfterActionDialog )
+            myAfterActionDialog.UpdateReport();
       }
       public bool OpenEvent(IGameInstance gi, string key)
       {
@@ -763,24 +770,66 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.EnemyStrenthCheck=null");
                      return false;
                   }
-                  Image imge020 = new Image { Width = 100, Height = 100, Name = "MovementChooseOption" };
+                  Image imge021 = new Image { Width = 100, Height = 100, Name = "MovementChooseOption" };
                   foreach(IMapItem mi in gi.Controls)
                   {
                      if( mi.TerritoryCurrent.Name == gi.EnemyStrengthCheck.Name)
                      {
                         if (1 == mi.Count)
-                           imge020.Source = MapItem.theMapImages.GetBitmapImage("c36Light");
+                           imge021.Source = MapItem.theMapImages.GetBitmapImage("c36Light");
                         else if( 2 == mi.Count)
-                           imge020.Source = MapItem.theMapImages.GetBitmapImage("c37Medium");
+                           imge021.Source = MapItem.theMapImages.GetBitmapImage("c37Medium");
                         else
-                           imge020.Source = MapItem.theMapImages.GetBitmapImage("c38Heavy");
+                           imge021.Source = MapItem.theMapImages.GetBitmapImage("c38Heavy");
                      }
                   }
                   myTextBlock.Inlines.Add(new Run("                                           "));
-                  myTextBlock.Inlines.Add(new InlineUIContainer(imge020));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge021));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
+            case "e024":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  Image imge024 = new Image { Source= MapItem.theMapImages.GetBitmapImage("c39ArtillerySupport"), Width = 100, Height = 100, Name = "MovementChooseOption" };
+                  myTextBlock.Inlines.Add(new Run("                                           "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge024));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  if ( 7 < gi.DieResults[key][0] )
+                     myTextBlock.Inlines.Add(new Run("No Artillery Support available now. Click image to continue."));
+                  else
+                     myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
+            case "e026":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  Image imge026 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c40AirStrike"), Width = 100, Height = 100, Name = "MovementChooseOption" };
+                  myTextBlock.Inlines.Add(new Run("                                           "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge026));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  if (4 < gi.DieResults[key][0])
+                     myTextBlock.Inlines.Add(new Run("No Air Strike available now. Click image to continue."));
+                  else
+                     myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
+            case "e027":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  Image imge027 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c29AmmoReload"), Width = 100, Height = 100, Name = "MovementChooseOption" };
+                  myTextBlock.Inlines.Add(new Run("                                           "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge027));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  if (7 < gi.DieResults[key][0])
+                     myTextBlock.Inlines.Add(new Run("No Resupply available now. Click image to continue."));
+                  else
+                     myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
             default:
@@ -979,6 +1028,10 @@ namespace Pattons_Best
          return true;
       }
       //--------------------------------------------------------------------
+      public void CloseAfterActionDialog()
+      {
+         myAfterActionDialog = null;
+      }
       public void ShowDieResult(int dieRoll)
       {
          if (null == myGameInstance)
@@ -1038,7 +1091,11 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowR162AmmoLoad(): myGameEngine=null");
             return false;
          }
-         GameAction outAction = GameAction.MorningBriefingTimeCheck;
+         GameAction outAction = GameAction.Error;
+         if ( GamePhase.MorningBriefing == myGameInstance.GamePhase)
+            outAction = GameAction.MorningBriefingTimeCheck;
+         else
+            outAction = GameAction.MovementChooseOption;
          StringBuilder sb11 = new StringBuilder("     ######ShowR162AmmoLoad() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
@@ -1275,13 +1332,13 @@ namespace Pattons_Best
                action = GameAction.PreparationsTurretRotateRight;
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
-            case "Strength Check":
-               action = GameAction.MovementEnemyStrengthChoice;
-               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-               break;
             case "Begin Game":
                action = GameAction.SetupShowMapHistorical;
                action = GameAction.TestingStartMovement; // <cgs> TEST
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "Entered":
+               action = GameAction.MovementEnterArea;
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Read Rules":
@@ -1290,6 +1347,22 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): ShowRule(r1.1) returned false");
                   return false;
                }
+               break;
+            case "Resupply":
+               action = GameAction.MovementResupplyCheck;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "Strength Check":
+               action = GameAction.MovementEnemyStrengthChoice;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "Strike":
+               action = GameAction.MovementAirStrikeChoice;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "Support":
+               action = GameAction.MovementArtillerySupportChoice;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             default:
                if (false == ShowTable(content))

@@ -575,20 +575,8 @@ namespace Pattons_Best
          string key = (string)b.Content;
          if (true == key.StartsWith("A")) // rules based click
          {
-            IAfterActionReport? aar = myGameInstance.Reports.GetLast();
-            if (null == aar)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateView():  gi.Reports.GetLast()=null");
-               return;
-            }
-            AfterActionReportUserControl aarUserControl = new AfterActionReportUserControl(aar);
-            if (true == aarUserControl.CtorError)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateView(): AfterActionReportUserControl CtorError=true");
-               return;
-            }
-            AfterActionDialog dialogAAR = new AfterActionDialog(aar);
-            dialogAAR.Show();
+            GameAction action = GameAction.ShowAfterActionReportDialog;
+            myGameEngine.PerformAction(ref myGameInstance, ref action);
          }
          else if (true == key.StartsWith("r")) // rules based click
          {

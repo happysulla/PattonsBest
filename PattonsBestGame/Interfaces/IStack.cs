@@ -22,7 +22,8 @@ namespace Pattons_Best
       IStack? Find(ITerritory t);
       IStack? Find(IMapItem mi);
       IStack? Find(String name);
-      IStack? Remove(IMapItem mi);
+      void Remove(IMapItem mi);
+      void Remove(string miName);
       IStack? RemoveAt(int index);
       IStack? this[int index] { get; set; }
       IStacks Shuffle();

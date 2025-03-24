@@ -1,4 +1,4 @@
-﻿<Window x:Name="myAfterActiondialog" x:Class="Pattons_Best.AfterActionDialog"
+﻿<Window x:Name="myAfterActionDialog" x:Class="Pattons_Best.AfterActionDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,7 +9,7 @@
         MaxWidth="840" 
         Height="930"
         Width="840"
-        ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" Foreground="Black" WindowStartupLocation="CenterScreen" WindowStyle="ThreeDBorderWindow" ResizeMode="CanResizeWithGrip">
+        ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" Foreground="Black" WindowStartupLocation="CenterScreen" WindowStyle="ThreeDBorderWindow" ResizeMode="CanResizeWithGrip" Closed="Window_Closed">
    <DockPanel Name="myDockPanel" Margin="15,0,0,0" >
       <ScrollViewer Name="myScrollViewerClient"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
       </ScrollViewer>

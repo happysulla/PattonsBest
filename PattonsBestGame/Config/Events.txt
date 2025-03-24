@@ -181,33 +181,60 @@ Table.
  Perform an additional Enemy <InlineUIContainer><Button Content='Strength Check' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
 <InlineUIContainer><Button Content='e023' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Call for Artillery 
 <InlineUIContainer><Button Content='Support' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
-<InlineUIContainer><Button Content='e024' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Call for Air 
+<InlineUIContainer><Button Content='e025' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Call for Air 
 <InlineUIContainer><Button Content='Strike' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
-<InlineUIContainer><Button Content='e025' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Attempt to 
+<InlineUIContainer><Button Content='e027' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Attempt to 
 <InlineUIContainer><Button Content='Resupply' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
-<InlineUIContainer><Button Content='e026' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Click on highlighted area to Enter
+<InlineUIContainer><Button Content='e028' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> An adjacent area is 
+<InlineUIContainer><Button Content='Entered' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>"
-e023	"<Bold>e024 Call for Artillery Support</Bold> 
+e023	"<Bold>e023 Call for Artillery Support</Bold> 
+<InlineUIContainer><Button Content='r23.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <InlineUIContainer><Button Content='r4.54.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
-Call to hit an area adjacent to your task force. Consult the 
+Call to hit an area adjacent to your task force. Only three Artillery Support markers can exist on the board at one time. Consult the 
 <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 to see if Artillery Support arrives. If successful, an Artillery Support marker on the area. Click on one of the adjacent regions highlighted blue."
-e024	"<Bold>e025 Call for Air Strike</Bold> 
+e024	"<Bold>e024 Artillery Support Roll</Bold> 
+<InlineUIContainer><Button Content='r23.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+<LineBreak/><LineBreak/>
+Roll 1D and consult the <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table to see if Artillery Support arrives. If successful, an Artillery Support marker is placed on the area. 
+<LineBreak/><LineBreak/>
+Die Roll =  <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer> 
+<LineBreak/><LineBreak/>"
+e025	"<Bold>e025 Call for Air Strike</Bold> 
+<InlineUIContainer><Button Content='r23.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <InlineUIContainer><Button Content='r4.54.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
-Call to hit an area adjacent to your task force. Consult the 
+Call to hit an area adjacent to your task force. Only two Air Strike markers can exist on the board at one time. 
+An additional 15 minute action can be selected while waiting for an air strike. Consult the 
 <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-to see if Air Strike arrives. If successful, an Air Strike marker is placed on the area."
-e025	"<Bold>e026 Attempt to Resupply</Bold> 
+to see if Air Strike arrives. If successful, an Air Strike marker is placed on the area. Click on one of the adjacent regions highlighted blue."
+e026	"<Bold>e026 Air Strike Roll</Bold> 
+<InlineUIContainer><Button Content='r4.54.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+<LineBreak/><LineBreak/>
+Roll 1D and consult the <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table to see if Air Strike arrives. If successful, an Air Strike marker is placed on the area. 
+<LineBreak/><LineBreak/>
+Die Roll =  <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer> 
+<LineBreak/><LineBreak/>"
+e027	"<Bold>e027 Attempt to Resupply</Bold> 
 <InlineUIContainer><Button Content='r4.54.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
 Consult the 
 <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-to see if resupply occurs. If successful, you may relead your tank with ammo. "
-e027	"<Bold>e027 Enter Adjacent Area</Bold> 
-<InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+to see if resupply occurs. If successful, you may relead your tank with ammo. 
+<LineBreak/><LineBreak/>
+Die Roll =  <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer> 
 <LineBreak/><LineBreak/>"
+e028	"<Bold>e028 Enter Adjacent Area</Bold> 
+<InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+<LineBreak/><LineBreak/>
+Click on one of the adjacent highlighted areas. Artillery Support or Air Strike Counters are moved to the battle board as a reminder. 
+<LineBreak/><LineBreak/>Choose 
+<InlineUIContainer><Button Content='Advancing Fire' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> per 
+<InlineUIContainer><Button Content='r22.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. "
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"
 e502	"<Bold>e502 Game Lost</Bold>

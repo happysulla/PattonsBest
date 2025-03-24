@@ -159,6 +159,17 @@ namespace Pattons_Best
       MovementEnemyStrengthCheck,
       MovementEnemyStrengthCheckRoll,
       MovementChooseOption,
+      MovementArtillerySupportChoice,
+      MovementArtillerySupportCheck,
+      MovementArtillerySupportCheckRoll,
+      MovementAirStrikeChoice,
+      MovementAirStrikeCheck,
+      MovementAirStrikeCheckRoll,
+      MovementResupplyCheck,
+      MovementResupplyCheckRoll,
+      MovementAmmoLoad,
+      MovementEnterArea,
+      MovementExit,
       Error
    };
    public interface IGameEngine

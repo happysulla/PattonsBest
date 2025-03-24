@@ -39,40 +39,40 @@ namespace Pattons_Best
          InitializeComponent();
          myIsEditable = isEditable;
          Report = report;
-         if (false == UpdateReport(report))
+         if (false == UpdateReport())
          {
             Logger.Log(LogEnum.LE_ERROR, "AfterActionReportUserControl(): UpdateReport() returned false");
             CtorError = true;
             return;
          }
       }
-      public bool UpdateReport(IAfterActionReport report)
+      public bool UpdateReport()
       {
-         String s = AddSpaces(report.Day, HEADER_INFO_LEN);
+         String s = AddSpaces(Report.Day, HEADER_INFO_LEN);
          mySpanDate.Inlines.Clear();
          mySpanDate.Inlines.Add(new Run(s));
          //----------------------------------
-         s = AddSpaces(report.Name, HEADER_INFO_LEN);
+         s = AddSpaces(Report.Name, HEADER_INFO_LEN);
          mySpanTankName.Inlines.Clear();
          mySpanTankName.Inlines.Add(new Run(s));
          mySpanTankName.IsEnabled = myIsEditable;
          if (true == mySpanTankName.IsEnabled)
             mySpanTankName.Background = theBrushInActive;
          //----------------------------------
-         TankCard card = new TankCard(report.TankCardNum);
+         TankCard card = new TankCard(Report.TankCardNum);
          s = AddSpaces(card.myModel, HEADER_INFO_LEN);
          mySpanTankModel.Inlines.Clear();
          mySpanTankModel.Inlines.Add(new Run(s));
          //----------------------------------
-         s = AddSpaces(report.Situation.ToString(), HEADER_INFO_LEN);
+         s = AddSpaces(Report.Situation.ToString(), HEADER_INFO_LEN);
          mySpanSituation.Inlines.Clear();
          mySpanSituation.Inlines.Add(new Run(s));
          //----------------------------------
-         s = AddSpaces(report.Weather, HEADER_INFO_LEN);
+         s = AddSpaces(Report.Weather, HEADER_INFO_LEN);
          mySpanWeather.Inlines.Clear();
          mySpanWeather.Inlines.Add(new Run(s));
          //----------------------------------
-         ICrewMember? commander = report.Commander as ICrewMember;
+         ICrewMember? commander = Report.Commander as ICrewMember;
          if( null == commander )
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): commander=null");
@@ -87,7 +87,7 @@ namespace Pattons_Best
          if (true == mySpanCommanderName.IsEnabled)
             mySpanCommanderName.Background = theBrushInActive;
          //----------------------------------
-         ICrewMember? gunner = report.Gunner as ICrewMember;
+         ICrewMember? gunner = Report.Gunner as ICrewMember;
          if (null == gunner)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): gunner=null");
@@ -101,7 +101,7 @@ namespace Pattons_Best
          if (true == mySpanGunnerName.IsEnabled)
             mySpanGunnerName.Background = theBrushInActive;
          //----------------------------------
-         ICrewMember? loader = report.Loader as ICrewMember;
+         ICrewMember? loader = Report.Loader as ICrewMember;
          if (null == loader)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): loader=null");
@@ -115,7 +115,7 @@ namespace Pattons_Best
          if (true == mySpanLoaderName.IsEnabled)
             mySpanLoaderName.Background = theBrushInActive;
          //----------------------------------
-         ICrewMember? driver = report.Driver as ICrewMember;
+         ICrewMember? driver = Report.Driver as ICrewMember;
          if (null == driver)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): loader=null");
@@ -129,7 +129,7 @@ namespace Pattons_Best
          if (true == mySpanDriverName.IsEnabled)
             mySpanDriverName.Background = theBrushInActive;
          //----------------------------------
-         ICrewMember? assistant = report.Assistant as ICrewMember;
+         ICrewMember? assistant = Report.Assistant as ICrewMember;
          if (null == assistant)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): assistant=null");
@@ -143,44 +143,44 @@ namespace Pattons_Best
          if (true == mySpanAssistantName.IsEnabled)
             mySpanAssistantName.Background = theBrushInActive;
          //----------------------------------
-         if( false == UpdateReportTimeTrack( report ))
+         if( false == UpdateReportTimeTrack( Report ))
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): UpdateReportTimeTrack() returned false");
             return false;
          }
          //----------------------------------
-         myRunAmmo30Calibre.Text = report.Ammo30CalibreMG.ToString();
-         myRunAmmo50Calibre.Text = report.Ammo50CalibreMG.ToString();
-         myRunAmmoSmokeBombs.Text = report.AmmoSmokeBomb.ToString();
-         myRunAmmoSmokeGrenades.Text = report.AmmoSmokeGrenade.ToString();
-         myRunAmmoPeriscopes.Text = report.AmmoPeriscope.ToString();
+         myRunAmmo30Calibre.Text = Report.Ammo30CalibreMG.ToString();
+         myRunAmmo50Calibre.Text = Report.Ammo50CalibreMG.ToString();
+         myRunAmmoSmokeBombs.Text = Report.AmmoSmokeBomb.ToString();
+         myRunAmmoSmokeGrenades.Text = Report.AmmoSmokeGrenade.ToString();
+         myRunAmmoPeriscopes.Text = Report.AmmoPeriscope.ToString();
          //----------------------------------
-         myRunMainGunHE.Text = report.MainGunHE.ToString();
-         myRunMainGunAP.Text = report.MainGunAP.ToString();
-         myRunMainGunWP.Text = report.MainGunWP.ToString();
-         myRunMainGunHBCI.Text = report.MainGunHBCI.ToString();
-         myRunMainGunHVAP.Text = report.MainGunHVAP.ToString();
+         myRunMainGunHE.Text = Report.MainGunHE.ToString();
+         myRunMainGunAP.Text = Report.MainGunAP.ToString();
+         myRunMainGunWP.Text = Report.MainGunWP.ToString();
+         myRunMainGunHBCI.Text = Report.MainGunHBCI.ToString();
+         myRunMainGunHVAP.Text = Report.MainGunHVAP.ToString();
          //----------------------------------
-         myRunVictoryPointsLight.Text = report.VictoryPtsKiaLightWeapon.ToString();
-         myRunVictoryPointsTruck.Text = report.VictoryPtsKiaTruck.ToString();
-         myRunVictoryPointsSPW.Text = report.VictoryPtsKiaSpwOrPsw.ToString();
-         myRunVictoryPointsSpGun.Text = report.VictoryPtsKiaSPGun.ToString();
-         myRunVictoryPointsPzIV.Text = report.VictoryPtsKiaPzIV.ToString();
-         myRunVictoryPointsPzV.Text = report.VictoryPtsKiaPzV.ToString();
-         myRunVictoryPointsPzVI.Text = report.VictoryPtsKiaPzVI.ToString();
-         myRunVictoryPointsAtGun.Text = report.VictoryPtsKiaAtGun.ToString();
-         myRunVictoryPointsPosition.Text = report.VictoryPtsKiaFortifiedPosition.ToString();
-         myRunVictoryPointsCaptureArea.Text = report.VictoryPtsCaptureArea.ToString();
-         myRunVictoryPointsCaptureExit.Text = report.VictoryPtsKiaExitArea.ToString();
-         myRunVictoryPointsLostTank.Text = report.VictoryPtsKiaExitArea.ToString();
-         myRunVictoryPointsLostInfantry.Text = report.VictoryPtsFriendlyTank.ToString();
+         myRunVictoryPointsLight.Text = Report.VictoryPtsKiaLightWeapon.ToString();
+         myRunVictoryPointsTruck.Text = Report.VictoryPtsKiaTruck.ToString();
+         myRunVictoryPointsSPW.Text = Report.VictoryPtsKiaSpwOrPsw.ToString();
+         myRunVictoryPointsSpGun.Text = Report.VictoryPtsKiaSPGun.ToString();
+         myRunVictoryPointsPzIV.Text = Report.VictoryPtsKiaPzIV.ToString();
+         myRunVictoryPointsPzV.Text = Report.VictoryPtsKiaPzV.ToString();
+         myRunVictoryPointsPzVI.Text = Report.VictoryPtsKiaPzVI.ToString();
+         myRunVictoryPointsAtGun.Text = Report.VictoryPtsKiaAtGun.ToString();
+         myRunVictoryPointsPosition.Text = Report.VictoryPtsKiaFortifiedPosition.ToString();
+         myRunVictoryPointsCaptureArea.Text = Report.VictoryPtsCaptureArea.ToString();
+         myRunVictoryPointsCaptureExit.Text = Report.VictoryPtsKiaExitArea.ToString();
+         myRunVictoryPointsLostTank.Text = Report.VictoryPtsKiaExitArea.ToString();
+         myRunVictoryPointsLostInfantry.Text = Report.VictoryPtsFriendlyTank.ToString();
          //----------------------------------
-         myRunVictoryPointsTotalTank.Text = report.VictoryPtsTotalTank.ToString();
-         myRunVictoryPointsTotalFriendly.Text = report.VictoryPtsTotalFriendly.ToString();
-         myRunVictoryPointsTotalTerritory.Text = report.VictoryPtsTotalTerritory.ToString();
+         myRunVictoryPointsTotalTank.Text = Report.VictoryPtsTotalTank.ToString();
+         myRunVictoryPointsTotalFriendly.Text = Report.VictoryPtsTotalFriendly.ToString();
+         myRunVictoryPointsTotalTerritory.Text = Report.VictoryPtsTotalTerritory.ToString();
          //----------------------------------
          StringBuilder sb = new StringBuilder();
-         foreach (String note in report.Notes)
+         foreach (String note in Report.Notes)
          {
             sb.Append(note);
             sb.Append("\n");
