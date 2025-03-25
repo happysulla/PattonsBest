@@ -1220,10 +1220,11 @@ namespace Pattons_Best
                }
                gi.Stacks.Remove(airStrike);
             }
-            string name = gi.AirStrikeCheck.Name + "Air" + Utilities.MapItemNum.ToString();
-            Utilities.MapItemNum++;
-            IMapItem airStrikeMarker = new MapItem(name, 1.0, "c40AirStrike", gi.AirStrikeCheck);
-            gi.Stacks.Add(airStrikeMarker);
+            gi.IsAirStrikePending = true;
+            //string name = gi.AirStrikeCheck.Name + "Air" + Utilities.MapItemNum.ToString();
+            //Utilities.MapItemNum++;
+            //IMapItem airStrikeMarker = new MapItem(name, 1.0, "c40AirStrike", gi.AirStrikeCheck);
+            //gi.Stacks.Add(airStrikeMarker);
          }
          return true;
       }

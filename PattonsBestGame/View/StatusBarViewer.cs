@@ -55,6 +55,8 @@ namespace Pattons_Best
                myTargetCursor = null;
                this.myCanvas.Cursor = Cursors.Arrow; // get rid of the canvas cursor
                break;
+            case GameAction.MovementAirStrikeChoice:
+               break;
             default:
                break;
          }
@@ -83,6 +85,16 @@ namespace Pattons_Best
             buttonGoto.IsEnabled = true;
          buttonGoto.Click += ButtonEventActive_Click;
          myStatusBar.Items.Add(buttonGoto);
+         //--------------------------------------------
+         if (true == gi.IsAirStrikePending)
+         {
+            myStatusBar.Items.Add(new Separator());
+            StringBuilder sbAir = new StringBuilder("Pending" );
+            Label labelAirStrike = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = sbAir.ToString() };
+            Image imgAirStrike = new Image { Source = MapItem.theMapImages.GetBitmapImage("AirStrike"), Width = 40, Height = 20 };
+            myStatusBar.Items.Add(labelAirStrike);
+            myStatusBar.Items.Add(imgAirStrike);
+         }
       }
       //-----------------------------------------------------------------
       private void ButtonEventActive_Click(object sender, RoutedEventArgs e)

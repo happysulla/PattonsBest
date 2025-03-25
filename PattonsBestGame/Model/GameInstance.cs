@@ -52,6 +52,7 @@ namespace Pattons_Best
       public bool IsMoving { set; get; } = false;
       public bool IsLeadTank { set; get; } = false;
       public bool IsTurretActive { set; get; } = false;
+      public bool IsAirStrikePending { set; get; } = false;
       //------------------------------------------------
       public IMapItemMoves MapItemMoves { get; set; } = new MapItemMoves();
       public IStacks Stacks { get; set; } = new Stacks();
