@@ -682,6 +682,7 @@ If the last time box is marked out during combat on the Battle Board , continue 
 r22.0	"<Bold>r22.0 Advancing Fire</Bold>
 <LineBreak/><LineBreak/>
 Advancing Fire represents blind HE and MG fire at places likely to be concealing unknown enemy units. It may take place both when you tank first enters a new map area and during Battle Rounds.
+<LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r22.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Entering a New Area <LineBreak/>
 <InlineUIContainer><Button Content='r22.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> During Battle Rounds<LineBreak/>"
 r22.1	"<Bold>r22.1 Advancing Fire - Entering a New Area</Bold>
@@ -690,7 +691,7 @@ When your tank force enters a new area on the Movement Board, you may have the t
 <InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
 You may place a number of Advancing Fire markers on the Battle Board. If battle then occurs in the area, the Advancing Fire may remove enemy units appearing in the zones with the markers. 
 <LineBreak/><LineBreak/>
-Your tank itself takes no sepcific action as the Advancing Fire is considered the effort of the entire task force including your tank. However, ammo is expended by your tank whether a battle occurs or not. If battle does occur, following steps occur:
+Your tank itself takes no specific action as the Advancing Fire is considered the effort of the entire task force including your tank. However, ammo is expended by your tank whether a battle occurs or not. If battle does occur, following steps occur:
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r22.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Advancing Fire Ammo Use <LineBreak/>
 <InlineUIContainer><Button Content='r22.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Advancing Fire Markers<LineBreak/>
@@ -703,7 +704,7 @@ r22.12	"<Bold>r22.12 Advancing Fire Markers</Bold>
 <LineBreak/><LineBreak/>
 Place up to six Advance Fire markers anywhere on the Battle Board except in Sectors 1, 2, 3, and the long range sectors 6-8. You may place more than one in a zone. For every 3 friendly tank losses (roudned up), omit one Advance Fire marker.
 <LineBreak/><LineBreak/>
-                                                  <InlineUIContainer><Image Name='c44AdvanceFire'  Height='80' Width='80'></Image></InlineUIContainer>"
+                                        <InlineUIContainer><Image Name='c44AdvanceFire'  Height='80' Width='80'></Image></InlineUIContainer>"
 r22.13	"<Bold>r22.13 Advancing Fire Resolution</Bold>
 <LineBreak/><LineBreak/>
 Advancing Fire is resolved in each Battle Board zone containing both an Advance Fire marker and enemy units during Battle Step 
@@ -721,7 +722,10 @@ r22.2	"<Bold>r22.2 Advancing Fire - Entering a New Area</Bold>
 You may fire your tank's MGs into zones containing no spotted units as a type of Advancing Fire. Order correct crew action (for example, Fire Bow MG) and place the Advancing Fire marker for the MG (Bow MG Advance Fire) into the zone you want to fire. Place the marker after any tank movement or facing changes. This type of fire can KO enemy units which move into the zone and reduce the danger of Panzerfaust attacks per the
 <InlineUIContainer><Button Content='Panzerfaust' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Attack Tables.
 <LineBreak/><LineBreak/>
--- During the Crew Action Phase, roll 2D:  (1-30 =  1 ammo box expected), (31-97 =  nothing), and (98-100 = MG malfunctions). 
+-- During the Crew Action Phase, roll 2D:  <LineBreak/>
+    1-30 =  1 ammo box expected<LineBreak/>
+    31-97 =  nothing<LineBreak/>
+    98-100 = MG malfunctions 
 <LineBreak/><LineBreak/>
 -- Each enemy truck or infantry type that enters the zone may be immediately fired on by your MG according to the 
 <InlineUIContainer><Button Content='Sherman MG' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
@@ -731,12 +735,11 @@ vs. Infantry Targets Table. Any kills are recorded as victory points on the Afte
 -- Remove these Advancing Fire markers specific for your MGs at the beginning of the Orders Phase 
 <InlineUIContainer><Button Content='r4.73' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> of the next round
 <LineBreak/><LineBreak/>
-                                                  <InlineUIContainer><Image Name='c42FireBowMg'  Height='80' Width='80'></Image></InlineUIContainer>"
+                                        <InlineUIContainer><Image Name='c42FireBowMg'  Height='80' Width='80'></Image></InlineUIContainer>"
 r23.0	"<Bold>r23.0 Artillery Support and Air Strikes</Bold>
 <LineBreak/><LineBreak/>
-<InlineUIContainer><Button Content='r22.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Artillery Support <LineBreak/>
-<InlineUIContainer><Button Content='r22.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> AirStrikes<LineBreak/>
-"
+<InlineUIContainer><Button Content='r23.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Artillery Support <LineBreak/>
+<InlineUIContainer><Button Content='r23.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> AirStrikes<LineBreak/>"
 r23.1	"<Bold>r23.1 Artillery Support</Bold>
 <LineBreak/><LineBreak/>
 Artillery support can be called for during the Movement Sequence 
@@ -749,13 +752,16 @@ If successful, place an Artillery Support marker in the area where the artillery
 <LineBreak/><LineBreak/>
 Additional artillery support may be called for, but no more than three support markers may be on the Movement Board at one time. You may voluntarily pick up an Artillery Support marker if you decide to attempt to place it elsewhere.
 <LineBreak/><LineBreak/>
-Artillery support takes effect in a newly entered area immediately after any appearing enemy units are placed on the Battle Board. Rsolve Arillery Support by rolling on the 
+                                        <InlineUIContainer><Image Name='c39ArtillerySupport'  Height='80' Width='80'></Image></InlineUIContainer>"
+r23.11	"<Bold>r23.1 Artillery Support Resolution</Bold>
+<LineBreak/><LineBreak/>
+Artillery support takes effect in a newly entered area immediately after any appearing enemy units are placed on the Battle Board. Resolve Arillery Support by rolling on the 
 <InlineUIContainer><Button Content='Friendly Action' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table against each enemy unit.
 <LineBreak/><LineBreak/>
 Enemy units destroyed by artillery support are immediately removed, and their victory points ar recorded under friendly forces of the After Action Report 
 <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Roll again against each surviving enemy unit for each additional support marker.
 <LineBreak/><LineBreak/>
-                                                  <InlineUIContainer><Image Name='c39ArtillerySupport'  Height='80' Width='80'></Image></InlineUIContainer>"
+                                        <InlineUIContainer><Image Name='c39ArtillerySupport'  Height='80' Width='80'></Image></InlineUIContainer>"
 r23.2	"<Bold>r23.2 Air Strike</Bold>
 <LineBreak/><LineBreak/>
 Air Strikes function very similarly to artillery support
@@ -764,9 +770,9 @@ They use more time (30 minutes). They are less likely to arrive (1D = 1-4). They
 <LineBreak/><LineBreak/>
 Also, air strikes may not be called for during overcast or falling snow weather. 
 <LineBreak/><LineBreak/>
-While the 30 minutes spent calling for air strike is passing, youuu may perform one additional 15 minute operation (such as call for arilltery support or chek an additional area for resistance.
+While the 30 minutes spent calling for air strike is passing, you may perform one additional 15 minute operation (such as call for arilltery support or check an additional area for resistance.
 <LineBreak/><LineBreak/>
-                                                  <InlineUIContainer><Image Name='c40AirSupport'  Height='80' Width='80'></Image></InlineUIContainer>"
+                                        <InlineUIContainer><Image Name='c40AirStrike'  Height='80' Width='80'></Image></InlineUIContainer>"
 	
 	
 	

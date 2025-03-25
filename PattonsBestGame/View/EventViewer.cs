@@ -713,7 +713,7 @@ namespace Pattons_Best
                }
                break;
             case "e015":
-               IMapItem? loaderSpot = gi.MainMapItems.Find("LoaderSpot");
+               IMapItem? loaderSpot = gi.Stacks.FindMapItem("LoaderSpot");
                if (null != loaderSpot)
                {
                   Image imge015 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c18LoaderSpot"), Width = 100, Height = 100, Name = "PreparationsCommanderSpot" };
@@ -727,7 +727,7 @@ namespace Pattons_Best
                }
                break;
             case "e016":
-               IMapItem? cmdrSpot = gi.MainMapItems.Find("CommanderSpot");
+               IMapItem? cmdrSpot = gi.Stacks.FindMapItem("CommanderSpot");
                if (null != cmdrSpot)
                {
                   Image imge016 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c19CommanderSpot"), Width = 100, Height = 100, Name = "PreparationsFinal" };
@@ -771,17 +771,26 @@ namespace Pattons_Best
                      return false;
                   }
                   Image imge021 = new Image { Width = 100, Height = 100, Name = "MovementChooseOption" };
-                  foreach(IMapItem mi in gi.MainMapItems)
+                  IStack? stack = gi.Stacks.Find(gi.EnemyStrengthCheck);
+                  if( null == stack )
                   {
-                     if( mi.TerritoryCurrent.Name == gi.EnemyStrengthCheck.Name)
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): stack=null for e021");
+                     return false;
+                  }
+                  if( 0 < stack.MapItems.Count )
+                  {
+                     IMapItem? mi = stack.MapItems[0];
+                     if (null == mi)
                      {
-                        if (1 == mi.Count)
-                           imge021.Source = MapItem.theMapImages.GetBitmapImage("c36Light");
-                        else if (2 == mi.Count)
-                           imge021.Source = MapItem.theMapImages.GetBitmapImage("c37Medium");
-                        else
-                           imge021.Source = MapItem.theMapImages.GetBitmapImage("c38Heavy");
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): mi=null for e021");
+                        return false;
                      }
+                     if (1 == mi.Count)
+                        imge021.Source = MapItem.theMapImages.GetBitmapImage("c36Light");
+                     else if (2 == mi.Count)
+                        imge021.Source = MapItem.theMapImages.GetBitmapImage("c37Medium");
+                     else
+                        imge021.Source = MapItem.theMapImages.GetBitmapImage("c38Heavy");
                   }
                   myTextBlock.Inlines.Add(new Run("                                           "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge021));
@@ -935,7 +944,7 @@ namespace Pattons_Best
       private bool SetButtonStateEnemyStrenth(IGameInstance gi, Button b)
       {
          b.IsEnabled = false;
-         IMapItem? taskForce = gi.MainMapItems.Find("TaskForce");
+         IMapItem? taskForce = gi.Stacks.FindMapItem("TaskForce");
          if (null == taskForce)
          {
             Logger.Log(LogEnum.LE_ERROR, "SetButtonStateEnemyStrenth(): taskForce=null");
@@ -947,17 +956,18 @@ namespace Pattons_Best
          {
             if (true == s.Contains("E")) // Ignore Entry or Exit Areas
                continue;
-            bool isMatch = false; // If any adjacent territory does not match something in the gi.Controls, enable the button
-            foreach (IMapItem mi in gi.MainMapItems)
+            string nameOfTerritory = s + "R"; // If any adjacent territory does not have a stack for ENEMY strength, enable the button
+            ITerritory t = Territories.theTerritories.Find(nameOfTerritory);
+            if( null == t )
             {
-               if( true == mi.Name.Contains("Stength"))
-               {
-                  if (true == mi.TerritoryCurrent.Name.Contains(s))
-                     isMatch = true;
-               }
+               Logger.Log(LogEnum.LE_ERROR, "SetButtonStateEnemyStrenth(): t=null for s=" + nameOfTerritory);
+               return false;
             }
-            if( false == isMatch )
+            Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "SetButtonStateEnemyStrenth(): Checking territory=" + nameOfTerritory);
+            IStack? stack = gi.Stacks.Find(t);
+            if (null == stack)
             {
+               Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "SetButtonStateEnemyStrenth(): no stack for=" + nameOfTerritory + " in " + gi.Stacks.ToString());
                b.IsEnabled = true;
                return true;
             }

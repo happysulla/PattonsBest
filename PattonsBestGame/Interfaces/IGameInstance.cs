@@ -29,7 +29,6 @@ namespace Pattons_Best
       bool IsUndoCommandAvailable { set; get; } // Allow user to back up if selected wrong user action
       String EndGameReason { set; get; }
       //----------------------------------------------
-      IMapItems MainMapItems { set; get; }
       IMapItems NewMembers { set; get; }
       IMapItems ReadyRacks { set; get; }
       IMapItems Hatches { set; get; }

@@ -13,7 +13,7 @@ namespace Pattons_Best
    {
       int Count { get; }
       void Add(IStack stack);
-
+      void Add(IMapItem mi);
       void Insert(int index, IStack stack);
       void Clear();
       bool Contains(IStack stack);
@@ -22,6 +22,7 @@ namespace Pattons_Best
       IStack? Find(ITerritory t);
       IStack? Find(IMapItem mi);
       IStack? Find(String name);
+      IMapItem? FindMapItem(String name);
       void Remove(IMapItem mi);
       void Remove(string miName);
       IStack? RemoveAt(int index);

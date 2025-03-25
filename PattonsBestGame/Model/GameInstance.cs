@@ -34,7 +34,6 @@ namespace Pattons_Best
       public bool IsUndoCommandAvailable { set; get; } = false;
       public String EndGameReason { set; get; } = "";
       //---------------------------------------------------------------
-      public IMapItems MainMapItems { set; get; } = new MapItems();
       public IMapItems NewMembers { set; get; } = new MapItems();
       public IMapItems ReadyRacks { set; get; } = new MapItems();
       public IMapItems Hatches { set; get; } = new MapItems();

@@ -76,13 +76,6 @@ namespace Pattons_Best
                break;
             }
          }
-         //-----------------------------------------------
-         const string pattern = @"\d+$"; // use regex to remove last numbers from mapitem name
-         foreach (IMapItem mi in gi.MainMapItems)
-         {
-            string miName = Regex.Replace(mi.Name, pattern, "");
-            Party.Add(miName);
-         }
       }
    };
 }

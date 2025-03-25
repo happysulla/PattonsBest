@@ -48,6 +48,19 @@ namespace Pattons_Best
       private readonly ArrayList myList;
       public Stacks() { myList = new ArrayList(); }
       public void Add(IStack stack) { myList.Add(stack); }
+      public void Add(IMapItem mi) 
+      {
+         IStack? stack = Find(mi.TerritoryCurrent);
+         if( null == stack )
+         {
+            stack = new Stack(mi.TerritoryCurrent, mi);
+            myList.Add(stack);
+         }
+         else
+         {
+            stack.MapItems.Add(mi);
+         }
+      }
       public void Insert(int index, IStack stack) { myList.Insert(index, stack); }
       public int Count { get { return myList.Count; } }
       public void Clear() { myList.Clear(); }
@@ -57,11 +70,10 @@ namespace Pattons_Best
       public void Remove(IStack stack) { myList.Remove(stack); }
       public IStack? Find(ITerritory t)
       {
-         string territoryName = Utilities.RemoveSpaces(t.Name);
          foreach (Object o in myList)
          {
             IStack stack = (IStack)o;
-            if (territoryName == Utilities.RemoveSpaces(stack.Territory.Name))
+            if (t.Name == stack.Territory.Name)
                return stack;
          }
          return null;
@@ -86,8 +98,21 @@ namespace Pattons_Best
             IStack stack = (IStack)o;
             foreach (MapItem mapItem in stack.MapItems)
             {
-               if (Utilities.RemoveSpaces(mapItem.Name) == name)
+               if (mapItem.Name == name)
                   return stack;
+            }
+         }
+         return null;
+      }
+      public IMapItem? FindMapItem(String name)
+      {
+         foreach (Object o in myList)
+         {
+            IStack stack = (IStack)o;
+            foreach (MapItem mapItem in stack.MapItems)
+            {
+               if (mapItem.Name == name)
+                  return mapItem;
             }
          }
          return null;
