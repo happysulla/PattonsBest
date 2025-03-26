@@ -165,10 +165,14 @@ namespace Pattons_Best
       MovementAirStrikeChoice,
       MovementAirStrikeCheck,
       MovementAirStrikeCheckRoll,
+      MovementAirStrikeCancel,
       MovementResupplyCheck,
       MovementResupplyCheckRoll,
       MovementAmmoLoad,
       MovementEnterArea,
+      MovementAdvanceFireCheck,
+      MovementAdvanceFire,
+      MovementAdvanceFireSkip,
       MovementExit,
       Error
    };

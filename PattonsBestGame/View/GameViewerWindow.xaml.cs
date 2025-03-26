@@ -904,6 +904,20 @@ namespace Pattons_Best
                      return false;
                   }
                   break;
+               case GameAction.MovementEnterArea:
+                  if (false == UpdateCanvasMainEnterArea(gi, action))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMainEnterArea() returned false");
+                     return false;
+                  }
+                  break;
+               case GameAction.MovementAdvanceFireCheck:
+                  if (false == UpdateCanvasMovement(gi, action))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMovement() returned false");
+                     return false;
+                  }
+                  break;
                case GameAction.EndGameClose:
                   GameAction outActionClose = GameAction.EndGameExit;
                   myGameEngine.PerformAction(ref gi, ref outActionClose);
@@ -1157,6 +1171,36 @@ namespace Pattons_Best
          }
          return true;
       }
+      private bool UpdateCanvasMainEnterArea(IGameInstance gi, GameAction action)
+      {
+         myPolygons.Clear();
+         //--------------------------------
+         IMapItem? taskForce = gi.Stacks.FindMapItem("TaskForce");
+         if (null == taskForce)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainEnterArea(): taskForce=null");
+            return false;
+         }
+         //--------------------------------
+         List<String> sTerritories = taskForce.TerritoryCurrent.Adjacents;
+         foreach (string s in sTerritories)
+         {
+            ITerritory? t = Territories.theTerritories.Find(s);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainEnterArea(): 1 t=null for " + s);
+               return false;
+            }
+            PointCollection points = new PointCollection();
+            foreach (IMapPoint mp1 in t.Points)
+               points.Add(new System.Windows.Point(mp1.X, mp1.Y));
+            Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = t.Name };
+            aPolygon.MouseDown += MouseDownPolygonEnterArea;
+            myPolygons.Add(aPolygon);
+            myCanvasMain.Children.Add(aPolygon);
+         }
+         return true;
+      }
       private bool UpdateCanvasMovement(IGameInstance gi, GameAction action)
       {
          try
@@ -1194,6 +1238,13 @@ namespace Pattons_Best
                }
                mi.TerritoryStarting = mim2.NewTerritory;
                mi.TerritoryCurrent = mi.TerritoryStarting;
+               //------------------------------------------
+               gi.Stacks.Remove(mi);
+               IStack? stack = gi.Stacks.Find(mim2.NewTerritory);
+               if (null == stack)
+                  gi.Stacks.Add(new Stack(mim2.NewTerritory, mi));
+               else
+                  stack.MapItems.Add(mi);
             }
          }
          catch (Exception e)
@@ -1205,9 +1256,7 @@ namespace Pattons_Best
       }
       private bool MovePathAnimate(IMapItemMove mim)
       {
-         if ("Prince" != mim.MapItem.Name) // only prince is moved on map
-            return true;
-         const int ANIMATE_TIME_SEC = 2;
+         const int ANIMATE_TIME_SEC = 3;
          if (null == mim.NewTerritory)
          {
             Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): b=null for n=" + mim.MapItem.Name);
@@ -1493,6 +1542,24 @@ namespace Pattons_Best
             return;
          }
          GameAction outAction = GameAction.MovementAirStrikeCheck;
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+      }
+      private void MouseDownPolygonEnterArea(object sender, MouseButtonEventArgs e)
+      {
+         Polygon? clickedPolygon = sender as Polygon;
+         if (null == clickedPolygon)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonEnterArea(): clickedPolygon=null");
+            return;
+         }
+         string tName = clickedPolygon.Name;
+         myGameInstance.EnteredArea = Territories.theTerritories.Find(tName);
+         if (null == myGameInstance.EnteredArea)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonEnterArea(): t=null for " + clickedPolygon.Name.ToString());
+            return;
+         }
+         GameAction outAction = GameAction.MovementAdvanceFireCheck;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
       private void ClickButtonMapItem(object sender, RoutedEventArgs e)

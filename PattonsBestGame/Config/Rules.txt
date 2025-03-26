@@ -247,17 +247,23 @@ Enter adjacent area by moving your Task Force marker into that area.
 1.) Decide if you tank will use advancing fire per 
 <InlineUIContainer><Button Content='r22.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
-2.) Consult <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-Table to determine if battle occurs. If no battle, convert the Resistance marker to US Control marker on the Movement board. If battle occurs, mark off 15 minutes, and go to 
-<InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+2.) Consult <InlineUIContainer><Button Content='Resistance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table to determine if battle occurs. 
 <LineBreak/><LineBreak/>
-3) Record victory points for area now under US Control on the After Action Report 
-<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  If daylight remains, and not in Exit area, continue with
-<InlineUIContainer><Button Content='4.53' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
-If daylight remains, and in Exit area, continue with
+---If no battle, convert the Resistance marker to US Control marker on the Movement board. Record victory points for area now under US Control on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  
+<LineBreak/><LineBreak/>
+---If daylight remains, and not in Exit area, continue with 
+<InlineUIContainer><Button Content='r4.53' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+<LineBreak/><LineBreak/>
+---If daylight remains, and in Exit area, continue with 
 <InlineUIContainer><Button Content='r4.51' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> with new start area.
-If no daylight remains, the day is finished. Go to If daylight remains, and in Exit area, continue with Evening Debriefing 
-<InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>"
+<LineBreak/><LineBreak/>
+---If no daylight remains, go to Evening Debriefing 
+<InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
+3)  If battle occurs, mark off 15 minutes, and go to 
+<InlineUIContainer><Button Content='r4.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. "
 r7.0	"<Bold>r7.0 Crew Ratings</Bold> 
 <LineBreak/><LineBreak/>
 Each crew member is given a numerical rating of his skill at his position. The rating range from 1 (poorest) to 10 (best). 
@@ -764,13 +770,13 @@ Enemy units destroyed by artillery support are immediately removed, and their vi
                                         <InlineUIContainer><Image Name='c39ArtillerySupport'  Height='80' Width='80'></Image></InlineUIContainer>"
 r23.2	"<Bold>r23.2 Air Strike</Bold>
 <LineBreak/><LineBreak/>
-Air Strikes function very similarly to artillery support
+Air Strikes function very similarly to artillery support 
 <InlineUIContainer><Button Content='r23.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> with a few exceptions. 
 They use more time (30 minutes). They are less likely to arrive (1D = 1-4). They are more effective against armor targets. 
 <LineBreak/><LineBreak/>
 Also, air strikes may not be called for during overcast or falling snow weather. 
 <LineBreak/><LineBreak/>
-While the 30 minutes spent calling for air strike is passing, you may perform one additional 15 minute operation (such as call for arilltery support or check an additional area for resistance.
+While the 30 minutes spent calling for air strike is passing, you may perform one additional 15 minute operation (such as call for arilltery support or check an additional area for resistance).
 <LineBreak/><LineBreak/>
                                         <InlineUIContainer><Image Name='c40AirStrike'  Height='80' Width='80'></Image></InlineUIContainer>"
 	

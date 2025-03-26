@@ -106,12 +106,16 @@ namespace Pattons_Best
       {
          TerritoryCurrent = territory;
          TerritoryStarting = territory;
+         this.Location.X = territory.CenterPoint.X;
+         this.Location.Y = territory.CenterPoint.Y;
       }
       public MapItem(string name, double zoom, string topImageName, string bottomImageName, ITerritory territory) :  
          this(name, zoom, false, false, topImageName, bottomImageName) 
       {
          TerritoryCurrent = territory;
          TerritoryStarting = territory;
+         this.Location.X = territory.CenterPoint.X;
+         this.Location.Y = territory.CenterPoint.Y;
       }
       public MapItem(string aName, double zoom, bool isHidden, bool isAnimated, string topImageName)
       {

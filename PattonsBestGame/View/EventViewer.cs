@@ -799,6 +799,17 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
+            case "e022":
+               if (true == gi.IsAirStrikePending)
+               {
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Air Strike is pending. Perform strength check or artillery support while waiting --or-- "));
+                  Button b1 = new Button() { Content = "Cancel", FontFamily = myFontFam1, FontSize = 12 };
+                  b1.Click += Button_Click;
+                  myTextBlock.Inlines.Add(new InlineUIContainer(b1));
+                  myTextBlock.Inlines.Add(new Run(" Air Strike if you want different choice. Time is not recovered."));
+               }
+               break;
             case "e024":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
@@ -976,7 +987,10 @@ namespace Pattons_Best
       }
       private bool SetButtonAirStrike(IGameInstance gi, Button b)
       {
-         b.IsEnabled = true;
+         if( true == gi.IsAirStrikePending )
+            b.IsEnabled = false;
+         else
+            b.IsEnabled = true;
          return true;
       }
       //--------------------------------------------------------------------
@@ -1205,6 +1219,14 @@ namespace Pattons_Best
                               action = GameAction.MovementChooseOption;
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
+                           case "c44AdvanceFire":
+                              action = GameAction.MovementAdvanceFire;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
+                           case "c44AdvanceFireDeny":
+                              action = GameAction.MovementAdvanceFireSkip;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
                            default:
                               break;// do nothing
                         }
@@ -1289,7 +1311,11 @@ namespace Pattons_Best
                action = GameAction.TestingStartMovement; // <cgs> TEST
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
-            case "Entered":
+            case "Cancel":
+               action = GameAction.MovementAirStrikeCancel;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "Enter":
                action = GameAction.MovementEnterArea;
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;

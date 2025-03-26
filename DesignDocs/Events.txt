@@ -233,15 +233,15 @@ e028	"<Bold>e028 Enter Adjacent Area</Bold>
 <LineBreak/><LineBreak/>
 Click on one of the adjacent highlighted areas. Artillery Support or Air Strike Counters are moved to the battle board as a reminder. 
 <LineBreak/><LineBreak/>
-                                <InlineUIContainer><Image Name='Combat' Height='200' Width='200'></Image></InlineUIContainer>"
+                                <InlineUIContainer><Image Name='CrossedRifles' Height='200' Width='200'></Image></InlineUIContainer>"
 e029	"<Bold>e029 Advancing Fire Choice</Bold> 
 <InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
-Choose one of the following images for Advancing Fire option per 
+Choose one of the following images if you want Advancing Fire 
 <InlineUIContainer><Button Content='r22.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
 <LineBreak/><LineBreak/>
-<InlineUIContainer><Image Name='c44AdvanceFire' Height='60' Width='60'></Image></InlineUIContainer> to perform advancing fire. <LineBreak/> <LineBreak/>
-<InlineUIContainer><Image Name='c44AdvanceFireDeny' Height='60' Width='60'></Image></InlineUIContainer> to skip advancing fire.  "
+<InlineUIContainer><Image Name='c44AdvanceFire' Height='100' Width='100'></Image></InlineUIContainer> to perform advancing fire. <LineBreak/> <LineBreak/>
+<InlineUIContainer><Image Name='c44AdvanceFireDeny' Height='100' Width='100'></Image></InlineUIContainer> to skip advancing fire.  "
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"
 e502	"<Bold>e502 Game Lost</Bold>

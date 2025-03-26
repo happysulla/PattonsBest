@@ -917,14 +917,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MovementChooseOption:
-                  gi.DieResults["e021"][0] = Utilities.NO_RESULT;
-                  gi.DieResults["e024"][0] = Utilities.NO_RESULT;
-                  gi.DieResults["e026"][0] = Utilities.NO_RESULT;
-                  gi.DieResults["e027"][0] = Utilities.NO_RESULT;
-                  gi.EnemyStrengthCheck = null;
-                  gi.ArtillerySupportCheck = null;
-                  gi.AirStrikeCheck = null;
-                  gi.EventDisplayed = gi.EventActive = "e022";
+                  SetChoicesForOperations(gi);
                   break;
                case GameAction.MovementArtillerySupportChoice:
                   gi.EventDisplayed = gi.EventActive = "e023";
@@ -960,6 +953,10 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                   }
                   break;
+               case GameAction.MovementAirStrikeCancel:
+                  gi.IsAirStrikePending = false;
+                  SetChoicesForOperations(gi);
+                  break;
                case GameAction.MovementResupplyCheck:
                   AdvanceTime(lastReport, 60);
                   gi.EventDisplayed = gi.EventActive = "e027";
@@ -972,7 +969,32 @@ namespace Pattons_Best
                case GameAction.MovementEnterArea:
                   AdvanceTime(lastReport, 60);
                   gi.EventDisplayed = gi.EventActive = "e028";
-
+                  break;
+               case GameAction.MovementAdvanceFireCheck:
+                  gi.EventDisplayed = gi.EventActive = "e029";
+                  if (null == gi.EnteredArea)
+                  {
+                     returnStatus = "gi.EnteredArea=null";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementEnterArea): " + returnStatus);
+                  }
+                  else
+                  {
+                     IMapItem? taskForce = gi.Stacks.FindMapItem("TaskForce");
+                     if (null == taskForce)
+                     {
+                        returnStatus = "taskForce=null";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementEnterArea): " + returnStatus);
+                     }
+                     else if (false == AddMapItemMove(gi, taskForce, gi.EnteredArea))
+                     {
+                        returnStatus = "AddMapItemMove() returned faulse";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementEnterArea): " + returnStatus);
+                     }
+                  }
+                  break;
+               case GameAction.MovementAdvanceFire:
+                  break;
+               case GameAction.MovementAdvanceFireSkip:
                   break;
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;
@@ -1082,6 +1104,18 @@ namespace Pattons_Best
          gi.Stacks.Add(miExit);
          return true;
       }
+      private void SetChoicesForOperations(IGameInstance gi)
+      {
+         gi.DieResults["e021"][0] = Utilities.NO_RESULT;
+         gi.DieResults["e024"][0] = Utilities.NO_RESULT;
+         gi.DieResults["e026"][0] = Utilities.NO_RESULT;
+         gi.DieResults["e027"][0] = Utilities.NO_RESULT;
+         gi.EnemyStrengthCheck = null;
+         gi.ArtillerySupportCheck = null;
+         if( false == gi.IsAirStrikePending )
+            gi.AirStrikeCheck = null;
+         gi.EventDisplayed = gi.EventActive = "e022";
+      }
       private bool SetEnemyStrengthCounter(IGameInstance gi, int dieRoll)
       {
          if (null == gi.EnemyStrengthCheck)
@@ -1155,6 +1189,19 @@ namespace Pattons_Best
             return false;
          }
          Utilities.MapItemNum++;
+         if (true == gi.IsAirStrikePending)
+         {
+            if (null == gi.AirStrikeCheck)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SetArtillerySupportCounter(): gi.AirStrikeCheck=null");
+               return false;
+            }
+            gi.IsAirStrikePending = false;
+            string nameAir = gi.AirStrikeCheck.Name + "Air" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            IMapItem airStrikeMarker = new MapItem(nameAir, 1.0, "c40AirStrike", gi.AirStrikeCheck);
+            gi.Stacks.Add(airStrikeMarker);
+         }
          return true;
       }
       private bool SetArtillerySupportCounter(IGameInstance gi, int dieRoll)
@@ -1190,6 +1237,19 @@ namespace Pattons_Best
             IMapItem artillerSupportMarker = new MapItem(name, 1.0, "c39ArtillerySupport", gi.ArtillerySupportCheck);
             gi.Stacks.Add(artillerSupportMarker);
          }
+         if( true == gi.IsAirStrikePending )
+         {
+            if (null == gi.AirStrikeCheck)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SetArtillerySupportCounter(): gi.AirStrikeCheck=null");
+               return false;
+            }
+            gi.IsAirStrikePending = false;
+            string name = gi.AirStrikeCheck.Name + "Air" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            IMapItem airStrikeMarker = new MapItem(name, 1.0, "c40AirStrike", gi.AirStrikeCheck);
+            gi.Stacks.Add(airStrikeMarker);
+         }
          return true;
       }
       private bool SetAirStrikeCounter(IGameInstance gi, int dieRoll)
@@ -1221,10 +1281,6 @@ namespace Pattons_Best
                gi.Stacks.Remove(airStrike);
             }
             gi.IsAirStrikePending = true;
-            //string name = gi.AirStrikeCheck.Name + "Air" + Utilities.MapItemNum.ToString();
-            //Utilities.MapItemNum++;
-            //IMapItem airStrikeMarker = new MapItem(name, 1.0, "c40AirStrike", gi.AirStrikeCheck);
-            //gi.Stacks.Add(airStrikeMarker);
          }
          return true;
       }
