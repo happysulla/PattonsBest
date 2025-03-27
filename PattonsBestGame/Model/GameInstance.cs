@@ -47,12 +47,13 @@ namespace Pattons_Best
       public ITerritory? AirStrikeCheck { get; set; } = null;
       public ITerritory? EnteredArea { get; set; } = null;
       //---------------------------------------------------------------
-
       public bool IsHulledDown { set; get; } = false;
       public bool IsMoving { set; get; } = false;
       public bool IsLeadTank { set; get; } = false;
       public bool IsTurretActive { set; get; } = false;
       public bool IsAirStrikePending { set; get; } = false;
+      public bool IsAdvancingFireChosen { set; get; } = false;
+      public EnumResistance BattleResistance { set; get; } = EnumResistance.None;
       //------------------------------------------------
       public IMapItemMoves MapItemMoves { get; set; } = new MapItemMoves();
       public IStacks Stacks { get; set; } = new Stacks();

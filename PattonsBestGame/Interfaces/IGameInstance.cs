@@ -47,6 +47,8 @@ namespace Pattons_Best
       bool IsLeadTank { set; get; }
       bool IsTurretActive { set; get; }
       bool IsAirStrikePending { set; get; }
+      bool IsAdvancingFireChosen { set; get; }
+      EnumResistance BattleResistance { set; get; }
       //------------------------------------------------
       IMapItemMoves MapItemMoves { set; get; }
       IStacks Stacks { set; get; }

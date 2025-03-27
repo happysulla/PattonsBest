@@ -173,6 +173,9 @@ namespace Pattons_Best
       MovementAdvanceFireCheck,
       MovementAdvanceFire,
       MovementAdvanceFireSkip,
+      MovementStrengthRollBattleBoard,
+      MovementResistanceCheck,
+      MovementResistanceCheckRoll,
       MovementExit,
       Error
    };

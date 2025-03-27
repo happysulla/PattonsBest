@@ -993,8 +993,61 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MovementAdvanceFire:
+                  gi.IsAdvancingFireChosen = true;
+                  if (false == EnterBoardArea(gi))
+                  {
+                     returnStatus = "SetAirStrikeCounter() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                  }
                   break;
                case GameAction.MovementAdvanceFireSkip:
+                  if (false == EnterBoardArea(gi))
+                  {
+                     returnStatus = "SetAirStrikeCounter() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.MovementStrengthRollBattleBoard:
+                  gi.DieResults[key][0] = dieRoll;
+                  gi.DieRollAction = GameAction.MovementResistanceCheckRoll;
+                  if (false == SetEnemyStrengthCounter(gi, dieRoll))
+                  {
+                     returnStatus = "SetEnemyStrengthCounter() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.MovementResistanceCheck:
+                  gi.EventDisplayed = gi.EventActive = "e031";
+                  gi.DieRollAction = GameAction.MovementResistanceCheckRoll;
+                  break;
+               case GameAction.MovementResistanceCheckRoll:
+                  gi.DieResults[key][0] = dieRoll;
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  switch (gi.BattleResistance)
+                  {
+                     case EnumResistance.Light:
+                        if (7 < dieRoll)
+                        {
+
+                        }
+                        break;
+                     case EnumResistance.Medium:
+                        if (5 < dieRoll)
+                        {
+
+                        }
+                        break;
+                     case EnumResistance.Heavy:
+                        if (3 < dieRoll)
+                        {
+
+                        }
+                        break;
+                     default:
+                        returnStatus = "reached default with resistance=" + gi.BattleResistance.ToString();
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                        break;
+                  }
                   break;
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;
@@ -1120,8 +1173,13 @@ namespace Pattons_Best
       {
          if (null == gi.EnemyStrengthCheck)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetEnemyStrengthCounter(): gi.EnemyStrengthCheck=null");
-            return false;
+            IMapItem? taskForce = gi.Stacks.FindMapItem("TaskForce");
+            if (null == taskForce)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SetEnemyStrengthCounter(): taskForce=null");
+               return false;
+            }
+            gi.EnemyStrengthCheck = taskForce.TerritoryStarting;
          }
          if ("A" == gi.EnemyStrengthCheck.Type)
             dieRoll += 1;
@@ -1162,12 +1220,14 @@ namespace Pattons_Best
          }
          //-------------------------------------
          string name = gi.EnemyStrengthCheck.Name;
+         gi.BattleResistance = resistance;
          if (EnumResistance.Light == resistance)
          {
             name += ("StrengthLight" + Utilities.MapItemNum.ToString());
             IMapItem strengthMarker = new MapItem(name, 1.0, "c36Light", gi.EnemyStrengthCheck);
             strengthMarker.Count = 1;
             gi.Stacks.Add(strengthMarker);
+
          }
          else if (EnumResistance.Medium == resistance)
          {
@@ -1281,6 +1341,34 @@ namespace Pattons_Best
                gi.Stacks.Remove(airStrike);
             }
             gi.IsAirStrikePending = true;
+         }
+         return true;
+      }
+      private bool EnterBoardArea(IGameInstance gi)
+      {
+         IMapItem? taskForce = gi.Stacks.FindMapItem("TaskForce");
+         if (null == taskForce)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "EnterBoardArea(): taskForce= null");
+            return false;
+         }
+         string name = taskForce.TerritoryStarting + "R";
+         ITerritory? t = Territories.theTerritories.Find(name);
+         if( null == t )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "EnterBoardArea(): t=null for " + name);
+            return false;
+         }
+         IStack? stack = gi.Stacks.Find(t.Name);
+         if (null == stack)
+         {
+            gi.EventDisplayed = gi.EventActive = "e030";
+            gi.DieRollAction = GameAction.MovementStrengthRollBattleBoard;
+         }
+         else
+         {
+            gi.EventDisplayed = gi.EventActive = "e031";
+            gi.DieRollAction = GameAction.MovementResistanceCheckRoll;
          }
          return true;
       }

@@ -852,6 +852,35 @@ namespace Pattons_Best
                      myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
+            case "e030":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  if (null == gi.EnemyStrengthCheck)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.EnemyStrenthCheck=null");
+                     return false;
+                  }
+                  Image imge021 = new Image { Width = 100, Height = 100, Name= "MovementResistanceCheck" };
+                  if (EnumResistance.Light == gi.BattleResistance)
+                     imge021.Source = MapItem.theMapImages.GetBitmapImage("c36Light");
+                  else if (EnumResistance.Medium == gi.BattleResistance)
+                     imge021.Source = MapItem.theMapImages.GetBitmapImage("c37Medium");
+                  else if (EnumResistance.Heavy == gi.BattleResistance)
+                     imge021.Source = MapItem.theMapImages.GetBitmapImage("c38Heavy");
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.BattleResistance=" + gi.BattleResistance.ToString());
+                     return false;
+                  }
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                      "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge021));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
             default:
                break;
          }
@@ -968,7 +997,7 @@ namespace Pattons_Best
             if (true == s.Contains("E")) // Ignore Entry or Exit Areas
                continue;
             string nameOfTerritory = s + "R"; // If any adjacent territory does not have a stack for ENEMY strength, enable the button
-            ITerritory t = Territories.theTerritories.Find(nameOfTerritory);
+            ITerritory? t = Territories.theTerritories.Find(nameOfTerritory);
             if( null == t )
             {
                Logger.Log(LogEnum.LE_ERROR, "SetButtonStateEnemyStrenth(): t=null for s=" + nameOfTerritory);
@@ -1225,6 +1254,10 @@ namespace Pattons_Best
                               return;
                            case "c44AdvanceFireDeny":
                               action = GameAction.MovementAdvanceFireSkip;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
+                           case "MovementResistanceCheck":
+                              action = GameAction.MovementResistanceCheck;
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
                            default:
