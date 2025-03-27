@@ -604,19 +604,19 @@ namespace Pattons_Best
                         imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherClear"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
                         break;
                      case "Overcast":
-                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherClear"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercast"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
                         break;
                      case "Fog":
-                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherClear"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherFog"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
                         break;
                      case "Mud":
-                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherClear"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherMud"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
                         break;
                      case "Mud/Overcast":
-                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherClear"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercastMud"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
                         break;
                      case "Snow":
-                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherClear"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherGroundSnow"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
                         break;
                      default:
                         break;
