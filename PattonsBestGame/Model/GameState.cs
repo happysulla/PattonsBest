@@ -1030,17 +1030,41 @@ namespace Pattons_Best
                         {
 
                         }
+                        else // battle
+                        {
+                           if (false == EnterBattle(gi, lastReport))
+                           {
+                              returnStatus = "EnterBattle() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                           }
+                        }
                         break;
                      case EnumResistance.Medium:
                         if (5 < dieRoll)
                         {
 
                         }
+                        else // battle
+                        {
+                           if (false == EnterBattle(gi, lastReport))
+                           {
+                              returnStatus = "EnterBattle() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                           }
+                        }
                         break;
                      case EnumResistance.Heavy:
                         if (3 < dieRoll)
                         {
 
+                        }
+                        else // battle
+                        {
+                           if (false == EnterBattle(gi, lastReport))
+                           {
+                              returnStatus = "EnterBattle() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                           }
                         }
                         break;
                      default:
@@ -1359,7 +1383,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "EnterBoardArea(): t=null for " + name);
             return false;
          }
-         IStack? stack = gi.Stacks.Find(t.Name);
+         IStack? stack = gi.Stacks.Find(t);
          if (null == stack)
          {
             gi.EventDisplayed = gi.EventActive = "e030";
@@ -1370,6 +1394,13 @@ namespace Pattons_Best
             gi.EventDisplayed = gi.EventActive = "e031";
             gi.DieRollAction = GameAction.MovementResistanceCheckRoll;
          }
+         return true;
+      }
+      private bool EnterBattle(IGameInstance gi, IAfterActionReport report)
+      {
+         AdvanceTime(report, 15);
+         gi.GamePhase = GamePhase.Battle;
+         gi.EventDisplayed = gi.EventActive = "e032";
          return true;
       }
    }
