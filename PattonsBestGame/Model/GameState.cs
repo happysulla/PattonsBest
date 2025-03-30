@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
+using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -591,7 +592,7 @@ namespace Pattons_Best
                   gi.Stacks.Add(new MapItem("Turret", 2.0, "c16Turret", gi.Home));
                   break;
                case GameAction.PreparationsTurretRotateLeft:
-                  IMapItem? turretL = gi.Stacks.FindMapItem("Turret"); 
+                  IMapItem? turretL = gi.Stacks.FindMapItem("Turret");
                   if (null == turretL)
                   {
                      returnStatus = "turret=null";
@@ -875,6 +876,14 @@ namespace Pattons_Best
                   theIs1stEnemyStrengthCheck = true;
                   gi.EventDisplayed = gi.EventActive = "e018";
                   break;
+               case GameAction.MovementStartAreaRestart:
+                  if (false == MovementPhaseRestart(gi, lastReport))
+                  {
+                     returnStatus = "SetStartArea() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                  }
+
+                  break;
                case GameAction.MovementStartAreaSetRoll:
                   gi.DieResults[key][0] = dieRoll;
                   if (false == SetStartArea(gi, dieRoll))
@@ -1028,7 +1037,11 @@ namespace Pattons_Best
                      case EnumResistance.Light:
                         if (7 < dieRoll)
                         {
-
+                           if (false == SkipBattleBoard(gi, lastReport))
+                           {
+                              returnStatus = "ExitBattle() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                           }
                         }
                         else // battle
                         {
@@ -1042,7 +1055,11 @@ namespace Pattons_Best
                      case EnumResistance.Medium:
                         if (5 < dieRoll)
                         {
-
+                           if (false == SkipBattleBoard(gi, lastReport))
+                           {
+                              returnStatus = "ExitBattle() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                           }
                         }
                         else // battle
                         {
@@ -1056,7 +1073,11 @@ namespace Pattons_Best
                      case EnumResistance.Heavy:
                         if (3 < dieRoll)
                         {
-
+                           if (false == SkipBattleBoard(gi, lastReport))
+                           {
+                              returnStatus = "ExitBattle() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                           }
                         }
                         else // battle
                         {
@@ -1189,7 +1210,7 @@ namespace Pattons_Best
          gi.DieResults["e027"][0] = Utilities.NO_RESULT;
          gi.EnemyStrengthCheck = null;
          gi.ArtillerySupportCheck = null;
-         if( false == gi.IsAirStrikePending )
+         if (false == gi.IsAirStrikePending)
             gi.AirStrikeCheck = null;
          gi.EventDisplayed = gi.EventActive = "e022";
       }
@@ -1298,7 +1319,7 @@ namespace Pattons_Best
          if (dieRoll < 8)
          {
             IMapItems artillerySupports = new MapItems();
-            foreach( IStack stack in gi.Stacks )
+            foreach (IStack stack in gi.Stacks)
             {
                foreach (IMapItem mi in stack.MapItems)
                {
@@ -1321,7 +1342,7 @@ namespace Pattons_Best
             IMapItem artillerSupportMarker = new MapItem(name, 1.0, "c39ArtillerySupport", gi.ArtillerySupportCheck);
             gi.Stacks.Add(artillerSupportMarker);
          }
-         if( true == gi.IsAirStrikePending )
+         if (true == gi.IsAirStrikePending)
          {
             if (null == gi.AirStrikeCheck)
             {
@@ -1378,7 +1399,7 @@ namespace Pattons_Best
          }
          string name = taskForce.TerritoryStarting + "R";
          ITerritory? t = Territories.theTerritories.Find(name);
-         if( null == t )
+         if (null == t)
          {
             Logger.Log(LogEnum.LE_ERROR, "EnterBoardArea(): t=null for " + name);
             return false;
@@ -1396,11 +1417,87 @@ namespace Pattons_Best
          }
          return true;
       }
+      private bool SkipBattleBoard(IGameInstance gi, IAfterActionReport report)
+      {
+         int basePoints = 1;
+         if ((EnumScenario.Advance == report.Situation) || (EnumScenario.Battle == report.Situation))
+            basePoints *= 2;
+         report.VictoryPtsCaptureArea += basePoints;
+         //------------------------------------
+         gi.EventDisplayed = gi.EventActive = "e032";
+         gi.DieRollAction = GameAction.DieRollActionNone;
+         IMapItem? taskForce = gi.Stacks.FindMapItem("TaskForce");
+         if (null == taskForce)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ExitBattle(): taskForce= null");
+            return false;
+         }
+         string name = taskForce.TerritoryStarting + "R";
+         ITerritory? t = Territories.theTerritories.Find(name);
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ExitBattle(): t=null for " + name);
+            return false;
+         }
+         IStack? stack = gi.Stacks.Find(t);
+         if (null == stack)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ExitBattle(): taskForce= null");
+            return false;
+         }
+         gi.Stacks.Remove(stack);
+         //------------------------------------
+         name += ("UsControl" + Utilities.MapItemNum.ToString());
+         Utilities.MapItemNum++;
+         IMapItem usControl = new MapItem(name, 1.0, "c28UsControl", t);
+         usControl.Count = 0; // 0=us  1=light  2=medium  3=heavy
+         gi.Stacks.Add(usControl);
+         return true;
+      }
       private bool EnterBattle(IGameInstance gi, IAfterActionReport report)
       {
          AdvanceTime(report, 15);
          gi.GamePhase = GamePhase.Battle;
          gi.EventDisplayed = gi.EventActive = "e032";
+         return true;
+      }
+      private bool MovementPhaseRestart(IGameInstance gi, IAfterActionReport report)
+      {
+         int basePoints = 30;
+         if ( (EnumScenario.Advance == report.Situation) || (EnumScenario.Battle == report.Situation) )
+            basePoints *= 2;
+         report.VictoryPtsKiaExitArea += basePoints;
+         //--------------------------------------------------------------
+         theIs1stEnemyStrengthCheck = true;
+         gi.EventDisplayed = gi.EventActive = "e018";
+         gi.DieRollAction = GameAction.DieRollActionNone;
+         //--------------------------------------------------------------
+         gi.EnemyStrengthCheck = null;
+         gi.ArtillerySupportCheck = null;
+         gi.AirStrikeCheck = null;
+         gi.EnteredArea = null;
+         //--------------------------------------------------------------
+         gi.IsAirStrikePending = false;
+         gi.IsAdvancingFireChosen = false;
+         gi.BattleResistance = EnumResistance.None;
+         gi.Stacks.Clear();
+         gi.MapItemMoves.Clear();
+         gi.EnteredHexes.Clear();
+         //--------------------------------------------------------------
+         try
+         {
+            Logger.Log(LogEnum.LE_RESET_ROLL_STATE, "MovementPhaseRestart(): resetting die rolls");
+            foreach (KeyValuePair<string, int[]> kvp in gi.DieResults)
+            {
+               for (int i = 0; i < 3; ++i)
+                  kvp.Value[i] = Utilities.NO_RESULT;
+            }
+         }
+         catch (Exception)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MovementPhaseRestart(): reset rolls");
+            return false;
+         }
          return true;
       }
    }

@@ -37,15 +37,26 @@ namespace Pattons_Best
       int MainGunHBCI { get; set; }
       int MainGunHVAP { get; set; }
       //----------------------------------------
-      int VictoryPtsKiaLightWeapon { get; set; }
-      int VictoryPtsKiaTruck{ get; set; }
-      int VictoryPtsKiaSpwOrPsw { get; set; }
-      int VictoryPtsKiaSPGun { get; set; }
-      int VictoryPtsKiaPzIV { get; set; }
-      int VictoryPtsKiaPzV { get; set; }
-      int VictoryPtsKiaPzVI { get; set; }
-      int VictoryPtsKiaAtGun { get; set; }
-      int VictoryPtsKiaFortifiedPosition { get; set; }
+      int VictoryPtsFriendlyKiaLightWeapon { get; set; }
+      int VictoryPtsFriendlyKiaTruck { get; set; }
+      int VictoryPtsFriendlyKiaSpwOrPsw { get; set; }
+      int VictoryPtsFriendlyKiaSPGun { get; set; }
+      int VictoryPtsFriendlyKiaPzIV { get; set; }
+      int VictoryPtsFriendlyKiaPzV { get; set; }
+      int VictoryPtsFriendlyKiaPzVI { get; set; }
+      int VictoryPtsFriendlyKiaAtGun { get; set; }
+      int VictoryPtsFriendlyKiaFortifiedPosition { get; set; }
+      //----------------------------------------
+      int VictoryPtsYourKiaLightWeapon { get; set; }
+      int VictoryPtsYourKiaTruck { get; set; }
+      int VictoryPtsYourKiaSpwOrPsw { get; set; }
+      int VictoryPtsYourKiaSPGun { get; set; }
+      int VictoryPtsYourKiaPzIV { get; set; }
+      int VictoryPtsYourKiaPzV { get; set; }
+      int VictoryPtsYourKiaPzVI { get; set; }
+      int VictoryPtsYourKiaAtGun { get; set; }
+      int VictoryPtsYourKiaFortifiedPosition { get; set; }
+      //----------------------------------------
       int VictoryPtsCaptureArea{ get; set; }
       int VictoryPtsKiaExitArea { get; set; }
       int VictoryPtsFriendlyTank { get; set; }
@@ -54,10 +65,6 @@ namespace Pattons_Best
       List<EnumDecoration> Decorations { get; set; }
       //----------------------------------------
       List<String> Notes { get; set; }
-      //----------------------------------------
-      int VictoryPtsTotalTank { get; set; }
-      int VictoryPtsTotalFriendly { get; set; }
-      int VictoryPtsTotalTerritory { get; set; }
       //----------------------------------------
       string DayEndedTime { get; set; }
       bool IsBreakdown { get; set; }

@@ -38,27 +38,35 @@ namespace Pattons_Best.Model
       public int MainGunHBCI { get; set; } = 10;
       public int MainGunHVAP { get; set; } = 0;
       //----------------------------------------
-      public int VictoryPtsKiaLightWeapon { get; set; } = 0;
-      public int VictoryPtsKiaTruck { get; set; } = 0;
-      public int VictoryPtsKiaSpwOrPsw { get; set; } = 0;
-      public int VictoryPtsKiaSPGun { get; set; } = 0;
-      public int VictoryPtsKiaPzIV { get; set; } = 0;
-      public int VictoryPtsKiaPzV { get; set; } = 0;
-      public int VictoryPtsKiaPzVI { get; set; } = 0;
-      public int VictoryPtsKiaAtGun { get; set; } = 0;
-      public int VictoryPtsKiaFortifiedPosition { get; set; } = 0;
+      public int VictoryPtsFriendlyKiaLightWeapon { get; set; } = 0;
+      public int VictoryPtsFriendlyKiaTruck { get; set; } = 0;
+      public int VictoryPtsFriendlyKiaSpwOrPsw { get; set; } = 0;
+      public int VictoryPtsFriendlyKiaSPGun { get; set; } = 0;
+      public int VictoryPtsFriendlyKiaPzIV { get; set; } = 0;
+      public int VictoryPtsFriendlyKiaPzV { get; set; } = 0;
+      public int VictoryPtsFriendlyKiaPzVI { get; set; } = 0;
+      public int VictoryPtsFriendlyKiaAtGun { get; set; } = 0;
+      public int VictoryPtsFriendlyKiaFortifiedPosition { get; set; } = 0;
+      //----------------------------------------
+      public int VictoryPtsYourKiaLightWeapon { get; set; } = 0;
+      public int VictoryPtsYourKiaTruck { get; set; } = 0;
+      public int VictoryPtsYourKiaSpwOrPsw { get; set; } = 0;
+      public int VictoryPtsYourKiaSPGun { get; set; } = 0;
+      public int VictoryPtsYourKiaPzIV { get; set; } = 0;
+      public int VictoryPtsYourKiaPzV { get; set; } = 0;
+      public int VictoryPtsYourKiaPzVI { get; set; } = 0;
+      public int VictoryPtsYourKiaAtGun { get; set; } = 0;
+      public int VictoryPtsYourKiaFortifiedPosition { get; set; } = 0;
+      //----------------------------------------
       public int VictoryPtsCaptureArea { get; set; } = 0;
       public int VictoryPtsKiaExitArea { get; set; } = 0;
+      //----------------------------------------
       public int VictoryPtsFriendlyTank { get; set; } = 0;
       public int VictoryPtsFriendlySquad { get; set; } = 0;
       //----------------------------------------
       public List<EnumDecoration> Decorations { get; set; } = new List<EnumDecoration>();
       //----------------------------------------
       public List<String> Notes { get; set; } = new List<String>();
-      //----------------------------------------
-      public int VictoryPtsTotalTank { get; set; } = 0;
-      public int VictoryPtsTotalFriendly { get; set; } = 0;
-      public int VictoryPtsTotalTerritory { get; set; } = 0;
       //----------------------------------------
       public string DayEndedTime { get; set; } = "";
       public bool IsBreakdown { get; set; } = false;

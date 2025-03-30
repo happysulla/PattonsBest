@@ -54,7 +54,7 @@ namespace Pattons_Best
       }
       public EnteredHex(IGameInstance gi, ColorActionEnum colorAction)
       {
-         if( null == gi.NewTerritory )
+         if( null == gi.EnteredArea)
          {
             Logger.Log(LogEnum.LE_ERROR, "EnteredHex(): gi.NewTerritory=null");
             CtorError = true;
@@ -63,14 +63,14 @@ namespace Pattons_Best
          ++theId;
          Identifer = "Hex#" + theId.ToString();
          Day = gi.Day + 1;
-         HexName = gi.NewTerritory.Name;
+         HexName = gi.EnteredArea.Name;
          EventNames.Add(gi.EventActive);
          ColorAction = colorAction;
          //-----------------------------------------------
          Position = 0;
          foreach (EnteredHex hex in gi.EnteredHexes.AsEnumerable().Reverse())
          {
-            if (hex.HexName == gi.NewTerritory.Name)
+            if (hex.HexName == gi.EnteredArea.Name)
             {
                Position = hex.Position + 1;
                break;

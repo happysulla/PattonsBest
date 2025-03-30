@@ -41,7 +41,6 @@ namespace Pattons_Best
       public IMapItem? Turret { set; get; } = null;
       //------------------------------------------------
       public ITerritory Home { get; set; } = new Territory();
-      public ITerritory? NewTerritory { set; get; } = null;
       public ITerritory? EnemyStrengthCheck { get; set; } = null;
       public ITerritory? ArtillerySupportCheck { get; set; } = null;
       public ITerritory? AirStrikeCheck { get; set; } = null;
@@ -149,6 +148,25 @@ namespace Pattons_Best
                break;
          }
          return crewmember;
+      }
+      public bool IsDaylightLeft(IAfterActionReport report )
+      {
+         if (report.SunsetHour < report.SunriseHour)
+            return false;
+         if (report.SunsetHour == report.SunriseHour)
+         {
+            if (report.SunsetMin <= report.SunriseMin)
+               return false;
+         }
+         return true;
+      }
+      public void AddVictoryPoints(IAfterActionReport report, int points)
+      {
+
+      }
+      public bool IsExitArea()
+      {
+         return false;
       }
    }
 }
