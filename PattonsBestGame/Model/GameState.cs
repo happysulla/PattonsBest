@@ -165,6 +165,24 @@ namespace Pattons_Best
             report.SunriseMin %= 60;
          }
       }
+      protected bool ResetDieResults(IGameInstance gi)
+      {
+         try
+         {
+            Logger.Log(LogEnum.LE_RESET_ROLL_STATE, "MovementPhaseRestart(): resetting die rolls");
+            foreach (KeyValuePair<string, int[]> kvp in gi.DieResults)
+            {
+               for (int i = 0; i < 3; ++i)
+                  kvp.Value[i] = Utilities.NO_RESULT;
+            }
+         }
+         catch (Exception)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MovementPhaseRestart(): reset rolls");
+            return false;
+         }
+         return true;
+      }
    }
    //-----------------------------------------------------
    class GameStateSetup : GameState
@@ -926,7 +944,11 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MovementChooseOption:
-                  SetChoicesForOperations(gi);
+                  if (false == SetChoicesForOperations(gi))
+                  {
+                     returnStatus = "SetChoicesForOperations() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementChooseOption): " + returnStatus);
+                  }
                   break;
                case GameAction.MovementArtillerySupportChoice:
                   gi.EventDisplayed = gi.EventActive = "e023";
@@ -964,7 +986,11 @@ namespace Pattons_Best
                   break;
                case GameAction.MovementAirStrikeCancel:
                   gi.IsAirStrikePending = false;
-                  SetChoicesForOperations(gi);
+                  if (false == SetChoicesForOperations(gi))
+                  {
+                     returnStatus = "SetChoicesForOperations() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementAirStrikeCancel): " + returnStatus);
+                  }
                   break;
                case GameAction.MovementResupplyCheck:
                   AdvanceTime(lastReport, 60);
@@ -1035,55 +1061,55 @@ namespace Pattons_Best
                   switch (gi.BattleResistance)
                   {
                      case EnumResistance.Light:
-                        if (7 < dieRoll)
-                        {
-                           if (false == SkipBattleBoard(gi, lastReport))
-                           {
-                              returnStatus = "ExitBattle() returned false";
-                              Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
-                           }
-                        }
-                        else // battle
+                        if (7 < dieRoll) // battle
                         {
                            if (false == EnterBattle(gi, lastReport))
                            {
                               returnStatus = "EnterBattle() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                           }
+                        }
+                        else 
+                        {
+                           if (false == SkipBattleBoard(gi, lastReport))
+                           {
+                              returnStatus = "ExitBattle() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                            }
                         }
                         break;
                      case EnumResistance.Medium:
-                        if (5 < dieRoll)
-                        {
-                           if (false == SkipBattleBoard(gi, lastReport))
-                           {
-                              returnStatus = "ExitBattle() returned false";
-                              Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
-                           }
-                        }
-                        else // battle
+                        if (5 < dieRoll) // battle
                         {
                            if (false == EnterBattle(gi, lastReport))
                            {
                               returnStatus = "EnterBattle() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                           }
+                        }
+                        else 
+                        {
+                           if (false == SkipBattleBoard(gi, lastReport))
+                           {
+                              returnStatus = "ExitBattle() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                            }
                         }
                         break;
                      case EnumResistance.Heavy:
-                        if (3 < dieRoll)
-                        {
-                           if (false == SkipBattleBoard(gi, lastReport))
-                           {
-                              returnStatus = "ExitBattle() returned false";
-                              Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
-                           }
-                        }
-                        else // battle
+                        if (3 < dieRoll) // battle
                         {
                            if (false == EnterBattle(gi, lastReport))
                            {
                               returnStatus = "EnterBattle() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                           }
+                        }
+                        else 
+                        {
+                           if (false == SkipBattleBoard(gi, lastReport))
+                           {
+                              returnStatus = "ExitBattle() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                            }
                         }
@@ -1202,17 +1228,19 @@ namespace Pattons_Best
          gi.Stacks.Add(miExit);
          return true;
       }
-      private void SetChoicesForOperations(IGameInstance gi)
+      private bool SetChoicesForOperations(IGameInstance gi)
       {
-         gi.DieResults["e021"][0] = Utilities.NO_RESULT;
-         gi.DieResults["e024"][0] = Utilities.NO_RESULT;
-         gi.DieResults["e026"][0] = Utilities.NO_RESULT;
-         gi.DieResults["e027"][0] = Utilities.NO_RESULT;
+         if (false == ResetDieResults(gi))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetChoicesForOperations(): ResetDieResults() returned false");
+            return false;
+         }
          gi.EnemyStrengthCheck = null;
          gi.ArtillerySupportCheck = null;
          if (false == gi.IsAirStrikePending)
             gi.AirStrikeCheck = null;
          gi.EventDisplayed = gi.EventActive = "e022";
+         return true;
       }
       private bool SetEnemyStrengthCounter(IGameInstance gi, int dieRoll)
       {
@@ -1224,7 +1252,13 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "SetEnemyStrengthCounter(): taskForce=null");
                return false;
             }
-            gi.EnemyStrengthCheck = taskForce.TerritoryStarting;
+            string sStrengthCheck = taskForce.TerritoryStarting.Name + "R";
+            gi.EnemyStrengthCheck = Territories.theTerritories.Find(sStrengthCheck);
+            if (null == gi.EnemyStrengthCheck)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SetEnemyStrengthCounter(): gi.EnemyStrengthCheck=null");
+               return false;
+            }
          }
          if ("A" == gi.EnemyStrengthCheck.Type)
             dieRoll += 1;
@@ -1397,8 +1431,8 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "EnterBoardArea(): taskForce= null");
             return false;
          }
-         string name = taskForce.TerritoryStarting + "R";
-         ITerritory? t = Territories.theTerritories.Find(name);
+         string name = taskForce.TerritoryStarting.Name + "R";
+         ITerritory? t = Territories.theTerritories.Find(name); // Find the territory corresponding to a strength marker
          if (null == t)
          {
             Logger.Log(LogEnum.LE_ERROR, "EnterBoardArea(): t=null for " + name);
@@ -1463,14 +1497,14 @@ namespace Pattons_Best
       }
       private bool MovementPhaseRestart(IGameInstance gi, IAfterActionReport report)
       {
-         int basePoints = 30;
+         int basePoints = 10;
          if ( (EnumScenario.Advance == report.Situation) || (EnumScenario.Battle == report.Situation) )
             basePoints *= 2;
          report.VictoryPtsKiaExitArea += basePoints;
          //--------------------------------------------------------------
          theIs1stEnemyStrengthCheck = true;
          gi.EventDisplayed = gi.EventActive = "e018";
-         gi.DieRollAction = GameAction.DieRollActionNone;
+         gi.DieRollAction = GameAction.MovementStartAreaSetRoll;
          //--------------------------------------------------------------
          gi.EnemyStrengthCheck = null;
          gi.ArtillerySupportCheck = null;
@@ -1484,18 +1518,9 @@ namespace Pattons_Best
          gi.MapItemMoves.Clear();
          gi.EnteredHexes.Clear();
          //--------------------------------------------------------------
-         try
+         if( false == ResetDieResults(gi))
          {
-            Logger.Log(LogEnum.LE_RESET_ROLL_STATE, "MovementPhaseRestart(): resetting die rolls");
-            foreach (KeyValuePair<string, int[]> kvp in gi.DieResults)
-            {
-               for (int i = 0; i < 3; ++i)
-                  kvp.Value[i] = Utilities.NO_RESULT;
-            }
-         }
-         catch (Exception)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MovementPhaseRestart(): reset rolls");
+            Logger.Log(LogEnum.LE_ERROR, "MovementPhaseRestart(): ResetDieResults() returned false");
             return false;
          }
          return true;
