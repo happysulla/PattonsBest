@@ -1089,6 +1089,8 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainEnemyStrengthCheck(): 1 adj=null for " + s);
                return false;
             }
+            if ('E' == adj.Name.Last()) // ingore entry/exit territories
+               continue;
             //-------------------------------
             string strengthTerritoryName = s + "R";
             ITerritory? t = Territories.theTerritories.Find(strengthTerritoryName);
@@ -1237,7 +1239,6 @@ namespace Pattons_Best
                   return false;
                }
                mi.TerritoryStarting = mim2.NewTerritory;
-               mi.TerritoryCurrent = mi.TerritoryStarting;
                //------------------------------------------
                gi.Stacks.Remove(mi);
                IStack? stack = gi.Stacks.Find(mim2.NewTerritory);
@@ -1245,6 +1246,7 @@ namespace Pattons_Best
                   gi.Stacks.Add(new Stack(mim2.NewTerritory, mi));
                else
                   stack.MapItems.Add(mi);
+               mi.TerritoryCurrent = mim2.NewTerritory;
             }
          }
          catch (Exception e)
@@ -1271,8 +1273,8 @@ namespace Pattons_Best
          try
          {
             Canvas.SetZIndex(b, 100); // Move the button to the top of the Canvas
-            double xStart = mim.MapItem.Location.X;
-            double yStart = mim.MapItem.Location.Y;
+            double xStart = mim.MapItem.TerritoryCurrent.CenterPoint.X;
+            double yStart = mim.MapItem.TerritoryCurrent.CenterPoint.Y;
             PathFigure aPathFigure = new PathFigure() { StartPoint = new System.Windows.Point(xStart, yStart) };
             if (null == mim.BestPath)
             {

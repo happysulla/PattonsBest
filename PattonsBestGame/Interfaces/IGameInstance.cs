@@ -36,7 +36,6 @@ namespace Pattons_Best
       IMapItem? Turret { set; get; }
       //------------------------------------------------
       ITerritory Home { get; set; }
-      ITerritory? NewTerritory { set; get; }
       ITerritory? EnemyStrengthCheck { get; set; }
       ITerritory? ArtillerySupportCheck { get; set; }
       ITerritory? AirStrikeCheck { get; set; }
@@ -57,5 +56,7 @@ namespace Pattons_Best
       List<IUnitTest> UnitTests { get; }
       //=========================================================
       ICrewMember? GetCrewMember(string name);
+      bool IsDaylightLeft(IAfterActionReport report);
+      bool IsExitArea(out bool isExitAreaReached);
    }
 }

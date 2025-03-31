@@ -881,6 +881,56 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
+            case "e032":
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               Image imge032 = new Image { Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c28UsControl") };
+               Button b2 = new Button() { FontFamily = myFontFam1, FontSize = 12 };
+               if ( false == gi.IsDaylightLeft(report))
+               {                 
+                  imge032.Name = "EveningDebriefingStart";
+                  b2.Content = "r4.9";
+                  b2.Click += Button_Click;
+                  myTextBlock.Inlines.Add(new Run("Since there is no daylight left, go to Evening Debriefing "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(b2));
+                  myTextBlock.Inlines.Add(new Run("."));
+               }
+               else
+               {
+                  bool isExitArea;
+                  if( false == gi.IsExitArea(out isExitArea))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.IsExitArea() returned false");
+                     return false;
+                  }
+                  if( true == isExitArea )
+                  {
+                     imge032.Name = "MovementStartAreaRestart";
+                     b2.Content = "r4.51";
+                     b2.Click += Button_Click;
+                     myTextBlock.Inlines.Add(new Run("Since in exit area and daylight remains, determine a new start area per "));
+                     myTextBlock.Inlines.Add(new InlineUIContainer(b2));
+                     myTextBlock.Inlines.Add(new Run("."));
+                  }
+                  else
+                  {
+                     imge032.Name = "MovementEnemyStrengthChoice";
+                     b2.Content = "r4.53";
+                     b2.Click += Button_Click;
+                     myTextBlock.Inlines.Add(new Run("Since not in exit area and daylight remains, go to Enemy Strength Check "));
+                     myTextBlock.Inlines.Add(new InlineUIContainer(b2));
+                     myTextBlock.Inlines.Add(new Run("."));
+                  }
+               }
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("                                           "));
+               myTextBlock.Inlines.Add(new InlineUIContainer(imge032));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("Click image to continue."));
+
+               break;
             default:
                break;
          }
@@ -1185,7 +1235,7 @@ namespace Pattons_Best
                               return;
                            case "Continue005":
                               action = GameAction.SetupAssignCrewRating;
-                              action = GameAction.SetupShowCombatCalendarCheck; // <cgs> TEST
+                              //action = GameAction.SetupShowCombatCalendarCheck; // <cgs> TEST
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
                            case "GotoMorningBriefing":
@@ -1258,6 +1308,14 @@ namespace Pattons_Best
                               return;
                            case "MovementResistanceCheck":
                               action = GameAction.MovementResistanceCheck;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
+                           case "MovementStartAreaRestart":
+                              action = GameAction.MovementStartAreaRestart;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
+                           case "EveningDebriefingStart":
+                              action = GameAction.EveningDebriefingStart;
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
                            default:
@@ -1338,6 +1396,25 @@ namespace Pattons_Best
             case "  +  ":
                action = GameAction.PreparationsTurretRotateRight;
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "AAR":
+               if (null == myAfterActionDialog)
+               {
+                  IAfterActionReport? aar = myGameInstance.Reports.GetLast();
+                  if (null == aar)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateView():  gi.Reports.GetLast()=null");
+                     return false;
+                  }
+                  AfterActionReportUserControl aarUserControl = new AfterActionReportUserControl(aar);
+                  if (true == aarUserControl.CtorError)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateView(): AfterActionReportUserControl CtorError=true");
+                     return false;
+                  }
+                  myAfterActionDialog = new AfterActionDialog(aar, CloseAfterActionDialog);
+                  myAfterActionDialog.Show();
+               }
                break;
             case "Begin Game":
                action = GameAction.SetupShowMapHistorical;

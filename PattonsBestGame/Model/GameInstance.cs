@@ -41,7 +41,6 @@ namespace Pattons_Best
       public IMapItem? Turret { set; get; } = null;
       //------------------------------------------------
       public ITerritory Home { get; set; } = new Territory();
-      public ITerritory? NewTerritory { set; get; } = null;
       public ITerritory? EnemyStrengthCheck { get; set; } = null;
       public ITerritory? ArtillerySupportCheck { get; set; } = null;
       public ITerritory? AirStrikeCheck { get; set; } = null;
@@ -149,6 +148,46 @@ namespace Pattons_Best
                break;
          }
          return crewmember;
+      }
+      public bool IsDaylightLeft(IAfterActionReport report )
+      {
+         if (report.SunsetHour < report.SunriseHour)
+            return false;
+         if (report.SunsetHour == report.SunriseHour)
+         {
+            if (report.SunsetMin <= report.SunriseMin)
+               return false;
+         }
+         return true;
+      }
+      public bool IsExitArea(out bool isExitAreaReached)
+      {
+         isExitAreaReached = false;
+         IMapItem? exitArea = this.Stacks.FindMapItem("ExitArea");
+         if( null == exitArea )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsExitArea(): exitArea=null");
+            return false;
+         }
+         if( 0 == exitArea.TerritoryCurrent.Adjacents.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsExitArea(): exitArea.TerritoryCurrent.Adjacents.Count=0");
+            return false;
+         }
+         string adjName = exitArea.TerritoryCurrent.Adjacents[0];
+         if (null == adjName)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsExitArea(): adjName=null");
+            return false;
+         }
+         if (null == EnteredArea)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsExitArea(): EnteredArea=null");
+            return false;
+         }
+         if (adjName == this.EnteredArea.Name)
+            isExitAreaReached = true;
+         return true;
       }
    }
 }

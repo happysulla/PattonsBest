@@ -176,7 +176,10 @@ namespace Pattons_Best
       MovementStrengthRollBattleBoard,
       MovementResistanceCheck,
       MovementResistanceCheckRoll,
+      MovementStartAreaRestart,
       MovementExit,
+
+      EveningDebriefingStart,
       Error
    };
    public interface IGameEngine

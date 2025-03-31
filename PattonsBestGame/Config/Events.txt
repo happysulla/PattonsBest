@@ -60,12 +60,12 @@ Probablility of Combat: PROBABILITY &gt;=
 <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/>"
 e007	"<Bold>e007 Morning Briefing - Weather Roll</Bold> <InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
-<LineBreak/><LineBreak/>
+<LineBreak/><LineBreak/>B29
 The 
 <InlineUIContainer><Button Content='Weather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
  Table determines weather for today:  
 <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>
-<LineBreak/>B24"
+<LineBreak/>"
 e008	"<Bold>e008 Type of Snow</Bold> 
 <LineBreak/><LineBreak/>
 Snow is in the forecast. Roll for type of snow on the
@@ -73,7 +73,7 @@ Snow is in the forecast. Roll for type of snow on the
  Table:  
 <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/>"
-e009	"<Bold>e008 Ammo Loading Limits</Bold> <InlineUIContainer><Button Content='r16.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+e009	"<Bold>e009 Ammo Loading Limits</Bold> <InlineUIContainer><Button Content='r16.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
 See 
 <InlineUIContainer><Button Content='r16.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
@@ -82,13 +82,15 @@ for ammo types. See
 for loading ammo. The Tank Card limits the number of normal main gun ammo allowed to AMMO_NORMAL_LOAD. Extra ammo is added in a later step 
 <InlineUIContainer><Button Content='e009b' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
--- <Bold>AP:</Bold> Unlimited<LineBreak/>
--- <Bold>HE:</Bold> Unlimited"
+ <Bold>--AP:</Bold> Unlimited<LineBreak/>
+ <Bold>-- HE:</Bold> Unlimited"
 e010	"<Bold>e010 Time Check</Bold> 
 <InlineUIContainer><Button Content='r4.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
-Determine sunrise and sunset for current month using the <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. Roll 1D/2  on the 
-<InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table. The Time Table also provides the timed used for each action take. Additionally, the same die roll is used to determine the ammo expended:  
+Determine sunrise and sunset for current month using the <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. 
+Roll 1D/2  on the 
+<InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table. 
+The Time Table also provides the timed used for each action take. Additionally, the same die roll is used to determine the ammo expended:  
 <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/><LineBreak/>"
 e011	"<Bold>e011 Deployment</Bold> 
@@ -248,12 +250,18 @@ e030	"<Bold>e030 Enemy Strength Roll Entering Battle Board</Bold>
 Roll 1D and consult the <InlineUIContainer><Button Content='Resistance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 Table for enemy strength: <LineBreak/><LineBreak/>
 Die Roll =  <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer> "
-e031	"<Bold>e031 Resistance Table</Bold> 
+e031	"<Bold>e031 Battle Check</Bold> 
 <InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
 Roll 1D and consult the <InlineUIContainer><Button Content='Resistance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 Table to determine if combat occurs in this area: <LineBreak/><LineBreak/>
 Die Roll =  <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer> "
+e032	"<Bold>e032 No Combat</Bold> 
+<InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+<LineBreak/><LineBreak/>
+No combat. Victory points added to the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+to reflect area under US Control. "
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"
 e502	"<Bold>e502 Game Lost</Bold>

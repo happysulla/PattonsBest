@@ -17,14 +17,6 @@ namespace Pattons_Best
       public ITerritory? NewTerritory { set; get; } = null; // Represents the new territory that the MapItem is being moved to.
       public IMapPath? BestPath { set; get; } = null;
       //------------------------------------------------------------------------------
-      //public MapItemMove() // default constructor
-      //{
-      //}
-      //public MapItemMove(ITerritory oldT, ITerritory newT)
-      //{
-      //   OldTerritory = oldT;
-      //   NewTerritory = newT;
-      //}
       public MapItemMove() // Default Contructor
       {
       }
