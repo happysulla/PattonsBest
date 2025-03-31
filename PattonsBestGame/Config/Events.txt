@@ -60,7 +60,7 @@ Probablility of Combat: PROBABILITY &gt;=
 <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/>"
 e007	"<Bold>e007 Morning Briefing - Weather Roll</Bold> <InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
-<LineBreak/><LineBreak/>
+<LineBreak/><LineBreak/>B29
 The 
 <InlineUIContainer><Button Content='Weather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
  Table determines weather for today:  
@@ -260,8 +260,8 @@ e032	"<Bold>e032 No Combat</Bold>
 <InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
 No combat. Victory points added to the After Action Report 
-<InlineUIContainer><Image Name='AAR' Height='60' Width='60'></Image></InlineUIContainer> 
-to reflect area under US Control. Continue with "
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+to reflect area under US Control. "
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"
 e502	"<Bold>e502 Game Lost</Bold>

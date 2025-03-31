@@ -160,13 +160,34 @@ namespace Pattons_Best
          }
          return true;
       }
-      public void AddVictoryPoints(IAfterActionReport report, int points)
+      public bool IsExitArea(out bool isExitAreaReached)
       {
-
-      }
-      public bool IsExitArea()
-      {
-         return false;
+         isExitAreaReached = false;
+         IMapItem? exitArea = this.Stacks.FindMapItem("ExitArea");
+         if( null == exitArea )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsExitArea(): exitArea=null");
+            return false;
+         }
+         if( 0 == exitArea.TerritoryCurrent.Adjacents.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsExitArea(): exitArea.TerritoryCurrent.Adjacents.Count=0");
+            return false;
+         }
+         string adjName = exitArea.TerritoryCurrent.Adjacents[0];
+         if (null == adjName)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsExitArea(): adjName=null");
+            return false;
+         }
+         if (null == EnteredArea)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsExitArea(): EnteredArea=null");
+            return false;
+         }
+         if (adjName == this.EnteredArea.Name)
+            isExitAreaReached = true;
+         return true;
       }
    }
 }

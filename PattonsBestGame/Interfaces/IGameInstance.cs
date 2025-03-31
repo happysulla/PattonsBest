@@ -57,7 +57,6 @@ namespace Pattons_Best
       //=========================================================
       ICrewMember? GetCrewMember(string name);
       bool IsDaylightLeft(IAfterActionReport report);
-      void AddVictoryPoints(IAfterActionReport report, int points);
-      bool IsExitArea();
+      bool IsExitArea(out bool isExitAreaReached);
    }
 }

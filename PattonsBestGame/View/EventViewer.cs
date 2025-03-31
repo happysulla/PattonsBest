@@ -895,25 +895,36 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new InlineUIContainer(b2));
                   myTextBlock.Inlines.Add(new Run("."));
                }
-               else if (false == gi.IsExitArea())
-               {
-                  imge032.Name = "MovementEnemyStrengthChoice";
-                  b2.Content = "r4.51";
-                  b2.Click += Button_Click;
-                  myTextBlock.Inlines.Add(new Run("Since not in exit area and daylight remains, go to Enemy Strength Check "));
-                  myTextBlock.Inlines.Add(new InlineUIContainer(b2));
-                  myTextBlock.Inlines.Add(new Run("."));
-               }
                else
                {
-                  imge032.Name = "MovementStartAreaRestart";
-                  b2.Content = "r4.53";
-                  b2.Click += Button_Click;
-                  myTextBlock.Inlines.Add(new Run("Since not in exit area and daylight remains, go to Enemy Strength Check "));
-                  myTextBlock.Inlines.Add(new InlineUIContainer(b2));
-                  myTextBlock.Inlines.Add(new Run("."));
+                  bool isExitArea;
+                  if( false == gi.IsExitArea(out isExitArea))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.IsExitArea() returned false");
+                     return false;
+                  }
+                  if( true == isExitArea )
+                  {
+                     imge032.Name = "MovementStartAreaRestart";
+                     b2.Content = "r4.51";
+                     b2.Click += Button_Click;
+                     myTextBlock.Inlines.Add(new Run("Since in exit area and daylight remains, determine a new start area per "));
+                     myTextBlock.Inlines.Add(new InlineUIContainer(b2));
+                     myTextBlock.Inlines.Add(new Run("."));
+                  }
+                  else
+                  {
+                     imge032.Name = "MovementEnemyStrengthChoice";
+                     b2.Content = "r4.53";
+                     b2.Click += Button_Click;
+                     myTextBlock.Inlines.Add(new Run("Since not in exit area and daylight remains, go to Enemy Strength Check "));
+                     myTextBlock.Inlines.Add(new InlineUIContainer(b2));
+                     myTextBlock.Inlines.Add(new Run("."));
+                  }
                }
-               myTextBlock.Inlines.Add(new Run("                                      "));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("                                           "));
                myTextBlock.Inlines.Add(new InlineUIContainer(imge032));
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
@@ -1299,6 +1310,10 @@ namespace Pattons_Best
                               action = GameAction.MovementResistanceCheck;
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
+                           case "MovementStartAreaRestart":
+                              action = GameAction.MovementStartAreaRestart;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                              return;
                            case "EveningDebriefingStart":
                               action = GameAction.EveningDebriefingStart;
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
@@ -1382,9 +1397,28 @@ namespace Pattons_Best
                action = GameAction.PreparationsTurretRotateRight;
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
+            case "AAR":
+               if (null == myAfterActionDialog)
+               {
+                  IAfterActionReport? aar = myGameInstance.Reports.GetLast();
+                  if (null == aar)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateView():  gi.Reports.GetLast()=null");
+                     return false;
+                  }
+                  AfterActionReportUserControl aarUserControl = new AfterActionReportUserControl(aar);
+                  if (true == aarUserControl.CtorError)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateView(): AfterActionReportUserControl CtorError=true");
+                     return false;
+                  }
+                  myAfterActionDialog = new AfterActionDialog(aar, CloseAfterActionDialog);
+                  myAfterActionDialog.Show();
+               }
+               break;
             case "Begin Game":
                action = GameAction.SetupShowMapHistorical;
-               //action = GameAction.TestingStartMovement; // <cgs> TEST
+               action = GameAction.TestingStartMovement; // <cgs> TEST
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Cancel":
