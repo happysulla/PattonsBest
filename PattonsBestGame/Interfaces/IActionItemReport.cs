@@ -62,6 +62,10 @@ namespace Pattons_Best
       int VictoryPtsFriendlyTank { get; set; }
       int VictoryPtsFriendlySquad { get; set; }
       //----------------------------------------
+      int VictoryPtsTotalYourTank { get; set; }
+      int VictoryPtsTotalFriendlyForces { get; set; }
+      int VictoryPtsTotalTerritory { get; set; } 
+      //----------------------------------------
       List<EnumDecoration> Decorations { get; set; }
       //----------------------------------------
       List<String> Notes { get; set; }

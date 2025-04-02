@@ -1,0 +1,99 @@
+<Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='AntiqueWhite'>
+   <Table.Columns>
+      <TableColumn Width='280'/>
+      <TableColumn Width='200'/>
+   </Table.Columns>
+   <TableRowGroup>
+      <TableRow  FontSize='14' >
+         <TableCell ColumnSpan='2' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <LineBreak/>DECORATIONS TABLE<LineBreak/>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <TableRowGroup >
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Right' Background='White'>
+            <Paragraph>
+               <Run Text='Bronze Star     '></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' Background='White'>
+            <Paragraph>
+               <Run Text='     200'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Right'  >
+            <Paragraph>
+               <Run Text='Silver Star     '></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left'  >
+            <Paragraph>
+               <Run Text='     225'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Right' Background='White'>
+            <Paragraph>
+               <Run Text='Distinguised Service Cross     '></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left' Background='White'>
+            <Paragraph>
+               <Run Text='     250'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Right'  >
+            <Paragraph>
+               <Run Text='Congressional Medal of Honor     '></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Left'  >
+            <Paragraph>
+               <Run Text='     300'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <TableRowGroup>
+      <TableRow  FontSize='10' >
+         <TableCell ColumnSpan='2' TextAlignment='Left' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Bold>
+                  <Run Text='  Die Roll Modifier:'></Run>
+               </Bold>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <TableRow  FontSize='10' >
+         <TableCell ColumnSpan='2' TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='  + Victory points scored by our tank, multiplied by two.'></Run>
+               <LineBreak/>
+               <Run Text='  + Victory points scored by friendly forces and for captured territory.'></Run>
+               <LineBreak/>
+               <Run Text='  +25 For pulling a crewman from a tank which burns.'></Run>
+               <LineBreak/>
+               <Run Text='  +5 If you are an officer (does not apply to the CMO).'></Run>
+               <LineBreak/>
+               <Run Text='  +5 If the commander was fighting from an open hatch during a roll on the '></Run>
+               <InlineUIContainer>
+                  <Button Content='Collateral' FontFamily='Courier New'  FontSize='8'></Button>
+               </InlineUIContainer>
+               <Run Text=' Damage Table.'></Run>
+               <LineBreak/>
+               <Run Text='  +10 If you were wounded today.'></Run>
+               <LineBreak/>
+               <Run Text='  +5 If in November or December.'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+</Table>

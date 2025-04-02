@@ -264,6 +264,46 @@ Table to determine if battle occurs.
 <LineBreak/><LineBreak/>
 3)  If battle occurs, mark off 15 minutes, and go to 
 <InlineUIContainer><Button Content='r4.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. "
+r4.9	"<Bold>r4.9  Evening Debrief</Bold>
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r4.91' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Rating Improvements<LineBreak/>
+<InlineUIContainer><Button Content='r4.92' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Total Victory Points<LineBreak/>
+<InlineUIContainer><Button Content='r4.93' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Promotions<LineBreak/>
+<InlineUIContainer><Button Content='r4.94' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Decorations<LineBreak/>
+<InlineUIContainer><Button Content='r4.95' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Day Ends"
+r4.91	"<Bold>r4.91  Rating Improvements</Bold>
+<LineBreak/><LineBreak/>
+Roll for rating improvements for each surviving crew member. Roll 1D for each crew member. If the number rolled is higher than the crew member's current rating, his rating is improved by one. If the number is less than or equal to his current rating, there is no change. See 
+<InlineUIContainer><Button Content='r7.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+for details about crew ratings."
+r4.92	"<Bold>r4.92  Total Victory Points</Bold>
+<LineBreak/><LineBreak/>
+Total victory points for both your tank and the friendly forces. 
+<LineBreak/><LineBreak/>
+Record these on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+Mutiply the totals by any scenario modifiers as shown on the AAR form. 
+<LineBreak/><LineBreak/>
+If the combined victory points from both your tank and friendly forces is positive, you have won the engagment."
+r4.93	"<Bold>r4.93  Promotions</Bold>
+<LineBreak/><LineBreak/>
+Determine if you have been promoted according to 
+<InlineUIContainer><Button Content='r25.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+Record a new rank on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. "
+r4.94	"<Bold>r4.94  Decorations</Bold>
+<LineBreak/><LineBreak/>
+Roll for possible decorations on the 
+<InlineUIContainer><Button Content='Decorations' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table per <InlineUIContainer><Button Content='r26.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+Record any medals received on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. "
+r4.95	"<Bold>r4.95  Day Ends</Bold>
+<LineBreak/><LineBreak/>
+This day is now complete. Go back to the Combat 
+<InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+Restart next day with 
+<InlineUIContainer><Button Content='r4.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. "
 r7.0	"<Bold>r7.0 Crew Ratings</Bold> 
 <LineBreak/><LineBreak/>
 Each crew member is given a numerical rating of his skill at his position. The rating range from 1 (poorest) to 10 (best). 
@@ -779,14 +819,65 @@ Also, air strikes may not be called for during overcast or falling snow weather.
 While the 30 minutes spent calling for air strike is passing, you may perform one additional 15 minute operation (such as call for arilltery support or check an additional area for resistance).
 <LineBreak/><LineBreak/>
                                         <InlineUIContainer><Image Name='c40AirStrike'  Height='80' Width='80'></Image></InlineUIContainer>"
-	
-	
-	
-	
-	
-	
-	
-	
+r25.0	"<Bold>r25.0 Promotions</Bold>
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r25.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Overview <LineBreak/>
+<InlineUIContainer><Button Content='r25.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Process<LineBreak/>
+<InlineUIContainer><Button Content='r25.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Limits"
+r25.1	"<Bold>r25.1 Promo Overview</Bold>
+<LineBreak/><LineBreak/>
+As a fresh tank commander, you begin the Campaign Game with a rank of sergeant. However, as the campaign continues, it is possible to be promoted up through the following ranks: staff sergeant, 2nd lieutenant, 1st lieutenant, and captain. 
+<LineBreak/><LineBreak/>
+Promotions depend on the cumulative total of total points scored by your tank(s) for knocking out enemy units. Victory points are not modified by the scenario type for puposes of promotion. Record only the points listed for each unit type on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r25.2	"<Bold>r25.2 Promo Process</Bold>
+<LineBreak/><LineBreak/>
+After each day of combat, check for promotion during the Evening Debriefing 
+<InlineUIContainer><Button Content='r4.93' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+For each 100 victory points scored by your tank, you are promoted one rank. 
+<LineBreak/><LineBreak/>
+For example, assume you are still a sergeant buy your tank has so far scored 93 points. If at the end of this day, your tank has knocked out 7 victory points worth of enemy units, you are promoted to the rank of staff sergeant. 
+<LineBreak/><LineBreak/>
+Promotions occur per following:<LineBreak/>
+-- 100 = Staff Sergeant<LineBreak/>
+-- 200 = 2nd Lieutenant<LineBreak/>
+-- 300 = 1st Lieutenant<LineBreak/>
+-- 400 = Captain"
+r25.3	"<Bold>r25.2 Promo Limits</Bold>
+<LineBreak/><LineBreak/>
+You may be promoted only once per month, but victory points continue to accumulate. 
+<LineBreak/><LineBreak/>
+For example, assume you have been promoted already in October, but score another 100 points in the month. At the end of your first day of combat in November, you would be promoted again. The rank is written on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r26.0	"<Bold>r26.0 Decorations</Bold>
+<LineBreak/><LineBreak/>
+If a sufficently large number of victory points are scored in a single day by both your tank and the accompanying friendl forces, you have a chance to be awarded a military decoration for valor. 
+<LineBreak/><LineBreak/>
+The decorations that may be won are: <LineBreak/>
+-- Bronze Star (easiest to win)<LineBreak/>
+-- Silver Star<LineBreak/>
+-- Distinguished Service Cross<LineBreak/>
+-- Congressional Medal of Honor (most difficult)
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r26.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Procedure <LineBreak/>
+<InlineUIContainer><Button Content='r26.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Additional Awards"
+r26.1	"<Bold>r26.1 Decorations Procedure</Bold>
+<LineBreak/><LineBreak/>
+At the end of each day of the campain, check the <InlineUIContainer><Button Content='Decorations' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table to see if you have a chance for a medal. In order to be awarded a decoration, you must roll at least 200 (after modifications) or more with a 2D roll. 
+<LineBreak/><LineBreak/>
+A decoration can only be reached by the addition of modifiers shown in the table. You may roll once per day. If your roll is high enough to qualify for more than one decoration, you may choose which to receive. 
+<LineBreak/><LineBreak/>
+For example, if you roll high enough fro both a Bronze Star and Silver Star, you may choose to receive either. You may only receive one decoration per day. It is possible to be decorated more than once with the same medal."
+r26.2	"<Bold>r26.2 Additional Awards</Bold>
+<LineBreak/><LineBreak/>
+As a combat soldier in the European Theater of Operations during World War II, you can also receive the following medals:
+<LineBreak/><LineBreak/>
+-- Purple Heart <LineBreak/>
+-- European Campaign Medal<LineBreak/>
+-- WWII Victory Medal<LineBreak/>
+<LineBreak/>
+- Purple Hearts are awarded for each wound recieved in combat. The European Campaign Medal is automatically awarded for playing the game. The WWII Victory Medal is automatically awarded after May of 1945."
 	
 	
 	

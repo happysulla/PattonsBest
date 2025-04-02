@@ -186,30 +186,30 @@ namespace Pattons_Best
          myRunVictoryPointsLostTank.Text = Report.VictoryPtsFriendlyTank.ToString();
          myRunVictoryPointsLostInfantry.Text = Report.VictoryPtsFriendlySquad.ToString();
          //----------------------------------
-         int totalYourKia = Report.VictoryPtsYourKiaLightWeapon;
-         totalYourKia += Report.VictoryPtsYourKiaTruck;
-         totalYourKia += Report.VictoryPtsYourKiaSpwOrPsw;
-         totalYourKia += Report.VictoryPtsYourKiaSPGun;
-         totalYourKia += Report.VictoryPtsYourKiaPzIV;
-         totalYourKia += Report.VictoryPtsYourKiaPzV;
-         totalYourKia += Report.VictoryPtsYourKiaPzVI;
-         totalYourKia += Report.VictoryPtsYourKiaAtGun;
-         totalYourKia += Report.VictoryPtsYourKiaFortifiedPosition;
-         myRunVictoryPointsTotalTank.Text = totalYourKia.ToString();
+         //int totalYourKia = Report.VictoryPtsYourKiaLightWeapon;
+         //totalYourKia += Report.VictoryPtsYourKiaTruck;
+         //totalYourKia += Report.VictoryPtsYourKiaSpwOrPsw;
+         //totalYourKia += Report.VictoryPtsYourKiaSPGun;
+         //totalYourKia += Report.VictoryPtsYourKiaPzIV;
+         //totalYourKia += Report.VictoryPtsYourKiaPzV;
+         //totalYourKia += Report.VictoryPtsYourKiaPzVI;
+         //totalYourKia += Report.VictoryPtsYourKiaAtGun;
+         //totalYourKia += Report.VictoryPtsYourKiaFortifiedPosition;
+         myRunVictoryPointsTotalTank.Text = Report.VictoryPtsTotalYourTank.ToString();
          //----------------------------------
-         int totalFriendlyKia = Report.VictoryPtsFriendlyKiaLightWeapon;
-         totalFriendlyKia += Report.VictoryPtsFriendlyKiaTruck;
-         totalFriendlyKia += Report.VictoryPtsFriendlyKiaSpwOrPsw;
-         totalFriendlyKia += Report.VictoryPtsFriendlyKiaSPGun;
-         totalFriendlyKia += Report.VictoryPtsFriendlyKiaPzIV;
-         totalFriendlyKia += Report.VictoryPtsFriendlyKiaPzV;
-         totalFriendlyKia += Report.VictoryPtsFriendlyKiaPzVI;
-         totalFriendlyKia += Report.VictoryPtsFriendlyKiaAtGun;
-         totalFriendlyKia += Report.VictoryPtsFriendlyKiaFortifiedPosition;
-         myRunVictoryPointsTotalFriendly.Text = totalFriendlyKia.ToString();
+         //int totalFriendlyKia = Report.VictoryPtsFriendlyKiaLightWeapon;
+         //totalFriendlyKia += Report.VictoryPtsFriendlyKiaTruck;
+         //totalFriendlyKia += Report.VictoryPtsFriendlyKiaSpwOrPsw;
+         //totalFriendlyKia += Report.VictoryPtsFriendlyKiaSPGun;
+         //totalFriendlyKia += Report.VictoryPtsFriendlyKiaPzIV;
+         //totalFriendlyKia += Report.VictoryPtsFriendlyKiaPzV;
+         //totalFriendlyKia += Report.VictoryPtsFriendlyKiaPzVI;
+         //totalFriendlyKia += Report.VictoryPtsFriendlyKiaAtGun;
+         //totalFriendlyKia += Report.VictoryPtsFriendlyKiaFortifiedPosition;
+         myRunVictoryPointsTotalFriendly.Text = Report.VictoryPtsTotalFriendlyForces.ToString();
          //----------------------------------
-         int totalArea = Report.VictoryPtsCaptureArea + Report.VictoryPtsKiaExitArea;
-         myRunVictoryPointsTotalTerritory.Text = totalArea.ToString();
+         //int totalArea = Report.VictoryPtsCaptureArea + Report.VictoryPtsKiaExitArea;
+         myRunVictoryPointsTotalTerritory.Text = Report.VictoryPtsTotalTerritory.ToString();
          //----------------------------------
          StringBuilder sb = new StringBuilder();
          foreach (String note in Report.Notes)

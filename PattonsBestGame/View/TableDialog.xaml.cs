@@ -103,6 +103,12 @@ namespace Pattons_Best
                this.Width = this.MinWidth = this.MaxWidth = 470;
                this.MinHeight = this.MaxHeight = 380;
                break;
+            case "Decorations":
+               this.Title = "Decorations Table";
+               this.Background = theBrushTan;
+               this.Width = this.MinWidth = this.MaxWidth = 550;
+               this.MinHeight = this.MaxHeight = 300;
+               break;
             case "Deployment":
                this.Title = "Deployment Tables";
                this.Background = theBrushOrange;

@@ -96,18 +96,17 @@
                <RowDefinition Height="Auto"/>
                <RowDefinition Height="Auto"/>
                <RowDefinition Height="Auto"/>
-               <RowDefinition Height="Auto"/>
-               <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                <ColumnDefinition Width="150"/>
             </Grid.ColumnDefinitions>
             <Button Grid.Row="0" Grid.Column="0" Content="Activation" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
-            <Button Grid.Row="1" Grid.Column="0" Content="Enemy Appearance" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
-            <Button Grid.Row="2" Grid.Column="0" Content="Exit Areas" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
-            <Button Grid.Row="3" Grid.Column="0" Content="Placement" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
-            <Button Grid.Row="4" Grid.Column="0" Content="Resistance" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
-            <Button Grid.Row="5" Grid.Column="0" Content="Spotting" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
+            <Button Grid.Row="1" Grid.Column="0" Content="Decorations" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
+            <Button Grid.Row="2" Grid.Column="0" Content="Enemy Appearance" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
+            <Button Grid.Row="3" Grid.Column="0" Content="Exit Areas" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
+            <Button Grid.Row="4" Grid.Column="0" Content="Placement" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
+            <Button Grid.Row="5" Grid.Column="0" Content="Resistance" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
+            <Button Grid.Row="6" Grid.Column="0" Content="Spotting" Click="ButtonShowRule_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,10" Width="120"/>
          </Grid>
          <!-- First Row and 4th Column-->
          <Grid Name="myGridOrange" Background="Orange" Grid.Row="1" Grid.Column="3">

@@ -115,6 +115,8 @@ namespace Pattons_Best
             {
                int ruleNum = i + STARTING_RULE_ROW;
                string key = myRulesManager.Rules.Keys.ElementAt(ruleNum);
+               if ('0' != key.Last())
+                  continue;
                string title = myRulesManager.GetRuleTitle(key);
                if (null == title)
                {

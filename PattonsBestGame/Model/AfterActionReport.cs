@@ -64,6 +64,10 @@ namespace Pattons_Best.Model
       public int VictoryPtsFriendlyTank { get; set; } = 0;
       public int VictoryPtsFriendlySquad { get; set; } = 0;
       //----------------------------------------
+      public int VictoryPtsTotalYourTank { get; set; } = 0;
+      public int VictoryPtsTotalFriendlyForces { get; set; } = 0;
+      public int VictoryPtsTotalTerritory { get; set; } = 0;
+      //----------------------------------------
       public List<EnumDecoration> Decorations { get; set; } = new List<EnumDecoration>();
       //----------------------------------------
       public List<String> Notes { get; set; } = new List<String>();
