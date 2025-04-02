@@ -304,6 +304,43 @@ This day is now complete. Go back to the Combat
 <InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
 Restart next day with 
 <InlineUIContainer><Button Content='r4.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. "
+r6.0	"<Bold>r6.0 How to Win</Bold>
+<LineBreak/><LineBreak/>
+In order to win an engagement or scenario, both you and your tank must survive. If you are killed or wounded sufficently to miss combat for any time, or if you tank is knocked out, you lose. 
+<LineBreak/><LineBreak/>
+If both you and your tank survive, winning depends on your score of victory points. Vicotry in the campaign game is a special case.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r6.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Victory Points<LineBreak/>
+<InlineUIContainer><Button Content='r6.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Victory<LineBreak/>
+<InlineUIContainer><Button Content='r6.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Campaign Game Victory"
+r6.1	"<Bold>r6.1 Victory Points</Bold>
+<LineBreak/><LineBreak/>
+Victory points are scored fro knocking out enemy units and capturing enemy territory. They are subtracted for loss of friendly forces and the loss of US controlled territory.
+<LineBreak/><LineBreak/>
+The points scored for each acheivement are shown on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+ Each time a victory point action occurs, the value is added on the AAR. 
+<LineBreak/><LineBreak/>
+When the scenario ends, total the victory points into four categories:<LineBreak/>
+--enemy units KO'd by your tank<LineBreak/>
+-- enemy units KO'd by friendly forces<LineBreak/>
+-- territory controlled or lost<LineBreak/>
+-- friendly force losses (tanks and infantry squads)"
+r6.2	"<Bold>r6.2 Victory</Bold>
+<LineBreak/><LineBreak/>
+When the engagement or scenario ends, multiply the victory points in the four categories by the multipliers shown on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+<LineBreak/><LineBreak/>
+Depending on whether the 4th Armored Division is advancing, engaged in a pitched battle, or defending against a counterattack; the gain or loss of territory and the destruction of enemy units will be more or less important.
+<LineBreak/><LineBreak/>
+If the sum of the adjusted positive and negative points is positive, you win. If the sum is negative, you lose."
+r6.3	"<Bold>r6.3 Campaign Game Victory</Bold>
+<LineBreak/><LineBreak/>
+The campaign in the European theatre of operations ended in victory for the Allied armies, and the 4th Armored Division must be considered one of the big winners in view of their tremendous war record.
+<LineBreak/><LineBreak/>
+For you as a tank commander, campaign victory is measured at a more basic level. If you are killed, you lose. Instead of starting over, it is recommended that you assum ethe identify of your replacement and continue from there.
+<LineBreak/><LineBreak/>
+If you survive the entire campaign regardless of wounds, you win!"
 r7.0	"<Bold>r7.0 Crew Ratings</Bold> 
 <LineBreak/><LineBreak/>
 Each crew member is given a numerical rating of his skill at his position. The rating range from 1 (poorest) to 10 (best). 
