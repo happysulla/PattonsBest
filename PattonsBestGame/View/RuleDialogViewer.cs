@@ -573,7 +573,7 @@ namespace Pattons_Best
       {
          Button b = (Button)sender;
          string key = (string)b.Content;
-         if (true == key.StartsWith("A")) // rules based click
+         if (true == key.Contains("AAR")) // rules based click
          {
             GameAction action = GameAction.ShowAfterActionReportDialog;
             myGameEngine.PerformAction(ref myGameInstance, ref action);

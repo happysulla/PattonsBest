@@ -60,7 +60,7 @@ Probablility of Combat: PROBABILITY &gt;=
 <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/>"
 e007	"<Bold>e007 Morning Briefing - Weather Roll</Bold> <InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
-<LineBreak/><LineBreak/>B29
+<LineBreak/><LineBreak/>
 The 
 <InlineUIContainer><Button Content='Weather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
  Table determines weather for today:  
@@ -79,11 +79,10 @@ See
 <InlineUIContainer><Button Content='r16.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 for ammo types. See 
 <InlineUIContainer><Button Content='r16.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-for loading ammo. The Tank Card limits the number of normal main gun ammo allowed to AMMO_NORMAL_LOAD. Extra ammo is added in a later step 
-<InlineUIContainer><Button Content='e009b' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+for loading ammo. The Tank Card limits the number of normal main gun ammo allowed to AMMO_NORMAL_LOAD. Extra ammo is added in a later step after assigning normal load.
 <LineBreak/><LineBreak/>
- <Bold>--AP:</Bold> Unlimited<LineBreak/>
- <Bold>-- HE:</Bold> Unlimited"
+<Bold>-- AP:</Bold> Unlimited<LineBreak/>
+<Bold>-- HE:</Bold> Unlimited"
 e010	"<Bold>e010 Time Check</Bold> 
 <InlineUIContainer><Button Content='r4.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
@@ -172,7 +171,7 @@ Table. The area is marked with a Light, Medium, or Heavy marker.
 <LineBreak/><LineBreak/>
 Die Roll =  <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer> 
 <LineBreak/><LineBreak/>"
-e022	"<Bold>e021 Choose Operations</Bold> 
+e022	"<Bold>e022 Choose Operations</Bold> 
 <InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
 Choose one of following options. To see the options, select the &apos;e###&apos; button. To choose the option, select the other buttons. Each option uses up time per the 
@@ -188,8 +187,7 @@ Table.
 <InlineUIContainer><Button Content='e027' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Attempt to 
 <InlineUIContainer><Button Content='Resupply' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
 <InlineUIContainer><Button Content='e028' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Choose adjacent area to 
-<InlineUIContainer><Button Content='Enter' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
-"
+<InlineUIContainer><Button Content='Enter' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>"
 e023	"<Bold>e023 Call for Artillery Support</Bold> 
 <InlineUIContainer><Button Content='r23.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <InlineUIContainer><Button Content='r4.54.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
@@ -235,7 +233,7 @@ e028	"<Bold>e028 Enter Adjacent Area</Bold>
 <LineBreak/><LineBreak/>
 Click on one of the adjacent highlighted areas. Artillery Support or Air Strike Counters are moved to the battle board as a reminder. 
 <LineBreak/><LineBreak/>
-                                <InlineUIContainer><Image Name='Combat' Height='200' Width='200'></Image></InlineUIContainer>"
+                        <InlineUIContainer><Image Name='Sherman1' Height='200' Width='325'></Image></InlineUIContainer>"
 e029	"<Bold>e029 Advancing Fire Choice</Bold> 
 <InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>

@@ -128,8 +128,7 @@ r4.4	"<Bold>r4.4 Prepare for Battle</Bold>
 <InlineUIContainer><Button Content='r4.43' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Gun Load<LineBreak/>
 <InlineUIContainer><Button Content='r4.44' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Tank &amp; Turrent Orientation<LineBreak/>
 <InlineUIContainer><Button Content='r4.45' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Mark Spot<LineBreak/>
-<InlineUIContainer><Button Content='r4.46' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Final Preparations
-"
+<InlineUIContainer><Button Content='r4.46' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Final Preparations"
 r4.41	"<Bold>r4.41 Deployment</Bold>
 <LineBreak/><LineBreak/>
 Determine your tank&apos;s deployment from the 
@@ -304,6 +303,112 @@ This day is now complete. Go back to the Combat
 <InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
 Restart next day with 
 <InlineUIContainer><Button Content='r4.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. "
+r5.0	"<Bold>r5.0 Using the Battle Board</Bold>
+<LineBreak/><LineBreak/>
+The Battle Board is divided into two parts. The main display is where the counters representing your tank and enemy units you encounter are placed. The Tank Card is used to monitor the condition of your tank and the actions of your crew. 
+<LineBreak/><LineBreak/>
+A small space is also provided at the top left to mark the weather. Accross the top of the Battle Board is a flow chart of the battle round sequence.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r5.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Descriptions and Definitions<LineBreak/>
+<InlineUIContainer><Button Content='r5.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Tank Card"
+r5.1	"<Bold>r5.1 Descriptions and Definitions</Bold>
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r5.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Battle Area<LineBreak/>
+<InlineUIContainer><Button Content='r5.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Sectors<LineBreak/>
+<InlineUIContainer><Button Content='r5.13' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Movement<LineBreak/>
+<InlineUIContainer><Button Content='r5.14' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Your Tank Position"
+r5.11	"<Bold>r5.11 Battle Area</Bold>
+<LineBreak/><LineBreak/>
+The Battle Area is a distorted circle centered on a hexagonal hub. The counter representing your Sherman tank is placed in this hub and remains there throughout play, changing only the direction it is facing. 
+<LineBreak/><LineBreak/>
+Radiating out from the hub are three rings, each corresponding to a range of distance: close range (out to 250 yards), medium range (out to 1000 yards), and long range (out to a mile). When enemy units are generated, they will be placed in the ring corresponding to the specified range. 
+<LineBreak/><LineBreak/>
+The radiating rings are further divided into six sectors, each sector boundary originating at a corner of the hexagonal hub. Each sector thus has three zones, one for each range."
+r5.12	"<Bold>r5.12 Sectors</Bold>
+<LineBreak/><LineBreak/>
+The sectors are numbered at the bottom right: 1, 2, 3, 4-5 (1), 6-8 (2), and 9-10 (3). When an enemy unit is activated, roll 1D to determine which sector it appears. For a roll of 4+, put the unit in the sector corresponding to that number.
+<LineBreak/><LineBreak/>
+For a roll of 1-3, the enemy unit appears only in the corresponding sector if no US Control marker is in the sector. If a US Control marker is present, then the unit appears in the sector where the number is shown in paratheses. 
+<LineBreak/><LineBreak/>
+For example, if a 2 was rolled and Sector 2 was marked US Control, the unit would be placed in Sectors 6-8 instead. Conversely, if a 6 was rolled and Sector 6-8 is marked as US Control but Sector 2 is not, the unit would appear in Sector 2. If both paired sectors are US Controlled, the enemy unit does not appear.
+<LineBreak/><LineBreak/>
+The US Control markers represent the presence of friendly forces in your support. After an engagement begins, the number of US Controlled sectors may increase or decrease due to actions from your tank, Enemy Actions 
+<InlineUIContainer><Button Content='r13.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, or Random Events 
+<InlineUIContainer><Button Content='r15.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r5.13	"<Bold>r5.13 Enemy Movement</Bold>
+<LineBreak/><LineBreak/>
+Certain Enemy Actions 
+<InlineUIContainer><Button Content='r13.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+call for enemy units to move in directions B (backward), R (Right), L (Left), and F (Forward). A unit moving backwards remains in the same sector but moves one zone away from the hub. 
+<LineBreak/><LineBreak/>
+A unit already at long range moving backward is permanently out of play. 
+<LineBreak/><LineBreak/>
+A unit already at close range moving forward jumps to close range in the sector on the other side of the hub directly opposite the sector it now occupies. 
+<LineBreak/><LineBreak/>
+Units moving to the right or left remain at the same range but move one zone clockwise or counterclockwise, respectively."
+r5.14	"<Bold>r5.14 Your Tank Position</Bold>
+<LineBreak/><LineBreak/>
+The position of your  tank counter in the hexagontal hub determines its facing. The hexside the tank is facing is the tank&apos;s front; directly opposite the tanks&apos;s rear. 
+<LineBreak/><LineBreak/>
+The other four sides are the tank&apos;s left and right front and rear sides. 
+<LineBreak/><LineBreak/>
+The facing of your tank has several important implications throughout play, determining what zones your crew can see, what can be shot at by which guns, and where enemy shots are hitting your tank.
+<LineBreak/><LineBreak/>
+                           <InlineUIContainer><Image Name='MapBattleFacing'  Height='300' Width='300'></Image></InlineUIContainer>"
+r5.2	"<Bold>r5.2 Tank Card</Bold>
+<LineBreak/><LineBreak/>
+The Tank Card lists the special characteristics of your tank and is used to monitor the actions of your crew, your gun load, and the state of the ready rack. 
+<LineBreak/><LineBreak/>
+In the top left corner is the tank number. In the top right corner is the list of characteristics. In the bottom right corner is a chart of spotting restrictions for the crew 
+<InlineUIContainer><Button Content='r17.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r5.21' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Open Hatches<LineBreak/>
+<InlineUIContainer><Button Content='r5.22' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Action Boxes<LineBreak/>
+<InlineUIContainer><Button Content='r5.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Gun Loads<LineBreak/>
+<InlineUIContainer><Button Content='r5.24' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Ready Rack<LineBreak/>
+<InlineUIContainer><Button Content='r5.25' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Horizontal Volute Spring Suspension (HVSS)"
+r5.21	"<Bold>r5.21 Open Hatches</Bold>
+<LineBreak/><LineBreak/>
+On the overhead view of the tank, place an Open Hatch marker on hatches you want open. Remove markers to close hatches.
+<LineBreak/><LineBreak/>
+                                     <InlineUIContainer><Image Name='c15OpenHatch'  Height='100' Width='100'></Image></InlineUIContainer>"
+r5.22	"<Bold>r5.22 Action Boxes</Bold>
+<LineBreak/><LineBreak/>
+Adjacent to the overhead view of the tank, each crew position has a labeled action box:<LineBreak/><LineBreak/>
+ C = Commander<LineBreak/>
+ G = Gunner<LineBreak/>
+ L = Loader<LineBreak/>
+ D = Driver<LineBreak/>
+ A = Assistant Criver<LineBreak/><LineBreak/>
+To order a crewman to perform an action, place the desired Action marker in the crewman&apos;s box per 
+<InlineUIContainer><Button Content='r8.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+The driver and loader automatically perform the actions Stop and Load, respectively, unless ordered otherwise.
+<LineBreak/><LineBreak/>
+                                     <InlineUIContainer><Image Name='c59LChangeGunLoad'  Height='100' Width='100'></Image></InlineUIContainer>"
+r5.23	"<Bold>r5.23 Gun Loads</Bold>
+<LineBreak/><LineBreak/>
+In the gun load section, place the Gun Load marker in the box of the ammo round loaded in the gun. Also markhere what round type you want to reload after firing (ammo reload marker), and whether you will draw reloads from the ready rack (ready rack ammo reload marker) per 
+<InlineUIContainer><Button Content='r16.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> .
+<LineBreak/><LineBreak/>
+                 <InlineUIContainer><Image Name='c17GunLoad'  Height='100' Width='100'></Image></InlineUIContainer>
+     <InlineUIContainer><Image Name='c29AmmoReload'  Height='100' Width='100'></Image></InlineUIContainer>
+     <InlineUIContainer><Image Name='c30ReadyRackAmmoReload'  Height='100' Width='100'></Image></InlineUIContainer>"
+r5.24	"<Bold>r5.24 Ready Rack</Bold>
+<LineBreak/><LineBreak/>
+In the ready rack section, place the Rounds Left markers to show what type of rounds are in the ready rack and how many of each per 
+<InlineUIContainer><Button Content='r16.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Ready rack capacity cannot be exceeded.
+<LineBreak/><LineBreak/>
+                                     <InlineUIContainer><Image Name='c12RoundsLeft'  Height='100' Width='100'></Image></InlineUIContainer>"
+r5.25	"<Bold>r5.25 Horizontal Volute Spring Suspension (HVSS)</Bold>
+<LineBreak/><LineBreak/>
+Certain tanks may have HVSS. If the Tank Card shows the special characteristic &quot;HVSS 1-#&quot;, roll 1D. 
+<LineBreak/><LineBreak/>
+If the number rolled is within the range shown, place the HVSS marker on the HVSS box to show the tank has HVSS.
+<LineBreak/><LineBreak/>
+Only check the HVSS the first day you operate the tank per 
+<InlineUIContainer><Button Content='r27.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. No tank may have HVSS before November 1944.
+<LineBreak/><LineBreak/>
+                                     <InlineUIContainer><Image Name='c75Hvss'  Height='100' Width='100'></Image></InlineUIContainer>"
 r6.0	"<Bold>r6.0 How to Win</Bold>
 <LineBreak/><LineBreak/>
 In order to win an engagement or scenario, both you and your tank must survive. If you are killed or wounded sufficently to miss combat for any time, or if you tank is knocked out, you lose. 
@@ -315,17 +420,17 @@ If both you and your tank survive, winning depends on your score of victory poin
 <InlineUIContainer><Button Content='r6.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Campaign Game Victory"
 r6.1	"<Bold>r6.1 Victory Points</Bold>
 <LineBreak/><LineBreak/>
-Victory points are scored fro knocking out enemy units and capturing enemy territory. They are subtracted for loss of friendly forces and the loss of US controlled territory.
+Victory points are scored for knocking out enemy units and capturing enemy territory. They are subtracted for loss of friendly forces and the loss of US controlled territory.
 <LineBreak/><LineBreak/>
 The points scored for each acheivement are shown on the After Action Report 
 <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
  Each time a victory point action occurs, the value is added on the AAR. 
 <LineBreak/><LineBreak/>
 When the scenario ends, total the victory points into four categories:<LineBreak/>
---enemy units KO'd by your tank<LineBreak/>
--- enemy units KO'd by friendly forces<LineBreak/>
--- territory controlled or lost<LineBreak/>
--- friendly force losses (tanks and infantry squads)"
+-- Enemy units KO'd by your tank<LineBreak/>
+-- Enemy units KO'd by friendly forces<LineBreak/>
+-- Territory controlled or lost<LineBreak/>
+-- Friendly force losses (tanks and infantry squads)"
 r6.2	"<Bold>r6.2 Victory</Bold>
 <LineBreak/><LineBreak/>
 When the engagement or scenario ends, multiply the victory points in the four categories by the multipliers shown on the After Action Report 
@@ -338,7 +443,7 @@ r6.3	"<Bold>r6.3 Campaign Game Victory</Bold>
 <LineBreak/><LineBreak/>
 The campaign in the European theatre of operations ended in victory for the Allied armies, and the 4th Armored Division must be considered one of the big winners in view of their tremendous war record.
 <LineBreak/><LineBreak/>
-For you as a tank commander, campaign victory is measured at a more basic level. If you are killed, you lose. Instead of starting over, it is recommended that you assum ethe identify of your replacement and continue from there.
+For you as a tank commander, campaign victory is measured at a more basic level. If you are killed, you lose. Instead of starting over, it is recommended that you assume the identify of your replacement and continue from there.
 <LineBreak/><LineBreak/>
 If you survive the entire campaign regardless of wounds, you win!"
 r7.0	"<Bold>r7.0 Crew Ratings</Bold> 

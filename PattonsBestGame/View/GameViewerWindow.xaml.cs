@@ -981,10 +981,13 @@ namespace Pattons_Best
                Button? b = buttons.Find(mi.Name);
                if (null != b)
                {
+                  double offset = counterCount * Utilities.STACK;
+                  if ("Turret" == mi.Name)
+                     offset = 0.0;
                   b.BeginAnimation(Canvas.LeftProperty, null); // end animation offset
                   b.BeginAnimation(Canvas.TopProperty, null);  // end animation offset
-                  Double x = t.CenterPoint.X - (mi.Zoom * Utilities.theMapItemOffset) - (counterCount * Utilities.STACK);
-                  Double y = t.CenterPoint.Y - (mi.Zoom * Utilities.theMapItemOffset) - (counterCount * Utilities.STACK);
+                  Double x = t.CenterPoint.X - (mi.Zoom * Utilities.theMapItemOffset) - offset;
+                  Double y = t.CenterPoint.Y - (mi.Zoom * Utilities.theMapItemOffset) - offset;
                   Canvas.SetLeft(b, x);
                   Canvas.SetTop(b, y);
                   Canvas.SetZIndex(b, 900 + counterCount);
@@ -994,6 +997,8 @@ namespace Pattons_Best
                {
                   Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "UpdateCanvasMapItems(): Adding mi=" + mi.Name + " to stack@" + stack.ToString());
                   int offset = stack.MapItems.Count - 1;
+                  if ("Turret" == mi.Name)
+                     offset = 0;
                   if (false == CreateButtonMapItem(mi, offset))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMapItems(): CreateButtonMapItem() returned false");

@@ -648,7 +648,7 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run(" Unlimited "));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("-- HBCI:") { FontWeight = FontWeights.Bold });
-                  myTextBlock.Inlines.Add(new Run(" 10 rounds "));
+                  myTextBlock.Inlines.Add(new Run(" 1D Roll "));
                }
                //-----------------------------------------------
                myTextBlock.Inlines.Add(new LineBreak());
