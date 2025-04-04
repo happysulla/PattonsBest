@@ -17,6 +17,10 @@ namespace Pattons_Best
       public Stack(ITerritory t, IMapItem mi)
       {
          Territory = t;
+         mi.TerritoryCurrent = t;
+         double offset = mi.Zoom * Utilities.theMapItemOffset;
+         mi.Location.X = t.CenterPoint.X - offset;
+         mi.Location.Y = t.CenterPoint.Y - offset;
          MapItems.Add(mi);
       }
       public void Rotate() { MapItems.Rotate(1); }
@@ -56,8 +60,14 @@ namespace Pattons_Best
             stack = new Stack(mi.TerritoryCurrent, mi);
             myList.Add(stack);
          }
-         else
+         else // add to top of stack
          {
+            if( "Turret" != mi.Name )
+            {
+               double offset = stack.MapItems.Count * Utilities.STACK;
+               mi.Location.X -= offset;
+               mi.Location.Y -= offset;
+            }
             stack.MapItems.Add(mi);
          }
       }
@@ -122,14 +132,24 @@ namespace Pattons_Best
          foreach (Object o in myList)
          {
             IStack stack = (IStack)o;
-            foreach (MapItem mapItem in stack.MapItems)
+            bool isMapItemRemoved = false;
+            foreach (MapItem mapItem in stack.MapItems) 
             {
+
                if (mi.Name == mapItem.Name)
                {
+                  isMapItemRemoved = true;
                   stack.MapItems.Remove(mapItem);
-                  if (stack.MapItems.Count == 0)
+                  if (0 == stack.MapItems.Count)
+                  {
                      Remove(stack);
-                  return;
+                     return;
+                  }
+                }
+               if (true == isMapItemRemoved) // future mapitems move up in stack
+               {
+                  mapItem.Location.X += Utilities.STACK;
+                  mapItem.Location.Y += Utilities.STACK;
                }
             }
          }
@@ -139,18 +159,27 @@ namespace Pattons_Best
          foreach (Object o in myList)
          {
             IStack stack = (IStack)o;
+            bool isMapItemRemoved = false;
             foreach (MapItem mapItem in stack.MapItems)
             {
                if (miName == mapItem.Name)
                {
+                  isMapItemRemoved = true;
                   stack.MapItems.Remove(mapItem);
-                  if (stack.MapItems.Count == 0)
+                  if (0 == stack.MapItems.Count)
+                  {
                      Remove(stack);
-                  return;
+                     return;
+                  }
+               }
+               if (true == isMapItemRemoved) // future mapitems move up in stack
+               {
+                  mapItem.Location.X += Utilities.STACK;
+                  mapItem.Location.Y += Utilities.STACK;
                }
             }
+            }
          }
-      }
       public IStack? RemoveAt(int index)
       {
          IStack? stack = myList[index] as IStack;

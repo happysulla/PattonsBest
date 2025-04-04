@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -865,7 +866,11 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): newT=null for " + tName);
             return false;
          }
-         rrHe.TerritoryCurrent = newT;
+         if (false == SetTerritory(rrHe, newT))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): SetTerritory() returned false");
+            return false;
+         }
          //------------------------------------------
          IMapItem? rrAp = myGameInstance.ReadyRacks[1];
          if (null == rrAp)
@@ -881,7 +886,11 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): newT=null for " + tName);
             return false;
          }
-         rrAp.TerritoryCurrent = newT;
+         if (false == SetTerritory(rrAp, newT))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): SetTerritory() returned false");
+            return false;
+         }
          //------------------------------------------
          if ( "75" == myMainGun )
          {
@@ -899,7 +908,11 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): newT=null for " + tName);
                return false;
             }
-            rrWp.TerritoryCurrent = newT;
+            if (false == SetTerritory(rrWp, newT))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): SetTerritory() returned false");
+               return false;
+            }
             //------------------------------------------
             IMapItem? rrHbci = myGameInstance.ReadyRacks[3];
             if (null == rrHbci)
@@ -915,7 +928,11 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): newT=null for " + tName);
                return false;
             }
-            rrHbci.TerritoryCurrent = newT;
+            if (false == SetTerritory(rrHbci, newT))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): SetTerritory() returned false");
+               return false;
+            }
          }
          else
          {
@@ -933,9 +950,38 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): newT=null for " + tName);
                return false;
             }
-            rrHvap.TerritoryCurrent = newT;
+            if( false == SetTerritory(rrHvap, newT))
+            {        
+               Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): SetTerritory() returned false");
+               return false;
+            }
          }
          //------------------------------------------
+         return true;
+      }
+      private bool SetTerritory(IMapItem mi, ITerritory newT)
+      {
+         if( null == myGameInstance )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetTerritory(): myGameInstance=null");
+            return false;
+         }
+         myGameInstance.TankStacks.Remove(mi);
+         //-------------------------------------
+         IStack? stack = myGameInstance.TankStacks.Find(mi.TerritoryCurrent);
+         if (null == stack)
+         {
+            stack = new Stack(newT, mi);
+            myGameInstance.TankStacks.Add(stack);
+         }
+         else // add to top of stack
+         {
+            mi.TerritoryCurrent = newT;
+            double offset = mi.Zoom * Utilities.theMapItemOffset + stack.MapItems.Count * Utilities.STACK;
+            mi.Location.X = newT.CenterPoint.X - offset;
+            mi.Location.Y = newT.CenterPoint.Y - offset;
+            stack.MapItems.Add(mi);
+         }
          return true;
       }
       //------------------------------------------------------------------------------------
@@ -1307,7 +1353,11 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ButtonReadyRackChange_Click(): newT=null for " + tName);
             return;
          }
-         rr.TerritoryCurrent = newT;
+         if( false == SetTerritory(rr, newT))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ButtonReadyRackChange_Click(): SetTerritory() returned false for " + tName);
+            return;
+         }
          GameAction action = GameAction.MorningBriefingAmmoReadyRackLoad;
          myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
          if (false == UpdateGrid())

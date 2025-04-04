@@ -106,16 +106,16 @@ namespace Pattons_Best
       {
          TerritoryCurrent = territory;
          TerritoryStarting = territory;
-         this.Location.X = territory.CenterPoint.X;
-         this.Location.Y = territory.CenterPoint.Y;
+         this.Location.X = territory.CenterPoint.X - zoom*Utilities.theMapItemOffset;
+         this.Location.Y = territory.CenterPoint.Y - zoom * Utilities.theMapItemOffset;
       }
       public MapItem(string name, double zoom, string topImageName, string bottomImageName, ITerritory territory) :  
          this(name, zoom, false, false, topImageName, bottomImageName) 
       {
          TerritoryCurrent = territory;
          TerritoryStarting = territory;
-         this.Location.X = territory.CenterPoint.X;
-         this.Location.Y = territory.CenterPoint.Y;
+         this.Location.X = territory.CenterPoint.X - zoom * Utilities.theMapItemOffset;
+         this.Location.Y = territory.CenterPoint.Y - zoom * Utilities.theMapItemOffset;
       }
       public MapItem(string aName, double zoom, bool isHidden, bool isAnimated, string topImageName)
       {
@@ -214,7 +214,8 @@ namespace Pattons_Best
       //----------------------------------------------------------------------------
       public void SetLocation(int counterCount)
       {
-         this.Location = new MapPoint(this.TerritoryCurrent.CenterPoint.X - Utilities.theMapItemOffset + (counterCount * Utilities.STACK), this.TerritoryCurrent.CenterPoint.Y - Utilities.theMapItemOffset + (counterCount * Utilities.STACK));
+         this.Location.X = this.TerritoryCurrent.CenterPoint.X - Utilities.theMapItemOffset + (counterCount * Utilities.STACK);
+         this.Location.Y = this.TerritoryCurrent.CenterPoint.Y - Utilities.theMapItemOffset + (counterCount * Utilities.STACK);
       }
       //----------------------------------------------------------------------------
       public void Flip()

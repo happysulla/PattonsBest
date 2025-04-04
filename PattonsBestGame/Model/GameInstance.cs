@@ -55,7 +55,9 @@ namespace Pattons_Best
       public EnumResistance BattleResistance { set; get; } = EnumResistance.None;
       //------------------------------------------------
       public IMapItemMoves MapItemMoves { get; set; } = new MapItemMoves();
-      public IStacks Stacks { get; set; } = new Stacks();
+      public IStacks TankStacks { get; set; } = new Stacks();
+      public IStacks MoveStacks { get; set; } = new Stacks();
+      public IStacks BattleStacks { get; set; } = new Stacks();
       private List<EnteredHex> myEnteredHexes = new List<EnteredHex>();
       public List<EnteredHex> EnteredHexes { get => myEnteredHexes; }
       //---------------------------------------------------------------
@@ -163,7 +165,7 @@ namespace Pattons_Best
       public bool IsExitArea(out bool isExitAreaReached)
       {
          isExitAreaReached = false;
-         IMapItem? exitArea = this.Stacks.FindMapItem("ExitArea");
+         IMapItem? exitArea = this.MoveStacks.FindMapItem("ExitArea");
          if( null == exitArea )
          {
             Logger.Log(LogEnum.LE_ERROR, "IsExitArea(): exitArea=null");

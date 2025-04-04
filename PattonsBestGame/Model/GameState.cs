@@ -102,7 +102,9 @@ namespace Pattons_Best
       }
       protected bool LoadGame(ref IGameInstance gi, ref GameAction action)
       {
-         gi.Stacks.Clear();
+         gi.MoveStacks.Clear();
+         gi.BattleStacks.Clear();
+         gi.TankStacks.Clear();
          return true;
       }
       protected void UndoCommand(ref IGameInstance gi, ref GameAction action)
@@ -213,7 +215,7 @@ namespace Pattons_Best
                gi.GamePhase = GamePhase.Preparations;
                gi.EventDisplayed = gi.EventActive = "e011";
                gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
-               gi.Stacks.Add(new MapItem("Sherman1", 2.0, "t001", gi.Home));
+               gi.BattleStacks.Add(new MapItem("Sherman1", 2.0, "t001", gi.Home));
                break;
             case GameAction.TestingStartMovement:
                gi.GamePhase = GamePhase.Movement;
@@ -434,7 +436,7 @@ namespace Pattons_Best
                   gi.GamePhase = GamePhase.Preparations;
                   gi.EventDisplayed = gi.EventActive = "e011";
                   gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
-                  gi.Stacks.Add(new MapItem("Sherman1", 2.0, "t001", gi.Home));
+                  gi.BattleStacks.Add(new MapItem("Sherman1", 2.0, "t001", gi.Home));
                   if (false == SetWeather(gi, gi.DieResults["e007"][0]))
                   {
                      returnStatus = "SetWeather() returned false";
@@ -514,16 +516,16 @@ namespace Pattons_Best
          const double zoom = 1.3;
          switch (weatherRolled)
          {
-            case "Clear": gi.Stacks.Add(new MapItem("Clear", zoom, "c20Clear", w1)); break;
-            case "Overcast": gi.Stacks.Add(new MapItem("Overcast", zoom, "c21Overcast", w1)); break;
-            case "Fog": gi.Stacks.Add(new MapItem("Fog", zoom, "c22Fog", w1)); break;
-            case "Mud": gi.Stacks.Add(new MapItem("Mud", zoom, "c23Mud", w1)); break;
-            case "Mud/Overcast": gi.Stacks.Add(new MapItem("Mud", zoom, "c23Mud", w1)); gi.Stacks.Add(new MapItem("Overcast", 1.0, "c21Overcast", w2)); break;
-            case "Falling Snow": gi.Stacks.Add(new MapItem("Falling Snow", zoom, "c26SnowFalling", w1)); break;
-            case "Ground Snow": gi.Stacks.Add(new MapItem("Ground Snow", zoom, "c27SnowGround", w1)); break;
-            case "Deep Snow": gi.Stacks.Add(new MapItem("Deep Snow", zoom, "c25SnowDeep", w1)); break;
-            case "Ground/Falling Snow": gi.Stacks.Add(new MapItem("Ground Snow", zoom, "c27SnowGround", w1)); gi.Stacks.Add(new MapItem("Falling Snow", 1.0, "c26SnowFalling", w2)); break;
-            case "Deep/Falling Snow": gi.Stacks.Add(new MapItem("Deep Snow", zoom, "c25SnowDeep", w1)); gi.Stacks.Add(new MapItem("Falling Snow", 1.0, "c26SnowFalling", w2)); break;
+            case "Clear": gi.BattleStacks.Add(new MapItem("Clear", zoom, "c20Clear", w1)); break;
+            case "Overcast": gi.BattleStacks.Add(new MapItem("Overcast", zoom, "c21Overcast", w1)); break;
+            case "Fog": gi.BattleStacks.Add(new MapItem("Fog", zoom, "c22Fog", w1)); break;
+            case "Mud": gi.BattleStacks.Add(new MapItem("Mud", zoom, "c23Mud", w1)); break;
+            case "Mud/Overcast": gi.BattleStacks.Add(new MapItem("Mud", zoom, "c23Mud", w1)); gi.BattleStacks.Add(new MapItem("Overcast", 1.0, "c21Overcast", w2)); break;
+            case "Falling Snow": gi.BattleStacks.Add(new MapItem("Falling Snow", zoom, "c26SnowFalling", w1)); break;
+            case "Ground Snow": gi.BattleStacks.Add(new MapItem("Ground Snow", zoom, "c27SnowGround", w1)); break;
+            case "Deep Snow": gi.BattleStacks.Add(new MapItem("Deep Snow", zoom, "c25SnowDeep", w1)); break;
+            case "Ground/Falling Snow": gi.BattleStacks.Add(new MapItem("Ground Snow", zoom, "c27SnowGround", w1)); gi.BattleStacks.Add(new MapItem("Falling Snow", 1.0, "c26SnowFalling", w2)); break;
+            case "Deep/Falling Snow": gi.BattleStacks.Add(new MapItem("Deep Snow", zoom, "c25SnowDeep", w1)); gi.BattleStacks.Add(new MapItem("Falling Snow", 1.0, "c26SnowFalling", w2)); break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "SetWeatherCounters(): reached default weatherRoll=" + weatherRolled);
                return false;
@@ -607,10 +609,10 @@ namespace Pattons_Best
                case GameAction.PreparationsTurret:
                   gi.IsTurretActive = true;
                   gi.EventDisplayed = gi.EventActive = "e014";
-                  gi.Stacks.Add(new MapItem("Turret", 2.0, "c16Turret", gi.Home));
+                  gi.BattleStacks.Add(new MapItem("Turret", 2.0, "c16Turret", gi.Home));
                   break;
                case GameAction.PreparationsTurretRotateLeft:
-                  IMapItem? turretL = gi.Stacks.FindMapItem("Turret");
+                  IMapItem? turretL = gi.BattleStacks.FindMapItem("Turret");
                   if (null == turretL)
                   {
                      returnStatus = "turret=null";
@@ -624,7 +626,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.PreparationsTurretRotateRight:
-                  IMapItem? turretR = gi.Stacks.FindMapItem("Turret");
+                  IMapItem? turretR = gi.BattleStacks.FindMapItem("Turret");
                   if (null == turretR)
                   {
                      returnStatus = "turret=null";
@@ -755,7 +757,7 @@ namespace Pattons_Best
                gi.IsHulledDown = true;
                gi.IsMoving = false;
                gi.IsLeadTank = false;
-               gi.Stacks.Add(new MapItem("HullDown", 0.85, "c14HullDown", tState));
+               gi.BattleStacks.Add(new MapItem("HullDown", 0.85, "c14HullDown", tState));
             }
             else if (dieRoll < 37)
             {
@@ -774,7 +776,7 @@ namespace Pattons_Best
                   gi.IsLeadTank = true;
                else
                   gi.IsLeadTank = false;
-               gi.Stacks.Add(new MapItem("Moving", 0.85, "c13Moving", tState));
+               gi.BattleStacks.Add(new MapItem("Moving", 0.85, "c13Moving", tState));
             }
             else
             {
@@ -790,7 +792,7 @@ namespace Pattons_Best
                gi.IsMoving = false;
                gi.IsLeadTank = false;
                IMapItem miHulledDown = new MapItem("HullDown", 0.85, "c14HullDown", tState);
-               gi.Stacks.Add(miHulledDown);
+               gi.BattleStacks.Add(miHulledDown);
             }
             else if (dieRoll < 58)
             {
@@ -810,7 +812,7 @@ namespace Pattons_Best
                else
                   gi.IsLeadTank = false;
                IMapItem miMoving = new MapItem("Moving", 0.85, "c13Moving", tState);
-               gi.Stacks.Add(miMoving);
+               gi.BattleStacks.Add(miMoving);
             }
             else
             {
@@ -831,7 +833,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetUsControlOnBattleMap(): tState=" + name);
             return false;
          }
-         gi.Stacks.Add(new MapItem("UsControl1", 1.0, "c28UsControl", t));
+         gi.BattleStacks.Add(new MapItem("UsControl1", 1.0, "c28UsControl", t));
          //--------------------------------------
          name = "B2M";
          t = Territories.theTerritories.Find(name);
@@ -840,7 +842,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetUsControlOnBattleMap(): tState=" + name);
             return false;
          }
-         gi.Stacks.Add(new MapItem("UsControl2", 1.0, "c28UsControl", t));
+         gi.BattleStacks.Add(new MapItem("UsControl2", 1.0, "c28UsControl", t));
          //--------------------------------------
          name = "B3M";
          t = Territories.theTerritories.Find(name);
@@ -849,7 +851,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetUsControlOnBattleMap(): tState=" + name);
             return false;
          }
-         gi.Stacks.Add(new MapItem("UsControl3", 1.0, "c28UsControl", t));
+         gi.BattleStacks.Add(new MapItem("UsControl3", 1.0, "c28UsControl", t));
          return true;
       }
    }
@@ -1014,7 +1016,7 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     IMapItem? taskForce = gi.Stacks.FindMapItem("TaskForce");
+                     IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
                      if (null == taskForce)
                      {
                         returnStatus = "taskForce=null";
@@ -1163,7 +1165,7 @@ namespace Pattons_Best
          }
          IMapItem startArea = new MapItem("StartArea", 1.0, "c33StartArea", t);
          startArea.Count = dieRoll;
-         gi.Stacks.Add(startArea);
+         gi.MoveStacks.Add(startArea);
          //-----------------------------------------
          if (0 == t.Adjacents.Count)
          {
@@ -1177,7 +1179,7 @@ namespace Pattons_Best
             return false;
          }
          IMapItem taskForceArea = new MapItem("TaskForce", 1.0, "c35TaskForce", adjacent);
-         gi.Stacks.Add(taskForceArea);
+         gi.MoveStacks.Add(taskForceArea);
          //-----------------------------------------
          string name1 = t.Adjacents[0] + "R";
          ITerritory? controlled = Territories.theTerritories.Find(name1); // should only be one adjacent to start area
@@ -1190,7 +1192,7 @@ namespace Pattons_Best
          Utilities.MapItemNum++;
          IMapItem usControl = new MapItem(name1, 1.0, "c28UsControl", controlled);
          usControl.Count = 0; // 0=us  1=light  2=medium  3=heavy
-         gi.Stacks.Add(usControl);
+         gi.MoveStacks.Add(usControl);
          return true;
       }
       private bool SetExitArea(IGameInstance gi, int dieRoll)
@@ -1202,7 +1204,7 @@ namespace Pattons_Best
             return false;
          }
          //-------------------------------------
-         IMapItem? miStart = gi.Stacks.FindMapItem("StartArea");
+         IMapItem? miStart = gi.MoveStacks.FindMapItem("StartArea");
          if (null == miStart)
          {
             Logger.Log(LogEnum.LE_ERROR, "SetExitArea(): mi=null for StartArea");
@@ -1225,7 +1227,7 @@ namespace Pattons_Best
          }
          IMapItem miExit = new MapItem("ExitArea", 1.0, "c34ExitArea", t);
          miExit.Count = exitArea;
-         gi.Stacks.Add(miExit);
+         gi.MoveStacks.Add(miExit);
          return true;
       }
       private bool SetChoicesForOperations(IGameInstance gi)
@@ -1246,7 +1248,7 @@ namespace Pattons_Best
       {
          if (null == gi.EnemyStrengthCheck)
          {
-            IMapItem? taskForce = gi.Stacks.FindMapItem("TaskForce");
+            IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
             if (null == taskForce)
             {
                Logger.Log(LogEnum.LE_ERROR, "SetEnemyStrengthCounter(): taskForce=null");
@@ -1305,7 +1307,7 @@ namespace Pattons_Best
             name += ("StrengthLight" + Utilities.MapItemNum.ToString());
             IMapItem strengthMarker = new MapItem(name, 1.0, "c36Light", gi.EnemyStrengthCheck);
             strengthMarker.Count = 1;
-            gi.Stacks.Add(strengthMarker);
+            gi.MoveStacks.Add(strengthMarker);
 
          }
          else if (EnumResistance.Medium == resistance)
@@ -1313,14 +1315,14 @@ namespace Pattons_Best
             name += ("StrengthMedium" + Utilities.MapItemNum.ToString());
             IMapItem strengthMarker = new MapItem(name, 1.0, "c37Medium", gi.EnemyStrengthCheck);
             strengthMarker.Count = 2;
-            gi.Stacks.Add(strengthMarker);
+            gi.MoveStacks.Add(strengthMarker);
          }
          else if (EnumResistance.Heavy == resistance)
          {
             name += ("StrengthHeavy" + Utilities.MapItemNum.ToString());
             IMapItem strengthMarker = new MapItem(name, 1.0, "c38Heavy", gi.EnemyStrengthCheck);
             strengthMarker.Count = 3;
-            gi.Stacks.Add(strengthMarker);
+            gi.MoveStacks.Add(strengthMarker);
          }
          else
          {
@@ -1339,7 +1341,7 @@ namespace Pattons_Best
             string nameAir = gi.AirStrikeCheck.Name + "Air" + Utilities.MapItemNum.ToString();
             Utilities.MapItemNum++;
             IMapItem airStrikeMarker = new MapItem(nameAir, 1.0, "c40AirStrike", gi.AirStrikeCheck);
-            gi.Stacks.Add(airStrikeMarker);
+            gi.MoveStacks.Add(airStrikeMarker);
          }
          return true;
       }
@@ -1353,7 +1355,7 @@ namespace Pattons_Best
          if (dieRoll < 8)
          {
             IMapItems artillerySupports = new MapItems();
-            foreach (IStack stack in gi.Stacks)
+            foreach (IStack stack in gi.MoveStacks)
             {
                foreach (IMapItem mi in stack.MapItems)
                {
@@ -1369,12 +1371,12 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "SetArtillerySupportCounter(): artillerySupport=null");
                   return false;
                }
-               gi.Stacks.Remove(artillerySupport);
+               gi.MoveStacks.Remove(artillerySupport);
             }
             string name = gi.ArtillerySupportCheck.Name + "Artillery" + Utilities.MapItemNum.ToString();
             Utilities.MapItemNum++;
-            IMapItem artillerSupportMarker = new MapItem(name, 1.0, "c39ArtillerySupport", gi.ArtillerySupportCheck);
-            gi.Stacks.Add(artillerSupportMarker);
+            IMapItem artillerySupportMarker = new MapItem(name, 1.0, "c39ArtillerySupport", gi.ArtillerySupportCheck);
+            gi.MoveStacks.Add(artillerySupportMarker);
          }
          if (true == gi.IsAirStrikePending)
          {
@@ -1387,7 +1389,7 @@ namespace Pattons_Best
             string name = gi.AirStrikeCheck.Name + "Air" + Utilities.MapItemNum.ToString();
             Utilities.MapItemNum++;
             IMapItem airStrikeMarker = new MapItem(name, 1.0, "c40AirStrike", gi.AirStrikeCheck);
-            gi.Stacks.Add(airStrikeMarker);
+            gi.MoveStacks.Add(airStrikeMarker);
          }
          return true;
       }
@@ -1401,7 +1403,7 @@ namespace Pattons_Best
          if (dieRoll < 5)
          {
             IMapItems airStrikes = new MapItems();
-            foreach (IStack stack in gi.Stacks)
+            foreach (IStack stack in gi.MoveStacks)
             {
                foreach (IMapItem mi in stack.MapItems)
                {
@@ -1417,7 +1419,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "SetAirStrikeCounter(): mi=null");
                   return false;
                }
-               gi.Stacks.Remove(airStrike);
+               gi.MoveStacks.Remove(airStrike);
             }
             gi.IsAirStrikePending = true;
          }
@@ -1425,7 +1427,7 @@ namespace Pattons_Best
       }
       private bool EnterBoardArea(IGameInstance gi)
       {
-         IMapItem? taskForce = gi.Stacks.FindMapItem("TaskForce");
+         IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
          if (null == taskForce)
          {
             Logger.Log(LogEnum.LE_ERROR, "EnterBoardArea(): taskForce= null");
@@ -1438,7 +1440,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "EnterBoardArea(): t=null for " + name);
             return false;
          }
-         IStack? stack = gi.Stacks.Find(t);
+         IStack? stack = gi.MoveStacks.Find(t);
          if (null == stack)
          {
             gi.EventDisplayed = gi.EventActive = "e030";
@@ -1460,7 +1462,7 @@ namespace Pattons_Best
          //------------------------------------
          gi.EventDisplayed = gi.EventActive = "e032";
          gi.DieRollAction = GameAction.DieRollActionNone;
-         IMapItem? taskForce = gi.Stacks.FindMapItem("TaskForce");
+         IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
          if (null == taskForce)
          {
             Logger.Log(LogEnum.LE_ERROR, "ExitBattle(): taskForce= null");
@@ -1473,19 +1475,19 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ExitBattle(): t=null for " + name);
             return false;
          }
-         IStack? stack = gi.Stacks.Find(t);
+         IStack? stack = gi.MoveStacks.Find(t);
          if (null == stack)
          {
             Logger.Log(LogEnum.LE_ERROR, "ExitBattle(): taskForce= null");
             return false;
          }
-         gi.Stacks.Remove(stack);
+         gi.MoveStacks.Remove(stack);
          //------------------------------------
          name += ("UsControl" + Utilities.MapItemNum.ToString());
          Utilities.MapItemNum++;
          IMapItem usControl = new MapItem(name, 1.0, "c28UsControl", t);
          usControl.Count = 0; // 0=us  1=light  2=medium  3=heavy
-         gi.Stacks.Add(usControl);
+         gi.MoveStacks.Add(usControl);
          return true;
       }
       private bool EnterBattle(IGameInstance gi, IAfterActionReport report)
@@ -1514,7 +1516,7 @@ namespace Pattons_Best
          gi.IsAirStrikePending = false;
          gi.IsAdvancingFireChosen = false;
          gi.BattleResistance = EnumResistance.None;
-         gi.Stacks.Clear();
+         gi.MoveStacks.Clear();
          gi.MapItemMoves.Clear();
          gi.EnteredHexes.Clear();
          //--------------------------------------------------------------

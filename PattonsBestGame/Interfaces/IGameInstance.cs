@@ -50,7 +50,9 @@ namespace Pattons_Best
       EnumResistance BattleResistance { set; get; }
       //------------------------------------------------
       IMapItemMoves MapItemMoves { set; get; }
-      IStacks Stacks { set; get; }
+      IStacks TankStacks { set; get; }
+      IStacks MoveStacks { set; get; }
+      IStacks BattleStacks { set; get; }
       List<EnteredHex> EnteredHexes { get; }
       //------------------------------------------------
       List<IUnitTest> UnitTests { get; }

@@ -713,7 +713,7 @@ namespace Pattons_Best
                }
                break;
             case "e015":
-               IMapItem? loaderSpot = gi.Stacks.FindMapItem("LoaderSpot");
+               IMapItem? loaderSpot = gi.BattleStacks.FindMapItem("LoaderSpot");
                if (null != loaderSpot)
                {
                   Image imge015 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c18LoaderSpot"), Width = 100, Height = 100, Name = "PreparationsCommanderSpot" };
@@ -727,7 +727,7 @@ namespace Pattons_Best
                }
                break;
             case "e016":
-               IMapItem? cmdrSpot = gi.Stacks.FindMapItem("CommanderSpot");
+               IMapItem? cmdrSpot = gi.BattleStacks.FindMapItem("CommanderSpot");
                if (null != cmdrSpot)
                {
                   Image imge016 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c19CommanderSpot"), Width = 100, Height = 100, Name = "PreparationsFinal" };
@@ -771,7 +771,7 @@ namespace Pattons_Best
                      return false;
                   }
                   Image imge021 = new Image { Width = 100, Height = 100, Name = "MovementChooseOption" };
-                  IStack? stack = gi.Stacks.Find(gi.EnemyStrengthCheck);
+                  IStack? stack = gi.MoveStacks.Find(gi.EnemyStrengthCheck);
                   if( null == stack )
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): stack=null for e021");
@@ -1034,7 +1034,7 @@ namespace Pattons_Best
       private bool SetButtonStateEnemyStrenth(IGameInstance gi, Button b)
       {
          b.IsEnabled = false;
-         IMapItem? taskForce = gi.Stacks.FindMapItem("TaskForce");
+         IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
          if (null == taskForce)
          {
             Logger.Log(LogEnum.LE_ERROR, "SetButtonStateEnemyStrenth(): taskForce=null");
@@ -1054,10 +1054,10 @@ namespace Pattons_Best
                return false;
             }
             Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "SetButtonStateEnemyStrenth(): Checking territory=" + nameOfTerritory);
-            IStack? stack = gi.Stacks.Find(t);
+            IStack? stack = gi.MoveStacks.Find(t);
             if (null == stack)
             {
-               Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "SetButtonStateEnemyStrenth(): no stack for=" + nameOfTerritory + " in " + gi.Stacks.ToString());
+               Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "SetButtonStateEnemyStrenth(): no stack for=" + nameOfTerritory + " in " + gi.MoveStacks.ToString());
                b.IsEnabled = true;
                return true;
             }
@@ -1235,7 +1235,7 @@ namespace Pattons_Best
                               return;
                            case "Continue005":
                               action = GameAction.SetupAssignCrewRating;
-                              //action = GameAction.SetupShowCombatCalendarCheck; // <cgs> TEST
+                              action = GameAction.SetupShowCombatCalendarCheck; // <cgs> TEST
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
                            case "GotoMorningBriefing":
