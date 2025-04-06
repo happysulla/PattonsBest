@@ -97,7 +97,7 @@ e011	"<Bold>e011 Deployment</Bold>
 <LineBreak/><LineBreak/>
 Determine your tank&apos;s deployment from the 
 <InlineUIContainer><Button Content='Deployment' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table:  
-<InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>
+<InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/><LineBreak/>"
 e012	"<Bold>e012 Hatches</Bold> 
 <InlineUIContainer><Button Content='r4.42' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  

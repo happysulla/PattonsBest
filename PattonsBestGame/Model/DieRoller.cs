@@ -15,11 +15,11 @@ namespace Pattons_Best
 {
    public class DieRoller : IDieRoller
    {
-      private const int ANIMATE_TIME_MS = 1100;         // To speed up die rolling, need to redo the die animation speed in GIF creation
+      private const int ANIMATE_TIME_MS = 1100;        // To speed up die rolling, need to redo the die animation speed in GIF creation
       private const double PATH_DISTANCE = 600;        // limits the animation path - distance & time correlate to speed of dice
       private const double DECELARATION_RATIO = 0.8;   // how fast the animation decelerates
-      private const double ACCELERATION_RATIO = 0.05;    // how fast the animation decelerates
-      private const double BUTTON_BOARDER = 15;         // add for the button border
+      private const double ACCELERATION_RATIO = 0.05;  // how fast the animation decelerates
+      private const double BUTTON_BOARDER = 15;        // add for the button border
       private const double ZOOM_DICE = 1.707;
       private RollEndCallback? myCallbackEndRoll;
       private LoadEndCallback myCallbackEndLoad;
@@ -74,11 +74,11 @@ namespace Pattons_Best
          foreach (Button b in theDice)
             HideDie();
          IMapPoint mp = GetCanvasCenter(sv, c);
-         int randomNum = Utilities.RandomGenerator.Next(0, 6);
+         int randomNum = Utilities.RandomGenerator.Next(0, 10);
          int die1 = RollStationaryDie(mp, randomNum);
-         if (0 == die1)
+         if( 0 == die1 )
          {
-            Logger.Log(LogEnum.LE_ERROR, "RollStationaryDice(): RollStationaryDie() returned 0");
+            Logger.Log(LogEnum.LE_ERROR, "RollStationaryDie(): die1=0");
             return 0;
          }
          myDieRollResults = die1;
@@ -86,18 +86,17 @@ namespace Pattons_Best
       }
       public int RollStationaryDice(Canvas c, RollEndCallback cb)
       {
-
          myDieRollResults = 0;
          myCallbackEndRoll = cb;
          ScrollViewer sv = (ScrollViewer)c.Parent;
          HideDie();
          IMapPoint mp = GetCanvasCenter(sv, c);
          IMapPoint mp1 = new MapPoint(mp.X, mp.Y - 0.65 * Utilities.theMapItemSize / Utilities.ZoomCanvas);
-         int randomNum = Utilities.RandomGenerator.Next(0, 6);
+         int randomNum = Utilities.RandomGenerator.Next(0, 10);
          int die1 = RollStationaryDie(mp1, randomNum);
          if (0 == die1)
          {
-            Logger.Log(LogEnum.LE_ERROR, "RollStationaryDice(): RollStationaryDie() returned 0");
+            Logger.Log(LogEnum.LE_ERROR, "RollStationaryDice(): die1=0");
             return 0;
          }
          //----------------------------------------------------------------------------------------
@@ -106,10 +105,15 @@ namespace Pattons_Best
          int die2 = RollStationaryDie(mp2, randomNum);
          if (0 == die2)
          {
-            Logger.Log(LogEnum.LE_ERROR, "RollStationaryDice(): RollStationaryDie() returned 0");
+            Logger.Log(LogEnum.LE_ERROR, "RollStationaryDice(): die2=0");
             return 0;
          }
-         myDieRollResults = die1 + die2;
+         if (0 == die1)
+            die1 = 10;
+         if ((10 == die1) && (0 == die2))
+            myDieRollResults = 100;
+         else
+            myDieRollResults = die1 + 10 * die2;
          return myDieRollResults;
       }
       public int RollMovingDie(Canvas c, RollEndCallback cb)
@@ -119,11 +123,11 @@ namespace Pattons_Best
          ScrollViewer sv = (ScrollViewer)c.Parent;
          HideDie();
          IMapPoint mp = GetCanvasCenter(sv, c);
-         int randomNum = Utilities.RandomGenerator.Next(0, 6);
+         int randomNum = Utilities.RandomGenerator.Next(0, 10);
          int die1 = RollMovingDie(sv, c, mp, randomNum);
          if (0 == die1)
          {
-            Logger.Log(LogEnum.LE_ERROR, "RollStationaryDice(): RollStationaryDie() returned 0");
+            Logger.Log(LogEnum.LE_ERROR, "RollMovingDie(): die1=0");
             return 0;
          }
          myDieRollResults = die1;
@@ -135,7 +139,7 @@ namespace Pattons_Best
          HideDie();
          IMapPoint mp = GetCanvasCenter(sv, c);
          IMapPoint mp1 = new MapPoint(mp.X, mp.Y - 0.65 * Utilities.theMapItemSize / Utilities.ZoomCanvas);
-         int randomNum = Utilities.RandomGenerator.Next(0, 6);
+         int randomNum = Utilities.RandomGenerator.Next(0, 10);
          int die1 = RollMovingDie(sv, c, mp1, randomNum);
          if (0 == die1)
          {
@@ -146,14 +150,19 @@ namespace Pattons_Best
          myDieRollResults = 0;
          myCallbackEndRoll = cb;
          IMapPoint mp2 = new MapPoint(mp.X, mp.Y + 0.65 * Utilities.theMapItemSize / Utilities.ZoomCanvas);
-         randomNum = Utilities.RandomGenerator.Next(6, 12);
+         randomNum = Utilities.RandomGenerator.Next(10, 20);
          int die2 = RollMovingDie(sv, c, mp2, randomNum);
          if (0 == die2)
          {
             Logger.Log(LogEnum.LE_ERROR, "RollStationaryDice(): 2-RollMovingDice() returned 0");
             return 0;
          }
-         myDieRollResults = die1 + die2;
+         if (0 == die1)
+            die1 = 10;
+         if ((10 == die1) && (0 == die2))
+            myDieRollResults = 100;
+         else
+           myDieRollResults = die1 + 10*die2;
          return myDieRollResults;
       }
       //-----------------------------------------------------------
@@ -259,7 +268,7 @@ namespace Pattons_Best
          Canvas.SetLeft(theDice[randomNum], mp.X - zoom * Utilities.theMapItemOffset);
          Canvas.SetTop(theDice[randomNum], mp.Y - zoom * Utilities.theMapItemOffset);
          Canvas.SetZIndex(theDice[randomNum], 10000);
-         return (randomNum % 6 + 1);
+         return ( randomNum % 10 );
       }
       private int RollMovingDie(ScrollViewer sv, Canvas c, IMapPoint mp, int randomNum)
       {
@@ -294,7 +303,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "RollMovingDie(): MovePathAnimate() returned false");
             return 0;
          }
-         return (randomNum % 6 + 1);
+         return (randomNum % 10);
       }
       private bool DiceAnimate(ScrollViewer sv, Canvas c, Button b, IMapPoint startPoint)
       {

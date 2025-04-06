@@ -399,7 +399,6 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.MorningBriefingWeatherRoll;
                   break;
                case GameAction.MorningBriefingWeatherRoll:
-                  dieRoll = 50; // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   break;
@@ -576,7 +575,6 @@ namespace Pattons_Best
                   gi.GamePhase = GamePhase.EndGame;
                   break;
                case GameAction.PreparationsDeploymentRoll:
-                  dieRoll = 88; // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   gi.IsPrepActive = true;
@@ -1459,6 +1457,7 @@ namespace Pattons_Best
             basePoints *= 2;
          report.VictoryPtsCaptureArea += basePoints;
          //------------------------------------
+         gi.GamePhase = GamePhase.Movement;
          gi.EventDisplayed = gi.EventActive = "e032";
          gi.DieRollAction = GameAction.DieRollActionNone;
          IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");

@@ -1213,124 +1213,119 @@ namespace Pattons_Best
                   if (result.VisualHit == img)
                   {
                      RollEndCallback rollEndCallback = ShowDieResult;
-                     if (true == img.Name.Contains("DieRoll"))
+                     switch (img.Name)
                      {
-                        myDieRoller.RollMovingDie(myCanvasMain, rollEndCallback);
-                        img.Visibility = Visibility.Hidden;
-                        return;
-                     }
-                     else
-                     {
-                        switch (img.Name)
-                        {
-                           case "DiceRoll":
-                              myDieRoller.RollMovingDice(myCanvasMain, rollEndCallback);
-                              img.Visibility = Visibility.Hidden;
-                              return;
-                           case "Continue001":
-                              action = GameAction.SetupShowMovementBoard;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "MapMovement":
-                              action = GameAction.SetupShowBattleBoard;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "MapBattle":
-                              action = GameAction.SetupShowTankCard;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "m001M4":
-                              action = GameAction.SetupShowAfterActionReport;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "Continue005":
-                              action = GameAction.SetupAssignCrewRating;
-                              //action = GameAction.SetupShowCombatCalendarCheck; // <cgs> TEST
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "GotoMorningBriefing":
-                              action = GameAction.MorningBriefingBegin;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "WeatherRollEnd":
-                              action = GameAction.MorningBriefingWeatherRollEnd;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "GotoMorningAmmoLimitsSetEnd":
-                              action = GameAction.MorningBriefingAmmoLoad;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "GotoMorningBriefingEnd":
-                              action = GameAction.MorningBriefingEnd;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "PreparationsDeployment":
-                              action = GameAction.PreparationsDeployment;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "PreparationsDeploymentEnd":
-                              action = GameAction.PreparationsHatches;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "c15OpenHatch":
-                              action = GameAction.PreparationsGunLoad;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "c17GunLoad":
-                              action = GameAction.PreparationsTurret;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "c16Turret":
-                              action = GameAction.PreparationsLoaderSpot;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "PreparationsCommanderSpot":
-                              action = GameAction.PreparationsCommanderSpot;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "PreparationsFinal":
-                              action = GameAction.PreparationsFinal;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "Continue017":
-                              action = GameAction.MovementStartAreaSet;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "MovementExitAreaSet":
-                              action = GameAction.MovementExitAreaSet;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "MovementEnemyStrengthChoice":
-                              action = GameAction.MovementEnemyStrengthChoice;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "MovementChooseOption":
-                              action = GameAction.MovementChooseOption;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "c44AdvanceFire":
-                              action = GameAction.MovementAdvanceFire;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "c44AdvanceFireDeny":
-                              action = GameAction.MovementAdvanceFireSkip;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "MovementResistanceCheck":
-                              action = GameAction.MovementResistanceCheck;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "MovementStartAreaRestart":
-                              action = GameAction.MovementStartAreaRestart;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           case "EveningDebriefingStart":
-                              action = GameAction.EveningDebriefingStart;
-                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                              return;
-                           default:
-                              break;// do nothing
-                        }
+                        case "DieRollWhite":
+                           myDieRoller.RollMovingDie(myCanvasMain, rollEndCallback);
+                           img.Visibility = Visibility.Hidden;
+                           return;
+                        case "DieRollBlue":
+                           myDieRoller.RollMovingDice(myCanvasMain, rollEndCallback);
+                           img.Visibility = Visibility.Hidden;
+                           return;
+                        case "Continue001":
+                           action = GameAction.SetupShowMovementBoard;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "MapMovement":
+                           action = GameAction.SetupShowBattleBoard;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "MapBattle":
+                           action = GameAction.SetupShowTankCard;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "m001M4":
+                           action = GameAction.SetupShowAfterActionReport;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "Continue005":
+                           action = GameAction.SetupAssignCrewRating;
+                           action = GameAction.SetupShowCombatCalendarCheck; // <cgs> TEST
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "GotoMorningBriefing":
+                           action = GameAction.MorningBriefingBegin;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "WeatherRollEnd":
+                           action = GameAction.MorningBriefingWeatherRollEnd;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "GotoMorningAmmoLimitsSetEnd":
+                           action = GameAction.MorningBriefingAmmoLoad;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "GotoMorningBriefingEnd":
+                           action = GameAction.MorningBriefingEnd;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "PreparationsDeployment":
+                           action = GameAction.PreparationsDeployment;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "PreparationsDeploymentEnd":
+                           action = GameAction.PreparationsHatches;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "c15OpenHatch":
+                           action = GameAction.PreparationsGunLoad;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "c17GunLoad":
+                           action = GameAction.PreparationsTurret;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "c16Turret":
+                           action = GameAction.PreparationsLoaderSpot;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "PreparationsCommanderSpot":
+                           action = GameAction.PreparationsCommanderSpot;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "PreparationsFinal":
+                           action = GameAction.PreparationsFinal;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "Continue017":
+                           action = GameAction.MovementStartAreaSet;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "MovementExitAreaSet":
+                           action = GameAction.MovementExitAreaSet;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "MovementEnemyStrengthChoice":
+                           action = GameAction.MovementEnemyStrengthChoice;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "MovementChooseOption":
+                           action = GameAction.MovementChooseOption;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "c44AdvanceFire":
+                           action = GameAction.MovementAdvanceFire;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "c44AdvanceFireDeny":
+                           action = GameAction.MovementAdvanceFireSkip;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "MovementResistanceCheck":
+                           action = GameAction.MovementResistanceCheck;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "MovementStartAreaRestart":
+                           action = GameAction.MovementStartAreaRestart;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "EveningDebriefingStart":
+                           action = GameAction.EveningDebriefingStart;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        default:
+                           break;// do nothing
                      }
                   }
                }
