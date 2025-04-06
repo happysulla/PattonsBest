@@ -416,7 +416,6 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.MorningBriefingTimeCheckRoll;
                   break;
                case GameAction.MorningBriefingTimeCheckRoll:
-                  dieRoll = 7; // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (false == TableMgr.SetTimeTrack(lastReport, gi.Day))

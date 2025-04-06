@@ -57,21 +57,21 @@ Otherwise continue with next day check.
 Date from Combat Calendar: DATE<LineBreak/>
 Expected Resistance: RESISTANCE<LineBreak/>
 Probablility of Combat: PROBABILITY &gt;= 
-<InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>
+<InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/>"
 e007	"<Bold>e007 Morning Briefing - Weather Roll</Bold> <InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
 The 
 <InlineUIContainer><Button Content='Weather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
  Table determines weather for today:  
-<InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>
+<InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/>"
 e008	"<Bold>e008 Type of Snow</Bold> 
 <LineBreak/><LineBreak/>
 Snow is in the forecast. Roll for type of snow on the
 <InlineUIContainer><Button Content='Weather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
  Table:  
-<InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>
+<InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/>"
 e009	"<Bold>e009 Ammo Loading Limits</Bold> <InlineUIContainer><Button Content='r16.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
@@ -90,14 +90,14 @@ Determine sunrise and sunset for current month using the <InlineUIContainer><But
 Roll 1D/2  on the 
 <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table. 
 The Time Table also provides the timed used for each action take. Additionally, the same die roll is used to determine the ammo expended:  
-<InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>
+<InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/><LineBreak/>"
 e011	"<Bold>e011 Deployment</Bold> 
 <InlineUIContainer><Button Content='r4.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
 Determine your tank&apos;s deployment from the 
 <InlineUIContainer><Button Content='Deployment' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table:  
-<InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>
+<InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/><LineBreak/>"
 e012	"<Bold>e012 Hatches</Bold> 
 <InlineUIContainer><Button Content='r4.42' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
@@ -147,7 +147,7 @@ e018	"<Bold>e018 Set Start Area</Bold>
 <LineBreak/><LineBreak/>
 Around the edge of the Movement Board, there are 10 areas number 1-10. The area is marked with the Start Area and Task Force markers. 
 <LineBreak/><LineBreak/>
-Die Roll =  <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer>
+Die Roll =  <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/><LineBreak/>"
 e019	"<Bold>e019 Set Exit Area</Bold> 
 <InlineUIContainer><Button Content='r4.52' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
@@ -156,7 +156,7 @@ On the <InlineUIContainer><Button Content='Exit Areas' FontFamily='Courier New' 
 Table, roll 1D and cross reference the number with the Start Area marker 
 <InlineUIContainer><Button Content='r4.51' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  
 <LineBreak/><LineBreak/>
-Die Roll =  <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer> 
+Die Roll =  <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer> 
 <LineBreak/><LineBreak/>"
 e020	"<Bold>e020 Enemy Strength Check - Choose Area</Bold> 
 <InlineUIContainer><Button Content='r4.53' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
@@ -169,7 +169,7 @@ e021	"<Bold>e021 Enemy Strength Check Roll</Bold>
 Roll 1D and consult the <InlineUIContainer><Button Content='Resistance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 Table. The area is marked with a Light, Medium, or Heavy marker.
 <LineBreak/><LineBreak/>
-Die Roll =  <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer> 
+Die Roll =  <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer> 
 <LineBreak/><LineBreak/>"
 e022	"<Bold>e022 Choose Operations</Bold> 
 <InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
@@ -201,7 +201,7 @@ e024	"<Bold>e024 Artillery Support Roll</Bold>
 Roll 1D and consult the <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 Table to see if Artillery Support arrives. If successful, an Artillery Support marker is placed on the area. 
 <LineBreak/><LineBreak/>
-Die Roll =  <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer> 
+Die Roll =  <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer> 
 <LineBreak/><LineBreak/>"
 e025	"<Bold>e025 Call for Air Strike</Bold> 
 <InlineUIContainer><Button Content='r23.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
@@ -217,7 +217,7 @@ e026	"<Bold>e026 Air Strike Roll</Bold>
 Roll 1D and consult the <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 Table to see if Air Strike arrives. If successful, an Air Strike marker is placed on the area. 
 <LineBreak/><LineBreak/>
-Die Roll =  <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer> 
+Die Roll =  <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer> 
 <LineBreak/><LineBreak/>"
 e027	"<Bold>e027 Attempt to Resupply</Bold> 
 <InlineUIContainer><Button Content='r4.54.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
@@ -226,7 +226,7 @@ Consult the
 <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 to see if resupply occurs. If successful, you may relead your tank with ammo. 
 <LineBreak/><LineBreak/>
-Die Roll =  <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer> 
+Die Roll =  <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer> 
 <LineBreak/><LineBreak/>"
 e028	"<Bold>e028 Enter Adjacent Area</Bold> 
 <InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
@@ -247,13 +247,13 @@ e030	"<Bold>e030 Enemy Strength Roll Entering Battle Board</Bold>
 <LineBreak/><LineBreak/>
 Roll 1D and consult the <InlineUIContainer><Button Content='Resistance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 Table for enemy strength: <LineBreak/><LineBreak/>
-Die Roll =  <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer> "
+Die Roll =  <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer> "
 e031	"<Bold>e031 Battle Check</Bold> 
 <InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
 Roll 1D and consult the <InlineUIContainer><Button Content='Resistance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 Table to determine if combat occurs in this area: <LineBreak/><LineBreak/>
-Die Roll =  <InlineUIContainer><Image Name='DieRoll' Height='21' Width='21' > </Image></InlineUIContainer> "
+Die Roll =  <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer> "
 e032	"<Bold>e032 No Combat</Bold> 
 <InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>

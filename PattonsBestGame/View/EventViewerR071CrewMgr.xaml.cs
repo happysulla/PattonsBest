@@ -322,7 +322,7 @@ namespace Pattons_Best
             {
                BitmapImage bmi = new BitmapImage();
                bmi.BeginInit();
-               bmi.UriSource = new Uri(MapImage.theImageDirectory + "dieRoll.gif", UriKind.Absolute);
+               bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollWhite.gif", UriKind.Absolute);
                bmi.EndInit();
                Image img = new Image { Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
                ImageBehavior.SetAnimatedSource(img, bmi);

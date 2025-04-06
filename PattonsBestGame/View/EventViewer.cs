@@ -384,15 +384,25 @@ namespace Pattons_Best
                   if (ui.Child is Button b)
                   {
                      if (false == SetButtonState(gi, key, b))
+                     {
                         Logger.Log(LogEnum.LE_ERROR, "OpenEvent(): SetButtonState() returned false");
+                        return false;
+                     }
                   }
                   else if (ui.Child is Image img)
                   {
                      string imageName = img.Name;
                      if (true == img.Name.Contains("Continue"))
                         imageName = "Continue";
-                     else if( true == img.Name.Contains("DieRoll"))
-                        imageName = "DieRoll";
+                     else if( true == img.Name.Contains("DieRollWhite"))
+                        imageName = "DieRollWhite";
+                     else if (true == img.Name.Contains("DieRollBlue"))
+                        imageName = "DieRollBlue";
+                     else if (true == img.Name.Contains("DieRoll"))
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "OpenEvent(): imageName=DieRoll for key=" + key);
+                        return false;
+                     }
                      string fullImagePath = MapImage.theImageDirectory + Utilities.RemoveSpaces(imageName) + ".gif";
                      System.Windows.Media.Imaging.BitmapImage bitImage = new BitmapImage();
                      bitImage.BeginInit();
@@ -400,7 +410,7 @@ namespace Pattons_Best
                      bitImage.EndInit();
                      img.Source = bitImage;
                      ImageBehavior.SetAnimatedSource(img, img.Source);
-                     if ((true == img.Name.Contains("DieRoll")) || (true == img.Name.Contains("DiceRoll")) || (true == img.Name.Contains("Die3Roll")))
+                     if ((true == img.Name.Contains("DieRollWhite")) || (true == img.Name.Contains("DieRollBlue")))
                      {
                         if (true == isDieShown[dieCount])
                         {
@@ -1235,7 +1245,7 @@ namespace Pattons_Best
                               return;
                            case "Continue005":
                               action = GameAction.SetupAssignCrewRating;
-                              action = GameAction.SetupShowCombatCalendarCheck; // <cgs> TEST
+                              //action = GameAction.SetupShowCombatCalendarCheck; // <cgs> TEST
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                               return;
                            case "GotoMorningBriefing":

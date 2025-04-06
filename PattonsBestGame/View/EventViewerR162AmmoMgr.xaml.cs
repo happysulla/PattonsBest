@@ -386,7 +386,7 @@ namespace Pattons_Best
             case E162Enum.LOAD_EXTRA_CHECK:
                BitmapImage bitMapDieRoll = new BitmapImage();
                bitMapDieRoll.BeginInit();
-               bitMapDieRoll.UriSource = new Uri(MapImage.theImageDirectory + "DieRoll.gif", UriKind.Absolute);
+               bitMapDieRoll.UriSource = new Uri(MapImage.theImageDirectory + "DieRollWhite.gif", UriKind.Absolute);
                bitMapDieRoll.EndInit();
                Image imgDieRoll = new Image { Name = "DieRoll", Source = bitMapDieRoll, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                ImageBehavior.SetAnimatedSource(imgDieRoll, bitMapDieRoll);
