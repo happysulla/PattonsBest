@@ -1492,7 +1492,6 @@ namespace Pattons_Best
       {
          AdvanceTime(report, 15);
          gi.GamePhase = GamePhase.Battle;
-         gi.EventDisplayed = gi.EventActive = "e032";
          return true;
       }
       private bool MovementPhaseRestart(IGameInstance gi, IAfterActionReport report)

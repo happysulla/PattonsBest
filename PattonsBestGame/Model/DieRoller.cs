@@ -76,11 +76,8 @@ namespace Pattons_Best
          IMapPoint mp = GetCanvasCenter(sv, c);
          int randomNum = Utilities.RandomGenerator.Next(0, 10);
          int die1 = RollStationaryDie(mp, randomNum);
-         if( 0 == die1 )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "RollStationaryDie(): die1=0");
-            return 0;
-         }
+         if (0 == die1)
+            die1 = 10;
          myDieRollResults = die1;
          return myDieRollResults;
       }
@@ -94,23 +91,11 @@ namespace Pattons_Best
          IMapPoint mp1 = new MapPoint(mp.X, mp.Y - 0.65 * Utilities.theMapItemSize / Utilities.ZoomCanvas);
          int randomNum = Utilities.RandomGenerator.Next(0, 10);
          int die1 = RollStationaryDie(mp1, randomNum);
-         if (0 == die1)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "RollStationaryDice(): die1=0");
-            return 0;
-         }
          //----------------------------------------------------------------------------------------
          IMapPoint mp2 = new MapPoint(mp.X, mp.Y + 0.65 * Utilities.theMapItemSize / Utilities.ZoomCanvas);
          randomNum = Utilities.RandomGenerator.Next(6, 12);
          int die2 = RollStationaryDie(mp2, randomNum);
-         if (0 == die2)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "RollStationaryDice(): die2=0");
-            return 0;
-         }
-         if (0 == die1)
-            die1 = 10;
-         if ((10 == die1) && (0 == die2))
+         if ((0 == die1) && (0 == die2))
             myDieRollResults = 100;
          else
             myDieRollResults = die1 + 10 * die2;
@@ -126,10 +111,7 @@ namespace Pattons_Best
          int randomNum = Utilities.RandomGenerator.Next(0, 10);
          int die1 = RollMovingDie(sv, c, mp, randomNum);
          if (0 == die1)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "RollMovingDie(): die1=0");
-            return 0;
-         }
+            die1 = 10;
          myDieRollResults = die1;
          return myDieRollResults;
       }
@@ -141,25 +123,13 @@ namespace Pattons_Best
          IMapPoint mp1 = new MapPoint(mp.X, mp.Y - 0.65 * Utilities.theMapItemSize / Utilities.ZoomCanvas);
          int randomNum = Utilities.RandomGenerator.Next(0, 10);
          int die1 = RollMovingDie(sv, c, mp1, randomNum);
-         if (0 == die1)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "RollStationaryDice(): 1-RollMovingDice() returned 0");
-            return 0;
-         }
          //--------------------------------------------------------
          myDieRollResults = 0;
          myCallbackEndRoll = cb;
          IMapPoint mp2 = new MapPoint(mp.X, mp.Y + 0.65 * Utilities.theMapItemSize / Utilities.ZoomCanvas);
          randomNum = Utilities.RandomGenerator.Next(10, 20);
          int die2 = RollMovingDie(sv, c, mp2, randomNum);
-         if (0 == die2)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "RollStationaryDice(): 2-RollMovingDice() returned 0");
-            return 0;
-         }
-         if (0 == die1)
-            die1 = 10;
-         if ((10 == die1) && (0 == die2))
+         if ((0 == die1) && (0 == die2))
             myDieRollResults = 100;
          else
            myDieRollResults = die1 + 10*die2;

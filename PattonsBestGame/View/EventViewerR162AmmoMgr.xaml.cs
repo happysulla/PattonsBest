@@ -987,7 +987,6 @@ namespace Pattons_Best
       //------------------------------------------------------------------------------------
       public void ShowDieResults(int dieRoll)
       {
-         dieRoll = 0; // <cgs> TEST
          StringBuilder sb = new StringBuilder(dieRoll.ToString());
          sb.Append(": ");
          if ( null == myGameInstance )
