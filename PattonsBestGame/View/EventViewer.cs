@@ -870,13 +870,13 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.EnemyStrenthCheck=null");
                      return false;
                   }
-                  Image imge021 = new Image { Width = 100, Height = 100, Name= "MovementResistanceCheck" };
+                  Image imge030 = new Image { Width = 100, Height = 100, Name= "MovementResistanceCheck" };
                   if (EnumResistance.Light == gi.BattleResistance)
-                     imge021.Source = MapItem.theMapImages.GetBitmapImage("c36Light");
+                     imge030.Source = MapItem.theMapImages.GetBitmapImage("c36Light");
                   else if (EnumResistance.Medium == gi.BattleResistance)
-                     imge021.Source = MapItem.theMapImages.GetBitmapImage("c37Medium");
+                     imge030.Source = MapItem.theMapImages.GetBitmapImage("c37Medium");
                   else if (EnumResistance.Heavy == gi.BattleResistance)
-                     imge021.Source = MapItem.theMapImages.GetBitmapImage("c38Heavy");
+                     imge030.Source = MapItem.theMapImages.GetBitmapImage("c38Heavy");
                   else
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.BattleResistance=" + gi.BattleResistance.ToString());
@@ -885,7 +885,21 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("                                      "));
-                  myTextBlock.Inlines.Add(new InlineUIContainer(imge021));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge030));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
+            case "e031": // This event is only shown if battle check resulted in combat
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  Image imge031 = new Image { Width = 150, Height = 150, Name = "BattleStart", Source = MapItem.theMapImages.GetBitmapImage("Combat") }; 
+                  myTextBlock.Inlines.Add(new Run("Combat! Enter Battle Board."));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                     "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge031));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
@@ -1320,6 +1334,10 @@ namespace Pattons_Best
                            action = GameAction.MovementStartAreaRestart;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
+                        case "BattleStart":
+                           action = GameAction.BattleStart;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
                         case "EveningDebriefingStart":
                            action = GameAction.EveningDebriefingStart;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);

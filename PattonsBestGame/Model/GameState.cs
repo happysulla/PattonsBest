@@ -1062,7 +1062,7 @@ namespace Pattons_Best
                      case EnumResistance.Light:
                         if (7 < dieRoll) // battle
                         {
-                           if (false == EnterBattle(gi, lastReport))
+                           if (false == EnterBattleBoard(gi, lastReport))
                            {
                               returnStatus = "EnterBattle() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
@@ -1080,7 +1080,7 @@ namespace Pattons_Best
                      case EnumResistance.Medium:
                         if (5 < dieRoll) // battle
                         {
-                           if (false == EnterBattle(gi, lastReport))
+                           if (false == EnterBattleBoard(gi, lastReport))
                            {
                               returnStatus = "EnterBattle() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
@@ -1098,7 +1098,7 @@ namespace Pattons_Best
                      case EnumResistance.Heavy:
                         if (3 < dieRoll) // battle
                         {
-                           if (false == EnterBattle(gi, lastReport))
+                           if (false == EnterBattleBoard(gi, lastReport))
                            {
                               returnStatus = "EnterBattle() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
@@ -1488,7 +1488,7 @@ namespace Pattons_Best
          gi.MoveStacks.Add(usControl);
          return true;
       }
-      private bool EnterBattle(IGameInstance gi, IAfterActionReport report)
+      private bool EnterBattleBoard(IGameInstance gi, IAfterActionReport report)
       {
          AdvanceTime(report, 15);
          gi.GamePhase = GamePhase.Battle;
@@ -1540,15 +1540,28 @@ namespace Pattons_Best
             case GameAction.ShowCombatCalendarDialog:
             case GameAction.ShowAfterActionReportDialog:
             case GameAction.ShowInventoryDialog:
+            case GameAction.ShowGameFeats:
             case GameAction.ShowRuleListingDialog:
             case GameAction.ShowEventListingDialog:
+            case GameAction.ShowTableListing:
             case GameAction.ShowReportErrorDialog:
             case GameAction.ShowAboutDialog:
-               break;
+            case GameAction.EndGameShowFeats:
             case GameAction.UpdateEventViewerDisplay: // Only change active event
                break;
             case GameAction.UpdateEventViewerActive: // Only change active event
                gi.EventDisplayed = gi.EventActive; // next screen to show
+               break;
+            case GameAction.BattleStart:
+               if( true == gi.IsAdvancingFireChosen )
+               {
+                  gi.EventDisplayed = gi.EventActive = "e033";
+               }
+               else
+               {
+                  gi.EventDisplayed = gi.EventActive = "e034";
+                  gi.DieRollAction = GameAction.BattleActivation;
+               }
                break;
             case GameAction.EndGameClose:
                gi.GamePhase = GamePhase.EndGame;

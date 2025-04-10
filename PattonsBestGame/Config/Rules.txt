@@ -263,6 +263,57 @@ Table to determine if battle occurs.
 <LineBreak/><LineBreak/>
 3)  If battle occurs, mark off 15 minutes, and go to 
 <InlineUIContainer><Button Content='r4.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. "
+r4.6	"<Bold>r4.6  Battle on Battle Board</Bold>
+<LineBreak/><LineBreak/>
+The Battle Board is prepared for battle.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r4.61' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Placement of Advancing Fire <LineBreak/>
+<InlineUIContainer><Button Content='r4.62' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Activation of Enemy Units<LineBreak/>
+<InlineUIContainer><Button Content='r4.63' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Placement of Enemy Units<LineBreak/>
+<InlineUIContainer><Button Content='r4.64' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Resolve Advancing Fire<LineBreak/>
+<InlineUIContainer><Button Content='r4.65' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Ambush Check"
+r4.61	"<Bold>r4.61  Placement of Advancing Fire</Bold>
+<LineBreak/><LineBreak/>
+Place Advancing Fire markes per 
+<InlineUIContainer><Button Content='r22.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r4.62	"<Bold>r4.62  Activation of Enemy Units</Bold>
+<LineBreak/><LineBreak/>
+Consult the 
+<InlineUIContainer><Button Content='Activation' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table for the number and general type of enemy units appearing per 
+<InlineUIContainer><Button Content='r12.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+ <LineBreak/><LineBreak/>
+The specific types of tanks, SPGs, and AT guns are not known until identified during the Spotting Phase of the Battle Round Sequence per 
+<InlineUIContainer><Button Content='r17.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+ <LineBreak/><LineBreak/>
+Roll 2D (x2 for Light, x3 for Medium, and x4 for Heavy resistance)."
+r4.63	"<Bold>r4.63  Placement of Enemy Units</Bold>
+<LineBreak/><LineBreak/>
+Place enemy units according to Battle Board 
+<InlineUIContainer><Button Content='Placement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+Table per 
+<InlineUIContainer><Button Content='r12.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r4.64	"<Bold>r4.64  Resolve Advancing Fire</Bold>
+<LineBreak/><LineBreak/>
+Resolve Advancing Fire, Artillery Support, and Air Strikes on the 
+<InlineUIContainer><Button Content='Friendly Action' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table per 
+<InlineUIContainer><Button Content='r22.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> and 
+<InlineUIContainer><Button Content='r23.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r4.65	"<Bold>r4.65  Ambush Check</Bold>
+<LineBreak/><LineBreak/>
+Roll 1D for possible Ambush and subtract one for rain, falling snow, or fog. If die roll is less than 7, consult appropriate 
+<InlineUIContainer><Button Content='Enemy Advance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Action Table, 
+<InlineUIContainer><Button Content='Enemy Battle' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Action Table, or 
+<InlineUIContainer><Button Content='Enemy Counterattack' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Action Table for each enemy unit per 
+<InlineUIContainer><Button Content='r13.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> and 
+<InlineUIContainer><Button Content='r19.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+ Additionally, roll for random events on the 
+<InlineUIContainer><Button Content='Random Events' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. Then go to 
+<LineBreak/><LineBreak/>
+Regardless of ambush status, continue with
+<InlineUIContainer><Button Content='r4.7' FontFamily='Courier New'  FontSize='12'> 
+to start the fight."
 r4.9	"<Bold>r4.9  Evening Debrief</Bold>
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r4.91' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Rating Improvements<LineBreak/>
@@ -354,7 +405,7 @@ The other four sides are the tank&apos;s left and right front and rear sides.
 <LineBreak/><LineBreak/>
 The facing of your tank has several important implications throughout play, determining what zones your crew can see, what can be shot at by which guns, and where enemy shots are hitting your tank.
 <LineBreak/><LineBreak/>
-                           <InlineUIContainer><Image Name='MapBattleFacing'  Height='300' Width='300'></Image></InlineUIContainer>"
+                      <InlineUIContainer><Image Name='MapBattleFacing'  Height='300' Width='300'></Image></InlineUIContainer>"
 r5.2	"<Bold>r5.2 Tank Card</Bold>
 <LineBreak/><LineBreak/>
 The Tank Card lists the special characteristics of your tank and is used to monitor the actions of your crew, your gun load, and the state of the ready rack. 

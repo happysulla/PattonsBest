@@ -23,6 +23,7 @@ namespace Pattons_Best
       public static EnumMainImage theMainImage = EnumMainImage.MI_Other;
       private Canvas? myCanvas = null;
       private IDieRoller? myDieRoller = null;
+      private System.Windows.Input.Cursor myTargetCursor = null;
       //-------------------------------------------------
       public CanvasImageViewer(Canvas? c, IDieRoller? dr)
       {
@@ -57,6 +58,25 @@ namespace Pattons_Best
          }
          switch (action)
          {
+            case GameAction.UpdateStatusBar:
+               if (null != myTargetCursor) // increase/decrease size of cursor when zoom in or out
+               {
+                  myTargetCursor.Dispose();
+                  double sizeCursor = Utilities.ZoomCanvas * Utilities.ZOOM * Utilities.theMapItemSize;
+                  System.Windows.Point hotPoint = new System.Windows.Point(Utilities.theMapItemOffset, sizeCursor * 0.5); // set the center of the MapItem as the hot point for the cursor
+                  Image img1 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c44AdvanceFire"), Width = sizeCursor, Height = sizeCursor };
+                  myTargetCursor = Utilities.ConvertToCursor(img1, hotPoint);
+                  this.myCanvas.Cursor = myTargetCursor;
+               }
+               break;
+            case GameAction.UpdateNewGame:
+            case GameAction.UpdateLoadingGame:
+            case GameAction.UpdateUndo:
+               if (null != myTargetCursor)
+                  myTargetCursor.Dispose();
+               myTargetCursor = null;
+               this.myCanvas.Cursor = System.Windows.Input.Cursors.Arrow; // get rid of the canvas cursor
+               break;
             case GameAction.RemoveSplashScreen:
                theMainImage = EnumMainImage.MI_Other;
                ShowInitialScreen(myCanvas);
@@ -74,9 +94,18 @@ namespace Pattons_Best
             case GameAction.SetupShowBattleBoard:
             case GameAction.PreparationsDeployment:
             case GameAction.TestingStartPreparations:
+            case GameAction.BattleStart:
                myDieRoller.HideDie();
                theMainImage = EnumMainImage.MI_Battle;
                ShowBattleMap(myCanvas);
+               if( true == gi.IsAdvancingFireChosen )
+               {
+                  double sizeCursor = Utilities.ZoomCanvas * Utilities.ZOOM * Utilities.theMapItemSize;
+                  System.Windows.Point hotPoint = new System.Windows.Point(Utilities.theMapItemOffset, sizeCursor * 0.5); // set the center of the MapItem as the hot point for the cursor
+                  Image img1 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c44AdvanceFire"), Width = sizeCursor, Height = sizeCursor };
+                  myTargetCursor = Utilities.ConvertToCursor(img1, hotPoint);
+                  this.myCanvas.Cursor = myTargetCursor; // set the cursor in the canvas
+               }
                break;
             case GameAction.SetupShowAfterActionReport:
                myDieRoller.HideDie();

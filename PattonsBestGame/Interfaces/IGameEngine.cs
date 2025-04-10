@@ -80,7 +80,6 @@ namespace Pattons_Best
       UpdateNewGame,  // Menu Options
       UpdateGameOptions, 
       UpdateLoadingGame,
-      UpdateLoadingGameReturnToJail,
       UpdateUndo,
 
       TestingStartPreparations,
@@ -178,6 +177,10 @@ namespace Pattons_Best
       MovementResistanceCheckRoll,
       MovementStartAreaRestart,
       MovementExit,
+
+      BattleStart,
+      BattleActivation,
+
 
       EveningDebriefingStart,
       Error
