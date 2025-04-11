@@ -522,13 +522,151 @@ Crew ratings cannot be greater than 10 and never decrease. Ratings cannot improv
 <InlineUIContainer><Button Content='r20.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
 Ratings may also improve during refitting periods per <InlineUIContainer><Button Content='r27.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r12.0	"<Bold>r12.0 Enemy Units</Bold> 
+<LineBreak/><LineBreak/>
+Enemy units of German armed forces engaged by the 4th Armored Division are represented in play by individual vehicles and small weapons teams. They are brought into play when battle is triggered by a roll on the 
+<InlineUIContainer><Button Content='Resistance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. 
+The number and type of enemy units appearing is determined by consulting the 
+<InlineUIContainer><Button Content='Activation' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. 
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r12.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Description<LineBreak/>
+<InlineUIContainer><Button Content='r12.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Activation<LineBreak/>
+<InlineUIContainer><Button Content='r12.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Placement"
+r12.1	"<Bold>r12.1 Description</Bold> 
+<LineBreak/><LineBreak/>
+Enemy units appear in two major types: vehicles and infantry. 
+ <LineBreak/><LineBreak/>
+Vehicle types are:<LineBreak/>
+<InlineUIContainer><Button Content='r12.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Tanks<LineBreak/>
+<InlineUIContainer><Button Content='r12.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Self Propelled Guns (SPGs)<LineBreak/>
+<InlineUIContainer><Button Content='r12.13' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Trucks<LineBreak/>
+<InlineUIContainer><Button Content='r12.14' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Panzerspahwagen (PSW)<LineBreak/>
+<InlineUIContainer><Button Content='r12.15' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Schutzenpanzerwagen (SPW)<LineBreak/>
+ <LineBreak/><LineBreak/>
+Infantry types are:<LineBreak/>
+<InlineUIContainer><Button Content='r12.16' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Light Weapons (LW)<LineBreak/>
+<InlineUIContainer><Button Content='r12.17' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Muchaine Gun (MG) Team<LineBreak/>
+<InlineUIContainer><Button Content='r12.18' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Antitank (AT) Gun
+<LineBreak/><LineBreak/>
+Tank, SPG, and AT guns are printed in black on their front side and red on their back side. When these units first appear, place them red side up. They remain on their red side until they are identified by spotting per 
+<InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+                 <InlineUIContainer><Image Name='c76UnidentifiedAtg'  Height='100' Width='100'></Image></InlineUIContainer>
+     <InlineUIContainer><Image Name='c77UnidentifiedSpg'  Height='100' Width='100'></Image></InlineUIContainer>
+     <InlineUIContainer><Image Name='c78UnidentifiedTank'  Height='100' Width='100'></Image></InlineUIContainer>"
+r12.11	"<Bold>r12.11 Tanks or Panzerkampfwagen (Pz)</Bold> 
+<LineBreak/><LineBreak/>
+Panzer (armored) + kampf (fighting) + wagen (vehicle) = armored fighting vehicle (AFV). Tanks have turrets and appear in four types: 
+<LineBreak/><LineBreak/>
+ -- Pz IV: medium tank<LineBreak/>
+ -- Pz V: Pather medium tank<LineBreak/>
+ -- Pz VIe: Tiger heavy tank<LineBreak/>
+ -- Pz VIb: King Tiger heavy tank
+<LineBreak/><LineBreak/>
+     <InlineUIContainer><Image Name='c79PzIV'  Height='100' Width='100'></Image></InlineUIContainer>
+     <InlineUIContainer><Image Name='c80PzV'  Height='100' Width='100'></Image></InlineUIContainer>
+     <InlineUIContainer><Image Name='c81PzVIe'  Height='100' Width='100'></Image></InlineUIContainer>
+     <InlineUIContainer><Image Name='c82PzVIb'  Height='100' Width='100'></Image></InlineUIContainer>"
+r12.12	"<Bold>r12.12 Self Propelled Gun (SPG)</Bold> 
+<LineBreak/><LineBreak/>
+SPGs have no turret and are designed as assault or anti-tnak guns. They appear in five types:
+<LineBreak/><LineBreak/>
+ -- STuG IIIG: Sturmgeschutz = assault - medium assault gun<LineBreak/>
+ -- Marder II: Marder = marten - medium assault gun<LineBreak/>
+ -- Marder III: medium assault gun<LineBreak/>
+ -- JgdPz IV: Jagdpanzer = armored hunter or tank destroyer - medium tank destroyer<LineBreak/>
+ -- JgdPz 38(t): Hetzer = troublemaker - medium tank destroyer
+<LineBreak/><LineBreak/>
+  <InlineUIContainer><Image Name='c83MarderII'  Height='100' Width='100'></Image></InlineUIContainer>
+  <InlineUIContainer><Image Name='c84MarderIII'  Height='100' Width='100'></Image></InlineUIContainer>
+  <InlineUIContainer><Image Name='c85STuGIIIg'  Height='100' Width='100'></Image></InlineUIContainer>
+  <InlineUIContainer><Image Name='c86JgdPzIV'  Height='100' Width='100'></Image></InlineUIContainer>
+  <InlineUIContainer><Image Name='c87JgdPz38t'  Height='100' Width='100'></Image></InlineUIContainer>"
+r12.13	"<Bold>r12.13 Truck</Bold> 
+<LineBreak/><LineBreak/>
+Any medium truck of the period
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c88Truck' Height='100' Width='100'></Image></InlineUIContainer>"
+r12.14	"<Bold>r12.14 Panzerspahwagen (PSW)</Bold> 
+<LineBreak/><LineBreak/>
+Armored scout car.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c89Psw232' Height='100' Width='100'></Image></InlineUIContainer>"
+r12.15	"<Bold>r12.15Schutzenpanzerwagen (SPW)</Bold> 
+<LineBreak/><LineBreak/>
+Armored infantry vehicle, i.e., armored personnel carrier.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c90Spw251' Height='100' Width='100'></Image></InlineUIContainer>"
+r12.16	"<Bold>r12.16 Light Weapons (LW)</Bold> 
+<LineBreak/><LineBreak/>
+Light weapons units represent a source of infantry weapons fire.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c91Lw' Height='100' Width='100'></Image></InlineUIContainer>"
+r12.17	"<Bold>r12.17 Machine Gun (MG) Team</Bold> 
+<LineBreak/><LineBreak/>
+Represents the fire of machine gun team.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c92MgTeam' Height='100' Width='100'></Image></InlineUIContainer>"
+r12.18	"<Bold>r12.18 Antitank (AT)</Bold> 
+<LineBreak/><LineBreak/>
+Pazerabwherkanone (Pak) = tank defense cannon. These represent an AT gun and its crew. AT Guns appear in three types: 50L (PaK38), 75L (PaK40), and 88LL (PaK43).
+<LineBreak/><LineBreak/>
+             <InlineUIContainer><Image Name='c93Pak38'  Height='100' Width='100'></Image></InlineUIContainer>
+     <InlineUIContainer><Image Name='c94Pak40'  Height='100' Width='100'></Image></InlineUIContainer>
+     <InlineUIContainer><Image Name='c95Pak43'  Height='100' Width='100'></Image></InlineUIContainer>"
+r12.2	"<Bold>r12.2 Activation</Bold> 
+<LineBreak/><LineBreak/>
+When battle is triggered on the 
+<InlineUIContainer><Button Content='Resistance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table, roll for the appearance of enemy units on the 
+<InlineUIContainer><Button Content='Activation' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table. The number of enemy units initially appearing depends on the level of resistance in the area:<LineBreak/>
+  2 = Light<LineBreak/>
+  3 = Medium<LineBreak/>
+  4 = Heavy
+<LineBreak/><LineBreak/>
+For each unit that will appear, roll once on the Activation Table under the column of the scenario type. This roll determines the type of unit that will be placed on the Battle Board."
+r12.3	"<Bold>r12.3 Placement</Bold> 
+<LineBreak/><LineBreak/>
+Placing enemy units on the Battle Board consists of up to four steps to determine:
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r12.31' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Sector<LineBreak/>
+<InlineUIContainer><Button Content='r12.32' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Range<LineBreak/>
+<InlineUIContainer><Button Content='r12.33' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Vehicle Facing<LineBreak/>
+<InlineUIContainer><Button Content='r12.34' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Target Terrain
+<LineBreak/><LineBreak/>
+There is no limit on the number of enemy units that may be placed in the same sector, at the same range, and in the same terrain."
+r12.31	"<Bold>r12.31 Sector</Bold> 
+<LineBreak/><LineBreak/>
+The sector to place a new enemy unit is determined by a 1D roll as explained in 
+<InlineUIContainer><Button Content='r5.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r12.32	"<Bold>r12.32 Range</Bold> 
+<LineBreak/><LineBreak/>
+To determine the range at which the enemy will be placed, roll 1D on Part I of the Battle Board 
+<InlineUIContainer><Button Content='Placement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table. Range will depend on the unit type and the type of Movement Board area where the battle is taking place, as well as the die roll."
+r12.33	"<Bold>r12.33 Vehicle Facing</Bold> 
+<LineBreak/><LineBreak/>
+Roll 1D on Part II of the Battle Board 
+<InlineUIContainer><Button Content='Placement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table to determine the facing of the enemy vehicles. For front, side, or rear facing; position the front, side or rear of the vehcile counter, respectively toward your Sherman tank counter."
+r12.34	"<Bold>r12.34 Target Terrain</Bold> 
+<LineBreak/><LineBreak/>
+Roll 1D on Part III of the Battle Board 
+<InlineUIContainer><Button Content='Placement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table to determine the terrain occupied by the enemy unit. The table also indicates if the unit is hulled down or moving in the open. Mark units hall down, in woods, in a fortification, in a building, or moving in the open with the appropriate counter. Units in the open have no marker.
+<LineBreak/><LineBreak/>
+       <InlineUIContainer><Image Name='c14HullDown'  Height='50' Width='50'></Image></InlineUIContainer>
+       <InlineUIContainer><Image Name='c97TerrainWoods'  Height='50' Width='50'></Image></InlineUIContainer>
+       <InlineUIContainer><Image Name='c98TerrainFort'  Height='50' Width='50'></Image></InlineUIContainer>
+       <InlineUIContainer><Image Name='c96TerrainBuilding'  Height='50' Width='50'></Image></InlineUIContainer>
+       <InlineUIContainer><Image Name='c13Moving'  Height='50' Width='50'></Image></InlineUIContainer>"
 r16.0	"<Bold>r16.0 Ammunition (Ammo)</Bold> 
 <LineBreak/><LineBreak/>
 Ammo is loaded into your tank at the beginning of each scenerio as part of morning briefing 
 <InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
 <LineBreak/><LineBreak/>
-Each model and variant of the Sherman tank has a limit on its normal load and ammo, both for its man gun and MGs as shown on it Tank Card 
-.  
+Each model and variant of the Sherman tank has a limit on its normal load and ammo, both for its man gun and MGs as shown on it Tank Card .  
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r16.0a' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Details<LineBreak/>
 <InlineUIContainer><Button Content='r16.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Ammo Types<LineBreak/>
@@ -941,7 +1079,7 @@ Mark off 1D/2 (round down) HE rounds and .30 caliber MG ammo boxes regardless of
 <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r22.12	"<Bold>r22.12 Advancing Fire Markers</Bold>
 <LineBreak/><LineBreak/>
-Place up to six Advance Fire markers anywhere on the Battle Board except in Sectors 1, 2, 3, and the long range sectors 6-8. You may place more than one in a zone. For every 3 friendly tank losses (roudned up), omit one Advance Fire marker.
+Place up to six Advance Fire markers anywhere on the Battle Board except in Sectors 1, 2, 3, and the long range sectors 6-8. You may place more than one in a zone. For every 3 friendly tank losses (rounded up), omit one Advance Fire marker.
 <LineBreak/><LineBreak/>
                                         <InlineUIContainer><Image Name='c44AdvanceFire'  Height='80' Width='80'></Image></InlineUIContainer>"
 r22.13	"<Bold>r22.13 Advancing Fire Resolution</Bold>
