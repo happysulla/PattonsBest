@@ -1028,6 +1028,7 @@ namespace Pattons_Best
                   break;
                case GameAction.MovementAdvanceFire:
                   gi.IsAdvancingFireChosen = true;
+                  gi.AdvancingFireMarkerCount = 6 - (int)Math.Ceiling((double)gi.FriendlyTankLossCount / 3.0);  // six minus friendly tank/3 (rounded up)
                   if (false == EnterBoardArea(gi))
                   {
                      returnStatus = "SetAirStrikeCounter() returned false";
@@ -1055,6 +1056,7 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.MovementResistanceCheckRoll;
                   break;
                case GameAction.MovementResistanceCheckRoll:
+                  dieRoll = 10; // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   switch (gi.BattleResistance)

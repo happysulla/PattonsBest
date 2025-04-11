@@ -264,10 +264,12 @@ e033	"<Bold>e033 Placing Advancing Fire Markers</Bold>
 <InlineUIContainer><Button Content='r4.61' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
 Place Advancing Fire Markers available to you per 
-<InlineUIContainer><Button Content='r22.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> .
+<InlineUIContainer><Button Content='r22.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+Click one of highlighted regions to place. 
 <LineBreak/><LineBreak/>
-Click one of highlighted regions where Advancing Fire Marker is placed. You place up to six minus one marker for every three friendly tank losses (rounded up) . 
-You may place more than one in a zone. The status bar on the bottom tracks how many you have placed."
+You place up to six minus one marker for every three friendly tank losses (rounded up) . You may place more than one in a zone. 
+<LineBreak/><LineBreak/>
+The status bar on the bottom shows how many are remaining to place."
 e034	"<Bold>e034 Activation of Enemy Units</Bold> 
 <InlineUIContainer><Button Content='r4.62' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>

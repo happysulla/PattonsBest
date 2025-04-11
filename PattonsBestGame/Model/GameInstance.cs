@@ -52,6 +52,8 @@ namespace Pattons_Best
       public bool IsTurretActive { set; get; } = false;
       public bool IsAirStrikePending { set; get; } = false;
       public bool IsAdvancingFireChosen { set; get; } = false;
+      public int AdvancingFireMarkerCount { set; get; } = 0;
+      public int FriendlyTankLossCount { set; get; } = 0;
       public EnumResistance BattleResistance { set; get; } = EnumResistance.None;
       //------------------------------------------------
       public IMapItemMoves MapItemMoves { get; set; } = new MapItemMoves();

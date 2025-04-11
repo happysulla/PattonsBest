@@ -95,6 +95,15 @@ namespace Pattons_Best
             myStatusBar.Items.Add(labelAirStrike);
             myStatusBar.Items.Add(imgAirStrike);
          }
+         //-------------------------------------------------------
+         if (true == gi.IsAdvancingFireChosen)
+         {
+            myStatusBar.Items.Add(new Separator());
+            Label labelAF = new Label() { FontFamily = myFontFam, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = gi.AdvancingFireMarkerCount.ToString() };
+            Image imgAF = new Image { Source = MapItem.theMapImages.GetBitmapImage("c44AdvanceFire"), Width = 30, Height = 30 };
+            myStatusBar.Items.Add(labelAF);
+            myStatusBar.Items.Add(imgAF);
+         }
       }
       //-----------------------------------------------------------------
       private void ButtonEventActive_Click(object sender, RoutedEventArgs e)
