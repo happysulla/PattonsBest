@@ -441,9 +441,7 @@ r5.23	"<Bold>r5.23 Gun Loads</Bold>
 In the gun load section, place the Gun Load marker in the box of the ammo round loaded in the gun. Also markhere what round type you want to reload after firing (ammo reload marker), and whether you will draw reloads from the ready rack (ready rack ammo reload marker) per 
 <InlineUIContainer><Button Content='r16.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> .
 <LineBreak/><LineBreak/>
-                 <InlineUIContainer><Image Name='c17GunLoad'  Height='100' Width='100'></Image></InlineUIContainer>
-     <InlineUIContainer><Image Name='c29AmmoReload'  Height='100' Width='100'></Image></InlineUIContainer>
-     <InlineUIContainer><Image Name='c30ReadyRackAmmoReload'  Height='100' Width='100'></Image></InlineUIContainer>"
++B93     <InlineUIContainer><Image Name='c30ReadyRackAmmoReload'  Height='100' Width='100'></Image></InlineUIContainer>"
 r5.24	"<Bold>r5.24 Ready Rack</Bold>
 <LineBreak/><LineBreak/>
 In the ready rack section, place the Rounds Left markers to show what type of rounds are in the ready rack and how many of each per 
@@ -753,6 +751,179 @@ as direct fire against an enemy unit. Subtract rating from the To Kill roll. Cre
 <InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
                                       <InlineUIContainer><Image Name='c74FireSubMg'  Height='100' Width='100'></Image></InlineUIContainer>"
+r9.0	"<Bold>r9.0 Sherman Main Gun Fire</Bold> 
+<LineBreak/><LineBreak/>
+The American versions of the Sherman tank available for play are armed with one of two types of main gun: either a 75mm or 76mm gun. The &quot;L&quot; denotes improved long range capability. 
+<LineBreak/><LineBreak/>
+The Main gun is directed to fire by placing either a Fire Main Gun or Ratate and Fire marker in the gunner&apos;s box on the Tank Card. The gun cannot be fired if it is not loaded or is malfunctioning. 
+<LineBreak/><LineBreak/>
+Resolution of a shot from the main gun requires five steps: 1.) Selecting eligible target 2.) Selecting Direct Fire or Area Fire 3.) Hitting the target 4.) For vehicle targets only, determining where the target was hit, and 5.) Determining if the target is destroyed. 
+<LineBreak/><LineBreak/>
+However, you do not see the results of any hits until you have finished firing.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r9.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Selecting a Target<LineBreak/>
+<InlineUIContainer><Button Content='r9.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Direct or Area Fire<LineBreak/>
+<InlineUIContainer><Button Content='r9.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Hitting the Target<LineBreak/>
+<InlineUIContainer><Button Content='r9.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Rate of Fire<LineBreak/>
+<InlineUIContainer><Button Content='r9.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Killing the Target<LineBreak/>
+<InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Ammo Loads and Reloads"
+r9.1	"<Bold>r9.1 Selecting a Target</Bold> 
+<LineBreak/><LineBreak/>
+Only those enemy units that have been spotted per 
+<InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> may be fired on. 
+The main gun may only fire at a target in the sector to the turret&apos;s front. 
+<LineBreak/><LineBreak/>
+By ordering the gunner to rotate and fire, the turret may be swung up to any sector and still fire but at a penalty per 
+<InlineUIContainer><Button Content='To Hit Target' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
+<LineBreak/><LineBreak/>
+The gun may be fired at targets at any range. The effectiveness of fire drops at longer ranges. 
+<LineBreak/><LineBreak/>
+The main gun may be fired at only one unit per battle round, regardless of how many Rate of Fire shots are taken. 
+<LineBreak/><LineBreak/>
+Infantry targets are LW, MG, and AT guns. All other enemy units are vehicles."
+r9.2	"<Bold>r9.2 Direct or Area Fire</Bold> 
+<LineBreak/><LineBreak/>
+Direct Fire represents aiming a shot at a specific target. Area Fire represents shooting into a general area. 
+<LineBreak/><LineBreak/>
+All AP and HVAP shots must use Direct Fire or they have no effect. 
+<LineBreak/><LineBreak/>
+WP and HCBI shots must use Area Fire.
+<LineBreak/><LineBreak/>
+HE ammo can use either Direct or Area Fire."
+r9.3	"<Bold>r9.3 Hitting the Target</Bold> 
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r9.31' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> To Hit Table<LineBreak/>
+<InlineUIContainer><Button Content='r9.32' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> To Hit Modifiers<LineBreak/>
+<InlineUIContainer><Button Content='r9.33' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Marking Target<LineBreak/>
+<InlineUIContainer><Button Content='r9.34' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Rate of Fire Roll<LineBreak/>
+<InlineUIContainer><Button Content='r9.35' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Target Acquisition<LineBreak/>"
+r9.31	"<Bold>r9.31 To Hit Table</Bold> 
+<LineBreak/><LineBreak/>
+Determine whether the target fired on is hit by consulting the correct row on the 
+<InlineUIContainer><Button Content='To Hit Target' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
+<LineBreak/><LineBreak/>
+The correct row will depend on the type of gun you have (75 or 76L), the type of target (infantry or vheicle), the type of ammo fired, and whether you are using Direct Fire or Area Fire.
+<LineBreak/><LineBreak/>
+At the top of the table are shown the basic To Hit numbers for each type of fire. You must roll the number shown or less on 2D (after modifications) to score a hit."
+r9.32	"<Bold>r9.32 To Hit Modifiers</Bold> 
+<LineBreak/><LineBreak/>
+At the bottom of the table are shown various factors that may modify the number rolled upward or downward. Smoke and certain types of weather on the 
+<InlineUIContainer><Button Content='Weather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table may half the basic To Hit number several times before any modifications."
+r9.33	"<Bold>r9.33 Marking Target</Bold> 
+<LineBreak/><LineBreak/>
+If a hit is core with AP or HE ammo, mark the target with an appropriate Hit marker. 
+<LineBreak/><LineBreak/>
+If the target is hit with a smoke round, place a Smoke marker in the zone.
+<LineBreak/><LineBreak/>
+                 <InlineUIContainer><Image Name='c100ApHit'  Height='100' Width='100'></Image></InlineUIContainer>
+     <InlineUIContainer><Image Name='c101HeHit'  Height='100' Width='100'></Image></InlineUIContainer>
+     <InlineUIContainer><Image Name='c102SmokeHit'  Height='100' Width='100'></Image></InlineUIContainer>"
+r9.34	"<Bold>r9.34 Rate of Fire Roll</Bold> 
+<LineBreak/><LineBreak/>
+If you achieve a Rate of Fire with your To Hit roll, you may immediately fire again per the 
+<InlineUIContainer><Button Content='Rate of Fire' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. 
+If your roll To Hit does not achieve a Rate of Fire, your firing is finished for this round."
+r9.35	"<Bold>r9.35 Target Acquisition</Bold> 
+<LineBreak/><LineBreak/>
+After your first shot at a target, place an &quot;Acquired Target 1&quot; marker on it. Place an &quot;Acquired Target 2&quot; marker on a target that already has one if you shoot a second time. 
+<LineBreak/><LineBreak/>
+Acquired target modifiers to the To Hit dice rolls apply only to targets marked with the acquired markers. 
+<LineBreak/><LineBreak/>
+Only one target at a time may be acquired by your tank. Acquired markers are removed if your tank moves or pivots unless your crew has a gyrostablizer per 
+<InlineUIContainer><Button Content='r27.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+<LineBreak/><LineBreak/>
+Additionally, the marker is removed if your turret rotates away from the target&apos;s zone or if you fire at a different target.
+<LineBreak/><LineBreak/>
+                           <InlineUIContainer><Image Name='c103Acquired1'  Height='100' Width='100'></Image></InlineUIContainer>
+     <InlineUIContainer><Image Name='c104Acquired2'  Height='100' Width='100'></Image></InlineUIContainer>"
+r9.4	"<Bold>r9.4 Rate of Fire</Bold> 
+<LineBreak/><LineBreak/>
+Achieving Rate of Fire allows for your crew to immediately fire another shot from the main gun. When a To Hit roll is made firing the main gun, the number rolled also deteremines whether the gun has acheived Rate of Fire.
+<LineBreak/><LineBreak/>
+If the roll is low enough (30 or less for a 75mm gun and 20 or less for a 76L mm gun), you may immediately elect to fire again. You can continue to fire again until either the Rate of Fire roll is not acheived or the ammo runs out.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r9.31' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Rate of Fire Modifiers<LineBreak/>
+<InlineUIContainer><Button Content='r9.32' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Successive Rate of Fire"
+r9.41	"<Bold>r9.41 Rate of Fire Modifiers</Bold> 
+<LineBreak/><LineBreak/>
+The 
+<InlineUIContainer><Button Content='Rate of Fire' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table details a number of modifiers that may affect the number needed to achieve the Rate of Fire. 
+<LineBreak/><LineBreak/>
+These modifiers affect only the Rate of Fire roll and have no effect on the To Hit dice roll."
+r9.42	"<Bold>r9.42 Successive Rate of Fire</Bold> 
+<LineBreak/><LineBreak/>
+Successive Rate of Fire shots must be fired at the original target even though you do not know the results of previous hits. You may not switch targets during a round."
+r9.5	"<Bold>r9.5 Killing the Target</Bold> 
+<LineBreak/><LineBreak/>
+For each hit against a target, consult one of the To Kill tables. The correct table is used to determine if the target is knocked out (KO&apos;s).
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r9.51' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> HE versus Infantry Targets<LineBreak/>
+<InlineUIContainer><Button Content='r9.52' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> AP vs Vehicles<LineBreak/>
+<InlineUIContainer><Button Content='r9.53' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> HE versus Vehicles"
+r9.51	"<Bold>r9.51 HE versus Infantry Targets</Bold> 
+<LineBreak/><LineBreak/>
+Both Area and Direct Fire versus infantry targets by 75 or 76L guns is resolved on the same 
+<InlineUIContainer><Button Content='To Kill Infantry' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
+<LineBreak/><LineBreak/>
+At the top of the table are listed the base numbers which must be rolled To Kill the target. 
+<LineBreak/><LineBreak/>
+At the buttom of the table are listed factors which may modify the number rolled."
+r9.52	"<Bold>r9.52 AP vs Vehicles</Bold> 
+<LineBreak/><LineBreak/>
+For each hit against a target, consult one of the corresponding tables: 
+<InlineUIContainer><Button Content='AP To Kill (75)' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> or 
+<InlineUIContainer><Button Content='AP To Kill (76)' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+All tables show a number for each type of enemy vehicle target for three different facings (front, side, and rear), three different ranges (close, medium, and long), and in some cases for both turrent or hull hits.
+<LineBreak/><LineBreak/>
+Where different numbers are shown for turret and hull hits, roll 1D on the 
+<InlineUIContainer><Button Content='Hit Location Tank' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table to determine where the shell hits.
+<LineBreak/><LineBreak/>
+If the number rolled is less than or equal to the number shown on the table, the target is KO&apos;ed."
+r9.53	"<Bold>r9.53 HE versus Vehicles</Bold> 
+<LineBreak/><LineBreak/>
+For each hit against a target, consult one of the corresponding tables: 
+<InlineUIContainer><Button Content='HE To Kill (75)' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> or 
+<InlineUIContainer><Button Content='HE To Kill (76)' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+In general, HE is not an effective weapon against vehicles, but it can kill those with light armor and trucks. 
+<LineBreak/><LineBreak/>
+All tables show a number for each type of enemy vehicle target for three different facings (front, side, and rear), three different ranges (close, medium, and long), and in some cases for both turrent or hull hits.
+<LineBreak/><LineBreak/>
+Where different numbers are shown for turret and hull hits, roll 1D on the 
+<InlineUIContainer><Button Content='Hit Location Tank' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table to determine where the shell hits."
+r9.6	"<Bold>r9.6 Ammo Loads and Reloads</Bold> 
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r9.61' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> First Ammo Load<LineBreak/>
+<InlineUIContainer><Button Content='r9.62' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Ammo Reload"
+r9.61	"<Bold>r9.61 First Ammo Load</Bold> 
+<LineBreak/><LineBreak/>
+During the Prepare for Battle step of the Sequence of Play 
+<InlineUIContainer><Button Content='r4.43' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+, you have the opportunity to choose an ammo load for your main gun. When the battle round sequence begins, this is the type of ammo in your gun and what you will fire with your first shot. 
+<LineBreak/><LineBreak/>
+If you elect to leave your gun unloaded, you may not fire in the first battle round, but you may load the gun as you choose preparing for the second round. 
+<LineBreak/><LineBreak/>
+If you choose to use Advancing Fire when entering a new area, you must load your gun with HE. Mark the ammo load by placing the Gun Load marker in the correct ammo box on the Tank Card. Only those ammo types listed on the Tank Card can be loaded and fired from your gun. 
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c17GunLoad'  Height='100' Width='100'></Image></InlineUIContainer>"
+r9.62	"<Bold>r9.62 Ammo Reload</Bold> 
+<LineBreak/><LineBreak/>
+During 
+<InlineUIContainer><Button Content='r4.73.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+fo the Battle Round Sequence, you must mark what type of ammo you want reloaded if you are firing your main gun. If you acheive Rate of Fire 
+<InlineUIContainer><Button Content='r9.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+and wish to continue firing, your additional shots will all be the type of ammo selected as your reload.  
+<LineBreak/><LineBreak/>
+During this step, also mark whether you want to draw ammo from your ready rack. Doing so increases your chance of achieving Rate of Fire.
+<LineBreak/><LineBreak/>
+Ammo is marked off as used only after being fired. Loading ammo into the gun does not use it as it is possible to change gun loads. Place the Gun Reload marker (and Ready Rack Ammo Reload marker if desired) in the Gun Load section of the Tank Card.
+<LineBreak/><LineBreak/>
+If you choose to use Advancing Fire 
+<InlineUIContainer><Button Content='r22.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+ when entering a new area, you must load your gun with HE. Mark the ammo load by placing the Gun Load marker in the correct ammo box on the Tank Card. Only those ammo types listed on the Tank Card can be loaded and fired from your gun. 
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c29AmmoReload'  Height='100' Width='100'></Image></InlineUIContainer>"
 r12.0	"<Bold>r12.0 Enemy Units</Bold> 
 <LineBreak/><LineBreak/>
 Enemy units of German armed forces engaged by the 4th Armored Division are represented in play by individual vehicles and small weapons teams. They are brought into play when battle is triggered by a roll on the 
