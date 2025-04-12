@@ -116,7 +116,7 @@
             <Paragraph>
                <Run Text='Dice Roll Modifier:'></Run><LineBreak/>
                <Run Text='  - Drivers Rating'></Run><LineBreak/>
-               <Run Text='  - Commanders rating if commander directing movement from open hatch     '></Run><LineBreak/>
+               <Run Text='  - Commander&apos;s rating if commander directing movement from open hatch     '></Run><LineBreak/>
                <Run Text='  - 1/2 Commanders rating (round down) if commander directing movement from vision cupola'></Run><LineBreak/>
                <Run Text='  -2 Tank has HVSS suspension'></Run><LineBreak/>
                <Run Text='  +5 Driver button up'></Run><LineBreak/>
@@ -333,6 +333,7 @@
                </Italic>
                <LineBreak/>
                <Run Text='     ^      = Direction of movement of tank'></Run>
+               <LineBreak/>
                <Run Text='     ->    = Displacement of enemy unit due to your tank move'></Run>
                <LineBreak/>
             </Paragraph>

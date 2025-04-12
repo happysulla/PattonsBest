@@ -82,7 +82,7 @@ r3.0	"<Bold>r3.0 Game Tables</Bold>
 Throughout the game, the notation 1D  means roll one die and 2D means rolling two die. The notation 1D/2 means roll one die and dividing the number by half.
 <LineBreak/><LineBreak/>When rolled together, the colored die is the tens digit and the white die is the ones digit. A roll of '00' represents 100. 
 <LineBreak/><LineBreak/>Many tables include additioinal factors that modify the randomly generated number of the dice roll. For example, when rolling on the 
-<InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table, 
+<InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Repair Table, 
 if the repairing crewman has a rating of 5, the roll modifier to repair is -5. "
 r4.0	"<Bold>r4.0 Sequence of Play</Bold> 
 <LineBreak/><LineBreak/>
@@ -522,6 +522,237 @@ Crew ratings cannot be greater than 10 and never decrease. Ratings cannot improv
 <InlineUIContainer><Button Content='r20.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
 Ratings may also improve during refitting periods per <InlineUIContainer><Button Content='r27.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r8.0	"<Bold>r8.0 Crew Actions</Bold> 
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r8.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Commander (C)<LineBreak/>
+<InlineUIContainer><Button Content='r8.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Gunner (G)<LineBreak/>
+<InlineUIContainer><Button Content='r8.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Loader (L)<LineBreak/>
+<InlineUIContainer><Button Content='r8.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Driver (D)<LineBreak/>
+<InlineUIContainer><Button Content='r8.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Assistant Driver (A)<LineBreak/>
+<InlineUIContainer><Button Content='r8.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Non-Specific Crew Actions"
+r8.1	"<Bold>r8.1 Commander (C)</Bold> 
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r8.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Direct Movement<LineBreak/>
+<InlineUIContainer><Button Content='r8.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Direct Fire
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c07Commander'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.11 	"<Bold>r8.11 Direct Movement</Bold> 
+<LineBreak/><LineBreak/>
+Direct the movement of the tank. This will reduce the chance of an accident per the 
+<InlineUIContainer><Button Content='Movement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
+However, the commander have no effect on any fire. You may continue to spot per 
+<InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> .
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c48CDirectMove'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.12	"<Bold>r8.12 Direct Fire</Bold> 
+<LineBreak/><LineBreak/>
+Direct the fire of the main gun or any one machine gun. Subtract the commander&apos;s crew rating from the To Hit roll on the
+<InlineUIContainer><Button Content='To Hit Target' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table 
+for the main gun fire or the To Kill roll for the 
+<InlineUIContainer><Button Content='Sherman MG' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. You may continue to spot per 
+<InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> .
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c49CDirectFire'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.2	"<Bold>r8.2 Gunner (G)</Bold> 
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r8.21' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Fire Main Gun<LineBreak/>
+<InlineUIContainer><Button Content='r8.22' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Fire Co-Axial MG<LineBreak/>
+<InlineUIContainer><Button Content='r8.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Rotate Turret<LineBreak/>
+<InlineUIContainer><Button Content='r8.24' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Rotate Turret/Fire Main Gun<LineBreak/>
+<InlineUIContainer><Button Content='r8.25' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Repair Main Gun
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c11Gunner'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.21	"<Bold>r8.21 Fire Main Gun</Bold> 
+<LineBreak/><LineBreak/>
+Subtract gunner&apos;s rating from the To Hit roll for the main gun. Gunner may not spot. 
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c50GFIreMainGun'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.22	"<Bold>r8.22 Fire Co-Axial MG</Bold> 
+<LineBreak/><LineBreak/>
+Subtract gunner&apos;s rating from the To Kill roll for the co-axial MG. You may continue to spot per 
+<InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> .
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c51GFireCoaxialMg'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.23	"<Bold>r8.23 Rotate Turret</Bold> 
+<LineBreak/><LineBreak/>
+Turn turret to face any sector. May spot only in the sector of the turret's front facing after rotation per per 
+<InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> .
+<LineBreak/><LineBreak/>
+                                       <InlineUIContainer><Image Name='c52GRotateTurret'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.24	"<Bold>r8.24 Rotate Turret/Fire Main Gun</Bold> 
+<LineBreak/><LineBreak/>
+Turn turret to face any sector and fire main gun with a penalty per 
+<InlineUIContainer><Button Content='To Hit Target' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table, i.e., +10 per sector rotated. 
+May not spot.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c53GRotateTurretFireMainGun'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.25	"<Bold>r8.25 Repair Main Gun</Bold> 
+<LineBreak/><LineBreak/>
+Subtract the gunner&apos;s rating from roll to repair the main gun on the 
+<InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Repair 
+Table. Can only be used if the loader is also attempting to repair the main gun per 
+<InlineUIContainer><Button Content='r8.32' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+You may not spot.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c57GRepairMainGun'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.3	"<Bold>r8.3 Loader (L)</Bold> 
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r8.31' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Load<LineBreak/>
+<InlineUIContainer><Button Content='r8.32' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Repair Main Gun<LineBreak/>
+<InlineUIContainer><Button Content='r8.33' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Repair Co-Axial MG<LineBreak/>
+<InlineUIContainer><Button Content='r8.34' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Fire Mortar<LineBreak/>
+<InlineUIContainer><Button Content='r8.35' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Change Gun Load<LineBreak/>
+<InlineUIContainer><Button Content='r8.36' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Restock Ready Rack
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c09Loader'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.31	"<Bold>r8.31 Load</Bold> 
+<LineBreak/><LineBreak/>
+If no marker is placed in the loader&apos;s box, he will automatically reload the main gun if it is fired. Subtract the loader&apos;s rating from the To Hit roll for the main gun. May spot normally unless the main gun is being fired. If the main gun is being fired, the loader may not spot.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c54LLoad'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.32	"<Bold>r8.32 Repair Main Gun</Bold> 
+<LineBreak/><LineBreak/>
+Roll on the 
+<InlineUIContainer><Button Content='Gun Malfunctioning' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Repair Table 
+to repair main gun. May not spot. 
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c55LRepairMainGun'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.33	"<Bold>r8.33 Repair Co-Axial MG</Bold> 
+<LineBreak/><LineBreak/>
+Roll on the 
+<InlineUIContainer><Button Content='Gun Malfunctioning' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Repair Table 
+to repair malfunctioning co-axial MG. May not spot.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c55LRepairMainGun'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.34	"<Bold>r8.34 Fire Mortar</Bold> 
+<LineBreak/><LineBreak/>
+Firing the 2 inch smoke mortar places a smoke marker in close zone to the turret&apos;s front. Also automatically reloads the mortar if smoke bombs are still available. May not spot.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c58LFireMortar'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.35	"<Bold>r8.35 Change Gun Load</Bold> 
+<LineBreak/><LineBreak/>
+Change the ammo round in the main gun to any round still available. May not spot.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c59LChangeGunLoad'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.36	"<Bold>r8.36 Restock Ready Rack</Bold> 
+<LineBreak/><LineBreak/>
+Replace rounds in the ready rack from those still available. May not spot.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c60LRestockReadyRack'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.4 	"<Bold>r8.4 Driver (D)</Bold> 
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r8.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Stop<LineBreak/>
+<InlineUIContainer><Button Content='r8.42' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Forward<LineBreak/>
+<InlineUIContainer><Button Content='r8.43' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Forward to Hull Down<LineBreak/>
+<InlineUIContainer><Button Content='r8.44' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Reverse<LineBreak/>
+<InlineUIContainer><Button Content='r8.45' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Reverse to Hull Down<LineBreak/>
+<InlineUIContainer><Button Content='r8.46' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Pivot Tank
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c08Driver'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.41	"<Bold>r8.41 Stop</Bold> 
+<LineBreak/><LineBreak/>
+If no action marker is placed in the driver&apos;s box, he automatically stops the tank. Remove any previously placed Moving marker from the tank. He may spot per 
+<InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c61DStop'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.42	"<Bold>r8.42 Forward</Bold> 
+<LineBreak/><LineBreak/>
+Tank moves forward. He may spot per 
+<InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c62DForward'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.43	"<Bold>r8.43 Forward to Hull Down</Bold> 
+<LineBreak/><LineBreak/>
+Tank moves forward looking for a hull down position. He may spot per 
+<InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c63DForwardToHullDown'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.44	"<Bold>r8.44 Reverse</Bold> 
+<LineBreak/><LineBreak/>
+Tank moves backward. He may spot per 
+<InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c64DReverse'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.45	"<Bold>r8.45 Reverse to Hull Down</Bold> 
+<LineBreak/><LineBreak/>
+Tank moves backward looking for a hull down position. He may spot per 
+<InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> .
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c65DReverseToHullDown'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.46	"<Bold>r8.46 Pivot Tank</Bold> 
+<LineBreak/><LineBreak/>
+Tank may change facing to any sector. Pivoting tank loses hull down position. He may spot per 
+<InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c66DPivotTank'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.5	"<Bold>r8.5 Assistant Driver (A)</Bold> 
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r8.51' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Fire Bow MG<LineBreak/>
+<InlineUIContainer><Button Content='r8.52' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Repair Bow MG<LineBreak/>
+<InlineUIContainer><Button Content='r8.53' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Pass Ammo
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c10Assistant'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.51	"<Bold>r8.51 Fire Bow MG</Bold> 
+<LineBreak/><LineBreak/>
+Subtract the assistant&apos;s rating from To Kill roll for the bow MG. He may spot per 
+<InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c67AFireBowMg'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.52	"<Bold>r8.52 Repair Bow MG</Bold> 
+<LineBreak/><LineBreak/>
+Roll on the 
+<InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Repair Table 
+to repair the malfunctioning bow MG. May not spot.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c68ARepairBowMg'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.53	"<Bold>r8.53 Pass Ammo</Bold> 
+<LineBreak/><LineBreak/>
+Assistant Driver passes ammo to speed reload time. Modify the To Hit roll by -10 when determining rate of fire per 
+<InlineUIContainer><Button Content='r9.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+This action cannot be taken when reloading from ready rack 
+<InlineUIContainer><Button Content='r5.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. May not spot
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c69APassAmmo'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.6	"<Bold>r8.6 Non-Specific Crew Actions</Bold> 
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r8.61' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Throw Smoke Grenades<LineBreak/>
+<InlineUIContainer><Button Content='r8.62' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Fire AA MG<LineBreak/>
+<InlineUIContainer><Button Content='r8.63' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Repair AA MG<LineBreak/>
+<InlineUIContainer><Button Content='r8.64' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Replace Periscope<LineBreak/>
+<InlineUIContainer><Button Content='r8.65' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Fire Sub MG"
+r8.61	"<Bold>r8.61 Throw Smoke Grenades</Bold> 
+<LineBreak/><LineBreak/>
+Either the commander or gunner may throw smoke grenades from their open hatch. Grenades must be available as shown on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContaine. Place a smoke marker on the tank per 
+<InlineUIContainer><Button Content='r18.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+He may spot per 
+<InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c70ThrowSmokeGrenade'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.62	"<Bold>r8.62 Fire AA MG</Bold> 
+<LineBreak/><LineBreak/>
+Commander (or loader in tanks with a split loader hatch and AA MG mount) subtracts rating from the To Kill roll for the AA MG. Crewman must have an open hatch. He may spot per 
+<InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c71FireAaMg'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.63	"<Bold>r8.63 Repair AA MG</Bold> 
+<LineBreak/><LineBreak/>
+Commander (or loader in tanks with a split loader hatch and AA MG mount) rolls on the 
+<InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Repair Table . He may not spot.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c72RepairAaMg'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.64	"<Bold>r8.64 Replace Periscope</Bold> 
+<LineBreak/><LineBreak/>
+A crewman who has had his periscope knocked out replaces the damaged periscope.  May not spot.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c73ReplacePeriscope'  Height='100' Width='100'></Image></InlineUIContainer>"
+r8.65	"<Bold>r8.65 Fire Sub MG</Bold> 
+<LineBreak/><LineBreak/>
+Commander (or loader in tanks other than those with a &quot;A&quot; turret) fires a .50 calibre submachine gun. The gun is fired as either Advancing Fire into an empty zone or 
+as direct fire against an enemy unit. Subtract rating from the To Kill roll. Crewman must fire from an open hatch. He may spot per 
+<InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c74FireSubMg'  Height='100' Width='100'></Image></InlineUIContainer>"
 r12.0	"<Bold>r12.0 Enemy Units</Bold> 
 <LineBreak/><LineBreak/>
 Enemy units of German armed forces engaged by the 4th Armored Division are represented in play by individual vehicles and small weapons teams. They are brought into play when battle is triggered by a roll on the 
@@ -661,6 +892,10 @@ Table to determine the terrain occupied by the enemy unit. The table also indica
        <InlineUIContainer><Image Name='c98TerrainFort'  Height='50' Width='50'></Image></InlineUIContainer>
        <InlineUIContainer><Image Name='c96TerrainBuilding'  Height='50' Width='50'></Image></InlineUIContainer>
        <InlineUIContainer><Image Name='c13Moving'  Height='50' Width='50'></Image></InlineUIContainer>"
+r14.0	"<Bold>r14.0 Friendly Action</Bold> 
+<LineBreak/><LineBreak/>
+Friendly Action represents the firepower of the friendly forces accompanying your vehicle. Roll 2D on the Friendly Action Table for each enemy unit on the Battle Board. Friendly action will result in either no effect, destruction of the enemy unit, or the placement of smoke. Record the destruction of enemy units on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r16.0	"<Bold>r16.0 Ammunition (Ammo)</Bold> 
 <LineBreak/><LineBreak/>
 Ammo is loaded into your tank at the beginning of each scenerio as part of morning briefing 

@@ -436,7 +436,7 @@
     <None Update="Images\c59LChangeGunLoad.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Images\c60LRstockReadyRack.gif">
+    <None Update="Images\c60LRestockReadyRack.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Images\c61DStop.gif">
