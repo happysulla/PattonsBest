@@ -24,7 +24,6 @@ namespace Pattons_Best
          Grid.SetRow(imageTutorial, 1);
          Grid.SetColumn(imageTutorial, 0);
       }
-
       private void ButtonGoto_Click(object sender, RoutedEventArgs e)
       {
          DialogResult = true;

@@ -94,6 +94,7 @@ namespace Pattons_Best
             case GameAction.SetupShowBattleBoard:
             case GameAction.PreparationsDeployment:
             case GameAction.TestingStartPreparations:
+            case GameAction.TestingStartBattle:
             case GameAction.BattleStart:
                myDieRoller.HideDie();
                theMainImage = EnumMainImage.MI_Battle;

@@ -84,9 +84,11 @@ namespace Pattons_Best
 
       TestingStartPreparations,
       TestingStartMovement,
+      TestingStartBattle,
 
       ShowCombatCalendarDialog,
       ShowAfterActionReportDialog,
+      ShowMovementDiagramDialog,
       ShowInventoryDialog,
       ShowRuleListingDialog,
       ShowEventListingDialog,

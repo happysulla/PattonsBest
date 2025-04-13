@@ -1746,6 +1746,11 @@ namespace Pattons_Best
             CommandBindings.Add(new CommandBinding(command, mmv.MenuItemViewAfterActionReport));
             //------------------------------------------------
             command = new RoutedCommand();
+            keyGesture = new KeyGesture(Key.M, ModifierKeys.Control);
+            InputBindings.Add(new KeyBinding(command, keyGesture));
+            CommandBindings.Add(new CommandBinding(command, mmv.MenuItemViewMoveDiagram));
+            //------------------------------------------------
+            command = new RoutedCommand();
             keyGesture = new KeyGesture(Key.G, ModifierKeys.Control);
             InputBindings.Add(new KeyBinding(command, keyGesture));
             CommandBindings.Add(new CommandBinding(command, mmv.MenuItemViewFeats_Click));

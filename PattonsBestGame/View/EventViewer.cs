@@ -259,6 +259,10 @@ namespace Pattons_Best
                }
                dialogTableListing.Show();
                break;
+            case GameAction.ShowMovementDiagramDialog:
+               ShowMovementDiagramDialog dialogMovementDiagram = new ShowMovementDiagramDialog();
+               dialogMovementDiagram.Show();
+               break;
             case GameAction.SetupAssignCrewRating:
             case GameAction.MorningBriefingAssignCrewRating:
                EventViewerR071CrewMgr newCrewMgr = new EventViewerR071CrewMgr(myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
@@ -1255,7 +1259,6 @@ namespace Pattons_Best
                            return;
                         case "Continue005":
                            action = GameAction.SetupAssignCrewRating;
-                           action = GameAction.SetupShowCombatCalendarCheck; // <cgs> TEST
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "GotoMorningBriefing":
@@ -1442,6 +1445,7 @@ namespace Pattons_Best
             case "Begin Game":
                action = GameAction.SetupShowMapHistorical;
                //action = GameAction.TestingStartMovement; // <cgs> TEST
+               action = GameAction.TestingStartBattle; // <cgs> TEST
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Cancel":

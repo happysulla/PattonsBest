@@ -77,10 +77,15 @@ namespace Pattons_Best
                   subItem33.Click += MenuItemViewAfterActionReport;
                   myMenuItemTopLevel3.Items.Add(subItem33);
                   MenuItem subItem34 = new MenuItem();
-                  subItem34.Header = "_Game Feats...";
-                  subItem34.InputGestureText = "Ctrl+G";
-                  subItem34.Click += MenuItemViewFeats_Click;
+                  subItem34.Header = "_Movement Diagram...";
+                  subItem34.InputGestureText = "Ctrl+M";
+                  subItem34.Click += MenuItemViewMoveDiagram;
                   myMenuItemTopLevel3.Items.Add(subItem34);
+                  MenuItem subItem35 = new MenuItem();
+                  subItem35.Header = "_Game Feats...";
+                  subItem35.InputGestureText = "Ctrl+G";
+                  subItem35.Click += MenuItemViewFeats_Click;
+                  myMenuItemTopLevel3.Items.Add(subItem35);
                }
                //------------------------------------------------
                if (menuItem.Name == "myMenuItemTopLevel4")
@@ -275,6 +280,11 @@ namespace Pattons_Best
       public void MenuItemViewAfterActionReport(object sender, RoutedEventArgs e)
       {
          GameAction action = GameAction.ShowAfterActionReportDialog;
+         myGameEngine.PerformAction(ref myGameInstance, ref action);
+      }
+      public void MenuItemViewMoveDiagram(object sender, RoutedEventArgs e)
+      {
+         GameAction action = GameAction.ShowMovementDiagramDialog;
          myGameEngine.PerformAction(ref myGameInstance, ref action);
       }
       public void MenuItemViewFeats_Click(object sender, RoutedEventArgs e)

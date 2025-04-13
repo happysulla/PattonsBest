@@ -207,6 +207,7 @@ namespace Pattons_Best
             case GameAction.ShowEventListingDialog:
             case GameAction.ShowTableListing:
             case GameAction.ShowReportErrorDialog:
+            case GameAction.ShowMovementDiagramDialog:
             case GameAction.ShowAboutDialog:
             case GameAction.EndGameShowFeats:
             case GameAction.UpdateEventViewerDisplay: // Only change active event
@@ -219,6 +220,11 @@ namespace Pattons_Best
                break;
             case GameAction.TestingStartMovement:
                gi.GamePhase = GamePhase.Movement;
+               gi.EventDisplayed = gi.EventActive = "e017";
+               gi.DieRollAction = GameAction.MovementStartAreaSetRoll;
+               break;
+            case GameAction.TestingStartBattle:
+               gi.GamePhase = GamePhase.Battle;
                gi.EventDisplayed = gi.EventActive = "e017";
                gi.DieRollAction = GameAction.MovementStartAreaSetRoll;
                break;
@@ -377,6 +383,7 @@ namespace Pattons_Best
                case GameAction.ShowRuleListingDialog:
                case GameAction.ShowEventListingDialog:
                case GameAction.ShowTableListing:
+               case GameAction.ShowMovementDiagramDialog:
                case GameAction.ShowReportErrorDialog:
                case GameAction.ShowAboutDialog:
                case GameAction.EndGameShowFeats:
@@ -391,7 +398,6 @@ namespace Pattons_Best
                   break;
                case GameAction.MorningBriefingCalendarRoll:
                case GameAction.SetupCombatCalendarRoll:
-                  dieRoll = 0; // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
                   break;
                case GameAction.MorningBriefingBegin:
@@ -560,6 +566,7 @@ namespace Pattons_Best
                case GameAction.ShowRuleListingDialog:
                case GameAction.ShowEventListingDialog:
                case GameAction.ShowTableListing:
+               case GameAction.ShowMovementDiagramDialog:
                case GameAction.ShowReportErrorDialog:
                case GameAction.ShowAboutDialog:
                case GameAction.EndGameShowFeats:
@@ -881,6 +888,7 @@ namespace Pattons_Best
                case GameAction.ShowRuleListingDialog:
                case GameAction.ShowEventListingDialog:
                case GameAction.ShowTableListing:
+               case GameAction.ShowMovementDiagramDialog:
                case GameAction.ShowReportErrorDialog:
                case GameAction.ShowAboutDialog:
                case GameAction.EndGameShowFeats:
@@ -1056,7 +1064,6 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.MovementResistanceCheckRoll;
                   break;
                case GameAction.MovementResistanceCheckRoll:
-                  dieRoll = 10; // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   switch (gi.BattleResistance)
@@ -1546,6 +1553,7 @@ namespace Pattons_Best
             case GameAction.ShowRuleListingDialog:
             case GameAction.ShowEventListingDialog:
             case GameAction.ShowTableListing:
+            case GameAction.ShowMovementDiagramDialog:
             case GameAction.ShowReportErrorDialog:
             case GameAction.ShowAboutDialog:
             case GameAction.EndGameShowFeats:
@@ -1669,6 +1677,7 @@ namespace Pattons_Best
             case GameAction.ShowRuleListingDialog:
             case GameAction.ShowEventListingDialog:
             case GameAction.ShowTableListing:
+            case GameAction.ShowMovementDiagramDialog:
             case GameAction.ShowReportErrorDialog:
             case GameAction.ShowAboutDialog:
             case GameAction.UpdateEventViewerDisplay:

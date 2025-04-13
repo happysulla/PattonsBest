@@ -48,7 +48,7 @@ r2.12	"<Bold>r2.12 Battle Board</Bold>
 The battle board is an abstract display used to resolve engagements with enemy forces. Your tank is placed in the center of this display and the action of an engagement revolves 
 around it through the use of pieces representing enemy units and other informational markers. A detailed explanation is given in 
 <InlineUIContainer><Button Content='r5.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
-<LineBreak/><LineBreak/>
+<LineBreak/><LineBreak/>B126
                  <InlineUIContainer><Image Name='MapBattle'  Height='400' Width='400'></Image></InlineUIContainer>"
 r2.13	"<Bold>r2.13 Tank Card</Bold> 
 <LineBreak/><LineBreak/>
@@ -323,7 +323,11 @@ r4.9	"<Bold>r4.9  Evening Debrief</Bold>
 <InlineUIContainer><Button Content='r4.95' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Day Ends"
 r4.91	"<Bold>r4.91  Rating Improvements</Bold>
 <LineBreak/><LineBreak/>
-Roll for rating improvements for each surviving crew member. Roll 1D for each crew member. If the number rolled is higher than the crew member's current rating, his rating is improved by one. If the number is less than or equal to his current rating, there is no change. See 
+Roll for rating improvements for each surviving crew member. 
+<LineBreak/><LineBreak/>
+Roll 1D for each crew member. If the number rolled is higher than the crew member's current rating, his rating is improved by one. If the number is less than or equal to his current rating, there is no change. 
+<LineBreak/><LineBreak/>
+See 
 <InlineUIContainer><Button Content='r7.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 for details about crew ratings."
 r4.92	"<Bold>r4.92  Total Victory Points</Bold>
@@ -924,6 +928,160 @@ If you choose to use Advancing Fire
  when entering a new area, you must load your gun with HE. Mark the ammo load by placing the Gun Load marker in the correct ammo box on the Tank Card. Only those ammo types listed on the Tank Card can be loaded and fired from your gun. 
 <LineBreak/><LineBreak/>
                                       <InlineUIContainer><Image Name='c29AmmoReload'  Height='100' Width='100'></Image></InlineUIContainer>"
+r10.0	"<Bold>r10.0 Sherman Machine Guns (MGs)</Bold> 
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r10.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Description<LineBreak/>
+<InlineUIContainer><Button Content='r10.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Firing Machine Guns"
+r10.1	"<Bold>r10.1 Description</Bold> 
+<LineBreak/><LineBreak/>
+In addition to its main gun, the Sherman tank is armed with several machine guns (MGs). 
+<LineBreak/><LineBreak/>
+The .30 calibre bow MG is mounted in the front right hull and is fired by the assistant driver.
+<LineBreak/><LineBreak/>
+The .30 calibre co-axial MG is mounted in the turret front along teh same axis as the main gun and is fired by the gunner.
+<LineBreak/><LineBreak/>
+The .50 calibre anti-aircraft (AA) MG is fixed to a pintle mount (post) on top of the turret and is fired by the commander. In some configurations, it can be fired by the loader.
+<LineBreak/><LineBreak/>
+Several hand held submachine guns (sub MGs) are carried in the turret and may be fired from open hatches.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c51FireCoaxialMg'  Height='100' Width='100'></Image></InlineUIContainer>"
+r10.2	"<Bold>r10.2 Firing Machine Guns (MGs)</Bold> 
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r10.21' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Description<LineBreak/>
+<InlineUIContainer><Button Content='r10.22' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> MG Restrictions<LineBreak/>
+<InlineUIContainer><Button Content='r10.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> MG Targets<LineBreak/>
+<InlineUIContainer><Button Content='r10.24' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> MG Zones"
+r10.21	"<Bold>r10.21 Crew Actions</Bold> 
+<LineBreak/><LineBreak/>
+MGs are directed to fire by placing a Crew Action marker on the operating crew member&apos;s box on the Tank Card. 
+<LineBreak/><LineBreak/>
+For example, if you want the co-axial MG to fire, place the Fire Co-Axial MG marker in the gunner&apos;s box."
+r10.22	"<Bold>r10.22 MG Restrictions</Bold> 
+<LineBreak/><LineBreak/>
+Only those enemy units that have been spotted may be fired on. The co-axial MG may only fire at a target in the sector to the turret&apos;s front. The bow MG may only fire into the sector to the tank&apos;s front. The AA MG or a sub MG may be fired into any sector, but the firing crewman must operate it from an open hatch. 
+<LineBreak/><LineBreak/>
+Any weapon may be fired at any range although the effectiveness of the MG fire drops at longer range. 
+<LineBreak/><LineBreak/>
+When your tank is hulled down, the bow MG may not fire. Only one enemy unit may be fired at by each MG per battle round unless the MG is performing Advancing Fire per 
+<InlineUIContainer><Button Content='r10.24' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r10.23	"<Bold>r10.23 MG Targets</Bold> 
+<LineBreak/><LineBreak/>
+Machine guns are only effective against the following targets: LW, MG teams, trucks, and AT guns.
+<LineBreak/><LineBreak/>
+They have no effect against other enemy units."
+r10.24	"<Bold>r10.24 MG Zones</Bold> 
+<LineBreak/><LineBreak/>
+MGs may also be fired into zones that contain no suitable MG targets. This is a type of Advancing Fire.
+<LineBreak/><LineBreak/>
+Mark the area with the correct Advancing Fire marker for that MG and roll for the gun malfunction and ammo use. 
+<LineBreak/><LineBreak/>
+If enemy units move into the zone during the Enemy Action Phase per 
+<InlineUIContainer><Button Content='r13.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, 
+roll normally to see iif the MG fire KO&apos;s them. 
+<LineBreak/><LineBreak/>
+Advancing Fire in a zone will also reduce the chance and effectiveness of a Panzerfaust attack originating from that zone per 
+<InlineUIContainer><Button Content='r15.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>,"
+r11.0	"<Bold>r11.0 Sherman Movement</Bold> 
+<LineBreak/><LineBreak/>
+Movement by your tank on the Battle Board is represented by you ordering one of the following crew actions: Forward, Forward to Hull Down, Reverse, or Reverse to Hull Down. However, due to the abstraction of the Battle Board system of sectors and zones radiating out from the hub your tank occupies, your tank never moves anywhere. 
+<LineBreak/><LineBreak/>
+Instead, what actually happens is that enemy units shift their positions on the Battle Board relative to your tank&apos;s position. 
+<LineBreak/><LineBreak/>
+For example, assume your tank is facing a sector containing an enemy tank at long range. If you order &quot;Forward&quot;, the enemy unit tank changes from long range to the medium range zone and your tank remains where it is located in the center. 
+<LineBreak/><LineBreak/>
+The four tank movement crew actions are resolved by refering to the two part 
+<InlineUIContainer><Button Content='Movement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table and rolling 2D. 
+The Part I of this table determines the effect of movement on your tank. The Part II determines the effect, if any, on the position and facing of enemy units.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r11.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Effect on your Tank<LineBreak/>
+<InlineUIContainer><Button Content='r11.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Effect on Enemy Unit<LineBreak/>
+<InlineUIContainer><Button Content='r11.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Leaving the Battle Area"
+r11.1	"<Bold>r11.1 Effect on your Tank</Bold> 
+<LineBreak/><LineBreak/>
+Ordering movement can result in no effect or one of the three possible states:
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r11.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Throwing a Track<LineBreak/>
+<InlineUIContainer><Button Content='r11.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Bogging Down<LineBreak/>
+<InlineUIContainer><Button Content='r4.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Hulled Down<LineBreak/>
+<LineBreak/><LineBreak/>
+Determine what occurs by rolling 2D on Part I of the 
+<InlineUIContainer><Button Content='Movement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. 
+<LineBreak/><LineBreak/>
+Find the number rolled under the movement action you ordered and read along the row of the number to the left to find the result. 
+<LineBreak/><LineBreak/>
+The number rolled is modifed by the ratings of the driver and possible the commander, as well as weather conditions. "
+r11.11	"<Bold>r11.11 Throwing a Track</Bold> 
+<LineBreak/><LineBreak/>
+A tank with a thrown track may not move or pivot for the remainder of the battle. Your tank sits where it is until it is knocked out or until all enemy units withdraw or are eliminated.
+<LineBreak/><LineBreak/>
+If the Battle Board is cleared of enemy units, the day of combat is finished for your tank. 
+<LineBreak/><LineBreak/>
+The crew of a disabled tank may abandon the vehicle, but each man must roll once on the 
+<InlineUIContainer><Button Content='Wounds' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table while making his escape. 
+<LineBreak/><LineBreak/>
+Go to Evening Debriefing 
+<InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c106ThrownTrack'  Height='100' Width='100'></Image></InlineUIContainer>"
+r11.12	"<Bold>r11.12 Bogging Down</Bold> 
+<LineBreak/><LineBreak/>
+A bogged down tank may not move or pivot until it freed itself. A bogged down tank attempts to free itself by ordering Reverse movement and rolling 2D on the 
+<InlineUIContainer><Button Content='Bogged Down' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Movement Table. 
+<LineBreak/><LineBreak/>
+If the result &quot;Assistant Required&quot; is rolled, the tank may not move or pivot or roll again on the table. 
+<LineBreak/><LineBreak/>
+When the battle ends, your tank is assumed to be freed with the help of friendly forces and play continues normally.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c105BoggedDown'  Height='100' Width='100'></Image></InlineUIContainer>"
+r11.2	"<Bold>r11.2 Effect on Enemy Units</Bold> 
+<LineBreak/><LineBreak/>
+The unmodified number rolled on the white die for the roll on Part I determines the effect of movement on the positioning of enemy units.
+<LineBreak/><LineBreak/>
+Find the number rolled along the left side of the table and read across to the column under the movement action ordered. 
+<LineBreak/><LineBreak/>
+Depending on whether you were moving forward or reverse, enemy units may move towards you, away from you, remain in place and change facing, or remain unchanged. 
+<LineBreak/><LineBreak/>
+Movement of enemy units on the Battle Board take place according to the 
+<InlineUIContainer><Button Content='Move Diagram' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  If an enemy vehicle is required to change facing, roll on the Battle Board 
+<InlineUIContainer><Button Content='Placement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table, Part II (Vehicle Facing), to see if the vehicle&apos;s facing changes. It is possible the facing will not change. "
+r11.3	"<Bold>r11.3 Leaving the Battle Board</Bold> 
+<LineBreak/><LineBreak/>
+It is possible for your tank and the accompanying friendly forces to leave the Battle Board before an engagement is finished. This event can be triggered by your tank moving either forward or backward. 
+<LineBreak/><LineBreak/>
+Your task force is assumed to have left the Battle Board when movement by your tank causes all enemy units on the display to shift from from a long range zone off the board. 
+<LineBreak/><LineBreak/>
+For example, assume the only enemy units in play are in the long range zone of Sector 6-8 (the sector your tank is facing) and you order reverse movement.
+<LineBreak/><LineBreak/>
+If the effect of your movement is for the enemy units to move back off the board, your task force is considered to have instead retreated. 
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r11.31' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Retreat<LineBreak/>
+<InlineUIContainer><Button Content='r11.32' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Moved Off Board<LineBreak/>
+<InlineUIContainer><Button Content='r11.33' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Reentering Area<LineBreak/>
+<InlineUIContainer><Button Content='r11.34' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Advancing to New Area"
+r11.31	"<Bold>r11.31 Retreat</Bold> 
+<LineBreak/><LineBreak/>
+A retreat occurs when your tank faces either Sector 1, 2, or 3 and moves forward, or faces one of the other three sectors and moves backward. 
+<LineBreak/><LineBreak/>
+An advance occurs when your tank faces either Sector 4-5, 6-8, or 9-10 and moves forward, or faces one of the other three sectors and moves backwards."
+r11.32	"<Bold>r11.32 Enemy Moved Off Board</Bold> 
+<LineBreak/><LineBreak/>
+If you leave an engagement, place the enemy units that were still in play up to the moment of your leaving in the area on the Movement Board where the engagement took place. 
+<LineBreak/><LineBreak/>
+If you reenter that area again before reaching your exit area, another engagement is automatically triggered, and the remaining units are added to those units that are activated normally."
+r11.33	"<Bold>r11.33 Reentering Area</Bold> 
+<LineBreak/><LineBreak/>
+If you retreat from an engagement, your task force returns to the area which you last occupied. If you advance out of an engagement by moving forward, place your Task Force marker in any area adjacent to the one you left, except the area from which you entered it. 
+<LineBreak/><LineBreak/>
+Leaving an engagement uses up the time that would have normally been expended to move into the new area."
+r11.34	"<Bold>r11.34 Advancing to New Area</Bold> 
+<LineBreak/><LineBreak/>
+If you enter a new area not marked by a US Control marker, go back to step 
+<InlineUIContainer><Button Content='r4.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, Prepare for Battle, and complete 
+<InlineUIContainer><Button Content='r4.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> through 
+<InlineUIContainer><Button Content='r4.46' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Then skip to 
+<InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Advancing Fire choice."
 r12.0	"<Bold>r12.0 Enemy Units</Bold> 
 <LineBreak/><LineBreak/>
 Enemy units of German armed forces engaged by the 4th Armored Division are represented in play by individual vehicles and small weapons teams. They are brought into play when battle is triggered by a roll on the 
@@ -1063,6 +1221,8 @@ Table to determine the terrain occupied by the enemy unit. The table also indica
        <InlineUIContainer><Image Name='c98TerrainFort'  Height='50' Width='50'></Image></InlineUIContainer>
        <InlineUIContainer><Image Name='c96TerrainBuilding'  Height='50' Width='50'></Image></InlineUIContainer>
        <InlineUIContainer><Image Name='c13Moving'  Height='50' Width='50'></Image></InlineUIContainer>"
+r13.0	"<Bold>r13.0 Enemy Action </Bold> 
+<LineBreak/><LineBreak/>"
 r14.0	"<Bold>r14.0 Friendly Action</Bold> 
 <LineBreak/><LineBreak/>
 Friendly Action represents the firepower of the friendly forces accompanying your vehicle. Roll 2D on the Friendly Action Table for each enemy unit on the Battle Board. Friendly action will result in either no effect, destruction of the enemy unit, or the placement of smoke. Record the destruction of enemy units on the After Action Report 
@@ -1502,7 +1662,7 @@ Enemy units kocked out are considered to be withdrawing and are not destroyed. N
 Remove the Advancing Fire markers from the Battle Board after resolving."
 r22.2	"<Bold>r22.2 Advancing Fire - Entering a New Area</Bold>
 <LineBreak/><LineBreak/>
-You may fire your tank's MGs into zones containing no spotted units as a type of Advancing Fire. Order correct crew action (for example, Fire Bow MG) and place the Advancing Fire marker for the MG (Bow MG Advance Fire) into the zone you want to fire. Place the marker after any tank movement or facing changes. This type of fire can KO enemy units which move into the zone and reduce the danger of Panzerfaust attacks per the
+You may fire your tank's MGs into zones containing no spotted units as a type of Advancing Fire. Order correct crew action (for example, Fire Bow MG) and place the Advancing Fire marker for the MG (Bow MG Advance Fire) into the zone you want to fire. Place the marker after any tank movement or facing changes. This type of fire can KO enemy units which move into the zone and reduce the danger of Panzerfaust attacks per the 
 <InlineUIContainer><Button Content='Panzerfaust' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Attack Tables.
 <LineBreak/><LineBreak/>
 -- During the Crew Action Phase, roll 2D:  <LineBreak/>

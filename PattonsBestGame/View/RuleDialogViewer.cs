@@ -578,6 +578,11 @@ namespace Pattons_Best
             GameAction action = GameAction.ShowAfterActionReportDialog;
             myGameEngine.PerformAction(ref myGameInstance, ref action);
          }
+         else if (true == key.Contains("Move Diagram")) // rules based click
+         {
+            GameAction action = GameAction.ShowMovementDiagramDialog;
+            myGameEngine.PerformAction(ref myGameInstance, ref action);
+         }
          else if (true == key.StartsWith("r")) // rules based click
          {
             if (false == ShowRule(key))
