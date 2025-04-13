@@ -82,6 +82,7 @@ namespace Pattons_Best
       UpdateLoadingGame,
       UpdateUndo,
 
+      TestingStartMorningBriefing,
       TestingStartPreparations,
       TestingStartMovement,
       TestingStartBattle,

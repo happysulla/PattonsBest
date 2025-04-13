@@ -187,11 +187,11 @@ namespace Pattons_Best
             case "Fog": gi.BattleStacks.Add(new MapItem("Fog", zoom, "c22Fog", w1)); break;
             case "Mud": gi.BattleStacks.Add(new MapItem("Mud", zoom, "c23Mud", w1)); break;
             case "Mud/Overcast": gi.BattleStacks.Add(new MapItem("Mud", zoom, "c23Mud", w1)); gi.BattleStacks.Add(new MapItem("Overcast", 1.0, "c21Overcast", w2)); break;
-            case "Falling Snow": gi.BattleStacks.Add(new MapItem("Falling Snow", zoom, "c26SnowFalling", w1)); break;
-            case "Ground Snow": gi.BattleStacks.Add(new MapItem("Ground Snow", zoom, "c27SnowGround", w1)); break;
-            case "Deep Snow": gi.BattleStacks.Add(new MapItem("Deep Snow", zoom, "c25SnowDeep", w1)); break;
-            case "Ground/Falling Snow": gi.BattleStacks.Add(new MapItem("Ground Snow", zoom, "c27SnowGround", w1)); gi.BattleStacks.Add(new MapItem("Falling Snow", 1.0, "c26SnowFalling", w2)); break;
-            case "Deep/Falling Snow": gi.BattleStacks.Add(new MapItem("Deep Snow", zoom, "c25SnowDeep", w1)); gi.BattleStacks.Add(new MapItem("Falling Snow", 1.0, "c26SnowFalling", w2)); break;
+            case "Falling Snow": gi.BattleStacks.Add(new MapItem("FallingSnow", zoom, "c26SnowFalling", w1)); break;
+            case "Ground Snow": gi.BattleStacks.Add(new MapItem("GroundSnow", zoom, "c27SnowGround", w1)); break;
+            case "Deep Snow": gi.BattleStacks.Add(new MapItem("DeepSnow", zoom, "c25SnowDeep", w1)); break;
+            case "Falling and Ground Snow": gi.BattleStacks.Add(new MapItem("GroundSnow", zoom, "c27SnowGround", w1)); gi.BattleStacks.Add(new MapItem("FallingSnow", zoom, "c26SnowFalling", w2)); break;
+            case "Falling and Deep Snow": gi.BattleStacks.Add(new MapItem("Dee Snow", zoom, "c25SnowDeep", w1)); gi.BattleStacks.Add(new MapItem("FallingSnow", zoom, "c26SnowFalling", w2)); break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "SetWeatherCounters(): reached default weatherRoll=" + weatherRolled);
                return false;
@@ -251,6 +251,20 @@ namespace Pattons_Best
             case GameAction.ShowAboutDialog:
             case GameAction.EndGameShowFeats:
             case GameAction.UpdateEventViewerDisplay: // Only change active event
+               break;
+            case GameAction.TestingStartMorningBriefing:
+               if (false == PerformAutoSetupCrewRatings(gi, ref action))
+               {
+                  returnStatus = "PerformAutoSetupCrewRatings() returned false";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
+               }
+               else
+               {
+                  gi.Day = 71;  // <cgs> TEST
+                  gi.GamePhase = GamePhase.MorningBriefing;
+                  gi.EventDisplayed = gi.EventActive = "e007";
+                  gi.DieRollAction = GameAction.MorningBriefingWeatherRoll;
+               }
                break;
             case GameAction.TestingStartPreparations:
                if (false == PerformAutoSetupCrewRatings(gi, ref action))
@@ -505,18 +519,19 @@ namespace Pattons_Best
                   break;
                case GameAction.MorningBriefingCalendarRoll:
                case GameAction.SetupCombatCalendarRoll:
-                  gi.DieResults[key][0] = dieRoll;
+                  gi.DieResults[key][0] = dieRoll; // clicking on image either restarts next day or continues with MorningBriefingBegin
                   break;
                case GameAction.MorningBriefingBegin:
                   gi.EventDisplayed = gi.EventActive = "e007";
                   gi.DieRollAction = GameAction.MorningBriefingWeatherRoll;
                   break;
                case GameAction.MorningBriefingWeatherRoll:
+                  dieRoll = 98;  // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
+                  lastReport.Weather = TableMgr.GetWeather(gi.Day, dieRoll);
                   break;
                case GameAction.MorningBriefingWeatherRollEnd:
-                  lastReport.Weather = TableMgr.GetWeather(gi.Day, dieRoll);
                   if (true == lastReport.Weather.Contains("Snow"))
                   {
                      gi.EventDisplayed = gi.EventActive = "e008"; // first need to roll for snow

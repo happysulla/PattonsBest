@@ -618,32 +618,33 @@ namespace Pattons_Best
                         imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherClear"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
                         break;
                      case "Overcast":
-                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercast"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercast"), Width = 400, Height = 266, Name = "WeatherRollEnd" };
                         break;
                      case "Fog":
-                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherFog"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherFog"), Width = 400, Height = 266, Name = "WeatherRollEnd" };
                         break;
                      case "Mud":
-                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherMud"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherMud"), Width = 400, Height = 266, Name = "WeatherRollEnd" };
                         break;
                      case "Mud/Overcast":
-                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercastMud"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercastMud"), Width = 400, Height = 266, Name = "WeatherRollEnd" };
                         break;
                      case "Snow":
-                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherGroundFalling"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling"), Width = 400, Height = 266, Name = "WeatherRollEnd" };
                         break;
                      default:
-                        break;
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default snow=" + report.Weather);
+                        return false;
                   }
                   if( null == imgWeather)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): img=null for key=" + key);
                      return false;
                   }
-                  myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Weather calls for " + report.Weather + ":"));
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("                                        "));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imgWeather));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -657,32 +658,33 @@ namespace Pattons_Best
                   switch (report.Weather)
                   {
                      case "Ground Snow":
-                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowGround"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowGround"), Width = 400, Height = 266, Name = "SnowRollEnd" };
                         break;
                      case "Deep Snow":
-                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowDeep"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowDeep"), Width = 400, Height = 266, Name = "SnowRollEnd" };
                         break;
                      case "Falling Snow":
-                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling"), Width = 400, Height = 266, Name = "SnowRollEnd" };
                         break;
                      case "Falling and Deep Snow":
-                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFallingDeep"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFallingDeep"), Width = 400, Height = 266, Name = "SnowRollEnd" };
                         break;
                      case "Falling and Ground Snow":
-                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFallingDeep"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFallingGround"), Width = 400, Height = 266, Name = "SnowRollEnd" };
                         break;
                      default:
-                        break;
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default snow=" + report.Weather);
+                        return false;
                   }
                   if (null == imgWeather)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): img=null for key=" + key);
                      return false;
                   }
+                   myTextBlock.Inlines.Add(new Run("Weather calls for " + report.Weather + ":"));
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("Weather calls for " + report.Weather + ":"));
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("                                        "));
+                  myTextBlock.Inlines.Add(new Run("               "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imgWeather));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -1306,6 +1308,10 @@ namespace Pattons_Best
                            action = GameAction.MorningBriefingWeatherRollEnd;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
+                        case "SnowRollEnd":
+                           action = GameAction.MorningBriefingSnowRollEnd;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
                         case "GotoMorningAmmoLimitsSetEnd":
                            action = GameAction.MorningBriefingAmmoLoad;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
@@ -1481,6 +1487,7 @@ namespace Pattons_Best
                break;
             case "Begin Game":
                action = GameAction.SetupShowMapHistorical;
+               action = GameAction.TestingStartMorningBriefing; // <cgs> TEST
                //action = GameAction.TestingStartMovement; // <cgs> TEST
                //action = GameAction.TestingStartBattle; // <cgs> TEST
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
