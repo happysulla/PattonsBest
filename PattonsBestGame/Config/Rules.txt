@@ -1222,11 +1222,98 @@ Table to determine the terrain occupied by the enemy unit. The table also indica
        <InlineUIContainer><Image Name='c96TerrainBuilding'  Height='50' Width='50'></Image></InlineUIContainer>
        <InlineUIContainer><Image Name='c13Moving'  Height='50' Width='50'></Image></InlineUIContainer>"
 r13.0	"<Bold>r13.0 Enemy Action </Bold> 
+<LineBreak/><LineBreak/>
+During the enemy action phase of the Battle Round Sequence, refer to the respective table:
+<InlineUIContainer><Button Content='Enemy Advance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, 
+<InlineUIContainer><Button Content='Enemy Battle' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, or 
+<InlineUIContainer><Button Content='Enemy Counterattack' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
+<LineBreak/><LineBreak/>
+Roll for each unit on the Battle Board. Enemy units will either do nothing, move to another zone (or off the board), move to another zone, or fire their weapons.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r13.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Movement<LineBreak/>
+<InlineUIContainer><Button Content='r13.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Fire Versus Infantry<LineBreak/>
+<InlineUIContainer><Button Content='r13.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Fire Versus Your Tank<LineBreak/>
+<InlineUIContainer><Button Content='r13.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Fire Versus Your Tank"
+r13.1	"<Bold>r13.1 Movement </Bold> 
+<LineBreak/><LineBreak/>
+Enemy units move n four direcitons: <LineBreak/>
+F = Forward<LineBreak/>
+B = Backward<LineBreak/>
+L = Left<LineBreak/>
+R = Right
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r13.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Move Forward<LineBreak/>
+<InlineUIContainer><Button Content='r13.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Move Backward<LineBreak/>
+<InlineUIContainer><Button Content='r13.13' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Move Right or Left<LineBreak/>
+<InlineUIContainer><Button Content='r13.14' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Move Into US Control <LineBreak/>
+<InlineUIContainer><Button Content='r13.14' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Moving Marker"
+r13.11	"<Bold>r13.11 Move Forward </Bold> 
+<LineBreak/><LineBreak/>
+A unit moving forward remains in the same sector, but moves one zone close to the hexagonal hub.
+<LineBreak/><LineBreak/>
+If it is already at close range, it jumps to close range in the sector on the other side of the hub direclty opposite the sector it now occupies."
+r13.12	"<Bold>r13.12 Move Backward </Bold> 
+<LineBreak/><LineBreak/>
+A unit moving backward remains in the same sector, but move sone zone away from the hub. A unit already at long range in Sectors 4-5, 6-8, or 9-10 is removed from play.
+<LineBreak/><LineBreak/>
+A unit alreayd at long range in Sectors 1, 2, or 3 is removed from the Battle Board and placed on the Movement Board in the area you moved out of to enter the current area. Remove the US Control marker from that area if present."
+r13.13	"<Bold>r13.13 Move Right or Left </Bold> 
+<LineBreak/><LineBreak/>
+Units moving to the right or left remain at the same range but move one zone clockwise or counterclockwise respectivley."
+r13.14	"<Bold>r13.14 Move Into US Control </Bold> 
+<LineBreak/><LineBreak/>
+If an enemy unit moves into a sector marked US Control, remove the US Control marker."
+r13.15	"<Bold>r13.15 Moving Marker </Bold> 
+<LineBreak/><LineBreak/>
+Mark moving enemy units with a Moving marker. Remove any Spotted, Hidden, or terrain markers. Immediately reroll for new facing and/or terrain on the Battle Board 
+<InlineUIContainer><Button Content='Placement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c13Moving'  Height='50' Width='50'></Image></InlineUIContainer>"
+r13.2	"<Bold>r13.2 Fire Versus Infantry </Bold> 
+<LineBreak/><LineBreak/>
+Enemy SPG, Tank, SPW, PSW, LW, and MG units may attempt to kill infantry squads of the forces friendly to you. Refere to the section of the "
+r13.3	"<Bold>r13.3 Fire Versus Any Tank </Bold> 
+<LineBreak/><LineBreak/>"
+r13.4	"<Bold>r13.4 Fire Versus Your Tank </Bold> 
 <LineBreak/><LineBreak/>"
 r14.0	"<Bold>r14.0 Friendly Action</Bold> 
 <LineBreak/><LineBreak/>
 Friendly Action represents the firepower of the friendly forces accompanying your vehicle. Roll 2D on the Friendly Action Table for each enemy unit on the Battle Board. Friendly action will result in either no effect, destruction of the enemy unit, or the placement of smoke. Record the destruction of enemy units on the After Action Report 
 <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r15.0	"<Bold>r15.0 Random Events</Bold> 
+<LineBreak/><LineBreak/>
+Roll 2D on the Random Events Table during the Random Events Phase of the Battle Round Sequence. Resolve the event immediately.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r15.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Time Passes<LineBreak/>
+<InlineUIContainer><Button Content='r15.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Friendly Artillery<LineBreak/>
+<InlineUIContainer><Button Content='r15.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Artillery<LineBreak/>
+<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Mines<LineBreak/>
+<InlineUIContainer><Button Content='r15.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Panzerfaust Attack<LineBreak/>
+<InlineUIContainer><Button Content='r15.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Harassing Fire<LineBreak/>
+<InlineUIContainer><Button Content='r15.7' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Friendly Advance<LineBreak/>
+<InlineUIContainer><Button Content='r15.8' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Reinforcement<LineBreak/>
+<InlineUIContainer><Button Content='r15.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Advance<LineBreak/>
+<InlineUIContainer><Button Content='r15.10' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Flanking Fire"
+r15.1	"<Bold>r15.1 Time Passes</Bold> 
+<LineBreak/><LineBreak/>"
+r15.2	"<Bold>r15.2 Friendly Artillery</Bold> 
+<LineBreak/><LineBreak/>"
+r15.3	"<Bold>r15.3 Enemy Artillery</Bold> 
+<LineBreak/><LineBreak/>"
+r15.4	"<Bold>r15.4 Mines</Bold> 
+<LineBreak/><LineBreak/>"
+r15.5	"<Bold>r15.5 Panzerfaust Attack</Bold> 
+<LineBreak/><LineBreak/>"
+r15.6	"<Bold>r15.6 Harassing Fire</Bold> 
+<LineBreak/><LineBreak/>"
+r15.7	"<Bold>r15.7 Friendly Advance</Bold> 
+<LineBreak/><LineBreak/>"
+r15.8	"<Bold>r15.8 Enemy Reinforcement</Bold> 
+<LineBreak/><LineBreak/>"
+r15.9	"<Bold>r15.9 Enemy Advance</Bold> 
+<LineBreak/><LineBreak/>"
+r15.10	"<Bold>r15.10 Flanking Fire</Bold> 
+<LineBreak/><LineBreak/>"
 r16.0	"<Bold>r16.0 Ammunition (Ammo)</Bold> 
 <LineBreak/><LineBreak/>
 Ammo is loaded into your tank at the beginning of each scenerio as part of morning briefing 
