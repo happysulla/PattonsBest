@@ -57,14 +57,4 @@ namespace Pattons_Best
          set { myList[index] = value; }
       }
    }
-   //===================================================================
-   public struct WeatherEntry
-   {
-      public int myClear = 0;
-      public int myMud = 0;
-      public int myOvercast = 0;
-      public int Snow = 0;
-      public WeatherEntry() { }
-   }
-
 }

@@ -60,46 +60,6 @@ namespace Pattons_Best
          gi.MapItemMoves.Insert(0, mim); // add at front
          return true;
       }
-      protected bool AssignNewCrewMembers(IGameInstance gi)
-      {
-         IAfterActionReport? aar = gi.Reports.GetLast();
-         if (null == aar)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewMembers(): aar is null");
-            return false;
-         }
-         foreach (IMapItem mi in gi.NewMembers)
-         {
-            ICrewMember? crewMember = mi as ICrewMember;
-            if (crewMember == null)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewMembers(): crewMember is null");
-               return false;
-            }
-            switch (crewMember.Role)
-            {
-               case "Commander":
-                  aar.Commander = crewMember;
-                  break;
-               case "Gunner":
-                  aar.Gunner = crewMember;
-                  break;
-               case "Loader":
-                  aar.Loader = crewMember;
-                  break;
-               case "Driver":
-                  aar.Driver = crewMember;
-                  break;
-               case "Assistant":
-                  aar.Assistant = crewMember;
-                  break;
-               default:
-                  Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewMembers(): Reached Default with role= " + crewMember.Role);
-                  return false;
-            }
-         }
-         return true;
-      }
       protected bool LoadGame(ref IGameInstance gi, ref GameAction action)
       {
          gi.MoveStacks.Clear();
@@ -158,6 +118,86 @@ namespace Pattons_Best
          sb.Append(MainWindow.theAssemblyDirectory);
          Logger.Log(LogEnum.LE_GAME_INIT_VERSION, sb.ToString());
       }
+      protected bool AssignNewCrewMembers(IGameInstance gi)
+      {
+         IAfterActionReport? aar = gi.Reports.GetLast();
+         if (null == aar)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewMembers(): aar is null");
+            return false;
+         }
+         foreach (IMapItem mi in gi.NewMembers)
+         {
+            ICrewMember? crewMember = mi as ICrewMember;
+            if (crewMember == null)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewMembers(): crewMember is null");
+               return false;
+            }
+            switch (crewMember.Role)
+            {
+               case "Commander":
+                  aar.Commander = crewMember;
+                  break;
+               case "Gunner":
+                  aar.Gunner = crewMember;
+                  break;
+               case "Loader":
+                  aar.Loader = crewMember;
+                  break;
+               case "Driver":
+                  aar.Driver = crewMember;
+                  break;
+               case "Assistant":
+                  aar.Assistant = crewMember;
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "AssignNewCrewMembers(): Reached Default with role= " + crewMember.Role);
+                  return false;
+            }
+         }
+         return true;
+      }
+      protected bool SetWeatherCounters(IGameInstance gi, int dieRoll)
+      {
+         IAfterActionReport? report = gi.Reports.GetLast(); // remove it from list
+         if (null == report)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetWeatherCounters(): report=null");
+            return false;
+         }
+         string weatherRolled = report.Weather;
+         ITerritory? w1 = Territories.theTerritories.Find("Weather1");
+         if (null == w1)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetWeatherCounters(): w1=null");
+            return false;
+         }
+         ITerritory? w2 = Territories.theTerritories.Find("Weather2");
+         if (null == w2)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetWeatherCounters(): w2=null");
+            return false;
+         }
+         const double zoom = 1.3;
+         switch (weatherRolled)
+         {
+            case "Clear": gi.BattleStacks.Add(new MapItem("Clear", zoom, "c20Clear", w1)); break;
+            case "Overcast": gi.BattleStacks.Add(new MapItem("Overcast", zoom, "c21Overcast", w1)); break;
+            case "Fog": gi.BattleStacks.Add(new MapItem("Fog", zoom, "c22Fog", w1)); break;
+            case "Mud": gi.BattleStacks.Add(new MapItem("Mud", zoom, "c23Mud", w1)); break;
+            case "Mud/Overcast": gi.BattleStacks.Add(new MapItem("Mud", zoom, "c23Mud", w1)); gi.BattleStacks.Add(new MapItem("Overcast", 1.0, "c21Overcast", w2)); break;
+            case "Falling Snow": gi.BattleStacks.Add(new MapItem("Falling Snow", zoom, "c26SnowFalling", w1)); break;
+            case "Ground Snow": gi.BattleStacks.Add(new MapItem("Ground Snow", zoom, "c27SnowGround", w1)); break;
+            case "Deep Snow": gi.BattleStacks.Add(new MapItem("Deep Snow", zoom, "c25SnowDeep", w1)); break;
+            case "Ground/Falling Snow": gi.BattleStacks.Add(new MapItem("Ground Snow", zoom, "c27SnowGround", w1)); gi.BattleStacks.Add(new MapItem("Falling Snow", 1.0, "c26SnowFalling", w2)); break;
+            case "Deep/Falling Snow": gi.BattleStacks.Add(new MapItem("Deep Snow", zoom, "c25SnowDeep", w1)); gi.BattleStacks.Add(new MapItem("Falling Snow", 1.0, "c26SnowFalling", w2)); break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "SetWeatherCounters(): reached default weatherRoll=" + weatherRolled);
+               return false;
+         }
+         return true;
+      }
       protected void AdvanceTime(IAfterActionReport report, int minToAdd)
       {
          report.SunriseMin += minToAdd;
@@ -213,20 +253,49 @@ namespace Pattons_Best
             case GameAction.UpdateEventViewerDisplay: // Only change active event
                break;
             case GameAction.TestingStartPreparations:
-               gi.GamePhase = GamePhase.Preparations;
-               gi.EventDisplayed = gi.EventActive = "e011";
-               gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
-               gi.BattleStacks.Add(new MapItem("Sherman1", 2.0, "t001", gi.Home));
+               if (false == PerformAutoSetupCrewRatings(gi, ref action))
+               {
+                  returnStatus = "PerformAutoSetupCrewRatings() returned false";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
+               }
+               else if (false == PerformAutoSetupWeather(gi, ref action))
+               {
+                  returnStatus = "PerformAutoSetupWeather() returned false";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
+               }
+               else
+               {
+                  gi.GamePhase = GamePhase.Preparations;
+                  gi.EventDisplayed = gi.EventActive = "e011";
+                  gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
+                  gi.BattleStacks.Add(new MapItem("Sherman1", 2.0, "t001", gi.Home));
+               }
                break;
             case GameAction.TestingStartMovement:
-               gi.GamePhase = GamePhase.Movement;
-               gi.EventDisplayed = gi.EventActive = "e017";
-               gi.DieRollAction = GameAction.MovementStartAreaSetRoll;
+               if( false == PerformAutoSetupCrewRatings(gi, ref action))
+               {
+                  returnStatus = "PerformAutoSetupCrewRatings() returned false";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
+               }
+               else
+               {
+                  gi.GamePhase = GamePhase.Movement;
+                  gi.EventDisplayed = gi.EventActive = "e017";
+                  gi.DieRollAction = GameAction.MovementStartAreaSetRoll;
+               }
                break;
             case GameAction.TestingStartBattle:
-               gi.GamePhase = GamePhase.Battle;
-               gi.EventDisplayed = gi.EventActive = "e017";
-               gi.DieRollAction = GameAction.MovementStartAreaSetRoll;
+               if (false == PerformAutoSetupCrewRatings(gi, ref action))
+               {
+                  returnStatus = "PerformAutoSetupCrewRatings() returned false";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
+               }
+               else
+               {
+                  gi.GamePhase = GamePhase.Battle;
+                  gi.EventDisplayed = gi.EventActive = "e017";
+                  gi.DieRollAction = GameAction.MovementStartAreaSetRoll;
+               }
                break;
             case GameAction.UpdateEventViewerActive: // Only change active event
                gi.EventDisplayed = gi.EventActive; // next screen to show
@@ -255,7 +324,7 @@ namespace Pattons_Best
                   }
                   if (true == option.IsEnabled)
                   {
-                     if (false == PerformAutoSetup(ref gi, ref action))
+                     if (false == PerformAutoSetup(gi, ref action))
                      {
                         returnStatus = "PerformAutoSetup() returned false";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
@@ -347,8 +416,46 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, sb12.ToString());
          return returnStatus;
       }
-      private bool PerformAutoSetup(ref IGameInstance gi, ref GameAction action)
+      private bool PerformAutoSetup(IGameInstance gi, ref GameAction action)
       {
+         if (false == PerformAutoSetupCrewRatings(gi, ref action))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): PerformAutoSetupCrewRatings() returned false");
+            return false;
+         }
+         if (false == PerformAutoSetupWeather(gi, ref action))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): PerformAutoSetupWeather() returned false");
+            return false;
+         }
+         return true;
+      }
+      private bool PerformAutoSetupCrewRatings(IGameInstance gi, ref GameAction action)
+      {
+         foreach (IMapItem mi in gi.NewMembers)
+         {
+            ICrewMember? cm = mi as ICrewMember;
+            if( null == cm )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupCrewRatings(): cm=null");
+               return false;
+            }
+            else
+            {
+               int dieRoll = Utilities.RandomGenerator.Next(1, 11);
+               cm.Rating = (int)Math.Ceiling((double)(dieRoll) / 2.0);
+            }
+         }
+         return true;
+      }
+      private bool PerformAutoSetupWeather(IGameInstance gi, ref GameAction action)
+      {
+         int dieRoll = Utilities.RandomGenerator.Next(1, 11);
+         if( false == SetWeatherCounters( gi, dieRoll) )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupWeather(): SetWeatherCounters() returned false");
+            return false;
+         }
          return true;
       }
       private void AddStartingTestingOptions(IGameInstance gi)
@@ -409,10 +516,24 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   break;
                case GameAction.MorningBriefingWeatherRollEnd:
+                  lastReport.Weather = TableMgr.GetWeather(gi.Day, dieRoll);
                   if (true == lastReport.Weather.Contains("Snow"))
+                  {
                      gi.EventDisplayed = gi.EventActive = "e008"; // first need to roll for snow
+                     gi.DieRollAction = GameAction.MorningBriefingSnowRoll;
+                  }
                   else
+                  {
                      gi.EventDisplayed = gi.EventActive = "e009";
+                  }
+                  break;
+               case GameAction.MorningBriefingSnowRoll:
+                  lastReport.Weather = TableMgr.GetWeatherSnow(gi.Day, dieRoll);
+                  gi.DieResults[key][0] = dieRoll;
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  break;
+               case GameAction.MorningBriefingSnowRollEnd:
+                  gi.EventDisplayed = gi.EventActive = "e009";
                   break;
                case GameAction.MorningBriefingAmmoReadyRackLoad:
                   break;
@@ -432,18 +553,14 @@ namespace Pattons_Best
                   lastReport.MainGunHE -= dieRoll * 2;
                   lastReport.Ammo30CalibreMG -= dieRoll;
                   break;
-               case GameAction.MorningBriefingSnowRoll:
-                  gi.DieResults[key][0] = dieRoll;
-                  gi.DieRollAction = GameAction.DieRollActionNone;
-                  break;
                case GameAction.PreparationsDeployment:
                   gi.GamePhase = GamePhase.Preparations;
                   gi.EventDisplayed = gi.EventActive = "e011";
                   gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
                   gi.BattleStacks.Add(new MapItem("Sherman1", 2.0, "t001", gi.Home));
-                  if (false == SetWeather(gi, gi.DieResults["e007"][0]))
+                  if (false == SetWeatherCounters(gi, gi.DieResults["e007"][0]))
                   {
-                     returnStatus = "SetWeather() returned false";
+                     returnStatus = "SetWeatherCounters() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(): " + returnStatus);
                   }
                   break;
@@ -495,47 +612,6 @@ namespace Pattons_Best
          else
             Logger.Log(LogEnum.LE_ERROR, sb12.ToString());
          return returnStatus;
-      }
-      private bool SetWeather(IGameInstance gi, int dieRoll)
-      {
-         IAfterActionReport? report = gi.Reports.GetLast(); // remove it from list
-         if (null == report)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetWeatherCounters(): report=null");
-            return false;
-         }
-         string weatherRolled = TableMgr.GetWeather(dieRoll);
-         ITerritory? w1 = Territories.theTerritories.Find("Weather1");
-         if (null == w1)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetWeatherCounters(): w1=null");
-            return false;
-         }
-         ITerritory? w2 = Territories.theTerritories.Find("Weather2");
-         if (null == w2)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetWeatherCounters(): w2=null");
-            return false;
-         }
-         const double zoom = 1.3;
-         switch (weatherRolled)
-         {
-            case "Clear": gi.BattleStacks.Add(new MapItem("Clear", zoom, "c20Clear", w1)); break;
-            case "Overcast": gi.BattleStacks.Add(new MapItem("Overcast", zoom, "c21Overcast", w1)); break;
-            case "Fog": gi.BattleStacks.Add(new MapItem("Fog", zoom, "c22Fog", w1)); break;
-            case "Mud": gi.BattleStacks.Add(new MapItem("Mud", zoom, "c23Mud", w1)); break;
-            case "Mud/Overcast": gi.BattleStacks.Add(new MapItem("Mud", zoom, "c23Mud", w1)); gi.BattleStacks.Add(new MapItem("Overcast", 1.0, "c21Overcast", w2)); break;
-            case "Falling Snow": gi.BattleStacks.Add(new MapItem("Falling Snow", zoom, "c26SnowFalling", w1)); break;
-            case "Ground Snow": gi.BattleStacks.Add(new MapItem("Ground Snow", zoom, "c27SnowGround", w1)); break;
-            case "Deep Snow": gi.BattleStacks.Add(new MapItem("Deep Snow", zoom, "c25SnowDeep", w1)); break;
-            case "Ground/Falling Snow": gi.BattleStacks.Add(new MapItem("Ground Snow", zoom, "c27SnowGround", w1)); gi.BattleStacks.Add(new MapItem("Falling Snow", 1.0, "c26SnowFalling", w2)); break;
-            case "Deep/Falling Snow": gi.BattleStacks.Add(new MapItem("Deep Snow", zoom, "c25SnowDeep", w1)); gi.BattleStacks.Add(new MapItem("Falling Snow", 1.0, "c26SnowFalling", w2)); break;
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "SetWeatherCounters(): reached default weatherRoll=" + weatherRolled);
-               return false;
-         }
-         report.Weather = weatherRolled;
-         return true;
       }
    }
    //-----------------------------------------------------

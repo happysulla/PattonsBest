@@ -23,7 +23,7 @@ namespace Pattons_Best
       public static EnumMainImage theMainImage = EnumMainImage.MI_Other;
       private Canvas? myCanvas = null;
       private IDieRoller? myDieRoller = null;
-      private System.Windows.Input.Cursor myTargetCursor = null;
+      private System.Windows.Input.Cursor? myTargetCursor = null;
       //-------------------------------------------------
       public CanvasImageViewer(Canvas? c, IDieRoller? dr)
       {

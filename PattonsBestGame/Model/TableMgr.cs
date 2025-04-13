@@ -18,9 +18,108 @@ namespace Pattons_Best
          CreateExitTable();
       }
       //-------------------------------------------
-      public static string GetWeather(int dieRoll)
+      public static string GetWeather(int day, int dieRoll)
       {
-         return "Clear";
+         string month = GetMonth(day);
+         switch(month)
+         {
+            case "Jul":
+            case "Aug":
+               if (dieRoll < 70)
+                  return "Clear";
+               else if (dieRoll < 89)
+                  return "Overcast";
+               else if (dieRoll < 92)
+                  return "Fog";
+               else if (dieRoll < 98)
+                  return "Mud";
+               else 
+                  return "Mud/Overcast";
+            case "Sep":
+            case "Oct":
+            case "Nov":
+               if (dieRoll < 62)
+                  return "Clear";
+               else if (dieRoll < 73)
+                  return "Overcast";
+               else if (dieRoll < 76)
+                  return "Fog";
+               else if (dieRoll < 92)
+                  return "Mud";
+               else if (dieRoll < 98)
+                  return "Mud/Overcast";
+               else
+               {
+                  if( "Nov" == month )
+                     return "Snow";
+                  else
+                     return "Overcast";
+               }
+            case "Dec":
+            case "Jan":
+            case "Feb":
+               if (dieRoll < 45)
+                  return "Clear";
+               else if (dieRoll < 51)
+                  return "Overcast";
+               else if (dieRoll < 59)
+                  return "Mud/Overcast";
+               else
+                  return "Snow";
+            case "Mar":
+            case "Apr":
+               if (dieRoll < 54)
+                  return "Clear";
+               else if (dieRoll < 72)
+                  return "Overcast";
+               else if (dieRoll < 76)
+                  return "Fog";
+               else if (dieRoll < 92)
+                  return "Mud";
+               else if (dieRoll < 98)
+                  return "Mud/Overcast";
+               else
+               {
+                  if ("Mar" == month)
+                     return "Snow";
+                  else
+                     return "Overcast";
+               }
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetWeather(): Reached Default month=" + month);
+               return "ERROR";
+         }
+      }
+      public static string GetWeatherSnow(int day, int dieRoll)
+      {
+         string month = GetMonth(day);
+         if ("Nov" == month)
+            --dieRoll;
+         else if (("Dec" == month) || ("Jan" == month) || ("Feb" == month))
+            ++dieRoll;
+         switch (dieRoll)
+         {
+            case 0:
+            case 1:
+               return "Falling Snow";
+            case 2:
+            case 3:
+            case 6:
+            case 7:
+               return "Ground Snow";
+            case 4:
+            case 5:
+               return "Falling and Ground Snow";
+            case 8:
+            case 9:
+               return "Deep Snow";
+            case 10:
+            case 11:
+               return "Falling and Deep Snow";
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetWeatherSnow(): Reached Default month=" + dieRoll.ToString());
+               return "ERROR";
+         }
       }
       public static string GetMonth( int day )
       {

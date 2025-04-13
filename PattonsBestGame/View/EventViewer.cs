@@ -582,7 +582,7 @@ namespace Pattons_Best
                      return false;
                }
                ReplaceText("PROBABILITY", report.Probability.ToString());
-               if (Utilities.NO_RESULT == firstDieResult) // skip today action
+               if (Utilities.NO_RESULT == firstDieResult) 
                {
                   Image imgSun = new Image { Source = MapItem.theMapImages.GetBitmapImage("Morning"), Width = 300, Height = 150 };
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -599,13 +599,13 @@ namespace Pattons_Best
                }
                else 
                {
-                  Image imgBrief = new Image { Source = MapItem.theMapImages.GetBitmapImage("Combat"), Width = 150, Height = 150, Name = "GotoMorningBriefing" };
+                  Image imgBrief = new Image { Source = MapItem.theMapImages.GetBitmapImage("DailyDecision"), Width = 200, Height = 200, Name = "GotoMorningBriefing" };
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("                                     "));
+                  myTextBlock.Inlines.Add(new Run("                                  "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imgBrief));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("Possible combat. Click image to continue."));
+                  myTextBlock.Inlines.Add(new Run("Possible contact. Click image to continue."));
                }
                break;
             case "e007":
@@ -630,7 +630,7 @@ namespace Pattons_Best
                         imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercastMud"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
                         break;
                      case "Snow":
-                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherGroundSnow"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherGroundFalling"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
                         break;
                      default:
                         break;
@@ -651,6 +651,43 @@ namespace Pattons_Best
                }
                break;
             case "e008":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  Image? imgWeather = null;
+                  switch (report.Weather)
+                  {
+                     case "Ground Snow":
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowGround"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        break;
+                     case "Deep Snow":
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowDeep"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        break;
+                     case "Falling Snow":
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        break;
+                     case "Falling and Deep Snow":
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFallingDeep"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        break;
+                     case "Falling and Ground Snow":
+                        imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFallingDeep"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                        break;
+                     default:
+                        break;
+                  }
+                  if (null == imgWeather)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): img=null for key=" + key);
+                     return false;
+                  }
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Weather calls for " + report.Weather + ":"));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                        "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgWeather));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
                break;
             case "e009":
                TankCard card = new TankCard(report.TankCardNum);
@@ -1445,7 +1482,7 @@ namespace Pattons_Best
             case "Begin Game":
                action = GameAction.SetupShowMapHistorical;
                //action = GameAction.TestingStartMovement; // <cgs> TEST
-               action = GameAction.TestingStartBattle; // <cgs> TEST
+               //action = GameAction.TestingStartBattle; // <cgs> TEST
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Cancel":

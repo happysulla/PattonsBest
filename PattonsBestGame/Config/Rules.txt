@@ -302,18 +302,45 @@ Table per
 <InlineUIContainer><Button Content='r23.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r4.65	"<Bold>r4.65  Ambush Check</Bold>
 <LineBreak/><LineBreak/>
-Roll 1D for possible Ambush and subtract one for rain, falling snow, or fog. If die roll is less than 7, consult appropriate 
-<InlineUIContainer><Button Content='Enemy Advance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Action Table, 
-<InlineUIContainer><Button Content='Enemy Battle' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Action Table, or 
-<InlineUIContainer><Button Content='Enemy Counterattack' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Action Table for each enemy unit per 
-<InlineUIContainer><Button Content='r13.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> and 
-<InlineUIContainer><Button Content='r19.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
- Additionally, roll for random events on the 
+Roll 1D for possible Ambush and subtract one for rain, falling snow, or fog. If die roll is less than 7, consult appropriate table for each enemy unit:
+<InlineUIContainer><Button Content='Enemy Advance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Action Table, <LineBreak/>
+<InlineUIContainer><Button Content='Enemy Battle' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Action Table, or <LineBreak/>
+<InlineUIContainer><Button Content='Enemy Counterattack' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Action Table.
+<LineBreak/><LineBreak/> 
+See 
+<InlineUIContainer><Button Content='r13.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for enemy actions and 
+<InlineUIContainer><Button Content='r20.43' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for ambushes in Counterattack scenario. 
+<LineBreak/><LineBreak/> 
+Additionally, roll for random events on the 
 <InlineUIContainer><Button Content='Random Events' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. Then go to 
 <LineBreak/><LineBreak/>
 Regardless of ambush status, continue with
-<InlineUIContainer><Button Content='r4.7' FontFamily='Courier New'  FontSize='12'> 
-to start the fight."
+<InlineUIContainer><Button Content='r4.7' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> to start the fight."
+r4.7	"<Bold>r4.7  Battle Round Sequence</Bold>
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r4.71' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Smoke Depletion Phase<LineBreak/>
+<InlineUIContainer><Button Content='r4.72' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Spotting Phase<LineBreak/>
+<InlineUIContainer><Button Content='r4.73' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Orders Phase<LineBreak/>
+<InlineUIContainer><Button Content='r4.74' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Crew Actions Phase<LineBreak/>
+<InlineUIContainer><Button Content='r4.75' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Actions Phase<LineBreak/>
+<InlineUIContainer><Button Content='r4.76' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Friendly Action Phase<LineBreak/>
+<InlineUIContainer><Button Content='r4.77' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Random Events Phase"
+r4.71	"<Bold>r4.71  Smoke Depletion Phase</Bold>
+<LineBreak/><LineBreak/>"
+r4.72	"<Bold>r4.72  Spotting Phase</Bold>
+<LineBreak/><LineBreak/>"
+r4.73	"<Bold>r4.73  Orders Phase</Bold>
+<LineBreak/><LineBreak/>"
+r4.74	"<Bold>r4.74  Crew Actions Phase</Bold>
+<LineBreak/><LineBreak/>"
+r4.75	"<Bold>r4.75  Enemy Actions Phase</Bold>
+<LineBreak/><LineBreak/>"
+r4.76	"<Bold>r4.76  Friendly Action Phase</Bold>
+<LineBreak/><LineBreak/>"
+r4.77	"<Bold>r4.77   Random Events Phase</Bold>
+<LineBreak/><LineBreak/>"
+r4.8	"<Bold>r4.8  When Your Tanks Is Target</Bold>
+<LineBreak/><LineBreak/>"
 r4.9	"<Bold>r4.9  Evening Debrief</Bold>
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r4.91' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Rating Improvements<LineBreak/>
@@ -1223,12 +1250,12 @@ Table to determine the terrain occupied by the enemy unit. The table also indica
        <InlineUIContainer><Image Name='c13Moving'  Height='50' Width='50'></Image></InlineUIContainer>"
 r13.0	"<Bold>r13.0 Enemy Action </Bold> 
 <LineBreak/><LineBreak/>
-During the enemy action phase of the Battle Round Sequence, refer to the respective table:
+During the enemy action phase of the Battle Round Sequence, refer to the respective table: 
 <InlineUIContainer><Button Content='Enemy Advance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, 
 <InlineUIContainer><Button Content='Enemy Battle' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, or 
 <InlineUIContainer><Button Content='Enemy Counterattack' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
 <LineBreak/><LineBreak/>
-Roll for each unit on the Battle Board. Enemy units will either do nothing, move to another zone (or off the board), move to another zone, or fire their weapons.
+Roll for each enemy unit on the Battle Board. Enemy units will either do nothing, move to another zone (or off the board), or fire their weapons.
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r13.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Movement<LineBreak/>
 <InlineUIContainer><Button Content='r13.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Fire Versus Infantry<LineBreak/>
@@ -1236,7 +1263,7 @@ Roll for each unit on the Battle Board. Enemy units will either do nothing, move
 <InlineUIContainer><Button Content='r13.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Fire Versus Your Tank"
 r13.1	"<Bold>r13.1 Movement </Bold> 
 <LineBreak/><LineBreak/>
-Enemy units move n four direcitons: <LineBreak/>
+Enemy units move in four direcitons: <LineBreak/>
 F = Forward<LineBreak/>
 B = Backward<LineBreak/>
 L = Left<LineBreak/>
@@ -1254,9 +1281,9 @@ A unit moving forward remains in the same sector, but moves one zone close to th
 If it is already at close range, it jumps to close range in the sector on the other side of the hub direclty opposite the sector it now occupies."
 r13.12	"<Bold>r13.12 Move Backward </Bold> 
 <LineBreak/><LineBreak/>
-A unit moving backward remains in the same sector, but move sone zone away from the hub. A unit already at long range in Sectors 4-5, 6-8, or 9-10 is removed from play.
+A unit moving backward remains in the same sector, but moves one zone away from the hub. A unit already at long range in Sectors 4-5, 6-8, or 9-10 is removed from play.
 <LineBreak/><LineBreak/>
-A unit alreayd at long range in Sectors 1, 2, or 3 is removed from the Battle Board and placed on the Movement Board in the area you moved out of to enter the current area. Remove the US Control marker from that area if present."
+A unit already at long range in Sectors 1, 2, or 3 is removed from the Battle Board and placed on the Movement Board in the area you moved out of to enter the current area. Remove the US Control marker from that area if present."
 r13.13	"<Bold>r13.13 Move Right or Left </Bold> 
 <LineBreak/><LineBreak/>
 Units moving to the right or left remain at the same range but move one zone clockwise or counterclockwise respectivley."
@@ -1271,11 +1298,37 @@ Mark moving enemy units with a Moving marker. Remove any Spotted, Hidden, or ter
                                       <InlineUIContainer><Image Name='c13Moving'  Height='50' Width='50'></Image></InlineUIContainer>"
 r13.2	"<Bold>r13.2 Fire Versus Infantry </Bold> 
 <LineBreak/><LineBreak/>
-Enemy SPG, Tank, SPW, PSW, LW, and MG units may attempt to kill infantry squads of the forces friendly to you. Refere to the section of the "
+Enemy SPG, Tank, SPW, PSW, LW, and MG units may attempt to kill infantry squads of the forces friendly to you. Refer to the section of the &quot;To Kill Infantry Squad&quot; rows on the respective table:
+<LineBreak/><LineBreak/>
++B31<LineBreak/><LineBreak/>
+The range for the enemy fire is determined by the range of the zone the unit occupies.
+<LineBreak/><LineBreak/>
+Roll 2D. If the number rolled is less than or equal to the number shown on the table, one US infantry squad is KO&apos;ed. Record the loss of the squad on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>"
 r13.3	"<Bold>r13.3 Fire Versus Any Tank </Bold> 
-<LineBreak/><LineBreak/>"
+<LineBreak/><LineBreak/>
+Enemy SPG, tank and AT gun units may attempt to kill Sherman tanks of the forces friendly to you. Refer to the section of the &quot;To Kill Sherman Tank&quot; rows on the respective table:
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='Enemy Advance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Action Table, <LineBreak/>
+<InlineUIContainer><Button Content='Enemy Battle' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Action Table, or <LineBreak/>
+<InlineUIContainer><Button Content='Enemy Counterattack' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Action Table.
+<LineBreak/><LineBreak/>
+The range for the enemy fire is determined by the range of the zone the unit occupies.
+<LineBreak/><LineBreak/>
+Roll 2D. If the number rolled is less than or equal to the number shown on the table, one friendly tank is KO&apos;ed. Record the loss of the tank on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>"
 r13.4	"<Bold>r13.4 Fire Versus Your Tank </Bold> 
-<LineBreak/><LineBreak/>"
+<LineBreak/><LineBreak/>
+The enemy unit is trying to KO your tank. First roll on the 
+<InlineUIContainer><Button Content='Enemy AP To Hit' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table 
+to see if the enemy shot hits your tank.
+<LineBreak/><LineBreak/>
+If it misses, continue resolving the action of the remaining enemy units. 
+<LineBreak/><LineBreak/>
+If the shot hits, roll on the 
+<InlineUIContainer><Button Content='Enemy AP To Kill' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table 
+to see if the shot penetrates your tank. 
+<LineBreak/><LineBreak/>If the shot does not penetrate, continue to resolve enemy action. If it does penetrate, your tank is knocked out."
 r14.0	"<Bold>r14.0 Friendly Action</Bold> 
 <LineBreak/><LineBreak/>
 Friendly Action represents the firepower of the friendly forces accompanying your vehicle. Roll 2D on the Friendly Action Table for each enemy unit on the Battle Board. Friendly action will result in either no effect, destruction of the enemy unit, or the placement of smoke. Record the destruction of enemy units on the After Action Report 
@@ -1293,27 +1346,88 @@ Roll 2D on the Random Events Table during the Random Events Phase of the Battle 
 <InlineUIContainer><Button Content='r15.7' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Friendly Advance<LineBreak/>
 <InlineUIContainer><Button Content='r15.8' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Reinforcement<LineBreak/>
 <InlineUIContainer><Button Content='r15.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Advance<LineBreak/>
-<InlineUIContainer><Button Content='r15.10' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Flanking Fire"
+<InlineUIContainer><Button Content='r15.A' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Flanking Fire"
 r15.1	"<Bold>r15.1 Time Passes</Bold> 
-<LineBreak/><LineBreak/>"
+<LineBreak/><LineBreak/>
+Fifteen minutes of time has passed since the beginning of the battle. Mark off 15 minutes on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+If the passing of time moves the time past sunset, the battle continues as normal until resolved. Assume enough daylight remains to allow combat.
+<LineBreak/><LineBreak/>
+Once the battle is finished, the day ends."
 r15.2	"<Bold>r15.2 Friendly Artillery</Bold> 
-<LineBreak/><LineBreak/>"
+<LineBreak/><LineBreak/>
+Friendly Artillery represents the fire of support guns. Resolve this fire by rolling on the 
+<InlineUIContainer><Button Content='Friendly Action' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table 
+against each enemy unit on the Battle Board.
+<LineBreak/><LineBreak/>
+Note the special modifiers for artillery versus armored vehicles."
 r15.3	"<Bold>r15.3 Enemy Artillery</Bold> 
-<LineBreak/><LineBreak/>"
+<LineBreak/><LineBreak/>
+Enemy Arillery represents the fire of guns in support of the enem units on the Battle Board and can result in the loss of friendly infantry squads. Also, it can damage your tank and wound exposed crew members. 
+<LineBreak/><LineBreak/>
+Roll 1D : <LineBreak/>
+1-6 = 1 squad lost <LineBreak/>
+7-9 = 2 squads lost <LineBreak/>
+10  = 3 squads lost <LineBreak/>
+<LineBreak/><LineBreak/>
+Also, roll on the <InlineUIContainer><Button Content='Collateral' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Damage Table."
 r15.4	"<Bold>r15.4 Mines</Bold> 
-<LineBreak/><LineBreak/>"
+<LineBreak/><LineBreak/>
+Mines represent the danger of passing over buried mines when moving into enemy territory. 
+<LineBreak/><LineBreak/>
+If your tank is not moving, this event is ignored. 
+<LineBreak/><LineBreak/>
+If you are moving, refer to the 
+<InlineUIContainer><Button Content='Minefield' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table."
 r15.5	"<Bold>r15.5 Panzerfaust Attack</Bold> 
-<LineBreak/><LineBreak/>"
+<LineBreak/><LineBreak/>
+This event represents the random chance of an attack on your tank by a hand-held antitank rocket launcher. The German army of WW II was equipped with the Panzerchreck (a reusable launcher similar to the US bazooka) and the Panzerfaust ( a more commone disposable launcher).
+<LineBreak/><LineBreak/>
+These weapons fired a shaped charge something like a lump of putty that ignited on impact and would burn through armor. They send a jet of molten metal and burning gas into the tank. 
+<LineBreak/><LineBreak/>
+Refer to the 
+<InlineUIContainer><Button Content='Panzerfaust' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Attack Table 
+to determine whether your tank is the object of this type of attack. If so, the table indicates whether the attack is succcessful.
+<LineBreak/><LineBreak/>
+                                      <InlineUIContainer><Image Name='c107Panzerfaust'  Height='50' Width='50'></Image></InlineUIContainer>"
 r15.6	"<Bold>r15.6 Harassing Fire</Bold> 
-<LineBreak/><LineBreak/>"
+<LineBreak/><LineBreak/>
+This event represents the random spraying of fire at your tank in the hopes of causing casualties to exposed crewmen. 
+<LineBreak/><LineBreak/>
+It was also possible for tis type of fire to cause collateral damage to your tank such as the damaging of periscopes, sights, adn the AA MG. 
+<LineBreak/><LineBreak/>
+When this event is rolled, roll on the 
+<InlineUIContainer><Button Content='Collateral' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Damage Table."
 r15.7	"<Bold>r15.7 Friendly Advance</Bold> 
-<LineBreak/><LineBreak/>"
+<LineBreak/><LineBreak/>
+This event represents the movement of friendly forces. 
+<LineBreak/><LineBreak/>
+Place one US Control marker in a sector of your choice that is empty of enemy units and adjacent to an already friendly sector.
+<LineBreak/><LineBreak/>
+Ignore this event if no sector qualifies."
 r15.8	"<Bold>r15.8 Enemy Reinforcement</Bold> 
-<LineBreak/><LineBreak/>"
+<LineBreak/><LineBreak/>
+When this event occurs, immediately activate one additional enemy unit for an Advance scenario and two additional for Battle/Counterattack scenarios.
+<LineBreak/><LineBreak/>
+Consult the Battle Board 
+<InlineUIContainer><Button Content='Placement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table 
+for the position of each new unit."
 r15.9	"<Bold>r15.9 Enemy Advance</Bold> 
-<LineBreak/><LineBreak/>"
-r15.10	"<Bold>r15.10 Flanking Fire</Bold> 
-<LineBreak/><LineBreak/>"
+<LineBreak/><LineBreak/>
+This event represents the movement of enemy forces and the withdrawal of friendly forces.
+<LineBreak/><LineBreak/>
+Remove one US Control marker from the a Battle Board sector adjacent to an enemy unit but do not move the enemy unit.
+<LineBreak/><LineBreak/>
+If two sectors are eligible, roll 1D:  <LineBreak/>
+1-5 = left hand sector  <LineBreak/>
+6-10 = right hand sector.
+<LineBreak/><LineBreak/>
+Ignore this event if no sector qualifies."
+r15.A	"<Bold>r15.A Flanking Fire</Bold> 
+<LineBreak/><LineBreak/>
+This event represents aggressive movement and fire from friendly forces. Roll against each enemy unit on the 
+<InlineUIContainer><Button Content='Friendly Action' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table with a die roll modifier of -10."
 r16.0	"<Bold>r16.0 Ammunition (Ammo)</Bold> 
 <LineBreak/><LineBreak/>
 Ammo is loaded into your tank at the beginning of each scenerio as part of morning briefing 
