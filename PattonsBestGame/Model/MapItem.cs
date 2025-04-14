@@ -12,6 +12,7 @@ using System.Xml.Linq;
 using WpfAnimatedGif;
 using Button = System.Windows.Controls.Button;
 using Label = System.Windows.Controls.Label;
+using Point = System.Windows.Point;
 
 namespace Pattons_Best
 {
@@ -42,6 +43,7 @@ namespace Pattons_Best
       [NonSerialized] private static BitmapImage? theBloodSpot = theMapImages.GetBitmapImage("OBlood1");
       [NonSerialized] private static BitmapImage? theMoving = theMapImages.GetBitmapImage("c13Moving");
       [NonSerialized] private static BitmapImage? theHullDown = theMapImages.GetBitmapImage("c14HullDown");
+      [NonSerialized] private static BitmapImage? theTurret = theMapImages.GetBitmapImage("c16Turret");
       private const double PERCENT_MAPITEM_COVERED = 40.0;
       //--------------------------------------------------
       public string Name { get; set; } = string.Empty;
@@ -94,6 +96,8 @@ namespace Pattons_Best
       //--------------------------------------------------
       public bool IsMoving { get; set; } = false;
       public bool IsHullDown { get; set; } = false;
+      public bool IsTurret { get; set; } = false;
+      //--------------------------------------------------
       private bool myIsFlipped = false;
       //----------------------------------------------------------------------------
       public MapItem()
@@ -316,6 +320,19 @@ namespace Pattons_Best
                c.Children.Add(imgHullDown);
                Canvas.SetLeft(imgHullDown, 0.5 * width );
                Canvas.SetTop(imgHullDown, - 0.5 * height);
+            }
+            if (true == mi.IsTurret)
+            {
+               double width = mi.Zoom * Utilities.theMapItemSize;
+               double height = width;
+               Image imgHullDown = new Image() { Height = height, Width = width, Source = theTurret };
+               RotateTransform rotateTransform = new RotateTransform();
+               imgHullDown.RenderTransformOrigin = new Point(0.5, 0.5);
+               rotateTransform.Angle = mi.Count * 60.0;
+               imgHullDown.RenderTransform = rotateTransform;
+               c.Children.Add(imgHullDown);
+               Canvas.SetLeft(imgHullDown, 0);
+               Canvas.SetTop(imgHullDown, 0);
             }
             if ("" != mi.OverlayImageName)
             {

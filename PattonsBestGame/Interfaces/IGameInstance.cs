@@ -34,7 +34,6 @@ namespace Pattons_Best
       IMapItems Hatches { set; get; }
       IMapItems GunLoads { set; get; }
       IMapItem Sherman { set; get; }
-      IMapItem Turret { set; get; }
       //------------------------------------------------
       ITerritory Home { get; set; }
       ITerritory? EnemyStrengthCheck { get; set; }

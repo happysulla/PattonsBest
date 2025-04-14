@@ -707,37 +707,17 @@ namespace Pattons_Best
                case GameAction.PreparationsTurret:
                   gi.IsTurretActive = true;
                   gi.EventDisplayed = gi.EventActive = "e014";
-                  gi.Turret.TerritoryCurrent = gi.Home;
-                  gi.Turret.SetLocation(0);
-                  gi.BattleStacks.Add(gi.Turret);
+                  gi.Sherman.IsTurret = true;
                   break;
                case GameAction.PreparationsTurretRotateLeft:
-                  IMapItem? turretL = gi.BattleStacks.FindMapItem("Turret");
-                  if (null == turretL)
-                  {
-                     returnStatus = "turret=null";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsTurretRotateRight): " + returnStatus);
-                  }
-                  else
-                  {
-                     turretL.Count--;
-                     if (turretL.Count < 0)
-                        turretL.Count = 5;
-                  }
+                  gi.Sherman.Count--;
+                  if (gi.Sherman.Count < 0)
+                     gi.Sherman.Count = 5;
                   break;
                case GameAction.PreparationsTurretRotateRight:
-                  IMapItem? turretR = gi.BattleStacks.FindMapItem("Turret");
-                  if (null == turretR)
-                  {
-                     returnStatus = "turret=null";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsTurretRotateLeft): " + returnStatus);
-                  }
-                  else
-                  {
-                     turretR.Count++;
-                     if (5 < turretR.Count)
-                        turretR.Count = 0;
-                  }
+                  gi.Sherman.Count++;
+                  if (5 < gi.Sherman.Count)
+                     gi.Sherman.Count = 0;
                   break;
                case GameAction.PreparationsLoaderSpot:
                   gi.IsTurretActive = false;

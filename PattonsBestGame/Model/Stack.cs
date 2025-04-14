@@ -62,12 +62,6 @@ namespace Pattons_Best
          }
          else // add to top of stack
          {
-            if( "Turret" != mi.Name )
-            {
-               double offset = stack.MapItems.Count * Utilities.STACK;
-               mi.Location.X -= offset;
-               mi.Location.Y -= offset;
-            }
             stack.MapItems.Add(mi);
          }
       }

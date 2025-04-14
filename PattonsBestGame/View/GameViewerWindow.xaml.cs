@@ -313,27 +313,11 @@ namespace Pattons_Best
                break;
             case GameAction.PreparationsTurretRotateLeft:
             case GameAction.PreparationsTurretRotateRight:
-               Button? button = myBattleButtons.Find("Turret");
-               if (null == button)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myBattleButtons.Find(Turret)=null");
-               }
+               Button? b100 = this.myBattleButtons.Find(gi.Sherman.Name);
+               if (null == b100)
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): b100=null");
                else
-               {
-                  IMapItem? turret = myGameInstance.BattleStacks.FindMapItem("Turret");
-                  if (null == turret)
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): Turret=null");
-                     return;
-                  }
-                  else
-                  {
-                     RotateTransform rotateTransform = new RotateTransform();
-                     button.RenderTransformOrigin = new Point(0.5, 0.5);
-                     rotateTransform.Angle = turret.Count * 60.0;
-                     button.RenderTransform = rotateTransform;
-                  }
-               }
+                  MapItem.SetButtonContent(b100, gi.Sherman);
                break;
             case GameAction.EndGameWin:
             case GameAction.EndGameLost:
@@ -937,10 +921,6 @@ namespace Pattons_Best
                {
                   Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "UpdateCanvasMainMapItems(): Adding mi=" + mi.Name + " to stack@" + stack.ToString());
                   Button newButton = CreateButtonMapItem(buttons, mi);
-                  if( "Turret" == mi.Name )
-                     Canvas.SetZIndex(newButton, 9999); // Turret always on top
-                  else
-                     Canvas.SetZIndex(newButton, 900 + counterCount);
                   myCanvasMain.Children.Add(newButton);
                }
             }
@@ -1539,14 +1519,13 @@ namespace Pattons_Best
                }
             }
          }
-         if (true == button.Name.Contains("Turret"))
+         //-----------------------------------------------
+         else if( true == button.Name.Contains("Sherman"))
          {
-            if (true == myGameInstance.IsTurretActive)
-            {
-               GameAction outAction = GameAction.PreparationsTurretRotateRight;
-               myGameEngine.PerformAction(ref myGameInstance, ref outAction);
-            }
-            return;
+            myGameInstance.Sherman.Count++;
+            if (5 < myGameInstance.Sherman.Count)
+               myGameInstance.Sherman.Count = 0;
+            MapItem.SetButtonContent(button, myGameInstance.Sherman);
          }
       }
       private void MouseEnterMapItem(object sender, System.Windows.Input.MouseEventArgs e)
