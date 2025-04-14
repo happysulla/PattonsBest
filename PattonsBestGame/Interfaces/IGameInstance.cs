@@ -33,7 +33,8 @@ namespace Pattons_Best
       IMapItems ReadyRacks { set; get; }
       IMapItems Hatches { set; get; }
       IMapItems GunLoads { set; get; }
-      IMapItem? Turret { set; get; }
+      IMapItem Sherman { set; get; }
+      IMapItem Turret { set; get; }
       //------------------------------------------------
       ITerritory Home { get; set; }
       ITerritory? EnemyStrengthCheck { get; set; }
@@ -41,8 +42,6 @@ namespace Pattons_Best
       ITerritory? AirStrikeCheck { get; set; }
       ITerritory? EnteredArea { get; set; }
       //------------------------------------------------
-      bool IsHulledDown { set; get; }
-      bool IsMoving { set; get; }
       bool IsLeadTank { set; get; }
       bool IsTurretActive { set; get; }
       bool IsAirStrikePending { set; get; }

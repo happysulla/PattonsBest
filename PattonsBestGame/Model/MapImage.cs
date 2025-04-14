@@ -19,6 +19,8 @@ namespace Pattons_Best
       public System.Windows.Media.Imaging.BitmapImage myBitmapImage;
       public string Name { get; set; } = string.Empty;
       public bool IsAnimated { get; set; } = false;
+      public bool IsMoving { get; set; } = false;
+      public bool IsHullDown { get; set; } = false;
       private Image myImage = new Image();
       public Image ImageControl { get=>myImage; set=>myImage=value; }
       private ImageAnimationController? myAnimationController = null;

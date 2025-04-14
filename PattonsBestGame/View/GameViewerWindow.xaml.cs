@@ -468,7 +468,7 @@ namespace Pattons_Best
       private Button CreateButtonMapItem(List<Button> buttons, IMapItem mi)
       {
          System.Windows.Controls.Button b = new Button { ContextMenu = myContextMenuButton, Name = mi.Name, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
-         MapItem.SetButtonContent(b, mi, false, false, false, false); // This sets the image as the button's content
+         MapItem.SetButtonContent(b, mi); // This sets the image as the button's content
          buttons.Add(b);
          Canvas.SetLeft(b, mi.Location.X);
          Canvas.SetTop(b, mi.Location.Y);
@@ -889,6 +889,10 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "UpdateCanvasMainClear(): Remove mi=" + button.Name + " from stack=" + stack.ToString());
                      stack.MapItems.Remove(button.Name);
                   }
+               }
+               else
+               {
+                  MapItem.SetButtonContent(button, mi);
                }
             }
             if (ui is Label label)  // A Game Feat Label

@@ -245,7 +245,7 @@ namespace Pattons_Best
          b.BorderBrush = Brushes.Black;
          b.Background = new SolidColorBrush(Colors.Transparent);
          b.Foreground = new SolidColorBrush(Colors.Transparent);
-         MapItem.SetButtonContent(b, mi, false, true); // This sets the image as the button's content
+         MapItem.SetButtonContent(b, mi); // This sets the image as the button's content
          return b;
       }
       public void ShowDieResults(int dieRoll)

@@ -644,7 +644,10 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Weather calls for " + report.Weather + ":"));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("                "));
+                  if( "Clear" == report.Weather )
+                     myTextBlock.Inlines.Add(new Run("                                    "));
+                  else
+                     myTextBlock.Inlines.Add(new Run("                "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imgWeather));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -681,7 +684,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): img=null for key=" + key);
                      return false;
                   }
-                   myTextBlock.Inlines.Add(new Run("Weather calls for " + report.Weather + ":"));
+                  myTextBlock.Inlines.Add(new Run("Weather calls for " + report.Weather + ":"));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("               "));
@@ -743,22 +746,36 @@ namespace Pattons_Best
                {
                   StringBuilder sbE011 = new StringBuilder();
                   sbE011.Append(" Is Hulled Down =  ");
-                  sbE011.Append( gi.IsHulledDown.ToString() );
+                  sbE011.Append( gi.Sherman.IsHullDown.ToString() );
                   sbE011.Append("\n Is Moving  = ");
-                  sbE011.Append(gi.IsMoving.ToString());
+                  sbE011.Append(gi.Sherman.IsMoving.ToString());
                   sbE011.Append("\n Is Lead Tank  = ");
                   sbE011.Append(gi.IsLeadTank.ToString());
-                  Image imge011 = new Image { Width = 100, Height = 100, Name = "PreparationsDeploymentEnd" };
-                  if (true == gi.IsHulledDown)
-                     imge011.Source = MapItem.theMapImages.GetBitmapImage("c14HullDown");
-                  else if( true == gi.IsMoving )
-                     imge011.Source = MapItem.theMapImages.GetBitmapImage("c13Moving");
-                  else
-                     imge011.Source = MapItem.theMapImages.GetBitmapImage("Continue");
                   myTextBlock.Inlines.Add(new Run(sbE011.ToString()));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("                                           "));
+                  Image imge011 = new Image { Name = "PreparationsDeploymentEnd" };
+                  if (true == gi.Sherman.IsHullDown)
+                  {
+                     imge011.Source = MapItem.theMapImages.GetBitmapImage("c14HullDown");
+                     imge011.Width = 300;
+                     imge011.Height = 150;
+                     myTextBlock.Inlines.Add(new Run("                            "));
+                  }
+                  else if( true == gi.Sherman.IsMoving )
+                  {
+                     imge011.Source = MapItem.theMapImages.GetBitmapImage("c13Moving");
+                     imge011.Width = 100;
+                     imge011.Height = 133;
+                     myTextBlock.Inlines.Add(new Run("                                           "));
+                  }
+                  else
+                  {
+                     imge011.Source = MapItem.theMapImages.GetBitmapImage("Continue");
+                     imge011.Width = 100;
+                     imge011.Height = 100;
+                     myTextBlock.Inlines.Add(new Run("                                           "));
+                  }
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge011));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());

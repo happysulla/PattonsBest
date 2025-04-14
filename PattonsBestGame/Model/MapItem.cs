@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Transactions;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -38,6 +40,8 @@ namespace Pattons_Best
       [NonSerialized] private static Random theRandom = new Random();
       [NonSerialized] public static IMapImages theMapImages = new MapImages();
       [NonSerialized] private static BitmapImage? theBloodSpot = theMapImages.GetBitmapImage("OBlood1");
+      [NonSerialized] private static BitmapImage? theMoving = theMapImages.GetBitmapImage("c13Moving");
+      [NonSerialized] private static BitmapImage? theHullDown = theMapImages.GetBitmapImage("c14HullDown");
       private const double PERCENT_MAPITEM_COVERED = 40.0;
       //--------------------------------------------------
       public string Name { get; set; } = string.Empty;
@@ -80,10 +84,16 @@ namespace Pattons_Best
       //--------------------------------------------------
       public IMapPoint Location { get; set; } = new MapPoint(0.0, 0.0);
       protected ITerritory myTerritoryCurrent = new Territory("Offboard");
-      public ITerritory TerritoryCurrent { get => myTerritoryCurrent; set => myTerritoryCurrent = value; }
+      public ITerritory TerritoryCurrent 
+      { 
+         get => myTerritoryCurrent; 
+         set => myTerritoryCurrent = value; 
+      }
       protected ITerritory myTerritoryStarting = new Territory("Offboard");
       public ITerritory TerritoryStarting { get => myTerritoryStarting; set => myTerritoryStarting = value; }
       //--------------------------------------------------
+      public bool IsMoving { get; set; } = false;
+      public bool IsHullDown { get; set; } = false;
       private bool myIsFlipped = false;
       //----------------------------------------------------------------------------
       public MapItem()
@@ -267,7 +277,7 @@ namespace Pattons_Best
             mapItems = newOrder;
          }
       }
-      public static void SetButtonContent(Button b, IMapItem mi, bool isStatsShown, bool isAdornmentsShown, bool isSwordOrShieldShown = false, bool isBloodSpotsShown = true)
+      public static void SetButtonContent(Button b, IMapItem mi, bool isBloodSpotsShown = true)
       {
          Grid g = new Grid() { };
          if (false == mi.IsAnimated)
@@ -289,6 +299,24 @@ namespace Pattons_Best
             }
             g.Children.Add(c);
             //----------------------------------------------------
+            if (true == mi.IsMoving)
+            {
+               double width = 0.4 * mi.Zoom * Utilities.theMapItemOffset;
+               double height = 1.33 * width;
+               Image imgMoving = new Image() { Height = height, Width = width, Source = theMoving };
+               c.Children.Add(imgMoving);
+               Canvas.SetLeft(imgMoving, mi.Zoom * Utilities.theMapItemOffset - 0.5 * width);
+               Canvas.SetTop(imgMoving, -0.5 * height);
+            }
+            if (true == mi.IsHullDown)
+            {
+               double width = 0.5 * mi.Zoom * Utilities.theMapItemSize;
+               double height = width / 2.0;
+               Image imgHullDown = new Image() { Height = height, Width = width, Source = theHullDown };
+               c.Children.Add(imgHullDown);
+               Canvas.SetLeft(imgHullDown, 0.5 * width );
+               Canvas.SetTop(imgHullDown, - 0.5 * height);
+            }
             if ("" != mi.OverlayImageName)
             {
                Image overlay = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage(mi.OverlayImageName) };

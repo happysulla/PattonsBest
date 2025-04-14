@@ -260,7 +260,6 @@ namespace Pattons_Best
                }
                else
                {
-                  gi.Day = 71;  // <cgs> TEST
                   gi.GamePhase = GamePhase.MorningBriefing;
                   gi.EventDisplayed = gi.EventActive = "e007";
                   gi.DieRollAction = GameAction.MorningBriefingWeatherRoll;
@@ -282,7 +281,9 @@ namespace Pattons_Best
                   gi.GamePhase = GamePhase.Preparations;
                   gi.EventDisplayed = gi.EventActive = "e011";
                   gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
-                  gi.BattleStacks.Add(new MapItem("Sherman1", 2.0, "t001", gi.Home));
+                  gi.Sherman.TerritoryCurrent = gi.Home;
+                  gi.Sherman.SetLocation(0);
+                  gi.BattleStacks.Add(gi.Sherman);
                }
                break;
             case GameAction.TestingStartMovement:
@@ -526,7 +527,6 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.MorningBriefingWeatherRoll;
                   break;
                case GameAction.MorningBriefingWeatherRoll:
-                  dieRoll = 98;  // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   lastReport.Weather = TableMgr.GetWeather(gi.Day, dieRoll);
@@ -572,7 +572,9 @@ namespace Pattons_Best
                   gi.GamePhase = GamePhase.Preparations;
                   gi.EventDisplayed = gi.EventActive = "e011";
                   gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
-                  gi.BattleStacks.Add(new MapItem("Sherman1", 2.0, "t001", gi.Home));
+                  gi.Sherman.TerritoryCurrent = gi.Home;
+                  gi.Sherman.SetLocation(0);
+                  gi.BattleStacks.Add(gi.Sherman);
                   if (false == SetWeatherCounters(gi, gi.DieResults["e007"][0]))
                   {
                      returnStatus = "SetWeatherCounters() returned false";
@@ -673,6 +675,7 @@ namespace Pattons_Best
                   gi.GamePhase = GamePhase.EndGame;
                   break;
                case GameAction.PreparationsDeploymentRoll:
+                  dieRoll = 90; // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   gi.IsPrepActive = true;
@@ -704,7 +707,9 @@ namespace Pattons_Best
                case GameAction.PreparationsTurret:
                   gi.IsTurretActive = true;
                   gi.EventDisplayed = gi.EventActive = "e014";
-                  gi.BattleStacks.Add(new MapItem("Turret", 2.0, "c16Turret", gi.Home));
+                  gi.Turret.TerritoryCurrent = gi.Home;
+                  gi.Turret.SetLocation(0);
+                  gi.BattleStacks.Add(gi.Turret);
                   break;
                case GameAction.PreparationsTurretRotateLeft:
                   IMapItem? turretL = gi.BattleStacks.FindMapItem("Turret");
@@ -849,15 +854,15 @@ namespace Pattons_Best
          {
             if (dieRoll < 9)
             {
-               gi.IsHulledDown = true;
-               gi.IsMoving = false;
+               gi.Sherman.IsHullDown = true;
+               gi.Sherman.IsMoving = false;
                gi.IsLeadTank = false;
-               gi.BattleStacks.Add(new MapItem("HullDown", 0.85, "c14HullDown", tState));
+               gi.Sherman.IsHullDown = true;
             }
             else if (dieRoll < 37)
             {
-               gi.IsHulledDown = false;
-               gi.IsMoving = false;
+               gi.Sherman.IsHullDown = false;
+               gi.Sherman.IsMoving = false;
                if ((31 < dieRoll) && (dieRoll < 37))
                   gi.IsLeadTank = true;
                else
@@ -865,13 +870,12 @@ namespace Pattons_Best
             }
             else if (dieRoll < 101)
             {
-               gi.IsHulledDown = false;
-               gi.IsMoving = true;
+               gi.Sherman.IsHullDown = false;
+               gi.Sherman.IsMoving = true;
                if (63 < dieRoll)
                   gi.IsLeadTank = true;
                else
                   gi.IsLeadTank = false;
-               gi.BattleStacks.Add(new MapItem("Moving", 0.85, "c13Moving", tState));
             }
             else
             {
@@ -883,16 +887,14 @@ namespace Pattons_Best
          {
             if (dieRoll < 21)
             {
-               gi.IsHulledDown = true;
-               gi.IsMoving = false;
+               gi.Sherman.IsHullDown = true;
+               gi.Sherman.IsMoving = false;
                gi.IsLeadTank = false;
-               IMapItem miHulledDown = new MapItem("HullDown", 0.85, "c14HullDown", tState);
-               gi.BattleStacks.Add(miHulledDown);
             }
             else if (dieRoll < 58)
             {
-               gi.IsHulledDown = false;
-               gi.IsMoving = false;
+               gi.Sherman.IsHullDown = false;
+               gi.Sherman.IsMoving = false;
                if (57 == dieRoll)
                   gi.IsLeadTank = true;
                else
@@ -900,14 +902,12 @@ namespace Pattons_Best
             }
             else if (dieRoll < 101)
             {
-               gi.IsHulledDown = false;
-               gi.IsMoving = true;
+               gi.Sherman.IsHullDown = false;
+               gi.Sherman.IsMoving = true;
                if (90 < dieRoll)
                   gi.IsLeadTank = true;
                else
                   gi.IsLeadTank = false;
-               IMapItem miMoving = new MapItem("Moving", 0.85, "c13Moving", tState);
-               gi.BattleStacks.Add(miMoving);
             }
             else
             {

@@ -24,6 +24,9 @@ namespace Pattons_Best
       ITerritory TerritoryCurrent { get; set; }
       ITerritory TerritoryStarting { get; set; }
       //----------------------------------------
+      bool IsMoving { get; set; }
+      bool IsHullDown { get; set; }
+      //----------------------------------------
       void SetLocation(int counterCount);
       void Flip();
       void Unflip();

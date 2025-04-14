@@ -24,6 +24,7 @@ namespace Pattons_Best
       private const int MAX_VOLUNTARY_ROUNDS = 30;
       public enum E162Enum
       {
+         SET_HBCI_COUNT,
          LOAD_NORMAL,
          LOAD_EXTRA_CHECK,
          LOAD_EXTRA_CHECK_SHOW,
@@ -243,7 +244,7 @@ namespace Pattons_Best
             IMapItem rr3 = new MapItem("ReadyRackHvap", 0.9, "c12RoundsLeft", t );
             myGameInstance.ReadyRacks.Add(rr3);
          }
-         // Assign 60% or freaming rounds to HE
+         // Assign 60% or rounds to HE
          myHeRoundCount = (int)Math.Ceiling((double)myUnassignedCount * 0.6);
          myUnassignedCount -= myHeRoundCount;
          myApRoundCount = myUnassignedCount; // assign remaining rounds to AP

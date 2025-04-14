@@ -384,7 +384,7 @@ namespace Pattons_Best
             b.IsEnabled = isEnabled;
             b.Click += this.Button_Click;
          }
-         MapItem.SetButtonContent(b, mi, false, true); // This sets the image as the button's content
+         MapItem.SetButtonContent(b, mi); // This sets the image as the button's content
          return b;
       }
       public void ShowDieResults(int dieRoll)
