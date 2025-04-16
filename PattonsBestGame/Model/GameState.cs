@@ -675,7 +675,6 @@ namespace Pattons_Best
                   gi.GamePhase = GamePhase.EndGame;
                   break;
                case GameAction.PreparationsDeploymentRoll:
-                  dieRoll = 90; // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   gi.IsPrepActive = true;

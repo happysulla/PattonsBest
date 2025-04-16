@@ -168,9 +168,62 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------------
-         myState = E162Enum.LOAD_NORMAL;
+         myState = E162Enum.SET_HBCI_COUNT;
          myIsRollInProgress = false;
          myCallback = callback;
+         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast(); // remove it from list
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): myGameInstance=null");
+            return false;
+         }
+         //--------------------------------------------------
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         myUnassignedReadyRack = card.myMaxReadyRackCount;
+         myUnassignedCount = card.myNumMainGunRound;
+         myMainGun = card.myMainGun;
+         myApRoundCount = 0;
+         myHeRoundCount = 0;
+         myWpRoundCount = 0;
+         myHbciRoundCount = 0;
+         myHvapRoundCount = 0;
+         myExtraAmmo = -1;
+         myDieRollResult = "";
+         myHbciRoundCountOriginal = 0;
+         myHbciRoundCount = 0;
+         //--------------------------------------------------
+         if ("75" != myMainGun)
+         {
+            if( false == SetLoadNormalState())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): SetLoadNormalState() return false");
+               return false;
+            }
+         }
+         //--------------------------------------------------
+         if (false == UpdateGrid())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): UpdateGrid() return false");
+            return false;
+         }
+         myScrollViewer.Content = myGrid;
+         return true;
+      }
+      private bool SetLoadNormalState()
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): myGameInstance=null");
+            return false;
+         }
+         myState = E162Enum.LOAD_NORMAL;
+         //--------------------------------------------------
+         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast(); // remove it from list
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): myGameInstance=null");
+            return false;
+         }
          //--------------------------------------------------
          ITerritory? t = Territories.theTerritories.Find("ReadyRackHe0");
          if (null == t)
@@ -190,31 +243,13 @@ namespace Pattons_Best
          IMapItem rr2 = new MapItem("ReadyRackAp", 0.9, "c12RoundsLeft", t);
          //--------------------------------------------------
          myGameInstance.ReadyRacks.Add(rr2);
-         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast(); // remove it from list
-         if (null == lastReport)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): myGameInstance=null");
-            return false;
-         }
-         TankCard card = new TankCard(lastReport.TankCardNum);
-         myUnassignedReadyRack = card.myMaxReadyRackCount;
-         myUnassignedCount = card.myNumMainGunRound;
-         myMainGun = card.myMainGun;
-         myApRoundCount = 0;
-         myHeRoundCount = 0;
-         myWpRoundCount = 0;
-         myHbciRoundCount = 0;
-         myHvapRoundCount = 0;
-         myExtraAmmo = -1;
-         myDieRollResult = "";
          if ("75" == myMainGun)
          {
-            myHbciRoundCountOriginal = myHbciRoundCount = 10;
             myUnassignedCount -= myHbciRoundCount;
             myWpRoundCount = 5;
             myUnassignedCount -= myWpRoundCount;
             t = Territories.theTerritories.Find("ReadyRackWp0");
-            if( null == t )
+            if (null == t)
             {
                Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackWp0");
                return false;
@@ -228,7 +263,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackHbci0");
                return false;
             }
-            IMapItem rr4 = new MapItem("ReadyRackHbci", 0.9, "c12RoundsLeft", t );
+            IMapItem rr4 = new MapItem("ReadyRackHbci", 0.9, "c12RoundsLeft", t);
             myGameInstance.ReadyRacks.Add(rr4);
          }
          else
@@ -241,7 +276,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackHvap0");
                return false;
             }
-            IMapItem rr3 = new MapItem("ReadyRackHvap", 0.9, "c12RoundsLeft", t );
+            IMapItem rr3 = new MapItem("ReadyRackHvap", 0.9, "c12RoundsLeft", t);
             myGameInstance.ReadyRacks.Add(rr3);
          }
          // Assign 60% or rounds to HE
@@ -251,7 +286,7 @@ namespace Pattons_Best
          myUnassignedCount = 0;
          // Assign default rack with 60% HE
          myHeReadyRackCount = (int)Math.Ceiling((double)myUnassignedReadyRack * 0.6);
-         myUnassignedReadyRack-= myHeReadyRackCount;
+         myUnassignedReadyRack -= myHeReadyRackCount;
          myApReadyRackCount = myUnassignedReadyRack;
          myUnassignedReadyRack = 0;
          myWpReadyRackCount = 0;
@@ -262,13 +297,6 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): UpdateReadyRack returned false");
             return false;
          }
-         //--------------------------------------------------
-         if (false == UpdateGrid())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): UpdateGrid() return false");
-            return false;
-         }
-         myScrollViewer.Content = myGrid;
          return true;
       }
       private bool UpdateGrid()
@@ -324,6 +352,9 @@ namespace Pattons_Best
          myTextBlockInstructions.Inlines.Clear();
          switch (myState)
          {
+            case E162Enum.SET_HBCI_COUNT:
+               myTextBlockInstructions.Inlines.Add(new Run("Roll 1D for available HBCI Rounds."));
+               break;
             case E162Enum.LOAD_NORMAL:
                if( 0 < myUnassignedCount )
                   myTextBlockInstructions.Inlines.Add(new Run("Adjust normal ammo type."));
@@ -384,6 +415,7 @@ namespace Pattons_Best
                label.Content = "Unassigned Ammo = " + myUnassignedCount.ToString();
                myStackPanelAssignable.Children.Add(label);
                break;
+            case E162Enum.SET_HBCI_COUNT:
             case E162Enum.LOAD_EXTRA_CHECK:
                BitmapImage bitMapDieRoll = new BitmapImage();
                bitMapDieRoll.BeginInit();
@@ -434,6 +466,18 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): UpdateGridRowsReadyRack() returned false");
                return false;
             }
+         }
+         else if (E162Enum.SET_HBCI_COUNT == myState)
+         {
+            List<UIElement> results = new List<UIElement>();
+            foreach (UIElement ui in myGrid.Children)
+            {
+               int rowNum0 = Grid.GetRow(ui);
+               if (STARTING_ASSIGNED_ROW <= rowNum0)
+                  results.Add(ui);
+            }
+            foreach (UIElement ui1 in results)
+               myGrid.Children.Remove(ui1);
          }
          else
          {
@@ -995,65 +1039,77 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance=null");
             return;
          }
-         ICombatCalendarEntry? entry = TableMgr.theCombatCalendarEntries[myGameInstance.Day];
-         if (null == entry)
+         if(E162Enum.SET_HBCI_COUNT == myState )
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ICombatCalendarEntry=null");
-            return;
-         }
-         if ( 6 < dieRoll )
-         {
-            switch (entry.Situation)
+            myHbciRoundCountOriginal = myHbciRoundCount = dieRoll;
+            if ( false == SetLoadNormalState())
             {
-               case EnumScenario.Advance:
-                  myExtraAmmo = 20;
-                  sb.Append("Required to take extra ammo");
-                  break;
-               case EnumScenario.Battle:
-                  myExtraAmmo = 0;
-                  sb.Append("Required to take extra ammo");
-                  break;
-               case EnumScenario.Counterattack:
-                  sb.Append("May voluntarily take extra ammo");
-                  break;
-               default:
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): reached default=" + entry.ToString());
-                  return;
-            }
-         }
-         else if (2 < dieRoll)
-         {
-            switch (entry.Situation)
-            {
-               case EnumScenario.Advance:
-                  myExtraAmmo = 30;
-                  sb.Append("Required to take extra ammo");
-                  break;
-               case EnumScenario.Battle:
-               case EnumScenario.Counterattack:
-                  myExtraAmmo = 10;
-                  sb.Append("Required to take extra ammo");
-                  break;
-               default:
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): reached default=" + entry.ToString());
-                  return;
-            }
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResults(=null) returned false");
+               return;
+            } 
          }
          else
          {
-            sb.Append("May voluntarily take extra ammo");
+            ICombatCalendarEntry? entry = TableMgr.theCombatCalendarEntries[myGameInstance.Day];
+            if (null == entry)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ICombatCalendarEntry=null");
+               return;
+            }
+            if (6 < dieRoll)
+            {
+               switch (entry.Situation)
+               {
+                  case EnumScenario.Advance:
+                     myExtraAmmo = 20;
+                     sb.Append("Required to take extra ammo");
+                     break;
+                  case EnumScenario.Battle:
+                     myExtraAmmo = 0;
+                     sb.Append("Required to take extra ammo");
+                     break;
+                  case EnumScenario.Counterattack:
+                     sb.Append("May voluntarily take extra ammo");
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): reached default=" + entry.ToString());
+                     return;
+               }
+            }
+            else if (2 < dieRoll)
+            {
+               switch (entry.Situation)
+               {
+                  case EnumScenario.Advance:
+                     myExtraAmmo = 30;
+                     sb.Append("Required to take extra ammo");
+                     break;
+                  case EnumScenario.Battle:
+                  case EnumScenario.Counterattack:
+                     myExtraAmmo = 10;
+                     sb.Append("Required to take extra ammo");
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): reached default=" + entry.ToString());
+                     return;
+               }
+            }
+            else
+            {
+               sb.Append("May voluntarily take extra ammo");
+            }
+            myDieRollResult = sb.ToString();
+            if (0 < myExtraAmmo)
+            {
+               myUnassignedCount += myExtraAmmo;
+               myState = E162Enum.LOAD_EXTRA;
+            }
+            else
+            {
+               myUnassignedCount += MAX_VOLUNTARY_ROUNDS;
+            }
+            myState = E162Enum.LOAD_EXTRA_CHECK_SHOW;
          }
-         myDieRollResult = sb.ToString();
-         if ( 0 < myExtraAmmo )
-         {
-            myUnassignedCount += myExtraAmmo;
-            myState = E162Enum.LOAD_EXTRA;
-         }
-         else
-         {
-            myUnassignedCount += MAX_VOLUNTARY_ROUNDS;
-         }
-         myState = E162Enum.LOAD_EXTRA_CHECK_SHOW;
          if (false == UpdateGrid())
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateGrid() return false");
          myIsRollInProgress = false;

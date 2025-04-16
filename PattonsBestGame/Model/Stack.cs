@@ -135,10 +135,8 @@ namespace Pattons_Best
                   isMapItemRemoved = true;
                   stack.MapItems.Remove(mapItem);
                   if (0 == stack.MapItems.Count)
-                  {
                      Remove(stack);
-                     return;
-                  }
+                  return;
                 }
                if (true == isMapItemRemoved) // future mapitems move up in stack
                {
@@ -161,10 +159,8 @@ namespace Pattons_Best
                   isMapItemRemoved = true;
                   stack.MapItems.Remove(mapItem);
                   if (0 == stack.MapItems.Count)
-                  {
                      Remove(stack);
-                     return;
-                  }
+                  return;
                }
                if (true == isMapItemRemoved) // future mapitems move up in stack
                {
@@ -172,8 +168,8 @@ namespace Pattons_Best
                   mapItem.Location.Y += Utilities.STACK;
                }
             }
-            }
          }
+      }
       public IStack? RemoveAt(int index)
       {
          IStack? stack = myList[index] as IStack;
