@@ -326,11 +326,29 @@ r4.7	"<Bold>r4.7  Battle Round Sequence</Bold>
 <InlineUIContainer><Button Content='r4.76' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Friendly Action Phase<LineBreak/>
 <InlineUIContainer><Button Content='r4.77' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Random Events Phase"
 r4.71	"<Bold>r4.71  Smoke Depletion Phase</Bold>
-<LineBreak/><LineBreak/>"
+<LineBreak/><LineBreak/>
+Deplete smoke in each zone by flipping one full strength Smoke marker to its back side or by removing a Smoke marker already on its back side. See 
+<InlineUIContainer><Button Content='r18.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for rules on smoke. Continue with 
+<InlineUIContainer><Button Content='r4.72' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r4.72	"<Bold>r4.72  Spotting Phase</Bold>
-<LineBreak/><LineBreak/>"
+<LineBreak/><LineBreak/>
+Determine what your crew can see by consulting the 
+<InlineUIContainer><Button Content='Spotting' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table 
+for each crew unit. 
+<LineBreak/><LineBreak/>
+Mark those enemy units spotted or hidden with the Spotted and Hidden markers per rule 
+<InlineUIContainer><Button Content='r17.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Determine the specific unit type for any unit identified per 
+<InlineUIContainer><Button Content='r17.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Continue with 
+<InlineUIContainer><Button Content='r4.73' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r4.73	"<Bold>r4.73  Orders Phase</Bold>
-<LineBreak/><LineBreak/>"
+<LineBreak/><LineBreak/>
+1. Hatch Segment: Open or close hatches by placing or removing Open Hatch marks on the Tank Card.
+<LineBreak/><LineBreak/>
+2. Orders Segment: Mark crew battle actions by placing Crew Actions markers in teh crew boxes of the Tank Card per 
+<InlineUIContainer><Button Content='r8.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Place only one marker per crewman.
+<LineBreak/><LineBreak/>
+3. Ammo Reload Segment: Mark ammo reload if firing main gun by placing the Gun Reload marker in the box on the Tank Card for the ammo type you wish to reload per 
+<InlineUIContainer><Button Content='r5.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Also mark the ammo is to be drawn from the ready rack by placing the Ready Rack Ammo Reload marker with the Gun Reload marker. Continue with <InlineUIContainer><Button Content='r4.74' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>"
 r4.74	"<Bold>r4.74  Crew Actions Phase</Bold>
 <LineBreak/><LineBreak/>"
 r4.75	"<Bold>r4.75  Enemy Actions Phase</Bold>
@@ -472,7 +490,7 @@ r5.23	"<Bold>r5.23 Gun Loads</Bold>
 In the gun load section, place the Gun Load marker in the box of the ammo round loaded in the gun. Also markhere what round type you want to reload after firing (ammo reload marker), and whether you will draw reloads from the ready rack (ready rack ammo reload marker) per 
 <InlineUIContainer><Button Content='r16.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> .
 <LineBreak/><LineBreak/>
-+B93     <InlineUIContainer><Image Name='c30ReadyRackAmmoReload'  Height='100' Width='100'></Image></InlineUIContainer>"
+                                     <InlineUIContainer><Image Name='c30ReadyRackAmmoReload'  Height='100' Width='100'></Image></InlineUIContainer>"
 r5.24	"<Bold>r5.24 Ready Rack</Bold>
 <LineBreak/><LineBreak/>
 In the ready rack section, place the Rounds Left markers to show what type of rounds are in the ready rack and how many of each per 
@@ -752,7 +770,7 @@ r8.6	"<Bold>r8.6 Non-Specific Crew Actions</Bold>
 r8.61	"<Bold>r8.61 Throw Smoke Grenades</Bold> 
 <LineBreak/><LineBreak/>
 Either the commander or gunner may throw smoke grenades from their open hatch. Grenades must be available as shown on the After Action Report 
-<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContaine. Place a smoke marker on the tank per 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Place a smoke marker on the tank per 
 <InlineUIContainer><Button Content='r18.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
 He may spot per 
 <InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
@@ -1517,7 +1535,7 @@ For each crewman attempting to spot a enemy unit, roll 1D. If the roll is less t
 r17.12	"<Bold>r17.12 Spotting Results</Bold> 
 <LineBreak/><LineBreak/>
 If the roll is equal to half or less than half of the crewman's rating (rounded down), he has also identified the unit. Consult the 
-<InlineUIContainer><Button Content='Appearance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<InlineUIContainer><Button Content='Enemy Appearance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 Table to detemine the specifc type of previously unidentified enemy tanks, SPs, and AT guns."
 r17.13	"<Bold>r17.13 Spotting Modifiers</Bold> 
 <LineBreak/><LineBreak/>
@@ -1575,7 +1593,7 @@ r17.4	"<Bold>r17.4 Unidentified Units</Bold>
 Enemy trucks, PSW, SPW, LW, and MG units are always identified. 
 <LineBreak/><LineBreak/>
 When a PSW/SPW is activiated, roll immediately on the 
-<InlineUIContainer><Button Content='Appearance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<InlineUIContainer><Button Content='Enemy Appearance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 Table to see which appears.
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r17.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Unidentified Tanks<LineBreak/>
@@ -1592,15 +1610,141 @@ All unidentified units are:<LineBreak/>
 -- AT guns -> Pak 43 (88LL)
 <LineBreak/><LineBreak/>
 When one of these is successfully identified, consult the 
-<InlineUIContainer><Button Content='Appearance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<InlineUIContainer><Button Content='Enemy Appearance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
  Table to determine what type of unit is actually present."
 r17.42	"<Bold>r17.42 Unidentified Example</Bold> 
 <LineBreak/><LineBreak/>
 An unidentified tank is placed at medium range to your tanks's front. During the Spotting Phase, your gunner rolls sufficiently low to identify the vehicle. You immediately roll a 5 on the 
-<InlineUIContainer><Button Content='Appearance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='Enemy Appearance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 resulting in the identification of the tank as a Pz IV. Replace the red Pz VIe counter with a black Pz IV counter.
 <LineBreak/><LineBreak/>
 Unidentified units are treated as the unit pictured for all purposes until identified. It is critical to identify counters as quickly as possible. Continue attempting to spot unidentified to spot unidentified units until they are identified."
+r18.0	"<Bold>r18.0 Smoke</Bold>
+<LineBreak/><LineBreak/>
+Smoke can be placed on the Battle Board as a tactical tool to obstruct the fire of enemy units. 
+<LineBreak/><LineBreak/>
+Smoke can be created from smoke grenades, smoke bombs, fired from a 2in smoke mortar, and from WP or HCBI rounds fired from the main gun.
+<LineBreak/><LineBreak/>
+Not all Sherman tanks have a smoke mortar, and only tanks with a 75mm gun may fire WP and HCBI rounds. 
+<LineBreak/><LineBreak/>
+Smoke may also be placed by 
+<InlineUIContainer><Button Content='Friendly Action' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table. Enemy units may never place smoke.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r18.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Placing Smoke<LineBreak/>
+<InlineUIContainer><Button Content='r18.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Depleting Smoke<LineBreak/>
+<InlineUIContainer><Button Content='r18.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Smoke Effects
+<LineBreak/><LineBreak/>
+             <InlineUIContainer><Image Name='c108Smoke1'  Height='100' Width='100'></Image></InlineUIContainer>
+     <InlineUIContainer><Image Name='c109Smoke2'  Height='100' Width='100'></Image></InlineUIContainer>
+     <InlineUIContainer><Image Name='c110Smoke3'  Height='100' Width='100'></Image></InlineUIContainer>"
+r18.1	"<Bold>r18.1  Placing Smoke</Bold>
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r18.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Smoke Grenades<LineBreak/>
+<InlineUIContainer><Button Content='r18.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Smoke Bombs<LineBreak/>
+<InlineUIContainer><Button Content='r18.13' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> WP Rounds<LineBreak/>
+<InlineUIContainer><Button Content='r18.14' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> HCBI Rounds<LineBreak/>
+<InlineUIContainer><Button Content='r18.15' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Friendy Action<LineBreak/>
+<InlineUIContainer><Button Content='r18.16' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Smoke Counter Limit
+<LineBreak/><LineBreak/>
+             <InlineUIContainer><Image Name='c108Smoke1'  Height='100' Width='100'></Image></InlineUIContainer>
+     <InlineUIContainer><Image Name='c109Smoke2'  Height='100' Width='100'></Image></InlineUIContainer>
+     <InlineUIContainer><Image Name='c110Smoke3'  Height='100' Width='100'></Image></InlineUIContainer>"
+r18.11	"<Bold>r18.11  Smoke Grenades</Bold>
+<LineBreak/><LineBreak/>
+Smoke Grenades place a Smoke marker on your tank. Once grenade is thrown by a crewman performing the Throw Smoke Grenade action per 
+<InlineUIContainer><Button Content='r8.61' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+ Mark off one smoke grenade on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r18.12	"<Bold>r18.12  Smoke Bombs</Bold>
+<LineBreak/><LineBreak/>
+Smoke bombs are fired from tanks having a 2in smoke mortar by the loader performing a Fire Mortar action per 
+<InlineUIContainer><Button Content='r8.34' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+Place a smoke Smoke marker in the close range zone directly to the front of the turret. 
+<LineBreak/><LineBreak/>
+Mark off one smoke bomb on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+When the loader fires the smoke mortar, he automatically reloads it with another smoke bomb as long as bombs remain."
+r18.13	"<Bold>r18.13  WP Rounds</Bold>
+<LineBreak/><LineBreak/>
+WP rounds are fired from the main gun as Area Fire on the 
+<InlineUIContainer><Button Content='To Hit Target' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. 
+<LineBreak/><LineBreak/>
+If a round does not hit, no smoke is placed. If the rounds hits, place one Smoke marker in the target zone.
+<LineBreak/><LineBreak/>
+Mark off one WP round on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r18.14	"<Bold>r18.14  HBCI Rounds</Bold>
+<LineBreak/><LineBreak/>
+HCBI rounds are fixed from the main gun in the same manner as WP rounds. 
+<LineBreak/><LineBreak/>
+However, if the round hits, place two Smoke markers in the target zone. 
+<LineBreak/><LineBreak/>
+Mark off one WP round on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r18.15	"<Bold>r18.15  Friendly Action</Bold>
+<LineBreak/><LineBreak/>
+Friendly Action on the <InlineUIContainer><Button Content='Friendly Action' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table 
+may place a Smoke marker when rolling against enemy AT guns, SPGs, and tanks. 
+<LineBreak/><LineBreak/>
+Place a Smoke marker in the zone the target unit occupies"
+r18.16	"<Bold>r18.16  Smoke Counter Limit</Bold>
+<LineBreak/><LineBreak/>
+The amount of smoke in play at any one time is limited by the number of Smoke markers in the counter mix. 
+<LineBreak/><LineBreak/>
+If all Smoke markers are in play, more smoke cannot be placed."
+r18.2	"<Bold>r18.2  Depleting Smoke</Bold>
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r18.21' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Smoke Depletion Phase<LineBreak/>
+<InlineUIContainer><Button Content='r18.22' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Smoke Multiplier Markers<LineBreak/>
+<InlineUIContainer><Button Content='r18.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Smoke In Rain
+<LineBreak/><LineBreak/>
+             <InlineUIContainer><Image Name='c111Smoke1'  Height='100' Width='100'></Image></InlineUIContainer>
+     <InlineUIContainer><Image Name='c112Smoke2'  Height='100' Width='100'></Image></InlineUIContainer>
+     <InlineUIContainer><Image Name='c113Smoke3'  Height='100' Width='100'></Image></InlineUIContainer>"
+r18.21	"<Bold>r18.21  Smoke Depletion Phase</Bold>
+<LineBreak/><LineBreak/>
+Smoke markers are printed in black on their front and gray on the back. When first placed, the black side is shown. 
+<LineBreak/><LineBreak/>
+During the Smoke Depletion Phase per 
+<InlineUIContainer><Image Name='r4.71'  Height='100' Width='100'></Image></InlineUIContainer> 
+of the Battle Round Sequence, one smoke marker is depleted in each zone containing Smoke markers. 
+<LineBreak/><LineBreak/>
+Deplete smoke by either flipping one marker in each area to its gray side or by removing one marker already on its gray side."
+r18.22	"<Bold>r18.22  Smoke Multiplier Markers</Bold>
+<LineBreak/><LineBreak/>
+Included in the mix of markers are several multiple Smoke markers, representing 2 or 3 Smoke markers. 
+<LineBreak/><LineBreak/>
+These markers can be used to make change or replace several Smoke markers in one zone. 
+<LineBreak/><LineBreak/>
+When one of these markers already on it back side is depleted, make change with smaller smoke markers. 
+<LineBreak/><LineBreak/>
+For example, to deplete a x2 Smoke marker already on its back side, replace it with a single smoke marker on its front side. It takes four depletions to remove a x2 Smoke marker. "
+r18.23	"<Bold>r18.23  Smoke In Rain</Bold>
+<LineBreak/><LineBreak/>
+Smoke depletes twice as fast during rain weather."
+r18.3	"<Bold>r18.3 Smoke Effects</Bold>
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r18.31' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> On Fire Attacks<LineBreak/>
+<InlineUIContainer><Button Content='r18.32' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> On Spotting"
+r18.31	"<Bold>r18.31 On Fire Attacks</Bold>
+<LineBreak/><LineBreak/>
+All fire into, out of, and through a zone containing smoke has a reduced chance of hitting its target. 
+<LineBreak/><LineBreak/>
+Each Smoke marker encountered reduces the base number needed 
+<InlineUIContainer><Button Content='To Hit Target' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table by one half (round down). 
+<LineBreak/><LineBreak/>
+For example, if employing Direct Fire at medium range infantry target with a 76L gun (base to hit number of 45), and there are two Smoke markers in the target&apos;s zone and one in the close range zone, the to hit number is reduced to 05. 
+<LineBreak/><LineBreak/>
+( [0.5 x 0.5 x 0.5 = 1/8] ) x 45 = 5.6 rounded down to 5"
+r18.32	"<Bold>r18.32 On Spotting</Bold>
+<LineBreak/><LineBreak/>
+Add +1 to the die roll when attempting to spot for each Smoke marker in the target&apos;s zone, in intervening zones, and on your tank. Refer to 
+<InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for the spotting rules"
 r19.0	"<Bold>r19.0 Crew Casualties</Bold> 
 <LineBreak/><LineBreak/>
 When playing, it is possible for the crewmen of your tank to be wounded or killed. Crew casualties can occur when you tank is knocked out 
@@ -1617,7 +1761,7 @@ When an enemy attack successfully rolls To Kill your tank, it has been knocked o
 <InlineUIContainer><Button Content='r19.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Exploding Tank<LineBreak/>
 <InlineUIContainer><Button Content='r19.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Non-Exploding Tank<LineBreak/>
 <InlineUIContainer><Button Content='r19.13' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Bail Out<LineBreak/>
-<InlineUIContainer><Button Content='r19.14' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Crew Rescue<LineBreak/>"
+<InlineUIContainer><Button Content='r19.14' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Crew Rescue"
 r19.11	"<Bold>r19.11 Exploding Tank</Bold> 
 <LineBreak/><LineBreak/>First determine if the tank explodes by consulting the Tank 
 <InlineUIContainer><Button Content='Explosion' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. All crewmen of an exploding tank are killed"
