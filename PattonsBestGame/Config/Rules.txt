@@ -344,11 +344,11 @@ r4.73	"<Bold>r4.73  Orders Phase</Bold>
 <LineBreak/><LineBreak/>
 1. Hatch Segment: Open or close hatches by placing or removing Open Hatch marks on the Tank Card.
 <LineBreak/><LineBreak/>
-2. Orders Segment: Mark crew battle actions by placing Crew Actions markers in teh crew boxes of the Tank Card per 
+2. Orders Segment: Mark crew battle actions by placing Crew Actions markers in the crew boxes of the Tank Card per 
 <InlineUIContainer><Button Content='r8.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Place only one marker per crewman.
 <LineBreak/><LineBreak/>
 3. Ammo Reload Segment: Mark ammo reload if firing main gun by placing the Gun Reload marker in the box on the Tank Card for the ammo type you wish to reload per 
-<InlineUIContainer><Button Content='r5.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Also mark the ammo is to be drawn from the ready rack by placing the Ready Rack Ammo Reload marker with the Gun Reload marker. Continue with <InlineUIContainer><Button Content='r4.74' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>"
+<InlineUIContainer><Button Content='r5.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Also, mark the ammo is to be drawn from the ready rack by placing the Ready Rack Ammo Reload marker with the Gun Reload marker. Continue with <InlineUIContainer><Button Content='r4.74' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>"
 r4.74	"<Bold>r4.74  Crew Actions Phase</Bold>
 <LineBreak/><LineBreak/>"
 r4.75	"<Bold>r4.75  Enemy Actions Phase</Bold>
@@ -983,7 +983,7 @@ In addition to its main gun, the Sherman tank is armed with several machine guns
 <LineBreak/><LineBreak/>
 The .30 calibre bow MG is mounted in the front right hull and is fired by the assistant driver.
 <LineBreak/><LineBreak/>
-The .30 calibre co-axial MG is mounted in the turret front along teh same axis as the main gun and is fired by the gunner.
+The .30 calibre co-axial MG is mounted in the turret front along the same axis as the main gun and is fired by the gunner.
 <LineBreak/><LineBreak/>
 The .50 calibre anti-aircraft (AA) MG is fixed to a pintle mount (post) on top of the turret and is fired by the commander. In some configurations, it can be fired by the loader.
 <LineBreak/><LineBreak/>
@@ -1607,11 +1607,11 @@ As a tank commander, you know either a tank, SPG, or AT gun is present; but you 
 All unidentified units are:<LineBreak/>
 -- Tanks -> Pz VIe<LineBreak/>
 -- SP Vehicles -> STuG IIIg<LineBreak/>
--- AT guns -> Pak 43 (88LL)
+-- AT guns -> Pak 43 (88LL) 
 <LineBreak/><LineBreak/>
-When one of these is successfully identified, consult the 
+When one of these is successfully identified, consult the
 <InlineUIContainer><Button Content='Enemy Appearance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
- Table to determine what type of unit is actually present."
+Table to determine what type of unit is actually present."
 r17.42	"<Bold>r17.42 Unidentified Example</Bold> 
 <LineBreak/><LineBreak/>
 An unidentified tank is placed at medium range to your tanks's front. During the Spotting Phase, your gunner rolls sufficiently low to identify the vehicle. You immediately roll a 5 on the 
@@ -1710,7 +1710,7 @@ r18.21	"<Bold>r18.21  Smoke Depletion Phase</Bold>
 Smoke markers are printed in black on their front and gray on the back. When first placed, the black side is shown. 
 <LineBreak/><LineBreak/>
 During the Smoke Depletion Phase per 
-<InlineUIContainer><Image Name='r4.71'  Height='100' Width='100'></Image></InlineUIContainer> 
+<InlineUIContainer><Button Content='r4.71' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 of the Battle Round Sequence, one smoke marker is depleted in each zone containing Smoke markers. 
 <LineBreak/><LineBreak/>
 Deplete smoke by either flipping one marker in each area to its gray side or by removing one marker already on its gray side."
@@ -1857,7 +1857,7 @@ r20.12	"<Bold>r20.12 Probability of Combat</Bold>
 Roll 1D. If the number rolled is less than or equal to the number shown on the scenario code, you go to action this day and begin the Sequence of Play 
 <InlineUIContainer><Button Content='r4.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
 <LineBreak/><LineBreak/>
-If the number rolled is higher than the code number, you miss combat this day. Mark the day off as completed on teh calender, and go on to the next day."
+If the number rolled is higher than the code number, you miss combat this day. Mark the day off as completed on the calender, and go on to the next day."
 r20.13	"<Bold>r20.13 Expected Enemy Resistance</Bold>
 <LineBreak/><LineBreak/>
 The resistance code for the day will affect the probabiliity of battle when a new area is entered on the Movement Board 
