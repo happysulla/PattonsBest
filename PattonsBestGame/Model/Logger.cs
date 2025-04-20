@@ -22,6 +22,7 @@ namespace Pattons_Best
       LE_MOVE_COUNT,
       LE_SHOW_STACK_ADD,
       LE_SHOW_STACK_DEL,
+      LE_SHOW_STACK_VIEW,
       LE_SHOW_ENEMY_STRENGTH,
       //-------------
       LE_RESET_ROLL_STATE,
@@ -36,7 +37,7 @@ namespace Pattons_Best
       LE_VIEW_TIME_TRACK,
       LE_END_ENUM
    }
-
+   //----------------------------------------------------------------------------
    public class Logger
    {
       const int NUM_LOG_LEVELS = (int)LogEnum.LE_END_ENUM;
@@ -48,7 +49,6 @@ namespace Pattons_Best
       //--------------------------------------------------
       static public bool SetInitial()
       {
-         //---------------------------------------------------------------------
          try // create the file
          {
             if (false == Directory.Exists(theLogDirectory))
@@ -74,15 +74,15 @@ namespace Pattons_Best
          {
             Console.WriteLine("SetInitial(): create file\n" + ex.ToString());
          }
-         //---------------------------------------------------------------------
          SetOn(LogEnum.LE_ERROR);
-         SetOn(LogEnum.LE_GAME_INIT);
-         SetOn(LogEnum.LE_GAME_INIT_VERSION);
+         //SetOn(LogEnum.LE_GAME_INIT);
+         //SetOn(LogEnum.LE_GAME_INIT_VERSION);
          SetOn(LogEnum.LE_USER_ACTION);
          SetOn(LogEnum.LE_NEXT_ACTION);
-         SetOn(LogEnum.LE_SHOW_STACK_ADD);
-         SetOn(LogEnum.LE_SHOW_STACK_DEL);
-         //SetOn(LogEnum.LE_SHOW_ENEMY_STRENGTH);
+         //SetOn(LogEnum.LE_SHOW_STACK_ADD);
+         //SetOn(LogEnum.LE_SHOW_STACK_DEL);
+         //SetOn(LogEnum.LE_SHOW_STACK_VIEW);
+         SetOn(LogEnum.LE_SHOW_ENEMY_STRENGTH);
          SetOn(LogEnum.LE_VIEW_MIM);
          SetOn(LogEnum.LE_VIEW_MIM_ADD);
          SetOn(LogEnum.LE_VIEW_MIM_CLEAR);

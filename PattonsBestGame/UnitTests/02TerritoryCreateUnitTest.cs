@@ -42,7 +42,8 @@ namespace Pattons_Best
       public TerritoryCreateUnitTest(DockPanel dp, IGameInstance gi, CanvasImageViewer civ)
       {
          myIndexName = 0;
-         myHeaderNames.Add("02-Delete Territories");
+         myHeaderNames.Add("02-Delete File");
+         myHeaderNames.Add("02-Delete Territory");
          myHeaderNames.Add("02-New Territories");
          myHeaderNames.Add("02-Set CenterPoints");
          myHeaderNames.Add("02-Verify Territories");
@@ -50,11 +51,12 @@ namespace Pattons_Best
          myHeaderNames.Add("02-Final");
          //------------------------------------
          myCommandNames.Add("00-Delete File");
-         myCommandNames.Add("01-Switch Main Image");
-         myCommandNames.Add("02-Click Elispse to Move");
-         myCommandNames.Add("03-Click Ellispe to Verify");
-         myCommandNames.Add("04-Verify Adjacents");
-         myCommandNames.Add("05-Cleanup");
+         myCommandNames.Add("01-Delete Territory");
+         myCommandNames.Add("02-Switch Main Image");
+         myCommandNames.Add("03-Click Elispse to Move");
+         myCommandNames.Add("04-Click Ellispe to Verify");
+         myCommandNames.Add("05-Verify Adjacents");
+         myCommandNames.Add("06-Cleanup");
          //------------------------------------
          myDockPanelTop = dp;
          //------------------------------------
@@ -149,7 +151,11 @@ namespace Pattons_Best
                return false;
             }
          }
-         else if (CommandName == myCommandNames[1])  // Switch Main Image
+         else if (CommandName == myCommandNames[1])  // Delete Territory
+         {
+
+         }
+         else if (CommandName == myCommandNames[2])  // Switch Main Image
          {
             if( true == myIsBattleMapShown )
             {
@@ -161,17 +167,16 @@ namespace Pattons_Best
                myIsBattleMapShown = true;
                myCanvasImageViewer.ShowBattleMap(myCanvasMain);
             }
-            CreateEllipses(Territories.theTerritories);
          }
-         else if (CommandName == myCommandNames[2]) // set centerpoints
+         else if (CommandName == myCommandNames[3]) // set centerpoints
          {
 
          }
-         else if (CommandName == myCommandNames[3]) // verify territories
+         else if (CommandName == myCommandNames[4]) // verify territories
          {
 
          }
-         else if (CommandName == myCommandNames[4]) // set adjacents
+         else if (CommandName == myCommandNames[5]) // set adjacents
          {
             if (false == ShowAdjacents(Territories.theTerritories))
             {
@@ -210,11 +215,20 @@ namespace Pattons_Best
          if (HeaderName == myHeaderNames[0])
          {
             CreateEllipses(Territories.theTerritories);
+            myCanvasTank.MouseLeftButtonDown += this.MouseLeftButtonDownDeleteTerritory;
+            myCanvasMain.MouseLeftButtonDown += this.MouseLeftButtonDownDeleteTerritory;
+            ++myIndexName;
+         }
+         else if (HeaderName == myHeaderNames[1])
+         {
+            myCanvasTank.MouseLeftButtonDown -= this.MouseLeftButtonDownDeleteTerritory;
             myCanvasTank.MouseLeftButtonDown += this.MouseLeftButtonDownCreateTerritory;
+            //----------------------------
+            myCanvasMain.MouseLeftButtonDown -= this.MouseLeftButtonDownDeleteTerritory;
             myCanvasMain.MouseLeftButtonDown += this.MouseLeftButtonDownCreateTerritory;
             ++myIndexName;
          }
-         else if (HeaderName == myHeaderNames[1]) // Switch Main Image
+         else if (HeaderName == myHeaderNames[2]) // Switch Main Image
          {
             myCanvasTank.MouseLeftButtonDown -= this.MouseLeftButtonDownCreateTerritory;
             myCanvasTank.MouseLeftButtonDown += this.MouseDownEllipseSetCenterPoint;
@@ -227,7 +241,7 @@ namespace Pattons_Best
             myCanvasMain.MouseUp += MouseUp;
             ++myIndexName;
          }
-         else if (HeaderName == myHeaderNames[2]) // Click Elispse to Move
+         else if (HeaderName == myHeaderNames[3]) // Click Elispse to Move
          {
             myCanvasTank.MouseMove -= MouseMove;
             myCanvasTank.MouseUp -= MouseUp;
@@ -241,7 +255,7 @@ namespace Pattons_Best
             myAnchorTerritory = null;
             ++myIndexName;
          }
-         else if (HeaderName == myHeaderNames[3]) // Click Ellispe to Verify
+         else if (HeaderName == myHeaderNames[4]) // Click Ellispe to Verify
          {
             myCanvasTank.MouseLeftButtonDown -= this.MouseDownEllipseVerify;
             myCanvasTank.MouseLeftButtonDown += this.MouseLeftButtonDownSetAdjacents;
@@ -452,7 +466,7 @@ namespace Pattons_Best
          {
             if( true == myIsBattleMapShown)
             {
-               if (("A" == t.Type) || ("B" == t.Type) || ("C" == t.Type) || ("D" == t.Type) || ("E" == t.Type) || ("R" == t.Type) || ("S" == t.Type) || ("T" == t.Type))
+               if (("A" == t.Type) || ("B" == t.Type) || ("C" == t.Type) || ("D" == t.Type) || ("E" == t.Type) )
                   continue;
             }
             else 
@@ -649,6 +663,65 @@ namespace Pattons_Best
          return true;
       }
       //--------------------------------------------------------------------
+      void MouseLeftButtonDownDeleteTerritory(object sender, MouseButtonEventArgs e)
+      {
+         if (null == myCanvasTank)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseLeftButtonDownDeleteTerritory(): myCanvasTank=null");
+            return;
+         }
+         if (null == myCanvasMain)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseLeftButtonDownDeleteTerritory(): myCanvasMain=null");
+            return;
+         }
+         System.Windows.Point p = e.GetPosition(myCanvasMain);
+         //--------------------------------------------
+         Ellipse? selectedEllipse = null;
+         foreach (UIElement ui in myCanvasTank.Children)
+         {
+            if (ui is Ellipse)
+            {
+               Ellipse ellipse = (Ellipse)ui;
+               if (true == ellipse.IsMouseOver)
+               {
+                  selectedEllipse = ellipse;
+                  break;
+               }
+            }
+         }
+         if( null == selectedEllipse)
+         {
+            foreach (UIElement ui in myCanvasMain.Children)
+            {
+               if (ui is Ellipse)
+               {
+                  Ellipse ellipse = (Ellipse)ui;
+                  if (true == ellipse.IsMouseOver)
+                  {
+                     selectedEllipse = ellipse;
+                     break;
+                  }
+               }
+            }
+         }
+         if (null == selectedEllipse)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseLeftButtonDownDeleteTerritory(): selectedEllipse=null");
+            return;
+         }
+         //--------------------------------------------
+         ITerritory? t = Territories.theTerritories.Find(selectedEllipse.Name);
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseLeftButtonDownDeleteTerritory(): t=null for ellipse.Name=" + selectedEllipse.Name);
+            return;
+         }
+         Territories.theTerritories.Remove(t);
+         MessageBox.Show(selectedEllipse.Name);
+         myEllipses.Remove(selectedEllipse);
+         myCanvasMain.Children.Remove(selectedEllipse);
+      }
       void MouseLeftButtonDownCreateTerritory(object sender, MouseButtonEventArgs e)
       {
          System.Windows.Point p = e.GetPosition(myCanvasMain);

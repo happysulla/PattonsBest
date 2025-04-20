@@ -36,9 +36,9 @@ namespace Pattons_Best
       IMapItem Sherman { set; get; }
       //------------------------------------------------
       ITerritory Home { get; set; }
-      ITerritory? EnemyStrengthCheck { get; set; }
+      ITerritory? EnemyStrengthCheckTerritory { get; set; }
       ITerritory? ArtillerySupportCheck { get; set; }
-      ITerritory? AirStrikeCheck { get; set; }
+      ITerritory? AirStrikeCheckTerritory { get; set; }
       ITerritory? EnteredArea { get; set; }
       //------------------------------------------------
       bool IsLeadTank { set; get; }

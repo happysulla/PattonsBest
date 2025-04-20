@@ -362,7 +362,7 @@ namespace Pattons_Best
          {
             if (true == myIsBattleMapShown)
             {
-               if (("A" == t.Type) || ("B" == t.Type) || ("C" == t.Type) || ("D" == t.Type) || ("E" == t.Type) || ("R" == t.Type) || ("S" == t.Type) || ("T" == t.Type))
+               if (("A" == t.Type) || ("B" == t.Type) || ("C" == t.Type) || ("D" == t.Type) || ("E" == t.Type) )
                   continue;
             }
             else
@@ -411,7 +411,7 @@ namespace Pattons_Best
          {
             if (true == myIsBattleMapShown)
             {
-               if (("A" == t.Type) || ("B" == t.Type) || ("C" == t.Type) || ("D" == t.Type) || ("E" == t.Type) || ("R" == t.Type) || ("S" == t.Type) || ("T" == t.Type))
+               if (("A" == t.Type) || ("B" == t.Type) || ("C" == t.Type) || ("D" == t.Type) || ("E" == t.Type) )
                   continue;
             }
             else

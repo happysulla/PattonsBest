@@ -6,6 +6,7 @@ namespace Pattons_Best
    {
       ITerritory Territory { get; set; }
       IMapItems MapItems { get; set; }
+      bool IsStacked { get; set; }
       void Rotate();
       void Shuffle();
    }

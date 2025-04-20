@@ -10,6 +10,7 @@ namespace Pattons_Best
    {
       public ITerritory Territory { get; set; }
       public IMapItems MapItems { get; set; } = new MapItems();
+      public bool IsStacked { get; set; } = false;
       public Stack(ITerritory t)
       {
          Territory = t;

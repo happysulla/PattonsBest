@@ -100,38 +100,11 @@ namespace Pattons_Best
       //--------------------------------------------------
       private bool myIsFlipped = false;
       //----------------------------------------------------------------------------
-      public MapItem()
-      {
-      }
-      public MapItem(IMapItem mi)
-      {
-         this.Name = mi.Name;
-         this.Zoom = mi.Zoom;
-         this.IsHidden = mi.IsHidden;
-         this.TopImageName = mi.TopImageName;
-         this.BottomImageName = mi.BottomImageName;
-      }
       protected MapItem(string name)
       {
          this.Name = name;
       }
-      public MapItem(string name, double zoom, string topImageName, ITerritory territory) :
-         this(name, zoom, false, false, topImageName)
-      {
-         TerritoryCurrent = territory;
-         TerritoryStarting = territory;
-         this.Location.X = territory.CenterPoint.X - zoom*Utilities.theMapItemOffset;
-         this.Location.Y = territory.CenterPoint.Y - zoom * Utilities.theMapItemOffset;
-      }
-      public MapItem(string name, double zoom, string topImageName, string bottomImageName, ITerritory territory) :  
-         this(name, zoom, false, false, topImageName, bottomImageName) 
-      {
-         TerritoryCurrent = territory;
-         TerritoryStarting = territory;
-         this.Location.X = territory.CenterPoint.X - zoom * Utilities.theMapItemOffset;
-         this.Location.Y = territory.CenterPoint.Y - zoom * Utilities.theMapItemOffset;
-      }
-      public MapItem(string aName, double zoom, bool isHidden, bool isAnimated, string topImageName)
+      protected MapItem(string aName, double zoom, bool isHidden, bool isAnimated, string topImageName)
       {
          try
          {
@@ -153,7 +126,7 @@ namespace Pattons_Best
             return;
          }
       }
-      public MapItem(string aName, double zoom, bool isHidden, bool isAnimated, string topImageName, string buttomImageName)
+      protected MapItem(string aName, double zoom, bool isHidden, bool isAnimated, string topImageName, string buttomImageName)
       {
          try
          {
@@ -182,54 +155,73 @@ namespace Pattons_Best
             return;
          }
       }
-      public MapItem(string aName, double zoom, bool isHidden, bool isAnimated, string topImageName, string bottomImageName, IMapPoint aStartingPoint)
+      //----------------------------------------------------------------------------
+      public MapItem()  // used in MapItemMove constructor
       {
-
-         this.Name = aName;
-         this.Zoom = zoom;
-         this.IsHidden = isHidden;
-         this.Location = aStartingPoint;
-         this.TopImageName = topImageName;
-         this.BottomImageName = bottomImageName;
-         try
-         {
-            IMapImage? mii = theMapImages.Find(topImageName);
-            if (null == mii)
-            {
-               mii = (IMapImage)new MapImage(topImageName);
-               theMapImages.Add(mii);
-            }
-            mii = theMapImages.Find(bottomImageName);
-            if (null == mii)
-            {
-               mii = (IMapImage)new MapImage(bottomImageName);
-               theMapImages.Add(mii);
-            }
-            this.IsAnimated = isAnimated; // This must come after the creating of the image
-         }
-         catch (Exception ex)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MapItem(): aName=" + aName + "\n Ex=" + ex.ToString());
-            return;
-         }
       }
-      public MapItem(string aName, double zoom, bool isHidden, bool isAnimated, string topImageName, string bottomImageName, MapPoint aStartingPoint, ITerritory territory) :
-        this(aName, zoom, isHidden, isAnimated, topImageName, bottomImageName, aStartingPoint)
+      public MapItem(string name, double zoom, string topImageName, ITerritory territory, bool isRandomLocation=false) :
+         this(name, zoom, false, false, topImageName)
       {
          TerritoryCurrent = territory;
          TerritoryStarting = territory;
-      }
-      public MapItem(string aName, double zoom, bool isHidden, bool isAnimated, string topImageName, string bottomImageName, ITerritory territory) :
-         this(aName, zoom, isHidden, isAnimated, topImageName, bottomImageName, territory.CenterPoint)
-      {
-         TerritoryCurrent = territory;
-         TerritoryStarting = territory;
+         this.Location.X = territory.CenterPoint.X - zoom * Utilities.theMapItemOffset;
+         this.Location.Y = territory.CenterPoint.Y - zoom * Utilities.theMapItemOffset;
+         if (true == isRandomLocation)
+            SetRandomLocation(myTerritoryCurrent);
       }
       //----------------------------------------------------------------------------
       public void SetLocation(int counterCount)
       {
          this.Location.X = this.TerritoryCurrent.CenterPoint.X - Utilities.theMapItemOffset + (counterCount * Utilities.STACK);
          this.Location.Y = this.TerritoryCurrent.CenterPoint.Y - Utilities.theMapItemOffset + (counterCount * Utilities.STACK);
+      }
+      public void SetRandomLocation(ITerritory t)
+      {
+         int minRightX = -10000000;
+         int maxLeftX = +10000000;
+         int minBottomY = -10000000;
+         int maxTopY = +10000000;
+         //----------------------------------------------------
+         // Make a StreamGeometry object from t.Points 
+         StreamGeometry geometry = new StreamGeometry();
+         geometry.FillRule = FillRule.EvenOdd;
+         if (0 == t.Points.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetRandomLocation(): t.Points.Count=0 for t.Name=" + t.Name);
+            return;
+         }
+         IMapPoint mp0 = t.Points[0];
+         System.Windows.Point point0 = new System.Windows.Point(mp0.X, mp0.Y);
+         StreamGeometryContext ctx = geometry.Open();
+         ctx.BeginFigure(point0, true, true); //  filled and closed
+         for (int i = 1; i < t.Points.Count; ++i)
+         {
+            IMapPoint mpI = t.Points[i];
+            System.Windows.Point pointI = new System.Windows.Point(mpI.X, mpI.Y);
+            ctx.LineTo(pointI, true, true);
+            if (mpI.X < maxLeftX) maxLeftX = (int)(mpI.X);
+            if (mpI.X > minRightX) minRightX = (int)(mpI.X);
+            if (mpI.Y < maxTopY) maxTopY = (int)(mpI.Y);
+            if (mpI.Y > minBottomY) minBottomY = (int)(mpI.Y);
+         }
+         geometry.Freeze();
+         int delta = (int)(this.Zoom * Utilities.theMapItemSize);
+         minRightX -= delta;
+         minBottomY -= delta;
+         //----------------------------------------------------
+         // Ensure the point is in the Geometry object
+         int count = 50;
+         while (0 < --count)
+         {
+            this.Location.X = (double)Utilities.RandomGenerator.Next(maxLeftX, minRightX); // Get a random point in the bounding box
+            this.Location.Y = (double)Utilities.RandomGenerator.Next(maxTopY, minBottomY);
+            System.Windows.Point p = new System.Windows.Point(this.Location.X, this.Location.Y);
+            if (false == geometry.FillContains(p)) // <cgs> TEST - return false selects first point found
+               return;
+            else
+               Logger.Log(LogEnum.LE_ERROR, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+         }
+         Logger.Log(LogEnum.LE_ERROR, "SetRandomLocation(): Cannot find a random point in t.Name=" + t.Name);
       }
       //----------------------------------------------------------------------------
       public void Flip()

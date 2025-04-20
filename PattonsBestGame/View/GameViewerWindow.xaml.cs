@@ -298,6 +298,7 @@ namespace Pattons_Best
             case GameAction.MorningBriefingCalendarRoll:
             case GameAction.MorningBriefingEnd:
                break;
+            case GameAction.TestingStartMovement:
             case GameAction.MorningBriefingAmmoReadyRackLoad:
             case GameAction.PreparationsHatches:
             case GameAction.PreparationsGunLoad:
@@ -791,9 +792,9 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MovementEnemyStrengthChoice:
-                  if (false == UpdateCanvasMainEnemyStrengthCheck(gi, action))
+                  if (false == UpdateCanvasMainEnemyStrengthCheckTerritory(gi, action))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMainEnemyStrengthCheck() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMainEnemyStrengthCheckTerritory() returned false");
                      return false;
                   }
                   break;
@@ -805,9 +806,9 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MovementAirStrikeChoice:
-                  if (false == UpdateCanvasMainAirStrikeCheck(gi, action))
+                  if (false == UpdateCanvasMainAirStrikeCheckTerritory(gi, action))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMainAirStrikeCheck() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMainAirStrikeCheckTerritory() returned false");
                      return false;
                   }
                   break;
@@ -819,6 +820,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MovementAdvanceFireCheck:
+               case GameAction.MovementEnterAreaUsControl:
                   if (false == UpdateCanvasMovement(gi, action))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMovement() returned false");
@@ -842,6 +844,7 @@ namespace Pattons_Best
       }
       private void UpdateCanvasMainClear(List<Button> buttons, IStacks stacks)
       {
+         Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "UpdateCanvasMainClear(): " + stacks.ToString());
          List<UIElement> elements = new List<UIElement>();
          foreach (UIElement ui in myCanvasMain.Children) // Clean the Canvas of all marks
          {
@@ -866,7 +869,7 @@ namespace Pattons_Best
                   IStack? stack = stacks.Find(button.Name);
                   if (null == stack)
                   {
-                     Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "UpdateCanvasMainClear(): mi=" + button.Name + " does not belong to stack");
+                     Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "UpdateCanvasMainClear(): mi=" + button.Name + " does not belong to " + stacks.ToString());
                   }
                   else
                   {
@@ -895,6 +898,7 @@ namespace Pattons_Best
       }
       private bool UpdateCanvasMainMapItems(List<Button> buttons, IStacks stacks)
       {
+         Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "UpdateCanvasMainMapItems(): " + stacks.ToString());
          foreach (IStack stack in stacks)
          {
             ITerritory t = stack.Territory;
@@ -992,14 +996,14 @@ namespace Pattons_Best
          return true;
       }
       //---------------------------------------
-      private bool UpdateCanvasMainEnemyStrengthCheck(IGameInstance gi, GameAction action)
+      private bool UpdateCanvasMainEnemyStrengthCheckTerritory(IGameInstance gi, GameAction action)
       {
          myPolygons.Clear();
          //--------------------------------
          IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
          if (null == taskForce)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainEnemyStrengthCheck(): taskForce=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainEnemyStrengthCheckTerritory(): taskForce=null");
             return false;
          }
          //--------------------------------
@@ -1009,22 +1013,33 @@ namespace Pattons_Best
             ITerritory? adj = Territories.theTerritories.Find(s);
             if (null == adj)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainEnemyStrengthCheck(): 1 adj=null for " + s);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainEnemyStrengthCheckTerritory(): 1 adj=null for " + s);
                return false;
             }
             if ('E' == adj.Name.Last()) // ingore entry/exit territories
                continue;
             //-------------------------------
-            string strengthTerritoryName = s + "R";
-            ITerritory? t = Territories.theTerritories.Find(strengthTerritoryName);
+            ITerritory? t = Territories.theTerritories.Find(s);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainEnemyStrengthCheck(): 2 t=null for " + strengthTerritoryName);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainEnemyStrengthCheckTerritory(): 2 t=null for " + s);
                return false;
             }
+            bool isSkip = false;
             IStack? stack = gi.MoveStacks.Find(t);
             if (null != stack)
-               continue;
+            {
+               foreach(IMapItem mi in stack.MapItems )
+               {
+                  if( (true == mi.Name.Contains("Strength")) || (true == mi.Name.Contains("UsControl")) )
+                  {
+                     isSkip = true;
+                     break;
+                  }
+               }
+               if (true == isSkip)
+                  continue;
+            }
             //-------------------------------
             PointCollection points = new PointCollection();
             foreach (IMapPoint mp1 in adj.Points)
@@ -1066,14 +1081,14 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool UpdateCanvasMainAirStrikeCheck(IGameInstance gi, GameAction action)
+      private bool UpdateCanvasMainAirStrikeCheckTerritory(IGameInstance gi, GameAction action)
       {
          myPolygons.Clear();
          //--------------------------------
          IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
          if (null == taskForce)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainAirStrikeCheck(): taskForce=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainAirStrikeCheckTerritory(): taskForce=null");
             return false;
          }
          //--------------------------------
@@ -1083,7 +1098,7 @@ namespace Pattons_Best
             ITerritory? t = Territories.theTerritories.Find(s);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainAirStrikeCheck(): 1 t=null for " + s);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainAirStrikeCheckTerritory(): 1 t=null for " + s);
                return false;
             }
             PointCollection points = new PointCollection();
@@ -1161,15 +1176,22 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): mim2.NewTerritory=null");
                   return false;
                }
-               mi.TerritoryStarting = mim2.NewTerritory;
                //------------------------------------------
                gi.MoveStacks.Remove(mi);
+               Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "UpdateCanvasMovement(): Removed mi=" + mi.Name + " t=" + mim2.OldTerritory.Name + " to " + gi.MoveStacks.ToString());
                IStack? stack = gi.MoveStacks.Find(mim2.NewTerritory);
                if (null == stack)
+               {
                   gi.MoveStacks.Add(new Stack(mim2.NewTerritory, mi));
+                  Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "UpdateCanvasMovement(): 1-Adding mi=" + mi.Name + " t=" + mim2.NewTerritory.Name + " to " + gi.MoveStacks.ToString());
+               }
                else
+               {
                   stack.MapItems.Add(mi);
-               mi.TerritoryCurrent = mim2.NewTerritory;
+                  Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "UpdateCanvasMovement(): 2-Adding mi=" + mi.Name + " t=" + mim2.NewTerritory.Name + " to " + gi.MoveStacks.ToString());
+               }
+               Logger.Log(LogEnum.LE_VIEW_MIM, "UpdateCanvasMovement(): mi=" + mi.Name + " t=" + mi.TerritoryCurrent.Name + " moving to t=" + mim2.NewTerritory.Name + " " + gi.MoveStacks.ToString());
+               mi.TerritoryCurrent = mi.TerritoryStarting = mim2.NewTerritory;
             }
          }
          catch (Exception e)
@@ -1195,9 +1217,9 @@ namespace Pattons_Best
          }
          try
          {
-            Canvas.SetZIndex(b, 100); // Move the button to the top of the Canvas
-            double xStart = mim.MapItem.TerritoryCurrent.CenterPoint.X;
-            double yStart = mim.MapItem.TerritoryCurrent.CenterPoint.Y;
+            Canvas.SetZIndex(b, 10000); // Move the button to the top of the Canvas
+            double xStart = mim.MapItem.Location.X;
+            double yStart = mim.MapItem.Location.Y;
             PathFigure aPathFigure = new PathFigure() { StartPoint = new System.Windows.Point(xStart, yStart) };
             if (null == mim.BestPath)
             {
@@ -1215,8 +1237,10 @@ namespace Pattons_Best
                aPathFigure.Segments.Add(lineSegment);
             }
             // Add the last line segment
-            double xEnd = mim.NewTerritory.CenterPoint.X - Utilities.theMapItemOffset;
-            double yEnd = mim.NewTerritory.CenterPoint.Y - Utilities.theMapItemOffset;
+            int multiplerX = Utilities.RandomGenerator.Next(0, 5) - 2;
+            int multiplerY = Utilities.RandomGenerator.Next(0, 5) - 2;
+            double xEnd = mim.NewTerritory.CenterPoint.X - Utilities.theMapItemOffset + multiplerX * Utilities.theMapItemOffset;
+            double yEnd = mim.NewTerritory.CenterPoint.Y - Utilities.theMapItemOffset + multiplerY * Utilities.theMapItemOffset;
             if ((Math.Abs(xEnd - xStart) < 2) && (Math.Abs(yEnd - yStart) < 2)) // if already at final location, skip animation or get runtime exception
                return true;
             System.Windows.Point newPoint2 = new System.Windows.Point(xEnd, yEnd);
@@ -1237,6 +1261,8 @@ namespace Pattons_Best
             b.RenderTransform = new TranslateTransform();
             b.BeginAnimation(Canvas.LeftProperty, xAnimiation);
             b.BeginAnimation(Canvas.TopProperty, yAnimiation);
+            mim.MapItem.Location.X = xEnd;
+            mim.MapItem.Location.Y = yEnd;
             if (null == myRectangleSelected)
             {
                Console.WriteLine("MovePathAnimate() myRectangleSelection=null");
@@ -1424,14 +1450,13 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonShowEnemyStrength(): clickedPolygon=null");
             return;
          }
-         string tName = clickedPolygon.Name + "R";
-         myGameInstance.EnemyStrengthCheck = Territories.theTerritories.Find(tName);
-         if (null == myGameInstance.EnemyStrengthCheck)
+         myGameInstance.EnemyStrengthCheckTerritory = Territories.theTerritories.Find(clickedPolygon.Name);
+         if (null == myGameInstance.EnemyStrengthCheckTerritory)
          {
             Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonShowEnemyStrength(): t=null for " + clickedPolygon.Name.ToString());
             return;
          }
-         GameAction outAction = GameAction.MovementEnemyStrengthCheck;
+         GameAction outAction = GameAction.MovementEnemyStrengthCheckTerritory;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
       private void MouseDownPolygonArtillerySupport(object sender, MouseButtonEventArgs e)
@@ -1442,8 +1467,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonArtillerySupport(): clickedPolygon=null");
             return;
          }
-         string tName = clickedPolygon.Name + "S";
-         myGameInstance.ArtillerySupportCheck = Territories.theTerritories.Find(tName);
+         myGameInstance.ArtillerySupportCheck = Territories.theTerritories.Find(clickedPolygon.Name);
          if (null == myGameInstance.ArtillerySupportCheck)
          {
             Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonArtillerySupport(): t=null for " + clickedPolygon.Name.ToString());
@@ -1460,14 +1484,13 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonAirStrike(): clickedPolygon=null");
             return;
          }
-         string tName = clickedPolygon.Name + "T";
-         myGameInstance.AirStrikeCheck = Territories.theTerritories.Find(tName);
-         if (null == myGameInstance.AirStrikeCheck)
+         myGameInstance.AirStrikeCheckTerritory = Territories.theTerritories.Find(clickedPolygon.Name);
+         if (null == myGameInstance.AirStrikeCheckTerritory)
          {
             Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonAirStrike(): t=null for " + clickedPolygon.Name.ToString());
             return;
          }
-         GameAction outAction = GameAction.MovementAirStrikeCheck;
+         GameAction outAction = GameAction.MovementAirStrikeCheckTerritory;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
       private void MouseDownPolygonEnterArea(object sender, MouseButtonEventArgs e)
@@ -1485,7 +1508,20 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonEnterArea(): t=null for " + clickedPolygon.Name.ToString());
             return;
          }
+         //-------------------------------------------------
          GameAction outAction = GameAction.MovementAdvanceFireCheck;
+         IStack? stack = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
+         if( null != stack )
+         {
+            foreach(IMapItem mi in stack.MapItems )
+            {
+               if( true == mi.Name.Contains("UsControl")) // If stack has a UsControl marker, resume with user choice
+               {
+                  outAction = GameAction.MovementEnterAreaUsControl;
+                  break;
+               }
+            }
+         }
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
       private void ClickButtonMapItem(object sender, RoutedEventArgs e)

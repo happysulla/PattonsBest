@@ -835,13 +835,13 @@ namespace Pattons_Best
             case "e021":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  if( null == gi.EnemyStrengthCheck )
+                  if( null == gi.EnemyStrengthCheckTerritory )
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.EnemyStrenthCheck=null");
                      return false;
                   }
                   Image imge021 = new Image { Width = 100, Height = 100, Name = "MovementChooseOption" };
-                  IStack? stack = gi.MoveStacks.Find(gi.EnemyStrengthCheck);
+                  IStack? stack = gi.MoveStacks.Find(gi.EnemyStrengthCheckTerritory);
                   if( null == stack )
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): stack=null for e021");
@@ -925,7 +925,7 @@ namespace Pattons_Best
             case "e030":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  if (null == gi.EnemyStrengthCheck)
+                  if (null == gi.EnemyStrengthCheckTerritory)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.EnemyStrenthCheck=null");
                      return false;
@@ -1094,17 +1094,19 @@ namespace Pattons_Best
             case "e022":
                if ("Strength Check" == content)
                {
-                  if ((false == SetButtonStateEnemyStrenth(gi, b)))
+                  bool isStrengthCheck = false;
+                  if ((false == EnemyStrengthCheckNeeded(gi, out isStrengthCheck)))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): SetButtonStateEnemyStrenth() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): EnemyStrengthCheckNeeded() returned false");
                      return false;
                   }
+                  b.IsEnabled = isStrengthCheck;
                }
                else if ("Strike" == content)
                {
                   if ((false == SetButtonAirStrike(gi, b)))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): SetButtonStateEnemyStrenth() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): SetButtonStateEnemyStrength() returned false");
                      return false;
                   }
                }
@@ -1115,35 +1117,59 @@ namespace Pattons_Best
          b.Click += Button_Click;
          return true;
       }
-      private bool SetButtonStateEnemyStrenth(IGameInstance gi, Button b)
+      private bool EnemyStrengthCheckNeeded(IGameInstance gi, out bool isCheckNeeded)
       {
-         b.IsEnabled = false;
-         IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
-         if (null == taskForce)
+         isCheckNeeded = false;
+         ITerritory? enteredTerritory = gi.EnteredArea;
+         if (null == enteredTerritory)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetButtonStateEnemyStrenth(): taskForce=null");
-            return false;
+            IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
+            if (null == taskForce)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SetButtonStateEnemyStrength(): taskForce=null");
+               return false;
+            }
+            enteredTerritory = taskForce.TerritoryCurrent;
          }
          //--------------------------------
-         List<String> sTerritories = taskForce.TerritoryCurrent.Adjacents;
-         foreach (string s in sTerritories )  // Look at each adjacent territory
+         List<String> sTerritories = enteredTerritory.Adjacents;
+         foreach (string s in sTerritories)  // Look at each adjacent territory
          {
             if (true == s.Contains("E")) // Ignore Entry or Exit Areas
                continue;
-            string nameOfTerritory = s + "R"; // If any adjacent territory does not have a stack for ENEMY strength, enable the button
-            ITerritory? t = Territories.theTerritories.Find(nameOfTerritory);
-            if( null == t )
+            Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "EnemyStrengthCheckNeeded(): Checking territory=" + enteredTerritory.Name + " adj=" + s);
+            ITerritory? t = Territories.theTerritories.Find(s);
+            if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "SetButtonStateEnemyStrenth(): t=null for s=" + nameOfTerritory);
+               Logger.Log(LogEnum.LE_ERROR, "EnemyStrengthCheckNeeded(): t=null for s=" + s);
                return false;
             }
-            Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "SetButtonStateEnemyStrenth(): Checking territory=" + nameOfTerritory);
+            Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "EnemyStrengthCheckNeeded(): Checking territory=" + s);
             IStack? stack = gi.MoveStacks.Find(t);
             if (null == stack)
             {
-               Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "SetButtonStateEnemyStrenth(): no stack for=" + nameOfTerritory + " in " + gi.MoveStacks.ToString());
-               b.IsEnabled = true;
+               Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "EnemyStrengthCheckNeeded(): no stack for=" + s + " in " + gi.MoveStacks.ToString());
+               isCheckNeeded = true;
                return true;
+            }
+            else
+            {
+               bool isCounterInStack = false;
+               foreach (IMapItem mi1 in stack.MapItems)
+               {
+                  if ((true == mi1.Name.Contains("Strength")) || (true == mi1.Name.Contains("UsControl")))
+                  {
+                     Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "SetButtonStateEnemyStrength(): Found mi=" + mi1.Name + " for=" + s + " in " + gi.MoveStacks.ToString());
+                     isCounterInStack = true;
+                     break;
+                  }
+               }
+               if (false == isCounterInStack)
+               {
+                  Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "SetButtonStateEnemyStrength(): no counter for=" + s + " in " + gi.MoveStacks.ToString());
+                  isCheckNeeded = true;
+                  return true;
+               }
             }
          }
          return true;
@@ -1374,7 +1400,15 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "MovementEnemyStrengthChoice":
-                           action = GameAction.MovementEnemyStrengthChoice;
+                           action = GameAction.MovementChooseOption;
+                           bool isStrengthCheckNeeded = false;
+                           if( false == EnemyStrengthCheckNeeded(myGameInstance, out isStrengthCheckNeeded))
+                           {
+                              Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): EnemyStrengthCheckNeeded() returned false");
+                              return;
+                           }
+                           if( true == isStrengthCheckNeeded )
+                              action = GameAction.MovementEnemyStrengthChoice;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "MovementChooseOption":
@@ -1504,8 +1538,9 @@ namespace Pattons_Best
                break;
             case "Begin Game":
                action = GameAction.SetupShowMapHistorical;
-               action = GameAction.TestingStartMorningBriefing; // <cgs> TEST
-               //action = GameAction.TestingStartMovement; // <cgs> TEST
+               //action = GameAction.TestingStartMorningBriefing; // <cgs> TEST
+               //action = GameAction.TestingStartPreparations; // <cgs> TEST
+               action = GameAction.TestingStartMovement; // <cgs> TEST
                //action = GameAction.TestingStartBattle; // <cgs> TEST
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;

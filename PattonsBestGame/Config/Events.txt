@@ -291,6 +291,11 @@ Place enemy units according to Battle Board
 Table per 
 <InlineUIContainer><Button Content='r12.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>"
+e036	"<Bold>e036 Re-enter Friendly Control</Bold> 
+<InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+<LineBreak/><LineBreak/>
+No combat. 
+<LineBreak/><LineBreak/>"
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"
 e502	"<Bold>e502 Game Lost</Bold>

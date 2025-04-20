@@ -179,9 +179,9 @@ namespace Pattons_Best
          }
          //--------------------------------------------------
          TankCard card = new TankCard(lastReport.TankCardNum);
+         myMainGun = card.myMainGun;
          myUnassignedReadyRack = card.myMaxReadyRackCount;
          myUnassignedCount = card.myNumMainGunRound;
-         myMainGun = card.myMainGun;
          myApRoundCount = 0;
          myHeRoundCount = 0;
          myWpRoundCount = 0;
@@ -1061,12 +1061,12 @@ namespace Pattons_Best
                switch (entry.Situation)
                {
                   case EnumScenario.Advance:
-                     myExtraAmmo = 20;
-                     sb.Append("Required to take extra ammo");
+                     myExtraAmmo = 30;
+                     sb.Append("Required to take 30 extra ammo");
                      break;
                   case EnumScenario.Battle:
-                     myExtraAmmo = 0;
-                     sb.Append("Required to take extra ammo");
+                     myExtraAmmo = 10;
+                     sb.Append("Required to take 10 extra ammo");
                      break;
                   case EnumScenario.Counterattack:
                      sb.Append("May voluntarily take extra ammo");
@@ -1081,13 +1081,13 @@ namespace Pattons_Best
                switch (entry.Situation)
                {
                   case EnumScenario.Advance:
-                     myExtraAmmo = 30;
-                     sb.Append("Required to take extra ammo");
+                     myExtraAmmo = 20;
+                     sb.Append("Required to take extra 20 extra ammo");
                      break;
                   case EnumScenario.Battle:
                   case EnumScenario.Counterattack:
-                     myExtraAmmo = 10;
-                     sb.Append("Required to take extra ammo");
+                     sb.Append("May voluntarily take 10 extra ammo");
+                     myExtraAmmo = 0;
                      break;
                   default:
                      Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): reached default=" + entry.ToString());

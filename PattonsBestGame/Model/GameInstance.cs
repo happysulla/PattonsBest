@@ -41,9 +41,9 @@ namespace Pattons_Best
       public IMapItem Sherman { set; get; } = new MapItem("Sherman1", 2.0, "t001", new Territory());
       //------------------------------------------------
       public ITerritory Home { get; set; } = new Territory();
-      public ITerritory? EnemyStrengthCheck { get; set; } = null;
+      public ITerritory? EnemyStrengthCheckTerritory { get; set; } = null;
       public ITerritory? ArtillerySupportCheck { get; set; } = null;
-      public ITerritory? AirStrikeCheck { get; set; } = null;
+      public ITerritory? AirStrikeCheckTerritory { get; set; } = null;
       public ITerritory? EnteredArea { get; set; } = null;
       //---------------------------------------------------------------
       public bool IsHulledDown { set; get; } = false;
