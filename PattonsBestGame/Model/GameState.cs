@@ -346,6 +346,8 @@ namespace Pattons_Best
          Utilities.MapItemNum++;
          IMapItem usControl = new MapItem(miName, 1.0, "c28UsControl", controlled, true);
          usControl.Count = 0; // 0=us  1=light  2=medium  3=heavy
+         IMapPoint mp = Territory.GetRandomPoint(controlled);
+         usControl.SetLocation(mp);
          gi.MoveStacks.Add(usControl);
          return true;
       }
@@ -441,8 +443,9 @@ namespace Pattons_Best
             ++Utilities.MapItemNum;
             IMapItem strengthMarker = new MapItem(name, 1.0, "c36Light", gi.EnemyStrengthCheckTerritory, true);
             strengthMarker.Count = 1;
+            IMapPoint mp = Territory.GetRandomPoint(gi.EnemyStrengthCheckTerritory);
+            strengthMarker.SetLocation(mp);
             gi.MoveStacks.Add(strengthMarker);
-
          }
          else if (EnumResistance.Medium == resistance)
          {
@@ -450,6 +453,8 @@ namespace Pattons_Best
             ++Utilities.MapItemNum;
             IMapItem strengthMarker = new MapItem(name, 1.0, "c37Medium", gi.EnemyStrengthCheckTerritory, true);
             strengthMarker.Count = 2;
+            IMapPoint mp = Territory.GetRandomPoint(gi.EnemyStrengthCheckTerritory);
+            strengthMarker.SetLocation(mp);
             gi.MoveStacks.Add(strengthMarker);
          }
          else if (EnumResistance.Heavy == resistance)
@@ -458,6 +463,8 @@ namespace Pattons_Best
             ++Utilities.MapItemNum;
             IMapItem strengthMarker = new MapItem(name, 1.0, "c38Heavy", gi.EnemyStrengthCheckTerritory, true);
             strengthMarker.Count = 3;
+            IMapPoint mp = Territory.GetRandomPoint(gi.EnemyStrengthCheckTerritory);
+            strengthMarker.SetLocation(mp);
             gi.MoveStacks.Add(strengthMarker);
          }
          else
@@ -560,7 +567,7 @@ namespace Pattons_Best
                   gi.EventDisplayed = gi.EventActive = "e011";
                   gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
                   gi.Sherman.TerritoryCurrent = gi.Home;
-                  gi.Sherman.SetLocation(0);
+                  gi.Sherman.SetLocation(gi.Home.CenterPoint);
                   gi.BattleStacks.Add(gi.Sherman);
                }
                break;
@@ -1030,7 +1037,7 @@ namespace Pattons_Best
                   gi.EventDisplayed = gi.EventActive = "e011";
                   gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
                   gi.Sherman.TerritoryCurrent = gi.Home;
-                  gi.Sherman.SetLocation(0);
+                  gi.Sherman.SetLocation(gi.Home.CenterPoint);
                   gi.BattleStacks.Add(gi.Sherman);
                   if (false == SetWeatherCounters( gi ))
                   {
@@ -1380,9 +1387,9 @@ namespace Pattons_Best
                   else 
                   {
                      bool isCheckNeeded = false;
-                     if( false == EnemyStrengthCheckNeeded(gi, out isCheckNeeded))
+                     if( false == IsEnemyStrengthCheckNeeded(gi, out isCheckNeeded))
                      {
-                        returnStatus = "EnemyStrengthCheckNeeded() returned false";
+                        returnStatus = "IsEnemyStrengthCheckNeeded() returned false";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementEnterAreaUsControl): " + returnStatus);
                      }
                      else
@@ -1642,6 +1649,8 @@ namespace Pattons_Best
             string name = gi.ArtillerySupportCheck.Name + "Artillery" + Utilities.MapItemNum.ToString();
             Utilities.MapItemNum++;
             IMapItem artillerySupportMarker = new MapItem(name, 1.0, "c39ArtillerySupport", gi.ArtillerySupportCheck, true);
+            IMapPoint mp = Territory.GetRandomPoint(gi.ArtillerySupportCheck);
+            artillerySupportMarker.SetLocation(mp);
             gi.MoveStacks.Add(artillerySupportMarker);
          }
          if (true == gi.IsAirStrikePending)
@@ -1655,6 +1664,8 @@ namespace Pattons_Best
             string name = gi.AirStrikeCheckTerritory.Name + "Air" + Utilities.MapItemNum.ToString();
             Utilities.MapItemNum++;
             IMapItem airStrikeMarker = new MapItem(name, 1.0, "c40AirStrike", gi.AirStrikeCheckTerritory, true);
+            IMapPoint mp = Territory.GetRandomPoint(gi.AirStrikeCheckTerritory);
+            airStrikeMarker.SetLocation(mp);
             gi.MoveStacks.Add(airStrikeMarker);
          }
          return true;
@@ -1738,6 +1749,8 @@ namespace Pattons_Best
          Utilities.MapItemNum++;
          IMapItem usControl = new MapItem(name, 1.0, "c28UsControl", taskForce.TerritoryCurrent);
          usControl.Count = 0; // 0=us  1=light  2=medium  3=heavy
+         IMapPoint mp = Territory.GetRandomPoint(taskForce.TerritoryCurrent);
+         usControl.SetLocation(mp);
          stack.MapItems.Add(usControl);
          Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "SkipBattleBoard(): Added mi=" + usControl.Name + " t=" + taskForce.TerritoryCurrent.Name + " to " + gi.MoveStacks.ToString());
          //------------------------------------
@@ -1772,12 +1785,12 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool EnemyStrengthCheckNeeded(IGameInstance gi, out bool isCheckNeeded)
+      private bool IsEnemyStrengthCheckNeeded(IGameInstance gi, out bool isCheckNeeded)
       {
          isCheckNeeded = false;
          if( null == gi.EnteredArea)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EnemyStrengthCheckNeeded(): gi.EnteredArea=null");
+            Logger.Log(LogEnum.LE_ERROR, "IsEnemyStrengthCheckNeeded(): gi.EnteredArea=null");
             return false;
          }
          //--------------------------------
@@ -1786,18 +1799,18 @@ namespace Pattons_Best
          {
             if (true == s.Contains("E")) // Ignore Entry or Exit Areas
                continue;
-            Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "EnemyStrengthCheckNeeded(): Checking territory=" + gi.EnteredArea.Name + " adj=" + s);
+            Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "IsEnemyStrengthCheckNeeded(): Checking territory=" + gi.EnteredArea.Name + " adj=" + s);
             ITerritory? t = Territories.theTerritories.Find(s);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "EnemyStrengthCheckNeeded(): t=null for s=" + s);
+               Logger.Log(LogEnum.LE_ERROR, "IsEnemyStrengthCheckNeeded(): t=null for s=" + s);
                return false;
             }
-            Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "EnemyStrengthCheckNeeded(): Checking territory=" + s);
+            Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "IsEnemyStrengthCheckNeeded(): Checking territory=" + s);
             IStack? stack = gi.MoveStacks.Find(t);
             if (null == stack)
             {
-               Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "EnemyStrengthCheckNeeded(): no stack for=" + s + " in " + gi.MoveStacks.ToString());
+               Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "IsEnemyStrengthCheckNeeded(): no stack for=" + s + " in " + gi.MoveStacks.ToString());
                isCheckNeeded = true;
                return true;
             }

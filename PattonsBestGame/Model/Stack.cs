@@ -19,9 +19,6 @@ namespace Pattons_Best
       {
          Territory = t;
          mi.TerritoryCurrent = t;
-         double offset = mi.Zoom * Utilities.theMapItemOffset;
-         mi.Location.X = t.CenterPoint.X - offset;
-         mi.Location.Y = t.CenterPoint.Y - offset;
          MapItems.Add(mi);
       }
       public void Rotate() { MapItems.Rotate(1); }

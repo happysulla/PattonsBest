@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography.Pkcs;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Xml;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Point = System.Windows.Point;
 
 namespace Pattons_Best
@@ -38,11 +40,13 @@ namespace Pattons_Best
          myIndexName = 0;
          myHeaderNames.Add("03-Delete Regions");
          myHeaderNames.Add("03-Add Regions");
+         myHeaderNames.Add("03-Select Random Pt");
          myHeaderNames.Add("03-Finish");
          //------------------------------------
          myCommandNames.Add("00-Regions");
          myCommandNames.Add("01-Switch Map");
-         myCommandNames.Add("02-Cleanup");
+         myCommandNames.Add("02-Random Pt");
+         myCommandNames.Add("03-Cleanup");
          //------------------------------------
          myDockPanel = dp;
          //------------------------------------
@@ -163,6 +167,10 @@ namespace Pattons_Best
             CreateEllipses(Territories.theTerritories);
             CreatePolygons(Territories.theTerritories);
          }
+         else if (CommandName == myCommandNames[2])
+         { 
+
+         }
          else
          {
             if (false == Cleanup(ref gi))
@@ -175,6 +183,11 @@ namespace Pattons_Best
       }
       public bool NextTest(ref IGameInstance gi) // Move to the next test in this class's unit tests
       {
+         if (null == myCanvasMain)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "NextTest(): myCanvasMain=null");
+            return false;
+         }
          if (HeaderName == myHeaderNames[0])
          {
             ++myIndexName;
@@ -182,6 +195,21 @@ namespace Pattons_Best
             CreatePolygons(Territories.theTerritories);
          }
          else if (HeaderName == myHeaderNames[1])
+         {
+            ++myIndexName;
+            List<UIElement> results = new List<UIElement>();
+            foreach (UIElement ui in myCanvasMain.Children)
+            {
+               if (ui is Ellipse)
+                  results.Add(ui);
+               if (ui is Polygon)
+                  results.Add(ui);
+            }
+            foreach (UIElement ui1 in results)
+               myCanvasMain.Children.Remove(ui1);
+            CreateEllipses2(Territories.theTerritories);
+         }
+         else if (HeaderName == myHeaderNames[2])
          {
             ++myIndexName;
          }
@@ -357,7 +385,6 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateEllipses(): myCanvasMain=null");
             return;
          }
-
          foreach (Territory t in territories)
          {
             if (true == myIsBattleMapShown)
@@ -387,6 +414,36 @@ namespace Pattons_Best
                myCanvasTank.Children.Add(aEllipse);
             myEllipses.Add(aEllipse);
             aEllipse.MouseDown += this.MouseDownEllipse;
+         }
+      }
+      private void CreateEllipses2(ITerritories territories)
+      {
+         myEllipses.Clear();
+         if (null == myCanvasMain)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateEllipses(): myCanvasMain=null");
+            return;
+         }
+         foreach (Territory t in territories)
+         {
+            if ("Main" != t.CanvasName)
+               continue;
+            if ("Battle" == t.Type)
+               continue;
+            Ellipse aEllipse = new Ellipse { Name = t.ToString() };
+            aEllipse.Fill = Brushes.Pink;
+            aEllipse.StrokeThickness = 1;
+            aEllipse.Stroke = Brushes.Red;
+            aEllipse.Width = 10;
+            aEllipse.Height = 10;
+            System.Windows.Point p = new System.Windows.Point(t.CenterPoint.X, t.CenterPoint.Y);
+            p.X -= theEllipseOffset;
+            p.Y -= theEllipseOffset;
+            Canvas.SetLeft(aEllipse, p.X);
+            Canvas.SetTop(aEllipse, p.Y);
+            myCanvasMain.Children.Add(aEllipse);
+            myEllipses.Add(aEllipse);
+            aEllipse.MouseDown += this.MouseDownEllipse2;
          }
       }
       private void CreatePolygons(ITerritories territories)
@@ -475,17 +532,123 @@ namespace Pattons_Best
          }
          return true;
       }
+      private bool SetRandomPoint(ITerritory t)
+      {
+         if (null == myCanvasMain)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetRandomPoint(): myCanvasMain=null for t.Name=" + t.Name);
+            return false;
+         }
+         if (0 == t.Points.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetRandomPoint(): t.Points.Count=0 for t.Name=" + t.Name);
+            return false;
+         }
+         //----------------------------------------------------
+         // Make a StreamGeometry object from t.Points 
+         StreamGeometry geometry = new StreamGeometry();
+         using (StreamGeometryContext ctx = geometry.Open())
+         {
+            IMapPoint mp0 = t.Points[0];
+            System.Windows.Point point0 = new System.Windows.Point(mp0.X, mp0.Y);
+            ctx.BeginFigure(point0, true, true); //  filled and closed
+            for (int i = 1; i < t.Points.Count; ++i)
+            {
+               IMapPoint mpI = t.Points[i];
+               System.Windows.Point pointI = new System.Windows.Point(mpI.X, mpI.Y);
+               ctx.LineTo(pointI, true, false);
+            }
+            geometry.Freeze();
+         }
+         System.Windows.Rect rect = geometry.Bounds;
+         System.Windows.Shapes.Path path = new System.Windows.Shapes.Path();
+         path.Fill = Utilities.theBrushRegion;
+         path.Stroke = Brushes.Black;
+         path.StrokeThickness = 1;
+         path.Data = geometry;
+         myCanvasMain.Children.Add(path);
+         //----------------------------------------------------
+         int count = 20;
+         while (0 < --count)
+         {
+            double XCenter = (double)Utilities.RandomGenerator.Next((int)rect.Left, (int)rect.Right) + Utilities.theMapItemOffset; // Get a random point in the bounding box
+            double YCenter = (double)Utilities.RandomGenerator.Next((int)rect.Top, (int)rect.Bottom) + Utilities.theMapItemOffset;
+            Ellipse ellipse = new Ellipse() { Fill = Brushes.Black, Stroke = Brushes.Black, Width = 10, Height = 10, StrokeThickness = 1 };
+            Canvas.SetLeft(ellipse, XCenter - 5);
+            Canvas.SetTop(ellipse, YCenter - 5);
+            myCanvasMain.Children.Add(ellipse);
+            System.Windows.Point pCenter = new System.Windows.Point(XCenter, YCenter);
+            if ( true == geometry.FillContains(pCenter) )
+            {
+               System.Windows.Point p1 = new System.Windows.Point(XCenter - Utilities.theMapItemOffset, YCenter - Utilities.theMapItemOffset);
+               System.Windows.Point p2 = new System.Windows.Point(XCenter + Utilities.theMapItemOffset, YCenter - Utilities.theMapItemOffset);
+               System.Windows.Point p3 = new System.Windows.Point(XCenter - Utilities.theMapItemOffset, YCenter + Utilities.theMapItemOffset);
+               System.Windows.Point p4 = new System.Windows.Point(XCenter + Utilities.theMapItemOffset, YCenter + Utilities.theMapItemOffset);
+               bool isP1In = geometry.FillContains(p1);
+               bool isP2In = geometry.FillContains(p2);
+               bool isP3In = geometry.FillContains(p3);
+               bool isP4In = geometry.FillContains(p4);
+               Rectangle rect0 = new Rectangle() { Fill=Utilities.theBrushRegion, Stroke = Brushes.Black, Width = Utilities.theMapItemSize, Height = Utilities.theMapItemSize, StrokeThickness = 1 };
+               Canvas.SetLeft(rect0, XCenter - Utilities.theMapItemOffset);
+               Canvas.SetTop(rect0, YCenter - Utilities.theMapItemOffset);
+               if (false == isP1In && false == isP2In)
+               {
+                  YCenter += Utilities.theMapItemOffset;
+               }
+               else if (false == isP3In && false == isP4In)
+               {
+                  YCenter -= Utilities.theMapItemOffset;
+               }
+               else if (false == isP1In && false == isP3In)
+               {
+                  XCenter += Utilities.theMapItemOffset;
+               }
+               else if (false == isP2In && false == isP4In)
+               {
+                  XCenter -= Utilities.theMapItemOffset;
+               }
+               else if (false == isP1In && true == isP2In)
+               {
+                  XCenter += Utilities.theMapItemOffset;
+               }
+               else if (true == isP1In && false == isP2In)
+               {
+                  XCenter -= Utilities.theMapItemOffset;
+               }
+               else if (true == isP3In && false == isP4In)
+               {
+                  YCenter -= Utilities.theMapItemOffset;
+               }
+               else if (false == isP3In && true == isP4In)
+               {
+                  YCenter -= Utilities.theMapItemOffset;
+               }
+               System.Windows.Point p5 = new System.Windows.Point(XCenter - Utilities.theMapItemOffset, YCenter - Utilities.theMapItemOffset);
+               if (true == geometry.FillContains(p5))
+               {
+                  Rectangle rectFinal = new Rectangle() { Fill = Brushes.Red, Stroke = Brushes.Red, Width = Utilities.theMapItemSize, Height = Utilities.theMapItemSize, StrokeThickness = 1 };
+                  Canvas.SetLeft(rectFinal, XCenter - Utilities.theMapItemOffset);
+                  Canvas.SetTop(rectFinal, YCenter - Utilities.theMapItemOffset);
+                  myCanvasMain.Children.Add(rectFinal);
+                  myCanvasMain.Children.Add(rect0);
+                  return true;
+               }
+            }
+         }
+         Logger.Log(LogEnum.LE_ERROR, "SetRandomPoint(): Cannot find a random point in t.Name=" + t.Name + " rect=" + rect.ToString());
+         return false;
+      }
       //--------------------------------------------------------
       void MouseDownEllipse(object sender, MouseButtonEventArgs e)
       {
          if (null == myCanvasTank)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownSetCenterPoint(): myCanvasTank=null");
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse(): myCanvasTank=null");
             return;
          }
          if (null == myCanvasMain)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownSetCenterPoint(): myCanvasMain=null");
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse(): myCanvasMain=null");
             return;
          }
          System.Windows.Point p = e.GetPosition(myCanvasMain);
@@ -496,20 +659,20 @@ namespace Pattons_Best
             isMainCanvas = false;
          }
          IMapPoint mp = new MapPoint(p.X, p.Y);
-         System.Diagnostics.Debug.WriteLine("MouseDownEllipse.MouseDown(): {0}", mp.ToString());
+         System.Diagnostics.Debug.WriteLine("MouseDownEllipse(): {0}", mp.ToString());
          ITerritory? matchingTerritory = null; // Find the corresponding Territory
          Ellipse mousedEllipse = (Ellipse)sender;
          foreach (ITerritory? t in Territories.theTerritories)
          {
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse.MouseDown(): t=null");
+               Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse(): t=null");
                return;
             }
             string? tName = t.ToString();
             if (null == tName)
             {
-               Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse.MouseDown(): tName=null");
+               Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse(): tName=null");
                return;
             }
             if (mousedEllipse.Tag.ToString() == Utilities.RemoveSpaces(tName))
@@ -560,6 +723,35 @@ namespace Pattons_Best
                myCanvasTank.MouseDown -= MouseDownCanvas;
                myCanvasTank.Children.Add(aPolygon);
             }
+         }
+         e.Handled = true;
+      }
+      void MouseDownEllipse2(object sender, MouseButtonEventArgs e)
+      {
+         if (null == myCanvasMain)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse2(): myCanvasMain=null");
+            return;
+         }
+         ITerritory? matchingTerritory = null; // Find the corresponding Territory
+         Ellipse mousedEllipse = (Ellipse)sender;
+         foreach (ITerritory t in Territories.theTerritories)
+         {
+            if (mousedEllipse.Name == t.Name)
+            {
+               matchingTerritory = t;
+               break;
+            }
+         }
+         if (null == matchingTerritory) // Check for error
+         {
+            MessageBox.Show("Unable to find " + mousedEllipse.Tag.ToString());
+            return;
+         }
+         if( false == SetRandomPoint(matchingTerritory))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse2(): SetRandomPoint() returned false");
+            return;
          }
          e.Handled = true;
       }

@@ -3,6 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Transactions;
+using System.Windows.Media;
+using Windows.Perception.Spatial;
+using System.Windows.Controls;
+using System.Windows.Shapes;
 
 namespace Pattons_Best
 {
@@ -15,6 +20,52 @@ namespace Pattons_Best
       public IMapPoint CenterPoint { get; set; } = new MapPoint();
       public List<IMapPoint> Points { get; set; } = new List<IMapPoint>();
       public List<String> Adjacents { get; set; } = new List<String>();
+      //---------------------------------------------------------------
+      public static IMapPoint GetRandomPoint(ITerritory t)
+      {
+         if (0 == t.Points.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetRandomPoint(): t.Points.Count=0 for t.Name=" + t.Name);
+            return t.CenterPoint;
+         }
+         //----------------------------------------------------
+         // Make a StreamGeometry object from t.Points 
+         StreamGeometry geometry = new StreamGeometry();
+         using (StreamGeometryContext ctx = geometry.Open())
+         {
+            IMapPoint mp0 = t.Points[0];
+            System.Windows.Point point0 = new System.Windows.Point(mp0.X, mp0.Y);
+            ctx.BeginFigure(point0, true, true); //  filled and closed
+            for (int i = 1; i < t.Points.Count; ++i)
+            {
+               IMapPoint mpI = t.Points[i];
+               System.Windows.Point pointI = new System.Windows.Point(mpI.X, mpI.Y);
+               ctx.LineTo(pointI, true, false);
+            }
+            geometry.Freeze();
+         }
+         System.Windows.Rect rect = geometry.Bounds;
+         Path path = new Path();
+         path.Fill = Brushes.Gold;
+         path.Stroke = Brushes.Black;
+         path.StrokeThickness = 1;
+         path.Data = geometry;
+         //----------------------------------------------------
+         int count = 20;
+         while (0 < --count)
+         {
+            double X = (double)Utilities.RandomGenerator.Next((int)rect.Left, (int)rect.Right); // Get a random point in the bounding box
+            double Y = (double)Utilities.RandomGenerator.Next((int)rect.Top, (int)rect.Bottom);
+            System.Windows.Point p = new System.Windows.Point(X + Utilities.theMapItemOffset, Y + Utilities.theMapItemOffset);
+            if (true == geometry.FillContains(p))
+            {
+               Logger.Log(LogEnum.LE_SHOW_RANDOM_PT, "GetRandomPoint(): 1-t.Name=" + t.Name + " rect=(" + rect.Left.ToString("F1") + "," + rect.Right.ToString("F1") + "," + rect.Top.ToString("F1") + "," + rect.Bottom.ToString("F1") + ") Pt=(" + X.ToString("F1") + "," + Y.ToString("F1") + ")");
+               return new MapPoint(X, Y);
+            }
+         }
+         Logger.Log(LogEnum.LE_ERROR, "GetRandomPoint(): Cannot find a random point in t.Name=" + t.Name + " rect=" + rect.ToString());
+         return t.CenterPoint;
+      }
       //---------------------------------------------------------------
       public Territory() 
       { 

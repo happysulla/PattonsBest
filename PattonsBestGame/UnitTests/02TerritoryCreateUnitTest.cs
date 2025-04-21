@@ -15,8 +15,8 @@ namespace Pattons_Best
 {
    public class TerritoryCreateUnitTest : IUnitTest
    {
-      public static Double theEllipseDiameter = 30;
-      public static Double theEllipseOffset = theEllipseDiameter / 2.0;
+      private static Double theEllipseDiameter = 10;
+      private static Double theEllipseOffset = theEllipseDiameter / 2.0;
       //-----------------------------------------
       private string? myFileName = null;
       private DockPanel myDockPanelTop;
@@ -415,7 +415,7 @@ namespace Pattons_Best
          myFileName = dirInfo.FullName + "\\Config\\" + Territories.FILENAME;
          return true;
       }
-      private void CreateEllipse(ITerritory territory)
+      private void CreateEllipse(ITerritory territory, IMapPoint mp)
       {
          if (null == myCanvasTank)
          {
@@ -440,8 +440,8 @@ namespace Pattons_Best
          System.Windows.Point p = new System.Windows.Point(territory.CenterPoint.X, territory.CenterPoint.Y);
          p.X -= theEllipseOffset;
          p.Y -= theEllipseOffset;
-         Canvas.SetLeft(aEllipse, p.X);
-         Canvas.SetTop(aEllipse, p.Y);
+         Canvas.SetLeft(aEllipse, mp.X);
+         Canvas.SetTop(aEllipse, mp.Y);
          if ( "Main" == territory.CanvasName)
             myCanvasMain.Children.Add(aEllipse);
          else
@@ -737,7 +737,7 @@ namespace Pattons_Best
                territory.Type = TerritoryCreateDialog.theTypeChecked;
             else
                territory.Type = TerritoryCreateDialog.theCardChecked;
-            CreateEllipse(territory);
+            CreateEllipse(territory, territory.CenterPoint);
             Territories.theTerritories.Add(territory);
          }
       }

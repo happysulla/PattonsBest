@@ -8,6 +8,7 @@ using System.Transactions;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Xml.Linq;
 using WpfAnimatedGif;
 using Button = System.Windows.Controls.Button;
@@ -166,62 +167,13 @@ namespace Pattons_Best
          TerritoryStarting = territory;
          this.Location.X = territory.CenterPoint.X - zoom * Utilities.theMapItemOffset;
          this.Location.Y = territory.CenterPoint.Y - zoom * Utilities.theMapItemOffset;
-         if (true == isRandomLocation)
-            SetRandomLocation(myTerritoryCurrent);
       }
       //----------------------------------------------------------------------------
-      public void SetLocation(int counterCount)
+      public void SetLocation(IMapPoint mp, int counterCount = 0)
       {
-         this.Location.X = this.TerritoryCurrent.CenterPoint.X - Utilities.theMapItemOffset + (counterCount * Utilities.STACK);
-         this.Location.Y = this.TerritoryCurrent.CenterPoint.Y - Utilities.theMapItemOffset + (counterCount * Utilities.STACK);
-      }
-      public void SetRandomLocation(ITerritory t)
-      {
-         int minRightX = -10000000;
-         int maxLeftX = +10000000;
-         int minBottomY = -10000000;
-         int maxTopY = +10000000;
-         //----------------------------------------------------
-         // Make a StreamGeometry object from t.Points 
-         StreamGeometry geometry = new StreamGeometry();
-         geometry.FillRule = FillRule.EvenOdd;
-         if (0 == t.Points.Count)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetRandomLocation(): t.Points.Count=0 for t.Name=" + t.Name);
-            return;
-         }
-         IMapPoint mp0 = t.Points[0];
-         System.Windows.Point point0 = new System.Windows.Point(mp0.X, mp0.Y);
-         StreamGeometryContext ctx = geometry.Open();
-         ctx.BeginFigure(point0, true, true); //  filled and closed
-         for (int i = 1; i < t.Points.Count; ++i)
-         {
-            IMapPoint mpI = t.Points[i];
-            System.Windows.Point pointI = new System.Windows.Point(mpI.X, mpI.Y);
-            ctx.LineTo(pointI, true, true);
-            if (mpI.X < maxLeftX) maxLeftX = (int)(mpI.X);
-            if (mpI.X > minRightX) minRightX = (int)(mpI.X);
-            if (mpI.Y < maxTopY) maxTopY = (int)(mpI.Y);
-            if (mpI.Y > minBottomY) minBottomY = (int)(mpI.Y);
-         }
-         geometry.Freeze();
-         int delta = (int)(this.Zoom * Utilities.theMapItemSize);
-         minRightX -= delta;
-         minBottomY -= delta;
-         //----------------------------------------------------
-         // Ensure the point is in the Geometry object
-         int count = 50;
-         while (0 < --count)
-         {
-            this.Location.X = (double)Utilities.RandomGenerator.Next(maxLeftX, minRightX); // Get a random point in the bounding box
-            this.Location.Y = (double)Utilities.RandomGenerator.Next(maxTopY, minBottomY);
-            System.Windows.Point p = new System.Windows.Point(this.Location.X, this.Location.Y);
-            if (false == geometry.FillContains(p)) // <cgs> TEST - return false selects first point found
-               return;
-            else
-               Logger.Log(LogEnum.LE_ERROR, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-         }
-         Logger.Log(LogEnum.LE_ERROR, "SetRandomLocation(): Cannot find a random point in t.Name=" + t.Name);
+         double delta = Utilities.theMapItemOffset + (counterCount * Utilities.STACK);
+         this.Location.X = mp.X - delta;
+         this.Location.Y = mp.Y - delta;
       }
       //----------------------------------------------------------------------------
       public void Flip()

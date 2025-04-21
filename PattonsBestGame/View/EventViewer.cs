@@ -1095,9 +1095,9 @@ namespace Pattons_Best
                if ("Strength Check" == content)
                {
                   bool isStrengthCheck = false;
-                  if ((false == EnemyStrengthCheckNeeded(gi, out isStrengthCheck)))
+                  if ((false == IsEnemyStrengthCheckNeeded(gi, out isStrengthCheck)))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): EnemyStrengthCheckNeeded() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): IsEnemyStrengthCheckNeeded() returned false");
                      return false;
                   }
                   b.IsEnabled = isStrengthCheck;
@@ -1117,7 +1117,7 @@ namespace Pattons_Best
          b.Click += Button_Click;
          return true;
       }
-      private bool EnemyStrengthCheckNeeded(IGameInstance gi, out bool isCheckNeeded)
+      private bool IsEnemyStrengthCheckNeeded(IGameInstance gi, out bool isCheckNeeded)
       {
          isCheckNeeded = false;
          ITerritory? enteredTerritory = gi.EnteredArea;
@@ -1137,18 +1137,18 @@ namespace Pattons_Best
          {
             if (true == s.Contains("E")) // Ignore Entry or Exit Areas
                continue;
-            Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "EnemyStrengthCheckNeeded(): Checking territory=" + enteredTerritory.Name + " adj=" + s);
+            Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "IsEnemyStrengthCheckNeeded(): Checking territory=" + enteredTerritory.Name + " adj=" + s);
             ITerritory? t = Territories.theTerritories.Find(s);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "EnemyStrengthCheckNeeded(): t=null for s=" + s);
+               Logger.Log(LogEnum.LE_ERROR, "IsEnemyStrengthCheckNeeded(): t=null for s=" + s);
                return false;
             }
-            Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "EnemyStrengthCheckNeeded(): Checking territory=" + s);
+            Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "IsEnemyStrengthCheckNeeded(): Checking territory=" + s);
             IStack? stack = gi.MoveStacks.Find(t);
             if (null == stack)
             {
-               Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "EnemyStrengthCheckNeeded(): no stack for=" + s + " in " + gi.MoveStacks.ToString());
+               Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "IsEnemyStrengthCheckNeeded(): no stack for=" + s + " in " + gi.MoveStacks.ToString());
                isCheckNeeded = true;
                return true;
             }
@@ -1402,9 +1402,9 @@ namespace Pattons_Best
                         case "MovementEnemyStrengthChoice":
                            action = GameAction.MovementChooseOption;
                            bool isStrengthCheckNeeded = false;
-                           if( false == EnemyStrengthCheckNeeded(myGameInstance, out isStrengthCheckNeeded))
+                           if( false == IsEnemyStrengthCheckNeeded(myGameInstance, out isStrengthCheckNeeded))
                            {
-                              Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): EnemyStrengthCheckNeeded() returned false");
+                              Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): IsEnemyStrengthCheckNeeded() returned false");
                               return;
                            }
                            if( true == isStrengthCheckNeeded )
