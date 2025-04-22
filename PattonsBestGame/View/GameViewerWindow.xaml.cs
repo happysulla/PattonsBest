@@ -99,6 +99,8 @@ namespace Pattons_Best
       private MainMenuViewer? myMainMenuViewer = null;
       private System.Windows.Input.Cursor? myTargetCursor = null;
       private readonly FontFamily myFontFam = new FontFamily("Tahoma");
+      private double myPreviousScrollHeight = 0.0;
+      private double myPreviousScrollWidth = 0.0;
       //---------------------------------------------------------------------
       private readonly SolidColorBrush mySolidColorBrushClear = new SolidColorBrush();
       private readonly SolidColorBrush mySolidColorBrushBlack = new SolidColorBrush();
@@ -791,7 +793,20 @@ namespace Pattons_Best
                      return false;
                   }
                   break;
+               case GameAction.MovementStartAreaSetRoll:
+                  IMapItem? startArea = gi.MoveStacks.FindMapItem("StartArea"); // center thumbnails around taskforce
+                  if (null != startArea)
+                     UpdateScrollbarThumbnails(startArea.TerritoryCurrent);
+                  break;
+               case GameAction.MovementExitAreaSetRoll:
+                  IMapItem? exitArea = gi.MoveStacks.FindMapItem("ExitArea"); // center thumbnails around exit area
+                  if (null != exitArea)
+                     UpdateScrollbarThumbnails(exitArea.TerritoryCurrent);
+                  break;
                case GameAction.MovementEnemyStrengthChoice:
+                  IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce"); // center thumbnails around exit area
+                  if (null != taskForce)
+                     UpdateScrollbarThumbnails(taskForce.TerritoryCurrent);
                   if (false == UpdateCanvasMainEnemyStrengthCheckTerritory(gi, action))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMainEnemyStrengthCheckTerritory() returned false");
@@ -895,6 +910,38 @@ namespace Pattons_Best
          }
          foreach (UIElement ui1 in elements)
             myCanvasMain.Children.Remove(ui1);
+      }
+      private void UpdateScrollbarThumbnails(ITerritory t)
+      {
+         double percentHeight = (t.CenterPoint.Y / myCanvasMain.ActualHeight);
+         double percentToScroll = 0.0;
+         if (percentHeight < 0.25)
+            percentToScroll = 0.0;
+         else if (0.75 < percentHeight)
+            percentToScroll = 1.0;
+         else
+            percentToScroll = percentHeight / 0.5 - 0.5;
+         double scrollHeight = myScrollViewerMap.ScrollableHeight;
+         if (0.0 == scrollHeight)
+            scrollHeight = myPreviousScrollHeight;
+         else
+            myPreviousScrollHeight = myScrollViewerMap.ScrollableHeight;
+         double amountToScrollV = percentToScroll * scrollHeight;
+         myScrollViewerMap.ScrollToVerticalOffset(amountToScrollV);
+         double percentWidth = (t.CenterPoint.X / myCanvasMain.ActualWidth);
+         if (percentWidth < 0.25)
+            percentToScroll = 0.0;
+         else if (0.75 < percentWidth)
+            percentToScroll = 1.0;
+         else
+            percentToScroll = percentWidth / 0.5 - 0.5;
+         double scrollWidth = myScrollViewerMap.ScrollableWidth;
+         if (0.0 == scrollWidth)
+            scrollWidth = myPreviousScrollWidth;
+         else
+            myPreviousScrollWidth = myScrollViewerMap.ScrollableWidth;
+         double amountToScrollH = percentToScroll * scrollWidth;
+         myScrollViewerMap.ScrollToHorizontalOffset(amountToScrollH);
       }
       private bool UpdateCanvasMainMapItems(List<Button> buttons, IStacks stacks)
       {
