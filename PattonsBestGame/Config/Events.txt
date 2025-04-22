@@ -257,9 +257,8 @@ Die Roll =  <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21'
 e032	"<Bold>e032 No Combat</Bold> 
 <InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
-No combat. Victory points added to the After Action Report 
-<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-to reflect area under US Control. "
+If converting territory to US Control, Victory points are added to the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 e033	"<Bold>e033 Placing Advancing Fire Markers</Bold> 
 <InlineUIContainer><Button Content='r4.61' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>

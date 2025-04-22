@@ -1572,6 +1572,9 @@ namespace Pattons_Best
                         break;
                   }
                   break;
+               case GameAction.EveningDebriefingStart:
+                  gi.GamePhase = GamePhase.EveningDebriefing;
+                  break;
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;
                   break;

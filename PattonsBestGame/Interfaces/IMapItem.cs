@@ -27,6 +27,7 @@ namespace Pattons_Best
       bool IsMoving { get; set; }
       bool IsHullDown { get; set; }
       bool IsTurret { get; set; }
+      bool IsKilled { get; set; }
       //----------------------------------------
       void SetLocation(IMapPoint mp, int counterCount=0);
       void Flip();

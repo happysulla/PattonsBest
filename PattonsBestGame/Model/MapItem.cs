@@ -98,6 +98,7 @@ namespace Pattons_Best
       public bool IsMoving { get; set; } = false;
       public bool IsHullDown { get; set; } = false;
       public bool IsTurret { get; set; } = false;
+      public bool IsKilled { get; set; } = false;
       //--------------------------------------------------
       private bool myIsFlipped = false;
       //----------------------------------------------------------------------------
