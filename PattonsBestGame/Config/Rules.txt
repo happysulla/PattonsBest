@@ -220,16 +220,16 @@ r4.54.2	"<Bold>r4.54.2  Call for Artillery Support</Bold>
 <LineBreak/><LineBreak/>
 Call to hit an area adjacent to your task force. Consult the 
 <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-to see if Artillery Support arrives 
-<InlineUIContainer><Button Content='r23.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+to see if Artillery Support arrives per 
+<InlineUIContainer><Button Content='r23.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  Roll 1D with a roll less than 8. 
 If successful, place an Artillery Support marker on the area. Three Artillery Support markers are allowed and can be placed in the same area. Continue with 
 <InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. "
 r4.54.3	"<Bold>r4.54.3  Call for Air Strike</Bold>
 <LineBreak/><LineBreak/>
 Call to hit an area adjacent to your task force. Consult the 
 <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-to see if Air Strike arrives
- <InlineUIContainer><Button Content='r23.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  If successful, place an Air Strike marker on the area. Two Air Strike markers are allowed and can be placed in the same area. Additionally, while waiting for air strike, a 15 minute operation can be chosen to happen in parallel. 
+to see if Air Strike arrives per
+ <InlineUIContainer><Button Content='r23.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  Roll 1D with roll less than 5. If successful, place an Air Strike marker on the area. Two Air Strike markers are allowed and can be placed in the same area. Additionally, while waiting for air strike, a 15 minute operation can be chosen to happen in parallel. 
 <LineBreak/><LineBreak/>
 Continue with 
 <InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
@@ -237,7 +237,9 @@ r4.54.4	"<Bold>r4.54.4  Attempt Resupply</Bold>
 <LineBreak/><LineBreak/>
 Consult the 
 <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-to see if resupply occurs. If successful, you may relead your tank with ammo. Continue with 
+Table to see if resupply occurs (Roll 1D less than 8). If successful, you may reload your tank with ammo per 
+<InlineUIContainer><Button Content='r16.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+and fuel per <InlineUIContainer><Button Content='r29.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Continue with 
 <InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r4.54.5	"<Bold>r4.54.5  Enter Adjacent Area</Bold>
 <LineBreak/><LineBreak/>
@@ -921,7 +923,7 @@ r9.52	"<Bold>r9.52 AP vs Vehicles</Bold>
 <LineBreak/><LineBreak/>
 For each hit against a target, consult one of the corresponding tables: 
 <InlineUIContainer><Button Content='AP To Kill (75)' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> or 
-<InlineUIContainer><Button Content='AP To Kill (76)' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<InlineUIContainer><Button Content='AP To Kill (76L)' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
 All tables show a number for each type of enemy vehicle target for three different facings (front, side, and rear), three different ranges (close, medium, and long), and in some cases for both turrent or hull hits.
 <LineBreak/><LineBreak/>

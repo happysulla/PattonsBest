@@ -8,10 +8,10 @@
       <TableRow  FontSize='16' >
          <TableCell ColumnSpan='3' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
             <Paragraph>
-               AP TO KILL (76)
+               AP TO KILL (76LL)
                <LineBreak/>
                <Italic>
-                  <Run FontSize='10' Text='For Critical Hits see note (3). For Normal Hits, roll the number shown or less To Kill.'></Run>
+                  <Run FontSize='10' Text='All critical hits are automatic kills. For Normal Hits, roll the number shown or less To Kill.'></Run>
                </Italic>
             </Paragraph>
          </TableCell>
@@ -40,7 +40,6 @@
                      <TableCell TextAlignment='Left' Background='DarkSeaGreen'>
                         <Paragraph>
                            <Run Text='  Pz IV'></Run>
-                           <LineBreak/>
                         </Paragraph>
                      </TableCell>
                   </TableRow>
@@ -93,7 +92,6 @@
                      <TableCell TextAlignment='Left' >
                         <Paragraph>
                            <Run Text='  JgdPz IV'></Run>
-                           <LineBreak/>
                         </Paragraph>
                      </TableCell>
                   </TableRow>
@@ -157,23 +155,17 @@
                   <TableRow  FontSize='12' >
                      <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
                         <Paragraph>
-                           <Run Text='T 92/83/72'></Run>
-                           <LineBreak/>
-                           <Run Text='H 72/58/42'></Run>
+                           <Run Text='95'></Run>
+                           </Paragraph>
+                     </TableCell>
+                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
+                        <Paragraph>
+                           <Run Text='95'></Run>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
                         <Paragraph>
-                           <Run Text='T 95/92/83'></Run>
-                           <LineBreak/>
-                           <Run Text='H 95/95/92'></Run>
-                        </Paragraph>
-                     </TableCell>
-                     <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
-                        <Paragraph>
-                           <Run Text='T 95/95/92'></Run>
-                           <LineBreak/>
-                           <Run Text='H 95'></Run>
+                           <Run Text='95'></Run>
                         </Paragraph>
                      </TableCell>
                   </TableRow>
@@ -181,21 +173,23 @@
                   <TableRow  FontSize='12' >
                      <TableCell TextAlignment='Center'>
                         <Paragraph>
-                           <Run Text='T 03/nc/nc'></Run>
+                           <Run Text='T 72/58/42'></Run>
                            <LineBreak/>
-                           <Run Text='H nc'></Run>
+                           <Run Text='H 17/08/03'></Run>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center'>
                         <Paragraph>
-                           <Run Text='92/83/72'></Run>
+                           <Run Text='95'></Run>
                            <LineBreak/>
+                           <Run Text='95'></Run>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center' >
                         <Paragraph>
-                           <Run Text='95/92/83'></Run>
+                           <Run Text='95'></Run>
                            <LineBreak/>
+                           <Run Text='95'></Run>
                         </Paragraph>
                      </TableCell>
                   </TableRow>
@@ -203,44 +197,47 @@
                   <TableRow  FontSize='12' >
                      <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
                         <Paragraph>
-                           <Run Text='T 03/nc/nc'></Run>
+                           <Run Text='T 72/58/42'></Run>
                            <LineBreak/>
+                           <Run Text='H 28/17/08'></Run>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
                         <Paragraph>
-                           <Run Text='72/58/42'></Run>
+                           <Run Text='95'></Run>
                            <LineBreak/>
+                           <Run Text='95'></Run>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
                         <Paragraph>
-                           <Run Text='83/72/58'></Run>
+                           <Run Text='95'></Run>
                            <LineBreak/>
+                           <Run Text='95'></Run>
                         </Paragraph>
                      </TableCell>
                   </TableRow>
                   <!-- Pz VIb -->
                   <TableRow  FontSize='12' >
-                     <TableCell TextAlignment='Center'>
+                     <TableCell TextAlignment='Center' >
                         <Paragraph>
-                           <Run Text='T nc'></Run>
+                           <Run Text='T 17/08/03'></Run>
                            <LineBreak/>
                            <Run Text='H nc'></Run>
                         </Paragraph>
                      </TableCell>
-                     <TableCell TextAlignment='Center'>
+                     <TableCell TextAlignment='Center' >
                         <Paragraph>
-                           <Run Text='T 28/17/08'></Run>
+                           <Run Text='T 95/95/83'></Run>
                            <LineBreak/>
-                           <Run Text='H 72/58/42'></Run>
+                           <Run Text='95'></Run>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center' >
                         <Paragraph>
-                           <Run Text='T 42/28/17'></Run>
+                           <Run Text='95'></Run>
                            <LineBreak/>
-                           <Run Text='H 83/72/58'></Run>
+                           <Run Text='95'></Run>
                         </Paragraph>
                      </TableCell>
                   </TableRow>
@@ -248,12 +245,12 @@
                   <TableRow  FontSize='12' >
                      <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
                         <Paragraph>
-                           <Run Text='72/58/42'></Run>
+                           <Run Text='95'></Run>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
                         <Paragraph>
-                           <Run Text='83'></Run>
+                           <Run Text='95'></Run>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
@@ -302,22 +299,17 @@
                   <TableRow  FontSize='12' >
                      <TableCell TextAlignment='Center'>
                         <Paragraph>
-                           <Run Text='03/nc/nc'></Run>
-                           <LineBreak/>
+                           <Run Text='72/58/42'></Run>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center'>
                         <Paragraph>
-                           <Run Text='T 95/95/92'></Run>
-                           <LineBreak/>
-                           <Run Text='H 95'></Run>
+                           <Run Text='95'></Run>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center' >
                         <Paragraph>
                            <Run Text='95'></Run>
-                           <LineBreak/>
-                           <Run Text=''></Run>
                         </Paragraph>
                      </TableCell>
                   </TableRow>
@@ -325,7 +317,7 @@
                   <TableRow  FontSize='12' >
                      <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
                         <Paragraph>
-                           <Run Text='03/nc/nc'></Run>
+                           <Run Text='72/58/42'></Run>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
@@ -389,7 +381,7 @@
                   <TableRow  FontSize='12' >
                      <TableCell ColumnSpan='3' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
                         <Paragraph>
-                           <Run>HVAP HITS</Run>
+                           <Run>APDS HITS</Run>
                         </Paragraph>
                      </TableCell>
                   </TableRow>
@@ -414,21 +406,17 @@
                   <TableRow  FontSize='12' >
                      <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
                         <Paragraph>
-                           <Run Text='T 95/95/92'></Run>
-                           <LineBreak/>
-                           <Run Text='H 95/95/72'></Run>
+                           <Run Text='95'></Run>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
                         <Paragraph>
                            <Run Text='95'></Run>
-                           <LineBreak/>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
                         <Paragraph>
                            <Run Text='95'></Run>
-                           <LineBreak/>
                         </Paragraph>
                      </TableCell>
                   </TableRow>
@@ -436,21 +424,23 @@
                   <TableRow  FontSize='12' >
                      <TableCell TextAlignment='Center'>
                         <Paragraph>
-                           <Run Text='T 83/42/03'></Run>
+                           <Run Text='T 95/95/83'></Run>
                            <LineBreak/>
-                           <Run Text='H 28/03/nc'></Run>
+                           <Run Text='H 58/58/28'></Run>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center'>
                         <Paragraph>
-                           <Run Text='95/95/92'></Run>
+                           <Run Text='95'></Run>
                            <LineBreak/>
+                           <Run Text='95'></Run>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center' >
                         <Paragraph>
                            <Run Text='95'></Run>
                            <LineBreak/>
+                           <Run Text='95'></Run>
                         </Paragraph>
                      </TableCell>
                   </TableRow>
@@ -458,19 +448,23 @@
                   <TableRow  FontSize='12' >
                      <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
                         <Paragraph>
-                           <Run Text='T 83/42/03'></Run>
+                           <Run Text='T 95/95/83'></Run>
                            <LineBreak/>
-                           <Run Text='H 95/83/28'></Run>
+                           <Run Text='95'></Run>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
                         <Paragraph>
-                           <Run Text='95/95/72'></Run>
+                           <Run Text='95'></Run>
+                           <LineBreak/>
+                           <Run Text='95'></Run>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
                         <Paragraph>
-                           <Run Text='95/95/72'></Run>
+                           <Run Text='95'></Run>
+                           <LineBreak/>
+                           <Run Text='95'></Run>
                         </Paragraph>
                      </TableCell>
                   </TableRow>
@@ -478,23 +472,23 @@
                   <TableRow  FontSize='12' >
                      <TableCell TextAlignment='Center'>
                         <Paragraph>
-                           <Run Text='T 28/03/nc'></Run>
+                           <Run Text='T 58/58/28'></Run>
                            <LineBreak/>
                            <Run Text='H nc'></Run>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center'>
                         <Paragraph>
-                           <Run Text='T 95/83/28'></Run>
+                           <Run Text='95'></Run>
                            <LineBreak/>
-                           <Run Text='H 95/95/72'></Run>
+                           <Run Text='95'></Run>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center' >
                         <Paragraph>
-                           <Run Text='T 95/92/42'></Run>
+                           <Run Text='95'></Run>
                            <LineBreak/>
-                           <Run Text='H 95/95/83'></Run>
+                           <Run Text='95'></Run>
                         </Paragraph>
                      </TableCell>
                   </TableRow>
@@ -502,7 +496,7 @@
                   <TableRow  FontSize='12' >
                      <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
                         <Paragraph>
-                           <Run Text='95/95/72'></Run>
+                           <Run Text='95'></Run>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
@@ -556,20 +550,17 @@
                   <TableRow  FontSize='12' >
                      <TableCell TextAlignment='Center'>
                         <Paragraph>
-                           <Run Text='83/42/03'></Run>
-                           <LineBreak/>
+                           <Run Text='95/95/83'></Run>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center'>
                         <Paragraph>
                            <Run Text='95'></Run>
-                           <LineBreak/>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center' >
                         <Paragraph>
                            <Run Text='95'></Run>
-                           <LineBreak/>
                         </Paragraph>
                      </TableCell>
                   </TableRow>
@@ -577,7 +568,7 @@
                   <TableRow  FontSize='12' >
                      <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
                         <Paragraph>
-                           <Run Text='83/42/03'></Run>
+                           <Run Text='95/95/83'></Run>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
@@ -595,7 +586,7 @@
                   <TableRow  FontSize='12' >
                      <TableCell TextAlignment='Center'  >
                         <Paragraph>
-                           <Run Text=' '></Run>
+                           <Run Text='95'></Run>
                         </Paragraph>
                      </TableCell>
                      <TableCell TextAlignment='Center'  >
@@ -642,9 +633,7 @@
                <LineBreak/>
                <Run Text='   (2) close/medium/long range'></Run>
                <LineBreak/>
-               <Run Text='   (3) All critical hits are automatic kills except for the 76L AP hits against Front Hull of the PzVIb '></Run>
-               <LineBreak/>
-               <Run Text='       where the numbers needed are 58/42/28'></Run>
+               <Run Text='   (3) APDS = Armor Piercing - Discarding Sabot = high velocity AP shell'></Run>
             </Paragraph>
          </TableCell>
       </TableRow>

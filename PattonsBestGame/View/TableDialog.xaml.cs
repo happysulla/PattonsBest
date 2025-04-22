@@ -68,8 +68,14 @@ namespace Pattons_Best
                this.Width = this.MinWidth = this.MaxWidth = 680;
                this.MinHeight = this.MaxHeight = 510;
                break;
-            case "AP To Kill (76)":
-               this.Title = "AP To Kill (76)";
+            case "AP To Kill (76L)":
+               this.Title = "AP To Kill (76L)";
+               this.Background = theBrushGreen;
+               this.Width = this.MinWidth = this.MaxWidth = 680;
+               this.MinHeight = this.MaxHeight = 510;
+               break;
+            case "AP To Kill (76LL)":
+               this.Title = "AP To Kill (76LL)";
                this.Background = theBrushGreen;
                this.Width = this.MinWidth = this.MaxWidth = 680;
                this.MinHeight = this.MaxHeight = 510;
@@ -240,6 +246,12 @@ namespace Pattons_Best
                this.Background = theBrushGreen;
                this.Width = this.MinWidth = this.MaxWidth = 460;
                this.MinHeight = this.MaxHeight = 350;
+               break;
+            case "Replacement":
+               this.Title = "Tank Replacement Table";
+               this.Background = theBrushTan;
+               this.Width = this.MinWidth = this.MaxWidth = 720;
+               this.MinHeight = this.MaxHeight = 450;
                break;
             case "Resistance":
                this.Title = "Resistance Table";

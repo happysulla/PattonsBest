@@ -1,0 +1,1081 @@
+<Table BorderBrush='Black' BorderThickness='1' TextAlignment='Center' Background='AntiqueWhite'>
+   <Table.Columns>
+      <TableColumn Width='120'/>
+      <TableColumn Width='60'/>
+      <TableColumn Width='50'/>
+      <TableColumn Width='50'/>
+      <TableColumn Width='50'/>
+      <TableColumn Width='50'/>
+      <TableColumn Width='50'/>
+      <TableColumn Width='50'/>
+      <TableColumn Width='50'/>
+      <TableColumn Width='50'/>
+      <TableColumn Width='50'/>
+   </Table.Columns>
+   <TableRowGroup>
+      <TableRow  FontSize='14' >
+         <TableCell ColumnSpan='11' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <LineBreak/>REPLACEMENT TABLE<LineBreak/>
+               <Run FontStyle='Italic' Text='Under the column of the current month, roll 2D to determine the model of your Sherman replacement. Crews with a combined rating of 35+ may instead choose the tank model they receive.'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+   <TableRowGroup >
+      <!-- .......................row1.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1' RowSpan='2' >
+            <Paragraph>
+               <LineBreak/>
+               <Run Text='Model'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1' RowSpan='2' >
+            <Paragraph>
+               <LineBreak/>
+               <Run Text='Turret'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' ColumnSpan='9'>
+            <Paragraph>
+               <Run Text='MONTH'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row2.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Run Text='8/44'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Run Text='9/44'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Run Text='10/44'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Run Text='11/44'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Run Text='12/44'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Run Text='1/45'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Run Text='2/45'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Run Text='3/45'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
+            <Paragraph>
+               <Run Text='4/45'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row3.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' Background='White'>
+            <Paragraph>
+               <Run Text='     1.) M4'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='A'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='1-6'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='1-5'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='1-3'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='1'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='1'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='1'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='1'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='1'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='1'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row4.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='     2.) M4'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='B'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='7-20'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='6-15'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='4-10'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='2-4'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='2-4'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='2-3'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='2'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='2'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='2'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row5.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' Background='White'>
+            <Paragraph>
+               <Run Text='     3.) M4'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='C'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='-'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='-'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='-'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='5'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='5'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='4'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='3'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='3'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='3'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row6.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='     4.) M4A1'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='A'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='21-27'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='16-21'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='11-15'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='6-8'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='6'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='5'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='4'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='4'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='4'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row7.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' Background='White'>
+            <Paragraph>
+               <Run Text='     5.) M4A1'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='B'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='28-45'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='22-35'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='16-25'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='9-15'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='7-9'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='6-8'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='5-6'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='5'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='5'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row8.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='     6.) M4A1'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='C'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='-'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='-'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='-'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='16'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='10'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='9'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='7'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='6'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='6'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row9.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' Background='White'>
+            <Paragraph>
+               <Run Text='     5.) M4A3'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='A'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='46-47'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='36-37'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='26-27'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='17'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='11'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='10'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='8'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='7'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='7'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row10.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='     8.) M4A3'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='B'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='48-50'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='38-40'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='28-30'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='18-20'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='12-14'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='11-13'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='9-11'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='8-9'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='8'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row11.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' Background='White'>
+            <Paragraph>
+               <Run Text='     9.) M4A3'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='C'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='-'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='-'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='-'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='21'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='15'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='14'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='12'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='10'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='9'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row12.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='     10.) M4A3(75)W'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='D'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='51-70'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='41-58'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='31-49'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='22-42'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='16-34'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='15-30'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='13-24'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='11-20'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='10-15'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row13.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' Background='White'>
+            <Paragraph>
+               <Run Text='     11.) M4A3(75)W'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='E'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='-'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='59-60'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='50-54'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='43-51'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='35-47'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='31-46'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='25-44'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='21-44'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='16-43'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row12.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='     12.) M4A3E2(75)W'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='F'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='-'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='61-65'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='55-59'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='52-56'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='48-52'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='47-51'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='45-49'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='45-49'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='44-48'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row15.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' Background='White'>
+            <Paragraph>
+               <Run Text='     13.) M4A3E2(76)W'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='F'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='-'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='-'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='60'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='57'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='53'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='52'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='50'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='50'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='49'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row16.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='     14.) M4A1(76)W'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='G'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='71-80'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='66-75'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='61-75'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='58-71'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='54-65'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='53-62'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='51-59'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='51-57'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='50-54'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row17.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' Background='White'>
+            <Paragraph>
+               <Run Text='     15.) M4A1(76)W'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='H'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='-'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='-'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='-'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='72'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='66-68'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='63-67'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='60-65'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='58-64'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='55-63'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row18.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' >
+            <Paragraph>
+               <Run Text='     16.) M4A3(76)W'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='G'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='81-100'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='76-100'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='76-100'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='73-97'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='69-94'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center'>
+            <Paragraph>
+               <Run Text='68-90'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='66-86'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='65-82'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' >
+            <Paragraph>
+               <Run Text='64-78'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+      <!-- .......................row19.......................-->
+      <TableRow  FontSize='12' >
+         <TableCell TextAlignment='Left' Background='White'>
+            <Paragraph>
+               <Run Text='     17.) M4A3(76)W'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='H'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='-'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='-'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='-'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='98-100'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='95-100'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='91-100'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='87-100'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='83-100'></Run>
+            </Paragraph>
+         </TableCell>
+         <TableCell TextAlignment='Center' Background='White'>
+            <Paragraph>
+               <Run Text='79-100'></Run>
+            </Paragraph>
+         </TableCell>
+      </TableRow>
+   </TableRowGroup>
+</Table>

@@ -67,6 +67,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Config\AP To Kill (76LL).xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Config\Replacement.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Config\Decorations.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -115,7 +121,7 @@
     <None Update="Config\HE To Kill (75).xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Config\AP To Kill (76).xml">
+    <None Update="Config\AP To Kill (76L).xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Config\AP To Kill (75).xml">
