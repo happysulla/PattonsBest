@@ -45,22 +45,61 @@ namespace Pattons_Best
             geometry.Freeze();
          }
          System.Windows.Rect rect = geometry.Bounds;
-         Path path = new Path();
-         path.Fill = Brushes.Gold;
-         path.Stroke = Brushes.Black;
-         path.StrokeThickness = 1;
-         path.Data = geometry;
          //----------------------------------------------------
          int count = 20;
          while (0 < --count)
          {
-            double X = (double)Utilities.RandomGenerator.Next((int)rect.Left, (int)rect.Right); // Get a random point in the bounding box
-            double Y = (double)Utilities.RandomGenerator.Next((int)rect.Top, (int)rect.Bottom);
-            System.Windows.Point p = new System.Windows.Point(X + Utilities.theMapItemOffset, Y + Utilities.theMapItemOffset);
-            if (true == geometry.FillContains(p))
+            double XCenter = (double)Utilities.RandomGenerator.Next((int)rect.Left, (int)rect.Right) + Utilities.theMapItemOffset; // Get a random point in the bounding box
+            double YCenter = (double)Utilities.RandomGenerator.Next((int)rect.Top, (int)rect.Bottom) + Utilities.theMapItemOffset;
+            Ellipse ellipse = new Ellipse() { Fill = Brushes.Black, Stroke = Brushes.Black, Width = 10, Height = 10, StrokeThickness = 1 };
+            Canvas.SetLeft(ellipse, XCenter - 5);
+            Canvas.SetTop(ellipse, YCenter - 5);
+            System.Windows.Point pCenter = new System.Windows.Point(XCenter, YCenter);
+            if (true == geometry.FillContains(pCenter))
             {
-               Logger.Log(LogEnum.LE_SHOW_RANDOM_PT, "GetRandomPoint(): 1-t.Name=" + t.Name + " rect=(" + rect.Left.ToString("F1") + "," + rect.Right.ToString("F1") + "," + rect.Top.ToString("F1") + "," + rect.Bottom.ToString("F1") + ") Pt=(" + X.ToString("F1") + "," + Y.ToString("F1") + ")");
-               return new MapPoint(X, Y);
+               System.Windows.Point p1 = new System.Windows.Point(XCenter - Utilities.theMapItemOffset, YCenter - Utilities.theMapItemOffset);
+               System.Windows.Point p2 = new System.Windows.Point(XCenter + Utilities.theMapItemOffset, YCenter - Utilities.theMapItemOffset);
+               System.Windows.Point p3 = new System.Windows.Point(XCenter - Utilities.theMapItemOffset, YCenter + Utilities.theMapItemOffset);
+               System.Windows.Point p4 = new System.Windows.Point(XCenter + Utilities.theMapItemOffset, YCenter + Utilities.theMapItemOffset);
+               bool isP1In = geometry.FillContains(p1);
+               bool isP2In = geometry.FillContains(p2);
+               bool isP3In = geometry.FillContains(p3);
+               bool isP4In = geometry.FillContains(p4);
+               if (false == isP1In && false == isP2In)
+               {
+                  YCenter += Utilities.theMapItemOffset;
+               }
+               else if (false == isP3In && false == isP4In)
+               {
+                  YCenter -= Utilities.theMapItemOffset;
+               }
+               else if (false == isP1In && false == isP3In)
+               {
+                  XCenter += Utilities.theMapItemOffset;
+               }
+               else if (false == isP2In && false == isP4In)
+               {
+                  XCenter -= Utilities.theMapItemOffset;
+               }
+               else if (false == isP1In && true == isP2In)
+               {
+                  XCenter += Utilities.theMapItemOffset;
+               }
+               else if (true == isP1In && false == isP2In)
+               {
+                  XCenter -= Utilities.theMapItemOffset;
+               }
+               else if (true == isP3In && false == isP4In)
+               {
+                  YCenter -= Utilities.theMapItemOffset;
+               }
+               else if (false == isP3In && true == isP4In)
+               {
+                  YCenter -= Utilities.theMapItemOffset;
+               }
+               System.Windows.Point p5 = new System.Windows.Point(XCenter - Utilities.theMapItemOffset, YCenter - Utilities.theMapItemOffset);
+               if (true == geometry.FillContains(p5))
+                  return new MapPoint(XCenter,YCenter);
             }
          }
          Logger.Log(LogEnum.LE_ERROR, "GetRandomPoint(): Cannot find a random point in t.Name=" + t.Name + " rect=" + rect.ToString());

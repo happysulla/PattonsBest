@@ -2058,9 +2058,40 @@ They use more time (30 minutes). They are less likely to arrive (1D = 1-4). They
 <LineBreak/><LineBreak/>
 Also, air strikes may not be called for during overcast or falling snow weather. 
 <LineBreak/><LineBreak/>
-While the 30 minutes spent calling for air strike is passing, you may perform one additional 15 minute operation (such as call for arilltery support or check an additional area for resistance).
+While the 30 minutes spent calling for air strike is passing, you may perform one additional 15 minute operation (such as call for atillery support or check an additional area for resistance).
 <LineBreak/><LineBreak/>
                                         <InlineUIContainer><Image Name='c40AirStrike'  Height='80' Width='80'></Image></InlineUIContainer>"
+r24.0	"<Bold>r24.0 Tank Replacement</Bold>
+<LineBreak/><LineBreak/>
+PATTON&apos;s BEST makes it possible for you to command any of 17 different variations of the M4 (Sherman) Medium tank used by the US Army forces in the fighting in northern Europe (and one important variant used by the Commonwealth forces only, i.e., the Firefly). 
+<LineBreak/><LineBreak/>
+In many cases the difference between models is slight, but giving you the chance to operate each may lead to a better understanding of why changes were made. 
+<LineBreak/><LineBreak/>
+The tank models available consist of four chasis: (M4, M4A1, M4A3, and M4A3E2), six different turrets, and usually two different guns (75 and 76L).
+<LineBreak/><LineBreak/>
+For each of the 17 Sherman variations, there is a separate Tank Card. The tank card for Tank #1 is printed on the game board, and the others are printed on different cards.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r24.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Tank Replacement<LineBreak/>
+<InlineUIContainer><Button Content='r24.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Tank Replacement Table"
+r24.1	"<Bold>r24.1 Tank Replacement</Bold>
+<LineBreak/><LineBreak/>
+Players beginning a campaign game are issued an M4 tank with a type A turret with a 75 gun (Tank #1).
+<LineBreak/><LineBreak/>
+Tanks may be replaced udner two circumstances: after you have had a tank shot out from under you (knoched out) in combat or during a refit period on the Campaign 
+<InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+<LineBreak/><LineBreak/>
+There is no historical basis for replacing tanks during refits, and players may keep their old model as long as they can. Destroyed tanks must be replaced per the Tank 
+<InlineUIContainer><Button Content='Replacement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table."
+r24.2	"<Bold>r24.2 Tank Replacement</Bold>
+<LineBreak/><LineBreak/>
+To replace your tank, consult the Tank 
+<InlineUIContainer><Button Content='Replacement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. 
+Roll 2D under the column for the current month and read across the row from the number rolled to the list of tank models down the table&apos;s left side to find the model your tank replacement.
+<LineBreak/><LineBreak/>
+Record your tank model on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+<LineBreak/><LineBreak/>
+Note that crews whose combined ratings total 35 or more do not have to roll for their new tank model but may instead choose the tank they receive."
 r25.0	"<Bold>r25.0 Promotions</Bold>
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r25.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Overview <LineBreak/>
@@ -2120,15 +2151,82 @@ As a combat soldier in the European Theater of Operations during World War II, y
 -- WWII Victory Medal<LineBreak/>
 <LineBreak/>
 - Purple Hearts are awarded for each wound recieved in combat. The European Campaign Medal is automatically awarded for playing the game. The WWII Victory Medal is automatically awarded after May of 1945."
-	
-	
-	
-	
-	
-	
-	
-	
-	
+r27.0	"<Bold>r27.0 Retrofitting</Bold>
+<LineBreak/><LineBreak/>
+During the periods on the Combat Calendar marked Refitting, the Division is building itself back up to strength, replacing tanks, and retraining new crews. 
+<LineBreak/><LineBreak/>
+During a refit period, you have the option of replacing your current tank per 
+<InlineUIContainer><Button Content='r24.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+<LineBreak/><LineBreak/>
+If the refit takes at least 7 days, you may attempt to improve your crew ratings per 
+<InlineUIContainer><Button Content='r27.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+and train your crew to use the gyrostablilizer per 
+<InlineUIContainer><Button Content='r27.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r27.1	"<Bold>r27.1 Crew Ratings </Bold>
+<LineBreak/><LineBreak/>
+Roll 1D separately for each crewman, even those joining the crew during the refit.
+<LineBreak/><LineBreak/>
+If the number rolled is higher than the crewman&apos;s current rating, his rating is increased by one. 
+<LineBreak/><LineBreak/>
+Only one attempt is made per man for the entire refit period."
+r27.2	"<Bold>r27.2 Gyrostabilizer</Bold>
+<LineBreak/><LineBreak/>
+A gyrostabilizer was attached to the main gun of the Sherman tank is to keep the gun stabilized, or steady, in the vertical axis (up-down). 
+<LineBreak/><LineBreak/>
+When turned on, it would keep the gun in a level position while the tank moved.  In theory, this allowed the gunner to keep the gun aimed at a target when moving by adjusting only the turret&apos;s rotation. 
+<LineBreak/><LineBreak/>
+In practice, most crews found the Stabilizer dangerous (the gun would move up and down on its own) and difficult to use. However, others thought the Stabilizer was a great asset if properly used.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r25.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Training Crew<LineBreak/>
+<InlineUIContainer><Button Content='r25.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Trained Crew<LineBreak/>
+<InlineUIContainer><Button Content='r25.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Stabilizer Use"
+r27.21	"<Bold>r27.21 Training Crew</Bold>
+<LineBreak/><LineBreak/>
+During a refit of at least 7 days, you may have your crew trained in the use of the gyrostabalizier if the combined rating of the crew is 30 or higher. 
+<LineBreak/><LineBreak/>
+Mark the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> that the crew is gyroStabilizer trained."
+r27.22	"<Bold>r27.22 Trained Crew</Bold>
+<LineBreak/><LineBreak/>
+Once trained, your crew stays so unless your gunner is lost. Other crew casulaties have no effect. 
+<LineBreak/><LineBreak/>
+Loss of your gunner loses your training. No replaement gunners have this training."
+r27.23	"<Bold>r27.23 Stabilizer Use</Bold>
+<LineBreak/><LineBreak/>
+In order to use the stabilizer, your crew must be trained in its use. If not trained, you may not fire the main gun during rounds when the tank is moved or pivoted. 
+<LineBreak/><LineBreak/>
+Trained crews may fire the main gun when the tank is moving or pivoting, although with the pentalty shown on the To Hit Tables. 
+<LineBreak/><LineBreak/>
+Gyrostabilizer training takes place during Refitting periods. "
+r29.0	"<Bold>r29.0 Fuel (Optional)</Bold>
+<LineBreak/><LineBreak/>
+All Sherman tank models carry a maxium of 35 units of fuel, where each unit equals 5 gallons (175 gallons total). During the Time Check step 
+<InlineUIContainer><Button Content='r4.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> of the sequence of play when you determine the amount of time and ammo already expended for the day, 
+the number rolled also deteremines the number of fuel units already used.
+<LineBreak/><LineBreak/>
+Subtract the number rolled from 35 to determine the number of fuel units remaining. 
+<LineBreak/><LineBreak/>
+Thereafter, fuel is consumed for action on both the Movement and Battle Boards, and is subtracted from the remaining total with each use. 
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r29.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Movement Board Fuel Use<LineBreak/>
+<InlineUIContainer><Button Content='r29.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Battle Board Fuel Use"
+r29.1	"<Bold>r29.1 Movement Board Fuel Use</Bold>
+<LineBreak/><LineBreak/>
+Moving from one area to another on the Movement Board consumes 2 fuel units. 
+<LineBreak/><LineBreak/>
+Successfully completing an ammo resupply operations refills the tank with fuel.  Put the fuel supply back to 25 units. 
+<LineBreak/><LineBreak/>
+If your tank is out of fuel, assume the entire task force is out or low, and no movement on the Movement Board is possible until a successful ammo (and fuel) resupply occurs per 
+<InlineUIContainer><Button Content='r4.54.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r29.2	"<Bold>r29.2 Battle Board Fuel Use</Bold>
+<LineBreak/><LineBreak/>
+While on the Battle Board, fuel is consumed during movement. 
+<LineBreak/><LineBreak/>
+When the driver performs the actions Forward, Forward to Hull Down, Reversion, and Reverse to Hull Down, the number rolled on the color die determines if fuel is consumed.
+<LineBreak/><LineBreak/>
+If the colored die is 1-3, mark off 1 unit of fuel. 
+<LineBreak/><LineBreak/>
+A tank with no fuel may not perform the above movement actions, nor may the tank pivot."
 	
 	
 	
