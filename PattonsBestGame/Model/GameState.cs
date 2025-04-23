@@ -592,8 +592,19 @@ namespace Pattons_Best
                else
                {
                   gi.GamePhase = GamePhase.Battle;
-                  gi.EventDisplayed = gi.EventActive = "e017";
-                  gi.DieRollAction = GameAction.MovementStartAreaSetRoll;
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  gi.IsAdvancingFireChosen = true;
+                  if (true == gi.IsAdvancingFireChosen)
+                  {
+                     gi.AdvancingFireMarkerCount = 6 - (int)Math.Ceiling((double)gi.FriendlyTankLossCount / 3.0);  // six minus friendly tank/3 (rounded up)
+                     gi.EventDisplayed = gi.EventActive = "e033";
+                  }
+                  else
+                  {
+                     gi.EventDisplayed = gi.EventActive = "e034";
+                     gi.DieRollAction = GameAction.BattleActivation;
+                  }
+                  action = GameAction.BattleStart;
                }
                break;
             case GameAction.UpdateEventViewerActive: // Only change active event
@@ -904,6 +915,7 @@ namespace Pattons_Best
             return false;
          }
          //------------------------------------
+         gi.Sherman.IsTurret = true;
          gi.Sherman.TerritoryCurrent = gi.Home;
          gi.BattleStacks.Add(gi.Sherman);
          return true;
@@ -1537,7 +1549,7 @@ namespace Pattons_Best
                         {
                            if (false == SkipBattleBoard(gi, lastReport))
                            {
-                              returnStatus = "ExitBattle() returned false";
+                              returnStatus = "SkipBattleBoard() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                            }
                         }
@@ -1555,7 +1567,7 @@ namespace Pattons_Best
                         {
                            if (false == SkipBattleBoard(gi, lastReport))
                            {
-                              returnStatus = "ExitBattle() returned false";
+                              returnStatus = "SkipBattleBoard() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                            }
                         }
@@ -1573,7 +1585,7 @@ namespace Pattons_Best
                         {
                            if (false == SkipBattleBoard(gi, lastReport))
                            {
-                              returnStatus = "ExitBattle() returned false";
+                              returnStatus = "SkipBattleBoard() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                            }
                         }

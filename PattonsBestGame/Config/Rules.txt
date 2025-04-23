@@ -238,7 +238,7 @@ r4.54.4	"<Bold>r4.54.4  Attempt Resupply</Bold>
 Consult the 
 <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 Table to see if resupply occurs (Roll 1D less than 8). If successful, you may reload your tank with ammo per 
-<InlineUIContainer><Button Content='r16.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<InlineUIContainer><Button Content='r16.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 and fuel per <InlineUIContainer><Button Content='r29.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Continue with 
 <InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r4.54.5	"<Bold>r4.54.5  Enter Adjacent Area</Bold>
@@ -304,19 +304,21 @@ Table per
 <InlineUIContainer><Button Content='r23.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r4.65	"<Bold>r4.65  Ambush Check</Bold>
 <LineBreak/><LineBreak/>
-Roll 1D for possible Ambush and subtract one for rain, falling snow, or fog. If die roll is less than 7, consult appropriate table for each enemy unit:
-<InlineUIContainer><Button Content='Enemy Advance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Action Table, <LineBreak/>
-<InlineUIContainer><Button Content='Enemy Battle' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Action Table, or <LineBreak/>
-<InlineUIContainer><Button Content='Enemy Counterattack' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Action Table.
-<LineBreak/><LineBreak/> 
+Roll 1D for possible Ambush and subtract one for rain, falling snow, or fog. If roll is greater than 6, no ambush occurs.
+<LineBreak/><LineBreak/>
+If die roll is less than 7, ambush occurs. consult appropriate table for each enemy unit on the appropriate Action Table: 
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='Enemy Advance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  <LineBreak/>
+<InlineUIContainer><Button Content='Enemy Battle' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  <LineBreak/>
+<InlineUIContainer><Button Content='Enemy Counterattack' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
 See 
 <InlineUIContainer><Button Content='r13.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for enemy actions and 
 <InlineUIContainer><Button Content='r20.43' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for ambushes in Counterattack scenario. 
-<LineBreak/><LineBreak/> 
 Additionally, roll for random events on the 
-<InlineUIContainer><Button Content='Random Events' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. Then go to 
+<InlineUIContainer><Button Content='Random Events' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. 
 <LineBreak/><LineBreak/>
-Regardless of ambush status, continue with
+Regardless of ambush status, continue with 
 <InlineUIContainer><Button Content='r4.7' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> to start the fight."
 r4.7	"<Bold>r4.7  Battle Round Sequence</Bold>
 <LineBreak/><LineBreak/>
@@ -923,7 +925,7 @@ r9.52	"<Bold>r9.52 AP vs Vehicles</Bold>
 <LineBreak/><LineBreak/>
 For each hit against a target, consult one of the corresponding tables: 
 <InlineUIContainer><Button Content='AP To Kill (75)' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> or 
-<InlineUIContainer><Button Content='AP To Kill (76L)' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<InlineUIContainer><Button Content='AP To Kill (76)' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
 All tables show a number for each type of enemy vehicle target for three different facings (front, side, and rear), three different ranges (close, medium, and long), and in some cases for both turrent or hull hits.
 <LineBreak/><LineBreak/>
