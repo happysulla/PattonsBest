@@ -184,9 +184,8 @@ namespace Pattons_Best
       MovementExit,
 
       BattleStart,
-      BattlePlaceAdvanceFire,
       BattleActivation,
-
+      BattlePlaceAdvanceFire,
 
       EveningDebriefingStart,
       Error

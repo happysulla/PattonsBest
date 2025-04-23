@@ -1,6 +1,7 @@
 ﻿using Pattons_Best.Model;
 using System;
 using System.CodeDom;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -598,13 +599,12 @@ namespace Pattons_Best
                   {
                      gi.AdvancingFireMarkerCount = 6 - (int)Math.Ceiling((double)gi.FriendlyTankLossCount / 3.0);  // six minus friendly tank/3 (rounded up)
                      gi.EventDisplayed = gi.EventActive = "e033";
+                     action = GameAction.BattleStart;
                   }
                   else
                   {
-                     gi.EventDisplayed = gi.EventActive = "e034";
-                     gi.DieRollAction = GameAction.BattleActivation;
+                     action = GameAction.BattleActivation;
                   }
-                  action = GameAction.BattleStart;
                }
                break;
             case GameAction.UpdateEventViewerActive: // Only change active event
@@ -1732,23 +1732,26 @@ namespace Pattons_Best
       }
       private bool EnterBoardArea(IGameInstance gi)
       {
-         IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
-         if (null == taskForce)
+         if (null == gi.EnteredArea)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EnterBoardArea(): taskForce= null");
+            Logger.Log(LogEnum.LE_ERROR, "EnterBoardArea(): gi.EnteredArea=null");
             return false;
          }
-         IStack? stack = gi.MoveStacks.Find(taskForce.TerritoryStarting);
-         if (null == stack)
+         IStack? stack = gi.MoveStacks.Find(gi.EnteredArea);
+         if (null != stack)
          {
-            gi.EventDisplayed = gi.EventActive = "e030";
-            gi.DieRollAction = GameAction.MovementStrengthRollBattleBoard;
+            foreach (IMapItem mi1 in stack.MapItems)
+            {
+               if ((true == mi1.Name.Contains("Strength")) || (true == mi1.Name.Contains("UsControl")))
+               {
+                  gi.EventDisplayed = gi.EventActive = "e031";
+                  gi.DieRollAction = GameAction.MovementResistanceCheckRoll;
+                  return true;
+               }
+            }
          }
-         else
-         {
-            gi.EventDisplayed = gi.EventActive = "e031";
-            gi.DieRollAction = GameAction.MovementResistanceCheckRoll;
-         }         
+         gi.EventDisplayed = gi.EventActive = "e030";
+         gi.DieRollAction = GameAction.MovementStrengthRollBattleBoard;
          return true;
       }
       private bool SkipBattleBoard(IGameInstance gi, IAfterActionReport report)
@@ -1930,15 +1933,9 @@ namespace Pattons_Best
                gi.EventDisplayed = gi.EventActive; // next screen to show
                break;
             case GameAction.BattleStart:
-               if( true == gi.IsAdvancingFireChosen )
-               {
-                  gi.EventDisplayed = gi.EventActive = "e033";
-               }
-               else
-               {
-                  gi.EventDisplayed = gi.EventActive = "e034";
-                  gi.DieRollAction = GameAction.BattleActivation;
-               }
+               gi.EventDisplayed = gi.EventActive = "e033";
+               break;
+            case GameAction.BattleActivation:
                break;
             case GameAction.BattlePlaceAdvanceFire:
                if( null == gi.AdvanceFire )
