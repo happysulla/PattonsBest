@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -96,6 +95,7 @@ namespace Pattons_Best
             case GameAction.TestingStartPreparations:
             case GameAction.TestingStartBattle:
             case GameAction.BattleStart:
+            case GameAction.BattleActivation:
                myDieRoller.HideDie();
                theMainImage = EnumMainImage.MI_Battle;
                ShowBattleMap(myCanvas);
@@ -106,6 +106,13 @@ namespace Pattons_Best
                   Image img1 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c44AdvanceFire"), Width = sizeCursor, Height = sizeCursor };
                   myTargetCursor = Utilities.ConvertToCursor(img1, hotPoint);
                   this.myCanvas.Cursor = myTargetCursor; // set the cursor in the canvas
+               }
+               else
+               {
+                  if (null != myTargetCursor)
+                     myTargetCursor.Dispose();
+                  myTargetCursor = null;
+                  this.myCanvas.Cursor = Cursors.Arrow; // get rid of the canvas cursor
                }
                break;
             case GameAction.SetupShowAfterActionReport:

@@ -473,18 +473,33 @@ namespace Pattons_Best
          }
          myGameInstance.MoveStacks.Remove(mi);
          //-------------------------------------
-         IStack? stack = myGameInstance.MoveStacks.Find(mi.TerritoryCurrent);
+         IStacks? stacks = null;
+         if( "Tank" == newT.CanvasName )
+         {
+            stacks = myGameInstance.TankStacks;
+         }
+         else if ("Main" == newT.CanvasName)
+         {
+            if( "Battle" == newT.Type )
+               stacks = myGameInstance.BattleStacks;
+            else if (("A" == newT.Type) || ("B" == newT.Type) || ("D" == newT.Type) || ("D" == newT.Type) || ("E" == newT.Type))
+               stacks = myGameInstance.MoveStacks;
+         }
+         if( null == stacks )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetTerritory(): unknown Parent=" + newT.CanvasName + " or unknown Type=" + newT.Type);
+            return false;
+         }
+         IStack? stack = stacks.Find(mi.TerritoryCurrent);
          if (null == stack)
          {
             stack = new Stack(newT, mi);
-            myGameInstance.MoveStacks.Add(stack);
+            stacks.Add(stack);
          }
          else // add to top of stack
          {
             mi.TerritoryCurrent = newT;
-            double offset = mi.Zoom * Utilities.theMapItemOffset + stack.MapItems.Count * Utilities.STACK;
-            mi.Location.X = newT.CenterPoint.X - offset;
-            mi.Location.Y = newT.CenterPoint.Y - offset;
+            mi.SetLocation(newT.CenterPoint);
             stack.MapItems.Add(mi);
          }
          return true;
@@ -842,6 +857,16 @@ namespace Pattons_Best
                      return false;
                   }
                   break;
+               case GameAction.BattleStart:
+                  if( true == gi.IsAdvancingFireChosen)
+                  {
+                     if (false == UpdateCanvasMainAdvancingMarkerFirePlace())
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMainAdvancingMarkerFirePlace() returned false");
+                        return false;
+                     }
+                  }
+                  break;
                case GameAction.EndGameClose:
                   GameAction outActionClose = GameAction.EndGameExit;
                   myGameEngine.PerformAction(ref gi, ref outActionClose);
@@ -1039,6 +1064,27 @@ namespace Pattons_Best
             myCanvasMain.Children.Add(aEllipse);
             myEllipses.Add(aEllipse);
             aEllipse.MouseDown += MouseDownEllipseSpottingCommander;
+         }
+         return true;
+      }
+      private bool UpdateCanvasMainAdvancingMarkerFirePlace()
+      {
+         string[] sectors = new string[8] { "B4L", "B4M", "B4C", "B6M", "B6C", "B9L", "B9M", "B9C" };
+         foreach (string s in sectors)
+         {
+            ITerritory? t = Territories.theTerritories.Find(s);
+            if( null == t )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainAdvancingMarkerFirePlace(): t=null for tName=" + s);
+               return false;
+            }
+            PointCollection points = new PointCollection();
+            foreach (IMapPoint mp1 in t.Points)
+               points.Add(new System.Windows.Point(mp1.X, mp1.Y));
+            Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = t.Name };
+            aPolygon.MouseDown += MouseDownPolygonPlaceAdvanceFire;
+            myPolygons.Add(aPolygon);
+            myCanvasMain.Children.Add(aPolygon);
          }
          return true;
       }
@@ -1284,8 +1330,8 @@ namespace Pattons_Best
                aPathFigure.Segments.Add(lineSegment);
             }
             // Add the last line segment
-            int multiplerX = Utilities.RandomGenerator.Next(0, 5) - 2;
-            int multiplerY = Utilities.RandomGenerator.Next(0, 5) - 2;
+            int multiplerX = Utilities.RandomGenerator.Next(0, 3) - 1;
+            int multiplerY = Utilities.RandomGenerator.Next(0, 3) - 1;
             double xEnd = mim.NewTerritory.CenterPoint.X - Utilities.theMapItemOffset + multiplerX * Utilities.theMapItemOffset;
             double yEnd = mim.NewTerritory.CenterPoint.Y - Utilities.theMapItemOffset + multiplerY * Utilities.theMapItemOffset;
             if ((Math.Abs(xEnd - xStart) < 2) && (Math.Abs(yEnd - yStart) < 2)) // if already at final location, skip animation or get runtime exception
@@ -1569,6 +1615,23 @@ namespace Pattons_Best
                }
             }
          }
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+      }
+      private void MouseDownPolygonPlaceAdvanceFire(object sender, MouseButtonEventArgs e)
+      {
+         Polygon? clickedPolygon = sender as Polygon;
+         if (null == clickedPolygon)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonPlaceAdvanceFire(): clickedPolygon=null");
+            return;
+         }
+         myGameInstance.AdvanceFire = Territories.theTerritories.Find(clickedPolygon.Name);
+         if (null == myGameInstance.AdvanceFire)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonPlaceAdvanceFire(): t=null for " + clickedPolygon.Name.ToString());
+            return;
+         }
+         GameAction outAction = GameAction.BattlePlaceAdvanceFire;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
       private void ClickButtonMapItem(object sender, RoutedEventArgs e)

@@ -332,7 +332,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): taskForceArea adjacent=" + t.Adjacents[0]);
             return false;
          }
-         IMapItem taskForceArea = new MapItem("TaskForce", 1.3, "c35TaskForce", adjacent, true);
+         IMapItem taskForceArea = new MapItem("TaskForce", 1.3, "c35TaskForce", adjacent);
          gi.MoveStacks.Add(taskForceArea);
          //-----------------------------------------
          string name1 = t.Adjacents[0];
@@ -344,7 +344,7 @@ namespace Pattons_Best
          }
          string miName = "UsControl" + Utilities.MapItemNum.ToString();
          Utilities.MapItemNum++;
-         IMapItem usControl = new MapItem(miName, 1.0, "c28UsControl", controlled, true);
+         IMapItem usControl = new MapItem(miName, 1.0, "c28UsControl", controlled);
          usControl.Count = 0; // 0=us  1=light  2=medium  3=heavy
          IMapPoint mp = Territory.GetRandomPoint(controlled);
          usControl.SetLocation(mp);
@@ -441,7 +441,7 @@ namespace Pattons_Best
          {
             string name = "StrengthLight" + Utilities.MapItemNum.ToString();
             ++Utilities.MapItemNum;
-            IMapItem strengthMarker = new MapItem(name, 1.0, "c36Light", gi.EnemyStrengthCheckTerritory, true);
+            IMapItem strengthMarker = new MapItem(name, 1.0, "c36Light", gi.EnemyStrengthCheckTerritory);
             strengthMarker.Count = 1;
             IMapPoint mp = Territory.GetRandomPoint(gi.EnemyStrengthCheckTerritory);
             strengthMarker.SetLocation(mp);
@@ -451,7 +451,7 @@ namespace Pattons_Best
          {
             string name = "StrengthMedium" + Utilities.MapItemNum.ToString();
             ++Utilities.MapItemNum;
-            IMapItem strengthMarker = new MapItem(name, 1.0, "c37Medium", gi.EnemyStrengthCheckTerritory, true);
+            IMapItem strengthMarker = new MapItem(name, 1.0, "c37Medium", gi.EnemyStrengthCheckTerritory);
             strengthMarker.Count = 2;
             IMapPoint mp = Territory.GetRandomPoint(gi.EnemyStrengthCheckTerritory);
             strengthMarker.SetLocation(mp);
@@ -461,7 +461,7 @@ namespace Pattons_Best
          {
             string name = "StrengthHeavy" + Utilities.MapItemNum.ToString();
             ++Utilities.MapItemNum;
-            IMapItem strengthMarker = new MapItem(name, 1.0, "c38Heavy", gi.EnemyStrengthCheckTerritory, true);
+            IMapItem strengthMarker = new MapItem(name, 1.0, "c38Heavy", gi.EnemyStrengthCheckTerritory);
             strengthMarker.Count = 3;
             IMapPoint mp = Territory.GetRandomPoint(gi.EnemyStrengthCheckTerritory);
             strengthMarker.SetLocation(mp);
@@ -483,7 +483,7 @@ namespace Pattons_Best
             gi.IsAirStrikePending = false;
             string nameAir =  "Air" + Utilities.MapItemNum.ToString();
             ++Utilities.MapItemNum;
-            IMapItem airStrikeMarker = new MapItem(nameAir, 1.0, "c40AirStrike", gi.AirStrikeCheckTerritory, true);
+            IMapItem airStrikeMarker = new MapItem(nameAir, 1.0, "c40AirStrike", gi.AirStrikeCheckTerritory);
             gi.MoveStacks.Add(airStrikeMarker);
          }
          return true;
@@ -567,7 +567,6 @@ namespace Pattons_Best
                   gi.EventDisplayed = gi.EventActive = "e011";
                   gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
                   gi.Sherman.TerritoryCurrent = gi.Home;
-                  gi.Sherman.SetLocation(gi.Home.CenterPoint);
                   gi.BattleStacks.Add(gi.Sherman);
                }
                break;
@@ -725,6 +724,18 @@ namespace Pattons_Best
       }
       private bool PerformAutoSetupSkipCrewAssignments(IGameInstance gi)
       {
+         gi.NewMembers.Clear();
+         IAfterActionReport? report = gi.Reports.GetLast();
+         if (null == report)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipCrewAssignments(): gi.Reports.GetLast() returned null");
+            return false;
+         }
+         gi.NewMembers.Add(report.Commander);
+         gi.NewMembers.Add(report.Gunner);
+         gi.NewMembers.Add(report.Loader);
+         gi.NewMembers.Add(report.Driver);
+         gi.NewMembers.Add(report.Assistant);
          foreach (IMapItem mi in gi.NewMembers) // assign crew ratings randomly
          {
             ICrewMember? cm = mi as ICrewMember;
@@ -892,6 +903,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): SetUsControlOnBattleMap() returned false");
             return false;
          }
+         //------------------------------------
+         gi.Sherman.TerritoryCurrent = gi.Home;
+         gi.BattleStacks.Add(gi.Sherman);
          return true;
       }
       private bool PerformAutoSetupSkipMovement(IGameInstance gi)
@@ -1037,7 +1051,6 @@ namespace Pattons_Best
                   gi.EventDisplayed = gi.EventActive = "e011";
                   gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
                   gi.Sherman.TerritoryCurrent = gi.Home;
-                  gi.Sherman.SetLocation(gi.Home.CenterPoint);
                   gi.BattleStacks.Add(gi.Sherman);
                   if (false == SetWeatherCounters( gi ))
                   {
@@ -1506,7 +1519,7 @@ namespace Pattons_Best
                   break;
                case GameAction.MovementResistanceCheckRoll:
                   Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "GameStateMovement.PerformAction(MovementResistanceCheckRoll): " + gi.MoveStacks.ToString());
-                  dieRoll = 1; // <cgs> TEST
+                  dieRoll = 10; // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   switch (gi.BattleResistance)
@@ -1651,7 +1664,7 @@ namespace Pattons_Best
             }
             string name = gi.ArtillerySupportCheck.Name + "Artillery" + Utilities.MapItemNum.ToString();
             Utilities.MapItemNum++;
-            IMapItem artillerySupportMarker = new MapItem(name, 1.0, "c39ArtillerySupport", gi.ArtillerySupportCheck, true);
+            IMapItem artillerySupportMarker = new MapItem(name, 1.0, "c39ArtillerySupport", gi.ArtillerySupportCheck);
             IMapPoint mp = Territory.GetRandomPoint(gi.ArtillerySupportCheck);
             artillerySupportMarker.SetLocation(mp);
             gi.MoveStacks.Add(artillerySupportMarker);
@@ -1666,7 +1679,7 @@ namespace Pattons_Best
             gi.IsAirStrikePending = false;
             string name = gi.AirStrikeCheckTerritory.Name + "Air" + Utilities.MapItemNum.ToString();
             Utilities.MapItemNum++;
-            IMapItem airStrikeMarker = new MapItem(name, 1.0, "c40AirStrike", gi.AirStrikeCheckTerritory, true);
+            IMapItem airStrikeMarker = new MapItem(name, 1.0, "c40AirStrike", gi.AirStrikeCheckTerritory);
             IMapPoint mp = Territory.GetRandomPoint(gi.AirStrikeCheckTerritory);
             airStrikeMarker.SetLocation(mp);
             gi.MoveStacks.Add(airStrikeMarker);
@@ -1913,6 +1926,42 @@ namespace Pattons_Best
                {
                   gi.EventDisplayed = gi.EventActive = "e034";
                   gi.DieRollAction = GameAction.BattleActivation;
+               }
+               break;
+            case GameAction.BattlePlaceAdvanceFire:
+               if( null == gi.AdvanceFire )
+               {
+                  returnStatus = "gi.AdvanceFire=null";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
+               }
+               else
+               {
+                  string name = "AdvanceFire" + Utilities.MapItemNum;
+                  ++Utilities.MapItemNum;
+                  IMapItem advanceFire = new MapItem(name, 1.0, "c44AdvanceFire", gi.AdvanceFire);
+                  IMapPoint mp = Territory.GetRandomPoint(gi.AdvanceFire);
+                  advanceFire.SetLocation(mp);
+                  IStack? stack = gi.BattleStacks.Find(gi.AdvanceFire);
+                  if (null == stack)
+                  {
+                     stack = new Stack(gi.AdvanceFire);
+                     gi.BattleStacks.Add(stack);
+                  }
+                  stack.MapItems.Add(advanceFire);
+                  //----------------------------------
+                  --gi.AdvancingFireMarkerCount;
+                  if (0 < gi.AdvancingFireMarkerCount)
+                  {
+                     action = GameAction.BattleStart;
+                  }
+                  else
+                  {
+                     gi.IsAdvancingFireChosen = false;
+                     gi.EventDisplayed = gi.EventActive = "e034";
+                     action = GameAction.BattleActivation;
+                  }
+                  //----------------------------------
+                  gi.AdvanceFire = null;
                }
                break;
             case GameAction.EndGameClose:

@@ -45,6 +45,7 @@ namespace Pattons_Best
       public ITerritory? ArtillerySupportCheck { get; set; } = null;
       public ITerritory? AirStrikeCheckTerritory { get; set; } = null;
       public ITerritory? EnteredArea { get; set; } = null;
+      public ITerritory? AdvanceFire { get; set; } = null;
       //---------------------------------------------------------------
       public bool IsHulledDown { set; get; } = false;
       public bool IsMoving { set; get; } = false;

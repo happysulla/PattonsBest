@@ -182,7 +182,9 @@ namespace Pattons_Best
       MovementResistanceCheckRoll,
       MovementStartAreaRestart,
       MovementExit,
+
       BattleStart,
+      BattlePlaceAdvanceFire,
       BattleActivation,
 
 

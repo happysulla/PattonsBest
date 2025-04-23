@@ -40,6 +40,7 @@ namespace Pattons_Best
       ITerritory? ArtillerySupportCheck { get; set; }
       ITerritory? AirStrikeCheckTerritory { get; set; }
       ITerritory? EnteredArea { get; set; }
+      ITerritory? AdvanceFire { get; set; }
       //------------------------------------------------
       bool IsLeadTank { set; get; }
       bool IsTurretActive { set; get; }

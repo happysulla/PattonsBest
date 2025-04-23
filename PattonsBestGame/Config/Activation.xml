@@ -526,7 +526,7 @@
                </Bold>
                <Run Text='(1) Treat as LW beginning 2/45'></Run>
                <LineBreak/>
-               <Run Text='(2) Trat as MG beginning 3/45'></Run>
+               <Run Text=' (2) Treat as MG beginning 3/45'></Run>
             </Paragraph>
          </TableCell>
       </TableRow>

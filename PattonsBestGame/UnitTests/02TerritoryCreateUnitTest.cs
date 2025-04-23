@@ -161,11 +161,13 @@ namespace Pattons_Best
             {
                myIsBattleMapShown = false;
                myCanvasImageViewer.ShowMovementMap(myCanvasMain);
+               CreateEllipses(Territories.theTerritories);
             }
             else
             {
                myIsBattleMapShown = true;
                myCanvasImageViewer.ShowBattleMap(myCanvasMain);
+               CreateEllipses(Territories.theTerritories);
             }
          }
          else if (CommandName == myCommandNames[3]) // set centerpoints
@@ -214,7 +216,6 @@ namespace Pattons_Best
          //---------------------------------
          if (HeaderName == myHeaderNames[0])
          {
-            CreateEllipses(Territories.theTerritories);
             myCanvasTank.MouseLeftButtonDown += this.MouseLeftButtonDownDeleteTerritory;
             myCanvasMain.MouseLeftButtonDown += this.MouseLeftButtonDownDeleteTerritory;
             ++myIndexName;
@@ -226,6 +227,10 @@ namespace Pattons_Best
             //----------------------------
             myCanvasMain.MouseLeftButtonDown -= this.MouseLeftButtonDownDeleteTerritory;
             myCanvasMain.MouseLeftButtonDown += this.MouseLeftButtonDownCreateTerritory;
+            //----------------------------
+            theEllipseDiameter = 20;
+            theEllipseOffset = theEllipseDiameter / 2.0;
+            CreateEllipses(Territories.theTerritories);
             ++myIndexName;
          }
          else if (HeaderName == myHeaderNames[2]) // Switch Main Image
@@ -486,9 +491,9 @@ namespace Pattons_Best
             Canvas.SetLeft(aEllipse, p.X);
             Canvas.SetTop(aEllipse, p.Y);
             myEllipses.Add(aEllipse);
-            Label aLabel = new Label() { Foreground=Brushes.Red, FontFamily = myFontFam, FontWeight=FontWeights.Bold, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = t.Name };
+            Label aLabel = new Label() { Foreground=Brushes.Red, FontFamily = myFontFam, FontWeight=FontWeights.Bold, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = t.Name };
             p.X -= theEllipseOffset;
-            p.Y -= theEllipseOffset;
+            p.Y -= 2*theEllipseOffset;
             Canvas.SetLeft(aLabel, p.X);
             Canvas.SetTop(aLabel, p.Y);
             if ("Main" == t.CanvasName)

@@ -161,7 +161,7 @@ namespace Pattons_Best
       public MapItem()  // used in MapItemMove constructor
       {
       }
-      public MapItem(string name, double zoom, string topImageName, ITerritory territory, bool isRandomLocation=false) :
+      public MapItem(string name, double zoom, string topImageName, ITerritory territory) :
          this(name, zoom, false, false, topImageName)
       {
          TerritoryCurrent = territory;
@@ -172,7 +172,7 @@ namespace Pattons_Best
       //----------------------------------------------------------------------------
       public void SetLocation(IMapPoint mp, int counterCount = 0)
       {
-         double delta = Utilities.theMapItemOffset + (counterCount * Utilities.STACK);
+         double delta = this.Zoom * Utilities.theMapItemOffset + (counterCount * Utilities.STACK);
          this.Location.X = mp.X - delta;
          this.Location.Y = mp.Y - delta;
       }

@@ -1,4 +1,4 @@
-﻿<Territories count="136">
+﻿<Territories count="135">
   <Territory value="M000">
     <Parent value="Main" />
     <Type value="B" />
@@ -1873,7 +1873,7 @@
   <Territory value="Home">
     <Parent value="Main" />
     <Type value="Battle" />
-    <CenterPoint X="0493.88" Y="0552.44" />
+    <CenterPoint X="0495.00" Y="0552.03" />
     <Points count="7">
       <regionPoint X="0469.42" Y="0508.06" />
       <regionPoint X="0516.52" Y="0507.15" />
@@ -1990,13 +1990,6 @@
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0104.50" Y="0782.76" />
-    <Points count="0" />
-    <Adjacents count="0" />
-  </Territory>
-  <Territory value="DeploymentState">
-    <Parent value="Main" />
-    <Type value="Battle" />
-    <CenterPoint X="0543.69" Y="0552.44" />
     <Points count="0" />
     <Adjacents count="0" />
   </Territory>
