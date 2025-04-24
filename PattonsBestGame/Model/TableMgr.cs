@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Media3D;
+using System.Xml.Linq;
 using Windows.Graphics.Printing3D;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Pattons_Best
 {
@@ -119,6 +122,232 @@ namespace Pattons_Best
             default:
                Logger.Log(LogEnum.LE_ERROR, "GetWeatherSnow(): Reached Default month=" + dieRoll.ToString());
                return "ERROR";
+         }
+      }
+      public static string GetEnemyUnit(EnumScenario situation, int day, int dieRoll)
+      {
+         const int Feb1945 = 136;
+         const int Mar1945 = 146;
+         string month = GetMonth(day);
+         if( dieRoll < 6 )
+         {
+            if (EnumScenario.Advance == situation && Feb1945 < day)
+               return "LW";
+            else
+               return "SPG";
+         }
+         else if (dieRoll < 11)
+         {
+            return "MG";
+         }
+         else if (dieRoll < 16)
+         {
+            return "LW";
+         }
+         else if (dieRoll < 21)
+         {
+            if (EnumScenario.Advance == situation )
+               return "TRUCK";
+            else if (EnumScenario.Battle == situation)
+               return "LW";
+            else 
+               return "TANK";
+         }
+         else if (dieRoll < 26)
+         {
+            if (EnumScenario.Advance == situation && Mar1945 < day)
+               return "MG";
+            else if (EnumScenario.Battle == situation)
+               return "ATG";
+            else if (EnumScenario.Counterattack == situation)
+               return "LW";
+            else
+               return "ATG";
+         }
+         else if (dieRoll < 31)
+         {
+            if (EnumScenario.Advance == situation && Mar1945 < day)
+               return "MG";
+            else if (EnumScenario.Battle == situation && Feb1945 < day)
+               return "LW";
+            else if (EnumScenario.Counterattack == situation && Feb1945 < day)
+               return "LW";
+            else
+               return "SPG";
+         }
+         else if (dieRoll < 36)
+         {
+            return "MG";
+         }
+         else if (dieRoll < 41)
+         {
+            return "LW";
+         }
+         else if (dieRoll < 46)
+         {
+            if (EnumScenario.Advance == situation && Feb1945 < day)
+               return "LW";
+            else if (EnumScenario.Battle == situation)
+               return "TANK";
+            else if (EnumScenario.Counterattack == situation && Mar1945 < day)
+               return "MG";
+            else
+               return "TANK";
+         }
+         else if (dieRoll < 51)
+         {
+            if (EnumScenario.Advance == situation)
+               return "TRUCK";
+            else if (EnumScenario.Battle == situation)
+               return "MG";
+            else 
+               return "LW";
+         }
+         else if (dieRoll < 56)
+         {
+            if (EnumScenario.Advance == situation && Feb1945 < day)
+               return "LW";
+            else if (EnumScenario.Battle == situation)
+               return "ATG";
+            else if (EnumScenario.Counterattack == situation && Mar1945 < day)
+               return "MG";
+            else if (EnumScenario.Advance == situation)
+               return "ATG";
+            else
+               return "SPG";
+         }
+         else if (dieRoll < 61)
+         {
+            return "LW";
+         }
+         else if (dieRoll < 66)
+         {
+            if (EnumScenario.Advance == situation)
+               return "TANK";
+            else if (EnumScenario.Battle == situation)
+               return "LW";
+            else if (EnumScenario.Counterattack == situation && Mar1945 < day)
+               return "MG";
+            else
+               return "TANK";
+         }
+         else if (dieRoll < 71)
+         {
+            if (EnumScenario.Advance == situation)
+               return "ATG";
+            else if (EnumScenario.Battle == situation && Feb1945 < day)
+               return "LW";
+            else if (EnumScenario.Counterattack == situation)
+               return "LW";
+            else
+               return "ATG";
+         }
+         else if (dieRoll < 76)
+         {
+            if (EnumScenario.Advance == situation)
+               return "PSW/SPW";
+            else if (EnumScenario.Battle == situation && Mar1945 < day)
+               return "MG";
+            else if (EnumScenario.Counterattack == situation && Feb1945 < day)
+               return "LW";
+            else if (EnumScenario.Counterattack == situation)
+               return "TANK";
+            else
+               return "ATG";
+         }
+         else if (dieRoll < 81)
+         {
+            if (EnumScenario.Advance == situation)
+               return "ATG";
+            else if (EnumScenario.Battle == situation && Mar1945 < day)
+               return "MG";
+            else if (EnumScenario.Counterattack == situation )
+               return "MG";
+            else
+               return "ATG";
+         }
+         else if (dieRoll < 86)
+         {
+            if (EnumScenario.Battle == situation)
+               return "MG";
+            else
+               return "LW";
+         }
+         else if (dieRoll < 91)
+         {
+            if (EnumScenario.Advance == situation)
+               return "TRUCK";
+            else if (EnumScenario.Battle == situation)
+               return "LW";
+            else if (EnumScenario.Counterattack == situation && Feb1945 < day)
+               return "LW";
+            else
+               return "TANK";
+         }
+         else if (dieRoll < 96)
+         {
+            if (EnumScenario.Advance == situation && Feb1945 < day)
+               return "LW";
+            else if (EnumScenario.Battle == situation)
+               return "ATG";
+            else if (EnumScenario.Counterattack == situation)
+               return "LW";
+            else
+               return "PSW/SPW";
+         }
+         else if (dieRoll < 101)
+         {
+            return "SPG";
+         }
+         return "ERROR";
+      }
+      public static string GetEnemyRange(int dieRoll, string areaType, string enemyUnit)
+      {
+         if ("C" == areaType)
+            dieRoll -= 3;
+         else if ("D" == areaType)
+            dieRoll -= 2;
+         switch( enemyUnit )
+         {
+            case "ATG":
+               if (dieRoll < 3)
+                  return "C";
+               else if (dieRoll < 8)
+                  return "M";
+               else
+                  return "L";
+            case "LW":
+               if (dieRoll < 7)
+                  return "C";
+               else 
+                  return "M";
+            case "MG":
+               if (dieRoll < 4)
+                  return "C";
+               else if (dieRoll < 9)
+                  return "M";
+               else
+                  return "L";
+            case "PSW":
+            case "SPW":
+            case "TANK":
+            case "TRUCK":
+               if (dieRoll < 4)
+                  return "C";
+               else if (dieRoll < 8)
+                  return "M";
+               else
+                  return "L";
+            case "SPG":
+               if (dieRoll < 3)
+                  return "C";
+               else if (dieRoll < 7)
+                  return "M";
+               else
+                  return "L";
+            default:
+              Logger.Log(LogEnum.LE_ERROR, "GetEnemyRange(): Reached Default enemy=" + enemyUnit);
+              return "ERROR";
          }
       }
       public static string GetMonth( int day )

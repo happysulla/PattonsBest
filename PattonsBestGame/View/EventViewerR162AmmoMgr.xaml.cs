@@ -1058,7 +1058,7 @@ namespace Pattons_Best
             }
             if (6 < dieRoll)
             {
-               switch (entry.Situation)
+               switch (entry.Scenario)
                {
                   case EnumScenario.Advance:
                      myExtraAmmo = 30;
@@ -1078,7 +1078,7 @@ namespace Pattons_Best
             }
             else if (2 < dieRoll)
             {
-               switch (entry.Situation)
+               switch (entry.Scenario)
                {
                   case EnumScenario.Advance:
                      myExtraAmmo = 20;

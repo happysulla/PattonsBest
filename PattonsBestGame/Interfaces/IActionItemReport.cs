@@ -9,7 +9,7 @@ namespace Pattons_Best
    public interface IAfterActionReport
    {
       string Day { get; set; }
-      EnumScenario Situation { get; set; }
+      EnumScenario Scenario { get; set; }
       int Probability { get; set; }
       EnumResistance Resistance { get; set; }
       string Name { get; set; }

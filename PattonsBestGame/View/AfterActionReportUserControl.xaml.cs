@@ -64,7 +64,7 @@ namespace Pattons_Best
          mySpanTankModel.Inlines.Clear();
          mySpanTankModel.Inlines.Add(new Run(s));
          //----------------------------------
-         s = AddSpaces(Report.Situation.ToString(), HEADER_INFO_LEN);
+         s = AddSpaces(Report.Scenario.ToString(), HEADER_INFO_LEN);
          mySpanSituation.Inlines.Clear();
          mySpanSituation.Inlines.Add(new Run(s));
          //----------------------------------

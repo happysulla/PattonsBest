@@ -11,7 +11,8 @@ namespace Pattons_Best
       Advance,
       Battle,
       Counterattack,
-      Retrofit
+      Retrofit,
+      None
    };
    public enum EnumResistance
    {

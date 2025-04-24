@@ -594,7 +594,7 @@ namespace Pattons_Best
                {
                   gi.GamePhase = GamePhase.Battle;
                   gi.DieRollAction = GameAction.DieRollActionNone;
-                  gi.IsAdvancingFireChosen = true;
+                  gi.IsAdvancingFireChosen = false; //<cgs>
                   if (true == gi.IsAdvancingFireChosen)
                   {
                      gi.AdvancingFireMarkerCount = 6 - (int)Math.Ceiling((double)gi.FriendlyTankLossCount / 3.0);  // six minus friendly tank/3 (rounded up)
@@ -950,15 +950,23 @@ namespace Pattons_Best
          }
          int index = Utilities.RandomGenerator.Next(0, taskForce.TerritoryCurrent.Adjacents.Count);
          string tName = taskForce.TerritoryCurrent.Adjacents[index];
-         ITerritory? adjTerritory = Territories.theTerritories.Find(tName);
-         if( null == adjTerritory)
+         int count = 5;
+         while ( true == tName.EndsWith("E") && --count < 0)
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): adjTerritory=null for " + tName);
+            index = Utilities.RandomGenerator.Next(0, taskForce.TerritoryCurrent.Adjacents.Count);
+            tName = taskForce.TerritoryCurrent.Adjacents[index];
+         }
+         gi.EnteredArea = Territories.theTerritories.Find(tName);
+         if ( null == gi.EnteredArea)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): gi.EnteredArea =null for " + tName);
             return false;
          }
+         taskForce.TerritoryCurrent = taskForce.TerritoryStarting = gi.EnteredArea;
+         taskForce.SetLocation(gi.EnteredArea.CenterPoint);
          //---------------------------------------------
          dieRoll = Utilities.RandomGenerator.Next(1, 11);
-         if ( false == SetEnemyStrengthCounter(gi, dieRoll) )
+         if ( false == SetEnemyStrengthCounter(gi, dieRoll) ) // set strength in current territory
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): SetEnemyStrengthCounter() returned false");
             return false;
@@ -1757,7 +1765,7 @@ namespace Pattons_Best
       private bool SkipBattleBoard(IGameInstance gi, IAfterActionReport report)
       {
          int basePoints = 1;
-         if ((EnumScenario.Advance == report.Situation) || (EnumScenario.Battle == report.Situation))
+         if ((EnumScenario.Advance == report.Scenario) || (EnumScenario.Battle == report.Scenario))
             basePoints *= 2;
          report.VictoryPtsCaptureArea += basePoints;
          //------------------------------------
@@ -1876,7 +1884,7 @@ namespace Pattons_Best
       private bool MovementPhaseRestart(IGameInstance gi, IAfterActionReport report)
       {
          int basePoints = 10;
-         if ( (EnumScenario.Advance == report.Situation) || (EnumScenario.Battle == report.Situation) )
+         if ( (EnumScenario.Advance == report.Scenario) || (EnumScenario.Battle == report.Scenario) )
             basePoints *= 2;
          report.VictoryPtsKiaExitArea += basePoints;
          //--------------------------------------------------------------

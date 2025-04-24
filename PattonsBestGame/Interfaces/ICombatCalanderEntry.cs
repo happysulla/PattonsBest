@@ -9,7 +9,7 @@ namespace Pattons_Best
    public interface ICombatCalendarEntry
    {
       string Date { set; get; }
-      EnumScenario Situation { set; get; }
+      EnumScenario Scenario { set; get; }
       int Probability { set; get; }
       EnumResistance Resistance { set; get; }
       string Note { set; get; }

@@ -10,7 +10,7 @@ namespace Pattons_Best.Model
    public class AfterActionReport : IAfterActionReport
    {
       public string Day { get; set; } = "07/27/44";
-      public EnumScenario Situation { get; set; } = EnumScenario.Advance;
+      public EnumScenario Scenario { get; set; } = EnumScenario.Advance;
       public int Probability { get; set; } = 3;
       public EnumResistance Resistance { get; set; }
       public string Name { get; set; } = Utilities.GetNickName();
@@ -79,14 +79,14 @@ namespace Pattons_Best.Model
       public AfterActionReport(ICombatCalendarEntry entry)
       {
          Day = entry.Date;
-         Situation = entry.Situation;
+         Scenario = entry.Scenario;
          Probability = entry.Probability;
          Resistance = entry.Resistance;
       }
       public AfterActionReport(ICombatCalendarEntry entry, IAfterActionReport aar)
       {
          Day = entry.Date;
-         Situation = entry.Situation;
+         Scenario = entry.Scenario;
          Probability = entry.Probability;
          Resistance = entry.Resistance;
          //------------------------------

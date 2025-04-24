@@ -17,7 +17,7 @@
 		<TableRowGroup  FontStyle='Italic' Background='Black' Foreground='White'>
 		   <TableRow  FontSize='12'> 
 			  <TableCell TextAlignment='Center'> <Paragraph>Month<LineBreak/>Day</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>Situation</Paragraph></TableCell> 
+			  <TableCell TextAlignment='Center'> <Paragraph>Scenario</Paragraph></TableCell> 
 			  <TableCell TextAlignment='Center'> <Paragraph>Historical Notes</Paragraph></TableCell> 
 		   </TableRow>
 		</TableRowGroup>
@@ -285,7 +285,7 @@
 		<TableRowGroup  FontStyle='Italic' Background='Black' Foreground='White'>
 		   <TableRow  FontSize='12'> 
 			  <TableCell TextAlignment='Center'> <Paragraph>Month<LineBreak/>Day</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>Situation</Paragraph></TableCell> 
+			  <TableCell TextAlignment='Center'> <Paragraph>Scenario</Paragraph></TableCell> 
 			  <TableCell TextAlignment='Center'> <Paragraph>Historical Notes</Paragraph></TableCell> 
 		   </TableRow>
 		</TableRowGroup>
@@ -544,7 +544,7 @@
 		<TableRowGroup  FontStyle='Italic' Background='Black' Foreground='White'>
 		   <TableRow  FontSize='12'> 
 			  <TableCell TextAlignment='Center'> <Paragraph>Month<LineBreak/>Day</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>Situation</Paragraph></TableCell> 
+			  <TableCell TextAlignment='Center'> <Paragraph>Scenario</Paragraph></TableCell> 
 			  <TableCell TextAlignment='Center'> <Paragraph>Historical Notes</Paragraph></TableCell> 
 		   </TableRow>
 		</TableRowGroup>
@@ -778,7 +778,7 @@
 		<TableRowGroup  FontStyle='Italic' Background='Black' Foreground='White'>
 		   <TableRow  FontSize='12'> 
 			  <TableCell TextAlignment='Center'> <Paragraph>Month<LineBreak/>Day</Paragraph></TableCell> 
-			  <TableCell TextAlignment='Center'> <Paragraph>Situation</Paragraph></TableCell> 
+			  <TableCell TextAlignment='Center'> <Paragraph>Scenario</Paragraph></TableCell> 
 			  <TableCell TextAlignment='Center'> <Paragraph>Historical Notes</Paragraph></TableCell> 
 		   </TableRow>
 		</TableRowGroup>

@@ -11,14 +11,14 @@ namespace Pattons_Best
    public class CombatCalendarEntry : ICombatCalendarEntry
    {
       public string Date { set; get; }
-      public EnumScenario Situation { set; get; }
+      public EnumScenario Scenario { set; get; }
       public int Probability { set; get; }
       public EnumResistance Resistance { set; get; }
       public string Note { set; get; }
       public CombatCalendarEntry(string d, EnumScenario s, int p, EnumResistance r, string n = "")
       {
          Date = d;
-         Situation = s;
+         Scenario = s;
          Probability = p;
          Resistance = r;
          Note = n;
