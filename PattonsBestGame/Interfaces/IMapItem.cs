@@ -20,6 +20,8 @@ namespace Pattons_Best
       bool IsMoved { get; set; }
       int Count { get; set; }
       IMapPoint Location { get; set; }
+      double Rotation { get; set; }  // Vehicle Facing Rotation
+      double RotationBase { get; set; } // Rotation to point at location
       //----------------------------------------
       ITerritory TerritoryCurrent { get; set; }
       ITerritory TerritoryStarting { get; set; }

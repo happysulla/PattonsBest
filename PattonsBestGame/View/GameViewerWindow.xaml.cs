@@ -456,12 +456,17 @@ namespace Pattons_Best
       {
          System.Windows.Controls.Button b = new Button { ContextMenu = myContextMenuButton, Name = mi.Name, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
          MapItem.SetButtonContent(b, mi); // This sets the image as the button's content
+         RotateTransform rotateTransform = new RotateTransform();
+         b.RenderTransformOrigin = new Point(0.5, 0.5);
+         rotateTransform.Angle = mi.RotationBase;
+         b.RenderTransform = rotateTransform;
          buttons.Add(b);
          Canvas.SetLeft(b, mi.Location.X);
          Canvas.SetTop(b, mi.Location.Y);
          b.Click += ClickButtonMapItem;
          b.MouseEnter += MouseEnterMapItem;
          b.MouseLeave += MouseLeaveMapItem;
+
          return b;
       }
       private bool SetTerritory(IMapItem mi, ITerritory newT)
@@ -994,6 +999,10 @@ namespace Pattons_Best
                   Canvas.SetTop(b, mi.Location.Y);
                   Canvas.SetZIndex(b, 900 + counterCount);
                   ++counterCount;
+                  RotateTransform rotateTransform = new RotateTransform();
+                  b.RenderTransformOrigin = new Point(0.5, 0.5);
+                  rotateTransform.Angle = mi.RotationBase;
+                  b.RenderTransform = rotateTransform;
                }
                else
                {
@@ -1668,7 +1677,7 @@ namespace Pattons_Best
             }
          }
          //-----------------------------------------------
-         else if( true == button.Name.Contains("Sherman"))
+         else if( true == button.Name.Contains("Sherman")) // This is for the turret
          {
             myGameInstance.Sherman.Count++;
             if (5 < myGameInstance.Sherman.Count)

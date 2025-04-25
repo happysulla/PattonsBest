@@ -84,6 +84,8 @@ namespace Pattons_Best
       }
       public bool IsMoved { get; set; } = false;
       public int Count { get; set; } = 0;
+      public double Rotation { get; set; } = 0.0;
+      public double RotationBase { get; set; } = 0.0;
       //--------------------------------------------------
       public IMapPoint Location { get; set; } = new MapPoint(0.0, 0.0);
       protected ITerritory myTerritoryCurrent = new Territory("Offboard");
@@ -273,13 +275,13 @@ namespace Pattons_Best
             {
                double width = mi.Zoom * Utilities.theMapItemSize;
                double height = width;
-               Image imgHullDown = new Image() { Height = height, Width = width, Source = theTurret };
+               Image imgTurret = new Image() { Height = height, Width = width, Source = theTurret };
                RotateTransform rotateTransform = new RotateTransform();
-               imgHullDown.RenderTransformOrigin = new Point(0.5, 0.5);
+               imgTurret.RenderTransformOrigin = new Point(0.5, 0.5);
                rotateTransform.Angle = mi.Count * 60.0;
-               imgHullDown.RenderTransform = rotateTransform;
-               c.Children.Add(imgHullDown);
-               Canvas.SetLeft(imgHullDown, 0);
+               imgTurret.RenderTransform = rotateTransform;
+               c.Children.Add(imgTurret);
+               Canvas.SetLeft(imgTurret, 0);
                Canvas.SetTop(imgHullDown, 0);
             }
             if ("" != mi.OverlayImageName)

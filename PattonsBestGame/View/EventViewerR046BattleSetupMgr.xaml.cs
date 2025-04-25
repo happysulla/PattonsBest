@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Pipes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,8 +9,10 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Linq;
@@ -677,11 +680,11 @@ namespace Pattons_Best
          return true;
       }
       //------------------------------------------------------------------------------------
-      private bool UpdateGridRowMapItem(Index i)
+      private bool CreateMapItem(Index i)
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowMapItem(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): myGameInstance=null");
             return false;
          }
          string name = "EnemyUnit" + Utilities.MapItemNum;
@@ -689,13 +692,13 @@ namespace Pattons_Best
          ITerritory? tLeft = Territories.theTerritories.Find("OffLeft");
          if (null == tLeft)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowMapItem(): tLeft=null for OffLeft");
+            Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): tLeft=null for OffLeft");
             return false;
          }
          ITerritory? tRight = Territories.theTerritories.Find("OffRight");
          if (null == tRight)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowMapItem(): tRight=null for OffRight");
+            Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): tRight=null for OffRight");
             return false;
          }
          ITerritory? t = null;
@@ -749,18 +752,53 @@ namespace Pattons_Best
                myIsVehicleActivated = true;
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowMapItem(): reached default with enemyUnit=" + myGridRows[i].myActivation);
+               Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): reached default with enemyUnit=" + myGridRows[i].myActivation);
                return false;
          }
          if (null == mi)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowMapItem(): mi=null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): mi=null");
             return false;
          }
          IMapPoint mp = Territory.GetRandomPoint(t);
          mi.SetLocation(mp);
          myGameInstance.BattleStacks.Add(mi);
          myGridRows[i].myMapItem = mi;
+         return true;
+      }
+      private bool CreateMapItemRotation(Index i)
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateMapItemRotation(): myGameInstance=null");
+            return false;
+         }
+         IMapItem? mi = myGridRows[i].myMapItem;   
+         if( null == mi )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateMapItemRotation(): mi=null");
+            return false;
+         }
+         ITerritory t = mi.TerritoryCurrent;
+         double xDiff = t.CenterPoint.X - myGameInstance.Home.CenterPoint.X;
+         double yDiff = t.CenterPoint.Y - myGameInstance.Home.CenterPoint.Y;
+         double angle = Math.Atan2(yDiff, xDiff) * 180 / Math.PI;
+         if ( (0.0 < xDiff) && (0.0 < yDiff) )
+         {
+            mi.RotationBase = angle + 90;
+         }
+         else if ((xDiff < 0.0) && (0.0 < yDiff))
+         {
+            mi.RotationBase = angle - 90;
+         }
+         else if ((xDiff < 0.0) && (yDiff < 0.0))
+         {
+            mi.RotationBase = angle - 90;
+         }
+         else if ((0.0 < xDiff) && (yDiff < 0.0))
+         {
+            mi.RotationBase = angle + 90;
+         }
          return true;
       }
       private bool UpdateGridRowSector(Index i)
@@ -879,9 +917,9 @@ namespace Pattons_Best
             case E046Enum.ACTIVATION:
                myGridRows[i].myDieRollActivation = dieRoll;
                myGridRows[i].myActivation = TableMgr.GetEnemyUnit(myScenario, myDay, dieRoll);
-               if (false == UpdateGridRowMapItem(i))
+               if (false == CreateMapItem(i))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateGridRowMapItem() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): CreateMapItem() returned false");
                   return;
                }
                if ("PSW/SPW" == myGridRows[i].myActivation)
@@ -904,9 +942,9 @@ namespace Pattons_Best
                   myGridRows[i].myActivation = "SPW";
                else
                   myGridRows[i].myActivation = "PSW";
-               if (false == UpdateGridRowMapItem(i))
+               if (false == CreateMapItem(i))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateGridRowMapItem() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): CreateMapItem() returned false");
                   return;
                }
                myState = E046Enum.PLACE_SECTOR;
@@ -920,7 +958,7 @@ namespace Pattons_Best
                myGridRows[i].myDieRollSector = dieRoll;
                if (false == UpdateGridRowSector(i))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateGridRowMapItem() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): CreateMapItem() returned false");
                   return;
                }
                myState = E046Enum.PLACE_RANGE;
