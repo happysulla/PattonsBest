@@ -950,11 +950,16 @@ namespace Pattons_Best
          }
          int index = Utilities.RandomGenerator.Next(0, taskForce.TerritoryCurrent.Adjacents.Count);
          string tName = taskForce.TerritoryCurrent.Adjacents[index];
-         int count = 5;
+         int count = 10;
          while ( true == tName.EndsWith("E") && --count < 0)
          {
             index = Utilities.RandomGenerator.Next(0, taskForce.TerritoryCurrent.Adjacents.Count);
             tName = taskForce.TerritoryCurrent.Adjacents[index];
+         }
+         if(true == tName.EndsWith("E"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): tName =" + tName);
+            tName = "M030";
          }
          gi.EnteredArea = Territories.theTerritories.Find(tName);
          if ( null == gi.EnteredArea)
@@ -966,6 +971,7 @@ namespace Pattons_Best
          taskForce.SetLocation(gi.EnteredArea.CenterPoint);
          //---------------------------------------------
          dieRoll = Utilities.RandomGenerator.Next(1, 11);
+         dieRoll = 10; // <cgs> TEST
          if ( false == SetEnemyStrengthCounter(gi, dieRoll) ) // set strength in current territory
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): SetEnemyStrengthCounter() returned false");
@@ -1939,6 +1945,8 @@ namespace Pattons_Best
                break;
             case GameAction.UpdateEventViewerActive: // Only change active event
                gi.EventDisplayed = gi.EventActive; // next screen to show
+               break;
+            case GameAction.UpdateBattleBoard:
                break;
             case GameAction.BattleStart:
                gi.EventDisplayed = gi.EventActive = "e033";

@@ -73,6 +73,7 @@ namespace Pattons_Best
    {
       RemoveSplashScreen,
       UpdateStatusBar,
+      UpdateBattleBoard,
       UpdateShowRegion,
       UpdateEventViewerDisplay,
       UpdateEventViewerActive,

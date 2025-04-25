@@ -171,6 +171,8 @@ namespace Pattons_Best
             case GameAction.UnitTestCommand:
             case GameAction.UnitTestNext:
                break;
+            case GameAction.UpdateBattleBoard:
+               break;
             case GameAction.UpdateGameOptions:
                break;
             case GameAction.UpdateUndo:
@@ -282,7 +284,7 @@ namespace Pattons_Best
             case GameAction.MorningBriefingAmmoReadyRackLoad:
                break;
             case GameAction.BattleActivation:
-               EventViewerR046BattleSetupMgr battleSetupMgr = new EventViewerR046BattleSetupMgr(myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
+               EventViewerR046BattleSetupMgr battleSetupMgr = new EventViewerR046BattleSetupMgr(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == battleSetupMgr.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): battleSetupMgr.CtorError=true");
                else if (false == battleSetupMgr.SetupBattle(ShowR049Results))

@@ -867,6 +867,8 @@ namespace Pattons_Best
                      }
                   }
                   break;
+               case GameAction.UpdateBattleBoard:
+                  break;
                case GameAction.EndGameClose:
                   GameAction outActionClose = GameAction.EndGameExit;
                   myGameEngine.PerformAction(ref gi, ref outActionClose);

@@ -301,7 +301,7 @@ namespace Pattons_Best
          }
          return "ERROR";
       }
-      public static string GetEnemyRange(int dieRoll, string areaType, string enemyUnit)
+      public static string GetEnemyRange(string areaType, string enemyUnit, int dieRoll)
       {
          if ("C" == areaType)
             dieRoll -= 3;
@@ -348,6 +348,226 @@ namespace Pattons_Best
             default:
               Logger.Log(LogEnum.LE_ERROR, "GetEnemyRange(): Reached Default enemy=" + enemyUnit);
               return "ERROR";
+         }
+      }
+      public static string GetEnemyFacing(string enemyUnit, int dieRoll)
+      {
+         switch (enemyUnit)
+         {
+            case "SPG":
+               if (dieRoll < 7) 
+                  return "Front";
+               else if (dieRoll < 10) 
+                  return "Side";
+               else
+                  return "Rear";
+            case "TANK":
+               if (dieRoll < 6)
+                  return "Front";
+               else if (dieRoll < 10)
+                  return "Side";
+               else
+                  return "Rear";
+            case "PSW":
+            case "SPW":
+            case "TRUCK":
+               if (dieRoll < 4)
+                  return "Front";
+               else if (dieRoll < 8)
+                  return "Side";
+               else
+                  return "Rear";
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetEnemyFacing(): Reached Default enemy=" + enemyUnit);
+               return "ERROR";
+         }
+      }
+      public static string GetEnemyTerrain(EnumScenario situation, int day, string areaType, string enemyUnit, int dieRoll)
+      {
+         if (EnumScenario.Counterattack == situation)
+            dieRoll += 2;
+         string month = GetMonth(day);
+         switch (enemyUnit)
+         {
+            case "LW":
+               switch (areaType)
+               {
+                  case "A":
+                     if (dieRoll < 5)
+                        return "Woods";
+                     else if (dieRoll < 9)
+                        return "Building";
+                     else if (dieRoll == 10 )
+                        return "Moving";
+                     else
+                        return "Open";
+                  case "B":
+                     if (dieRoll < 4)
+                        return "Woods";
+                     else if ((dieRoll < 8) && (("Nov" != month) && ("Feb" != month)))
+                        return "Woods";
+                     else if (dieRoll < 8)
+                        return "Fortification";
+                     else if (dieRoll == 10)
+                        return "Moving";
+                     else
+                        return "Open";
+                  case "C":
+                     if (dieRoll < 3)
+                        return "Woods";
+                     else if (dieRoll < 9)
+                        return "Building";
+                     else if (dieRoll == 10)
+                        return "Moving";
+                     else
+                        return "Open";
+                  case "D":
+                     if (dieRoll < 4)
+                        return "Woods";
+                     else if ((dieRoll < 9) && (("Nov" != month) && ("Feb" != month)))
+                        return "Woods";
+                     else if (dieRoll < 9)
+                        return "Fortification";
+                     else if (dieRoll == 10)
+                        return "Moving";
+                     else
+                        return "Open";
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "GetEnemyTerrain(): Reached Default areaType=" + areaType);
+                     return "ERROR";
+               }
+            case "MG":
+               switch( areaType )
+               {
+                  case "A":
+                     if (dieRoll < 5)
+                        return "Woods";
+                     else if (dieRoll < 9)
+                        return "Building";
+                     else
+                        return "Open";
+                  case "B":
+                     if (dieRoll < 4)
+                        return "Woods";
+                     else if ((dieRoll < 8) && (("Nov" != month) && ("Feb" != month)))
+                        return "Woods";
+                     else if (dieRoll < 8)
+                        return "Fortification";
+                     else
+                        return "Open";
+                  case "C":
+                     if (dieRoll < 3)
+                        return "Woods";
+                     else if (dieRoll < 9)
+                        return "Building";
+                     else
+                        return "Open";
+                  case "D":
+                     if (dieRoll < 4)
+                        return "Woods";
+                     else if ((dieRoll < 9) && (("Nov" != month) && ("Feb" != month)))
+                        return "Woods";
+                     else if (dieRoll < 9)
+                        return "Fortification";
+                     else
+                        return "Open";
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "GetEnemyTerrain(): Reached Default areaType=" + areaType);
+                     return "ERROR";
+               }
+            case "ATG":
+               switch (areaType)
+               {
+                  case "A":
+                     if (dieRoll < 5)
+                        return "Woods";
+                     else if ((dieRoll < 9) && (("Nov" != month) && ("Feb" != month)))
+                        return "Open";
+                     else if (dieRoll < 9)
+                        return "Fortification";
+                     else
+                        return "Open";
+                  case "B":
+                     if (dieRoll < 4)
+                        return "Woods";
+                     else if ((dieRoll < 8) && (("Nov" != month) && ("Feb" != month)))
+                        return "Woods";
+                     else if (dieRoll < 8)
+                        return "Fortification";
+                     else
+                        return "Open";
+                  case "C":
+                     if (dieRoll < 3)
+                        return "Woods";
+                     else if ((dieRoll < 9) && (("Nov" != month) && ("Feb" != month)))
+                        return "Open";
+                     else if (dieRoll < 9)
+                        return "Fortification";
+                     else
+                        return "Open";
+                  case "D":
+                     if (dieRoll < 4)
+                        return "Woods";
+                     else if ((dieRoll < 9) && (("Nov" != month) && ("Feb" != month)))
+                        return "Woods";
+                     else if (dieRoll < 9)
+                        return "Fortification";
+                     else
+                        return "Open";
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "GetEnemyTerrain(): Reached Default areaType=" + areaType);
+                     return "ERROR";
+               }
+            case "SPG":
+            case "TANK":
+            case "PSW":
+            case "SPW":
+            case "TRUCK":
+               switch (areaType)
+               {
+                  case "A":
+                     if (dieRoll < 5)
+                        return "Hull Down";
+                     else if (dieRoll < 7)
+                        return "Woods";
+                     else if (dieRoll < 9)
+                        return "Open";
+                     else
+                        return "Moving";
+                  case "B":
+                     if (dieRoll < 3)
+                        return "Hull Down";
+                     else if (dieRoll < 5)
+                        return "Woods";
+                     else if (dieRoll < 9)
+                        return "Open";
+                     else
+                        return "Moving";
+                  case "C":
+                     if (dieRoll < 6)
+                        return "Hull Down";
+                     else if (dieRoll < 7)
+                        return "Woods";
+                     else if (dieRoll < 9)
+                        return "Open";
+                     else
+                        return "Moving";
+                  case "D":
+                     if (dieRoll < 3)
+                        return "Hull Down";
+                     else if (dieRoll < 8)
+                        return "Woods";
+                     else if (dieRoll < 9)
+                        return "Open";
+                     else
+                        return "Moving";
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "GetEnemyTerrain(): Reached Default areaType=" + areaType);
+                     return "ERROR";
+               }
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetEnemyTerrain(): Reached Default enemy=" + enemyUnit);
+               return "ERROR";
          }
       }
       public static string GetMonth( int day )

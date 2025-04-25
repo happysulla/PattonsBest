@@ -226,7 +226,7 @@ namespace Pattons_Best
             mapItems = newOrder;
          }
       }
-      public static void SetButtonContent(Button b, IMapItem mi, bool isBloodSpotsShown = true)
+      public static void SetButtonContent(Button b, IMapItem mi, bool isDecoration=true, bool isBloodSpotsShown = true)
       {
          Grid g = new Grid() { };
          if (false == mi.IsAnimated)
@@ -248,23 +248,26 @@ namespace Pattons_Best
             }
             g.Children.Add(c);
             //----------------------------------------------------
-            if (true == mi.IsMoving)
+            if( true == isDecoration)
             {
-               double width = 0.4 * mi.Zoom * Utilities.theMapItemOffset;
-               double height = 1.33 * width;
-               Image imgMoving = new Image() { Height = height, Width = width, Source = theMoving };
-               c.Children.Add(imgMoving);
-               Canvas.SetLeft(imgMoving, mi.Zoom * Utilities.theMapItemOffset - 0.5 * width);
-               Canvas.SetTop(imgMoving, -0.5 * height);
-            }
-            if (true == mi.IsHullDown)
-            {
-               double width = 0.5 * mi.Zoom * Utilities.theMapItemSize;
-               double height = width / 2.0;
-               Image imgHullDown = new Image() { Height = height, Width = width, Source = theHullDown };
-               c.Children.Add(imgHullDown);
-               Canvas.SetLeft(imgHullDown, 0.5 * width );
-               Canvas.SetTop(imgHullDown, - 0.5 * height);
+               if (true == mi.IsMoving)
+               {
+                  double width = 0.4 * mi.Zoom * Utilities.theMapItemOffset;
+                  double height = 1.33 * width;
+                  Image imgMoving = new Image() { Height = height, Width = width, Source = theMoving };
+                  c.Children.Add(imgMoving);
+                  Canvas.SetLeft(imgMoving, mi.Zoom * Utilities.theMapItemOffset - 0.5 * width);
+                  Canvas.SetTop(imgMoving, -0.5 * height);
+               }
+               if (true == mi.IsHullDown)
+               {
+                  double width = 0.5 * mi.Zoom * Utilities.theMapItemSize;
+                  double height = width / 2.0;
+                  Image imgHullDown = new Image() { Height = height, Width = width, Source = theHullDown };
+                  c.Children.Add(imgHullDown);
+                  Canvas.SetLeft(imgHullDown, 0.5 * width);
+                  Canvas.SetTop(imgHullDown, -0.5 * height);
+               }
             }
             if (true == mi.IsTurret)
             {

@@ -57,6 +57,8 @@ namespace Pattons_Best
          }
          switch (action)
          {
+            case GameAction.UpdateBattleBoard:
+               break;
             case GameAction.UpdateStatusBar:
                if (null != myTargetCursor) // increase/decrease size of cursor when zoom in or out
                {

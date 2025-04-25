@@ -55,6 +55,8 @@ namespace Pattons_Best
                myTargetCursor = null;
                this.myCanvas.Cursor = Cursors.Arrow; // get rid of the canvas cursor
                break;
+            case GameAction.UpdateBattleBoard:
+               break;
             case GameAction.MovementAirStrikeChoice:
                break;
             default:
