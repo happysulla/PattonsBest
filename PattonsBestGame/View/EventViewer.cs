@@ -1604,9 +1604,9 @@ namespace Pattons_Best
             case "Begin Game":
                action = GameAction.SetupShowMapHistorical;
                //action = GameAction.TestingStartMorningBriefing; // <cgs> TEST
-               //action = GameAction.TestingStartPreparations; // <cgs> TEST
+               action = GameAction.TestingStartPreparations; // <cgs> TEST
                //action = GameAction.TestingStartMovement; // <cgs> TEST
-               action = GameAction.TestingStartBattle; // <cgs> TEST
+               //action = GameAction.TestingStartBattle; // <cgs> TEST
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Cancel":

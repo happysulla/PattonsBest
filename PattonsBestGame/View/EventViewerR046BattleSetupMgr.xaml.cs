@@ -213,7 +213,6 @@ namespace Pattons_Best
                }
             }
          }
-         myMaxRowCount = 4; // <cgs> TEST
          //--------------------------------------------------
          myResistence = lastReport.Resistance;
          //--------------------------------------------------

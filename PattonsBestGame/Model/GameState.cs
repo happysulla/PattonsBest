@@ -971,7 +971,6 @@ namespace Pattons_Best
          taskForce.SetLocation(gi.EnteredArea.CenterPoint);
          //---------------------------------------------
          dieRoll = Utilities.RandomGenerator.Next(1, 11);
-         dieRoll = 10; // <cgs> TEST
          if ( false == SetEnemyStrengthCounter(gi, dieRoll) ) // set strength in current territory
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): SetEnemyStrengthCounter() returned false");
@@ -1545,7 +1544,6 @@ namespace Pattons_Best
                   break;
                case GameAction.MovementResistanceCheckRoll:
                   Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "GameStateMovement.PerformAction(MovementResistanceCheckRoll): " + gi.MoveStacks.ToString());
-                  dieRoll = 10; // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   switch (gi.BattleResistance)
