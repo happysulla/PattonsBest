@@ -181,6 +181,7 @@ namespace Pattons_Best
          myResistence = EnumResistance.None;
          myScenario = lastReport.Scenario;
          myDay = myGameInstance.Day;
+         myCallback = callback;
          //--------------------------------------------------
          if (null == myGameInstance.EnteredArea)
          {
@@ -1222,6 +1223,8 @@ namespace Pattons_Best
                            }
                            return;
                         }
+                        if ("Continue" == img.Name)
+                           myState = E046Enum.END;
                         if (false == UpdateGrid())
                            Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): UpdateGrid() return false");
                         return;

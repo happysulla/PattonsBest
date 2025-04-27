@@ -188,6 +188,7 @@ namespace Pattons_Best
       BattleStart,
       BattleActivation,
       BattlePlaceAdvanceFire,
+      BattleSetupEnd,
 
       EveningDebriefingStart,
       Error

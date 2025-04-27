@@ -1237,11 +1237,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowR049Results(): myGameEngine=null");
             return false;
          }
-         GameAction outAction = GameAction.Error;
-         if (GamePhase.GameSetup == myGameInstance.GamePhase)
-            outAction = GameAction.SetupShowCombatCalendarCheck;
-         else
-            outAction = GameAction.MorningBriefingAssignCrewRatingEnd;
+         GameAction outAction = GameAction.BattleSetupEnd;
          StringBuilder sb11 = new StringBuilder("     ######ShowR049Results() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
