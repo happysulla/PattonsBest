@@ -570,6 +570,206 @@ namespace Pattons_Best
                return "ERROR";
          }
       }
+      public static bool SetFriendlyActionResult(IGameInstance gi, IMapItem mi, string enemyUnit, int dieRoll, int usControlledSectors,bool isAdvancingFire, bool isArtilleryFire, bool isAirStrike, bool isFlankingFire )
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): lastReport=null");
+            return false;
+         }
+         //----------------------------------------------------
+         if ((false == isArtilleryFire) && ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling"))))
+         {
+            if (("B6M" == mi.TerritoryCurrent.Name) || ("B6L" == mi.TerritoryCurrent.Name)) // no Friendly action allowed in these regions unless artillery
+               return true;
+         }
+         //----------------------------------------------------
+         if (dieRoll < 4) // always a kill if below 4 regardless of modifiers
+         {
+            mi.IsKilled = true;
+            return true;
+         }
+         //----------------------------------------------------
+         IStack? stack = gi.BattleStacks.Find(mi.TerritoryCurrent);
+         if( null == stack )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): stack=null for t=" + mi.TerritoryCurrent.Name);
+            return false;
+         }
+         bool isSmokeAddedToTerritory = false;
+         switch (enemyUnit) // modifiers do not apply for smoke
+         {
+            case "LW":
+            case "MG":
+            case "TRUCK":
+            case "PSW":
+            case "SPW":
+            case "MARDERII":
+            case "MARDERIII":
+               // no smoke possible
+               break;
+            case "ATG":
+            case "PzV":
+            case "JdgPzIV":
+            case "JdgPz38t":
+               if (79 < dieRoll)
+                  isSmokeAddedToTerritory = true;
+               break;
+            case "PzIV":
+            case "STuGIIIg":
+            case "SPG":
+               if (89 < dieRoll)
+                  isSmokeAddedToTerritory = true;
+               break;
+            case "TANK":
+            case "PzVI":
+               if (59 < dieRoll)
+                  isSmokeAddedToTerritory = true;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): reached default with enemyUnit=" + enemyUnit);
+               return false;
+         }
+         if( true == isSmokeAddedToTerritory )
+         {
+            string miName = "SmokeOne" + Utilities.MapItemNum;
+            Utilities.MapItemNum++;
+            IMapItem smoke = new MapItem(miName, Utilities.ZOOM, "c108Smoke1", mi.TerritoryCurrent);
+            IMapPoint mp = Territory.GetRandomPoint(mi.TerritoryCurrent);
+            smoke.SetLocation(mp);
+            stack.MapItems.Add(smoke);
+            return true; // if smoke occurs, no chance of killing target
+         }
+         //----------------------------------------------------
+         int numSmokeInTargetZone = 0;
+         foreach(IMapItem smoke in stack.MapItems)
+         {
+            if( true == smoke.Name.Contains("Smoke"))
+               numSmokeInTargetZone++;
+         }
+         dieRoll += (numSmokeInTargetZone * 10);
+         //----------------------------------------------------
+         bool isTargetVehicle = false;
+         bool isTargetInWoods = false;
+         int friendlySquadsLost = 0;
+         int friendlyTanksLost = 0;
+         switch ( enemyUnit )
+         {
+            case "LW":
+            case "MG":
+               isTargetInWoods = mi.IsWoods;
+               friendlySquadsLost = lastReport.VictoryPtsFriendlySquad;
+               break;
+            case "ATG":
+               isTargetInWoods = mi.IsWoods;
+               break;
+            case "TRUCK":
+               friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
+               break;
+            case "PSW":
+            case "SPW":
+               isTargetVehicle = true;
+               friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
+               break;
+            case "PzIV":
+               isTargetVehicle = true;
+               friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
+               break;
+            case "PzV":
+               isTargetVehicle = true;
+               friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
+               break;
+            case "TANK":
+            case "PzVI":
+               isTargetVehicle = true;
+               friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
+               break;
+            case "STuGIIIg":
+            case "SPG":
+               isTargetVehicle = true;
+               friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
+               break;
+            case "MARDERII":
+            case "MARDERIII":
+               isTargetVehicle = true;
+               friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
+               break;
+            case "JdgPzIV":
+            case "JdgPz38t":
+               isTargetVehicle = true;
+               friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): reached default with enemyUnit=" + enemyUnit);
+               return false;
+         }
+         //----------------------------------------------------
+         if (true == isFlankingFire)
+            dieRoll -= 10;
+         //----------------------------------------------------
+         if ( (true == isTargetVehicle) && (true == isAirStrike) )
+            dieRoll -= 10;
+         //----------------------------------------------------
+         dieRoll -= (3 * usControlledSectors);
+         //----------------------------------------------------
+         if( true == isTargetInWoods )
+            dieRoll -= 3;
+         //----------------------------------------------------
+         dieRoll += friendlySquadsLost;
+         //----------------------------------------------------
+         dieRoll += (2*friendlyTanksLost);
+         //----------------------------------------------------
+         if( (true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
+            dieRoll += 10;
+         //----------------------------------------------------
+         if ((true == isTargetVehicle) && ( (true == isAdvancingFire) || (true == isArtilleryFire) ) ) 
+            dieRoll += 10;
+         //----------------------------------------------------
+         dieRoll = Math.Max(dieRoll, 1);
+         //----------------------------------------------------
+         switch (enemyUnit) // modifiers do not apply for smoke
+         {
+            case "LW":
+            case "MG":
+            case "PzIV":
+            case "STuGIIIg":
+            case "SPG":
+               if (dieRoll < 31)
+                  mi.IsKilled = true;
+               break;
+            case "ATG":
+            case "PzV":
+            case "JdgPzIV":
+            case "JdgPz38t":
+               if (dieRoll < 21)
+                  mi.IsKilled = true;
+               break;
+            case "TRUCK":
+               if (dieRoll < 61)
+                  mi.IsKilled = true;
+               break;
+            case "PSW":
+            case "SPW":
+               if (dieRoll < 41)
+                  mi.IsKilled = true;
+               break;
+            case "MARDERII":
+            case "MARDERIII":
+               if (dieRoll < 51)
+                  mi.IsKilled = true;
+               break;
+            case "TANK":
+            case "PzVI":
+               if (dieRoll < 11)
+                  mi.IsKilled = true;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): reached default with enemyUnit=" + enemyUnit);
+               return false;
+         }
+         return true;
+      }
       public static string GetMonth( int day )
       {
          if (day < 5)
