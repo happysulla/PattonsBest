@@ -570,8 +570,35 @@ namespace Pattons_Best
                return "ERROR";
          }
       }
-      public static bool SetFriendlyActionResult(IGameInstance gi, IMapItem mi, string enemyUnit, int dieRoll, int usControlledSectors,bool isAdvancingFire, bool isArtilleryFire, bool isAirStrike, bool isFlankingFire )
+      public static bool SetFriendlyActionResult(IGameInstance gi, IMapItem mi, int dieRoll, int numUsControlledSector, bool isAdvancingFire, bool isArtilleryFire, bool isAirStrike, bool isFlankingFire )
       {
+         string enemyUnit = "ERROR";
+         if (true == mi.Name.Contains("LW"))
+            enemyUnit = "LW";
+         else if (true == mi.Name.Contains("MG"))
+            enemyUnit = "MG";
+         else if (true == mi.Name.Contains("TRUCK"))
+            enemyUnit = "TRUCK";
+         else if ((true == mi.Name.Contains("PSW")) || (true == mi.Name.Contains("SPW")))
+            enemyUnit = "CAR";
+         else if (true == mi.Name.Contains("MARDER"))
+            enemyUnit = "MARDER";
+         else if ((true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("Pak")) )
+            enemyUnit = "ATG";
+         else if (true == mi.Name.Contains("PzIV"))
+            enemyUnit = "PzIV";
+         else if (true == mi.Name.Contains("PzV"))
+            enemyUnit = "PzV";
+         else if ((true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("PzVI")))
+            enemyUnit = "PzVI";
+         else if ((true == mi.Name.Contains("JdgPzIV")) || (true == mi.Name.Contains("JdgPz38t")))
+            enemyUnit = "JdgPz";
+         if( "ERROR" == enemyUnit )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): unknown enemyUnit=" + mi.Name);
+            return false;
+         }
+         //----------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
@@ -603,16 +630,13 @@ namespace Pattons_Best
             case "LW":
             case "MG":
             case "TRUCK":
-            case "PSW":
-            case "SPW":
-            case "MARDERII":
-            case "MARDERIII":
+            case "CAR":
+            case "MARDER":
                // no smoke possible
                break;
             case "ATG":
             case "PzV":
-            case "JdgPzIV":
-            case "JdgPz38t":
+            case "JdgPz":
                if (79 < dieRoll)
                   isSmokeAddedToTerritory = true;
                break;
@@ -622,7 +646,6 @@ namespace Pattons_Best
                if (89 < dieRoll)
                   isSmokeAddedToTerritory = true;
                break;
-            case "TANK":
             case "PzVI":
                if (59 < dieRoll)
                   isSmokeAddedToTerritory = true;
@@ -667,36 +690,14 @@ namespace Pattons_Best
             case "TRUCK":
                friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
                break;
-            case "PSW":
-            case "SPW":
-               isTargetVehicle = true;
-               friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
-               break;
+            case "CAR":
             case "PzIV":
-               isTargetVehicle = true;
-               friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
-               break;
             case "PzV":
-               isTargetVehicle = true;
-               friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
-               break;
-            case "TANK":
             case "PzVI":
-               isTargetVehicle = true;
-               friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
-               break;
             case "STuGIIIg":
             case "SPG":
-               isTargetVehicle = true;
-               friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
-               break;
-            case "MARDERII":
-            case "MARDERIII":
-               isTargetVehicle = true;
-               friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
-               break;
-            case "JdgPzIV":
-            case "JdgPz38t":
+            case "MARDER":
+            case "JdgPz":
                isTargetVehicle = true;
                friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
                break;
@@ -711,7 +712,7 @@ namespace Pattons_Best
          if ( (true == isTargetVehicle) && (true == isAirStrike) )
             dieRoll -= 10;
          //----------------------------------------------------
-         dieRoll -= (3 * usControlledSectors);
+         dieRoll -= (3 * numUsControlledSector);
          //----------------------------------------------------
          if( true == isTargetInWoods )
             dieRoll -= 3;
@@ -740,8 +741,7 @@ namespace Pattons_Best
                break;
             case "ATG":
             case "PzV":
-            case "JdgPzIV":
-            case "JdgPz38t":
+            case "JdgPz":
                if (dieRoll < 21)
                   mi.IsKilled = true;
                break;
@@ -749,17 +749,14 @@ namespace Pattons_Best
                if (dieRoll < 61)
                   mi.IsKilled = true;
                break;
-            case "PSW":
-            case "SPW":
+            case "CAR":
                if (dieRoll < 41)
                   mi.IsKilled = true;
                break;
-            case "MARDERII":
-            case "MARDERIII":
+            case "MARDER":
                if (dieRoll < 51)
                   mi.IsKilled = true;
                break;
-            case "TANK":
             case "PzVI":
                if (dieRoll < 11)
                   mi.IsKilled = true;

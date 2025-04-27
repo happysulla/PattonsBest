@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 using WpfAnimatedGif;
 
 namespace Pattons_Best
@@ -684,8 +685,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): myGameInstance=null");
             return false;
          }
-         string name = "EnemyUnit" + Utilities.MapItemNum;
-         Utilities.MapItemNum++;
+
          ITerritory? tLeft = Territories.theTerritories.Find("OffLeft");
          if (null == tLeft)
          {
@@ -700,6 +700,8 @@ namespace Pattons_Best
          }
          ITerritory? t = null;
          IMapItem? mi = null;
+         string name = myGridRows[i].myActivation + Utilities.MapItemNum;
+         Utilities.MapItemNum++;
          switch (myGridRows[i].myActivation)
          {
             case "ATG":
