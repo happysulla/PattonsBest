@@ -28,6 +28,9 @@ namespace Pattons_Best
       //----------------------------------------
       bool IsMoving { get; set; }
       bool IsHullDown { get; set; }
+      bool IsWoods { get; set; }
+      bool IsBuilding { get; set; }
+      bool IsFortification { get; set; }
       bool IsTurret { get; set; }
       bool IsKilled { get; set; }
       //----------------------------------------

@@ -44,6 +44,9 @@ namespace Pattons_Best
       [NonSerialized] private static BitmapImage? theBloodSpot = theMapImages.GetBitmapImage("OBlood1");
       [NonSerialized] private static BitmapImage? theMoving = theMapImages.GetBitmapImage("c13Moving");
       [NonSerialized] private static BitmapImage? theHullDown = theMapImages.GetBitmapImage("c14HullDown");
+      [NonSerialized] private static BitmapImage? theWood = theMapImages.GetBitmapImage("OWoods");
+      [NonSerialized] private static BitmapImage? theFort = theMapImages.GetBitmapImage("OFort");
+      [NonSerialized] private static BitmapImage? theBuild = theMapImages.GetBitmapImage("OBuild");
       [NonSerialized] private static BitmapImage? theTurret = theMapImages.GetBitmapImage("c16Turret");
       private const double PERCENT_MAPITEM_COVERED = 40.0;
       //--------------------------------------------------
@@ -99,6 +102,9 @@ namespace Pattons_Best
       //--------------------------------------------------
       public bool IsMoving { get; set; } = false;
       public bool IsHullDown { get; set; } = false;
+      public bool IsWoods { get; set; } = false;
+      public bool IsBuilding { get; set; } = false;
+      public bool IsFortification { get; set; } = false;
       public bool IsTurret { get; set; } = false;
       public bool IsKilled { get; set; } = false;
       //--------------------------------------------------
@@ -256,19 +262,46 @@ namespace Pattons_Best
                {
                   double width = 0.4 * mi.Zoom * Utilities.theMapItemOffset;
                   double height = 1.33 * width;
-                  Image imgMoving = new Image() { Height = height, Width = width, Source = theMoving };
-                  c.Children.Add(imgMoving);
-                  Canvas.SetLeft(imgMoving, mi.Zoom * Utilities.theMapItemOffset - 0.5 * width);
-                  Canvas.SetTop(imgMoving, -0.5 * height);
+                  Image imgTerrain = new Image() { Height = height, Width = width, Source = theMoving };
+                  c.Children.Add(imgTerrain);
+                  Canvas.SetLeft(imgTerrain, mi.Zoom * Utilities.theMapItemOffset - 0.5 * width);
+                  Canvas.SetTop(imgTerrain, -0.5 * height);
                }
-               if (true == mi.IsHullDown)
+               else if (true == mi.IsHullDown)
                {
                   double width = 0.5 * mi.Zoom * Utilities.theMapItemSize;
                   double height = width / 2.0;
-                  Image imgHullDown = new Image() { Height = height, Width = width, Source = theHullDown };
-                  c.Children.Add(imgHullDown);
-                  Canvas.SetLeft(imgHullDown, 0.5 * width);
-                  Canvas.SetTop(imgHullDown, -0.5 * height);
+                  Image imgTerrain = new Image() { Height = height, Width = width, Source = theHullDown };
+                  c.Children.Add(imgTerrain);
+                  Canvas.SetLeft(imgTerrain, 0.5 * width);
+                  Canvas.SetTop(imgTerrain, -0.5 * height);
+               }
+               else if (true == mi.IsWoods)
+               {
+                  double width = mi.Zoom * Utilities.theMapItemSize;
+                  double height = width;
+                  Image imgTerrain = new Image() { Height = height, Width = width, Source = theWood };
+                  c.Children.Add(imgTerrain);
+                  Canvas.SetLeft(imgTerrain,0);
+                  Canvas.SetTop(imgTerrain, 0);
+               }
+               else if (true == mi.IsFortification)
+               {
+                  double width = mi.Zoom * Utilities.theMapItemSize;
+                  double height = width;
+                  Image imgTerrain = new Image() { Height = height, Width = width, Source = theFort };
+                  c.Children.Add(imgTerrain);
+                  Canvas.SetLeft(imgTerrain, 0);
+                  Canvas.SetTop(imgTerrain, 0);
+               }
+               else if (true == mi.IsBuilding)
+               {
+                  double width = mi.Zoom * Utilities.theMapItemSize;
+                  double height = width;
+                  Image imgTerrain = new Image() { Height = height, Width = width, Source = theBuild };
+                  c.Children.Add(imgTerrain);
+                  Canvas.SetLeft(imgTerrain, 0);
+                  Canvas.SetTop(imgTerrain, 0);
                }
             }
             if (true == mi.IsTurret)
@@ -282,7 +315,7 @@ namespace Pattons_Best
                imgTurret.RenderTransform = rotateTransform;
                c.Children.Add(imgTurret);
                Canvas.SetLeft(imgTurret, 0);
-               Canvas.SetTop(imgHullDown, 0);
+               Canvas.SetTop(imgTurret, 0);
             }
             if ("" != mi.OverlayImageName)
             {

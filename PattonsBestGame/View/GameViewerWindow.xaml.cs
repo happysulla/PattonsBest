@@ -455,10 +455,10 @@ namespace Pattons_Best
       private Button CreateButtonMapItem(List<Button> buttons, IMapItem mi)
       {
          System.Windows.Controls.Button b = new Button { ContextMenu = myContextMenuButton, Name = mi.Name, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
-         MapItem.SetButtonContent(b, mi); // This sets the image as the button's content
+         MapItem.SetButtonContent(b, mi, true); // This sets the image as the button's content
          RotateTransform rotateTransform = new RotateTransform();
          b.RenderTransformOrigin = new Point(0.5, 0.5);
-         rotateTransform.Angle = mi.RotationBase;
+         rotateTransform.Angle = mi.RotationBase + mi.Rotation;
          b.RenderTransform = rotateTransform;
          buttons.Add(b);
          Canvas.SetLeft(b, mi.Location.X);
@@ -466,7 +466,6 @@ namespace Pattons_Best
          b.Click += ClickButtonMapItem;
          b.MouseEnter += MouseEnterMapItem;
          b.MouseLeave += MouseLeaveMapItem;
-
          return b;
       }
       private bool SetTerritory(IMapItem mi, ITerritory newT)
@@ -926,7 +925,7 @@ namespace Pattons_Best
                }
                else
                {
-                  MapItem.SetButtonContent(button, mi);
+                  MapItem.SetButtonContent(button, mi, true);
                }
             }
             if (ui is Label label)  // A Game Feat Label
@@ -1001,7 +1000,7 @@ namespace Pattons_Best
                   ++counterCount;
                   RotateTransform rotateTransform = new RotateTransform();
                   b.RenderTransformOrigin = new Point(0.5, 0.5);
-                  rotateTransform.Angle = mi.RotationBase;
+                  rotateTransform.Angle = mi.RotationBase + mi.Rotation;
                   b.RenderTransform = rotateTransform;
                }
                else
@@ -1682,7 +1681,7 @@ namespace Pattons_Best
             myGameInstance.Sherman.Count++;
             if (5 < myGameInstance.Sherman.Count)
                myGameInstance.Sherman.Count = 0;
-            MapItem.SetButtonContent(button, myGameInstance.Sherman);
+            MapItem.SetButtonContent(button, myGameInstance.Sherman, true);
          }
       }
       private void MouseEnterMapItem(object sender, System.Windows.Input.MouseEventArgs e)

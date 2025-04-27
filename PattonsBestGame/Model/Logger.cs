@@ -25,6 +25,7 @@ namespace Pattons_Best
       LE_SHOW_STACK_VIEW,
       LE_SHOW_ENEMY_STRENGTH,
       LE_SHOW_RANDOM_PT,
+      LE_SHOW_ROTATION,
       //-------------
       LE_RESET_ROLL_STATE,
       LE_VIEW_DICE_MOVING,
@@ -85,6 +86,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_STACK_VIEW);
          //SetOn(LogEnum.LE_SHOW_ENEMY_STRENGTH);
          SetOn(LogEnum.LE_SHOW_RANDOM_PT);
+         SetOn(LogEnum.LE_SHOW_ROTATION);
          //SetOn(LogEnum.LE_VIEW_MIM);
          //SetOn(LogEnum.LE_VIEW_MIM_ADD);
          //SetOn(LogEnum.LE_VIEW_MIM_CLEAR);
