@@ -287,7 +287,14 @@ namespace Pattons_Best
                EventViewerR046BattleSetupMgr battleSetupMgr = new EventViewerR046BattleSetupMgr(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == battleSetupMgr.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): battleSetupMgr.CtorError=true");
-               else if (false == battleSetupMgr.SetupBattle(ShowR049Results))
+               else if (false == battleSetupMgr.SetupBattle(ShowR0463BattleSetupResults))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): SetupBattle() returned false");
+               break;
+            case GameAction.BattleResolveAdvanceFire:
+               EventVieweR046ResolveAdvance battleResolveAdvFire = new EventVieweR046ResolveAdvance(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
+               if (true == battleResolveAdvFire.CtorError)
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): battleResolveAdvFire.CtorError=true");
+               else if (false == battleResolveAdvFire.ResolveAdvanceFire(ShowR0464AdvanceFireResults) )
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): SetupBattle() returned false");
                break;
             case GameAction.EveningDebriefingStart:
@@ -1225,27 +1232,6 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
          myGameEngine.PerformAction(ref myGameInstance, ref action, dieRoll);
       }
-      public bool ShowR049Results()
-      {
-         if (null == myGameInstance)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ShowR049Results(): myGameInstance=null");
-            return false;
-         }
-         if (null == myGameEngine)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ShowR049Results(): myGameEngine=null");
-            return false;
-         }
-         GameAction outAction = GameAction.BattleSetupEnd;
-         StringBuilder sb11 = new StringBuilder("     ######ShowR049Results() :");
-         sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
-         sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
-         sb11.Append(" a="); sb11.Append(outAction.ToString());
-         Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
-         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
-         return true;
-      }
       public bool ShowR071CrewRatings()
       {
          if( null == myGameInstance)
@@ -1289,6 +1275,48 @@ namespace Pattons_Best
          else
             outAction = GameAction.MovementChooseOption;
          StringBuilder sb11 = new StringBuilder("     ######ShowR162AmmoLoad() :");
+         sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
+         sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
+         sb11.Append(" a="); sb11.Append(outAction.ToString());
+         Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+         return true;
+      }
+      public bool ShowR0463BattleSetupResults()
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowR0463BattleSetupResults(): myGameInstance=null");
+            return false;
+         }
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowR0463BattleSetupResults(): myGameEngine=null");
+            return false;
+         }
+         GameAction outAction = GameAction.BattleResolveAdvanceFire;
+         StringBuilder sb11 = new StringBuilder("     ######ShowR0463BattleSetupResults() :");
+         sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
+         sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
+         sb11.Append(" a="); sb11.Append(outAction.ToString());
+         Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+         return true;
+      }
+      public bool ShowR0464AdvanceFireResults()
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowR0464AdvanceFireResults(): myGameInstance=null");
+            return false;
+         }
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowR0464AdvanceFireResults(): myGameEngine=null");
+            return false;
+         }
+         GameAction outAction = GameAction.BattleSetupEnd;
+         StringBuilder sb11 = new StringBuilder("     ######ShowR0464AdvanceFireResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
          sb11.Append(" a="); sb11.Append(outAction.ToString());
@@ -1604,9 +1632,9 @@ namespace Pattons_Best
             case "Begin Game":
                action = GameAction.SetupShowMapHistorical;
                //action = GameAction.TestingStartMorningBriefing; // <cgs> TEST
-               action = GameAction.TestingStartPreparations; // <cgs> TEST
+               //action = GameAction.TestingStartPreparations; // <cgs> TEST
                //action = GameAction.TestingStartMovement; // <cgs> TEST
-               //action = GameAction.TestingStartBattle; // <cgs> TEST
+               action = GameAction.TestingStartBattle; // <cgs> TEST
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Cancel":

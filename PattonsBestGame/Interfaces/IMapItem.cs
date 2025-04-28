@@ -35,6 +35,7 @@ namespace Pattons_Best
       bool IsKilled { get; set; }
       //----------------------------------------
       void SetLocation(IMapPoint mp, int counterCount=0);
+      void SetBloodSpots();
       void Flip();
       void Unflip();
    }

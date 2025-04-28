@@ -26,13 +26,15 @@
          <RowDefinition Height="Auto"></RowDefinition>
          <RowDefinition Height="Auto"></RowDefinition>
          <RowDefinition Height="Auto"></RowDefinition>
-         <RowDefinition></RowDefinition>
       </Grid.RowDefinitions>
       <StackPanel Grid.Row="0" Grid.ColumnSpan="6" Orientation="Horizontal">
-         <TextBlock Name="myTextBlockHeader" Text="r4.6 Battle Setup" FontWeight="Bold" FontFamily='Georgia' FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>
-         <Button Content='r4.62' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" />
-         <Button Content='r5.12' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Hidden"/>
-         <Button Content='r4.63' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Hidden"/>
+         <TextBlock Name="myTextBlockHeader" Text="r4.62 Battle Setup" FontWeight="Bold" FontFamily='Georgia' FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+         <Button Name='myButtonR462' Content='r4.62' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" />
+         <Button Name='myButtonR174' Content='r4.62' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" />
+         <Button Name='myButtonR512' Content='r5.12' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Hidden"/>
+         <Button Name='myButtonR1232' Content='r12.32' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Hidden"/>
+         <Button Name='myButtonR1233' Content='r12.33' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Hidden"/>
+         <Button Name='myButtonR1234' Content='r12.34' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Hidden"/>
       </StackPanel>
       <Rectangle Grid.Row="1" Grid.ColumnSpan="6" Margin="5" Height="1" Fill="Black"/>
       <TextBlock Grid.Row="2" Grid.ColumnSpan="6" Name="myTextBlockInstructions" FontFamily='Georgia' FontSize="16" VerticalAlignment="Bottom"  HorizontalAlignment="Left" Margin="2,0,0,5">

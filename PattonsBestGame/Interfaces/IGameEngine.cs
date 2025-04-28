@@ -188,6 +188,10 @@ namespace Pattons_Best
       BattleStart,
       BattleActivation,
       BattlePlaceAdvanceFire,
+      BattleResolveAdvanceFire,
+      BattleResolveAdvanceArtilleryFire,
+      BattleResolveAdvanceAirStrike,
+      BattleAmbushStart,
       BattleSetupEnd,
 
       EveningDebriefingStart,

@@ -27,6 +27,8 @@ namespace Pattons_Best
       LE_SHOW_RANDOM_PT,
       LE_SHOW_ROTATION,
       //-------------
+      LE_VIEW_ADV_FIRE_RESOLVE,
+      //-------------
       LE_RESET_ROLL_STATE,
       LE_VIEW_DICE_MOVING,
       LE_VIEW_UPDATE_MENU,
@@ -87,6 +89,8 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_ENEMY_STRENGTH);
          SetOn(LogEnum.LE_SHOW_RANDOM_PT);
          SetOn(LogEnum.LE_SHOW_ROTATION);
+         //-------------------------------
+         SetOn(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE);
          //SetOn(LogEnum.LE_VIEW_MIM);
          //SetOn(LogEnum.LE_VIEW_MIM_ADD);
          //SetOn(LogEnum.LE_VIEW_MIM_CLEAR);

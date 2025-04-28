@@ -80,7 +80,6 @@ namespace Pattons_Best
       private RuleDialogViewer? myRulesMgr;
       private IDieRoller? myDieRoller;
       //---------------------------------------------------
-      private readonly SolidColorBrush mySolidColorBrushBlack = new SolidColorBrush() { Color = Colors.Black };
       private readonly FontFamily myFontFam = new FontFamily("Tahoma");
       private readonly FontFamily myFontFam1 = new FontFamily("Courier New");
       private readonly DoubleCollection myDashArray = new DoubleCollection();
@@ -319,6 +318,9 @@ namespace Pattons_Best
                break;
             case E046Enum.PLACE_SECTOR:
                myTextBlockInstructions.Inlines.Add(new Run("Roll for each enemy unit to determine sector."));
+               myButtonR462.Visibility = Visibility.Hidden;
+               myButtonR174.Visibility = Visibility.Hidden;
+               myButtonR512.Visibility = Visibility.Visible;
                break;
             case E046Enum.PLACE_RANGE:
                myTextBlockInstructions.Inlines.Add(new Run("Roll for range on the Battle "));
@@ -326,6 +328,8 @@ namespace Pattons_Best
                b3.Click += ButtonRule_Click;
                myTextBlockInstructions.Inlines.Add(new InlineUIContainer(b3));
                myTextBlockInstructions.Inlines.Add(new Run(" Table."));
+               myButtonR512.Visibility = Visibility.Hidden;
+               myButtonR1232.Visibility = Visibility.Visible;
                break;
             case E046Enum.PLACE_FACING:
                myTextBlockInstructions.Inlines.Add(new Run("Roll for facing on the Battle "));
@@ -333,6 +337,8 @@ namespace Pattons_Best
                b4.Click += ButtonRule_Click;
                myTextBlockInstructions.Inlines.Add(new InlineUIContainer(b4));
                myTextBlockInstructions.Inlines.Add(new Run(" Table."));
+               myButtonR1232.Visibility = Visibility.Hidden;
+               myButtonR1233.Visibility = Visibility.Visible;
                break;
             case E046Enum.PLACE_TERRAIN:
                myTextBlockInstructions.Inlines.Add(new Run("Roll for terrain on the Battle "));
@@ -340,6 +346,8 @@ namespace Pattons_Best
                b5.Click += ButtonRule_Click;
                myTextBlockInstructions.Inlines.Add(new InlineUIContainer(b5));
                myTextBlockInstructions.Inlines.Add(new Run(" Table."));
+               myButtonR1233.Visibility = Visibility.Hidden;
+               myButtonR1234.Visibility = Visibility.Visible;
                break;
             case E046Enum.SHOW_RESULTS:
                myTextBlockInstructions.Inlines.Add(new Run("Click image to continue."));
@@ -804,6 +812,11 @@ namespace Pattons_Best
       }
       private bool UpdateGridRowSector(Index i)
       {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowSector(): myGameInstance=null");
+            return false;
+         }
          string? tName = null;
          switch(myGridRows[i].myDieRollSector)
          {
@@ -925,8 +938,10 @@ namespace Pattons_Best
                return false;
             }
             IMapPoint mp = Territory.GetRandomPoint(t);
-            mi.TerritoryCurrent = mi.TerritoryStarting = t;
             mi.SetLocation(mp);
+            mi.TerritoryCurrent = mi.TerritoryStarting = t;
+            myGameInstance.BattleStacks.Remove(mi.Name);
+            myGameInstance.BattleStacks.Add(mi);
             if (false == CreateMapItemRotation(i))
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): CreateMapItemRotation() returned false");
@@ -937,6 +952,11 @@ namespace Pattons_Best
       }
       private bool UpdateGridRowRange(Index i)
       {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowRange(): myGameInstance=null");
+            return false;
+         }
          if ("M" == myGridRows[i].myRange)
             return true;
          //----------------------------
@@ -964,6 +984,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): CreateMapItemRotation() returned false");
             return false;
          }
+         mi.TerritoryCurrent = mi.TerritoryStarting = t;
+         myGameInstance.BattleStacks.Remove(mi.Name);
+         myGameInstance.BattleStacks.Add(mi);
          return true;
       }
       private bool UpdateGridRowFacing(Index i)

@@ -594,7 +594,7 @@ namespace Pattons_Best
                {
                   gi.GamePhase = GamePhase.Battle;
                   gi.DieRollAction = GameAction.DieRollActionNone;
-                  gi.IsAdvancingFireChosen = false; //<cgs>
+                  gi.IsAdvancingFireChosen = true; //<cgs>
                   if (true == gi.IsAdvancingFireChosen)
                   {
                      gi.AdvancingFireMarkerCount = 6 - (int)Math.Ceiling((double)gi.FriendlyTankLossCount / 3.0);  // six minus friendly tank/3 (rounded up)

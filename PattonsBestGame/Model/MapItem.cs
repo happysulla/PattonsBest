@@ -184,7 +184,15 @@ namespace Pattons_Best
          this.Location.X = mp.X - delta;
          this.Location.Y = mp.Y - delta;
       }
-      //----------------------------------------------------------------------------
+      public void SetBloodSpots()
+      {
+         for (int spots = 0; spots < PERCENT_MAPITEM_COVERED; ++spots) // splatter the MapItem with random blood spots
+         {
+            int range = (int)(Utilities.theMapItemSize);
+            BloodSpot spot = new BloodSpot(range, theRandom);
+            myWoundSpots.Add(spot);
+         }
+      }
       public void Flip()
       {
          if (false == myIsFlipped)
