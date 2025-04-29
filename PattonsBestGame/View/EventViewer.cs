@@ -267,41 +267,48 @@ namespace Pattons_Best
                break;
             case GameAction.SetupAssignCrewRating:
             case GameAction.MorningBriefingAssignCrewRating:
-               EventViewerR071CrewMgr newCrewMgr = new EventViewerR071CrewMgr(myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
+               EventViewerCrewSetup newCrewMgr = new EventViewerCrewSetup(myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == newCrewMgr.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): newCrewMgr.CtorError=true");
-               else if (false == newCrewMgr.AssignNewCrewRatings(ShowR071CrewRatings))
+               else if (false == newCrewMgr.AssignNewCrewRatings(ShowCrewRatingResults))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): AssignNewCrewRatings() returned false");
                break;
             case GameAction.MorningBriefingAmmoLoad:
             case GameAction.MovementAmmoLoad:
-               EventViewerR162AmmoMgr newAmmoLoadMgr = new EventViewerR162AmmoMgr(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
+               EventViewerAmmoSetup newAmmoLoadMgr = new EventViewerAmmoSetup(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == newAmmoLoadMgr.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): newAmmoLoadMgr.CtorError=true");
-               else if (false == newAmmoLoadMgr.LoadAmmo(ShowR162AmmoLoad))
+               else if (false == newAmmoLoadMgr.LoadAmmo(ShowAmmoLoadResults))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): LoadAmmo() returned false");
                break;
             case GameAction.MorningBriefingAmmoReadyRackLoad:
                break;
             case GameAction.BattleActivation:
-               EventViewerR046BattleSetupMgr battleSetupMgr = new EventViewerR046BattleSetupMgr(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
+               EventViewerBattleSetup battleSetupMgr = new EventViewerBattleSetup(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == battleSetupMgr.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): battleSetupMgr.CtorError=true");
-               else if (false == battleSetupMgr.SetupBattle(ShowR0463BattleSetupResults))
+               else if (false == battleSetupMgr.SetupBattle(ShowBattleSetupResults))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): SetupBattle() returned false");
                break;
             case GameAction.BattleResolveAdvanceFire:
-               EventVieweR046ResolveAdvance battleResolveAdvFire = new EventVieweR046ResolveAdvance(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
+               EventViewerResolveAdvance battleResolveAdvFire = new EventViewerResolveAdvance(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == battleResolveAdvFire.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): battleResolveAdvFire.CtorError=true");
-               else if (false == battleResolveAdvFire.ResolveAdvanceFire(ShowR0464AdvanceFireResults) )
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): SetupBattle() returned false");
+               else if (false == battleResolveAdvFire.ResolveAdvanceFire(ShowBattleSetupFireResults) )
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ResolveAdvanceFire() returned false");
+               break;
+            case GameAction.BattleResolveArtilleryFire:
+               EventViewerResolveArtilleryFire battleResolveArtFire = new EventViewerResolveArtilleryFire(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
+               if (true == battleResolveArtFire.CtorError)
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): battleResolveAdvFire.CtorError=true");
+               else if (false == battleResolveArtFire.ResolveArtilleryFire(ShowBattleSetupFireResults))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ResolveArtilleryFire() returned false");
                break;
             case GameAction.EveningDebriefingStart:
-               EventViewerR491RatingImprove crewRatingImprove = new EventViewerR491RatingImprove(myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
+               EventViewerRatingImprove crewRatingImprove = new EventViewerRatingImprove(myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == crewRatingImprove.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): crewRatingImprove.CtorError=true");
-               else if (false == crewRatingImprove.ImproveRatings(ShowR491RatingImprove))
+               else if (false == crewRatingImprove.ImproveRatings(ShowRatingImproveResults))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ImproveRatings() returned false");
                break;
             case GameAction.UpdateEventViewerDisplay:
@@ -1036,7 +1043,39 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               break;
+            case "e037":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  int dieRoll = gi.DieResults[key][0];
+                  Image? imge037 = null;
+                  if ( dieRoll < 8 )
+                  {
+                     myTextBlock.Inlines.Add(new Run("Ambush!"));
+                     imge037 = new Image { Name = "Ambush", Width = 400, Height = 266, Source = MapItem.theMapImages.GetBitmapImage("Ambush") };
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("              "));
+                  }
+                  else
+                  {
+                     myTextBlock.Inlines.Add(new Run("No Ambush"));
+                     imge037 = new Image { Name="Continue37", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("                                  "));
+                  }
 
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge037));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               else
+               {
+                  if ((true == report.Weather.Contains("Rain")) || (true == report.Weather.Contains("Fog")) || (true == report.Weather.Contains("Falling")))
+                     myTextBlock.Inlines.Add(new Run("Subtracting one for Rain, Fog, or Falling Snow."));
+               }
                break;
             default:
                break;
@@ -1232,16 +1271,16 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
          myGameEngine.PerformAction(ref myGameInstance, ref action, dieRoll);
       }
-      public bool ShowR071CrewRatings()
+      public bool ShowCrewRatingResults()
       {
          if( null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowR071CrewRatings(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowCrewRatingResults(): myGameInstance=null");
             return false;
          }
          if (null == myGameEngine)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowR071CrewRatings(): myGameEngine=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowCrewRatingResults(): myGameEngine=null");
             return false;
          }
          GameAction outAction = GameAction.Error;
@@ -1249,7 +1288,7 @@ namespace Pattons_Best
             outAction = GameAction.SetupShowCombatCalendarCheck;
          else
             outAction = GameAction.MorningBriefingAssignCrewRatingEnd;
-         StringBuilder sb11 = new StringBuilder("     ######ShowR071CrewRatings() :");
+         StringBuilder sb11 = new StringBuilder("     ######ShowCrewRatingResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
          sb11.Append(" a="); sb11.Append(outAction.ToString());
@@ -1257,16 +1296,16 @@ namespace Pattons_Best
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
          return true;
       }
-      public bool ShowR162AmmoLoad()
+      public bool ShowAmmoLoadResults()
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowR162AmmoLoad(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowAmmoLoadResults(): myGameInstance=null");
             return false;
          }
          if (null == myGameEngine)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowR162AmmoLoad(): myGameEngine=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowAmmoLoadResults(): myGameEngine=null");
             return false;
          }
          GameAction outAction = GameAction.Error;
@@ -1274,7 +1313,7 @@ namespace Pattons_Best
             outAction = GameAction.MorningBriefingTimeCheck;
          else
             outAction = GameAction.MovementChooseOption;
-         StringBuilder sb11 = new StringBuilder("     ######ShowR162AmmoLoad() :");
+         StringBuilder sb11 = new StringBuilder("     ######ShowAmmoLoadResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
          sb11.Append(" a="); sb11.Append(outAction.ToString());
@@ -1282,20 +1321,64 @@ namespace Pattons_Best
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
          return true;
       }
-      public bool ShowR0463BattleSetupResults()
+      public bool ShowBattleSetupResults()
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowR0463BattleSetupResults(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupResults(): myGameInstance=null");
             return false;
          }
          if (null == myGameEngine)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowR0463BattleSetupResults(): myGameEngine=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupResults(): myGameEngine=null");
             return false;
          }
-         GameAction outAction = GameAction.BattleResolveAdvanceFire;
-         StringBuilder sb11 = new StringBuilder("     ######ShowR0463BattleSetupResults() :");
+         GameAction outAction = GameAction.BattleAmbushStart;
+         //--------------------------------------------------
+         if (null == myGameInstance.EnteredArea)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): myGameInstance.EnteredArea=null");
+            return false;
+         }
+         IStack? stackEnteredArea = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
+         if (null == stackEnteredArea)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): stackEnteredArea=null");
+            return false;
+         }
+         bool isAirStrike = false;
+         bool isArtilleryStrike = false;
+         foreach (IMapItem mi in stackEnteredArea.MapItems)
+         {
+            if (true == mi.Name.Contains("Air"))
+               isAirStrike = true;
+            if (true == mi.Name.Contains("Artillery"))
+               isArtilleryStrike = true;
+         }
+         if (true == isArtilleryStrike)
+            outAction = GameAction.BattleResolveArtilleryFire;
+         else if (true == isAirStrike)
+            outAction = GameAction.BattleResolveAirStrike;
+         //--------------------------------------------------
+         foreach (IStack stack in myGameInstance.BattleStacks)
+         {
+            bool isAdvanceFireMarkerInTerritory = false;
+            bool isEnemyUnitInTerritory = false;
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == Utilities.IsEnemyUnit(mi))
+                  isEnemyUnitInTerritory = true;
+               else if (true == mi.Name.Contains("AdvanceFire"))
+                  isAdvanceFireMarkerInTerritory = true;
+               if( true == isEnemyUnitInTerritory && true == isAdvanceFireMarkerInTerritory )
+               {
+                  outAction = GameAction.BattleResolveAdvanceFire;
+                  break;
+               }
+            }
+         }
+         //--------------------------------------------------
+         StringBuilder sb11 = new StringBuilder("     ######ShowBattleSetupResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
          sb11.Append(" a="); sb11.Append(outAction.ToString());
@@ -1303,20 +1386,62 @@ namespace Pattons_Best
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
          return true;
       }
-      public bool ShowR0464AdvanceFireResults()
+      public bool ShowBattleSetupFireResults()
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowR0464AdvanceFireResults(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): myGameInstance=null");
             return false;
          }
          if (null == myGameEngine)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowR0464AdvanceFireResults(): myGameEngine=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): myGameEngine=null");
             return false;
          }
-         GameAction outAction = GameAction.BattleSetupEnd;
-         StringBuilder sb11 = new StringBuilder("     ######ShowR0464AdvanceFireResults() :");
+         GameAction outAction = GameAction.BattleAmbushStart;
+         //--------------------------------------------------
+         if (null == myGameInstance.EnteredArea)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): myGameInstance.EnteredArea=null");
+            return false;
+         }
+         IStack? stackEnteredArea = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
+         if( null == stackEnteredArea )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): stackEnteredArea=null");
+            return false;
+         }
+         outAction = GameAction.BattleBoardEmpty;
+         //--------------------------------------------------
+         foreach (IStack stack in myGameInstance.BattleStacks)
+         {
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == Utilities.IsEnemyUnit(mi))
+               {
+                  outAction = GameAction.BattleAmbushStart;
+                  break;
+               }
+            }
+         }
+         if(GameAction.BattleAmbushStart == outAction)
+         {
+            bool isAirStrike = false;
+            bool isArtilleryStrike = false;
+            foreach (IMapItem mi in stackEnteredArea.MapItems)
+            {
+               if (true == mi.Name.Contains("Air"))
+                  isAirStrike = true;
+               if (true == mi.Name.Contains("Artillery"))
+                  isArtilleryStrike = true;
+            }
+            if (true == isArtilleryStrike)
+               outAction = GameAction.BattleResolveArtilleryFire;
+            else if (true == isAirStrike)
+               outAction = GameAction.BattleResolveAirStrike;
+         }
+         //--------------------------------------------------
+         StringBuilder sb11 = new StringBuilder("     ######ShowBattleSetupFireResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
          sb11.Append(" a="); sb11.Append(outAction.ToString());
@@ -1324,16 +1449,16 @@ namespace Pattons_Best
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
          return true;
       }
-      public bool ShowR491RatingImprove()
+      public bool ShowRatingImproveResults()
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowR491RatingImprove(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowRatingImproveResults(): myGameInstance=null");
             return false;
          }
          if (null == myGameEngine)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowR491RatingImprove(): myGameEngine=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowRatingImproveResults(): myGameEngine=null");
             return false;
          }
          GameAction outAction = GameAction.Error;
@@ -1341,7 +1466,7 @@ namespace Pattons_Best
             outAction = GameAction.SetupShowCombatCalendarCheck;
          else
             outAction = GameAction.MorningBriefingAssignCrewRatingEnd;
-         StringBuilder sb11 = new StringBuilder("     ######ShowR491RatingImprove() :");
+         StringBuilder sb11 = new StringBuilder("     ######ShowRatingImproveResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
          sb11.Append(" a="); sb11.Append(outAction.ToString());
@@ -1630,11 +1755,11 @@ namespace Pattons_Best
                }
                break;
             case "Begin Game":
-               action = GameAction.SetupShowMapHistorical;
                //action = GameAction.TestingStartMorningBriefing; // <cgs> TEST
-               //action = GameAction.TestingStartPreparations; // <cgs> TEST
+               action = GameAction.TestingStartPreparations; // <cgs> TEST
                //action = GameAction.TestingStartMovement; // <cgs> TEST
-               action = GameAction.TestingStartBattle; // <cgs> TEST
+               //action = GameAction.TestingStartBattle; // <cgs> TEST
+               //action = GameAction.SetupShowMapHistorical;
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Cancel":

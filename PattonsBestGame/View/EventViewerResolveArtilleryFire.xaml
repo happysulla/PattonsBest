@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Pattons_Best.EventVieweR046ResolveAdvance"
+﻿<UserControl x:Class="Pattons_Best.EventViewerResolveArtilleryFire"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -33,9 +33,9 @@
          <RowDefinition Height="Auto"></RowDefinition>
       </Grid.RowDefinitions>
       <StackPanel Grid.Row="0" Grid.ColumnSpan="5" Orientation="Horizontal">
-         <TextBlock Name="myTextBlockHeader" Text="r4.64 Advancing Fire" FontWeight="Bold" FontFamily='Georgia' FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+         <TextBlock Name="myTextBlockHeader" Text="r4.64 Artillery Fire" FontWeight="Bold" FontFamily='Georgia' FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>
          <Button Name="myButtonR464" Content='r4.64' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" />
-         <Button Name="myButtonR221" Content='r22.1' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" />
+         <Button Name="myButtonR221" Content='r23.1' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" />
       </StackPanel>
       <Rectangle Grid.Row="1" Grid.ColumnSpan="5" Margin="5" Height="1" Fill="Black"/>
       <TextBlock Grid.Row="2" Grid.ColumnSpan="5" Name="myTextBlockInstructions" FontFamily='Georgia' FontSize="16" VerticalAlignment="Bottom"  HorizontalAlignment="Left" Margin="2,0,0,5">

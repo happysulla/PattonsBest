@@ -232,5 +232,31 @@ namespace Pattons_Best
             return default;
          }
       }
+      public static bool IsEnemyUnit(IMapItem mi)
+      {
+         if (true == mi.Name.Contains("LW"))
+            return true;
+         else if ((true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("Pak")))
+            return true;
+         else if ((true == mi.Name.Contains("SPG")) || (true == mi.Name.Contains("STuGIIIg")))
+            return true;
+         else if ((true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("PzVI")))
+            return true;
+         else if (true == mi.Name.Contains("MG"))
+            return true;
+         else if (true == mi.Name.Contains("TRUCK"))
+            return true;
+         else if ((true == mi.Name.Contains("PSW")) || (true == mi.Name.Contains("SPW")))
+            return true;
+         else if (true == mi.Name.Contains("MARDER"))
+            return true;
+         else if (true == mi.Name.Contains("PzIV"))
+            return true;
+         else if (true == mi.Name.Contains("PzV"))
+            return true;
+         else if ((true == mi.Name.Contains("JdgPzIV")) || (true == mi.Name.Contains("JdgPz38t")))
+            return true;
+         return false;
+      }
    }
 }

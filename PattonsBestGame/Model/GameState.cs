@@ -1328,7 +1328,6 @@ namespace Pattons_Best
          GameAction previousAction = action;
          GameAction previousDieAction = gi.DieRollAction;
          string previousEvent = gi.EventActive;
-         string key = gi.EventActive;
          string returnStatus = "OK";
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -1338,6 +1337,7 @@ namespace Pattons_Best
          }
          else
          {
+            string key = gi.EventActive;
             switch (action)
             {
                case GameAction.ShowCombatCalendarDialog:
@@ -1926,72 +1926,96 @@ namespace Pattons_Best
          GameAction previousDieAction = gi.DieRollAction;
          string previousEvent = gi.EventActive;
          string returnStatus = "OK";
-         switch (action)
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
          {
-            case GameAction.ShowCombatCalendarDialog:
-            case GameAction.ShowAfterActionReportDialog:
-            case GameAction.ShowInventoryDialog:
-            case GameAction.ShowGameFeats:
-            case GameAction.ShowRuleListingDialog:
-            case GameAction.ShowEventListingDialog:
-            case GameAction.ShowTableListing:
-            case GameAction.ShowMovementDiagramDialog:
-            case GameAction.ShowReportErrorDialog:
-            case GameAction.ShowAboutDialog:
-            case GameAction.EndGameShowFeats:
-            case GameAction.UpdateEventViewerDisplay: // Only change active event
-               break;
-            case GameAction.UpdateEventViewerActive: // Only change active event
-               gi.EventDisplayed = gi.EventActive; // next screen to show
-               break;
-            case GameAction.UpdateBattleBoard:
-               break;
-            case GameAction.BattleStart:
-               gi.EventDisplayed = gi.EventActive = "e033";
-               break;
-            case GameAction.BattleActivation:
-               break;
-            case GameAction.BattlePlaceAdvanceFire:
-               if( null == gi.AdvanceFire )
-               {
-                  returnStatus = "gi.AdvanceFire=null";
-                  Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
-               }
-               else
-               {
-                  string name = "AdvanceFire" + Utilities.MapItemNum;
-                  ++Utilities.MapItemNum;
-                  IMapItem advanceFire = new MapItem(name, 1.0, "c44AdvanceFire", gi.AdvanceFire);
-                  IMapPoint mp = Territory.GetRandomPoint(gi.AdvanceFire);
-                  advanceFire.SetLocation(mp);
-                  IStack? stack = gi.BattleStacks.Find(gi.AdvanceFire);
-                  if (null == stack)
+            returnStatus = "lastReport=null";
+            Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+         }
+         else
+         {
+            string key = gi.EventActive;
+            switch (action)
+            {
+               case GameAction.ShowCombatCalendarDialog:
+               case GameAction.ShowAfterActionReportDialog:
+               case GameAction.ShowInventoryDialog:
+               case GameAction.ShowGameFeats:
+               case GameAction.ShowRuleListingDialog:
+               case GameAction.ShowEventListingDialog:
+               case GameAction.ShowTableListing:
+               case GameAction.ShowMovementDiagramDialog:
+               case GameAction.ShowReportErrorDialog:
+               case GameAction.ShowAboutDialog:
+               case GameAction.EndGameShowFeats:
+               case GameAction.UpdateEventViewerDisplay: // Only change active event
+                  break;
+               case GameAction.UpdateEventViewerActive: // Only change active event
+                  gi.EventDisplayed = gi.EventActive; // next screen to show
+                  break;
+               case GameAction.UpdateBattleBoard:
+                  break;
+               case GameAction.BattleStart:
+                  gi.EventDisplayed = gi.EventActive = "e033";
+                  break;
+               case GameAction.BattleActivation:
+                  break;
+               case GameAction.BattlePlaceAdvanceFire:
+                  if (null == gi.AdvanceFire)
                   {
-                     stack = new Stack(gi.AdvanceFire);
-                     gi.BattleStacks.Add(stack);
-                  }
-                  stack.MapItems.Add(advanceFire);
-                  //----------------------------------
-                  --gi.AdvancingFireMarkerCount;
-                  if (0 < gi.AdvancingFireMarkerCount)
-                  {
-                     action = GameAction.BattleStart;
+                     returnStatus = "gi.AdvanceFire=null";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
                   }
                   else
                   {
-                     gi.IsAdvancingFireChosen = false;
-                     gi.EventDisplayed = gi.EventActive = "e034";
-                     action = GameAction.BattleActivation;
+                     string name = "AdvanceFire" + Utilities.MapItemNum;
+                     ++Utilities.MapItemNum;
+                     IMapItem advanceFire = new MapItem(name, 1.0, "c44AdvanceFire", gi.AdvanceFire);
+                     IMapPoint mp = Territory.GetRandomPoint(gi.AdvanceFire);
+                     advanceFire.SetLocation(mp);
+                     IStack? stack = gi.BattleStacks.Find(gi.AdvanceFire);
+                     if (null == stack)
+                     {
+                        stack = new Stack(gi.AdvanceFire);
+                        gi.BattleStacks.Add(stack);
+                     }
+                     stack.MapItems.Add(advanceFire);
+                     //----------------------------------
+                     --gi.AdvancingFireMarkerCount;
+                     if (0 < gi.AdvancingFireMarkerCount)
+                     {
+                        action = GameAction.BattleStart;
+                     }
+                     else
+                     {
+                        gi.IsAdvancingFireChosen = false;
+                        gi.EventDisplayed = gi.EventActive = "e034";
+                        action = GameAction.BattleActivation;
+                     }
+                     //----------------------------------
+                     gi.AdvanceFire = null;
                   }
-                  //----------------------------------
-                  gi.AdvanceFire = null;
-               }
-               break;
-            case GameAction.EndGameClose:
-               gi.GamePhase = GamePhase.EndGame;
-               break;
-            default:
-               break;
+                  break;
+               case GameAction.BattleAmbushStart:
+                  gi.EventDisplayed = gi.EventActive = "e037";
+                  gi.DieRollAction = GameAction.BattleAmbushRoll;
+                  break;
+               case GameAction.BattleAmbushRoll:
+                  if ((true == lastReport.Weather.Contains("Rain")) || (true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
+                     dieRoll--;
+                  gi.DieResults[key][0] = dieRoll;
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  break;
+               case GameAction.BattleBoardEmpty:
+                  gi.GamePhase = GamePhase.Preparations;
+                  gi.EventDisplayed = gi.EventActive = "e038";
+                  break;
+               case GameAction.EndGameClose:
+                  gi.GamePhase = GamePhase.EndGame;
+                  break;
+               default:
+                  break;
+            }
          }
          StringBuilder sb12 = new StringBuilder();
          if ("OK" != returnStatus)

@@ -17,7 +17,7 @@ using WpfAnimatedGif;
 
 namespace Pattons_Best
 {
-   public partial class EventViewerR162AmmoMgr : UserControl
+   public partial class EventViewerAmmoSetup : UserControl
    {
       public delegate bool EndAmmoLoadCallback();
       private const int STARTING_ASSIGNED_ROW = 6;
@@ -81,13 +81,13 @@ namespace Pattons_Best
       private readonly FontFamily myFontFam = new FontFamily("Tahoma");
       private readonly FontFamily myFontFam1 = new FontFamily("Courier New");
       //-------------------------------------------------------------------------------------
-      public EventViewerR162AmmoMgr(IGameEngine? ge, IGameInstance? gi, Canvas? c, ScrollViewer? sv, RuleDialogViewer? rdv, IDieRoller dr)
+      public EventViewerAmmoSetup(IGameEngine? ge, IGameInstance? gi, Canvas? c, ScrollViewer? sv, RuleDialogViewer? rdv, IDieRoller dr)
       {
          InitializeComponent();
          //--------------------------------------------------
          if (null == ge) // check parameter inputs
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerR162AmmoMgr(): ge=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerAmmoSetup(): ge=null");
             CtorError = true;
             return;
          }
@@ -95,7 +95,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == gi) // check parameter inputs
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerR162AmmoMgr(): gi=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerAmmoSetup(): gi=null");
             CtorError = true;
             return;
          }
@@ -103,7 +103,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == c) // check parameter inputs
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerR162AmmoMgr(): c=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerAmmoSetup(): c=null");
             CtorError = true;
             return;
          }
@@ -111,7 +111,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == sv)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerR162AmmoMgr(): sv=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerAmmoSetup(): sv=null");
             CtorError = true;
             return;
          }
@@ -119,7 +119,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == rdv)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerR162AmmoMgr(): rdv=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerAmmoSetup(): rdv=null");
             CtorError = true;
             return;
          }
@@ -127,7 +127,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == dr)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerR162AmmoMgr(): dr=true");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerAmmoSetup(): dr=true");
             CtorError = true;
             return;
          }

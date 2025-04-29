@@ -16,7 +16,7 @@ using WpfAnimatedGif;
 
 namespace Pattons_Best
 {
-   public partial class EventViewerR491RatingImprove : UserControl
+   public partial class EventViewerRatingImprove : UserControl
    {
       public delegate bool EndRatingImproveCallback();
       private const int MAX_GRID_LEN = 5;
@@ -54,13 +54,13 @@ namespace Pattons_Best
       private IDieRoller? myDieRoller;
       private readonly FontFamily myFontFam = new FontFamily("Tahoma");
       //-------------------------------------------------------------------------------------
-      public EventViewerR491RatingImprove(IGameInstance? gi, Canvas? c, ScrollViewer? sv, RuleDialogViewer? rdv, IDieRoller dr)
+      public EventViewerRatingImprove(IGameInstance? gi, Canvas? c, ScrollViewer? sv, RuleDialogViewer? rdv, IDieRoller dr)
       {
          InitializeComponent();
          //--------------------------------------------------
          if (null == gi) // check parameter inputs
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerR491RatingImprove(): gi=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerRatingImprove(): gi=null");
             CtorError = true;
             return;
          }
@@ -68,7 +68,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == c) // check parameter inputs
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerR491RatingImprove(): c=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerRatingImprove(): c=null");
             CtorError = true;
             return;
          }
@@ -76,7 +76,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == sv)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerR491RatingImprove(): sv=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerRatingImprove(): sv=null");
             CtorError = true;
             return;
          }
@@ -84,7 +84,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == rdv)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerR491RatingImprove(): rdv=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerRatingImprove(): rdv=null");
             CtorError = true;
             return;
          }
@@ -92,7 +92,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == dr)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerR491RatingImprove(): dr=true");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerRatingImprove(): dr=true");
             CtorError = true;
             return;
          }

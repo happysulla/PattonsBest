@@ -313,10 +313,11 @@ If die roll is less than 7, ambush occurs. consult appropriate table for each en
 <InlineUIContainer><Button Content='Enemy Counterattack' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
 See 
-<InlineUIContainer><Button Content='r13.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for enemy actions and 
-<InlineUIContainer><Button Content='r20.43' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for ambushes in Counterattack scenario. 
-Additionally, roll for random events on the 
+<InlineUIContainer><Button Content='r13.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for enemy actions. Additionally,  roll for random events on the 
 <InlineUIContainer><Button Content='Random Events' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. 
+<LineBreak/><LineBreak/>
+If this is a Counterattack scenario, skip the enemy actions and follow B242
+<InlineUIContainer><Button Content='r20.43' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for how ambushes are affected.
 <LineBreak/><LineBreak/>
 Regardless of ambush status, continue with 
 <InlineUIContainer><Button Content='r4.7' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> to start the fight."
@@ -1836,10 +1837,10 @@ r20.0	"<Bold>r20.0 Campaign</Bold>
 <LineBreak/><LineBreak/>The campaign recreates actions of the 4th Armored Division from late July, 1944 through April, 1945. Each day the 4th Armored saw action,
 there is a chance your tank will fight; when the Division is refitting, you will be resting. Each day begins with a check of the Combat <InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
-<InlineUIContainer><Button Content='r20.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>Combat Calendar<LineBreak/>
+<InlineUIContainer><Button Content='r20.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Combat Calendar<LineBreak/>
 <InlineUIContainer><Button Content='r20.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Advance Scenario<LineBreak/>
 <InlineUIContainer><Button Content='r20.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Battle Scenario<LineBreak/>
-<InlineUIContainer><Button Content='r20.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> CounterAttack Scenario<LineBreak/>"
+<InlineUIContainer><Button Content='r20.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Counterattack Scenario<LineBreak/>"
 r20.1	"<Bold>r20.1 Combat Calendar</Bold>
 <LineBreak/><LineBreak/>
 For each day of the campaign, the Combat <InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
@@ -1915,12 +1916,14 @@ When daylight runs out, the day is over. Go to the Evening DeBriefing. If a batt
 <InlineUIContainer><Button Content='r4.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r20.43	"<Bold>r20.43 CounterAttack - Battle</Bold>
 <LineBreak/><LineBreak/>
-Delete steps <InlineUIContainer><Button Content='r4.61' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> and 
+When performing the Battle portion of a Counterattack sceanrio, delete steps <InlineUIContainer><Button Content='r4.61' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> and 
 <InlineUIContainer><Button Content='r4.64' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
-If no Ambush occurs, go to the Battle Round Sequence 
+<LineBreak/><LineBreak/>When rolling for Ambush per 
+<InlineUIContainer><Button Content='r4.65' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, 
+if no Ambush occurs, go to the Battle Round Sequence 
 <InlineUIContainer><Button Content='r4.7' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. If an Ambush does occur, do not conduct Enemy Actions, but instead perform the following steps:
 <LineBreak/><LineBreak/>
-For your tank, go to Battle Sequence <InlineUIContainer><Button Content='r4.72' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> -> 
+For your tank, perform Battle Sequence <InlineUIContainer><Button Content='r4.72' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> -> 
 <InlineUIContainer><Button Content='r4.74' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
 Perform step <InlineUIContainer><Button Content='r4.76' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>: Friendly Action Phase <LineBreak/>
 Perform step <InlineUIContainer><Button Content='r4.77' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>: Random Events Phase<LineBreak/>
@@ -1930,7 +1933,8 @@ If you clear the Battle Board, go to <InlineUIContainer><Button Content='r20.44'
 If you retreat from the Battle Board, go to <InlineUIContainer><Button Content='r20.45' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>"
 r20.44	"<Bold>r20.44 Counterattack - Clear Battle Board</Bold>
 <LineBreak/><LineBreak/>
-If battle (or even your Ambush) clears the board of enemy units, return to Time Check to determine how many hours pass before a battle becomes possible again. 
+If battle (or even your Ambush) clears the board of enemy units, return to Time Check <InlineUIContainer><Button Content='r4.32' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+to determine how many hours pass before a battle becomes possible again. 
 <LineBreak/><LineBreak/>
 Mark off the hours that pass, and go to Prepare for Battle <InlineUIContainer><Button Content='r20.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r20.45	"<Bold>r20.45 Counterattack - Retreat from Battle Board</Bold>

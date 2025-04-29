@@ -811,7 +811,8 @@ namespace Pattons_Best
                if (dieRoll < 61)
                   mi.IsKilled = true;
                break;
-            case "CAR":
+            case "PSW":
+            case "SPW":
                if (dieRoll < 41)
                   mi.IsKilled = true;
                break;

@@ -13,11 +13,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfAnimatedGif;
-using static Pattons_Best.EventViewerR046BattleSetupMgr;
+using static Pattons_Best.EventViewerBattleSetup;
 
 namespace Pattons_Best
 {
-   public partial class EventVieweR046ResolveAdvance : UserControl
+   public partial class EventViewerResolveAdvance : UserControl
    {
       public delegate bool EndResolveAdvanceFireCallback();
       private const int STARTING_ASSIGNED_ROW = 6;
@@ -63,7 +63,7 @@ namespace Pattons_Best
       private readonly FontFamily myFontFam = new FontFamily("Tahoma");
       private readonly FontFamily myFontFam1 = new FontFamily("Courier New");
       //-------------------------------------------------------------------------------------
-      public EventVieweR046ResolveAdvance(IGameEngine? ge, IGameInstance? gi, Canvas? c, ScrollViewer? sv, RuleDialogViewer? rdv, IDieRoller dr)
+      public EventViewerResolveAdvance(IGameEngine? ge, IGameInstance? gi, Canvas? c, ScrollViewer? sv, RuleDialogViewer? rdv, IDieRoller dr)
       {
          InitializeComponent();
          //--------------------------------------------------
@@ -77,7 +77,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == gi) // check parameter inputs
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventVieweR046ResolveAdvance(): gi=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventVieweResolveAdvance(): gi=null");
             CtorError = true;
             return;
          }
@@ -85,7 +85,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == c) // check parameter inputs
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventVieweR046ResolveAdvance(): c=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventVieweResolveAdvance(): c=null");
             CtorError = true;
             return;
          }
@@ -93,7 +93,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == sv)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventVieweR046ResolveAdvance(): sv=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventVieweResolveAdvance(): sv=null");
             CtorError = true;
             return;
          }
@@ -101,7 +101,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == rdv)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventVieweR046ResolveAdvance(): rdv=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventVieweResolveAdvance(): rdv=null");
             CtorError = true;
             return;
          }
@@ -109,7 +109,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == dr)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventVieweR046ResolveAdvance(): dr=true");
+            Logger.Log(LogEnum.LE_ERROR, "EventVieweResolveAdvance(): dr=true");
             CtorError = true;
             return;
          }
@@ -190,7 +190,7 @@ namespace Pattons_Best
             {
                if (true == mi.Name.Contains("AdvanceFire"))
                   advanceFires.Add(mi);
-               if (true == IsEnemyUnit(mi))
+               if (true == Utilities.IsEnemyUnit(mi))
                   enemyUnits.Add(mi);
             }
             if (0 == enemyUnits.Count)
@@ -423,32 +423,6 @@ namespace Pattons_Best
          b.Foreground = new SolidColorBrush(Colors.Transparent);
          MapItem.SetButtonContent(b, mi, true, false); // This sets the image as the button's content
          return b;
-      }
-      private bool IsEnemyUnit(IMapItem mi)
-      {
-         if (true == mi.Name.Contains("LW"))
-            return true;
-         else if (true == mi.Name.Contains("MG"))
-            return true;
-         else if (true == mi.Name.Contains("TRUCK"))
-            return true;
-         else if ((true == mi.Name.Contains("PSW")) || (true == mi.Name.Contains("SPW")))
-            return true;
-         else if (true == mi.Name.Contains("MARDER"))
-            return true;
-         else if ((true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("Pak")))
-            return true;
-         else if (true == mi.Name.Contains("PzIV"))
-            return true;
-         else if (true == mi.Name.Contains("PzV"))
-            return true;
-         else if ((true == mi.Name.Contains("SPG")) || (true == mi.Name.Contains("STuGIIIg")))
-            return true;
-         else if ((true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("PzVI")))
-            return true;
-         else if ((true == mi.Name.Contains("JdgPzIV")) || (true == mi.Name.Contains("JdgPz38t")))
-            return true;
-         return false;
       }
       public void ShowDieResults(int dieRoll)
       {

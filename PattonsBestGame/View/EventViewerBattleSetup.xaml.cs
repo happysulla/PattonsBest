@@ -13,7 +13,7 @@ using WpfAnimatedGif;
 
 namespace Pattons_Best
 {
-   public partial class EventViewerR046BattleSetupMgr : UserControl
+   public partial class EventViewerBattleSetup : UserControl
    {
       public delegate bool EndBattleSetupCallback();
       private const int STARTING_ASSIGNED_ROW = 6;
@@ -84,7 +84,7 @@ namespace Pattons_Best
       private readonly FontFamily myFontFam1 = new FontFamily("Courier New");
       private readonly DoubleCollection myDashArray = new DoubleCollection();
       //-------------------------------------------------------------------------------------
-      public EventViewerR046BattleSetupMgr(IGameEngine? ge, IGameInstance? gi, Canvas? c, ScrollViewer? sv, RuleDialogViewer? rdv, IDieRoller dr)
+      public EventViewerBattleSetup(IGameEngine? ge, IGameInstance? gi, Canvas? c, ScrollViewer? sv, RuleDialogViewer? rdv, IDieRoller dr)
       {
          InitializeComponent();
          //--------------------------------------------------
@@ -774,7 +774,7 @@ namespace Pattons_Best
          myGridRows[i].myMapItem = mi;
          return true;
       }
-      private bool CreateMapItemRotation(Index i)
+      private bool CreateMapItemRotation(Index i, string caller)
       {
          if (null == myGameInstance)
          {
@@ -807,7 +807,7 @@ namespace Pattons_Best
          double xDiff = (mi.Location.X + mi.Zoom*Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.X;
          double yDiff = (mi.Location.Y + mi.Zoom * Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.Y;
          mi.RotationBase = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;
-         Logger.Log(LogEnum.LE_SHOW_ROTATION, "CreateMapItemRotation(): xDiff=" + xDiff.ToString("F2") + " yDiff=" + yDiff.ToString("F2") + " r=" + mi.RotationBase.ToString("F2") + " t=" + mi.TerritoryCurrent.Name + " X=" + mi.Location.X + " Y=" + mi.Location.Y);
+         Logger.Log(LogEnum.LE_SHOW_ROTATION, "CreateMapItemRotation(): " + caller + "(): xDiff=" + xDiff.ToString("F2") + " yDiff=" + yDiff.ToString("F2") + " r=" + mi.RotationBase.ToString("F2") + " t=" + mi.TerritoryCurrent.Name + " X=" + mi.Location.X + " Y=" + mi.Location.Y);
          return true;
       }
       private bool UpdateGridRowSector(Index i)
@@ -942,7 +942,7 @@ namespace Pattons_Best
             mi.TerritoryCurrent = mi.TerritoryStarting = t;
             myGameInstance.BattleStacks.Remove(mi.Name);
             myGameInstance.BattleStacks.Add(mi);
-            if (false == CreateMapItemRotation(i))
+            if (false == CreateMapItemRotation(i, "UpdateGridRowSector"))
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): CreateMapItemRotation() returned false");
                return false;
@@ -963,7 +963,7 @@ namespace Pattons_Best
          IMapItem? mi = myGridRows[i].myMapItem;
          if (null == mi)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowSector(): mi=null for i=" + i.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowRange(): mi=null for i=" + i.ToString());
             return false;
          }
          string tName = mi.TerritoryCurrent.Name;
@@ -974,19 +974,19 @@ namespace Pattons_Best
          ITerritory? t = Territories.theTerritories.Find(modified);
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowSector(): t=null for i=" + i.ToString());
-            return false;
-         }
-         IMapPoint mp = Territory.GetRandomPoint(t);
-         mi.SetLocation(mp);
-         if (false == CreateMapItemRotation(i))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): CreateMapItemRotation() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowRange(): t=null for i=" + i.ToString());
             return false;
          }
          mi.TerritoryCurrent = mi.TerritoryStarting = t;
          myGameInstance.BattleStacks.Remove(mi.Name);
          myGameInstance.BattleStacks.Add(mi);
+         IMapPoint mp = Territory.GetRandomPoint(t);
+         mi.SetLocation(mp);
+         if (false == CreateMapItemRotation(i, "UpdateGridRowRange"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowRange(): CreateMapItemRotation() returned false");
+            return false;
+         }
          return true;
       }
       private bool UpdateGridRowFacing(Index i)

@@ -16,7 +16,7 @@ using WpfAnimatedGif;
 
 namespace Pattons_Best
 {
-   public partial class EventViewerR071CrewMgr : UserControl
+   public partial class EventViewerCrewSetup : UserControl
    {
       public delegate bool EndCrewMgrCallback();
       private const int MAX_GRID_LEN = 5;
@@ -68,13 +68,13 @@ namespace Pattons_Best
       private readonly SolidColorBrush mySolidColorBrushBlack = new SolidColorBrush() { Color = Colors.Black };
       private readonly FontFamily myFontFam = new FontFamily("Tahoma");
       //-------------------------------------------------------------------------------------
-      public EventViewerR071CrewMgr(IGameInstance? gi, Canvas? c, ScrollViewer? sv, RuleDialogViewer? rdv, IDieRoller dr)
+      public EventViewerCrewSetup(IGameInstance? gi, Canvas? c, ScrollViewer? sv, RuleDialogViewer? rdv, IDieRoller dr)
       {
          InitializeComponent();
          //--------------------------------------------------
          if (null == gi) // check parameter inputs
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerR071CrewMgr(): gi=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerCrewSetup(): gi=null");
             CtorError = true;
             return;
          }
@@ -82,7 +82,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == c) // check parameter inputs
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerR071CrewMgr(): c=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerCrewSetup(): c=null");
             CtorError = true;
             return;
          }
@@ -90,7 +90,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == sv)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerR071CrewMgr(): sv=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerCrewSetup(): sv=null");
             CtorError = true;
             return;
          }
@@ -98,7 +98,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == rdv)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerR071CrewMgr(): rdv=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerCrewSetup(): rdv=null");
             CtorError = true;
             return;
          }
@@ -106,7 +106,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == dr)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerR071CrewMgr(): dr=true");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerCrewSetup(): dr=true");
             CtorError = true;
             return;
          }

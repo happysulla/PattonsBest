@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Pattons_Best.EventViewerR491RatingImprove"
+﻿<UserControl x:Class="Pattons_Best.EventViewerAmmoSetup"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,7 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
    <Grid Name="myGrid" MinWidth="600" MaxWidth="600" Background="#FFB9EA9E" >
       <Grid.ColumnDefinitions>
-         <ColumnDefinition Width="1*"/>
+         <ColumnDefinition Name="myColDef1" Width="1*"/>
          <ColumnDefinition Width="2*"/>
          <ColumnDefinition Width="1*"/>
       </Grid.ColumnDefinitions>
@@ -23,25 +23,26 @@
          <RowDefinition Height="Auto"></RowDefinition>
          <RowDefinition Height="Auto"></RowDefinition>
          <RowDefinition Height="Auto"></RowDefinition>
-         <RowDefinition Height="Auto"></RowDefinition>
       </Grid.RowDefinitions>
       <StackPanel Grid.Row="0" Grid.ColumnSpan="3" Orientation="Horizontal">
-         <TextBlock Name="myTextBlockHeader" Text=" Improvements for Crew Rating" FontWeight="Bold" FontFamily='Georgia' FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>
-         <Button Content='r4.91' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" />
-         <Button Content='r7.2' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" />
+         <TextBlock Name="myTextBlockHeader" Text=" Ammunition (Ammo)" FontWeight="Bold" FontFamily='Georgia' FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+         <Button Name="myAmmoTable" Content='Ammo' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Visible"/>
+         <Button Name="myR16" Content='r16.0' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Visible"/>
+         <Button Name="myR1621" Content='r16.21' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Visible"/>
+         <Button Name="myR1622" Content='r16.22' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Hidden"/>
+         <Button Name="myR1623" Content='r16.23' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Hidden"/>
       </StackPanel>
       <Rectangle Grid.Row="1" Grid.ColumnSpan="3" Margin="5" Height="1" Fill="Black"/>
       <TextBlock Grid.Row="2" Grid.ColumnSpan="3" Name="myTextBlockInstructions" FontFamily='Georgia' FontSize="16" VerticalAlignment="Bottom"  HorizontalAlignment="Left" Margin="2,0,0,5">
-        Roll for rating improvements for each surviving crew member.
-        <LineBreak/>If number higher, improve by one.
+        Determine rating for crew by rolling 1D/2 rounded up. When assigning multiple,
       </TextBlock>
       <StackPanel Grid.Row="3" Grid.ColumnSpan="3" Name="myStackPanelAssignable" DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5,0,0,0">
          <Rectangle  Height="42" Width="42" Stroke="Black" />
       </StackPanel>
       <Rectangle Grid.Row="4" Grid.ColumnSpan="3" Margin="5" Height="1" Fill="Black"/>
       <!--Table Header Row-->
-      <TextBlock Grid.Row="5" Grid.Column="0" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock1">Crew Member</TextBlock>
-      <TextBlock Grid.Row="5" Grid.Column="1" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock2">Current Rating</TextBlock>
-      <TextBlock Grid.Row="5" Grid.Column="2" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock3">Die Roll</TextBlock>
+      <TextBlock Grid.Row="5" Grid.Column="0" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock1">Ammo Type</TextBlock>
+      <TextBlock Grid.Row="5" Grid.Column="1" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock2">Normal</TextBlock>
+      <TextBlock Grid.Row="5" Grid.Column="2" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock3">Extra</TextBlock>
    </Grid>
 </UserControl>
