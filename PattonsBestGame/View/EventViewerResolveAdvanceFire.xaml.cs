@@ -428,8 +428,8 @@ namespace Pattons_Best
       {
          System.Windows.Controls.Button b = new Button { };
          b.Name = mi.Name;
-         b.Width = mi.Zoom * Utilities.theMapItemSize;
-         b.Height = mi.Zoom * Utilities.theMapItemSize;
+         b.Width = Utilities.ZOOM * Utilities.theMapItemSize;
+         b.Height = Utilities.ZOOM * Utilities.theMapItemSize;
          b.BorderThickness = new Thickness(0);
          b.Background = new SolidColorBrush(Colors.Transparent);
          b.Foreground = new SolidColorBrush(Colors.Transparent);

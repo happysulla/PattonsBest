@@ -746,12 +746,12 @@ namespace Pattons_Best
                break;
             case "SPG":
                t = tLeft;
-               mi = new MapItem(name, Utilities.ZOOM + 0.65, "c77UnidentifiedSpg", t);
+               mi = new MapItem(name, Utilities.ZOOM + 0.5, "c77UnidentifiedSpg", t);
                myIsVehicleActivated = true;
                break;
             case "TANK":
                t = tLeft;
-               mi = new MapItem(name, Utilities.ZOOM + 0.65, "c78UnidentifiedTank", t);
+               mi = new MapItem(name, Utilities.ZOOM + 0.5, "c78UnidentifiedTank", t);
                myIsVehicleActivated = true;
                break;
             case "TRUCK":

@@ -306,20 +306,20 @@ e038	"<Bold>e038 Battle Board Empty</Bold>
 <LineBreak/><LineBreak/>
 Since the Battle Board is now empty of enemy units, the battle for this area is over. 
 <LineBreak/><LineBreak/>
-1.) Flip the area Resistance marker over on the Movement Board to US Controlled.
+1.) Flip Resistance marker to US Controlled on Movement Board.
 <LineBreak/>
-2.) Record the victory points for control of the area on the After Action Report 
+2.) Victory points for control of the area added to the 
 <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/>
 3.) If daylight remains, return to Prepare for Battle per 
 <InlineUIContainer><Button Content='r4.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/>
-4.) If daylight does not remain, perform the Evening Debriefing per 
+4.) No daylight, perform the Evening Debriefing per 
 <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
-<LineBreak/><LineBreak/>
-                               <InlineUIContainer><Image Name='Sherman4' Height='168' Width='275'></Image></InlineUIContainer><LineBreak/><LineBreak/>
 <LineBreak/>
-Click image to continue."
+5.) Click image to continue.
+<LineBreak/><LineBreak/>
+                               <InlineUIContainer><Image Name='Sherman4' Height='168' Width='275'></Image></InlineUIContainer>"
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"
 e502	"<Bold>e502 Game Lost</Bold>

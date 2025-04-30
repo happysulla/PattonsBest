@@ -701,7 +701,7 @@ namespace Pattons_Best
          {
             mi.IsKilled = true;
             mi.SetBloodSpots();
-            return "KIA";
+            return "KO";
          }
          //----------------------------------------------------
          string enemyUnit = "ERROR";
@@ -776,7 +776,7 @@ namespace Pattons_Best
          {
             string miName = "SmokeOne" + Utilities.MapItemNum;
             Utilities.MapItemNum++;
-            IMapItem smoke = new MapItem(miName, Utilities.ZOOM, "c108Smoke1", mi.TerritoryCurrent);
+            IMapItem smoke = new MapItem(miName, Utilities.ZOOM + 0.75, "c108Smoke1", mi.TerritoryCurrent);
             IMapPoint mp = Territory.GetRandomPoint(mi.TerritoryCurrent);
             smoke.SetLocation(mp);
             stack.MapItems.Add(smoke);
