@@ -13,39 +13,37 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfAnimatedGif;
-using static Pattons_Best.EventViewerBattleSetup;
 
 namespace Pattons_Best
 {
-   public partial class EventViewerResolveAdvance : UserControl
+   public partial class EventViewerResolveAirStrike : UserControl
    {
-      public delegate bool EndResolveAdvanceFireCallback();
+      public delegate bool EndResolveAirStrikeCallback();
       private const int STARTING_ASSIGNED_ROW = 6;
+      private const int PREVIOUSLY_KIA = 100;
       public enum E0464Enum
       {
-         ROLL_ADVANCE_FIRE,
+         ROLL_ARTILLERY_FIRE,
          SHOW_RESULTS,
          END
       };
       public bool CtorError { get; } = false;
-      private EndResolveAdvanceFireCallback? myCallback = null;
-      private E0464Enum myState = E0464Enum.ROLL_ADVANCE_FIRE;
+      private EndResolveAirStrikeCallback? myCallback = null;
+      private E0464Enum myState = E0464Enum.ROLL_ARTILLERY_FIRE;
       private int myMaxRowCount = 0;
       private int myRollResultRowNum = 0;
       private bool myIsRollInProgress = false;
       //---------------------------------------------------
       public struct GridRow
       {
-         public IMapItem myMapItemAdvance;
          public IMapItem myMapItemEnemy;
          public int myDieRoll = Utilities.NO_RESULT;
          public char mySector = '0';
          public char myRange = 'E';
          public int myModifier = 0;
          public string myResult = "";
-         public GridRow(IMapItem enemyUnit, IMapItem advanceFire)
+         public GridRow(IMapItem enemyUnit)
          {
-            myMapItemAdvance = advanceFire;
             myMapItemEnemy = enemyUnit;
          }
       };
@@ -59,17 +57,19 @@ namespace Pattons_Best
       private IDieRoller? myDieRoller;
       //---------------------------------------------------
       private int myNumUseControlled = 0;
+      private IMapItem? myMapItemAirStrike = null;
+      private int myAirStrikeCount = 0;
       //---------------------------------------------------
       private readonly FontFamily myFontFam = new FontFamily("Tahoma");
       private readonly FontFamily myFontFam1 = new FontFamily("Courier New");
       //-------------------------------------------------------------------------------------
-      public EventViewerResolveAdvance(IGameEngine? ge, IGameInstance? gi, Canvas? c, ScrollViewer? sv, RuleDialogViewer? rdv, IDieRoller dr)
+      public EventViewerResolveAirStrike(IGameEngine? ge, IGameInstance? gi, Canvas? c, ScrollViewer? sv, RuleDialogViewer? rdv, IDieRoller dr)
       {
          InitializeComponent();
          //--------------------------------------------------
          if (null == ge) // check parameter inputs
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewerCrewMgr(): ge=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerResolveAirStrike(): ge=null");
             CtorError = true;
             return;
          }
@@ -77,7 +77,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == gi) // check parameter inputs
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventVieweResolveAdvance(): gi=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerResolveAirStrike(): gi=null");
             CtorError = true;
             return;
          }
@@ -85,7 +85,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == c) // check parameter inputs
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventVieweResolveAdvance(): c=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerResolveAirStrike(): c=null");
             CtorError = true;
             return;
          }
@@ -93,7 +93,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == sv)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventVieweResolveAdvance(): sv=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerResolveAirStrike(): sv=null");
             CtorError = true;
             return;
          }
@@ -101,7 +101,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == rdv)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventVieweResolveAdvance(): rdv=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerResolveAirStrike(): rdv=null");
             CtorError = true;
             return;
          }
@@ -109,44 +109,78 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == dr)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventVieweResolveAdvance(): dr=true");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerResolveAirStrike(): dr=true");
             CtorError = true;
             return;
          }
          myDieRoller = dr;
          //--------------------------------------------------
+         ITerritory? t = Territories.theTerritories.Find("OffLeft");
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerResolveAirStrike(): t=null");
+            CtorError = true;
+            return;
+         }
+         myMapItemAirStrike = new MapItem("dummyArt", Utilities.ZOOM, "c40AirStrike", t);
+         //--------------------------------------------------
          myGrid.MouseDown += Grid_MouseDown;
       }
-      public bool ResolveAdvanceFire(EndResolveAdvanceFireCallback callback)
+      public bool ResolveAirStrike(EndResolveAirStrikeCallback callback)
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveAdvanceFire(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "ResolveAirStrike(): myGameInstance=null");
             return false;
          }
          if (null == myCanvas)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveAdvanceFire(): myCanvas=null");
+            Logger.Log(LogEnum.LE_ERROR, "ResolveAirStrike(): myCanvas=null");
             return false;
          }
          if (null == myScrollViewer)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveAdvanceFire(): myScrollViewer=null");
+            Logger.Log(LogEnum.LE_ERROR, "ResolveAirStrike(): myScrollViewer=null");
             return false;
          }
          if (null == myRulesMgr)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveAdvanceFire(): myRulesMgr=null");
+            Logger.Log(LogEnum.LE_ERROR, "ResolveAirStrike(): myRulesMgr=null");
             return false;
          }
          if (null == myDieRoller)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveAdvanceFire(): myDieRoller=null");
+            Logger.Log(LogEnum.LE_ERROR, "ResolveAirStrike(): myDieRoller=null");
             return false;
          }
          //--------------------------------------------------
          myCallback = callback;
          myNumUseControlled = 0;
+         //--------------------------------------------------
+         if (null == myGameInstance.EnteredArea)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResolveAirStrike(): myGameInstance.EnteredArea=null");
+            return false;
+         }
+         IStack? stack1 = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
+         if (null == stack1)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResolveAirStrike(): stack=null");
+            return false;
+         }
+         myAirStrikeCount = 0;
+         IMapItems removals = new MapItems();
+         foreach (IMapItem mi in stack1.MapItems)
+         {
+            if (true == mi.Name.Contains("Air"))
+            {
+               myAirStrikeCount++;
+               removals.Add(mi);
+            }
+         }
+         foreach (IMapItem mi in removals)
+            myGameInstance.MoveStacks.Remove(mi);
+         Logger.Log(LogEnum.LE_VIEW_AIR_FIRE_RESOLVE, "ResolveAirStrike(): myNumUseControlled=" + myNumUseControlled.ToString());
          //--------------------------------------------------
          string[] sectors = new string[6] { "B1M", "B2M", "B3M", "B4M", "B6M", "B9M" };
          foreach (string sector in sectors)
@@ -154,13 +188,13 @@ namespace Pattons_Best
             ITerritory? t = Territories.theTerritories.Find(sector);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ResolveAdvanceFire(): t=null for s=" + sector);
+               Logger.Log(LogEnum.LE_ERROR, "ResolveAirStrike(): t=null for s=" + sector);
                return false;
             }
-            IStack? stack1 = myGameInstance.BattleStacks.Find(t);
-            if (null == stack1)
+            IStack? stack2 = myGameInstance.BattleStacks.Find(t);
+            if (null == stack2)
                continue;
-            foreach (IMapItem mi in stack1.MapItems)
+            foreach (IMapItem mi in stack2.MapItems)
             {
                if (true == mi.Name.Contains("UsControl"))
                {
@@ -169,63 +203,42 @@ namespace Pattons_Best
                }
             }
          }
-         Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ResolveAdvanceFire(): myNumUseControlled=" + myNumUseControlled.ToString());
+         Logger.Log(LogEnum.LE_VIEW_AIR_FIRE_RESOLVE, "ResolveAirStrike(): myNumUseControlled=" + myNumUseControlled.ToString());
          //--------------------------------------------------
          int i = 0;
-         string[] advanceFireTerritories = new string[8] { "B4L", "B4M", "B4C", "B6M", "B6C", "B9L", "B9M", "B9C" };
-         foreach (string s in advanceFireTerritories)
+         foreach(IStack stack3 in myGameInstance.BattleStacks)
          {
-            ITerritory? t = Territories.theTerritories.Find(s);
-            if (null == t)
+            foreach (IMapItem mi in stack3.MapItems)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ResolveAdvanceFire(): t=null for s=" + s);
-               return false;
-            }
-            IStack? stack = myGameInstance.BattleStacks.Find(t);
-            if (null == stack)
-               continue;
-            IMapItems advanceFires = new MapItems();
-            IMapItems enemyUnits = new MapItems();
-            foreach ( IMapItem mi in stack.MapItems)
-            {
-               if (true == mi.Name.Contains("AdvanceFire"))
-                  advanceFires.Add(mi);
                if (true == Utilities.IsEnemyUnit(mi))
-                  enemyUnits.Add(mi);
-            }
-            if (0 == enemyUnits.Count)
-            {
-               foreach (IMapItem advanceFire in advanceFires)
-                  myGameInstance.BattleStacks.Remove(advanceFire);
-               continue;
-            }
-            Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ResolveAdvanceFire(): AdvFire=true for s=" + stack.ToString());
-            foreach(IMapItem enemyUnit in enemyUnits )
-            {
-               foreach (IMapItem advanceFire in advanceFires)
                {
-                  Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ResolveAdvanceFire(): IsEnemyUnit()=true for mi.Name=" + enemyUnit.Name);
-                  myGridRows[i] = new GridRow(enemyUnit, advanceFire);
-                  int count = enemyUnit.TerritoryCurrent.Name.Length;
+                  int count = mi.TerritoryCurrent.Name.Length;
                   if (count < 3)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "GridRow(): count<3 for mi.TerritoryCurrent.Name=" + enemyUnit.TerritoryCurrent.Name);
+                     Logger.Log(LogEnum.LE_ERROR, "ResolveAirStrike(): count<3 for mi.TerritoryCurrent.Name=" + mi.TerritoryCurrent.Name);
                      return false;
                   }
-                  myGridRows[i].myRange = enemyUnit.TerritoryCurrent.Name[--count];
-                  myGridRows[i].mySector = enemyUnit.TerritoryCurrent.Name[--count];
-                  ++i;
+                  char range = mi.TerritoryCurrent.Name[--count];
+                  char sector = mi.TerritoryCurrent.Name[--count];
+                  for ( int k1 = 0; k1 < myAirStrikeCount; ++k1)
+                  {
+                     Logger.Log(LogEnum.LE_VIEW_AIR_FIRE_RESOLVE, "ResolveAirStrike(): IsEnemyUnit()=true for mi.Name=" + mi.Name);
+                     myGridRows[i] = new GridRow(mi);
+                     myGridRows[i].myRange = range;
+                     myGridRows[i].mySector = sector;
+                     ++i;
+                  }
                }
             }
          }
          myMaxRowCount = i;
          //--------------------------------------------------
          for(int k=0; k<myMaxRowCount; ++k )
-            myGridRows[k].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[k].myMapItemEnemy, myNumUseControlled, true, false, false, false);
+            myGridRows[k].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[k].myMapItemEnemy, myNumUseControlled, false, false, true, false);
          //--------------------------------------------------
          if (false == UpdateGrid())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveAdvanceFire(): UpdateGrid() return false");
+            Logger.Log(LogEnum.LE_ERROR, "ResolveAirStrike(): UpdateGrid() return false");
             return false;
          }
          myScrollViewer.Content = myGrid;
@@ -271,12 +284,13 @@ namespace Pattons_Best
             {
                foreach (IMapItem mapItem in stack.MapItems)
                {
-                  if( (true == mapItem.Name.Contains("AdvanceFire")) || (true == mapItem.IsKilled) )
+                  if (true == mapItem.IsKilled)
                      removals.Add(mapItem);
                }
             }
             foreach (IMapItem mi in removals)
                myGameInstance.BattleStacks.Remove(mi);
+            //----------------------------------------
             if (null == myCallback)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myCallback=null");
@@ -295,7 +309,7 @@ namespace Pattons_Best
          myTextBlockInstructions.Inlines.Clear();
          switch (myState)
          {
-            case E0464Enum.ROLL_ADVANCE_FIRE:
+            case E0464Enum.ROLL_ARTILLERY_FIRE:
                myTextBlockInstructions.Inlines.Add(new Run("Roll on "));
                Button b4 = new Button() { Content = "Friendly Action", FontFamily = myFontFam1, FontSize = 8 };
                b4.Click += ButtonRule_Click;
@@ -316,9 +330,19 @@ namespace Pattons_Best
          myStackPanelAssignable.Children.Clear(); // clear out assignable panel 
          switch (myState)
          {
-            case E0464Enum.ROLL_ADVANCE_FIRE:
+            case E0464Enum.ROLL_ARTILLERY_FIRE:
                Rectangle r1 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                myStackPanelAssignable.Children.Add(r1);
+               if (null == myMapItemAirStrike)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): myMapItemArtillery=null");
+                  return false;
+               }
+               Button b = CreateButton(myMapItemAirStrike);
+               myStackPanelAssignable.Children.Add(b);
+               string content = " = " + myAirStrikeCount.ToString();
+               Label label = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = content };
+               myStackPanelAssignable.Children.Add(label);
                break;
             case E0464Enum.SHOW_RESULTS:
                System.Windows.Controls.Image img2 = new System.Windows.Controls.Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
@@ -385,7 +409,18 @@ namespace Pattons_Best
             Grid.SetRow(label2, rowNum);
             Grid.SetColumn(label2, 2);
             //----------------------------------
-            if (Utilities.NO_RESULT < myGridRows[i].myDieRoll)
+            if (PREVIOUSLY_KIA == myGridRows[i].myDieRoll)
+            {
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
+               myGrid.Children.Add(label3);
+               Grid.SetRow(label3, rowNum);
+               Grid.SetColumn(label3, 3);
+               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myResult };
+               myGrid.Children.Add(label4);
+               Grid.SetRow(label4, rowNum);
+               Grid.SetColumn(label4, 4);
+            }
+            else if (Utilities.NO_RESULT < myGridRows[i].myDieRoll)
             {
                Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRoll.ToString() };
                myGrid.Children.Add(label3);
@@ -439,19 +474,39 @@ namespace Pattons_Best
          }
          IMapItem mi = myGridRows[i].myMapItemEnemy;
          myGridRows[i].myDieRoll = dieRoll;
-         myGridRows[i].myResult = TableMgr.SetFriendlyActionResult(myGameInstance, mi, dieRoll, myNumUseControlled, true, false, false, false);
+         myGridRows[i].myResult = TableMgr.SetFriendlyActionResult(myGameInstance, mi, dieRoll, myNumUseControlled, false, false, true, false);
          if ( "ERROR" == myGridRows[i].myResult )
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): SetFriendlyActionResult() returned ERROR");
             return;
          }
-         myGameInstance.BattleStacks.Remove(myGridRows[i].myMapItemAdvance);
+         //-------------------------------
+         if (true == mi.IsKilled)
+         {
+            for (int j = 0; j < myMaxRowCount; ++j)
+            {
+               if ((Utilities.NO_RESULT == myGridRows[j].myDieRoll) && (myGridRows[j].myMapItemEnemy.Name == mi.Name) )
+               {
+                  myGridRows[j].myDieRoll = PREVIOUSLY_KIA;
+                  myGridRows[j].myResult = myGridRows[i].myResult;
+               }
+            }
+         }
+         //-------------------------------
+         if ("Smoke" == myGridRows[i].myResult)
+         {
+            for (int j = 0; j < myMaxRowCount; ++j)
+            {
+               if (Utilities.NO_RESULT == myGridRows[j].myDieRoll)
+                  myGridRows[j].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[j].myMapItemEnemy, myNumUseControlled, false, false, true, false);
+            }
+         }
          //-------------------------------
          myState = E0464Enum.SHOW_RESULTS;
          for (int j = 0; j < myMaxRowCount; ++j)
          {
             if (Utilities.NO_RESULT == myGridRows[j].myDieRoll)
-               myState = E0464Enum.ROLL_ADVANCE_FIRE;
+               myState = E0464Enum.ROLL_ARTILLERY_FIRE;
          }
          if (false == UpdateGrid())
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateGrid() return false");

@@ -48,7 +48,7 @@ namespace Pattons_Best
       [NonSerialized] private static BitmapImage? theFort = theMapImages.GetBitmapImage("OFort");
       [NonSerialized] private static BitmapImage? theBuild = theMapImages.GetBitmapImage("OBuild");
       [NonSerialized] private static BitmapImage? theTurret = theMapImages.GetBitmapImage("c16Turret");
-      private const double PERCENT_MAPITEM_COVERED = 35.0;
+      private const double PERCENT_MAPITEM_COVERED = 30.0;
       //--------------------------------------------------
       public string Name { get; set; } = string.Empty;
       public string TopImageName { get; set; } = string.Empty;

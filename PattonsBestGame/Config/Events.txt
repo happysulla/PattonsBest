@@ -299,7 +299,7 @@ e037	"<Bold>e037 Ambush Check</Bold>
 <InlineUIContainer><Button Content='r4.65' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
 Roll 1D for possible Ambush: 
-<InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer> &lt; 8
+<InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>&lt; 8
 <LineBreak/><LineBreak/>"
 e038	"<Bold>e038 Battle Board Empty</Bold> 
 <InlineUIContainer><Button Content='r4.77' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
@@ -307,17 +307,18 @@ e038	"<Bold>e038 Battle Board Empty</Bold>
 Since the Battle Board is now empty of enemy units, the battle for this area is over. 
 <LineBreak/><LineBreak/>
 1.) Flip the area Resistance marker over on the Movement Board to US Controlled.
-<LineBreak/><LineBreak/>
+<LineBreak/>
 2.) Record the victory points for control of the area on the After Action Report 
 <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
-<LineBreak/><LineBreak/>
+<LineBreak/>
 3.) If daylight remains, return to Prepare for Battle per 
 <InlineUIContainer><Button Content='r4.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
-3.) If daylight does not remain, perform the Evening Debriefing per 
+<LineBreak/>
+4.) If daylight does not remain, perform the Evening Debriefing per 
 <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
-                        <InlineUIContainer><Image Name='Sherman4' Height='200' Width='325'></Image></InlineUIContainer><LineBreak/><LineBreak/>
-<LineBreak/><LineBreak/>
+                               <InlineUIContainer><Image Name='Sherman4' Height='168' Width='275'></Image></InlineUIContainer><LineBreak/><LineBreak/>
+<LineBreak/>
 Click image to continue."
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"

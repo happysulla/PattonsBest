@@ -489,6 +489,58 @@ namespace Pattons_Best
          }
          return true;
       }
+      protected bool SetArtillerySupportCounter(IGameInstance gi, int dieRoll)
+      {
+         if (null == gi.ArtillerySupportCheck)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetArtillerySupportCounter(): gi.ArtillerySupportCheck=null");
+            return false;
+         }
+         if (dieRoll < 8)
+         {
+            IMapItems artillerySupports = new MapItems();
+            foreach (IStack stack in gi.MoveStacks)
+            {
+               foreach (IMapItem mi in stack.MapItems)
+               {
+                  if (true == mi.Name.Contains("Artillery"))
+                     artillerySupports.Add(mi);
+               }
+            }
+            if (2 < artillerySupports.Count) // May only have three artillery supports. Remove last one.
+            {
+               IMapItem? artillerySupport = artillerySupports[0];
+               if (null == artillerySupport)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "SetArtillerySupportCounter(): artillerySupport=null");
+                  return false;
+               }
+               gi.MoveStacks.Remove(artillerySupport);
+            }
+            string name = gi.ArtillerySupportCheck.Name + "Artillery" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            IMapItem artillerySupportMarker = new MapItem(name, 1.0, "c39ArtillerySupport", gi.ArtillerySupportCheck);
+            IMapPoint mp = Territory.GetRandomPoint(gi.ArtillerySupportCheck);
+            artillerySupportMarker.SetLocation(mp);
+            gi.MoveStacks.Add(artillerySupportMarker);
+         }
+         if (true == gi.IsAirStrikePending)
+         {
+            if (null == gi.AirStrikeCheckTerritory)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SetArtillerySupportCounter(): gi.AirStrikeCheckTerritory=null");
+               return false;
+            }
+            gi.IsAirStrikePending = false;
+            string name = gi.AirStrikeCheckTerritory.Name + "Air" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            IMapItem airStrikeMarker = new MapItem(name, 1.0, "c40AirStrike", gi.AirStrikeCheckTerritory);
+            IMapPoint mp = Territory.GetRandomPoint(gi.AirStrikeCheckTerritory);
+            airStrikeMarker.SetLocation(mp);
+            gi.MoveStacks.Add(airStrikeMarker);
+         }
+         return true;
+      }
       protected void AdvanceTime(IAfterActionReport report, int minToAdd)
       {
          report.SunriseMin += minToAdd;
@@ -594,7 +646,7 @@ namespace Pattons_Best
                {
                   gi.GamePhase = GamePhase.Battle;
                   gi.DieRollAction = GameAction.DieRollActionNone;
-                  gi.IsAdvancingFireChosen = true; //<cgs>
+                  gi.IsAdvancingFireChosen = false; //<cgs>
                   if (true == gi.IsAdvancingFireChosen)
                   {
                      gi.AdvancingFireMarkerCount = 6 - (int)Math.Ceiling((double)gi.FriendlyTankLossCount / 3.0);  // six minus friendly tank/3 (rounded up)
@@ -977,6 +1029,29 @@ namespace Pattons_Best
             return false;
          }
          //---------------------------------------------
+         gi.ArtillerySupportCheck = gi.EnteredArea;
+         for( int i=0; i<3; ++i )
+         {
+            dieRoll = Utilities.RandomGenerator.Next(1, 11);
+            if (false == SetArtillerySupportCounter(gi, dieRoll)) // set strength in current territory
+            {
+               Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): SetArtillerySupportCounter() returned false");
+               return false;
+            }
+         }
+         //---------------------------------------------
+         gi.AirStrikeCheckTerritory = gi.EnteredArea;
+         for (int i = 0; i < 2; ++i)
+         {
+            dieRoll = Utilities.RandomGenerator.Next(1, 11);
+            if (dieRoll < 5) 
+            {
+               string nameAir = "Air" + Utilities.MapItemNum.ToString();
+               ++Utilities.MapItemNum;
+               IMapItem airStrikeMarker = new MapItem(nameAir, 1.0, "c40AirStrike", gi.AirStrikeCheckTerritory);
+               gi.MoveStacks.Add(airStrikeMarker);
+            }
+         }
          return true;
       }
    }
@@ -1656,58 +1731,6 @@ namespace Pattons_Best
          if (false == gi.IsAirStrikePending)
             gi.AirStrikeCheckTerritory = null;
          gi.EventDisplayed = gi.EventActive = "e022";
-         return true;
-      }
-      private bool SetArtillerySupportCounter(IGameInstance gi, int dieRoll)
-      {
-         if (null == gi.ArtillerySupportCheck)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetArtillerySupportCounter(): gi.ArtillerySupportCheck=null");
-            return false;
-         }
-         if (dieRoll < 8)
-         {
-            IMapItems artillerySupports = new MapItems();
-            foreach (IStack stack in gi.MoveStacks)
-            {
-               foreach (IMapItem mi in stack.MapItems)
-               {
-                  if (true == mi.Name.Contains("Artillery"))
-                     artillerySupports.Add(mi);
-               }
-            }
-            if (2 < artillerySupports.Count) // May only have three artillery supports. Remove last one.
-            {
-               IMapItem? artillerySupport = artillerySupports[0];
-               if (null == artillerySupport)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "SetArtillerySupportCounter(): artillerySupport=null");
-                  return false;
-               }
-               gi.MoveStacks.Remove(artillerySupport);
-            }
-            string name = gi.ArtillerySupportCheck.Name + "Artillery" + Utilities.MapItemNum.ToString();
-            Utilities.MapItemNum++;
-            IMapItem artillerySupportMarker = new MapItem(name, 1.0, "c39ArtillerySupport", gi.ArtillerySupportCheck);
-            IMapPoint mp = Territory.GetRandomPoint(gi.ArtillerySupportCheck);
-            artillerySupportMarker.SetLocation(mp);
-            gi.MoveStacks.Add(artillerySupportMarker);
-         }
-         if (true == gi.IsAirStrikePending)
-         {
-            if (null == gi.AirStrikeCheckTerritory)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "SetArtillerySupportCounter(): gi.AirStrikeCheckTerritory=null");
-               return false;
-            }
-            gi.IsAirStrikePending = false;
-            string name = gi.AirStrikeCheckTerritory.Name + "Air" + Utilities.MapItemNum.ToString();
-            Utilities.MapItemNum++;
-            IMapItem airStrikeMarker = new MapItem(name, 1.0, "c40AirStrike", gi.AirStrikeCheckTerritory);
-            IMapPoint mp = Territory.GetRandomPoint(gi.AirStrikeCheckTerritory);
-            airStrikeMarker.SetLocation(mp);
-            gi.MoveStacks.Add(airStrikeMarker);
-         }
          return true;
       }
       private bool SetAirStrikeCounter(IGameInstance gi, int dieRoll)
