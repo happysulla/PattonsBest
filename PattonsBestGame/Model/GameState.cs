@@ -288,7 +288,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetUsControlOnBattleMap(): tState=" + name);
             return false;
          }
-         gi.BattleStacks.Add(new MapItem("UsControl1", 1.0, "c28UsControl", t));
+         gi.BattleStacks.Add(new MapItem("UsControl1", Utilities.ZOOM, "c28UsControl", t));
          //--------------------------------------
          name = "B2M";
          t = Territories.theTerritories.Find(name);
@@ -297,7 +297,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetUsControlOnBattleMap(): tState=" + name);
             return false;
          }
-         gi.BattleStacks.Add(new MapItem("UsControl2", 1.0, "c28UsControl", t));
+         gi.BattleStacks.Add(new MapItem("UsControl2", Utilities.ZOOM, "c28UsControl", t));
          //--------------------------------------
          name = "B3M";
          t = Territories.theTerritories.Find(name);
@@ -306,7 +306,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetUsControlOnBattleMap(): tState=" + name);
             return false;
          }
-         gi.BattleStacks.Add(new MapItem("UsControl3", 1.0, "c28UsControl", t));
+         gi.BattleStacks.Add(new MapItem("UsControl3", Utilities.ZOOM, "c28UsControl", t));
          return true;
       }
       protected bool SetStartArea(IGameInstance gi, int dieRoll)
@@ -911,7 +911,7 @@ namespace Pattons_Best
          rr1.Count = count;
          gi.ReadyRacks.Add(rr1);
          //--------------------------------------------------
-         if (false == TableMgr.SetTimeTrack(lastReport, gi.Day)) // assing sunrise and sunset
+         if (false == TableMgr.SetTimeTrack(lastReport, gi.Day)) // passing sunrise and sunset
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): TableMgr.SetTimeTrack() returned false");
             return false;
@@ -1466,7 +1466,7 @@ namespace Pattons_Best
                   break;
                case GameAction.MovementEnemyStrengthChoice:
                   gi.EventDisplayed = gi.EventActive = "e020";
-                  gi.DieRollAction = GameAction.MovementExitAreaSetRoll;
+                  gi.DieRollAction = GameAction.DieRollActionNone;
                   break;
                case GameAction.MovementEnemyStrengthCheckTerritory:
                   if (false == theIs1stEnemyStrengthCheckTerritory)
@@ -1500,17 +1500,17 @@ namespace Pattons_Best
                   else 
                   {
                      bool isCheckNeeded = false;
-                     if( false == IsEnemyStrengthCheckNeeded(gi, out isCheckNeeded))
+                     if( false == IsEnemyStrengthCheckNeededInAdjacent(gi, out isCheckNeeded))
                      {
-                        returnStatus = "IsEnemyStrengthCheckNeeded() returned false";
+                        returnStatus = "IsEnemyStrengthCheckNeededInAdjacent() returned false";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementEnterAreaUsControl): " + returnStatus);
                      }
                      else
                      {
                         if( true == isCheckNeeded )
                         {
-                           gi.EventDisplayed = gi.EventActive = "e032";
-                           gi.DieRollAction = GameAction.MovementResistanceCheckRoll;
+                           gi.EventDisplayed = gi.EventActive = "e020";
+                           gi.DieRollAction = GameAction.DieRollActionNone;
                         }
                         else
                         {
@@ -1575,22 +1575,30 @@ namespace Pattons_Best
                   AdvanceTime(lastReport, 60);
                   gi.EventDisplayed = gi.EventActive = "e028";
                   break;
-               case GameAction.MovementAdvanceFireCheck:
+               case GameAction.MovementAdvanceFireChoice:
                   gi.EventDisplayed = gi.EventActive = "e029";
-                  if (null == gi.EnteredArea)
-                  {
-                     returnStatus = "gi.EnteredArea=null";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementAdvanceFireCheck): " + returnStatus);
-                  }
-                  else if(false == MoveTaskForceToNewArea(gi))
+                  gi.DieRollAction = GameAction.MovementAdvanceFireAmmoUseRoll;
+                  if(false == MoveTaskForceToNewArea(gi))
                   {
                      returnStatus = "MoveTaskForceToNewArea() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementAdvanceFireCheck): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementAdvanceFireChoice): " + returnStatus);
                   }
                   break;
-               case GameAction.MovementAdvanceFire:
+               case GameAction.MovementAdvanceFireAmmoUseCheck:
+                  gi.EventActive = gi.EventDisplayed = "e030";
+                  gi.DieRollAction = GameAction.MovementAdvanceFireAmmoUseRoll;
                   gi.IsAdvancingFireChosen = true;
                   gi.AdvancingFireMarkerCount = 6 - (int)Math.Ceiling((double)gi.FriendlyTankLossCount / 3.0);  // six minus friendly tank/3 (rounded up)
+                  break;
+               case GameAction.MovementAdvanceFireAmmoUseRoll:
+                  gi.DieResults[key][0] = dieRoll;
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  int heRoundsUsed = (int)Math.Floor((double)gi.DieResults[key][0] / 2.0);
+                  int mgRoundsUsed = gi.DieResults[key][0];
+                  lastReport.MainGunHE -= Math.Min(heRoundsUsed, lastReport.MainGunHE);
+                  lastReport.Ammo30CalibreMG -= Math.Min(mgRoundsUsed, lastReport.Ammo30CalibreMG);
+                  break;
+               case GameAction.MovementAdvanceFire:
                   if (false == EnterBoardArea(gi))
                   {
                      returnStatus = "EnterBoardArea() returned false";
@@ -1606,19 +1614,19 @@ namespace Pattons_Best
                   break;
                case GameAction.MovementStrengthRollBattleBoard:
                   gi.DieResults[key][0] = dieRoll;
-                  gi.DieRollAction = GameAction.MovementResistanceCheckRoll;
+                  gi.DieRollAction = GameAction.MovementBattleCheckRoll;
                   if (false == SetEnemyStrengthCounter(gi, dieRoll))
                   {
                      returnStatus = "SetEnemyStrengthCounter() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                   }
                   break;
-               case GameAction.MovementResistanceCheck:
-                  gi.EventDisplayed = gi.EventActive = "e031";
-                  gi.DieRollAction = GameAction.MovementResistanceCheckRoll;
+               case GameAction.MovementBattleCheck:
+                  gi.EventDisplayed = gi.EventActive = "e032";
+                  gi.DieRollAction = GameAction.MovementBattleCheckRoll;
                   break;
-               case GameAction.MovementResistanceCheckRoll:
-                  Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "GameStateMovement.PerformAction(MovementResistanceCheckRoll): " + gi.MoveStacks.ToString());
+               case GameAction.MovementBattleCheckRoll:
+                  Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "GameStateMovement.PerformAction(MovementBattleCheckRoll): " + gi.MoveStacks.ToString());
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   switch (gi.BattleResistance)
@@ -1676,7 +1684,7 @@ namespace Pattons_Best
                               Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                            }
                         }
-                        Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "GameStateMovement.PerformAction(MovementResistanceCheckRoll): " + gi.MoveStacks.ToString());
+                        Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "GameStateMovement.PerformAction(MovementBattleCheckRoll): " + gi.MoveStacks.ToString());
                         break;
                      default:
                         returnStatus = "reached default with resistance=" + gi.BattleResistance.ToString();
@@ -1777,15 +1785,15 @@ namespace Pattons_Best
          {
             foreach (IMapItem mi1 in stack.MapItems)
             {
-               if ((true == mi1.Name.Contains("Strength")) || (true == mi1.Name.Contains("UsControl")))
+               if (true == mi1.Name.Contains("Strength"))
                {
-                  gi.EventDisplayed = gi.EventActive = "e031";
-                  gi.DieRollAction = GameAction.MovementResistanceCheckRoll;
+                  gi.EventDisplayed = gi.EventActive = "e032";
+                  gi.DieRollAction = GameAction.MovementBattleCheckRoll; 
                   return true;
                }
             }
          }
-         gi.EventDisplayed = gi.EventActive = "e030";
+         gi.EventDisplayed = gi.EventActive = "e031";
          gi.DieRollAction = GameAction.MovementStrengthRollBattleBoard;
          return true;
       }
@@ -1797,7 +1805,7 @@ namespace Pattons_Best
          report.VictoryPtsCaptureArea += basePoints;
          //------------------------------------
          gi.GamePhase = GamePhase.Movement;
-         gi.EventDisplayed = gi.EventActive = "e032";
+         gi.EventDisplayed = gi.EventActive = "e033";
          gi.DieRollAction = GameAction.DieRollActionNone;
          IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
          if (null == taskForce)
@@ -1851,12 +1859,12 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool IsEnemyStrengthCheckNeeded(IGameInstance gi, out bool isCheckNeeded)
+      private bool IsEnemyStrengthCheckNeededInAdjacent(IGameInstance gi, out bool isCheckNeeded)
       {
          isCheckNeeded = false;
          if( null == gi.EnteredArea)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsEnemyStrengthCheckNeeded(): gi.EnteredArea=null");
+            Logger.Log(LogEnum.LE_ERROR, "IsEnemyStrengthCheckNeededInAdjacent(): gi.EnteredArea=null");
             return false;
          }
          //--------------------------------
@@ -1865,18 +1873,18 @@ namespace Pattons_Best
          {
             if (true == s.Contains("E")) // Ignore Entry or Exit Areas
                continue;
-            Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "IsEnemyStrengthCheckNeeded(): Checking territory=" + gi.EnteredArea.Name + " adj=" + s);
+            Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "IsEnemyStrengthCheckNeededInAdjacent(): Checking territory=" + gi.EnteredArea.Name + " adj=" + s);
             ITerritory? t = Territories.theTerritories.Find(s);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "IsEnemyStrengthCheckNeeded(): t=null for s=" + s);
+               Logger.Log(LogEnum.LE_ERROR, "IsEnemyStrengthCheckNeededInAdjacent(): t=null for s=" + s);
                return false;
             }
-            Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "IsEnemyStrengthCheckNeeded(): Checking territory=" + s);
+            Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "IsEnemyStrengthCheckNeededInAdjacent(): Checking territory=" + s);
             IStack? stack = gi.MoveStacks.Find(t);
             if (null == stack)
             {
-               Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "IsEnemyStrengthCheckNeeded(): no stack for=" + s + " in " + gi.MoveStacks.ToString());
+               Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "IsEnemyStrengthCheckNeededInAdjacent(): no stack for=" + s + " in " + gi.MoveStacks.ToString());
                isCheckNeeded = true;
                return true;
             }
@@ -2012,7 +2020,6 @@ namespace Pattons_Best
                      else
                      {
                         gi.IsAdvancingFireChosen = false;
-                        gi.EventDisplayed = gi.EventActive = "e034";
                         action = GameAction.BattleActivation;
                      }
                      //----------------------------------
@@ -2020,7 +2027,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleAmbushStart:
-                  gi.EventDisplayed = gi.EventActive = "e037";
+                  gi.EventDisplayed = gi.EventActive = "e035";
                   gi.DieRollAction = GameAction.BattleAmbushRoll;
                   break;
                case GameAction.BattleAmbushRoll:
@@ -2029,9 +2036,16 @@ namespace Pattons_Best
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   break;
-               case GameAction.BattleBoardEmpty:
+               case GameAction.BattleEmpty:
                   gi.GamePhase = GamePhase.Preparations;
-                  gi.EventDisplayed = gi.EventActive = "e038";
+                  gi.EventDisplayed = gi.EventActive = "e036";
+                  break;
+               case GameAction.BattleEmptyResolve:
+                  if( false == ResolveEmptyBattleBoard(gi, lastReport))
+                  {
+                     returnStatus = "ResolveEmptyBattleBoard() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
+                  }
                   break;
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;
@@ -2062,6 +2076,61 @@ namespace Pattons_Best
          else
             Logger.Log(LogEnum.LE_ERROR, sb12.ToString());
          return returnStatus;
+      }
+      private bool ResolveEmptyBattleBoard(IGameInstance gi, IAfterActionReport report)
+      {
+         if( null == gi.EnteredArea )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResolveEmptyBattleBoard(): gi.EnteredArea=null");
+            return false;
+         }
+         IStack? stack = gi.MoveStacks.Find(gi.EnteredArea);
+         if (null == stack)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResolveEmptyBattleBoard(): stack=null");
+            return false;
+         }
+         bool isCounterInStack = false;
+         foreach (IMapItem mi1 in stack.MapItems)
+         {
+            if (true == mi1.Name.Contains("Strength")) 
+            {
+               stack.MapItems.Remove(mi1);
+               isCounterInStack = true;
+               break;
+            }
+         }
+         if (false == isCounterInStack)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResolveEmptyBattleBoard(): isCounterInStack=false");
+            return false;
+         }
+         string miName = "UsControl" + Utilities.MapItemNum.ToString();
+         Utilities.MapItemNum++;
+         IMapItem usControl = new MapItem(miName, 1.0, "c28UsControl", gi.EnteredArea);
+         usControl.Count = 0; // 0=us  1=light  2=medium  3=heavy
+         IMapPoint mp = Territory.GetRandomPoint(gi.EnteredArea);
+         usControl.SetLocation(mp);
+         gi.MoveStacks.Add(usControl);
+         //-----------------------------------
+         int basePoints = 1;
+         if ((EnumScenario.Advance == report.Scenario) || (EnumScenario.Battle == report.Scenario))
+            basePoints *= 2;
+         report.VictoryPtsCaptureArea += basePoints;
+         //-----------------------------------
+         if( true == gi.IsDaylightLeft(report))
+         {
+            gi.GamePhase = GamePhase.Preparations;
+            gi.EventDisplayed = gi.EventActive = "e011";
+            gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
+         }
+         else
+         {
+            gi.GamePhase = GamePhase.EveningDebriefing;
+            gi.EventDisplayed = gi.EventActive = "e50";
+            gi.DieRollAction = GameAction.DieRollActionNone;
+         }
+         return true;
       }
    }
    //-----------------------------------------------------

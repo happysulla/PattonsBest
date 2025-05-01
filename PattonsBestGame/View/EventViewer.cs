@@ -959,7 +959,29 @@ namespace Pattons_Best
                      myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
-            case "e030":
+            case "e030": // This event is only shown if battle check resulted in combat
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  int heRoundsUsed = (int)Math.Floor((double)gi.DieResults[key][0] / 2.0);
+                  int mgRoundsUsed = gi.DieResults[key][0];
+                  StringBuilder sb = new StringBuilder();
+                  sb.Append("HE Rounds Used = ");
+                  sb.Append(heRoundsUsed.ToString());
+                  sb.Append("\nMG Boxes Used = ");
+                  sb.Append(mgRoundsUsed.ToString());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run(sb.ToString()));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  Image imge030 = new Image { Width = 100, Height = 100, Name = "MovementAdvanceFire", Source = MapItem.theMapImages.GetBitmapImage("c44AdvanceFire") };
+                  myTextBlock.Inlines.Add(new Run("                                          "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge030));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
+            case "e031":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
                   if (null == gi.EnemyStrengthCheckTerritory)
@@ -967,7 +989,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.EnemyStrenthCheck=null");
                      return false;
                   }
-                  Image imge030 = new Image { Width = 100, Height = 100, Name= "MovementResistanceCheck" };
+                  Image imge030 = new Image { Width = 100, Height = 100, Name= "MovementBattleCheck" };
                   if (EnumResistance.Light == gi.BattleResistance)
                      imge030.Source = MapItem.theMapImages.GetBitmapImage("c36Light");
                   else if (EnumResistance.Medium == gi.BattleResistance)
@@ -988,7 +1010,7 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
-            case "e031": // This event is only shown if battle check resulted in combat
+            case "e032": // This event is only shown if battle check resulted in combat
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
                   Image imge031 = new Image { Width = 150, Height = 150, Name = "BattleStart", Source = MapItem.theMapImages.GetBitmapImage("Combat") }; 
@@ -1002,14 +1024,14 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
-            case "e032":
+            case "e033":
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
                Image imge032 = new Image { Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c28UsControl") };
                Button b2 = new Button() { FontFamily = myFontFam1, FontSize = 12 };
                if ( false == gi.IsDaylightLeft(report))
                {                 
-                  imge032.Name = "EveningDebriefingStart";
+                  imge032.Name = "Debrief";
                   b2.Content = "r4.9";
                   b2.Click += Button_Click;
                   myTextBlock.Inlines.Add(new Run("Since there is no daylight left, go to Evening Debriefing "));
@@ -1051,7 +1073,7 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new Run("Click image to continue."));
                break;
-            case "e037":
+            case "e035":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
                   int dieRoll = gi.DieResults[key][0];
@@ -1410,7 +1432,7 @@ namespace Pattons_Best
                outAction = GameAction.BattleResolveAirStrike;
          }
          if (0 == enemyCount)
-            outAction = GameAction.BattleBoardEmpty;
+            outAction = GameAction.BattleEmpty;
          //--------------------------------------------------
          foreach (IMapItem mi in removals)
             myGameInstance.BattleStacks.Remove(mi);
@@ -1487,7 +1509,7 @@ namespace Pattons_Best
          else if ((true == isAirStrike) && (true == isEnemyUnitAvailableForAirStrike) )
             outAction = GameAction.BattleResolveAirStrike;
          if ( 0 == enemyCount )
-            outAction = GameAction.BattleBoardEmpty;
+            outAction = GameAction.BattleEmpty;
          //--------------------------------------------------
          StringBuilder sb11 = new StringBuilder("     ######ShowBattleSetupFireResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
@@ -1679,15 +1701,19 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "c44AdvanceFire":
-                           action = GameAction.MovementAdvanceFire;
+                           action = GameAction.MovementAdvanceFireAmmoUseCheck;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "c44AdvanceFireDeny":
                            action = GameAction.MovementAdvanceFireSkip;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
-                        case "MovementResistanceCheck":
-                           action = GameAction.MovementResistanceCheck;
+                        case "MovementAdvanceFire":
+                           action = GameAction.MovementAdvanceFire;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "MovementBattleCheck":
+                           action = GameAction.MovementBattleCheck;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "MovementStartAreaRestart":
@@ -1701,7 +1727,11 @@ namespace Pattons_Best
                               action = GameAction.BattleActivation;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
-                        case "EveningDebriefingStart":
+                        case "Sherman4": // Battle Board is Empty
+                           action = GameAction.BattleEmptyResolve;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Debrief":
                            action = GameAction.EveningDebriefingStart;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;

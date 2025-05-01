@@ -242,24 +242,31 @@ Choose one of the following images for Advancing Fire option per
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Image Name='c44AdvanceFire' Height='60' Width='60'></Image></InlineUIContainer> to perform advancing fire. <LineBreak/> <LineBreak/>
 <InlineUIContainer><Image Name='c44AdvanceFireDeny' Height='60' Width='60'></Image></InlineUIContainer> to skip advancing fire.  "
-e030	"<Bold>e030 Enemy Strength Roll Entering Battle Board</Bold> 
+e030	"<Bold>e030 Advancing Fire Ammo Use</Bold> 
+<InlineUIContainer><Button Content='r22.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+<LineBreak/><LineBreak/>
+Mark off 1D/2 (round down) HE rounds and .30 caliber MG ammo boxes regardless of whether the battle occurs or not. Mark off on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+Die Roll =  <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer> "
+e031	"<Bold>e031 Enemy Strength Roll Entering Battle Board</Bold> 
 <InlineUIContainer><Button Content='r4.53' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
 Roll 1D and consult the <InlineUIContainer><Button Content='Resistance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 Table for enemy strength: <LineBreak/><LineBreak/>
 Die Roll =  <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer> "
-e031	"<Bold>e031 Battle Check</Bold> 
+e032	"<Bold>e032 Battle Check</Bold> 
 <InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
 Roll 1D and consult the <InlineUIContainer><Button Content='Resistance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 Table to determine if combat occurs in this area: <LineBreak/><LineBreak/>
 Die Roll =  <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer> "
-e032	"<Bold>e032 No Combat</Bold> 
+e033	"<Bold>e033 No Combat</Bold> 
 <InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
 If converting territory to US Control, Victory points are added to the After Action Report 
 <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
-e033	"<Bold>e033 Placing Advancing Fire Markers</Bold> 
+e034	"<Bold>e034 Placing Advancing Fire Markers</Bold> 
 <InlineUIContainer><Button Content='r4.61' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
 Place Advancing Fire Markers available to you per 
@@ -269,39 +276,13 @@ Click one of highlighted regions to place.
 You place up to six minus one marker for every three friendly tank losses (rounded up) . You may place more than one in a zone. 
 <LineBreak/><LineBreak/>
 The status bar on the bottom shows how many are remaining to place."
-e034	"<Bold>e034 Activation of Enemy Units</Bold> 
-<InlineUIContainer><Button Content='r4.62' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
-<LineBreak/><LineBreak/>
-Consult the 
-<InlineUIContainer><Button Content='Activation' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-Table for the number and general type of enemy units appearing per 
-<InlineUIContainer><Button Content='r12.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
- <LineBreak/><LineBreak/>
-The specific types of tanks, SPGs, and AT guns are not known until identified during the Spotting Phase of the Battle Round Sequence per 
-<InlineUIContainer><Button Content='r17.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
- <LineBreak/><LineBreak/>
-Roll 2D (x2 for Light, x3 for Medium, and x4 for Heavy resistance).
-<LineBreak/><LineBreak/>"
-e035	"<Bold>e035 Placement of Enemy Units</Bold> 
-<InlineUIContainer><Button Content='r4.63' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
-<LineBreak/><LineBreak/>
-Place enemy units according to Battle Board 
-<InlineUIContainer><Button Content='Placement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-Table per 
-<InlineUIContainer><Button Content='r12.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
-<LineBreak/><LineBreak/>"
-e036	"<Bold>e036 Re-enter Friendly Control</Bold> 
-<InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
-<LineBreak/><LineBreak/>
-No combat. 
-<LineBreak/><LineBreak/>"
-e037	"<Bold>e037 Ambush Check</Bold> 
+e035	"<Bold>e035 Ambush Check</Bold> 
 <InlineUIContainer><Button Content='r4.65' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
 Roll 1D for possible Ambush: 
 <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>&lt; 8
 <LineBreak/><LineBreak/>"
-e038	"<Bold>e038 Battle Board Empty</Bold> 
+e036	"<Bold>e036 Battle Board Empty</Bold> 
 <InlineUIContainer><Button Content='r4.77' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
 Since the Battle Board is now empty of enemy units, the battle for this area is over. 
@@ -319,7 +300,13 @@ Since the Battle Board is now empty of enemy units, the battle for this area is 
 <LineBreak/>
 5.) Click image to continue.
 <LineBreak/><LineBreak/>
-                               <InlineUIContainer><Image Name='Sherman4' Height='168' Width='275'></Image></InlineUIContainer>"
+          <InlineUIContainer><Image Name='Debrief' Height='225' Width='450'></Image></InlineUIContainer>"
+e050	"<Bold>e050 Evening Debriefing</Bold> 
+<LineBreak/><LineBreak/>
+An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+Click image to continue.
+<LineBreak/><LineBreak/>
+                     <InlineUIContainer><Image Name='Sherman4' Height='168' Width='275'></Image></InlineUIContainer>"
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"
 e502	"<Bold>e502 Game Lost</Bold>

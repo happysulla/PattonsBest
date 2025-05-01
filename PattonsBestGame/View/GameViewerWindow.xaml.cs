@@ -823,7 +823,7 @@ namespace Pattons_Best
                      UpdateScrollbarThumbnails(exitArea.TerritoryCurrent);
                   break;
                case GameAction.MovementEnemyStrengthChoice:
-                  IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce"); // center thumbnails around exit area
+                  IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce"); // center thumbnails around task force
                   if (null != taskForce)
                      UpdateScrollbarThumbnails(taskForce.TerritoryCurrent);
                   if (false == UpdateCanvasMainEnemyStrengthCheckTerritory(gi, action))
@@ -853,11 +853,22 @@ namespace Pattons_Best
                      return false;
                   }
                   break;
-               case GameAction.MovementAdvanceFireCheck:
+               case GameAction.MovementAdvanceFireChoice:
+                  if (false == UpdateCanvasMovement(gi, action))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMovement() returned false");
+                     return false;
+                  }
+                  break;
                case GameAction.MovementEnterAreaUsControl:
                   if (false == UpdateCanvasMovement(gi, action))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMovement() returned false");
+                     return false;
+                  }
+                  if (false == UpdateCanvasMainEnemyStrengthCheckTerritory(gi, action))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMainEnemyStrengthCheckTerritory() returned false");
                      return false;
                   }
                   break;
@@ -1612,7 +1623,7 @@ namespace Pattons_Best
             return;
          }
          //-------------------------------------------------
-         GameAction outAction = GameAction.MovementAdvanceFireCheck;
+         GameAction outAction = GameAction.MovementAdvanceFireChoice;
          IStack? stack = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
          if( null != stack )
          {

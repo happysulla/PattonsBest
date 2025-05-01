@@ -175,13 +175,15 @@ namespace Pattons_Best
       MovementResupplyCheckRoll,
       MovementAmmoLoad,
       MovementEnterArea,
-      MovementAdvanceFireCheck,
+      MovementAdvanceFireChoice,
+      MovementAdvanceFireAmmoUseCheck,
+      MovementAdvanceFireAmmoUseRoll,
       MovementAdvanceFire,
       MovementAdvanceFireSkip,
       MovementEnterAreaUsControl,
       MovementStrengthRollBattleBoard,
-      MovementResistanceCheck,
-      MovementResistanceCheckRoll,
+      MovementBattleCheck,
+      MovementBattleCheckRoll,
       MovementStartAreaRestart,
       MovementExit,
 
@@ -194,7 +196,8 @@ namespace Pattons_Best
       BattleAmbushStart,
       BattleAmbushRoll,
       BattleSetupEnd,
-      BattleBoardEmpty,
+      BattleEmpty,
+      BattleEmptyResolve,
 
       EveningDebriefingStart,
       Error
