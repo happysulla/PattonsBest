@@ -1081,15 +1081,15 @@ namespace Pattons_Best
                   if ( dieRoll < 8 )
                   {
                      myTextBlock.Inlines.Add(new Run("Ambush!"));
-                     imge037 = new Image { Name = "Ambush", Width = 400, Height = 266, Source = MapItem.theMapImages.GetBitmapImage("Ambush") };
+                     imge037 = new Image { Name = "Ambush", Width = 300, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("Ambush") };
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new Run("              "));
+                     myTextBlock.Inlines.Add(new Run("                        "));
                   }
                   else
                   {
                      myTextBlock.Inlines.Add(new Run("No Ambush"));
-                     imge037 = new Image { Name="Continue37", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                     imge037 = new Image { Name="Continue35", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new Run("                                  "));
@@ -1725,6 +1725,14 @@ namespace Pattons_Best
                               action = GameAction.BattleStart;
                            else
                               action = GameAction.BattleActivation;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Ambush":
+                           action = GameAction.BattleAmbush;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Continue35":
+                           action = GameAction.BattleRoundSequenceStart;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Sherman4": // Battle Board is Empty

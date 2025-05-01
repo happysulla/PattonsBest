@@ -196,8 +196,11 @@ namespace Pattons_Best
       BattleAmbushStart,
       BattleAmbushRoll,
       BattleSetupEnd,
+      BattleAmbush,
       BattleEmpty,
       BattleEmptyResolve,
+
+      BattleRoundSequenceStart,
 
       EveningDebriefingStart,
       Error

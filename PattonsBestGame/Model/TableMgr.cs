@@ -21,6 +21,98 @@ namespace Pattons_Best
          CreateExitTable();
       }
       //-------------------------------------------
+      public static string GetMonth(int day)
+      {
+         if (day < 5)
+            return "Jul";
+         if (day < 37)
+            return "Aug";
+         if (day < 58)
+            return "Sep";
+         if (day < 70)
+            return "Oct";
+         if (day < 92)
+            return "Nov";
+         if (day < 110)
+            return "Dec";
+         if (day < 137)
+            return "Jan";
+         if (day < 147)
+            return "Feb";
+         if (day < 174)
+            return "Mar";
+         if (day < 193)
+            return "Apr";
+         Logger.Log(LogEnum.LE_ERROR, "GetMonth(): reached default day=" + day.ToString());
+         return "ERROR";
+      }
+      public static bool SetTimeTrack(IAfterActionReport lastReport, int day)
+      {
+         switch (GetMonth(day))
+         {
+            case "Jul":
+            case "Aug":
+               lastReport.SunriseHour = 5;
+               lastReport.SunriseMin = 0;
+               lastReport.SunsetHour = 19;
+               lastReport.SunsetMin = 15;
+               break;
+            case "Sep":
+               lastReport.SunriseHour = 5;
+               lastReport.SunriseMin = 30;
+               lastReport.SunsetHour = 18;
+               lastReport.SunsetMin = 15;
+               break;
+            case "Oct":
+               lastReport.SunriseHour = 6;
+               lastReport.SunriseMin = 30;
+               lastReport.SunsetHour = 17;
+               lastReport.SunsetMin = 15;
+               break;
+            case "Nov":
+               lastReport.SunriseHour = 7;
+               lastReport.SunriseMin = 15;
+               lastReport.SunsetHour = 16;
+               lastReport.SunsetMin = 15;
+               break;
+            case "Dec":
+               lastReport.SunriseHour = 7;
+               lastReport.SunriseMin = 45;
+               lastReport.SunsetHour = 16;
+               lastReport.SunsetMin = 00;
+               break;
+            case "Jan":
+               lastReport.SunriseHour = 7;
+               lastReport.SunriseMin = 45;
+               lastReport.SunsetHour = 16;
+               lastReport.SunsetMin = 30;
+               break;
+            case "Feb":
+               lastReport.SunriseHour = 7;
+               lastReport.SunriseMin = 15;
+               lastReport.SunsetHour = 17;
+               lastReport.SunsetMin = 30;
+               break;
+            case "Mar":
+               lastReport.SunriseHour = 6;
+               lastReport.SunriseMin = 15;
+               lastReport.SunsetHour = 18;
+               lastReport.SunsetMin = 00;
+               break;
+            case "Apr":
+               lastReport.SunriseHour = 5;
+               lastReport.SunriseMin = 15;
+               lastReport.SunsetHour = 19;
+               lastReport.SunsetMin = 00;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTimeCheckRoll): reached default day=" + day.ToString());
+               return false;
+         }
+
+         return true;
+      }
+      //-------------------------------------------
       public static string GetWeather(int day, int dieRoll)
       {
          string month = GetMonth(day);
@@ -835,97 +927,81 @@ namespace Pattons_Best
          }
          return "None";
       }
-      public static string GetMonth( int day )
+      public static int GetEnemyActionModifier(IGameInstance gi, IMapItem mi, bool isAmbush, bool isShermanFiring, bool isFiringAtFront)
       {
-         if (day < 5)
-            return "Jul";
-         if (day < 37)
-            return "Aug";
-         if (day < 58)
-            return "Sep";
-         if (day < 70)
-            return "Oct";
-         if (day < 92)
-            return "Nov";
-         if (day < 110)
-            return "Dec";
-         if (day < 137)
-            return "Jan";
-         if (day < 147)
-            return "Feb";
-         if (day < 174)
-            return "Mar";
-         if (day < 193)
-            return "Apr";
-         Logger.Log(LogEnum.LE_ERROR, "GetMonth(): reached default day=" + day.ToString());
-         return "ERROR";
-      }
-      public static bool SetTimeTrack(IAfterActionReport lastReport, int day)
-      {
-         switch (GetMonth(day))
+         string enemyUnit = "ERROR";
+         if (true == mi.Name.Contains("LW"))
+            enemyUnit = "LW";
+         else if (true == mi.Name.Contains("MG"))
+            enemyUnit = "MG";
+         else if (true == mi.Name.Contains("TRUCK"))
+            enemyUnit = "TRUCK";
+         else if (true == mi.Name.Contains("PSW"))
+            enemyUnit = "PSW";
+         else if (true == mi.Name.Contains("SPW"))
+            enemyUnit = "SPW";
+         else if (true == mi.Name.Contains("MARDER"))
+            enemyUnit = "MARDER";
+         else if ((true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("Pak")))
+            enemyUnit = "ATG";
+         else if (true == mi.Name.Contains("PzIV"))
+            enemyUnit = "PzIV";
+         else if (true == mi.Name.Contains("PzV"))
+            enemyUnit = "PzV";
+         else if ((true == mi.Name.Contains("SPG")) || (true == mi.Name.Contains("STuGIIIg")))
+            enemyUnit = "STuGIIIg";
+         else if ((true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("PzVI")))
+            enemyUnit = "PzVI";
+         else if ((true == mi.Name.Contains("JdgPzIV")) || (true == mi.Name.Contains("JdgPz38t")))
+            enemyUnit = "JdgPz";
+         if ("ERROR" == enemyUnit)
          {
-            case "Jul":
-            case "Aug":
-               lastReport.SunriseHour = 5;
-               lastReport.SunriseMin = 0;
-               lastReport.SunsetHour = 19;
-               lastReport.SunsetMin = 15;
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyActionModifier(): unknown enemyUnit=" + mi.Name);
+            return -100;
+         }
+         //----------------------------------------------------
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyActionModifier(): lastReport=null");
+            return -100;
+         }
+         //----------------------------------------------------
+         int modifier = 0;
+         switch (enemyUnit)
+         {
+            case "LW":
+            case "MG":
+               if (true == isAmbush)
+                  modifier += 20;
                break;
-            case "Sep":
-               lastReport.SunriseHour = 5;
-               lastReport.SunriseMin = 30;
-               lastReport.SunsetHour = 18;
-               lastReport.SunsetMin = 15;
+            case "ATG":
+               if (true == isAmbush)
+                  modifier += 20;
                break;
-            case "Oct":
-               lastReport.SunriseHour = 6;
-               lastReport.SunriseMin = 30;
-               lastReport.SunsetHour = 17;
-               lastReport.SunsetMin = 15;
+            case "TRUCK":
+            case "PSW":
+            case "SPW":
+               if (true == isAmbush)
+                  modifier += 10;
                break;
-            case "Nov":
-               lastReport.SunriseHour = 7;
-               lastReport.SunriseMin = 15;
-               lastReport.SunsetHour = 16;
-               lastReport.SunsetMin = 15;
-               break;
-            case "Dec":
-               lastReport.SunriseHour = 7;
-               lastReport.SunriseMin = 45;
-               lastReport.SunsetHour = 16;
-               lastReport.SunsetMin = 00;
-               break;
-            case "Jan":
-               lastReport.SunriseHour = 7;
-               lastReport.SunriseMin = 45;
-               lastReport.SunsetHour = 16;
-               lastReport.SunsetMin = 30;
-               break;
-            case "Feb":
-               lastReport.SunriseHour = 7;
-               lastReport.SunriseMin = 15;
-               lastReport.SunsetHour = 17;
-               lastReport.SunsetMin = 30;
-               break;
-            case "Mar":
-               lastReport.SunriseHour = 6;
-               lastReport.SunriseMin = 15;
-               lastReport.SunsetHour = 18;
-               lastReport.SunsetMin = 00;
-               break;
-            case "Apr":
-               lastReport.SunriseHour = 5;
-               lastReport.SunriseMin = 15;
-               lastReport.SunsetHour = 19;
-               lastReport.SunsetMin = 00;
+            case "PzIV":
+            case "PzV":
+            case "PzVI":
+            case "STuGIIIg":
+            case "SPG":
+            case "MARDER":
+            case "JdgPz":
+               if (true == isAmbush)
+                  modifier += 10;
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTimeCheckRoll): reached default day=" + day.ToString());
-               return false;
+               Logger.Log(LogEnum.LE_ERROR, "GetEnemyActionModifier(): reached default with enemyUnit=" + enemyUnit);
+               return -1;
          }
-
-         return true;
+         return modifier;
       }
+
       //-------------------------------------------
       private void CreateCombatCalender()
       {

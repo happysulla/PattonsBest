@@ -316,7 +316,7 @@ See
 <InlineUIContainer><Button Content='r13.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for enemy actions. Additionally,  roll for random events on the 
 <InlineUIContainer><Button Content='Random Events' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. 
 <LineBreak/><LineBreak/>
-If this is a Counterattack scenario, skip the enemy actions and follow B242
+If this is a Counterattack scenario, skip the enemy actions and follow 
 <InlineUIContainer><Button Content='r20.43' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for how ambushes are affected.
 <LineBreak/><LineBreak/>
 Regardless of ambush status, continue with 
