@@ -344,7 +344,7 @@ namespace Pattons_Best
                   bmi.BeginInit();
                   bmi.UriSource = new Uri(MapImage.theImageDirectory + "TigerMoving.gif", UriKind.Absolute);
                   bmi.EndInit();
-                  System.Windows.Controls.Image img = new System.Windows.Controls.Image { Name = "Move", Source = bmi, Width = Utilities.ZOOM * Utilities.theMapItemSize * 1.75, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  System.Windows.Controls.Image img = new System.Windows.Controls.Image { Name = "Move", Source = bmi, Width = Utilities.ZOOM * Utilities.theMapItemSize * 2.5, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                   ImageBehavior.SetAnimatedSource(img, bmi);
                   myStackPanelAssignable.Children.Add(img);
                   break;
@@ -528,6 +528,14 @@ namespace Pattons_Best
       }
       private bool UpdateGridRowsEnemyActionMove()
       {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowsEnemyActionMove(): myGameInstance=null");
+            return false;
+         }
+         Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "UpdateGridRowsEnemyActionMove(): Setting up new moves");
+         myGameInstance.MapItemMoves.Clear(); 
+         //--------------------------------------
          for (int i = 0; i < myMaxRowCount; ++i)
          {
             int rowNum = i + STARTING_ASSIGNED_ROW;
@@ -584,12 +592,8 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowsEnemyActionMove(): Invalid State Territories.Count=" + mim.BestPath.Territories.Count.ToString() + " for start=" + mi.TerritoryStarting.ToString() + " for newT=" + newT.Name);
                return false;
             }
-            if (null == myGameInstance)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowsEnemyActionMove(): myGameInstance=null");
-               return false;
-            }
             myGameInstance.MapItemMoves.Insert(0, mim); // add at front
+            Logger.Log(LogEnum.LE_VIEW_MIM_ADD, "UpdateGridRowsEnemyActionMove(): mi=" + mi.Name + " moving to t=" + newT.Name);
          }
          return true;
       }

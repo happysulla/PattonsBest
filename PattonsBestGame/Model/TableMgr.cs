@@ -928,12 +928,9 @@ namespace Pattons_Best
          }
          return "None";
       }
-<<<<<<< HEAD
       public static int GetEnemyActionModifier(IGameInstance gi, IMapItem mi)
-=======
-      public static int GetEnemyActionModifier(IGameInstance gi, IMapItem mi, bool isAmbush, bool isShermanFiring, bool isFiringAtFront)
->>>>>>> dd666c372207166abc41e3cd605cf8d6850e97c0
       {
+
          string enemyUnit = "ERROR";
          if (true == mi.Name.Contains("LW"))
             enemyUnit = "LW";
@@ -977,29 +974,17 @@ namespace Pattons_Best
          {
             case "LW":
             case "MG":
-<<<<<<< HEAD
                if (true == gi.IsAmbush)
                   modifier += 20;
                break;
             case "ATG":
                if (true == gi.IsAmbush)
-=======
-               if (true == isAmbush)
-                  modifier += 20;
-               break;
-            case "ATG":
-               if (true == isAmbush)
->>>>>>> dd666c372207166abc41e3cd605cf8d6850e97c0
                   modifier += 20;
                break;
             case "TRUCK":
             case "PSW":
             case "SPW":
-<<<<<<< HEAD
                if (true == gi.IsAmbush)
-=======
-               if (true == isAmbush)
->>>>>>> dd666c372207166abc41e3cd605cf8d6850e97c0
                   modifier += 10;
                break;
             case "PzIV":
@@ -1009,11 +994,7 @@ namespace Pattons_Best
             case "SPG":
             case "MARDER":
             case "JdgPz":
-<<<<<<< HEAD
                if (true == gi.IsAmbush)
-=======
-               if (true == isAmbush)
->>>>>>> dd666c372207166abc41e3cd605cf8d6850e97c0
                   modifier += 10;
                break;
             default:
@@ -1021,10 +1002,10 @@ namespace Pattons_Best
                return -1;
          }
          return modifier;
-<<<<<<< HEAD
       }
       public static string SetEnemyActionResult(IGameInstance gi, IMapItem mi, int dieRoll)
       {
+         return "Move-L"; // <cgs> TEST
          string enemyUnit = "ERROR";
          if (true == mi.Name.Contains("LW"))
             enemyUnit = "LW";
@@ -1618,8 +1599,6 @@ namespace Pattons_Best
             return null;
          }
          return newT;
-=======
->>>>>>> dd666c372207166abc41e3cd605cf8d6850e97c0
       }
 
       //-------------------------------------------

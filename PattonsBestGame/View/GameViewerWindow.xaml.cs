@@ -854,14 +854,15 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MovementAdvanceFireChoice:
-                  if (false == UpdateCanvasMovement(gi, action))
+               case GameAction.UpdateBattleBoard:
+                  if (false == UpdateCanvasMovement(gi, action, stacks, buttons))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMovement() returned false");
                      return false;
                   }
                   break;
                case GameAction.MovementEnterAreaUsControl:
-                  if (false == UpdateCanvasMovement(gi, action))
+                  if (false == UpdateCanvasMovement(gi, action, stacks, buttons))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMovement() returned false");
                      return false;
@@ -881,8 +882,6 @@ namespace Pattons_Best
                         return false;
                      }
                   }
-                  break;
-               case GameAction.UpdateBattleBoard:
                   break;
                case GameAction.EndGameClose:
                   GameAction outActionClose = GameAction.EndGameExit;
@@ -1255,75 +1254,73 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool UpdateCanvasMovement(IGameInstance gi, GameAction action)
+      private bool UpdateCanvasMovement(IGameInstance gi, GameAction action, IStacks stacks, List<Button> buttons)
       {
          try
          {
-            if (0 < gi.MapItemMoves.Count)
+            foreach( IMapItemMove mim in gi.MapItemMoves)
             {
-               IMapItemMove? mim2 = gi.MapItemMoves[0];
-               if (null == mim2)
+               if (null == mim)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): mim2=null");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): mim=null");
                   return false;
                }
-               if (null == mim2.OldTerritory)
+               if (null == mim.OldTerritory)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): mim2.OldTerritory=null");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): mim.OldTerritory=null");
                   return false;
                }
-               IMapItem mi = mim2.MapItem;
-               if (false == MovePathAnimate(mim2))
+               IMapItem mi = mim.MapItem;
+               if (false == MovePathAnimate(mim, buttons))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): MovePathAnimate() returned false t=" + mim2.OldTerritory.ToString());
-                  Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "UpdateCanvasMovement(): MovePathAnimate() returned false gi.MapItemMoves.Clear()");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): MovePathAnimate() returned false t=" + mim.OldTerritory.ToString());
                   gi.MapItemMoves.Clear();
                   return false;
                }
-               if (null == mim2)
+               if (null == mim)
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): mim2=null");
                   return false;
                }
-               if (null == mim2.NewTerritory)
+               if (null == mim.NewTerritory)
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): mim2.NewTerritory=null");
                   return false;
                }
                //------------------------------------------
-               gi.MoveStacks.Remove(mi);
-               Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "UpdateCanvasMovement(): Removed mi=" + mi.Name + " t=" + mim2.OldTerritory.Name + " to " + gi.MoveStacks.ToString());
-               IStack? stack = gi.MoveStacks.Find(mim2.NewTerritory);
+               stacks.Remove(mi);
+               Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "UpdateCanvasMovement(): Removed mi=" + mi.Name + " t=" + mim.OldTerritory.Name + " to " + gi.MoveStacks.ToString());
+               IStack? stack = gi.MoveStacks.Find(mim.NewTerritory);
                if (null == stack)
                {
-                  gi.MoveStacks.Add(new Stack(mim2.NewTerritory, mi));
-                  Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "UpdateCanvasMovement(): 1-Adding mi=" + mi.Name + " t=" + mim2.NewTerritory.Name + " to " + gi.MoveStacks.ToString());
+                  stacks.Add(new Stack(mim.NewTerritory, mi));
+                  Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "UpdateCanvasMovement(): 1-Adding mi=" + mi.Name + " t=" + mim.NewTerritory.Name + " to " + gi.MoveStacks.ToString());
                }
                else
                {
                   stack.MapItems.Add(mi);
-                  Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "UpdateCanvasMovement(): 2-Adding mi=" + mi.Name + " t=" + mim2.NewTerritory.Name + " to " + gi.MoveStacks.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "UpdateCanvasMovement(): 2-Adding mi=" + mi.Name + " t=" + mim.NewTerritory.Name + " to " + gi.MoveStacks.ToString());
                }
-               Logger.Log(LogEnum.LE_VIEW_MIM, "UpdateCanvasMovement(): mi=" + mi.Name + " t=" + mi.TerritoryCurrent.Name + " moving to t=" + mim2.NewTerritory.Name + " " + gi.MoveStacks.ToString());
-               mi.TerritoryCurrent = mi.TerritoryStarting = mim2.NewTerritory;
+               Logger.Log(LogEnum.LE_VIEW_MIM, "UpdateCanvasMovement(): mi=" + mi.Name + " t=" + mi.TerritoryCurrent.Name + " moving to t=" + mim.NewTerritory.Name + " " + gi.MoveStacks.ToString());
+               mi.TerritoryCurrent = mi.TerritoryStarting = mim.NewTerritory;
             }
          }
          catch (Exception e)
          {
-            Console.WriteLine("UpdateCanvasMovement() - EXCEPTION THROWN e={0}", e.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement():  EXCEPTION THROWN e=\n" + e.ToString());
             return false;
          }
          return true;
       }
-      private bool MovePathAnimate(IMapItemMove mim)
+      private bool MovePathAnimate(IMapItemMove mim, List<Button> buttons)
       {
-         const int ANIMATE_TIME_SEC = 3;
+         const int ANIMATE_TIME_SEC = 4;
          if (null == mim.NewTerritory)
          {
             Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): b=null for n=" + mim.MapItem.Name);
             return false;
          }
-         Button? b = myMoveButtons.Find(Utilities.RemoveSpaces(mim.MapItem.Name));
+         Button? b = buttons.Find(mim.MapItem.Name);
          if (null == b)
          {
             Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): b=null for n=" + mim.MapItem.Name);
@@ -1351,10 +1348,9 @@ namespace Pattons_Best
                aPathFigure.Segments.Add(lineSegment);
             }
             // Add the last line segment
-            int multiplerX = Utilities.RandomGenerator.Next(0, 3) - 1;
-            int multiplerY = Utilities.RandomGenerator.Next(0, 3) - 1;
-            double xEnd = mim.NewTerritory.CenterPoint.X - Utilities.theMapItemOffset + multiplerX * Utilities.theMapItemOffset;
-            double yEnd = mim.NewTerritory.CenterPoint.Y - Utilities.theMapItemOffset + multiplerY * Utilities.theMapItemOffset;
+            IMapPoint mp = Territory.GetRandomPoint(mim.NewTerritory);
+            double xEnd = mp.X - mim.MapItem.Zoom * Utilities.theMapItemOffset;
+            double yEnd = mp.Y - mim.MapItem.Zoom * Utilities.theMapItemOffset;
             if ((Math.Abs(xEnd - xStart) < 2) && (Math.Abs(yEnd - yStart) < 2)) // if already at final location, skip animation or get runtime exception
                return true;
             System.Windows.Point newPoint2 = new System.Windows.Point(xEnd, yEnd);
@@ -1375,23 +1371,14 @@ namespace Pattons_Best
             b.RenderTransform = new TranslateTransform();
             b.BeginAnimation(Canvas.LeftProperty, xAnimiation);
             b.BeginAnimation(Canvas.TopProperty, yAnimiation);
-            mim.MapItem.Location.X = xEnd;
-            mim.MapItem.Location.Y = yEnd;
-            if (null == myRectangleSelected)
-            {
-               Console.WriteLine("MovePathAnimate() myRectangleSelection=null");
-               return false;
-            }
-            myRectangleSelected.RenderTransform = new TranslateTransform();
-            myRectangleSelected.BeginAnimation(Canvas.LeftProperty, xAnimiation);
-            myRectangleSelected.BeginAnimation(Canvas.TopProperty, yAnimiation);
+            mim.MapItem.SetLocation(mp);
             return true;
          }
          catch (Exception e)
          {
             b.BeginAnimation(Canvas.LeftProperty, null); // end animation offset
             b.BeginAnimation(Canvas.TopProperty, null);  // end animation offset
-            Console.WriteLine("MovePathAnimate() - EXCEPTION THROWN e={0}", e.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate():  EXCEPTION THROWN e=\n" + e.ToString());
             return false;
          }
       }

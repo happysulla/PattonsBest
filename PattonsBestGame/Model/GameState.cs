@@ -13,8 +13,11 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Windows.Devices.Perception;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Pattons_Best
 {
@@ -659,6 +662,20 @@ namespace Pattons_Best
                   }
                }
                break;
+            case GameAction.TestingStartAmbush:
+               if (false == PerformAutoSetupSkipBattleSetup(gi))
+               {
+                  returnStatus = "PerformAutoSetupSkipBattleSetup() returned false";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
+               }
+               else
+               {
+                  gi.GamePhase = GamePhase.Battle;
+                  gi.EventDisplayed = gi.EventActive = "e035";
+                  gi.DieRollAction = GameAction.BattleAmbushRoll;
+                  gi.IsAdvancingFireChosen = false;
+               }
+               break;
             case GameAction.UpdateEventViewerActive: // Only change active event
                gi.EventDisplayed = gi.EventActive; // next screen to show
                break;
@@ -1053,6 +1070,144 @@ namespace Pattons_Best
                IMapItem airStrikeMarker = new MapItem(nameAir, 1.0, "c40AirStrike", gi.AirStrikeCheckTerritory);
                gi.MoveStacks.Add(airStrikeMarker);
             }
+         }
+         return true;
+      }
+      private bool PerformAutoSetupSkipBattleSetup(IGameInstance gi)
+      {
+         if (false == PerformAutoSetupSkipMovement(gi))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): PerformAutoSetupSkipMovement() returned false");
+            return false;
+         }
+         //--------------------------------------------------------
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup():  lastReport=null");
+            return false;
+         }
+         //--------------------------------------------------------
+         for( int k=0; k < 4; k++ )
+         {
+            int die1 = Utilities.RandomGenerator.Next(0, 3);
+            int die2 = Utilities.RandomGenerator.Next(0, 3);
+            string? tName = null;
+            if (0 == die1)
+            {
+               if (0 == die2)
+                  tName = "B4C";
+               else if (1 == die2)
+                  tName = "B4M";
+               else if (2 == die2)
+                  tName = "B4L";
+            }
+            else if (1 == die1)
+            {
+               if (0 == die2)
+                  tName = "B6C";
+               else if (1 == die2)
+                  tName = "B6M";
+               else if (2 == die2)
+                  tName = "B6L";
+            }
+            else if (2 == die1)
+            {
+               if (0 == die2)
+                  tName = "B9C";
+               else if (1 == die2)
+                  tName = "B9M";
+               else if (2 == die2)
+                  tName = "B9L";
+            }
+            if (null == tName)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup():  tName=null");
+               return false;
+            }
+            ITerritory? t = Territories.theTerritories.Find(tName);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup():  t=null for tName=" + tName);
+               return false;
+            }
+            //-------------------------------------------
+            int diceRoll = 0;
+            die1 = Utilities.RandomGenerator.Next(0, 10);
+            die2 = Utilities.RandomGenerator.Next(0, 10);
+            if ((0 == die1) && (0 == die2))
+               diceRoll = 100;
+            else
+               diceRoll = die1 + 10 * die2;
+            string activation = TableMgr.GetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
+            IMapItem? mi = null;
+            string name = activation + Utilities.MapItemNum;
+            Utilities.MapItemNum++;
+            bool isVehicle = false;
+            switch (activation)
+            {
+               case "ATG":
+                  mi = new MapItem(name, Utilities.ZOOM + 0.1, "c76UnidentifiedAtg", t);
+                  break;
+               case "LW":
+                  mi = new MapItem(name, Utilities.ZOOM, "c91Lw", t);
+                  break;
+               case "MG":
+                  mi = new MapItem(name, Utilities.ZOOM, "c92MgTeam", t);
+                  break;
+               case "PSW/SPW":
+                  activation = "SPW";
+                  name = activation + Utilities.MapItemNum;
+                  Utilities.MapItemNum++;
+                  mi = new MapItem(name, Utilities.ZOOM + 0.2, "c89Psw232", t);
+                  break;
+               case "SPG":
+                  mi = new MapItem(name, Utilities.ZOOM + 0.5, "c77UnidentifiedSpg", t);
+                  isVehicle = true;
+                  break;
+               case "TANK":
+                  mi = new MapItem(name, Utilities.ZOOM + 0.5, "c78UnidentifiedTank", t);
+                  isVehicle = true;
+                  break;
+               case "TRUCK":
+                  mi = new MapItem(name, Utilities.ZOOM + 0.3, "c88Truck", t);
+                  isVehicle = true;
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): reached default with activation=" + activation);
+                  return false;
+            }
+            if (null == mi)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): mi=null");
+               return false;
+            }
+            IMapPoint mp = Territory.GetRandomPoint(t);
+            mi.SetLocation(mp);
+            gi.BattleStacks.Add(mi);
+            //-----------------------------------------
+            if (true == isVehicle)
+            {
+               double xDiff = (mi.Location.X + mi.Zoom * Utilities.theMapItemOffset) - gi.Home.CenterPoint.X;
+               double yDiff = (mi.Location.Y + mi.Zoom * Utilities.theMapItemOffset) - gi.Home.CenterPoint.Y;
+               mi.RotationBase = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;
+               //-----------------------------------------
+               die1 = Utilities.RandomGenerator.Next(0, 3);
+               if (1 == die1)
+               {
+                  mi.Rotation = 150 + Utilities.RandomGenerator.Next(0, 60);
+               }
+               else if (2 == die1)
+               {
+                  if (0 == Utilities.RandomGenerator.Next(0, 2))
+                     mi.Rotation = 35 + Utilities.RandomGenerator.Next(0, 115);
+                  else
+                     mi.Rotation = -35 - Utilities.RandomGenerator.Next(0, 115);
+               }
+            }
+            //-----------------------------------------
+            die1 = Utilities.RandomGenerator.Next(1, 11);
+            string enemyTerrain = TableMgr.GetEnemyTerrain(lastReport.Scenario, gi.Day, "A", activation, die1);
          }
          return true;
       }
@@ -2054,16 +2209,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
                   }
                   break;
-<<<<<<< HEAD
                case GameAction.BattleAmbush: // Handled with EventViewerBattleAmbush class
-=======
-               case GameAction.BattleAmbush:
-                  if (false == ResolveAmbush(gi, lastReport))
-                  {
-                     returnStatus = "ResolveAmbush() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
-                  }
->>>>>>> dd666c372207166abc41e3cd605cf8d6850e97c0
                   break;
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;
@@ -2148,11 +2294,6 @@ namespace Pattons_Best
             gi.EventDisplayed = gi.EventActive = "e50";
             gi.DieRollAction = GameAction.DieRollActionNone;
          }
-         return true;
-      }
-      private bool ResolveAmbush(IGameInstance gi, IAfterActionReport report)
-      {
-
          return true;
       }
    }

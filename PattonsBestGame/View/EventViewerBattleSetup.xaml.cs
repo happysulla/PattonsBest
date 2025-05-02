@@ -809,11 +809,11 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_SHOW_ROTATION, "CreateMapItemRotation(): " + caller + "(): xDiff=" + xDiff.ToString("F2") + " yDiff=" + yDiff.ToString("F2") + " r=" + mi.RotationBase.ToString("F2") + " t=" + mi.TerritoryCurrent.Name + " X=" + mi.Location.X + " Y=" + mi.Location.Y);
          return true;
       }
-      private bool UpdateGridRowSector(Index i)
+      private bool ShowDieResultUpdateSector(Index i)
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowSector(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): myGameInstance=null");
             return false;
          }
          string? tName = null;
@@ -914,12 +914,12 @@ namespace Pattons_Best
                }
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowSector(): reached default dr=" + myGridRows[i].myDieRollSector.ToString());
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): reached default dr=" + myGridRows[i].myDieRollSector.ToString());
                return false;
          }
          if( null == tName )
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowSector(): tName=null for dr=" + myGridRows[i].myDieRollSector.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): tName=null for dr=" + myGridRows[i].myDieRollSector.ToString());
             return false;
          }
          if ("X" != myGridRows[i].mySector)
@@ -927,13 +927,13 @@ namespace Pattons_Best
             ITerritory? t = Territories.theTerritories.Find(tName);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowSector(): t=null for " + tName);
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): t=null for " + tName);
                return false;
             }
             IMapItem? mi = myGridRows[i].myMapItem;
             if( null == mi )
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowSector(): mi=null for i=" + i.ToString());
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): mi=null for i=" + i.ToString());
                return false;
             }
             IMapPoint mp = Territory.GetRandomPoint(t);
@@ -941,7 +941,7 @@ namespace Pattons_Best
             mi.TerritoryCurrent = mi.TerritoryStarting = t;
             myGameInstance.BattleStacks.Remove(mi.Name);
             myGameInstance.BattleStacks.Add(mi);
-            if (false == CreateMapItemRotation(i, "UpdateGridRowSector"))
+            if (false == CreateMapItemRotation(i, "ShowDieResultUpdateSector"))
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): CreateMapItemRotation() returned false");
                return false;
@@ -988,7 +988,7 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool UpdateGridRowFacing(Index i)
+      private bool ShowDieResultUpdateFacing(Index i)
       {
          if ("Front" == myGridRows[i].myFacing)
             return true;
@@ -996,7 +996,7 @@ namespace Pattons_Best
          IMapItem? mi = myGridRows[i].myMapItem;
          if (null == mi)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowFacing(): mi=null for i=" + i.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): mi=null for i=" + i.ToString());
             return false;
          }
          //----------------------------
@@ -1076,9 +1076,9 @@ namespace Pattons_Best
                break;
             case E046Enum.PLACE_SECTOR:
                myGridRows[i].myDieRollSector = dieRoll;
-               if (false == UpdateGridRowSector(i))
+               if (false == ShowDieResultUpdateSector(i))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateGridRowSector() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResultUpdateSector() returned false");
                   return;
                }
                myState = E046Enum.PLACE_RANGE;
@@ -1119,9 +1119,9 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyFacing() returned ERROR");
                   return;
                }
-               if (false == UpdateGridRowFacing(i))
+               if (false == ShowDieResultUpdateFacing(i))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateGridRowFacing() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResultUpdateFacing() returned false");
                   return;
                }
                myState = E046Enum.PLACE_TERRAIN;

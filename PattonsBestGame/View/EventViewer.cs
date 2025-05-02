@@ -1087,24 +1087,21 @@ namespace Pattons_Best
                   Image? imge037 = null;
                   if (true == gi.IsAmbush)
                   {
-                     myTextBlock.Inlines.Add(new Run("Ambush!"));
-                     imge037 = new Image { Name = "Ambush", Width = 300, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("Ambush") };
+                     myTextBlock.Inlines.Add(new Run("Ambush! Click image to continue."));
+                     imge037 = new Image { Name = "Ambush", Width = 400, Height = 240, Source = MapItem.theMapImages.GetBitmapImage("Ambush") };
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new Run("                        "));
+                     myTextBlock.Inlines.Add(new Run("                "));
                   }
                   else
                   {
-                     myTextBlock.Inlines.Add(new Run("No Ambush"));
-                     imge037 = new Image { Name="Continue35", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                     myTextBlock.Inlines.Add(new Run("No ambush. Click image to continue."));
+                     imge037 = new Image { Name="Continue35", Width = 200, Height = 210, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new Run("                                  "));
                   }
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge037));
-                  myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                else
                {
@@ -1874,6 +1871,7 @@ namespace Pattons_Best
                //action = GameAction.TestingStartPreparations; // <cgs> TEST
                //action = GameAction.TestingStartMovement; // <cgs> TEST
                action = GameAction.TestingStartBattle; // <cgs> TEST
+               action = GameAction.TestingStartAmbush; // <cgs> TEST
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Cancel":

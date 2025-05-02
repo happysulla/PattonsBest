@@ -88,6 +88,7 @@ namespace Pattons_Best
       TestingStartPreparations,
       TestingStartMovement,
       TestingStartBattle,
+      TestingStartAmbush,
 
       ShowCombatCalendarDialog,
       ShowAfterActionReportDialog,
@@ -201,6 +202,7 @@ namespace Pattons_Best
       BattleEmptyResolve,
 
       BattleRoundSequenceStart,
+
 
       EveningDebriefingStart,
       Error

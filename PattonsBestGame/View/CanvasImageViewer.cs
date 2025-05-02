@@ -96,6 +96,7 @@ namespace Pattons_Best
             case GameAction.PreparationsDeployment:
             case GameAction.TestingStartPreparations:
             case GameAction.TestingStartBattle:
+            case GameAction.TestingStartAmbush:
             case GameAction.BattleStart:
             case GameAction.BattleActivation:
                myDieRoller.HideDie();
