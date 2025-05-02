@@ -2054,7 +2054,16 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
                   }
                   break;
+<<<<<<< HEAD
                case GameAction.BattleAmbush: // Handled with EventViewerBattleAmbush class
+=======
+               case GameAction.BattleAmbush:
+                  if (false == ResolveAmbush(gi, lastReport))
+                  {
+                     returnStatus = "ResolveAmbush() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
+                  }
+>>>>>>> dd666c372207166abc41e3cd605cf8d6850e97c0
                   break;
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;
@@ -2139,6 +2148,11 @@ namespace Pattons_Best
             gi.EventDisplayed = gi.EventActive = "e50";
             gi.DieRollAction = GameAction.DieRollActionNone;
          }
+         return true;
+      }
+      private bool ResolveAmbush(IGameInstance gi, IAfterActionReport report)
+      {
+
          return true;
       }
    }
