@@ -276,7 +276,7 @@ The Battle Board is prepared for battle.
 <InlineUIContainer><Button Content='r4.65' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Ambush Check"
 r4.61	"<Bold>r4.61  Placement of Advancing Fire</Bold>
 <LineBreak/><LineBreak/>
-Place Advancing Fire markers per 
+Place Advancing Fire markes per 
 <InlineUIContainer><Button Content='r22.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r4.62	"<Bold>r4.62  Activation of Enemy Units</Bold>
 <LineBreak/><LineBreak/>
@@ -317,7 +317,7 @@ See
 <InlineUIContainer><Button Content='Random Events' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. 
 <LineBreak/><LineBreak/>
 If this is a Counterattack scenario, skip the enemy actions and follow 
-<InlineUIContainer><Button Content='r20.43' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for how ambushes are implemented.
+<InlineUIContainer><Button Content='r20.43' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for how ambushes are affected.
 <LineBreak/><LineBreak/>
 Regardless of ambush status, continue with 
 <InlineUIContainer><Button Content='r4.7' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> to start the fight."
@@ -357,25 +357,7 @@ r4.73	"<Bold>r4.73  Orders Phase</Bold>
 r4.74	"<Bold>r4.74  Crew Actions Phase</Bold>
 <LineBreak/><LineBreak/>"
 r4.75	"<Bold>r4.75  Enemy Actions Phase</Bold>
-<LineBreak/><LineBreak/>
-Roll on the respective table for each enemy unit on the Battle Board:
-<LineBreak/><LineBreak/>
-<InlineUIContainer><Button Content='Enemy Advance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  <LineBreak/>
-<InlineUIContainer><Button Content='Enemy Battle' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  <LineBreak/>
-<InlineUIContainer><Button Content='Enemy Counterattack' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
-<LineBreak/><LineBreak/>
-1.) <InlineUIContainer><Button Content='r13.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Roll for each moving enemy unit on the 
-<InlineUIContainer><Button Content='Placement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table (vehicle units only) for new facing and/or terrain. Place Moving marker on units that move.
-<LineBreak/><LineBreak/>
-2.) <InlineUIContainer><Button Content='r13.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-<InlineUIContainer><Button Content='r13.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> For attacks not directed at your tank, roll on the 
-respective Enemy Combat Fire Table. Record friendly casualties on the After Action Report 
-<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
-<LineBreak/><LineBreak/>
-3.) For attacks directed at your tank, go to 
-<InlineUIContainer><Button Content='r4.8' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
-<LineBreak/><LineBreak/>
-4.) Continue with Friendly Action Phase per <InlineUIContainer><Button Content='r4.76' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>"
+<LineBreak/><LineBreak/>"
 r4.76	"<Bold>r4.76  Friendly Action Phase</Bold>
 <LineBreak/><LineBreak/>"
 r4.77	"<Bold>r4.77   Random Events Phase</Bold>
@@ -1304,7 +1286,7 @@ Roll for each enemy unit on the Battle Board. Enemy units will either do nothing
 <InlineUIContainer><Button Content='r13.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Fire Versus Your Tank"
 r13.1	"<Bold>r13.1 Movement </Bold> 
 <LineBreak/><LineBreak/>
-Enemy units move in four directions: <LineBreak/>
+Enemy units move in four direcitons: <LineBreak/>
 F = Forward<LineBreak/>
 B = Backward<LineBreak/>
 L = Left<LineBreak/>
@@ -1951,10 +1933,10 @@ If you clear the Battle Board, go to <InlineUIContainer><Button Content='r20.44'
 If you retreat from the Battle Board, go to <InlineUIContainer><Button Content='r20.45' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>"
 r20.44	"<Bold>r20.44 Counterattack - Clear Battle Board</Bold>
 <LineBreak/><LineBreak/>
-If battle (or even your Ambush) clears the board of enemy units, return to Time Check <InlineUIContainer><Button Content='r4.32' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+If battle (or even your Ambush) clears the board of enemy units, return to Time Check <InlineUIContainer><Button Content='r4.32' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 to determine how many hours pass before a battle becomes possible again. 
 <LineBreak/><LineBreak/>
-Mark off the hours that pass, and go to Prepare for Battle <InlineUIContainer><Button Content='r4.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+Mark off the hours that pass, and go to Prepare for Battle <InlineUIContainer><Button Content='r20.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r20.45	"<Bold>r20.45 Counterattack - Retreat from Battle Board</Bold>
 <LineBreak/><LineBreak/>
 If you retreat from the Battle Board, mark off 15 minutes and record the loss of one area. 
