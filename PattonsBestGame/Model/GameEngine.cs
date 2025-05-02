@@ -1,5 +1,4 @@
-﻿using Pattons_Best.Model;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows.Shapes;
@@ -9,7 +8,7 @@ namespace Pattons_Best
 {
    public class GameEngine : IGameEngine
    {
-      TableMgr myTableMgr = new TableMgr();  
+      TableMgr myTableMgr = new TableMgr();
       //---------------------------------------------------------------------
       private readonly MainWindow myMainWindow;
       private readonly List<IView> myViews = new List<IView>();
@@ -47,7 +46,7 @@ namespace Pattons_Best
       }
       public bool CreateUnitTests(IGameInstance gi, DockPanel dp, EventViewer ev, IDieRoller dr, CanvasImageViewer civ)
       {
-        //-----------------------------------------------------------------------------
+         //-----------------------------------------------------------------------------
          IUnitTest ut1 = new GameViewerCreateUnitTest(dp);
          if (true == ut1.CtorError)
          {

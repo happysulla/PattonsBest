@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pattons_Best.Model
+namespace Pattons_Best
 {
    public class AfterActionReport : IAfterActionReport
    {
@@ -25,7 +25,7 @@ namespace Pattons_Best.Model
       public int SunriseHour { get; set; } = 5;
       public int SunriseMin { get; set; } = 0;
       public int SunsetHour { get; set; } = 19;
-      public int SunsetMin { get; set; } = 15; 
+      public int SunsetMin { get; set; } = 15;
       //----------------------------------------
       public int Ammo30CalibreMG { get; set; } = 30;
       public int Ammo50CalibreMG { get; set; } = 6;
@@ -70,7 +70,7 @@ namespace Pattons_Best.Model
       //----------------------------------------
       public List<EnumDecoration> Decorations { get; set; } = new List<EnumDecoration>();
       //----------------------------------------
-      public List<String> Notes { get; set; } = new List<String>();
+      public List<string> Notes { get; set; } = new List<string>();
       //----------------------------------------
       public string DayEndedTime { get; set; } = "";
       public bool IsBreakdown { get; set; } = false;
@@ -90,13 +90,13 @@ namespace Pattons_Best.Model
          Probability = entry.Probability;
          Resistance = entry.Resistance;
          //------------------------------
-         this.Name = aar.Name;
-         this.Commander = aar.Commander;
-         this.Gunner = aar.Gunner;
-         this.Loader = aar.Loader;
-         this.Driver = aar.Driver;
-         this.Assistant = aar.Assistant;
-         this.Decorations = aar.Decorations;
+         Name = aar.Name;
+         Commander = aar.Commander;
+         Gunner = aar.Gunner;
+         Loader = aar.Loader;
+         Driver = aar.Driver;
+         Assistant = aar.Assistant;
+         Decorations = aar.Decorations;
       }
    }
    //===================================================================
@@ -108,7 +108,7 @@ namespace Pattons_Best.Model
       public int Count { get { return myList.Count; } }
       public IAfterActionReport? Find(string day)
       {
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             IAfterActionReport aar = (IAfterActionReport)o;
             if (day == Utilities.RemoveSpaces(aar.Day))
@@ -134,7 +134,7 @@ namespace Pattons_Best.Model
       public void Clear() { myList.Clear(); }
       public bool Contains(IAfterActionReport aar)
       {
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             IAfterActionReport aar1 = (IAfterActionReport)o;
             if (aar.Day == aar1.Day) // match on name
@@ -145,7 +145,7 @@ namespace Pattons_Best.Model
       public int IndexOf(IAfterActionReport aar) { return myList.IndexOf(aar); }
       public void Remove(IAfterActionReport aar)
       {
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             IAfterActionReport aar1 = (IAfterActionReport)o;
             if (aar.Day == Utilities.RemoveSpaces(aar1.Day))
@@ -157,7 +157,7 @@ namespace Pattons_Best.Model
       }
       public IAfterActionReport? Remove(string day)
       {
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             IAfterActionReport aar = (IAfterActionReport)o;
             if (day == aar.Day)

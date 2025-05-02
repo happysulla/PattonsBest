@@ -593,6 +593,7 @@ namespace Pattons_Best
                return false;
             }
             myGameInstance.MapItemMoves.Insert(0, mim); // add at front
+            Logger.Log(LogEnum.LE_VIEW_ROTATION, "UpdateGridRowsEnemyActionMove(): mi=" + mim.MapItem.Name + " r=" + mim.MapItem.Rotation + " rb=" + mim.MapItem.RotationBase);
             Logger.Log(LogEnum.LE_VIEW_MIM_ADD, "UpdateGridRowsEnemyActionMove(): mi=" + mi.Name + " moving to t=" + newT.Name);
          }
          return true;

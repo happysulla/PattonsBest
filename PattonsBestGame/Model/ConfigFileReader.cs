@@ -10,7 +10,7 @@ namespace Pattons_Best
 {
    public class ConfigFileReader
    {
-      public string[] theTables = new string[42] 
+      public string[] theTables = new string[42]
            { "Activation", "Ammo", "AP To Kill (75)", "AP To Kill (76L)", "AP To Kill (76LL)", "Bail Out", "Bogged Down", "Brew Up", "Calendar", "Collateral", "Deployment",
              "Decorations", "Enemy Advance", "Enemy Appearance", "Enemy AP To Hit", "Enemy AP To Kill", "Enemy Battle",  "Enemy Counterattack",
              "Exit Areas", "Explosion",  "Friendly Action",  "Gun Malfunction", "HE to Kill (75)", "HE to Kill (76)",
@@ -24,14 +24,14 @@ namespace Pattons_Best
       private Dictionary<string, string> myRecordTitles = new Dictionary<string, string>();
       public Dictionary<string, string> RecordTitles { get => myRecordTitles; }
       private StreamReader? myStreamReader = null;
-         //-------------------------------------------------------------
+      //-------------------------------------------------------------
       public ConfigFileReader(string filename)
       {
-         if( true == filename.Contains("Tables"))
+         if (true == filename.Contains("Tables"))
          {
-            foreach( string s in theTables )
+            foreach (string s in theTables)
             {
-               string filename1 = ConfigFileReader.theConfigDirectory + s + ".xml";
+               string filename1 = theConfigDirectory + s + ".xml";
                if (false == CreateTable(s, filename1))
                {
                   Logger.Log(LogEnum.LE_ERROR, "ConfigFileReader(): CreateTable() returned false for s=" + s);
@@ -119,7 +119,7 @@ namespace Pattons_Best
             {
                if ('"' == fileContent[i])
                {
-                  if (fileContent.Length <= (i + 1))
+                  if (fileContent.Length <= i + 1)
                      return true;
                   if ('"' == fileContent[i + 1]) // skip appending two characters if double double quotes, i.e. ""
                   {

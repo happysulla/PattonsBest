@@ -23,7 +23,7 @@ namespace Pattons_Best
                Directory.CreateDirectory(theGamesDirectory);
             string filename = theGamesDirectory + "Checkpoint.bpg";
             IGameInstance? gi = ReadXml(filename);
-            if( null == gi )
+            if (null == gi)
             {
                Logger.Log(LogEnum.LE_ERROR, "OpenGame(): ReadXml() returned null for " + filename);
                return null;
@@ -86,7 +86,7 @@ namespace Pattons_Best
                Directory.CreateDirectory(theGamesDirectory);
             Directory.SetCurrentDirectory(theGamesDirectory);
          }
-         catch(Exception e)
+         catch (Exception e)
          {
             Logger.Log(LogEnum.LE_ERROR, "OpenGameFromFile(): path=" + theGamesDirectory + " e=" + e.ToString());
             return null;
@@ -108,7 +108,7 @@ namespace Pattons_Best
                }
                Logger.Log(LogEnum.LE_GAME_INIT, "OpenGameFromFile(): gi=" + gi.ToString());
                string? gamePath = Path.GetDirectoryName(dlg.FileName); // save off the directory user chosen
-               if( null == gamePath)
+               if (null == gamePath)
                {
                   Directory.SetCurrentDirectory(MainWindow.theAssemblyDirectory);
                   Logger.Log(LogEnum.LE_ERROR, "OpenGameFromFile(): Path.GetDirectoryName() returned null for fn=" + dlg.FileName);
@@ -150,9 +150,9 @@ namespace Pattons_Best
             if (true == dlg.ShowDialog())
             {
                XmlDocument? aXmlDocument = CreateXml(gi); // create a new XML document 
-               if( null == aXmlDocument)
+               if (null == aXmlDocument)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "SaveGameAsToFile(): CreateXml() returned null for path=" + theGamesDirectory );
+                  Logger.Log(LogEnum.LE_ERROR, "SaveGameAsToFile(): CreateXml() returned null for path=" + theGamesDirectory);
                   return false;
                }
                using (FileStream writer = new FileStream(dlg.FileName, FileMode.OpenOrCreate, FileAccess.Write))
@@ -189,7 +189,7 @@ namespace Pattons_Best
          int Day = gi.Day + 1;
          if (Day < 100)
             sb.Append("0");
-         if ( Day < 10 )
+         if (Day < 10)
             sb.Append("0");
          sb.Append(Day.ToString());
          sb.Append(".pbg");
@@ -210,7 +210,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateXml():  assembly.GetName().Version=null");
             return -1;
          }
-         return versionRunning.Major;  
+         return versionRunning.Major;
       }
       public bool ReadXmlTerritories(XmlReader reader, ITerritories territories)
       {
@@ -232,7 +232,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Territories.Count=null");
             return false;
          }
-         int count = Int32.Parse(sCount);
+         int count = int.Parse(sCount);
          //-----------------------------------------------------------------
          for (int i = 0; i < count; ++i)
          {
@@ -310,14 +310,14 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(sX)=null");
                return false;
             }
-            territory.CenterPoint.X = Double.Parse(sX);
+            territory.CenterPoint.X = double.Parse(sX);
             string? sY = reader.GetAttribute("Y");
             if (null == sY)
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(sX)=null");
                return false;
             }
-            territory.CenterPoint.Y = Double.Parse(sY);
+            territory.CenterPoint.Y = double.Parse(sY);
             //--------------------------------------
             reader.Read();
             if (false == reader.IsStartElement())
@@ -336,7 +336,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(sCount0)=null");
                return false;
             }
-            int count0 = Int32.Parse(sCount0);
+            int count0 = int.Parse(sCount0);
             for (int i1 = 0; i1 < count0; ++i1)
             {
                reader.Read();
@@ -362,9 +362,9 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(sY1)=null");
                   return false;
                }
-               double x = Double.Parse(sX1);
-               double y = Double.Parse(sY1);
-               IMapPoint mp = new MapPoint(x,y);
+               double x = double.Parse(sX1);
+               double y = double.Parse(sY1);
+               IMapPoint mp = new MapPoint(x, y);
                territory.Points.Add(mp);
             }
             if (0 < count0)
@@ -387,7 +387,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(sCount3)=null");
                return false;
             }
-            int count3 = Int32.Parse(sCount3);
+            int count3 = int.Parse(sCount3);
             for (int i3 = 0; i3 < count3; ++i3)
             {
                reader.Read();
@@ -412,7 +412,7 @@ namespace Pattons_Best
             if (0 < count3)
                reader.Read(); // get past </Adjacents> tag
             //--------------------------------------
-            territories.Add(territory);            
+            territories.Add(territory);
             reader.Read(); // get past </Territory> tag
          }
          if (0 < count)
@@ -429,7 +429,7 @@ namespace Pattons_Best
          }
          XmlAttribute xmlAttribute = aXmlDocument.CreateAttribute("count");
          xmlAttribute.Value = territories.Count.ToString();
-         if( null == root.Attributes )
+         if (null == root.Attributes)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml(): root.Attributes is null");
             return false;
@@ -572,7 +572,7 @@ namespace Pattons_Best
             // Load the reader with the data file and ignore all white space nodes.
             reader = new XmlTextReader(filename) { WhitespaceHandling = WhitespaceHandling.None };
             reader.Read();
-            if( true == reader.IsStartElement())
+            if (true == reader.IsStartElement())
             {
                if (reader.Name != "GameInstance")
                {
@@ -597,8 +597,8 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "ReadXml(): version=null");
                      return null;
                   }
-                  int version = Int32.Parse(sVersion);
-                  if ( version != GetMajorVersion() )
+                  int version = int.Parse(sVersion);
+                  if (version != GetMajorVersion())
                   {
                      System.Windows.MessageBox.Show("Unable to open due to version mismatch. File v" + version + " does not match running v" + GetMajorVersion() + ".");
                      return null;
@@ -606,7 +606,7 @@ namespace Pattons_Best
                }
             }
             //----------------------------------------------
-            if( false == ReadXmlOptions(reader, gi.Options))
+            if (false == ReadXmlOptions(reader, gi.Options))
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlOptions() returned false");
                return null;
@@ -700,7 +700,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "ReadXml(): GetAttribute(GameTurn)=null");
                      return null;
                   }
-                  gi.GameTurn = Int32.Parse(sAttribute);
+                  gi.GameTurn = int.Parse(sAttribute);
                }
             }
             //----------------------------------------------
@@ -738,13 +738,13 @@ namespace Pattons_Best
             return false;
          }
          string? sCount = reader.GetAttribute("count");
-         if( null == sCount)
+         if (null == sCount)
          {
             Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): Count=null");
             return false;
          }
          //-------------------------------------
-         int count = Int32.Parse(sCount);
+         int count = int.Parse(sCount);
          for (int i = 0; i < count; ++i)
          {
             reader.Read();
@@ -767,7 +767,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): IsEnabled=null");
                   return false;
                }
-               bool isEnabled = Boolean.Parse(sEnabled);
+               bool isEnabled = bool.Parse(sEnabled);
                Option option = new Option(name, isEnabled);
                options.Add(option);
             }
@@ -799,7 +799,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Count=null");
                return false;
             }
-            int count = Int32.Parse(sCount);
+            int count = int.Parse(sCount);
             for (int i = 0; i < count; ++i)
             {
                reader.Read();
@@ -811,21 +811,21 @@ namespace Pattons_Best
                      return false;
                   }
                   string? tName = reader.GetAttribute("value");
-                  if( null == tName )
+                  if (null == tName)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameMapItems(): GetAttribute() returned false");
                      return false;
                   }
                   ITerritory? territory = Territories.theTerritories.Find(tName);
-                  if( null == territory )
+                  if (null == territory)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameMapItems(): Find() returned null for tName=" + tName);
                      return false;
                   }
-                  territories.Add(territory);   
+                  territories.Add(territory);
                }
             }
-            if( 0 < count )
+            if (0 < count)
                reader.Read(); // get past end tag
          }
          return true;
@@ -852,7 +852,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Count=null");
                return false;
             }
-            int count = Int32.Parse(sCount);
+            int count = int.Parse(sCount);
             for (int i = 0; i < count; ++i)
             {
                reader.Read();
@@ -899,14 +899,14 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): sIdentifier=null");
                return false;
             }
-            EnteredHex.theId = Int32.Parse(sTheIdentifier);
+            EnteredHex.theId = int.Parse(sTheIdentifier);
             string? sCount = reader.GetAttribute("count");
             if (null == sCount)
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): Count=null");
                return false;
             }
-            int countEnterHex = Int32.Parse(sCount);
+            int countEnterHex = int.Parse(sCount);
             for (int i = 0; i < countEnterHex; ++i)
             {
                string? sIdentifier = null;
@@ -916,7 +916,7 @@ namespace Pattons_Best
                int position = 0;
                ColorActionEnum colorAction = ColorActionEnum.CAE_START;
                List<string> eventNames = new List<string>();
-               List<string> partyNames = new List<string>();   
+               List<string> partyNames = new List<string>();
                //----------------------------
                reader.Read();
                if (true == reader.IsStartElement())
@@ -958,7 +958,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): GetAttribute(sDay) returned null");
                      return false;
                   }
-                  day = Int32.Parse(sDay);
+                  day = int.Parse(sDay);
                }
                //--------------------------------------
                reader.Read();
@@ -991,7 +991,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): GetAttribute(sIsEncounter) returned null");
                      return false;
                   }
-                  isEncounter = Boolean.Parse(sIsEncounter);
+                  isEncounter = bool.Parse(sIsEncounter);
                }
                //--------------------------------------
                reader.Read();
@@ -1008,7 +1008,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): GetAttribute(sPosition) returned null");
                      return false;
                   }
-                  position = Int32.Parse(sPosition);
+                  position = int.Parse(sPosition);
                }
                //--------------------------------------
                reader.Read();
@@ -1063,8 +1063,8 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): GetAttribute(sCount) returned null");
                      return false;
                   }
-                  int countEventName = Int32.Parse(sCount);
-                  for(int k=0; k< countEventName; ++k )
+                  int countEventName = int.Parse(sCount);
+                  for (int k = 0; k < countEventName; ++k)
                   {
                      reader.Read();
                      if (reader.Name != "EventName")
@@ -1072,7 +1072,7 @@ namespace Pattons_Best
                         Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): EventName != (node=" + reader.Name + ")");
                         return false;
                      }
-                     string? sEventName= reader.GetAttribute("value");
+                     string? sEventName = reader.GetAttribute("value");
                      if (null == sEventName)
                      {
                         Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): GetAttribute(sEventName) returned null");
@@ -1098,7 +1098,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): GetAttribute(sCount) returned null");
                      return false;
                   }
-                  int countPartyName = Int32.Parse(sCount);
+                  int countPartyName = int.Parse(sCount);
                   for (int k = 0; k < countPartyName; ++k)
                   {
                      reader.Read();
@@ -1115,11 +1115,11 @@ namespace Pattons_Best
                      }
                      partyNames.Add(sPartyName);
                   }
-                  if( 0 < countPartyName)
+                  if (0 < countPartyName)
                      reader.Read(); // get past </PartyNames> tag
                }
                //--------------------------------------
-               if(null == sIdentifier)
+               if (null == sIdentifier)
                {
                   Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): sIdentifier=null");
                   return false;
@@ -1155,14 +1155,14 @@ namespace Pattons_Best
             return null;
          }
          //------------------------------------------
-         XmlElement? versionElem = aXmlDocument.CreateElement("Version"); 
-         if( null == versionElem )
+         XmlElement? versionElem = aXmlDocument.CreateElement("Version");
+         if (null == versionElem)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml(): aXmlDocument.DocumentElement.LastChild=null");
             return null;
          }
          int majorVersion = GetMajorVersion();
-         if (majorVersion < 0 )
+         if (majorVersion < 0)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml():  0 > majorVersion=" + majorVersion.ToString());
             return null;
@@ -1175,7 +1175,7 @@ namespace Pattons_Best
             return null;
          }
          //------------------------------------------
-         if ( false == CreateXmlGameOptions(aXmlDocument, gi.Options))
+         if (false == CreateXmlGameOptions(aXmlDocument, gi.Options))
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateXmlOptions() returned false");
             return null;
@@ -1274,8 +1274,8 @@ namespace Pattons_Best
          //--------------------------------
          foreach (Option option in options)
          {
-            XmlElement? optionElem = aXmlDocument.CreateElement("Option");  
-            if( null == optionElem )
+            XmlElement? optionElem = aXmlDocument.CreateElement("Option");
+            if (null == optionElem)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(Option) returned null");
                return false;
@@ -1447,7 +1447,7 @@ namespace Pattons_Best
          //--------------------------------------------------------------------
          foreach (EnteredHex hex in hexes)
          {
-            XmlElement? hexElem = aXmlDocument.CreateElement("EnteredHex");  
+            XmlElement? hexElem = aXmlDocument.CreateElement("EnteredHex");
             if (null == hexElem)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(hexElem) returned null");
@@ -1460,7 +1460,7 @@ namespace Pattons_Best
                return false;
             }
             //-------------------------------------------------
-            XmlElement? elem = aXmlDocument.CreateElement("Identifier");  
+            XmlElement? elem = aXmlDocument.CreateElement("Identifier");
             if (null == elem)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(Identifier) returned null");
@@ -1557,7 +1557,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(eventNamesNode) returned null");
                return false;
             }
-            foreach( string sEventName in hex.EventNames )
+            foreach (string sEventName in hex.EventNames)
             {
                elem = aXmlDocument.CreateElement("EventName");
                if (null == elem)

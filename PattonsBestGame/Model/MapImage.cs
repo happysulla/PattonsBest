@@ -15,20 +15,20 @@ namespace Pattons_Best
    [Serializable]
    public class MapImage : IMapImage
    {
-      public static string theImageDirectory = "";      
-      public System.Windows.Media.Imaging.BitmapImage myBitmapImage;
+      public static string theImageDirectory = "";
+      public BitmapImage myBitmapImage;
       public string Name { get; set; } = string.Empty;
       public bool IsAnimated { get; set; } = false;
       public bool IsMoving { get; set; } = false;
       public bool IsHullDown { get; set; } = false;
       private Image myImage = new Image();
-      public Image ImageControl { get=>myImage; set=>myImage=value; }
+      public Image ImageControl { get => myImage; set => myImage = value; }
       private ImageAnimationController? myAnimationController = null;
-      public ImageAnimationController? AnimationController { get=>myAnimationController; set=>myAnimationController=value; }
+      public ImageAnimationController? AnimationController { get => myAnimationController; set => myAnimationController = value; }
       //--------------------------------------------
       public MapImage(string imageName)
       {
-         string fullImagePath = MapImage.theImageDirectory + Utilities.RemoveSpaces(imageName) + ".gif";
+         string fullImagePath = theImageDirectory + Utilities.RemoveSpaces(imageName) + ".gif";
          Name = imageName;
          myBitmapImage = new BitmapImage();
          try
@@ -37,9 +37,9 @@ namespace Pattons_Best
             myBitmapImage.UriSource = new Uri(fullImagePath, UriKind.Absolute);
             myBitmapImage.EndInit();
             ImageControl = new Image { Source = myBitmapImage, Stretch = Stretch.Fill, Name = imageName };
-            if( null == ImageControl)
+            if (null == ImageControl)
             {
-               Logger.Log(LogEnum.LE_ERROR, "MapImage(): 0 imageName=" + imageName );
+               Logger.Log(LogEnum.LE_ERROR, "MapImage(): 0 imageName=" + imageName);
             }
             else
             {
@@ -62,7 +62,7 @@ namespace Pattons_Best
          {
             Logger.Log(LogEnum.LE_ERROR, "MapImage(): 3 imageName=" + fullImagePath + "\n" + ioException.ToString());
          }
-         catch ( Exception e )
+         catch (Exception e)
          {
             Logger.Log(LogEnum.LE_ERROR, "MapImage(): 4 imageName=" + fullImagePath + "\n" + e.ToString());
          }
@@ -87,10 +87,10 @@ namespace Pattons_Best
          }
          catch (DirectoryNotFoundException dirException)
          {
-            if( null == ImageControl )
-                Logger.Log(LogEnum.LE_ERROR, "ImageAnimationLoaded(): 1 imagecontrol=null \n" + dirException.ToString());
+            if (null == ImageControl)
+               Logger.Log(LogEnum.LE_ERROR, "ImageAnimationLoaded(): 1 imagecontrol=null \n" + dirException.ToString());
             else
-                Logger.Log(LogEnum.LE_ERROR, "ImageAnimationLoaded(): 1 imageName=" + ImageControl.Name + "\n" + dirException.ToString());
+               Logger.Log(LogEnum.LE_ERROR, "ImageAnimationLoaded(): 1 imageName=" + ImageControl.Name + "\n" + dirException.ToString());
             return;
          }
          catch (FileNotFoundException fileException)
@@ -142,16 +142,16 @@ namespace Pattons_Best
       }
       public IMapImage? this[int index]
       {
-         get 
+         get
          {
             IMapImage? image = myList[index] as IMapImage;
-            return image; 
+            return image;
          }
          set { myList[index] = value; }
       }
       public IMapImage? Find(string pathToMatch)
       {
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             IMapImage mii = (IMapImage)o;
             if (mii.Name == pathToMatch)
@@ -161,17 +161,17 @@ namespace Pattons_Best
       }
       public BitmapImage? GetBitmapImage(string imageName)
       {
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             MapImage? mii = o as MapImage;
-            if( null == mii )
+            if (null == mii)
             {
                Logger.Log(LogEnum.LE_ERROR, "GetBitmapImage(): mii is not a MapImage");
                return null;
             }
             if (mii.Name == imageName)
             {
-               if( null == mii.myBitmapImage)
+               if (null == mii.myBitmapImage)
                {
                   Logger.Log(LogEnum.LE_ERROR, "GetBitmapImage(): mii.myBitmapImage=null");
                   return null;

@@ -13,7 +13,7 @@ namespace Pattons_Best
    public class Utilities
    {
       private static int NUM_NICK_NAMES = 126;
-      public static String[] theNickNames = new string[126]
+      public static string[] theNickNames = new string[126]
       { "MOTHER", "LITTLE WHILLIE", "TIN TURTLE", "WHIPPET", "DREADNAUGHT", "FLOATING COFFIN", "BAD BOY", "THE INVINCIBLE", "RONSON", "TOMMY COOKER",
          "GIANT", "CASE CLOSED", "AND JUSTICE FOR ALL", "BIG DOG", "CRASHING THRU EM", "BLACK LABEL", "CORONA", "CHARIOT OF HELL", "CAUSE WE CAN", "CARNAGE", "ALWAYS CRAZY",
          "BETTER RUN AND HIDE", "ACHTONG BABY", "CABALLO LOCO", "ANCIENT ONE", "CLOUD NINE", "BOHICA", "CHRONIC PAIN", "COMPLIMENTS OF USA", "BLIZHITCH", "ASHES TO ASHES", "BRAGGING RIGHTS",
@@ -40,16 +40,16 @@ namespace Pattons_Best
       //--------------------------------------------
       public static int MapItemNum { set; get; } = 0;
       //--------------------------------------------
-      public static Double ZoomCanvas { get; set; } = 1.5;
-      public static Double theMapItemOffset = 20;
-      public static Double theMapItemSize = 40;  // size of a MapItem black
+      public static double ZoomCanvas { get; set; } = 1.5;
+      public static double theMapItemOffset = 20;
+      public static double theMapItemSize = 40;  // size of a MapItem black
       public static int theStackSize = 1000;
       //--------------------------------------------
       static private int theRandomIndex = 0;
       private static readonly Random[] theRandoms = new Random[NUM_RANDOM_GEN]; // default seed is System time 
       static public Random RandomGenerator
       {
-         get 
+         get
          {
             int newIndex = theRandomIndex + 3;
             if (NUM_RANDOM_GEN <= newIndex)
@@ -57,7 +57,7 @@ namespace Pattons_Best
             theRandomIndex = newIndex;
             for (int i = 0; i < 4; i++)
                Thread.Sleep(theRandoms[theRandomIndex].Next(3));
-            return theRandoms[theRandomIndex]; 
+            return theRandoms[theRandomIndex];
          }
       }
       static public string GetNickName()
@@ -72,7 +72,7 @@ namespace Pattons_Best
             sb.Append('0');
          sb.Append(hour.ToString());
          sb.Append(':');
-         if( min < 15 )
+         if (min < 15)
             sb.Append('0');
          sb.Append(min.ToString());
          return sb.ToString();
@@ -129,13 +129,13 @@ namespace Pattons_Best
          }
          return false;
       }
-      public static System.Windows.Input.Cursor ConvertToCursor(UIElement control, System.Windows.Point hotSpot)
+      public static System.Windows.Input.Cursor ConvertToCursor(UIElement control, Point hotSpot)
       {
          //--------------------------------------------
          // convert FrameworkElement to PNG stream
          var pngStream = new MemoryStream();
          control.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-         System.Windows.Rect rect = new System.Windows.Rect(0, 0, control.DesiredSize.Width, control.DesiredSize.Height);
+         Rect rect = new Rect(0, 0, control.DesiredSize.Width, control.DesiredSize.Height);
          RenderTargetBitmap rtb = new RenderTargetBitmap((int)control.DesiredSize.Width, (int)control.DesiredSize.Height, 96, 96, PixelFormats.Pbgra32);
          control.Arrange(rect);
          rtb.Render(control);
@@ -156,16 +156,16 @@ namespace Pattons_Best
          cursorStream.Write(new byte[2] { (byte)hotSpot.X, 0x00 }, 0, 2);                    // ICONDIRENTRY: Specifies the horizontal coordinates of the hotspot in number of pixels from the left.
          cursorStream.Write(new byte[2] { (byte)hotSpot.Y, 0x00 }, 0, 2);                    // ICONDIRENTRY: Specifies the vertical coordinates of the hotspot in number of pixels from the top.
          cursorStream.Write(new byte[4] {                                                    // ICONDIRENTRY: Specifies the size of the image's data in bytes
-                                          (byte)((pngStream.Length & 0x000000FF)),
+                                          (byte)(pngStream.Length & 0x000000FF),
                                           (byte)((pngStream.Length & 0x0000FF00) >> 0x08),
                                           (byte)((pngStream.Length & 0x00FF0000) >> 0x10),
                                           (byte)((pngStream.Length & 0xFF000000) >> 0x18)
                                        }, 0, 4);
          cursorStream.Write(new byte[4] {                                                    // ICONDIRENTRY: Specifies the offset of BMP or PNG data from the beginning of the ICO/CUR file
-                                          (byte)0x16,
-                                          (byte)0x00,
-                                          (byte)0x00,
-                                          (byte)0x00,
+                                          0x16,
+                                          0x00,
+                                          0x00,
+                                          0x00,
                                        }, 0, 4);
 
          // copy PNG stream to cursor stream
@@ -176,7 +176,7 @@ namespace Pattons_Best
          cursorStream.Seek(0, SeekOrigin.Begin);
          return new System.Windows.Input.Cursor(cursorStream);
       }
-      public static String Serialize<T>(T t)
+      public static string Serialize<T>(T t)
       {
          try // XML serializer does not work for Interfaces
          {
@@ -191,15 +191,15 @@ namespace Pattons_Best
             return "";
          }
       }
-      public static T? Deserialize<T>(String s_xml)
+      public static T? Deserialize<T>(string s_xml)
       {
          try // XML serializer does not work for Interfaces
          {
             StringReader reader = new StringReader(s_xml);
             XmlReader xw = XmlReader.Create(reader);
             XmlSerializer serializer = new XmlSerializer(typeof(T));
-            object? obj = serializer.Deserialize(xw);  
-            if(null == obj)
+            object? obj = serializer.Deserialize(xw);
+            if (null == obj)
             {
                var type = typeof(T);
                Logger.Log(LogEnum.LE_ERROR, "Deserialize(): serializer returned null for s=" + s_xml + " T=" + type.ToString());
@@ -236,17 +236,17 @@ namespace Pattons_Best
       {
          if (true == mi.Name.Contains("LW"))
             return true;
-         else if ((true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("Pak")))
+         else if (true == mi.Name.Contains("ATG") || true == mi.Name.Contains("Pak"))
             return true;
-         else if ((true == mi.Name.Contains("SPG")) || (true == mi.Name.Contains("STuGIIIg")))
+         else if (true == mi.Name.Contains("SPG") || true == mi.Name.Contains("STuGIIIg"))
             return true;
-         else if ((true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("PzVI")))
+         else if (true == mi.Name.Contains("TANK") || true == mi.Name.Contains("PzVI"))
             return true;
          else if (true == mi.Name.Contains("MG"))
             return true;
          else if (true == mi.Name.Contains("TRUCK"))
             return true;
-         else if ((true == mi.Name.Contains("PSW")) || (true == mi.Name.Contains("SPW")))
+         else if (true == mi.Name.Contains("PSW") || true == mi.Name.Contains("SPW"))
             return true;
          else if (true == mi.Name.Contains("MARDER"))
             return true;
@@ -254,7 +254,7 @@ namespace Pattons_Best
             return true;
          else if (true == mi.Name.Contains("PzV"))
             return true;
-         else if ((true == mi.Name.Contains("JdgPzIV")) || (true == mi.Name.Contains("JdgPz38t")))
+         else if (true == mi.Name.Contains("JdgPzIV") || true == mi.Name.Contains("JdgPz38t"))
             return true;
          return false;
       }

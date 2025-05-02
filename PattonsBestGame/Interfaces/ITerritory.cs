@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using static Pattons_Best.Territory;
-
 namespace Pattons_Best
 {
    public interface ITerritory

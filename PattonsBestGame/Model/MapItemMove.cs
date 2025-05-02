@@ -31,7 +31,7 @@ namespace Pattons_Best
       {
          MapItem = movingMapItem;
          OldTerritory = movingMapItem.TerritoryCurrent;
-         if( null == OldTerritory )
+         if (null == OldTerritory)
          {
             Logger.Log(LogEnum.LE_ERROR, "MapItemMove(): OldTerritory=null");
             CtorError = true;
@@ -206,7 +206,7 @@ namespace Pattons_Best
                   }
                   else // Add the Territory with the lowest Metric to the path
                   {
-                     if( null != lowestTerritory)
+                     if (null != lowestTerritory)
                      {
                         path.Territories.Add(lowestTerritory);
                         path.Metric = lowestMetricScore;
@@ -306,10 +306,10 @@ namespace Pattons_Best
       }
       public IMapItemMove? this[int index]
       {
-         get 
+         get
          {
             IMapItemMove? mim = myList[index] as IMapItemMove;
-            return mim; 
+            return mim;
          }
          set { myList[index] = value; }
       }
@@ -326,7 +326,7 @@ namespace Pattons_Best
             {
                IMapItemMove? randomMim = myList[index] as IMapItemMove;
                myList.RemoveAt(index);
-               if( null != randomMim ) 
+               if (null != randomMim)
                   newOrder.Add(randomMim);
             }
          }

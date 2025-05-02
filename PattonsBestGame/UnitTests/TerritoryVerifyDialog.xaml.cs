@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
-using static Pattons_Best.Territory;
 namespace Pattons_Best
 {
    public partial class TerritoryVerifyDialog : Window

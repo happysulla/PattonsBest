@@ -9,7 +9,7 @@ namespace Pattons_Best
 {
    public static class SurnameMgr
    {
-      private static List<String> theSurnames = new List<String>();
+      private static List<string> theSurnames = new List<string>();
       private static List<int> theProbabilities = new List<int>();
       public static bool SetInitial()
       {
@@ -18,7 +18,7 @@ namespace Pattons_Best
          {
             StreamReader sr = File.OpenText(filename);
             int i = 0;
-            while(i < 1500)
+            while (i < 1500)
             {
                string? line = sr.ReadLine();
                if (null == line)
@@ -28,7 +28,7 @@ namespace Pattons_Best
                {
                   string[] aStringArray = line.Split(new char[] { ',' });
                   theSurnames.Add(aStringArray[0]);
-                  theProbabilities.Add(Int32.Parse(aStringArray[1]));
+                  theProbabilities.Add(int.Parse(aStringArray[1]));
                }
             }
             return true;
@@ -43,9 +43,9 @@ namespace Pattons_Best
       {
          int randomNum = Utilities.RandomGenerator.Next(1000000);
          string retValue = theSurnames[0];
-         for (int i = 0; i < theProbabilities.Count; ++i )
+         for (int i = 0; i < theProbabilities.Count; ++i)
          {
-            if( randomNum < theProbabilities[i] )
+            if (randomNum < theProbabilities[i])
                return retValue;
             retValue = theSurnames[i];
          }

@@ -34,7 +34,7 @@ namespace Pattons_Best
       public void Add(ICombatCalendarEntry ce) { myList.Add(ce); }
       public ICombatCalendarEntry? Find(string date)
       {
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             ICombatCalendarEntry ce = (ICombatCalendarEntry)o;
             if (date == Utilities.RemoveSpaces(ce.Date))
@@ -47,7 +47,7 @@ namespace Pattons_Best
       {
          get
          {
-            if (this.Count <= index)
+            if (Count <= index)
                return null;
             if (null == myList[index])
                return null;

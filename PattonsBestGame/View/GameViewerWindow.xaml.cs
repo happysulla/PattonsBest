@@ -1,5 +1,4 @@
-﻿using Pattons_Best.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -18,10 +17,10 @@ using System.Xml.Serialization;
 using Button = System.Windows.Controls.Button;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Point = System.Windows.Point;
-using Pattons_Best.Model;
 using System.Diagnostics;
 using System.Xml.Linq;
 using System.Collections;
+using Pattons_Best.Properties;
 
 namespace Pattons_Best
 {

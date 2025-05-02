@@ -14,9 +14,9 @@ namespace Pattons_Best
    public class TableMgr
    {
       public static ICombatCalanderEntries theCombatCalendarEntries = new CombatCalendarEntries();
-      public static int[,] theExits = new int[10,10];
+      public static int[,] theExits = new int[10, 10];
       //-------------------------------------------
-      public TableMgr() 
+      public TableMgr()
       {
          CreateCombatCalender();
          CreateExitTable();
@@ -117,7 +117,7 @@ namespace Pattons_Best
       public static string GetWeather(int day, int dieRoll)
       {
          string month = GetMonth(day);
-         switch(month)
+         switch (month)
          {
             case "Jul":
             case "Aug":
@@ -129,7 +129,7 @@ namespace Pattons_Best
                   return "Fog";
                else if (dieRoll < 98)
                   return "Mud";
-               else 
+               else
                   return "Mud/Overcast";
             case "Sep":
             case "Oct":
@@ -146,7 +146,7 @@ namespace Pattons_Best
                   return "Mud/Overcast";
                else
                {
-                  if( "Nov" == month )
+                  if ("Nov" == month)
                      return "Snow";
                   else
                      return "Overcast";
@@ -191,7 +191,7 @@ namespace Pattons_Best
          string month = GetMonth(day);
          if ("Nov" == month)
             --dieRoll;
-         else if (("Dec" == month) || ("Jan" == month) || ("Feb" == month))
+         else if ("Dec" == month || "Jan" == month || "Feb" == month)
             ++dieRoll;
          switch (dieRoll)
          {
@@ -222,7 +222,7 @@ namespace Pattons_Best
          const int Feb1945 = 136;
          const int Mar1945 = 146;
          string month = GetMonth(day);
-         if( dieRoll < 6 )
+         if (dieRoll < 6)
          {
             if (EnumScenario.Advance == situation && Feb1945 < day)
                return "LW";
@@ -239,11 +239,11 @@ namespace Pattons_Best
          }
          else if (dieRoll < 21)
          {
-            if (EnumScenario.Advance == situation )
+            if (EnumScenario.Advance == situation)
                return "TRUCK";
             else if (EnumScenario.Battle == situation)
                return "LW";
-            else 
+            else
                return "TANK";
          }
          else if (dieRoll < 26)
@@ -293,7 +293,7 @@ namespace Pattons_Best
                return "TRUCK";
             else if (EnumScenario.Battle == situation)
                return "MG";
-            else 
+            else
                return "LW";
          }
          else if (dieRoll < 56)
@@ -354,7 +354,7 @@ namespace Pattons_Best
                return "ATG";
             else if (EnumScenario.Battle == situation && Mar1945 < day)
                return "MG";
-            else if (EnumScenario.Counterattack == situation )
+            else if (EnumScenario.Counterattack == situation)
                return "MG";
             else
                return "ATG";
@@ -400,7 +400,7 @@ namespace Pattons_Best
             dieRoll -= 3;
          else if ("D" == areaType)
             dieRoll -= 2;
-         switch( enemyUnit )
+         switch (enemyUnit)
          {
             case "ATG":
                if (dieRoll < 3)
@@ -412,7 +412,7 @@ namespace Pattons_Best
             case "LW":
                if (dieRoll < 7)
                   return "C";
-               else 
+               else
                   return "M";
             case "MG":
                if (dieRoll < 4)
@@ -439,8 +439,8 @@ namespace Pattons_Best
                else
                   return "L";
             default:
-              Logger.Log(LogEnum.LE_ERROR, "GetEnemyRange(): Reached Default enemy=" + enemyUnit);
-              return "ERROR";
+               Logger.Log(LogEnum.LE_ERROR, "GetEnemyRange(): Reached Default enemy=" + enemyUnit);
+               return "ERROR";
          }
       }
       public static string GetEnemyFacing(string enemyUnit, int dieRoll)
@@ -448,9 +448,9 @@ namespace Pattons_Best
          switch (enemyUnit)
          {
             case "SPG":
-               if (dieRoll < 7) 
+               if (dieRoll < 7)
                   return "Front";
-               else if (dieRoll < 10) 
+               else if (dieRoll < 10)
                   return "Side";
                else
                   return "Rear";
@@ -490,14 +490,14 @@ namespace Pattons_Best
                         return "Woods";
                      else if (dieRoll < 9)
                         return "Building";
-                     else if (dieRoll == 10 )
+                     else if (dieRoll == 10)
                         return "Moving";
                      else
                         return "Open";
                   case "B":
                      if (dieRoll < 4)
                         return "Woods";
-                     else if ((dieRoll < 8) && (("Nov" != month) && ("Feb" != month)))
+                     else if (dieRoll < 8 && "Nov" != month && "Feb" != month)
                         return "Woods";
                      else if (dieRoll < 8)
                         return "Fortification";
@@ -517,7 +517,7 @@ namespace Pattons_Best
                   case "D":
                      if (dieRoll < 4)
                         return "Woods";
-                     else if ((dieRoll < 9) && (("Nov" != month) && ("Feb" != month)))
+                     else if (dieRoll < 9 && "Nov" != month && "Feb" != month)
                         return "Woods";
                      else if (dieRoll < 9)
                         return "Fortification";
@@ -530,7 +530,7 @@ namespace Pattons_Best
                      return "ERROR";
                }
             case "MG":
-               switch( areaType )
+               switch (areaType)
                {
                   case "A":
                      if (dieRoll < 5)
@@ -542,7 +542,7 @@ namespace Pattons_Best
                   case "B":
                      if (dieRoll < 4)
                         return "Woods";
-                     else if ((dieRoll < 8) && (("Nov" != month) && ("Feb" != month)))
+                     else if (dieRoll < 8 && "Nov" != month && "Feb" != month)
                         return "Woods";
                      else if (dieRoll < 8)
                         return "Fortification";
@@ -558,7 +558,7 @@ namespace Pattons_Best
                   case "D":
                      if (dieRoll < 4)
                         return "Woods";
-                     else if ((dieRoll < 9) && (("Nov" != month) && ("Feb" != month)))
+                     else if (dieRoll < 9 && "Nov" != month && "Feb" != month)
                         return "Woods";
                      else if (dieRoll < 9)
                         return "Fortification";
@@ -574,7 +574,7 @@ namespace Pattons_Best
                   case "A":
                      if (dieRoll < 5)
                         return "Woods";
-                     else if ((dieRoll < 9) && (("Nov" != month) && ("Feb" != month)))
+                     else if (dieRoll < 9 && "Nov" != month && "Feb" != month)
                         return "Open";
                      else if (dieRoll < 9)
                         return "Fortification";
@@ -583,7 +583,7 @@ namespace Pattons_Best
                   case "B":
                      if (dieRoll < 4)
                         return "Woods";
-                     else if ((dieRoll < 8) && (("Nov" != month) && ("Feb" != month)))
+                     else if (dieRoll < 8 && "Nov" != month && "Feb" != month)
                         return "Woods";
                      else if (dieRoll < 8)
                         return "Fortification";
@@ -592,7 +592,7 @@ namespace Pattons_Best
                   case "C":
                      if (dieRoll < 3)
                         return "Woods";
-                     else if ((dieRoll < 9) && (("Nov" != month) && ("Feb" != month)))
+                     else if (dieRoll < 9 && "Nov" != month && "Feb" != month)
                         return "Open";
                      else if (dieRoll < 9)
                         return "Fortification";
@@ -601,7 +601,7 @@ namespace Pattons_Best
                   case "D":
                      if (dieRoll < 4)
                         return "Woods";
-                     else if ((dieRoll < 9) && (("Nov" != month) && ("Feb" != month)))
+                     else if (dieRoll < 9 && "Nov" != month && "Feb" != month)
                         return "Woods";
                      else if (dieRoll < 9)
                         return "Fortification";
@@ -674,21 +674,21 @@ namespace Pattons_Best
             enemyUnit = "TRUCK";
          else if (true == mi.Name.Contains("PSW"))
             enemyUnit = "PSW";
-         else if (true == mi.Name.Contains("SPW")) 
+         else if (true == mi.Name.Contains("SPW"))
             enemyUnit = "SPW";
          else if (true == mi.Name.Contains("MARDER"))
             enemyUnit = "MARDER";
-         else if ((true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("Pak")))
+         else if (true == mi.Name.Contains("ATG") || true == mi.Name.Contains("Pak"))
             enemyUnit = "ATG";
          else if (true == mi.Name.Contains("PzIV"))
             enemyUnit = "PzIV";
          else if (true == mi.Name.Contains("PzV"))
             enemyUnit = "PzV";
-         else if ((true == mi.Name.Contains("SPG")) || (true == mi.Name.Contains("STuGIIIg")))
+         else if (true == mi.Name.Contains("SPG") || true == mi.Name.Contains("STuGIIIg"))
             enemyUnit = "STuGIIIg";
-         else if ((true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("PzVI")))
+         else if (true == mi.Name.Contains("TANK") || true == mi.Name.Contains("PzVI"))
             enemyUnit = "PzVI";
-         else if ((true == mi.Name.Contains("JdgPzIV")) || (true == mi.Name.Contains("JdgPz38t")))
+         else if (true == mi.Name.Contains("JdgPzIV") || true == mi.Name.Contains("JdgPz38t"))
             enemyUnit = "JdgPz";
          if ("ERROR" == enemyUnit)
          {
@@ -716,7 +716,7 @@ namespace Pattons_Best
             if (true == smoke.Name.Contains("Smoke"))
                numSmokeInTargetZone++;
          }
-         int modifier = (numSmokeInTargetZone * 10);
+         int modifier = numSmokeInTargetZone * 10;
          //----------------------------------------------------
          bool isTargetVehicle = false;
          bool isTargetInWoods = false;
@@ -755,27 +755,27 @@ namespace Pattons_Best
          if (true == isFlankingFire)
             modifier -= 10;
          //----------------------------------------------------
-         if ((true == isTargetVehicle) && (true == isAirStrike))
+         if (true == isTargetVehicle && true == isAirStrike)
             modifier -= 10;
          //----------------------------------------------------
-         modifier -= (3 * numUsControlledSector);
+         modifier -= 3 * numUsControlledSector;
          //----------------------------------------------------
          if (true == isTargetInWoods)
             modifier -= 3;
          //----------------------------------------------------
          modifier += friendlySquadsLost;
          //----------------------------------------------------
-         modifier += (2 * friendlyTanksLost);
+         modifier += 2 * friendlyTanksLost;
          //----------------------------------------------------
-         if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
+         if (true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
             modifier += 10;
          //----------------------------------------------------
-         if ((true == isTargetVehicle) && ((true == isAdvancingFire) || (true == isArtilleryFire)))
+         if (true == isTargetVehicle && (true == isAdvancingFire || true == isArtilleryFire))
             modifier += 10;
          //----------------------------------------------------
          return modifier;
       }
-      public static string SetFriendlyActionResult(IGameInstance gi, IMapItem mi, int dieRoll, int numUsControlledSector, bool isAdvancingFire, bool isArtilleryFire, bool isAirStrike, bool isFlankingFire )
+      public static string SetFriendlyActionResult(IGameInstance gi, IMapItem mi, int dieRoll, int numUsControlledSector, bool isAdvancingFire, bool isArtilleryFire, bool isAirStrike, bool isFlankingFire)
       {
          //----------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
@@ -784,9 +784,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): lastReport=null");
             return "ERROR";
          }
-         if ((false == isArtilleryFire) && ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling"))))
+         if (false == isArtilleryFire && (true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling")))
          {
-            if (("B6M" == mi.TerritoryCurrent.Name) || ("B6L" == mi.TerritoryCurrent.Name)) // no Friendly action allowed in these regions unless artillery
+            if ("B6M" == mi.TerritoryCurrent.Name || "B6L" == mi.TerritoryCurrent.Name) // no Friendly action allowed in these regions unless artillery
                return "ERROR";
          }
          //----------------------------------------------------
@@ -810,26 +810,26 @@ namespace Pattons_Best
             enemyUnit = "SPW";
          else if (true == mi.Name.Contains("MARDER"))
             enemyUnit = "MARDER";
-         else if ((true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("Pak")))
+         else if (true == mi.Name.Contains("ATG") || true == mi.Name.Contains("Pak"))
             enemyUnit = "ATG";
          else if (true == mi.Name.Contains("PzIV"))
             enemyUnit = "PzIV";
          else if (true == mi.Name.Contains("PzV"))
             enemyUnit = "PzV";
-         else if ((true == mi.Name.Contains("SPG")) || (true == mi.Name.Contains("STuGIIIg")))
+         else if (true == mi.Name.Contains("SPG") || true == mi.Name.Contains("STuGIIIg"))
             enemyUnit = "STuGIIIg";
-         else if ((true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("PzVI")))
+         else if (true == mi.Name.Contains("TANK") || true == mi.Name.Contains("PzVI"))
             enemyUnit = "PzVI";
-         else if ((true == mi.Name.Contains("JdgPzIV")) || (true == mi.Name.Contains("JdgPz38t")))
+         else if (true == mi.Name.Contains("JdgPzIV") || true == mi.Name.Contains("JdgPz38t"))
             enemyUnit = "JdgPz";
-         if ( "ERROR" == enemyUnit )
+         if ("ERROR" == enemyUnit)
          {
             Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): unknown enemyUnit=" + mi.Name);
             return "ERROR";
          }
          //----------------------------------------------------
          IStack? stack = gi.BattleStacks.Find(mi.TerritoryCurrent);
-         if( null == stack )
+         if (null == stack)
          {
             Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): stack=null for t=" + mi.TerritoryCurrent.Name);
             return "ERROR";
@@ -865,7 +865,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): reached default with enemyUnit=" + enemyUnit);
                return "ERROR";
          }
-         if( true == isSmokeAddedToTerritory )
+         if (true == isSmokeAddedToTerritory)
          {
             string miName = "SmokeOne" + Utilities.MapItemNum;
             Utilities.MapItemNum++;
@@ -877,7 +877,7 @@ namespace Pattons_Best
          }
          //----------------------------------------------------
          int modifier = GetFriendlyActionModifier(gi, mi, numUsControlledSector, isAdvancingFire, isArtilleryFire, isAirStrike, isFlankingFire);
-         if( modifier < -99 )
+         if (modifier < -99)
          {
             Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): GetFriendlyActionModifier() returned error");
             return "ERROR";
@@ -944,17 +944,17 @@ namespace Pattons_Best
             enemyUnit = "SPW";
          else if (true == mi.Name.Contains("MARDER"))
             enemyUnit = "MARDER";
-         else if ((true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("Pak")))
+         else if (true == mi.Name.Contains("ATG") || true == mi.Name.Contains("Pak"))
             enemyUnit = "ATG";
          else if (true == mi.Name.Contains("PzIV"))
             enemyUnit = "PzIV";
          else if (true == mi.Name.Contains("PzV"))
             enemyUnit = "PzV";
-         else if ((true == mi.Name.Contains("SPG")) || (true == mi.Name.Contains("STuGIIIg")))
+         else if (true == mi.Name.Contains("SPG") || true == mi.Name.Contains("STuGIIIg"))
             enemyUnit = "STuGIIIg";
-         else if ((true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("PzVI")))
+         else if (true == mi.Name.Contains("TANK") || true == mi.Name.Contains("PzVI"))
             enemyUnit = "PzVI";
-         else if ((true == mi.Name.Contains("JdgPzIV")) || (true == mi.Name.Contains("JdgPz38t")))
+         else if (true == mi.Name.Contains("JdgPzIV") || true == mi.Name.Contains("JdgPz38t"))
             enemyUnit = "JdgPz";
          if ("ERROR" == enemyUnit)
          {
@@ -1019,17 +1019,17 @@ namespace Pattons_Best
             enemyUnit = "SPW";
          else if (true == mi.Name.Contains("MARDER"))
             enemyUnit = "MARDER";
-         else if ((true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("Pak")))
+         else if (true == mi.Name.Contains("ATG") || true == mi.Name.Contains("Pak"))
             enemyUnit = "ATG";
          else if (true == mi.Name.Contains("PzIV"))
             enemyUnit = "PzIV";
          else if (true == mi.Name.Contains("PzV"))
             enemyUnit = "PzV";
-         else if ((true == mi.Name.Contains("SPG")) || (true == mi.Name.Contains("STuGIIIg")))
+         else if (true == mi.Name.Contains("SPG") || true == mi.Name.Contains("STuGIIIg"))
             enemyUnit = "STuGIIIg";
-         else if ((true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("PzVI")))
+         else if (true == mi.Name.Contains("TANK") || true == mi.Name.Contains("PzVI"))
             enemyUnit = "PzVI";
-         else if ((true == mi.Name.Contains("JdgPzIV")) || (true == mi.Name.Contains("JdgPz38t")))
+         else if (true == mi.Name.Contains("JdgPzIV") || true == mi.Name.Contains("JdgPz38t"))
             enemyUnit = "JdgPz";
          if ("ERROR" == enemyUnit)
          {
@@ -1048,19 +1048,19 @@ namespace Pattons_Best
          if ('C' != name[name.Length - 1])
          {
             string weather = lastReport.Weather;
-            if ((true == weather.Contains("Fog")) || (true == weather.Contains("Falling")))
+            if (true == weather.Contains("Fog") || true == weather.Contains("Falling"))
                isDoNothingIfFiring = true;
          }
          //----------------------------------------------------
          int modifier = GetEnemyActionModifier(gi, mi);
-         if( modifier < 0 )
+         if (modifier < 0)
          {
             Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): GetEnemyActionModifier() returned error");
             return "ERROR";
          }
          dieRoll += modifier;
          //----------------------------------------------------
-         if ( EnumScenario.Advance == lastReport.Scenario)
+         if (EnumScenario.Advance == lastReport.Scenario)
          {
             switch (enemyUnit)
             {
@@ -1078,7 +1078,7 @@ namespace Pattons_Best
                      return "Move-B";
                   if (dieRoll < 96)
                   {
-                     if(true == isDoNothingIfFiring)
+                     if (true == isDoNothingIfFiring)
                         return "Do Nothing";
                      return "Fire-Infantry";
                   }
@@ -1365,7 +1365,7 @@ namespace Pattons_Best
       {
          ITerritory oldT = mi.TerritoryCurrent;
          string? newTerritoryName = null;
-         switch(oldT.Name)
+         switch (oldT.Name)
          {
             case "B1C":
                if ("Move-F" == move)
@@ -1587,15 +1587,15 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default oldT=" + oldT.Name);
                return null;
          }
-         if( null == newTerritoryName )
+         if (null == newTerritoryName)
          {
             Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): newTerritoryName = null move=" + move + " for oldT=" + oldT.Name);
             return null;
          }
          ITerritory? newT = Territories.theTerritories.Find(newTerritoryName);
-         if( null == newT )
+         if (null == newT)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): newT=null newTerritoryName=" + newTerritoryName );
+            Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): newT=null newTerritoryName=" + newTerritoryName);
             return null;
          }
          return newT;
@@ -1812,115 +1812,115 @@ namespace Pattons_Best
       }
       private void CreateExitTable()
       {
-         theExits[0,0] = 8;
-         theExits[0,1] = 8;
-         theExits[0,2] = 8;
-         theExits[0,3] = 8;
-         theExits[0,4] = 8;
-         theExits[0,5] = 8;
-         theExits[0,6] = 5;
-         theExits[0,7] = 5;
-         theExits[0,8] = 5;
-         theExits[0,9] = 5;
+         theExits[0, 0] = 8;
+         theExits[0, 1] = 8;
+         theExits[0, 2] = 8;
+         theExits[0, 3] = 8;
+         theExits[0, 4] = 8;
+         theExits[0, 5] = 8;
+         theExits[0, 6] = 5;
+         theExits[0, 7] = 5;
+         theExits[0, 8] = 5;
+         theExits[0, 9] = 5;
          //----------------
-         theExits[1,0] = 8;
-         theExits[1,1] = 8;
-         theExits[1,2] = 8;
-         theExits[1,3] = 8;
-         theExits[1,4] = 8;
-         theExits[1,5] = 4;
-         theExits[1,6] = 4;
-         theExits[1,7] = 5;
-         theExits[1,8] = 5;
-         theExits[1,9] = 5;
+         theExits[1, 0] = 8;
+         theExits[1, 1] = 8;
+         theExits[1, 2] = 8;
+         theExits[1, 3] = 8;
+         theExits[1, 4] = 8;
+         theExits[1, 5] = 4;
+         theExits[1, 6] = 4;
+         theExits[1, 7] = 5;
+         theExits[1, 8] = 5;
+         theExits[1, 9] = 5;
          //----------------
-         theExits[2,0] = 7;
-         theExits[2,1] = 7;
-         theExits[2,2] = 7;
-         theExits[2,3] = 7;
-         theExits[2,4] = 7;
-         theExits[2,5] = 3;
-         theExits[2,6] = 3;
-         theExits[2,7] = 4;
-         theExits[2,8] = 4;
-         theExits[2,9] = 4;
+         theExits[2, 0] = 7;
+         theExits[2, 1] = 7;
+         theExits[2, 2] = 7;
+         theExits[2, 3] = 7;
+         theExits[2, 4] = 7;
+         theExits[2, 5] = 3;
+         theExits[2, 6] = 3;
+         theExits[2, 7] = 4;
+         theExits[2, 8] = 4;
+         theExits[2, 9] = 4;
          //----------------
-         theExits[3,0] = 7;
-         theExits[3,1] = 6;
-         theExits[3,2] = 6;
-         theExits[3,3] = 6;
-         theExits[3,4] = 3;
-         theExits[3,5] = 2;
-         theExits[3,6] = 2;
-         theExits[3,7] = 4;
-         theExits[3,8] = 4;
-         theExits[3,9] = 4;
+         theExits[3, 0] = 7;
+         theExits[3, 1] = 6;
+         theExits[3, 2] = 6;
+         theExits[3, 3] = 6;
+         theExits[3, 4] = 3;
+         theExits[3, 5] = 2;
+         theExits[3, 6] = 2;
+         theExits[3, 7] = 4;
+         theExits[3, 8] = 4;
+         theExits[3, 9] = 4;
          //----------------
-         theExits[4,0] = 6;
-         theExits[4,1] = 5;
-         theExits[4,2] = 5;
-         theExits[4,3] = 2;
-         theExits[4,4] = 2;
-         theExits[4,5] = 2;
-         theExits[4,6] = 2;
-         theExits[4,7] = 3;
-         theExits[4,8] = 3;
-         theExits[4,9] = 3;
+         theExits[4, 0] = 6;
+         theExits[4, 1] = 5;
+         theExits[4, 2] = 5;
+         theExits[4, 3] = 2;
+         theExits[4, 4] = 2;
+         theExits[4, 5] = 2;
+         theExits[4, 6] = 2;
+         theExits[4, 7] = 3;
+         theExits[4, 8] = 3;
+         theExits[4, 9] = 3;
          //----------------
-         theExits[5,0] = 5;
-         theExits[5,1] = 5;
-         theExits[5,2] = 5;
-         theExits[5,3] = 1;
-         theExits[5,4] = 1;
-         theExits[5,5] = 1;
-         theExits[5,6] = 1;
-         theExits[5,7] = 2;
-         theExits[5,8] = 2;
-         theExits[5,9] = 8;
+         theExits[5, 0] = 5;
+         theExits[5, 1] = 5;
+         theExits[5, 2] = 5;
+         theExits[5, 3] = 1;
+         theExits[5, 4] = 1;
+         theExits[5, 5] = 1;
+         theExits[5, 6] = 1;
+         theExits[5, 7] = 2;
+         theExits[5, 8] = 2;
+         theExits[5, 9] = 8;
          //----------------
-         theExits[6,0] = 5;
-         theExits[6,1] = 4;
-         theExits[6,2] = 10;
-         theExits[6,3] = 10;
-         theExits[6,4] = 10;
-         theExits[6,5] = 10;
-         theExits[6,6] = 10;
-         theExits[6,7] = 2;
-         theExits[6,8] = 2;
-         theExits[6,9] = 7;
+         theExits[6, 0] = 5;
+         theExits[6, 1] = 4;
+         theExits[6, 2] = 10;
+         theExits[6, 3] = 10;
+         theExits[6, 4] = 10;
+         theExits[6, 5] = 10;
+         theExits[6, 6] = 10;
+         theExits[6, 7] = 2;
+         theExits[6, 8] = 2;
+         theExits[6, 9] = 7;
          //----------------
-         theExits[7,0] = 4;
-         theExits[7,1] = 4;
-         theExits[7,2] = 10;
-         theExits[7,3] = 10;
-         theExits[7,4] = 10;
-         theExits[7,5] = 10;
-         theExits[7,6] = 10;
-         theExits[7,7] = 1;
-         theExits[7,8] = 7;
-         theExits[7,9] = 6;
+         theExits[7, 0] = 4;
+         theExits[7, 1] = 4;
+         theExits[7, 2] = 10;
+         theExits[7, 3] = 10;
+         theExits[7, 4] = 10;
+         theExits[7, 5] = 10;
+         theExits[7, 6] = 10;
+         theExits[7, 7] = 1;
+         theExits[7, 8] = 7;
+         theExits[7, 9] = 6;
          //----------------
-         theExits[8,0] = 4;
-         theExits[8,1] = 3;
-         theExits[8,2] = 9;
-         theExits[8,3] = 9;
-         theExits[8,4] = 9;
-         theExits[8,5] = 9;
-         theExits[8,6] = 9;
-         theExits[8,7] = 10;
-         theExits[8,8] = 6;
-         theExits[8,9] = 5;
+         theExits[8, 0] = 4;
+         theExits[8, 1] = 3;
+         theExits[8, 2] = 9;
+         theExits[8, 3] = 9;
+         theExits[8, 4] = 9;
+         theExits[8, 5] = 9;
+         theExits[8, 6] = 9;
+         theExits[8, 7] = 10;
+         theExits[8, 8] = 6;
+         theExits[8, 9] = 5;
          //----------------
-         theExits[9,0] = 3;
-         theExits[9,1] = 9;
-         theExits[9,2] = 9;
-         theExits[9,3] = 9;
-         theExits[9,4] = 9;
-         theExits[9,5] = 9;
-         theExits[9,6] = 9;
-         theExits[9,7] = 6;
-         theExits[9,8] = 5;
-         theExits[9,9] = 5;
+         theExits[9, 0] = 3;
+         theExits[9, 1] = 9;
+         theExits[9, 2] = 9;
+         theExits[9, 3] = 9;
+         theExits[9, 4] = 9;
+         theExits[9, 5] = 9;
+         theExits[9, 6] = 9;
+         theExits[9, 7] = 6;
+         theExits[9, 8] = 5;
+         theExits[9, 9] = 5;
       }
    }
 }

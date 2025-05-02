@@ -62,24 +62,24 @@ namespace Pattons_Best
       {
          set
          {
-            if (null == this.TopImageName)
+            if (null == TopImageName)
                return;
-            IMapImage? mii = theMapImages.Find(this.TopImageName);
+            IMapImage? mii = theMapImages.Find(TopImageName);
             if (null == mii)
             {
-               Logger.Log(LogEnum.LE_ERROR, "IsAnimated.set() could not find map image for " + this.TopImageName);
+               Logger.Log(LogEnum.LE_ERROR, "IsAnimated.set() could not find map image for " + TopImageName);
                return;
             }
             mii.IsAnimated = value;
          }
          get
          {
-            if (null == this.TopImageName)
+            if (null == TopImageName)
                return false;
-            IMapImage? mii = theMapImages.Find(this.TopImageName);
+            IMapImage? mii = theMapImages.Find(TopImageName);
             if (null == mii)
             {
-               Logger.Log(LogEnum.LE_ERROR, "IsAnimated.get() could not find map image for " + this.TopImageName);
+               Logger.Log(LogEnum.LE_ERROR, "IsAnimated.get() could not find map image for " + TopImageName);
                return false;
             }
             return mii.IsAnimated;
@@ -92,10 +92,10 @@ namespace Pattons_Best
       //--------------------------------------------------
       public IMapPoint Location { get; set; } = new MapPoint(0.0, 0.0);
       protected ITerritory myTerritoryCurrent = new Territory("Offboard");
-      public ITerritory TerritoryCurrent 
-      { 
-         get => myTerritoryCurrent; 
-         set => myTerritoryCurrent = value; 
+      public ITerritory TerritoryCurrent
+      {
+         get => myTerritoryCurrent;
+         set => myTerritoryCurrent = value;
       }
       protected ITerritory myTerritoryStarting = new Territory("Offboard");
       public ITerritory TerritoryStarting { get => myTerritoryStarting; set => myTerritoryStarting = value; }
@@ -112,23 +112,23 @@ namespace Pattons_Best
       //----------------------------------------------------------------------------
       protected MapItem(string name)
       {
-         this.Name = name;
+         Name = name;
       }
       protected MapItem(string aName, double zoom, bool isHidden, bool isAnimated, string topImageName)
       {
          try
          {
-            this.Name = aName;
-            this.Zoom = zoom;
-            this.IsHidden = isHidden;
-            this.TopImageName = topImageName;
+            Name = aName;
+            Zoom = zoom;
+            IsHidden = isHidden;
+            TopImageName = topImageName;
             IMapImage? mii = theMapImages.Find(topImageName);
             if (null == mii)
             {
                mii = new MapImage(topImageName);
                theMapImages.Add(mii);
             }
-            this.IsAnimated = isAnimated;
+            IsAnimated = isAnimated;
          }
          catch (Exception ex)
          {
@@ -140,24 +140,24 @@ namespace Pattons_Best
       {
          try
          {
-            this.Name = aName;
-            this.Zoom = zoom;
-            this.IsHidden = isHidden;
-            this.TopImageName = topImageName;
+            Name = aName;
+            Zoom = zoom;
+            IsHidden = isHidden;
+            TopImageName = topImageName;
             IMapImage? miiTop = theMapImages.Find(topImageName);
             if (null == miiTop)
             {
                miiTop = new MapImage(topImageName);
                theMapImages.Add(miiTop);
             }
-            this.TopImageName = topImageName;
+            TopImageName = topImageName;
             IMapImage? miiBottom = theMapImages.Find(buttomImageName);
             if (null == miiBottom)
             {
                miiBottom = new MapImage(buttomImageName);
                theMapImages.Add(miiBottom);
             }
-            this.IsAnimated = isAnimated;
+            IsAnimated = isAnimated;
          }
          catch (Exception ex)
          {
@@ -174,21 +174,21 @@ namespace Pattons_Best
       {
          TerritoryCurrent = territory;
          TerritoryStarting = territory;
-         this.Location.X = territory.CenterPoint.X - zoom * Utilities.theMapItemOffset;
-         this.Location.Y = territory.CenterPoint.Y - zoom * Utilities.theMapItemOffset;
+         Location.X = territory.CenterPoint.X - zoom * Utilities.theMapItemOffset;
+         Location.Y = territory.CenterPoint.Y - zoom * Utilities.theMapItemOffset;
       }
       //----------------------------------------------------------------------------
       public void SetLocation(IMapPoint mp, int counterCount = 0)
       {
-         double delta = this.Zoom * Utilities.theMapItemOffset + (counterCount * Utilities.STACK);
-         this.Location.X = mp.X - delta;
-         this.Location.Y = mp.Y - delta;
+         double delta = Zoom * Utilities.theMapItemOffset + counterCount * Utilities.STACK;
+         Location.X = mp.X - delta;
+         Location.Y = mp.Y - delta;
       }
       public void SetBloodSpots()
       {
          for (int spots = 0; spots < PERCENT_MAPITEM_COVERED; ++spots) // splatter the MapItem with random blood spots
          {
-            int range = (int)(Utilities.theMapItemSize);
+            int range = (int)Utilities.theMapItemSize;
             BloodSpot spot = new BloodSpot(range, theRandom);
             myWoundSpots.Add(spot);
          }
@@ -213,12 +213,12 @@ namespace Pattons_Best
             BottomImageName = temp;
          }
       }
-      public override String ToString()
+      public override string ToString()
       {
          StringBuilder sb = new StringBuilder("Name=<");
-         sb.Append(this.Name);
+         sb.Append(Name);
          sb.Append(">T=<");
-         sb.Append(this.TerritoryCurrent.Name);
+         sb.Append(TerritoryCurrent.Name);
          return sb.ToString();
       }
       //---------------------------------------------------------------------------- static functions
@@ -234,7 +234,7 @@ namespace Pattons_Best
                int index = Utilities.RandomGenerator.Next(mapItems.Count);
                if (index < mapItems.Count)
                {
-                  IMapItem randomIndex = (IMapItem)mapItems[index];
+                  IMapItem randomIndex = mapItems[index];
                   mapItems.RemoveAt(index);
                   newOrder.Add(randomIndex);
                }
@@ -242,7 +242,7 @@ namespace Pattons_Best
             mapItems = newOrder;
          }
       }
-      public static void SetButtonContent(Button b, IMapItem mi, bool isDecoration=true, bool isBloodSpotsShown = true)
+      public static void SetButtonContent(Button b, IMapItem mi, bool isDecoration = true, bool isBloodSpotsShown = true)
       {
          Grid g = new Grid() { };
          if (false == mi.IsAnimated)
@@ -264,7 +264,7 @@ namespace Pattons_Best
             }
             g.Children.Add(c);
             //----------------------------------------------------
-            if( true == isDecoration)
+            if (true == isDecoration)
             {
                if (true == mi.IsMoving)
                {
@@ -290,7 +290,7 @@ namespace Pattons_Best
                   double height = width;
                   Image imgTerrain = new Image() { Height = height, Width = width, Source = theWood };
                   c.Children.Add(imgTerrain);
-                  Canvas.SetLeft(imgTerrain,0);
+                  Canvas.SetLeft(imgTerrain, 0);
                   Canvas.SetTop(imgTerrain, 0);
                }
                else if (true == mi.IsFortification)
@@ -370,7 +370,7 @@ namespace Pattons_Best
       public MapItems(IMapItems mapItems)
       {
          myList = new ArrayList();
-         foreach (IMapItem item in mapItems) { this.Add(item); }
+         foreach (IMapItem item in mapItems) { Add(item); }
       }
       public void Add(IMapItem? mi) { myList.Add(mi); }
       public void Insert(int index, IMapItem mi) { myList.Insert(index, mi); }
@@ -383,7 +383,7 @@ namespace Pattons_Best
       public void Remove(IMapItem mi) { myList.Remove(mi); }
       public IMapItem? Find(string miName)
       {
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             IMapItem? mi = o as IMapItem;
             if (null == mi)
@@ -395,7 +395,7 @@ namespace Pattons_Best
       }
       public IMapItem? Remove(string miName)
       {
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             IMapItem? mi = (IMapItem)o;
             if (null == mi) return null;
@@ -447,7 +447,7 @@ namespace Pattons_Best
       {
          for (int j = 0; j < numOfRotates; j++)
          {
-            Object? temp = myList[0];
+            object? temp = myList[0];
             if (temp == null)
             {
                Logger.Log(LogEnum.LE_ERROR, "Rotate(): myList[0]=null");
@@ -461,11 +461,11 @@ namespace Pattons_Best
             }
          }
       }
-      public override String ToString()
+      public override string ToString()
       {
          StringBuilder sb = new StringBuilder();
          sb.Append("[ ");
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             IMapItem mi = (IMapItem)o;
             sb.Append(mi.Name);

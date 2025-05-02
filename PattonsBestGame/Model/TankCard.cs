@@ -26,7 +26,7 @@ namespace Pattons_Best
       //-------------------------------
       public TankCard(int num)
       {
-         switch( num )
+         switch (num)
          {
             case 1:
                break;

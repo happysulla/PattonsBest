@@ -12,12 +12,12 @@ namespace Pattons_Best
       private double myMetric = 0;
       public double Metric { get; set; }
       private List<ITerritory> myTerritories = new List<ITerritory>();
-      public List<ITerritory> Territories { get=>myTerritories; }
+      public List<ITerritory> Territories { get => myTerritories; }
       //-----------------------------------------------------------
       public MapPath()
       {
       }
-      public MapPath(String pathName)
+      public MapPath(string pathName)
       {
          Name = pathName;
       }
@@ -29,12 +29,12 @@ namespace Pattons_Best
             myTerritories.Add(t);
       }
       //-----------------------------------------------------------
-      public override String ToString()
+      public override string ToString()
       {
          StringBuilder sb = new StringBuilder();
-         sb.Append(this.Name);
+         sb.Append(Name);
          sb.Append("(");
-         sb.Append(this.Metric.ToString());
+         sb.Append(Metric.ToString());
          sb.Append(") PATH=");
          int count = 0;
          foreach (ITerritory t in Territories)
@@ -63,10 +63,10 @@ namespace Pattons_Best
       public void Remove(IMapPath path) { myList.Remove(path); }
       public IMapPath? Find(IMapPath pathToMatch)
       {
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             IMapPath? path = o as IMapPath;
-            if( null == path )
+            if (null == path)
             {
                Logger.Log(LogEnum.LE_ERROR, "MapPath.Find(pathToMatch): path=null");
                return null;
@@ -78,7 +78,7 @@ namespace Pattons_Best
       }
       public IMapPath? Find(string pathName)
       {
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             IMapPath? path = (IMapPath)o;
             if (null == path)
@@ -93,7 +93,7 @@ namespace Pattons_Best
       }
       public IMapPath? Remove(string pathName)
       {
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             IMapPath path = (IMapPath)o;
             if (path.Name == pathName)
@@ -114,10 +114,10 @@ namespace Pattons_Best
       }
       public IMapPath? this[int index]
       {
-         get 
-         { 
+         get
+         {
             IMapPath? mp = myList[index] as IMapPath;
-            return mp; 
+            return mp;
          }
          set { myList[index] = value; }
       }

@@ -12,12 +12,12 @@ namespace Pattons_Best
       public Point CenterPoint { get => myCenterPoint; set => myCenterPoint = value; }
       public MapPoint() { }
       public MapPoint(double x, double y) { myX = x; myY = y; }
-      public override String ToString()
+      public override string ToString()
       {
          StringBuilder sb = new StringBuilder("(");
-         sb.Append(this.myX.ToString("####."));
+         sb.Append(myX.ToString("####."));
          sb.Append(",");
-         sb.Append(this.myY.ToString("####."));
+         sb.Append(myY.ToString("####."));
          sb.Append(")");
          return sb.ToString();
       }

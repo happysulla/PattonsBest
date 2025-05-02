@@ -19,7 +19,7 @@ namespace Pattons_Best
       public string Type { get; set; } = "ERROR";
       public IMapPoint CenterPoint { get; set; } = new MapPoint();
       public List<IMapPoint> Points { get; set; } = new List<IMapPoint>();
-      public List<String> Adjacents { get; set; } = new List<String>();
+      public List<string> Adjacents { get; set; } = new List<string>();
       //---------------------------------------------------------------
       public static IMapPoint GetRandomPoint(ITerritory t)
       {
@@ -49,8 +49,8 @@ namespace Pattons_Best
          int count = 20;
          while (0 < --count)
          {
-            double XCenter = (double)Utilities.RandomGenerator.Next((int)rect.Left, (int)rect.Right) + Utilities.theMapItemOffset; // Get a random point in the bounding box
-            double YCenter = (double)Utilities.RandomGenerator.Next((int)rect.Top, (int)rect.Bottom) + Utilities.theMapItemOffset;
+            double XCenter = Utilities.RandomGenerator.Next((int)rect.Left, (int)rect.Right) + Utilities.theMapItemOffset; // Get a random point in the bounding box
+            double YCenter = Utilities.RandomGenerator.Next((int)rect.Top, (int)rect.Bottom) + Utilities.theMapItemOffset;
             Ellipse ellipse = new Ellipse() { Fill = Brushes.Black, Stroke = Brushes.Black, Width = 10, Height = 10, StrokeThickness = 1 };
             Canvas.SetLeft(ellipse, XCenter - 5);
             Canvas.SetTop(ellipse, YCenter - 5);
@@ -99,21 +99,21 @@ namespace Pattons_Best
                }
                System.Windows.Point p5 = new System.Windows.Point(XCenter - Utilities.theMapItemOffset, YCenter - Utilities.theMapItemOffset);
                if (true == geometry.FillContains(p5))
-                  return new MapPoint(XCenter,YCenter);
+                  return new MapPoint(XCenter, YCenter);
             }
          }
          Logger.Log(LogEnum.LE_ERROR, "GetRandomPoint(): Cannot find a random point in t.Name=" + t.Name + " rect=" + rect.ToString());
          return t.CenterPoint;
       }
       //---------------------------------------------------------------
-      public Territory() 
-      { 
+      public Territory()
+      {
 
       }
       public Territory(string name) { Name = name; }
-      public override String ToString()
+      public override string ToString()
       {
-         return this.Name;
+         return Name;
       }
       public ITerritory Find(List<ITerritory> territories, string name)
       {
@@ -123,7 +123,7 @@ namespace Pattons_Best
          if (0 < results.Count())
             return results.First();
          else
-            throw (new Exception("Territory.Find(): Unknown Territory=" + name));
+            throw new Exception("Territory.Find(): Unknown Territory=" + name);
       }
    }
    //---------------------------------------------------------------
@@ -139,9 +139,9 @@ namespace Pattons_Best
       public void Insert(int index, ITerritory t) { myList.Insert(index, t); }
       public int Count { get { return myList.Count; } }
       public void Clear() { myList.Clear(); }
-      public bool Contains(ITerritory t) 
+      public bool Contains(ITerritory t)
       {
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             ITerritory t1 = (ITerritory)o;
             if (Utilities.RemoveSpaces(t.Name) == Utilities.RemoveSpaces(t1.Name)) // match on name
@@ -154,7 +154,7 @@ namespace Pattons_Best
       public void Remove(ITerritory t) { myList.Remove(t); }
       public ITerritory? Find(string tName)
       {
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             ITerritory t = (ITerritory)o;
             if (tName == Utilities.RemoveSpaces(t.Name))
@@ -170,7 +170,7 @@ namespace Pattons_Best
       }
       public ITerritory? Remove(string tName)
       {
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             ITerritory t = (ITerritory)o;
             if (tName == t.Name)
@@ -183,18 +183,18 @@ namespace Pattons_Best
       }
       public ITerritory? this[int index]
       {
-         get 
-         {  
+         get
+         {
             ITerritory? t = myList[index] as ITerritory;
-            return t; 
+            return t;
          }
          set { myList[index] = value; }
       }
-      public override String ToString()
+      public override string ToString()
       {
          StringBuilder sb = new StringBuilder();
          sb.Append("[ ");
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             ITerritory t = (ITerritory)o;
             sb.Append(t.Name);
@@ -207,7 +207,7 @@ namespace Pattons_Best
    //---------------------------------------------------------------
    public static class TerritoryExtensions
    {
-      public static ITerritory? Find(this IList<ITerritory> territories, String name)
+      public static ITerritory? Find(this IList<ITerritory> territories, string name)
       {
          try
          {

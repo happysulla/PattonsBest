@@ -30,12 +30,12 @@ namespace Pattons_Best
       public List<Button> theDice = new List<Button>();
       private int myLoadedCount = 0;
       private Mutex myMutex = new Mutex();
-      public Mutex DieMutex { get=>myMutex; }
+      public Mutex DieMutex { get => myMutex; }
       //-----------------------------------------------------------
       public DieRoller(Canvas? c, LoadEndCallback? callback = null)
       {
          myCallbackEndLoad = callback ?? throw new ArgumentNullException(nameof(callback));
-         if( null == c )
+         if (null == c)
          {
             CtorError = true;
             return;
@@ -50,7 +50,7 @@ namespace Pattons_Best
       //-----------------------------------------------------------
       public void HideDie()
       {
-         if( null == theDice)
+         if (null == theDice)
          {
             Logger.Log(LogEnum.LE_ERROR, "HideDie(): theDice=null");
             return;
@@ -95,7 +95,7 @@ namespace Pattons_Best
          IMapPoint mp2 = new MapPoint(mp.X, mp.Y + 0.65 * Utilities.theMapItemSize / Utilities.ZoomCanvas);
          randomNum = Utilities.RandomGenerator.Next(6, 12);
          int die2 = RollStationaryDie(mp2, randomNum);
-         if ((0 == die1) && (0 == die2))
+         if (0 == die1 && 0 == die2)
             myDieRollResults = 100;
          else
             myDieRollResults = die1 + 10 * die2;
@@ -129,10 +129,10 @@ namespace Pattons_Best
          IMapPoint mp2 = new MapPoint(mp.X, mp.Y + 0.65 * Utilities.theMapItemSize / Utilities.ZoomCanvas);
          randomNum = Utilities.RandomGenerator.Next(10, 20);
          int die2 = RollMovingDie(sv, c, mp2, randomNum);
-         if ((0 == die1) && (0 == die2))
+         if (0 == die1 && 0 == die2)
             myDieRollResults = 100;
          else
-           myDieRollResults = die1 + 10*die2;
+            myDieRollResults = die1 + 10 * die2;
          return myDieRollResults;
       }
       //-----------------------------------------------------------
@@ -144,7 +144,7 @@ namespace Pattons_Best
          {
             // Load the reader with the data file and ignore all white space nodes.
             XmlTextReader? reader = new XmlTextReader(filename) { WhitespaceHandling = WhitespaceHandling.None };
-            if( null == reader )
+            if (null == reader)
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadDiceXml(): reader=null");
                return false;
@@ -156,7 +156,7 @@ namespace Pattons_Best
                   if (reader.IsStartElement())
                   {
                      string? imageName = reader.GetAttribute("value");
-                     if( null == imageName )
+                     if (null == imageName)
                      {
                         Logger.Log(LogEnum.LE_ERROR, "ReadDiceXml(): imageName=null");
                         return false;
@@ -168,7 +168,7 @@ namespace Pattons_Best
                         Logger.Log(LogEnum.LE_ERROR, "ReadDiceXml(): zoomStr=null");
                         return false;
                      }
-                     Double zoom = Double.Parse(zoomStr);
+                     double zoom = double.Parse(zoomStr);
                      reader.Read();
                      string? topImageName = reader.GetAttribute("value");
                      if (null == topImageName)
@@ -237,8 +237,8 @@ namespace Pattons_Best
          controller.Play();
          Canvas.SetLeft(theDice[randomNum], mp.X - zoom * Utilities.theMapItemOffset);
          Canvas.SetTop(theDice[randomNum], mp.Y - zoom * Utilities.theMapItemOffset);
-         Canvas.SetZIndex(theDice[randomNum], 10000);
-         return ( randomNum % 10 );
+         Panel.SetZIndex(theDice[randomNum], 10000);
+         return randomNum % 10;
       }
       private int RollMovingDie(ScrollViewer sv, Canvas c, IMapPoint mp, int randomNum)
       {
@@ -265,7 +265,7 @@ namespace Pattons_Best
          IMapPoint centerPoint = new MapPoint(mp.X - zoom * Utilities.theMapItemOffset, mp.Y - zoom * Utilities.theMapItemOffset);
          Canvas.SetLeft(b, centerPoint.X);
          Canvas.SetTop(b, centerPoint.Y);
-         Canvas.SetZIndex(theDice[randomNum], 10000);
+         Panel.SetZIndex(theDice[randomNum], 10000);
          Thread.Sleep(100);
          //----------------------------------------------------
          if (false == DiceAnimate(sv, c, b, centerPoint))
@@ -273,7 +273,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "RollMovingDie(): MovePathAnimate() returned false");
             return 0;
          }
-         return (randomNum % 10);
+         return randomNum % 10;
       }
       private bool DiceAnimate(ScrollViewer sv, Canvas c, Button b, IMapPoint startPoint)
       {
@@ -333,7 +333,7 @@ namespace Pattons_Best
          try
          {
             double dieSize = ZOOM_DICE * Utilities.theMapItemSize / Utilities.ZoomCanvas;
-            PathFigure aPathFigure = new PathFigure() { StartPoint = new System.Windows.Point(startPoint.X, startPoint.Y) };
+            PathFigure aPathFigure = new PathFigure() { StartPoint = new Point(startPoint.X, startPoint.Y) };
             double angle1InDegrees = Utilities.RandomGenerator.Next(20, 60);
             double angle1InRadians = angle1InDegrees * Math.PI / 180;
             double tangetOfAngle = Math.Tan(angle1InRadians);
@@ -341,15 +341,15 @@ namespace Pattons_Best
             double borderButtonSize = BUTTON_BOARDER / Utilities.ZoomCanvas;
             double Xdelta = sv.HorizontalOffset / Utilities.ZoomCanvas;
             double Xleft = Xdelta - borderButtonSize; // add in thumb offset for horizontal scroll bar
-            double Xright = (Xdelta + c.ActualWidth + BUTTON_BOARDER) - dieSize;
+            double Xright = Xdelta + c.ActualWidth + BUTTON_BOARDER - dieSize;
             if (Visibility.Visible == sv.ComputedHorizontalScrollBarVisibility)
-               Xright = Xdelta + sv.ActualWidth / Utilities.ZoomCanvas + borderButtonSize - System.Windows.SystemParameters.VerticalScrollBarWidth - dieSize;
+               Xright = Xdelta + sv.ActualWidth / Utilities.ZoomCanvas + borderButtonSize - SystemParameters.VerticalScrollBarWidth - dieSize;
             //--------------------------------------
             double Ydelta = sv.VerticalOffset / Utilities.ZoomCanvas;
             double Ytop = Ydelta - borderButtonSize; // add in thumb offset for vertical scroll bar 
-            double Ybottom = (Ydelta + c.ActualHeight + BUTTON_BOARDER) - dieSize;
+            double Ybottom = Ydelta + c.ActualHeight + BUTTON_BOARDER - dieSize;
             if (Visibility.Visible == sv.ComputedVerticalScrollBarVisibility)
-               Ybottom = Ydelta + sv.ActualHeight / Utilities.ZoomCanvas + 2 * borderButtonSize - System.Windows.SystemParameters.HorizontalScrollBarHeight - dieSize;
+               Ybottom = Ydelta + sv.ActualHeight / Utilities.ZoomCanvas + 2 * borderButtonSize - SystemParameters.HorizontalScrollBarHeight - dieSize;
             //--------------------------------------
             // 0=(-X,-Y)   1=(+X,-Y)  2=(-X,+Y)  3=(+X,+Y)
             //      (0,0)---------------------
@@ -390,7 +390,7 @@ namespace Pattons_Best
                      {
                         dieDirectionChange = "(-X,-Y)->(-X,+Y) c=0=top yt1=" + yt0.ToString("###") + " > ydiff=" + yDiff0.ToString("###");
                         dieDirection = 2; // 2=(-X,+Y) 
-                        x2 = x1 - (yDiff0 / tangetOfAngle);
+                        x2 = x1 - yDiff0 / tangetOfAngle;
                         y2 = Ytop;
                      }
                      else // case #2 ==>  y < y1  bounce of X-left wall
@@ -408,7 +408,7 @@ namespace Pattons_Best
                      {
                         dieDirectionChange = "(+X,-Y)->(+X,+Y) c=1=top yt1=" + yt1.ToString("###") + " > ydiff=" + yDiff1.ToString("###");
                         dieDirection = 3; // 3=(+X,+Y)
-                        x2 = x1 + (yDiff1 / tangetOfAngle);
+                        x2 = x1 + yDiff1 / tangetOfAngle;
                         y2 = Ytop;
                      }
                      else // case #3 ==>  yt1 < y1 bounce of X-right
@@ -426,7 +426,7 @@ namespace Pattons_Best
                      {
                         dieDirectionChange = "(-X,+Y)->(-X,-Y) c=4=bottom" + yt2.ToString("###") + " > ydiff=" + yDiff2.ToString("###");
                         dieDirection = 0; // 0=(-X,-Y)
-                        x2 = x1 - (yDiff2 / tangetOfAngle);
+                        x2 = x1 - yDiff2 / tangetOfAngle;
                         y2 = Ybottom;
                      }
                      else // case #6 ==> yt2 < (Y - y1) : bounce off X-left
@@ -444,7 +444,7 @@ namespace Pattons_Best
                      {
                         dieDirectionChange = "(+X,+Y)->(+X,-Y) c=5=bottom";
                         dieDirection = 1; // 1 = (+X,-Y)
-                        x2 = x1 + (yDiff3 / tangetOfAngle);
+                        x2 = x1 + yDiff3 / tangetOfAngle;
                         y2 = Ybottom;
                      }
                      else // case #7 ==> yt3 < (Y - y1) : bounce off X-right
@@ -457,7 +457,7 @@ namespace Pattons_Best
                      break;
                   default: Logger.Log(LogEnum.LE_ERROR, "DiceAnimate(): Reached default"); return false;
                }
-               System.Windows.Point newPoint = new System.Windows.Point(x2, y2);
+               Point newPoint = new Point(x2, y2);
                LineSegment lineSegment = new LineSegment(newPoint, false);
                aPathFigure.Segments.Add(lineSegment);
                pathDistance += Math.Sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
@@ -529,7 +529,7 @@ namespace Pattons_Best
             y = c.ActualHeight / 2 + sv.VerticalOffset;
          else
             y = sv.ActualHeight / (2 * Utilities.ZoomCanvas) + sv.VerticalOffset / Utilities.ZoomCanvas;
-         IMapPoint mp = (IMapPoint)new MapPoint(x, y);
+         IMapPoint mp = new MapPoint(x, y);
          return mp;
       }
       private void CreateEllipse(double x, double y)
@@ -571,7 +571,7 @@ namespace Pattons_Best
       }
       private void ImageAnimationCompleted(object sender, RoutedEventArgs e)
       {
-         if ( null == myCanvas)
+         if (null == myCanvas)
          {
             Logger.Log(LogEnum.LE_ERROR, "ImageAnimationCompleted(): myCanvas=null");
             return;

@@ -5,9 +5,9 @@ using System.Windows;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Collections.Generic;
-using Pattons_Best.Model;
+
 namespace Pattons_Best
-{
+{ 
    public class GameInstance : IGameInstance
    {
       static public Logger Logger = new Logger();
@@ -32,7 +32,7 @@ namespace Pattons_Best
       public IAfterActionReports Reports { get; set; } = new AfterActionReports();
       public GameAction DieRollAction { get; set; } = GameAction.DieRollActionNone;
       public bool IsUndoCommandAvailable { set; get; } = false;
-      public String EndGameReason { set; get; } = "";
+      public string EndGameReason { set; get; } = "";
       //---------------------------------------------------------------
       public IMapItems NewMembers { set; get; } = new MapItems();
       public IMapItems ReadyRacks { set; get; } = new MapItems();
@@ -72,7 +72,7 @@ namespace Pattons_Best
       //==============================================================
       public GameInstance() // Constructor - set log levels
       {
-         if ( false == Logger.SetInitial()) // tsetup logger
+         if (false == Logger.SetInitial()) // tsetup logger
          {
             Logger.Log(LogEnum.LE_ERROR, "GameInstance(): SetInitial() returned false");
             CtorError = true;
@@ -83,7 +83,7 @@ namespace Pattons_Best
             GameLoadMgr gameLoadMgr = new GameLoadMgr();
             string filename = ConfigFileReader.theConfigDirectory + Territories.FILENAME;
             XmlTextReader? reader = new XmlTextReader(filename) { WhitespaceHandling = WhitespaceHandling.None };
-            if( null == reader )
+            if (null == reader)
             {
                Logger.Log(LogEnum.LE_ERROR, "GameInstance(): reader=null");
                return;
@@ -94,7 +94,7 @@ namespace Pattons_Best
             if (null == tHome)
                Logger.Log(LogEnum.LE_ERROR, "GameInstance(): tHome=null");
             else
-               this.Home = tHome;
+               Home = tHome;
 
          }
          catch (Exception e)
@@ -112,22 +112,22 @@ namespace Pattons_Best
       }
       public GameInstance(Options newGameOptions) // Constructor - set log levels
       {
-         this.Options = newGameOptions;
+         Options = newGameOptions;
       }
-      public override String ToString()
+      public override string ToString()
       {
          StringBuilder sb = new StringBuilder("[");
          sb.Append("t=");
-         sb.Append(this.GameTurn.ToString());
+         sb.Append(GameTurn.ToString());
          sb.Append(",p=");
-         sb.Append(this.GamePhase.ToString());
+         sb.Append(GamePhase.ToString());
          sb.Append("]");
          return sb.ToString();
       }
       //---------------------------------------------------------------
       public ICrewMember? GetCrewMember(string name)
       {
-         IAfterActionReport? report = this.Reports.GetLast();
+         IAfterActionReport? report = Reports.GetLast();
          if (null == report)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetCrewMember(): report=null");
@@ -157,7 +157,7 @@ namespace Pattons_Best
          }
          return crewmember;
       }
-      public bool IsDaylightLeft(IAfterActionReport report )
+      public bool IsDaylightLeft(IAfterActionReport report)
       {
          if (report.SunsetHour < report.SunriseHour)
             return false;
@@ -171,13 +171,13 @@ namespace Pattons_Best
       public bool IsExitArea(out bool isExitAreaReached)
       {
          isExitAreaReached = false;
-         IMapItem? exitArea = this.MoveStacks.FindMapItem("ExitArea");
-         if( null == exitArea )
+         IMapItem? exitArea = MoveStacks.FindMapItem("ExitArea");
+         if (null == exitArea)
          {
             Logger.Log(LogEnum.LE_ERROR, "IsExitArea(): exitArea=null");
             return false;
          }
-         if( 0 == exitArea.TerritoryCurrent.Adjacents.Count)
+         if (0 == exitArea.TerritoryCurrent.Adjacents.Count)
          {
             Logger.Log(LogEnum.LE_ERROR, "IsExitArea(): exitArea.TerritoryCurrent.Adjacents.Count=0");
             return false;
@@ -193,7 +193,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "IsExitArea(): EnteredArea=null");
             return false;
          }
-         if (adjName == this.EnteredArea.Name)
+         if (adjName == EnteredArea.Name)
             isExitAreaReached = true;
          return true;
       }

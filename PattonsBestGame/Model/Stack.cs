@@ -24,16 +24,16 @@ namespace Pattons_Best
       }
       public void Rotate() { MapItems.Rotate(1); }
       public void Shuffle() { MapItems = MapItems.Shuffle(); }
-      public override String ToString()
+      public override string ToString()
       {
          StringBuilder sb = new StringBuilder("");
          sb.Append(Territory.ToString());
          sb.Append("==>(");
          int count = MapItems.Count;
-         for(int i=0; i<count; ++i)
+         for (int i = 0; i < count; ++i)
          {
             IMapItem? mi = MapItems[i];
-            if( null != mi)
+            if (null != mi)
             {
                sb.Append(mi.Name);
                if (i != MapItems.Count - 1)
@@ -51,10 +51,10 @@ namespace Pattons_Best
       private readonly ArrayList myList;
       public Stacks() { myList = new ArrayList(); }
       public void Add(IStack stack) { myList.Add(stack); }
-      public void Add(IMapItem mi) 
+      public void Add(IMapItem mi)
       {
          IStack? stack = Find(mi.TerritoryCurrent);
-         if( null == stack )
+         if (null == stack)
          {
             stack = new Stack(mi.TerritoryCurrent, mi);
             myList.Add(stack);
@@ -73,7 +73,7 @@ namespace Pattons_Best
       public void Remove(IStack stack) { myList.Remove(stack); }
       public IStack? Find(ITerritory t)
       {
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             IStack stack = (IStack)o;
             if (t.Name == stack.Territory.Name)
@@ -83,7 +83,7 @@ namespace Pattons_Best
       }
       public IStack? Find(IMapItem mi)
       {
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             IStack stack = (IStack)o;
             foreach (MapItem mapItem in stack.MapItems)
@@ -94,9 +94,9 @@ namespace Pattons_Best
          }
          return null;
       }
-      public IStack? Find(String name)
+      public IStack? Find(string name)
       {
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             IStack stack = (IStack)o;
             foreach (MapItem mapItem in stack.MapItems)
@@ -107,9 +107,9 @@ namespace Pattons_Best
          }
          return null;
       }
-      public IMapItem? FindMapItem(String name)
+      public IMapItem? FindMapItem(string name)
       {
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             IStack stack = (IStack)o;
             foreach (MapItem mapItem in stack.MapItems)
@@ -122,11 +122,11 @@ namespace Pattons_Best
       }
       public void Remove(IMapItem mi)
       {
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             IStack stack = (IStack)o;
             bool isMapItemRemoved = false;
-            foreach (MapItem mapItem in stack.MapItems) 
+            foreach (MapItem mapItem in stack.MapItems)
             {
 
                if (mi.Name == mapItem.Name)
@@ -136,7 +136,7 @@ namespace Pattons_Best
                   if (0 == stack.MapItems.Count)
                      Remove(stack);
                   return;
-                }
+               }
                if (true == isMapItemRemoved) // future mapitems move up in stack
                {
                   mapItem.Location.X += Utilities.STACK;
@@ -147,7 +147,7 @@ namespace Pattons_Best
       }
       public void Remove(string miName)
       {
-         foreach (Object o in myList)
+         foreach (object o in myList)
          {
             IStack stack = (IStack)o;
             bool isMapItemRemoved = false;
@@ -172,7 +172,7 @@ namespace Pattons_Best
       public IStack? RemoveAt(int index)
       {
          IStack? stack = myList[index] as IStack;
-         if( stack == null) return null;  
+         if (stack == null) return null;
          myList.RemoveAt(index);
          return stack;
       }
@@ -192,7 +192,7 @@ namespace Pattons_Best
             {
                IStack? stack = myList[index] as IStack;
                myList.RemoveAt(index);
-               if ( null == stack )
+               if (null == stack)
                {
                   Logger.Log(LogEnum.LE_ERROR, "Shuffle(): stack=null");
                }
@@ -205,10 +205,10 @@ namespace Pattons_Best
          }
          return newStacks;
       }
-      public override String ToString()
+      public override string ToString()
       {
          StringBuilder sb = new StringBuilder("stacks[");
-         sb.Append(this.Count.ToString());
+         sb.Append(Count.ToString());
          sb.Append("]=");
          foreach (IStack stack in this)
          {
