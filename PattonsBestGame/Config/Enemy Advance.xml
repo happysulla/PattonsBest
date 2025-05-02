@@ -205,7 +205,7 @@
 			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
 				<Paragraph>
             <Run Text='31-65'></Run>
-            <Run Typography.Variants='Superscript'>3</Run>
+            <Run Typography.Variants='Superscript'>5</Run>
             </Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  Background='DodgerBlue'>
@@ -216,6 +216,7 @@
 			<TableCell TextAlignment='Center' >
 				<Paragraph>
 					<Bold>Fire-Your Tank</Bold>
+               <Run Typography.Variants='Superscript'>6</Run>
 				</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center'  >

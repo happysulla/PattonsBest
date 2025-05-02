@@ -1033,6 +1033,7 @@ namespace Pattons_Best
          for( int i=0; i<3; ++i )
          {
             dieRoll = Utilities.RandomGenerator.Next(1, 11);
+            dieRoll = 10; // <cgs>
             if (false == SetArtillerySupportCounter(gi, dieRoll)) // set strength in current territory
             {
                Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): SetArtillerySupportCounter() returned false");
@@ -1044,6 +1045,7 @@ namespace Pattons_Best
          for (int i = 0; i < 2; ++i)
          {
             dieRoll = Utilities.RandomGenerator.Next(1, 11);
+            dieRoll = 10; // <cgs>
             if (dieRoll < 5) 
             {
                string nameAir = "Air" + Utilities.MapItemNum.ToString();
@@ -2033,8 +2035,13 @@ namespace Pattons_Best
                case GameAction.BattleAmbushRoll:
                   if ((true == lastReport.Weather.Contains("Rain")) || (true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
                      dieRoll--;
+                  dieRoll = 1; // <cgs> 
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
+                  if (dieRoll < 8)
+                     gi.IsAmbush = true;
+                  else
+                     gi.IsAmbush = false;
                   break;
                case GameAction.BattleEmpty:
                   gi.GamePhase = GamePhase.Preparations;
@@ -2046,6 +2053,8 @@ namespace Pattons_Best
                      returnStatus = "ResolveEmptyBattleBoard() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
                   }
+                  break;
+               case GameAction.BattleAmbush: // Handled with EventViewerBattleAmbush class
                   break;
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;

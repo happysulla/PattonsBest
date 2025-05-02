@@ -694,16 +694,16 @@ namespace Pattons_Best
             return false;
          }
 
-         ITerritory? tLeft = Territories.theTerritories.Find("OffLeft");
+         ITerritory? tLeft = Territories.theTerritories.Find("OffBottomLeft");
          if (null == tLeft)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): tLeft=null for OffLeft");
+            Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): tLeft=null for OffBottomLeft");
             return false;
          }
-         ITerritory? tRight = Territories.theTerritories.Find("OffRight");
+         ITerritory? tRight = Territories.theTerritories.Find("OffBottomRight");
          if (null == tRight)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): tRight=null for OffRight");
+            Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): tRight=null for OffBottomRight");
             return false;
          }
          ITerritory? t = null;
@@ -803,7 +803,6 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "CreateMapItemRotation(): reached default with enemyUnit=" + myGridRows[i].myActivation);
                return false;
          }
-         ITerritory t = mi.TerritoryCurrent;
          double xDiff = (mi.Location.X + mi.Zoom*Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.X;
          double yDiff = (mi.Location.Y + mi.Zoom * Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.Y;
          mi.RotationBase = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;

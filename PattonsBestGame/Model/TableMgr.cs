@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,98 @@ namespace Pattons_Best
       {
          CreateCombatCalender();
          CreateExitTable();
+      }
+      //-------------------------------------------
+      public static string GetMonth(int day)
+      {
+         if (day < 5)
+            return "Jul";
+         if (day < 37)
+            return "Aug";
+         if (day < 58)
+            return "Sep";
+         if (day < 70)
+            return "Oct";
+         if (day < 92)
+            return "Nov";
+         if (day < 110)
+            return "Dec";
+         if (day < 137)
+            return "Jan";
+         if (day < 147)
+            return "Feb";
+         if (day < 174)
+            return "Mar";
+         if (day < 193)
+            return "Apr";
+         Logger.Log(LogEnum.LE_ERROR, "GetMonth(): reached default day=" + day.ToString());
+         return "ERROR";
+      }
+      public static bool SetTimeTrack(IAfterActionReport lastReport, int day)
+      {
+         switch (GetMonth(day))
+         {
+            case "Jul":
+            case "Aug":
+               lastReport.SunriseHour = 5;
+               lastReport.SunriseMin = 0;
+               lastReport.SunsetHour = 19;
+               lastReport.SunsetMin = 15;
+               break;
+            case "Sep":
+               lastReport.SunriseHour = 5;
+               lastReport.SunriseMin = 30;
+               lastReport.SunsetHour = 18;
+               lastReport.SunsetMin = 15;
+               break;
+            case "Oct":
+               lastReport.SunriseHour = 6;
+               lastReport.SunriseMin = 30;
+               lastReport.SunsetHour = 17;
+               lastReport.SunsetMin = 15;
+               break;
+            case "Nov":
+               lastReport.SunriseHour = 7;
+               lastReport.SunriseMin = 15;
+               lastReport.SunsetHour = 16;
+               lastReport.SunsetMin = 15;
+               break;
+            case "Dec":
+               lastReport.SunriseHour = 7;
+               lastReport.SunriseMin = 45;
+               lastReport.SunsetHour = 16;
+               lastReport.SunsetMin = 00;
+               break;
+            case "Jan":
+               lastReport.SunriseHour = 7;
+               lastReport.SunriseMin = 45;
+               lastReport.SunsetHour = 16;
+               lastReport.SunsetMin = 30;
+               break;
+            case "Feb":
+               lastReport.SunriseHour = 7;
+               lastReport.SunriseMin = 15;
+               lastReport.SunsetHour = 17;
+               lastReport.SunsetMin = 30;
+               break;
+            case "Mar":
+               lastReport.SunriseHour = 6;
+               lastReport.SunriseMin = 15;
+               lastReport.SunsetHour = 18;
+               lastReport.SunsetMin = 00;
+               break;
+            case "Apr":
+               lastReport.SunriseHour = 5;
+               lastReport.SunriseMin = 15;
+               lastReport.SunsetHour = 19;
+               lastReport.SunsetMin = 00;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTimeCheckRoll): reached default day=" + day.ToString());
+               return false;
+         }
+
+         return true;
       }
       //-------------------------------------------
       public static string GetWeather(int day, int dieRoll)
@@ -835,96 +928,675 @@ namespace Pattons_Best
          }
          return "None";
       }
-      public static string GetMonth( int day )
+      public static int GetEnemyActionModifier(IGameInstance gi, IMapItem mi)
       {
-         if (day < 5)
-            return "Jul";
-         if (day < 37)
-            return "Aug";
-         if (day < 58)
-            return "Sep";
-         if (day < 70)
-            return "Oct";
-         if (day < 92)
-            return "Nov";
-         if (day < 110)
-            return "Dec";
-         if (day < 137)
-            return "Jan";
-         if (day < 147)
-            return "Feb";
-         if (day < 174)
-            return "Mar";
-         if (day < 193)
-            return "Apr";
-         Logger.Log(LogEnum.LE_ERROR, "GetMonth(): reached default day=" + day.ToString());
-         return "ERROR";
-      }
-      public static bool SetTimeTrack(IAfterActionReport lastReport, int day)
-      {
-         switch (GetMonth(day))
+         string enemyUnit = "ERROR";
+         if (true == mi.Name.Contains("LW"))
+            enemyUnit = "LW";
+         else if (true == mi.Name.Contains("MG"))
+            enemyUnit = "MG";
+         else if (true == mi.Name.Contains("TRUCK"))
+            enemyUnit = "TRUCK";
+         else if (true == mi.Name.Contains("PSW"))
+            enemyUnit = "PSW";
+         else if (true == mi.Name.Contains("SPW"))
+            enemyUnit = "SPW";
+         else if (true == mi.Name.Contains("MARDER"))
+            enemyUnit = "MARDER";
+         else if ((true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("Pak")))
+            enemyUnit = "ATG";
+         else if (true == mi.Name.Contains("PzIV"))
+            enemyUnit = "PzIV";
+         else if (true == mi.Name.Contains("PzV"))
+            enemyUnit = "PzV";
+         else if ((true == mi.Name.Contains("SPG")) || (true == mi.Name.Contains("STuGIIIg")))
+            enemyUnit = "STuGIIIg";
+         else if ((true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("PzVI")))
+            enemyUnit = "PzVI";
+         else if ((true == mi.Name.Contains("JdgPzIV")) || (true == mi.Name.Contains("JdgPz38t")))
+            enemyUnit = "JdgPz";
+         if ("ERROR" == enemyUnit)
          {
-            case "Jul":
-            case "Aug":
-               lastReport.SunriseHour = 5;
-               lastReport.SunriseMin = 0;
-               lastReport.SunsetHour = 19;
-               lastReport.SunsetMin = 15;
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyActionModifier(): unknown enemyUnit=" + mi.Name);
+            return -100;
+         }
+         //----------------------------------------------------
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyActionModifier(): lastReport=null");
+            return -100;
+         }
+         //----------------------------------------------------
+         int modifier = 0;
+         switch (enemyUnit)
+         {
+            case "LW":
+            case "MG":
+               if (true == gi.IsAmbush)
+                  modifier += 20;
                break;
-            case "Sep":
-               lastReport.SunriseHour = 5;
-               lastReport.SunriseMin = 30;
-               lastReport.SunsetHour = 18;
-               lastReport.SunsetMin = 15;
+            case "ATG":
+               if (true == gi.IsAmbush)
+                  modifier += 20;
                break;
-            case "Oct":
-               lastReport.SunriseHour = 6;
-               lastReport.SunriseMin = 30;
-               lastReport.SunsetHour = 17;
-               lastReport.SunsetMin = 15;
+            case "TRUCK":
+            case "PSW":
+            case "SPW":
+               if (true == gi.IsAmbush)
+                  modifier += 10;
                break;
-            case "Nov":
-               lastReport.SunriseHour = 7;
-               lastReport.SunriseMin = 15;
-               lastReport.SunsetHour = 16;
-               lastReport.SunsetMin = 15;
-               break;
-            case "Dec":
-               lastReport.SunriseHour = 7;
-               lastReport.SunriseMin = 45;
-               lastReport.SunsetHour = 16;
-               lastReport.SunsetMin = 00;
-               break;
-            case "Jan":
-               lastReport.SunriseHour = 7;
-               lastReport.SunriseMin = 45;
-               lastReport.SunsetHour = 16;
-               lastReport.SunsetMin = 30;
-               break;
-            case "Feb":
-               lastReport.SunriseHour = 7;
-               lastReport.SunriseMin = 15;
-               lastReport.SunsetHour = 17;
-               lastReport.SunsetMin = 30;
-               break;
-            case "Mar":
-               lastReport.SunriseHour = 6;
-               lastReport.SunriseMin = 15;
-               lastReport.SunsetHour = 18;
-               lastReport.SunsetMin = 00;
-               break;
-            case "Apr":
-               lastReport.SunriseHour = 5;
-               lastReport.SunriseMin = 15;
-               lastReport.SunsetHour = 19;
-               lastReport.SunsetMin = 00;
+            case "PzIV":
+            case "PzV":
+            case "PzVI":
+            case "STuGIIIg":
+            case "SPG":
+            case "MARDER":
+            case "JdgPz":
+               if (true == gi.IsAmbush)
+                  modifier += 10;
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTimeCheckRoll): reached default day=" + day.ToString());
-               return false;
+               Logger.Log(LogEnum.LE_ERROR, "GetEnemyActionModifier(): reached default with enemyUnit=" + enemyUnit);
+               return -1;
          }
-
-         return true;
+         return modifier;
+      }
+      public static string SetEnemyActionResult(IGameInstance gi, IMapItem mi, int dieRoll)
+      {
+         string enemyUnit = "ERROR";
+         if (true == mi.Name.Contains("LW"))
+            enemyUnit = "LW";
+         else if (true == mi.Name.Contains("MG"))
+            enemyUnit = "MG";
+         else if (true == mi.Name.Contains("TRUCK"))
+            enemyUnit = "TRUCK";
+         else if (true == mi.Name.Contains("PSW"))
+            enemyUnit = "PSW";
+         else if (true == mi.Name.Contains("SPW"))
+            enemyUnit = "SPW";
+         else if (true == mi.Name.Contains("MARDER"))
+            enemyUnit = "MARDER";
+         else if ((true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("Pak")))
+            enemyUnit = "ATG";
+         else if (true == mi.Name.Contains("PzIV"))
+            enemyUnit = "PzIV";
+         else if (true == mi.Name.Contains("PzV"))
+            enemyUnit = "PzV";
+         else if ((true == mi.Name.Contains("SPG")) || (true == mi.Name.Contains("STuGIIIg")))
+            enemyUnit = "STuGIIIg";
+         else if ((true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("PzVI")))
+            enemyUnit = "PzVI";
+         else if ((true == mi.Name.Contains("JdgPzIV")) || (true == mi.Name.Contains("JdgPz38t")))
+            enemyUnit = "JdgPz";
+         if ("ERROR" == enemyUnit)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): unknown enemyUnit=" + mi.Name);
+            return "ERROR";
+         }
+         //----------------------------------------------------
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): lastReport=null");
+            return "ERROR";
+         }
+         bool isDoNothingIfFiring = false;
+         string name = mi.TerritoryCurrent.Name;
+         if ('C' != name[name.Length - 1])
+         {
+            string weather = lastReport.Weather;
+            if ((true == weather.Contains("Fog")) || (true == weather.Contains("Falling")))
+               isDoNothingIfFiring = true;
+         }
+         //----------------------------------------------------
+         int modifier = GetEnemyActionModifier(gi, mi);
+         if( modifier < 0 )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): GetEnemyActionModifier() returned error");
+            return "ERROR";
+         }
+         dieRoll += modifier;
+         //----------------------------------------------------
+         if ( EnumScenario.Advance == lastReport.Scenario)
+         {
+            switch (enemyUnit)
+            {
+               case "LW":
+               case "MG":
+                  if (dieRoll < 11)
+                     return "Do Nothing";
+                  if (dieRoll < 21)
+                     return "Move-F";
+                  if (dieRoll < 31)
+                     return "Move-L";
+                  if (dieRoll < 41)
+                     return "Move-R";
+                  if (dieRoll < 61)
+                     return "Move-B";
+                  if (dieRoll < 96)
+                  {
+                     if(true == isDoNothingIfFiring)
+                        return "Do Nothing";
+                     return "Fire-Infantry";
+                  }
+                  if (true == isDoNothingIfFiring)
+                     return "Do Nothing";
+                  return "Collateral";
+               case "ATG":
+                  if (dieRoll < 21)
+                     return "Move-B";
+                  if (dieRoll < 31)
+                     return "Do Nothing";
+                  if (dieRoll < 66)
+                  {
+                     if (true == isDoNothingIfFiring)
+                        return "Do Nothing";
+                     else if (true == gi.IsShermanFiring)
+                        return "Fire-Your Tank";
+                     else
+                        return "Fire-Any Tank";
+                  }
+                  if (dieRoll < 71)
+                  {
+                     if (true == isDoNothingIfFiring)
+                        return "Do Nothing";
+                     return "Fire-Any Tank";
+                  }
+                  if (true == isDoNothingIfFiring)
+                     return "Do Nothing";
+                  return "Fire-Lead Tank";
+               case "TRUCK":
+                  if (dieRoll < 31)
+                     return "Do Nothing";
+                  if (dieRoll < 41)
+                     return "Move-F";
+                  if (dieRoll < 51)
+                     return "Move-L";
+                  if (dieRoll < 61)
+                     return "Move-R";
+                  if (dieRoll < 91)
+                     return "Move-B";
+                  return "Do Nothing";
+               case "PSW":
+               case "SPW":
+                  if (dieRoll < 31)
+                     return "Do Nothing";
+                  if (dieRoll < 41)
+                     return "Move-F";
+                  if (dieRoll < 51)
+                     return "Move-L";
+                  if (dieRoll < 61)
+                     return "Move-R";
+                  if (dieRoll < 91)
+                     return "Move-B";
+                  if (dieRoll < 96)
+                  {
+                     if (true == isDoNothingIfFiring)
+                        return "Do Nothing";
+                     return "Fire-Infantry";
+                  }
+                  if (true == isDoNothingIfFiring)
+                     return "Do Nothing";
+                  return "Collateral";
+               case "PzIV":
+               case "PzV":
+               case "PzVI":
+               case "STuGIIIg":
+               case "SPG":
+               case "MARDER":
+               case "JdgPz":
+                  if (dieRoll < 11)
+                     return "Do Nothing";
+                  if (dieRoll < 21)
+                     return "Move-F";
+                  if (dieRoll < 31)
+                     return "Move-L";
+                  if (dieRoll < 41)
+                     return "Move-R";
+                  if (dieRoll < 61)
+                     return "Move-B";
+                  if (dieRoll < 66)
+                     return "Fire-Infantry";
+                  if (dieRoll < 81)
+                  {
+                     if (true == gi.IsShermanFiringAtFront)
+                     {
+                        if (true == isDoNothingIfFiring)
+                           return "Do Nothing";
+                        return "Fire-Your Tank";
+                     }
+                     else if (true == gi.IsShermanFiring)
+                     {
+                        return "Move-B";
+                     }
+                     else
+                     {
+                        if (true == isDoNothingIfFiring)
+                           return "Do Nothing";
+                        return "Fire-Any Tank";
+                     }
+                  }
+                  if (dieRoll < 86)
+                  {
+                     if (true == isDoNothingIfFiring)
+                        return "Do Nothing";
+                     return "Fire-Your Tank";
+                  }
+                  if (true == isDoNothingIfFiring)
+                     return "Do Nothing";
+                  return "Fire-Lead Tank";
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): reached default with enemyUnit=" + enemyUnit);
+                  return "ERROR";
+            }
+         }
+         else if (EnumScenario.Battle == lastReport.Scenario)
+         {
+            switch (enemyUnit)
+            {
+               case "LW":
+               case "MG":
+                  if (dieRoll < 11)
+                     return "Do Nothing";
+                  if (dieRoll < 21)
+                     return "Move-F";
+                  if (dieRoll < 31)
+                     return "Move-L";
+                  if (dieRoll < 41)
+                     return "Move-R";
+                  if (dieRoll < 61)
+                     return "Move-B";
+                  if (dieRoll < 96)
+                     return "Fire-Infantry";
+                  return "Collateral";
+               case "ATG":
+                  if (dieRoll < 21)
+                     return "Move-B";
+                  if (dieRoll < 31)
+                     return "Do Nothing";
+                  if (dieRoll < 81)
+                  {
+                     if (true == isDoNothingIfFiring)
+                        return "Do Nothing";
+                     else if (true == gi.IsShermanFiring)
+                        return "Fire-Your Tank";
+                     else
+                        return "Fire-Any Tank";
+                  }
+                  if (dieRoll < 91)
+                  {
+                     if (true == isDoNothingIfFiring)
+                        return "Do Nothing";
+                     return "Fire-Any Tank";
+                  }
+                  if (true == isDoNothingIfFiring)
+                     return "Do Nothing";
+                  return "Fire-Lead Tank";
+               case "PzIV":
+               case "PzV":
+               case "PzVI":
+               case "STuGIIIg":
+               case "SPG":
+               case "MARDER":
+               case "JdgPz":
+                  if (dieRoll < 11)
+                     return "Do Nothing";
+                  if (dieRoll < 16)
+                     return "Move-F";
+                  if (dieRoll < 21)
+                     return "Move-L";
+                  if (dieRoll < 26)
+                     return "Move-R";
+                  if (dieRoll < 36)
+                     return "Move-B";
+                  if (dieRoll < 41)
+                     return "Fire-Infantry";
+                  if (dieRoll < 86)
+                  {
+                     if (true == gi.IsShermanFiringAtFront)
+                     {
+                        if (true == isDoNothingIfFiring)
+                           return "Do Nothing";
+                        return "Fire-Your Tank";
+                     }
+                     else if (true == gi.IsShermanFiring)
+                     {
+                        return "Move-B";
+                     }
+                     else
+                     {
+                        if (true == isDoNothingIfFiring)
+                           return "Do Nothing";
+                        return "Fire-Any Tank";
+                     }
+                  }
+                  if (dieRoll < 91)
+                  {
+                     if (true == isDoNothingIfFiring)
+                        return "Do Nothing";
+                     return "Fire-Your Tank";
+                  }
+                  if (true == isDoNothingIfFiring)
+                     return "Do Nothing";
+                  return "Fire-Lead Tank";
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): reached default with enemyUnit=" + enemyUnit);
+                  return "ERROR";
+            }
+         }
+         else if (EnumScenario.Counterattack == lastReport.Scenario)
+         {
+            switch (enemyUnit)
+            {
+               case "LW":
+               case "MG":
+                  if (dieRoll < 11)
+                     return "Do Nothing";
+                  if (dieRoll < 41)
+                     return "Move-F";
+                  if (dieRoll < 51)
+                     return "Move-L";
+                  if (dieRoll < 61)
+                     return "Move-R";
+                  if (dieRoll < 71)
+                     return "Move-B";
+                  if (dieRoll < 76)
+                  {
+                     if (true == isDoNothingIfFiring)
+                        return "Do Nothing";
+                     return "Fire-Infantry";
+                  }
+                  if (true == isDoNothingIfFiring)
+                     return "Do Nothing";
+                  return "Collateral";
+               case "PzIV":
+               case "PzV":
+               case "PzVI":
+               case "STuGIIIg":
+               case "SPG":
+               case "MARDER":
+               case "JdgPz":
+                  if (dieRoll < 11)
+                     return "Do Nothing";
+                  if (dieRoll < 41)
+                     return "Move-F";
+                  if (dieRoll < 51)
+                     return "Move-L";
+                  if (dieRoll < 61)
+                     return "Move-R";
+                  if (dieRoll < 71)
+                     return "Move-B";
+                  if (dieRoll < 76)
+                     return "Fire-Infantry";
+                  if (dieRoll < 96)
+                  {
+                     if (true == gi.IsShermanFiringAtFront)
+                     {
+                        if (true == isDoNothingIfFiring)
+                           return "Do Nothing";
+                        return "Fire-Your Tank";
+                     }
+                     else if (true == gi.IsShermanFiring)
+                     {
+                        return "Move-B";
+                     }
+                     else
+                     {
+                        if (true == isDoNothingIfFiring)
+                           return "Do Nothing";
+                        return "Fire-Any Tank";
+                     }
+                  }
+                  if (true == isDoNothingIfFiring)
+                     return "Do Nothing";
+                  return "Fire-Your Tank";
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): reached default with enemyUnit=" + enemyUnit);
+                  return "ERROR";
+            }
+         }
+         Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): reached default");
+         return "ERROR";
+      }
+      public static ITerritory? SetNewTerritory(IMapItem mi, string move)
+      {
+         ITerritory oldT = mi.TerritoryCurrent;
+         string? newTerritoryName = null;
+         switch(oldT.Name)
+         {
+            case "B1C":
+               if ("Move-F" == move)
+                  newTerritoryName = "B4C";
+               else if ("Move-L" == move)
+                  newTerritoryName = "B9C";
+               else if ("Move-R" == move)
+                  newTerritoryName = "B2C";
+               else if ("Move-B" == move)
+                  newTerritoryName = "B1M";
+               else
+                  Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
+               break;
+            case "B1M":
+               if ("Move-F" == move)
+                  newTerritoryName = "B1C";
+               else if ("Move-L" == move)
+                  newTerritoryName = "B9M";
+               else if ("Move-R" == move)
+                  newTerritoryName = "B2M";
+               else if ("Move-B" == move)
+                  newTerritoryName = "B1L";
+               else
+                  Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
+               break;
+            case "B1L":
+               if ("Move-F" == move)
+                  newTerritoryName = "B1M";
+               else if ("Move-L" == move)
+                  newTerritoryName = "B9L";
+               else if ("Move-R" == move)
+                  newTerritoryName = "B2L";
+               else if ("Move-B" == move)
+                  newTerritoryName = "OffBottomRight";
+               else
+                  Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
+               break;
+            case "B2C":
+               if ("Move-F" == move)
+                  newTerritoryName = "B6C";
+               else if ("Move-L" == move)
+                  newTerritoryName = "B1C";
+               else if ("Move-R" == move)
+                  newTerritoryName = "B3C";
+               else if ("Move-B" == move)
+                  newTerritoryName = "B2M";
+               else
+                  Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
+               break;
+            case "B2M":
+               if ("Move-F" == move)
+                  newTerritoryName = "B2C";
+               else if ("Move-L" == move)
+                  newTerritoryName = "B1M";
+               else if ("Move-R" == move)
+                  newTerritoryName = "B3M";
+               else if ("Move-B" == move)
+                  newTerritoryName = "B2L";
+               else
+                  Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
+               break;
+            case "B2L":
+               if ("Move-F" == move)
+                  newTerritoryName = "B2M";
+               else if ("Move-L" == move)
+                  newTerritoryName = "B1L";
+               else if ("Move-R" == move)
+                  newTerritoryName = "B3L";
+               else if ("Move-B" == move)
+                  newTerritoryName = "OffBottomRight";
+               else
+                  Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
+               break;
+            case "B3C":
+               if ("Move-F" == move)
+                  newTerritoryName = "B9C";
+               else if ("Move-L" == move)
+                  newTerritoryName = "B2C";
+               else if ("Move-R" == move)
+                  newTerritoryName = "B4C";
+               else if ("Move-B" == move)
+                  newTerritoryName = "B3M";
+               else
+                  Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
+               break;
+            case "B3M":
+               if ("Move-F" == move)
+                  newTerritoryName = "B3C";
+               else if ("Move-L" == move)
+                  newTerritoryName = "B2M";
+               else if ("Move-R" == move)
+                  newTerritoryName = "B4M";
+               else if ("Move-B" == move)
+                  newTerritoryName = "B3L";
+               else
+                  Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
+               break;
+            case "B3L":
+               if ("Move-F" == move)
+                  newTerritoryName = "B3M";
+               else if ("Move-L" == move)
+                  newTerritoryName = "B2L";
+               else if ("Move-R" == move)
+                  newTerritoryName = "B4L";
+               else if ("Move-B" == move)
+                  newTerritoryName = "OffBottomLeft";
+               else
+                  Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
+               break;
+            case "B4C":
+               if ("Move-F" == move)
+                  newTerritoryName = "B1C";
+               else if ("Move-L" == move)
+                  newTerritoryName = "B3C";
+               else if ("Move-R" == move)
+                  newTerritoryName = "B6C";
+               else if ("Move-B" == move)
+                  newTerritoryName = "B4M";
+               else
+                  Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
+               break;
+            case "B4M":
+               if ("Move-F" == move)
+                  newTerritoryName = "B4C";
+               else if ("Move-L" == move)
+                  newTerritoryName = "B3M";
+               else if ("Move-R" == move)
+                  newTerritoryName = "B6M";
+               else if ("Move-B" == move)
+                  newTerritoryName = "B4L";
+               else
+                  Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
+               break;
+            case "B4L":
+               if ("Move-F" == move)
+                  newTerritoryName = "B4M";
+               else if ("Move-L" == move)
+                  newTerritoryName = "B3L";
+               else if ("Move-R" == move)
+                  newTerritoryName = "B6L";
+               else if ("Move-B" == move)
+                  newTerritoryName = "OffTopLeft";
+               else
+                  Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
+               break;
+            case "B6C":
+               if ("Move-F" == move)
+                  newTerritoryName = "B2C";
+               else if ("Move-L" == move)
+                  newTerritoryName = "B4C";
+               else if ("Move-R" == move)
+                  newTerritoryName = "B9C";
+               else if ("Move-B" == move)
+                  newTerritoryName = "B6M";
+               else
+                  Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
+               break;
+            case "B6M":
+               if ("Move-F" == move)
+                  newTerritoryName = "B6C";
+               else if ("Move-L" == move)
+                  newTerritoryName = "B4M";
+               else if ("Move-R" == move)
+                  newTerritoryName = "B9M";
+               else if ("Move-B" == move)
+                  newTerritoryName = "B6M";
+               else
+                  Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
+               break;
+            case "B6L":
+               if ("Move-F" == move)
+                  newTerritoryName = "B6M";
+               else if ("Move-L" == move)
+                  newTerritoryName = "B4L";
+               else if ("Move-R" == move)
+                  newTerritoryName = "B9L";
+               else if ("Move-B" == move)
+                  newTerritoryName = "OffTopRight";
+               else
+                  Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
+               break;
+            case "B9C":
+               if ("Move-F" == move)
+                  newTerritoryName = "B3C";
+               else if ("Move-L" == move)
+                  newTerritoryName = "B6C";
+               else if ("Move-R" == move)
+                  newTerritoryName = "B1C";
+               else if ("Move-B" == move)
+                  newTerritoryName = "B9M";
+               else
+                  Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
+               break;
+            case "B9M":
+               if ("Move-F" == move)
+                  newTerritoryName = "B9C";
+               else if ("Move-L" == move)
+                  newTerritoryName = "B6M";
+               else if ("Move-R" == move)
+                  newTerritoryName = "B1M";
+               else if ("Move-B" == move)
+                  newTerritoryName = "B9L";
+               else
+                  Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
+               break;
+            case "B9L":
+               if ("Move-F" == move)
+                  newTerritoryName = "B9M";
+               else if ("Move-L" == move)
+                  newTerritoryName = "B6L";
+               else if ("Move-R" == move)
+                  newTerritoryName = "B1L";
+               else if ("Move-B" == move)
+                  newTerritoryName = "OffTopRight";
+               else
+                  Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default oldT=" + oldT.Name);
+               return null;
+         }
+         if( null == newTerritoryName )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): newTerritoryName = null move=" + move + " for oldT=" + oldT.Name);
+            return null;
+         }
+         ITerritory? newT = Territories.theTerritories.Find(newTerritoryName);
+         if( null == newT )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): newT=null newTerritoryName=" + newTerritoryName );
+            return null;
+         }
+         return newT;
       }
       //-------------------------------------------
       private void CreateCombatCalender()

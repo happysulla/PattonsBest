@@ -1885,7 +1885,7 @@
     </Points>
     <Adjacents count="0" />
   </Territory>
-  <Territory value="OffRight">
+  <Territory value="OffBottomRight">
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0915.92" Y="0828.66" />
@@ -1905,7 +1905,7 @@
     </Points>
     <Adjacents count="0" />
   </Territory>
-  <Territory value="OffLeft">
+  <Territory value="OffBottomLeft">
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0059.16" Y="0834.10" />

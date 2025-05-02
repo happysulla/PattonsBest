@@ -53,6 +53,9 @@ namespace Pattons_Best
       public bool IsTurretActive { set; get; } = false;
       public bool IsAirStrikePending { set; get; } = false;
       public bool IsAdvancingFireChosen { set; get; } = false;
+      public bool IsAmbush { set; get; } = false;
+      public bool IsShermanFiring { set; get; } = false;
+      public bool IsShermanFiringAtFront { set; get; } = false;
       public int AdvancingFireMarkerCount { set; get; } = 0;
       public int FriendlyTankLossCount { set; get; } = 0;
       public EnumResistance BattleResistance { set; get; } = EnumResistance.None;

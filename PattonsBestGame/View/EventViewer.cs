@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml;
 using WpfAnimatedGif;
+using static Pattons_Best.EventViewerEnemyAction;
 using Button = System.Windows.Controls.Button;
 using Cursors = System.Windows.Input.Cursors;
 using Point = System.Windows.Point;
@@ -309,6 +310,13 @@ namespace Pattons_Best
                if (true == battleResolveAirStrike.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): battleResolveAdvFire.CtorError=true");
                else if (false == battleResolveAirStrike.ResolveAirStrike(ShowBattleSetupFireResults))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ResolveAirStrike() returned false");
+               break;
+            case GameAction.BattleAmbush:
+               EventViewerEnemyAction battleAmbush = new EventViewerEnemyAction(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
+               if (true == battleAmbush.CtorError)
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): battleAmbush.CtorError=true");
+               else if (false == battleAmbush.PerformEnemyAction(ShowBattleAmbush))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ResolveAirStrike() returned false");
                break;
             case GameAction.EveningDebriefingStart:
@@ -1076,25 +1084,23 @@ namespace Pattons_Best
             case "e035":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  int dieRoll = gi.DieResults[key][0];
                   Image? imge037 = null;
-                  if ( dieRoll < 8 )
+                  if (true == gi.IsAmbush)
                   {
                      myTextBlock.Inlines.Add(new Run("Ambush!"));
-                     imge037 = new Image { Name = "Ambush", Width = 400, Height = 266, Source = MapItem.theMapImages.GetBitmapImage("Ambush") };
+                     imge037 = new Image { Name = "Ambush", Width = 300, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("Ambush") };
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new Run("              "));
+                     myTextBlock.Inlines.Add(new Run("                        "));
                   }
                   else
                   {
                      myTextBlock.Inlines.Add(new Run("No Ambush"));
-                     imge037 = new Image { Name="Continue37", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                     imge037 = new Image { Name="Continue35", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new Run("                                  "));
                   }
-
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge037));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -1519,6 +1525,28 @@ namespace Pattons_Best
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
          return true;
       }
+      public bool ShowBattleAmbush()
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): myGameInstance=null");
+            return false;
+         }
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): myGameEngine=null");
+            return false;
+         }
+         GameAction outAction = GameAction.Error;
+         //--------------------------------------------------
+         StringBuilder sb11 = new StringBuilder("     ######ShowBattleAmbush() :");
+         sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
+         sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
+         sb11.Append(" a="); sb11.Append(outAction.ToString());
+         Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+         return true;
+      }
       public bool ShowRatingImproveResults()
       {
          if (null == myGameInstance)
@@ -1725,6 +1753,14 @@ namespace Pattons_Best
                               action = GameAction.BattleStart;
                            else
                               action = GameAction.BattleActivation;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Ambush":
+                           action = GameAction.BattleAmbush;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Continue35":
+                           action = GameAction.BattleRoundSequenceStart;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Sherman4": // Battle Board is Empty
