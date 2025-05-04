@@ -21,11 +21,13 @@ namespace Pattons_Best
    {
       public delegate bool EndResolveEnemyActionCallback();
       private const int STARTING_ASSIGNED_ROW = 6;
+      private const int NO_MOVE = 100;
       public enum E0475Enum
       {
          ENEMY_ACTION_SELECT,
          ENEMY_ACTION_SELECT_SHOW,
          ENEMY_ACTION_MOVE,
+         ENEMY_ACTION_MOVE_SHOW,
          ENEMY_ACTION_FIRE,
          ENEMY_ACTION_FIRE_SHOW,
          ENEMY_ACTION_FIRE_YOUR_TANK,
@@ -41,11 +43,15 @@ namespace Pattons_Best
       public struct GridRow
       {
          public IMapItem myMapItemEnemy;
-         public int myDieRoll = Utilities.NO_RESULT;
-         public char mySector = '0';
-         public char myRange = 'E';
-         public int myModifier = 0;
          public string myEnemyAction = "";
+         public int myModifier = 0;
+         public char mySector = 'E';
+         public char myRange = 'E';
+         public string myFacing = "NA";
+         public string myTerrain = "NA";
+         public int myDieRollEnemyAction = Utilities.NO_RESULT;
+         public int myDieRollFacing = Utilities.NO_RESULT;
+         public int myDieRollTerrain = Utilities.NO_RESULT; 
          public GridRow(IMapItem enemyUnit)
          {
             myMapItemEnemy = enemyUnit;
@@ -151,6 +157,8 @@ namespace Pattons_Best
          if (true == myGameInstance.IsAmbush)
             myButtonR465.Visibility = Visibility.Visible;
          //--------------------------------------------------
+         Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "PerformEnemyAction(): myGameInstance.MapItemMoves.Clear()");
+         myGameInstance.MapItemMoves.Clear();
          if (null == myGameInstance.EnteredArea)
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformEnemyAction(): myGameInstance.EnteredArea=null");
@@ -178,6 +186,7 @@ namespace Pattons_Best
             {
                if (true == Utilities.IsEnemyUnit(mi))
                {
+                  mi.IsMoved = false;
                   int count = mi.TerritoryCurrent.Name.Length;
                   if (count < 3)
                   {
@@ -469,29 +478,8 @@ namespace Pattons_Best
             myGrid.Children.Add(b1);
             Grid.SetRow(b1, rowNum);
             Grid.SetColumn(b1, 0);
-            StringBuilder sb = new StringBuilder();
-            switch (myGridRows[i].mySector)
-            {
-               case '1':
-               case '2':
-               case '3':
-                  sb.Append(myGridRows[i].mySector);
-                  break;
-               case '4':
-                  sb.Append("4-5 ");
-                  break;
-               case '6':
-                  sb.Append("6-8 ");
-                  break;
-               case '9':
-                  sb.Append("9-10");
-                  break;
-               default:
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): Reached default sector=" + myGridRows[i].mySector);
-                  return false;
-            }
-            sb.Append(myGridRows[i].myRange);
-            Label label1 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = sb.ToString() };
+
+            Label label1 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = UpdateSectorAndRange(i) };
             myGrid.Children.Add(label1);
             Grid.SetRow(label1, rowNum);
             Grid.SetColumn(label1, 1);
@@ -501,9 +489,9 @@ namespace Pattons_Best
             Grid.SetRow(label2, rowNum);
             Grid.SetColumn(label2, 2);
             //----------------------------------
-            if (Utilities.NO_RESULT < myGridRows[i].myDieRoll)
+            if (Utilities.NO_RESULT < myGridRows[i].myDieRollEnemyAction)
             {
-               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRoll.ToString() };
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRollEnemyAction.ToString() };
                myGrid.Children.Add(label3);
                Grid.SetRow(label3, rowNum);
                Grid.SetColumn(label3, 3);
@@ -529,14 +517,6 @@ namespace Pattons_Best
       }
       private bool UpdateGridRowsEnemyActionMove()
       {
-         if (null == myGameInstance)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowsEnemyActionMove(): myGameInstance=null");
-            return false;
-         }
-         Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "UpdateGridRowsEnemyActionMove(): Setting up new moves");
-         myGameInstance.MapItemMoves.Clear(); 
-         //--------------------------------------
          for (int i = 0; i < myMaxRowCount; ++i)
          {
             int rowNum = i + STARTING_ASSIGNED_ROW;
@@ -545,62 +525,74 @@ namespace Pattons_Best
             myGrid.Children.Add(b1);
             Grid.SetRow(b1, rowNum);
             Grid.SetColumn(b1, 0);
-            //---------------------------------------
-            ITerritory? newT = null;
-            switch (myGridRows[i].myEnemyAction)
+            //----------------------------
+            Label label1 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = UpdateSectorAndRange(i) };
+            myGrid.Children.Add(label1);
+            Grid.SetRow(label1, rowNum);
+            Grid.SetColumn(label1, 1);
+            //----------------------------
+            if( NO_MOVE == myGridRows[i].myDieRollFacing)
             {
-               case "Do Nothing":
-               case "Fire-Infantry":
-               case "Fire-Any Tank":
-               case "Fire-Lead Tank":
-               case "Fire-Your Tank":
-               case "Collateral":
-                  return true;
-               case "Move-F":
-               case "Move-L":
-               case "Move-R":
-               case "Move-B":
-                  newT = TableMgr.SetNewTerritory(mi, myGridRows[i].myEnemyAction);
-                  break;
-               default:
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowsEnemyActionMove(): reached default r=" + myGridRows[i].myEnemyAction);
-                  return false;
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
+               myGrid.Children.Add(label3);
+               Grid.SetRow(label3, rowNum);
+               Grid.SetColumn(label3, 3);
             }
-            if (null == newT)
+            else if (Utilities.NO_RESULT < myGridRows[i].myDieRollFacing)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowsEnemyActionMove(): SetNewTerritory() returned null");
-               return false;
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myFacing };
+               myGrid.Children.Add(label3);
+               Grid.SetRow(label3, rowNum);
+               Grid.SetColumn(label3, 3);
             }
-            //--------------------------------------------
-            MapItemMove mim = new MapItemMove(Territories.theTerritories, mi, newT);
-            if (true == mim.CtorError)
+            else
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowsEnemyActionMove(): mim.CtorError=true for start=" + mi.TerritoryStarting.ToString() + " for newT=" + newT.Name);
-               return false;
+               BitmapImage bmi = new BitmapImage();
+               bmi.BeginInit();
+               bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
+               bmi.EndInit();
+               System.Windows.Controls.Image img = new System.Windows.Controls.Image { Name = "DiceRoll", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+               ImageBehavior.SetAnimatedSource(img, bmi);
+               myGrid.Children.Add(img);
+               Grid.SetRow(img, rowNum);
+               Grid.SetColumn(img, 3);
             }
-            if (null == mim.NewTerritory)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowsEnemyActionMove(): Invalid Parameter mim.NewTerritory=null" + " for start=" + mi.TerritoryStarting.ToString() + " for newT=" + newT.Name);
-               return false;
-            }
-            if (null == mim.BestPath)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowsEnemyActionMove(): Invalid Parameter mim.BestPath=null" + " for start=" + mi.TerritoryStarting.ToString() + " for newT=" + newT.Name);
-               return false;
-            }
-            if (0 == mim.BestPath.Territories.Count)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowsEnemyActionMove(): Invalid State Territories.Count=" + mim.BestPath.Territories.Count.ToString() + " for start=" + mi.TerritoryStarting.ToString() + " for newT=" + newT.Name);
-               return false;
-            }
-            myGameInstance.MapItemMoves.Insert(0, mim); // add at front
-            Logger.Log(LogEnum.LE_VIEW_MIM_ADD, "UpdateGridRowsEnemyActionMove(): mi=" + mi.Name + " moving to t=" + newT.Name);
          }
          return true;
       }
       private bool UpdateGridRowsEnemyActionFire()
       {
          return true;
+      }
+      private string UpdateSectorAndRange(int i)
+      {
+         StringBuilder sb = new StringBuilder();
+         switch (myGridRows[i].mySector)
+         {
+            case '1':
+               sb.Append("1 ");
+               break;
+            case '2':
+               sb.Append("2 ");
+               break;
+            case '3':
+               sb.Append("3 ");
+               break;
+            case '4':
+               sb.Append("4-5 ");
+               break;
+            case '6':
+               sb.Append("6-8 ");
+               break;
+            case '9':
+               sb.Append("9-10 ");
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): Reached default sector=" + myGridRows[i].mySector);
+               return "ERROR";
+         }
+         sb.Append(myGridRows[i].myRange);
+         return sb.ToString();
       }
       //------------------------------------------------------------------------------------
       private Button CreateButton(IMapItem mi)
@@ -614,6 +606,75 @@ namespace Pattons_Best
          b.Foreground = new SolidColorBrush(Colors.Transparent);
          MapItem.SetButtonContent(b, mi, false, false); // This sets the image as the button's content
          return b;
+      }
+      private bool CreateMapItemMove(int i)
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateMapItemMove(): myGameInstance=null");
+            return false;
+         }
+         int rowNum = i + STARTING_ASSIGNED_ROW;
+         IMapItem mi = myGridRows[i].myMapItemEnemy;
+         //---------------------------------------
+         ITerritory? newT = null;
+         switch (myGridRows[i].myEnemyAction)
+         {
+            case "Do Nothing":
+            case "Fire-Infantry":
+            case "Fire-Any Tank":
+            case "Fire-Lead Tank":
+            case "Fire-Your Tank":
+            case "Collateral":
+               return true;
+            case "Move-F":
+            case "Move-L":
+            case "Move-R":
+            case "Move-B":
+               newT = TableMgr.SetNewTerritory(mi, myGridRows[i].myEnemyAction);
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "CreateMapItemMove(): reached default r=" + myGridRows[i].myEnemyAction);
+               return false;
+         }
+         if (null == newT)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateMapItemMove(): SetNewTerritory() returned null");
+            return false;
+         }
+         //--------------------------------------------
+         MapItemMove mim = new MapItemMove(Territories.theTerritories, mi, newT);
+         if (true == mim.CtorError)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateMapItemMove(): mim.CtorError=true for start=" + mi.TerritoryStarting.ToString() + " for newT=" + newT.Name);
+            return false;
+         }
+         if (null == mim.NewTerritory)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateMapItemMove(): Invalid Parameter mim.NewTerritory=null" + " for start=" + mi.TerritoryStarting.ToString() + " for newT=" + newT.Name);
+            return false;
+         }
+         if (null == mim.BestPath)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateMapItemMove(): Invalid Parameter mim.BestPath=null" + " for start=" + mi.TerritoryStarting.ToString() + " for newT=" + newT.Name);
+            return false;
+         }
+         if (0 == mim.BestPath.Territories.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateMapItemMove(): Invalid State Territories.Count=" + mim.BestPath.Territories.Count.ToString() + " for start=" + mi.TerritoryStarting.ToString() + " for newT=" + newT.Name);
+            return false;
+         }
+         myGameInstance.MapItemMoves.Insert(0, mim); // add at front
+         Logger.Log(LogEnum.LE_VIEW_MIM_ADD, "UpdateGridRowsEnemyActionMove(): mi=" + mi.Name + " moving to t=" + newT.Name);
+         //-----------------------------------------------------
+         myGridRows[i].myRange = 'O';  // assume off board if not equal to three
+         myGridRows[i].mySector = 'O'; // assume off board if not equal to three
+         if (3 == newT.Name.Length)
+         {
+            myGridRows[i].myRange = newT.Name[newT.Name.Length - 1];
+            myGridRows[i].mySector = newT.Name[newT.Name.Length - 2];
+         }
+         return true;
       }
       public void ShowDieResults(int dieRoll)
       {
@@ -630,25 +691,39 @@ namespace Pattons_Best
             return;
          }
          IMapItem mi = myGridRows[i].myMapItemEnemy;
-         myGridRows[i].myDieRoll = dieRoll + myGridRows[i].myModifier;
-         string enemyAction = TableMgr.SetEnemyActionResult(myGameInstance, mi, dieRoll);
-         Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): myState=" + myState.ToString() + " enemyAction=" + enemyAction);
-         if (false == enemyAction.Contains("Move"))
-            enemyAction = "Move-B";
-         myGridRows[i].myEnemyAction = enemyAction;
-         if ( "ERROR" == myGridRows[i].myEnemyAction )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): SetFriendlyActionResult() returned ERROR");
-            return;
-         }
          //-------------------------------
          switch(myState)
          {
             case E0475Enum.ENEMY_ACTION_SELECT:
+               myGridRows[i].myDieRollEnemyAction = dieRoll + myGridRows[i].myModifier;
+               string enemyAction = TableMgr.SetEnemyActionResult(myGameInstance, mi, dieRoll);
+               if ("ERROR" == enemyAction)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): SetEnemyActionResult() returned ERROR");
+                  return;
+               }
+               Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): myState=" + myState.ToString() + " enemyAction=" + enemyAction);
+               if ((true == enemyAction.Contains("Fire")) || (true == enemyAction.Contains("Collateral")))  // <cgs> TEST
+                  enemyAction = "Do Nothing";
+               if( true == enemyAction.Contains("Move") )
+               {
+                  mi.IsMoved = true;
+                  mi.IsHullDown = false;
+                  mi.IsBuilding = false;
+                  mi.IsFortification = false;
+                  mi.IsWoods = false;
+                  mi.IsMoving = true;
+               }
+               else
+               {
+                  myGridRows[i].myDieRollFacing = NO_MOVE;
+                  myGridRows[i].myDieRollTerrain = NO_MOVE;
+               }
+               myGridRows[i].myEnemyAction = enemyAction;
                myState = E0475Enum.ENEMY_ACTION_SELECT_SHOW;
                for (int j = 0; j < myMaxRowCount; ++j)
                {
-                  if (Utilities.NO_RESULT == myGridRows[j].myDieRoll)
+                  if (Utilities.NO_RESULT == myGridRows[j].myDieRollEnemyAction)
                      myState = E0475Enum.ENEMY_ACTION_SELECT;
                }
                break;
@@ -673,6 +748,10 @@ namespace Pattons_Best
          GameAction outAction = GameAction.UpdateBattleBoard;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
          Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): ---------------myState=" + myState.ToString());
+      }
+      private bool ShowDieResultUpdateFacing(Index i)
+      {
+         return true;
       }
       //---------------------Controller Function--------------------------------------------
       private void ButtonRule_Click(object sender, RoutedEventArgs e)
@@ -742,7 +821,17 @@ namespace Pattons_Best
                      if (result.VisualHit == img)
                      {
                         if ("Move" == img.Name)
+                        {
+                           for (int j = 0; j < myMaxRowCount; ++j)
+                           {
+                              if (false == CreateMapItemMove(j))
+                              {
+                                 Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): CreateMapItemMove(i) returned false");
+                                 return;
+                              }
+                           }
                            myState = E0475Enum.ENEMY_ACTION_MOVE;
+                        }
                         if ("Fire" == img.Name)
                            myState = E0475Enum.ENEMY_ACTION_FIRE;
                         if (false == UpdateGrid())

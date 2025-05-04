@@ -381,9 +381,13 @@ namespace Pattons_Best
             switch(myGridRows[i].mySector)
             {
                case '1':
+                  sb.Append("1 ");
+                  break;
                case '2':
+                  sb.Append("2 ");
+                  break;
                case '3':
-                  sb.Append(myGridRows[i].mySector);
+                  sb.Append("3 ");
                   break;
                case '4':
                   sb.Append("4-5 ");

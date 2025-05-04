@@ -954,11 +954,11 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool UpdateGridRowRange(Index i)
+      private bool ShowDieResultUpdateRange(Index i)
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowRange(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateRange(): myGameInstance=null");
             return false;
          }
          if ("M" == myGridRows[i].myRange)
@@ -967,7 +967,7 @@ namespace Pattons_Best
          IMapItem? mi = myGridRows[i].myMapItem;
          if (null == mi)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowRange(): mi=null for i=" + i.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateRange(): mi=null for i=" + i.ToString());
             return false;
          }
          string tName = mi.TerritoryCurrent.Name;
@@ -978,7 +978,7 @@ namespace Pattons_Best
          ITerritory? t = Territories.theTerritories.Find(modified);
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowRange(): t=null for i=" + i.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateRange(): t=null for i=" + i.ToString());
             return false;
          }
          mi.TerritoryCurrent = mi.TerritoryStarting = t;
@@ -986,9 +986,9 @@ namespace Pattons_Best
          myGameInstance.BattleStacks.Add(mi);
          IMapPoint mp = Territory.GetRandomPoint(t, mi.Zoom * Utilities.theMapItemOffset);
          mi.Location = mp;
-         if (false == CreateMapItemRotation(i, "UpdateGridRowRange"))
+         if (false == CreateMapItemRotation(i, "ShowDieResultUpdateRange"))
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowRange(): CreateMapItemRotation() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateRange(): CreateMapItemRotation() returned false");
             return false;
          }
          return true;
@@ -1101,9 +1101,9 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyRange() returned ERROR");
                   return;
                }
-               if (false == UpdateGridRowRange(i))
+               if (false == ShowDieResultUpdateRange(i))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateGridRowRange() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResultUpdateRange() returned false");
                   return;
                }
                if (true == myIsVehicleActivated)

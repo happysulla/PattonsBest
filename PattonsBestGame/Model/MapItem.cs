@@ -108,7 +108,7 @@ namespace Pattons_Best
       public ITerritory TerritoryStarting { get => myTerritoryStarting; set => myTerritoryStarting = value; }
       //--------------------------------------------------
       public bool IsVehicle { get; set; } = false;
-      public bool IsMoving { get; set; } = false;
+      public bool IsMoving { get; set; } = false; // Only applies to Sherman tank
       public bool IsHullDown { get; set; } = false;
       public bool IsWoods { get; set; } = false;
       public bool IsBuilding { get; set; } = false;

@@ -1599,7 +1599,6 @@ namespace Pattons_Best
          }
          return newT;
       }
-
       //-------------------------------------------
       private void CreateCombatCalender()
       {
