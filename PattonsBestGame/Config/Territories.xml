@@ -2224,7 +2224,12 @@
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0907.50" Y="0091.76" />
-    <Points count="0" />
+    <Points count="4">
+      <regionPoint X="0997.50" Y="0208.76" />
+      <regionPoint X="0997.50" Y="0002.76" />
+      <regionPoint X="0684.50" Y="0002.76" />
+      <regionPoint X="0997.50" Y="0205.76" />
+    </Points>
     <Adjacents count="2">
       <adjacent value="B9L" />
       <adjacent value="B6L" />
@@ -2234,7 +2239,11 @@
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0050.50" Y="0115.76" />
-    <Points count="0" />
+    <Points count="3">
+      <regionPoint X="0144.50" Y="0078.76" />
+      <regionPoint X="0001.50" Y="0239.76" />
+      <regionPoint X="0001.50" Y="0078.76" />
+    </Points>
     <Adjacents count="1">
       <adjacent value="B4L" />
     </Adjacents>

@@ -349,8 +349,8 @@ namespace Pattons_Best
          Utilities.MapItemNum++;
          IMapItem usControl = new MapItem(miName, 1.0, "c28UsControl", controlled);
          usControl.Count = 0; // 0=us  1=light  2=medium  3=heavy
-         IMapPoint mp = Territory.GetRandomPoint(controlled);
-         usControl.SetLocation(mp);
+         IMapPoint mp = Territory.GetRandomPoint(controlled, usControl.Zoom * Utilities.theMapItemOffset);
+         usControl.Location = mp;
          gi.MoveStacks.Add(usControl);
          return true;
       }
@@ -446,8 +446,8 @@ namespace Pattons_Best
             ++Utilities.MapItemNum;
             IMapItem strengthMarker = new MapItem(name, 1.0, "c36Light", gi.EnemyStrengthCheckTerritory);
             strengthMarker.Count = 1;
-            IMapPoint mp = Territory.GetRandomPoint(gi.EnemyStrengthCheckTerritory);
-            strengthMarker.SetLocation(mp);
+            IMapPoint mp = Territory.GetRandomPoint(gi.EnemyStrengthCheckTerritory, strengthMarker.Zoom * Utilities.theMapItemOffset);
+            strengthMarker.Location = mp;
             gi.MoveStacks.Add(strengthMarker);
          }
          else if (EnumResistance.Medium == resistance)
@@ -456,8 +456,8 @@ namespace Pattons_Best
             ++Utilities.MapItemNum;
             IMapItem strengthMarker = new MapItem(name, 1.0, "c37Medium", gi.EnemyStrengthCheckTerritory);
             strengthMarker.Count = 2;
-            IMapPoint mp = Territory.GetRandomPoint(gi.EnemyStrengthCheckTerritory);
-            strengthMarker.SetLocation(mp);
+            IMapPoint mp = Territory.GetRandomPoint(gi.EnemyStrengthCheckTerritory, strengthMarker.Zoom * Utilities.theMapItemOffset);
+            strengthMarker.Location = mp;
             gi.MoveStacks.Add(strengthMarker);
          }
          else if (EnumResistance.Heavy == resistance)
@@ -466,8 +466,8 @@ namespace Pattons_Best
             ++Utilities.MapItemNum;
             IMapItem strengthMarker = new MapItem(name, 1.0, "c38Heavy", gi.EnemyStrengthCheckTerritory);
             strengthMarker.Count = 3;
-            IMapPoint mp = Territory.GetRandomPoint(gi.EnemyStrengthCheckTerritory);
-            strengthMarker.SetLocation(mp);
+            IMapPoint mp = Territory.GetRandomPoint(gi.EnemyStrengthCheckTerritory, strengthMarker.Zoom * Utilities.theMapItemOffset);
+            strengthMarker.Location = mp;
             gi.MoveStacks.Add(strengthMarker);
          }
          else
@@ -522,8 +522,8 @@ namespace Pattons_Best
             string name = gi.ArtillerySupportCheck.Name + "Artillery" + Utilities.MapItemNum.ToString();
             Utilities.MapItemNum++;
             IMapItem artillerySupportMarker = new MapItem(name, 1.0, "c39ArtillerySupport", gi.ArtillerySupportCheck);
-            IMapPoint mp = Territory.GetRandomPoint(gi.ArtillerySupportCheck);
-            artillerySupportMarker.SetLocation(mp);
+            IMapPoint mp = Territory.GetRandomPoint(gi.ArtillerySupportCheck, artillerySupportMarker.Zoom * Utilities.theMapItemOffset);
+            artillerySupportMarker.Location = mp;
             gi.MoveStacks.Add(artillerySupportMarker);
          }
          if (true == gi.IsAirStrikePending)
@@ -537,8 +537,8 @@ namespace Pattons_Best
             string name = gi.AirStrikeCheckTerritory.Name + "Air" + Utilities.MapItemNum.ToString();
             Utilities.MapItemNum++;
             IMapItem airStrikeMarker = new MapItem(name, 1.0, "c40AirStrike", gi.AirStrikeCheckTerritory);
-            IMapPoint mp = Territory.GetRandomPoint(gi.AirStrikeCheckTerritory);
-            airStrikeMarker.SetLocation(mp);
+            IMapPoint mp = Territory.GetRandomPoint(gi.AirStrikeCheckTerritory, airStrikeMarker.Zoom * Utilities.theMapItemOffset);
+            airStrikeMarker.Location = mp;
             gi.MoveStacks.Add(airStrikeMarker);
          }
          return true;
@@ -985,6 +985,7 @@ namespace Pattons_Best
          //------------------------------------
          gi.Sherman.IsTurret = true;
          gi.Sherman.TerritoryCurrent = gi.Home;
+         gi.Sherman.Location = gi.Home.CenterPoint - (gi.Sherman.Zoom*Utilities.theMapItemOffset);
          gi.BattleStacks.Add(gi.Sherman);
          return true;
       }
@@ -1036,7 +1037,7 @@ namespace Pattons_Best
             return false;
          }
          taskForce.TerritoryCurrent = taskForce.TerritoryStarting = gi.EnteredArea;
-         taskForce.SetLocation(gi.EnteredArea.CenterPoint);
+         taskForce.Location = gi.EnteredArea.CenterPoint;
          //---------------------------------------------
          dieRoll = Utilities.RandomGenerator.Next(1, 11);
          if (false == SetEnemyStrengthCounter(gi, dieRoll)) // set strength in current territory
@@ -1087,7 +1088,7 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------------------
-         for (int k = 0; k < 4; k++)
+         for (int k = 0; k < 3; k++)
          {
             int die1 = Utilities.RandomGenerator.Next(0, 3);
             int die2 = Utilities.RandomGenerator.Next(0, 3);
@@ -1138,12 +1139,11 @@ namespace Pattons_Best
                diceRoll = 100;
             else
                diceRoll = die1 + 10 * die2;
-            string activation = TableMgr.GetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
+            string enemyUnit = TableMgr.GetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
             IMapItem? mi = null;
-            string name = activation + Utilities.MapItemNum;
+            string name = enemyUnit + Utilities.MapItemNum;
             Utilities.MapItemNum++;
-            bool isVehicle = false;
-            switch (activation)
+            switch (enemyUnit)
             {
                case "ATG":
                   mi = new MapItem(name, Utilities.ZOOM + 0.1, "c76UnidentifiedAtg", t);
@@ -1155,25 +1155,25 @@ namespace Pattons_Best
                   mi = new MapItem(name, Utilities.ZOOM, "c92MgTeam", t);
                   break;
                case "PSW/SPW":
-                  activation = "SPW";
-                  name = activation + Utilities.MapItemNum;
+                  enemyUnit = "SPW";
+                  name = enemyUnit + Utilities.MapItemNum;
                   Utilities.MapItemNum++;
                   mi = new MapItem(name, Utilities.ZOOM + 0.2, "c89Psw232", t);
                   break;
                case "SPG":
                   mi = new MapItem(name, Utilities.ZOOM + 0.5, "c77UnidentifiedSpg", t);
-                  isVehicle = true;
+                  mi.IsVehicle = true;
                   break;
                case "TANK":
                   mi = new MapItem(name, Utilities.ZOOM + 0.5, "c78UnidentifiedTank", t);
-                  isVehicle = true;
+                  mi.IsVehicle = true;
                   break;
                case "TRUCK":
                   mi = new MapItem(name, Utilities.ZOOM + 0.3, "c88Truck", t);
-                  isVehicle = true;
+                  mi.IsVehicle = true;
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): reached default with activation=" + activation);
+                  Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): reached default with enemyUnit=" + enemyUnit);
                   return false;
             }
             if (null == mi)
@@ -1181,11 +1181,11 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): mi=null");
                return false;
             }
-            IMapPoint mp = Territory.GetRandomPoint(t);
-            mi.SetLocation(mp);
+            IMapPoint mp = Territory.GetRandomPoint(t, mi.Zoom * Utilities.theMapItemOffset);
+            mi.Location = mp;
             gi.BattleStacks.Add(mi);
             //-----------------------------------------
-            if (true == isVehicle)
+            if (true == mi.IsVehicle)
             {
                double xDiff = mi.Location.X + mi.Zoom * Utilities.theMapItemOffset - gi.Home.CenterPoint.X;
                double yDiff = mi.Location.Y + mi.Zoom * Utilities.theMapItemOffset - gi.Home.CenterPoint.Y;
@@ -1206,7 +1206,7 @@ namespace Pattons_Best
             }
             //-----------------------------------------
             die1 = Utilities.RandomGenerator.Next(1, 11);
-            string enemyTerrain = TableMgr.GetEnemyTerrain(lastReport.Scenario, gi.Day, "A", activation, die1);
+            string enemyTerrain = TableMgr.GetEnemyTerrain(lastReport.Scenario, gi.Day, "A", enemyUnit, die1);
          }
          return true;
       }
@@ -1979,8 +1979,8 @@ namespace Pattons_Best
          Utilities.MapItemNum++;
          IMapItem usControl = new MapItem(name, 1.0, "c28UsControl", taskForce.TerritoryCurrent);
          usControl.Count = 0; // 0=us  1=light  2=medium  3=heavy
-         IMapPoint mp = Territory.GetRandomPoint(taskForce.TerritoryCurrent);
-         usControl.SetLocation(mp);
+         IMapPoint mp = Territory.GetRandomPoint(taskForce.TerritoryCurrent, usControl.Zoom * Utilities.theMapItemOffset);
+         usControl.Location = mp;
          stack.MapItems.Add(usControl);
          Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "SkipBattleBoard(): Added mi=" + usControl.Name + " t=" + taskForce.TerritoryCurrent.Name + " to " + gi.MoveStacks.ToString());
          //------------------------------------
@@ -2158,8 +2158,8 @@ namespace Pattons_Best
                      string name = "AdvanceFire" + Utilities.MapItemNum;
                      ++Utilities.MapItemNum;
                      IMapItem advanceFire = new MapItem(name, 1.0, "c44AdvanceFire", gi.AdvanceFire);
-                     IMapPoint mp = Territory.GetRandomPoint(gi.AdvanceFire);
-                     advanceFire.SetLocation(mp);
+                     IMapPoint mp = Territory.GetRandomPoint(gi.AdvanceFire, advanceFire.Zoom * Utilities.theMapItemOffset);
+                     advanceFire.Location = mp;
                      IStack? stack = gi.BattleStacks.Find(gi.AdvanceFire);
                      if (null == stack)
                      {
@@ -2272,8 +2272,8 @@ namespace Pattons_Best
          Utilities.MapItemNum++;
          IMapItem usControl = new MapItem(miName, 1.0, "c28UsControl", gi.EnteredArea);
          usControl.Count = 0; // 0=us  1=light  2=medium  3=heavy
-         IMapPoint mp = Territory.GetRandomPoint(gi.EnteredArea);
-         usControl.SetLocation(mp);
+         IMapPoint mp = Territory.GetRandomPoint(gi.EnteredArea, usControl.Zoom * Utilities.theMapItemOffset);
+         usControl.Location = mp;
          gi.MoveStacks.Add(usControl);
          //-----------------------------------
          int basePoints = 1;

@@ -8,6 +8,7 @@ using System.Windows.Media;
 using Windows.Perception.Spatial;
 using System.Windows.Controls;
 using System.Windows.Shapes;
+using System.Windows.Controls.Primitives;
 
 namespace Pattons_Best
 {
@@ -21,7 +22,7 @@ namespace Pattons_Best
       public List<IMapPoint> Points { get; set; } = new List<IMapPoint>();
       public List<string> Adjacents { get; set; } = new List<string>();
       //---------------------------------------------------------------
-      public static IMapPoint GetRandomPoint(ITerritory t)
+      public static IMapPoint GetRandomPoint(ITerritory t, double offset) // return the top left location of a MapItem, not the center point
       {
          if (0 == t.Points.Count)
          {
@@ -47,63 +48,60 @@ namespace Pattons_Best
          System.Windows.Rect rect = geometry.Bounds;
          //----------------------------------------------------
          int count = 20;
-         while (0 < --count)
+         while (0 < --count) // offset is the difference between MapItem location on screen and the center of the  MapItem.
          {
-            double XCenter = Utilities.RandomGenerator.Next((int)rect.Left, (int)rect.Right) + Utilities.theMapItemOffset; // Get a random point in the bounding box
-            double YCenter = Utilities.RandomGenerator.Next((int)rect.Top, (int)rect.Bottom) + Utilities.theMapItemOffset;
-            Ellipse ellipse = new Ellipse() { Fill = Brushes.Black, Stroke = Brushes.Black, Width = 10, Height = 10, StrokeThickness = 1 };
-            Canvas.SetLeft(ellipse, XCenter - 5);
-            Canvas.SetTop(ellipse, YCenter - 5);
+            double XCenter = Utilities.RandomGenerator.Next((int)rect.Left, (int)rect.Right) + offset; // Get a random point in the bounding box
+            double YCenter = Utilities.RandomGenerator.Next((int)rect.Top, (int)rect.Bottom) + offset;
             System.Windows.Point pCenter = new System.Windows.Point(XCenter, YCenter);
             if (true == geometry.FillContains(pCenter))
             {
-               System.Windows.Point p1 = new System.Windows.Point(XCenter - Utilities.theMapItemOffset, YCenter - Utilities.theMapItemOffset);
-               System.Windows.Point p2 = new System.Windows.Point(XCenter + Utilities.theMapItemOffset, YCenter - Utilities.theMapItemOffset);
-               System.Windows.Point p3 = new System.Windows.Point(XCenter - Utilities.theMapItemOffset, YCenter + Utilities.theMapItemOffset);
-               System.Windows.Point p4 = new System.Windows.Point(XCenter + Utilities.theMapItemOffset, YCenter + Utilities.theMapItemOffset);
+               System.Windows.Point p1 = new System.Windows.Point(XCenter - offset, YCenter - offset);
+               System.Windows.Point p2 = new System.Windows.Point(XCenter + offset, YCenter - offset);
+               System.Windows.Point p3 = new System.Windows.Point(XCenter - offset, YCenter + offset);
+               System.Windows.Point p4 = new System.Windows.Point(XCenter + offset, YCenter + offset);
                bool isP1In = geometry.FillContains(p1);
                bool isP2In = geometry.FillContains(p2);
                bool isP3In = geometry.FillContains(p3);
                bool isP4In = geometry.FillContains(p4);
-               if (false == isP1In && false == isP2In)
+               if (false == isP1In && false == isP2In)  // try to adjust location so that four corners are inside the region
                {
-                  YCenter += Utilities.theMapItemOffset;
+                  YCenter += offset;
                }
                else if (false == isP3In && false == isP4In)
                {
-                  YCenter -= Utilities.theMapItemOffset;
+                  YCenter -= offset;
                }
                else if (false == isP1In && false == isP3In)
                {
-                  XCenter += Utilities.theMapItemOffset;
+                  XCenter += offset;
                }
                else if (false == isP2In && false == isP4In)
                {
-                  XCenter -= Utilities.theMapItemOffset;
+                  XCenter -= offset;
                }
                else if (false == isP1In && true == isP2In)
                {
-                  XCenter += Utilities.theMapItemOffset;
+                  XCenter += offset;
                }
                else if (true == isP1In && false == isP2In)
                {
-                  XCenter -= Utilities.theMapItemOffset;
+                  XCenter -= offset;
                }
                else if (true == isP3In && false == isP4In)
                {
-                  YCenter -= Utilities.theMapItemOffset;
+                  YCenter -= offset;
                }
                else if (false == isP3In && true == isP4In)
                {
-                  YCenter -= Utilities.theMapItemOffset;
+                  YCenter -= offset;
                }
-               System.Windows.Point p5 = new System.Windows.Point(XCenter - Utilities.theMapItemOffset, YCenter - Utilities.theMapItemOffset);
+               System.Windows.Point p5 = new System.Windows.Point(XCenter - offset, YCenter - offset); // do a final check to make sure center point is in region
                if (true == geometry.FillContains(p5))
-                  return new MapPoint(XCenter, YCenter);
+                  return new MapPoint(p5.X, p5.Y);
             }
          }
          Logger.Log(LogEnum.LE_ERROR, "GetRandomPoint(): Cannot find a random point in t.Name=" + t.Name + " rect=" + rect.ToString());
-         return t.CenterPoint;
+         return new MapPoint(t.CenterPoint.X - offset, t.CenterPoint.Y - offset);
       }
       //---------------------------------------------------------------
       public Territory()

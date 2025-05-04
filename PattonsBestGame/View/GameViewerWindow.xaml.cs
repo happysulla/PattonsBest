@@ -30,6 +30,8 @@ namespace Pattons_Best
       private const Double MARQUEE_SCROLL_ANMINATION_TIME = 30.0;
       private const Double ELLIPSE_DIAMETER = 40.0;
       private const Double ELLIPSE_RADIUS = ELLIPSE_DIAMETER / 2.0;
+      private Double theOldXAfterAnimation = 0.0;
+      private Double theOldYAfterAnimation = 0.0;
       public bool CtorError { get; } = false;
       //---------------------------------------------------------------------
       [Serializable]
@@ -502,7 +504,7 @@ namespace Pattons_Best
          else // add to top of stack
          {
             mi.TerritoryCurrent = newT;
-            mi.SetLocation(newT.CenterPoint);
+            mi.Location = newT.CenterPoint; 
             stack.MapItems.Add(mi);
          }
          return true;
@@ -1286,6 +1288,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): mim2.NewTerritory=null");
                   return false;
                }
+               Logger.Log(LogEnum.LE_VIEW_ROTATION, "UpdateCanvasMovement(): mi=" + mim.MapItem.Name + " r=" + mim.MapItem.Rotation + " rb=" + mim.MapItem.RotationBase);
                //------------------------------------------
                stacks.Remove(mi);
                Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "UpdateCanvasMovement(): Removed mi=" + mi.Name + " t=" + mim.OldTerritory.Name + " to " + gi.MoveStacks.ToString());
@@ -1328,8 +1331,11 @@ namespace Pattons_Best
          try
          {
             Canvas.SetZIndex(b, 10000); // Move the button to the top of the Canvas
-            double xStart = mim.MapItem.Location.X;
+            double diffXOld = theOldXAfterAnimation - mim.MapItem.Location.X;
+            double diffYOld = theOldYAfterAnimation - mim.MapItem.Location.Y;
+            double xStart = mim.MapItem.Location.X; // get top left point of MapItem
             double yStart = mim.MapItem.Location.Y;
+            Logger.Log(LogEnum.LE_VIEW_ROTATION, "+++++++++++++++++MovePathAnimate(): 1 - mi.X=" + xStart.ToString("F0") + "  mi.Y=" + yStart.ToString("F0") + " r=" + mim.MapItem.Rotation.ToString("F0") + " dX=" + diffXOld.ToString("F0") + " dY=" + diffYOld.ToString("F0") + " rb=" + mim.MapItem.RotationBase.ToString("F0"));
             PathFigure aPathFigure = new PathFigure() { StartPoint = new System.Windows.Point(xStart, yStart) };
             if (null == mim.BestPath)
             {
@@ -1347,12 +1353,13 @@ namespace Pattons_Best
                aPathFigure.Segments.Add(lineSegment);
             }
             // Add the last line segment
-            IMapPoint mp = Territory.GetRandomPoint(mim.NewTerritory);
-            double xEnd = mp.X - mim.MapItem.Zoom * Utilities.theMapItemOffset;
-            double yEnd = mp.Y - mim.MapItem.Zoom * Utilities.theMapItemOffset;
-            if ((Math.Abs(xEnd - xStart) < 2) && (Math.Abs(yEnd - yStart) < 2)) // if already at final location, skip animation or get runtime exception
+            IMapPoint mp = Territory.GetRandomPoint(mim.NewTerritory, mim.MapItem.Zoom * Utilities.theMapItemOffset);
+            if ((Math.Abs(mp.X - xStart) < 2) && (Math.Abs(mp.Y - yStart) < 2)) // if already at final location, skip animation or get runtime exception
                return true;
-            System.Windows.Point newPoint2 = new System.Windows.Point(xEnd, yEnd);
+            theOldXAfterAnimation = mp.X;
+            theOldYAfterAnimation = mp.Y;
+            //----------------------------------------------------
+            System.Windows.Point newPoint2 = new System.Windows.Point(mp.X, mp.Y);
             LineSegment lineSegment2 = new LineSegment(newPoint2, false);
             aPathFigure.Segments.Add(lineSegment2);
             // Animiate the map item along the line segment
@@ -1368,9 +1375,22 @@ namespace Pattons_Best
             yAnimiation.Duration = TimeSpan.FromSeconds(ANIMATE_TIME_SEC);
             yAnimiation.Source = PathAnimationSource.Y;
             b.RenderTransform = new TranslateTransform();
+            //----------------------------------------------------
+            if( true == mim.MapItem.IsVehicle )
+            {
+               double xDiff = xStart - mp.X;
+               double yDiff = yStart - mp.Y;
+               double angleRotation = Math.Atan2(yDiff, xDiff) * 180 / Math.PI - 90;
+               RotateTransform rotateTransform = new RotateTransform();
+               b.RenderTransformOrigin = new Point(0.5, 0.5);
+               rotateTransform.Angle = angleRotation;
+               b.RenderTransform = rotateTransform;
+            }
+            //----------------------------------------------------
             b.BeginAnimation(Canvas.LeftProperty, xAnimiation);
             b.BeginAnimation(Canvas.TopProperty, yAnimiation);
-            mim.MapItem.SetLocation(mp);
+            mim.MapItem.Location = mp;
+            Logger.Log(LogEnum.LE_VIEW_ROTATION, "-----------------MovePathAnimate(): 2 - mi.X=" + mim.MapItem.Location.X.ToString("F0") + " mi.Y=" + mim.MapItem.Location.Y.ToString("F0") + " r=" + mim.MapItem.Rotation.ToString("F0") + " rb=" + mim.MapItem.RotationBase.ToString("F0"));
             return true;
          }
          catch (Exception e)

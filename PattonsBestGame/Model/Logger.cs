@@ -42,6 +42,8 @@ namespace Pattons_Best
       LE_VIEW_MIM_ADD,
       LE_VIEW_MIM_CLEAR,
       LE_VIEW_TIME_TRACK,
+      //-------------
+      LE_EVENT_VIEWER_ENEMY_ACTION,
       LE_END_ENUM
    }
    //----------------------------------------------------------------------------
@@ -90,19 +92,21 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_STACK_DEL);
          //SetOn(LogEnum.LE_SHOW_STACK_VIEW);
          //SetOn(LogEnum.LE_SHOW_ENEMY_STRENGTH);
-         SetOn(LogEnum.LE_SHOW_RANDOM_PT);
-         SetOn(LogEnum.LE_SHOW_ROTATION);
+         //SetOn(LogEnum.LE_SHOW_RANDOM_PT);
+         // SetOn(LogEnum.LE_SHOW_ROTATION);
          //-------------------------------
-         SetOn(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE);
-         SetOn(LogEnum.LE_VIEW_ART_FIRE_RESOLVE);
-         SetOn(LogEnum.LE_VIEW_AIR_FIRE_RESOLVE);
-         SetOn(LogEnum.LE_VIEW_ROTATION);
+         //SetOn(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE);
+         //SetOn(LogEnum.LE_VIEW_ART_FIRE_RESOLVE);
+         //SetOn(LogEnum.LE_VIEW_AIR_FIRE_RESOLVE);
+         //SetOn(LogEnum.LE_VIEW_ROTATION);
          //-------------------------------
          SetOn(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER);
-         SetOn(LogEnum.LE_VIEW_MIM);
-         SetOn(LogEnum.LE_VIEW_MIM_ADD);
-         SetOn(LogEnum.LE_VIEW_MIM_CLEAR);
+         //SetOn(LogEnum.LE_VIEW_MIM);
+         //SetOn(LogEnum.LE_VIEW_MIM_ADD);
+         //SetOn(LogEnum.LE_VIEW_MIM_CLEAR);
          //SetOn(LogEnum.LE_VIEW_TIME_TRACK);
+         //-------------------------------
+         SetOn(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION);
          return true;
       }
       static public void SetOn(LogEnum logLevel)

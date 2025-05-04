@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
+using System.Windows.Forms;
 namespace Pattons_Best
 {
    [Serializable]
@@ -8,8 +10,6 @@ namespace Pattons_Best
    {
       private double myX = 0.0; public double X { get => myX; set => myX = value; }
       private double myY = 0.0; public double Y { get => myY; set => myY = value; }
-      private Point myCenterPoint = new Point();
-      public Point CenterPoint { get => myCenterPoint; set => myCenterPoint = value; }
       public MapPoint() { }
       public MapPoint(double x, double y) { myX = x; myY = y; }
       public override string ToString()

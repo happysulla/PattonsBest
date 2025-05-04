@@ -6,10 +6,12 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Transactions;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Xml.Linq;
+using Windows.Graphics.Printing3D;
 using WpfAnimatedGif;
 using Button = System.Windows.Controls.Button;
 using Label = System.Windows.Controls.Label;
@@ -90,7 +92,12 @@ namespace Pattons_Best
       public double Rotation { get; set; } = 0.0;
       public double RotationBase { get; set; } = 0.0;
       //--------------------------------------------------
-      public IMapPoint Location { get; set; } = new MapPoint(0.0, 0.0);
+      private IMapPoint myLocation = new MapPoint();  // top left corner of MapItem
+      public IMapPoint Location 
+      {
+         get => myLocation;
+         set => myLocation = value;
+      }
       protected ITerritory myTerritoryCurrent = new Territory("Offboard");
       public ITerritory TerritoryCurrent
       {
@@ -100,6 +107,7 @@ namespace Pattons_Best
       protected ITerritory myTerritoryStarting = new Territory("Offboard");
       public ITerritory TerritoryStarting { get => myTerritoryStarting; set => myTerritoryStarting = value; }
       //--------------------------------------------------
+      public bool IsVehicle { get; set; } = false;
       public bool IsMoving { get; set; } = false;
       public bool IsHullDown { get; set; } = false;
       public bool IsWoods { get; set; } = false;
@@ -178,12 +186,6 @@ namespace Pattons_Best
          Location.Y = territory.CenterPoint.Y - zoom * Utilities.theMapItemOffset;
       }
       //----------------------------------------------------------------------------
-      public void SetLocation(IMapPoint mp, int counterCount = 0)
-      {
-         double delta = Zoom * Utilities.theMapItemOffset + counterCount * Utilities.STACK;
-         Location.X = mp.X - delta;
-         Location.Y = mp.Y - delta;
-      }
       public void SetBloodSpots()
       {
          for (int spots = 0; spots < PERCENT_MAPITEM_COVERED; ++spots) // splatter the MapItem with random blood spots

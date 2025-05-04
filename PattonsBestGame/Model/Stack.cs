@@ -19,7 +19,6 @@ namespace Pattons_Best
       {
          Territory = t;
          mi.TerritoryCurrent = t;
-         mi.SetLocation(t.CenterPoint);
          MapItems.Add(mi);
       }
       public void Rotate() { MapItems.Rotate(1); }

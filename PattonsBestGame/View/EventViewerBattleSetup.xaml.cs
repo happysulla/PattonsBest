@@ -738,26 +738,31 @@ namespace Pattons_Best
                t = tLeft;
                mi = new MapItem(name, Utilities.ZOOM + 0.2, "c89Psw232", t);
                myIsVehicleActivated = true;
+               mi.IsVehicle = true;
                break;
             case "SPW":
                t = tLeft;
                mi = new MapItem(name, Utilities.ZOOM + 0.2, "c90Spw251", t);
                myIsVehicleActivated = true;
+               mi.IsVehicle = true;
                break;
             case "SPG":
                t = tLeft;
                mi = new MapItem(name, Utilities.ZOOM + 0.5, "c77UnidentifiedSpg", t);
                myIsVehicleActivated = true;
+               mi.IsVehicle = true;
                break;
             case "TANK":
                t = tLeft;
                mi = new MapItem(name, Utilities.ZOOM + 0.5, "c78UnidentifiedTank", t);
                myIsVehicleActivated = true;
+               mi.IsVehicle = true;
                break;
             case "TRUCK":
                t = tRight;
                mi = new MapItem(name, Utilities.ZOOM + 0.3, "c88Truck", t);
                myIsVehicleActivated = true;
+               mi.IsVehicle = true;
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): reached default with enemyUnit=" + myGridRows[i].myActivation);
@@ -768,8 +773,8 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): mi=null");
             return false;
          }
-         IMapPoint mp = Territory.GetRandomPoint(t);
-         mi.SetLocation(mp);
+         IMapPoint mp = Territory.GetRandomPoint(t, mi.Zoom * Utilities.theMapItemOffset);
+         mi.Location = mp;
          myGameInstance.BattleStacks.Add(mi);
          myGridRows[i].myMapItem = mi;
          return true;
@@ -936,8 +941,8 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): mi=null for i=" + i.ToString());
                return false;
             }
-            IMapPoint mp = Territory.GetRandomPoint(t);
-            mi.SetLocation(mp);
+            IMapPoint mp = Territory.GetRandomPoint(t, mi.Zoom * Utilities.theMapItemOffset);
+            mi.Location = mp;
             mi.TerritoryCurrent = mi.TerritoryStarting = t;
             myGameInstance.BattleStacks.Remove(mi.Name);
             myGameInstance.BattleStacks.Add(mi);
@@ -979,8 +984,8 @@ namespace Pattons_Best
          mi.TerritoryCurrent = mi.TerritoryStarting = t;
          myGameInstance.BattleStacks.Remove(mi.Name);
          myGameInstance.BattleStacks.Add(mi);
-         IMapPoint mp = Territory.GetRandomPoint(t);
-         mi.SetLocation(mp);
+         IMapPoint mp = Territory.GetRandomPoint(t, mi.Zoom * Utilities.theMapItemOffset);
+         mi.Location = mp;
          if (false == CreateMapItemRotation(i, "UpdateGridRowRange"))
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowRange(): CreateMapItemRotation() returned false");

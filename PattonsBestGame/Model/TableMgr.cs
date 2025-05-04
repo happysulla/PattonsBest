@@ -870,8 +870,8 @@ namespace Pattons_Best
             string miName = "SmokeOne" + Utilities.MapItemNum;
             Utilities.MapItemNum++;
             IMapItem smoke = new MapItem(miName, Utilities.ZOOM + 0.75, "c108Smoke1", mi.TerritoryCurrent);
-            IMapPoint mp = Territory.GetRandomPoint(mi.TerritoryCurrent);
-            smoke.SetLocation(mp);
+            IMapPoint mp = Territory.GetRandomPoint(mi.TerritoryCurrent, mi.Zoom * Utilities.theMapItemOffset);
+            smoke.Location = mp;
             stack.MapItems.Add(smoke);
             return "Smoke"; // if smoke occurs, no chance of killing target
          }
@@ -1005,7 +1005,6 @@ namespace Pattons_Best
       }
       public static string SetEnemyActionResult(IGameInstance gi, IMapItem mi, int dieRoll)
       {
-         return "Move-L"; // <cgs> TEST
          string enemyUnit = "ERROR";
          if (true == mi.Name.Contains("LW"))
             enemyUnit = "LW";

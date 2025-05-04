@@ -19,13 +19,14 @@ namespace Pattons_Best
       bool IsAnimated { get; set; }
       bool IsMoved { get; set; }
       int Count { get; set; }
-      IMapPoint Location { get; set; }
+      IMapPoint Location { get; set; } // top left corner of MapItem
       double Rotation { get; set; }  // Vehicle Facing Rotation
       double RotationBase { get; set; } // Rotation to point at location
       //----------------------------------------
       ITerritory TerritoryCurrent { get; set; }
       ITerritory TerritoryStarting { get; set; }
       //----------------------------------------
+      bool IsVehicle { get; set; }
       bool IsMoving { get; set; }
       bool IsHullDown { get; set; }
       bool IsWoods { get; set; }
@@ -34,7 +35,6 @@ namespace Pattons_Best
       bool IsTurret { get; set; }
       bool IsKilled { get; set; }
       //----------------------------------------
-      void SetLocation(IMapPoint mp, int counterCount=0);
       void SetBloodSpots();
       void Flip();
       void Unflip();
