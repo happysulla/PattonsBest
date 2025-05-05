@@ -756,7 +756,14 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------
-         IStack? stack = myGameInstance.BattleStacks.Find(newT);
+         if (3 != newT.Name.Length)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateMapItemMove(): newT size not equal to 3 for tName=" + newT.Name);
+            return false;
+         }
+         char sector = newT.Name[newT.Name.Length - 2];
+         string tName = "B" + sector + "M";
+         IStack? stack = myGameInstance.BattleStacks.Find(tName);
          if( null != stack )
          {
             IMapItems removals = new MapItems();
