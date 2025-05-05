@@ -33,6 +33,7 @@ namespace Pattons_Best
             case GamePhase.Preparations: return new GameStateBattlePrep();
             case GamePhase.Movement: return new GameStateMovement();
             case GamePhase.Battle: return new GameStateBattle();
+            case GamePhase.BattleRoundSequence: return new GameStateBattleRoundSequence();
             case GamePhase.EveningDebriefing: return new GameStateEveningDebriefing();
             case GamePhase.EndGame: return new GameStateEnded();
             default: Logger.Log(LogEnum.LE_ERROR, "GetGameState(): reached default p=" + phase.ToString()); return null;
@@ -796,6 +797,7 @@ namespace Pattons_Best
       }
       private void AddStartingTestingOptions(IGameInstance gi)
       {
+         //gi.IsLeadTank = true;
       }
       private bool PerformAutoSetup(IGameInstance gi, ref GameAction action)
       {
@@ -1159,6 +1161,7 @@ namespace Pattons_Best
                   name = enemyUnit + Utilities.MapItemNum;
                   Utilities.MapItemNum++;
                   mi = new MapItem(name, Utilities.ZOOM + 0.2, "c89Psw232", t);
+                  mi.IsVehicle = true;
                   break;
                case "SPG":
                   mi = new MapItem(name, Utilities.ZOOM + 0.5, "c77UnidentifiedSpg", t);
@@ -1167,6 +1170,7 @@ namespace Pattons_Best
                case "TANK":
                   mi = new MapItem(name, Utilities.ZOOM + 0.5, "c78UnidentifiedTank", t);
                   mi.IsVehicle = true;
+                  mi.IsTurret = true;
                   break;
                case "TRUCK":
                   mi = new MapItem(name, Utilities.ZOOM + 0.3, "c88Truck", t);
@@ -2210,6 +2214,11 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleAmbush: // Handled with EventViewerBattleAmbush class
                   break;
+               case GameAction.BattleRoundSequenceStart:
+                  gi.GamePhase = GamePhase.BattleRoundSequence;
+                  gi.EventDisplayed = gi.EventActive = "e037";
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  break;
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;
                   break;
@@ -2294,6 +2303,61 @@ namespace Pattons_Best
             gi.DieRollAction = GameAction.DieRollActionNone;
          }
          return true;
+      }
+   }
+   //-----------------------------------------------------
+   class GameStateBattleRoundSequence : GameState
+   {
+      public override string PerformAction(ref IGameInstance gi, ref GameAction action, int dieRoll)
+      {
+         GamePhase previousPhase = gi.GamePhase;
+         GameAction previousAction = action;
+         GameAction previousDieAction = gi.DieRollAction;
+         string previousEvent = gi.EventActive;
+         string returnStatus = "OK";
+         switch (action)
+         {
+            case GameAction.ShowCombatCalendarDialog:
+            case GameAction.ShowAfterActionReportDialog:
+            case GameAction.ShowInventoryDialog:
+            case GameAction.ShowRuleListingDialog:
+            case GameAction.ShowEventListingDialog:
+            case GameAction.ShowReportErrorDialog:
+            case GameAction.ShowAboutDialog:
+               break;
+            case GameAction.UpdateEventViewerDisplay: // Only change active event
+               break;
+            case GameAction.UpdateEventViewerActive: // Only change active event
+               gi.EventDisplayed = gi.EventActive; // next screen to show
+               break;
+            case GameAction.EndGameClose:
+               gi.GamePhase = GamePhase.EndGame;
+               break;
+            default:
+               break;
+         }
+         StringBuilder sb12 = new StringBuilder();
+         if ("OK" != returnStatus)
+            sb12.Append("<<<<ERROR2::::::GameStateBattleRoundSequence.PerformAction():");
+         sb12.Append("===>p=");
+         sb12.Append(previousPhase.ToString());
+         if (previousPhase != gi.GamePhase)
+         { sb12.Append("=>"); sb12.Append(gi.GamePhase.ToString()); }
+         sb12.Append(" a="); sb12.Append(previousAction.ToString());
+         if (previousAction != action)
+         { sb12.Append("=>"); sb12.Append(action.ToString()); }
+         sb12.Append(" dra="); sb12.Append(previousDieAction.ToString());
+         if (previousDieAction != gi.DieRollAction)
+         { sb12.Append("=>"); sb12.Append(gi.DieRollAction.ToString()); }
+         sb12.Append(" e="); sb12.Append(previousEvent);
+         if (previousEvent != gi.EventActive)
+         { sb12.Append("=>"); sb12.Append(gi.EventActive); }
+         sb12.Append(" dr="); sb12.Append(dieRoll.ToString());
+         if ("OK" == returnStatus)
+            Logger.Log(LogEnum.LE_NEXT_ACTION, sb12.ToString());
+         else
+            Logger.Log(LogEnum.LE_ERROR, sb12.ToString());
+         return returnStatus;
       }
    }
    //-----------------------------------------------------

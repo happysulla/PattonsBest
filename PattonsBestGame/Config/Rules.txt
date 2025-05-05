@@ -1723,11 +1723,7 @@ r18.2	"<Bold>r18.2  Depleting Smoke</Bold>
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r18.21' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Smoke Depletion Phase<LineBreak/>
 <InlineUIContainer><Button Content='r18.22' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Smoke Multiplier Markers<LineBreak/>
-<InlineUIContainer><Button Content='r18.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Smoke In Rain
-<LineBreak/><LineBreak/>
-             <InlineUIContainer><Image Name='c111Smoke1'  Height='100' Width='100'></Image></InlineUIContainer>
-     <InlineUIContainer><Image Name='c112Smoke2'  Height='100' Width='100'></Image></InlineUIContainer>
-     <InlineUIContainer><Image Name='c113Smoke3'  Height='100' Width='100'></Image></InlineUIContainer>"
+<InlineUIContainer><Button Content='r18.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Smoke In Rain"
 r18.21	"<Bold>r18.21  Smoke Depletion Phase</Bold>
 <LineBreak/><LineBreak/>
 Smoke markers are printed in black on their front and gray on the back. When first placed, the black side is shown. 
@@ -1736,7 +1732,9 @@ During the Smoke Depletion Phase per
 <InlineUIContainer><Button Content='r4.71' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 of the Battle Round Sequence, one smoke marker is depleted in each zone containing Smoke markers. 
 <LineBreak/><LineBreak/>
-Deplete smoke by either flipping one marker in each area to its gray side or by removing one marker already on its gray side."
+Deplete smoke by either flipping one marker in each area to its gray side or by removing one marker already on its gray side.
+<LineBreak/><LineBreak/>
+             <InlineUIContainer><Image Name='c111Smoke1'  Height='100' Width='100'></Image></InlineUIContainer>"
 r18.22	"<Bold>r18.22  Smoke Multiplier Markers</Bold>
 <LineBreak/><LineBreak/>
 Included in the mix of markers are several multiple Smoke markers, representing 2 or 3 Smoke markers. 
@@ -1745,7 +1743,10 @@ These markers can be used to make change or replace several Smoke markers in one
 <LineBreak/><LineBreak/>
 When one of these markers already on it back side is depleted, make change with smaller smoke markers. 
 <LineBreak/><LineBreak/>
-For example, to deplete a x2 Smoke marker already on its back side, replace it with a single smoke marker on its front side. It takes four depletions to remove a x2 Smoke marker. "
+For example, to deplete a x2 Smoke marker already on its back side, replace it with a single smoke marker on its front side. It takes four depletions to remove a x2 Smoke marker. 
+<LineBreak/><LineBreak/>
+                        <InlineUIContainer><Image Name='c112Smoke2'  Height='100' Width='100'></Image></InlineUIContainer>
+     <InlineUIContainer><Image Name='c113Smoke3'  Height='100' Width='100'></Image></InlineUIContainer>"
 r18.23	"<Bold>r18.23  Smoke In Rain</Bold>
 <LineBreak/><LineBreak/>
 Smoke depletes twice as fast during rain weather."

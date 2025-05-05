@@ -36,7 +36,6 @@ namespace Pattons_Best
       private int myMaxRowCount = 0;
       private int myRollResultRowNum = 0;
       private bool myIsRollInProgress = false;
-      private EnumResistance myResistence = EnumResistance.None;
       private EnumScenario myScenario = EnumScenario.None;
       private int myDay = 0;
       private bool myIsVehicleActivated = false;
@@ -178,7 +177,6 @@ namespace Pattons_Best
          myMaxRowCount = 0;
          myRollResultRowNum = 0;
          myIsRollInProgress = false;
-         myResistence = EnumResistance.None;
          myScenario = lastReport.Scenario;
          myDay = myGameInstance.Day;
          myCallback = callback;
@@ -213,8 +211,6 @@ namespace Pattons_Best
                }
             }
          }
-         //--------------------------------------------------
-         myResistence = lastReport.Resistance;
          //--------------------------------------------------
          string[] sectors = new string[6] {"B1M", "B2M", "B3M", "B4M", "B6M", "B9M" };
          int i = 0;
@@ -628,27 +624,21 @@ namespace Pattons_Best
                      switch(myGridRows[i].myTerrain)
                      {
                         case "Hull Down":
-                           mi5.IsHullDown = true;
                            terrain = new MapItem("Terrain", 1.0, "c14HullDownFull", mi5.TerritoryCurrent);
                            break;
                         case "Woods":
-                           mi5.IsWoods = true;
-                           mi5.IsBuilding = true;
                            terrain = new MapItem("Terrain", 1.0, "C97TerrainWoods", mi5.TerritoryCurrent);
                            break;
                         case "Fortification":
-                           mi5.IsFortification = true;
                            terrain = new MapItem("Terrain", 1.0, "C98TerrainFort", mi5.TerritoryCurrent);
                            break;
                         case "Building":
-                           mi5.IsBuilding = true;
                            terrain = new MapItem("Terrain", 1.0, "C96TerrainBuilding", mi5.TerritoryCurrent);
                            break;
                         case "Open":
                            terrain = new MapItem("Terrain", 1.0, "c114Open", mi5.TerritoryCurrent);
                            break;
                         case "Moving":
-                           mi5.IsMoving = true;
                            terrain = new MapItem("Terrain", 1.0, "c13Moving", mi5.TerritoryCurrent);
                            break;
                         default:
@@ -733,6 +723,7 @@ namespace Pattons_Best
             case "PSW/SPW":
                t = tLeft;
                mi = new MapItem(name, Utilities.ZOOM, "SpwOrPsw", t);
+               mi.IsVehicle = true;
                return true;
             case "PSW":
                t = tLeft;
@@ -757,6 +748,7 @@ namespace Pattons_Best
                mi = new MapItem(name, Utilities.ZOOM + 0.5, "c78UnidentifiedTank", t);
                myIsVehicleActivated = true;
                mi.IsVehicle = true;
+               mi.IsTurret = true;
                break;
             case "TRUCK":
                t = tRight;
@@ -812,210 +804,6 @@ namespace Pattons_Best
          double yDiff = (mi.Location.Y + mi.Zoom * Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.Y;
          mi.RotationBase = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;
          Logger.Log(LogEnum.LE_SHOW_ROTATION, "CreateMapItemRotation(): " + caller + "(): xDiff=" + xDiff.ToString("F2") + " yDiff=" + yDiff.ToString("F2") + " r=" + mi.RotationBase.ToString("F2") + " t=" + mi.TerritoryCurrent.Name + " X=" + mi.Location.X + " Y=" + mi.Location.Y);
-         return true;
-      }
-      private bool ShowDieResultUpdateSector(Index i)
-      {
-         if (null == myGameInstance)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): myGameInstance=null");
-            return false;
-         }
-         string? tName = null;
-         switch(myGridRows[i].myDieRollSector)
-         {
-            case 1:
-               if ( false == myIsSectorUsControlled[0] )
-               {
-                  tName = "B1M";
-                  myGridRows[i].mySector = "1";
-               }
-               else
-               {
-                  tName = "B9M";
-                  if (true == myIsSectorUsControlled[5])
-                     myGridRows[i].mySector = "X";
-                  else
-                     myGridRows[i].mySector = "(1)";
-               }
-               break;
-            case 2:
-               if (false == myIsSectorUsControlled[1])
-               {
-                  tName = "B2M";
-                  myGridRows[i].mySector = "2";
-               }
-               else
-               {
-                  tName = "B6M";
-                  if (true == myIsSectorUsControlled[4])
-                     myGridRows[i].mySector = "X";
-                  else
-                     myGridRows[i].mySector = "(2)";
-               }
-               break;
-            case 3:
-               if (false == myIsSectorUsControlled[2])
-               {
-                  tName = "B3M";
-                  myGridRows[i].mySector = "3";
-               }
-               else
-               {
-                  tName = "B4M";
-                  if (true == myIsSectorUsControlled[3])
-                     myGridRows[i].mySector = "X";
-                  else
-                     myGridRows[i].mySector = "(3)";
-               }
-               break;
-            case 4:
-            case 5:
-               if (false == myIsSectorUsControlled[3])
-               {
-                  tName = "B4M";
-                  myGridRows[i].mySector = "4-5";
-               }
-               else
-               {
-                  tName = "B3M";
-                  if (true == myIsSectorUsControlled[2])
-                     myGridRows[i].mySector = "X";
-                  else
-                     myGridRows[i].mySector = "(3)";
-               }
-               break;
-            case 6:
-            case 7:
-            case 8:
-               if (false == myIsSectorUsControlled[4])
-               {
-                  tName = "B6M";
-                  myGridRows[i].mySector = "6-8";
-               }
-               else
-               {
-                  tName = "B2M";
-                  if (true == myIsSectorUsControlled[1])
-                     myGridRows[i].mySector = "X";
-                  else
-                     myGridRows[i].mySector = "(2)";
-               }
-               break;
-            case 9:
-            case 10:
-               if (false == myIsSectorUsControlled[5])
-               {
-                  tName = "B9M";
-                  myGridRows[i].mySector = "9-10";
-               }
-               else
-               {
-                  tName = "B1M";
-                  if (true == myIsSectorUsControlled[0])
-                     myGridRows[i].mySector = "X";
-                  else
-                     myGridRows[i].mySector = "(1)";
-               }
-               break;
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): reached default dr=" + myGridRows[i].myDieRollSector.ToString());
-               return false;
-         }
-         if( null == tName )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): tName=null for dr=" + myGridRows[i].myDieRollSector.ToString());
-            return false;
-         }
-         if ("X" != myGridRows[i].mySector)
-         {
-            ITerritory? t = Territories.theTerritories.Find(tName);
-            if (null == t)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): t=null for " + tName);
-               return false;
-            }
-            IMapItem? mi = myGridRows[i].myMapItem;
-            if( null == mi )
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): mi=null for i=" + i.ToString());
-               return false;
-            }
-            IMapPoint mp = Territory.GetRandomPoint(t, mi.Zoom * Utilities.theMapItemOffset);
-            mi.Location = mp;
-            mi.TerritoryCurrent = mi.TerritoryStarting = t;
-            myGameInstance.BattleStacks.Remove(mi.Name);
-            myGameInstance.BattleStacks.Add(mi);
-            if (false == CreateMapItemRotation(i, "ShowDieResultUpdateSector"))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): CreateMapItemRotation() returned false");
-               return false;
-            }
-         }
-         return true;
-      }
-      private bool ShowDieResultUpdateRange(Index i)
-      {
-         if (null == myGameInstance)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateRange(): myGameInstance=null");
-            return false;
-         }
-         if ("M" == myGridRows[i].myRange)
-            return true;
-         //----------------------------
-         IMapItem? mi = myGridRows[i].myMapItem;
-         if (null == mi)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateRange(): mi=null for i=" + i.ToString());
-            return false;
-         }
-         string tName = mi.TerritoryCurrent.Name;
-         if (true == tName.Contains("Off"))
-            return true;
-         //----------------------------
-         string modified = tName.Remove(tName.Length - 1) + myGridRows[i].myRange; // change last character
-         ITerritory? t = Territories.theTerritories.Find(modified);
-         if (null == t)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateRange(): t=null for i=" + i.ToString());
-            return false;
-         }
-         mi.TerritoryCurrent = mi.TerritoryStarting = t;
-         myGameInstance.BattleStacks.Remove(mi.Name);
-         myGameInstance.BattleStacks.Add(mi);
-         IMapPoint mp = Territory.GetRandomPoint(t, mi.Zoom * Utilities.theMapItemOffset);
-         mi.Location = mp;
-         if (false == CreateMapItemRotation(i, "ShowDieResultUpdateRange"))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateRange(): CreateMapItemRotation() returned false");
-            return false;
-         }
-         return true;
-      }
-      private bool ShowDieResultUpdateFacing(Index i)
-      {
-         if ("Front" == myGridRows[i].myFacing)
-            return true;
-         //----------------------------
-         IMapItem? mi = myGridRows[i].myMapItem;
-         if (null == mi)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): mi=null for i=" + i.ToString());
-            return false;
-         }
-         //----------------------------
-         if ("Rear" == myGridRows[i].myFacing)
-         {
-            mi.Rotation = 150 + Utilities.RandomGenerator.Next(0, 60);
-         }
-         else if ("Side" ==  myGridRows[i].myFacing)
-         {
-            if (0 == Utilities.RandomGenerator.Next(0, 2))
-               mi.Rotation = 35 + Utilities.RandomGenerator.Next(0, 115);
-            else
-               mi.Rotation = -35 - Utilities.RandomGenerator.Next(0, 115);
-         }
          return true;
       }
       private Button CreateButton(IMapItem mi)
@@ -1144,6 +932,11 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyTerrain() returned ERROR");
                   return;
                }
+               if (false == ShowDieResultUpdateTerrain(i))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResultUpdateTerrain() returned ERROR");
+                  return;
+               }
                myState = E046Enum.SHOW_RESULTS;
                for (int j = 0; j < myMaxRowCount; ++j)
                {
@@ -1172,6 +965,243 @@ namespace Pattons_Best
          }
          GameAction outAction = GameAction.UpdateBattleBoard;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+      }
+      private bool ShowDieResultUpdateSector(Index i)
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): myGameInstance=null");
+            return false;
+         }
+         string? tName = null;
+         switch (myGridRows[i].myDieRollSector)
+         {
+            case 1:
+               if (false == myIsSectorUsControlled[0])
+               {
+                  tName = "B1M";
+                  myGridRows[i].mySector = "1";
+               }
+               else
+               {
+                  tName = "B9M";
+                  if (true == myIsSectorUsControlled[5])
+                     myGridRows[i].mySector = "X";
+                  else
+                     myGridRows[i].mySector = "(1)";
+               }
+               break;
+            case 2:
+               if (false == myIsSectorUsControlled[1])
+               {
+                  tName = "B2M";
+                  myGridRows[i].mySector = "2";
+               }
+               else
+               {
+                  tName = "B6M";
+                  if (true == myIsSectorUsControlled[4])
+                     myGridRows[i].mySector = "X";
+                  else
+                     myGridRows[i].mySector = "(2)";
+               }
+               break;
+            case 3:
+               if (false == myIsSectorUsControlled[2])
+               {
+                  tName = "B3M";
+                  myGridRows[i].mySector = "3";
+               }
+               else
+               {
+                  tName = "B4M";
+                  if (true == myIsSectorUsControlled[3])
+                     myGridRows[i].mySector = "X";
+                  else
+                     myGridRows[i].mySector = "(3)";
+               }
+               break;
+            case 4:
+            case 5:
+               if (false == myIsSectorUsControlled[3])
+               {
+                  tName = "B4M";
+                  myGridRows[i].mySector = "4-5";
+               }
+               else
+               {
+                  tName = "B3M";
+                  if (true == myIsSectorUsControlled[2])
+                     myGridRows[i].mySector = "X";
+                  else
+                     myGridRows[i].mySector = "(3)";
+               }
+               break;
+            case 6:
+            case 7:
+            case 8:
+               if (false == myIsSectorUsControlled[4])
+               {
+                  tName = "B6M";
+                  myGridRows[i].mySector = "6-8";
+               }
+               else
+               {
+                  tName = "B2M";
+                  if (true == myIsSectorUsControlled[1])
+                     myGridRows[i].mySector = "X";
+                  else
+                     myGridRows[i].mySector = "(2)";
+               }
+               break;
+            case 9:
+            case 10:
+               if (false == myIsSectorUsControlled[5])
+               {
+                  tName = "B9M";
+                  myGridRows[i].mySector = "9-10";
+               }
+               else
+               {
+                  tName = "B1M";
+                  if (true == myIsSectorUsControlled[0])
+                     myGridRows[i].mySector = "X";
+                  else
+                     myGridRows[i].mySector = "(1)";
+               }
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): reached default dr=" + myGridRows[i].myDieRollSector.ToString());
+               return false;
+         }
+         if (null == tName)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): tName=null for dr=" + myGridRows[i].myDieRollSector.ToString());
+            return false;
+         }
+         if ("X" != myGridRows[i].mySector)
+         {
+            ITerritory? t = Territories.theTerritories.Find(tName);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): t=null for " + tName);
+               return false;
+            }
+            IMapItem? mi = myGridRows[i].myMapItem;
+            if (null == mi)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): mi=null for i=" + i.ToString());
+               return false;
+            }
+            IMapPoint mp = Territory.GetRandomPoint(t, mi.Zoom * Utilities.theMapItemOffset);
+            mi.Location = mp;
+            mi.TerritoryCurrent = mi.TerritoryStarting = t;
+            myGameInstance.BattleStacks.Remove(mi.Name);
+            myGameInstance.BattleStacks.Add(mi);
+            if (false == CreateMapItemRotation(i, "ShowDieResultUpdateSector"))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): CreateMapItemRotation() returned false");
+               return false;
+            }
+         }
+         return true;
+      }
+      private bool ShowDieResultUpdateRange(Index i)
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateRange(): myGameInstance=null");
+            return false;
+         }
+         if ("M" == myGridRows[i].myRange)
+            return true;
+         //----------------------------
+         IMapItem? mi = myGridRows[i].myMapItem;
+         if (null == mi)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateRange(): mi=null for i=" + i.ToString());
+            return false;
+         }
+         string tName = mi.TerritoryCurrent.Name;
+         if (true == tName.Contains("Off"))
+            return true;
+         //----------------------------
+         string modified = tName.Remove(tName.Length - 1) + myGridRows[i].myRange; // change last character
+         ITerritory? t = Territories.theTerritories.Find(modified);
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateRange(): t=null for i=" + i.ToString());
+            return false;
+         }
+         mi.TerritoryCurrent = mi.TerritoryStarting = t;
+         myGameInstance.BattleStacks.Remove(mi.Name);
+         myGameInstance.BattleStacks.Add(mi);
+         IMapPoint mp = Territory.GetRandomPoint(t, mi.Zoom * Utilities.theMapItemOffset);
+         mi.Location = mp;
+         if (false == CreateMapItemRotation(i, "ShowDieResultUpdateRange"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateRange(): CreateMapItemRotation() returned false");
+            return false;
+         }
+         return true;
+      }
+      private bool ShowDieResultUpdateFacing(Index i)
+      {
+         if ("Front" == myGridRows[i].myFacing)
+            return true;
+         //----------------------------
+         IMapItem? mi = myGridRows[i].myMapItem;
+         if (null == mi)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): mi=null for i=" + i.ToString());
+            return false;
+         }
+         //----------------------------
+         if ("Rear" == myGridRows[i].myFacing)
+         {
+            mi.Rotation = 150 + Utilities.RandomGenerator.Next(0, 60);
+         }
+         else if ("Side" == myGridRows[i].myFacing)
+         {
+            if (0 == Utilities.RandomGenerator.Next(0, 2))
+               mi.Rotation = 35 + Utilities.RandomGenerator.Next(0, 115);
+            else
+               mi.Rotation = -35 - Utilities.RandomGenerator.Next(0, 115);
+         }
+         return true;
+      }
+      private bool ShowDieResultUpdateTerrain(Index i)
+      {
+         IMapItem? mi = myGridRows[i].myMapItem;
+         if (null == mi)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): mi=null for i=" + i.ToString());
+            return false;
+         }
+         switch (myGridRows[i].myTerrain)
+         {
+            case "Hull Down":
+               mi.IsHullDown = true;
+               break;
+            case "Woods":
+               mi.IsWoods = true;
+               break;
+            case "Fortification":
+               mi.IsFortification = true;
+               break;
+            case "Building":
+               mi.IsBuilding = true;
+               break;
+            case "Open":
+               break;
+            case "Moving":
+               mi.IsMoving = true;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateTerrain(): reached default terrain=" + myGridRows[i].myDieRollTerrain);
+               return false;
+         }
+         return true;
       }
       //---------------------Controller Function--------------------------------------------
       private void ButtonRule_Click(object sender, RoutedEventArgs e)

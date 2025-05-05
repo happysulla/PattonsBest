@@ -258,5 +258,55 @@ namespace Pattons_Best
             return true;
          return false;
       }
+      public static int GetSmokeCount(IGameInstance gi, char sector, char range)
+      {
+         int numSmokeMarkers = -10000;
+         IStack? stack = gi.BattleStacks.Find(gi.Home);
+         if (null == stack)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberInfantry():  stack=null for " + gi.Home.Name);
+            return numSmokeMarkers;
+         }
+         foreach (IMapItem smoke in stack.MapItems)
+         {
+            if (true == smoke.Name.Contains("Smoke"))
+               numSmokeMarkers++;
+         }
+         stack = gi.BattleStacks.Find("B" + sector + "C");
+         if (null != stack)
+         {
+            foreach (IMapItem smoke in stack.MapItems)
+            {
+               if (true == smoke.Name.Contains("Smoke"))
+                  numSmokeMarkers++;
+            }
+         }
+         if (('M' == range) || ('L' == range))
+         {
+            stack = gi.BattleStacks.Find("B" + sector + "M");
+            if (null != stack)
+            {
+               foreach (IMapItem smoke in stack.MapItems)
+               {
+                  if (true == smoke.Name.Contains("Smoke"))
+                     numSmokeMarkers++;
+               }
+            }
+         }
+         if ('L' == range)
+         {
+            string tName = "B" + sector + "L";
+            stack = gi.BattleStacks.Find(tName);
+            if (null != stack)
+            {
+               foreach (IMapItem smoke in stack.MapItems)
+               {
+                  if (true == smoke.Name.Contains("Smoke"))
+                     numSmokeMarkers++;
+               }
+            }
+         }
+         return numSmokeMarkers;
+      }
    }
 }

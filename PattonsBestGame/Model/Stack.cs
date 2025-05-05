@@ -93,16 +93,13 @@ namespace Pattons_Best
          }
          return null;
       }
-      public IStack? Find(string name)
+      public IStack? Find(string territoryName)
       {
          foreach (object o in myList)
          {
             IStack stack = (IStack)o;
-            foreach (MapItem mapItem in stack.MapItems)
-            {
-               if (mapItem.Name == name)
-                  return stack;
-            }
+            if (territoryName == stack.Territory.Name)
+               return stack;
          }
          return null;
       }

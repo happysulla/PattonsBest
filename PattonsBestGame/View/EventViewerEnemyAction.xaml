@@ -50,6 +50,6 @@
       <TextBlock Grid.Row="5" Grid.Column="1" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock1">Sector/Range</TextBlock>
       <TextBlock Grid.Row="5" Grid.Column="2" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock2">Modifier</TextBlock>
       <TextBlock Grid.Row="5" Grid.Column="3" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock3">Roll</TextBlock>
-      <TextBlock Grid.Row="5" Grid.Column="4" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock4">Result</TextBlock>
+      <TextBlock Grid.Row="5" Grid.Column="4" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock4">Enemy Action</TextBlock>
    </Grid>
 </UserControl>

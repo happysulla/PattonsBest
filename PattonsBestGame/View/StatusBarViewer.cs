@@ -98,6 +98,13 @@ namespace Pattons_Best
             myStatusBar.Items.Add(imgAirStrike);
          }
          //-------------------------------------------------------
+         if (true == gi.IsLeadTank)
+         {
+            myStatusBar.Items.Add(new Separator());
+            Image imgLead = new Image { Source = MapItem.theMapImages.GetBitmapImage("ShermanLead"), Width = 60, Height = 40 };
+            myStatusBar.Items.Add(imgLead);
+         }
+         //-------------------------------------------------------
          if (true == gi.IsAdvancingFireChosen)
          {
             myStatusBar.Items.Add(new Separator());

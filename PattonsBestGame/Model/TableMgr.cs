@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
@@ -403,6 +404,9 @@ namespace Pattons_Best
          switch (enemyUnit)
          {
             case "ATG":
+            case "Pak43":
+            case "Pak38":
+            case "Pak40":
                if (dieRoll < 3)
                   return "C";
                else if (dieRoll < 8)
@@ -424,6 +428,10 @@ namespace Pattons_Best
             case "PSW":
             case "SPW":
             case "TANK":
+            case "PzVIe":
+            case "PzIV":
+            case "PzV":
+            case "PzVIb":
             case "TRUCK":
                if (dieRoll < 4)
                   return "C";
@@ -432,6 +440,11 @@ namespace Pattons_Best
                else
                   return "L";
             case "SPG":
+            case "STuGIIIg":
+            case "MARDERII":
+            case "MARDERIII":
+            case "JdgPzIV":
+            case "JdgPz38t":
                if (dieRoll < 3)
                   return "C";
                else if (dieRoll < 7)
@@ -448,6 +461,11 @@ namespace Pattons_Best
          switch (enemyUnit)
          {
             case "SPG":
+            case "STuGIIIg":
+            case "MARDERII":
+            case "MARDERIII":
+            case "JdgPzIV":
+            case "JdgPz38t":
                if (dieRoll < 7)
                   return "Front";
                else if (dieRoll < 10)
@@ -455,6 +473,10 @@ namespace Pattons_Best
                else
                   return "Rear";
             case "TANK":
+            case "PzVIe":
+            case "PzIV":
+            case "PzV":
+            case "PzVIb":
                if (dieRoll < 6)
                   return "Front";
                else if (dieRoll < 10)
@@ -569,6 +591,9 @@ namespace Pattons_Best
                      return "ERROR";
                }
             case "ATG":
+            case "Pak43":
+            case "Pak38":
+            case "Pak40":
                switch (areaType)
                {
                   case "A":
@@ -612,10 +637,19 @@ namespace Pattons_Best
                      return "ERROR";
                }
             case "SPG":
+            case "STuGIIIg":
             case "TANK":
+            case "PzVIe":
+            case "PzIV":
+            case "PzV":
+            case "PzVIb":
             case "PSW":
             case "SPW":
             case "TRUCK":
+            case "MARDERII":
+            case "MARDERIII":
+            case "JdgPzIV":
+            case "JdgPz38t":
                switch (areaType)
                {
                   case "A":
@@ -665,31 +699,7 @@ namespace Pattons_Best
       }
       public static int GetFriendlyActionModifier(IGameInstance gi, IMapItem mi, int numUsControlledSector, bool isAdvancingFire, bool isArtilleryFire, bool isAirStrike, bool isFlankingFire)
       {
-         string enemyUnit = "ERROR";
-         if (true == mi.Name.Contains("LW"))
-            enemyUnit = "LW";
-         else if (true == mi.Name.Contains("MG"))
-            enemyUnit = "MG";
-         else if (true == mi.Name.Contains("TRUCK"))
-            enemyUnit = "TRUCK";
-         else if (true == mi.Name.Contains("PSW"))
-            enemyUnit = "PSW";
-         else if (true == mi.Name.Contains("SPW"))
-            enemyUnit = "SPW";
-         else if (true == mi.Name.Contains("MARDER"))
-            enemyUnit = "MARDER";
-         else if (true == mi.Name.Contains("ATG") || true == mi.Name.Contains("Pak"))
-            enemyUnit = "ATG";
-         else if (true == mi.Name.Contains("PzIV"))
-            enemyUnit = "PzIV";
-         else if (true == mi.Name.Contains("PzV"))
-            enemyUnit = "PzV";
-         else if (true == mi.Name.Contains("SPG") || true == mi.Name.Contains("STuGIIIg"))
-            enemyUnit = "STuGIIIg";
-         else if (true == mi.Name.Contains("TANK") || true == mi.Name.Contains("PzVI"))
-            enemyUnit = "PzVI";
-         else if (true == mi.Name.Contains("JdgPzIV") || true == mi.Name.Contains("JdgPz38t"))
-            enemyUnit = "JdgPz";
+         string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetFriendlyActionModifier(): unknown enemyUnit=" + mi.Name);
@@ -730,20 +740,27 @@ namespace Pattons_Best
                friendlySquadsLost = lastReport.VictoryPtsFriendlySquad;
                break;
             case "ATG":
+            case "Pak43":
+            case "Pak38":
+            case "Pak40":
                isTargetInWoods = mi.IsWoods;
                break;
             case "TRUCK":
                friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
                break;
-            case "PSW":
-            case "SPW":
+            case "SPG":
+            case "STuGIIIg":
+            case "TANK":
+            case "PzVIe":
             case "PzIV":
             case "PzV":
-            case "PzVI":
-            case "STuGIIIg":
-            case "SPG":
-            case "MARDER":
-            case "JdgPz":
+            case "PzVIb":
+            case "PSW":
+            case "SPW":
+            case "MARDERII":
+            case "MARDERIII":
+            case "JdgPzIV":
+            case "JdgPz38t":
                isTargetVehicle = true;
                friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
                break;
@@ -797,31 +814,7 @@ namespace Pattons_Best
             return "KO";
          }
          //----------------------------------------------------
-         string enemyUnit = "ERROR";
-         if (true == mi.Name.Contains("LW"))
-            enemyUnit = "LW";
-         else if (true == mi.Name.Contains("MG"))
-            enemyUnit = "MG";
-         else if (true == mi.Name.Contains("TRUCK"))
-            enemyUnit = "TRUCK";
-         else if (true == mi.Name.Contains("PSW"))
-            enemyUnit = "PSW";
-         else if (true == mi.Name.Contains("SPW"))
-            enemyUnit = "SPW";
-         else if (true == mi.Name.Contains("MARDER"))
-            enemyUnit = "MARDER";
-         else if (true == mi.Name.Contains("ATG") || true == mi.Name.Contains("Pak"))
-            enemyUnit = "ATG";
-         else if (true == mi.Name.Contains("PzIV"))
-            enemyUnit = "PzIV";
-         else if (true == mi.Name.Contains("PzV"))
-            enemyUnit = "PzV";
-         else if (true == mi.Name.Contains("SPG") || true == mi.Name.Contains("STuGIIIg"))
-            enemyUnit = "STuGIIIg";
-         else if (true == mi.Name.Contains("TANK") || true == mi.Name.Contains("PzVI"))
-            enemyUnit = "PzVI";
-         else if (true == mi.Name.Contains("JdgPzIV") || true == mi.Name.Contains("JdgPz38t"))
-            enemyUnit = "JdgPz";
+         string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
             Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): unknown enemyUnit=" + mi.Name);
@@ -842,12 +835,17 @@ namespace Pattons_Best
             case "TRUCK":
             case "PSW":
             case "SPW":
-            case "MARDER":
+            case "MARDERII":
+            case "MARDERIII":
                // no smoke possible
                break;
             case "ATG":
+            case "Pak43":
+            case "Pak38":
+            case "Pak40":
             case "PzV":
-            case "JdgPz":
+            case "JdgPzIV":
+            case "JdgPz38t":
                if (79 < dieRoll)
                   isSmokeAddedToTerritory = true;
                break;
@@ -857,7 +855,9 @@ namespace Pattons_Best
                if (89 < dieRoll)
                   isSmokeAddedToTerritory = true;
                break;
-            case "PzVI":
+            case "TANK":
+            case "PzVIe":
+            case "PzVIb":
                if (59 < dieRoll)
                   isSmokeAddedToTerritory = true;
                break;
@@ -895,8 +895,12 @@ namespace Pattons_Best
                   mi.IsKilled = true;
                break;
             case "ATG":
+            case "Pak43":
+            case "Pak38":
+            case "Pak40":
             case "PzV":
-            case "JdgPz":
+            case "JdgPzIV":
+            case "JdgPz38t":
                if (dieRoll < 21)
                   mi.IsKilled = true;
                break;
@@ -909,11 +913,14 @@ namespace Pattons_Best
                if (dieRoll < 41)
                   mi.IsKilled = true;
                break;
-            case "MARDER":
+            case "MARDERII":
+            case "MARDERIII":
                if (dieRoll < 51)
                   mi.IsKilled = true;
                break;
-            case "PzVI":
+            case "PzVIe":
+            case "PzVIb":
+            case "TANK":
                if (dieRoll < 11)
                   mi.IsKilled = true;
                break;
@@ -930,32 +937,7 @@ namespace Pattons_Best
       }
       public static int GetEnemyActionModifier(IGameInstance gi, IMapItem mi)
       {
-
-         string enemyUnit = "ERROR";
-         if (true == mi.Name.Contains("LW"))
-            enemyUnit = "LW";
-         else if (true == mi.Name.Contains("MG"))
-            enemyUnit = "MG";
-         else if (true == mi.Name.Contains("TRUCK"))
-            enemyUnit = "TRUCK";
-         else if (true == mi.Name.Contains("PSW"))
-            enemyUnit = "PSW";
-         else if (true == mi.Name.Contains("SPW"))
-            enemyUnit = "SPW";
-         else if (true == mi.Name.Contains("MARDER"))
-            enemyUnit = "MARDER";
-         else if (true == mi.Name.Contains("ATG") || true == mi.Name.Contains("Pak"))
-            enemyUnit = "ATG";
-         else if (true == mi.Name.Contains("PzIV"))
-            enemyUnit = "PzIV";
-         else if (true == mi.Name.Contains("PzV"))
-            enemyUnit = "PzV";
-         else if (true == mi.Name.Contains("SPG") || true == mi.Name.Contains("STuGIIIg"))
-            enemyUnit = "STuGIIIg";
-         else if (true == mi.Name.Contains("TANK") || true == mi.Name.Contains("PzVI"))
-            enemyUnit = "PzVI";
-         else if (true == mi.Name.Contains("JdgPzIV") || true == mi.Name.Contains("JdgPz38t"))
-            enemyUnit = "JdgPz";
+         string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetEnemyActionModifier(): unknown enemyUnit=" + mi.Name);
@@ -978,6 +960,9 @@ namespace Pattons_Best
                   modifier += 20;
                break;
             case "ATG":
+            case "Pak43":
+            case "Pak38":
+            case "Pak40":
                if (true == gi.IsAmbush)
                   modifier += 20;
                break;
@@ -987,13 +972,17 @@ namespace Pattons_Best
                if (true == gi.IsAmbush)
                   modifier += 10;
                break;
+            case "TANK":
             case "PzIV":
             case "PzV":
-            case "PzVI":
+            case "PzVIe":
+            case "PzVIb":
             case "STuGIIIg":
             case "SPG":
-            case "MARDER":
-            case "JdgPz":
+            case "MARDERII":
+            case "MARDERIII":
+            case "JdgPzIV":
+            case "JdgPz38t":
                if (true == gi.IsAmbush)
                   modifier += 10;
                break;
@@ -1005,31 +994,7 @@ namespace Pattons_Best
       }
       public static string SetEnemyActionResult(IGameInstance gi, IMapItem mi, int dieRoll)
       {
-         string enemyUnit = "ERROR";
-         if (true == mi.Name.Contains("LW"))
-            enemyUnit = "LW";
-         else if (true == mi.Name.Contains("MG"))
-            enemyUnit = "MG";
-         else if (true == mi.Name.Contains("TRUCK"))
-            enemyUnit = "TRUCK";
-         else if (true == mi.Name.Contains("PSW"))
-            enemyUnit = "PSW";
-         else if (true == mi.Name.Contains("SPW"))
-            enemyUnit = "SPW";
-         else if (true == mi.Name.Contains("MARDER"))
-            enemyUnit = "MARDER";
-         else if (true == mi.Name.Contains("ATG") || true == mi.Name.Contains("Pak"))
-            enemyUnit = "ATG";
-         else if (true == mi.Name.Contains("PzIV"))
-            enemyUnit = "PzIV";
-         else if (true == mi.Name.Contains("PzV"))
-            enemyUnit = "PzV";
-         else if (true == mi.Name.Contains("SPG") || true == mi.Name.Contains("STuGIIIg"))
-            enemyUnit = "STuGIIIg";
-         else if (true == mi.Name.Contains("TANK") || true == mi.Name.Contains("PzVI"))
-            enemyUnit = "PzVI";
-         else if (true == mi.Name.Contains("JdgPzIV") || true == mi.Name.Contains("JdgPz38t"))
-            enemyUnit = "JdgPz";
+         string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
             Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): unknown enemyUnit=" + mi.Name);
@@ -1085,6 +1050,9 @@ namespace Pattons_Best
                      return "Do Nothing";
                   return "Collateral";
                case "ATG":
+               case "Pak43":
+               case "Pak38":
+               case "Pak40":
                   if (dieRoll < 21)
                      return "Move-B";
                   if (dieRoll < 31)
@@ -1140,13 +1108,17 @@ namespace Pattons_Best
                   if (true == isDoNothingIfFiring)
                      return "Do Nothing";
                   return "Collateral";
+               case "TANK":
                case "PzIV":
                case "PzV":
-               case "PzVI":
+               case "PzVIe":
+               case "PzVIb":
                case "STuGIIIg":
                case "SPG":
-               case "MARDER":
-               case "JdgPz":
+               case "MARDERII":
+               case "MARDERIII":
+               case "JdgPzIV":
+               case "JdgPz38t":
                   if (dieRoll < 11)
                      return "Do Nothing";
                   if (dieRoll < 21)
@@ -1212,6 +1184,9 @@ namespace Pattons_Best
                      return "Fire-Infantry";
                   return "Collateral";
                case "ATG":
+               case "Pak43":
+               case "Pak38":
+               case "Pak40":
                   if (dieRoll < 21)
                      return "Move-B";
                   if (dieRoll < 31)
@@ -1234,13 +1209,17 @@ namespace Pattons_Best
                   if (true == isDoNothingIfFiring)
                      return "Do Nothing";
                   return "Fire-Lead Tank";
+               case "TANK":
                case "PzIV":
                case "PzV":
-               case "PzVI":
+               case "PzVIe":
+               case "PzVIb":
                case "STuGIIIg":
                case "SPG":
-               case "MARDER":
-               case "JdgPz":
+               case "MARDERII":
+               case "MARDERIII":
+               case "JdgPzIV":
+               case "JdgPz38t":
                   if (dieRoll < 11)
                      return "Do Nothing";
                   if (dieRoll < 16)
@@ -1282,7 +1261,7 @@ namespace Pattons_Best
                      return "Do Nothing";
                   return "Fire-Lead Tank";
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): reached default with enemyUnit=" + enemyUnit);
+                  Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): Battle - reached default with enemyUnit=" + enemyUnit);
                   return "ERROR";
             }
          }
@@ -1311,13 +1290,17 @@ namespace Pattons_Best
                   if (true == isDoNothingIfFiring)
                      return "Do Nothing";
                   return "Collateral";
+               case "TANK":
                case "PzIV":
                case "PzV":
-               case "PzVI":
+               case "PzVIe":
+               case "PzVIb":
                case "STuGIIIg":
                case "SPG":
-               case "MARDER":
-               case "JdgPz":
+               case "MARDERII":
+               case "MARDERIII":
+               case "JdgPzIV":
+               case "JdgPz38t":
                   if (dieRoll < 11)
                      return "Do Nothing";
                   if (dieRoll < 41)
@@ -1353,7 +1336,7 @@ namespace Pattons_Best
                      return "Do Nothing";
                   return "Fire-Your Tank";
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): reached default with enemyUnit=" + enemyUnit);
+                  Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): Counterattack - reached default with enemyUnit=" + enemyUnit);
                   return "ERROR";
             }
          }
@@ -1598,6 +1581,274 @@ namespace Pattons_Best
             return null;
          }
          return newT;
+      }
+      public static double GetToKillNumberInfantry(IGameInstance gi, IMapItem mi, char sector, char range)
+      {
+         double toKillNum = -1000.0;
+         string enemyUnit = mi.GetEnemyUnit();
+         if ("ERROR" == enemyUnit)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberInfantry(): unknown enemyUnit=" + mi.Name);
+            return toKillNum;
+         }
+         //----------------------------------------------------
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberInfantry(): lastReport=null");
+            return toKillNum;
+         }
+         //----------------------------------------------------
+         if ( (EnumScenario.Advance == lastReport.Scenario) || (EnumScenario.Counterattack == lastReport.Scenario) )
+         {
+            switch (enemyUnit)
+            {
+               case "LW":
+               case "SPW":
+                  if ('C' == range)
+                     toKillNum = 30;
+                  else if ('M' == range)
+                     toKillNum = 20;
+                  else if ('L' == range)
+                     toKillNum = 03;
+                  break;
+               case "MG":
+               case "PSW":
+                  if ('C' == range)
+                     toKillNum = 55;
+                  else if ('M' == range)
+                     toKillNum = 30;
+                  else if ('L' == range)
+                     toKillNum = 03;
+                  break;
+               case "TANK":
+               case "PzIV":
+               case "PzV":
+               case "PzVIe":
+               case "PzVIb":
+               case "STuGIIIg":
+               case "SPG":
+               case "MARDERII":
+               case "MARDERIII":
+               case "JdgPzIV":
+               case "JdgPz38t":
+                  if ('C' == range)
+                     toKillNum = 65;
+                  else if ('M' == range)
+                     toKillNum = 40;
+                  else if ('L' == range)
+                     toKillNum = 10;
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberInfantry(): Advance - reached default with enemyUnit=" + enemyUnit);
+                  return toKillNum;
+            }
+         }
+         else if (EnumScenario.Battle == lastReport.Scenario)
+         {
+            switch (enemyUnit)
+            {
+               case "LW":
+                  if ('C' == range)
+                     toKillNum = 30;
+                  else if ('M' == range)
+                     toKillNum = 20;
+                  else if ('L' == range)
+                     toKillNum = 03;
+                  break;
+               case "MG":
+                  if ('C' == range)
+                     toKillNum = 55;
+                  else if ('M' == range)
+                     toKillNum = 30;
+                  else if ('L' == range)
+                     toKillNum = 03;
+                  break;
+               case "PzIV":
+               case "PzV":
+               case "PzVI":
+               case "STuGIIIg":
+               case "SPG":
+               case "MARDER":
+               case "JdgPz":
+                  if ('C' == range)
+                     toKillNum = 65;
+                  else if ('M' == range)
+                     toKillNum = 40;
+                  else if ('L' == range)
+                     toKillNum = 10;
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberInfantry(): Battle - reached default with enemyUnit=" + enemyUnit);
+                  return toKillNum;
+            }
+         }
+         else
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberInfantry():  reached default with scearno=" + lastReport.Scenario);
+            return toKillNum;
+         }
+         //------------------------------------
+         int numSmokeMarkers = Utilities.GetSmokeCount(gi, sector, range);
+         if (numSmokeMarkers < 0)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): GetSmokeCount() returned error");
+            return toKillNum;
+         }
+         if ( 0 < numSmokeMarkers)
+            toKillNum = toKillNum * numSmokeMarkers * 0.5;
+         //------------------------------------
+         if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
+            toKillNum = toKillNum * 0.5;
+         //------------------------------------
+         return toKillNum;
+      }
+      public static double GetToKillNumberTank(IGameInstance gi, IMapItem mi, char sector, char range)
+      {
+         double toKillNum = -1000.0;
+         string enemyUnit = mi.GetEnemyUnit();
+         if ("ERROR" == enemyUnit)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): unknown enemyUnit=" + mi.Name);
+            return toKillNum;
+         }
+         //----------------------------------------------------
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): lastReport=null");
+            return toKillNum;
+         }
+         //----------------------------------------------------
+         if ( (EnumScenario.Advance == lastReport.Scenario) || (EnumScenario.Counterattack == lastReport.Scenario) )
+         {
+            switch (enemyUnit)
+            {
+               case "Pak38": // 50L
+                  if ('C' == range)
+                     toKillNum = 15;
+                  else if ('M' == range)
+                     toKillNum = 05;
+                  else if ('L' == range)
+                     toKillNum = 01;
+                  break;
+               case "Pak40": // 75L
+               case "PzIV": 
+               case "STuGIIIg":
+               case "SPG":
+               case "MARDERII":
+               case "MARDERIII":
+               case "JdgPzIV":
+               case "JdgPz38t":
+                  if ('C' == range)
+                     toKillNum = 52;
+                  else if ('M' == range)
+                     toKillNum = 40;
+                  else if ('L' == range)
+                     toKillNum = 22;
+                  break;
+               case "PzV": // 75LL
+                  if ('C' == range)
+                     toKillNum = 68;
+                  else if ('M' == range)
+                     toKillNum = 66;
+                  else if ('L' == range)
+                     toKillNum = 61;
+                  break;
+               case "PzVIe":
+               case "TANK": // 88L
+                  if ('C' == range)
+                     toKillNum = 68;
+                  else if ('M' == range)
+                     toKillNum = 63;
+                  else if ('L' == range)
+                     toKillNum = 43;
+                  break;
+               case "ATG":   // 88LL
+               case "Pak43":
+               case "PzVIb":
+                  if ('C' == range)
+                     toKillNum = 68;
+                  else if ('M' == range)
+                     toKillNum = 66;
+                  else if ('L' == range)
+                     toKillNum = 61;
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): Advance - reached default with enemyUnit=" + enemyUnit);
+                  return toKillNum;
+            }
+         }
+         else if (EnumScenario.Battle == lastReport.Scenario)
+         {
+            switch (enemyUnit)
+            {
+               case "Pak40": // 75L
+               case "PzIV":
+               case "STuGIIIg":
+               case "SPG":
+               case "MARDERII":
+               case "MARDERIII":
+               case "JdgPzIV":
+               case "JdgPz38t":
+                  if ('C' == range)
+                     toKillNum = 42;
+                  else if ('M' == range)
+                     toKillNum = 30;
+                  else if ('L' == range)
+                     toKillNum = 12;
+                  break;
+               case "PzV": // 75LL
+                  if ('C' == range)
+                     toKillNum = 58;
+                  else if ('M' == range)
+                     toKillNum = 56;
+                  else if ('L' == range)
+                     toKillNum = 51;
+                  break;
+               case "PzVIe":
+               case "TANK": // 88L
+                  if ('C' == range)
+                     toKillNum = 58;
+                  else if ('M' == range)
+                     toKillNum = 53;
+                  else if ('L' == range)
+                     toKillNum = 33;
+                  break;
+               case "ATG":   // 88LL
+               case "Pak43":
+               case "PzVIb":
+                  if ('C' == range)
+                     toKillNum = 58;
+                  else if ('M' == range)
+                     toKillNum = 56;
+                  else if ('L' == range)
+                     toKillNum = 51;
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): Advance - reached default with enemyUnit=" + enemyUnit);
+                  return toKillNum;
+            }
+         }
+         else 
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): reached default scenario=" + lastReport.Scenario);
+            return toKillNum;
+         }
+         //------------------------------------
+         int numSmokeMarkers = Utilities.GetSmokeCount(gi, sector, range);
+         if (numSmokeMarkers < 0 )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): GetSmokeCount() returned error");
+            return toKillNum;
+         }
+         if (0 < numSmokeMarkers)
+            toKillNum = toKillNum * numSmokeMarkers * 0.5;
+         //------------------------------------
+         if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
+            toKillNum = toKillNum * 0.5;
+         //------------------------------------
+         return toKillNum;
       }
       //-------------------------------------------
       private void CreateCombatCalender()

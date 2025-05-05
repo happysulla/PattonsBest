@@ -60,6 +60,7 @@ namespace Pattons_Best
       Preparations,
       Movement,
       Battle,
+      BattleRoundSequence,
       EveningDebriefing,
       EndGame,
       Error
@@ -202,7 +203,6 @@ namespace Pattons_Best
       BattleEmptyResolve,
 
       BattleRoundSequenceStart,
-
 
       EveningDebriefingStart,
       Error

@@ -186,6 +186,45 @@ namespace Pattons_Best
          Location.Y = territory.CenterPoint.Y - zoom * Utilities.theMapItemOffset;
       }
       //----------------------------------------------------------------------------
+      public string GetEnemyUnit()
+      {
+         string enemyUnit = "ERROR";
+         if (true == this.Name.Contains("LW"))
+            enemyUnit = "LW";
+         else if (true == this.Name.Contains("MG"))
+            enemyUnit = "MG";
+         else if (true == this.Name.Contains("TRUCK"))
+            enemyUnit = "TRUCK";
+         else if (true == this.Name.Contains("PSW"))
+            enemyUnit = "PSW";
+         else if (true == this.Name.Contains("SPW"))
+            enemyUnit = "SPW";
+         else if (true == this.Name.Contains("SPG") || true == this.Name.Contains("STuGIIIg"))
+            enemyUnit = "STuGIIIg";
+         else if (true == this.Name.Contains("TANK") || true == this.Name.Contains("PzVIe"))
+            enemyUnit = "PzVIe";
+         else if ( (true == this.Name.Contains("ATG")) || true == this.Name.Contains("Pak43") )
+            enemyUnit = "Pak43";
+         else if (true == this.Name.Contains("Pak38") )
+            enemyUnit = "Pak38";
+         else if (true == this.Name.Contains("Pak40"))
+            enemyUnit = "Pak40";
+         else if (true == this.Name.Contains("PzIV"))
+            enemyUnit = "PzIV";
+         else if (true == this.Name.Contains("PzV"))
+            enemyUnit = "PzV";
+         else if (true == this.Name.Contains("PzVIb"))
+            enemyUnit = "PzVIb";
+         else if (true == this.Name.Contains("MARDERII"))
+            enemyUnit = "MARDERII";
+         else if (true == this.Name.Contains("MARDERIII"))
+            enemyUnit = "MARDERIII";
+         else if (true == this.Name.Contains("JdgPzIV") )
+            enemyUnit = "JdgPzIV";
+         else if (true == this.Name.Contains("JdgPz38t") )
+            enemyUnit = "JdgPz38t";
+         return enemyUnit;
+      }
       public void SetBloodSpots()
       {
          for (int spots = 0; spots < PERCENT_MAPITEM_COVERED; ++spots) // splatter the MapItem with random blood spots
@@ -313,19 +352,19 @@ namespace Pattons_Best
                   Canvas.SetLeft(imgTerrain, 0);
                   Canvas.SetTop(imgTerrain, 0);
                }
-            }
-            if (true == mi.IsTurret)
-            {
-               double width = mi.Zoom * Utilities.theMapItemSize;
-               double height = width;
-               Image imgTurret = new Image() { Height = height, Width = width, Source = theTurret };
-               RotateTransform rotateTransform = new RotateTransform();
-               imgTurret.RenderTransformOrigin = new Point(0.5, 0.5);
-               rotateTransform.Angle = mi.Count * 60.0;
-               imgTurret.RenderTransform = rotateTransform;
-               c.Children.Add(imgTurret);
-               Canvas.SetLeft(imgTurret, 0);
-               Canvas.SetTop(imgTurret, 0);
+               if (true == mi.IsTurret)
+               {
+                  double width = mi.Zoom * Utilities.theMapItemSize;
+                  double height = width;
+                  Image imgTurret = new Image() { Height = height, Width = width, Source = theTurret };
+                  RotateTransform rotateTransform = new RotateTransform();
+                  imgTurret.RenderTransformOrigin = new Point(0.5, 0.5);
+                  rotateTransform.Angle = mi.Count * 60.0;
+                  imgTurret.RenderTransform = rotateTransform;
+                  c.Children.Add(imgTurret);
+                  Canvas.SetLeft(imgTurret, 0);
+                  Canvas.SetTop(imgTurret, 0);
+               }
             }
             if ("" != mi.OverlayImageName)
             {

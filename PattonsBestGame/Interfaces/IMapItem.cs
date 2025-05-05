@@ -35,6 +35,7 @@ namespace Pattons_Best
       bool IsTurret { get; set; }
       bool IsKilled { get; set; }
       //----------------------------------------
+      string GetEnemyUnit();
       void SetBloodSpots();
       void Flip();
       void Unflip();

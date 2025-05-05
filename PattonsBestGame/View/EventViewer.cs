@@ -1527,15 +1527,26 @@ namespace Pattons_Best
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowBattleAmbush(): myGameInstance=null");
             return false;
          }
          if (null == myGameEngine)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): myGameEngine=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowBattleAmbush(): myGameEngine=null");
             return false;
          }
-         GameAction outAction = GameAction.Error;
+         GameAction outAction = GameAction.BattleEmpty;
+         foreach (IStack stack in myGameInstance.BattleStacks)
+         {
+            foreach (IMapItem mi in stack.MapItems)
+            { 
+               if (true == Utilities.IsEnemyUnit(mi))
+               {
+                  outAction = GameAction.BattleRoundSequenceStart;
+                  break;
+               }
+            }
+         }
          //--------------------------------------------------
          StringBuilder sb11 = new StringBuilder("     ######ShowBattleAmbush() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
@@ -1871,8 +1882,8 @@ namespace Pattons_Best
                //action = GameAction.TestingStartMorningBriefing; // <cgs> TEST
                //action = GameAction.TestingStartPreparations; // <cgs> TEST
                //action = GameAction.TestingStartMovement; // <cgs> TEST
-               action = GameAction.TestingStartBattle; // <cgs> TEST
-               //action = GameAction.TestingStartAmbush; // <cgs> TEST
+               //action = GameAction.TestingStartBattle; // <cgs> TEST
+               action = GameAction.TestingStartAmbush; // <cgs> TEST
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Cancel":
