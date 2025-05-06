@@ -115,7 +115,7 @@ namespace Pattons_Best
             {
                myStatusBar.Items.Add(new Separator());
                Label labelTanksKia = new Label() { FontFamily = myFontFam, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = lastReport.VictoryPtsFriendlyTank.ToString() };
-               Image imgKiaTank = new Image { Source = MapItem.theMapImages.GetBitmapImage("ShermanKia"), Width = 24, Height = 30 };
+               Image imgKiaTank = new Image { Source = MapItem.theMapImages.GetBitmapImage("ShermanKia"), Width = 38, Height = 30 };
                myStatusBar.Items.Add(labelTanksKia);
                myStatusBar.Items.Add(imgKiaTank);
             }
