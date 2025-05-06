@@ -49,7 +49,6 @@ namespace Pattons_Best
       bool IsShermanFiring { set; get; } 
       bool IsShermanFiringAtFront { set; get; }
       int AdvancingFireMarkerCount { set; get; }
-      int FriendlyTankLossCount { set; get; }
       EnumResistance BattleResistance { set; get; }
       //------------------------------------------------
       IMapItemMoves MapItemMoves { set; get; }

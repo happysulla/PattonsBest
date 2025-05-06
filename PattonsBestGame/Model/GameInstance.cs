@@ -57,7 +57,6 @@ namespace Pattons_Best
       public bool IsShermanFiring { set; get; } = false;
       public bool IsShermanFiringAtFront { set; get; } = false;
       public int AdvancingFireMarkerCount { set; get; } = 0;
-      public int FriendlyTankLossCount { set; get; } = 0;
       public EnumResistance BattleResistance { set; get; } = EnumResistance.None;
       //------------------------------------------------
       public IMapItemMoves MapItemMoves { get; set; } = new MapItemMoves();

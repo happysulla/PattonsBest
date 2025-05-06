@@ -652,7 +652,7 @@ namespace Pattons_Best
                   gi.IsAdvancingFireChosen = false; //<cgs>
                   if (true == gi.IsAdvancingFireChosen)
                   {
-                     gi.AdvancingFireMarkerCount = 6 - (int)Math.Ceiling(gi.FriendlyTankLossCount / 3.0);  // six minus friendly tank/3 (rounded up)
+                     gi.AdvancingFireMarkerCount = 6;
                      gi.EventDisplayed = gi.EventActive = "e033";
                      action = GameAction.BattleStart;
                   }
@@ -1748,7 +1748,7 @@ namespace Pattons_Best
                   gi.EventActive = gi.EventDisplayed = "e030";
                   gi.DieRollAction = GameAction.MovementAdvanceFireAmmoUseRoll;
                   gi.IsAdvancingFireChosen = true;
-                  gi.AdvancingFireMarkerCount = 6 - (int)Math.Ceiling(gi.FriendlyTankLossCount / 3.0);  // six minus friendly tank/3 (rounded up)
+                  gi.AdvancingFireMarkerCount = 6 - (int)Math.Ceiling(lastReport.VictoryPtsFriendlyTank / 3.0);  // six minus friendly tank/3 (rounded up)
                   break;
                case GameAction.MovementAdvanceFireAmmoUseRoll:
                   gi.DieResults[key][0] = dieRoll;
@@ -2214,10 +2214,28 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleAmbush: // Handled with EventViewerBattleAmbush class
                   break;
+               case GameAction.BattleRoundSeqeunceSpotting: // Handled with EventViewerSpottingMgr class
+                  break;
                case GameAction.BattleRoundSequenceStart:
                   gi.GamePhase = GamePhase.BattleRoundSequence;
-                  gi.EventDisplayed = gi.EventActive = "e037";
-                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  int smokeCount = 0;
+                  foreach(IStack stack in gi.BattleStacks )
+                  {
+                     foreach(IMapItem mi in stack.MapItems)
+                     {
+                        if (true == mi.Name.Contains("Smoke"))
+                           smokeCount++;
+                     }
+                  }
+                  if( 0 < smokeCount)
+                  {
+                     gi.EventDisplayed = gi.EventActive = "e037";
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else
+                  {
+                     action = GameAction.BattleRoundSeqeunceSpotting;
+                  }
                   break;
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;

@@ -309,6 +309,18 @@ Deplete smoke in each zone by converting one white full strength Smoke marker to
 <InlineUIContainer><Button Content='r4.72' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
                                               <InlineUIContainer><Image Name='c111Smoke1' Height='100' Width='100'></Image></InlineUIContainer>"
+e038	"<Bold>e038 Spotting Phase</Bold> 
+<InlineUIContainer><Button Content='r4.72' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+<LineBreak/><LineBreak/>
+Determine what your crew can see by consulting the 
+<InlineUIContainer><Button Content='Spotting' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table for each crewman. 
+<LineBreak/><LineBreak/>
+Mark those enmy units spotted or hidden with Spotted and Hidden markers. 
+<LineBreak/><LineBreak/>
+Determine the specific unit type for any units identified per 
+<InlineUIContainer><Button Content='r17.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>"
 e050	"<Bold>e050 Evening Debriefing</Bold> 
 <LineBreak/><LineBreak/>
 An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 

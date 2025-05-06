@@ -1513,7 +1513,7 @@ namespace Pattons_Best
                else if ("Move-R" == move)
                   newTerritoryName = "B9M";
                else if ("Move-B" == move)
-                  newTerritoryName = "B6M";
+                  newTerritoryName = "B6L";
                else
                   Logger.Log(LogEnum.LE_ERROR, "SetNewTerritory(): reached default move=" + move + " for oldT=" + oldT.Name);
                break;

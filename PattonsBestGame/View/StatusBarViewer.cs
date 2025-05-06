@@ -1,9 +1,12 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using WpfAnimatedGif;
 using Point = System.Windows.Point;
 
 namespace Pattons_Best
@@ -64,12 +67,12 @@ namespace Pattons_Best
          }
          //--------------------------------------------
          myStatusBar.Items.Clear();
-         System.Windows.Controls.Button buttonZoomIn = new System.Windows.Controls.Button { Content=" - ", FontFamily=myFontFam1, Height = 15, Width = 30 };
+         System.Windows.Controls.Button buttonZoomIn = new System.Windows.Controls.Button { Content=" - ", FontFamily=myFontFam1, Width = 30, Height = 15};
          buttonZoomIn.Click += ButtonZoomIn_Click;
          myStatusBar.Items.Add(buttonZoomIn);
          Label labelOr = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = "or" };
          myStatusBar.Items.Add(labelOr);
-         System.Windows.Controls.Button buttonZoomOut = new System.Windows.Controls.Button { Content = " + ", FontFamily = myFontFam1, Height = 15, Width = 30 };
+         System.Windows.Controls.Button buttonZoomOut = new System.Windows.Controls.Button { Content = " + ", FontFamily = myFontFam1, Width = 30, Height = 15};
          buttonZoomOut.Click += ButtonZoomOut_Click;
          myStatusBar.Items.Add(buttonZoomOut);
          StringBuilder sbZ = new StringBuilder("Zoom=");
@@ -80,7 +83,7 @@ namespace Pattons_Best
          myStatusBar.Items.Add(new Separator());
          Label labelGoto = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = "Goto:" };
          myStatusBar.Items.Add(labelGoto);
-         System.Windows.Controls.Button buttonGoto = new System.Windows.Controls.Button { Content = myGameInstance.EventActive, FontFamily = myFontFam1, Height = 15, Width = 40 };
+         System.Windows.Controls.Button buttonGoto = new System.Windows.Controls.Button { Content = myGameInstance.EventActive, FontFamily = myFontFam1, Width = 40, Height = 15, };
          if (true == gi.IsGridActive)
             buttonGoto.IsEnabled = false;
          else
@@ -101,8 +104,30 @@ namespace Pattons_Best
          if (true == gi.IsLeadTank)
          {
             myStatusBar.Items.Add(new Separator());
-            Image imgLead = new Image { Source = MapItem.theMapImages.GetBitmapImage("ShermanLead"), Width = 60, Height = 40 };
+            Image imgLead = new Image { Source = MapItem.theMapImages.GetBitmapImage("ShermanLead"), Width = 45, Height = 30 };
             myStatusBar.Items.Add(imgLead);
+         }
+         //-------------------------------------------------------
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null != lastReport)
+         {
+            if (0 < lastReport.VictoryPtsFriendlyTank)
+            {
+               myStatusBar.Items.Add(new Separator());
+               Label labelTanksKia = new Label() { FontFamily = myFontFam, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = lastReport.VictoryPtsFriendlyTank.ToString() };
+               Image imgKiaTank = new Image { Source = MapItem.theMapImages.GetBitmapImage("ShermanKia"), Width = 24, Height = 30 };
+               myStatusBar.Items.Add(labelTanksKia);
+               myStatusBar.Items.Add(imgKiaTank);
+            }
+            //-------------------------------------------------------
+            if (0 < lastReport.VictoryPtsFriendlySquad)
+            {
+               myStatusBar.Items.Add(new Separator());
+               Label labelSquadsKia = new Label() { FontFamily = myFontFam, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = lastReport.VictoryPtsFriendlySquad.ToString() };
+               Image imgKiaSquad = new Image { Source = MapItem.theMapImages.GetBitmapImage("SquadKia"), Width = 53, Height = 30 };
+               myStatusBar.Items.Add(imgKiaSquad);
+               myStatusBar.Items.Add(labelSquadsKia);
+            }
          }
          //-------------------------------------------------------
          if (true == gi.IsAdvancingFireChosen)
@@ -113,6 +138,7 @@ namespace Pattons_Best
             myStatusBar.Items.Add(labelAF);
             myStatusBar.Items.Add(imgAF);
          }
+
       }
       //-----------------------------------------------------------------
       private void ButtonEventActive_Click(object sender, RoutedEventArgs e)

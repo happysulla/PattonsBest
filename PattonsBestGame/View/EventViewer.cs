@@ -318,7 +318,14 @@ namespace Pattons_Best
                if (true == battleAmbush.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): battleAmbush.CtorError=true");
                else if (false == battleAmbush.PerformEnemyAction(ShowBattleAmbush))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ResolveAirStrike() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): PerformEnemyAction() returned false");
+               break;
+            case GameAction.BattleRoundSeqeunceSpotting:
+               EventViewerSpottingMgr spottingMgr = new EventViewerSpottingMgr(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
+               if (true == spottingMgr.CtorError)
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): spottingMgr.CtorError=true");
+               else if (false == spottingMgr.PerformSpotting(ShowSpottingResults))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): PerformSpotting() returned false");
                break;
             case GameAction.EveningDebriefingStart:
                EventViewerRatingImprove crewRatingImprove = new EventViewerRatingImprove(myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
@@ -1556,6 +1563,28 @@ namespace Pattons_Best
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
          return true;
       }
+      public bool ShowSpottingResults()
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowSpottingResults(): myGameInstance=null");
+            return false;
+         }
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowSpottingResults(): myGameEngine=null");
+            return false;
+         }
+         GameAction outAction = GameAction.BattleRoundSequenceOrders;
+         //--------------------------------------------------
+         StringBuilder sb11 = new StringBuilder("     ######ShowSpottingResults() :");
+         sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
+         sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
+         sb11.Append(" a="); sb11.Append(outAction.ToString());
+         Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+         return true;
+      }     
       public bool ShowRatingImproveResults()
       {
          if (null == myGameInstance)

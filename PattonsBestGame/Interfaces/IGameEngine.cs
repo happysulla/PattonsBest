@@ -203,6 +203,8 @@ namespace Pattons_Best
       BattleEmptyResolve,
 
       BattleRoundSequenceStart,
+      BattleRoundSeqeunceSpotting,
+      BattleRoundSequenceOrders,
 
       EveningDebriefingStart,
       Error

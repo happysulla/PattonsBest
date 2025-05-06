@@ -756,24 +756,22 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------
-         if (3 != newT.Name.Length)
+         if (3 == newT.Name.Length)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateMapItemMove(): newT size not equal to 3 for tName=" + newT.Name);
-            return false;
-         }
-         char sector = newT.Name[newT.Name.Length - 2];
-         string tName = "B" + sector + "M";
-         IStack? stack = myGameInstance.BattleStacks.Find(tName);
-         if( null != stack )
-         {
-            IMapItems removals = new MapItems();
-            foreach( MapItem removal in stack.MapItems )
+            char sector = newT.Name[newT.Name.Length - 2];
+            string tName = "B" + sector + "M";
+            IStack? stack = myGameInstance.BattleStacks.Find(tName);
+            if (null != stack)
             {
-               if( true == removal.Name.Contains("UsControl"))
-                  removals.Add(removal);
+               IMapItems removals = new MapItems();
+               foreach (MapItem removal in stack.MapItems)
+               {
+                  if (true == removal.Name.Contains("UsControl"))
+                     removals.Add(removal);
+               }
+               foreach (IMapItem removal in removals)
+                  myGameInstance.BattleStacks.Remove(removal);
             }
-            foreach(IMapItem removal in removals)
-               myGameInstance.BattleStacks.Remove(removal);
          }
          //--------------------------------------------
          MapItemMove mim = new MapItemMove(Territories.theTerritories, mi, newT);
@@ -882,6 +880,13 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance=null");
             return;
          }
+         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): lastReport=null");
+            return;
+         }
+         //-------------------------------
          int i = myRollResultRowNum - STARTING_ASSIGNED_ROW;
          if (i < 0)
          {
@@ -1004,9 +1009,23 @@ namespace Pattons_Best
                if( dieRoll <= myGridRows[i].myToKillNumber )
                {
                   if( true == myGridRows[i].myEnemyAction.Contains("Infantry"))
+                  {
                      myGridRows[i].myToKillResult = "Infantry KO";
+                     lastReport.VictoryPtsFriendlySquad++;
+                  }
                   else
+                  {
+                     if (true == myGridRows[i].myEnemyAction.Contains("Lead")) // if kia lead tank, all other fire on lead tank is ignored
+                     {
+                        for (int j = 0; j < myMaxRowCount; ++j)
+                        {
+                           if ((Utilities.NO_RESULT == myGridRows[j].myDieRollFire) && (true == myGridRows[i].myEnemyAction.Contains("Lead")))
+                              myGridRows[j].myDieRollFire = NO_FIRE;
+                        }
+                     }
                      myGridRows[i].myToKillResult = "Tank KO";
+                     lastReport.VictoryPtsFriendlyTank++;
+                  }
                }
                else
                {
@@ -1218,7 +1237,12 @@ namespace Pattons_Best
                                  return;
                               }                                
                            }
-                           myState = E0475Enum.ENEMY_ACTION_MOVE;
+                           myState = E0475Enum.ENEMY_ACTION_MOVE_SHOW;
+                           for (int j = 0; j < myMaxRowCount; ++j)
+                           {
+                              if ((Utilities.NO_RESULT == myGridRows[j].myDieRollTerrain) || (Utilities.NO_RESULT == myGridRows[j].myDieRollFacing))
+                                 myState = E0475Enum.ENEMY_ACTION_MOVE;
+                           }
                            myTextBlock2.Text = "Vehicle Facing";
                            myTextBlock3.Text = "Terrain";
                         }
