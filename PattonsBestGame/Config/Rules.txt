@@ -151,7 +151,7 @@ r4.44	"<Bold>r4.44 Tank &amp; Turrent Orientation</Bold>
 <LineBreak/><LineBreak/>
 Place the Sherman tank counter for the tank model you are using in the center of the Battle Board. If you want the turret to face a different sector than the tank itself, place a Turret marker on the tank counter accordingly.
 <LineBreak/><LineBreak/>
-                                     <InlineUIContainer><Image Name='c16Turret'  Height='100' Width='100'></Image></InlineUIContainer>"
+                                     <InlineUIContainer><Image Name='c16TurretSherman75'  Height='100' Width='100'></Image></InlineUIContainer>"
 r4.45	"<Bold>r4.45  Mark Loader Spot</Bold>
 <LineBreak/><LineBreak/>
 If the loader is buttoned up or does not have a hatch, mark the sector he will be searching by placing the Loader Spot marker just outside the long range zone of a sector. If the commander is also buttoned up and does not have a vision cupola, place the Commander Spot marker similiarly for the sector hew will be searching. See 

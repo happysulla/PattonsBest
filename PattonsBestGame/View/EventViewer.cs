@@ -1730,7 +1730,7 @@ namespace Pattons_Best
                            action = GameAction.PreparationsTurret;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
-                        case "c16Turret":
+                        case "c16TurretSherman75":
                            action = GameAction.PreparationsLoaderSpot;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;

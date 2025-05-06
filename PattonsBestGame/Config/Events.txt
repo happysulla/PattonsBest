@@ -120,7 +120,7 @@ The Sherman tank counter is placed at the center of the battle board. If you wan
 Alternatively, select buttons here:
 <LineBreak/><LineBreak/>
                                    <InlineUIContainer><Button Content='  -  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-<InlineUIContainer><Image Name='c16Turret'  Height='150' Width='150'></Image></InlineUIContainer> 
+<InlineUIContainer><Image Name='c16TurretSherman75'  Height='150' Width='150'></Image></InlineUIContainer> 
 <InlineUIContainer><Button Content='  +  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
 When you are satisfied with the current turret orientation, click turret image between buttons to continue."

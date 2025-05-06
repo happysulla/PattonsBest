@@ -49,7 +49,8 @@ namespace Pattons_Best
       [NonSerialized] private static BitmapImage? theWood = theMapImages.GetBitmapImage("OWoods");
       [NonSerialized] private static BitmapImage? theFort = theMapImages.GetBitmapImage("OFort");
       [NonSerialized] private static BitmapImage? theBuild = theMapImages.GetBitmapImage("OBuild");
-      [NonSerialized] private static BitmapImage? theTurret = theMapImages.GetBitmapImage("c16Turret");
+      [NonSerialized] private static BitmapImage? theSherman75Turret = theMapImages.GetBitmapImage("c16TurretSherman75");
+      [NonSerialized] private static BitmapImage? thePzVIbTurret = theMapImages.GetBitmapImage("c82PzVIbTurret");
       private const double PERCENT_MAPITEM_COVERED = 30.0;
       //--------------------------------------------------
       public string Name { get; set; } = string.Empty;
@@ -356,14 +357,26 @@ namespace Pattons_Best
                {
                   double width = mi.Zoom * Utilities.theMapItemSize;
                   double height = width;
-                  Image imgTurret = new Image() { Height = height, Width = width, Source = theTurret };
-                  RotateTransform rotateTransform = new RotateTransform();
-                  imgTurret.RenderTransformOrigin = new Point(0.5, 0.5);
-                  rotateTransform.Angle = mi.Count * 60.0;
-                  imgTurret.RenderTransform = rotateTransform;
-                  c.Children.Add(imgTurret);
-                  Canvas.SetLeft(imgTurret, 0);
-                  Canvas.SetTop(imgTurret, 0);
+                  Image? imgTurret = null;
+                  if (true == mi.Name.Contains("Sherman") )
+                     imgTurret = new Image() { Height = height, Width = width, Source = theSherman75Turret };
+                  else if (true == mi.Name.Contains("TANK") || true == mi.Name.Contains("PzVIe"))
+                     imgTurret = new Image() { Height = height, Width = width, Source = thePzVIbTurret };
+
+                  if( null == imgTurret)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "SetButtonContent(): turret=null");
+                  }
+                  else
+                  {
+                     RotateTransform rotateTransform = new RotateTransform();
+                     imgTurret.RenderTransformOrigin = new Point(0.5, 0.5);
+                     rotateTransform.Angle = mi.Count * 60.0;
+                     imgTurret.RenderTransform = rotateTransform;
+                     c.Children.Add(imgTurret);
+                     Canvas.SetLeft(imgTurret, 0);
+                     Canvas.SetTop(imgTurret, 0);
+                  }
                }
             }
             if ("" != mi.OverlayImageName)
