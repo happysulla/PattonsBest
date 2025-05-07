@@ -1037,7 +1037,7 @@ namespace Pattons_Best
                }
                else if (true == enemyAction.Contains("Tank"))
                {
-                  if( ( (true == enemyAction.Contains("Lead") )&& (true == myGameInstance.IsLeadTank)) || (true == enemyAction.Contains("Your") ) )
+                  if( ( (true == enemyAction.Contains("Lead") ) && (true == myGameInstance.IsLeadTank)) || (true == enemyAction.Contains("Your") ) )
                   {
                      myGridRows[i].myDieRollToHitYourTank = (int)TableMgr.GetToHitNumberYourTank(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
                      if (myGridRows[i].myDieRollToHitYourTank < -100)
@@ -1162,7 +1162,7 @@ namespace Pattons_Best
                      {
                         for (int j = 0; j < myMaxRowCount; ++j)
                         {
-                           if ((Utilities.NO_RESULT == myGridRows[j].myDieRollFire) && (true == myGridRows[i].myEnemyAction.Contains("Lead")))
+                           if ((Utilities.NO_RESULT == myGridRows[j].myDieRollFire) && (true == myGridRows[j].myEnemyAction.Contains("Lead")))
                               myGridRows[j].myDieRollFire = NO_FIRE;
                         }
                      }

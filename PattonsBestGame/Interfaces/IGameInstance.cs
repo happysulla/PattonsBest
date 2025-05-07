@@ -54,6 +54,7 @@ namespace Pattons_Best
       int AdvancingFireMarkerCount { set; get; }
       EnumResistance BattleResistance { set; get; }
       Dictionary<string,bool> BrokenPeriscopes { set; get; }
+      Dictionary<string, int> EnemyShots { set; get; }
       //------------------------------------------------
       IMapItemMoves MapItemMoves { set; get; }
       IStacks TankStacks { set; get; }
