@@ -27,6 +27,7 @@ namespace Pattons_Best
       private const int NO_FIRE = 101;
       private const int NO_FACING = 102;
       private const int KEEP_TERRAIN = 103;
+      private const int NO_COLLATERAL = 104;
       public enum E0475Enum
       {
          ENEMY_ACTION_SELECT,
@@ -385,10 +386,10 @@ namespace Pattons_Best
                break;
             case E0475Enum.ENEMY_ACTION_COLLATERAL:
                myTextBlockInstructions.Inlines.Add(new Run("Roll on the "));
-               Button bCollateral = new Button() { Content = "Collateral Damage", FontFamily = myFontFam1, FontSize = 8 };
+               Button bCollateral = new Button() { Content = "Collateral", FontFamily = myFontFam1, FontSize = 8 };
                bCollateral.Click += ButtonRule_Click;
                myTextBlockInstructions.Inlines.Add(new InlineUIContainer(bCollateral));
-               myTextBlockInstructions.Inlines.Add(new Run(" Table."));
+               myTextBlockInstructions.Inlines.Add(new Run("  Damage Table."));
                break;
             case E0475Enum.ENEMY_ACTION_MOVE_SHOW:
             case E0475Enum.ENEMY_ACTION_FIRE_SHOW:
@@ -777,12 +778,15 @@ namespace Pattons_Best
             myGrid.Children.Add(label1);
             Grid.SetRow(label1, rowNum);
             Grid.SetColumn(label1, 1);
-            Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myToKillNumber };
-            myGrid.Children.Add(label2);
-            Grid.SetRow(label2, rowNum);
-            Grid.SetColumn(label2, 2);
             //----------------------------
-            if (Utilities.NO_RESULT < myGridRows[i].myDieRollCollateral)
+            if (NO_COLLATERAL == myGridRows[i].myDieRollCollateral)
+            {
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
+               myGrid.Children.Add(label3);
+               Grid.SetRow(label3, rowNum);
+               Grid.SetColumn(label3, 3);
+            }
+            else if (Utilities.NO_RESULT < myGridRows[i].myDieRollCollateral)
             {
                Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRollCollateral.ToString() };
                myGrid.Children.Add(label3);
@@ -1035,6 +1039,7 @@ namespace Pattons_Best
                {
                   myGridRows[i].myDieRollFire = NO_FIRE;
                }
+               //----------------------------------------
                if ( true == enemyAction.Contains("Move") )
                {
                   mi.IsMoved = true;
@@ -1048,8 +1053,13 @@ namespace Pattons_Best
                {
                   myGridRows[i].myDieRollFacing = NO_MOVE;
                   myGridRows[i].myDieRollTerrain = KEEP_TERRAIN;
-
                }
+               //----------------------------------------
+               if (false == enemyAction.Contains("Collateral"))
+               {
+                  myGridRows[i].myDieRollCollateral = NO_COLLATERAL;
+               }
+               //----------------------------------------
                myGridRows[i].myEnemyAction = enemyAction;
                myState = E0475Enum.ENEMY_ACTION_SELECT_SHOW;
                for (int j = 0; j < myMaxRowCount; ++j)
@@ -1374,7 +1384,7 @@ namespace Pattons_Best
                         }
                         if ("Collateral" == img.Name)
                         {
-                           myState = E0475Enum.ENEMY_ACTION_FIRE;
+                           myState = E0475Enum.ENEMY_ACTION_COLLATERAL;
                            myTextBlock2.Visibility = Visibility.Hidden;
                            myTextBlock3.Text = "Roll";
                            myTextBlock4.Text = "Result";
