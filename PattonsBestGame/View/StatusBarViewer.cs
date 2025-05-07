@@ -125,8 +125,8 @@ namespace Pattons_Best
                myStatusBar.Items.Add(new Separator());
                Label labelSquadsKia = new Label() { FontFamily = myFontFam, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = lastReport.VictoryPtsFriendlySquad.ToString() };
                Image imgKiaSquad = new Image { Source = MapItem.theMapImages.GetBitmapImage("SquadKia"), Width = 53, Height = 30 };
-               myStatusBar.Items.Add(imgKiaSquad);
                myStatusBar.Items.Add(labelSquadsKia);
+               myStatusBar.Items.Add(imgKiaSquad);
             }
          }
          //-------------------------------------------------------
@@ -137,6 +137,24 @@ namespace Pattons_Best
             Image imgAF = new Image { Source = MapItem.theMapImages.GetBitmapImage("c44AdvanceFire"), Width = 30, Height = 30 };
             myStatusBar.Items.Add(labelAF);
             myStatusBar.Items.Add(imgAF);
+         }
+         //-------------------------------------------------------
+         if (0 < gi.BrokenPeriscopes.Count)
+         {
+            myStatusBar.Items.Add(new Separator());
+            Label labelBrokenScope = new Label() { FontFamily = myFontFam, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = gi.BrokenPeriscopes.Count.ToString() };
+            Image imgBrokenScope = new Image { Source = MapItem.theMapImages.GetBitmapImage("BrokenPeriscope"), Width = 50, Height = 30 };
+            myStatusBar.Items.Add(labelBrokenScope);
+            myStatusBar.Items.Add(imgBrokenScope);
+         }
+         //-------------------------------------------------------
+         if (true == gi.IsBrokenGunsight)
+         {
+            myStatusBar.Items.Add(new Separator());
+            Label labelBrokenSite = new Label() { FontFamily = myFontFam, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = gi.BrokenPeriscopes.Count.ToString() };
+            Image imgBrokenSite = new Image { Source = MapItem.theMapImages.GetBitmapImage("BrokenGunsight"), Width = 30, Height = 30 };
+            myStatusBar.Items.Add(labelBrokenSite);
+            myStatusBar.Items.Add(imgBrokenSite);
          }
 
       }

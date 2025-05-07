@@ -48,8 +48,12 @@ namespace Pattons_Best
       bool IsAmbush { set; get; }
       bool IsShermanFiring { set; get; } 
       bool IsShermanFiringAtFront { set; get; }
+      bool IsBrokenGunsight { set; get; }
+      bool IsBrokenMgAntiAircraft { set; get; }
+      //------------------------------------------------
       int AdvancingFireMarkerCount { set; get; }
       EnumResistance BattleResistance { set; get; }
+      Dictionary<string,bool> BrokenPeriscopes { set; get; }
       //------------------------------------------------
       IMapItemMoves MapItemMoves { set; get; }
       IStacks TankStacks { set; get; }

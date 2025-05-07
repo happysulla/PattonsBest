@@ -1850,6 +1850,79 @@ namespace Pattons_Best
          //------------------------------------
          return toKillNum;
       }
+      public static string GetCollateralDamage(IGameInstance gi, int dieRoll)
+      {
+         if (dieRoll < 51)
+            return "No Effect";
+         if( dieRoll < 53 )
+         {
+            gi.BrokenPeriscopes["Driver"] = true;
+            return "Driver Periscope Broken";
+         }
+         if (dieRoll < 55)
+         {
+            gi.BrokenPeriscopes["Assistant"] = true;
+            return "Assistant Periscope Broken";
+         }
+         if (dieRoll < 58)
+         {
+            gi.BrokenPeriscopes["Gunner"] = true;
+            return "Gunner Periscope Broken";
+         }
+         if (dieRoll < 61)
+         {
+            gi.BrokenPeriscopes["Loader"] = true;
+            return "Loader Periscope Broken";
+         }
+         if (dieRoll < 64)
+         {
+            gi.BrokenPeriscopes["Commander"] = true;
+            return "Commander Periscope Broken";
+         }
+         if (dieRoll < 66)
+         {
+            gi.IsBrokenGunsight = true;
+            return "Gunsight Broken";
+         }
+         if (dieRoll < 71)
+         {
+            gi.IsBrokenMgAntiAircraft = true;
+            return "AA MG Broken";
+         }
+         if (dieRoll < 76)
+         {
+            IMapItem? hatch = gi.Hatches.Find("Driver");
+            if( null != hatch )
+               return "Driver Wounds";
+            else
+               return "No Effect";
+         }
+         if (dieRoll < 81)
+         {
+            IMapItem? hatch = gi.Hatches.Find("Asssistant");
+            if (null != hatch)
+               return "Asssistant Wounds";
+            else
+               return "No Effect";
+         }
+         if (dieRoll < 91)
+         {
+            IMapItem? hatch = gi.Hatches.Find("Loader");
+            if (null != hatch)
+               return "Loader Wounds";
+            else
+               return "No Effect";
+         }
+         if (dieRoll < 101)
+         {
+            IMapItem? hatch = gi.Hatches.Find("Commander");
+            if (null != hatch)
+               return "Commander Wounds";
+            else
+               return "No Effect";
+         }
+         return "ERROR";
+      }
       //-------------------------------------------
       private void CreateCombatCalender()
       {

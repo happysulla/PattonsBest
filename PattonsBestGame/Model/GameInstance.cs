@@ -56,8 +56,12 @@ namespace Pattons_Best
       public bool IsAmbush { set; get; } = false;
       public bool IsShermanFiring { set; get; } = false;
       public bool IsShermanFiringAtFront { set; get; } = false;
+      public bool IsBrokenGunsight { set; get; } = false;
+      public bool IsBrokenMgAntiAircraft { set; get; } = false;
+      //---------------------------------------------------------------
       public int AdvancingFireMarkerCount { set; get; } = 0;
       public EnumResistance BattleResistance { set; get; } = EnumResistance.None;
+      public Dictionary<string, bool> BrokenPeriscopes { set; get; } = new Dictionary<string, bool>();
       //------------------------------------------------
       public IMapItemMoves MapItemMoves { get; set; } = new MapItemMoves();
       public IStacks TankStacks { get; set; } = new Stacks();
