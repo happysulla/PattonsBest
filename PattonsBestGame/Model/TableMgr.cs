@@ -1850,6 +1850,42 @@ namespace Pattons_Best
          //------------------------------------
          return toKillNum;
       }
+      public static double GetToHitNumberYourTank(IGameInstance gi, IMapItem mi, char sector, char range)
+      {
+         double toKillNum = -1000.0;
+         string enemyUnit = mi.GetEnemyUnit();
+         if ("ERROR" == enemyUnit)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): unknown enemyUnit=" + mi.Name);
+            return toKillNum;
+         }
+         //----------------------------------------------------
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): lastReport=null");
+            return toKillNum;
+         }
+         return toKillNum;
+      }
+      public static double GetToKillNumberYourTank(IGameInstance gi, IMapItem mi, char sector, char range)
+      {
+         double toKillNum = -1000.0;
+         string enemyUnit = mi.GetEnemyUnit();
+         if ("ERROR" == enemyUnit)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): unknown enemyUnit=" + mi.Name);
+            return toKillNum;
+         }
+         //----------------------------------------------------
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): lastReport=null");
+            return toKillNum;
+         }
+         return toKillNum;
+      }
       public static string GetCollateralDamage(IGameInstance gi, int dieRoll)
       {
          if (dieRoll < 51)

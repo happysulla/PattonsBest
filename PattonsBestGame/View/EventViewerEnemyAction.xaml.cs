@@ -28,6 +28,7 @@ namespace Pattons_Best
       private const int NO_FACING = 102;
       private const int KEEP_TERRAIN = 103;
       private const int NO_COLLATERAL = 104;
+      private const int NO_FIRE_YOUR_TANK = 105;
       public enum E0475Enum
       {
          ENEMY_ACTION_SELECT,
@@ -39,6 +40,7 @@ namespace Pattons_Best
          ENEMY_ACTION_COLLATERAL,
          ENEMY_ACTION_COLLATERAL_SHOW,
          ENEMY_ACTION_FIRE_YOUR_TANK,
+         ENEMY_ACTION_FIRE_YOUR_TANK_SHOW,
          END
       };
       public bool CtorError { get; } = false;
@@ -62,11 +64,17 @@ namespace Pattons_Best
          public string myToKillResult = "NA";
          public int myToKillNumber = 0;
          public string myCollateralDamage = "ERROR";
+         public int myToHitNumberYourTank = 0;
+         public int myToKillNumberYourTank = 0;
+         public string myHitLocationYourTank = "ERROR";
          public int myDieRollEnemyAction = Utilities.NO_RESULT;
          public int myDieRollFacing = Utilities.NO_RESULT;
          public int myDieRollTerrain = Utilities.NO_RESULT;
          public int myDieRollFire = Utilities.NO_RESULT;
          public int myDieRollCollateral = Utilities.NO_RESULT;
+         public int myDieRollToHitYourTank = Utilities.NO_RESULT;
+         public int myDieRollHitLocationYourTank = Utilities.NO_RESULT;
+         public int myDieRollToKillYourTank = Utilities.NO_RESULT;
          public GridRow(IMapItem enemyUnit)
          {
             myMapItem = enemyUnit;
@@ -1017,9 +1025,10 @@ namespace Pattons_Best
                   return;
                }
                Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): myState=" + myState.ToString() + " enemyAction=" + enemyAction);
+               //----------------------------------------
                if (true == enemyAction.Contains("Infantry"))
                {
-                  myGridRows[i].myToKillNumber = (int) TableMgr.GetToKillNumberInfantry(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
+                  myGridRows[i].myToHitNumberYourTank = (int) TableMgr.GetToKillNumberInfantry(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
                   if(myGridRows[i].myToKillNumber < -100 )
                   {
                      Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetToKillNumberInfantry() returned " + myGridRows[i].myToKillNumber.ToString() + " for action=" + enemyAction);
@@ -1028,16 +1037,39 @@ namespace Pattons_Best
                }
                else if (true == enemyAction.Contains("Tank"))
                {
-                  myGridRows[i].myToKillNumber = (int) TableMgr.GetToKillNumberTank(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
-                  if (myGridRows[i].myToKillNumber < -100)
+                  if( ( (true == enemyAction.Contains("Lead") )&& (true == myGameInstance.IsLeadTank)) || (true == enemyAction.Contains("Your") ) )
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetToKillNumberInfantry() returned " + myGridRows[i].myToKillNumber.ToString() + " for action=" + enemyAction);
-                     return;
+                     myGridRows[i].myDieRollToHitYourTank = (int)TableMgr.GetToHitNumberYourTank(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
+                     if (myGridRows[i].myDieRollToHitYourTank < -100)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetToKillNumberInfantry() returned " + myGridRows[i].myDieRollToHitYourTank.ToString() + " for action=" + enemyAction);
+                        return;
+                     }
+                     myGridRows[i].myDieRollToKillYourTank = (int)TableMgr.GetToHitNumberYourTank(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
+                     if (myGridRows[i].myDieRollToKillYourTank < -100)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myDieRollToKillYourTank() returned " + myGridRows[i].myDieRollToKillYourTank.ToString() + " for action=" + enemyAction);
+                        return;
+                     }
+                     myGridRows[i].myToKillNumber = NO_FIRE;
+                  }
+                  else
+                  {
+                     myGridRows[i].myToKillNumber = (int)TableMgr.GetToKillNumberTank(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
+                     if (myGridRows[i].myToKillNumber < -100)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetToKillNumberInfantry() returned " + myGridRows[i].myToKillNumber.ToString() + " for action=" + enemyAction);
+                        return;
+                     }
+                     myGridRows[i].myDieRollToHitYourTank = NO_FIRE_YOUR_TANK;
+                     myGridRows[i].myDieRollToKillYourTank = NO_FIRE_YOUR_TANK;
                   }
                }
                else
                {
                   myGridRows[i].myDieRollFire = NO_FIRE;
+                  myGridRows[i].myDieRollToHitYourTank = NO_FIRE_YOUR_TANK;
+                  myGridRows[i].myDieRollToKillYourTank = NO_FIRE_YOUR_TANK;
                }
                //----------------------------------------
                if ( true == enemyAction.Contains("Move") )
@@ -1388,6 +1420,14 @@ namespace Pattons_Best
                            myTextBlock2.Visibility = Visibility.Hidden;
                            myTextBlock3.Text = "Roll";
                            myTextBlock4.Text = "Result";
+                        }
+                        if ("YourTank" == img.Name)
+                        {
+                           myState = E0475Enum.ENEMY_ACTION_FIRE_YOUR_TANK;
+                           myTextBlock2.Visibility = Visibility.Visible;
+                           myTextBlock3.Text = "To Hit";
+                           myTextBlock3.Text = "Hit Location";
+                           myTextBlock4.Text = "Kill Results";
                         }
                         if ("Continue" == img.Name)
                            myState = E0475Enum.END;
