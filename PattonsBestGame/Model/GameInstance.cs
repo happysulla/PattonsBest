@@ -62,7 +62,8 @@ namespace Pattons_Best
       public int AdvancingFireMarkerCount { set; get; } = 0;
       public EnumResistance BattleResistance { set; get; } = EnumResistance.None;
       public Dictionary<string, bool> BrokenPeriscopes { set; get; } = new Dictionary<string, bool>();
-      public Dictionary<string, int> EnemyShots { set; get; } = new Dictionary<string, int>();
+      public Dictionary<string, bool> FirstShots { set; get; } = new Dictionary<string, bool>();
+      public Dictionary<string, int> AcquiredShots { set; get; } = new Dictionary<string, int>();
       //------------------------------------------------
       public IMapItemMoves MapItemMoves { get; set; } = new MapItemMoves();
       public IStacks TankStacks { get; set; } = new Stacks();

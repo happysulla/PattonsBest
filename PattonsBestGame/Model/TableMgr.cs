@@ -16,10 +16,13 @@ namespace Pattons_Best
    {
       public static ICombatCalanderEntries theCombatCalendarEntries = new CombatCalendarEntries();
       public static int[,] theExits = new int[10, 10];
+      //public static int[,,,] theApToKills = new int[3,3,3,2]; // armor class, facing, range, T/H
+      public static Dictionary<string, int[,,,]> theApToKills = new Dictionary<string, int[,,,]>(); // gun -> ( armor class, facing, range, T/H )
       //-------------------------------------------
       public TableMgr()
       {
          CreateCombatCalender();
+         CreateEnemyApToKill();
          CreateExitTable();
       }
       //-------------------------------------------
@@ -1851,24 +1854,52 @@ namespace Pattons_Best
          return toKillNum;
       }
       //-------------------------------------------
-      public static double GetToHitNumberModifierForYourTank(IGameInstance gi, IMapItem mi, char range)
+      public static int GetToHitNumberModifierForYourTank(IGameInstance gi, IMapItem mi, char range)
       {
-         double toHitModifierNum = -1000.0;
+         int toHitModifierNum = 0;
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetToHitNumberYourTank(): unknown enemyUnit=" + mi.Name);
-            return toHitModifierNum;
+            return -1000;
          }
-         if( true == gi.EnemyShots.ContainsKey(mi.Name))
+         if( false == gi.FirstShots.ContainsKey(mi.Name))
+            toHitModifierNum += 10; // add 10 if first shot
+         //-----------------------------------------------
+         if (false == gi.AcquiredShots.ContainsKey(mi.Name))
          {
-            int numShots = gi.EnemyShots[mi.Name];
+            if (1 < gi.AcquiredShots[mi.Name])
+            {
+               if ('C' == range)
+                  toHitModifierNum -= 10;
+               else if ('M' == range)
+                  toHitModifierNum -= 20;
+               else if ('L' == range)
+                  toHitModifierNum -= 30;
+               else
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetToHitNumberYourTank(): 1-unknown range=" + range);
+                  return -1000;
+               }
+            }
+            else // acquired 1 marker
+            {
+               if ('C' == range)
+                  toHitModifierNum -= 5;
+               else if ('M' == range)
+                  toHitModifierNum -= 10;
+               else if ('L' == range)
+                  toHitModifierNum -= 15;
+               else
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetToHitNumberYourTank(): 2-unknown range=" + range);
+                  return -1000;
+               }
+            }
          }
-         else
-         {
-            toHitModifierNum = 10;
-         }
-
+         //-----------------------------------------------
+         if( true == gi.Sherman.IsMoving )
+               toHitModifierNum += 20; 
          return toHitModifierNum;
       }
       public static double GetToHitNumberYourTank(IGameInstance gi, IMapItem mi, char sector, char range)
@@ -1951,18 +1982,30 @@ namespace Pattons_Best
          //------------------------------------
          return toKillNum;
       }
-      public static string GetHitLocationYourTank(IGameInstance gi)
+      public static string GetHitLocationYourTank(IGameInstance gi, int dieRoll)
       {
-         //----------------------------------------------------
-         IAfterActionReport? lastReport = gi.Reports.GetLast();
-         if (null == lastReport)
+         if( true == gi.Sherman.IsHullDown )
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): lastReport=null");
+            if (dieRoll < 6)
+               return "Turret";
+            else if( dieRoll < 11)
+               return "Miss";
+            Logger.Log(LogEnum.LE_ERROR, "GetHitLocationYourTank(): 1-dieRoll=" + dieRoll.ToString());
             return "ERROR";
          }
-         return "ERROR";
+         else
+         {
+            if (dieRoll < 5)
+               return "Turret";
+            else if (dieRoll < 10)
+               return "Hull";
+            else if (dieRoll == 10)
+               return "Track";
+            Logger.Log(LogEnum.LE_ERROR, "GetHitLocationYourTank(): 2-dieRoll=" + dieRoll.ToString());
+            return "ERROR";
+         }
       }
-      public static double GetToKillNumberYourTank(IGameInstance gi, IMapItem mi, char sector, char range)
+      public static double GetToKillNumberYourTank(IGameInstance gi, IMapItem mi, char range, string hitLocation)
       {
          double toKillNum = -1000.0;
          string enemyUnit = mi.GetEnemyUnit();
@@ -1978,6 +2021,57 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberYourTank(): lastReport=null");
             return toKillNum;
          }
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         //----------------------------------------------------
+         string gun = "Unknown";
+         switch (enemyUnit)
+         {
+            case "Pak38":
+               gun = "50L";
+               break;
+            case "Pak40":
+            case "SPG":
+            case "STuGIIIg":
+            case "PzIV":
+            case "MARDERII":
+            case "MARDERIII":
+            case "JdgPzIV":
+            case "JdgPz38t":
+               gun = "75L";
+               break;
+            case "PzV":
+               gun = "75LL";
+               break;
+            case "TANK":
+            case "PzVIe":
+               gun = "88L";
+               break;
+            case "ATG":
+            case "Pak43":
+            case "PzVIb":
+               gun = "88LL";
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetToHitNumberYourTank(): Reached Default enemyUnit=" + enemyUnit);
+               return toKillNum;
+         }
+         switch(gun)
+         {
+            case "50L":
+               break;
+            case "75L":
+               break;
+            case "75LL":
+               break;
+            case "88L":
+               break;
+            case "88LL":
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetToHitNumberYourTank(): Reached Default gun=" + gun);
+               return toKillNum;
+         }
+
          return toKillNum;
       }
       public static string GetCollateralDamage(IGameInstance gi, int dieRoll)
@@ -2373,6 +2467,140 @@ namespace Pattons_Best
          theExits[9, 7] = 6;
          theExits[9, 8] = 5;
          theExits[9, 9] = 5;
+      }
+      private void CreateEnemyApToKill()
+      {
+         // armor class, facing, range, hull
+         //======================================================================
+         int[,,,] entry50L = new int[3, 3, 3, 2];
+         theApToKills["50L"] = entry50L;
+         entry50L[0, 0, 0, 0] = 17;  // ac=1, facing=front, range=C, turret
+         entry50L[0, 0, 1, 0] = 08;  // ac=1, facing=front, range=M, turret
+         entry50L[0, 0, 2, 0] = 03;  // ac=1, facing=front, range=L, turret
+         entry50L[0, 0, 0, 1] = 17;  // ac=1, facing=front, range=C, hull
+         entry50L[0, 0, 1, 1] = 08;  // ac=1, facing=front, range=M, hull
+         entry50L[0, 0, 2, 1] = 03;  // ac=1, facing=front, range=L, hull
+         //----------------------------
+         entry50L[0, 1, 0, 0] = 42;  // ac=1, facing=side, range=C, turret
+         entry50L[0, 1, 1, 0] = 28;  // ac=1, facing=side, range=M, turret
+         entry50L[0, 1, 2, 0] = 17;  // ac=1, facing=side, range=L, turret
+         entry50L[0, 1, 0, 1] = 72;  // ac=1, facing=side, range=C, hull
+         entry50L[0, 1, 1, 1] = 58;  // ac=1, facing=side, range=M, hull
+         entry50L[0, 1, 2, 1] = 42;  // ac=1, facing=side, range=L, hull
+         //----------------------------
+         entry50L[0, 2, 0, 0] = 58;  // ac=1, facing=rear, range=C, turret
+         entry50L[0, 2, 1, 0] = 42;  // ac=1, facing=rear, range=M, turret
+         entry50L[0, 2, 2, 0] = 28;  // ac=1, facing=rear, range=L, turret
+         entry50L[0, 2, 0, 1] = 83;  // ac=1, facing=rear, range=C, hull
+         entry50L[0, 2, 1, 1] = 72;  // ac=1, facing=rear, range=M, hull
+         entry50L[0, 2, 2, 1] = 58;  // ac=1, facing=rear, range=L, hull
+         //----------------------------
+         entry50L[1, 0, 0, 0] = 17;  // ac=2, facing=front, range=C, turret
+         entry50L[1, 0, 1, 0] = 08;  // ac=2, facing=front, range=M, turret
+         entry50L[1, 0, 2, 0] = 03;  // ac=2, facing=front, range=L, turret
+         entry50L[1, 0, 0, 1] = 03;  // ac=2, facing=front, range=C, hull
+         entry50L[1, 0, 1, 1] = 03;  // ac=2, facing=front, range=M, hull
+         entry50L[1, 0, 2, 1] = 03;  // ac=2, facing=front, range=L, hull
+         //----------------------------
+         entry50L[1, 1, 0, 0] = 42;  // ac=2, facing=side, range=C, turret
+         entry50L[1, 1, 1, 0] = 28;  // ac=2, facing=side, range=M, turret
+         entry50L[1, 1, 2, 0] = 17;  // ac=2, facing=side, range=L, turret
+         entry50L[1, 1, 0, 1] = 72;  // ac=2, facing=side, range=C, hull
+         entry50L[1, 1, 1, 1] = 58;  // ac=2, facing=side, range=M, hull
+         entry50L[1, 1, 2, 1] = 42;  // ac=2, facing=side, range=L, hull
+         //----------------------------
+         entry50L[1, 2, 0, 0] = 58;  // ac=2, facing=rear, range=C, turret
+         entry50L[1, 2, 1, 0] = 42;  // ac=2, facing=rear, range=M, turret
+         entry50L[1, 2, 2, 0] = 28;  // ac=2, facing=rear, range=L, turret
+         entry50L[1, 2, 0, 1] = 83;  // ac=2, facing=rear, range=C, hull
+         entry50L[1, 2, 1, 1] = 72;  // ac=2, facing=rear, range=M, hull
+         entry50L[1, 2, 2, 1] = 58;  // ac=2, facing=rear, range=L, hull
+         //----------------------------
+         entry50L[2, 0, 0, 0] = 02;  // ac=3, facing=front, range=C, turret
+         entry50L[2, 0, 1, 0] = 01;  // ac=3, facing=front, range=M, turret
+         entry50L[2, 0, 2, 0] = 01;  // ac=3, facing=front, range=L, turret
+         entry50L[2, 0, 0, 1] = 02;  // ac=3, facing=front, range=C, hull
+         entry50L[2, 0, 1, 1] = 01;  // ac=3, facing=front, range=M, hull
+         entry50L[2, 0, 2, 1] = 01;  // ac=3, facing=front, range=L, hull
+         //----------------------------
+         entry50L[2, 1, 0, 0] = 03;  // ac=3, facing=side, range=C, turret
+         entry50L[2, 1, 1, 0] = 03;  // ac=3, facing=side, range=M, turret
+         entry50L[2, 1, 2, 0] = 03;  // ac=3, facing=side, range=L, turret
+         entry50L[2, 1, 0, 1] = 17;  // ac=3, facing=side, range=C, hull
+         entry50L[2, 1, 1, 1] = 08;  // ac=3, facing=side, range=M, hull
+         entry50L[2, 1, 2, 1] = 03;  // ac=3, facing=side, range=L, hull
+         //----------------------------
+         entry50L[2, 2, 0, 0] = 03;  // ac=3, facing=rear, range=C, turret
+         entry50L[2, 2, 1, 0] = 03;  // ac=3, facing=rear, range=M, turret
+         entry50L[2, 2, 2, 0] = 03;  // ac=3, facing=rear, range=L, turret
+         entry50L[2, 2, 0, 1] = 28;  // ac=3, facing=rear, range=C, hull
+         entry50L[2, 2, 1, 1] = 17;  // ac=3, facing=rear, range=M, hull
+         entry50L[2, 2, 2, 1] = 08;  // ac=3, facing=rear, range=L, hull
+         //======================================================================
+         int[,,,] entry75L = new int[3, 3, 3, 2];
+         theApToKills["75L"] = entry75L;
+         entry75L[0, 0, 0, 0] = 17;  // ac=1, facing=front, range=C, turret
+         entry75L[0, 0, 1, 0] = 08;  // ac=1, facing=front, range=M, turret
+         entry75L[0, 0, 2, 0] = 03;  // ac=1, facing=front, range=L, turret
+         entry75L[0, 0, 0, 1] = 17;  // ac=1, facing=front, range=C, hull
+         entry75L[0, 0, 1, 1] = 08;  // ac=1, facing=front, range=M, hull
+         entry75L[0, 0, 2, 1] = 03;  // ac=1, facing=front, range=L, hull
+         //----------------------------
+         entry75L[0, 1, 0, 0] = 42;  // ac=1, facing=side, range=C, turret
+         entry75L[0, 1, 1, 0] = 28;  // ac=1, facing=side, range=M, turret
+         entry75L[0, 1, 2, 0] = 17;  // ac=1, facing=side, range=L, turret
+         entry75L[0, 1, 0, 1] = 72;  // ac=1, facing=side, range=C, hull
+         entry75L[0, 1, 1, 1] = 58;  // ac=1, facing=side, range=M, hull
+         entry75L[0, 1, 2, 1] = 42;  // ac=1, facing=side, range=L, hull
+         //----------------------------
+         entry75L[0, 2, 0, 0] = 58;  // ac=1, facing=rear, range=C, turret
+         entry75L[0, 2, 1, 0] = 42;  // ac=1, facing=rear, range=M, turret
+         entry75L[0, 2, 2, 0] = 28;  // ac=1, facing=rear, range=L, turret
+         entry75L[0, 2, 0, 1] = 83;  // ac=1, facing=rear, range=C, hull
+         entry75L[0, 2, 1, 1] = 72;  // ac=1, facing=rear, range=M, hull
+         entry75L[0, 2, 2, 1] = 58;  // ac=1, facing=rear, range=L, hull
+         //----------------------------
+         entry75L[1, 0, 0, 0] = 17;  // ac=2, facing=front, range=C, turret
+         entry75L[1, 0, 1, 0] = 08;  // ac=2, facing=front, range=M, turret
+         entry75L[1, 0, 2, 0] = 03;  // ac=2, facing=front, range=L, turret
+         entry75L[1, 0, 0, 1] = 03;  // ac=2, facing=front, range=C, hull
+         entry75L[1, 0, 1, 1] = 03;  // ac=2, facing=front, range=M, hull
+         entry75L[1, 0, 2, 1] = 03;  // ac=2, facing=front, range=L, hull
+         //----------------------------
+         entry75L[1, 1, 0, 0] = 42;  // ac=2, facing=side, range=C, turret
+         entry75L[1, 1, 1, 0] = 28;  // ac=2, facing=side, range=M, turret
+         entry75L[1, 1, 2, 0] = 17;  // ac=2, facing=side, range=L, turret
+         entry75L[1, 1, 0, 1] = 72;  // ac=2, facing=side, range=C, hull
+         entry75L[1, 1, 1, 1] = 58;  // ac=2, facing=side, range=M, hull
+         entry75L[1, 1, 2, 1] = 42;  // ac=2, facing=side, range=L, hull
+         //----------------------------
+         entry75L[1, 2, 0, 0] = 58;  // ac=2, facing=rear, range=C, turret
+         entry75L[1, 2, 1, 0] = 42;  // ac=2, facing=rear, range=M, turret
+         entry75L[1, 2, 2, 0] = 28;  // ac=2, facing=rear, range=L, turret
+         entry75L[1, 2, 0, 1] = 83;  // ac=2, facing=rear, range=C, hull
+         entry75L[1, 2, 1, 1] = 72;  // ac=2, facing=rear, range=M, hull
+         entry75L[1, 2, 2, 1] = 58;  // ac=2, facing=rear, range=L, hull
+         //----------------------------
+         entry75L[2, 0, 0, 0] = 02;  // ac=3, facing=front, range=C, turret
+         entry75L[2, 0, 1, 0] = 01;  // ac=3, facing=front, range=M, turret
+         entry75L[2, 0, 2, 0] = 01;  // ac=3, facing=front, range=L, turret
+         entry75L[2, 0, 0, 1] = 02;  // ac=3, facing=front, range=C, hull
+         entry75L[2, 0, 1, 1] = 01;  // ac=3, facing=front, range=M, hull
+         entry75L[2, 0, 2, 1] = 01;  // ac=3, facing=front, range=L, hull
+         //----------------------------
+         entry75L[2, 1, 0, 0] = 03;  // ac=3, facing=side, range=C, turret
+         entry75L[2, 1, 1, 0] = 03;  // ac=3, facing=side, range=M, turret
+         entry75L[2, 1, 2, 0] = 03;  // ac=3, facing=side, range=L, turret
+         entry75L[2, 1, 0, 1] = 17;  // ac=3, facing=side, range=C, hull
+         entry75L[2, 1, 1, 1] = 08;  // ac=3, facing=side, range=M, hull
+         entry75L[2, 1, 2, 1] = 03;  // ac=3, facing=side, range=L, hull
+         //----------------------------
+         entry75L[2, 2, 0, 0] = 03;  // ac=3, facing=rear, range=C, turret
+         entry75L[2, 2, 1, 0] = 03;  // ac=3, facing=rear, range=M, turret
+         entry75L[2, 2, 2, 0] = 03;  // ac=3, facing=rear, range=L, turret
+         entry75L[2, 2, 0, 1] = 28;  // ac=3, facing=rear, range=C, hull
+         entry75L[2, 2, 1, 1] = 17;  // ac=3, facing=rear, range=M, hull
+         entry75L[2, 2, 2, 1] = 08;  // ac=3, facing=rear, range=L, hull
       }
    }
 }
