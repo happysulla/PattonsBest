@@ -2539,33 +2539,33 @@ namespace Pattons_Best
          //======================================================================
          int[,,,] entry75L = new int[3, 3, 3, 2];
          theApToKills["75L"] = entry75L;
-         entry75L[0, 0, 0, 0] = 17;  // ac=1, facing=front, range=C, turret
-         entry75L[0, 0, 1, 0] = 08;  // ac=1, facing=front, range=M, turret
-         entry75L[0, 0, 2, 0] = 03;  // ac=1, facing=front, range=L, turret
-         entry75L[0, 0, 0, 1] = 17;  // ac=1, facing=front, range=C, hull
-         entry75L[0, 0, 1, 1] = 08;  // ac=1, facing=front, range=M, hull
-         entry75L[0, 0, 2, 1] = 03;  // ac=1, facing=front, range=L, hull
+         entry75L[0, 0, 0, 0] = 72;  // ac=1, facing=front, range=C, turret
+         entry75L[0, 0, 1, 0] = 58;  // ac=1, facing=front, range=M, turret
+         entry75L[0, 0, 2, 0] = 42;  // ac=1, facing=front, range=L, turret
+         entry75L[0, 0, 0, 1] = 72;  // ac=1, facing=front, range=C, hull
+         entry75L[0, 0, 1, 1] = 58;  // ac=1, facing=front, range=M, hull
+         entry75L[0, 0, 2, 1] = 42;  // ac=1, facing=front, range=L, hull
          //----------------------------
-         entry75L[0, 1, 0, 0] = 42;  // ac=1, facing=side, range=C, turret
-         entry75L[0, 1, 1, 0] = 28;  // ac=1, facing=side, range=M, turret
-         entry75L[0, 1, 2, 0] = 17;  // ac=1, facing=side, range=L, turret
-         entry75L[0, 1, 0, 1] = 72;  // ac=1, facing=side, range=C, hull
-         entry75L[0, 1, 1, 1] = 58;  // ac=1, facing=side, range=M, hull
-         entry75L[0, 1, 2, 1] = 42;  // ac=1, facing=side, range=L, hull
+         entry75L[0, 1, 0, 0] = 92;  // ac=1, facing=side, range=C, turret
+         entry75L[0, 1, 1, 0] = 83;  // ac=1, facing=side, range=M, turret
+         entry75L[0, 1, 2, 0] = 72;  // ac=1, facing=side, range=L, turret
+         entry75L[0, 1, 0, 1] = 95;  // ac=1, facing=side, range=C, hull
+         entry75L[0, 1, 1, 1] = 95;  // ac=1, facing=side, range=M, hull
+         entry75L[0, 1, 2, 1] = 92;  // ac=1, facing=side, range=L, hull
          //----------------------------
-         entry75L[0, 2, 0, 0] = 58;  // ac=1, facing=rear, range=C, turret
-         entry75L[0, 2, 1, 0] = 42;  // ac=1, facing=rear, range=M, turret
-         entry75L[0, 2, 2, 0] = 28;  // ac=1, facing=rear, range=L, turret
-         entry75L[0, 2, 0, 1] = 83;  // ac=1, facing=rear, range=C, hull
-         entry75L[0, 2, 1, 1] = 72;  // ac=1, facing=rear, range=M, hull
-         entry75L[0, 2, 2, 1] = 58;  // ac=1, facing=rear, range=L, hull
+         entry75L[0, 2, 0, 0] = 95;  // ac=1, facing=rear, range=C, turret
+         entry75L[0, 2, 1, 0] = 92;  // ac=1, facing=rear, range=M, turret
+         entry75L[0, 2, 2, 0] = 83;  // ac=1, facing=rear, range=L, turret
+         entry75L[0, 2, 0, 1] = 95;  // ac=1, facing=rear, range=C, hull
+         entry75L[0, 2, 1, 1] = 95;  // ac=1, facing=rear, range=M, hull
+         entry75L[0, 2, 2, 1] = 95;  // ac=1, facing=rear, range=L, hull
          //----------------------------
-         entry75L[1, 0, 0, 0] = 17;  // ac=2, facing=front, range=C, turret
-         entry75L[1, 0, 1, 0] = 08;  // ac=2, facing=front, range=M, turret
-         entry75L[1, 0, 2, 0] = 03;  // ac=2, facing=front, range=L, turret
-         entry75L[1, 0, 0, 1] = 03;  // ac=2, facing=front, range=C, hull
-         entry75L[1, 0, 1, 1] = 03;  // ac=2, facing=front, range=M, hull
-         entry75L[1, 0, 2, 1] = 03;  // ac=2, facing=front, range=L, hull
+         entry75L[1, 0, 0, 0] = 72;  // ac=2, facing=front, range=C, turret
+         entry75L[1, 0, 1, 0] = 58;  // ac=2, facing=front, range=M, turret
+         entry75L[1, 0, 2, 0] = 42;  // ac=2, facing=front, range=L, turret
+         entry75L[1, 0, 0, 1] = 28;  // ac=2, facing=front, range=C, hull
+         entry75L[1, 0, 1, 1] = 17;  // ac=2, facing=front, range=M, hull
+         entry75L[1, 0, 2, 1] = 08;  // ac=2, facing=front, range=L, hull
          //----------------------------
          entry75L[1, 1, 0, 0] = 42;  // ac=2, facing=side, range=C, turret
          entry75L[1, 1, 1, 0] = 28;  // ac=2, facing=side, range=M, turret
