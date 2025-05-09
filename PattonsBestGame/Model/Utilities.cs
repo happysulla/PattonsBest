@@ -260,12 +260,12 @@ namespace Pattons_Best
       }
       public static int GetSmokeCount(IGameInstance gi, char sector, char range)
       {
-         int numSmokeMarkers = -10000;
+         int numSmokeMarkers = 0;
          IStack? stack = gi.BattleStacks.Find(gi.Home);
          if (null == stack)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberInfantry():  stack=null for " + gi.Home.Name);
-            return numSmokeMarkers;
+            return -10000;
          }
          foreach (IMapItem smoke in stack.MapItems)
          {
