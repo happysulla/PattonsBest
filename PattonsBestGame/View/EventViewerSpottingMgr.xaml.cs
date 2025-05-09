@@ -22,13 +22,7 @@ namespace Pattons_Best
       public delegate bool EndSpottingMgrCallback();
       private const int MAX_GRID_LEN = 5;
       private const int STARTING_ASSIGNED_ROW = 6;
-      private const bool IS_ENABLE = true;
-      private const bool NO_ENABLE = false;
-      private const bool IS_STATS = true;
-      private const bool NO_STATS = false;
-      private const bool NO_ADORN = false;
-      private const bool IS_CURSOR = true;
-      private const bool NO_CURSOR = false;
+      private const int SPOTTED = 100;
       public enum E0472Enum
       {
          SELECT_CREWMAN,
@@ -163,6 +157,18 @@ namespace Pattons_Best
          myRollResultRowNum = 0;
          mySelectedCrewman = null;
          //--------------------------------------------------
+         string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Gunner" };
+         foreach (string crewmember in crewmembers)
+         {
+            ICrewMember? cm = myGameInstance.GetCrewMember(crewmember);
+            if (null == cm)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "PerformSpotting(): cm=null for name=" + crewmember);
+               return false;
+            }
+            myAssignables.Add(cm);
+         }
+         //--------------------------------------------------
          if (false == UpdateGrid())
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformSpotting(): UpdateGrid() return false");
@@ -230,7 +236,7 @@ namespace Pattons_Best
          switch (myState)
          {
             case E0472Enum.SELECT_CREWMAN:
-               myTextBlockInstructions.Inlines.Add(new Run("Select a crewman to perform spotting by click it."));
+               myTextBlockInstructions.Inlines.Add(new Run("Select a crewman to perform spotting by clicking it."));
                break;
             case E0472Enum.SELECT_CREWMAN_SHOW:
                myTextBlockInstructions.Inlines.Add(new Run("Click image to continue."));
@@ -255,14 +261,14 @@ namespace Pattons_Best
             case E0472Enum.SELECT_CREWMAN:
                foreach (IMapItem mi in myAssignables)
                {
-                  Button b = CreateButton(mi, IS_ENABLE, false, IS_STATS, NO_ADORN, NO_CURSOR);
+                  Button b = CreateButton(mi);
                   myStackPanelAssignable.Children.Add(b);
                }
                break;
             case E0472Enum.ROLL_SPOTTING:
                foreach (IMapItem mi in myAssignables)
                {
-                  Button b = CreateButton(mi, NO_ENABLE, false, IS_STATS, NO_ADORN, NO_CURSOR);
+                  Button b = CreateButton(mi);
                   myStackPanelAssignable.Children.Add(b);
                }
                break;
@@ -298,43 +304,16 @@ namespace Pattons_Best
          return true;
       }
       //------------------------------------------------------------------------------------
-      private Button CreateButton(IMapItem mi, bool isEnabled, bool isRectangleAdded, bool isStatsShown, bool isAdornmentsShown, bool isCursor)
+      private Button CreateButton(IMapItem mi)
       {
-         System.Windows.Controls.Button b = new System.Windows.Controls.Button { };
-         ICrewMember? crewMember = (ICrewMember)mi;
-         if (null == crewMember)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateButton(): crewMember=null");
-            return b;
-         }
-         b.Name = crewMember.Role;
-         if (true == isCursor)
-         {
-            b.Width = Utilities.theMapItemSize;
-            b.Height = Utilities.theMapItemSize;
-         }
-         else
-         {
-            b.Width = Utilities.ZOOM * Utilities.theMapItemSize;
-            b.Height = Utilities.ZOOM * Utilities.theMapItemSize;
-         }
-         if (false == isRectangleAdded)
-         {
-            b.BorderThickness = new Thickness(0);
-         }
-         else
-         {
-            b.BorderThickness = new Thickness(1);
-            b.BorderBrush = Brushes.Black;
-         }
+         System.Windows.Controls.Button b = new Button { };
+         b.Name = mi.Name;
+         b.Width = Utilities.ZOOM * Utilities.theMapItemSize;
+         b.Height = Utilities.ZOOM * Utilities.theMapItemSize;
+         b.BorderThickness = new Thickness(0);
          b.Background = new SolidColorBrush(Colors.Transparent);
          b.Foreground = new SolidColorBrush(Colors.Transparent);
-         if (true == isEnabled)
-         {
-            b.IsEnabled = isEnabled;
-            b.Click += this.Button_Click;
-         }
-         MapItem.SetButtonContent(b, mi); // This sets the image as the button's content
+         MapItem.SetButtonContent(b, mi, false, false); // This sets the image as the button's content
          return b;
       }
       public void ShowDieResults(int dieRoll)

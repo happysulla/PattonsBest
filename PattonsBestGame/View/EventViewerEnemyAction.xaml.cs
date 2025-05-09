@@ -54,24 +54,29 @@ namespace Pattons_Best
       public struct GridRow
       {
          public IMapItem myMapItem;
+         public int myModifierEnemyAction = 0;
          public string myEnemyAction = "";
-         public int myModifier = 0;
+         public int myDieRollEnemyAction = Utilities.NO_RESULT;
+         //---------------------------------------------------
          public char mySector = 'E';
          public char myRange = 'E';
          public string mySectorRangeDisplay = "ERROR";
          public string myFacing = "NA";
          public string myTerrain = "NA";
+         public int myDieRollFacing = Utilities.NO_RESULT;
+         public int myDieRollTerrain = Utilities.NO_RESULT;
+         //---------------------------------------------------
+         public int myDieRollFire = Utilities.NO_RESULT;
          public string myToKillResult = "NA";
          public int myToKillNumber = 0;
+         //---------------------------------------------------
+         public int myDieRollCollateral = Utilities.NO_RESULT;
          public string myCollateralDamage = "ERROR";
+         //---------------------------------------------------
+         public int myModifierToHitYourTank = 0;
          public int myToHitNumberYourTank = 0;
          public int myToKillNumberYourTank = 0;
          public string myHitLocationYourTank = "ERROR";
-         public int myDieRollEnemyAction = Utilities.NO_RESULT;
-         public int myDieRollFacing = Utilities.NO_RESULT;
-         public int myDieRollTerrain = Utilities.NO_RESULT;
-         public int myDieRollFire = Utilities.NO_RESULT;
-         public int myDieRollCollateral = Utilities.NO_RESULT;
          public int myDieRollToHitYourTank = Utilities.NO_RESULT;
          public int myDieRollHitLocationYourTank = Utilities.NO_RESULT;
          public int myDieRollToKillYourTank = Utilities.NO_RESULT;
@@ -259,7 +264,7 @@ namespace Pattons_Best
          myMaxRowCount = i;
          //--------------------------------------------------
          for(int k=0; k<myMaxRowCount; ++k )
-            myGridRows[k].myModifier = TableMgr.GetEnemyActionModifier(myGameInstance, myGridRows[k].myMapItem);
+            myGridRows[k].myModifierEnemyAction = TableMgr.GetEnemyActionModifier(myGameInstance, myGridRows[k].myMapItem);
          //--------------------------------------------------
          if (false == UpdateGrid())
          {
@@ -677,7 +682,7 @@ namespace Pattons_Best
             Grid.SetRow(label1, rowNum);
             Grid.SetColumn(label1, 1);
             //----------------------------------
-            Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myModifier.ToString() };
+            Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myModifierEnemyAction.ToString() };
             myGrid.Children.Add(label2);
             Grid.SetRow(label2, rowNum);
             Grid.SetColumn(label2, 2);
@@ -1105,6 +1110,8 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): lastReport=null");
             return;
          }
+         Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "ShowDieResults(): myGameInstance.MapItemMoves.Clear()");
+         myGameInstance.MapItemMoves.Clear();
          //-------------------------------
          int i = myRollResultRowNum - STARTING_ASSIGNED_ROW;
          if (i < 0)
@@ -1123,7 +1130,8 @@ namespace Pattons_Best
          switch (myState)
          {
             case E0475Enum.ENEMY_ACTION_SELECT:
-               myGridRows[i].myDieRollEnemyAction = dieRoll + myGridRows[i].myModifier;
+               dieRoll = 81 - myGridRows[i].myModifierEnemyAction; // <cgs> TEST
+               myGridRows[i].myDieRollEnemyAction = dieRoll + myGridRows[i].myModifierEnemyAction;
                string enemyAction = TableMgr.SetEnemyActionResult(myGameInstance, mi, dieRoll);
                if ("ERROR" == enemyAction)
                {
@@ -1134,7 +1142,7 @@ namespace Pattons_Best
                //----------------------------------------
                if (true == enemyAction.Contains("Infantry"))
                {
-                  myGridRows[i].myToHitNumberYourTank = (int) TableMgr.GetToKillNumberInfantry(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
+                  myGridRows[i].myToKillNumber = (int) TableMgr.GetToKillNumberInfantry(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
                   if(myGridRows[i].myToKillNumber < -100 )
                   {
                      Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetToKillNumberInfantry() returned " + myGridRows[i].myToKillNumber.ToString() + " for action=" + enemyAction);
@@ -1145,16 +1153,16 @@ namespace Pattons_Best
                {
                   if( ( (true == enemyAction.Contains("Lead") ) && (true == myGameInstance.IsLeadTank)) || (true == enemyAction.Contains("Your") ) )
                   {
-                     myGridRows[i].myDieRollToHitYourTank = (int)TableMgr.GetToHitNumberYourTank(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
-                     if (myGridRows[i].myDieRollToHitYourTank < -100)
+                     myGridRows[i].myModifierToHitYourTank = (int)TableMgr.GetToHitNumberModifierForYourTank(myGameInstance, mi, myGridRows[i].myRange);
+                     if (myGridRows[i].myModifierToHitYourTank < -100)
                      {
                         Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetToKillNumberInfantry() returned " + myGridRows[i].myDieRollToHitYourTank.ToString() + " for action=" + enemyAction);
                         return;
                      }
-                     myGridRows[i].myDieRollToKillYourTank = (int)TableMgr.GetToHitNumberYourTank(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
-                     if (myGridRows[i].myDieRollToKillYourTank < -100)
+                     myGridRows[i].myToHitNumberYourTank = (int)TableMgr.GetToHitNumberYourTank(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
+                     if (myGridRows[i].myToHitNumberYourTank < -100)
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myDieRollToKillYourTank() returned " + myGridRows[i].myDieRollToKillYourTank.ToString() + " for action=" + enemyAction);
+                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetToKillNumberInfantry() returned " + myGridRows[i].myDieRollToHitYourTank.ToString() + " for action=" + enemyAction);
                         return;
                      }
                      myGridRows[i].myToKillNumber = NO_FIRE;
@@ -1208,8 +1216,6 @@ namespace Pattons_Best
                break;
             //------------------------------------------------------------------------------------------------
             case E0475Enum.ENEMY_ACTION_MOVE:
-               Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "ShowDieResults(): myGameInstance.MapItemMoves.Clear()");
-               myGameInstance.MapItemMoves.Clear();
                if( 2 == myRollResultColNum )
                {
                   myGridRows[i].myDieRollFacing = dieRoll;
@@ -1254,8 +1260,6 @@ namespace Pattons_Best
                break;
             //------------------------------------------------------------------------------------------------
             case E0475Enum.ENEMY_ACTION_FIRE:
-               Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "ShowDieResults(): myGameInstance.MapItemMoves.Clear()");
-               myGameInstance.MapItemMoves.Clear();
                myGridRows[i].myDieRollFire = dieRoll;
                if( dieRoll <= myGridRows[i].myToKillNumber )
                {
@@ -1291,29 +1295,8 @@ namespace Pattons_Best
                break;
             //------------------------------------------------------------------------------------------------
             case E0475Enum.ENEMY_ACTION_COLLATERAL:
-               Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "ShowDieResults(): myGameInstance.MapItemMoves.Clear()");
-               myGameInstance.MapItemMoves.Clear();
+                 Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "ShowDieResults(): myGameInstance.MapItemMoves.Clear()");
                myGridRows[i].myDieRollCollateral = dieRoll;
-               myGridRows[i].myCollateralDamage = TableMgr.GetCollateralDamage(myGameInstance, dieRoll);
-               if ("ERROR" == myGridRows[i].myCollateralDamage)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): SetEnemyActionResult() returned ERROR");
-                  return;
-               }
-               //---------------------------------
-               myState = E0475Enum.ENEMY_ACTION_COLLATERAL_SHOW;
-               for (int j = 0; j < myMaxRowCount; ++j)
-               {
-                  if (Utilities.NO_RESULT == myGridRows[j].myDieRollCollateral)
-                     myState = E0475Enum.ENEMY_ACTION_COLLATERAL;
-               }
-               break;
-            //------------------------------------------------------------------------------------------------
-            case E0475Enum.ENEMY_ACTION_FIRE_YOUR_TANK:
-               Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "ShowDieResults(): myGameInstance.MapItemMoves.Clear()");
-               myGameInstance.MapItemMoves.Clear();
-               myGridRows[i].myDieRollCollateral = dieRoll;
-               myGridRows[i].myCollateralDamage = TableMgr.GetCollateralDamage(myGameInstance, dieRoll);
                if ("ERROR" == myGridRows[i].myCollateralDamage)
                {
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): SetEnemyActionResult() returned ERROR");
@@ -1323,6 +1306,22 @@ namespace Pattons_Best
                for (int j = 0; j < myMaxRowCount; ++j)
                {
                   if ((Utilities.NO_RESULT == myGridRows[j].myToHitNumberYourTank) || (Utilities.NO_RESULT == myGridRows[j].myToKillNumberYourTank) || (Utilities.NO_RESULT == myGridRows[j].myDieRollToKillYourTank))
+                     myState = E0475Enum.ENEMY_ACTION_FIRE_YOUR_TANK;
+               }
+               break;
+            //------------------------------------------------------------------------------------------------
+            case E0475Enum.ENEMY_ACTION_FIRE_YOUR_TANK:
+               Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "ShowDieResults(): myGameInstance.MapItemMoves.Clear()");
+               myGridRows[i].myDieRollToHitYourTank = dieRoll;
+               if(myGridRows[i].myDieRollToHitYourTank <= myGridRows[i].myToHitNumberYourTank)
+               {
+
+               }
+               //---------------------------------
+               myState = E0475Enum.ENEMY_ACTION_FIRE_YOUR_TANK_SHOW;
+               for (int j = 0; j < myMaxRowCount; ++j)
+               {
+                  if (Utilities.NO_RESULT == myGridRows[j].myDieRollToHitYourTank)
                      myState = E0475Enum.ENEMY_ACTION_FIRE_YOUR_TANK;
                }
                break;
