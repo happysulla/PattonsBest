@@ -133,7 +133,6 @@ namespace Pattons_Best
       private readonly ArrayList myList;
       public Territories() { myList = new ArrayList(); }
       public void Add(ITerritory t) { myList.Add(t); }
-
       public void Insert(int index, ITerritory t) { myList.Insert(index, t); }
       public int Count { get { return myList.Count; } }
       public void Clear() { myList.Clear(); }

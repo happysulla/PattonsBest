@@ -1413,7 +1413,7 @@ namespace Pattons_Best
             foreach (IMapItem mi in stack.MapItems)
             {
                Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ShowBattleSetupFireResults(): mi=" + mi.Name);
-               if (true == Utilities.IsEnemyUnit(mi))
+               if (true == mi.IsEnemyUnit())
                {
                   ++enemyCount;
                   Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ShowBattleSetupFireResults(): c=" + enemyCount);
@@ -1503,7 +1503,7 @@ namespace Pattons_Best
          {
             foreach (IMapItem mi in stack.MapItems)
             {
-               if (true == Utilities.IsEnemyUnit(mi))
+               if (true == mi.IsEnemyUnit())
                {
                   ++enemyCount;
                   if ( ((false == lastReport.Weather.Contains("Fog")) && (false == lastReport.Weather.Contains("Falling"))) || (("B6M" != stack.Territory.Name) && ("B6L" != stack.Territory.Name)) )
@@ -1547,7 +1547,7 @@ namespace Pattons_Best
          {
             foreach (IMapItem mi in stack.MapItems)
             { 
-               if (true == Utilities.IsEnemyUnit(mi))
+               if (true == mi.IsEnemyUnit())
                {
                   outAction = GameAction.BattleRoundSequenceStart;
                   break;

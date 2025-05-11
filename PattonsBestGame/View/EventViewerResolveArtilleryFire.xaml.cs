@@ -210,7 +210,7 @@ namespace Pattons_Best
          {
             foreach (IMapItem mi in stack3.MapItems)
             {
-               if (true == Utilities.IsEnemyUnit(mi))
+               if (true == mi.IsEnemyUnit())
                {
                   int count = mi.TerritoryCurrent.Name.Length;
                   if (count < 3)

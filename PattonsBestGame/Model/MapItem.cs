@@ -187,6 +187,32 @@ namespace Pattons_Best
          Location.Y = territory.CenterPoint.Y - zoom * Utilities.theMapItemOffset;
       }
       //----------------------------------------------------------------------------
+      public bool IsEnemyUnit()
+      {
+         if (true == this.Name.Contains("LW"))
+            return true;
+         else if (true == this.Name.Contains("ATG") || true == this.Name.Contains("Pak"))
+            return true;
+         else if (true == this.Name.Contains("SPG") || true == this.Name.Contains("STuGIIIg"))
+            return true;
+         else if (true == this.Name.Contains("TANK") || true == this.Name.Contains("PzVI"))
+            return true;
+         else if (true == this.Name.Contains("MG"))
+            return true;
+         else if (true == this.Name.Contains("TRUCK"))
+            return true;
+         else if (true == this.Name.Contains("PSW") || true == this.Name.Contains("SPW"))
+            return true;
+         else if (true == this.Name.Contains("MARDER"))
+            return true;
+         else if (true == this.Name.Contains("PzIV"))
+            return true;
+         else if (true == this.Name.Contains("PzV"))
+            return true;
+         else if (true == this.Name.Contains("JdgPzIV") || true == this.Name.Contains("JdgPz38t"))
+            return true;
+         return false;
+      }
       public string GetEnemyUnit()
       {
          string enemyUnit = "ERROR";

@@ -8,6 +8,8 @@ using System.Xml.Serialization;
 using System.Xml;
 using System.Data.Common;
 using System.Threading;
+using System.Windows.Documents;
+using System.Collections.Generic;
 namespace Pattons_Best
 {
    public class Utilities
@@ -231,32 +233,6 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Deserialize(): s=" + s_xml + " T=" + type.ToString() + "\nex=" + ex.ToString());
             return default;
          }
-      }
-      public static bool IsEnemyUnit(IMapItem mi)
-      {
-         if (true == mi.Name.Contains("LW"))
-            return true;
-         else if (true == mi.Name.Contains("ATG") || true == mi.Name.Contains("Pak"))
-            return true;
-         else if (true == mi.Name.Contains("SPG") || true == mi.Name.Contains("STuGIIIg"))
-            return true;
-         else if (true == mi.Name.Contains("TANK") || true == mi.Name.Contains("PzVI"))
-            return true;
-         else if (true == mi.Name.Contains("MG"))
-            return true;
-         else if (true == mi.Name.Contains("TRUCK"))
-            return true;
-         else if (true == mi.Name.Contains("PSW") || true == mi.Name.Contains("SPW"))
-            return true;
-         else if (true == mi.Name.Contains("MARDER"))
-            return true;
-         else if (true == mi.Name.Contains("PzIV"))
-            return true;
-         else if (true == mi.Name.Contains("PzV"))
-            return true;
-         else if (true == mi.Name.Contains("JdgPzIV") || true == mi.Name.Contains("JdgPz38t"))
-            return true;
-         return false;
       }
       public static int GetSmokeCount(IGameInstance gi, char sector, char range)
       {

@@ -1077,6 +1077,7 @@ namespace Pattons_Best
       }
       private bool PerformAutoSetupSkipBattleSetup(IGameInstance gi)
       {
+         gi.IsLeadTank = true; //<cgs> TEST
          if (false == PerformAutoSetupSkipMovement(gi))
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): PerformAutoSetupSkipMovement() returned false");

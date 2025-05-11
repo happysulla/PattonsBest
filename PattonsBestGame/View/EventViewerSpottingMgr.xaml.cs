@@ -156,6 +156,7 @@ namespace Pattons_Best
          myIsRollInProgress = false;
          myRollResultRowNum = 0;
          mySelectedCrewman = null;
+         myMaxRowCount = 0;
          //--------------------------------------------------
          string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Gunner" };
          foreach (string crewmember in crewmembers)
@@ -261,14 +262,27 @@ namespace Pattons_Best
             case E0472Enum.SELECT_CREWMAN:
                foreach (IMapItem mi in myAssignables)
                {
-                  Button b = CreateButton(mi);
+                  ICrewMember?cm = mi as ICrewMember; 
+                  if( null == cm )
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): cast of mi to cm failed");
+                     return false;
+                  }
+                  Button b = CreateButton(cm);
+                  b.Click += Button_Click;
                   myStackPanelAssignable.Children.Add(b);
                }
                break;
             case E0472Enum.ROLL_SPOTTING:
                foreach (IMapItem mi in myAssignables)
                {
-                  Button b = CreateButton(mi);
+                  ICrewMember? cm = mi as ICrewMember;
+                  if (null == cm)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): cast of mi to cm failed");
+                     return false;
+                  }
+                  Button b = CreateButton(cm);
                   myStackPanelAssignable.Children.Add(b);
                }
                break;
@@ -299,7 +313,13 @@ namespace Pattons_Best
          //------------------------------------------------------------
          for (int i = 0; i < myMaxRowCount; ++i)
          {
-
+            int rowNum = i + STARTING_ASSIGNED_ROW;
+            GridRow row = myGridRows[i];
+            IMapItem enemyUnit = row.myMapItem;
+            Button b = CreateButton(enemyUnit);
+            myGrid.Children.Add(b);
+            Grid.SetRow(b, rowNum);
+            Grid.SetColumn(b, 0);
          }
          return true;
       }
@@ -314,6 +334,18 @@ namespace Pattons_Best
          b.Background = new SolidColorBrush(Colors.Transparent);
          b.Foreground = new SolidColorBrush(Colors.Transparent);
          MapItem.SetButtonContent(b, mi, false, false); // This sets the image as the button's content
+         return b;
+      }
+      private Button CreateButton(ICrewMember cm)
+      {
+         System.Windows.Controls.Button b = new Button { };
+         b.Name = cm.Role;
+         b.Width = Utilities.ZOOM * Utilities.theMapItemSize;
+         b.Height = Utilities.ZOOM * Utilities.theMapItemSize;
+         b.BorderThickness = new Thickness(0);
+         b.Background = new SolidColorBrush(Colors.Transparent);
+         b.Foreground = new SolidColorBrush(Colors.Transparent);
+         MapItem.SetButtonContent(b, cm, false, false); // This sets the image as the button's content
          return b;
       }
       public void ShowDieResults(int dieRoll)
@@ -428,8 +460,52 @@ namespace Pattons_Best
       }
       private void Button_Click(object sender, RoutedEventArgs e)
       {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Button_Click(): myGameInstance=null");
+            return;
+         }
          Button b = (Button)sender;
-         int rowNum = Grid.GetRow(b);
+         if (true == String.IsNullOrEmpty(b.Name))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Button_Click(): b.Name=null");
+            return;
+         }
+         if (null != mySelectedCrewman)
+            return;
+         mySelectedCrewman = myGameInstance.GetCrewMember(b.Name);
+         if ( null == mySelectedCrewman )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Button_Click(): myGameInstance.GetCrewMember() returned null for cm=" + b.Name);
+            return;
+         }
+         myAssignables.Remove(b.Name);
+         //---------------------------------------
+         myState = E0472Enum.SELECT_CREWMAN_SHOW;
+         List<string>? spottedTerritories = TankCard.GetSpottedTerritories(myGameInstance, mySelectedCrewman);
+         if( null == spottedTerritories )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Button_Click(): GetSpottedTerritories() returned null for cm=" + b.Name);
+            return;
+         }
+         int i = 0;
+         foreach ( string tName in spottedTerritories )
+         {
+            IStack? stack = myGameInstance.BattleStacks.Find(tName);
+            if( null != stack )
+            {
+               foreach(IMapItem mi in stack.MapItems )
+               {
+                  if( true == mi.IsEnemyUnit())
+                  {
+                     myGridRows[i] = new GridRow(mi);
+                     i++;
+                  }
+               }
+            }
+         }
+         myMaxRowCount = i;
+         //---------------------------------------
          if (false == UpdateGrid())
          {
             Logger.Log(LogEnum.LE_ERROR, "Button_Click(): UpdateGrid() return false");

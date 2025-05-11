@@ -191,7 +191,7 @@ namespace Pattons_Best
             {
                if (true == mi.Name.Contains("AdvanceFire"))
                   advanceFires.Add(mi);
-               if (true == Utilities.IsEnemyUnit(mi))
+               if (true == mi.IsEnemyUnit())
                   enemyUnits.Add(mi);
             }
             if (0 == enemyUnits.Count)
