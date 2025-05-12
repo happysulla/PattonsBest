@@ -320,7 +320,7 @@ namespace Pattons_Best
                else if (false == battleAmbush.PerformEnemyAction(ShowAmbushResults))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): PerformEnemyAction() returned false");
                break;
-            case GameAction.BattleRoundSeqeunceSpotting:
+            case GameAction.BattleRoundSequenceSpotting:
                EventViewerSpottingMgr spottingMgr = new EventViewerSpottingMgr(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == spottingMgr.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): spottingMgr.CtorError=true");
@@ -1542,6 +1542,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowAmbushResults(): myGameEngine=null");
             return false;
          }
+         //------------------------------------------
          GameAction outAction = GameAction.BattleEmpty;
          foreach (IStack stack in myGameInstance.BattleStacks)
          {

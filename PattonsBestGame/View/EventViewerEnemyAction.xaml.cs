@@ -1065,7 +1065,7 @@ namespace Pattons_Best
             }
             else if (NO_FIRE_THROWN_TRACK == myGridRows[i].myDieRollToKillYourTank)
             {
-               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myHitLocationYourTank };
+               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRollHitLocationYourTank.ToString() };
                myGrid.Children.Add(label2);
                Grid.SetRow(label2, rowNum);
                Grid.SetColumn(label2, 2);
@@ -1080,7 +1080,7 @@ namespace Pattons_Best
             }
             else if (NO_FIRE_MISSED_TURRET == myGridRows[i].myDieRollToKillYourTank)
             {
-               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myHitLocationYourTank };
+               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRollHitLocationYourTank.ToString()}; //myGridRows[i].myHitLocationYourTank 
                myGrid.Children.Add(label2);
                Grid.SetRow(label2, rowNum);
                Grid.SetColumn(label2, 2);
@@ -1107,6 +1107,7 @@ namespace Pattons_Best
             }
             else if (Utilities.NO_RESULT < myGridRows[i].myDieRollHitLocationYourTank)
             {
+               Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "UpdateGridRowsToKillYourTank(): myState=" + myState.ToString() + " dr=" + myGridRows[i].myDieRollHitLocationYourTank + " hitLoc=" + myGridRows[i].myHitLocationYourTank);
                Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myHitLocationYourTank };
                myGrid.Children.Add(label2);
                Grid.SetRow(label2, rowNum);

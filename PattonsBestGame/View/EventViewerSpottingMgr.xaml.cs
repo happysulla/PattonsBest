@@ -46,6 +46,7 @@ namespace Pattons_Best
          public string mySectorRangeDisplay = "ERROR";
          public int myModifier = 0;
          public int myDieRoll = Utilities.NO_RESULT;
+         public string myResult = "UNINITIALIZED";
          public GridRow(IMapItem enemyUnit)
          {
             myMapItem = enemyUnit;
@@ -337,10 +338,30 @@ namespace Pattons_Best
             Grid.SetRow(label2, rowNum);
             Grid.SetColumn(label2, 2);
             //----------------------------------
-            Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myModifier.ToString() };
-            myGrid.Children.Add(label3);
-            Grid.SetRow(label3, rowNum);
-            Grid.SetColumn(label3, 3);
+            if (Utilities.NO_RESULT < myGridRows[i].myDieRoll)
+            {
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRoll.ToString() };
+               myGrid.Children.Add(label3);
+               Grid.SetRow(label3, rowNum);
+               Grid.SetColumn(label3, 3);
+               //----------------------------------
+               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myResult };
+               myGrid.Children.Add(label4);
+               Grid.SetRow(label4, rowNum);
+               Grid.SetColumn(label4, 4);
+            }
+            else
+            {
+               BitmapImage bmi = new BitmapImage();
+               bmi.BeginInit();
+               bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollWhite.gif", UriKind.Absolute);
+               bmi.EndInit();
+               System.Windows.Controls.Image img = new System.Windows.Controls.Image { Name = "DieRoll", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+               ImageBehavior.SetAnimatedSource(img, bmi);
+               myGrid.Children.Add(img);
+               Grid.SetRow(img, rowNum);
+               Grid.SetColumn(img, 2);
+            }
          }
          return true;
       }
@@ -419,6 +440,7 @@ namespace Pattons_Best
             return;
          }
          myGridRows[i].myDieRoll = dieRoll;
+         
          //------------------------------------
          myState = E0472Enum.SELECT_CREWMAN;
          for (int j = 0; j < myMaxRowCount; ++j)

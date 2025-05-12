@@ -2214,29 +2214,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleAmbush: // Handled with EventViewerBattleAmbush class
-                  break;
-               case GameAction.BattleRoundSeqeunceSpotting: // Handled with EventViewerSpottingMgr class
-                  break;
-               case GameAction.BattleRoundSequenceStart:
                   gi.GamePhase = GamePhase.BattleRoundSequence;
-                  int smokeCount = 0;
-                  foreach(IStack stack in gi.BattleStacks )
-                  {
-                     foreach(IMapItem mi in stack.MapItems)
-                     {
-                        if (true == mi.Name.Contains("Smoke"))
-                           smokeCount++;
-                     }
-                  }
-                  if( 0 < smokeCount)
-                  {
-                     gi.EventDisplayed = gi.EventActive = "e037";
-                     gi.DieRollAction = GameAction.DieRollActionNone;
-                  }
-                  else
-                  {
-                     action = GameAction.BattleRoundSeqeunceSpotting;
-                  }
                   break;
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;
@@ -2339,15 +2317,89 @@ namespace Pattons_Best
             case GameAction.ShowCombatCalendarDialog:
             case GameAction.ShowAfterActionReportDialog:
             case GameAction.ShowInventoryDialog:
+            case GameAction.ShowGameFeats:
             case GameAction.ShowRuleListingDialog:
             case GameAction.ShowEventListingDialog:
+            case GameAction.ShowTableListing:
+            case GameAction.ShowMovementDiagramDialog:
             case GameAction.ShowReportErrorDialog:
             case GameAction.ShowAboutDialog:
-               break;
+            case GameAction.EndGameShowFeats:
             case GameAction.UpdateEventViewerDisplay: // Only change active event
                break;
             case GameAction.UpdateEventViewerActive: // Only change active event
                gi.EventDisplayed = gi.EventActive; // next screen to show
+               break;
+            case GameAction.BattleRoundSequenceStart:
+               gi.GamePhase = GamePhase.BattleRoundSequence;
+               int smokeCount = 0;
+               foreach (IStack stack in gi.BattleStacks)
+               {
+                  foreach (IMapItem mi in stack.MapItems)
+                  {
+                     if (true == mi.Name.Contains("Smoke"))
+                        smokeCount++;
+                  }
+               }
+               if (0 < smokeCount)
+               {
+                  gi.EventDisplayed = gi.EventActive = "e037";
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+               }
+               else
+               {
+                  //------------------------------------------
+                  bool isPossibleSpot = false;
+                  string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Gunner" };
+                  foreach (string crewmember in crewmembers)
+                  {
+                     ICrewMember? cm = gi.GetCrewMember(crewmember);
+                     if (null == cm)
+                     {
+                        returnStatus = "gi.GetCrewMember() returned null";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
+                     }
+                     else
+                     {
+                        List<string>? spottedTerritories = Territory.GetSpottedTerritories(gi, cm);
+                        if (null == spottedTerritories)
+                        {
+                           returnStatus = "GetSpottedTerritories() returned null";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
+                        }
+                        else
+                        {
+                           foreach (string tName in spottedTerritories)
+                           {
+                              IStack? stack = gi.BattleStacks.Find(tName);
+                              if (null != stack)
+                              {
+                                 foreach (IMapItem mi in stack.MapItems)
+                                 {
+                                    if ((true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("TANK")))
+                                    {
+                                       isPossibleSpot = true;
+                                       break;
+                                    }
+                                 }
+                              }
+                              if (true == isPossibleSpot)
+                                 break;
+                           }
+                        }
+                     }
+                  }
+                  if (true == isPossibleSpot)
+                  {
+                     action = GameAction.BattleRoundSequenceSpotting;
+                  }
+                  else
+                  {
+                     action = GameAction.BattleRoundSequenceOrders;
+                     gi.EventDisplayed = gi.EventActive = "e038";
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+               }
                break;
             case GameAction.EndGameClose:
                gi.GamePhase = GamePhase.EndGame;

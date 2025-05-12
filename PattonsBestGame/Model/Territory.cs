@@ -118,12 +118,12 @@ namespace Pattons_Best
                         if (true == mi.Name.Contains("CommanderSpot"))
                         {
                            string tName = mi.TerritoryCurrent.Name;
-                           if (3 != tName.Length)
+                           if (5 != tName.Length)
                            {
-                              Logger.Log(LogEnum.LE_ERROR, "Button_Click(): tName != 3 for " + mi.TerritoryCurrent.Name);
+                              Logger.Log(LogEnum.LE_ERROR, "Button_Click(): tName != 4 for " + mi.TerritoryCurrent.Name);
                               return null;
                            }
-                           char sector = tName[tName.Length - 2];
+                           char sector = tName[tName.Length - 1];
                            spottedTerritories.Add("B" + sector + "C");
                            spottedTerritories.Add("B" + sector + "M");
                            spottedTerritories.Add("B" + sector + "L");
@@ -199,12 +199,12 @@ namespace Pattons_Best
                      if (true == mi.Name.Contains("LoaderSpot"))
                      {
                         string tName = mi.TerritoryCurrent.Name;
-                        if (3 != tName.Length)
+                        if (5 != tName.Length)
                         {
-                           Logger.Log(LogEnum.LE_ERROR, "Button_Click(): tName != 3 for " + mi.TerritoryCurrent.Name);
+                           Logger.Log(LogEnum.LE_ERROR, "Button_Click(): tName != 4 for " + mi.TerritoryCurrent.Name);
                            return null;
                         }
-                        char sector = tName[tName.Length - 2];
+                        char sector = tName[tName.Length - 1];
                         spottedTerritories.Add("B" + sector + "C");
                         spottedTerritories.Add("B" + sector + "M");
                         spottedTerritories.Add("B" + sector + "L");

@@ -203,7 +203,7 @@ namespace Pattons_Best
       BattleEmptyResolve,
 
       BattleRoundSequenceStart,
-      BattleRoundSeqeunceSpotting,
+      BattleRoundSequenceSpotting,
       BattleRoundSequenceOrders,
 
       EveningDebriefingStart,
