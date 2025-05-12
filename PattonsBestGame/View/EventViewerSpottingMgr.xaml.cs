@@ -579,10 +579,10 @@ namespace Pattons_Best
                }
             }
             if( i != (spottedTerritories.Count-1 ) )
-             sb.Append(')');
+             sb.Append(',');
          }
          myMaxRowCount = i;
-         Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Button_Click():myState=" + myState.ToString() + " myMaxRowCount=" + myMaxRowCount.ToString() + sb.ToString() + "]");
+         Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Button_Click():myState=" + myState.ToString() + " myMaxRowCount=" + myMaxRowCount.ToString() + " " + sb.ToString() + "]");
          //---------------------------------------
          if (false == UpdateGrid())
          {
