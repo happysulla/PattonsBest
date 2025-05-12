@@ -64,7 +64,7 @@ namespace Pattons_Best
          //---------------------------------------------------
          public char mySector = 'E';
          public char myRange = 'E';
-         public string mySectorRangeDisplay = "ERROR";
+         public string mySectorRangeDisplay = "UNINT";
          public string myFacing = "NA";
          public string myTerrain = "NA";
          public int myDieRollFacing = Utilities.NO_RESULT;
@@ -74,18 +74,18 @@ namespace Pattons_Best
          public string myToKillResult = "NA";
          public int myToKillNumber = 0;
          //---------------------------------------------------
-         public string myCollateralDamage = "ERROR";
+         public string myCollateralDamage = "UNINT";
          public int myDieRollCollateral = Utilities.NO_RESULT;
          //---------------------------------------------------
          public int myModifierToHitYourTank = 0;
          public int myToHitNumberYourTank = 0;
-         public string myToHitResultYourTank = "ERROR";
+         public string myToHitResultYourTank = "UNINT";
          public int myDieRollToHitYourTank = Utilities.NO_RESULT;
          //---------------------------------------------------
-         public string myHitLocationYourTank = "ERROR";
+         public string myHitLocationYourTank = "UNINT";
          public int myDieRollHitLocationYourTank = Utilities.NO_RESULT;
          //---------------------------------------------------
-         public string myToKillResultYourTank = "ERROR";
+         public string myToKillResultYourTank = "UNINT";
          public int myToKillNumberYourTank = 0;
          public int myDieRollToKillYourTank = Utilities.NO_RESULT;
          public GridRow(IMapItem enemyUnit)
@@ -103,7 +103,7 @@ namespace Pattons_Best
       private IDieRoller? myDieRoller;
       //---------------------------------------------------
       private EnumScenario myScenario = EnumScenario.None;
-      private string myAreaType = "ERROR";
+      private string myAreaType = "UNINT";
       //---------------------------------------------------
       private readonly FontFamily myFontFam = new FontFamily("Tahoma");
       private readonly FontFamily myFontFam1 = new FontFamily("Courier New");
@@ -1065,7 +1065,7 @@ namespace Pattons_Best
             }
             else if (NO_FIRE_THROWN_TRACK == myGridRows[i].myDieRollToKillYourTank)
             {
-               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRollHitLocationYourTank.ToString() };
+               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myHitLocationYourTank };
                myGrid.Children.Add(label2);
                Grid.SetRow(label2, rowNum);
                Grid.SetColumn(label2, 2);
@@ -1080,7 +1080,7 @@ namespace Pattons_Best
             }
             else if (NO_FIRE_MISSED_TURRET == myGridRows[i].myDieRollToKillYourTank)
             {
-               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRollHitLocationYourTank.ToString() };
+               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myHitLocationYourTank };
                myGrid.Children.Add(label2);
                Grid.SetRow(label2, rowNum);
                Grid.SetColumn(label2, 2);
@@ -1248,6 +1248,45 @@ namespace Pattons_Best
             myGridRows[i].myDieRollFacing = NO_FACING;
          }
          return true;
+      }
+      private string GetSectorRangeDisplay(int i)
+      {
+         StringBuilder sb = new StringBuilder();
+         switch (myGridRows[i].mySector)
+         {
+            case '1':
+               sb.Append("1 ");
+               sb.Append(myGridRows[i].myRange);
+               break;
+            case '2':
+               sb.Append("2 ");
+               sb.Append(myGridRows[i].myRange);
+               break;
+            case '3':
+               sb.Append("3 ");
+               sb.Append(myGridRows[i].myRange);
+               break;
+            case '4':
+               sb.Append("4-5 ");
+               sb.Append(myGridRows[i].myRange);
+               break;
+            case '6':
+               sb.Append("6-8 ");
+               sb.Append(myGridRows[i].myRange);
+               break;
+            case '9':
+               sb.Append("9-10 ");
+               sb.Append(myGridRows[i].myRange);
+               break;
+            case 'O':
+               sb.Append("Off");
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetSectorRangeDisplay(): Reached default sector=" + myGridRows[i].mySector);
+               return "ERROR";
+         }
+         Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "GetSectorRangeDisplay(): loc=" + sb.ToString());
+         return sb.ToString();
       }
       private bool SetTerrainCounter(int i)
       {
@@ -1613,45 +1652,6 @@ namespace Pattons_Best
          myIsRollInProgress = false;
          //-------------------------------
          Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): ---------------myState=" + myState.ToString());
-      }
-      private string GetSectorRangeDisplay(int i)
-      {
-         StringBuilder sb = new StringBuilder();
-         switch (myGridRows[i].mySector)
-         {
-            case '1':
-               sb.Append("1 ");
-               sb.Append(myGridRows[i].myRange);
-               break;
-            case '2':
-               sb.Append("2 ");
-               sb.Append(myGridRows[i].myRange);
-               break;
-            case '3':
-               sb.Append("3 ");
-               sb.Append(myGridRows[i].myRange);
-               break;
-            case '4':
-               sb.Append("4-5 ");
-               sb.Append(myGridRows[i].myRange);
-               break;
-            case '6':
-               sb.Append("6-8 ");
-               sb.Append(myGridRows[i].myRange);
-               break;
-            case '9':
-               sb.Append("9-10 ");
-               sb.Append(myGridRows[i].myRange);
-               break;
-            case 'O':
-               sb.Append("Off");
-               break;
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "GetSectorRangeDisplay(): Reached default sector=" + myGridRows[i].mySector);
-               return "ERROR";
-         }
-         Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "GetSectorRangeDisplay(): loc=" + sb.ToString());
-         return sb.ToString();
       }
       private bool ShowDieResultUpdateFacing(Index i)
       {

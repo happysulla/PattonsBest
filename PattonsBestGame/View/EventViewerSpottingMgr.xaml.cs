@@ -41,10 +41,10 @@ namespace Pattons_Best
       private class GridRow
       {
          public IMapItem myMapItem;
-         public int myModifier = 0;
          public char mySector = 'E';
          public char myRange = 'E';
          public string mySectorRangeDisplay = "ERROR";
+         public int myModifier = 0;
          public int myDieRoll = Utilities.NO_RESULT;
          public GridRow(IMapItem enemyUnit)
          {
@@ -326,6 +326,21 @@ namespace Pattons_Best
             myGrid.Children.Add(b);
             Grid.SetRow(b, rowNum);
             Grid.SetColumn(b, 0);
+            //----------------------------------
+            Label label1 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = GetSectorRangeDisplay(i) };
+            myGrid.Children.Add(label1);
+            Grid.SetRow(label1, rowNum);
+            Grid.SetColumn(label1, 1);
+            //----------------------------------
+            Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myModifier.ToString() };
+            myGrid.Children.Add(label2);
+            Grid.SetRow(label2, rowNum);
+            Grid.SetColumn(label2, 2);
+            //----------------------------------
+            Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myModifier.ToString() };
+            myGrid.Children.Add(label3);
+            Grid.SetRow(label3, rowNum);
+            Grid.SetColumn(label3, 3);
          }
          return true;
       }
@@ -354,6 +369,46 @@ namespace Pattons_Best
          MapItem.SetButtonContent(b, cm, false, false); // This sets the image as the button's content
          return b;
       }
+      private string GetSectorRangeDisplay(int i)
+      {
+         StringBuilder sb = new StringBuilder();
+         switch (myGridRows[i].mySector)
+         {
+            case '1':
+               sb.Append("1 ");
+               sb.Append(myGridRows[i].myRange);
+               break;
+            case '2':
+               sb.Append("2 ");
+               sb.Append(myGridRows[i].myRange);
+               break;
+            case '3':
+               sb.Append("3 ");
+               sb.Append(myGridRows[i].myRange);
+               break;
+            case '4':
+               sb.Append("4-5 ");
+               sb.Append(myGridRows[i].myRange);
+               break;
+            case '6':
+               sb.Append("6-8 ");
+               sb.Append(myGridRows[i].myRange);
+               break;
+            case '9':
+               sb.Append("9-10 ");
+               sb.Append(myGridRows[i].myRange);
+               break;
+            case 'O':
+               sb.Append("Off");
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetSectorRangeDisplay(): Reached default sector=" + myGridRows[i].mySector);
+               return "ERROR";
+         }
+         Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "GetSectorRangeDisplay(): loc=" + sb.ToString());
+         return sb.ToString();
+      }
+      //------------------------------------------------------------------------------------
       public void ShowDieResults(int dieRoll)
       {
          Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "ShowDieResults(): +++++++++++++++++myState=" + myState.ToString() + " dr=" + dieRoll.ToString() );
@@ -506,9 +561,19 @@ namespace Pattons_Best
             {
                foreach(IMapItem mi in stack.MapItems )
                {
-                  if( true == mi.IsEnemyUnit())
+                  if( (true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("TANK")) )
                   {
                      myGridRows[i] = new GridRow(mi);
+                     int count = mi.TerritoryCurrent.Name.Length;
+                     if ( 3 != count )
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "Button_Click(): length not 3 for tName=" + tName);
+                        return;
+                     }
+                     myGridRows[i] = new GridRow(mi);
+                     myGridRows[i].myRange = mi.TerritoryCurrent.Name[--count];
+                     myGridRows[i].mySector = mi.TerritoryCurrent.Name[--count];
+                     myGridRows[i].mySectorRangeDisplay = GetSectorRangeDisplay(i);
                      i++;
                   }
                }
