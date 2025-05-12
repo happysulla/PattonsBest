@@ -256,6 +256,7 @@ namespace Pattons_Best
       }
       private bool UpdateAssignablePanel()
       {
+         Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "UpdateAssignablePanel(): myState=" + myState.ToString());
          myStackPanelAssignable.Children.Clear(); // clear out assignable panel 
          switch (myState)
          {
@@ -272,6 +273,10 @@ namespace Pattons_Best
                   b.Click += Button_Click;
                   myStackPanelAssignable.Children.Add(b);
                }
+               break;
+            case E0472Enum.SELECT_CREWMAN_SHOW:
+               Rectangle r1 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+               myStackPanelAssignable.Children.Add(r1);
                break;
             case E0472Enum.ROLL_SPOTTING:
                foreach (IMapItem mi in myAssignables)
@@ -311,6 +316,7 @@ namespace Pattons_Best
          foreach (UIElement ui1 in results)
             myGrid.Children.Remove(ui1);
          //------------------------------------------------------------
+         Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "UpdateGridRows(): myState=" + myState.ToString() + " myMaxRowCount=" + myMaxRowCount.ToString());
          for (int i = 0; i < myMaxRowCount; ++i)
          {
             int rowNum = i + STARTING_ASSIGNED_ROW;
@@ -350,6 +356,7 @@ namespace Pattons_Best
       }
       public void ShowDieResults(int dieRoll)
       {
+         Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "ShowDieResults(): +++++++++++++++++myState=" + myState.ToString() + " dr=" + dieRoll.ToString() );
          int i = myRollResultRowNum - STARTING_ASSIGNED_ROW;
          if (i < 0)
          {
@@ -367,6 +374,7 @@ namespace Pattons_Best
          if (false == UpdateGrid())
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateGrid() return false");
          myIsRollInProgress = false;
+         Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "ShowDieResults(): -----------------myState=" + myState.ToString());
       }
       //---------------------Controller Function--------------------------------------------
       private void ButtonRule_Click(object sender, RoutedEventArgs e)
@@ -482,15 +490,17 @@ namespace Pattons_Best
          myAssignables.Remove(b.Name);
          //---------------------------------------
          myState = E0472Enum.SELECT_CREWMAN_SHOW;
-         List<string>? spottedTerritories = TankCard.GetSpottedTerritories(myGameInstance, mySelectedCrewman);
+         List<string>? spottedTerritories = Territory.GetSpottedTerritories(myGameInstance, mySelectedCrewman);
          if( null == spottedTerritories )
          {
             Logger.Log(LogEnum.LE_ERROR, "Button_Click(): GetSpottedTerritories() returned null for cm=" + b.Name);
             return;
          }
+         StringBuilder sb = new StringBuilder("Button_Click(): spottedTerritories=[");
          int i = 0;
          foreach ( string tName in spottedTerritories )
          {
+            sb.Append(tName);
             IStack? stack = myGameInstance.BattleStacks.Find(tName);
             if( null != stack )
             {
@@ -503,8 +513,11 @@ namespace Pattons_Best
                   }
                }
             }
+            if( i != (spottedTerritories.Count-1 ) )
+             sb.Append(')');
          }
          myMaxRowCount = i;
+         Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Button_Click():myState=" + myState.ToString() + " myMaxRowCount=" + myMaxRowCount.ToString() + sb.ToString() + "]");
          //---------------------------------------
          if (false == UpdateGrid())
          {

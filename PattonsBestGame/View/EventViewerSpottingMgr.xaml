@@ -9,7 +9,9 @@
    <Grid Name="myGrid" MinWidth="600" MaxWidth="600" Background="#FFB9EA9E" >
       <Grid.ColumnDefinitions>
          <ColumnDefinition Width="1*"/>
-         <ColumnDefinition Width="2*"/>
+         <ColumnDefinition Width="1*"/>
+         <ColumnDefinition Width="1*"/>
+         <ColumnDefinition Width="1*"/>
          <ColumnDefinition Width="1*"/>
       </Grid.ColumnDefinitions>
       <Grid.RowDefinitions>

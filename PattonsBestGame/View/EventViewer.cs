@@ -317,7 +317,7 @@ namespace Pattons_Best
                EventViewerEnemyAction battleAmbush = new EventViewerEnemyAction(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == battleAmbush.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): battleAmbush.CtorError=true");
-               else if (false == battleAmbush.PerformEnemyAction(ShowBattleAmbush))
+               else if (false == battleAmbush.PerformEnemyAction(ShowAmbushResults))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): PerformEnemyAction() returned false");
                break;
             case GameAction.BattleRoundSeqeunceSpotting:
@@ -1530,16 +1530,16 @@ namespace Pattons_Best
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
          return true;
       }
-      public bool ShowBattleAmbush()
+      public bool ShowAmbushResults()
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowBattleAmbush(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowAmbushResults(): myGameInstance=null");
             return false;
          }
          if (null == myGameEngine)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowBattleAmbush(): myGameEngine=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowAmbushResults(): myGameEngine=null");
             return false;
          }
          GameAction outAction = GameAction.BattleEmpty;
@@ -1555,7 +1555,7 @@ namespace Pattons_Best
             }
          }
          //--------------------------------------------------
-         StringBuilder sb11 = new StringBuilder("     ######ShowBattleAmbush() :");
+         StringBuilder sb11 = new StringBuilder("     ######ShowAmbushResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
          sb11.Append(" a="); sb11.Append(outAction.ToString());

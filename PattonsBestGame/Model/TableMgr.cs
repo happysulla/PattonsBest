@@ -17,7 +17,7 @@ namespace Pattons_Best
       public static ICombatCalanderEntries theCombatCalendarEntries = new CombatCalendarEntries();
       public static int[,] theExits = new int[10, 10];
       //public static int[,,,] theApToKills = new int[3,3,3,2]; // armor class, facing, range, T/H
-      public static Dictionary<string, int[,,,]> theApToKills = new Dictionary<string, int[,,,]>(); // gun -> ( armor class, facing, range, T/H )
+      public static Dictionary<string, int[,,,]> theApToKills = new Dictionary<string, int[,,,]>(); // gun -> armorclass, facing, range, turret
       //-------------------------------------------
       public TableMgr()
       {
@@ -2087,7 +2087,7 @@ namespace Pattons_Best
             return "ERROR";
          }
       }
-      public static double GetToKillNumberYourTank(IGameInstance gi, IMapItem mi, char range, string hitLocation)
+      public static double GetToKillNumberYourTank(IGameInstance gi, IMapItem mi, string facing, char range, string hitLocation)
       {
          double toKillNum = -1000.0;
          string enemyUnit = mi.GetEnemyUnit();
@@ -2096,14 +2096,6 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberYourTank(): unknown enemyUnit=" + mi.Name);
             return toKillNum;
          }
-         //----------------------------------------------------
-         IAfterActionReport? lastReport = gi.Reports.GetLast();
-         if (null == lastReport)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberYourTank(): lastReport=null");
-            return toKillNum;
-         }
-         TankCard card = new TankCard(lastReport.TankCardNum);
          //----------------------------------------------------
          string gun = "Unknown";
          switch (enemyUnit)
@@ -2137,23 +2129,38 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "GetToHitNumberYourTank(): Reached Default enemyUnit=" + enemyUnit);
                return toKillNum;
          }
-         switch(gun)
+         //----------------------------------------------------
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
          {
-            case "50L":
-               break;
-            case "75L":
-               break;
-            case "75LL":
-               break;
-            case "88L":
-               break;
-            case "88LL":
-               break;
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "GetToHitNumberYourTank(): Reached Default gun=" + gun);
-               return toKillNum;
+            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberYourTank(): lastReport=null");
+            return toKillNum;
          }
-
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         int armorclass = 0;
+         if ("II" == card.myArmorClass)
+            armorclass = 1;
+         else if ("III" == card.myArmorClass)
+            armorclass = 3;
+         //----------------------------------------------------
+         int facingNum = 0;
+         if ("Side" == facing)
+            facingNum = 1;
+         else if ("Rear" == facing)
+            facingNum = 2;
+         //----------------------------------------------------
+         int rangeNum = 0;
+         if ('M' == range)
+            rangeNum = 1;
+         else if ('L' == range)
+            rangeNum = 2;
+         //----------------------------------------------------
+         int locationNum = 0;
+         if ("Turret" == hitLocation)
+            locationNum = 1;
+         //----------------------------------------------------
+         int[,,,] table = theApToKills[gun];
+         toKillNum = table[armorclass, facingNum, rangeNum, locationNum];
          return toKillNum;
       }
       //-------------------------------------------

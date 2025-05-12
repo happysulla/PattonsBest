@@ -29,6 +29,8 @@ namespace Pattons_Best
       private const int KEEP_TERRAIN = 103;
       private const int NO_COLLATERAL = 104;
       private const int NO_FIRE_YOUR_TANK = 105;
+      private const int NO_FIRE_THROWN_TRACK = 106;
+      private const int NO_FIRE_MISSED_TURRET = 107;
       public enum E0475Enum
       {
          ENEMY_ACTION_SELECT,
@@ -438,6 +440,7 @@ namespace Pattons_Best
             case E0475Enum.ENEMY_ACTION_FIRE_SHOW:
             case E0475Enum.ENEMY_ACTION_COLLATERAL_SHOW:
             case E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK_SHOW:
+            case E0475Enum.ENEMY_ACTION_TO_KILL_YOUR_TANK_SHOW:
                myTextBlockInstructions.Inlines.Add(new Run("Click image to continue."));
                break;
             default:
@@ -456,6 +459,7 @@ namespace Pattons_Best
             case E0475Enum.ENEMY_ACTION_FIRE:
             case E0475Enum.ENEMY_ACTION_COLLATERAL:
             case E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK:
+            case E0475Enum.ENEMY_ACTION_TO_KILL_YOUR_TANK:
                Rectangle r1 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                myStackPanelAssignable.Children.Add(r1);
                break;
@@ -1059,6 +1063,36 @@ namespace Pattons_Best
                Grid.SetRow(label4, rowNum);
                Grid.SetColumn(label4, 4);
             }
+            else if (NO_FIRE_THROWN_TRACK == myGridRows[i].myDieRollToKillYourTank)
+            {
+               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRollHitLocationYourTank.ToString() };
+               myGrid.Children.Add(label2);
+               Grid.SetRow(label2, rowNum);
+               Grid.SetColumn(label2, 2);
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
+               myGrid.Children.Add(label3);
+               Grid.SetRow(label3, rowNum);
+               Grid.SetColumn(label3, 3);
+               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "Thrown Track" };
+               myGrid.Children.Add(label4);
+               Grid.SetRow(label4, rowNum);
+               Grid.SetColumn(label4, 4);
+            }
+            else if (NO_FIRE_MISSED_TURRET == myGridRows[i].myDieRollToKillYourTank)
+            {
+               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRollHitLocationYourTank.ToString() };
+               myGrid.Children.Add(label2);
+               Grid.SetRow(label2, rowNum);
+               Grid.SetColumn(label2, 2);
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
+               myGrid.Children.Add(label3);
+               Grid.SetRow(label3, rowNum);
+               Grid.SetColumn(label3, 3);
+               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "Miss Turret" };
+               myGrid.Children.Add(label4);
+               Grid.SetRow(label4, rowNum);
+               Grid.SetColumn(label4, 4);
+            }
             else if (Utilities.NO_RESULT == myGridRows[i].myDieRollHitLocationYourTank)
             {
                BitmapImage bmi = new BitmapImage();
@@ -1077,7 +1111,7 @@ namespace Pattons_Best
                myGrid.Children.Add(label2);
                Grid.SetRow(label2, rowNum);
                Grid.SetColumn(label2, 2);
-               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myToHitNumberYourTank.ToString() };
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myToKillNumberYourTank.ToString() };
                myGrid.Children.Add(label3);
                Grid.SetRow(label3, rowNum);
                Grid.SetColumn(label3, 3);
@@ -1490,7 +1524,7 @@ namespace Pattons_Best
             //------------------------------------------------------------------------------------------------
             case E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK:
                myGridRows[i].myDieRollToHitYourTank = dieRoll;
-               Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Firing at Your Tank myState=" + myState.ToString() + " enemyAction=" + dieRoll);
+               Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Firing at Your Tank myState=" + myState.ToString() + " dr=" + dieRoll);
                if (myGridRows[i].myDieRollToHitYourTank <= myGridRows[i].myToHitNumberYourTank)
                {
                   myGridRows[i].myToHitResultYourTank = "Hit";
@@ -1512,9 +1546,9 @@ namespace Pattons_Best
             //------------------------------------------------------------------------------------------------
             case E0475Enum.ENEMY_ACTION_TO_KILL_YOUR_TANK:
                myGridRows[i].myDieRollToHitYourTank = dieRoll;
-               Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Killing Your Tank myState=" + myState.ToString() + " enemyAction=" + dieRoll);
                if (2 == myRollResultColNum)
                {
+                  Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Hit Location for myState=" + myState.ToString() + " dr=" + dieRoll);
                   myGridRows[i].myDieRollHitLocationYourTank = dieRoll;
                   myGridRows[i].myHitLocationYourTank = TableMgr.GetHitLocationYourTank(myGameInstance, dieRoll);
                   if ("ERROR" == myGridRows[i].myHitLocationYourTank)
@@ -1522,15 +1556,36 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.myHitLocationYourTank() returned ERROR");
                      return;
                   }
+                  myGridRows[i].myToKillNumberYourTank = (int)TableMgr.GetToKillNumberYourTank(myGameInstance, myGridRows[i].myMapItem, myGridRows[i].myFacing, myGridRows[i].myRange, myGridRows[i].myHitLocationYourTank);
+                  if (myGridRows[i].myToKillNumberYourTank < -100)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetToKillNumberYourTank() returned error=" + myGridRows[i].myToKillNumberYourTank.ToString());
+                     return;
+                  }
+                  if ( "Miss" == myGridRows[i].myHitLocationYourTank )
+                     myGridRows[i].myDieRollToKillYourTank = NO_FIRE_MISSED_TURRET;
+                  if ("Track" == myGridRows[i].myHitLocationYourTank)
+                     myGridRows[i].myDieRollToKillYourTank = NO_FIRE_THROWN_TRACK;
                }
                else if (4 == myRollResultColNum)
                {
+                  Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Killing Your Tank for myState=" + myState.ToString() + " dr=" + dieRoll);
                   myGridRows[i].myDieRollToKillYourTank = dieRoll;
-                  myGridRows[i].myToKillNumberYourTank = (int) TableMgr.GetToKillNumberYourTank(myGameInstance, myGridRows[i].myMapItem, myGridRows[i].myRange, myGridRows[i].myHitLocationYourTank);
-                  if (myGridRows[i].myToKillNumberYourTank < -100)
+                  if( dieRoll <= myGridRows[i].myToKillNumberYourTank )
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetToKillNumberYourTank() returned ERROR");
-                     return;
+                     myGameInstance.Sherman.SetBloodSpots();
+                     myGridRows[i].myToKillResultYourTank = "KO";
+                     for (int j = 0; j < myMaxRowCount; ++j)
+                     {
+                        if (Utilities.NO_RESULT == myGridRows[j].myDieRollHitLocationYourTank)
+                           myGridRows[j].myDieRollHitLocationYourTank = NO_FIRE_YOUR_TANK;
+                        if (Utilities.NO_RESULT == myGridRows[j].myDieRollToKillYourTank)
+                           myGridRows[j].myDieRollToKillYourTank = NO_FIRE_YOUR_TANK;
+                     }
+                  }
+                  else
+                  {
+                     myGridRows[i].myToKillResultYourTank = "No Effect";
                   }
                }
                else
@@ -1539,11 +1594,14 @@ namespace Pattons_Best
                   return;
                }
                //-----------------------------
-               myState = E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK_SHOW;
+               myState = E0475Enum.ENEMY_ACTION_TO_KILL_YOUR_TANK_SHOW;
                for (int j = 0; j < myMaxRowCount; ++j)
                {
-                  if (Utilities.NO_RESULT == myGridRows[j].myDieRollToHitYourTank)
-                     myState = E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK;
+                   if ((Utilities.NO_RESULT == myGridRows[j].myDieRollHitLocationYourTank) || (Utilities.NO_RESULT == myGridRows[j].myDieRollToKillYourTank) )
+                  {
+                     Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): j=" + j.ToString() + " myState=E0475Enum.ENEMY_ACTION_TO_KILL_YOUR_TANK");
+                     myState = E0475Enum.ENEMY_ACTION_TO_KILL_YOUR_TANK;
+                  }
                }
                break;
             default:
@@ -1778,9 +1836,9 @@ namespace Pattons_Best
                         }
                         if ("ToKillYourTank" == img.Name)
                         {
-                           myState = E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK;
+                           myState = E0475Enum.ENEMY_ACTION_TO_KILL_YOUR_TANK;
                            myTextBlock2.Text = "Hit Location";
-                           myTextBlock3.Text = "To Kil Number";
+                           myTextBlock3.Text = "To Kill Number";
                         }
                         if ("Continue" == img.Name)
                            myState = E0475Enum.END;
