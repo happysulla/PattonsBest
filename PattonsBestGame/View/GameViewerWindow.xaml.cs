@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.Xml.Linq;
 using System.Collections;
 using Pattons_Best.Properties;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace Pattons_Best
 {
@@ -593,6 +594,13 @@ namespace Pattons_Best
                      return false;
                   }
                   break;
+               case GameAction.BattleRoundSequenceOrders:
+                  if (false == UpdateCanvasTankOrders(gi, action))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasTankOrders() returned false");
+                     return false;
+                  }
+                  break;
                case GameAction.EndGameClose:
                   GameAction outActionClose = GameAction.EndGameExit;
                   myGameEngine.PerformAction(ref gi, ref outActionClose);
@@ -701,7 +709,7 @@ namespace Pattons_Best
          IAfterActionReport? report = gi.Reports.GetLast();
          if (null == report)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankHatches(): report=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankGunLoad(): report=null");
             return false;
          }
          //--------------------------------
@@ -760,6 +768,20 @@ namespace Pattons_Best
          Button? b = myTankButtons.Find("GunLoad");
          if (null != b)
             Canvas.SetZIndex(b, 99999);
+         return true;
+      }
+      private bool UpdateCanvasTankOrders(IGameInstance gi, GameAction action)
+      {
+         if( false == UpdateCanvasTankHatches(gi, action))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankOrders(): UpdateCanvasTankHatches() returned false");
+            return false;
+         }
+         if (false == UpdateCanvasTankGunLoad(gi, action))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankOrders(): UpdateCanvasTankGunLoad() returned false");
+            return false;
+         }
          return true;
       }
       //---------------------------------------
@@ -1065,7 +1087,7 @@ namespace Pattons_Best
             ITerritory? t = Territories.theTerritories.Find(s);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankHatches(): cannot find tName=" + s);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainSpottingCommander(): cannot find tName=" + s);
                return false;
             }
             Ellipse aEllipse = new Ellipse

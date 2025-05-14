@@ -15,7 +15,6 @@ namespace Pattons_Best
       string OverlayImageName { get; set; }
       List<BloodSpot> WoundSpots { get; }
       double Zoom { get; set; }
-      bool IsHidden { get; set; }
       bool IsAnimated { get; set; }
       bool IsMoved { get; set; }
       int Count { get; set; }
@@ -26,14 +25,18 @@ namespace Pattons_Best
       ITerritory TerritoryCurrent { get; set; }
       ITerritory TerritoryStarting { get; set; }
       //----------------------------------------
-      bool IsVehicle { get; set; }
       bool IsMoving { get; set; }
       bool IsHullDown { get; set; }
+      bool IsTurret { get; set; }
+      bool IsKilled { get; set; }
+      //----------------------------------------
+      bool IsVehicle { get; set; }
       bool IsWoods { get; set; }
       bool IsBuilding { get; set; }
       bool IsFortification { get; set; }
-      bool IsTurret { get; set; }
-      bool IsKilled { get; set; }
+      bool IsSpotted { get; set; }
+      bool IsIdentified { get; set; }
+      bool IsHidden { get; set; }
       //----------------------------------------
       bool IsEnemyUnit();
       string GetEnemyUnit();

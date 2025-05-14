@@ -60,7 +60,6 @@ namespace Pattons_Best
       public List<BloodSpot> myWoundSpots = new List<BloodSpot>();
       public List<BloodSpot> WoundSpots { get => myWoundSpots; }
       public double Zoom { get; set; } = 1.0;
-      public bool IsHidden { get; set; } = false;
       public bool IsAnimated
       {
          set
@@ -108,14 +107,18 @@ namespace Pattons_Best
       protected ITerritory myTerritoryStarting = new Territory("Offboard");
       public ITerritory TerritoryStarting { get => myTerritoryStarting; set => myTerritoryStarting = value; }
       //--------------------------------------------------
-      public bool IsVehicle { get; set; } = false;
-      public bool IsMoving { get; set; } = false; // Only applies to Sherman tank
+      public bool IsMoving { get; set; } = false;  
       public bool IsHullDown { get; set; } = false;
+      public bool IsTurret { get; set; } = false;
+      public bool IsKilled { get; set; } = false;
+      //--------------------------------------------------
+      public bool IsVehicle { get; set; } = false;
       public bool IsWoods { get; set; } = false;
       public bool IsBuilding { get; set; } = false;
       public bool IsFortification { get; set; } = false;
-      public bool IsTurret { get; set; } = false;
-      public bool IsKilled { get; set; } = false;
+      public bool IsSpotted { get; set; } = false;
+      public bool IsIdentified { get; set; } = false;
+      public bool IsHidden { get; set; } = false;
       //--------------------------------------------------
       private bool myIsFlipped = false;
       //----------------------------------------------------------------------------
@@ -123,13 +126,12 @@ namespace Pattons_Best
       {
          Name = name;
       }
-      protected MapItem(string aName, double zoom, bool isHidden, bool isAnimated, string topImageName)
+      protected MapItem(string aName, double zoom, bool isAnimated, string topImageName)
       {
          try
          {
             Name = aName;
             Zoom = zoom;
-            IsHidden = isHidden;
             TopImageName = topImageName;
             IMapImage? mii = theMapImages.Find(topImageName);
             if (null == mii)
@@ -145,13 +147,12 @@ namespace Pattons_Best
             return;
          }
       }
-      protected MapItem(string aName, double zoom, bool isHidden, bool isAnimated, string topImageName, string buttomImageName)
+      protected MapItem(string aName, double zoom, bool isAnimated, string topImageName, string buttomImageName)
       {
          try
          {
             Name = aName;
             Zoom = zoom;
-            IsHidden = isHidden;
             TopImageName = topImageName;
             IMapImage? miiTop = theMapImages.Find(topImageName);
             if (null == miiTop)
@@ -179,7 +180,7 @@ namespace Pattons_Best
       {
       }
       public MapItem(string name, double zoom, string topImageName, ITerritory territory) :
-         this(name, zoom, false, false, topImageName)
+         this(name, zoom, false, topImageName)
       {
          TerritoryCurrent = territory;
          TerritoryStarting = territory;
@@ -256,7 +257,7 @@ namespace Pattons_Best
       {
          for (int spots = 0; spots < PERCENT_MAPITEM_COVERED; ++spots) // splatter the MapItem with random blood spots
          {
-            int range = (int)Utilities.theMapItemSize;
+            int range = (int)(this.Zoom * Utilities.theMapItemSize);
             BloodSpot spot = new BloodSpot(range, theRandom);
             myWoundSpots.Add(spot);
          }
@@ -435,7 +436,7 @@ namespace Pattons_Best
       public bool IsButtonedUp { get; set; } = true;
       public int Sector { get; set; } = 0;
       public CrewMember(string role, string rank, string topImageName)
-         : base(SurnameMgr.GetSurname(), 1.0, false, false, topImageName)
+         : base(SurnameMgr.GetSurname(), 1.0, false, topImageName)
       {
          Role = role;
          Rank = rank;

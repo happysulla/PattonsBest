@@ -312,16 +312,16 @@ Deplete smoke in each zone by converting one white full strength Smoke marker to
 e038	"<Bold>e038 Orders Phase</Bold> 
 <InlineUIContainer><Button Content='r4.73' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
-Click on closed hatches to open and open hatches to close.
+Click on blue squares to open hatches. Click on Open Hatch marker to close.
  <LineBreak/><LineBreak/>
-Click crew member boxes on the Tank Card to select from a pull down of options for each crew member per 
+Click crew member action boxes to select from a pull down to assign crew actions for each crew member per 
 <InlineUIContainer><Button Content='r8.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
-Click on the appropriate Tank Card location to place the Gun Reload marker per 
+Click on the appropriate Gun Load box to set the Gun Reload marker per 
 <InlineUIContainer><Button Content='r5.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
-Click on the ready rack boxes on the Tank Card to select the Ready Rack Ammo Reload marker and the Gun Reload marker per 
-<InlineUIContainer><Button Content='r8.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+Click the Gun Reload marker/button if you want the reload to come from the ready rack. A Ready Rack Ammo Reload marker is added per  
+<InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
 Determine the specific unit type for any units identified per 
 <InlineUIContainer><Button Content='r17.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.

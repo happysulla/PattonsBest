@@ -2376,7 +2376,7 @@ namespace Pattons_Best
                               {
                                  foreach (IMapItem mi in stack.MapItems)
                                  {
-                                    if ((true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("TANK")))
+                                    if ( (true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("SPG")) )
                                     {
                                        isPossibleSpot = true;
                                        break;

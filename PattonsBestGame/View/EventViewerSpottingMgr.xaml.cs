@@ -168,6 +168,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "PerformSpotting(): cm=null for name=" + crewmember);
                return false;
             }
+            cm.Name = cm.Role;
             myAssignables.Add(cm);
          }
          //--------------------------------------------------
@@ -426,7 +427,6 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "GetSectorRangeDisplay(): Reached default sector=" + myGridRows[i].mySector);
                return "ERROR";
          }
-         Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "GetSectorRangeDisplay(): loc=" + sb.ToString());
          return sb.ToString();
       }
       //------------------------------------------------------------------------------------
@@ -439,7 +439,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowCombatResults(): 0 > i=" + i.ToString());
             return;
          }
-         myGridRows[i].myDieRoll = dieRoll;
+         myGridRows[i].myDieRoll = dieRoll + myGridRows[i].myModifier; 
          
          //------------------------------------
          myState = E0472Enum.SELECT_CREWMAN;
@@ -583,8 +583,12 @@ namespace Pattons_Best
             {
                foreach(IMapItem mi in stack.MapItems )
                {
-                  if( (true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("TANK")) )
+                  sb.Append("=(");
+                  sb.Append(mi.Name);
+                  sb.Append(")");
+                  if( (true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("SPG")) )
                   {
+                     sb.Append("a");
                      myGridRows[i] = new GridRow(mi);
                      int count = mi.TerritoryCurrent.Name.Length;
                      if ( 3 != count )

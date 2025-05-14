@@ -1573,7 +1573,7 @@ namespace Pattons_Best
                {
                   myGridRows[i].myToHitResultYourTank = "Miss";
                   myGridRows[i].myDieRollHitLocationYourTank = NO_FIRE_YOUR_TANK;
-                  myGridRows[i].myToKillNumberYourTank = NO_FIRE_YOUR_TANK;
+                  myGridRows[i].myDieRollToKillYourTank = NO_FIRE_YOUR_TANK;
                }
                //---------------------------------
                myState = E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK_SHOW;
@@ -1637,7 +1637,8 @@ namespace Pattons_Best
                myState = E0475Enum.ENEMY_ACTION_TO_KILL_YOUR_TANK_SHOW;
                for (int j = 0; j < myMaxRowCount; ++j)
                {
-                   if ((Utilities.NO_RESULT == myGridRows[j].myDieRollHitLocationYourTank) || (Utilities.NO_RESULT == myGridRows[j].myDieRollToKillYourTank) )
+                  Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): i=" + i.ToString() + " j=" + j.ToString() + " mi=" + myGridRows[j].myMapItem.Name + " dr2" + myGridRows[j].myDieRollToKillYourTank.ToString());
+                  if (Utilities.NO_RESULT == myGridRows[j].myDieRollToKillYourTank )
                   {
                      Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): j=" + j.ToString() + " myState=E0475Enum.ENEMY_ACTION_TO_KILL_YOUR_TANK");
                      myState = E0475Enum.ENEMY_ACTION_TO_KILL_YOUR_TANK;

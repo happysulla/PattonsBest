@@ -2164,6 +2164,84 @@ namespace Pattons_Best
          return toKillNum;
       }
       //-------------------------------------------
+      public static int GetSpottingModifier(IGameInstance gi, IMapItem mi, ICrewMember cm, char sector, char range)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetSpottingModifier(): lastReport=null");
+            return -1000;
+         }
+         int spottingModifer = 0;
+         if (true == cm.IsButtonedUp)
+            spottingModifer += 3;
+         if( true == gi.Sherman.IsMoving )
+            spottingModifer += 1;
+         if( true == mi.IsWoods )
+            spottingModifer += 1;
+         if (true == mi.IsBuilding)
+            spottingModifer += 1;
+         if (true == mi.IsFortification)
+            spottingModifer += 1;
+         if (true == mi.IsHullDown)
+            spottingModifer += 1;
+         if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
+            spottingModifer += 1;
+         int numSmokeMarkers = Utilities.GetSmokeCount(gi, sector, range);
+         if (numSmokeMarkers < 0)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetSpottingModifier(): GetSmokeCount() returned error");
+            return -1000;
+         }
+         spottingModifer += numSmokeMarkers;
+         //--------------------------------------------------------------
+         string enemyUnit = mi.GetEnemyUnit();
+         if ("ERROR" == enemyUnit)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetSpottingModifier(): unknown enemyUnit=" + mi.Name);
+            return -1000;
+         }
+         //----------------------------------------------------
+         switch (enemyUnit)
+         {
+            case "ATG":
+            case "Pak38":
+            case "Pak40":
+            case "Pak43":
+            case "PzIV":
+            case "MARDERII":
+            case "MARDERIII":
+               break;
+            case "SPG":
+            case "STuGIIIg":
+            case "JdgPzIV":
+            case "JdgPz38t":
+               spottingModifer += 1;
+               break;
+            case "TANK":
+            case "PzVIe":
+            case "PzV":
+               spottingModifer -= 1;
+               break;
+            case "PzVIb":
+               spottingModifer -= 2;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetSpottingModifier(): Reached Default enemyUnit=" + enemyUnit);
+               return -1000;
+         }
+         //----------------------------------------------------
+         if( 'M' == range )
+            spottingModifer -= 1;
+         if ('C' == range)
+            spottingModifer -= 2;
+         if ( true == mi.IsMoving )
+            spottingModifer -= 3;
+         if (true == mi.IsSpotted)
+            spottingModifer -= 3;
+         return spottingModifer;
+      }
+      //-------------------------------------------
       private void CreateCombatCalender()
       {
          theCombatCalendarEntries.Add(new CombatCalendarEntry("07/27/44", EnumScenario.Advance, 3, EnumResistance.Light, "Corba Breakout"));
