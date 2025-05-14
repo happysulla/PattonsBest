@@ -2241,6 +2241,43 @@ namespace Pattons_Best
             spottingModifer -= 3;
          return spottingModifer;
       }
+      public static string GetSpottingResult(IGameInstance gi, IMapItem mi, ICrewMember cm, char sector, char range, int dieRoll)
+      {
+         //----------------------------------------------------
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetSpottingResult(): lastReport=null");
+            return "ERROR";
+         }
+         if ( ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling"))) && ('C' != range) )
+            return "Unspotted";
+         //----------------------------------------------------
+         if ( 1 == dieRoll ) // an unmodified roll of 1 always spots and ids it
+         {
+            mi.IsSpotted = true;
+            mi.IsIdentified = true;
+            return "Identified";
+         }
+         if ( (9 == dieRoll) && (10 == dieRoll) )  // an unmodified roll of 9-10 means target is hidden
+         {
+            mi.IsSpotted = false;
+            mi.IsIdentified = false;
+            mi.IsHidden = false;
+            return "Hidden";
+         }
+         //-------------------------------
+         int modifier = GetSpottingModifier(gi, mi, cm, sector, range);
+         if( modifier < -100 )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetSpottingResult(): GetSpottingModifier() returned error");
+            return "ERROR";
+         }
+         dieRoll += modifier;
+         //-------------------------------
+
+         return "Unspotted";
+      }
       //-------------------------------------------
       private void CreateCombatCalender()
       {

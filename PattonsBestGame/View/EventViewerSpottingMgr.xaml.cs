@@ -361,7 +361,7 @@ namespace Pattons_Best
                ImageBehavior.SetAnimatedSource(img, bmi);
                myGrid.Children.Add(img);
                Grid.SetRow(img, rowNum);
-               Grid.SetColumn(img, 2);
+               Grid.SetColumn(img, 3);
             }
          }
          return true;
@@ -433,14 +433,25 @@ namespace Pattons_Best
       public void ShowDieResults(int dieRoll)
       {
          Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "ShowDieResults(): +++++++++++++++++myState=" + myState.ToString() + " dr=" + dieRoll.ToString() );
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance=null");
+            return;
+         }
+         if (null == mySelectedCrewman)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): mySelectedCrewman=null");
+            return;
+         }
          int i = myRollResultRowNum - STARTING_ASSIGNED_ROW;
          if (i < 0)
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowCombatResults(): 0 > i=" + i.ToString());
             return;
          }
-         myGridRows[i].myDieRoll = dieRoll + myGridRows[i].myModifier; 
-         
+         IMapItem mi = myGridRows[i].myMapItem;
+         myGridRows[i].myDieRoll = dieRoll + myGridRows[i].myModifier;
+         myGridRows[i].myResult = TableMgr.GetSpottingResult(myGameInstance, mi, mySelectedCrewman, myGridRows[i].mySector, myGridRows[i].myRange, dieRoll);
          //------------------------------------
          myState = E0472Enum.SELECT_CREWMAN;
          for (int j = 0; j < myMaxRowCount; ++j)
@@ -600,6 +611,12 @@ namespace Pattons_Best
                      myGridRows[i].myRange = mi.TerritoryCurrent.Name[--count];
                      myGridRows[i].mySector = mi.TerritoryCurrent.Name[--count];
                      myGridRows[i].mySectorRangeDisplay = GetSectorRangeDisplay(i);
+                     myGridRows[i].myModifier = TableMgr.GetSpottingModifier(myGameInstance, mi, mySelectedCrewman, myGridRows[i].mySector, myGridRows[i].myRange);
+                     if( myGridRows[i].myModifier < -100 )
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "Button_Click(): invalid mod=" + myGridRows[i].myModifier);
+                        return;
+                     }
                      i++;
                   }
                }
