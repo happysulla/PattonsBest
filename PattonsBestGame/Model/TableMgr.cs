@@ -2172,9 +2172,16 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "GetSpottingModifier(): lastReport=null");
             return -1000;
          }
+         //-------------------------------------------------------
+         TankCard card = new TankCard(lastReport.TankCardNum);
          int spottingModifer = 0;
          if (true == cm.IsButtonedUp)
-            spottingModifer += 3;
+         {
+            if( ("Commander" == cm.Role ) && (true == card.myIsVisionCupola) )
+               spottingModifer += 2;
+            else
+               spottingModifer += 3;
+         }
          if( true == gi.Sherman.IsMoving )
             spottingModifer += 1;
          if( true == mi.IsWoods )
@@ -2230,13 +2237,19 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "GetSpottingModifier(): Reached Default enemyUnit=" + enemyUnit);
                return -1000;
          }
+
          //----------------------------------------------------
-         if( 'M' == range )
+         if ( 'M' == range )
             spottingModifer -= 1;
          if ('C' == range)
             spottingModifer -= 2;
+         //----------------------------------------------------
+         if (true == mi.IsFired)
+            spottingModifer -= 2;
+         //----------------------------------------------------
          if ( true == mi.IsMoving )
             spottingModifer -= 3;
+         //----------------------------------------------------
          if (true == mi.IsSpotted)
             spottingModifer -= 3;
          return spottingModifer;
@@ -2275,7 +2288,17 @@ namespace Pattons_Best
          }
          dieRoll += modifier;
          //-------------------------------
-
+         if( dieRoll <= cm.Rating )
+         {
+            mi.IsSpotted = true;
+            int halfRating = (int)Math.Ceiling(cm.Rating * 0.5);
+            if ( dieRoll <= halfRating )
+            {
+               mi.IsIdentified = true;
+               return "Identified";
+            }
+            return "Spotted";
+         }
          return "Unspotted";
       }
       //-------------------------------------------

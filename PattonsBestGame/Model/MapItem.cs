@@ -28,8 +28,9 @@ namespace Pattons_Best
       public BloodSpot(int range, Random r)
       {
          mySize = r.Next(8) + 5;
-         myLeft = r.Next(range);
-         myTop = r.Next(range);
+         int halfSize = mySize / 2;
+         myLeft = r.Next(halfSize, range) - halfSize;
+         myTop  = r.Next(halfSize, range) - halfSize;
       }
       public BloodSpot(int size, double left, double top)
       {
@@ -51,7 +52,7 @@ namespace Pattons_Best
       [NonSerialized] private static BitmapImage? theBuild = theMapImages.GetBitmapImage("OBuild");
       [NonSerialized] private static BitmapImage? theSherman75Turret = theMapImages.GetBitmapImage("c16TurretSherman75");
       [NonSerialized] private static BitmapImage? thePzVIbTurret = theMapImages.GetBitmapImage("c82PzVIbTurret");
-      private const double PERCENT_MAPITEM_COVERED = 30.0;
+      private const double PERCENT_MAPITEM_COVERED = 35.0;
       //--------------------------------------------------
       public string Name { get; set; } = string.Empty;
       public string TopImageName { get; set; } = string.Empty;
@@ -111,6 +112,7 @@ namespace Pattons_Best
       public bool IsHullDown { get; set; } = false;
       public bool IsTurret { get; set; } = false;
       public bool IsKilled { get; set; } = false;
+      public bool IsFired { get; set; } = false;
       //--------------------------------------------------
       public bool IsVehicle { get; set; } = false;
       public bool IsWoods { get; set; } = false;

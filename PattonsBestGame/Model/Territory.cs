@@ -106,10 +106,21 @@ namespace Pattons_Best
       public static List<String>? GetSpottedTerritories(IGameInstance gi, ICrewMember cm)
       {
          List<string> spottedTerritories = new List<string>();
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetSpottingResult(): lastReport=null");
+            return null;
+         }
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         //---------------------------------------------------
+         bool isCloseRangeOnly = false;
+         if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
+            isCloseRangeOnly = true;
          switch (cm.Role)
          {
             case "Commander":
-               if (true == cm.IsButtonedUp) // any one sector
+               if ( (true == cm.IsButtonedUp) && (false == card.myIsVisionCupola) ) // any one sector
                {
                   foreach (IStack stack in gi.BattleStacks)
                   {
@@ -120,13 +131,17 @@ namespace Pattons_Best
                            string tName = mi.TerritoryCurrent.Name;
                            if (5 != tName.Length)
                            {
-                              Logger.Log(LogEnum.LE_ERROR, "Button_Click(): tName != 4 for " + mi.TerritoryCurrent.Name);
+                              Logger.Log(LogEnum.LE_ERROR, "GetSpottedTerritories(): tName != 4 for " + mi.TerritoryCurrent.Name);
                               return null;
                            }
                            char sector = tName[tName.Length - 1];
                            spottedTerritories.Add("B" + sector + "C");
-                           spottedTerritories.Add("B" + sector + "M");
-                           spottedTerritories.Add("B" + sector + "L");
+                           if( false == isCloseRangeOnly)
+                           {
+                              spottedTerritories.Add("B" + sector + "M");
+                              spottedTerritories.Add("B" + sector + "L");
+                           }
+
                         }
                      }
                   }
@@ -134,60 +149,81 @@ namespace Pattons_Best
                else // all sectors
                {
                   spottedTerritories.Add("B1C");
-                  spottedTerritories.Add("B1M");
-                  spottedTerritories.Add("B1L");
                   spottedTerritories.Add("B2C");
-                  spottedTerritories.Add("B2M");
-                  spottedTerritories.Add("B2L");
                   spottedTerritories.Add("B3C");
-                  spottedTerritories.Add("B3M");
-                  spottedTerritories.Add("B3L");
                   spottedTerritories.Add("B4C");
-                  spottedTerritories.Add("B4M");
-                  spottedTerritories.Add("B4L");
                   spottedTerritories.Add("B6C");
-                  spottedTerritories.Add("B6M");
-                  spottedTerritories.Add("B6L");
                   spottedTerritories.Add("B9C");
-                  spottedTerritories.Add("B9M");
-                  spottedTerritories.Add("B9L");
+                  if (false == isCloseRangeOnly)
+                  {
+                     spottedTerritories.Add("B1M");
+                     spottedTerritories.Add("B2M");
+                     spottedTerritories.Add("B3M");
+                     spottedTerritories.Add("B4M");
+                     spottedTerritories.Add("B6M");
+                     spottedTerritories.Add("B9M");
+                     spottedTerritories.Add("B1L");
+                     spottedTerritories.Add("B2L");
+                     spottedTerritories.Add("B3L");
+                     spottedTerritories.Add("B4L");
+                     spottedTerritories.Add("B6L");
+                     spottedTerritories.Add("B9L");
+                  }
                }
                break;
             case "Gunner":
-               switch (gi.Sherman.RotationBase)
+               switch (gi.Sherman.Count)
                {
                   case 0:
                      spottedTerritories.Add("B6C");
-                     spottedTerritories.Add("B6M");
-                     spottedTerritories.Add("B6L");
+                     if (false == isCloseRangeOnly)
+                     {
+                        spottedTerritories.Add("B6M");
+                        spottedTerritories.Add("B6L");
+                     }
                      break;
-                  case 60:
+                  case 1:
                      spottedTerritories.Add("B9C");
-                     spottedTerritories.Add("B9M");
-                     spottedTerritories.Add("B9L");
+                     if (false == isCloseRangeOnly)
+                     {
+                        spottedTerritories.Add("B9M");
+                        spottedTerritories.Add("B9L");
+                     }
                      break;
-                  case 120:
+                  case 2:
                      spottedTerritories.Add("B1C");
-                     spottedTerritories.Add("B1M");
-                     spottedTerritories.Add("B1L");
+                     if (false == isCloseRangeOnly)
+                     {
+                        spottedTerritories.Add("B1M");
+                        spottedTerritories.Add("B1L");
+                     }
                      break;
-                  case 180:
+                  case 3:
                      spottedTerritories.Add("B2C");
-                     spottedTerritories.Add("B2M");
-                     spottedTerritories.Add("B2L");
+                     if (false == isCloseRangeOnly)
+                     {
+                        spottedTerritories.Add("B2M");
+                        spottedTerritories.Add("B2L");
+                     }
                      break;
-                  case 240:
+                  case 4:
                      spottedTerritories.Add("B3C");
-                     spottedTerritories.Add("B3M");
-                     spottedTerritories.Add("B3L");
+                     if (false == isCloseRangeOnly)
+                     {
+                        spottedTerritories.Add("B3M");
+                        spottedTerritories.Add("B3L");
+                     }
                      break;
-                  case 300:
+                  case 5:
                      spottedTerritories.Add("B4C");
-                     spottedTerritories.Add("B4M");
-                     spottedTerritories.Add("B4L");
+                     if (false == isCloseRangeOnly)
+                     {
+                        spottedTerritories.Add("B4M");
+                        spottedTerritories.Add("B4L");
+                     }
                      break;
                   default:
-                     Logger.Log(LogEnum.LE_ERROR, "Button_Click(): 1-reached default for RotationBase=" + gi.Sherman.RotationBase.ToString());
+                     Logger.Log(LogEnum.LE_ERROR, "GetSpottedTerritories(): 1-reached default for RotationBase=" + gi.Sherman.RotationBase.ToString());
                      return null;
                }
                break;
@@ -201,12 +237,15 @@ namespace Pattons_Best
                         string tName = mi.TerritoryCurrent.Name;
                         if (5 != tName.Length)
                         {
-                           Logger.Log(LogEnum.LE_ERROR, "Button_Click(): tName != 4 for " + mi.TerritoryCurrent.Name);
+                           Logger.Log(LogEnum.LE_ERROR, "GetSpottedTerritories(): tName != 4 for " + mi.TerritoryCurrent.Name);
                            return null;
                         }
                         char sector = tName[tName.Length - 1];
                         spottedTerritories.Add("B" + sector + "C");
-                        spottedTerritories.Add("B" + sector + "M");
+                        if (false == isCloseRangeOnly)
+                        {
+                        }
+                           spottedTerritories.Add("B" + sector + "M");
                         spottedTerritories.Add("B" + sector + "L");
                      }
                   }
@@ -220,36 +259,54 @@ namespace Pattons_Best
                   {
                      case 0:
                         spottedTerritories.Add("B6C");
-                        spottedTerritories.Add("B6M");
-                        spottedTerritories.Add("B6L");
+                        if (false == isCloseRangeOnly)
+                        {
+                           spottedTerritories.Add("B6M");
+                           spottedTerritories.Add("B6L");
+                        }
                         break;
                      case 60:
                         spottedTerritories.Add("B9C");
-                        spottedTerritories.Add("B9M");
-                        spottedTerritories.Add("B9L");
+                        if (false == isCloseRangeOnly)
+                        {
+                           spottedTerritories.Add("B9M");
+                           spottedTerritories.Add("B9L");
+                        }
                         break;
                      case 120:
                         spottedTerritories.Add("B1C");
-                        spottedTerritories.Add("B1M");
-                        spottedTerritories.Add("B1L");
+                        if (false == isCloseRangeOnly)
+                        {
+                           spottedTerritories.Add("B1M");
+                           spottedTerritories.Add("B1L");
+                        }
                         break;
                      case 180:
                         spottedTerritories.Add("B2C");
-                        spottedTerritories.Add("B2M");
-                        spottedTerritories.Add("B2L");
+                        if (false == isCloseRangeOnly)
+                        {
+                           spottedTerritories.Add("B2M");
+                           spottedTerritories.Add("B2L");
+                        }
                         break;
                      case 240:
                         spottedTerritories.Add("B3C");
-                        spottedTerritories.Add("B3M");
-                        spottedTerritories.Add("B3L");
+                        if (false == isCloseRangeOnly)
+                        {
+                           spottedTerritories.Add("B3M");
+                           spottedTerritories.Add("B3L");
+                        }
                         break;
                      case 300:
                         spottedTerritories.Add("B4C");
-                        spottedTerritories.Add("B4M");
-                        spottedTerritories.Add("B4L");
+                        if (false == isCloseRangeOnly)
+                        {
+                           spottedTerritories.Add("B4M");
+                           spottedTerritories.Add("B4L");
+                        }
                         break;
                      default:
-                        Logger.Log(LogEnum.LE_ERROR, "Button_Click(): 2-reached default for RotationBase=" + gi.Sherman.RotationBase.ToString());
+                        Logger.Log(LogEnum.LE_ERROR, "GetSpottedTerritories(): 2-reached default for RotationBase=" + gi.Sherman.RotationBase.ToString());
                         return null;
                   }
                }
@@ -258,116 +315,159 @@ namespace Pattons_Best
                   switch (gi.Sherman.RotationBase)
                   {
                      case 0:
-                        spottedTerritories.Add("B1M");
-                        spottedTerritories.Add("B1L");
+                        if (false == isCloseRangeOnly)
+                        {
+                           spottedTerritories.Add("B1M");
+                           spottedTerritories.Add("B1L");
+                           spottedTerritories.Add("B3M");
+                           spottedTerritories.Add("B3L");
+                           spottedTerritories.Add("B4M");
+                           spottedTerritories.Add("B4L");
+                           spottedTerritories.Add("B6M");
+                           spottedTerritories.Add("B6L");
+                           spottedTerritories.Add("B9M");
+                           spottedTerritories.Add("B9L");
+                        }
+                        spottedTerritories.Add("B1C");
                         spottedTerritories.Add("B3C");
-                        spottedTerritories.Add("B3M");
-                        spottedTerritories.Add("B3L");
                         spottedTerritories.Add("B4C");
-                        spottedTerritories.Add("B4M");
-                        spottedTerritories.Add("B4L");
                         spottedTerritories.Add("B6C");
-                        spottedTerritories.Add("B6M");
-                        spottedTerritories.Add("B6L");
                         spottedTerritories.Add("B9C");
-                        spottedTerritories.Add("B9M");
-                        spottedTerritories.Add("B9L");
                         break;
                      case 60:
-                        spottedTerritories.Add("B1M");
-                        spottedTerritories.Add("B1L");
+                        if (false == isCloseRangeOnly)
+                        {
+                           spottedTerritories.Add("B1M");
+                           spottedTerritories.Add("B1L");
+                           spottedTerritories.Add("B2M");
+                           spottedTerritories.Add("B2L");
+                           spottedTerritories.Add("B4M");
+                           spottedTerritories.Add("B4L");
+                           spottedTerritories.Add("B6M");
+                           spottedTerritories.Add("B6L");
+                           spottedTerritories.Add("B9M");
+                           spottedTerritories.Add("B9L");
+                        }
+                        spottedTerritories.Add("B1C");
                         spottedTerritories.Add("B2C");
-                        spottedTerritories.Add("B2M");
-                        spottedTerritories.Add("B2L");
                         spottedTerritories.Add("B4C");
-                        spottedTerritories.Add("B4M");
-                        spottedTerritories.Add("B4L");
                         spottedTerritories.Add("B6C");
-                        spottedTerritories.Add("B6M");
-                        spottedTerritories.Add("B6L");
                         spottedTerritories.Add("B9C");
-                        spottedTerritories.Add("B9M");
-                        spottedTerritories.Add("B9L");
                         break;
                      case 120:
+                        if (false == isCloseRangeOnly)
+                        {
+                           spottedTerritories.Add("B1M");
+                           spottedTerritories.Add("B1L");
+                           spottedTerritories.Add("B2M");
+                           spottedTerritories.Add("B2L");
+                           spottedTerritories.Add("B3M");
+                           spottedTerritories.Add("B3L");
+                           spottedTerritories.Add("B6M");
+                           spottedTerritories.Add("B6L");
+                           spottedTerritories.Add("B9M");
+                           spottedTerritories.Add("B9L");
+                        }
                         spottedTerritories.Add("B1C");
-                        spottedTerritories.Add("B1M");
-                        spottedTerritories.Add("B1L");
                         spottedTerritories.Add("B2C");
-                        spottedTerritories.Add("B2M");
-                        spottedTerritories.Add("B2L");
                         spottedTerritories.Add("B3C");
-                        spottedTerritories.Add("B3M");
-                        spottedTerritories.Add("B3L");
                         spottedTerritories.Add("B6C");
-                        spottedTerritories.Add("B6M");
-                        spottedTerritories.Add("B6L");
                         spottedTerritories.Add("B9C");
-                        spottedTerritories.Add("B9M");
-                        spottedTerritories.Add("B9L");
                         break;
                      case 180:
+                        if (false == isCloseRangeOnly)
+                        {
+                           spottedTerritories.Add("B1M");
+                           spottedTerritories.Add("B1L");
+                           spottedTerritories.Add("B2M");
+                           spottedTerritories.Add("B2L");
+                           spottedTerritories.Add("B3M");
+                           spottedTerritories.Add("B3L");
+                           spottedTerritories.Add("B4M");
+                           spottedTerritories.Add("B4L");
+                           spottedTerritories.Add("B9M");
+                           spottedTerritories.Add("B9L");
+                        }
                         spottedTerritories.Add("B1C");
-                        spottedTerritories.Add("B1M");
-                        spottedTerritories.Add("B1L");
                         spottedTerritories.Add("B2C");
-                        spottedTerritories.Add("B2M");
-                        spottedTerritories.Add("B2L");
                         spottedTerritories.Add("B3C");
-                        spottedTerritories.Add("B3M");
-                        spottedTerritories.Add("B3L");
                         spottedTerritories.Add("B4C");
-                        spottedTerritories.Add("B4M");
-                        spottedTerritories.Add("B4L");
                         spottedTerritories.Add("B9C");
-                        spottedTerritories.Add("B9M");
-                        spottedTerritories.Add("B9L");
                         break;
                      case 240:
+                        if (false == isCloseRangeOnly)
+                        {
+                           spottedTerritories.Add("B1M");
+                           spottedTerritories.Add("B1L");
+                           spottedTerritories.Add("B2M");
+                           spottedTerritories.Add("B2L");
+                           spottedTerritories.Add("B3M");
+                           spottedTerritories.Add("B3L");
+                           spottedTerritories.Add("B4M");
+                           spottedTerritories.Add("B4L");
+                           spottedTerritories.Add("B6M");
+                           spottedTerritories.Add("B6L");
+                        }
                         spottedTerritories.Add("B1C");
-                        spottedTerritories.Add("B1M");
-                        spottedTerritories.Add("B1L");
                         spottedTerritories.Add("B2C");
-                        spottedTerritories.Add("B2M");
-                        spottedTerritories.Add("B2L");
                         spottedTerritories.Add("B3C");
-                        spottedTerritories.Add("B3M");
-                        spottedTerritories.Add("B3L");
                         spottedTerritories.Add("B4C");
-                        spottedTerritories.Add("B4M");
-                        spottedTerritories.Add("B4L");
                         spottedTerritories.Add("B6C");
-                        spottedTerritories.Add("B6M");
-                        spottedTerritories.Add("B6L");
                         break;
                      case 300:
+                        if (false == isCloseRangeOnly)
+                        {
+                           spottedTerritories.Add("B2M");
+                           spottedTerritories.Add("B2L");
+                           spottedTerritories.Add("B3M");
+                           spottedTerritories.Add("B3L");
+                           spottedTerritories.Add("B4M");
+                           spottedTerritories.Add("B4L");
+                           spottedTerritories.Add("B6M");
+                           spottedTerritories.Add("B6L");
+                           spottedTerritories.Add("B9M");
+                           spottedTerritories.Add("B9L");
+                        }
                         spottedTerritories.Add("B2C");
-                        spottedTerritories.Add("B2M");
-                        spottedTerritories.Add("B2L");
                         spottedTerritories.Add("B3C");
-                        spottedTerritories.Add("B3M");
-                        spottedTerritories.Add("B3L");
                         spottedTerritories.Add("B4C");
-                        spottedTerritories.Add("B4M");
-                        spottedTerritories.Add("B4L");
                         spottedTerritories.Add("B6C");
-                        spottedTerritories.Add("B6M");
-                        spottedTerritories.Add("B6L");
                         spottedTerritories.Add("B9C");
-                        spottedTerritories.Add("B9M");
-                        spottedTerritories.Add("B9L");
                         break;
                      default:
-                        Logger.Log(LogEnum.LE_ERROR, "Button_Click(): 3-reached default for RotationBase=" + gi.Sherman.RotationBase.ToString());
+                        Logger.Log(LogEnum.LE_ERROR, "GetSpottedTerritories(): 3-reached default for RotationBase=" + gi.Sherman.RotationBase.ToString());
                         return null;
                   }
                }
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "Button_Click(): reached default for cm=" + cm.Name);
+               Logger.Log(LogEnum.LE_ERROR, "GetSpottedTerritories(): reached default for cm=" + cm.Name);
                return null;
          }
-         return spottedTerritories;
+         //------------------------------------
+         List<string> returnedTerritories = new List<string>();
+         foreach( string tName in spottedTerritories )
+         {
+            int count = tName.Length;
+            if (3 != count)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetSpottedTerritories(): length not 3 for tName=" + tName);
+               return null;
+            }
+            IStack? stack = gi.BattleStacks.Find(tName);
+            if (null != stack)
+            {
+               foreach (IMapItem mi in stack.MapItems)
+               {
+                  if ((true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("SPG")))
+                  {
+                     if (false == mi.IsIdentified)
+                        returnedTerritories.Add(tName);
+                  }
+               }
+            }
+         }
+         return returnedTerritories;
       }
       //---------------------------------------------------------------
       public Territory()

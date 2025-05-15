@@ -169,7 +169,14 @@ namespace Pattons_Best
                return false;
             }
             cm.Name = cm.Role;
-            myAssignables.Add(cm);
+            List<string>? spottedTerritories = Territory.GetSpottedTerritories(myGameInstance, cm);
+            if (null == spottedTerritories)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "PerformSpotting(): GetSpottedTerritories() returned null for cm=" + cm.Role);
+               return false;
+            }
+            if( 0 < spottedTerritories.Count)
+               myAssignables.Add(cm);
          }
          //--------------------------------------------------
          if (false == UpdateGrid())
@@ -210,16 +217,6 @@ namespace Pattons_Best
       {
          if (E0472Enum.END == myState)
          {
-            for (int i = 0; i < myMaxRowCount; i++)
-            {
-               ICrewMember? crewMember = myGridRows[i].myMapItem as ICrewMember;
-               if( null == crewMember )
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): crewMember=null");
-                  return false;
-               }
-               crewMember.Rating = (int) Math.Ceiling((double)(myGridRows[i].myDieRoll)/2.0);
-            }
             if (null == myCallback)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myCallback=null");
@@ -239,10 +236,13 @@ namespace Pattons_Best
          switch (myState)
          {
             case E0472Enum.SELECT_CREWMAN:
-               myTextBlockInstructions.Inlines.Add(new Run("Select a crewman to perform spotting by clicking it."));
+               if( 0 == myAssignables.Count)
+                  myTextBlockInstructions.Inlines.Add(new Run("Click image to continue."));
+               else
+                  myTextBlockInstructions.Inlines.Add(new Run("Select a crewman to perform spotting by clicking it."));
                break;
             case E0472Enum.SELECT_CREWMAN_SHOW:
-               myTextBlockInstructions.Inlines.Add(new Run("Click image to continue."));
+               myTextBlockInstructions.Inlines.Add(new Run("Roll die to determine if enemy unit is spotted or hidden."));
                break;
             case E0472Enum.ROLL_SPOTTING:
                myTextBlockInstructions.Inlines.Add(new Run("Roll for each enemy unit that can be spotted."));
@@ -263,17 +263,25 @@ namespace Pattons_Best
          switch (myState)
          {
             case E0472Enum.SELECT_CREWMAN:
-               foreach (IMapItem mi in myAssignables)
+               if( 0 < myAssignables.Count )
                {
-                  ICrewMember?cm = mi as ICrewMember; 
-                  if( null == cm )
+                  foreach (IMapItem mi in myAssignables)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): cast of mi to cm failed");
-                     return false;
+                     ICrewMember? cm = mi as ICrewMember;
+                     if (null == cm)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): cast of mi to cm failed");
+                        return false;
+                     }
+                     Button b = CreateButton(cm);
+                     b.Click += Button_Click;
+                     myStackPanelAssignable.Children.Add(b);
                   }
-                  Button b = CreateButton(cm);
-                  b.Click += Button_Click;
-                  myStackPanelAssignable.Children.Add(b);
+               }
+               else
+               {
+                  Image img1 = new Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  myStackPanelAssignable.Children.Add(img1);
                }
                break;
             case E0472Enum.SELECT_CREWMAN_SHOW:
@@ -293,10 +301,9 @@ namespace Pattons_Best
                   myStackPanelAssignable.Children.Add(b);
                }
                break;
-
             case E0472Enum.ROLL_SPOTTING_SHOW:
-               Image img1 = new Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
-               myStackPanelAssignable.Children.Add(img1);
+               Image img2 = new Image { Name = "ContinueNext", Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+               myStackPanelAssignable.Children.Add(img2);
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): reached default s=" + myState.ToString());
@@ -453,7 +460,7 @@ namespace Pattons_Best
          myGridRows[i].myDieRoll = dieRoll + myGridRows[i].myModifier;
          myGridRows[i].myResult = TableMgr.GetSpottingResult(myGameInstance, mi, mySelectedCrewman, myGridRows[i].mySector, myGridRows[i].myRange, dieRoll);
          //------------------------------------
-         myState = E0472Enum.SELECT_CREWMAN;
+         myState = E0472Enum.ROLL_SPOTTING_SHOW;
          for (int j = 0; j < myMaxRowCount; ++j)
          {
             if (Utilities.NO_RESULT == myGridRows[j].myDieRoll)
@@ -519,6 +526,14 @@ namespace Pattons_Best
                      {
                         if ("Continue" == img.Name)
                            myState = E0472Enum.END;
+                        if ("ContinueNext" == img.Name)
+                        {
+                           mySelectedCrewman = null;
+                           if (0 < myAssignables.Count)
+                              myState = E0472Enum.SELECT_CREWMAN;
+                           else
+                              myState = E0472Enum.END;
+                        }
                         if ("DieRoll" == img.Name)
                         {
                            if (false == myIsRollInProgress)
@@ -589,10 +604,16 @@ namespace Pattons_Best
          foreach ( string tName in spottedTerritories )
          {
             sb.Append(tName);
+            int count = tName.Length;
+            if (3 != count)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Button_Click(): length not 3 for tName=" + tName);
+               return;
+            }
             IStack? stack = myGameInstance.BattleStacks.Find(tName);
             if( null != stack )
             {
-               foreach(IMapItem mi in stack.MapItems )
+               foreach (IMapItem mi in stack.MapItems )
                {
                   sb.Append("=(");
                   sb.Append(mi.Name);
@@ -601,15 +622,8 @@ namespace Pattons_Best
                   {
                      sb.Append("a");
                      myGridRows[i] = new GridRow(mi);
-                     int count = mi.TerritoryCurrent.Name.Length;
-                     if ( 3 != count )
-                     {
-                        Logger.Log(LogEnum.LE_ERROR, "Button_Click(): length not 3 for tName=" + tName);
-                        return;
-                     }
-                     myGridRows[i] = new GridRow(mi);
-                     myGridRows[i].myRange = mi.TerritoryCurrent.Name[--count];
-                     myGridRows[i].mySector = mi.TerritoryCurrent.Name[--count];
+                     myGridRows[i].myRange = tName[--count];
+                     myGridRows[i].mySector = tName[--count];
                      myGridRows[i].mySectorRangeDisplay = GetSectorRangeDisplay(i);
                      myGridRows[i].myModifier = TableMgr.GetSpottingModifier(myGameInstance, mi, mySelectedCrewman, myGridRows[i].mySector, myGridRows[i].myRange);
                      if( myGridRows[i].myModifier < -100 )

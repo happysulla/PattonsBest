@@ -230,6 +230,7 @@ namespace Pattons_Best
             {
                if (true == mi.IsEnemyUnit())
                {
+                  mi.IsFired = false;
                   mi.IsMoved = false;
                   int count = mi.TerritoryCurrent.Name.Length;
                   if (count < 3)
@@ -1390,6 +1391,7 @@ namespace Pattons_Best
                //----------------------------------------
                if (true == enemyAction.Contains("Infantry"))
                {
+                  mi.IsFired = true;
                   myGridRows[i].myToKillNumber = (int) TableMgr.GetToKillNumberInfantry(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
                   if(myGridRows[i].myToKillNumber < -100 )
                   {
@@ -1401,7 +1403,8 @@ namespace Pattons_Best
                }
                else if (true == enemyAction.Contains("Tank"))
                {
-                  if( ( (true == enemyAction.Contains("Lead") ) && (true == myGameInstance.IsLeadTank)) || (true == enemyAction.Contains("Your") ) )
+                  mi.IsFired = true;
+                  if ( ( (true == enemyAction.Contains("Lead") ) && (true == myGameInstance.IsLeadTank)) || (true == enemyAction.Contains("Your") ) )
                   {
                      Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Firing at Your Tank myState=" + myState.ToString() + " enemyAction=" + enemyAction);
                      myGridRows[i].myModifierToHitYourTank = (int)TableMgr.GetToHitNumberModifierForYourTank(myGameInstance, mi, myGridRows[i].myRange);
@@ -1455,6 +1458,7 @@ namespace Pattons_Best
                //----------------------------------------
                if (false == enemyAction.Contains("Collateral"))
                {
+                  mi.IsFired = true;
                   myGridRows[i].myDieRollCollateral = NO_COLLATERAL;
                }
                //----------------------------------------
