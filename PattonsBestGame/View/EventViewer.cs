@@ -1576,7 +1576,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowSpottingResults(): myGameEngine=null");
             return false;
          }
-         GameAction outAction = GameAction.BattleRoundSequenceOrders;
+         GameAction outAction = GameAction.BattleRoundSequenceSpottingEnd;
          //--------------------------------------------------
          StringBuilder sb11 = new StringBuilder("     ######ShowSpottingResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());

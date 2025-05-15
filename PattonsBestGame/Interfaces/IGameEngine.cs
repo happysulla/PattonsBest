@@ -204,6 +204,7 @@ namespace Pattons_Best
 
       BattleRoundSequenceStart,
       BattleRoundSequenceSpotting,
+      BattleRoundSequenceSpottingEnd,
       BattleRoundSequenceOrders,
 
       EveningDebriefingStart,

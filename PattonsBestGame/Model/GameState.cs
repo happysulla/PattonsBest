@@ -985,6 +985,15 @@ namespace Pattons_Best
             return false;
          }
          //------------------------------------
+         ITerritory? t11 = Territories.theTerritories.Find("GunLoadHe");
+         if (null == t11)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t11=null");
+            return false;
+         }
+         IMapItem gunLoad = new MapItem("GunLoad", 1.0, "c17GunLoad", t11);
+         gi.GunLoads.Add(gunLoad);
+         //------------------------------------
          gi.Sherman.IsTurret = true;
          gi.Sherman.TerritoryCurrent = gi.Home;
          gi.Sherman.Location = gi.Home.CenterPoint - (gi.Sherman.Zoom*Utilities.theMapItemOffset);
@@ -1077,12 +1086,13 @@ namespace Pattons_Best
       }
       private bool PerformAutoSetupSkipBattleSetup(IGameInstance gi)
       {
-         gi.IsLeadTank = true; //<cgs> TEST
+
          if (false == PerformAutoSetupSkipMovement(gi))
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): PerformAutoSetupSkipMovement() returned false");
             return false;
          }
+         gi.IsLeadTank = true; //<cgs> TEST
          //--------------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -2349,7 +2359,6 @@ namespace Pattons_Best
                else
                {
                   //------------------------------------------
-                  bool isPossibleSpot = false;
                   string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Gunner" };
                   foreach (string crewmember in crewmembers)
                   {
@@ -2367,39 +2376,24 @@ namespace Pattons_Best
                            returnStatus = "GetSpottedTerritories() returned null";
                            Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
                         }
+                        else if(0 < spottedTerritories.Count)
+                        {
+                           action = GameAction.BattleRoundSequenceSpotting;
+                        }
                         else
                         {
-                           foreach (string tName in spottedTerritories)
-                           {
-                              IStack? stack = gi.BattleStacks.Find(tName);
-                              if (null != stack)
-                              {
-                                 foreach (IMapItem mi in stack.MapItems)
-                                 {
-                                    if ( (true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("SPG")) )
-                                    {
-                                       isPossibleSpot = true;
-                                       break;
-                                    }
-                                 }
-                              }
-                              if (true == isPossibleSpot)
-                                 break;
-                           }
+                           action = GameAction.BattleRoundSequenceOrders;
+                           gi.EventDisplayed = gi.EventActive = "e038";
+                           gi.DieRollAction = GameAction.DieRollActionNone;
                         }
                      }
                   }
-                  if (true == isPossibleSpot)
-                  {
-                     action = GameAction.BattleRoundSequenceSpotting;
-                  }
-                  else
-                  {
-                     action = GameAction.BattleRoundSequenceOrders;
-                     gi.EventDisplayed = gi.EventActive = "e038";
-                     gi.DieRollAction = GameAction.DieRollActionNone;
-                  }
                }
+               break;
+            case GameAction.BattleRoundSequenceSpottingEnd:
+               action = GameAction.BattleRoundSequenceOrders;
+               gi.EventDisplayed = gi.EventActive = "e038";
+               gi.DieRollAction = GameAction.DieRollActionNone;
                break;
             case GameAction.EndGameClose:
                gi.GamePhase = GamePhase.EndGame;

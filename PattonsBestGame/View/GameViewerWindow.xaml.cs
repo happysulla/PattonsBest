@@ -302,7 +302,11 @@ namespace Pattons_Best
             case GameAction.MorningBriefingCalendarRoll:
             case GameAction.MorningBriefingEnd:
                break;
+            case GameAction.TestingStartMorningBriefing:
+            case GameAction.TestingStartPreparations:
             case GameAction.TestingStartMovement:
+            case GameAction.TestingStartBattle:
+            case GameAction.TestingStartAmbush:
             case GameAction.MorningBriefingAmmoReadyRackLoad:
             case GameAction.PreparationsHatches:
             case GameAction.PreparationsGunLoad:
@@ -568,6 +572,12 @@ namespace Pattons_Best
          //-------------------------------------------------------
          if (GamePhase.UnitTest == gi.GamePhase)
             return true;
+         //-------------------------------------------------------
+         if (false == UpdateCanvasTankMapItems(gi.Hatches))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasTankMapItems(Hatches) returned false");
+            return false;
+         }
          //-------------------------------------------------------
          if (false == UpdateCanvasTankMapItems(gi.ReadyRacks))
          {

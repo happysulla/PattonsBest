@@ -767,10 +767,15 @@ namespace Pattons_Best
                myGrid.Children.Add(label3);
                Grid.SetRow(label3, rowNum);
                Grid.SetColumn(label3, 3);
-               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myEnemyAction };
+               int dieRollPlusModifier = myGridRows[i].myDieRollEnemyAction + myGridRows[i].myModifierEnemyAction;
+               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = dieRollPlusModifier.ToString() };
                myGrid.Children.Add(label4);
                Grid.SetRow(label4, rowNum);
                Grid.SetColumn(label4, 4);
+               Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myEnemyAction };
+               myGrid.Children.Add(label5);
+               Grid.SetRow(label5, rowNum);
+               Grid.SetColumn(label5, 5);
             }
             else
             {
@@ -851,10 +856,10 @@ namespace Pattons_Best
                Grid.SetColumn(img, 3);
             }
             //----------------------------
-            Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myEnemyAction };
-            myGrid.Children.Add(label4);
-            Grid.SetRow(label4, rowNum);
-            Grid.SetColumn(label4, 4);
+            Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myEnemyAction };
+            myGrid.Children.Add(label5);
+            Grid.SetRow(label5, rowNum);
+            Grid.SetColumn(label5, 5);
          }
          return true;
       }
@@ -891,10 +896,10 @@ namespace Pattons_Best
                myGrid.Children.Add(label3);
                Grid.SetRow(label3, rowNum);
                Grid.SetColumn(label3, 3);
-               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myToKillResult };
-               myGrid.Children.Add(label4);
-               Grid.SetRow(label4, rowNum);
-               Grid.SetColumn(label4, 4);
+               Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myToKillResult };
+               myGrid.Children.Add(label5);
+               Grid.SetRow(label5, rowNum);
+               Grid.SetColumn(label5, 5);
             }
             else
             {
@@ -1380,7 +1385,7 @@ namespace Pattons_Best
          {
             case E0475Enum.ENEMY_ACTION_SELECT:
                dieRoll = 81 - myGridRows[i].myModifierEnemyAction; // <cgs> TEST
-               myGridRows[i].myDieRollEnemyAction = dieRoll + myGridRows[i].myModifierEnemyAction;
+               myGridRows[i].myDieRollEnemyAction = dieRoll;
                string enemyAction = TableMgr.SetEnemyActionResult(myGameInstance, mi, dieRoll);
                if ("ERROR" == enemyAction)
                {
@@ -1817,20 +1822,21 @@ namespace Pattons_Best
                            }
                            myTextBlock2.Text = "Vehicle Facing";
                            myTextBlock3.Text = "Terrain";
+                           myTextBlock4.Visibility = Visibility.Hidden;
                         }
                         if ("Fire" == img.Name)
                         {
                            myState = E0475Enum.ENEMY_ACTION_FIRE;
                            myTextBlock2.Text = "To Kill #";
                            myTextBlock3.Text = "Roll";
-                           myTextBlock4.Text = "Result";
+                           myTextBlock5.Text = "Result";
                         }
                         if ("Collateral" == img.Name)
                         {
                            myState = E0475Enum.ENEMY_ACTION_COLLATERAL;
                            myTextBlock2.Visibility = Visibility.Hidden;
                            myTextBlock3.Text = "Roll";
-                           myTextBlock4.Text = "Result";
+                           myTextBlock5.Text = "Result";
                         }
                         if ("YourTank" == img.Name)
                         {
@@ -1838,7 +1844,7 @@ namespace Pattons_Best
                            myTextBlock2.Visibility = Visibility.Visible;
                            myTextBlock2.Text = "To Hit Modifer";
                            myTextBlock3.Text = "To Hit Number";
-                           myTextBlock4.Text = "Results";
+                           myTextBlock5.Text = "Results";
                         }
                         if ("ToKillYourTank" == img.Name)
                         {

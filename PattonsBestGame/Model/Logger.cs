@@ -45,6 +45,7 @@ namespace Pattons_Best
       //-------------
       LE_EVENT_VIEWER_ENEMY_ACTION,
       LE_EVENT_VIEWER_SPOTTING,
+      LE_EVENT_VIEWER_ORDERS,
       LE_END_ENUM
    }
    //----------------------------------------------------------------------------
@@ -109,6 +110,7 @@ namespace Pattons_Best
          //-------------------------------
          SetOn(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION);
          SetOn(LogEnum.LE_EVENT_VIEWER_SPOTTING);
+         SetOn(LogEnum.LE_EVENT_VIEWER_ORDERS);
          return true;
       }
       static public void SetOn(LogEnum logLevel)
