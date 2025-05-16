@@ -311,6 +311,8 @@ namespace Pattons_Best
             case GameAction.PreparationsHatches:
             case GameAction.PreparationsGunLoad:
             case GameAction.PreparationsGunLoadSelect:
+            case GameAction.BattleRoundSequenceOrders:
+            case GameAction.UpdateTankCard:
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                break;
@@ -464,7 +466,7 @@ namespace Pattons_Best
          MapItem.SetButtonContent(b, mi, true); // This sets the image as the button's content
          RotateTransform rotateTransform = new RotateTransform();
          b.RenderTransformOrigin = new Point(0.5, 0.5);
-         rotateTransform.Angle = mi.RotationBase + mi.Rotation;
+         rotateTransform.Angle = mi.RotationBase + mi.RotationHull;
          b.RenderTransform = rotateTransform;
          buttons.Add(b);
          Canvas.SetLeft(b, mi.Location.X);
@@ -481,7 +483,6 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetTerritory(): myGameInstance=null");
             return false;
          }
-         myGameInstance.MoveStacks.Remove(mi);
          //-------------------------------------
          IStacks? stacks = null;
          if( "Tank" == newT.CanvasName )
@@ -500,16 +501,21 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetTerritory(): unknown Parent=" + newT.CanvasName + " or unknown Type=" + newT.Type);
             return false;
          }
+         int delta = (int) (mi.Zoom * Utilities.theMapItemOffset);
+         stacks.Remove(mi);
          IStack? stack = stacks.Find(mi.TerritoryCurrent);
          if (null == stack)
          {
             stack = new Stack(newT, mi);
+            mi.Location.X = newT.CenterPoint.X - delta;
+            mi.Location.Y = newT.CenterPoint.Y - delta;
             stacks.Add(stack);
          }
          else // add to top of stack
          {
             mi.TerritoryCurrent = newT;
-            mi.Location = newT.CenterPoint; 
+            mi.Location.X = newT.CenterPoint.X - delta;
+            mi.Location.Y = newT.CenterPoint.Y - delta;
             stack.MapItems.Add(mi);
          }
          return true;
@@ -650,6 +656,8 @@ namespace Pattons_Best
             Button? b = myTankButtons.Find(mi.Name);
             if (null != b)
             {
+               if (true == mi.Name.Contains("GunLoad"))
+                  Logger.Log(LogEnum.LE_SHOW_MAPITEM_TANK, "UpdateCanvasTankMapItems(): 1-mi=" + mi.Name + " loc=" + mi.Location.ToString() + " t=" + mi.TerritoryCurrent.Name + " tLoc=" + mi.TerritoryCurrent.CenterPoint.ToString());
                b.BeginAnimation(Canvas.LeftProperty, null); // end animation offset
                b.BeginAnimation(Canvas.TopProperty, null);  // end animation offset
                Canvas.SetLeft(b, mi.Location.X);
@@ -659,6 +667,8 @@ namespace Pattons_Best
             {
                Button newButton = CreateButtonMapItem(myTankButtons, mi);
                myCanvasTank.Children.Add(newButton);
+               if (true == mi.Name.Contains("GunLoad"))
+                  Logger.Log(LogEnum.LE_SHOW_MAPITEM_TANK, "UpdateCanvasTankMapItems(): 2-mi=" + mi.Name + " loc=" + mi.Location.ToString() + " t=" + mi.TerritoryCurrent.Name + " tLoc=" + mi.TerritoryCurrent.CenterPoint.ToString());
             }
          }
          return true;
@@ -775,23 +785,96 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankHatches(): EXCEPTION THROWN a=" + action.ToString() + "\n" + e.ToString());
             return false;
          }
-         Button? b = myTankButtons.Find("GunLoad");
-         if (null != b)
-            Canvas.SetZIndex(b, 99999);
          return true;
       }
       private bool UpdateCanvasTankOrders(IGameInstance gi, GameAction action)
       {
-         if( false == UpdateCanvasTankHatches(gi, action))
+         //--------------------------------
+         IAfterActionReport? report = gi.Reports.GetLast();
+         if (null == report)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankOrders(): UpdateCanvasTankHatches() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankOrders(): report=null");
             return false;
          }
-         if (false == UpdateCanvasTankGunLoad(gi, action))
+         TankCard tankCard = new TankCard(report.TankCardNum);
+         //--------------------------------
+         string[] crewmembers = new string[4] { "Driver", "Assistant", "Commander", "Loader" };
+         foreach (string crewmember in crewmembers)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankOrders(): UpdateCanvasTankGunLoad() returned false");
-            return false;
+            if ((crewmember == "Loader") && (false == tankCard.myIsLoaderHatch))
+               continue;
+            ICrewMember? cm = myGameInstance.GetCrewMember(crewmember);
+            if (null == cm)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankOrders(): cm=null for " + crewmember);
+               return false;
+            }
+            if (true == cm.IsButtonedUp)
+            {
+               string tName = crewmember + "Hatch";
+               ITerritory? t = Territories.theTerritories.Find(tName);
+               if (null == t)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankOrders(): cannot find tName=" + tName);
+                  return false;
+               }
+               PointCollection points = new PointCollection();
+               foreach (IMapPoint mp1 in t.Points)
+                  points.Add(new System.Windows.Point(mp1.X, mp1.Y));
+               Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = t.ToString() };
+               myPolygons.Add(aPolygon);
+               myCanvasTank.Children.Add(aPolygon);
+               aPolygon.MouseDown += MouseDownPolygonHatches;
+            }
          }
+         //--------------------------------
+         string[] gunLoads = new string[5] { "He", "Ap", "Wp", "Hbci", "Hvap" };
+         foreach (string gunload in gunLoads)
+         {
+            switch (gunload)
+            {
+               case "He":
+                  if (0 == report.MainGunHE)
+                     continue;
+                  break;
+               case "Ap":
+                  if (0 == report.MainGunAP)
+                     continue;
+                  break;
+               case "Wp":
+                  if (0 == report.MainGunWP)
+                     continue;
+                  break;
+               case "Hbci":
+                  if (0 == report.MainGunHBCI)
+                     continue;
+                  break;
+               case "Hvap":
+                  if (0 == report.MainGunHVAP)
+                     continue;
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankOrders(): reached default gunload=" + gunload);
+                  return false;
+            }
+            string tName = "GunLoad" + gunload;
+            ITerritory? t = Territories.theTerritories.Find(tName);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankOrders(): cannot find tName=" + tName);
+               return false;
+            }
+            PointCollection points = new PointCollection();
+            foreach (IMapPoint mp1 in t.Points)
+               points.Add(new System.Windows.Point(mp1.X, mp1.Y));
+            Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = t.ToString() };
+            myPolygons.Add(aPolygon);
+            myCanvasTank.Children.Add(aPolygon);
+            aPolygon.MouseDown += MouseDownPolygonGunLoad;
+         }
+         Button? b = myTankButtons.Find("GunLoad");
+         if (null != b)
+            Canvas.SetZIndex(b, 99999);
          return true;
       }
       //---------------------------------------
@@ -1043,7 +1126,7 @@ namespace Pattons_Best
                   ++counterCount;
                   RotateTransform rotateTransform = new RotateTransform();
                   b.RenderTransformOrigin = new Point(0.5, 0.5);
-                  rotateTransform.Angle = mi.RotationBase + mi.Rotation;
+                  rotateTransform.Angle = mi.RotationBase + mi.RotationHull;
                   b.RenderTransform = rotateTransform;
                }
                else
@@ -1065,7 +1148,7 @@ namespace Pattons_Best
             ITerritory? t = Territories.theTerritories.Find(s);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankHatches(): cannot find tName=" + s);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainSpottingLoader(): cannot find tName=" + s);
                return false;
             }
             Ellipse aEllipse = new Ellipse
@@ -1320,7 +1403,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): mim2.NewTerritory=null");
                   return false;
                }
-               Logger.Log(LogEnum.LE_VIEW_ROTATION, "UpdateCanvasMovement(): mi=" + mim.MapItem.Name + " r=" + mim.MapItem.Rotation + " rb=" + mim.MapItem.RotationBase);
+               Logger.Log(LogEnum.LE_VIEW_ROTATION, "UpdateCanvasMovement(): mi=" + mim.MapItem.Name + " r=" + mim.MapItem.RotationHull + " rb=" + mim.MapItem.RotationBase);
                //------------------------------------------
                stacks.Remove(mi);
                Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "UpdateCanvasMovement(): Removed mi=" + mi.Name + " t=" + mim.OldTerritory.Name + " to " + gi.MoveStacks.ToString());
@@ -1367,7 +1450,7 @@ namespace Pattons_Best
             double diffYOld = theOldYAfterAnimation - mim.MapItem.Location.Y;
             double xStart = mim.MapItem.Location.X; // get top left point of MapItem
             double yStart = mim.MapItem.Location.Y;
-            Logger.Log(LogEnum.LE_VIEW_ROTATION, "+++++++++++++++++MovePathAnimate(): 1 - mi.X=" + xStart.ToString("F0") + "  mi.Y=" + yStart.ToString("F0") + " r=" + mim.MapItem.Rotation.ToString("F0") + " dX=" + diffXOld.ToString("F0") + " dY=" + diffYOld.ToString("F0") + " rb=" + mim.MapItem.RotationBase.ToString("F0"));
+            Logger.Log(LogEnum.LE_VIEW_ROTATION, "+++++++++++++++++MovePathAnimate(): 1 - mi.X=" + xStart.ToString("F0") + "  mi.Y=" + yStart.ToString("F0") + " r=" + mim.MapItem.RotationHull.ToString("F0") + " dX=" + diffXOld.ToString("F0") + " dY=" + diffYOld.ToString("F0") + " rb=" + mim.MapItem.RotationBase.ToString("F0"));
             PathFigure aPathFigure = new PathFigure() { StartPoint = new System.Windows.Point(xStart, yStart) };
             if (null == mim.BestPath)
             {
@@ -1422,7 +1505,7 @@ namespace Pattons_Best
             b.BeginAnimation(Canvas.LeftProperty, xAnimiation);
             b.BeginAnimation(Canvas.TopProperty, yAnimiation);
             mim.MapItem.Location = mp;
-            Logger.Log(LogEnum.LE_VIEW_ROTATION, "-----------------MovePathAnimate(): 2 - mi.X=" + mim.MapItem.Location.X.ToString("F0") + " mi.Y=" + mim.MapItem.Location.Y.ToString("F0") + " r=" + mim.MapItem.Rotation.ToString("F0") + " rb=" + mim.MapItem.RotationBase.ToString("F0"));
+            Logger.Log(LogEnum.LE_VIEW_ROTATION, "-----------------MovePathAnimate(): 2 - mi.X=" + mim.MapItem.Location.X.ToString("F0") + " mi.Y=" + mim.MapItem.Location.Y.ToString("F0") + " r=" + mim.MapItem.RotationHull.ToString("F0") + " rb=" + mim.MapItem.RotationBase.ToString("F0"));
             return true;
          }
          catch (Exception e)
@@ -1522,7 +1605,9 @@ namespace Pattons_Best
                break;
             }
          }
-         GameAction outAction = GameAction.PreparationsHatches;
+         GameAction outAction = GameAction.BattleRoundSequenceOrders;
+         if (GamePhase.Preparations == myGameInstance.GamePhase)
+            outAction = GameAction.PreparationsHatches;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
       private void MouseDownPolygonGunLoad(object sender, MouseButtonEventArgs e)
@@ -1533,8 +1618,8 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonGunLoad(): clickedPolygon=null");
             return;
          }
-         ITerritory? t = Territories.theTerritories.Find(clickedPolygon.Name);
-         if (null == t)
+         ITerritory? newT = Territories.theTerritories.Find(clickedPolygon.Name);
+         if (null == newT)
          {
             Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonGunLoad(): t=null for " + clickedPolygon.Name.ToString());
             return;
@@ -1545,9 +1630,14 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonGunLoad(): t=null for " + clickedPolygon.Name.ToString());
             return;
          }
-         if (false == SetTerritory(gunLoad, t))
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonGunLoad(): SetTerritory() returned false");
-         GameAction outAction = GameAction.PreparationsGunLoadSelect;
+         gunLoad.TerritoryCurrent = newT;
+         double delta = gunLoad.Zoom * Utilities.theMapItemOffset;
+         gunLoad.Location.X = newT.CenterPoint.X - delta;
+         gunLoad.Location.Y = newT.CenterPoint.Y - delta;
+         Logger.Log(LogEnum.LE_SHOW_MAPITEM_TANK, "MouseDownPolygonGunLoad(): gunLoad=" + gunLoad.Name + " loc=" + gunLoad.Location.ToString() + " t=" + newT.Name + " tLoc=" + newT.CenterPoint.ToString());
+         GameAction outAction = GameAction.BattleRoundSequenceOrders;
+         if (GamePhase.Preparations == myGameInstance.GamePhase)
+            outAction = GameAction.PreparationsGunLoadSelect;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
       private void MouseDownEllipseSpottingLoader(object sender, MouseButtonEventArgs e)
@@ -1701,7 +1791,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): button = null");
             return;
          }
-         if (true == button.Name.Contains("OpenHatch"))
+         if ( (true == button.Name.Contains("OpenHatch")) && ( (true == myGameInstance.IsHatchesActive) || (true == myGameInstance.IsOrdersActive) ) )
          {
             string[] crewmembers = new string[4] { "Driver", "Assistant", "Commander", "Loader" };
             foreach (string s in crewmembers)
@@ -1717,9 +1807,12 @@ namespace Pattons_Best
                   crewMember.IsButtonedUp = true;
                   myGameInstance.Hatches.Remove(button.Name);
                   this.myTankButtons.Remove(button);
-                  GameAction outAction = GameAction.PreparationsHatches;
-                  myGameEngine.PerformAction(ref myGameInstance, ref outAction);
                   myCanvasTank.Children.Remove(button);
+                  //----------------------------------------------
+                  GameAction outAction = GameAction.BattleRoundSequenceOrders;
+                  if (GamePhase.Preparations == myGameInstance.GamePhase)
+                     outAction = GameAction.PreparationsHatches;
+                  myGameEngine.PerformAction(ref myGameInstance, ref outAction);
                   return;
                }
             }

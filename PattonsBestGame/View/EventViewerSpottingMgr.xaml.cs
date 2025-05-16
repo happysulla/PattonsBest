@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Windows.System.RemoteSystems;
 using WpfAnimatedGif;
 
 namespace Pattons_Best
@@ -285,25 +286,35 @@ namespace Pattons_Best
                }
                break;
             case E0472Enum.SELECT_CREWMAN_SHOW:
-               Rectangle r1 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
-               myStackPanelAssignable.Children.Add(r1);
-               break;
             case E0472Enum.ROLL_SPOTTING:
-               foreach (IMapItem mi in myAssignables)
+               Rectangle r2 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+               myStackPanelAssignable.Children.Add(r2);
+               Rectangle r3 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+               myStackPanelAssignable.Children.Add(r3);
+               if ( null == mySelectedCrewman )
                {
-                  ICrewMember? cm = mi as ICrewMember;
-                  if (null == cm)
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): cast of mi to cm failed");
-                     return false;
-                  }
-                  Button b = CreateButton(cm);
-                  myStackPanelAssignable.Children.Add(b);
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): mySelectedCrewman=null");
+                  return false;
                }
+               Button b1 = CreateButton(mySelectedCrewman);
+               myStackPanelAssignable.Children.Add(b1);
+               Label label1 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = " rating = " + mySelectedCrewman.Rating.ToString() };
+               myStackPanelAssignable.Children.Add(label1);
                break;
             case E0472Enum.ROLL_SPOTTING_SHOW:
                Image img2 = new Image { Name = "ContinueNext", Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                myStackPanelAssignable.Children.Add(img2);
+               Rectangle r4 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+               myStackPanelAssignable.Children.Add(r4);
+               if (null == mySelectedCrewman)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): mySelectedCrewman=null");
+                  return false;
+               }
+               Button b2 = CreateButton(mySelectedCrewman);
+               myStackPanelAssignable.Children.Add(b2);
+               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = " rating = " + mySelectedCrewman.Rating.ToString() };
+               myStackPanelAssignable.Children.Add(label2);
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): reached default s=" + myState.ToString());
@@ -529,6 +540,20 @@ namespace Pattons_Best
                         if ("ContinueNext" == img.Name)
                         {
                            mySelectedCrewman = null;
+                           IMapItems removals = new MapItems();
+                           foreach(ICrewMember cm in myAssignables)
+                           {
+                              List<string>? newSpottedTerritories = Territory.GetSpottedTerritories(myGameInstance, cm);
+                              if (null == newSpottedTerritories)
+                              {
+                                 Logger.Log(LogEnum.LE_ERROR, "PerformSpotting(): GetSpottedTerritories() returned null for cm=" + cm.Role);
+                                 return;
+                              }
+                              if (0 == newSpottedTerritories.Count)
+                                 removals.Add(cm);
+                           }
+                           foreach (ICrewMember cm in removals) // Remove crew members that have no spotting opportunity
+                              myAssignables.Remove(cm);
                            if (0 < myAssignables.Count)
                               myState = E0472Enum.SELECT_CREWMAN;
                            else
@@ -622,8 +647,8 @@ namespace Pattons_Best
                   {
                      sb.Append("a");
                      myGridRows[i] = new GridRow(mi);
-                     myGridRows[i].myRange = tName[--count];
-                     myGridRows[i].mySector = tName[--count];
+                     myGridRows[i].myRange = tName[count-1];
+                     myGridRows[i].mySector = tName[count-2];
                      myGridRows[i].mySectorRangeDisplay = GetSectorRangeDisplay(i);
                      myGridRows[i].myModifier = TableMgr.GetSpottingModifier(myGameInstance, mi, mySelectedCrewman, myGridRows[i].mySector, myGridRows[i].myRange);
                      if( myGridRows[i].myModifier < -100 )

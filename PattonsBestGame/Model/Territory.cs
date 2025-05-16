@@ -95,7 +95,7 @@ namespace Pattons_Best
                {
                   YCenter -= offset;
                }
-               System.Windows.Point p5 = new System.Windows.Point(XCenter - offset, YCenter - offset); // do a final check to make sure center point is in region
+               System.Windows.Point p5 = new System.Windows.Point(XCenter - offset, YCenter - offset); // do a final check to make sure point is in region
                if (true == geometry.FillContains(p5))
                   return new MapPoint(p5.X, p5.Y);
             }

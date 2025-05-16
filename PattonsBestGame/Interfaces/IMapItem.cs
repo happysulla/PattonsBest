@@ -18,9 +18,10 @@ namespace Pattons_Best
       bool IsAnimated { get; set; }
       bool IsMoved { get; set; }
       int Count { get; set; }
-      IMapPoint Location { get; set; } // top left corner of MapItem
-      double Rotation { get; set; }  // Vehicle Facing Rotation
-      double RotationBase { get; set; } // Rotation to point at location
+      IMapPoint Location { get; set; }       // top left corner of MapItem
+      double RotationHull { get; set; }      
+      double RotationTurret { get; set; }    
+      double RotationBase { get; set; }      // rotation to point at location
       //----------------------------------------
       ITerritory TerritoryCurrent { get; set; }
       ITerritory TerritoryStarting { get; set; }

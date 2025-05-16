@@ -26,6 +26,7 @@ namespace Pattons_Best
       LE_SHOW_ENEMY_STRENGTH,
       LE_SHOW_RANDOM_PT,
       LE_SHOW_ROTATION,
+      LE_SHOW_MAPITEM_TANK,
       //-------------
       LE_VIEW_ADV_FIRE_RESOLVE,
       LE_VIEW_ART_FIRE_RESOLVE,
@@ -96,6 +97,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_ENEMY_STRENGTH);
          //SetOn(LogEnum.LE_SHOW_RANDOM_PT);
          // SetOn(LogEnum.LE_SHOW_ROTATION);
+         SetOn(LogEnum.LE_SHOW_MAPITEM_TANK);
          //-------------------------------
          //SetOn(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE);
          //SetOn(LogEnum.LE_VIEW_ART_FIRE_RESOLVE);

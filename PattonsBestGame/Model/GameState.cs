@@ -968,7 +968,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for CommanderHatch");
             return false;
          }
-         IMapItem mi = new MapItem(cm.Name + "OpenHatch", 1.0, "c15OpenHatch", t);
+         IMapItem mi = new MapItem(cm.Role + "OpenHatch", 1.0, "c15OpenHatch", t);
          gi.Hatches.Add(mi);
          //------------------------------------
          ITerritory? t1 = Territories.theTerritories.Find("Spot4");
@@ -996,7 +996,9 @@ namespace Pattons_Best
          //------------------------------------
          gi.Sherman.IsTurret = true;
          gi.Sherman.TerritoryCurrent = gi.Home;
-         gi.Sherman.Location = gi.Home.CenterPoint - (gi.Sherman.Zoom*Utilities.theMapItemOffset);
+         int delta = (int) (gi.Sherman.Zoom * Utilities.theMapItemOffset);
+         gi.Sherman.Location.X = gi.Home.CenterPoint.X - delta;
+         gi.Sherman.Location.Y = gi.Home.CenterPoint.Y - delta;
          gi.BattleStacks.Add(gi.Sherman);
          return true;
       }
@@ -1209,14 +1211,14 @@ namespace Pattons_Best
                die1 = Utilities.RandomGenerator.Next(0, 3);
                if (1 == die1)
                {
-                  mi.Rotation = 150 + Utilities.RandomGenerator.Next(0, 60);
+                  mi.RotationHull = 150 + Utilities.RandomGenerator.Next(0, 60);
                }
                else if (2 == die1)
                {
                   if (0 == Utilities.RandomGenerator.Next(0, 2))
-                     mi.Rotation = 35 + Utilities.RandomGenerator.Next(0, 115);
+                     mi.RotationHull = 35 + Utilities.RandomGenerator.Next(0, 115);
                   else
-                     mi.Rotation = -35 - Utilities.RandomGenerator.Next(0, 115);
+                     mi.RotationHull = -35 - Utilities.RandomGenerator.Next(0, 115);
                }
             }
             //-----------------------------------------
@@ -1425,7 +1427,7 @@ namespace Pattons_Best
                case GameAction.PreparationsDeploymentRoll:
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
-                  gi.IsPrepActive = true;
+                  gi.IsHatchesActive = true;
                   if (false == SetDeployment(gi, dieRoll))
                   {
                      returnStatus = "SetDeployment() returned false";
@@ -1437,6 +1439,7 @@ namespace Pattons_Best
                   break;
                case GameAction.PreparationsGunLoad:
                   gi.EventDisplayed = gi.EventActive = "e013";
+                  gi.IsHatchesActive = false;
                   ITerritory? t = Territories.theTerritories.Find("GunLoadHe");
                   if (null == t)
                   {
@@ -1597,6 +1600,10 @@ namespace Pattons_Best
                case GameAction.ShowReportErrorDialog:
                case GameAction.ShowAboutDialog:
                case GameAction.EndGameShowFeats:
+               case GameAction.UpdateStatusBar:
+               case GameAction.UpdateBattleBoard:
+               case GameAction.UpdateTankCard:
+               case GameAction.UpdateShowRegion:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
                   break;
                case GameAction.UpdateEventViewerActive: // Only change active event
@@ -2150,12 +2157,14 @@ namespace Pattons_Best
                case GameAction.ShowReportErrorDialog:
                case GameAction.ShowAboutDialog:
                case GameAction.EndGameShowFeats:
+               case GameAction.UpdateStatusBar:
+               case GameAction.UpdateBattleBoard:
+               case GameAction.UpdateTankCard:
+               case GameAction.UpdateShowRegion:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
                   break;
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
-                  break;
-               case GameAction.UpdateBattleBoard:
                   break;
                case GameAction.BattleStart:
                   gi.EventDisplayed = gi.EventActive = "e033";
@@ -2335,6 +2344,10 @@ namespace Pattons_Best
             case GameAction.ShowReportErrorDialog:
             case GameAction.ShowAboutDialog:
             case GameAction.EndGameShowFeats:
+            case GameAction.UpdateStatusBar:
+            case GameAction.UpdateBattleBoard:
+            case GameAction.UpdateTankCard:
+            case GameAction.UpdateShowRegion:
             case GameAction.UpdateEventViewerDisplay: // Only change active event
                break;
             case GameAction.UpdateEventViewerActive: // Only change active event
@@ -2385,6 +2398,7 @@ namespace Pattons_Best
                            action = GameAction.BattleRoundSequenceOrders;
                            gi.EventDisplayed = gi.EventActive = "e038";
                            gi.DieRollAction = GameAction.DieRollActionNone;
+                           gi.IsOrdersActive = true;
                         }
                      }
                   }
@@ -2394,6 +2408,7 @@ namespace Pattons_Best
                action = GameAction.BattleRoundSequenceOrders;
                gi.EventDisplayed = gi.EventActive = "e038";
                gi.DieRollAction = GameAction.DieRollActionNone;
+               gi.IsOrdersActive = true;
                break;
             case GameAction.EndGameClose:
                gi.GamePhase = GamePhase.EndGame;
@@ -2440,11 +2455,18 @@ namespace Pattons_Best
             case GameAction.ShowCombatCalendarDialog:
             case GameAction.ShowAfterActionReportDialog:
             case GameAction.ShowInventoryDialog:
+            case GameAction.ShowGameFeats:
             case GameAction.ShowRuleListingDialog:
             case GameAction.ShowEventListingDialog:
+            case GameAction.ShowTableListing:
+            case GameAction.ShowMovementDiagramDialog:
             case GameAction.ShowReportErrorDialog:
             case GameAction.ShowAboutDialog:
-               break;
+            case GameAction.EndGameShowFeats:
+            case GameAction.UpdateStatusBar:
+            case GameAction.UpdateBattleBoard:
+            case GameAction.UpdateTankCard:
+            case GameAction.UpdateShowRegion:
             case GameAction.UpdateEventViewerDisplay: // Only change active event
                break;
             case GameAction.UpdateEventViewerActive: // Only change active event
@@ -2502,8 +2524,12 @@ namespace Pattons_Best
             case GameAction.ShowMovementDiagramDialog:
             case GameAction.ShowReportErrorDialog:
             case GameAction.ShowAboutDialog:
-            case GameAction.UpdateEventViewerDisplay:
             case GameAction.EndGameShowFeats:
+            case GameAction.UpdateStatusBar:
+            case GameAction.UpdateBattleBoard:
+            case GameAction.UpdateTankCard:
+            case GameAction.UpdateShowRegion:
+            case GameAction.UpdateEventViewerDisplay: // Only change active event
                break;
             case GameAction.EndGameWin:
                gi.EventDisplayed = gi.EventActive = "e501";

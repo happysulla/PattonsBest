@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using Windows.ApplicationModel.Activation;
 using WpfAnimatedGif;
 using static Pattons_Best.EventViewerBattleSetup;
+using static System.Windows.Forms.AxHost;
 
 namespace Pattons_Best
 {
@@ -452,6 +453,11 @@ namespace Pattons_Best
       }
       private bool UpdateAssignablePanel()
       {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): myGameInstance=null");
+            return false;
+         }
          myStackPanelAssignable.Children.Clear(); // clear out assignable panel 
          switch (myState)
          {
@@ -474,7 +480,7 @@ namespace Pattons_Best
                {
                   if (true == myGridRows[j].myEnemyAction.Contains("Move"))
                      isEnemyMoving = true;
-                  else if (true == myGridRows[j].myEnemyAction.Contains("Your"))
+                  else if ( (true == myGridRows[j].myEnemyAction.Contains("Your")) || ( (true == myGridRows[j].myEnemyAction.Contains("Lead")) && (true == myGameInstance.IsLeadTank) ) )
                      isYourTank = true;
                   else if (true == myGridRows[j].myEnemyAction.Contains("Fire"))
                      isEnemyFiring = true;
@@ -529,7 +535,7 @@ namespace Pattons_Best
                bool isYourTank1 = false;
                for (int j = 0; j < myMaxRowCount; ++j)
                {
-                  if (true == myGridRows[j].myEnemyAction.Contains("Your"))
+                  if ((true == myGridRows[j].myEnemyAction.Contains("Your")) || ((true == myGridRows[j].myEnemyAction.Contains("Lead")) && (true == myGameInstance.IsLeadTank)))
                      isYourTank1 = true;
                   else if (true == myGridRows[j].myEnemyAction.Contains("Fire"))
                      isEnemyFiring1 = true;
@@ -572,7 +578,7 @@ namespace Pattons_Best
                bool isYourTank2 = false;
                for (int j = 0; j < myMaxRowCount; ++j)
                {
-                  if (true == myGridRows[j].myEnemyAction.Contains("Your"))
+                  if ((true == myGridRows[j].myEnemyAction.Contains("Your")) || ((true == myGridRows[j].myEnemyAction.Contains("Lead")) && (true == myGameInstance.IsLeadTank)))
                      isYourTank2 = true;
                   else if (true == myGridRows[j].myEnemyAction.Contains("Collateral"))
                      isCollateralDamage2 = true;
@@ -602,8 +608,8 @@ namespace Pattons_Best
                bool isYourTank3 = false;
                for (int j = 0; j < myMaxRowCount; ++j)
                {
-                  if (true == myGridRows[j].myEnemyAction.Contains("YourTank"))
-                     isYourTank2 = true;
+                  if ((true == myGridRows[j].myEnemyAction.Contains("Your")) || ((true == myGridRows[j].myEnemyAction.Contains("Lead")) && (true == myGameInstance.IsLeadTank)))
+                     isYourTank3 = true;
                }
                if (true == isYourTank3)
                {
@@ -881,10 +887,18 @@ namespace Pattons_Best
             //----------------------------
             if (NO_FIRE == myGridRows[i].myDieRollFire)
             {
+               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
+               myGrid.Children.Add(label2);
+               Grid.SetRow(label2, rowNum);
+               Grid.SetColumn(label2, 2);
                Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
                myGrid.Children.Add(label3);
                Grid.SetRow(label3, rowNum);
                Grid.SetColumn(label3, 3);
+               Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myEnemyAction };
+               myGrid.Children.Add(label5);
+               Grid.SetRow(label5, rowNum);
+               Grid.SetColumn(label5, 5);
             }
             else if (Utilities.NO_RESULT < myGridRows[i].myDieRollFire)
             {
@@ -942,6 +956,10 @@ namespace Pattons_Best
                myGrid.Children.Add(label3);
                Grid.SetRow(label3, rowNum);
                Grid.SetColumn(label3, 3);
+               Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myEnemyAction };
+               myGrid.Children.Add(label5);
+               Grid.SetRow(label5, rowNum);
+               Grid.SetColumn(label5, 5);
             }
             else if (Utilities.NO_RESULT < myGridRows[i].myDieRollCollateral)
             {
@@ -949,10 +967,10 @@ namespace Pattons_Best
                myGrid.Children.Add(label3);
                Grid.SetRow(label3, rowNum);
                Grid.SetColumn(label3, 3);
-               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myCollateralDamage };
-               myGrid.Children.Add(label4);
-               Grid.SetRow(label4, rowNum);
-               Grid.SetColumn(label4, 4);
+               Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myCollateralDamage };
+               myGrid.Children.Add(label5);
+               Grid.SetRow(label5, rowNum);
+               Grid.SetColumn(label5, 5);
             }
             else
             {
@@ -999,6 +1017,10 @@ namespace Pattons_Best
                myGrid.Children.Add(label4);
                Grid.SetRow(label4, rowNum);
                Grid.SetColumn(label4, 4);
+               Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myEnemyAction };
+               myGrid.Children.Add(label5);
+               Grid.SetRow(label5, rowNum);
+               Grid.SetColumn(label5, 5);
             }
             else if (Utilities.NO_RESULT < myGridRows[i].myDieRollToHitYourTank)
             {
@@ -1010,10 +1032,15 @@ namespace Pattons_Best
                myGrid.Children.Add(label3);
                Grid.SetRow(label3, rowNum);
                Grid.SetColumn(label3, 3);
-               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myToHitResultYourTank };
+               int dieRollPlusMod = myGridRows[i].myModifierToHitYourTank + myGridRows[i].myDieRollToHitYourTank;
+               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = dieRollPlusMod.ToString() };
                myGrid.Children.Add(label4);
                Grid.SetRow(label4, rowNum);
                Grid.SetColumn(label4, 4);
+               Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myToHitResultYourTank };
+               myGrid.Children.Add(label5);
+               Grid.SetRow(label5, rowNum);
+               Grid.SetColumn(label5, 5);
             }
             else
             {
@@ -1068,6 +1095,10 @@ namespace Pattons_Best
                myGrid.Children.Add(label4);
                Grid.SetRow(label4, rowNum);
                Grid.SetColumn(label4, 4);
+               Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myEnemyAction };
+               myGrid.Children.Add(label5);
+               Grid.SetRow(label5, rowNum);
+               Grid.SetColumn(label5, 5);
             }
             else if (NO_FIRE_THROWN_TRACK == myGridRows[i].myDieRollToKillYourTank)
             {
@@ -1079,10 +1110,14 @@ namespace Pattons_Best
                myGrid.Children.Add(label3);
                Grid.SetRow(label3, rowNum);
                Grid.SetColumn(label3, 3);
-               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "Thrown Track" };
+               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
                myGrid.Children.Add(label4);
                Grid.SetRow(label4, rowNum);
                Grid.SetColumn(label4, 4);
+               Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "Thrown Track" };
+               myGrid.Children.Add(label5);
+               Grid.SetRow(label5, rowNum);
+               Grid.SetColumn(label5, 5);
             }
             else if (NO_FIRE_MISSED_TURRET == myGridRows[i].myDieRollToKillYourTank)
             {
@@ -1094,10 +1129,14 @@ namespace Pattons_Best
                myGrid.Children.Add(label3);
                Grid.SetRow(label3, rowNum);
                Grid.SetColumn(label3, 3);
-               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "Miss Turret" };
+               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
                myGrid.Children.Add(label4);
                Grid.SetRow(label4, rowNum);
                Grid.SetColumn(label4, 4);
+               Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "Miss Turret" };
+               myGrid.Children.Add(label5);
+               Grid.SetRow(label5, rowNum);
+               Grid.SetColumn(label5, 5);
             }
             else if (Utilities.NO_RESULT == myGridRows[i].myDieRollHitLocationYourTank)
             {
@@ -1136,10 +1175,14 @@ namespace Pattons_Best
                }
                else
                {
-                  Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myToKillResultYourTank };
+                  Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRollToKillYourTank.ToString() };
                   myGrid.Children.Add(label4);
                   Grid.SetRow(label4, rowNum);
                   Grid.SetColumn(label4, 4);
+                  Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myToKillResultYourTank };
+                  myGrid.Children.Add(label5);
+                  Grid.SetRow(label5, rowNum);
+                  Grid.SetColumn(label5, 5);
                }
             }
          }
@@ -1681,21 +1724,21 @@ namespace Pattons_Best
          double xDiff = (mi.Location.X + mi.Zoom * Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.X; // first point the vehicle at the Sherman
          double yDiff = (mi.Location.Y + mi.Zoom * Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.Y;
          mi.RotationBase = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;
-         mi.Rotation = 0.0;
+         mi.RotationHull = 0.0;
          //----------------------------
          if ("Front" == myGridRows[i].myFacing)
             return true;
          //----------------------------
          if ("Rear" == myGridRows[i].myFacing)
          {
-            mi.Rotation = 150 + Utilities.RandomGenerator.Next(0, 60);
+            mi.RotationHull = 150 + Utilities.RandomGenerator.Next(0, 60);
          }
          else if ("Side" == myGridRows[i].myFacing)
          {
             if (0 == Utilities.RandomGenerator.Next(0, 2))
-               mi.Rotation = 35 + Utilities.RandomGenerator.Next(0, 115);
+               mi.RotationHull = 35 + Utilities.RandomGenerator.Next(0, 115);
             else
-               mi.Rotation = -35 - Utilities.RandomGenerator.Next(0, 115);
+               mi.RotationHull = -35 - Utilities.RandomGenerator.Next(0, 115);
          }
          return true;
       }
@@ -1814,43 +1857,61 @@ namespace Pattons_Best
                                  return;
                               }                                
                            }
+                           E0475Enum state = myState;
                            myState = E0475Enum.ENEMY_ACTION_MOVE_SHOW;
                            for (int j = 0; j < myMaxRowCount; ++j)
                            {
                               if ((Utilities.NO_RESULT == myGridRows[j].myDieRollTerrain) || (Utilities.NO_RESULT == myGridRows[j].myDieRollFacing))
                                  myState = E0475Enum.ENEMY_ACTION_MOVE;
                            }
+                           Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "Grid_MouseDown(): p=" + state.ToString() + "-->" + myState.ToString());
+                           myTextBlockHeader.Text = "r4.75 Enemy Action - Move";
                            myTextBlock2.Text = "Vehicle Facing";
                            myTextBlock3.Text = "Terrain";
                            myTextBlock4.Visibility = Visibility.Hidden;
                         }
                         if ("Fire" == img.Name)
                         {
+                           Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "Grid_MouseDown(): p=" + myState.ToString() + "-->ENEMY_ACTION_FIRE");
                            myState = E0475Enum.ENEMY_ACTION_FIRE;
+                           myTextBlockHeader.Text = "r4.75 Enemy Action - Fire At Friends";
                            myTextBlock2.Text = "To Kill #";
                            myTextBlock3.Text = "Roll";
+                           myTextBlock4.Visibility = Visibility.Hidden;
                            myTextBlock5.Text = "Result";
                         }
                         if ("Collateral" == img.Name)
                         {
+                           Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "Grid_MouseDown(): p=" + myState.ToString() + "-->ENEMY_ACTION_COLLATERAL");
                            myState = E0475Enum.ENEMY_ACTION_COLLATERAL;
+                           myTextBlockHeader.Text = "r4.75 Enemy Action - Collateral";
                            myTextBlock2.Visibility = Visibility.Hidden;
                            myTextBlock3.Text = "Roll";
+                           myTextBlock4.Visibility = Visibility.Hidden;
                            myTextBlock5.Text = "Result";
                         }
                         if ("YourTank" == img.Name)
                         {
+                           Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "Grid_MouseDown(): p=" + myState.ToString() + "-->ENEMY_ACTION_TO_HIT_YOUR_TANK");
                            myState = E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK;
+                           myTextBlockHeader.Text = "r4.75 Enemy Action - To Hit Your Tank";
                            myTextBlock2.Visibility = Visibility.Visible;
                            myTextBlock2.Text = "To Hit Modifer";
                            myTextBlock3.Text = "To Hit Number";
+                           myTextBlock4.Visibility = Visibility.Visible;
+                           myTextBlock3.Text = "Die Roll";
                            myTextBlock5.Text = "Results";
                         }
                         if ("ToKillYourTank" == img.Name)
                         {
+                           Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "Grid_MouseDown(): p=" + myState.ToString() + "-->ENEMY_ACTION_TO_KILL_YOUR_TANK");
                            myState = E0475Enum.ENEMY_ACTION_TO_KILL_YOUR_TANK;
+                           myTextBlockHeader.Text = "r4.75 Enemy Action - To Kill Your Tank";
                            myTextBlock2.Text = "Hit Location";
                            myTextBlock3.Text = "To Kill Number";
+                           myTextBlock4.Visibility = Visibility.Visible;
+                           myTextBlock4.Text = "Die Roll";
+                           myTextBlock5.Text = "Results";
                         }
                         if ("Continue" == img.Name)
                            myState = E0475Enum.END;

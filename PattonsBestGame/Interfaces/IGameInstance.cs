@@ -13,7 +13,6 @@ namespace Pattons_Best
       //----------------------------------------------
       bool IsMultipleSelectForDieResult { set; get; } // In EventViewer, show buttons instead of die results for user to choose from
       bool IsGridActive { set; get; } // True if there is some EventViewer manager active
-      bool IsPrepActive { set; get; } // True if user can open hatches
       string EventActive { set; get; }
       string EventDisplayed { set; get; }
       string EventStart { set; get; } // Event ID when encounter starts
@@ -41,8 +40,11 @@ namespace Pattons_Best
       ITerritory? EnteredArea { get; set; }
       ITerritory? AdvanceFire { get; set; }
       //------------------------------------------------
-      bool IsLeadTank { set; get; }
       bool IsTurretActive { set; get; }
+      bool IsHatchesActive { set; get; }
+      bool IsOrdersActive { set; get; }
+      //------------------------------------------------
+      bool IsLeadTank { set; get; }
       bool IsAirStrikePending { set; get; }
       bool IsAdvancingFireChosen { set; get; }
       bool IsAmbush { set; get; }

@@ -90,7 +90,8 @@ namespace Pattons_Best
       }
       public bool IsMoved { get; set; } = false;
       public int Count { get; set; } = 0;
-      public double Rotation { get; set; } = 0.0;
+      public double RotationHull { get; set; } = 0.0;
+      public double RotationTurret { get; set; } = 0.0;
       public double RotationBase { get; set; } = 0.0;
       //--------------------------------------------------
       private IMapPoint myLocation = new MapPoint();  // top left corner of MapItem

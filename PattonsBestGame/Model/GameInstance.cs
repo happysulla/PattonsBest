@@ -17,8 +17,6 @@ namespace Pattons_Best
       //------------------------------------------------
       public bool IsMultipleSelectForDieResult { set; get; } = false;
       public bool IsGridActive { set; get; } = false;
-      public bool IsHatchesActive { set; get; } = false;
-      public bool IsPrepActive { set; get; } = false;
       public string EventActive { get; set; } = "e000";
       public string EventDisplayed { set; get; } = "e000";
       public string EventStart { set; get; } = "e000";
@@ -47,10 +45,13 @@ namespace Pattons_Best
       public ITerritory? EnteredArea { get; set; } = null;
       public ITerritory? AdvanceFire { get; set; } = null;
       //---------------------------------------------------------------
+      public bool IsTurretActive { set; get; } = false;
+      public bool IsHatchesActive { set; get; } = false;
+      public bool IsOrdersActive { set; get; } = false;
+      //---------------------------------------------------------------
       public bool IsHulledDown { set; get; } = false;
       public bool IsMoving { set; get; } = false;
       public bool IsLeadTank { set; get; } = false;
-      public bool IsTurretActive { set; get; } = false;
       public bool IsAirStrikePending { set; get; } = false;
       public bool IsAdvancingFireChosen { set; get; } = false;
       public bool IsAmbush { set; get; } = false;
