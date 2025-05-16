@@ -45,6 +45,7 @@ namespace Pattons_Best
       LE_VIEW_TIME_TRACK,
       //-------------
       LE_EVENT_VIEWER_ENEMY_ACTION,
+      LE_EVENT_VIEWER_RANDOM_EVENT,
       LE_EVENT_VIEWER_SPOTTING,
       LE_EVENT_VIEWER_ORDERS,
       LE_END_ENUM
@@ -97,7 +98,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_ENEMY_STRENGTH);
          //SetOn(LogEnum.LE_SHOW_RANDOM_PT);
          // SetOn(LogEnum.LE_SHOW_ROTATION);
-         SetOn(LogEnum.LE_SHOW_MAPITEM_TANK);
+         //SetOn(LogEnum.LE_SHOW_MAPITEM_TANK);
          //-------------------------------
          //SetOn(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE);
          //SetOn(LogEnum.LE_VIEW_ART_FIRE_RESOLVE);

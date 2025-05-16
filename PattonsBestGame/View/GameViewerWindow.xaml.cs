@@ -118,7 +118,8 @@ namespace Pattons_Best
       private readonly List<Button> myTankButtons = new List<Button>();
       private readonly SplashDialog mySplashScreen;
       private ContextMenu myContextMenuButton = new ContextMenu();
-      private readonly ContextMenu myContextMenuCanvas = new ContextMenu();
+      private ContextMenu myContextMenuCrewAction = new ContextMenu();
+      private ContextMenu myContextMenuGunLoadAction = new ContextMenu();
       private readonly DoubleCollection myDashArray = new DoubleCollection();
       private int myBrushIndex = 0;
       private readonly List<Brush> myBrushes = new List<Brush>();
@@ -234,6 +235,20 @@ namespace Pattons_Best
             CtorError = true;
             return;
          }
+         //---------------------------------------------------------------
+         MenuItem menuItem1 = new MenuItem();
+         menuItem1.Name = "Commander_Move";
+         menuItem1.Header = "Direct _Move";
+         menuItem1.InputGestureText = "Ctrl+Shift+M";
+         menuItem1.Click += MenuItemCrewAction_Click;
+         myContextMenuCrewAction.Items.Add(menuItem1);
+         MenuItem menuItem2 = new MenuItem();
+         menuItem2.Name = "Commander_Fire";
+         menuItem2.Header = "Direct _Fire";
+         menuItem2.InputGestureText = "Ctrl+Shift+F";
+         menuItem2.Click += MenuItemCrewAction_Click;
+         myContextMenuCrewAction.Items.Add(menuItem2);
+         myContextMenuCrewAction.Visibility = Visibility.Visible;
          //---------------------------------------------------------------
          // Implement the Model View Controller (MVC) pattern by registering views with
          // the game engine such that when the model data is changed, the views are updated.
@@ -591,6 +606,12 @@ namespace Pattons_Best
             return false;
          }
          //-------------------------------------------------------
+         if (false == UpdateCanvasTankMapItems(gi.CrewActions))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasTankMapItems(CrewActions) returned false");
+            return false;
+         }
+         //-------------------------------------------------------
          try
          {
             switch (action)
@@ -656,20 +677,20 @@ namespace Pattons_Best
             Button? b = myTankButtons.Find(mi.Name);
             if (null != b)
             {
-               if (true == mi.Name.Contains("GunLoad"))
-                  Logger.Log(LogEnum.LE_SHOW_MAPITEM_TANK, "UpdateCanvasTankMapItems(): 1-mi=" + mi.Name + " loc=" + mi.Location.ToString() + " t=" + mi.TerritoryCurrent.Name + " tLoc=" + mi.TerritoryCurrent.CenterPoint.ToString());
+               Logger.Log(LogEnum.LE_SHOW_MAPITEM_TANK, "UpdateCanvasTankMapItems(): 1-mi=" + mi.Name + " loc=" + mi.Location.ToString() + " t=" + mi.TerritoryCurrent.Name + " tLoc=" + mi.TerritoryCurrent.CenterPoint.ToString());
                b.BeginAnimation(Canvas.LeftProperty, null); // end animation offset
                b.BeginAnimation(Canvas.TopProperty, null);  // end animation offset
                Canvas.SetLeft(b, mi.Location.X);
                Canvas.SetTop(b, mi.Location.Y);
+               Canvas.SetZIndex(b, 900);
             }
             else
             {
                Button newButton = CreateButtonMapItem(myTankButtons, mi);
                myCanvasTank.Children.Add(newButton);
-               if (true == mi.Name.Contains("GunLoad"))
-                  Logger.Log(LogEnum.LE_SHOW_MAPITEM_TANK, "UpdateCanvasTankMapItems(): 2-mi=" + mi.Name + " loc=" + mi.Location.ToString() + " t=" + mi.TerritoryCurrent.Name + " tLoc=" + mi.TerritoryCurrent.CenterPoint.ToString());
+               Logger.Log(LogEnum.LE_SHOW_MAPITEM_TANK, "UpdateCanvasTankMapItems(): 2-mi=" + mi.Name + " loc=" + mi.Location.ToString() + " t=" + mi.TerritoryCurrent.Name + " tLoc=" + mi.TerritoryCurrent.CenterPoint.ToString());
             }
+
          }
          return true;
       }
@@ -798,10 +819,12 @@ namespace Pattons_Best
          }
          TankCard tankCard = new TankCard(report.TankCardNum);
          //--------------------------------
-         string[] crewmembers = new string[4] { "Driver", "Assistant", "Commander", "Loader" };
+         string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Gunner" };
          foreach (string crewmember in crewmembers)
          {
-            if ((crewmember == "Loader") && (false == tankCard.myIsLoaderHatch))
+            if (crewmember == "Gunner") // Gunners have no hatches
+               continue;
+            if ((crewmember == "Loader") && (false == tankCard.myIsLoaderHatch)) // some loaders have no hatches
                continue;
             ICrewMember? cm = myGameInstance.GetCrewMember(crewmember);
             if (null == cm)
@@ -821,7 +844,7 @@ namespace Pattons_Best
                PointCollection points = new PointCollection();
                foreach (IMapPoint mp1 in t.Points)
                   points.Add(new System.Windows.Point(mp1.X, mp1.Y));
-               Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = t.ToString() };
+               Polygon aPolygon = new Polygon {Fill = Utilities.theBrushRegion, Points = points, Name = t.ToString() };
                myPolygons.Add(aPolygon);
                myCanvasTank.Children.Add(aPolygon);
                aPolygon.MouseDown += MouseDownPolygonHatches;
@@ -872,9 +895,24 @@ namespace Pattons_Best
             myCanvasTank.Children.Add(aPolygon);
             aPolygon.MouseDown += MouseDownPolygonGunLoad;
          }
-         Button? b = myTankButtons.Find("GunLoad");
-         if (null != b)
-            Canvas.SetZIndex(b, 99999);
+         //--------------------------------
+         foreach (string crewmember in crewmembers)
+         {
+            string tName = crewmember + "Action";
+            ITerritory? t = Territories.theTerritories.Find(tName);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankOrders(): cannot find tName=" + tName);
+               return false;
+            }
+            PointCollection points = new PointCollection();
+            foreach (IMapPoint mp1 in t.Points)
+               points.Add(new System.Windows.Point(mp1.X, mp1.Y));
+            Polygon aPolygon = new Polygon { ContextMenu = myContextMenuCrewAction, Fill = Utilities.theBrushRegion, Points = points, Name = t.ToString() };
+            myPolygons.Add(aPolygon);
+            myCanvasTank.Children.Add(aPolygon);
+            aPolygon.MouseDown += MouseDownPolygonCrewActions;
+         }
          return true;
       }
       //---------------------------------------
@@ -1640,6 +1678,55 @@ namespace Pattons_Best
             outAction = GameAction.PreparationsGunLoadSelect;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
+      private void MouseDownPolygonCrewActions(object sender, MouseButtonEventArgs e)
+      {
+         Polygon? clickedPolygon = sender as Polygon;
+         if (null == clickedPolygon)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonCrewActions(): clickedPolygon=null");
+            return;
+         }
+         ITerritory? selectedTerritory = Territories.theTerritories.Find(clickedPolygon.Name);
+         if (null == selectedTerritory)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonCrewActions(): t=null for " + clickedPolygon.Name.ToString());
+            return;
+         }
+         //-----------------------------------------------
+         if (true == clickedPolygon.Name.Contains("Commander"))
+         {
+            ICrewMember? crewmember = myGameInstance.GetCrewMember("Commander");
+            if (null == crewmember)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonCrewActions(): Commander");
+               return;
+            }
+
+            if ( true == crewmember.IsButtonedUp )
+            {
+
+            }
+         }
+         else if (true == clickedPolygon.Name.Contains("Loader"))
+         {
+
+         }
+         else if (true == clickedPolygon.Name.Contains("Assistant"))
+         {
+
+         }
+         else if (true == clickedPolygon.Name.Contains("Gunner"))
+         {
+
+         }
+         else if (true == clickedPolygon.Name.Contains("Commander"))
+         {
+
+         }
+         //-----------------------------------------------
+         GameAction outAction = GameAction.BattleRoundSequenceOrders;
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+      }
       private void MouseDownEllipseSpottingLoader(object sender, MouseButtonEventArgs e)
       {
          Ellipse? ellipse = sender as Ellipse;
@@ -1871,6 +1958,66 @@ namespace Pattons_Best
          else
             mySpeedRatioMarquee = 0.5;
          myStoryboard.SetSpeedRatio(this, mySpeedRatioMarquee);
+      }
+      public void MenuItemCrewAction_Click(object sender, RoutedEventArgs e)
+      {
+         MenuItem? menuitem = sender as MenuItem;
+         if( null == menuitem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewAction_Click(): menuitem=null");
+            return;
+         }
+         //--------------------------------------
+         IMapItem? mi = null;
+         string[] aStringArray1 = menuitem.Name.Split(new char[] { '_' });
+         if(aStringArray1.Length < 2)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewAction_Click(): underscore not found in " + menuitem.Name + " len=" + aStringArray1.Length);
+            return;
+         }
+         string sCrewMemberRole = aStringArray1[0];
+         //--------------------------------------
+         string tName = aStringArray1[0] + "Action";
+         ITerritory? t = Territories.theTerritories.Find(tName);
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewAction_Click(): t=null for " + tName);
+            return;
+         }
+         foreach(IMapItem ca in myGameInstance.CrewActions) // get rid of existing crew action
+         {
+            if( true == ca.Name.Contains(sCrewMemberRole))
+            {
+               myGameInstance.CrewActions.Remove(ca);
+               break;
+            }
+         }
+         //--------------------------------------
+         switch (menuitem.Name)
+         {
+            case "Commander_Move":
+               mi = new MapItem(sCrewMemberRole, 1.0, "c48CDirectMove", t);
+               break;
+            case "Commander_Fire":
+               mi = new MapItem(sCrewMemberRole, 1.0, "c49CDirectFire", t);
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewAction_Click(): reached default name=" + menuitem.Name);
+               return;
+         }
+         if( null == mi )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewAction_Click(): mi=null");
+            return;
+         }
+         myGameInstance.CrewActions.Add(mi);
+         //--------------------------------------
+         System.Windows.Controls.Button b = new Button { ContextMenu = myContextMenuCrewAction, Name = sCrewMemberRole, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
+         MapItem.SetButtonContent(b, mi, false); // This sets the image as the button's content
+         myTankButtons.Add(b);
+         myCanvasTank.Children.Add(b);
+         Canvas.SetLeft(b, mi.Location.X);
+         Canvas.SetTop(b, mi.Location.Y);
       }
       //-------------GameViewerWindow---------------------------------
       private void ContentRenderedGameViewerWindow(object sender, EventArgs e)

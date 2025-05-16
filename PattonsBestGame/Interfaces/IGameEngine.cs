@@ -200,6 +200,7 @@ namespace Pattons_Best
       BattleAmbushRoll,
       BattleSetupEnd,
       BattleAmbush,
+      BattleRandomEvent,
       BattleEmpty,
       BattleEmptyResolve,
 

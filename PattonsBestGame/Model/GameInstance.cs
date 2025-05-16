@@ -36,6 +36,7 @@ namespace Pattons_Best
       public IMapItems ReadyRacks { set; get; } = new MapItems();
       public IMapItems Hatches { set; get; } = new MapItems();
       public IMapItems GunLoads { set; get; } = new MapItems();
+      public IMapItems CrewActions { set; get; } = new MapItems();
       public IMapItem Sherman { set; get; } = new MapItem("Sherman1", 2.0, "t001", new Territory());
       //------------------------------------------------
       public ITerritory Home { get; set; } = new Territory();

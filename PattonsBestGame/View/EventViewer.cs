@@ -1550,7 +1550,7 @@ namespace Pattons_Best
             { 
                if (true == mi.IsEnemyUnit())
                {
-                  outAction = GameAction.BattleRoundSequenceStart;
+                  outAction = GameAction.BattleRandomEvent;
                   break;
                }
             }

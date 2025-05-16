@@ -28,9 +28,8 @@ namespace Pattons_Best
       public BloodSpot(int range, Random r)
       {
          mySize = r.Next(8) + 5;
-         int halfSize = mySize / 2;
-         myLeft = r.Next(halfSize, range) - halfSize;
-         myTop  = r.Next(halfSize, range) - halfSize;
+         myLeft = r.Next(mySize, range - mySize);
+         myTop  = r.Next(mySize, range - mySize);
       }
       public BloodSpot(int size, double left, double top)
       {

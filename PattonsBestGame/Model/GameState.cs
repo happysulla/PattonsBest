@@ -2233,6 +2233,8 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleAmbush: // Handled with EventViewerBattleAmbush class
+                  break;
+               case GameAction.BattleRandomEvent: 
                   gi.GamePhase = GamePhase.BattleRoundSequence;
                   break;
                case GameAction.EndGameClose:

@@ -31,6 +31,7 @@ namespace Pattons_Best
       IMapItems ReadyRacks { set; get; }
       IMapItems Hatches { set; get; }
       IMapItems GunLoads { set; get; }
+      IMapItems CrewActions { set; get; }
       IMapItem Sherman { set; get; }
       //------------------------------------------------
       ITerritory Home { get; set; }

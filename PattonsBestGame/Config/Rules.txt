@@ -151,7 +151,7 @@ r4.44	"<Bold>r4.44 Tank &amp; Turrent Orientation</Bold>
 <LineBreak/><LineBreak/>
 Place the Sherman tank counter for the tank model you are using in the center of the Battle Board. If you want the turret to face a different sector than the tank itself, place a Turret marker on the tank counter accordingly.
 <LineBreak/><LineBreak/>
-                                     <InlineUIContainer><Image Name='c16TurretSherman75'  Height='100' Width='100'></Image></InlineUIContainer>"
+                                     <InlineUIContainer><Image Name='c16Turret'  Height='100' Width='100'></Image></InlineUIContainer>"
 r4.45	"<Bold>r4.45  Mark Loader Spot</Bold>
 <LineBreak/><LineBreak/>
 If the loader is buttoned up or does not have a hatch, mark the sector he will be searching by placing the Loader Spot marker just outside the long range zone of a sector. If the commander is also buttoned up and does not have a vision cupola, place the Commander Spot marker similiarly for the sector hew will be searching. See 
@@ -510,10 +510,12 @@ The driver and loader automatically perform the actions Stop and Load, respectiv
                                      <InlineUIContainer><Image Name='c59LChangeGunLoad'  Height='100' Width='100'></Image></InlineUIContainer>"
 r5.23	"<Bold>r5.23 Gun Loads</Bold>
 <LineBreak/><LineBreak/>
-In the gun load section, place the Gun Load marker in the box of the ammo round loaded in the gun. Also markhere what round type you want to reload after firing (ammo reload marker), and whether you will draw reloads from the ready rack (ready rack ammo reload marker) per 
+In the gun load section, place the Gun Load marker in the box of the ammo round loaded in the gun. Also mark here what round type you want to reload after firing (ammo reload marker), and whether you will draw reloads from the ready rack (ready rack ammo reload marker) per 
 <InlineUIContainer><Button Content='r16.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> .
 <LineBreak/><LineBreak/>
-                                     <InlineUIContainer><Image Name='c30ReadyRackAmmoReload'  Height='100' Width='100'></Image></InlineUIContainer>"
+           <InlineUIContainer><Image Name='c17GunLoad'  Height='100' Width='100'></Image></InlineUIContainer>
+      <InlineUIContainer><Image Name='c29AmmoReload'  Height='100' Width='100'></Image></InlineUIContainer>
+      <InlineUIContainer><Image Name='c30ReadyRackAmmoReload'  Height='100' Width='100'></Image></InlineUIContainer>"
 r5.24	"<Bold>r5.24 Ready Rack</Bold>
 <LineBreak/><LineBreak/>
 In the ready rack section, place the Rounds Left markers to show what type of rounds are in the ready rack and how many of each per 
