@@ -26,6 +26,19 @@ namespace Pattons_Best
       {
          ROLL_RANDOM_EVENT,
          SHOW_RESULTS,
+         TIME_PASSES,
+         FRIENDLY_ARTILLERY,
+         ENEMY_ARTILLERY,
+         ENEMY_ARTILLERY_SHOW,
+         ENEMY_ARTILLERY_COLLATERAL,
+         ENEMY_ARTILLERY_COLLATERAL_SHOW,
+         MINE_ATTACK,
+         PAZNERFAUST_ATTACK,
+         HARRASSING_FIRE,
+         FRIENDLY_ADVANCE,
+         ENEMY_REINFORCE,
+         ENEMY_ADVANCE,
+         FLANKING_FIRE,
          END
       };
       public bool CtorError { get; } = false;
@@ -34,6 +47,10 @@ namespace Pattons_Best
       private int myMaxRowCount = 0;
       private int myRollResultRowNum = 0;
       private bool myIsRollInProgress = false;
+      private EnumScenario myScenario = EnumScenario.None;
+      //---------------------------------------------------
+      private int myDieRollRandomEvent = Utilities.NO_RESULT;
+      private string myRandomEvent = "Unknown";
       //---------------------------------------------------
       public struct GridRow
       {
@@ -144,17 +161,13 @@ namespace Pattons_Best
          //--------------------------------------------------
          myCallback = callback;
          //--------------------------------------------------
-         if (null == myGameInstance.EnteredArea)
+         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
+         if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveRandomEvent(): myGameInstance.EnteredArea=null");
+            Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): lastReport=null");
             return false;
          }
-         IStack? stack1 = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
-         if (null == stack1)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveRandomEvent(): stack=null");
-            return false;
-         }
+         myScenario = lastReport.Scenario;
          //--------------------------------------------------
          if (false == UpdateGrid())
          {
@@ -230,11 +243,7 @@ namespace Pattons_Best
          switch (myState)
          {
             case E0477Enum.ROLL_RANDOM_EVENT:
-               myTextBlockInstructions.Inlines.Add(new Run("Roll on "));
-               Button b4 = new Button() { Content = "Friendly Action", FontFamily = myFontFam1, FontSize = 8 };
-               b4.Click += ButtonRule_Click;
-               myTextBlockInstructions.Inlines.Add(new InlineUIContainer(b4));
-               myTextBlockInstructions.Inlines.Add(new Run(" Table for possible smoke or Knock-Out (KO)"));
+               myTextBlockInstructions.Inlines.Add(new Run("Roll die to determine random event."));
                break;
             case E0477Enum.SHOW_RESULTS:
                myTextBlockInstructions.Inlines.Add(new Run("Click image to continue."));
@@ -253,12 +262,59 @@ namespace Pattons_Best
             case E0477Enum.ROLL_RANDOM_EVENT:
                Rectangle r1 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                myStackPanelAssignable.Children.Add(r1);
-               Label label = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
-               myStackPanelAssignable.Children.Add(label);
+               // -------------------------------------
+               Label label1 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "  " };
+               myStackPanelAssignable.Children.Add(label1);
+               BitmapImage bmi = new BitmapImage();
+               bmi.BeginInit();
+               bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
+               bmi.EndInit();
+               System.Windows.Controls.Image img = new System.Windows.Controls.Image { Name = "DiceRoll", Source = bmi, Width = Utilities.ZOOM*Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+               ImageBehavior.SetAnimatedSource(img, bmi);
+               myStackPanelAssignable.Children.Add(img);
                break;
             case E0477Enum.SHOW_RESULTS:
                System.Windows.Controls.Image img2 = new System.Windows.Controls.Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                myStackPanelAssignable.Children.Add(img2);
+               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "  " + myRandomEvent };
+               myStackPanelAssignable.Children.Add(label2);
+               break;
+            case E0477Enum.TIME_PASSES:
+               System.Windows.Controls.Image img21 = new System.Windows.Controls.Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+               myStackPanelAssignable.Children.Add(img21);
+               Label label21 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "  15 minutes passes - see " };
+               myStackPanelAssignable.Children.Add(label21);
+               Button b21 = new Button() { Content = "AAR", FontFamily = myFontFam1, FontSize = 12 };
+               b21.Click += ButtonRule_Click;
+               myStackPanelAssignable.Children.Add(b21);
+               break;
+            case E0477Enum.FRIENDLY_ARTILLERY:
+               Rectangle r22 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+               myStackPanelAssignable.Children.Add(r22);
+               Label label22 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "  Friendly Artillery - see  " };
+               myStackPanelAssignable.Children.Add(label22);
+               Button b22 = new Button() { Content = "r23.1", FontFamily = myFontFam1, FontSize = 12 };
+               b22.Click += ButtonRule_Click;
+               myStackPanelAssignable.Children.Add(b22);
+               break;
+            case E0477Enum.ENEMY_ARTILLERY:
+               Rectangle r23 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+               myStackPanelAssignable.Children.Add(r23);
+               Label label23 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "  Enemy Artillery - roll 1D for infantry KO  " };
+               myStackPanelAssignable.Children.Add(label23);
+               BitmapImage bmi23 = new BitmapImage();
+               bmi23.BeginInit();
+               bmi23.UriSource = new Uri(MapImage.theImageDirectory + "DieRollWhite.gif", UriKind.Absolute);
+               bmi23.EndInit();
+               System.Windows.Controls.Image img23 = new System.Windows.Controls.Image { Name = "EnemyArtillery", Source = bmi23, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+               ImageBehavior.SetAnimatedSource(img23, bmi23);
+               myStackPanelAssignable.Children.Add(img23);
+               break;
+            case E0477Enum.ENEMY_ARTILLERY_SHOW:
+               System.Windows.Controls.Image img231 = new System.Windows.Controls.Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+               myStackPanelAssignable.Children.Add(img231);
+               Label label231 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "  Enemy Artillery - roll 1D for infantry KO  " };
+               myStackPanelAssignable.Children.Add(label231);
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): reached default s=" + myState.ToString());
@@ -382,18 +438,52 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance=null");
             return;
          }
-         int i = myRollResultRowNum - STARTING_ASSIGNED_ROW;
-         if (i < 0)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): 0 > i=" + i.ToString());
-            return;
-         }
          //-------------------------------
-         myState = E0477Enum.SHOW_RESULTS;
-         for (int j = 0; j < myMaxRowCount; ++j)
+         switch(myState)
          {
-            if (Utilities.NO_RESULT == myGridRows[j].myDieRoll)
-               myState = E0477Enum.ROLL_RANDOM_EVENT;
+            case E0477Enum.ROLL_RANDOM_EVENT:
+               myDieRollRandomEvent = dieRoll;
+               myRandomEvent = TableMgr.GetRandomEvent(myScenario, dieRoll);
+               switch(myRandomEvent)
+               {
+                  case "Time Passes":
+                     myState = E0477Enum.TIME_PASSES;
+                     break;
+                  case "Friendly Artillery":
+                     myState = E0477Enum.FRIENDLY_ARTILLERY;
+                     break;
+                  case "Enemy Artillery":
+                     myState = E0477Enum.ENEMY_ARTILLERY;
+                     break;
+                  case "Mines":
+                     myState = E0477Enum.MINE_ATTACK;
+                     break;
+                  case "Panzerfaust":
+                     myState = E0477Enum.PAZNERFAUST_ATTACK;
+                     break;
+                  case "Harrassing Fire":
+                     myState = E0477Enum.HARRASSING_FIRE;
+                     break;
+                  case "Friendly Advance":
+                     myState = E0477Enum.FRIENDLY_ADVANCE;
+                     break;
+                  case "Enemy Reinfore":
+                     myState = E0477Enum.ENEMY_REINFORCE;
+                     break;
+                  case "Enemy Advance":
+                     myState = E0477Enum.ENEMY_ADVANCE;
+                     break;
+                  case "Flanking Fire":
+                     myState = E0477Enum.FLANKING_FIRE;
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): reached default with myRandomEvent=" + myRandomEvent);
+                     return;
+               }
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): reached default with myState=" + myState.ToString());
+               return;
          }
          if (false == UpdateGrid())
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateGrid() return false");
@@ -479,6 +569,13 @@ namespace Pattons_Best
                   {
                      if (result.VisualHit == img)
                      {
+                        if ("DiceRoll" == img.Name)
+                        {
+                           myIsRollInProgress = true;
+                           RollEndCallback callback = ShowDieResults;
+                           myDieRoller.RollMovingDice(myCanvas, callback);
+                           img.Visibility = Visibility.Hidden;
+                        }
                         if ("Continue" == img.Name)
                            myState = E0477Enum.END;
                         if (false == UpdateGrid())

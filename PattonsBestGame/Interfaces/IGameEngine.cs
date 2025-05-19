@@ -201,6 +201,10 @@ namespace Pattons_Best
       BattleSetupEnd,
       BattleAmbush,
       BattleRandomEvent,
+      BattleRandomEventRoll,
+      BattleEnemyArtilleryRoll,
+      BattleCollateralDamageCheck,
+      BattleMinefieldAttackRoll,
       BattleEmpty,
       BattleEmptyResolve,
 

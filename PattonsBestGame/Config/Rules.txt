@@ -1607,7 +1607,7 @@ r17.25	"<Bold>r17.25 Smoke Restrictions</Bold>
 Spotting rolls are +1 for each Smoke marker on your tank, in the zone with the unit you are attempting to spot, or in any zones between."
 r17.3	"<Bold>r17.3 Hidden Units</Bold> 
 <LineBreak/><LineBreak/>
-Hidden enemy units cannot be spotted, cannot be fired on, and cannot fire at you. This chagnes when your tank moves or the hidden unit moves during the Eney Action Phase 
+Hidden enemy units cannot be spotted, cannot be fired on, and cannot fire at you. This changes when your tank moves or the hidden unit moves during the Eney Action Phase 
 <InlineUIContainer><Button Content='r17.21' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
 If either event occurs, remove the Hidden marker. You may attempt to spot this unit during the next Spotting Phase.
@@ -1636,14 +1636,20 @@ All unidentified units are:<LineBreak/>
 <LineBreak/><LineBreak/>
 When one of these is successfully identified, consult the
 <InlineUIContainer><Button Content='Enemy Appearance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-Table to determine what type of unit is actually present."
+Table to determine what type of unit is actually present.
+<LineBreak/><LineBreak/>
+Hidden units are addressed by 
+<InlineUIContainer><Button Content='r17.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r17.42	"<Bold>r17.42 Unidentified Example</Bold> 
 <LineBreak/><LineBreak/>
 An unidentified tank is placed at medium range to your tanks's front. During the Spotting Phase, your gunner rolls sufficiently low to identify the vehicle. You immediately roll a 5 on the 
 <InlineUIContainer><Button Content='Enemy Appearance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 resulting in the identification of the tank as a Pz IV. Replace the red Pz VIe counter with a black Pz IV counter.
 <LineBreak/><LineBreak/>
-Unidentified units are treated as the unit pictured for all purposes until identified. It is critical to identify counters as quickly as possible. Continue attempting to spot unidentified to spot unidentified units until they are identified."
+Unidentified units are treated as the unit pictured for all purposes until identified. It is critical to identify counters as quickly as possible. Continue attempting to spot unidentified units until they are identified.
+<LineBreak/><LineBreak/>
+Hidden units are addressed by 
+<InlineUIContainer><Button Content='r17.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r18.0	"<Bold>r18.0 Smoke</Bold>
 <LineBreak/><LineBreak/>
 Smoke can be placed on the Battle Board as a tactical tool to obstruct the fire of enemy units. 

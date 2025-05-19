@@ -280,6 +280,12 @@ namespace Pattons_Best
       {
          if (E046Enum.END == myState)
          {
+            if( null == myGameInstance)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myGameInstance=null");
+               return false;
+            }
+            Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "UpdateEndState(): BattleStacks=" + myGameInstance.BattleStacks.ToString());
             if (null == myCallback)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myCallback=null");
@@ -767,6 +773,7 @@ namespace Pattons_Best
          }
          IMapPoint mp = Territory.GetRandomPoint(t, mi.Zoom * Utilities.theMapItemOffset);
          mi.Location = mp;
+         Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "CreateMapItem(): Adding mi=" + mi.Name + " t=" + mi.TerritoryCurrent.Name + " to " + myGameInstance.BattleStacks.ToString() + " at i=" + i.ToString());
          myGameInstance.BattleStacks.Add(mi);
          myGridRows[i].myMapItem = mi;
          return true;
@@ -839,7 +846,7 @@ namespace Pattons_Best
                {
                   myState = E046Enum.SPW_OR_PSW_ROLL;
                   if (false == UpdateGrid())
-                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateGrid() return false");
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateGrid() return false for i=" + i.ToString());
                   myIsRollInProgress = false;
                   return;
                }

@@ -1117,6 +1117,16 @@ namespace Pattons_Best
                      myTextBlock.Inlines.Add(new Run("Subtracting one for Rain, Fog, or Falling Snow."));
                }
                break;
+            case "e039":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  Image imge039 = new Image { Name = "Continue39", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                  myTextBlock.Inlines.Add(new Run("                        "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge039));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
             default:
                break;
          }
@@ -1810,6 +1820,14 @@ namespace Pattons_Best
                            action = GameAction.EveningDebriefingStart;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
+                        case "Continue39":
+                           action = GameAction.BattleRandomEventRoll;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "MilitaryWatch":
+                           action = GameAction.BattleRoundSequenceStart;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
                         default:
                            break;// do nothing
                      }
@@ -1911,9 +1929,9 @@ namespace Pattons_Best
                action = GameAction.SetupShowMapHistorical;
                //action = GameAction.TestingStartMorningBriefing; // <cgs> TEST
                //action = GameAction.TestingStartPreparations; // <cgs> TEST
-               //action = GameAction.TestingStartMovement; // <cgs> TEST
+               action = GameAction.TestingStartMovement; // <cgs> TEST
                //action = GameAction.TestingStartBattle; // <cgs> TEST
-               action = GameAction.TestingStartAmbush; // <cgs> TEST
+               //action = GameAction.TestingStartAmbush; // <cgs> TEST
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Cancel":

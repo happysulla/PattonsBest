@@ -16,7 +16,9 @@ using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Windows.Devices.Perception;
+using static Pattons_Best.EventViewerResolveRandomEvent;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Windows.Forms.AxHost;
 
 namespace Pattons_Best
 {
@@ -1063,7 +1065,6 @@ namespace Pattons_Best
          for (int i = 0; i < 3; ++i)
          {
             dieRoll = Utilities.RandomGenerator.Next(1, 11);
-            dieRoll = 10; // <cgs>
             if (false == SetArtillerySupportCounter(gi, dieRoll)) // set strength in current territory
             {
                Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): SetArtillerySupportCounter() returned false");
@@ -1075,7 +1076,6 @@ namespace Pattons_Best
          for (int i = 0; i < 2; ++i)
          {
             dieRoll = Utilities.RandomGenerator.Next(1, 11);
-            dieRoll = 10; // <cgs>
             if (dieRoll < 5)
             {
                string nameAir = "Air" + Utilities.MapItemNum.ToString();
@@ -1094,7 +1094,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): PerformAutoSetupSkipMovement() returned false");
             return false;
          }
-         gi.IsLeadTank = true; //<cgs> TEST
+         //gi.IsLeadTank = false; //<cgs> TEST
          //--------------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -1805,6 +1805,9 @@ namespace Pattons_Best
                   break;
                case GameAction.MovementBattleCheckRoll:
                   Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "GameStateMovement.PerformAction(MovementBattleCheckRoll): " + gi.MoveStacks.ToString());
+                  Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "GameStateMovement.PerformAction(MovementBattleCheckRoll): gi.MapItemMoves.Clear()");
+                  gi.MapItemMoves.Clear();
+                  dieRoll = 10; // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   switch (gi.BattleResistance)
@@ -2213,7 +2216,7 @@ namespace Pattons_Best
                case GameAction.BattleAmbushRoll:
                   if (true == lastReport.Weather.Contains("Rain") || true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
                      dieRoll--;
-                  dieRoll = 1; // <cgs> 
+                  dieRoll = 1; // <cgs> TEST
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (dieRoll < 8)
@@ -2234,8 +2237,100 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleAmbush: // Handled with EventViewerBattleAmbush class
                   break;
-               case GameAction.BattleRandomEvent: 
-                  gi.GamePhase = GamePhase.BattleRoundSequence;
+               case GameAction.BattleRandomEvent:
+                  gi.EventDisplayed = gi.EventActive = "e039";
+                  gi.DieRollAction = GameAction.BattleRandomEventRoll;
+                  break;
+               case GameAction.BattleRandomEventRoll:
+                  dieRoll = 1; // <cgs> TEST
+                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
+                  {
+                     gi.DieResults[key][0] = dieRoll;
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else
+                  {
+                     gi.GamePhase = GamePhase.BattleRoundSequence;
+                     string randomEvent = TableMgr.GetRandomEvent(lastReport.Scenario, dieRoll);
+                     switch (randomEvent)
+                     {
+                        case "Time Passes":
+                           gi.EventDisplayed = gi.EventActive = "e040";
+                           AdvanceTime(lastReport, 15);
+                           break;
+                        case "Friendly Artillery":
+                           gi.EventDisplayed = gi.EventActive = "e041";
+                           break;
+                        case "Enemy Artillery":
+                           gi.EventDisplayed = gi.EventActive = "e042";
+                           gi.DieRollAction = GameAction.BattleEnemyArtilleryRoll;
+                           break;
+                        case "Mines":
+                           gi.GamePhase = GamePhase.BattleRoundSequence;
+                           if ( true == gi.Sherman.IsMoving )
+                           {
+                              gi.EventDisplayed = gi.EventActive = "e043";
+                           }
+                           else
+                           {
+                              gi.EventDisplayed = gi.EventActive = "e044";
+                              gi.DieRollAction = GameAction.BattleMinefieldAttackRoll;
+                           }
+                           break;
+                        case "Panzerfaust":
+                           break;
+                        case "Harrassing Fire":
+                           break;
+                        case "Friendly Advance":
+                           break;
+                        case "Enemy Reinfore":
+                           break;
+                        case "Enemy Advance":
+                           break;
+                        case "Flanking Fire":
+                           break;
+                        default:
+                           returnStatus = "reached default with randomEvent=" + randomEvent;
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
+                           break;
+                     }
+                  }
+                  break;
+               case GameAction.BattleEnemyArtilleryRoll:
+                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
+                  {
+                     gi.DieResults[key][0] = dieRoll;
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                     if (dieRoll < 7)
+                        lastReport.VictoryPtsFriendlySquad += 1;
+                     else if (dieRoll < 10 )
+                        lastReport.VictoryPtsFriendlySquad += 2;
+                     else
+                        lastReport.VictoryPtsFriendlySquad += 3;
+                  }
+                  else
+                  {
+                     action = GameAction.BattleCollateralDamageCheck;
+                  }
+                  break;
+               case GameAction.BattleMinefieldAttackRoll:
+                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
+                  {
+                     gi.DieResults[key][0] = dieRoll;
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                     if (dieRoll < 2)
+                     {
+                        lastReport.VictoryPtsFriendlyTank += 1;
+                     }
+                     else if (dieRoll < 3)
+                     {
+                     }
+                  }
+                  else
+                  {
+                     action = GameAction.BattleRoundSequenceStart;
+                     gi.GamePhase = GamePhase.BattleRoundSequence;
+                  }
                   break;
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;

@@ -85,6 +85,7 @@ for loading ammo. The Tank Card limits the number of normal main gun ammo allowe
 <Bold>-- HE:</Bold> Unlimited"
 e010	"<Bold>e010 Time Check</Bold> 
 <InlineUIContainer><Button Content='r4.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='r21.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
 Determine sunrise and sunset for current month using the <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. 
 Roll 1D on the 
@@ -325,6 +326,108 @@ Click the Gun Reload marker/button if you want the reload to come from the ready
 <LineBreak/><LineBreak/>
 Determine the specific unit type for any units identified per 
 <InlineUIContainer><Button Content='r17.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>"
+e039	"<Bold>e039 Random Events for Ambush</Bold> 
+<InlineUIContainer><Button Content='r4.65' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<LineBreak/><LineBreak/>
+Roll on the 
+<InlineUIContainer><Button Content='Random Events' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table:  
+<InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer>
+<LineBreak/><LineBreak/>
+  <InlineUIContainer><Button Content='e040' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Time Passes<LineBreak/>
+  <InlineUIContainer><Button Content='e041' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Friendly Artillery<LineBreak/>
+  <InlineUIContainer><Button Content='e042' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Artillery<LineBreak/>
+  <InlineUIContainer><Button Content='e043' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Mine Attack<LineBreak/>
+  <InlineUIContainer><Button Content='e044' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Panzerfaust Attack<LineBreak/>
+  <InlineUIContainer><Button Content='e045' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Harrassing Fire<LineBreak/>
+  <InlineUIContainer><Button Content='e046' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Friendly Advance<LineBreak/>
+  <InlineUIContainer><Button Content='e047' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Reinforcment<LineBreak/>
+  <InlineUIContainer><Button Content='e048' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Advance<LineBreak/>
+  <InlineUIContainer><Button Content='e049' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Flanking Fire<LineBreak/>
+<LineBreak/><LineBreak/>"
+e040	"<Bold>e040 Time Passes</Bold> 
+<InlineUIContainer><Button Content='r21.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<LineBreak/><LineBreak/>
+Fifteen minutes pass on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+<LineBreak/><LineBreak/>
+Click image to continue.
+<LineBreak/><LineBreak/>
+                                   <InlineUIContainer><Image Name='MilitaryWatch' Height='100' Width='200'></Image></InlineUIContainer>"
+e041	"<Bold>e041 Friendly Artillery</Bold> 
+<InlineUIContainer><Button Content='r23.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<LineBreak/><LineBreak/>
+Friendly artillery support arrives. Click image to continue.
+<LineBreak/><LineBreak/>
+                                        <InlineUIContainer><Image Name='c39ArtillerySupport'  Height='80' Width='80'></Image></InlineUIContainer>"
+e042	"<Bold>e042 Enemy Artillery</Bold> 
+<LineBreak/><LineBreak/>
+Enemy artillery arrives. Roll 1D to knock out (KO) friendly units: 
+<InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>
+<LineBreak/><LineBreak/>
+1 KO for 1-6<LineBreak/>
+2 KO for 7-9<LineBreak/>
+3 KO for 10
+<LineBreak/><LineBreak/>"
+e043	"<Bold>e043 Mine Attack</Bold> 
+<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<LineBreak/><LineBreak/>
+Roll 1D on the 
+<InlineUIContainer><Button Content='Minefield' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Attack Table: 
+<InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer> "
+e043a	"<Bold>e043a Mine Attack Ignored</Bold> 
+<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<LineBreak/><LineBreak/>
+No effect since Sherman is not moving. Click image to continue.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='Continue043' Height='100' Width='100'></Image></InlineUIContainer>"
+e044	"<Bold>e044 Panzerfaust Attack</Bold> 
+<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<LineBreak/><LineBreak/>
+Determine from which sector of the Battle Board attack is originating by rolling 1D according to 
+<InlineUIContainer><Button Content='r5.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> :  
+<InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>
+<LineBreak/><LineBreak/>
+If the sector rolled is US controlled, no attack is made. If the sector is not US Controlled, a Panzerfaust marker is placed in the sector's close range.
+<LineBreak/><LineBreak/>
+If an attack occurs, roll on the 
+<InlineUIContainer><Button Content='Panzerfaust' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Attack Table to hit Sherman:  
+<InlineUIContainer><Image Name='DieRollWhite1' Height='21' Width='21' Visibility='Hidden'> </Image></InlineUIContainer>
+<LineBreak/><LineBreak/>
+If hits, roll again to see if your tank is knocked out (KO):  
+<InlineUIContainer><Image Name='DieRollWhite2' Height='21' Width='21' Visibility='Hidden'> </Image></InlineUIContainer>
+<LineBreak/><LineBreak/>"
+e045	"<Bold>e045 Harrassing Fire</Bold> 
+<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<LineBreak/><LineBreak/>
+Your tank is sprayed with small weapons fire. Roll 1D on the 
+<InlineUIContainer><Button Content='Collateral' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Damage Table:  
+<InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>
+<LineBreak/><LineBreak/>"
+e046	"<Bold>e046 Friendly Advance</Bold> 
+<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<LineBreak/><LineBreak/>
+Place a US Controlled marker in a sector of your choice that is empty of enemy units and adjacent to a sector already US Controlled."
+e046a	"<Bold>e046a Friendly Advance Ignored</Bold> 
+<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<LineBreak/><LineBreak/>
+Since there is no sector adjacent to a US Controlled sector that is empty of enemy units, this event is ignored. Click image to continue."
+e047	"<Bold>e047 Enemy Reinformement</Bold> 
+<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<LineBreak/><LineBreak/>"
+e048	"<Bold>e048 Enemy Advance</Bold> 
+<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<LineBreak/><LineBreak/>
+Remove one US Control marker from sector adjacent to an enemy unit. If two sectors are eligible, it is chosen randomly"
+e048a	"<Bold>e048a Enemy Advance Ignored</Bold> 
+<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<LineBreak/><LineBreak/>
+Since no sector is adjacent to an enemy unit, this event is ignored. Click image to continue."
+e049	"<Bold>e049 Flanking Fire</Bold> 
+<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<LineBreak/><LineBreak/>
+Roll against each enemy unit on the Friendly Action Table with a die roll modifer of -10. Click image to continue.
 <LineBreak/><LineBreak/>"
 e050	"<Bold>e050 Evening Debriefing</Bold> 
 <LineBreak/><LineBreak/>

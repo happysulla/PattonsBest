@@ -197,7 +197,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == myGameInstance.EnteredArea)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): myGameInstance.EnteredArea=null");
+            Logger.Log(LogEnum.LE_ERROR, "PerformEnemyAction(): myGameInstance.EnteredArea=null");
             return false;
          }
          myAreaType = myGameInstance.EnteredArea.Type;
@@ -219,11 +219,12 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "PerformEnemyAction(): lastReport=null");
             return false;
          }
          myScenario = lastReport.Scenario;
          //--------------------------------------------------
+         Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "PerformEnemyAction(): BattleStacks=" + myGameInstance.BattleStacks.ToString());
          int i = 0;
          foreach(IStack stack3 in myGameInstance.BattleStacks)
          {
@@ -517,7 +518,7 @@ namespace Pattons_Best
                {
                   BitmapImage bmi = new BitmapImage();
                   bmi.BeginInit();
-                  bmi.UriSource = new Uri(MapImage.theImageDirectory + "TigerFiring3.gif", UriKind.Absolute);
+                  bmi.UriSource = new Uri(MapImage.theImageDirectory + "TigerFiring.gif", UriKind.Absolute);
                   bmi.EndInit();
                   System.Windows.Controls.Image img = new System.Windows.Controls.Image { Name = "YourTank", Source = bmi, Width = Utilities.ZOOM * Utilities.theMapItemSize * 1.75, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                   ImageBehavior.SetAnimatedSource(img, bmi);
@@ -1427,7 +1428,7 @@ namespace Pattons_Best
          switch (myState)
          {
             case E0475Enum.ENEMY_ACTION_SELECT:
-               dieRoll = 81 - myGridRows[i].myModifierEnemyAction; // <cgs> TEST
+               //dieRoll = 81 - myGridRows[i].myModifierEnemyAction; // <cgs> TEST
                myGridRows[i].myDieRollEnemyAction = dieRoll;
                string enemyAction = TableMgr.SetEnemyActionResult(myGameInstance, mi, dieRoll);
                if ("ERROR" == enemyAction)

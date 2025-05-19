@@ -121,24 +121,14 @@ namespace Pattons_Best
          foreach (object o in myList)
          {
             IStack stack = (IStack)o;
-            bool isMapItemRemoved = false;
             foreach (MapItem mapItem in stack.MapItems)
             {
-
                if (mi.Name == mapItem.Name)
                {
-                  isMapItemRemoved = true;
                   stack.MapItems.Remove(mapItem);
                   if (0 == stack.MapItems.Count)
-                  {
                      Remove(stack);
-                     return;
-                  }
-               }
-               if (true == isMapItemRemoved) // future mapitems move up in stack
-               {
-                  mapItem.Location.X += Utilities.STACK;
-                  mapItem.Location.Y += Utilities.STACK;
+                  return;
                }
             }
          }
@@ -148,21 +138,14 @@ namespace Pattons_Best
          foreach (object o in myList)
          {
             IStack stack = (IStack)o;
-            bool isMapItemRemoved = false;
             foreach (MapItem mapItem in stack.MapItems)
             {
                if (miName == mapItem.Name)
                {
-                  isMapItemRemoved = true;
                   stack.MapItems.Remove(mapItem);
                   if (0 == stack.MapItems.Count)
                      Remove(stack);
                   return;
-               }
-               if (true == isMapItemRemoved) // future mapitems move up in stack
-               {
-                  mapItem.Location.X += Utilities.STACK;
-                  mapItem.Location.Y += Utilities.STACK;
                }
             }
          }

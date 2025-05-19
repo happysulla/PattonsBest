@@ -2164,6 +2164,74 @@ namespace Pattons_Best
          return toKillNum;
       }
       //-------------------------------------------
+      public static string GetRandomEvent(EnumScenario scenario, int dieRoll)
+      {
+         string randomEvent = "ERROR";
+         switch(scenario)
+         {
+            case EnumScenario.Advance:
+               if (dieRoll < 6)
+                  return "Time Passes";
+               if (dieRoll < 16)
+                  return "Friendly Artillery";
+               if (dieRoll < 21)
+                  return "Enemy Artillery";
+               if (dieRoll < 26)
+                  return "Mines";
+               if (dieRoll < 31)
+                  return "Panzerfaust";
+               if (dieRoll < 36)
+                  return "Harrassing Fire";
+               if (dieRoll < 61)
+                  return "Friendly Advance";
+               if (dieRoll < 81)
+                  return "Enemy Reinfore";
+               return "Flanking Fire";
+            case EnumScenario.Battle:
+               if (dieRoll < 6)
+                  return "Time Passes";
+               if (dieRoll < 16)
+                  return "Friendly Artillery";
+               if (dieRoll < 21)
+                  return "Enemy Artillery";
+               if (dieRoll < 31)
+                  return "Mines";
+               if (dieRoll < 36)
+                  return "Panzerfaust";
+               if (dieRoll < 41)
+                  return "Harrassing Fire";
+               if (dieRoll < 46)
+                  return "Friendly Advance";
+               if (dieRoll < 61)
+                  return "Enemy Reinfore";
+               if (dieRoll < 81)
+                  return "Enemy Advance";
+               return "Flanking Fire";
+            case EnumScenario.Counterattack:
+               if (dieRoll < 6)
+                  return "Time Passes";
+               if (dieRoll < 26)
+                  return "Friendly Artillery";
+               if (dieRoll < 36)
+                  return "Enemy Artillery";
+               if (dieRoll < 41)
+                  return "Panzerfaust";
+               if (dieRoll < 46)
+                  return "Harrassing Fire";
+               if (dieRoll < 51)
+                  return "Friendly Advance";
+               if (dieRoll < 76)
+                  return "Enemy Reinfore";
+               if (dieRoll < 91)
+                  return "Enemy Advance";
+               return "Flanking Fire";
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetRandomEvent(): reached default scenario=" + scenario.ToString());
+               return "ERROR";
+         }
+         return randomEvent;
+      }
+      //-------------------------------------------
       public static int GetSpottingModifier(IGameInstance gi, IMapItem mi, ICrewMember cm, char sector, char range)
       {
          IAfterActionReport? lastReport = gi.Reports.GetLast();
