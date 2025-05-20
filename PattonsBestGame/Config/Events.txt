@@ -345,7 +345,7 @@ Table:
   <InlineUIContainer><Button Content='e047' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Reinforcment<LineBreak/>
   <InlineUIContainer><Button Content='e048' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Advance<LineBreak/>
   <InlineUIContainer><Button Content='e049' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Flanking Fire<LineBreak/>
-<LineBreak/><LineBreak/>"
+<LineBreak/>"
 e040	"<Bold>e040 Time Passes</Bold> 
 <InlineUIContainer><Button Content='r21.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>

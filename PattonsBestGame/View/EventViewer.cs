@@ -1121,8 +1121,9 @@ namespace Pattons_Best
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
                   Image imge039 = new Image { Name = "Continue39", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
-                  myTextBlock.Inlines.Add(new Run("                        "));
+                  myTextBlock.Inlines.Add(new Run("                                      "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge039));
+                  myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }

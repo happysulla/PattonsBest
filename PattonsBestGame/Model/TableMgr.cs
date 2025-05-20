@@ -2163,6 +2163,37 @@ namespace Pattons_Best
          toKillNum = table[armorclass, facingNum, rangeNum, locationNum];
          return toKillNum;
       }
+      public static int GetExplosionModifier(IGameInstance gi, IMapItem mi, string hitLocation)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetExplosionModifier(): lastReport=null");
+            return -1000;
+         }
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         //----------------------------------
+         int modifier = 0;
+         //----------------------------------
+         if( "Hull" == hitLocation )
+            modifier += 5;
+         //----------------------------------
+         string enemyUnit = mi.GetEnemyUnit();
+         if (("ATG" == enemyUnit) || ("Pak43" == enemyUnit) || ("PzVIb" == enemyUnit) || ("TANK" == enemyUnit) || ("PzVIe" == enemyUnit) )
+            modifier += 5;
+         //----------------------------------
+         int roundsOnBoard = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
+         int diff = roundsOnBoard - card.myNumMainGunRound;
+         if( 0 < diff )
+         {
+            int extraAmmoMod = (int)Math.Ceiling((double)diff / 2.0);
+            modifier += extraAmmoMod;
+         }
+         //----------------------------------
+         if (false == card.myIsWetStowage)
+            modifier += 5;
+         return modifier;
+      }
       //-------------------------------------------
       public static string GetRandomEvent(EnumScenario scenario, int dieRoll)
       {
