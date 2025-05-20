@@ -57,9 +57,6 @@ namespace Pattons_Best
       private int myRollResultRowNum = 0;
       private int myRollResultColNum = 0;
       private bool myIsRollInProgress = false;
-      private int myDieRollExplosion = Utilities.NO_RESULT;
-      private int myExplosionModifier = 0;
-      private string myExplosionResult = "Uninit";
       //============================================================
       public struct GridRow
       {
@@ -94,6 +91,11 @@ namespace Pattons_Best
          public string myToKillResultYourTank = "UNINT";
          public int myToKillNumberYourTank = 0;
          public int myDieRollToKillYourTank = Utilities.NO_RESULT;
+         //---------------------------------------------------
+         public int myDieRollExplosion = Utilities.NO_RESULT;
+         public int myExplosionModifier = 0;
+         public string myExplosionResult = "Uninit";
+         //---------------------------------------------------
          public GridRow(IMapItem enemyUnit)
          {
             myMapItem = enemyUnit;
@@ -1437,10 +1439,6 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "ShowDieResults(): myGameInstance.MapItemMoves.Clear()");
          myGameInstance.MapItemMoves.Clear();
          //-------------------------------
-         myDieRollExplosion = Utilities.NO_RESULT;
-         myExplosionModifier = 0;
-         myExplosionResult = "Uninit";
-         //-------------------------------
          int i = myRollResultRowNum - STARTING_ASSIGNED_ROW;
          if (i < 0)
          {
@@ -1669,6 +1667,7 @@ namespace Pattons_Best
             //------------------------------------------------------------------------------------------------
             case E0475Enum.ENEMY_ACTION_TO_KILL_YOUR_TANK:
                myGridRows[i].myDieRollToHitYourTank = dieRoll;
+               IMapItem enemyMapItem = myGridRows[i].myMapItem;
                if (2 == myRollResultColNum)
                {
                   Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Hit Location for myState=" + myState.ToString() + " dr=" + dieRoll);
@@ -1699,7 +1698,7 @@ namespace Pattons_Best
                      myGameInstance.Sherman.SetBloodSpots();
                      myGameInstance.Sherman.IsKilled = true;
                      myGridRows[i].myToKillResultYourTank = "KO";
-                     myExplosionModifier = TableMgr.GetExplosionModifier(myGameInstance, myGridRows[i].myMapItem, myGridRows[i].myHitLocationYourTank);
+                     //myExplosionModifier = TableMgr.GetExplosionModifier(myGameInstance, enemyMapItem, myGridRows[i].myHitLocationYourTank);
                      for (int j = 0; j < myMaxRowCount; ++j)
                      {
                         if (Utilities.NO_RESULT == myGridRows[j].myDieRollHitLocationYourTank)
@@ -1735,11 +1734,11 @@ namespace Pattons_Best
                break;
             //------------------------------------------------------------------------------------------------
             case E0475Enum.ENEMY_ACTION_TANK_EXPLOSION:
-               myDieRollExplosion = dieRoll;
-               if( 99 <  dieRoll + myExplosionModifier)
-                  myExplosionResult = "Tank Explodes";
+               myGridRows[0].myDieRollExplosion = dieRoll;
+               if( 99 <  dieRoll + myGridRows[0].myExplosionModifier)
+                  myGridRows[0].myExplosionResult = "Tank Explodes";
                else
-                  myExplosionResult = "Tank Destroyed";
+                  myGridRows[0].myExplosionResult = "Tank Destroyed";
                myState = E0475Enum.ENEMY_ACTION_TANK_EXPLOSION_SHOW;
                break;
             default:
@@ -1958,12 +1957,16 @@ namespace Pattons_Best
                            myTextBlock4.Text = "Die Roll";
                            myTextBlock5.Text = "Results";
                         }
-                        if ("DieRoll" == img.Name)
+                        if ("TankExplosion" == img.Name)
                         {
-                           myIsRollInProgress = true;
-                           RollEndCallback callback = ShowDieResults;
-                           myDieRoller.RollMovingDie(myCanvas, callback);
-                           img.Visibility = Visibility.Hidden;
+                           Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "Grid_MouseDown(): p=" + myState.ToString() + "-->ENEMY_ACTION_TO_KILL_YOUR_TANK");
+                           myState = E0475Enum.ENEMY_ACTION_TO_KILL_YOUR_TANK;
+                           myTextBlockHeader.Text = "r4.75 Enemy Action - To Kill Your Tank";
+                           myTextBlock2.Text = "Hit Location";
+                           myTextBlock3.Text = "To Kill Number";
+                           myTextBlock4.Visibility = Visibility.Visible;
+                           myTextBlock4.Text = "Die Roll";
+                           myTextBlock5.Text = "Results";
                         }
                         if ("Continue" == img.Name)
                            myState = E0475Enum.END;
