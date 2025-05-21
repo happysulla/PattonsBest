@@ -2530,9 +2530,16 @@ namespace Pattons_Best
                   }
                }
                foreach (IMapItem mi in removals)
+               {
                   gi.BattleStacks.Remove(mi);
+                  Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "GameStateBattle.PerformAction(): removing mi=" + mi.Name + " from BattleStacks=" + gi.BattleStacks.ToString());
+               }
+
                foreach (IMapItem mi in additions)
+               {
                   gi.BattleStacks.Add(mi);
+                  Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "GameStateBattle.PerformAction(): adding mi=" + mi.Name + " from BattleStacks=" + gi.BattleStacks.ToString());
+               }
                //----------------------------------------------
                if (false == SpottingPhaseBegin(gi, ref action))
                {

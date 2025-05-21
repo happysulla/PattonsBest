@@ -90,9 +90,9 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_GAME_INIT);
          //SetOn(LogEnum.LE_GAME_INIT_VERSION);
          SetOn(LogEnum.LE_NEXT_ACTION);
-         //SetOn(LogEnum.LE_SHOW_STACK_ADD);
-         //SetOn(LogEnum.LE_SHOW_STACK_DEL);
-         //SetOn(LogEnum.LE_SHOW_STACK_VIEW);
+         SetOn(LogEnum.LE_SHOW_STACK_ADD);
+         SetOn(LogEnum.LE_SHOW_STACK_DEL);
+         SetOn(LogEnum.LE_SHOW_STACK_VIEW);
          //SetOn(LogEnum.LE_SHOW_ENEMY_STRENGTH);
          //SetOn(LogEnum.LE_SHOW_RANDOM_PT);
          // SetOn(LogEnum.LE_SHOW_ROTATION);

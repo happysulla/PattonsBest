@@ -55,16 +55,12 @@
 			</TableCell>
 			<TableCell TextAlignment='Center' Background='DodgerBlue'>
 				<Paragraph>
-					<Bold>
 						<Run Text='1-30'> </Run>
-					</Bold>
 				</Paragraph>
 			</TableCell>
 			<TableCell TextAlignment='Center' Background='DodgerBlue'>
 				<Paragraph>
-					<Bold>
 						<Run Text=' '> </Run>
-					</Bold>
 				</Paragraph>
 			</TableCell>
 		</TableRow>

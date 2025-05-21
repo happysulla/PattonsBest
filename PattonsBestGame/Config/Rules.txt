@@ -2067,18 +2067,23 @@ r23.1	"<Bold>r23.1 Artillery Support</Bold>
 <LineBreak/><LineBreak/>
 Artillery support can be called for during the Movement Sequence 
 <InlineUIContainer><Button Content='r4.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
-This operation takes 15 minutes. Mark off the time and rol 1D as shown on the 
+This operation takes 15 minutes. Mark off the time and roll 1D as shown on the 
 <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 Use Table to see if the support arrives. It arrives on 1-7 roll. 
 <LineBreak/><LineBreak/>
 If successful, place an Artillery Support marker in the area where the artillery landed. If at any time during this day you enter the marked area (before reaching the exit area), the artillery support will attack all enemy units appearing. 
 <LineBreak/><LineBreak/>
-Additional artillery support may be called for, but no more than three support markers may be on the Movement Board at one time. You may voluntarily pick up an Artillery Support marker if you decide to attempt to place it elsewhere.
+Additional artillery support may be called for, but no more than three support markers may be on the Movement Board at one time. You may voluntarily pick up an Artillery Support marker if you decide to attempt to place it elsewhere. 
+<LineBreak/><LineBreak/>
+Resolution is performed per  
+<InlineUIContainer><Button Content='r23.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
 <LineBreak/><LineBreak/>
                                         <InlineUIContainer><Image Name='c39ArtillerySupport'  Height='80' Width='80'></Image></InlineUIContainer>"
 r23.11	"<Bold>r23.1 Artillery Support Resolution</Bold>
 <LineBreak/><LineBreak/>
-Artillery support takes effect in a newly entered area immediately after any appearing enemy units are placed on the Battle Board. Resolve Arillery Support by rolling on the 
+Artillery support takes effect in a newly entered area immediately after any appearing enemy units are placed on the Battle Board. 
+<LineBreak/><LineBreak/>
+Resolve Arillery Support by rolling on the 
 <InlineUIContainer><Button Content='Friendly Action' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table against each enemy unit.
 <LineBreak/><LineBreak/>
 Enemy units destroyed by artillery support are immediately removed, and their victory points ar recorded under friendly forces of the After Action Report 
