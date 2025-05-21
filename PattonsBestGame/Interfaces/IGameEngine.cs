@@ -76,6 +76,7 @@ namespace Pattons_Best
       UpdateStatusBar,
       UpdateTankCard,
       UpdateBattleBoard,
+      UpdateTankExplosion,
       UpdateShowRegion,
       UpdateEventViewerDisplay,
       UpdateEventViewerActive,
@@ -209,6 +210,7 @@ namespace Pattons_Best
       BattleEmptyResolve,
 
       BattleRoundSequenceStart,
+      BattleRoundSequenceSmokeDepletionEnd,
       BattleRoundSequenceSpotting,
       BattleRoundSequenceSpottingEnd,
       BattleRoundSequenceOrders,

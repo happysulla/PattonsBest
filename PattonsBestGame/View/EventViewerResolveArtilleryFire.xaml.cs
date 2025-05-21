@@ -20,6 +20,7 @@ namespace Pattons_Best
    public partial class EventViewerResolveArtilleryFire : UserControl
    {
       public delegate bool EndResolveArtilleryFireCallback();
+      private const int NUM_OF_ROWS = 20;
       private const int STARTING_ASSIGNED_ROW = 6;
       private const int PREVIOUSLY_KIA = 100;
       public enum E0464Enum
@@ -48,7 +49,7 @@ namespace Pattons_Best
             myMapItemEnemy = enemyUnit;
          }
       };
-      private GridRow[] myGridRows = new GridRow[10];
+      private GridRow[] myGridRows = new GridRow[NUM_OF_ROWS];
       //---------------------------------------------------
       private IGameEngine? myGameEngine;
       private IGameInstance? myGameInstance;
@@ -169,18 +170,24 @@ namespace Pattons_Best
             return false;
          }
          myArtilleryCount = 0;
-         IMapItems removals = new MapItems();
-         foreach (IMapItem mi in stack1.MapItems)
+         if( (true == myGameInstance.IsAmbush) || (GamePhase.BattleRoundSequence == myGameInstance.GamePhase) )
          {
-            if (true == mi.Name.Contains("Artillery"))
-            {
-               myArtilleryCount++;
-               removals.Add(mi);
-            }
+            myArtilleryCount = 1;
          }
-         foreach (IMapItem mi in removals)
-            myGameInstance.MoveStacks.Remove(mi);
-         Logger.Log(LogEnum.LE_VIEW_ART_FIRE_RESOLVE, "ResolveArtilleryFire(): myNumUseControlled=" + myNumUseControlled.ToString());
+         else // initial artillery firing entering area
+         {
+            IMapItems removals = new MapItems();
+            foreach (IMapItem mi in stack1.MapItems)
+            {
+               if (true == mi.Name.Contains("Artillery"))
+               {
+                  myArtilleryCount++;
+                  removals.Add(mi);
+               }
+            }
+            foreach (IMapItem mi in removals)
+               myGameInstance.MoveStacks.Remove(mi);
+         }
          //--------------------------------------------------
          string[] sectors = new string[6] { "B1M", "B2M", "B3M", "B4M", "B6M", "B9M" };
          foreach (string sector in sectors)
@@ -203,7 +210,7 @@ namespace Pattons_Best
                }
             }
          }
-         Logger.Log(LogEnum.LE_VIEW_ART_FIRE_RESOLVE, "ResolveArtilleryFire(): myNumUseControlled=" + myNumUseControlled.ToString());
+         Logger.Log(LogEnum.LE_VIEW_ART_FIRE_RESOLVE, "ResolveArtilleryFire(): myNumUseControlled=" + myNumUseControlled.ToString() + " stacks=" + myGameInstance.BattleStacks.ToString());
          //--------------------------------------------------
          int i = 0;
          foreach(IStack stack3 in myGameInstance.BattleStacks)
@@ -227,6 +234,11 @@ namespace Pattons_Best
                      myGridRows[i].myRange = range;
                      myGridRows[i].mySector = sector;
                      ++i;
+                     if(NUM_OF_ROWS == i)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "ResolveArtilleryFire(): i=" + NUM_OF_ROWS.ToString() + " for stacks=" + myGameInstance.BattleStacks.ToString());
+                        return false;
+                     }
                   }
                }
             }
@@ -455,8 +467,8 @@ namespace Pattons_Best
       {
          System.Windows.Controls.Button b = new Button { };
          b.Name = mi.Name;
-         b.Width = mi.Zoom * Utilities.theMapItemSize;
-         b.Height = mi.Zoom * Utilities.theMapItemSize;
+         b.Width = Utilities.ZOOM * Utilities.theMapItemSize;
+         b.Height = Utilities.ZOOM * Utilities.theMapItemSize;
          b.BorderThickness = new Thickness(0);
          b.Background = new SolidColorBrush(Colors.Transparent);
          b.Foreground = new SolidColorBrush(Colors.Transparent);

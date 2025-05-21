@@ -1486,51 +1486,72 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): lastReport=null");
             return false;
          }
-         if (null == myGameInstance.EnteredArea)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): myGameInstance.EnteredArea=null");
-            return false;
-         }
-         IStack? stackEnteredArea = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
-         if( null == stackEnteredArea )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): stackEnteredArea=null");
-            return false;
-         }
          bool isAirStrike = false;
          bool isArtilleryStrike = false;
-         foreach (IMapItem mi in stackEnteredArea.MapItems)
+         GameAction outAction = GameAction.BattleAmbushStart;
+         if ( (true == myGameInstance.IsAmbush) || (GamePhase.BattleRoundSequence == myGameInstance.GamePhase) ) // Friendly action during ambush as part of Random Events
          {
-            if (true == mi.Name.Contains("Air"))
-               isAirStrike = true;
-            if (true == mi.Name.Contains("Artillery"))
-               isArtilleryStrike = true;
+            outAction = GameAction.BattleRoundSequenceStart;
+         }
+         else if (GamePhase.BattleRoundSequence == myGameInstance.GamePhase) // Friendly action during normal Battle Road Sequence as part of Random Events
+         {
+            outAction = GameAction.BattleRoundSequenceStart;
+         }
+         else
+         {
+            if (null == myGameInstance.EnteredArea)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): myGameInstance.EnteredArea=null");
+               return false;
+            }
+            IStack? stackEnteredArea = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
+            if (null == stackEnteredArea)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): stackEnteredArea=null");
+               return false;
+            }
+            foreach (IMapItem mi in stackEnteredArea.MapItems)
+            {
+               if (true == mi.Name.Contains("Air"))
+                  isAirStrike = true;
+               if (true == mi.Name.Contains("Artillery"))
+                  isArtilleryStrike = true;
+            }
+            //--------------------------------------------------
+            bool isEnemyUnitAvailableForAirStrike = false;
+            foreach (IStack stack in myGameInstance.BattleStacks)
+            {
+               foreach (IMapItem mi in stack.MapItems)
+               {
+                  if (true == mi.IsEnemyUnit())
+                  {
+                     if (((false == lastReport.Weather.Contains("Fog")) && (false == lastReport.Weather.Contains("Falling"))) || (("B6M" != stack.Territory.Name) && ("B6L" != stack.Territory.Name)))
+                     {
+                        isEnemyUnitAvailableForAirStrike = true;
+                        break;
+                     }
+                  }
+               }
+            }
+            if (true == isArtilleryStrike)
+               outAction = GameAction.BattleResolveArtilleryFire;
+            else if ((true == isAirStrike) && (true == isEnemyUnitAvailableForAirStrike))
+               outAction = GameAction.BattleResolveAirStrike;
          }
          //--------------------------------------------------
-         GameAction outAction = GameAction.BattleAmbushStart;
-         int enemyCount = 0;
-         bool isEnemyUnitAvailableForAirStrike = false;
+         bool isBattleBoardEmpty = true;
          foreach (IStack stack in myGameInstance.BattleStacks)
          {
             foreach (IMapItem mi in stack.MapItems)
             {
                if (true == mi.IsEnemyUnit())
                {
-                  ++enemyCount;
-                  if ( ((false == lastReport.Weather.Contains("Fog")) && (false == lastReport.Weather.Contains("Falling"))) || (("B6M" != stack.Territory.Name) && ("B6L" != stack.Territory.Name)) )
-                  {
-                     isEnemyUnitAvailableForAirStrike = true;
-                     break;
-                  }
+                  isBattleBoardEmpty = false;
+                  break;
                }
             }
          }
-         //--------------------------------------------------
-         if (true == isArtilleryStrike) 
-            outAction = GameAction.BattleResolveArtilleryFire;
-         else if ((true == isAirStrike) && (true == isEnemyUnitAvailableForAirStrike) )
-            outAction = GameAction.BattleResolveAirStrike;
-         if ( 0 == enemyCount )
+         if ( true == isBattleBoardEmpty)
             outAction = GameAction.BattleEmpty;
          //--------------------------------------------------
          StringBuilder sb11 = new StringBuilder("     ######ShowBattleSetupFireResults() :");
@@ -1821,6 +1842,10 @@ namespace Pattons_Best
                            action = GameAction.EveningDebriefingStart;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
+                        case "c111Smoke1": // smoke depletion
+                           action = GameAction.BattleRoundSequenceSmokeDepletionEnd;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
                         case "Continue39":
                            action = GameAction.BattleRandomEventRoll;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
@@ -1930,9 +1955,9 @@ namespace Pattons_Best
                action = GameAction.SetupShowMapHistorical;
                //action = GameAction.TestingStartMorningBriefing; // <cgs> TEST
                //action = GameAction.TestingStartPreparations; // <cgs> TEST
-               action = GameAction.TestingStartMovement; // <cgs> TEST
+               //action = GameAction.TestingStartMovement; // <cgs> TEST
                //action = GameAction.TestingStartBattle; // <cgs> TEST
-               //action = GameAction.TestingStartAmbush; // <cgs> TEST
+               action = GameAction.TestingStartAmbush; // <cgs> TEST
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Cancel":

@@ -799,7 +799,7 @@ namespace Pattons_Best
       }
       private void AddStartingTestingOptions(IGameInstance gi)
       {
-         //gi.IsLeadTank = true;
+         gi.IsLeadTank = true;
       }
       private bool PerformAutoSetup(IGameInstance gi, ref GameAction action)
       {
@@ -973,6 +973,38 @@ namespace Pattons_Best
          IMapItem mi = new MapItem(cm.Role + "OpenHatch", 1.0, "c15OpenHatch", t);
          gi.Hatches.Add(mi);
          //------------------------------------
+         cm = gi.GetCrewMember("Driver");
+         if (null == cm)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Driver");
+            return false;
+         }
+         cm.IsButtonedUp = false;
+         t = Territories.theTerritories.Find("DriverHatch");
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for DriverHatch");
+            return false;
+         }
+         mi = new MapItem(cm.Role + "OpenHatch", 1.0, "c15OpenHatch", t);
+         gi.Hatches.Add(mi);
+         //------------------------------------
+         cm = gi.GetCrewMember("Assistant");
+         if (null == cm)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Assistant");
+            return false;
+         }
+         cm.IsButtonedUp = false;
+         t = Territories.theTerritories.Find("AssistantHatch");
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for AssistantHatch");
+            return false;
+         }
+         mi = new MapItem(cm.Role + "OpenHatch", 1.0, "c15OpenHatch", t);
+         gi.Hatches.Add(mi);
+         //------------------------------------
          ITerritory? t1 = Territories.theTerritories.Find("Spot4");
          if (null == t1)
          {
@@ -1094,7 +1126,6 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): PerformAutoSetupSkipMovement() returned false");
             return false;
          }
-         //gi.IsLeadTank = false; //<cgs> TEST
          //--------------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -1154,6 +1185,7 @@ namespace Pattons_Best
                diceRoll = 100;
             else
                diceRoll = die1 + 10 * die2;
+            diceRoll = 45; // TANK <cgs> TEST
             string enemyUnit = TableMgr.GetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
             IMapItem? mi = null;
             string name = enemyUnit + Utilities.MapItemNum;
@@ -2242,7 +2274,7 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.BattleRandomEventRoll;
                   break;
                case GameAction.BattleRandomEventRoll:
-                  dieRoll = 1; // <cgs> TEST
+                  dieRoll = 9; // <cgs> TEST
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      gi.DieResults[key][0] = dieRoll;
@@ -2259,7 +2291,7 @@ namespace Pattons_Best
                            AdvanceTime(lastReport, 15);
                            break;
                         case "Friendly Artillery":
-                           gi.EventDisplayed = gi.EventActive = "e041";
+                           action = GameAction.BattleResolveArtilleryFire;
                            break;
                         case "Enemy Artillery":
                            gi.EventDisplayed = gi.EventActive = "e042";
@@ -2468,37 +2500,44 @@ namespace Pattons_Best
                }
                else
                {
-                  //------------------------------------------
-                  string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Gunner" };
-                  foreach (string crewmember in crewmembers)
+                  if( false == SpottingPhaseBegin(gi, ref action) )
                   {
-                     ICrewMember? cm = gi.GetCrewMember(crewmember);
-                     if (null == cm)
+                     returnStatus = "SpottingPhaseBegin() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
+                  }
+               }
+               break;
+            case GameAction.BattleRoundSequenceSmokeDepletionEnd:
+               IMapItems removals = new MapItems();
+               IMapItems additions = new MapItems();
+               foreach (IStack stack in gi.BattleStacks)
+               {
+                  foreach (IMapItem mi in stack.MapItems)
+                  {
+                     if (true == mi.Name.Contains("Smoke")) // remove white and gray smoke counters
                      {
-                        returnStatus = "gi.GetCrewMember() returned null";
-                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
-                     }
-                     else
-                     {
-                        List<string>? spottedTerritories = Territory.GetSpottedTerritories(gi, cm);
-                        if (null == spottedTerritories)
+                        removals.Add(mi);
+                        if (true == mi.Name.Contains("SmokeWhite")) // exchange white with gray counters
                         {
-                           returnStatus = "GetSpottedTerritories() returned null";
-                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
-                        }
-                        else if(0 < spottedTerritories.Count)
-                        {
-                           action = GameAction.BattleRoundSequenceSpotting;
-                        }
-                        else
-                        {
-                           action = GameAction.BattleRoundSequenceOrders;
-                           gi.EventDisplayed = gi.EventActive = "e038";
-                           gi.DieRollAction = GameAction.DieRollActionNone;
-                           gi.IsOrdersActive = true;
+                           string miName = "SmokeGrey" + Utilities.MapItemNum;
+                           Utilities.MapItemNum++;
+                           IMapItem smoke = new MapItem(miName, Utilities.ZOOM + 0.75, "c111Smoke1", mi.TerritoryCurrent);
+                           IMapPoint mp = Territory.GetRandomPoint(mi.TerritoryCurrent, mi.Zoom * Utilities.theMapItemOffset);
+                           smoke.Location = mp;
+                           additions.Add(smoke);
                         }
                      }
                   }
+               }
+               foreach (IMapItem mi in removals)
+                  gi.BattleStacks.Remove(mi);
+               foreach (IMapItem mi in additions)
+                  gi.BattleStacks.Add(mi);
+               //----------------------------------------------
+               if (false == SpottingPhaseBegin(gi, ref action))
+               {
+                  returnStatus = "SpottingPhaseBegin() returned false";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
                }
                break;
             case GameAction.BattleRoundSequenceSpottingEnd:
@@ -2535,6 +2574,40 @@ namespace Pattons_Best
          else
             Logger.Log(LogEnum.LE_ERROR, sb12.ToString());
          return returnStatus;
+      }
+      private bool SpottingPhaseBegin(IGameInstance gi, ref GameAction outAction)
+      {
+         string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Gunner" };
+         foreach (string crewmember in crewmembers)
+         {
+            ICrewMember? cm = gi.GetCrewMember(crewmember);
+            if (null == cm)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): gi.GetCrewMember() returned null");
+               return false;
+            }
+            else
+            {
+               List<string>? spottedTerritories = Territory.GetSpottedTerritories(gi, cm);
+               if (null == spottedTerritories)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): GetSpottedTerritories() returned null");
+                  return false;
+               }
+               else if (0 < spottedTerritories.Count)
+               {
+                  outAction = GameAction.BattleRoundSequenceSpotting;
+               }
+               else
+               {
+                  outAction = GameAction.BattleRoundSequenceOrders;
+                  gi.EventDisplayed = gi.EventActive = "e038";
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  gi.IsOrdersActive = true;
+               }
+            }
+         }
+         return true;
       }
    }
    //-----------------------------------------------------

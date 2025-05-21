@@ -92,8 +92,8 @@ namespace Pattons_Best
          public int myToKillNumberYourTank = 0;
          public int myDieRollToKillYourTank = Utilities.NO_RESULT;
          //---------------------------------------------------
-         public int myDieRollExplosion = Utilities.NO_RESULT;
          public int myExplosionModifier = 0;
+         public int myDieRollExplosion = Utilities.NO_RESULT;
          public string myExplosionResult = "Uninit";
          //---------------------------------------------------
          public GridRow(IMapItem enemyUnit)
@@ -332,7 +332,9 @@ namespace Pattons_Best
             {
                foreach (IMapItem mapItem in stack.MapItems)
                {
-                  if (true == mapItem.IsKilled)
+                  if (true == mapItem.IsKilled) //remove KIA units
+                     removals.Add(mapItem);
+                  if( true == mapItem.TerritoryCurrent.Name.Contains("Off")) // remove all units that left the board
                      removals.Add(mapItem);
                }
             }
@@ -482,6 +484,7 @@ namespace Pattons_Best
             case E0475Enum.ENEMY_ACTION_COLLATERAL:
             case E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK:
             case E0475Enum.ENEMY_ACTION_TO_KILL_YOUR_TANK:
+            case E0475Enum.ENEMY_ACTION_TANK_EXPLOSION:
                Rectangle r1 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                myStackPanelAssignable.Children.Add(r1);
                break;
@@ -534,7 +537,7 @@ namespace Pattons_Best
                   bmi3.BeginInit();
                   bmi3.UriSource = new Uri(MapImage.theImageDirectory + "TigerFiring.gif", UriKind.Absolute);
                   bmi3.EndInit();
-                  System.Windows.Controls.Image img3 = new System.Windows.Controls.Image { Name = "YourTank", Source = bmi3, Width = Utilities.ZOOM * Utilities.theMapItemSize * 1.75, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  System.Windows.Controls.Image img3 = new System.Windows.Controls.Image { Name = "ToHitYourTank", Source = bmi3, Width = Utilities.ZOOM * Utilities.theMapItemSize * 1.75, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                   ImageBehavior.SetAnimatedSource(img3, bmi3);
                   myStackPanelAssignable.Children.Add(img3);
                }
@@ -578,7 +581,7 @@ namespace Pattons_Best
                   bmi5.BeginInit();
                   bmi5.UriSource = new Uri(MapImage.theImageDirectory + "TigerFiring4.gif", UriKind.Absolute);
                   bmi5.EndInit();
-                  System.Windows.Controls.Image img5 = new System.Windows.Controls.Image { Name = "YourTank", Source = bmi5, Width = Utilities.ZOOM * Utilities.theMapItemSize * 1.75, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  System.Windows.Controls.Image img5 = new System.Windows.Controls.Image { Name = "ToHitYourTank", Source = bmi5, Width = Utilities.ZOOM * Utilities.theMapItemSize * 1.75, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                   ImageBehavior.SetAnimatedSource(img5, bmi5);
                   myStackPanelAssignable.Children.Add(img5);
                }
@@ -607,9 +610,9 @@ namespace Pattons_Best
                {
                   BitmapImage bmi6 = new BitmapImage();
                   bmi6.BeginInit();
-                  bmi6.UriSource = new Uri(MapImage.theImageDirectory + "TigerFiring4.gif", UriKind.Absolute);
+                  bmi6.UriSource = new Uri(MapImage.theImageDirectory + "TigerFiring.gif", UriKind.Absolute);
                   bmi6.EndInit();
-                  System.Windows.Controls.Image img6 = new System.Windows.Controls.Image { Name = "YourTank", Source = bmi6, Width = Utilities.ZOOM * Utilities.theMapItemSize * 1.75, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  System.Windows.Controls.Image img6 = new System.Windows.Controls.Image { Name = "ToHitYourTank", Source = bmi6, Width = Utilities.ZOOM * Utilities.theMapItemSize * 1.75, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                   ImageBehavior.SetAnimatedSource(img6, bmi6);
                   myStackPanelAssignable.Children.Add(img6);
                }
@@ -630,9 +633,9 @@ namespace Pattons_Best
                {
                   BitmapImage bmi71 = new BitmapImage();
                   bmi71.BeginInit();
-                  bmi71.UriSource = new Uri(MapImage.theImageDirectory + "TigerFiring4.gif", UriKind.Absolute);
+                  bmi71.UriSource = new Uri(MapImage.theImageDirectory + "TigerFiring.gif", UriKind.Absolute);
                   bmi71.EndInit();
-                  System.Windows.Controls.Image img71 = new System.Windows.Controls.Image { Name = "YourTank", Source = bmi71, Width = Utilities.ZOOM * Utilities.theMapItemSize * 1.75, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  System.Windows.Controls.Image img71 = new System.Windows.Controls.Image { Name = "ToHitYourTank", Source = bmi71, Width = Utilities.ZOOM * Utilities.theMapItemSize * 1.75, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                   ImageBehavior.SetAnimatedSource(img71, bmi71);
                   myStackPanelAssignable.Children.Add(img71);
                }
@@ -653,9 +656,9 @@ namespace Pattons_Best
                {
                   BitmapImage bmi8 = new BitmapImage();
                   bmi8.BeginInit();
-                  bmi8.UriSource = new Uri(MapImage.theImageDirectory + "TigerFiring.gif", UriKind.Absolute);
+                  bmi8.UriSource = new Uri(MapImage.theImageDirectory + "TigerFiring2.gif", UriKind.Absolute);
                   bmi8.EndInit();
-                  System.Windows.Controls.Image img8 = new System.Windows.Controls.Image { Name = "ToKillYourTank", Source = bmi8, Width = Utilities.ZOOM * Utilities.theMapItemSize * 1.75, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  System.Windows.Controls.Image img8 = new System.Windows.Controls.Image { Name = "ToKillYourTank", Source = bmi8, Width = Utilities.ZOOM * Utilities.theMapItemSize * 1.7, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                   ImageBehavior.SetAnimatedSource(img8, bmi8);
                   myStackPanelAssignable.Children.Add(img8);
                }
@@ -666,23 +669,29 @@ namespace Pattons_Best
                }
                break;
             case E0475Enum.ENEMY_ACTION_TO_KILL_YOUR_TANK_SHOW:
-               System.Windows.Controls.Image img7 = new System.Windows.Controls.Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
-               myStackPanelAssignable.Children.Add(img7);
+               bool isTankExplostion = false;
+               for (int j = 0; j < myMaxRowCount; ++j)
+               {
+                  if ("Tank Explodes" == myGridRows[j].myExplosionResult)
+                     isTankExplostion = true;
+               }
+               if (true == isTankExplostion)
+               {
+                  BitmapImage bmi8 = new BitmapImage();
+                  bmi8.BeginInit();
+                  bmi8.UriSource = new Uri(MapImage.theImageDirectory + "ShermanDestroyed2.gif", UriKind.Absolute);
+                  bmi8.EndInit();
+                  System.Windows.Controls.Image img8 = new System.Windows.Controls.Image { Name = "TankExplosionCheck", Source = bmi8, Width = Utilities.ZOOM * Utilities.theMapItemSize * 1.7, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  ImageBehavior.SetAnimatedSource(img8, bmi8);
+                  myStackPanelAssignable.Children.Add(img8);
+               }
+               else
+               {
+                  System.Windows.Controls.Image img5 = new System.Windows.Controls.Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  myStackPanelAssignable.Children.Add(img5);
+               }
                break;
-            case E0475Enum.ENEMY_ACTION_TANK_EXPLOSION:
-               Rectangle r2 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
-               myStackPanelAssignable.Children.Add(r2);
-               // -------------------------------------
-               Label label1 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "  " };
-               myStackPanelAssignable.Children.Add(label1);
-               BitmapImage bmi9 = new BitmapImage();
-               bmi9.BeginInit();
-               bmi9.UriSource = new Uri(MapImage.theImageDirectory + "DieRollWhite.gif", UriKind.Absolute);
-               bmi9.EndInit();
-               System.Windows.Controls.Image img9 = new System.Windows.Controls.Image { Name = "DieRoll", Source = bmi9, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
-               ImageBehavior.SetAnimatedSource(img9, bmi9);
-               myStackPanelAssignable.Children.Add(img9);
-               break;
+
             default:
                Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): reached default s=" + myState.ToString());
                return false;
@@ -769,12 +778,23 @@ namespace Pattons_Best
                }
                myGameEngine.PerformAction(ref myGameInstance, ref outAction);
                break;
+            case E0475Enum.ENEMY_ACTION_TANK_EXPLOSION:
+            case E0475Enum.ENEMY_ACTION_TANK_EXPLOSION_SHOW:
+               if (false == UpdateGridRowsTankKnockedOut())
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): UpdateGridRowsTankKnockedOut() returned false");
+                  return false;
+               }
+               outAction = GameAction.UpdateTankExplosion;
+               myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+               break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): reached default s=" + myState.ToString());
                return false;
          }
          return true;
       }
+      //------------------------------------------------------------------------------------
       private bool UpdateGridRowsEnemyActionSelect()
       {
          for (int i = 0; i < myMaxRowCount; ++i)
@@ -1214,6 +1234,50 @@ namespace Pattons_Best
                   Grid.SetColumn(label5, 5);
                }
             }
+         }
+         return true;
+      }
+      private bool UpdateGridRowsTankKnockedOut()
+      {
+         int rowNum = STARTING_ASSIGNED_ROW;
+         IMapItem mi = myGridRows[0].myMapItem;
+         Button b1 = CreateButton(mi);
+         myGrid.Children.Add(b1);
+         Grid.SetRow(b1, rowNum);
+         Grid.SetColumn(b1, 0);
+         //----------------------------
+         Label label1 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[0].myExplosionModifier };
+         myGrid.Children.Add(label1);
+         Grid.SetRow(label1, rowNum);
+         Grid.SetColumn(label1, 1);
+         //----------------------------
+         if (Utilities.NO_RESULT == myGridRows[0].myDieRollExplosion)
+         {
+            BitmapImage bmi = new BitmapImage();
+            bmi.BeginInit();
+            bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollWhite.gif", UriKind.Absolute);
+            bmi.EndInit();
+            System.Windows.Controls.Image img = new System.Windows.Controls.Image { Name = "DieRoll", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+            ImageBehavior.SetAnimatedSource(img, bmi);
+            myGrid.Children.Add(img);
+            Grid.SetRow(img, rowNum);
+            Grid.SetColumn(img, 2);
+         }
+         else 
+         {
+            Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[0].myDieRollExplosion.ToString() };
+            myGrid.Children.Add(label3);
+            Grid.SetRow(label3, rowNum);
+            Grid.SetColumn(label3, 3);
+            int combo = myGridRows[0].myDieRollExplosion + myGridRows[0].myDieRollExplosion;
+            Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = combo.ToString() };
+            myGrid.Children.Add(label4);
+            Grid.SetRow(label4, rowNum);
+            Grid.SetColumn(label3, 4);
+            Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[0].myExplosionResult };
+            myGrid.Children.Add(label5);
+            Grid.SetRow(label5, rowNum);
+            Grid.SetColumn(label5, 5);
          }
          return true;
       }
@@ -1698,7 +1762,7 @@ namespace Pattons_Best
                      myGameInstance.Sherman.SetBloodSpots();
                      myGameInstance.Sherman.IsKilled = true;
                      myGridRows[i].myToKillResultYourTank = "KO";
-                     //myExplosionModifier = TableMgr.GetExplosionModifier(myGameInstance, enemyMapItem, myGridRows[i].myHitLocationYourTank);
+                     myGridRows[0].myExplosionModifier = TableMgr.GetExplosionModifier(myGameInstance, enemyMapItem, myGridRows[i].myHitLocationYourTank);
                      for (int j = 0; j < myMaxRowCount; ++j)
                      {
                         if (Utilities.NO_RESULT == myGridRows[j].myDieRollHitLocationYourTank)
@@ -1934,7 +1998,7 @@ namespace Pattons_Best
                            myTextBlock4.Visibility = Visibility.Hidden;
                            myTextBlock5.Text = "Result";
                         }
-                        if ("YourTank" == img.Name)
+                        if ("ToHitYourTank" == img.Name)
                         {
                            Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "Grid_MouseDown(): p=" + myState.ToString() + "-->ENEMY_ACTION_TO_HIT_YOUR_TANK");
                            myState = E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK;
@@ -1943,7 +2007,7 @@ namespace Pattons_Best
                            myTextBlock2.Text = "To Hit Modifer";
                            myTextBlock3.Text = "To Hit Number";
                            myTextBlock4.Visibility = Visibility.Visible;
-                           myTextBlock3.Text = "Die Roll";
+                           myTextBlock4.Text = "Die Roll";
                            myTextBlock5.Text = "Results";
                         }
                         if ("ToKillYourTank" == img.Name)
@@ -1957,15 +2021,16 @@ namespace Pattons_Best
                            myTextBlock4.Text = "Die Roll";
                            myTextBlock5.Text = "Results";
                         }
-                        if ("TankExplosion" == img.Name)
+                        if ("TankExplosionCheck" == img.Name)
                         {
-                           Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "Grid_MouseDown(): p=" + myState.ToString() + "-->ENEMY_ACTION_TO_KILL_YOUR_TANK");
-                           myState = E0475Enum.ENEMY_ACTION_TO_KILL_YOUR_TANK;
-                           myTextBlockHeader.Text = "r4.75 Enemy Action - To Kill Your Tank";
-                           myTextBlock2.Text = "Hit Location";
-                           myTextBlock3.Text = "To Kill Number";
+                           Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "Grid_MouseDown(): p=" + myState.ToString() + "-->ENEMY_ACTION_TANK_EXPLOSION");
+                           myState = E0475Enum.ENEMY_ACTION_TANK_EXPLOSION;
+                           myGridRows[0].myMapItem = myGameInstance.Sherman;
+                           myTextBlockHeader.Text = "r4.81 Enemy Action - Tank Explosion Check";
+                           myTextBlock2.Text = "Modifier";
+                           myTextBlock3.Text = "Die Roll";
                            myTextBlock4.Visibility = Visibility.Visible;
-                           myTextBlock4.Text = "Die Roll";
+                           myTextBlock4.Text = "Roll + Modifier";
                            myTextBlock5.Text = "Results";
                         }
                         if ("Continue" == img.Name)

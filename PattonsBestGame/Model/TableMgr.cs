@@ -870,7 +870,7 @@ namespace Pattons_Best
          }
          if (true == isSmokeAddedToTerritory)
          {
-            string miName = "SmokeOne" + Utilities.MapItemNum;
+            string miName = "SmokeWhite" + Utilities.MapItemNum;
             Utilities.MapItemNum++;
             IMapItem smoke = new MapItem(miName, Utilities.ZOOM + 0.75, "c108Smoke1", mi.TerritoryCurrent);
             IMapPoint mp = Territory.GetRandomPoint(mi.TerritoryCurrent, mi.Zoom * Utilities.theMapItemOffset);

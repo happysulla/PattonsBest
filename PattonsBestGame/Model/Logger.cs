@@ -99,7 +99,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_MAPITEM_TANK);
          //-------------------------------
          //SetOn(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE);
-         //SetOn(LogEnum.LE_VIEW_ART_FIRE_RESOLVE);
+         SetOn(LogEnum.LE_VIEW_ART_FIRE_RESOLVE);
          //SetOn(LogEnum.LE_VIEW_AIR_FIRE_RESOLVE);
          //SetOn(LogEnum.LE_VIEW_ROTATION);
          //-------------------------------

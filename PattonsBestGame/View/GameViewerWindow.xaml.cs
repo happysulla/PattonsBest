@@ -1412,8 +1412,6 @@ namespace Pattons_Best
       {
          try
          {
-            IMapItems removals = new MapItems();
-            IMapItems additions = new MapItems();
             foreach ( IMapItemMove mim in gi.MapItemMoves)
             {
                if (null == mim)
@@ -1445,36 +1443,10 @@ namespace Pattons_Best
                }
                Logger.Log(LogEnum.LE_VIEW_ROTATION, "UpdateCanvasMovement(): mi=" + mim.MapItem.Name + " r=" + mim.MapItem.RotationHull + " rb=" + mim.MapItem.RotationBase);
                //------------------------------------------
-               removals.Add(mi);
-               additions.Add(mi);
+               stacks.Remove(mi); // remove from existing stack
                Logger.Log(LogEnum.LE_VIEW_MIM, "UpdateCanvasMovement(): mi=" + mi.Name + " t=" + mi.TerritoryCurrent.Name + " moving to t=" + mim.NewTerritory.Name + " " + gi.MoveStacks.ToString());
                mi.TerritoryCurrent = mi.TerritoryStarting = mim.NewTerritory;
-            }
-            //--------------------------------
-            while( 0 < removals.Count)
-            {
-               foreach (IMapItem mi in removals)
-               {
-                  Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "UpdateCanvasMovement(): Removed mi=" + mi.Name + " t=" + mi.TerritoryCurrent.Name + " to " + gi.MoveStacks.ToString());
-                  gi.MoveStacks.Remove(mi);
-                  removals.Remove(mi);
-                  break;
-               }
-            }
-            //--------------------------------
-            foreach (IMapItem mi in additions)
-            {
-               IStack? stack = gi.MoveStacks.Find(mi.TerritoryCurrent);
-               if (null == stack)
-               {
-                  stacks.Add(new Stack(mi.TerritoryCurrent, mi));
-                  Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "UpdateCanvasMovement(): 1-Adding mi=" + mi.Name + " t=" + mi.TerritoryCurrent.Name + " to " + gi.MoveStacks.ToString());
-               }
-               else
-               {
-                  stack.MapItems.Add(mi);
-                  Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "UpdateCanvasMovement(): 2-Adding mi=" + mi.Name + " t=" + mi.TerritoryCurrent.Name + " to " + gi.MoveStacks.ToString());
-               }
+               stacks.Add(mi); // add to new stack
             }
          }
          catch (Exception e)
