@@ -452,6 +452,7 @@ namespace Pattons_Best
          switch (myState)
          {
             case E0481Enum.COLLATERAL_DAMAGE_ROLL:
+               dieRoll = 100; // <cgs> TEST
                myDieRollCollateral = dieRoll;
                myCollateralDamage = TableMgr.GetCollateralDamage(myGameInstance, dieRoll);
                if ("ERROR" == myCollateralDamage)

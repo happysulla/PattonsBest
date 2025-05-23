@@ -1895,7 +1895,7 @@ namespace Pattons_Best
          }
          if (dieRoll < 76)
          {
-            IMapItem? hatch = gi.Hatches.Find("Driver");
+            IMapItem? hatch = gi.Hatches.Find("DriverOpenHatch");
             if (null != hatch)
                return "Driver Wounds";
             else
@@ -1903,7 +1903,7 @@ namespace Pattons_Best
          }
          if (dieRoll < 81)
          {
-            IMapItem? hatch = gi.Hatches.Find("Asssistant");
+            IMapItem? hatch = gi.Hatches.Find("AsssistantOpenHatch");
             if (null != hatch)
                return "Asssistant Wounds";
             else
@@ -1911,7 +1911,7 @@ namespace Pattons_Best
          }
          if (dieRoll < 91)
          {
-            IMapItem? hatch = gi.Hatches.Find("Loader");
+            IMapItem? hatch = gi.Hatches.Find("LoaderOpenHatch");
             if (null != hatch)
                return "Loader Wounds";
             else
@@ -1919,7 +1919,7 @@ namespace Pattons_Best
          }
          if (dieRoll < 101)
          {
-            IMapItem? hatch = gi.Hatches.Find("Commander");
+            IMapItem? hatch = gi.Hatches.Find("CommanderOpenHatch");
             if (null != hatch)
                return "Commander Wounds";
             else
@@ -2197,7 +2197,6 @@ namespace Pattons_Best
       //-------------------------------------------
       public static string GetRandomEvent(EnumScenario scenario, int dieRoll)
       {
-         string randomEvent = "ERROR";
          switch(scenario)
          {
             case EnumScenario.Advance:
@@ -2260,7 +2259,6 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "GetRandomEvent(): reached default scenario=" + scenario.ToString());
                return "ERROR";
          }
-         return randomEvent;
       }
       //-------------------------------------------
       public static int GetSpottingModifier(IGameInstance gi, IMapItem mi, ICrewMember cm, char sector, char range)

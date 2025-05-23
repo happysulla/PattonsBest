@@ -66,6 +66,8 @@ namespace Pattons_Best
       public Dictionary<string, bool> BrokenPeriscopes { set; get; } = new Dictionary<string, bool>();
       public Dictionary<string, bool> FirstShots { set; get; } = new Dictionary<string, bool>();
       public Dictionary<string, int> AcquiredShots { set; get; } = new Dictionary<string, int>();
+      public ShermanDeath? Death { set; get; } = null;
+      public string? EnemyFireDirection { set; get; } = null;
       //------------------------------------------------
       public IMapItemMoves MapItemMoves { get; set; } = new MapItemMoves();
       public IStacks TankStacks { get; set; } = new Stacks();

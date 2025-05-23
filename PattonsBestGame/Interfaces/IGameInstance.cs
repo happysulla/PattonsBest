@@ -5,6 +5,25 @@ using System.Text.RegularExpressions;
 
 namespace Pattons_Best
 {
+   public struct ShermanDeath
+   {
+      public IMapItem myEnemyUnit;
+      public string myHitLocation;
+      public int myDay;
+      public string myCause;
+      public bool myIsAmbush;
+      public bool myIsExplosion = false;
+      public bool myIsBrewUp = false;
+      //---------------------------------------------------
+      public ShermanDeath(IMapItem eu, string loc, int day, string cause, bool isAmbush)
+      {
+         myEnemyUnit = eu;
+         myHitLocation = loc;
+         myDay = day;
+         myCause = cause;
+         myIsAmbush = isAmbush;
+      }
+   };
    public interface IGameInstance
    {
       bool CtorError { get; }
@@ -33,6 +52,7 @@ namespace Pattons_Best
       IMapItems GunLoads { set; get; }
       IMapItems CrewActions { set; get; }
       IMapItem Sherman { set; get; }
+      
       //------------------------------------------------
       ITerritory Home { get; set; }
       ITerritory? EnemyStrengthCheckTerritory { get; set; }
@@ -59,6 +79,8 @@ namespace Pattons_Best
       Dictionary<string,bool> BrokenPeriscopes { set; get; }
       Dictionary<string, bool> FirstShots { set; get; }
       Dictionary<string, int> AcquiredShots { set; get; }
+      ShermanDeath? Death { set; get; }
+      string? EnemyFireDirection { set; get; }
       //------------------------------------------------
       IMapItemMoves MapItemMoves { set; get; }
       IStacks TankStacks { set; get; }

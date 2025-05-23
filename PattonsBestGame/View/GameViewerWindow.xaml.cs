@@ -17,11 +17,7 @@ using System.Xml.Serialization;
 using Button = System.Windows.Controls.Button;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Point = System.Windows.Point;
-using System.Diagnostics;
-using System.Xml.Linq;
-using System.Collections;
 using Pattons_Best.Properties;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace Pattons_Best
 {
