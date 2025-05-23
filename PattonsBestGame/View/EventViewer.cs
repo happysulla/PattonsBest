@@ -327,6 +327,13 @@ namespace Pattons_Best
                else if (false == spottingMgr.PerformSpotting(ShowSpottingResults))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): PerformSpotting() returned false");
                break;
+            case GameAction.BattleCollateralDamageCheck:
+               EventViewerTankCollateral collateralCheck = new EventViewerTankCollateral(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
+               if (true == collateralCheck.CtorError)
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): collateralCheck.CtorError=true");
+               else if (false == collateralCheck.ResolveCollateralDamage(ShowCollateralDamageResults))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ResolveCollateralDamage() returned false");
+               break;
             case GameAction.EveningDebriefingStart:
                EventViewerRatingImprove crewRatingImprove = new EventViewerRatingImprove(myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == crewRatingImprove.CtorError)
@@ -1121,9 +1128,27 @@ namespace Pattons_Best
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
                   Image imge039 = new Image { Name = "Continue39", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
-                  myTextBlock.Inlines.Add(new Run("                                      "));
+                  myTextBlock.Inlines.Add(new Run("                                          "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge039));
                   myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
+            case "e042":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  myTextBlock.Inlines.Add(new Run("Num of Friendly Tanks Knocked Out: "));
+                  if (gi.DieResults[key][0] < 7 )
+                     myTextBlock.Inlines.Add(new Run("1 Tank"));
+                  else if (gi.DieResults[key][0] < 10)
+                     myTextBlock.Inlines.Add(new Run("2 Tank"));
+                  else
+                     myTextBlock.Inlines.Add(new Run("3 Tank"));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  Image imge042 = new Image { Name = "EnemyArtilleryEnd", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("ShermanKia") };
+                  myTextBlock.Inlines.Add(new Run("                                  "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge042));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
@@ -1596,6 +1621,30 @@ namespace Pattons_Best
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
          return true;
       }
+      public bool ShowCollateralDamageResults()
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowCollateralDamageResults(): myGameInstance=null");
+            return false;
+         }
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowCollateralDamageResults(): myGameEngine=null");
+            return false;
+         }
+         GameAction outAction = GameAction.BattleRoundSequenceSpottingEnd;
+         if( true == myGameInstance.IsAmbush )
+            outAction = GameAction.BattleRoundSequenceStart;
+         //--------------------------------------------------
+         StringBuilder sb11 = new StringBuilder("     ######ShowCollateralDamageResults() :");
+         sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
+         sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
+         sb11.Append(" a="); sb11.Append(outAction.ToString());
+         Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+         return true;
+      }
       public bool ShowSpottingResults()
       {
          if (null == myGameInstance)
@@ -1852,6 +1901,10 @@ namespace Pattons_Best
                            break;
                         case "MilitaryWatch":
                            action = GameAction.BattleRoundSequenceStart;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "EnemyArtilleryEnd":
+                           action = GameAction.BattleEnemyArtilleryRoll;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         default:

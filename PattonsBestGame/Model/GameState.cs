@@ -2274,7 +2274,7 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.BattleRandomEventRoll;
                   break;
                case GameAction.BattleRandomEventRoll:
-                  dieRoll = 9; // <cgs> TEST
+                  dieRoll = 16; // <cgs> TEST
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      gi.DieResults[key][0] = dieRoll;
@@ -2298,7 +2298,6 @@ namespace Pattons_Best
                            gi.DieRollAction = GameAction.BattleEnemyArtilleryRoll;
                            break;
                         case "Mines":
-                           gi.GamePhase = GamePhase.BattleRoundSequence;
                            if ( true == gi.Sherman.IsMoving )
                            {
                               gi.EventDisplayed = gi.EventActive = "e043";
@@ -2326,42 +2325,6 @@ namespace Pattons_Best
                            Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
                            break;
                      }
-                  }
-                  break;
-               case GameAction.BattleEnemyArtilleryRoll:
-                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
-                  {
-                     gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
-                     if (dieRoll < 7)
-                        lastReport.VictoryPtsFriendlySquad += 1;
-                     else if (dieRoll < 10 )
-                        lastReport.VictoryPtsFriendlySquad += 2;
-                     else
-                        lastReport.VictoryPtsFriendlySquad += 3;
-                  }
-                  else
-                  {
-                     action = GameAction.BattleCollateralDamageCheck;
-                  }
-                  break;
-               case GameAction.BattleMinefieldAttackRoll:
-                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
-                  {
-                     gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.DieRollActionNone;
-                     if (dieRoll < 2)
-                     {
-                        lastReport.VictoryPtsFriendlyTank += 1;
-                     }
-                     else if (dieRoll < 3)
-                     {
-                     }
-                  }
-                  else
-                  {
-                     action = GameAction.BattleRoundSequenceStart;
-                     gi.GamePhase = GamePhase.BattleRoundSequence;
                   }
                   break;
                case GameAction.EndGameClose:
@@ -2460,104 +2423,151 @@ namespace Pattons_Best
          GameAction previousDieAction = gi.DieRollAction;
          string previousEvent = gi.EventActive;
          string returnStatus = "OK";
-         switch (action)
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
          {
-            case GameAction.ShowCombatCalendarDialog:
-            case GameAction.ShowAfterActionReportDialog:
-            case GameAction.ShowInventoryDialog:
-            case GameAction.ShowGameFeats:
-            case GameAction.ShowRuleListingDialog:
-            case GameAction.ShowEventListingDialog:
-            case GameAction.ShowTableListing:
-            case GameAction.ShowMovementDiagramDialog:
-            case GameAction.ShowReportErrorDialog:
-            case GameAction.ShowAboutDialog:
-            case GameAction.EndGameShowFeats:
-            case GameAction.UpdateStatusBar:
-            case GameAction.UpdateBattleBoard:
-            case GameAction.UpdateTankCard:
-            case GameAction.UpdateShowRegion:
-            case GameAction.UpdateEventViewerDisplay: // Only change active event
-               break;
-            case GameAction.UpdateEventViewerActive: // Only change active event
-               gi.EventDisplayed = gi.EventActive; // next screen to show
-               break;
-            case GameAction.BattleRoundSequenceStart:
-               gi.GamePhase = GamePhase.BattleRoundSequence;
-               int smokeCount = 0;
-               foreach (IStack stack in gi.BattleStacks)
-               {
-                  foreach (IMapItem mi in stack.MapItems)
+            returnStatus = "lastReport=null";
+            Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+         }
+         else
+         {
+            string key = gi.EventActive;
+            switch (action)
+            {
+               case GameAction.ShowCombatCalendarDialog:
+               case GameAction.ShowAfterActionReportDialog:
+               case GameAction.ShowInventoryDialog:
+               case GameAction.ShowGameFeats:
+               case GameAction.ShowRuleListingDialog:
+               case GameAction.ShowEventListingDialog:
+               case GameAction.ShowTableListing:
+               case GameAction.ShowMovementDiagramDialog:
+               case GameAction.ShowReportErrorDialog:
+               case GameAction.ShowAboutDialog:
+               case GameAction.EndGameShowFeats:
+               case GameAction.UpdateStatusBar:
+               case GameAction.UpdateBattleBoard:
+               case GameAction.UpdateTankCard:
+               case GameAction.UpdateShowRegion:
+               case GameAction.UpdateEventViewerDisplay: // Only change active event
+                  break;
+               case GameAction.UpdateEventViewerActive: // Only change active event
+                  gi.EventDisplayed = gi.EventActive; // next screen to show
+                  break;
+               case GameAction.BattleRoundSequenceStart:
+                  gi.GamePhase = GamePhase.BattleRoundSequence;
+                  gi.IsAmbush = false;
+                  int smokeCount = 0;
+                  foreach (IStack stack in gi.BattleStacks)
                   {
-                     if (true == mi.Name.Contains("Smoke"))
-                        smokeCount++;
+                     foreach (IMapItem mi in stack.MapItems)
+                     {
+                        if (true == mi.Name.Contains("Smoke"))
+                           smokeCount++;
+                     }
                   }
-               }
-               if (0 < smokeCount)
-               {
-                  gi.EventDisplayed = gi.EventActive = "e037";
-                  gi.DieRollAction = GameAction.DieRollActionNone;
-               }
-               else
-               {
-                  if( false == SpottingPhaseBegin(gi, ref action) )
+                  if (0 < smokeCount)
+                  {
+                     gi.EventDisplayed = gi.EventActive = "e037";
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else
+                  {
+                     if (false == SpottingPhaseBegin(gi, ref action))
+                     {
+                        returnStatus = "SpottingPhaseBegin() returned false";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
+                     }
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceSmokeDepletionEnd:
+                  IMapItems removals = new MapItems();
+                  IMapItems additions = new MapItems();
+                  foreach (IStack stack in gi.BattleStacks)
+                  {
+                     foreach (IMapItem mi in stack.MapItems)
+                     {
+                        if (true == mi.Name.Contains("Smoke")) // remove white and gray smoke counters
+                        {
+                           removals.Add(mi);
+                           if (true == mi.Name.Contains("SmokeWhite")) // exchange white with gray counters
+                           {
+                              string miName = "SmokeGrey" + Utilities.MapItemNum;
+                              Utilities.MapItemNum++;
+                              IMapItem smoke = new MapItem(miName, Utilities.ZOOM + 0.75, "c111Smoke1", mi.TerritoryCurrent);
+                              IMapPoint mp = Territory.GetRandomPoint(mi.TerritoryCurrent, mi.Zoom * Utilities.theMapItemOffset);
+                              smoke.Location = mp;
+                              additions.Add(smoke);
+                           }
+                        }
+                     }
+                  }
+                  foreach (IMapItem mi in removals)
+                  {
+                     gi.BattleStacks.Remove(mi);
+                     Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "GameStateBattle.PerformAction(): removing mi=" + mi.Name + " from BattleStacks=" + gi.BattleStacks.ToString());
+                  }
+
+                  foreach (IMapItem mi in additions)
+                  {
+                     gi.BattleStacks.Add(mi);
+                     Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "GameStateBattle.PerformAction(): adding mi=" + mi.Name + " from BattleStacks=" + gi.BattleStacks.ToString());
+                  }
+                  //----------------------------------------------
+                  if (false == SpottingPhaseBegin(gi, ref action))
                   {
                      returnStatus = "SpottingPhaseBegin() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
                   }
-               }
-               break;
-            case GameAction.BattleRoundSequenceSmokeDepletionEnd:
-               IMapItems removals = new MapItems();
-               IMapItems additions = new MapItems();
-               foreach (IStack stack in gi.BattleStacks)
-               {
-                  foreach (IMapItem mi in stack.MapItems)
+                  break;
+               case GameAction.BattleRoundSequenceSpottingEnd:
+                  action = GameAction.BattleRoundSequenceOrders;
+                  gi.EventDisplayed = gi.EventActive = "e038";
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  gi.IsOrdersActive = true;
+                  break;
+               case GameAction.BattleEnemyArtilleryRoll:
+                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     if (true == mi.Name.Contains("Smoke")) // remove white and gray smoke counters
+                     gi.DieResults[key][0] = dieRoll;
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                     if (dieRoll < 7)
+                        lastReport.VictoryPtsFriendlySquad += 1;
+                     else if (dieRoll < 10)
+                        lastReport.VictoryPtsFriendlySquad += 2;
+                     else
+                        lastReport.VictoryPtsFriendlySquad += 3;
+                  }
+                  else
+                  {
+                     action = GameAction.BattleCollateralDamageCheck;
+                  }
+                  break;
+               case GameAction.BattleMinefieldAttackRoll:
+                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
+                  {
+                     gi.DieResults[key][0] = dieRoll;
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                     if (dieRoll < 2)
                      {
-                        removals.Add(mi);
-                        if (true == mi.Name.Contains("SmokeWhite")) // exchange white with gray counters
-                        {
-                           string miName = "SmokeGrey" + Utilities.MapItemNum;
-                           Utilities.MapItemNum++;
-                           IMapItem smoke = new MapItem(miName, Utilities.ZOOM + 0.75, "c111Smoke1", mi.TerritoryCurrent);
-                           IMapPoint mp = Territory.GetRandomPoint(mi.TerritoryCurrent, mi.Zoom * Utilities.theMapItemOffset);
-                           smoke.Location = mp;
-                           additions.Add(smoke);
-                        }
+                        lastReport.VictoryPtsFriendlyTank += 1;
+                     }
+                     else if (dieRoll < 3)
+                     {
                      }
                   }
-               }
-               foreach (IMapItem mi in removals)
-               {
-                  gi.BattleStacks.Remove(mi);
-                  Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "GameStateBattle.PerformAction(): removing mi=" + mi.Name + " from BattleStacks=" + gi.BattleStacks.ToString());
-               }
-
-               foreach (IMapItem mi in additions)
-               {
-                  gi.BattleStacks.Add(mi);
-                  Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "GameStateBattle.PerformAction(): adding mi=" + mi.Name + " from BattleStacks=" + gi.BattleStacks.ToString());
-               }
-               //----------------------------------------------
-               if (false == SpottingPhaseBegin(gi, ref action))
-               {
-                  returnStatus = "SpottingPhaseBegin() returned false";
-                  Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
-               }
-               break;
-            case GameAction.BattleRoundSequenceSpottingEnd:
-               action = GameAction.BattleRoundSequenceOrders;
-               gi.EventDisplayed = gi.EventActive = "e038";
-               gi.DieRollAction = GameAction.DieRollActionNone;
-               gi.IsOrdersActive = true;
-               break;
-            case GameAction.EndGameClose:
-               gi.GamePhase = GamePhase.EndGame;
-               break;
-            default:
-               break;
+                  else
+                  {
+                     action = GameAction.BattleRoundSequenceStart;
+                     gi.GamePhase = GamePhase.BattleRoundSequence;
+                  }
+                  break;
+               case GameAction.EndGameClose:
+                  gi.GamePhase = GamePhase.EndGame;
+                  break;
+               default:
+                  break;
+            }
          }
          StringBuilder sb12 = new StringBuilder();
          if ("OK" != returnStatus)

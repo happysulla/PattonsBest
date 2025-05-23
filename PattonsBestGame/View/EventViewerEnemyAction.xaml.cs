@@ -1692,11 +1692,12 @@ namespace Pattons_Best
                break;
             //------------------------------------------------------------------------------------------------
             case E0475Enum.ENEMY_ACTION_COLLATERAL:
-                 Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "ShowDieResults(): myGameInstance.MapItemMoves.Clear()");
+               Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "ShowDieResults(): myGameInstance.MapItemMoves.Clear()");
                myGridRows[i].myDieRollCollateral = dieRoll;
+               myGridRows[i].myCollateralDamage = TableMgr.GetCollateralDamage(myGameInstance, dieRoll); 
                if ("ERROR" == myGridRows[i].myCollateralDamage)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): SetEnemyActionResult() returned ERROR");
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetCollateralDamage() returned ERROR");
                   return;
                }
                myState = E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK_SHOW;
@@ -2004,10 +2005,10 @@ namespace Pattons_Best
                            myState = E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK;
                            myTextBlockHeader.Text = "r4.75 Enemy Action - To Hit Your Tank";
                            myTextBlock2.Visibility = Visibility.Visible;
-                           myTextBlock2.Text = "To Hit Modifer";
-                           myTextBlock3.Text = "To Hit Number";
+                           myTextBlock2.Text = "Hit Modifer";
+                           myTextBlock3.Text = "Hit Number";
                            myTextBlock4.Visibility = Visibility.Visible;
-                           myTextBlock4.Text = "Die Roll";
+                           myTextBlock4.Text = "Die + Modifier";
                            myTextBlock5.Text = "Results";
                         }
                         if ("ToKillYourTank" == img.Name)
