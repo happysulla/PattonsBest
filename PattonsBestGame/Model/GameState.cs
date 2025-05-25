@@ -961,53 +961,53 @@ namespace Pattons_Best
             return false;
          }
          //------------------------------------
-         ICrewMember? cm = gi.GetCrewMember("Commander");
-         if (null == cm)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Commander");
-            return false;
-         }
-         cm.IsButtonedUp = false;
-         ITerritory? t = Territories.theTerritories.Find("CommanderHatch");
-         if (null == t)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for CommanderHatch");
-            return false;
-         }
-         IMapItem mi = new MapItem(cm.Role + "OpenHatch", 1.0, "c15OpenHatch", t);
-         gi.Hatches.Add(mi);
-         //------------------------------------
-         cm = gi.GetCrewMember("Driver");
-         if (null == cm)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Driver");
-            return false;
-         }
-         cm.IsButtonedUp = false;
-         t = Territories.theTerritories.Find("DriverHatch");
-         if (null == t)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for DriverHatch");
-            return false;
-         }
-         mi = new MapItem(cm.Role + "OpenHatch", 1.0, "c15OpenHatch", t);
-         gi.Hatches.Add(mi);
-         //------------------------------------
-         cm = gi.GetCrewMember("Assistant");
-         if (null == cm)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Assistant");
-            return false;
-         }
-         cm.IsButtonedUp = false;
-         t = Territories.theTerritories.Find("AssistantHatch");
-         if (null == t)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for AssistantHatch");
-            return false;
-         }
-         mi = new MapItem(cm.Role + "OpenHatch", 1.0, "c15OpenHatch", t);
-         gi.Hatches.Add(mi);
+         //ICrewMember? cm = gi.GetCrewMember("Commander");
+         //if (null == cm)
+         //{
+         //   Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Commander");
+         //   return false;
+         //}
+         //cm.IsButtonedUp = false;
+         //ITerritory? t = Territories.theTerritories.Find("CommanderHatch");
+         //if (null == t)
+         //{
+         //   Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for CommanderHatch");
+         //   return false;
+         //}
+         //IMapItem mi = new MapItem(cm.Role + "OpenHatch", 1.0, "c15OpenHatch", t);
+         //gi.Hatches.Add(mi);
+         ////------------------------------------
+         //cm = gi.GetCrewMember("Driver");
+         //if (null == cm)
+         //{
+         //   Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Driver");
+         //   return false;
+         //}
+         //cm.IsButtonedUp = false;
+         //t = Territories.theTerritories.Find("DriverHatch");
+         //if (null == t)
+         //{
+         //   Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for DriverHatch");
+         //   return false;
+         //}
+         //mi = new MapItem(cm.Role + "OpenHatch", 1.0, "c15OpenHatch", t);
+         //gi.Hatches.Add(mi);
+         ////------------------------------------
+         //cm = gi.GetCrewMember("Assistant");
+         //if (null == cm)
+         //{
+         //   Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Assistant");
+         //   return false;
+         //}
+         //cm.IsButtonedUp = false;
+         //t = Territories.theTerritories.Find("AssistantHatch");
+         //if (null == t)
+         //{
+         //   Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for AssistantHatch");
+         //   return false;
+         //}
+         //mi = new MapItem(cm.Role + "OpenHatch", 1.0, "c15OpenHatch", t);
+         //gi.Hatches.Add(mi);
          //------------------------------------
          ITerritory? t1 = Territories.theTerritories.Find("Spot4");
          if (null == t1)
@@ -2543,7 +2543,16 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     action = GameAction.BattleCollateralDamageCheck;
+                     if( false == CheckCrewMemberExposed(gi, ref action))
+                     {
+                        returnStatus = "CheckCrewMemberExposed() returned false";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
+                     }
+                     else if (false == SpottingPhaseBegin(gi, ref action))
+                     {
+                        returnStatus = "SpottingPhaseBegin() returned false";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
+                     }
                   }
                   break;
                case GameAction.BattleMinefieldAttackRoll:
@@ -2593,6 +2602,36 @@ namespace Pattons_Best
          else
             Logger.Log(LogEnum.LE_ERROR, sb12.ToString());
          return returnStatus;
+      }
+      private bool CheckCrewMemberExposed(IGameInstance gi, ref GameAction outAction)
+      {
+         bool isCrewExposed = false;
+         string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Gunner" };
+         foreach (string crewmember in crewmembers)
+         {
+            ICrewMember? cm = gi.GetCrewMember(crewmember);
+            if (null == cm)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): gi.GetCrewMember() returned null");
+               return false;
+            }
+            foreach (IMapItem hatch in gi.Hatches)
+            {
+               if (true == hatch.Name.Contains(cm.Role))
+               {
+                  isCrewExposed = true;
+                  break;
+               }
+            }
+            if (true == isCrewExposed)
+               break;
+         }
+         if (true == isCrewExposed)
+         {
+            outAction = GameAction.BattleCollateralDamageCheck;
+            gi.NumCollateralDamage++; // check for collateral damage after resolving artillery roll
+         }
+         return true;
       }
       private bool SpottingPhaseBegin(IGameInstance gi, ref GameAction outAction)
       {

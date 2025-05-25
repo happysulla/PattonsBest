@@ -1587,7 +1587,7 @@ namespace Pattons_Best
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
          return true;
       }
-      public bool ShowAmbushResults(bool isCollateral)
+      public bool ShowAmbushResults()
       {
          if (null == myGameInstance)
          {
@@ -1601,7 +1601,7 @@ namespace Pattons_Best
          }
          GameAction outAction = GameAction.BattleEmpty;
          //------------------------------------------
-         if ( true == isCollateral )
+         if ( 0 < myGameInstance.NumCollateralDamage )
          {
             outAction = GameAction.BattleCollateralDamageCheck;
          }

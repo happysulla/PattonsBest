@@ -26,23 +26,6 @@ namespace Pattons_Best
       }
    }
    //-------------------------------------------------
-   public class CollateralDamage
-   {
-      public IMapItem myEnemyUnit;
-      public int myDay = 0;
-      public string myCause = "";
-      public bool myIsAmbush = false;
-      public bool myIsExplosion = false;
-      public bool myIsBrewUp = false;
-      public CollateralDamage(IGameInstance gi, IMapItem eu, int day, string cause, bool isAmbush)
-      {
-         myEnemyUnit = eu;
-         myDay = day;
-         myCause = cause;
-         myIsAmbush = isAmbush;
-      }
-   }
-   //-------------------------------------------------
    public interface IGameInstance
    {
       bool CtorError { get; }
@@ -101,6 +84,7 @@ namespace Pattons_Best
       Dictionary<string, bool> FirstShots { set; get; }
       Dictionary<string, int> AcquiredShots { set; get; }
       ShermanDeath? Death { set; get; }
+      int NumCollateralDamage { set; get; }
       //------------------------------------------------
       IMapItemMoves MapItemMoves { set; get; }
       IStacks TankStacks { set; get; }

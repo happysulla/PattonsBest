@@ -22,7 +22,7 @@ namespace Pattons_Best
 {
    public partial class EventViewerEnemyAction : UserControl
    {
-      public delegate bool EndResolveEnemyActionCallback(bool isCollateral);
+      public delegate bool EndResolveEnemyActionCallback();
       private const int STARTING_ASSIGNED_ROW = 6;
       private const int NO_MOVE = 100;
       private const int NO_FIRE = 101;
@@ -72,9 +72,6 @@ namespace Pattons_Best
          public int myDieRollFire = Utilities.NO_RESULT;
          public string myToKillResult = "NA";
          public int myToKillNumber = 0;
-         //---------------------------------------------------
-         public string myCollateralDamage = "UNINT";
-         public int myDieRollCollateral = Utilities.NO_RESULT;
          //---------------------------------------------------
          public int myModifierToHitYourTank = 0;
          public int myToHitNumberYourTank = 0;
@@ -320,13 +317,6 @@ namespace Pattons_Best
                return false;
             }
             //-----------------------------------------
-            bool isCollateral = false;
-            for ( int i = 0; i<myMaxRowCount; i++)
-            {
-               if (true == myGridRows[i].myEnemyAction.Contains("Collateral"))
-                  isCollateral = true;
-            }
-            //-----------------------------------------
             IMapItems removals = new MapItems();
             foreach (IStack stack in myGameInstance.BattleStacks)
             {
@@ -346,7 +336,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myCallback=null");
                return false;
             }
-            if (false == myCallback(isCollateral))
+            if (false == myCallback())
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myCallback() returned false");
                return false;
@@ -881,59 +871,6 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool UpdateGridRowsCollateral()
-      {
-         for (int i = 0; i < myMaxRowCount; ++i)
-         {
-            int rowNum = i + STARTING_ASSIGNED_ROW;
-            IMapItem mi = myGridRows[i].myMapItem;
-            Button b1 = CreateButton(mi);
-            myGrid.Children.Add(b1);
-            Grid.SetRow(b1, rowNum);
-            Grid.SetColumn(b1, 0);
-            //----------------------------
-            Label label1 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].mySectorRangeDisplay };
-            myGrid.Children.Add(label1);
-            Grid.SetRow(label1, rowNum);
-            Grid.SetColumn(label1, 1);
-            //----------------------------
-            if (NO_COLLATERAL == myGridRows[i].myDieRollCollateral)
-            {
-               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
-               myGrid.Children.Add(label3);
-               Grid.SetRow(label3, rowNum);
-               Grid.SetColumn(label3, 3);
-               Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myEnemyAction };
-               myGrid.Children.Add(label5);
-               Grid.SetRow(label5, rowNum);
-               Grid.SetColumn(label5, 5);
-            }
-            else if (Utilities.NO_RESULT < myGridRows[i].myDieRollCollateral)
-            {
-               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRollCollateral.ToString() };
-               myGrid.Children.Add(label3);
-               Grid.SetRow(label3, rowNum);
-               Grid.SetColumn(label3, 3);
-               Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myCollateralDamage };
-               myGrid.Children.Add(label5);
-               Grid.SetRow(label5, rowNum);
-               Grid.SetColumn(label5, 5);
-            }
-            else
-            {
-               BitmapImage bmi = new BitmapImage();
-               bmi.BeginInit();
-               bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
-               bmi.EndInit();
-               System.Windows.Controls.Image img = new System.Windows.Controls.Image { Name = "DiceRoll", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
-               ImageBehavior.SetAnimatedSource(img, bmi);
-               myGrid.Children.Add(img);
-               Grid.SetRow(img, rowNum);
-               Grid.SetColumn(img, 3);
-            }
-         }
-         return true;
-      }
       private bool UpdateGridRowsToHitYourTank()
       {
          for (int i = 0; i < myMaxRowCount; ++i)
@@ -1450,10 +1387,10 @@ namespace Pattons_Best
                   myGridRows[i].myDieRollTerrain = KEEP_TERRAIN;
                }
                //----------------------------------------
-               if (false == enemyAction.Contains("Collateral"))
+               if (true == enemyAction.Contains("Collateral"))
                {
+                  myGameInstance.NumCollateralDamage++;
                   mi.IsFired = true;
-                  myGridRows[i].myDieRollCollateral = NO_COLLATERAL;
                }
                //----------------------------------------
                myGridRows[i].myEnemyAction = enemyAction;

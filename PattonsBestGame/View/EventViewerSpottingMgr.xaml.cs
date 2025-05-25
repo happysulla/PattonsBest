@@ -181,10 +181,13 @@ namespace Pattons_Best
                myAssignables.Add(cm);
          }
          //--------------------------------------------------
-         foreach(IMapItem enemyUnit in myGameInstance.BattleStacks) // get original spotting results
+         foreach(IStack stack in myGameInstance.BattleStacks) // get original spotting results
          {
-            if( true == enemyUnit.IsEnemyUnit())
-               mySpottings[enemyUnit.Name] = enemyUnit.Spotting;
+            foreach(IMapItem enemyUnit in stack.MapItems )
+            {
+               if (true == enemyUnit.IsEnemyUnit())
+                  mySpottings[enemyUnit.Name] = enemyUnit.Spotting;
+            }
          }
          //--------------------------------------------------
          if (false == UpdateGrid())

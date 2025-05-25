@@ -147,6 +147,12 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------------
+         if( 0 == myGameInstance.NumCollateralDamage )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResolveCollateralDamage(): improper state NumCollateralDamage=0");
+            return false;
+         }
+         //--------------------------------------------------
          myGridRows = new GridRow[MAX_GRID_LEN];
          myState = E0481Enum.COLLATERAL_DAMAGE_ROLL;
          myIsRollInProgress = false;
@@ -279,7 +285,12 @@ namespace Pattons_Best
                break;
             case E0481Enum.COLLATERAL_DAMAGE_ROLL_SHOW:
             case E0481Enum.COLLATERAL_DAMAGE_WOUND_ROLL:
-                Image img = GetImageFromDamage();
+               Image? img = GetImageFromDamage();
+               if( null == img )
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): GetImageFromDamage() returned null");
+                  return false;
+               }
                myStackPanelAssignable.Children.Add(img);
                Rectangle r13 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                myStackPanelAssignable.Children.Add(r13);
@@ -464,19 +475,27 @@ namespace Pattons_Best
          MapItem.SetButtonContent(b, mi, true, true); // This sets the image as the button's content
          return b;
       }
-      private Image GetImageFromDamage()
+      private Image? GetImageFromDamage()
       {
+         if( null == myGameInstance)
+         { 
+            Logger.Log(LogEnum.LE_ERROR, "GetImageFromDamage(): myGameInstance=null");
+            return null;
+         }
          Image? img = null;
+         string name = "Continue";
+         if (0 < myGameInstance.NumCollateralDamage)
+            name = "CollateralCheck";
          if (true == myCollateralDamage.Contains("Wound"))
             img = new System.Windows.Controls.Image { Name = "Wounded", Source = MapItem.theMapImages.GetBitmapImage("OBlood1"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
          else if (true == myCollateralDamage.Contains("Periscope"))
-            img = new System.Windows.Controls.Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("BrokenPeriscope"), Width = Utilities.ZOOM * Utilities.theMapItemSize * 2, Height = Utilities.ZOOM * Utilities.theMapItemSize * 2 };
+            img = new System.Windows.Controls.Image { Name = name, Source = MapItem.theMapImages.GetBitmapImage("BrokenPeriscope"), Width = Utilities.ZOOM * Utilities.theMapItemSize * 2, Height = Utilities.ZOOM * Utilities.theMapItemSize * 2 };
          else if (true == myCollateralDamage.Contains("Gunsight"))
-            img = new System.Windows.Controls.Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("BrokenGunsight"), Width = Utilities.ZOOM * Utilities.theMapItemSize * 2, Height = Utilities.ZOOM * Utilities.theMapItemSize * 2 };
+            img = new System.Windows.Controls.Image { Name = name, Source = MapItem.theMapImages.GetBitmapImage("BrokenGunsight"), Width = Utilities.ZOOM * Utilities.theMapItemSize * 2, Height = Utilities.ZOOM * Utilities.theMapItemSize * 2 };
          else if (true == myCollateralDamage.Contains("AA MG"))
-            img = new System.Windows.Controls.Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("c72RepairAaMg"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+            img = new System.Windows.Controls.Image { Name = name, Source = MapItem.theMapImages.GetBitmapImage("c72RepairAaMg"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
          else
-            img = new System.Windows.Controls.Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+            img = new System.Windows.Controls.Image { Name = name, Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
          return img;
       }
       //------------------------------------------------------------------------------------
@@ -500,6 +519,7 @@ namespace Pattons_Best
          switch (myState)
          {
             case E0481Enum.COLLATERAL_DAMAGE_ROLL:
+               myGameInstance.NumCollateralDamage--;
                myDieRollCollateral = dieRoll;
                myCollateralDamage = TableMgr.GetCollateralDamage(myGameInstance, dieRoll);
                if ("ERROR" == myCollateralDamage)
@@ -507,30 +527,38 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetCollateralDamage() returned ERROR");
                   return;
                }
-               StringBuilder sb = new StringBuilder("At ");
-               sb.Append(TableMgr.GetTime(lastReport));
-               sb.Append(", Tank suffered ");
-               sb.Append(myCollateralDamage);
-               lastReport.Notes.Add(sb.ToString());
-               for (int k=0; k < myMaxRowCount; ++k)
+               if( "No Effect" == myCollateralDamage)
                {
-                  ICrewMember cm1 = myGridRows[k].myCrewMember;
-                  if( null == cm1 )
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetCollateralDamage() returned ERROR");
-                     return;
-                  }
-                  if (false == myCollateralDamage.Contains(cm1.Role))
-                  {
+                  for (int k = 0; k < myMaxRowCount; ++k)
                      myGridRows[k].myDieRollWound = NO_WOUNDS;
-                  }
-                  else
+               }
+               else
+               {
+                  StringBuilder sb = new StringBuilder("At ");
+                  sb.Append(TableMgr.GetTime(lastReport));
+                  sb.Append(", Tank suffered ");
+                  sb.Append(myCollateralDamage);
+                  lastReport.Notes.Add(sb.ToString());
+                  for (int k = 0; k < myMaxRowCount; ++k)
                   {
-                     myGridRows[k].myWoundsModifier = TableMgr.GetWoundsModifier(myGameInstance, cm1);
-                     if (myGridRows[k].myWoundsModifier < -100)
+                     ICrewMember cm1 = myGridRows[k].myCrewMember;
+                     if (null == cm1)
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetWoundsModifier() returned error for k=" + k.ToString());
+                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetCollateralDamage() returned ERROR");
                         return;
+                     }
+                     if (false == myCollateralDamage.Contains(cm1.Role))
+                     {
+                        myGridRows[k].myDieRollWound = NO_WOUNDS;
+                     }
+                     else
+                     {
+                        myGridRows[k].myWoundsModifier = TableMgr.GetWoundsModifier(myGameInstance, cm1);
+                        if (myGridRows[k].myWoundsModifier < -100)
+                        {
+                           Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetWoundsModifier() returned error for k=" + k.ToString());
+                           return;
+                        }
                      }
                   }
                }
@@ -647,6 +675,24 @@ namespace Pattons_Best
                            img.Visibility = Visibility.Hidden;
                         }
                         return;
+                     }
+                     if ("CollateralCheck" == img.Name)
+                     {
+                        myState = E0481Enum.COLLATERAL_DAMAGE_ROLL;
+                        myIsRollInProgress = false;
+                        myRollResultRowNum = 0;
+                        myDieRollCollateral = Utilities.NO_RESULT;
+                        myCollateralDamage = "Uninit";
+                        for( int i=0; i < myMaxRowCount; ++i )
+                        {
+                           ICrewMember cm = myGridRows[i].myCrewMember;
+                           if (true == cm.IsButtonedUp)
+                              myGridRows[i].myDieRollWound = BUTTONED_UP;
+                           else if (true == cm.IsKilled)
+                              myGridRows[i].myDieRollWound = KIA_CREWMAN;
+                           else
+                              myGridRows[i].myDieRollWound = Utilities.NO_RESULT;
+                        }
                      }
                      if ("Wounded" == img.Name)
                         myState = E0481Enum.COLLATERAL_DAMAGE_WOUND_ROLL;
