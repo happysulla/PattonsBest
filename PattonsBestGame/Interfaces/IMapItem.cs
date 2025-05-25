@@ -36,9 +36,8 @@ namespace Pattons_Best
       bool IsWoods { get; set; }
       bool IsBuilding { get; set; }
       bool IsFortification { get; set; }
-      bool IsSpotted { get; set; }
-      bool IsIdentified { get; set; }
-      bool IsHidden { get; set; }
+      //----------------------------------------
+      EnumSpottingResult Spotting { get; set; }
       //----------------------------------------
       bool IsEnemyUnit();
       string GetEnemyUnit();

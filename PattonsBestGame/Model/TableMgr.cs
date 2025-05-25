@@ -2556,7 +2556,7 @@ namespace Pattons_Best
          if ( true == mi.IsMoving )
             spottingModifer -= 3;
          //----------------------------------------------------
-         if (true == mi.IsSpotted)
+         if (EnumSpottingResult.SPOTTED == mi.Spotting)
             spottingModifer -= 3;
          return spottingModifer;
       }
@@ -2573,18 +2573,9 @@ namespace Pattons_Best
             return "Unspotted";
          //----------------------------------------------------
          if ( 1 == dieRoll ) // an unmodified roll of 1 always spots and ids it
-         {
-            mi.IsSpotted = true;
-            mi.IsIdentified = true;
             return "Identified";
-         }
          if ( (9 == dieRoll) && (10 == dieRoll) )  // an unmodified roll of 9-10 means target is hidden
-         {
-            mi.IsSpotted = false;
-            mi.IsIdentified = false;
-            mi.IsHidden = false;
             return "Hidden";
-         }
          //-------------------------------
          int modifier = GetSpottingModifier(gi, mi, cm, sector, range);
          if( modifier < -100 )
@@ -2596,13 +2587,9 @@ namespace Pattons_Best
          //-------------------------------
          if( dieRoll <= cm.Rating )
          {
-            mi.IsSpotted = true;
             int halfRating = (int)Math.Ceiling(cm.Rating * 0.5);
             if ( dieRoll <= halfRating )
-            {
-               mi.IsIdentified = true;
                return "Identified";
-            }
             return "Spotted";
          }
          return "Unspotted";

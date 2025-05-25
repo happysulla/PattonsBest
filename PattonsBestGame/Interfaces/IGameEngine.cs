@@ -21,6 +21,15 @@ namespace Pattons_Best
       Heavy,
       None
    };
+   public enum EnumSpottingResult
+   {
+      HIDDEN,
+      UNSPOTTED,
+      SPOTTED,
+      SPOTTED_HIDDEN,
+      IDENTIFIED,
+      IDENTIFIED_HIDDEN
+   };
    public enum EnumDecoration
    {
       ED_BronzeStar,
@@ -68,6 +77,7 @@ namespace Pattons_Best
    [Serializable]
    public enum BattlePhase
    {
+      None,
       Ambush,
       AmbushRandomEvent,
       Spotting,

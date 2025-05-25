@@ -26,7 +26,7 @@ namespace Pattons_Best
       //------------------------------------------------
       public int GameTurn { get; set; } = 0;
       public GamePhase GamePhase { get; set; } = GamePhase.GameSetup;
-      public BattlePhase BattlePhase { set; get; } = BattlePhase.Ambush;
+      public BattlePhase BattlePhase { set; get; } = BattlePhase.None;
       public int Day { get; set; } = 0;
       public IAfterActionReports Reports { get; set; } = new AfterActionReports();
       public GameAction DieRollAction { get; set; } = GameAction.DieRollActionNone;

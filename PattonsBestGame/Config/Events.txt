@@ -312,20 +312,11 @@ Deplete smoke in each zone by converting one white full strength Smoke marker to
                                               <InlineUIContainer><Image Name='c111Smoke1' Height='100' Width='100'></Image></InlineUIContainer>"
 e038	"<Bold>e038 Orders Phase</Bold> 
 <InlineUIContainer><Button Content='r4.73' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+<InlineUIContainer><Button Content='r8.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
 Click on blue squares to open hatches. Click on Open Hatch marker to close.
  <LineBreak/><LineBreak/>
-Click crew member action boxes to select from a pull down to assign crew actions for each crew member per 
-<InlineUIContainer><Button Content='r8.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
-<LineBreak/><LineBreak/>
-Click on the appropriate Gun Load box to set the Gun Reload marker per 
-<InlineUIContainer><Button Content='r5.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
-<LineBreak/><LineBreak/>
-Click the Gun Reload marker/button if you want the reload to come from the ready rack. A Ready Rack Ammo Reload marker is added per  
-<InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
-<LineBreak/><LineBreak/>
-Determine the specific unit type for any units identified per 
-<InlineUIContainer><Button Content='r17.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+Right click crew member action boxes to select from a pull down to assign crew actions for each crew member.
 <LineBreak/><LineBreak/>"
 e039	"<Bold>e039 Random Events for Ambush</Bold> 
 <InlineUIContainer><Button Content='r4.65' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
@@ -435,6 +426,13 @@ An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9'
 Click image to continue.
 <LineBreak/><LineBreak/>
                      <InlineUIContainer><Image Name='Sherman4' Height='168' Width='275'></Image></InlineUIContainer>"
+e051	"<Bold>e051 Ammo Reload Order</Bold> 
+<InlineUIContainer><Button Content='r4.73' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<InlineUIContainer><Button Content='r5.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Right click marker or one of blue boxes to to select from pull down menu where to set Gun Reload marker and/or Ready Rack Ammo Reload marker.
+<LineBreak/><LineBreak/>"
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"
 e502	"<Bold>e502 Game Lost</Bold>

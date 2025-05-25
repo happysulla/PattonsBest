@@ -62,6 +62,7 @@ namespace Pattons_Best
       private RuleDialogViewer? myRulesMgr;
       private IDieRoller? myDieRoller;
       //---------------------------------------------------
+      private Dictionary<string, EnumSpottingResult>  mySpottings = new Dictionary<string, EnumSpottingResult>();
       private IMapItems myAssignables = new MapItems();    // listing of new crewmen 
       private ICrewMember? mySelectedCrewman = null;
       //---------------------------------------------------
@@ -180,6 +181,12 @@ namespace Pattons_Best
                myAssignables.Add(cm);
          }
          //--------------------------------------------------
+         foreach(IMapItem enemyUnit in myGameInstance.BattleStacks) // get original spotting results
+         {
+            if( true == enemyUnit.IsEnemyUnit())
+               mySpottings[enemyUnit.Name] = enemyUnit.Spotting;
+         }
+         //--------------------------------------------------
          if (false == UpdateGrid())
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformSpotting(): UpdateGrid() return false");
@@ -218,6 +225,21 @@ namespace Pattons_Best
       {
          if (E0472Enum.END == myState)
          {
+            if( null == myGameInstance)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myGameInstance=null");
+               return false;
+            }
+            foreach( string s in mySpottings.Keys )
+            {
+               IMapItem? enemy = myGameInstance.BattleStacks.FindMapItem(s);
+               if (null == enemy)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): enemy=null for s=" + s);
+                  return false;
+               }
+               enemy.Spotting = mySpottings[s];
+            }
             if (null == myCallback)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myCallback=null");
@@ -469,7 +491,72 @@ namespace Pattons_Best
          }
          IMapItem mi = myGridRows[i].myMapItem;
          myGridRows[i].myDieRoll = dieRoll + myGridRows[i].myModifier;
-         myGridRows[i].myResult = TableMgr.GetSpottingResult(myGameInstance, mi, mySelectedCrewman, myGridRows[i].mySector, myGridRows[i].myRange, dieRoll);
+         string spottingResult = TableMgr.GetSpottingResult(myGameInstance, mi, mySelectedCrewman, myGridRows[i].mySector, myGridRows[i].myRange, dieRoll);
+         if ("ERROR" == myGridRows[i].myResult)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowCombatResults(): GetSpottingResult() returned error for i=" + i.ToString());
+            return;
+         }
+         else if ( "Identified" == myGridRows[i].myResult )
+         { 
+            if (EnumSpottingResult.IDENTIFIED_HIDDEN == mySpottings[mi.Name])
+            {
+               spottingResult = "Already Hidden";
+            }
+            else if (EnumSpottingResult.SPOTTED_HIDDEN == mySpottings[mi.Name])
+            {
+               spottingResult = "Already Hidden";
+            }
+            else
+            {
+               mySpottings[mi.Name] = EnumSpottingResult.IDENTIFIED;
+               spottingResult = "Identified";
+            }
+         }
+         else if ("Spotted" == myGridRows[i].myResult)
+         {
+            if (EnumSpottingResult.IDENTIFIED_HIDDEN == mySpottings[mi.Name])
+            {
+               spottingResult = "Already Hidden";
+            }
+            else if (EnumSpottingResult.SPOTTED_HIDDEN == mySpottings[mi.Name])
+            {
+               spottingResult = "Already Hidden";
+            }
+            if (EnumSpottingResult.IDENTIFIED == mySpottings[mi.Name])
+            {
+               spottingResult = "Already Identified";
+            }
+            else
+            {
+               spottingResult = "Spotted";
+               mySpottings[mi.Name] = EnumSpottingResult.SPOTTED;
+            }
+         }
+         else if ("Unspotted" == myGridRows[i].myResult)
+         {
+            if (EnumSpottingResult.IDENTIFIED_HIDDEN == mySpottings[mi.Name])
+               spottingResult = "Already Hidden";
+            else if (EnumSpottingResult.SPOTTED_HIDDEN == mySpottings[mi.Name])
+               spottingResult = "Already Hidden";
+            else if (EnumSpottingResult.IDENTIFIED == mySpottings[mi.Name])
+               spottingResult = "Already Identified";
+            else if (EnumSpottingResult.SPOTTED == mySpottings[mi.Name])
+               spottingResult = "Already Spotted";
+            else
+               spottingResult = "Unspotted";
+         }
+         else if ("Hidden" == myGridRows[i].myResult)
+         {
+            if (EnumSpottingResult.SPOTTED == mySpottings[mi.Name])
+               mySpottings[mi.Name] = EnumSpottingResult.SPOTTED_HIDDEN;
+            else if (EnumSpottingResult.IDENTIFIED == mySpottings[mi.Name])
+               mySpottings[mi.Name] = EnumSpottingResult.IDENTIFIED_HIDDEN;
+            else
+               mySpottings[mi.Name] = EnumSpottingResult.HIDDEN;
+            spottingResult = "Hidden";
+         }
+         myGridRows[i].myResult = spottingResult;
          //------------------------------------
          myState = E0472Enum.ROLL_SPOTTING_SHOW;
          for (int j = 0; j < myMaxRowCount; ++j)

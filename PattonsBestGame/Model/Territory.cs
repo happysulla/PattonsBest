@@ -511,7 +511,7 @@ namespace Pattons_Best
                {
                   if ((true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("SPG")))
                   {
-                     if (false == mi.IsIdentified)
+                     if ( (EnumSpottingResult.IDENTIFIED != mi.Spotting) && (EnumSpottingResult.IDENTIFIED_HIDDEN != mi.Spotting) && (EnumSpottingResult.SPOTTED_HIDDEN != mi.Spotting) && (EnumSpottingResult.HIDDEN != mi.Spotting))
                         returnedTerritories.Add(tName);
                   }
                }

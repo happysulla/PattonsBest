@@ -1648,7 +1648,9 @@ namespace Pattons_Best
                if (true == mi.IsEnemyUnit())
                {
                   outAction = GameAction.BattleRoundSequenceSpottingEnd;
-                  if ((BattlePhase.Ambush == myGameInstance.BattlePhase) || (BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase))
+                  if (BattlePhase.Ambush == myGameInstance.BattlePhase)
+                     outAction = GameAction.BattleRandomEvent;
+                  else if (BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase)
                      outAction = GameAction.BattleRoundSequenceStart;
                   break;
                }

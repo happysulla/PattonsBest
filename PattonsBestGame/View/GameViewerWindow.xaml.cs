@@ -18,6 +18,7 @@ using Button = System.Windows.Controls.Button;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Point = System.Windows.Point;
 using Pattons_Best.Properties;
+using System.Security.Cryptography.Pkcs;
 
 namespace Pattons_Best
 {
@@ -322,10 +323,15 @@ namespace Pattons_Best
             case GameAction.PreparationsHatches:
             case GameAction.PreparationsGunLoad:
             case GameAction.PreparationsGunLoadSelect:
-            case GameAction.BattleRoundSequenceOrders:
             case GameAction.UpdateTankCard:
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               break;
+            case GameAction.BattleRoundSequenceOrders:
+               if (false == UpdateCanvasTank(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               if (false == UpdateCanvasMain(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
             case GameAction.PreparationsTurret:
                if (false == UpdateCanvasTank(gi, action))
@@ -846,6 +852,35 @@ namespace Pattons_Best
                aPolygon.MouseDown += MouseDownPolygonHatches;
             }
          }
+         foreach (string crewmember in crewmembers)
+         {
+            string tName = crewmember + "Action";
+            ITerritory? t = Territories.theTerritories.Find(tName);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankOrders(): cannot find tName=" + tName);
+               return false;
+            }
+            PointCollection points = new PointCollection();
+            foreach (IMapPoint mp1 in t.Points)
+               points.Add(new System.Windows.Point(mp1.X, mp1.Y));
+            Polygon aPolygon = new Polygon { ContextMenu = myContextMenuCrewAction, Fill = Utilities.theBrushRegion, Points = points, Name = t.ToString() };
+            myPolygons.Add(aPolygon);
+            myCanvasTank.Children.Add(aPolygon);
+            aPolygon.MouseDown += MouseDownPolygonCrewActions;
+         }
+         return true;
+      }
+      private bool UpdateCanvasTankAmmoOrders(IGameInstance gi, GameAction action)
+      {
+         //--------------------------------
+         IAfterActionReport? report = gi.Reports.GetLast();
+         if (null == report)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankOrders(): report=null");
+            return false;
+         }
+         TankCard tankCard = new TankCard(report.TankCardNum);
          //--------------------------------
          string[] gunLoads = new string[5] { "He", "Ap", "Wp", "Hbci", "Hvap" };
          foreach (string gunload in gunLoads)
@@ -891,24 +926,6 @@ namespace Pattons_Best
             myCanvasTank.Children.Add(aPolygon);
             aPolygon.MouseDown += MouseDownPolygonGunLoad;
          }
-         //--------------------------------
-         foreach (string crewmember in crewmembers)
-         {
-            string tName = crewmember + "Action";
-            ITerritory? t = Territories.theTerritories.Find(tName);
-            if (null == t)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankOrders(): cannot find tName=" + tName);
-               return false;
-            }
-            PointCollection points = new PointCollection();
-            foreach (IMapPoint mp1 in t.Points)
-               points.Add(new System.Windows.Point(mp1.X, mp1.Y));
-            Polygon aPolygon = new Polygon { ContextMenu = myContextMenuCrewAction, Fill = Utilities.theBrushRegion, Points = points, Name = t.ToString() };
-            myPolygons.Add(aPolygon);
-            myCanvasTank.Children.Add(aPolygon);
-            aPolygon.MouseDown += MouseDownPolygonCrewActions;
-         }
          return true;
       }
       //---------------------------------------
@@ -941,6 +958,12 @@ namespace Pattons_Best
          if (false == UpdateCanvasMainMapItems(buttons, stacks))
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMainMapItems() returned false");
+            return false;
+         }
+         //-------------------------------------------------------
+         if (false == UpdateCanvasAnimateBattlePhase(gi))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasAnimateBattlePhase() returned false");
             return false;
          }
          //-------------------------------------------------------
@@ -1089,6 +1112,8 @@ namespace Pattons_Best
                }
             }
             if (ui is Label label)  // A Game Feat Label
+               elements.Add(ui);
+            if (ui is Rectangle rect)  
                elements.Add(ui);
             if (ui is Image img)
             {
@@ -1256,6 +1281,43 @@ namespace Pattons_Best
             myPolygons.Add(aPolygon);
             myCanvasMain.Children.Add(aPolygon);
          }
+         return true;
+      }
+      private bool UpdateCanvasAnimateBattlePhase(IGameInstance gi)
+      {
+         if (BattlePhase.None == gi.BattlePhase)
+            return true;
+         ITerritory? t = Territories.theTerritories.Find( gi.BattlePhase.ToString() );
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasAnimateBattlePhase(): t=null for name=" + gi.BattlePhase.ToString());
+            return false;
+         }
+         ColorAnimation colorAnimation = new ColorAnimation
+         {
+            From = Colors.Lime,
+            To = Colors.Transparent,
+            Duration = new Duration(TimeSpan.FromSeconds(1)),
+            AutoReverse = true,
+            RepeatBehavior = RepeatBehavior.Forever
+         };
+         if( 4 != t.Points.Count )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasAnimateBattlePhase(): t=" + t.Name + " has points=" + t.Points.Count.ToString());
+            return false;
+         }
+         IMapPoint p1 = t.Points[0];
+         IMapPoint p2 = t.Points[2];
+         Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "UpdateCanvasAnimateBattlePhase(): phase=" + gi.BattlePhase.ToString() + " pt=" + p1.ToString());
+         Rectangle r = new Rectangle();
+         r.Fill = new SolidColorBrush(Colors.Blue);
+         SolidColorBrush brush = (SolidColorBrush)r.Fill;
+         brush.BeginAnimation(SolidColorBrush.ColorProperty, colorAnimation);
+         r.Height = p2.Y - p1.Y;
+         r.Width = p2.X - p1.X;
+         myCanvasMain.Children.Add(r);
+         Canvas.SetLeft(r, p1.X);
+         Canvas.SetTop(r, p1.Y);
          return true;
       }
       //---------------------------------------
@@ -1596,6 +1658,7 @@ namespace Pattons_Best
          myRectangleMoving.Visibility = Visibility.Visible;
          return true;
       }
+
       //-------------CONTROLLER FUNCTIONS---------------------------------
       private void MouseDownPolygonHatches(object sender, MouseButtonEventArgs e)
       {

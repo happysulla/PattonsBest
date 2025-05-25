@@ -2273,6 +2273,7 @@ namespace Pattons_Best
                case GameAction.BattleAmbush: // Handled with EventViewerBattleAmbush class
                   break;
                case GameAction.BattleRandomEvent:
+                  gi.BattlePhase = BattlePhase.AmbushRandomEvent;
                   gi.EventDisplayed = gi.EventActive = "e039";
                   gi.DieRollAction = GameAction.BattleRandomEventRoll;
                   break;
@@ -2524,9 +2525,9 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleRoundSequenceSpottingEnd:
                   action = GameAction.BattleRoundSequenceOrders;
+                  gi.BattlePhase = BattlePhase.Orders;
                   gi.EventDisplayed = gi.EventActive = "e038";
                   gi.DieRollAction = GameAction.DieRollActionNone;
-                  gi.BattlePhase = BattlePhase.Orders;
                   break;
                case GameAction.BattleEnemyArtilleryRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
@@ -2561,7 +2562,6 @@ namespace Pattons_Best
                   else
                   {
                      action = GameAction.BattleRoundSequenceStart;
-                     gi.GamePhase = GamePhase.BattleRoundSequence;
                   }
                   break;
                case GameAction.EndGameClose:
@@ -2636,9 +2636,9 @@ namespace Pattons_Best
             }
          }
          outAction = GameAction.BattleRoundSequenceOrders;
+         gi.BattlePhase = BattlePhase.Orders;
          gi.EventDisplayed = gi.EventActive = "e038";
          gi.DieRollAction = GameAction.DieRollActionNone;
-         gi.BattlePhase = BattlePhase.Orders;
          return true;
       }
    }

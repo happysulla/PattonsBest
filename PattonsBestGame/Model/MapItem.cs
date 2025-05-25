@@ -117,9 +117,8 @@ namespace Pattons_Best
       public bool IsWoods { get; set; } = false;
       public bool IsBuilding { get; set; } = false;
       public bool IsFortification { get; set; } = false;
-      public bool IsSpotted { get; set; } = false;
-      public bool IsIdentified { get; set; } = false;
-      public bool IsHidden { get; set; } = false;
+      //--------------------------------------------------
+      public EnumSpottingResult Spotting { get; set; } = EnumSpottingResult.UNSPOTTED;
       //--------------------------------------------------
       private bool myIsFlipped = false;
       //----------------------------------------------------------------------------
@@ -412,7 +411,20 @@ namespace Pattons_Best
                Image overlay = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage("OKIA") };
                g.Children.Add(overlay);
             }
-            if ("" != mi.OverlayImageName)
+            else if ((EnumSpottingResult.IDENTIFIED == mi.Spotting ) || (EnumSpottingResult.IDENTIFIED_HIDDEN == mi.Spotting) || (EnumSpottingResult.SPOTTED == mi.Spotting) || (EnumSpottingResult.SPOTTED_HIDDEN == mi.Spotting) || (EnumSpottingResult.HIDDEN == mi.Spotting) )
+            {
+               if (EnumSpottingResult.HIDDEN != mi.Spotting)
+               {
+                  Image overlay = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage("OSPOT") };
+                  g.Children.Add(overlay);
+               }
+               if ((EnumSpottingResult.IDENTIFIED_HIDDEN == mi.Spotting) || (EnumSpottingResult.SPOTTED_HIDDEN == mi.Spotting) || (EnumSpottingResult.HIDDEN == mi.Spotting))
+               {
+                  Image overlay1 = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage("OHIDE") };
+                  g.Children.Add(overlay1);
+               }
+            }
+            else if ("" != mi.OverlayImageName)
             {
                Image overlay = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage(mi.OverlayImageName) };
                g.Children.Add(overlay);
