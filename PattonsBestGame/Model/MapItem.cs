@@ -112,6 +112,7 @@ namespace Pattons_Best
       public bool IsTurret { get; set; } = false;
       public bool IsKilled { get; set; } = false;
       public bool IsFired { get; set; } = false;
+      public bool IsSpotted { get; set; } = false;
       //--------------------------------------------------
       public bool IsVehicle { get; set; } = false;
       public bool IsWoods { get; set; } = false;

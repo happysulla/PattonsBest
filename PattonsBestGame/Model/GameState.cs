@@ -961,53 +961,53 @@ namespace Pattons_Best
             return false;
          }
          //------------------------------------
-         //ICrewMember? cm = gi.GetCrewMember("Commander");
-         //if (null == cm)
-         //{
-         //   Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Commander");
-         //   return false;
-         //}
-         //cm.IsButtonedUp = false;
-         //ITerritory? t = Territories.theTerritories.Find("CommanderHatch");
-         //if (null == t)
-         //{
-         //   Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for CommanderHatch");
-         //   return false;
-         //}
-         //IMapItem mi = new MapItem(cm.Role + "OpenHatch", 1.0, "c15OpenHatch", t);
-         //gi.Hatches.Add(mi);
-         ////------------------------------------
-         //cm = gi.GetCrewMember("Driver");
-         //if (null == cm)
-         //{
-         //   Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Driver");
-         //   return false;
-         //}
-         //cm.IsButtonedUp = false;
-         //t = Territories.theTerritories.Find("DriverHatch");
-         //if (null == t)
-         //{
-         //   Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for DriverHatch");
-         //   return false;
-         //}
-         //mi = new MapItem(cm.Role + "OpenHatch", 1.0, "c15OpenHatch", t);
-         //gi.Hatches.Add(mi);
-         ////------------------------------------
-         //cm = gi.GetCrewMember("Assistant");
-         //if (null == cm)
-         //{
-         //   Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Assistant");
-         //   return false;
-         //}
-         //cm.IsButtonedUp = false;
-         //t = Territories.theTerritories.Find("AssistantHatch");
-         //if (null == t)
-         //{
-         //   Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for AssistantHatch");
-         //   return false;
-         //}
-         //mi = new MapItem(cm.Role + "OpenHatch", 1.0, "c15OpenHatch", t);
-         //gi.Hatches.Add(mi);
+         ICrewMember? cm = gi.GetCrewMember("Commander");
+         if (null == cm)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Commander");
+            return false;
+         }
+         cm.IsButtonedUp = false;
+         ITerritory? t = Territories.theTerritories.Find("CommanderHatch");
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for CommanderHatch");
+            return false;
+         }
+         IMapItem mi = new MapItem(cm.Role + "OpenHatch", 1.0, "c15OpenHatch", t);
+         gi.Hatches.Add(mi);
+         //------------------------------------
+         cm = gi.GetCrewMember("Driver");
+         if (null == cm)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Driver");
+            return false;
+         }
+         cm.IsButtonedUp = false;
+         t = Territories.theTerritories.Find("DriverHatch");
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for DriverHatch");
+            return false;
+         }
+         mi = new MapItem(cm.Role + "OpenHatch", 1.0, "c15OpenHatch", t);
+         gi.Hatches.Add(mi);
+         //------------------------------------
+         cm = gi.GetCrewMember("Assistant");
+         if (null == cm)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Assistant");
+            return false;
+         }
+         cm.IsButtonedUp = false;
+         t = Territories.theTerritories.Find("AssistantHatch");
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for AssistantHatch");
+            return false;
+         }
+         mi = new MapItem(cm.Role + "OpenHatch", 1.0, "c15OpenHatch", t);
+         gi.Hatches.Add(mi);
          //------------------------------------
          ITerritory? t1 = Territories.theTerritories.Find("Spot4");
          if (null == t1)

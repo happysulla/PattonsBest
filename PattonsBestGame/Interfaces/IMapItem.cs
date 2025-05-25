@@ -31,6 +31,7 @@ namespace Pattons_Best
       bool IsTurret { get; set; }
       bool IsKilled { get; set; }
       bool IsFired { get; set; }
+      bool IsSpotted { get; set; }
       //----------------------------------------
       bool IsVehicle { get; set; }
       bool IsWoods { get; set; }

@@ -2556,7 +2556,7 @@ namespace Pattons_Best
          if ( true == mi.IsMoving )
             spottingModifer -= 3;
          //----------------------------------------------------
-         if (EnumSpottingResult.SPOTTED == mi.Spotting)
+         if (true == mi.IsSpotted)
             spottingModifer -= 3;
          return spottingModifer;
       }
@@ -2570,12 +2570,20 @@ namespace Pattons_Best
             return "ERROR";
          }
          if ( ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling"))) && ('C' != range) )
+         {
             return "Unspotted";
+         }
          //----------------------------------------------------
          if ( 1 == dieRoll ) // an unmodified roll of 1 always spots and ids it
+         {
+            mi.Spotting = EnumSpottingResult.IDENTIFIED;
             return "Identified";
-         if ( (9 == dieRoll) && (10 == dieRoll) )  // an unmodified roll of 9-10 means target is hidden
+         }
+         if ( (9 == dieRoll) || (10 == dieRoll) )  // an unmodified roll of 9-10 means target is hidden
+         {
+            mi.Spotting = EnumSpottingResult.HIDDEN;
             return "Hidden";
+         }
          //-------------------------------
          int modifier = GetSpottingModifier(gi, mi, cm, sector, range);
          if( modifier < -100 )
@@ -2589,7 +2597,11 @@ namespace Pattons_Best
          {
             int halfRating = (int)Math.Ceiling(cm.Rating * 0.5);
             if ( dieRoll <= halfRating )
+            {
+               mi.Spotting = EnumSpottingResult.IDENTIFIED;
                return "Identified";
+            }
+            mi.Spotting = EnumSpottingResult.SPOTTED;
             return "Spotted";
          }
          return "Unspotted";
