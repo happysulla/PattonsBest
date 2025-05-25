@@ -406,7 +406,7 @@ namespace Pattons_Best
          b.BorderThickness = new Thickness(0);
          b.Background = new SolidColorBrush(Colors.Transparent);
          b.Foreground = new SolidColorBrush(Colors.Transparent);
-         MapItem.SetButtonContent(b, cm, false, false); // This sets the image as the button's content
+         MapItem.SetButtonContent(b, cm, true, true); // This sets the image as the button's content
          return b;
       }
       private string GetSectorRangeDisplay(int i)
@@ -450,7 +450,7 @@ namespace Pattons_Best
       //------------------------------------------------------------------------------------
       public void ShowDieResults(int dieRoll)
       {
-         Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "ShowDieResults(): +++++++++++++++++myState=" + myState.ToString() + " dr=" + dieRoll.ToString() );
+         Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "EventViewerSpottingMgr.ShowDieResults(): +++++++++++++++++myState=" + myState.ToString() + " dr=" + dieRoll.ToString() );
          if (null == myGameInstance)
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance=null");

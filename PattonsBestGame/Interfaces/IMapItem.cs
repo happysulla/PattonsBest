@@ -42,7 +42,7 @@ namespace Pattons_Best
       //----------------------------------------
       bool IsEnemyUnit();
       string GetEnemyUnit();
-      void SetBloodSpots();
+      void SetBloodSpots(int percent = 40);
       void Flip();
       void Unflip();
    }
@@ -72,5 +72,9 @@ namespace Pattons_Best
       int Rating { get; set; }
       bool IsButtonedUp { get; set; }
       int Sector { get; set; }
+      string Action { get; set; }
+      string Wound { get; set; }
+      bool IsUnconscious { get; set; }
+      bool IsIncapacitated { get; set; }
    }
 }

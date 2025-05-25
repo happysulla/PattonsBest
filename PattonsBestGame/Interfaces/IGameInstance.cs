@@ -5,25 +5,44 @@ using System.Text.RegularExpressions;
 
 namespace Pattons_Best
 {
-   public struct ShermanDeath
+   public class ShermanDeath
    {
       public IMapItem myEnemyUnit;
-      public string myHitLocation;
-      public int myDay;
-      public string myCause;
-      public bool myIsAmbush;
+      public string myHitLocation = "";
+      public string myEnemyFireDirection = "";
+      public int myDay = 0;
+      public string myCause = "";
+      public bool myIsAmbush = false;
       public bool myIsExplosion = false;
       public bool myIsBrewUp = false;
-      //---------------------------------------------------
-      public ShermanDeath(IMapItem eu, string loc, int day, string cause, bool isAmbush)
+      public ShermanDeath(IGameInstance gi, IMapItem eu, string loc, string cause)
       {
          myEnemyUnit = eu;
          myHitLocation = loc;
+         myCause = cause;
+         myDay = gi.Day;
+         myIsAmbush = ((BattlePhase.Ambush == gi.BattlePhase) || (BattlePhase.AmbushRandomEvent == gi.BattlePhase) );
+         myEnemyFireDirection = TableMgr.GetEnemyFireDirection(gi, eu, myHitLocation);
+      }
+   }
+   //-------------------------------------------------
+   public class CollateralDamage
+   {
+      public IMapItem myEnemyUnit;
+      public int myDay = 0;
+      public string myCause = "";
+      public bool myIsAmbush = false;
+      public bool myIsExplosion = false;
+      public bool myIsBrewUp = false;
+      public CollateralDamage(IGameInstance gi, IMapItem eu, int day, string cause, bool isAmbush)
+      {
+         myEnemyUnit = eu;
          myDay = day;
          myCause = cause;
          myIsAmbush = isAmbush;
       }
-   };
+   }
+   //-------------------------------------------------
    public interface IGameInstance
    {
       bool CtorError { get; }
@@ -40,6 +59,7 @@ namespace Pattons_Best
       //----------------------------------------------
       int GameTurn { set; get; }
       GamePhase GamePhase { set; get; }
+      BattlePhase BattlePhase { set; get; }
       int Day { get; set; }
       IAfterActionReports Reports { get; set; }
       GameAction DieRollAction { set; get; } // Used in EventViewerPanel when die roll happens to indicate next event for die roll
@@ -52,7 +72,6 @@ namespace Pattons_Best
       IMapItems GunLoads { set; get; }
       IMapItems CrewActions { set; get; }
       IMapItem Sherman { set; get; }
-      
       //------------------------------------------------
       ITerritory Home { get; set; }
       ITerritory? EnemyStrengthCheckTerritory { get; set; }
@@ -63,16 +82,18 @@ namespace Pattons_Best
       //------------------------------------------------
       bool IsTurretActive { set; get; }
       bool IsHatchesActive { set; get; }
-      bool IsOrdersActive { set; get; }
       //------------------------------------------------
       bool IsLeadTank { set; get; }
       bool IsAirStrikePending { set; get; }
       bool IsAdvancingFireChosen { set; get; }
-      bool IsAmbush { set; get; }
       bool IsShermanFiring { set; get; } 
       bool IsShermanFiringAtFront { set; get; }
       bool IsBrokenGunsight { set; get; }
       bool IsBrokenMgAntiAircraft { set; get; }
+      //------------------------------------------------
+      bool IsBailOut { set; get; }
+      bool IsMinefieldAttack { set; get; }
+      bool IsHarrassingFire { set; get; }
       //------------------------------------------------
       int AdvancingFireMarkerCount { set; get; }
       EnumResistance BattleResistance { set; get; }
@@ -80,7 +101,6 @@ namespace Pattons_Best
       Dictionary<string, bool> FirstShots { set; get; }
       Dictionary<string, int> AcquiredShots { set; get; }
       ShermanDeath? Death { set; get; }
-      string? EnemyFireDirection { set; get; }
       //------------------------------------------------
       IMapItemMoves MapItemMoves { set; get; }
       IStacks TankStacks { set; get; }

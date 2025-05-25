@@ -65,6 +65,20 @@ namespace Pattons_Best
       EndGame,
       Error
    };
+   [Serializable]
+   public enum BattlePhase
+   {
+      Ambush,
+      AmbushRandomEvent,
+      Spotting,
+      Orders,
+      AmmoOrders,
+      CrewAction,
+      EnemyAction,
+      FriendlyAction,
+      RandomEvent,
+      Error
+   };
    // GameState is a subclass representing the state pattern. For each game state, there can be different
    // game phases and game actions. The GameEngine makes a call that each class can act on..
    // GameEngine.PerformAction() ==> GameState.PerformAction()

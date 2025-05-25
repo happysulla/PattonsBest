@@ -22,7 +22,7 @@ namespace Pattons_Best
 {
    public partial class EventViewerEnemyAction : UserControl
    {
-      public delegate bool EndResolveEnemyActionCallback();
+      public delegate bool EndResolveEnemyActionCallback(bool isCollateral);
       private const int STARTING_ASSIGNED_ROW = 6;
       private const int NO_MOVE = 100;
       private const int NO_FIRE = 101;
@@ -40,8 +40,6 @@ namespace Pattons_Best
          ENEMY_ACTION_MOVE_SHOW,
          ENEMY_ACTION_FIRE,
          ENEMY_ACTION_FIRE_SHOW,
-         ENEMY_ACTION_COLLATERAL,
-         ENEMY_ACTION_COLLATERAL_SHOW,
          ENEMY_ACTION_TO_HIT_YOUR_TANK,
          ENEMY_ACTION_TO_HIT_YOUR_TANK_SHOW,
          ENEMY_ACTION_TO_KILL_YOUR_TANK,
@@ -193,7 +191,7 @@ namespace Pattons_Best
          }
          //--------------------------------------------------
          myCallback = callback;
-         if (true == myGameInstance.IsAmbush)
+         if (BattlePhase.Ambush == myGameInstance.BattlePhase)
             myButtonR465.Visibility = Visibility.Visible;
          //--------------------------------------------------
          if (null == myGameInstance.EnteredArea)
@@ -321,6 +319,14 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myGameInstance=null");
                return false;
             }
+            //-----------------------------------------
+            bool isCollateral = false;
+            for ( int i = 0; i<myMaxRowCount; i++)
+            {
+               if (true == myGridRows[i].myEnemyAction.Contains("Collateral"))
+                  isCollateral = true;
+            }
+            //-----------------------------------------
             IMapItems removals = new MapItems();
             foreach (IStack stack in myGameInstance.BattleStacks)
             {
@@ -340,7 +346,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myCallback=null");
                return false;
             }
-            if (false == myCallback())
+            if (false == myCallback(isCollateral))
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myCallback() returned false");
                return false;
@@ -411,13 +417,6 @@ namespace Pattons_Best
                }
                myTextBlockInstructions.Inlines.Add(new Run(" Table to determine if infantry/tank KO'ed."));
                break;
-            case E0475Enum.ENEMY_ACTION_COLLATERAL:
-               myTextBlockInstructions.Inlines.Add(new Run("Roll on the "));
-               Button bCollateral = new Button() { Content = "Collateral", FontFamily = myFontFam1, FontSize = 8 };
-               bCollateral.Click += ButtonRule_Click;
-               myTextBlockInstructions.Inlines.Add(new InlineUIContainer(bCollateral));
-               myTextBlockInstructions.Inlines.Add(new Run("  Damage Table."));
-               break;
             case E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK:
                myTextBlockInstructions.Inlines.Add(new Run("Roll on these tables in this order: "));
                Button bToHit = new Button() { Content = "Enemy AP To Hit", FontFamily = myFontFam1, FontSize = 8 };
@@ -444,7 +443,6 @@ namespace Pattons_Best
                break;
             case E0475Enum.ENEMY_ACTION_MOVE_SHOW:
             case E0475Enum.ENEMY_ACTION_FIRE_SHOW:
-            case E0475Enum.ENEMY_ACTION_COLLATERAL_SHOW:
             case E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK_SHOW:
             case E0475Enum.ENEMY_ACTION_TO_KILL_YOUR_TANK_SHOW:
                myTextBlockInstructions.Inlines.Add(new Run("Click image to continue."));
@@ -468,7 +466,6 @@ namespace Pattons_Best
             case E0475Enum.ENEMY_ACTION_SELECT:
             case E0475Enum.ENEMY_ACTION_MOVE:
             case E0475Enum.ENEMY_ACTION_FIRE:
-            case E0475Enum.ENEMY_ACTION_COLLATERAL:
             case E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK:
             case E0475Enum.ENEMY_ACTION_TO_KILL_YOUR_TANK:
                Rectangle r1 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
@@ -478,7 +475,6 @@ namespace Pattons_Best
                //-------------------------------
                bool isEnemyMoving = false;
                bool isEnemyFiring = false;
-               bool isCollateralDamage = false;
                bool isYourTank = false;
                for (int j = 0; j < myMaxRowCount; ++j)
                {
@@ -488,8 +484,6 @@ namespace Pattons_Best
                      isYourTank = true;
                   else if (true == myGridRows[j].myEnemyAction.Contains("Fire"))
                      isEnemyFiring = true;
-                  else if (true == myGridRows[j].myEnemyAction.Contains("Collateral"))
-                     isCollateralDamage = true;
                }
                if (true == isEnemyMoving)
                {
@@ -512,11 +506,6 @@ namespace Pattons_Best
                   ImageBehavior.SetAnimatedSource(img2, bmi2);
                   myStackPanelAssignable.Children.Add(img2);
                }
-               else if (true == isCollateralDamage)
-               {
-                  System.Windows.Controls.Image img41 = new System.Windows.Controls.Image { Name = "Collateral", Source = MapItem.theMapImages.GetBitmapImage("CollateralDamage"), Width = Utilities.ZOOM * Utilities.theMapItemSize * 1.5, Height = Utilities.ZOOM * Utilities.theMapItemSize };
-                  myStackPanelAssignable.Children.Add(img41);
-               }
                else if (true == isYourTank)
                {
                   BitmapImage bmi3 = new BitmapImage();
@@ -535,7 +524,6 @@ namespace Pattons_Best
                break;
             case E0475Enum.ENEMY_ACTION_MOVE_SHOW:
                bool isEnemyFiring1 = false;
-               bool isCollateralDamage1 = false;
                bool isYourTank1 = false;
                for (int j = 0; j < myMaxRowCount; ++j)
                {
@@ -543,8 +531,6 @@ namespace Pattons_Best
                      isYourTank1 = true;
                   else if (true == myGridRows[j].myEnemyAction.Contains("Fire"))
                      isEnemyFiring1 = true;
-                  else if (true == myGridRows[j].myEnemyAction.Contains("Collateral"))
-                     isCollateralDamage1 = true;
                }
                if (true == isEnemyFiring1)
                {
@@ -555,11 +541,6 @@ namespace Pattons_Best
                   System.Windows.Controls.Image img4 = new System.Windows.Controls.Image { Name = "Fire", Source = bmi4, Width = Utilities.ZOOM * Utilities.theMapItemSize * 1.75, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                   ImageBehavior.SetAnimatedSource(img4, bmi4);
                   myStackPanelAssignable.Children.Add(img4);
-               }
-               else if (true == isCollateralDamage1)
-               {
-                  System.Windows.Controls.Image img42 = new System.Windows.Controls.Image { Name = "Collateral", Source = MapItem.theMapImages.GetBitmapImage("CollateralDamage"), Width = Utilities.ZOOM * Utilities.theMapItemSize * 1.5, Height = Utilities.ZOOM * Utilities.theMapItemSize };
-                  myStackPanelAssignable.Children.Add(img42);
                }
                else if (true == isYourTank1)
                {
@@ -578,21 +559,13 @@ namespace Pattons_Best
                }
                break;
             case E0475Enum.ENEMY_ACTION_FIRE_SHOW:
-               bool isCollateralDamage2 = false;
                bool isYourTank2 = false;
                for (int j = 0; j < myMaxRowCount; ++j)
                {
                   if ((true == myGridRows[j].myEnemyAction.Contains("Your")) || ((true == myGridRows[j].myEnemyAction.Contains("Lead")) && (true == myGameInstance.IsLeadTank)))
                      isYourTank2 = true;
-                  else if (true == myGridRows[j].myEnemyAction.Contains("Collateral"))
-                     isCollateralDamage2 = true;
                }
-               if (true == isCollateralDamage2)
-               {
-                  System.Windows.Controls.Image img43 = new System.Windows.Controls.Image { Name = "Collateral", Source = MapItem.theMapImages.GetBitmapImage("CollateralDamage"), Width = Utilities.ZOOM * Utilities.theMapItemSize*1.5, Height = Utilities.ZOOM * Utilities.theMapItemSize };
-                  myStackPanelAssignable.Children.Add(img43);
-               }
-               else if (true == isYourTank2)
+               if (true == isYourTank2)
                {
                   BitmapImage bmi6 = new BitmapImage();
                   bmi6.BeginInit();
@@ -606,29 +579,6 @@ namespace Pattons_Best
                {
                   System.Windows.Controls.Image img52 = new System.Windows.Controls.Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                   myStackPanelAssignable.Children.Add(img52);
-               }
-               break;
-            case E0475Enum.ENEMY_ACTION_COLLATERAL_SHOW:
-               bool isYourTank3 = false;
-               for (int j = 0; j < myMaxRowCount; ++j)
-               {
-                  if ((true == myGridRows[j].myEnemyAction.Contains("Your")) || ((true == myGridRows[j].myEnemyAction.Contains("Lead")) && (true == myGameInstance.IsLeadTank)))
-                     isYourTank3 = true;
-               }
-               if (true == isYourTank3)
-               {
-                  BitmapImage bmi71 = new BitmapImage();
-                  bmi71.BeginInit();
-                  bmi71.UriSource = new Uri(MapImage.theImageDirectory + "TigerFiring.gif", UriKind.Absolute);
-                  bmi71.EndInit();
-                  System.Windows.Controls.Image img71 = new System.Windows.Controls.Image { Name = "ToHitYourTank", Source = bmi71, Width = Utilities.ZOOM * Utilities.theMapItemSize * 1.75, Height = Utilities.ZOOM * Utilities.theMapItemSize };
-                  ImageBehavior.SetAnimatedSource(img71, bmi71);
-                  myStackPanelAssignable.Children.Add(img71);
-               }
-               else
-               {
-                  System.Windows.Controls.Image img53 = new System.Windows.Controls.Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
-                  myStackPanelAssignable.Children.Add(img53);
                }
                break;
             case E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK_SHOW:
@@ -714,15 +664,6 @@ namespace Pattons_Best
                if (false == UpdateGridRowsFire())
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): UpdateGridRowsFire() returned false");
-                  return false;
-               }
-               myGameEngine.PerformAction(ref myGameInstance, ref outAction);
-               break;
-            case E0475Enum.ENEMY_ACTION_COLLATERAL:
-            case E0475Enum.ENEMY_ACTION_COLLATERAL_SHOW:
-               if (false == UpdateGridRowsCollateral())
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): UpdateGridRowsCollateral() returned false");
                   return false;
                }
                myGameEngine.PerformAction(ref myGameInstance, ref outAction);
@@ -1401,7 +1342,7 @@ namespace Pattons_Best
       //------------------------------------------------------------------------------------
       public void ShowDieResults(int dieRoll)
       {
-         Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): ++++++++++++++myState=" + myState.ToString());
+         Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "EventViewerEnemyAction.ShowDieResults(): ++++++++++++++myState=" + myState.ToString());
          if (null == myGameInstance)
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance=null");
@@ -1433,7 +1374,6 @@ namespace Pattons_Best
          switch (myState)
          {
             case E0475Enum.ENEMY_ACTION_SELECT:
-               //dieRoll = 81 - myGridRows[i].myModifierEnemyAction; // <cgs> TEST
                myGridRows[i].myDieRollEnemyAction = dieRoll;
                string enemyAction = TableMgr.SetEnemyActionResult(myGameInstance, mi, dieRoll);
                if ("ERROR" == enemyAction)
@@ -1604,23 +1544,6 @@ namespace Pattons_Best
                }
                break;
             //------------------------------------------------------------------------------------------------
-            case E0475Enum.ENEMY_ACTION_COLLATERAL:
-               Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "ShowDieResults(): myGameInstance.MapItemMoves.Clear()");
-               myGridRows[i].myDieRollCollateral = dieRoll;
-               myGridRows[i].myCollateralDamage = TableMgr.GetCollateralDamage(myGameInstance, dieRoll); 
-               if ("ERROR" == myGridRows[i].myCollateralDamage)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetCollateralDamage() returned ERROR");
-                  return;
-               }
-               myState = E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK_SHOW;
-               for (int j = 0; j < myMaxRowCount; ++j)
-               {
-                  if ((Utilities.NO_RESULT == myGridRows[j].myToHitNumberYourTank) || (Utilities.NO_RESULT == myGridRows[j].myToKillNumberYourTank) || (Utilities.NO_RESULT == myGridRows[j].myDieRollToKillYourTank))
-                     myState = E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK;
-               }
-               break;
-            //------------------------------------------------------------------------------------------------
             case E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK:
                myGridRows[i].myDieRollToHitYourTank = dieRoll;
                Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Firing at Your Tank myState=" + myState.ToString() + " dr=" + dieRoll);
@@ -1676,7 +1599,7 @@ namespace Pattons_Best
                      myGameInstance.Sherman.SetBloodSpots();
                      myGameInstance.Sherman.IsKilled = true;
                      myGridRows[i].myToKillResultYourTank = "KO";
-                     myGameInstance.Death = new ShermanDeath(enemyMapItem, myGridRows[i].myHitLocationYourTank, myGameInstance.Day, "Enemy Action", myGameInstance.IsAmbush);
+                     myGameInstance.Death = new ShermanDeath(myGameInstance, enemyMapItem, myGridRows[i].myHitLocationYourTank, "Enemy Action");
                      for (int j = 0; j < myMaxRowCount; ++j)
                      {
                         if (Utilities.NO_RESULT == myGridRows[j].myDieRollHitLocationYourTank)
@@ -1886,16 +1809,6 @@ namespace Pattons_Best
                            myState = E0475Enum.ENEMY_ACTION_FIRE;
                            myTextBlockHeader.Text = "r4.75 Enemy Action - Fire At Friends";
                            myTextBlock2.Text = "To Kill #";
-                           myTextBlock3.Text = "Roll";
-                           myTextBlock4.Visibility = Visibility.Hidden;
-                           myTextBlock5.Text = "Result";
-                        }
-                        if ("Collateral" == img.Name)
-                        {
-                           Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "Grid_MouseDown(): p=" + myState.ToString() + "-->ENEMY_ACTION_COLLATERAL");
-                           myState = E0475Enum.ENEMY_ACTION_COLLATERAL;
-                           myTextBlockHeader.Text = "r4.75 Enemy Action - Collateral";
-                           myTextBlock2.Visibility = Visibility.Hidden;
                            myTextBlock3.Text = "Roll";
                            myTextBlock4.Visibility = Visibility.Hidden;
                            myTextBlock5.Text = "Result";

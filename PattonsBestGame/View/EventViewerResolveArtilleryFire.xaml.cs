@@ -170,7 +170,7 @@ namespace Pattons_Best
             return false;
          }
          myArtilleryCount = 0;
-         if( (true == myGameInstance.IsAmbush) || (GamePhase.BattleRoundSequence == myGameInstance.GamePhase) )
+         if( (BattlePhase.Ambush == myGameInstance.BattlePhase) || (BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase) || (GamePhase.BattleRoundSequence == myGameInstance.GamePhase) )
          {
             myArtilleryCount = 1;
          }

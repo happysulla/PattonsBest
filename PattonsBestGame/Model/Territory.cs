@@ -103,6 +103,56 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_ERROR, "GetRandomPoint(): Cannot find a random point in t.Name=" + t.Name + " rect=" + rect.ToString());
          return new MapPoint(t.CenterPoint.X - offset, t.CenterPoint.Y - offset);
       }
+      public static int GetSmokeCount(IGameInstance gi, char sector, char range)
+      {
+         int numSmokeMarkers = 0;
+         IStack? stack = gi.BattleStacks.Find(gi.Home);
+         if (null == stack)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetSmokeCount():  stack=null for " + gi.Home.Name);
+            return -10000;
+         }
+         foreach (IMapItem smoke in stack.MapItems)
+         {
+            if (true == smoke.Name.Contains("Smoke"))
+               numSmokeMarkers++;
+         }
+         stack = gi.BattleStacks.Find("B" + sector + "C");
+         if (null != stack)
+         {
+            foreach (IMapItem smoke in stack.MapItems)
+            {
+               if (true == smoke.Name.Contains("Smoke"))
+                  numSmokeMarkers++;
+            }
+         }
+         if (('M' == range) || ('L' == range))
+         {
+            stack = gi.BattleStacks.Find("B" + sector + "M");
+            if (null != stack)
+            {
+               foreach (IMapItem smoke in stack.MapItems)
+               {
+                  if (true == smoke.Name.Contains("Smoke"))
+                     numSmokeMarkers++;
+               }
+            }
+         }
+         if ('L' == range)
+         {
+            string tName = "B" + sector + "L";
+            stack = gi.BattleStacks.Find(tName);
+            if (null != stack)
+            {
+               foreach (IMapItem smoke in stack.MapItems)
+               {
+                  if (true == smoke.Name.Contains("Smoke"))
+                     numSmokeMarkers++;
+               }
+            }
+         }
+         return numSmokeMarkers;
+      }
       public static List<String>? GetSpottedTerritories(IGameInstance gi, ICrewMember cm)
       {
          List<string> spottedTerritories = new List<string>();

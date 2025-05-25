@@ -26,6 +26,7 @@ namespace Pattons_Best
       //------------------------------------------------
       public int GameTurn { get; set; } = 0;
       public GamePhase GamePhase { get; set; } = GamePhase.GameSetup;
+      public BattlePhase BattlePhase { set; get; } = BattlePhase.Ambush;
       public int Day { get; set; } = 0;
       public IAfterActionReports Reports { get; set; } = new AfterActionReports();
       public GameAction DieRollAction { get; set; } = GameAction.DieRollActionNone;
@@ -48,18 +49,20 @@ namespace Pattons_Best
       //---------------------------------------------------------------
       public bool IsTurretActive { set; get; } = false;
       public bool IsHatchesActive { set; get; } = false;
-      public bool IsOrdersActive { set; get; } = false;
       //---------------------------------------------------------------
       public bool IsHulledDown { set; get; } = false;
       public bool IsMoving { set; get; } = false;
       public bool IsLeadTank { set; get; } = false;
       public bool IsAirStrikePending { set; get; } = false;
       public bool IsAdvancingFireChosen { set; get; } = false;
-      public bool IsAmbush { set; get; } = false;
       public bool IsShermanFiring { set; get; } = false;
       public bool IsShermanFiringAtFront { set; get; } = false;
       public bool IsBrokenGunsight { set; get; } = false;
       public bool IsBrokenMgAntiAircraft { set; get; } = false;
+      //---------------------------------------------------------------
+      public bool IsBailOut { set; get; } = false;
+      public bool IsMinefieldAttack { set; get; } = false;
+      public bool IsHarrassingFire { set; get; } = false;
       //---------------------------------------------------------------
       public int AdvancingFireMarkerCount { set; get; } = 0;
       public EnumResistance BattleResistance { set; get; } = EnumResistance.None;
@@ -67,7 +70,6 @@ namespace Pattons_Best
       public Dictionary<string, bool> FirstShots { set; get; } = new Dictionary<string, bool>();
       public Dictionary<string, int> AcquiredShots { set; get; } = new Dictionary<string, int>();
       public ShermanDeath? Death { set; get; } = null;
-      public string? EnemyFireDirection { set; get; } = null;
       //------------------------------------------------
       public IMapItemMoves MapItemMoves { get; set; } = new MapItemMoves();
       public IStacks TankStacks { get; set; } = new Stacks();

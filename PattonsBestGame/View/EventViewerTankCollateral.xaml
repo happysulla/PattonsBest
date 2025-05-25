@@ -12,8 +12,9 @@
          <ColumnDefinition Width="*"/>
          <ColumnDefinition Width="*"/>
          <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+         <ColumnDefinition Width="*"/>
+         <ColumnDefinition Width="*"/>
+         <ColumnDefinition Width="1.5*"/>
       </Grid.ColumnDefinitions>
       <Grid.RowDefinitions>
          <RowDefinition Height="Auto"></RowDefinition>
@@ -27,23 +28,24 @@
          <RowDefinition Height="Auto"></RowDefinition>
          <RowDefinition Height="Auto"></RowDefinition>
               </Grid.RowDefinitions>
-      <StackPanel Grid.Row="0" Grid.ColumnSpan="6" Orientation="Horizontal">
+      <StackPanel Grid.Row="0" Grid.ColumnSpan="7" Orientation="Horizontal">
          <TextBlock Name="myTextBlockHeader" Text=" Collateral Damage Check" FontWeight="Bold" FontFamily='Georgia' FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>
       </StackPanel>
-      <Rectangle Grid.Row="1" Grid.ColumnSpan="6" Margin="5" Height="1" Fill="Black"/>
-      <TextBlock Grid.Row="2" Grid.ColumnSpan="6" Name="myTextBlockInstructions" FontFamily='Georgia' FontSize="16" VerticalAlignment="Bottom"  HorizontalAlignment="Left" Margin="2,0,0,5">
+      <Rectangle Grid.Row="1" Grid.ColumnSpan="7" Margin="5" Height="1" Fill="Black"/>
+      <TextBlock Grid.Row="2" Grid.ColumnSpan="7" Name="myTextBlockInstructions" FontFamily='Georgia' FontSize="16" VerticalAlignment="Bottom"  HorizontalAlignment="Left" Margin="2,0,0,5">
         You find a high alter of godly power.
       </TextBlock>
-      <StackPanel Grid.Row="3" Grid.ColumnSpan="6" Name="myStackPanelAssignable" DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5,0,0,0">
+      <StackPanel Grid.Row="3" Grid.ColumnSpan="7" Name="myStackPanelAssignable" DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5,0,0,0">
          <Rectangle  Height="42" Width="42" Stroke="Black" />
       </StackPanel>
-      <Rectangle Grid.Row="4" Grid.ColumnSpan="6" Margin="5" Height="1" Fill="Black"/>
+      <Rectangle Grid.Row="4" Grid.ColumnSpan="7" Margin="5" Height="1" Fill="Black"/>
       <!--Table Header Row-->
       <TextBlock Grid.Row="5" Grid.Column="0" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock0">Crew Member</TextBlock>
       <TextBlock Grid.Row="5" Grid.Column="1" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock1">Rating</TextBlock>
       <TextBlock Grid.Row="5" Grid.Column="2" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock2">Button Up?</TextBlock>
-      <TextBlock Grid.Row="5" Grid.Column="3" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock3">Hit Location</TextBlock>
-      <TextBlock Grid.Row="5" Grid.Column="4" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock4">Roll</TextBlock>
-      <TextBlock Grid.Row="5" Grid.Column="5" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock5">Result</TextBlock>
+      <TextBlock Grid.Row="5" Grid.Column="3" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock3">Direction</TextBlock>
+      <TextBlock Grid.Row="5" Grid.Column="4" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock4">Modifier</TextBlock>
+      <TextBlock Grid.Row="5" Grid.Column="5" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock5">Wounds Roll</TextBlock>
+      <TextBlock Grid.Row="5" Grid.Column="6" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock6">Roll + Modifier</TextBlock>
    </Grid>
 </UserControl>

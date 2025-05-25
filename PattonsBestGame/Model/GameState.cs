@@ -281,7 +281,11 @@ namespace Pattons_Best
             }
          }
          if (true == gi.IsLeadTank)
-            report.Notes.Add("You are the Lead Tank!");
+         {
+            StringBuilder sb = new StringBuilder( "At ");
+            sb.Append(TableMgr.GetTime(report));
+            report.Notes.Add(", you are the Lead Tank!");
+         }
          return true;
       }
       protected bool SetUsControlOnBattleMap(IGameInstance gi)
@@ -1185,7 +1189,6 @@ namespace Pattons_Best
                diceRoll = 100;
             else
                diceRoll = die1 + 10 * die2;
-            diceRoll = 45; // TANK <cgs> TEST
             string enemyUnit = TableMgr.GetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
             IMapItem? mi = null;
             string name = enemyUnit + Utilities.MapItemNum;
@@ -2252,9 +2255,9 @@ namespace Pattons_Best
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (dieRoll < 8)
-                     gi.IsAmbush = true;
+                     gi.BattlePhase = BattlePhase.Ambush;
                   else
-                     gi.IsAmbush = false;
+                     gi.BattlePhase = BattlePhase.Spotting;
                   break;
                case GameAction.BattleEmpty:
                   gi.GamePhase = GamePhase.Preparations;
@@ -2455,8 +2458,7 @@ namespace Pattons_Best
                   gi.EventDisplayed = gi.EventActive; // next screen to show
                   break;
                case GameAction.BattleRoundSequenceStart:
-                  gi.GamePhase = GamePhase.BattleRoundSequence;
-                  gi.IsAmbush = false;
+                  gi.BattlePhase = BattlePhase.Spotting;
                   int smokeCount = 0;
                   foreach (IStack stack in gi.BattleStacks)
                   {
@@ -2524,7 +2526,7 @@ namespace Pattons_Best
                   action = GameAction.BattleRoundSequenceOrders;
                   gi.EventDisplayed = gi.EventActive = "e038";
                   gi.DieRollAction = GameAction.DieRollActionNone;
-                  gi.IsOrdersActive = true;
+                  gi.BattlePhase = BattlePhase.Orders;
                   break;
                case GameAction.BattleEnemyArtilleryRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
@@ -2611,19 +2613,32 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): GetSpottedTerritories() returned null");
                   return false;
                }
-               else if (0 < spottedTerritories.Count)
+               if( true == Logger.theLogLevel[(int)LogEnum.LE_EVENT_VIEWER_SPOTTING])
+               {
+                  StringBuilder sb = new StringBuilder("GameStateBattle.PerformAction(): cm=");
+                  sb.Append(cm.Role);
+                  sb.Append(" spotting for territories=(");
+                  int i = 0;
+                  foreach (string s in spottedTerritories)
+                  {
+                     sb.Append(s);
+                     if (++i != spottedTerritories.Count)
+                        sb.Append(",");
+                  }
+                  sb.Append(")");
+                  Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, sb.ToString() );
+               }
+               if (0 < spottedTerritories.Count)
                {
                   outAction = GameAction.BattleRoundSequenceSpotting;
-               }
-               else
-               {
-                  outAction = GameAction.BattleRoundSequenceOrders;
-                  gi.EventDisplayed = gi.EventActive = "e038";
-                  gi.DieRollAction = GameAction.DieRollActionNone;
-                  gi.IsOrdersActive = true;
+                  return true;
                }
             }
          }
+         outAction = GameAction.BattleRoundSequenceOrders;
+         gi.EventDisplayed = gi.EventActive = "e038";
+         gi.DieRollAction = GameAction.DieRollActionNone;
+         gi.BattlePhase = BattlePhase.Orders;
          return true;
       }
    }

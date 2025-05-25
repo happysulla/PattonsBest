@@ -1863,7 +1863,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): button = null");
             return;
          }
-         if ( (true == button.Name.Contains("OpenHatch")) && ( (true == myGameInstance.IsHatchesActive) || (true == myGameInstance.IsOrdersActive) ) )
+         if ( (true == button.Name.Contains("OpenHatch")) && ( (true == myGameInstance.IsHatchesActive) || (BattlePhase.Orders == myGameInstance.BattlePhase) ) )
          {
             string[] crewmembers = new string[4] { "Driver", "Assistant", "Commander", "Loader" };
             foreach (string s in crewmembers)

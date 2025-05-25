@@ -45,11 +45,11 @@ namespace Pattons_Best
       //---------------------------------------------------
       private class GridRow
       {
-         public IMapItem? myMapItem;
+         public ICrewMember? myCrewMember;
          public int myDieRoll;
          public GridRow()
          {
-            myMapItem = null;
+            myCrewMember = null;
             myDieRoll = Utilities.NO_RESULT;
          }
       };
@@ -62,7 +62,7 @@ namespace Pattons_Best
       private IDieRoller? myDieRoller;
       //---------------------------------------------------
       private IMapItems myAssignables = new MapItems();    // listing of new crewmen 
-      private IMapItem? myMapItemDragged = null;
+      private ICrewMember? myCrewMemberDragged = null;
       //---------------------------------------------------
       private readonly Dictionary<string, Cursor> myCursors = new Dictionary<string, Cursor>();
       private readonly DoubleCollection myDashArray = new DoubleCollection();
@@ -154,12 +154,12 @@ namespace Pattons_Best
          System.Windows.Point hotPoint = new System.Windows.Point(Utilities.theMapItemOffset, Utilities.theMapItemOffset); // set the center of the MapItem as the hot point for the cursor
          myCursors.Clear();
          int i = 0;
-         foreach (IMapItem mi in myGameInstance.NewMembers)
+         foreach (ICrewMember cm in myGameInstance.NewMembers)
          {
-            myAssignables.Add(mi);
+            myAssignables.Add(cm);
             myGridRows[i] = new GridRow();
-            Button b = CreateButton(mi, IS_ENABLE, false, NO_STATS, NO_ADORN, IS_CURSOR);
-            myCursors[mi.Name] = Utilities.ConvertToCursor(b, hotPoint);
+            Button b = CreateButton(cm, IS_ENABLE, false, NO_STATS, NO_ADORN, IS_CURSOR);
+            myCursors[cm.Name] = Utilities.ConvertToCursor(b, hotPoint);
             ++i;
          }
          //--------------------------------------------------
@@ -203,7 +203,7 @@ namespace Pattons_Best
          {
             for (int i = 0; i < myMaxRowCount; i++)
             {
-               ICrewMember? crewMember = myGridRows[i].myMapItem as ICrewMember;
+               ICrewMember? crewMember = myGridRows[i].myCrewMember as ICrewMember;
                if( null == crewMember )
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): crewMember=null");
@@ -250,19 +250,19 @@ namespace Pattons_Best
          switch (myState)
          {
             case E071Enum.ROLL_RATING:
-               foreach (IMapItem mi in myAssignables)
+               foreach (ICrewMember cm in myAssignables)
                {
-                  Button b = CreateButton(mi, NO_ENABLE, false, IS_STATS, NO_ADORN, NO_CURSOR);
+                  Button b = CreateButton(cm, NO_ENABLE, false, IS_STATS, NO_ADORN, NO_CURSOR);
                   myStackPanelAssignable.Children.Add(b);
                }
                break;
             case E071Enum.ASSIGN_CREWMEN:
-               foreach (IMapItem mi in myAssignables)
+               foreach (ICrewMember cm in myAssignables)
                {
                   bool isRectangleBorderAdded = false; // If dragging a map item, show rectangle around that MapItem
-                  if (null != myMapItemDragged && mi.Name == myMapItemDragged.Name)
+                  if (null != myCrewMemberDragged && cm.Name == myCrewMemberDragged.Name)
                      isRectangleBorderAdded = true;
-                  Button b = CreateButton(mi, IS_ENABLE, isRectangleBorderAdded, IS_STATS, NO_ADORN, NO_CURSOR);
+                  Button b = CreateButton(cm, IS_ENABLE, isRectangleBorderAdded, IS_STATS, NO_ADORN, NO_CURSOR);
                   myStackPanelAssignable.Children.Add(b);
                }
                break;
@@ -295,7 +295,7 @@ namespace Pattons_Best
             int rowNum = i + STARTING_ASSIGNED_ROW;
             GridRow row = myGridRows[i];
             //------------------------------------
-            if (null == row.myMapItem)
+            if (null == row.myCrewMember)
             {
                Rectangle r = new Rectangle()
                {
@@ -313,7 +313,7 @@ namespace Pattons_Best
             }
             else
             {
-               Button b = CreateButton(row.myMapItem, IS_ENABLE, false, IS_STATS, NO_ADORN, NO_CURSOR);
+               Button b = CreateButton(row.myCrewMember, IS_ENABLE, false, IS_STATS, NO_ADORN, NO_CURSOR);
                myGrid.Children.Add(b);
                Grid.SetRow(b, rowNum);
                Grid.SetColumn(b, 0);
@@ -349,16 +349,10 @@ namespace Pattons_Best
          return true;
       }
       //------------------------------------------------------------------------------------
-      private Button CreateButton(IMapItem mi, bool isEnabled, bool isRectangleAdded, bool isStatsShown, bool isAdornmentsShown, bool isCursor)
+      private Button CreateButton(ICrewMember cm, bool isEnabled, bool isRectangleAdded, bool isStatsShown, bool isAdornmentsShown, bool isCursor)
       {
          System.Windows.Controls.Button b = new System.Windows.Controls.Button { };
-         ICrewMember? crewMember = (ICrewMember)mi;
-         if (null == crewMember)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateButton(): crewMember=null");
-            return b;
-         }
-         b.Name = crewMember.Role;
+         b.Name = cm.Role;
          if (true == isCursor)
          {
             b.Width = Utilities.theMapItemSize;
@@ -385,7 +379,7 @@ namespace Pattons_Best
             b.IsEnabled = isEnabled;
             b.Click += this.Button_Click;
          }
-         MapItem.SetButtonContent(b, mi); // This sets the image as the button's content
+         MapItem.SetButtonContent(b, cm); // This sets the image as the button's content
          return b;
       }
       public void ShowDieResults(int dieRoll)
@@ -453,7 +447,7 @@ namespace Pattons_Best
          HitTestResult result = VisualTreeHelper.HitTest(myGrid, p);  // Get the Point where the hit test occurrs
          foreach (UIElement ui in myGrid.Children)
          {
-            if (null != myMapItemDragged) // If dragging something, check if dragged to rectangle either in StackPanel or GridRow
+            if (null != myCrewMemberDragged) // If dragging something, check if dragged to rectangle either in StackPanel or GridRow
             {
                if (ui is StackPanel panel)  // First check all rectangles in the myStackPanelAssignable
                {
@@ -463,9 +457,9 @@ namespace Pattons_Best
                      {
                         if (result.VisualHit == rect)
                         {
-                           myAssignables.Add(myMapItemDragged);
+                           myAssignables.Add(myCrewMemberDragged);
                            myGrid.Cursor = Cursors.Arrow;
-                           myMapItemDragged = null;
+                           myCrewMemberDragged = null;
                            if (false == UpdateGrid())
                               Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): UpdateGrid() return false");
                            return;
@@ -480,16 +474,16 @@ namespace Pattons_Best
                      myGrid.Cursor = Cursors.Arrow;
                      int rowNum = Grid.GetRow(rect);
                      int i = rowNum - STARTING_ASSIGNED_ROW;
-                     myAssignables.Remove(myMapItemDragged);
-                     myGridRows[i].myMapItem = myMapItemDragged;
-                     myMapItemDragged = null;
+                     myAssignables.Remove(myCrewMemberDragged);
+                     myGridRows[i].myCrewMember = myCrewMemberDragged;
+                     myCrewMemberDragged = null;
                      //--------------------------------------------------
                      if (E071Enum.ASSIGN_CREWMEN == myState) // if any crewman is not assigned, continue in same state
                      {
                         myState = E071Enum.SHOW_RESULTS;
                         for (int j = 0; j < myMaxRowCount; ++j)
                         {
-                           if (null == myGridRows[j].myMapItem)
+                           if (null == myGridRows[j].myCrewMember)
                               myState = E071Enum.ASSIGN_CREWMEN;
                         }
                      }
@@ -499,7 +493,7 @@ namespace Pattons_Best
                      return;
                   }
                }
-            } // end if (null != myMapItemDragged)
+            } // end if (null != myCrewMemberDragged)
             else //----------------------NOT DRAGGING-------------------------------------
             {
                if (ui is StackPanel panel)
@@ -552,9 +546,9 @@ namespace Pattons_Best
       {
          Button b = (Button)sender;
          int rowNum = Grid.GetRow(b);
-         if (null != myMapItemDragged) 
+         if (null != myCrewMemberDragged) 
          {
-            ICrewMember? crewMember = (ICrewMember)myMapItemDragged;
+            ICrewMember? crewMember = (ICrewMember)myCrewMemberDragged;
             if (null == crewMember)
             {
                Logger.Log(LogEnum.LE_ERROR, "Button_Click(): crewMember=null");
@@ -565,42 +559,36 @@ namespace Pattons_Best
                if (STARTING_ASSIGNED_ROW <= rowNum) // only support dropping on grid row - all other drops just disable the move
                {
                   int i = rowNum - STARTING_ASSIGNED_ROW;
-                  if ( null == myGridRows[i].myMapItem)
+                  if ( null == myGridRows[i].myCrewMember)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "Button_Click(): myGridRows[i].myMapItem=null for b.Name=" + b.Name);
                      return;
                   }
-                  myAssignables.Add(myGridRows[i].myMapItem);   // add existing one back to myAssignables
-                  myAssignables.Remove(myMapItemDragged); // Remove dragged map item from myAssignables
-                  myGridRows[i].myMapItem = myMapItemDragged;   // grid row updated
+                  myAssignables.Add(myGridRows[i].myCrewMember);   // add existing one back to myAssignables
+                  myAssignables.Remove(myCrewMemberDragged); // Remove dragged map item from myAssignables
+                  myGridRows[i].myCrewMember = myCrewMemberDragged;   // grid row updated
                }
             }
-            myMapItemDragged = null;
+            myCrewMemberDragged = null;
             myGrid.Cursor = Cursors.Arrow;
          }
          else
          {
-            foreach(IMapItem mi in myAssignables)
+            foreach(ICrewMember cm in myAssignables)
             {
-               ICrewMember? crewMember = (ICrewMember)mi;
-               if (null == crewMember)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "Button_Click(): crewMember=null");
-                  return;
-               }
-               if( crewMember.Role == b.Name )
-                  myMapItemDragged = mi;
+               if( cm.Role == b.Name )
+                  myCrewMemberDragged = cm;
             }
-            if (null == myMapItemDragged)
+            if (null == myCrewMemberDragged)
             {
                Logger.Log(LogEnum.LE_ERROR, "Button_Click(): mi=null for b.Name=" + b.Name);
                return;
             }
-            myGrid.Cursor = myCursors[myMapItemDragged.Name]; // change cursor of button being dragged
+            myGrid.Cursor = myCursors[myCrewMemberDragged.Name]; // change cursor of button being dragged
             if (STARTING_ASSIGNED_ROW <= rowNum)
             {
                int i = rowNum - STARTING_ASSIGNED_ROW;
-               myGridRows[i].myMapItem = null;
+               myGridRows[i].myCrewMember = null;
             }
             else
             {
@@ -613,7 +601,7 @@ namespace Pattons_Best
             myState = E071Enum.SHOW_RESULTS;
             for (int j = 0; j < myMaxRowCount; ++j)
             {
-               if (null == myGridRows[j].myMapItem)
+               if (null == myGridRows[j].myCrewMember)
                   myState = E071Enum.ASSIGN_CREWMEN;
             }
          }

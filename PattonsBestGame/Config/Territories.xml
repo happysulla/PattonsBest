@@ -1,4 +1,4 @@
-﻿<Territories count="137">
+﻿<Territories count="146">
   <Territory value="M000">
     <Parent value="Main" />
     <Type value="B" />
@@ -2247,5 +2247,123 @@
     <Adjacents count="1">
       <adjacent value="B4L" />
     </Adjacents>
+  </Territory>
+  <Territory value="Ambush">
+    <Parent value="Main" />
+    <Type value="Battle" />
+    <CenterPoint X="0035.50" Y="0281.76" />
+    <Points count="5">
+      <regionPoint X="0000.25" Y="0262.02" />
+      <regionPoint X="0073.75" Y="0263.02" />
+      <regionPoint X="0073.25" Y="0298.52" />
+      <regionPoint X="0000.25" Y="0299.02" />
+      <regionPoint X="0000.75" Y="0262.02" />
+    </Points>
+    <Adjacents count="0" />
+  </Territory>
+   <Territory value="AmbushRandomEvent">
+      <Parent value="Main" />
+      <Type value="Battle" />
+      <CenterPoint X="0076.29" Y="0226.88" />
+      <Points count="5">
+         <regionPoint X="0038.00" Y="0206.31" />
+         <regionPoint X="0112.29" Y="0206.88" />
+         <regionPoint X="0112.86" Y="0242.88" />
+         <regionPoint X="0038.00" Y="0242.88" />
+         <regionPoint X="0038.57" Y="0207.45" />
+      </Points>
+      <Adjacents count="0" />
+   </Territory>
+  <Territory value="Spotting">
+    <Parent value="Main" />
+    <Type value="Battle" />
+    <CenterPoint X="0127.50" Y="0171.76" />
+    <Points count="5">
+      <regionPoint X="0084.75" Y="0152.52" />
+      <regionPoint X="0168.75" Y="0152.52" />
+      <regionPoint X="0168.75" Y="0188.52" />
+      <regionPoint X="0084.25" Y="0187.52" />
+      <regionPoint X="0084.75" Y="0152.02" />
+    </Points>
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="Orders">
+    <Parent value="Main" />
+    <Type value="Battle" />
+    <CenterPoint X="0197.50" Y="0112.76" />
+    <Points count="5">
+      <regionPoint X="0150.25" Y="0095.52" />
+      <regionPoint X="0247.75" Y="0095.52" />
+      <regionPoint X="0247.75" Y="0130.52" />
+      <regionPoint X="0149.25" Y="0130.52" />
+      <regionPoint X="0150.25" Y="0095.02" />
+    </Points>
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="AmmoOrders">
+    <Parent value="Main" />
+    <Type value="Battle" />
+    <CenterPoint X="0316.50" Y="0059.76" />
+    <Points count="5">
+      <regionPoint X="0266.25" Y="0041.52" />
+      <regionPoint X="0363.75" Y="0042.52" />
+      <regionPoint X="0364.25" Y="0078.52" />
+      <regionPoint X="0266.75" Y="0077.52" />
+      <regionPoint X="0267.25" Y="0042.02" />
+    </Points>
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="CrewAction">
+    <Parent value="Main" />
+    <Type value="Battle" />
+    <CenterPoint X="0682.50" Y="0060.76" />
+    <Points count="5">
+      <regionPoint X="0621.34" Y="0042.02" />
+      <regionPoint X="0738.84" Y="0043.02" />
+      <regionPoint X="0738.84" Y="0079.02" />
+      <regionPoint X="0620.84" Y="0078.52" />
+      <regionPoint X="0621.84" Y="0043.02" />
+    </Points>
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="EnemyAction">
+    <Parent value="Main" />
+    <Type value="Battle" />
+    <CenterPoint X="0780.50" Y="0115.76" />
+    <Points count="6">
+      <regionPoint X="0745.84" Y="0096.02" />
+      <regionPoint X="0812.34" Y="0095.52" />
+      <regionPoint X="0812.84" Y="0131.52" />
+      <regionPoint X="0745.84" Y="0131.52" />
+      <regionPoint X="0745.84" Y="0131.52" />
+      <regionPoint X="0746.34" Y="0096.02" />
+    </Points>
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="FriendlyAction">
+    <Parent value="Main" />
+    <Type value="Battle" />
+    <CenterPoint X="0864.50" Y="0171.76" />
+    <Points count="5">
+      <regionPoint X="0825.34" Y="0152.52" />
+      <regionPoint X="0906.34" Y="0153.02" />
+      <regionPoint X="0905.84" Y="0188.52" />
+      <regionPoint X="0825.34" Y="0188.52" />
+      <regionPoint X="0825.34" Y="0153.02" />
+    </Points>
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="RandomEvent">
+    <Parent value="Main" />
+    <Type value="Battle" />
+    <CenterPoint X="0912.58" Y="0226.31" />
+    <Points count="5">
+      <regionPoint X="0875.44" Y="0206.31" />
+      <regionPoint X="0948.58" Y="0207.45" />
+      <regionPoint X="0948.58" Y="0243.45" />
+      <regionPoint X="0874.87" Y="0242.88" />
+      <regionPoint X="0876.01" Y="0206.88" />
+    </Points>
+    <Adjacents count="0" />
   </Territory>
 </Territories>

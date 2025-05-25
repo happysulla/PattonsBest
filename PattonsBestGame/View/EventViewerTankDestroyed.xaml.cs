@@ -344,7 +344,7 @@ namespace Pattons_Best
       //------------------------------------------------------------------------------------
       public void ShowDieResults(int dieRoll)
       {
-         Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): ++++++++++++++myState=" + myState.ToString());
+         Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "EventViewerTankDestroyed.ShowDieResults(): ++++++++++++++myState=" + myState.ToString());
          if (null == myGameInstance)
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance=null");
@@ -375,6 +375,8 @@ namespace Pattons_Best
          //-------------------------------
          switch (myState)
          {
+            case E0481Enum.ENEMY_ACTION_TANK_EXPLOSION:
+               break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): reached default myState=" + myState.ToString());
                return;

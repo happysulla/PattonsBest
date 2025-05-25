@@ -1100,7 +1100,7 @@ namespace Pattons_Best
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
                   Image? imge037 = null;
-                  if (true == gi.IsAmbush)
+                  if (BattlePhase.Ambush == gi.BattlePhase)
                   {
                      myTextBlock.Inlines.Add(new Run("Ambush! Click image to continue."));
                      imge037 = new Image { Name = "Ambush", Width = 400, Height = 240, Source = MapItem.theMapImages.GetBitmapImage("Ambush") };
@@ -1514,7 +1514,7 @@ namespace Pattons_Best
          bool isAirStrike = false;
          bool isArtilleryStrike = false;
          GameAction outAction = GameAction.BattleAmbushStart;
-         if ( (true == myGameInstance.IsAmbush) || (GamePhase.BattleRoundSequence == myGameInstance.GamePhase) ) // Friendly action during ambush as part of Random Events
+         if ( (BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase) || (GamePhase.BattleRoundSequence == myGameInstance.GamePhase) ) // Friendly action during ambush as part of Random Events
          {
             outAction = GameAction.BattleRoundSequenceStart;
          }
@@ -1587,7 +1587,7 @@ namespace Pattons_Best
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
          return true;
       }
-      public bool ShowAmbushResults()
+      public bool ShowAmbushResults(bool isCollateral)
       {
          if (null == myGameInstance)
          {
@@ -1599,16 +1599,23 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowAmbushResults(): myGameEngine=null");
             return false;
          }
-         //------------------------------------------
          GameAction outAction = GameAction.BattleEmpty;
-         foreach (IStack stack in myGameInstance.BattleStacks)
+         //------------------------------------------
+         if ( true == isCollateral )
          {
-            foreach (IMapItem mi in stack.MapItems)
-            { 
-               if (true == mi.IsEnemyUnit())
+            outAction = GameAction.BattleCollateralDamageCheck;
+         }
+         else
+         {
+            foreach (IStack stack in myGameInstance.BattleStacks)
+            {
+               foreach (IMapItem mi in stack.MapItems)
                {
-                  outAction = GameAction.BattleRandomEvent;
-                  break;
+                  if (true == mi.IsEnemyUnit())
+                  {
+                     outAction = GameAction.BattleRandomEvent;
+                     break;
+                  }
                }
             }
          }
@@ -1633,9 +1640,20 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowCollateralDamageResults(): myGameEngine=null");
             return false;
          }
-         GameAction outAction = GameAction.BattleRoundSequenceSpottingEnd;
-         if( true == myGameInstance.IsAmbush )
-            outAction = GameAction.BattleRoundSequenceStart;
+         GameAction outAction = GameAction.BattleEmpty;
+         foreach (IStack stack in myGameInstance.BattleStacks)
+         {
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.IsEnemyUnit())
+               {
+                  outAction = GameAction.BattleRoundSequenceSpottingEnd;
+                  if ((BattlePhase.Ambush == myGameInstance.BattlePhase) || (BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase))
+                     outAction = GameAction.BattleRoundSequenceStart;
+                  break;
+               }
+            }
+         }
          //--------------------------------------------------
          StringBuilder sb11 = new StringBuilder("     ######ShowCollateralDamageResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());

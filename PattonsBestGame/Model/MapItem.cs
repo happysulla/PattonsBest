@@ -28,8 +28,8 @@ namespace Pattons_Best
       public BloodSpot(int range, Random r)
       {
          mySize = r.Next(8) + 5;
-         myLeft = r.Next(mySize, range - mySize);
-         myTop  = r.Next(mySize, range - mySize);
+         myLeft = r.Next(0, range - mySize);
+         myTop  = r.Next(0, range - mySize);
       }
       public BloodSpot(int size, double left, double top)
       {
@@ -43,15 +43,14 @@ namespace Pattons_Best
    {
       [NonSerialized] private static Random theRandom = new Random();
       [NonSerialized] public static IMapImages theMapImages = new MapImages();
-      [NonSerialized] private static BitmapImage? theBloodSpot = theMapImages.GetBitmapImage("OBlood1");
-      [NonSerialized] private static BitmapImage? theMoving = theMapImages.GetBitmapImage("c13Moving");
-      [NonSerialized] private static BitmapImage? theHullDown = theMapImages.GetBitmapImage("c14HullDown");
-      [NonSerialized] private static BitmapImage? theWood = theMapImages.GetBitmapImage("OWoods");
-      [NonSerialized] private static BitmapImage? theFort = theMapImages.GetBitmapImage("OFort");
-      [NonSerialized] private static BitmapImage? theBuild = theMapImages.GetBitmapImage("OBuild");
-      [NonSerialized] private static BitmapImage? theSherman75Turret = theMapImages.GetBitmapImage("c16TurretSherman75");
-      [NonSerialized] private static BitmapImage? thePzVIbTurret = theMapImages.GetBitmapImage("c82PzVIbTurret");
-      private const double PERCENT_MAPITEM_COVERED = 35.0;
+      [NonSerialized] protected static BitmapImage? theBloodSpot = theMapImages.GetBitmapImage("OBlood1");
+      [NonSerialized] protected static BitmapImage? theMoving = theMapImages.GetBitmapImage("c13Moving");
+      [NonSerialized] protected static BitmapImage? theHullDown = theMapImages.GetBitmapImage("c14HullDown");
+      [NonSerialized] protected static BitmapImage? theWood = theMapImages.GetBitmapImage("OWoods");
+      [NonSerialized] protected static BitmapImage? theFort = theMapImages.GetBitmapImage("OFort");
+      [NonSerialized] protected static BitmapImage? theBuild = theMapImages.GetBitmapImage("OBuild");
+      [NonSerialized] protected static BitmapImage? theSherman75Turret = theMapImages.GetBitmapImage("c16TurretSherman75");
+      [NonSerialized] protected static BitmapImage? thePzVIbTurret = theMapImages.GetBitmapImage("c82PzVIbTurret");
       //--------------------------------------------------
       public string Name { get; set; } = string.Empty;
       public string TopImageName { get; set; } = string.Empty;
@@ -255,9 +254,9 @@ namespace Pattons_Best
             enemyUnit = "JdgPz38t";
          return enemyUnit;
       }
-      public void SetBloodSpots()
+      public void SetBloodSpots(int percent=40)
       {
-         for (int spots = 0; spots < PERCENT_MAPITEM_COVERED; ++spots) // splatter the MapItem with random blood spots
+         for (int spots = 0; spots < percent; ++spots) // splatter the MapItem with random blood spots
          {
             int range = (int)(this.Zoom * Utilities.theMapItemSize);
             BloodSpot spot = new BloodSpot(range, theRandom);
@@ -408,6 +407,11 @@ namespace Pattons_Best
                   }
                }
             }
+            if (true == mi.IsKilled)
+            {
+               Image overlay = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage("OKIA") };
+               g.Children.Add(overlay);
+            }
             if ("" != mi.OverlayImageName)
             {
                Image overlay = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage(mi.OverlayImageName) };
@@ -437,11 +441,120 @@ namespace Pattons_Best
       public int Rating { get; set; } = 0;
       public bool IsButtonedUp { get; set; } = true;
       public int Sector { get; set; } = 0;
+      public string Action { get; set; } = "None";
+      public string Wound { get; set; } = "None";
+      public bool IsUnconscious { get; set; } = false;
+      public bool IsIncapacitated { get; set; } = false;
       public CrewMember(string role, string rank, string topImageName)
          : base(SurnameMgr.GetSurname(), 1.0, false, topImageName)
       {
          Role = role;
          Rank = rank;
+      }
+      public static void SetButtonContent(Button b, ICrewMember cm, bool isDecoration = true, bool isBloodSpotsShown = true)
+      {
+         Grid g = new Grid() { };
+         if (false == cm.IsAnimated)
+         {
+            Image img = new Image() { Source = theMapImages.GetBitmapImage(cm.TopImageName), Stretch = Stretch.Fill };
+            img.Source = theMapImages.GetBitmapImage(cm.TopImageName);
+            g.Children.Add(img);
+            //----------------------------------------------------
+            Canvas c = new Canvas() { };
+            if (true == isBloodSpotsShown)
+            {
+               foreach (BloodSpot bs in cm.WoundSpots) // create wound spot on canvas
+               {
+                  Image spotImg = new Image() { Stretch = Stretch.Fill, Height = bs.mySize, Width = bs.mySize, Source = theBloodSpot };
+                  c.Children.Add(spotImg);
+                  Canvas.SetLeft(spotImg, bs.myLeft);
+                  Canvas.SetTop(spotImg, bs.myTop);
+               }
+            }
+            g.Children.Add(c);
+            //----------------------------------------------------
+            if (true == isDecoration)
+            {
+               if (true == cm.IsMoving)
+               {
+                  double width = 0.4 * cm.Zoom * Utilities.theMapItemOffset;
+                  double height = 1.33 * width;
+                  Image imgTerrain = new Image() { Height = height, Width = width, Source = theMoving };
+                  c.Children.Add(imgTerrain);
+                  Canvas.SetLeft(imgTerrain, cm.Zoom * Utilities.theMapItemOffset - 0.5 * width);
+                  Canvas.SetTop(imgTerrain, -0.5 * height);
+               }
+               else if (true == cm.IsHullDown)
+               {
+                  double width = 0.5 * cm.Zoom * Utilities.theMapItemSize;
+                  double height = width / 2.0;
+                  Image imgTerrain = new Image() { Height = height, Width = width, Source = theHullDown };
+                  c.Children.Add(imgTerrain);
+                  Canvas.SetLeft(imgTerrain, 0.5 * width);
+                  Canvas.SetTop(imgTerrain, -0.5 * height);
+               }
+               else if (true == cm.IsWoods)
+               {
+                  double width = cm.Zoom * Utilities.theMapItemSize;
+                  double height = width;
+                  Image imgTerrain = new Image() { Height = height, Width = width, Source = theWood };
+                  c.Children.Add(imgTerrain);
+                  Canvas.SetLeft(imgTerrain, 0);
+                  Canvas.SetTop(imgTerrain, 0);
+               }
+               else if (true == cm.IsFortification)
+               {
+                  double width = cm.Zoom * Utilities.theMapItemSize;
+                  double height = width;
+                  Image imgTerrain = new Image() { Height = height, Width = width, Source = theFort };
+                  c.Children.Add(imgTerrain);
+                  Canvas.SetLeft(imgTerrain, 0);
+                  Canvas.SetTop(imgTerrain, 0);
+               }
+               else if (true == cm.IsBuilding)
+               {
+                  double width = cm.Zoom * Utilities.theMapItemSize;
+                  double height = width;
+                  Image imgTerrain = new Image() { Height = height, Width = width, Source = theBuild };
+                  c.Children.Add(imgTerrain);
+                  Canvas.SetLeft(imgTerrain, 0);
+                  Canvas.SetTop(imgTerrain, 0);
+               }
+            }
+            if (true == cm.IsKilled)
+            {
+               Image overlay = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage("OKIA") };
+               g.Children.Add(overlay);
+            }
+            else if (true == cm.IsUnconscious)
+            {
+               Image overlay = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage("OUNC") };
+               g.Children.Add(overlay);
+            }
+            else if (true == cm.IsIncapacitated)
+            {
+               Image overlay = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage("OINC") };
+               g.Children.Add(overlay);
+            }
+            else if ("" != cm.OverlayImageName)
+            {
+               Image overlay = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage(cm.OverlayImageName) };
+               g.Children.Add(overlay);
+            }
+         }
+         else
+         {
+            IMapImage? mii = theMapImages.Find(cm.TopImageName);
+            if (null == mii)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SetButtonContent(): mii=null");
+            }
+            else
+            {
+               g.Children.Add(mii.ImageControl);
+            }
+         }
+         b.Content = g;
       }
    }
    //--------------------------------------------------------------------------

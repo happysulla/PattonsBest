@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,6 +23,7 @@ namespace Pattons_Best
       private const int STARTING_ASSIGNED_ROW = 6;
       private const int KIA_CREWMAN = 100;
       private const int BUTTONED_UP = 101;
+      private const int NO_WOUNDS = 102;
       public enum E0481Enum
       {
          COLLATERAL_DAMAGE_ROLL,
@@ -40,7 +42,7 @@ namespace Pattons_Best
       public struct GridRow
       {
          public ICrewMember myCrewMember;
-         public bool myIsWounded = false;
+         public int myWoundsModifier = 0;
          public int myDieRollWound = Utilities.NO_RESULT;
          //---------------------------------------------------
          public GridRow(ICrewMember cm)
@@ -58,6 +60,7 @@ namespace Pattons_Best
       private IDieRoller? myDieRoller;
       private int myDieRollCollateral = Utilities.NO_RESULT;
       private string myCollateralDamage = "Uninit";
+      private string myWoundsResults = "Uninit";
       //---------------------------------------------------
       private readonly FontFamily myFontFam = new FontFamily("Tahoma");
       private readonly FontFamily myFontFam1 = new FontFamily("Courier New");
@@ -293,9 +296,7 @@ namespace Pattons_Best
                Rectangle r14 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                myStackPanelAssignable.Children.Add(r14);
                StringBuilder sb4 = new StringBuilder();
-               sb4.Append(myDieRollCollateral.ToString());
-               sb4.Append(" = ");
-               sb4.Append(myCollateralDamage);
+               sb4.Append(myWoundsResults);
                Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = sb4.ToString() };
                myStackPanelAssignable.Children.Add(label4);
                break;
@@ -363,15 +364,42 @@ namespace Pattons_Best
                Grid.SetRow(buLabel, rowNum);
                Grid.SetColumn(buLabel, 2);
             }
+            //-------------------------------
+            string content = "NA";
+            if( null != myGameInstance.Death )
+               content = myGameInstance.Death.myEnemyFireDirection;
+            Label labelDirection = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = content};
+            myGrid.Children.Add(labelDirection);
+            Grid.SetRow(labelDirection, rowNum);
+            Grid.SetColumn(labelDirection, 3);
+            //-------------------------------
             switch (myState)
             {
                case E0481Enum.COLLATERAL_DAMAGE_ROLL:
                case E0481Enum.COLLATERAL_DAMAGE_ROLL_SHOW:
                   break;
                case E0481Enum.COLLATERAL_DAMAGE_WOUND_ROLL:
-               case E0481Enum.COLLATERAL_DAMAGE_WOUND_ROLL_SHOW:
-                  if (Utilities.NO_RESULT == myGridRows[i].myDieRollWound)
+                  if (NO_WOUNDS == myGridRows[i].myDieRollWound)
                   {
+                     Label modifier = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
+                     myGrid.Children.Add(modifier);
+                     Grid.SetRow(modifier, rowNum);
+                     Grid.SetColumn(modifier, 4);
+                     Label dieRollLabel = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
+                     myGrid.Children.Add(dieRollLabel);
+                     Grid.SetRow(dieRollLabel, rowNum);
+                     Grid.SetColumn(dieRollLabel, 5);
+                     Label resultLabel = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
+                     myGrid.Children.Add(resultLabel);
+                     Grid.SetRow(resultLabel, rowNum);
+                     Grid.SetColumn(resultLabel, 6);
+                  }
+                  else 
+                  {
+                     Label modifier = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myWoundsModifier.ToString() };
+                     myGrid.Children.Add(modifier);
+                     Grid.SetRow(modifier, rowNum);
+                     Grid.SetColumn(modifier, 4);
                      BitmapImage bmi = new BitmapImage();
                      bmi.BeginInit();
                      bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
@@ -380,18 +408,40 @@ namespace Pattons_Best
                      ImageBehavior.SetAnimatedSource(img, bmi);
                      myGrid.Children.Add(img);
                      Grid.SetRow(img, rowNum);
-                     Grid.SetColumn(img, 4);
+                     Grid.SetColumn(img, 5);
+                  }
+                  break;
+               case E0481Enum.COLLATERAL_DAMAGE_WOUND_ROLL_SHOW:
+                  if (NO_WOUNDS == myGridRows[i].myDieRollWound)
+                  {
+                     Label modifier = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
+                     myGrid.Children.Add(modifier);
+                     Grid.SetRow(modifier, rowNum);
+                     Grid.SetColumn(modifier, 4);
+                     Label dieRollLabel = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
+                     myGrid.Children.Add(dieRollLabel);
+                     Grid.SetRow(dieRollLabel, rowNum);
+                     Grid.SetColumn(dieRollLabel, 5);
+                     Label resultLabel = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
+                     myGrid.Children.Add(resultLabel);
+                     Grid.SetRow(resultLabel, rowNum);
+                     Grid.SetColumn(resultLabel, 6);
                   }
                   else
                   {
+                     Label modifier = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myWoundsModifier.ToString() };
+                     myGrid.Children.Add(modifier);
+                     Grid.SetRow(modifier, rowNum);
+                     Grid.SetColumn(modifier, 4);
                      Label dieRollLabel = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRollWound.ToString() };
                      myGrid.Children.Add(dieRollLabel);
                      Grid.SetRow(dieRollLabel, rowNum);
-                     Grid.SetColumn(dieRollLabel, 4);
-                     Label resultLabel = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "Sent Home"};
+                     Grid.SetColumn(dieRollLabel, 5);
+                     int diePlusMod = myGridRows[i].myDieRollWound + myGridRows[i].myWoundsModifier;
+                     Label resultLabel = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = diePlusMod.ToString() };
                      myGrid.Children.Add(resultLabel);
                      Grid.SetRow(resultLabel, rowNum);
-                     Grid.SetColumn(resultLabel, 5);
+                     Grid.SetColumn(resultLabel, 6);
                   }
                   break;
                default:
@@ -420,9 +470,9 @@ namespace Pattons_Best
          if (true == myCollateralDamage.Contains("Wound"))
             img = new System.Windows.Controls.Image { Name = "Wounded", Source = MapItem.theMapImages.GetBitmapImage("OBlood1"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
          else if (true == myCollateralDamage.Contains("Periscope"))
-            img = new System.Windows.Controls.Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("BrokenPeriscope"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+            img = new System.Windows.Controls.Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("BrokenPeriscope"), Width = Utilities.ZOOM * Utilities.theMapItemSize * 2, Height = Utilities.ZOOM * Utilities.theMapItemSize * 2 };
          else if (true == myCollateralDamage.Contains("Gunsight"))
-            img = new System.Windows.Controls.Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("BrokenGunsight"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+            img = new System.Windows.Controls.Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("BrokenGunsight"), Width = Utilities.ZOOM * Utilities.theMapItemSize * 2, Height = Utilities.ZOOM * Utilities.theMapItemSize * 2 };
          else if (true == myCollateralDamage.Contains("AA MG"))
             img = new System.Windows.Controls.Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("c72RepairAaMg"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
          else
@@ -432,7 +482,7 @@ namespace Pattons_Best
       //------------------------------------------------------------------------------------
       public void ShowDieResults(int dieRoll)
       {
-         Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): ++++++++++++++myState=" + myState.ToString());
+         Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "EventViewerTankCollateral.ShowDieResults(): ++++++++++++++myState=" + myState.ToString());
          if (null == myGameInstance)
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance=null");
@@ -447,18 +497,42 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "ShowDieResults(): myGameInstance.MapItemMoves.Clear()");
          myGameInstance.MapItemMoves.Clear();
          //-------------------------------
-
-         //-------------------------------
          switch (myState)
          {
             case E0481Enum.COLLATERAL_DAMAGE_ROLL:
-               dieRoll = 100; // <cgs> TEST
                myDieRollCollateral = dieRoll;
                myCollateralDamage = TableMgr.GetCollateralDamage(myGameInstance, dieRoll);
                if ("ERROR" == myCollateralDamage)
                {
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetCollateralDamage() returned ERROR");
                   return;
+               }
+               StringBuilder sb = new StringBuilder("At ");
+               sb.Append(TableMgr.GetTime(lastReport));
+               sb.Append(", Tank suffered ");
+               sb.Append(myCollateralDamage);
+               lastReport.Notes.Add(sb.ToString());
+               for (int k=0; k < myMaxRowCount; ++k)
+               {
+                  ICrewMember cm1 = myGridRows[k].myCrewMember;
+                  if( null == cm1 )
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetCollateralDamage() returned ERROR");
+                     return;
+                  }
+                  if (false == myCollateralDamage.Contains(cm1.Role))
+                  {
+                     myGridRows[k].myDieRollWound = NO_WOUNDS;
+                  }
+                  else
+                  {
+                     myGridRows[k].myWoundsModifier = TableMgr.GetWoundsModifier(myGameInstance, cm1);
+                     if (myGridRows[k].myWoundsModifier < -100)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetWoundsModifier() returned error for k=" + k.ToString());
+                        return;
+                     }
+                  }
                }
                myState = E0481Enum.COLLATERAL_DAMAGE_ROLL_SHOW;
                break;
@@ -469,8 +543,24 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): 0 > i=" + i.ToString());
                   return;
                }
+               myGridRows[i].myDieRollWound = dieRoll;
                ICrewMember cm = myGridRows[i].myCrewMember;
-               myState = E0481Enum.COLLATERAL_DAMAGE_ROLL_SHOW;
+               myWoundsResults = TableMgr.SetWounds(myGameInstance, cm, dieRoll);
+               if ("ERROR" == myWoundsResults)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetWounds() returned ERROR");
+                  return;
+               }
+               StringBuilder sb1 = new StringBuilder("At ");
+               sb1.Append(TableMgr.GetTime(lastReport));
+               sb1.Append(", ");
+               sb1.Append(cm.Name);
+               sb1.Append(" (");
+               sb1.Append(cm.Role);
+               sb1.Append(" ) suffered ");
+               sb1.Append(myWoundsResults);
+               lastReport.Notes.Add(sb1.ToString());
+               myState = E0481Enum.COLLATERAL_DAMAGE_WOUND_ROLL_SHOW;
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): reached default myState=" + myState.ToString());
@@ -562,13 +652,10 @@ namespace Pattons_Best
                         myState = E0481Enum.COLLATERAL_DAMAGE_WOUND_ROLL;
                      if ("Continue" == img.Name)
                         myState = E0481Enum.END;
-                     if (false == UpdateGrid())
-                        Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): UpdateGrid() return false");
-                     return;
                   }
                }
             }
-            if (ui is Image img1) // next check all images within the Grid Rows
+            else if (ui is Image img1) // next check all images within the Grid Rows
             {
                if (result.VisualHit == img1)
                {
@@ -584,11 +671,13 @@ namespace Pattons_Best
                      else
                         Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): unknown image name img1.Name=" + img1.Name);
                      img1.Visibility = Visibility.Hidden;
+                     return;
                   }
-                  return;
                }
             }
          }
+         if (false == UpdateGrid())
+            Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): UpdateGrid() return false");
       }
    }
 }

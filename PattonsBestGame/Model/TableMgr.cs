@@ -51,6 +51,19 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_ERROR, "GetMonth(): reached default day=" + day.ToString());
          return "ERROR";
       }
+      public static string GetTime(IAfterActionReport aar)
+      {
+         StringBuilder sb = new StringBuilder();
+         if (aar.SunriseHour < 10)
+            sb.Append("0");
+         sb.Append(aar.SunriseHour);
+         sb.Append(":");
+         if (aar.SunriseMin < 10)
+            sb.Append("0");
+         sb.Append(aar.SunriseMin);
+         return sb.ToString();
+
+      }
       public static bool SetTimeTrack(IAfterActionReport lastReport, int day)
       {
          switch (GetMonth(day))
@@ -959,20 +972,20 @@ namespace Pattons_Best
          {
             case "LW":
             case "MG":
-               if (true == gi.IsAmbush)
+               if (BattlePhase.Ambush == gi.BattlePhase)
                   modifier += 20;
                break;
             case "ATG":
             case "Pak43":
             case "Pak38":
             case "Pak40":
-               if (true == gi.IsAmbush)
+               if (BattlePhase.Ambush == gi.BattlePhase)
                   modifier += 20;
                break;
             case "TRUCK":
             case "PSW":
             case "SPW":
-               if (true == gi.IsAmbush)
+               if (BattlePhase.Ambush == gi.BattlePhase)
                   modifier += 10;
                break;
             case "TANK":
@@ -986,7 +999,7 @@ namespace Pattons_Best
             case "MARDERIII":
             case "JdgPzIV":
             case "JdgPz38t":
-               if (true == gi.IsAmbush)
+               if (BattlePhase.Ambush == gi.BattlePhase)
                   modifier += 10;
                break;
             default:
@@ -1693,7 +1706,7 @@ namespace Pattons_Best
             return toKillNum;
          }
          //------------------------------------
-         int numSmokeMarkers = Utilities.GetSmokeCount(gi, sector, range);
+         int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
          if (numSmokeMarkers < 0)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): GetSmokeCount() returned error");
@@ -1840,7 +1853,7 @@ namespace Pattons_Best
             return toKillNum;
          }
          //------------------------------------
-         int numSmokeMarkers = Utilities.GetSmokeCount(gi, sector, range);
+         int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
          if (numSmokeMarkers < 0 )
          {
             Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): GetSmokeCount() returned error");
@@ -2042,7 +2055,7 @@ namespace Pattons_Best
                return toHitNum;
          }
          //------------------------------------
-         int numSmokeMarkers = Utilities.GetSmokeCount(gi, sector, range);
+         int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
          if (numSmokeMarkers < 0)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): GetSmokeCount() returned error");
@@ -2085,6 +2098,52 @@ namespace Pattons_Best
                return "Track";
             Logger.Log(LogEnum.LE_ERROR, "GetHitLocationYourTank(): 2-dieRoll=" + dieRoll.ToString());
             return "ERROR";
+         }
+      }
+      public static string GetEnemyFireDirection(IGameInstance gi, IMapItem enemyUnit, string hitLocation)
+      {
+         int count = enemyUnit.TerritoryCurrent.Name.Count();
+         if ( 3 != count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): 3 != enemyUnit.TerritoryCurrent.Name=" + enemyUnit.TerritoryCurrent.Name);
+            return "ERROR";
+         }
+         char enemySector = enemyUnit.TerritoryCurrent.Name[count - 2];
+         switch(enemySector)
+         {
+            case '6':
+               if ("Turret" == hitLocation)
+                  return "T F";
+               else
+                  return "H F";
+            case '9':
+               if ("Turret" == hitLocation)
+                  return "T R";
+               else
+                  return "H FR";
+            case '1':
+               if ("Turret" == hitLocation)
+                  return "T R";
+               else
+                  return "H FB";
+            case '2':
+               if ("Turret" == hitLocation)
+                  return "T B";
+               else
+                  return "H B";
+            case '3':
+               if ("Turret" == hitLocation)
+                  return "T L";
+               else
+                  return "H BL";
+            case '4':
+               if ("Turret" == hitLocation)
+                  return "T L";
+               else
+                  return "H FL";
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): reached default enemySector=" + enemySector);
+               return "ERROR";
          }
       }
       public static double GetToKillNumberYourTank(IGameInstance gi, IMapItem mi, string facing, char range, string hitLocation)
@@ -2195,6 +2254,156 @@ namespace Pattons_Best
          return modifier;
       }
       //-------------------------------------------
+      public static int GetWoundsModifier(IGameInstance gi, ICrewMember cm)
+      {
+         int modifier = 0;
+         //----------------------------------
+         ShermanDeath? death = gi.Death;
+         if( null != death)
+         {
+            switch (death.myEnemyFireDirection)
+            {
+               case "T F":
+                  if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                     modifier -= 20;
+                  break;
+               case "T R":
+                  if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                     modifier -= 20;
+                  if ("Gunner" == cm.Role)
+                     modifier += 10;
+                  if ("Loader" == cm.Role)
+                     modifier -= 10;
+                  break;
+               case "T L":
+                  if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                     modifier -= 20;
+                  if ("Gunner" == cm.Role)
+                     modifier -= 10;
+                  if ("Loader" == cm.Role)
+                     modifier += 10;
+                  break;
+               case "T B":
+                  if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                     modifier -= 20;
+                  if ("Commander" == cm.Role)
+                     modifier += 10;
+                  break;
+               case "H F":
+                  if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                     modifier += 10;
+                  if ("Commander" == cm.Role)
+                     modifier -= 10;
+                  break;
+               case "H FR":
+                  if (("Driver" == cm.Role) || ("Loader" == cm.Role))
+                     modifier -= 10;
+                  if (("Assistant" == cm.Role) || ("Gunner" == cm.Role))
+                     modifier += 10;
+                  break;
+               case "H BR":
+                  if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                     modifier -= 40;
+                  else
+                     modifier -= 30;
+                  break;
+               case "H FL":
+                  if (("Driver" == cm.Role) || ("Loader" == cm.Role))
+                     modifier += 10;
+                  if (("Assistant" == cm.Role) || ("Gunner" == cm.Role))
+                     modifier -= 10;
+                  break;
+               case "H BL":
+                  if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                     modifier -= 40;
+                  else
+                     modifier -= 30;
+                  break;
+               case "H B":
+                  if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                     modifier -= 40;
+                  else
+                     modifier -= 30;
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "GetExplosionModifier(): reached default for direction=" + death.myEnemyFireDirection);
+                  return -1000;
+            }
+         }
+         //----------------------------------
+         if( true == gi.IsBailOut)
+            modifier -= cm.Rating;
+         if (true == gi.IsMinefieldAttack)
+            modifier -= 20;
+         if (true == gi.IsHarrassingFire)
+            modifier -= 20;
+         //----------------------------------
+         if( ("FireSubMg" == cm.Action) || ("FireAaMg" == cm.Action) )
+            modifier += 5;
+         return modifier;
+      }
+      public static string SetWounds(IGameInstance gi, ICrewMember cm, int dieRoll)
+      {
+         if( 100 == dieRoll ) // unmodified die roll 100 is always a kill
+         {
+            cm.SetBloodSpots(40);
+            cm.IsKilled = true;
+            return "Killed";
+         }
+         int modifier = GetWoundsModifier(gi, cm);
+         if (modifier < -100)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetWounds(): GetWoundsModifier() returned error");
+            return "ERROR";
+         }
+         dieRoll += modifier;
+         if (dieRoll < 42)
+            return "Near Miss";
+         else if (dieRoll < 48)
+         {
+            cm.SetBloodSpots(5);
+            if( (true == gi.IsMinefieldAttack) || (null == gi.Death) )
+            {
+               cm.IsUnconscious = true;
+               cm.IsIncapacitated = true;
+               return "Unconscious - Incapacitated";
+            }
+            else
+            {
+               return "Light Wound";
+            }
+         }
+         else if (dieRoll < 73)
+         {
+            cm.SetBloodSpots(10);
+            return "Light Wound";
+         }
+         else if (dieRoll < 88)
+         {
+            cm.SetBloodSpots(20);
+            cm.IsIncapacitated = true;
+            return "Light Wound - Out one week";
+         }
+         else if (dieRoll < 93)
+         {
+            cm.SetBloodSpots(30);
+            cm.IsIncapacitated = true;
+            return "Serious Wound - Out 1D weeks";
+         }
+         else if (dieRoll < 98)
+         {
+            cm.SetBloodSpots(35);
+            cm.IsIncapacitated = true;
+            return "Serious Wound - Sent Home";
+         }
+         else
+         {
+            cm.SetBloodSpots(40);
+            cm.IsKilled = true;
+            return "Killed";
+         }
+      }
+      //-------------------------------------------
       public static string GetRandomEvent(EnumScenario scenario, int dieRoll)
       {
          switch(scenario)
@@ -2291,7 +2500,7 @@ namespace Pattons_Best
             spottingModifer += 1;
          if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
             spottingModifer += 1;
-         int numSmokeMarkers = Utilities.GetSmokeCount(gi, sector, range);
+         int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
          if (numSmokeMarkers < 0)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetSpottingModifier(): GetSmokeCount() returned error");
