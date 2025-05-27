@@ -88,9 +88,9 @@ namespace Pattons_Best
       }
       public bool IsMoved { get; set; } = false;
       public int Count { get; set; } = 0;
-      public double RotationHull { get; set; } = 0.0;
+      public double RotationOffset { get; set; } = 0.0;
       public double RotationTurret { get; set; } = 0.0;
-      public double RotationBase { get; set; } = 0.0;
+      public double RotationHull { get; set; } = 0.0;
       //--------------------------------------------------
       private IMapPoint myLocation = new MapPoint();  // top left corner of MapItem
       public IMapPoint Location 
@@ -120,8 +120,6 @@ namespace Pattons_Best
       public bool IsFortification { get; set; } = false;
       //--------------------------------------------------
       public EnumSpottingResult Spotting { get; set; } = EnumSpottingResult.UNSPOTTED;
-      //--------------------------------------------------
-      private bool myIsFlipped = false;
       //----------------------------------------------------------------------------
       protected MapItem(string name)
       {
@@ -189,6 +187,26 @@ namespace Pattons_Best
          Location.Y = territory.CenterPoint.Y - zoom * Utilities.theMapItemOffset;
       }
       //----------------------------------------------------------------------------
+      public void Clone(IMapItem mi)
+      {
+         this.IsMoved = mi.IsMoved;
+         this.Count = mi.Count;
+         this.RotationOffset = mi.RotationOffset;
+         this.RotationTurret = mi.RotationTurret;
+         this.RotationHull = mi.RotationHull;
+         this.Location = mi.Location;
+         this.TerritoryStarting = mi.TerritoryStarting;
+         this.IsMoving = mi.IsMoving;
+         this.IsHullDown = mi.IsHullDown;
+         this.IsTurret = mi.IsTurret;
+         this.IsKilled = mi.IsKilled;
+         this.IsFired = mi.IsFired;
+         this.IsVehicle = mi.IsVehicle;
+         this.IsWoods = mi.IsWoods;
+         this.IsBuilding = mi.IsBuilding;
+         this.IsFortification = mi.IsFortification;
+         this.Spotting = mi.Spotting;  
+      }
       public bool IsEnemyUnit()
       {
          if (true == this.Name.Contains("LW"))
@@ -211,14 +229,26 @@ namespace Pattons_Best
             return true;
          else if (true == this.Name.Contains("PzV"))
             return true;
-         else if (true == this.Name.Contains("JdgPzIV") || true == this.Name.Contains("JdgPz38t"))
+         else if (true == this.Name.Contains("PzVIb"))
+            return true;
+         else if (true == this.Name.Contains("PzVIe"))
+            return true;
+         else if (true == this.Name.Contains("JdgPzIV"))
+            return true;
+         else if (true == this.Name.Contains("JdgPz38t"))
             return true;
          return false;
       }
       public string GetEnemyUnit()
       {
          string enemyUnit = "ERROR";
-         if (true == this.Name.Contains("LW"))
+         if (true == this.Name.Contains("TANK"))
+            enemyUnit = "TANK";
+         else if (true == this.Name.Contains("ATG"))
+            enemyUnit = "ATG";
+         else if (true == this.Name.Contains("SPG"))
+            enemyUnit = "SPG";
+         else if (true == this.Name.Contains("LW"))
             enemyUnit = "LW";
          else if (true == this.Name.Contains("MG"))
             enemyUnit = "MG";
@@ -228,12 +258,6 @@ namespace Pattons_Best
             enemyUnit = "PSW";
          else if (true == this.Name.Contains("SPW"))
             enemyUnit = "SPW";
-         else if (true == this.Name.Contains("SPG") || true == this.Name.Contains("STuGIIIg"))
-            enemyUnit = "STuGIIIg";
-         else if (true == this.Name.Contains("TANK") || true == this.Name.Contains("PzVIe"))
-            enemyUnit = "PzVIe";
-         else if ( (true == this.Name.Contains("ATG")) || true == this.Name.Contains("Pak43") )
-            enemyUnit = "Pak43";
          else if (true == this.Name.Contains("Pak38") )
             enemyUnit = "Pak38";
          else if (true == this.Name.Contains("Pak40"))
@@ -244,6 +268,10 @@ namespace Pattons_Best
             enemyUnit = "PzV";
          else if (true == this.Name.Contains("PzVIb"))
             enemyUnit = "PzVIb";
+         else if (true == this.Name.Contains("PzVIe"))
+            enemyUnit = "PzVIe";
+         else if (true == this.Name.Contains("STuGIIIg"))
+            enemyUnit = "STuGIIIg";
          else if (true == this.Name.Contains("MARDERII"))
             enemyUnit = "MARDERII";
          else if (true == this.Name.Contains("MARDERIII"))
@@ -261,26 +289,6 @@ namespace Pattons_Best
             int range = (int)(this.Zoom * Utilities.theMapItemSize);
             BloodSpot spot = new BloodSpot(range, theRandom);
             myWoundSpots.Add(spot);
-         }
-      }
-      public void Flip()
-      {
-         if (false == myIsFlipped)
-         {
-            myIsFlipped = true;
-            string temp = TopImageName;
-            TopImageName = BottomImageName;
-            BottomImageName = temp;
-         }
-      }
-      public void Unflip()
-      {
-         if (true == myIsFlipped)
-         {
-            myIsFlipped = false;
-            string temp = TopImageName;
-            TopImageName = BottomImageName;
-            BottomImageName = temp;
          }
       }
       public override string ToString()
@@ -334,6 +342,31 @@ namespace Pattons_Best
             }
             g.Children.Add(c);
             //----------------------------------------------------
+            if (true == mi.IsTurret)
+            {
+               double width = mi.Zoom * Utilities.theMapItemSize;
+               double height = width;
+               Image? imgTurret = null;
+               if (true == mi.Name.Contains("Sherman"))
+                  imgTurret = new Image() { Height = height, Width = width, Source = theSherman75Turret };
+               else if (true == mi.Name.Contains("TANK") || true == mi.Name.Contains("PzVIe"))
+                  imgTurret = new Image() { Height = height, Width = width, Source = thePzVIbTurret };
+               if (null == imgTurret)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "SetButtonContent(): turret=null");
+               }
+               else
+               {
+                  RotateTransform rotateTransform = new RotateTransform();
+                  imgTurret.RenderTransformOrigin = new Point(0.5, 0.5);
+                  rotateTransform.Angle = mi.Count * 60.0;
+                  imgTurret.RenderTransform = rotateTransform;
+                  c.Children.Add(imgTurret);
+                  Canvas.SetLeft(imgTurret, 0);
+                  Canvas.SetTop(imgTurret, 0);
+               }
+            }
+            //----------------------------------------------------
             if (true == isDecoration)
             {
                if (true == mi.IsMoving)
@@ -381,51 +414,23 @@ namespace Pattons_Best
                   Canvas.SetLeft(imgTerrain, 0);
                   Canvas.SetTop(imgTerrain, 0);
                }
-               if (true == mi.IsTurret)
-               {
-                  double width = mi.Zoom * Utilities.theMapItemSize;
-                  double height = width;
-                  Image? imgTurret = null;
-                  if (true == mi.Name.Contains("Sherman") )
-                     imgTurret = new Image() { Height = height, Width = width, Source = theSherman75Turret };
-                  else if (true == mi.Name.Contains("TANK") || true == mi.Name.Contains("PzVIe"))
-                     imgTurret = new Image() { Height = height, Width = width, Source = thePzVIbTurret };
-
-                  if( null == imgTurret)
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "SetButtonContent(): turret=null");
-                  }
-                  else
-                  {
-                     RotateTransform rotateTransform = new RotateTransform();
-                     imgTurret.RenderTransformOrigin = new Point(0.5, 0.5);
-                     rotateTransform.Angle = mi.Count * 60.0;
-                     imgTurret.RenderTransform = rotateTransform;
-                     c.Children.Add(imgTurret);
-                     Canvas.SetLeft(imgTurret, 0);
-                     Canvas.SetTop(imgTurret, 0);
-                  }
-               }
-            }
-            if (true == mi.IsKilled)
-            {
-               Image overlay = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage("OKIA") };
-               g.Children.Add(overlay);
-            }
-            else if ((EnumSpottingResult.IDENTIFIED == mi.Spotting ) || (EnumSpottingResult.IDENTIFIED_HIDDEN == mi.Spotting) || (EnumSpottingResult.SPOTTED == mi.Spotting) || (EnumSpottingResult.SPOTTED_HIDDEN == mi.Spotting) || (EnumSpottingResult.HIDDEN == mi.Spotting) )
-            {
-               if (EnumSpottingResult.HIDDEN != mi.Spotting)
+               if ((EnumSpottingResult.SPOTTED == mi.Spotting) || (true == mi.IsSpotted)) // if Spotted now or previous round
                {
                   Image overlay = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage("OSPOT") };
                   g.Children.Add(overlay);
                }
-               if ((EnumSpottingResult.IDENTIFIED_HIDDEN == mi.Spotting) || (EnumSpottingResult.SPOTTED_HIDDEN == mi.Spotting) || (EnumSpottingResult.HIDDEN == mi.Spotting))
+               if (EnumSpottingResult.HIDDEN == mi.Spotting)
                {
                   Image overlay1 = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage("OHIDE") };
+                  RotateTransform rotateTransform = new RotateTransform();
+                  overlay1.RenderTransformOrigin = new Point(0.5, 0.5);
+                  rotateTransform.Angle = -(mi.RotationHull + mi.RotationOffset);
+                  overlay1.RenderTransform = rotateTransform;
                   g.Children.Add(overlay1);
                }
             }
-            else if ("" != mi.OverlayImageName)
+            //----------------------------------
+            if ("" != mi.OverlayImageName)
             {
                Image overlay = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage(mi.OverlayImageName) };
                g.Children.Add(overlay);

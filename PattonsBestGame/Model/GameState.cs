@@ -1241,19 +1241,19 @@ namespace Pattons_Best
             {
                double xDiff = mi.Location.X + mi.Zoom * Utilities.theMapItemOffset - gi.Home.CenterPoint.X;
                double yDiff = mi.Location.Y + mi.Zoom * Utilities.theMapItemOffset - gi.Home.CenterPoint.Y;
-               mi.RotationBase = Math.Atan2(yDiff, xDiff) * 180 / Math.PI - 90;
+               mi.RotationHull = Math.Atan2(yDiff, xDiff) * 180 / Math.PI - 90;
                //-----------------------------------------
                die1 = Utilities.RandomGenerator.Next(0, 3);
                if (1 == die1)
                {
-                  mi.RotationHull = 150 + Utilities.RandomGenerator.Next(0, 60);
+                  mi.RotationOffset = 150 + Utilities.RandomGenerator.Next(0, 60);
                }
                else if (2 == die1)
                {
                   if (0 == Utilities.RandomGenerator.Next(0, 2))
-                     mi.RotationHull = 35 + Utilities.RandomGenerator.Next(0, 115);
+                     mi.RotationOffset = 35 + Utilities.RandomGenerator.Next(0, 115);
                   else
-                     mi.RotationHull = -35 - Utilities.RandomGenerator.Next(0, 115);
+                     mi.RotationOffset = -35 - Utilities.RandomGenerator.Next(0, 115);
                }
             }
             //-----------------------------------------
@@ -2524,9 +2524,15 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceSpottingEnd:
-                  action = GameAction.BattleRoundSequenceOrders;
+                  action = GameAction.BattleRoundSequenceCrewOrders;
                   gi.BattlePhase = BattlePhase.Orders;
                   gi.EventDisplayed = gi.EventActive = "e038";
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  break;
+               case GameAction.BattleRoundSequenceCrewOrders:
+                  break;
+               case GameAction.BattleRoundSequenceAmmoOrders:
+                  gi.EventDisplayed = gi.EventActive = "e051";
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   break;
                case GameAction.BattleEnemyArtilleryRoll:
@@ -2543,14 +2549,9 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     if( false == CheckCrewMemberExposed(gi, ref action))
+                     if( false == CheckCrewMemberExposed(gi, ref action)) // calls SpottingPhaseBegin() if no collateral
                      {
                         returnStatus = "CheckCrewMemberExposed() returned false";
-                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
-                     }
-                     else if (false == SpottingPhaseBegin(gi, ref action))
-                     {
-                        returnStatus = "SpottingPhaseBegin() returned false";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
                      }
                   }
@@ -2612,7 +2613,7 @@ namespace Pattons_Best
             ICrewMember? cm = gi.GetCrewMember(crewmember);
             if (null == cm)
             {
-               Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): gi.GetCrewMember() returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CheckCrewMemberExposed(): gi.GetCrewMember() returned null");
                return false;
             }
             foreach (IMapItem hatch in gi.Hatches)
@@ -2630,6 +2631,11 @@ namespace Pattons_Best
          {
             outAction = GameAction.BattleCollateralDamageCheck;
             gi.NumCollateralDamage++; // check for collateral damage after resolving artillery roll
+         }
+         else if (false == SpottingPhaseBegin(gi, ref outAction))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CheckCrewMemberExposed(): SpottingPhaseBegin() returned false");
+            return false;
          }
          return true;
       }
@@ -2674,7 +2680,7 @@ namespace Pattons_Best
                }
             }
          }
-         outAction = GameAction.BattleRoundSequenceOrders;
+         outAction = GameAction.BattleRoundSequenceCrewOrders;
          gi.BattlePhase = BattlePhase.Orders;
          gi.EventDisplayed = gi.EventActive = "e038";
          gi.DieRollAction = GameAction.DieRollActionNone;

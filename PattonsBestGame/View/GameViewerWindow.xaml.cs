@@ -114,8 +114,7 @@ namespace Pattons_Best
       private readonly List<Button> myBattleButtons = new List<Button>();
       private readonly List<Button> myTankButtons = new List<Button>();
       private readonly SplashDialog mySplashScreen;
-      private ContextMenu myContextMenuButton = new ContextMenu();
-      private ContextMenu myContextMenuCrewAction = new ContextMenu();
+      private Dictionary<string, ContextMenu> myContextMenuCrewActions = new Dictionary<string, ContextMenu>();
       private ContextMenu myContextMenuGunLoadAction = new ContextMenu();
       private readonly DoubleCollection myDashArray = new DoubleCollection();
       private int myBrushIndex = 0;
@@ -124,7 +123,6 @@ namespace Pattons_Best
       private readonly List<Polygon> myPolygons = new List<Polygon>();
       private readonly List<Ellipse> myEllipses = new List<Ellipse>();
       private Rectangle? myRectangleMoving = null;               // Not used - Rectangle that is moving with button
-      private Rectangle myRectangleSelected = new Rectangle(); // Player has manually selected this button
       private ITerritory? myTerritorySelected = null;
       private Storyboard myStoryboard = new Storyboard();    // Show Statistics Marquee at end of game 
       private TextBlock myTextBoxMarquee; // Displayed at end to show Statistics of games
@@ -210,6 +208,18 @@ namespace Pattons_Best
          myDashArray.Add(4);  // used for dotted lines
          myDashArray.Add(2);  // used for dotted lines
          //---------------------------------------------------------------
+         myContextMenuCrewActions["Commander"] = new ContextMenu();
+         myContextMenuCrewActions["Gunner"] = new ContextMenu();
+         myContextMenuCrewActions["Loader"] = new ContextMenu();
+         myContextMenuCrewActions["Driver"] = new ContextMenu();
+         myContextMenuCrewActions["Assistant"] = new ContextMenu();
+         if (false == CreateContextMenuAction())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): CreateContextMenuAction() returned false");
+            CtorError = true;
+            return;
+         }
+         //---------------------------------------------------------------
          myDieRoller = new DieRoller(myCanvasMain, CloseSplashScreen); // Close the splash screen when die resources are loaded
          if (true == myDieRoller.CtorError)
          {
@@ -232,20 +242,6 @@ namespace Pattons_Best
             CtorError = true;
             return;
          }
-         //---------------------------------------------------------------
-         MenuItem menuItem1 = new MenuItem();
-         menuItem1.Name = "Commander_Move";
-         menuItem1.Header = "Direct _Move";
-         menuItem1.InputGestureText = "Ctrl+Shift+M";
-         menuItem1.Click += MenuItemCrewAction_Click;
-         myContextMenuCrewAction.Items.Add(menuItem1);
-         MenuItem menuItem2 = new MenuItem();
-         menuItem2.Name = "Commander_Fire";
-         menuItem2.Header = "Direct _Fire";
-         menuItem2.InputGestureText = "Ctrl+Shift+F";
-         menuItem2.Click += MenuItemCrewAction_Click;
-         myContextMenuCrewAction.Items.Add(menuItem2);
-         myContextMenuCrewAction.Visibility = Visibility.Visible;
          //---------------------------------------------------------------
          // Implement the Model View Controller (MVC) pattern by registering views with
          // the game engine such that when the model data is changed, the views are updated.
@@ -331,7 +327,7 @@ namespace Pattons_Best
                if (false == UpdateCanvasAnimateBattlePhase(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
                break;
-            case GameAction.BattleRoundSequenceOrders:
+            case GameAction.BattleRoundSequenceCrewOrders:
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                if (false == UpdateCanvasMain(gi, action))
@@ -483,11 +479,11 @@ namespace Pattons_Best
       }
       private Button CreateButtonMapItem(List<Button> buttons, IMapItem mi)
       {
-         System.Windows.Controls.Button b = new Button { ContextMenu = myContextMenuButton, Name = mi.Name, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
+         System.Windows.Controls.Button b = new Button { Name = mi.Name, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
          MapItem.SetButtonContent(b, mi, true); // This sets the image as the button's content
          RotateTransform rotateTransform = new RotateTransform();
          b.RenderTransformOrigin = new Point(0.5, 0.5);
-         rotateTransform.Angle = mi.RotationBase + mi.RotationHull;
+         rotateTransform.Angle = mi.RotationHull + mi.RotationOffset;
          b.RenderTransform = rotateTransform;
          buttons.Add(b);
          Canvas.SetLeft(b, mi.Location.X);
@@ -496,6 +492,158 @@ namespace Pattons_Best
          b.MouseEnter += MouseEnterMapItem;
          b.MouseLeave += MouseLeaveMapItem;
          return b;
+      }
+      private bool CreateContextMenuAction()
+      {
+         //---------------------------------
+         myContextMenuCrewActions["Loader"].Items.Clear();
+         myContextMenuCrewActions["Loader"].Visibility = Visibility.Visible;
+         MenuItem menuItem1 = new MenuItem();
+         menuItem1.Name = "Loader_Load";
+         menuItem1.Header = "Load";
+         menuItem1.InputGestureText = "Ctrl+Shift+F";
+         menuItem1.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Loader"].Items.Add(menuItem1);
+         MenuItem menuItem2 = new MenuItem();
+         menuItem2.Name = "Loader_RepairMainGun";
+         menuItem2.Header = "Repair Main Gun";
+         menuItem2.InputGestureText = "Ctrl+Shift+X";
+         menuItem2.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Loader"].Items.Add(menuItem2);
+         MenuItem menuItem3 = new MenuItem();
+         menuItem3.Name = "Loader_RepairCoaxialMg";
+         menuItem3.Header = "Repair Coaxial MG";
+         menuItem3.InputGestureText = "Ctrl+Shift+T";
+         menuItem3.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Loader"].Items.Add(menuItem3);
+         MenuItem menuItem4 = new MenuItem();
+         menuItem4.Name = "Loader_FireMortar";
+         menuItem4.Header = "Fire Mortar";
+         menuItem4.InputGestureText = "Ctrl+Shift+A";
+         menuItem4.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Loader"].Items.Add(menuItem4);
+         MenuItem menuItem5 = new MenuItem();
+         menuItem5.Name = "Loader_ChangeGunLoad";
+         menuItem5.Header = "Change Gun Load";
+         menuItem5.InputGestureText = "Ctrl+Shift+G";
+         menuItem5.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Loader"].Items.Add(menuItem5);
+         MenuItem menuItem6 = new MenuItem();
+         menuItem6.Name = "Loader_RestockReadyRack";
+         menuItem6.Header = "Restock Ready Rack";
+         menuItem6.InputGestureText = "Ctrl+Shift+G";
+         menuItem6.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Loader"].Items.Add(menuItem6);
+         //---------------------------------
+         myContextMenuCrewActions["Driver"].Items.Clear();
+         myContextMenuCrewActions["Driver"].Visibility = Visibility.Visible;
+         menuItem1 = new MenuItem();
+         menuItem1.Name = "Driver_Stop";
+         menuItem1.Header = "Stop";
+         menuItem1.InputGestureText = "Ctrl+Shift+F";
+         menuItem1.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
+         menuItem2 = new MenuItem();
+         menuItem2.Name = "Driver_Forward";
+         menuItem2.Header = "Forward";
+         menuItem2.InputGestureText = "Ctrl+Shift+X";
+         menuItem2.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Driver"].Items.Add(menuItem2);
+         menuItem3 = new MenuItem();
+         menuItem3.Name = "Driver_ForwardToHullDown";
+         menuItem3.Header = "Forward To Hull Down";
+         menuItem3.InputGestureText = "Ctrl+Shift+T";
+         menuItem3.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Driver"].Items.Add(menuItem3);
+         menuItem4 = new MenuItem();
+         menuItem4.Name = "Driver_Reverse";
+         menuItem4.Header = "Reverse";
+         menuItem4.InputGestureText = "Ctrl+Shift+A";
+         menuItem4.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Driver"].Items.Add(menuItem4);
+         menuItem5 = new MenuItem();
+         menuItem5.Name = "Driver_ReverseToHullDown";
+         menuItem5.Header = "Reverse To Hull Down";
+         menuItem5.InputGestureText = "Ctrl+Shift+G";
+         menuItem5.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Driver"].Items.Add(menuItem5);
+         menuItem6 = new MenuItem();
+         menuItem6.Name = "Driver_PivotTank";
+         menuItem6.Header = "Pivot Tank";
+         menuItem6.InputGestureText = "Ctrl+Shift+G";
+         menuItem6.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Driver"].Items.Add(menuItem6);
+         //---------------------------------
+         myContextMenuCrewActions["Gunner"].Items.Clear();
+         myContextMenuCrewActions["Gunner"].Visibility = Visibility.Visible;
+         menuItem1 = new MenuItem();
+         menuItem1.Name = "Gunner_FireMainGun";
+         menuItem1.Header = "Fire Main Gun";
+         menuItem1.InputGestureText = "Ctrl+Shift+F";
+         menuItem1.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Gunner"].Items.Add(menuItem1);
+         menuItem2 = new MenuItem();
+         menuItem2.Name = "Gunner_FireCoaxialMg";
+         menuItem2.Header = "Fire Co-Axial MG";
+         menuItem2.InputGestureText = "Ctrl+Shift+X";
+         menuItem2.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Gunner"].Items.Add(menuItem2);
+         menuItem3 = new MenuItem();
+         menuItem3.Name = "Gunner_RotateTurret";
+         menuItem3.Header = "Rotate Turret";
+         menuItem3.InputGestureText = "Ctrl+Shift+T";
+         menuItem3.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Gunner"].Items.Add(menuItem3);
+         menuItem4 = new MenuItem();
+         menuItem4.Name = "Gunner_RotateFireMainGun";
+         menuItem4.Header = "Rotate & Fire Main Gun";
+         menuItem4.InputGestureText = "Ctrl+Shift+A";
+         menuItem4.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Gunner"].Items.Add(menuItem4);
+         menuItem5 = new MenuItem();
+         menuItem5.Name = "Gunner_RepairMainGun";
+         menuItem5.Header = "Repair Main Gun";
+         menuItem5.InputGestureText = "Ctrl+Shift+G";
+         menuItem5.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Gunner"].Items.Add(menuItem5);
+         //---------------------------------
+         myContextMenuCrewActions["Assistant"].Items.Clear();
+         myContextMenuCrewActions["Assistant"].Visibility = Visibility.Visible;
+         menuItem1 = new MenuItem();
+         menuItem1.Name = "Assistant_FireBowMg";
+         menuItem1.Header = "_Fire Bow MG";
+         menuItem1.InputGestureText = "Ctrl+Shift+F";
+         menuItem1.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+         menuItem2 = new MenuItem();
+         menuItem2.Name = "Assistant_RepairBowMg";
+         menuItem2.Header = "Repair Bow MG";
+         menuItem2.InputGestureText = "Ctrl+Shift+X";
+         menuItem2.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Assistant"].Items.Add(menuItem2);
+         menuItem3 = new MenuItem();
+         menuItem3.Name = "Assistant_PassAmmo";
+         menuItem3.Header = "Pass Ammo";
+         menuItem3.InputGestureText = "Ctrl+Shift+T";
+         menuItem3.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Assistant"].Items.Add(menuItem3);
+         //---------------------------------
+         myContextMenuCrewActions["Commander"].Items.Clear();
+         myContextMenuCrewActions["Commander"].Visibility = Visibility.Visible;
+         menuItem1 = new MenuItem();
+         menuItem1.Name = "Commander_Move";
+         menuItem1.Header = "Direct _Move";
+         menuItem1.InputGestureText = "Ctrl+Shift+M";
+         menuItem1.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
+         menuItem2 = new MenuItem();
+         menuItem2.Name = "Commander_Fire";
+         menuItem2.Header = "Direct _Fire";
+         menuItem2.InputGestureText = "Ctrl+Shift+F";
+         menuItem2.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Commander"].Items.Add(menuItem2);
+         //---------------------------------
+         return true;
       }
       private bool SetTerritory(IMapItem mi, ITerritory newT)
       {
@@ -637,7 +785,7 @@ namespace Pattons_Best
                      return false;
                   }
                   break;
-               case GameAction.BattleRoundSequenceOrders:
+               case GameAction.BattleRoundSequenceCrewOrders:
                   if (false == UpdateCanvasTankOrders(gi, action))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasTankOrders() returned false");
@@ -868,7 +1016,8 @@ namespace Pattons_Best
             PointCollection points = new PointCollection();
             foreach (IMapPoint mp1 in t.Points)
                points.Add(new System.Windows.Point(mp1.X, mp1.Y));
-            Polygon aPolygon = new Polygon { ContextMenu = myContextMenuCrewAction, Fill = Utilities.theBrushRegion, Points = points, Name = t.ToString() };
+            Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = t.ToString() };
+            aPolygon.ContextMenu = myContextMenuCrewActions[crewmember];
             myPolygons.Add(aPolygon);
             myCanvasTank.Children.Add(aPolygon);
             aPolygon.MouseDown += MouseDownPolygonCrewActions;
@@ -1189,7 +1338,7 @@ namespace Pattons_Best
                   ++counterCount;
                   RotateTransform rotateTransform = new RotateTransform();
                   b.RenderTransformOrigin = new Point(0.5, 0.5);
-                  rotateTransform.Angle = mi.RotationBase + mi.RotationHull;
+                  rotateTransform.Angle = mi.RotationHull + mi.RotationOffset;
                   b.RenderTransform = rotateTransform;
                }
                else
@@ -1503,7 +1652,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): mim2.NewTerritory=null");
                   return false;
                }
-               Logger.Log(LogEnum.LE_VIEW_ROTATION, "UpdateCanvasMovement(): mi=" + mim.MapItem.Name + " r=" + mim.MapItem.RotationHull + " rb=" + mim.MapItem.RotationBase);
+               Logger.Log(LogEnum.LE_VIEW_ROTATION, "UpdateCanvasMovement(): mi=" + mim.MapItem.Name + " r=" + mim.MapItem.RotationOffset + " rb=" + mim.MapItem.RotationHull);
                //------------------------------------------
                stacks.Remove(mi); // remove from existing stack
                Logger.Log(LogEnum.LE_VIEW_MIM, "UpdateCanvasMovement(): mi=" + mi.Name + " t=" + mi.TerritoryCurrent.Name + " moving to t=" + mim.NewTerritory.Name + " " + gi.MoveStacks.ToString());
@@ -1539,7 +1688,7 @@ namespace Pattons_Best
             double diffYOld = theOldYAfterAnimation - mim.MapItem.Location.Y;
             double xStart = mim.MapItem.Location.X; // get top left point of MapItem
             double yStart = mim.MapItem.Location.Y;
-            Logger.Log(LogEnum.LE_VIEW_ROTATION, "+++++++++++++++++MovePathAnimate(): 1 - mi.X=" + xStart.ToString("F0") + "  mi.Y=" + yStart.ToString("F0") + " r=" + mim.MapItem.RotationHull.ToString("F0") + " dX=" + diffXOld.ToString("F0") + " dY=" + diffYOld.ToString("F0") + " rb=" + mim.MapItem.RotationBase.ToString("F0"));
+            Logger.Log(LogEnum.LE_VIEW_ROTATION, "+++++++++++++++++MovePathAnimate(): 1 - mi.X=" + xStart.ToString("F0") + "  mi.Y=" + yStart.ToString("F0") + " r=" + mim.MapItem.RotationOffset.ToString("F0") + " dX=" + diffXOld.ToString("F0") + " dY=" + diffYOld.ToString("F0") + " rb=" + mim.MapItem.RotationHull.ToString("F0"));
             PathFigure aPathFigure = new PathFigure() { StartPoint = new System.Windows.Point(xStart, yStart) };
             if (null == mim.BestPath)
             {
@@ -1594,7 +1743,7 @@ namespace Pattons_Best
             b.BeginAnimation(Canvas.LeftProperty, xAnimiation);
             b.BeginAnimation(Canvas.TopProperty, yAnimiation);
             mim.MapItem.Location = mp;
-            Logger.Log(LogEnum.LE_VIEW_ROTATION, "-----------------MovePathAnimate(): 2 - mi.X=" + mim.MapItem.Location.X.ToString("F0") + " mi.Y=" + mim.MapItem.Location.Y.ToString("F0") + " r=" + mim.MapItem.RotationHull.ToString("F0") + " rb=" + mim.MapItem.RotationBase.ToString("F0"));
+            Logger.Log(LogEnum.LE_VIEW_ROTATION, "-----------------MovePathAnimate(): 2 - mi.X=" + mim.MapItem.Location.X.ToString("F0") + " mi.Y=" + mim.MapItem.Location.Y.ToString("F0") + " r=" + mim.MapItem.RotationOffset.ToString("F0") + " rb=" + mim.MapItem.RotationHull.ToString("F0"));
             return true;
          }
          catch (Exception e)
@@ -1662,7 +1811,6 @@ namespace Pattons_Best
          myRectangleMoving.Visibility = Visibility.Visible;
          return true;
       }
-
       //-------------CONTROLLER FUNCTIONS---------------------------------
       private void MouseDownPolygonHatches(object sender, MouseButtonEventArgs e)
       {
@@ -1695,7 +1843,7 @@ namespace Pattons_Best
                break;
             }
          }
-         GameAction outAction = GameAction.BattleRoundSequenceOrders;
+         GameAction outAction = GameAction.BattleRoundSequenceCrewOrders;
          if (GamePhase.Preparations == myGameInstance.GamePhase)
             outAction = GameAction.PreparationsHatches;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
@@ -1725,7 +1873,7 @@ namespace Pattons_Best
          gunLoad.Location.X = newT.CenterPoint.X - delta;
          gunLoad.Location.Y = newT.CenterPoint.Y - delta;
          Logger.Log(LogEnum.LE_SHOW_MAPITEM_TANK, "MouseDownPolygonGunLoad(): gunLoad=" + gunLoad.Name + " loc=" + gunLoad.Location.ToString() + " t=" + newT.Name + " tLoc=" + newT.CenterPoint.ToString());
-         GameAction outAction = GameAction.BattleRoundSequenceOrders;
+         GameAction outAction = GameAction.BattleRoundSequenceCrewOrders;
          if (GamePhase.Preparations == myGameInstance.GamePhase)
             outAction = GameAction.PreparationsGunLoadSelect;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
@@ -1776,7 +1924,7 @@ namespace Pattons_Best
 
          }
          //-----------------------------------------------
-         GameAction outAction = GameAction.BattleRoundSequenceOrders;
+         GameAction outAction = GameAction.BattleRoundSequenceCrewOrders;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
       private void MouseDownEllipseSpottingLoader(object sender, MouseButtonEventArgs e)
@@ -1948,7 +2096,7 @@ namespace Pattons_Best
                   this.myTankButtons.Remove(button);
                   myCanvasTank.Children.Remove(button);
                   //----------------------------------------------
-                  GameAction outAction = GameAction.BattleRoundSequenceOrders;
+                  GameAction outAction = GameAction.BattleRoundSequenceCrewOrders;
                   if (GamePhase.Preparations == myGameInstance.GamePhase)
                      outAction = GameAction.PreparationsHatches;
                   myGameEngine.PerformAction(ref myGameInstance, ref outAction);
@@ -2011,12 +2159,12 @@ namespace Pattons_Best
             mySpeedRatioMarquee = 0.5;
          myStoryboard.SetSpeedRatio(this, mySpeedRatioMarquee);
       }
-      public void MenuItemCrewAction_Click(object sender, RoutedEventArgs e)
+      public void MenuItemCrewActionClick(object sender, RoutedEventArgs e)
       {
          MenuItem? menuitem = sender as MenuItem;
          if( null == menuitem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewAction_Click(): menuitem=null");
+            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): menuitem=null");
             return;
          }
          //--------------------------------------
@@ -2024,7 +2172,7 @@ namespace Pattons_Best
          string[] aStringArray1 = menuitem.Name.Split(new char[] { '_' });
          if(aStringArray1.Length < 2)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewAction_Click(): underscore not found in " + menuitem.Name + " len=" + aStringArray1.Length);
+            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): underscore not found in " + menuitem.Name + " len=" + aStringArray1.Length);
             return;
          }
          string sCrewMemberRole = aStringArray1[0];
@@ -2033,43 +2181,136 @@ namespace Pattons_Best
          ITerritory? t = Territories.theTerritories.Find(tName);
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewAction_Click(): t=null for " + tName);
+            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): t=null for " + tName);
             return;
          }
-         foreach(IMapItem ca in myGameInstance.CrewActions) // get rid of existing crew action
+         foreach(IMapItem crewAction in myGameInstance.CrewActions) // get rid of existing crew action for this crew member
          {
-            if( true == ca.Name.Contains(sCrewMemberRole))
+            if( true == crewAction.Name.Contains(sCrewMemberRole)) 
             {
-               myGameInstance.CrewActions.Remove(ca);
+               myGameInstance.CrewActions.Remove(crewAction); // Remove existing Crew Action
+               foreach(Button oldButton in myTankButtons)     // Remove existing Button
+               {
+                  if( oldButton.Name == crewAction.Name )
+                  {
+                     myTankButtons.Remove(oldButton);
+                     break;
+                  }
+               }
                break;
             }
          }
          //--------------------------------------
+         ContextMenu? menu = null;  // Add in new button
          switch (menuitem.Name)
          {
+            case "Loader_Load":
+               mi = new MapItem(menuitem.Name, 1.0, "c54LLoad", t);
+               menu = myContextMenuCrewActions["Loader"];
+               break;
+            case "Loader_RepairMainGun":
+               mi = new MapItem(menuitem.Name, 1.0, "c55LRepairMainGun", t);
+               menu = myContextMenuCrewActions["Loader"];
+               break;
+            case "Loader_RepairCoaxialMg":
+               mi = new MapItem(menuitem.Name, 1.0, "c56LRepairCoaxialMg", t);
+               menu = myContextMenuCrewActions["Loader"];
+               break;
+            case "Loader_FireMortar":
+               mi = new MapItem(menuitem.Name, 1.0, "c58LFireMortar", t);
+               menu = myContextMenuCrewActions["Loader"];
+               break;
+            case "Loader_ChangeGunLoad":
+               mi = new MapItem(menuitem.Name, 1.0, "c59LChangeGunLoad", t);
+               menu = myContextMenuCrewActions["Loader"];
+               break;
+            case "Loader_RestockReadyRack":
+               mi = new MapItem(menuitem.Name, 1.0, "c60LRestockReadyRack", t);
+               menu = myContextMenuCrewActions["Loader"];
+               break;
+            case "Driver_Stop":
+               mi = new MapItem(menuitem.Name, 1.0, "c61DStop", t);
+               menu = myContextMenuCrewActions["Driver"];
+               break;
+            case "Driver_Forward":
+               mi = new MapItem(menuitem.Name, 1.0, "c62DForward", t);
+               menu = myContextMenuCrewActions["Driver"];
+               break;
+            case "Driver_ForwardToHullDown":
+               mi = new MapItem(menuitem.Name, 1.0, "c63DForwardToHullDown", t);
+               menu = myContextMenuCrewActions["Driver"];
+               break;
+            case "Driver_Reverse":
+               mi = new MapItem(menuitem.Name, 1.0, "c64DReverse", t);
+               menu = myContextMenuCrewActions["Driver"];
+               break;
+            case "Driver_ReverseToHullDown":
+               mi = new MapItem(menuitem.Name, 1.0, "c65DReverseToHullDown", t);
+               menu = myContextMenuCrewActions["Driver"];
+               break;
+            case "Gunner_FireMainGun":
+               mi = new MapItem(menuitem.Name, 1.0, "c50GFireMainGun", t);
+               menu = myContextMenuCrewActions["Gunner"];
+               break;
+            case "Gunner_FireCoaxialMg":
+               mi = new MapItem(menuitem.Name, 1.0, "c51GFireCoaxialMg", t);
+               menu = myContextMenuCrewActions["Gunner"];
+               break;
+            case "Gunner_RotateTurret":
+               mi = new MapItem(menuitem.Name, 1.0, "c52GRotateTurret", t);
+               menu = myContextMenuCrewActions["Gunner"];
+               break;
+            case "Gunner_RotateFireMainGun":
+               mi = new MapItem(menuitem.Name, 1.0, "c53GRotateTurretFireMainGun", t);
+               menu = myContextMenuCrewActions["Gunner"];
+               break;
+            case "Gunner_RepairMainGun":
+               mi = new MapItem(menuitem.Name, 1.0, "c57GRepairMainGun", t);
+               menu = myContextMenuCrewActions["Gunner"];
+               break;
+            case "Assistant_FireBowMg":
+               mi = new MapItem(menuitem.Name, 1.0, "c67AFireBowMg", t);
+               menu = myContextMenuCrewActions["Assistant"];
+               break;
+            case "Assistant_RepairBowMg":
+               mi = new MapItem(menuitem.Name, 1.0, "c68ARepairBowMg", t);
+               menu = myContextMenuCrewActions["Assistant"];
+               break;
+            case "Assistant_PassAmmo":
+               mi = new MapItem(menuitem.Name, 1.0, "c69APassAmmo", t);
+               menu = myContextMenuCrewActions["Assistant"];
+               break;
             case "Commander_Move":
-               mi = new MapItem(sCrewMemberRole, 1.0, "c48CDirectMove", t);
+               mi = new MapItem(menuitem.Name, 1.0, "c48CDirectMove", t);
+               menu = myContextMenuCrewActions["Commander"];
                break;
             case "Commander_Fire":
-               mi = new MapItem(sCrewMemberRole, 1.0, "c49CDirectFire", t);
+               mi = new MapItem(menuitem.Name, 1.0, "c49CDirectFire", t);
+               menu = myContextMenuCrewActions["Commander"];
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewAction_Click(): reached default name=" + menuitem.Name);
+               Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): reached default name=" + menuitem.Name);
                return;
          }
          if( null == mi )
          {
-            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewAction_Click(): mi=null");
+            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): mi=null");
             return;
          }
          myGameInstance.CrewActions.Add(mi);
          //--------------------------------------
-         System.Windows.Controls.Button b = new Button { ContextMenu = myContextMenuCrewAction, Name = sCrewMemberRole, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
-         MapItem.SetButtonContent(b, mi, false); // This sets the image as the button's content
-         myTankButtons.Add(b);
-         myCanvasTank.Children.Add(b);
-         Canvas.SetLeft(b, mi.Location.X);
-         Canvas.SetTop(b, mi.Location.Y);
+         if( null == menu )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): menu=null");
+            return;
+         }
+         System.Windows.Controls.Button newButton = new Button { ContextMenu = menu, Name = sCrewMemberRole, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
+         MapItem.SetButtonContent(newButton, mi, false); // This sets the image as the button's content
+         myTankButtons.Add(newButton);
+         myCanvasTank.Children.Add(newButton);
+         Canvas.SetLeft(newButton, mi.Location.X);
+         Canvas.SetTop(newButton, mi.Location.Y);
+         Canvas.SetZIndex(newButton, 900);
       }
       //-------------GameViewerWindow---------------------------------
       private void ContentRenderedGameViewerWindow(object sender, EventArgs e)

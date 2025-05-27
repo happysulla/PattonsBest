@@ -9,6 +9,7 @@ using System.Windows.Media.Media3D;
 using System.Xml.Linq;
 using Windows.Graphics.Printing3D;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Windows.Forms.AxHost;
 
 namespace Pattons_Best
 {
@@ -2478,35 +2479,6 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "GetSpottingModifier(): lastReport=null");
             return -1000;
          }
-         //-------------------------------------------------------
-         TankCard card = new TankCard(lastReport.TankCardNum);
-         int spottingModifer = 0;
-         if (true == cm.IsButtonedUp)
-         {
-            if( ("Commander" == cm.Role ) && (true == card.myIsVisionCupola) )
-               spottingModifer += 2;
-            else
-               spottingModifer += 3;
-         }
-         if( true == gi.Sherman.IsMoving )
-            spottingModifer += 1;
-         if( true == mi.IsWoods )
-            spottingModifer += 1;
-         if (true == mi.IsBuilding)
-            spottingModifer += 1;
-         if (true == mi.IsFortification)
-            spottingModifer += 1;
-         if (true == mi.IsHullDown)
-            spottingModifer += 1;
-         if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
-            spottingModifer += 1;
-         int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
-         if (numSmokeMarkers < 0)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetSpottingModifier(): GetSmokeCount() returned error");
-            return -1000;
-         }
-         spottingModifer += numSmokeMarkers;
          //--------------------------------------------------------------
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
@@ -2514,6 +2486,60 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "GetSpottingModifier(): unknown enemyUnit=" + mi.Name);
             return -1000;
          }
+         //-------------------------------------------------------
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         int spottingModifer = 0;
+         if (true == cm.IsButtonedUp)
+         {
+            if( ("Commander" == cm.Role ) && (true == card.myIsVisionCupola) )
+            {
+               spottingModifer += 2;
+               Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): bu=+2 enemyUnit=" + enemyUnit + " mod=" + spottingModifer.ToString());
+            }
+            else
+            {
+               spottingModifer += 3;
+               Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): bu=+3 enemyUnit=" + enemyUnit + " mod=" + spottingModifer.ToString());
+            }
+         }
+         if( true == gi.Sherman.IsMoving )
+         {
+            spottingModifer += 1;
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): move+1 enemyUnit=" + enemyUnit + " mod=" + spottingModifer.ToString());
+         }
+         if( true == mi.IsWoods )
+         {
+            spottingModifer += 1;
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): woods+1 enemyUnit=" + enemyUnit + " mod=" + spottingModifer.ToString());
+         }
+         if (true == mi.IsBuilding)
+         {
+            spottingModifer += 1;
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): build+1 enemyUnit=" + enemyUnit + " mod=" + spottingModifer.ToString());
+         }
+         if (true == mi.IsFortification)
+         {
+            spottingModifer += 1;
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): fort+1 enemyUnit=" + enemyUnit + " mod=" + spottingModifer.ToString());
+         }
+         if (true == mi.IsHullDown)
+         {
+            spottingModifer += 1;
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): hull+1 enemyUnit=" + enemyUnit + " mod=" + spottingModifer.ToString());
+         }
+         if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
+         {
+            spottingModifer += 1;
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): fog+1 enemyUnit=" + enemyUnit + " mod=" + spottingModifer.ToString());
+         }
+         int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
+         if (numSmokeMarkers < 0)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetSpottingModifier(): GetSmokeCount() returned error");
+            return -1000;
+         }
+         spottingModifer += numSmokeMarkers;
+         Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): smoke+" + numSmokeMarkers.ToString() + " enemyUnit=" + enemyUnit + " mod=" + spottingModifer.ToString());
          //----------------------------------------------------
          switch (enemyUnit)
          {
@@ -2530,14 +2556,17 @@ namespace Pattons_Best
             case "JdgPzIV":
             case "JdgPz38t":
                spottingModifer += 1;
+               Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): size+1 enemyUnit=" + enemyUnit + " mod=" + spottingModifer.ToString());
                break;
             case "TANK":
             case "PzVIe":
             case "PzV":
                spottingModifer -= 1;
+               Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): size-1 enemyUnit=" + enemyUnit + " mod=" + spottingModifer.ToString());
                break;
             case "PzVIb":
                spottingModifer -= 2;
+               Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): size-2 enemyUnit=" + enemyUnit + " mod=" + spottingModifer.ToString());
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "GetSpottingModifier(): Reached Default enemyUnit=" + enemyUnit);
@@ -2546,18 +2575,33 @@ namespace Pattons_Best
 
          //----------------------------------------------------
          if ( 'M' == range )
+         {
             spottingModifer -= 1;
-         if ('C' == range)
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): range-1 enemyUnit=" + enemyUnit + " mod=" + spottingModifer.ToString());
+         }
+         else if ('C' == range)
+         {
             spottingModifer -= 2;
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): range-2 enemyUnit=" + enemyUnit + " mod=" + spottingModifer.ToString());
+         }
          //----------------------------------------------------
          if (true == mi.IsFired)
+         {
             spottingModifer -= 2;
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): fired-2 enemyUnit=" + enemyUnit + " mod=" + spottingModifer.ToString());
+         }
          //----------------------------------------------------
          if ( true == mi.IsMoving )
+         {
             spottingModifer -= 3;
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): move-3 enemyUnit=" + enemyUnit + " mod=" + spottingModifer.ToString());
+         }
          //----------------------------------------------------
          if (true == mi.IsSpotted)
+         {
             spottingModifer -= 3;
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): spot-3 enemyUnit=" + enemyUnit + " mod=" + spottingModifer.ToString());
+         }
          return spottingModifer;
       }
       public static string GetSpottingResult(IGameInstance gi, IMapItem mi, ICrewMember cm, char sector, char range, int dieRoll)
@@ -2605,6 +2649,210 @@ namespace Pattons_Best
             return "Spotted";
          }
          return "Unspotted";
+      }
+      public static IMapItem? GetAppearingUnit(IGameInstance gi, IMapItem mi)
+      {
+         IMapItem? appearingMapItem = null;
+         if (true == mi.Name.Contains("ATG"))
+         {
+            foreach (IStack stack in gi.BattleStacks)
+            {
+               foreach (IMapItem mapItem in stack.MapItems)
+               {
+                  if (true == mapItem.Name.Contains("Pak38"))
+                  {
+                     string name = "Pak39" + Utilities.MapItemNum.ToString();
+                     Utilities.MapItemNum++;
+                     appearingMapItem = new MapItem(name, mi.Zoom, "c93Pak38", mi.TerritoryCurrent);
+                  }
+                  else if (true == mapItem.Name.Contains("Pak40"))
+                  {
+                     string name = "Pak40" + Utilities.MapItemNum.ToString();
+                     Utilities.MapItemNum++;
+                     appearingMapItem = new MapItem(name, mi.Zoom, "c94Pak40", mi.TerritoryCurrent);
+                  }
+                  else if (true == mapItem.Name.Contains("Pak43"))
+                  {
+                     string name = "Pak43" + Utilities.MapItemNum.ToString();
+                     Utilities.MapItemNum++;
+                     appearingMapItem = new MapItem(name, mi.Zoom, "c95Pak43", mi.TerritoryCurrent);
+                  }
+               }
+            }
+         }
+         else if (true == mi.Name.Contains("TANK"))
+         {
+            foreach (IStack stack in gi.BattleStacks)
+            {
+               foreach (IMapItem mapItem in stack.MapItems)
+               {
+                  if (true == mapItem.Name.Contains("PzIV"))
+                  {
+                     string name = "PzIV" + Utilities.MapItemNum.ToString();
+                     Utilities.MapItemNum++;
+                     appearingMapItem = new MapItem(name, mi.Zoom, "c79PzIV", mi.TerritoryCurrent);
+                  }
+                  else if (true == mapItem.Name.Contains("PzV"))
+                  {
+                     string name = "PzV" + Utilities.MapItemNum.ToString();
+                     Utilities.MapItemNum++;
+                     appearingMapItem = new MapItem(name, mi.Zoom, "c80PzV", mi.TerritoryCurrent);
+                  }
+               }
+            }
+         }
+         else if (true == mi.Name.Contains("SPG"))
+         {
+            foreach (IStack stack in gi.BattleStacks)
+            {
+               foreach (IMapItem mapItem in stack.MapItems)
+               {
+                  if (true == mapItem.Name.Contains("STuGIIIg"))
+                  {
+                     string name = "STuGIIIg" + Utilities.MapItemNum.ToString();
+                     Utilities.MapItemNum++;
+                     appearingMapItem = new MapItem(name, mi.Zoom, "c85STuGIIIg", mi.TerritoryCurrent);
+                  }
+                  else if (true == mapItem.Name.Contains("MARDERII"))
+                  {
+                     string name = "MARDERII" + Utilities.MapItemNum.ToString();
+                     Utilities.MapItemNum++;
+                     appearingMapItem = new MapItem(name, mi.Zoom, "c83MarderII", mi.TerritoryCurrent);
+                  }
+                  else if (true == mapItem.Name.Contains("MARDERIII"))
+                  {
+                     string name = "MARDERIII" + Utilities.MapItemNum.ToString();
+                     Utilities.MapItemNum++;
+                     appearingMapItem = new MapItem(name, mi.Zoom, "c84MarderIII", mi.TerritoryCurrent);
+                  }
+                  else if (true == mapItem.Name.Contains("JdgPzIV"))
+                  {
+                     string name = "JdgPzIV" + Utilities.MapItemNum.ToString();
+                     Utilities.MapItemNum++;
+                     appearingMapItem = new MapItem(name, mi.Zoom, "c86JgdPzIV", mi.TerritoryCurrent);
+                  }
+                  else if (true == mapItem.Name.Contains("JdgPz38t"))
+                  {
+                     string name = "JdgPz38t" + Utilities.MapItemNum.ToString();
+                     Utilities.MapItemNum++;
+                     appearingMapItem = new MapItem(name, mi.Zoom, "c87JgdPz38t", mi.TerritoryCurrent);
+                  }
+               }
+            }
+         }
+         else
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetAppearingUnit(): reached default mi=" + mi.Name);
+            return null;
+         }
+         return appearingMapItem;
+      }
+      public static IMapItem? GetAppearingUnitNew(IGameInstance gi, IMapItem mi, int dieRoll)
+      {
+         IMapItem? appearingMapItem = null;
+         if( true == mi.Name.Contains("ATG"))
+         {
+            if( dieRoll < 4 )
+            {
+               string name = "Pak39" + Utilities.MapItemNum.ToString();
+               Utilities.MapItemNum++;
+               appearingMapItem = new MapItem(name, mi.Zoom, "c93Pak38", mi.TerritoryCurrent);
+            }
+            else if(dieRoll < 9)
+            {
+               string name = "Pak40" + Utilities.MapItemNum.ToString();
+               Utilities.MapItemNum++;
+               appearingMapItem = new MapItem(name, mi.Zoom, "c94Pak40", mi.TerritoryCurrent);
+            }
+            else 
+            {
+               string name = "Pak43" + Utilities.MapItemNum.ToString();
+               Utilities.MapItemNum++;
+               appearingMapItem = new MapItem(name, mi.Zoom, "c95Pak43", mi.TerritoryCurrent);
+            }
+         }
+         else if (true == mi.Name.Contains("TANK"))
+         {
+            if (dieRoll < 6)
+            {
+               string name = "PzIV" + Utilities.MapItemNum.ToString();
+               Utilities.MapItemNum++;
+               appearingMapItem = new MapItem(name, mi.Zoom, "c79PzIV", mi.TerritoryCurrent);
+            }
+            else if (dieRoll < 10)
+            {
+               string name = "PzV" + Utilities.MapItemNum.ToString();
+               Utilities.MapItemNum++;
+               appearingMapItem = new MapItem(name, mi.Zoom, "c82PzVIb", mi.TerritoryCurrent);
+            }
+            else
+            {
+               int diceRoll = 0;
+               int die1 = Utilities.RandomGenerator.Next(0, 10);
+               int die2 = Utilities.RandomGenerator.Next(0, 10);
+               if (0 == die1 && 0 == die2)
+                  diceRoll = 100;
+               else
+                  diceRoll = die1 + 10 * die2;
+               if (diceRoll < 81)
+               {
+                  string name = "PzV" + Utilities.MapItemNum.ToString();
+                  Utilities.MapItemNum++;
+                  appearingMapItem = new MapItem(name, mi.Zoom, "c80PzV", mi.TerritoryCurrent);
+               }
+               else if (diceRoll < 95)
+               {
+                  string name = "PzVIe" + Utilities.MapItemNum.ToString();
+                  Utilities.MapItemNum++;
+                  appearingMapItem = new MapItem(name, mi.Zoom, "c81PzVIe", mi.TerritoryCurrent);
+               }
+               else
+               {
+                  string name = "PzVIb" + Utilities.MapItemNum.ToString();
+                  Utilities.MapItemNum++;
+                  appearingMapItem = new MapItem(name, mi.Zoom, "c82PzVIb", mi.TerritoryCurrent);
+               }
+            }
+         }
+         else if (true == mi.Name.Contains("SPG"))
+         {
+            if (dieRoll < 4)
+            {
+               string name = "STuGIIIg" + Utilities.MapItemNum.ToString();
+               Utilities.MapItemNum++;
+               appearingMapItem = new MapItem(name, mi.Zoom, "c85STuGIIIg", mi.TerritoryCurrent);
+            }
+            else if (dieRoll < 5)
+            {
+               string name = "MARDERII" + Utilities.MapItemNum.ToString();
+               Utilities.MapItemNum++;
+               appearingMapItem = new MapItem(name, mi.Zoom, "c83MarderII", mi.TerritoryCurrent);
+            }
+            else if (dieRoll < 7)
+            {
+               string name = "MARDERIII" + Utilities.MapItemNum.ToString();
+               Utilities.MapItemNum++;
+               appearingMapItem = new MapItem(name, mi.Zoom, "c84MarderIII", mi.TerritoryCurrent);
+            }
+            else if (dieRoll < 9)
+            {
+               string name = "JdgPzIV" + Utilities.MapItemNum.ToString();
+               Utilities.MapItemNum++;
+               appearingMapItem = new MapItem(name, mi.Zoom, "c86JgdPzIV", mi.TerritoryCurrent);
+            }
+            else
+            {
+               string name = "JdgPz38t" + Utilities.MapItemNum.ToString();
+               Utilities.MapItemNum++;
+               appearingMapItem = new MapItem(name, mi.Zoom, "c87JgdPz38t", mi.TerritoryCurrent);
+            }
+         }
+         else
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetAppearingUnit(): reached default mi=" + mi.Name);
+            return null;
+         }
+         return appearingMapItem;
       }
       //-------------------------------------------
       private void CreateCombatCalender()

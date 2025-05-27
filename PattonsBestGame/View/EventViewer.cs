@@ -1124,6 +1124,17 @@ namespace Pattons_Best
                      myTextBlock.Inlines.Add(new Run("Subtracting one for Rain, Fog, or Falling Snow."));
                }
                break;
+            case "e038":
+               if (5 == gi.CrewActions.Count)
+               {
+                  Image imge038 = new Image { Name = "Continue38", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                  myTextBlock.Inlines.Add(new Run("                                          "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge038));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
             case "e039":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
@@ -1913,6 +1924,10 @@ namespace Pattons_Best
                            return;
                         case "c111Smoke1": // smoke depletion
                            action = GameAction.BattleRoundSequenceSmokeDepletionEnd;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Continue38":
+                           action = GameAction.BattleRoundSequenceAmmoOrders;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue39":

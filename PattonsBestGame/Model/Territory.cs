@@ -273,7 +273,7 @@ namespace Pattons_Best
                      }
                      break;
                   default:
-                     Logger.Log(LogEnum.LE_ERROR, "GetSpottedTerritories(): 1-reached default for RotationBase=" + gi.Sherman.RotationBase.ToString());
+                     Logger.Log(LogEnum.LE_ERROR, "GetSpottedTerritories(): 1-reached default for RotationHull=" + gi.Sherman.RotationHull.ToString());
                      return null;
                }
                break;
@@ -305,7 +305,7 @@ namespace Pattons_Best
             case "Assistant":
                if (true == cm.IsButtonedUp) // Tank Front Only 
                {
-                  switch (gi.Sherman.RotationBase)
+                  switch (gi.Sherman.RotationHull)
                   {
                      case 0:
                         spottedTerritories.Add("B6C");
@@ -356,13 +356,13 @@ namespace Pattons_Best
                         }
                         break;
                      default:
-                        Logger.Log(LogEnum.LE_ERROR, "GetSpottedTerritories(): 2-reached default for RotationBase=" + gi.Sherman.RotationBase.ToString());
+                        Logger.Log(LogEnum.LE_ERROR, "GetSpottedTerritories(): 2-reached default for RotationHull=" + gi.Sherman.RotationHull.ToString());
                         return null;
                   }
                }
                else // all sectors except rear
                {
-                  switch (gi.Sherman.RotationBase)
+                  switch (gi.Sherman.RotationHull)
                   {
                      case 0:
                         if (false == isCloseRangeOnly)
@@ -485,7 +485,7 @@ namespace Pattons_Best
                         spottedTerritories.Add("B9C");
                         break;
                      default:
-                        Logger.Log(LogEnum.LE_ERROR, "GetSpottedTerritories(): 3-reached default for RotationBase=" + gi.Sherman.RotationBase.ToString());
+                        Logger.Log(LogEnum.LE_ERROR, "GetSpottedTerritories(): 3-reached default for RotationHull=" + gi.Sherman.RotationHull.ToString());
                         return null;
                   }
                }
@@ -511,7 +511,7 @@ namespace Pattons_Best
                {
                   if ((true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("SPG")))
                   {
-                     if ( (EnumSpottingResult.IDENTIFIED != mi.Spotting) && (EnumSpottingResult.IDENTIFIED_HIDDEN != mi.Spotting) && (EnumSpottingResult.SPOTTED_HIDDEN != mi.Spotting) && (EnumSpottingResult.HIDDEN != mi.Spotting))
+                     if ( (EnumSpottingResult.IDENTIFIED != mi.Spotting) && (EnumSpottingResult.HIDDEN != mi.Spotting))
                         returnedTerritories.Add(tName);
                   }
                }

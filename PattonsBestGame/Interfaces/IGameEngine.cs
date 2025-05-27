@@ -26,9 +26,7 @@ namespace Pattons_Best
       HIDDEN,
       UNSPOTTED,
       SPOTTED,
-      SPOTTED_HIDDEN,
-      IDENTIFIED,
-      IDENTIFIED_HIDDEN
+      IDENTIFIED
    };
    public enum EnumDecoration
    {
@@ -237,7 +235,8 @@ namespace Pattons_Best
       BattleRoundSequenceSmokeDepletionEnd,
       BattleRoundSequenceSpotting,
       BattleRoundSequenceSpottingEnd,
-      BattleRoundSequenceOrders,
+      BattleRoundSequenceCrewOrders,
+      BattleRoundSequenceAmmoOrders,
 
       EveningDebriefingStart,
       Error

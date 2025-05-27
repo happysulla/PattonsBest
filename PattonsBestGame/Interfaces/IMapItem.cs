@@ -19,9 +19,9 @@ namespace Pattons_Best
       bool IsMoved { get; set; }
       int Count { get; set; }
       IMapPoint Location { get; set; }       // top left corner of MapItem
-      double RotationHull { get; set; }      
+      double RotationOffset { get; set; }      
       double RotationTurret { get; set; }    
-      double RotationBase { get; set; }      // rotation to point at location
+      double RotationHull { get; set; }      // rotation to point at location
       //----------------------------------------
       ITerritory TerritoryCurrent { get; set; }
       ITerritory TerritoryStarting { get; set; }
@@ -40,11 +40,10 @@ namespace Pattons_Best
       //----------------------------------------
       EnumSpottingResult Spotting { get; set; }
       //----------------------------------------
+      void Clone(IMapItem mi);
       bool IsEnemyUnit();
       string GetEnemyUnit();
       void SetBloodSpots(int percent = 40);
-      void Flip();
-      void Unflip();
    }
    //==========================================
    public interface IMapItems : System.Collections.IEnumerable

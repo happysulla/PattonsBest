@@ -23,13 +23,16 @@ namespace Pattons_Best
       public delegate bool EndSpottingMgrCallback();
       private const int MAX_GRID_LEN = 5;
       private const int STARTING_ASSIGNED_ROW = 6;
-      private const int SPOTTED = 100;
+      private const int NOT_IDENTIFIED = -1;
+      private const int ALREADY_IDENTIFIED = 100;
       public enum E0472Enum
       {
          SELECT_CREWMAN,
          SELECT_CREWMAN_SHOW,
          ROLL_SPOTTING,
          ROLL_SPOTTING_SHOW,
+         ROLL_APPEARANCE,
+         ROLL_APPEARANCE_SHOW,
          END
       };
       public bool CtorError { get; } = false;
@@ -37,6 +40,7 @@ namespace Pattons_Best
       private E0472Enum myState = E0472Enum.ROLL_SPOTTING;
       private int myMaxRowCount = 5;
       private int myRollResultRowNum = 0;
+      private int myRollResultColNum = 0;
       private bool myIsRollInProgress = false;
       //---------------------------------------------------
       private class GridRow
@@ -46,8 +50,10 @@ namespace Pattons_Best
          public char myRange = 'E';
          public string mySectorRangeDisplay = "ERROR";
          public int myModifier = 0;
-         public int myDieRoll = Utilities.NO_RESULT;
+         public int myDieRollSpotting = Utilities.NO_RESULT;
          public string myResult = "UNINITIALIZED";
+         public IMapItem? myMapItemAppearing = null;
+         public int myDieRollAppearance = Utilities.NO_RESULT;
          public GridRow(IMapItem enemyUnit)
          {
             myMapItem = enemyUnit;
@@ -65,9 +71,8 @@ namespace Pattons_Best
       private IMapItems myAssignables = new MapItems();    // listing of new crewmen 
       private ICrewMember? mySelectedCrewman = null;
       //---------------------------------------------------
-      private readonly DoubleCollection myDashArray = new DoubleCollection();
-      private readonly SolidColorBrush mySolidColorBrushBlack = new SolidColorBrush() { Color = Colors.Black };
       private readonly FontFamily myFontFam = new FontFamily("Tahoma");
+      private readonly FontFamily myFontFam1 = new FontFamily("Courier New");
       //-------------------------------------------------------------------------------------
       public EventViewerSpottingMgr(IGameEngine? ge, IGameInstance? gi, Canvas? c, ScrollViewer? sv, RuleDialogViewer? rdv, IDieRoller dr)
       {
@@ -121,8 +126,6 @@ namespace Pattons_Best
          }
          myDieRoller = dr;
          //--------------------------------------------------
-         myDashArray.Add(4);  // used for dotted lines
-         myDashArray.Add(2);  // used for dotted lines
          myGrid.MouseDown += Grid_MouseDown;
       }
       public bool PerformSpotting(EndSpottingMgrCallback callback)
@@ -157,8 +160,10 @@ namespace Pattons_Best
          myState = E0472Enum.SELECT_CREWMAN;
          myIsRollInProgress = false;
          myRollResultRowNum = 0;
+         myRollResultColNum = 0;
          mySelectedCrewman = null;
          myMaxRowCount = 0;
+         myAssignables.Clear();
          //--------------------------------------------------
          string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Gunner" };
          foreach (string crewmember in crewmembers)
@@ -264,6 +269,13 @@ namespace Pattons_Best
             case E0472Enum.ROLL_SPOTTING_SHOW:
                myTextBlockInstructions.Inlines.Add(new Run("Click image to continue."));
                break;
+            case E0472Enum.ROLL_APPEARANCE:
+               myTextBlockInstructions.Inlines.Add(new Run("Roll on "));
+               Button b1 = new Button() { Content = "Appearance", FontFamily = myFontFam1, FontSize = 8 };
+               b1.Click += ButtonRule_Click;
+               myTextBlockInstructions.Inlines.Add(new InlineUIContainer(b1));
+               myTextBlockInstructions.Inlines.Add(new Run(" Table for appearance of enemy units."));
+               break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "UpdateUserInstructions(): reached default state=" + myState.ToString());
                return false;
@@ -316,6 +328,14 @@ namespace Pattons_Best
                break;
             case E0472Enum.ROLL_SPOTTING_SHOW:
                Image img2 = new Image { Name = "ContinueNext", Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+               for ( int i=0; i<myMaxRowCount; ++i )
+               {
+                  if (Utilities.NO_RESULT == myGridRows[i].myDieRollSpotting)
+                  {
+                     img2 = new Image { Name = "Spotting", Source = MapItem.theMapImages.GetBitmapImage("Spotting"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                     break;
+                  }
+               }
                myStackPanelAssignable.Children.Add(img2);
                Rectangle r4 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                myStackPanelAssignable.Children.Add(r4);
@@ -328,6 +348,10 @@ namespace Pattons_Best
                myStackPanelAssignable.Children.Add(b2);
                Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = " rating = " + mySelectedCrewman.Rating.ToString() };
                myStackPanelAssignable.Children.Add(label2);
+               break;
+            case E0472Enum.ROLL_APPEARANCE:
+               Rectangle r41 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+               myStackPanelAssignable.Children.Add(r41);
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): reached default s=" + myState.ToString());
@@ -370,17 +394,50 @@ namespace Pattons_Best
             Grid.SetRow(label2, rowNum);
             Grid.SetColumn(label2, 2);
             //----------------------------------
-            if (Utilities.NO_RESULT < myGridRows[i].myDieRoll)
+            if (Utilities.NO_RESULT < myGridRows[i].myDieRollSpotting)
             {
-               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRoll.ToString() };
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRollSpotting.ToString() };
                myGrid.Children.Add(label3);
                Grid.SetRow(label3, rowNum);
                Grid.SetColumn(label3, 3);
                //----------------------------------
-               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myResult };
+               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myResult };
                myGrid.Children.Add(label4);
                Grid.SetRow(label4, rowNum);
                Grid.SetColumn(label4, 4);
+               //----------------------------------
+               if (NOT_IDENTIFIED == myGridRows[i].myDieRollAppearance)
+               {
+                  Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
+                  myGrid.Children.Add(label5);
+                  Grid.SetRow(label5, rowNum);
+                  Grid.SetColumn(label5, 5);
+               }
+               else if (Utilities.NO_RESULT < myGridRows[i].myDieRollAppearance)
+               {
+                  IMapItem? enemyUnitAppearing = myGridRows[i].myMapItemAppearing;
+                  if ( null == enemyUnitAppearing)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): enemyUnitAppearing=null for i=" + i.ToString());
+                     return false;
+                  }
+                  Button b1 = CreateButton(enemyUnitAppearing);
+                  myGrid.Children.Add(b1);
+                  Grid.SetRow(b1, rowNum);
+                  Grid.SetColumn(b1, 5);
+               }
+               else
+               {
+                  BitmapImage bmi = new BitmapImage();
+                  bmi.BeginInit();
+                  bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollWhite.gif", UriKind.Absolute);
+                  bmi.EndInit();
+                  System.Windows.Controls.Image img = new System.Windows.Controls.Image { Name = "DieRoll", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+                  ImageBehavior.SetAnimatedSource(img, bmi);
+                  myGrid.Children.Add(img);
+                  Grid.SetRow(img, rowNum);
+                  Grid.SetColumn(img, 5);
+               }
             }
             else
             {
@@ -481,24 +538,75 @@ namespace Pattons_Best
             return;
          }
          IMapItem mi = myGridRows[i].myMapItem;
-         myGridRows[i].myDieRoll = dieRoll + myGridRows[i].myModifier;
-         myGridRows[i].myResult = TableMgr.GetSpottingResult(myGameInstance, mi, mySelectedCrewman, myGridRows[i].mySector, myGridRows[i].myRange, dieRoll);
-         if ("ERROR" == myGridRows[i].myResult)
+         if ( 3 == myRollResultColNum)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowCombatResults(): GetSpottingResult() returned error for i=" + i.ToString());
-            return;
+            myGridRows[i].myDieRollSpotting = dieRoll + myGridRows[i].myModifier;
+            myGridRows[i].myResult = TableMgr.GetSpottingResult(myGameInstance, mi, mySelectedCrewman, myGridRows[i].mySector, myGridRows[i].myRange, dieRoll);
+            if ("ERROR" == myGridRows[i].myResult)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ShowCombatResults(): GetSpottingResult() returned error for i=" + i.ToString());
+               return;
+            }
+            if ("Identified" != myGridRows[i].myResult)
+            {
+               myGridRows[i].myDieRollAppearance = NOT_IDENTIFIED;
+            }
+            else
+            {
+               IMapItem? enemyUnitAppearing = TableMgr.GetAppearingUnit(myGameInstance, mi); // check if there is an enemy type arleady set for this unidentified unit
+               if (null != enemyUnitAppearing)
+               {
+                  myGridRows[i].myDieRollAppearance = ALREADY_IDENTIFIED; // no need to roll for type b/c already established
+                  myGridRows[i].myMapItemAppearing = enemyUnitAppearing;
+                  myGameInstance.BattleStacks.Remove(mi);
+                  Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "ShowCombatResults(): removing mi=" + mi.Name + " from BattleStacks=" + myGameInstance.BattleStacks.ToString());
+                  enemyUnitAppearing.Clone(mi);
+                  myGameInstance.BattleStacks.Add(enemyUnitAppearing);
+                  Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "ShowCombatResults(): adding mi=" + enemyUnitAppearing.Name + " from BattleStacks=" + myGameInstance.BattleStacks.ToString());
+               }
+            }
+            //------------------------------------
+            myState = E0472Enum.ROLL_SPOTTING_SHOW;
+            for (int j = 0; j < myMaxRowCount; ++j)
+            {
+               if (Utilities.NO_RESULT == myGridRows[j].myDieRollSpotting)
+                  myState = E0472Enum.ROLL_SPOTTING;
+            }
+         }
+         else
+         {
+            myGridRows[i].myDieRollAppearance = dieRoll;
+            IMapItem? enemyUnitAppearing = TableMgr.GetAppearingUnitNew(myGameInstance, mi, dieRoll);
+            if( null == enemyUnitAppearing)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ShowCombatResults(): GetAppearingUnit() returned null for i=" + i.ToString());
+               return;
+            }
+            myGridRows[i].myMapItemAppearing = enemyUnitAppearing;
+            myGameInstance.BattleStacks.Remove(mi);
+            Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "ShowCombatResults(): removing mi=" + mi.Name + " from BattleStacks=" + myGameInstance.BattleStacks.ToString());
+            enemyUnitAppearing.Clone(mi);
+            myGameInstance.BattleStacks.Add(enemyUnitAppearing);
+            Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "ShowCombatResults(): adding mi=" + enemyUnitAppearing.Name + " from BattleStacks=" + myGameInstance.BattleStacks.ToString());
          }
          //------------------------------------
-         myState = E0472Enum.ROLL_SPOTTING_SHOW;
-         for (int j = 0; j < myMaxRowCount; ++j)
-         {
-            if (Utilities.NO_RESULT == myGridRows[j].myDieRoll)
-               myState = E0472Enum.ROLL_SPOTTING;
-         }
          if (false == UpdateGrid())
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateGrid() return false");
          myIsRollInProgress = false;
-         Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "ShowDieResults(): -----------------myState=" + myState.ToString());
+         //------------------------------------
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameEngine=null");
+            return;
+         }
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance=null");
+            return;
+         }
+         GameAction outAction = GameAction.UpdateBattleBoard;
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+         Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "EventViewerSpottingMgr.ShowDieResults(): -----------------myState=" + myState.ToString());
       }
       //---------------------Controller Function--------------------------------------------
       private void ButtonRule_Click(object sender, RoutedEventArgs e)
@@ -512,6 +620,84 @@ namespace Pattons_Best
          string key = (string)b.Content;
          if (false == myRulesMgr.ShowRule(key))
             Logger.Log(LogEnum.LE_ERROR, "ButtonRule_Click(): myRulesMgr.ShowRule() returned false key=" + key);
+      }
+      private void Button_Click(object sender, RoutedEventArgs e)
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Button_Click(): myGameInstance=null");
+            return;
+         }
+         Button b = (Button)sender;
+         if (true == String.IsNullOrEmpty(b.Name))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Button_Click(): b.Name=null");
+            return;
+         }
+         if (null != mySelectedCrewman)
+            return;
+         mySelectedCrewman = myGameInstance.GetCrewMember(b.Name);
+         if (null == mySelectedCrewman)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Button_Click(): myGameInstance.GetCrewMember() returned null for cm=" + b.Name);
+            return;
+         }
+         myAssignables.Remove(b.Name);
+         //---------------------------------------
+         myState = E0472Enum.SELECT_CREWMAN_SHOW;
+         List<string>? spottedTerritories = Territory.GetSpottedTerritories(myGameInstance, mySelectedCrewman);
+         if (null == spottedTerritories)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Button_Click(): GetSpottedTerritories() returned null for cm=" + b.Name);
+            return;
+         }
+         StringBuilder sb = new StringBuilder("Button_Click(): spottedTerritories=[");
+         int i = 0;
+         foreach (string tName in spottedTerritories)
+         {
+            sb.Append(tName);
+            int count = tName.Length;
+            if (3 != count)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Button_Click(): length not 3 for tName=" + tName);
+               return;
+            }
+            IStack? stack = myGameInstance.BattleStacks.Find(tName);
+            if (null != stack)
+            {
+               foreach (IMapItem mi in stack.MapItems)
+               {
+                  sb.Append("=(");
+                  sb.Append(mi.Name);
+                  sb.Append(")");
+                  if ((true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("SPG")))
+                  {
+                     sb.Append("a");
+                     myGridRows[i] = new GridRow(mi);
+                     myGridRows[i].myRange = tName[count - 1];
+                     myGridRows[i].mySector = tName[count - 2];
+                     myGridRows[i].mySectorRangeDisplay = GetSectorRangeDisplay(i);
+                     myGridRows[i].myModifier = TableMgr.GetSpottingModifier(myGameInstance, mi, mySelectedCrewman, myGridRows[i].mySector, myGridRows[i].myRange);
+                     if (myGridRows[i].myModifier < -100)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "Button_Click(): invalid mod=" + myGridRows[i].myModifier);
+                        return;
+                     }
+                     i++;
+                  }
+               }
+            }
+            if (i != (spottedTerritories.Count - 1))
+               sb.Append(',');
+         }
+         myMaxRowCount = i;
+         Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Button_Click():myState=" + myState.ToString() + " myMaxRowCount=" + myMaxRowCount.ToString() + " " + sb.ToString() + "]");
+         //---------------------------------------
+         if (false == UpdateGrid())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Button_Click(): UpdateGrid() return false");
+            return;
+         }
       }
       private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
       {
@@ -555,7 +741,9 @@ namespace Pattons_Best
                      {
                         if ("Continue" == img.Name)
                            myState = E0472Enum.END;
-                        if ("ContinueNext" == img.Name)
+                        else if ("Spotting" == img.Name)
+                           myState = E0472Enum.ROLL_APPEARANCE;
+                        else if ("ContinueNext" == img.Name)
                         {
                            mySelectedCrewman = null;
                            IMapItems removals = new MapItems();
@@ -577,17 +765,6 @@ namespace Pattons_Best
                            else
                               myState = E0472Enum.END;
                         }
-                        if ("DieRoll" == img.Name)
-                        {
-                           if (false == myIsRollInProgress)
-                           {
-                              myIsRollInProgress = true;
-                              RollEndCallback callback = ShowDieResults;
-                              myDieRoller.RollMovingDie(myCanvas, callback);
-                              img.Visibility = Visibility.Hidden;
-                           }
-                           return;
-                        }
                         if (false == UpdateGrid())
                            Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): UpdateGrid() return false");
                         return;
@@ -601,8 +778,9 @@ namespace Pattons_Best
                {
                   if (false == myIsRollInProgress)
                   {
-                     myRollResultRowNum = Grid.GetRow(img1);
                      myIsRollInProgress = true;
+                     myRollResultRowNum = Grid.GetRow(img1);
+                     myRollResultColNum = Grid.GetColumn(img1);
                      RollEndCallback callback = ShowDieResults;
                      myDieRoller.RollMovingDie(myCanvas, callback);
                      img1.Visibility = Visibility.Hidden;
@@ -612,83 +790,6 @@ namespace Pattons_Best
             }
          }
       }
-      private void Button_Click(object sender, RoutedEventArgs e)
-      {
-         if (null == myGameInstance)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Button_Click(): myGameInstance=null");
-            return;
-         }
-         Button b = (Button)sender;
-         if (true == String.IsNullOrEmpty(b.Name))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Button_Click(): b.Name=null");
-            return;
-         }
-         if (null != mySelectedCrewman)
-            return;
-         mySelectedCrewman = myGameInstance.GetCrewMember(b.Name);
-         if ( null == mySelectedCrewman )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Button_Click(): myGameInstance.GetCrewMember() returned null for cm=" + b.Name);
-            return;
-         }
-         myAssignables.Remove(b.Name);
-         //---------------------------------------
-         myState = E0472Enum.SELECT_CREWMAN_SHOW;
-         List<string>? spottedTerritories = Territory.GetSpottedTerritories(myGameInstance, mySelectedCrewman);
-         if( null == spottedTerritories )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Button_Click(): GetSpottedTerritories() returned null for cm=" + b.Name);
-            return;
-         }
-         StringBuilder sb = new StringBuilder("Button_Click(): spottedTerritories=[");
-         int i = 0;
-         foreach ( string tName in spottedTerritories )
-         {
-            sb.Append(tName);
-            int count = tName.Length;
-            if (3 != count)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Button_Click(): length not 3 for tName=" + tName);
-               return;
-            }
-            IStack? stack = myGameInstance.BattleStacks.Find(tName);
-            if( null != stack )
-            {
-               foreach (IMapItem mi in stack.MapItems )
-               {
-                  sb.Append("=(");
-                  sb.Append(mi.Name);
-                  sb.Append(")");
-                  if( (true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("SPG")) )
-                  {
-                     sb.Append("a");
-                     myGridRows[i] = new GridRow(mi);
-                     myGridRows[i].myRange = tName[count-1];
-                     myGridRows[i].mySector = tName[count-2];
-                     myGridRows[i].mySectorRangeDisplay = GetSectorRangeDisplay(i);
-                     myGridRows[i].myModifier = TableMgr.GetSpottingModifier(myGameInstance, mi, mySelectedCrewman, myGridRows[i].mySector, myGridRows[i].myRange);
-                     if( myGridRows[i].myModifier < -100 )
-                     {
-                        Logger.Log(LogEnum.LE_ERROR, "Button_Click(): invalid mod=" + myGridRows[i].myModifier);
-                        return;
-                     }
-                     i++;
-                  }
-               }
-            }
-            if( i != (spottedTerritories.Count-1 ) )
-             sb.Append(',');
-         }
-         myMaxRowCount = i;
-         Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Button_Click():myState=" + myState.ToString() + " myMaxRowCount=" + myMaxRowCount.ToString() + " " + sb.ToString() + "]");
-         //---------------------------------------
-         if (false == UpdateGrid())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Button_Click(): UpdateGrid() return false");
-            return;
-         }
-      }
+
    }
 }

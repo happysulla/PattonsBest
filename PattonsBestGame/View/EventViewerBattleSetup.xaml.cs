@@ -809,8 +809,8 @@ namespace Pattons_Best
          }
          double xDiff = (mi.Location.X + mi.Zoom*Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.X;
          double yDiff = (mi.Location.Y + mi.Zoom * Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.Y;
-         mi.RotationBase = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;
-         Logger.Log(LogEnum.LE_SHOW_ROTATION, "CreateMapItemRotation(): " + caller + "(): xDiff=" + xDiff.ToString("F2") + " yDiff=" + yDiff.ToString("F2") + " r=" + mi.RotationBase.ToString("F2") + " t=" + mi.TerritoryCurrent.Name + " X=" + mi.Location.X + " Y=" + mi.Location.Y);
+         mi.RotationHull = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;
+         Logger.Log(LogEnum.LE_SHOW_ROTATION, "CreateMapItemRotation(): " + caller + "(): xDiff=" + xDiff.ToString("F2") + " yDiff=" + yDiff.ToString("F2") + " r=" + mi.RotationHull.ToString("F2") + " t=" + mi.TerritoryCurrent.Name + " X=" + mi.Location.X + " Y=" + mi.Location.Y);
          return true;
       }
       private Button CreateButton(IMapItem mi)
@@ -1166,14 +1166,14 @@ namespace Pattons_Best
          //----------------------------
          if ("Rear" == myGridRows[i].myFacing)
          {
-            mi.RotationHull = 150 + Utilities.RandomGenerator.Next(0, 60);
+            mi.RotationOffset = 150 + Utilities.RandomGenerator.Next(0, 60);
          }
          else if ("Side" == myGridRows[i].myFacing)
          {
             if (0 == Utilities.RandomGenerator.Next(0, 2))
-               mi.RotationHull = 35 + Utilities.RandomGenerator.Next(0, 115);
+               mi.RotationOffset = 35 + Utilities.RandomGenerator.Next(0, 115);
             else
-               mi.RotationHull = -35 - Utilities.RandomGenerator.Next(0, 115);
+               mi.RotationOffset = -35 - Utilities.RandomGenerator.Next(0, 115);
          }
          return true;
       }

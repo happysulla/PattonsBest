@@ -27,6 +27,7 @@ namespace Pattons_Best
       LE_SHOW_ROTATION,
       LE_SHOW_MAPITEM_TANK,
       LE_SHOW_BATTLE_PHASE,
+      LE_SHOW_SPOT_MOD,
       //-------------
       LE_VIEW_ADV_FIRE_RESOLVE,
       LE_VIEW_ART_FIRE_RESOLVE,
@@ -98,7 +99,8 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_RANDOM_PT);
          // SetOn(LogEnum.LE_SHOW_ROTATION);
          //SetOn(LogEnum.LE_SHOW_MAPITEM_TANK);
-         SetOn(LogEnum.LE_SHOW_BATTLE_PHASE);
+         //SetOn(LogEnum.LE_SHOW_BATTLE_PHASE);
+         SetOn(LogEnum.LE_SHOW_SPOT_MOD);
          //-------------------------------
          //SetOn(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE);
          //SetOn(LogEnum.LE_VIEW_ART_FIRE_RESOLVE);

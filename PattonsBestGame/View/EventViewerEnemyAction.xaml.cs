@@ -1593,22 +1593,22 @@ namespace Pattons_Best
          }
          double xDiff = (mi.Location.X + mi.Zoom * Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.X; // first point the vehicle at the Sherman
          double yDiff = (mi.Location.Y + mi.Zoom * Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.Y;
-         mi.RotationBase = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;
-         mi.RotationHull = 0.0;
+         mi.RotationHull = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;
+         mi.RotationOffset = 0.0;
          //----------------------------
          if ("Front" == myGridRows[i].myFacing)
             return true;
          //----------------------------
          if ("Rear" == myGridRows[i].myFacing)
          {
-            mi.RotationHull = 150 + Utilities.RandomGenerator.Next(0, 60);
+            mi.RotationOffset = 150 + Utilities.RandomGenerator.Next(0, 60);
          }
          else if ("Side" == myGridRows[i].myFacing)
          {
             if (0 == Utilities.RandomGenerator.Next(0, 2))
-               mi.RotationHull = 35 + Utilities.RandomGenerator.Next(0, 115);
+               mi.RotationOffset = 35 + Utilities.RandomGenerator.Next(0, 115);
             else
-               mi.RotationHull = -35 - Utilities.RandomGenerator.Next(0, 115);
+               mi.RotationOffset = -35 - Utilities.RandomGenerator.Next(0, 115);
          }
          return true;
       }
