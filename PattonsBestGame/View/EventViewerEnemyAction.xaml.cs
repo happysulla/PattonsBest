@@ -28,7 +28,6 @@ namespace Pattons_Best
       private const int NO_FIRE = 101;
       private const int NO_FACING = 102;
       private const int KEEP_TERRAIN = 103;
-      private const int NO_COLLATERAL = 104;
       private const int NO_FIRE_YOUR_TANK = 105;
       private const int NO_FIRE_THROWN_TRACK = 106;
       private const int NO_FIRE_MISSED_TURRET = 107;

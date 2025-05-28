@@ -341,6 +341,14 @@ namespace Pattons_Best
                else if (false == crewRatingImprove.ImproveRatings(ShowRatingImproveResults))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ImproveRatings() returned false");
                break;
+            case GameAction.BattleShermanKilled:
+            case GameAction.BattleRoundSequenceShermanKilled:
+               EventViewerTankDestroyed tankDestroyed = new EventViewerTankDestroyed(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
+               if (true == tankDestroyed.CtorError)
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): tankDestroyed.CtorError=true");
+               else if (false == tankDestroyed.ResolveTankDestroyed(ShowTankDestroyedResults))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ResolveTankDestroyed() returned false");
+               break;
             case GameAction.UpdateEventViewerDisplay:
                gi.IsGridActive = false;
                if (false == OpenEvent(gi, gi.EventDisplayed))
@@ -1610,14 +1618,19 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowAmbushResults(): myGameEngine=null");
             return false;
          }
-         GameAction outAction = GameAction.BattleEmpty;
+         GameAction outAction = GameAction.Error;
          //------------------------------------------
          if ( 0 < myGameInstance.NumCollateralDamage )
          {
             outAction = GameAction.BattleCollateralDamageCheck;
          }
+         else if (null != myGameInstance.Death)
+         {
+            outAction = GameAction.BattleShermanKilled;
+         }
          else
          {
+            outAction = GameAction.BattleEmpty;
             foreach (IStack stack in myGameInstance.BattleStacks)
             {
                foreach (IMapItem mi in stack.MapItems)
@@ -1716,6 +1729,28 @@ namespace Pattons_Best
          else
             outAction = GameAction.MorningBriefingAssignCrewRatingEnd;
          StringBuilder sb11 = new StringBuilder("     ######ShowRatingImproveResults() :");
+         sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
+         sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
+         sb11.Append(" a="); sb11.Append(outAction.ToString());
+         Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+         return true;
+      }
+      public bool ShowTankDestroyedResults()
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowTankDestroyedResults(): myGameInstance=null");
+            return false;
+         }
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowTankDestroyedResults(): myGameEngine=null");
+            return false;
+         }
+         GameAction outAction = GameAction.Error;
+         outAction = GameAction.EveningDebriefingStart;
+         StringBuilder sb11 = new StringBuilder("     ######ShowTankDestroyedResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
          sb11.Append(" a="); sb11.Append(outAction.ToString());

@@ -14,6 +14,7 @@ namespace Pattons_Best
       public string myCause = "";
       public bool myIsAmbush = false;
       public bool myIsExplosion = false;
+      public bool myIsBailout = false;
       public bool myIsBrewUp = false;
       public ShermanDeath(IGameInstance gi, IMapItem eu, string loc, string cause)
       {

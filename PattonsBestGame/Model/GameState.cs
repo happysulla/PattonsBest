@@ -2331,6 +2331,8 @@ namespace Pattons_Best
                      }
                   }
                   break;
+               case GameAction.BattleShermanKilled:
+                  break;
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;
                   break;

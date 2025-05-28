@@ -230,6 +230,7 @@ namespace Pattons_Best
       BattleMinefieldAttackRoll,
       BattleEmpty,
       BattleEmptyResolve,
+      BattleShermanKilled,
 
       BattleRoundSequenceStart,
       BattleRoundSequenceSmokeDepletionEnd,
@@ -237,6 +238,7 @@ namespace Pattons_Best
       BattleRoundSequenceSpottingEnd,
       BattleRoundSequenceCrewOrders,
       BattleRoundSequenceAmmoOrders,
+      BattleRoundSequenceShermanKilled,
 
       EveningDebriefingStart,
       Error

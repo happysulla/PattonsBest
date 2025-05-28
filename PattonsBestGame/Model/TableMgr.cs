@@ -2339,7 +2339,7 @@ namespace Pattons_Best
          if (true == gi.IsHarrassingFire)
             modifier -= 20;
          //----------------------------------
-         if( ("FireSubMg" == cm.Action) || ("FireAaMg" == cm.Action) )
+         if( (true == cm.Action.Contains("FireSubMg")) || (true == cm.Action.Contains("FireAaMg")) )
             modifier += 5;
          return modifier;
       }
