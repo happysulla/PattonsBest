@@ -13,7 +13,7 @@
          <ColumnDefinition Width="*"/>
          <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
       <Grid.RowDefinitions>
          <RowDefinition Height="Auto"></RowDefinition>
@@ -28,9 +28,8 @@
          <RowDefinition Height="Auto"></RowDefinition>
               </Grid.RowDefinitions>
       <StackPanel Grid.Row="0" Grid.ColumnSpan="6" Orientation="Horizontal">
-         <TextBlock Name="myTextBlockHeader" Text="r4.75 Enemy Action" FontWeight="Bold" FontFamily='Georgia' FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>
-         <Button Name="myButtonR475" Content='r4.75' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" />
-         <Button Name="myButtonR465" Content='r4.65' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" Visibility="Hidden"/>
+         <TextBlock Name="myTextBlockHeader" Text="r4.8 When Your Tank Is Hit" FontWeight="Bold" FontFamily='Georgia' FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+         <Button Name="myButtonR475" Content='r4.81.4' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" />
       </StackPanel>
       <Rectangle Grid.Row="1" Grid.ColumnSpan="6" Margin="5" Height="1" Fill="Black"/>
       <TextBlock Grid.Row="2" Grid.ColumnSpan="6" Name="myTextBlockInstructions" FontFamily='Georgia' FontSize="16" VerticalAlignment="Bottom"  HorizontalAlignment="Left" Margin="2,0,0,5">
@@ -42,10 +41,10 @@
       <Rectangle Grid.Row="4" Grid.ColumnSpan="6" Margin="5" Height="1" Fill="Black"/>
       <!--Table Header Row-->
       <TextBlock Grid.Row="5" Grid.Column="0" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock0">Enemy Unit</TextBlock>
-      <TextBlock Grid.Row="5" Grid.Column="1" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock1">Sector/Range</TextBlock>
-      <TextBlock Grid.Row="5" Grid.Column="2" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock2">Modifier</TextBlock>
-      <TextBlock Grid.Row="5" Grid.Column="3" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock3">Roll</TextBlock>
-      <TextBlock Grid.Row="5" Grid.Column="4" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock4">Modifer + Roll</TextBlock>
-      <TextBlock Grid.Row="5" Grid.Column="5" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock5">Enemy Action</TextBlock>
+      <TextBlock Grid.Row="5" Grid.Column="1" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock1">Explostion Modifier</TextBlock>
+      <TextBlock Grid.Row="5" Grid.Column="2" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock2">Roll</TextBlock>
+      <TextBlock Grid.Row="5" Grid.Column="3" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock3">Roll + Modifer</TextBlock>
+      <TextBlock Grid.Row="5" Grid.Column="4" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock4">Result</TextBlock>
+      <TextBlock Grid.Row="5" Grid.Column="5" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock5" Visibility="Hidden"> </TextBlock>
    </Grid>
 </UserControl>

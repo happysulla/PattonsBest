@@ -221,7 +221,7 @@ namespace Pattons_Best
             {
                gi.Sherman.IsHullDown = true;
                gi.Sherman.IsMoving = false;
-               gi.IsLeadTank = false;
+               gi.IsLeadTank = false; // SetDeployment()
                gi.Sherman.IsHullDown = true;
             }
             else if (dieRoll < 37)
@@ -231,7 +231,7 @@ namespace Pattons_Best
                if (31 < dieRoll && dieRoll < 37)
                   gi.IsLeadTank = true;
                else
-                  gi.IsLeadTank = false;
+                  gi.IsLeadTank = false; // SetDeployment()
             }
             else if (dieRoll < 101)
             {
@@ -240,7 +240,7 @@ namespace Pattons_Best
                if (63 < dieRoll)
                   gi.IsLeadTank = true;
                else
-                  gi.IsLeadTank = false;
+                  gi.IsLeadTank = false; // SetDeployment()
             }
             else
             {
@@ -254,7 +254,7 @@ namespace Pattons_Best
             {
                gi.Sherman.IsHullDown = true;
                gi.Sherman.IsMoving = false;
-               gi.IsLeadTank = false;
+               gi.IsLeadTank = false; // SetDeployment()
             }
             else if (dieRoll < 58)
             {
@@ -263,7 +263,7 @@ namespace Pattons_Best
                if (57 == dieRoll)
                   gi.IsLeadTank = true;
                else
-                  gi.IsLeadTank = false;
+                  gi.IsLeadTank = false; // SetDeployment()
             }
             else if (dieRoll < 101)
             {
@@ -272,7 +272,7 @@ namespace Pattons_Best
                if (90 < dieRoll)
                   gi.IsLeadTank = true;
                else
-                  gi.IsLeadTank = false;
+                  gi.IsLeadTank = false; // SetDeployment()
             }
             else
             {
@@ -655,7 +655,6 @@ namespace Pattons_Best
                {
                   gi.GamePhase = GamePhase.Battle;
                   gi.DieRollAction = GameAction.DieRollActionNone;
-                  gi.IsAdvancingFireChosen = false; //<cgs>
                   if (true == gi.IsAdvancingFireChosen)
                   {
                      gi.AdvancingFireMarkerCount = 6;
@@ -803,7 +802,23 @@ namespace Pattons_Best
       }
       private void AddStartingTestingOptions(IGameInstance gi)
       {
-         gi.IsLeadTank = true;
+         gi.IsAdvancingFireChosen = false;
+         //--------------------------------
+         gi.IsLeadTank = true; 
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): lastReport=null");
+         }
+         else if (true == gi.IsLeadTank)
+         {
+            StringBuilder sb = new StringBuilder("At ");
+            sb.Append(TableMgr.GetTime(lastReport));
+            lastReport.Notes.Add(", you are the Lead Tank!");
+         }
+         //--------------------------------
+         gi.Sherman.IsMoving = true;
+         gi.Sherman.IsHullDown = false;
       }
       private bool PerformAutoSetup(IGameInstance gi, ref GameAction action)
       {
@@ -837,6 +852,7 @@ namespace Pattons_Best
                cm.Rating = (int)Math.Ceiling(dieRoll / 2.0);
             }
          }
+         AddStartingTestingOptions(gi);
          return true;
       }
       private bool PerformAutoSetupSkipMorningBriefing(IGameInstance gi)
@@ -944,6 +960,7 @@ namespace Pattons_Best
          lastReport.SunriseHour += (int)Math.Floor(dieRoll * 0.5) + 1;
          lastReport.MainGunHE -= dieRoll * 2;
          lastReport.Ammo30CalibreMG -= dieRoll;
+         AddStartingTestingOptions(gi);
          return true;
       }
       private bool PerformAutoSetupSkipPreparations(IGameInstance gi)
@@ -1038,6 +1055,7 @@ namespace Pattons_Best
          gi.Sherman.Location.X = gi.Home.CenterPoint.X - delta;
          gi.Sherman.Location.Y = gi.Home.CenterPoint.Y - delta;
          gi.BattleStacks.Add(gi.Sherman);
+         AddStartingTestingOptions(gi);
          return true;
       }
       private bool PerformAutoSetupSkipMovement(IGameInstance gi)
@@ -1120,6 +1138,7 @@ namespace Pattons_Best
                gi.MoveStacks.Add(airStrikeMarker);
             }
          }
+         AddStartingTestingOptions(gi);
          return true;
       }
       private bool PerformAutoSetupSkipBattleSetup(IGameInstance gi)
@@ -1189,7 +1208,8 @@ namespace Pattons_Best
                diceRoll = 100;
             else
                diceRoll = die1 + 10 * die2;
-            string enemyUnit = TableMgr.GetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
+            diceRoll = 45; // <cgs> TEST
+            string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
             IMapItem? mi = null;
             string name = enemyUnit + Utilities.MapItemNum;
             Utilities.MapItemNum++;
@@ -1260,6 +1280,7 @@ namespace Pattons_Best
             die1 = Utilities.RandomGenerator.Next(1, 11);
             string enemyTerrain = TableMgr.GetEnemyTerrain(lastReport.Scenario, gi.Day, "A", enemyUnit, die1);
          }
+         AddStartingTestingOptions(gi);
          return true;
       }
    }
@@ -2278,16 +2299,16 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.BattleRandomEventRoll;
                   break;
                case GameAction.BattleRandomEventRoll:
-                  dieRoll = 16; // <cgs> TEST
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
+                     dieRoll = 22; // <cgs> TEST
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
                   else
                   {
-                     gi.GamePhase = GamePhase.BattleRoundSequence;
-                     string randomEvent = TableMgr.GetRandomEvent(lastReport.Scenario, dieRoll);
+                     gi.GamePhase = GamePhase.BattleRoundSequence;                              // <<<<<<<<<<<<< Change to BattleRoundSequence
+                     string randomEvent = TableMgr.GetRandomEvent(lastReport.Scenario, gi.DieResults[key][0]);
                      switch (randomEvent)
                      {
                         case "Time Passes":
@@ -2304,12 +2325,13 @@ namespace Pattons_Best
                         case "Mines":
                            if ( true == gi.Sherman.IsMoving )
                            {
+                              gi.IsMinefieldAttack = true;
                               gi.EventDisplayed = gi.EventActive = "e043";
+                              gi.DieRollAction = GameAction.BattleMinefieldAttackRoll;
                            }
                            else
                            {
-                              gi.EventDisplayed = gi.EventActive = "e044";
-                              gi.DieRollAction = GameAction.BattleMinefieldAttackRoll;
+                              gi.EventDisplayed = gi.EventActive = "e043a";
                            }
                            break;
                         case "Panzerfaust":

@@ -376,9 +376,9 @@ namespace Pattons_Best
          {
             BitmapImage bmi = new BitmapImage();
             bmi.BeginInit();
-            bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollWhite.gif", UriKind.Absolute);
+            bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
             bmi.EndInit();
-            System.Windows.Controls.Image img = new System.Windows.Controls.Image { Name = "DieRoll", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+            System.Windows.Controls.Image img = new System.Windows.Controls.Image { Name = "DiceRoll", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
             ImageBehavior.SetAnimatedSource(img, bmi);
             myGrid.Children.Add(img);
             Grid.SetRow(img, rowNum);
@@ -395,7 +395,7 @@ namespace Pattons_Best
             myGrid.Children.Add(label3);
             Grid.SetRow(label3, rowNum);
             Grid.SetColumn(label3, 3);
-            Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRowExplodes[0].myExplosionResult };
+            Label label4 = new Label() { FontFamily = myFontFam, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRowExplodes[0].myExplosionResult };
             myGrid.Children.Add(label4);
             Grid.SetRow(label4, rowNum);
             Grid.SetColumn(label4, 4);
@@ -432,12 +432,12 @@ namespace Pattons_Best
             }
             else
             {
-               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRowWounds[i].myDieRollWound.ToString() };
+               int combo = myGridRowWounds[i].myWoundModifier + myGridRowWounds[i].myDieRollWound;
+               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = combo.ToString() };
                myGrid.Children.Add(label2);
                Grid.SetRow(label2, rowNum);
                Grid.SetColumn(label2, 2);
-               int combo = myGridRowWounds[i].myWoundModifier + myGridRowWounds[i].myDieRollWound;
-               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = combo.ToString() };
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRowWounds[i].myWoundResult };
                myGrid.Children.Add(label3);
                Grid.SetRow(label3, rowNum);
                Grid.SetColumn(label3, 3);
@@ -459,6 +459,10 @@ namespace Pattons_Best
                   myGrid.Children.Add(label4);
                   Grid.SetRow(label4, rowNum);
                   Grid.SetColumn(label4, 4);
+                  Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRowWounds[i].myDieRollBailout.ToString() };
+                  myGrid.Children.Add(label5);
+                  Grid.SetRow(label5, rowNum);
+                  Grid.SetColumn(label5, 5);
                }
             }
          }
@@ -474,7 +478,7 @@ namespace Pattons_Best
          b.BorderThickness = new Thickness(0);
          b.Background = new SolidColorBrush(Colors.Transparent);
          b.Foreground = new SolidColorBrush(Colors.Transparent);
-         MapItem.SetButtonContent(b, mi, false, false); // This sets the image as the button's content
+         MapItem.SetButtonContent(b, mi, false, false, false); // This sets the image as the button's content
          return b;
       }
       //------------------------------------------------------------------------------------
@@ -504,13 +508,6 @@ namespace Pattons_Best
          if (i < 0)
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): 0 > i=" + i.ToString());
-            return;
-         }
-         IMapItem mi = myGridRowExplodes[i].myMapItem;
-         string enemyUnit = mi.GetEnemyUnit();
-         if( "ERROR" == enemyUnit )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): mi.GetEnemyUnit() returned error");
             return;
          }
          //-------------------------------
@@ -552,7 +549,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateGrid() return false");
          myIsRollInProgress = false;
          //-------------------------------
-         Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): ---------------myState=" + myState.ToString());
+         Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "EventViewerTankDestroyed.ShowDieResults(): ---------------myState=" + myState.ToString());
       }
       //---------------------Controller Function--------------------------------------------
       private void ButtonRule_Click(object sender, RoutedEventArgs e)
@@ -622,9 +619,18 @@ namespace Pattons_Best
                      if (result.VisualHit == img)
                      {
                         if ("Wounds" == img.Name)
+                        {
                            myState = E0481Enum.WOUNDS_ROLL;
+                           myTextBlock2.Text = "Wounds Modifier";
+                           myTextBlock3.Text = "Roll + Modifier";
+                           myTextBlock4.Text = "Wound Result";
+                           myTextBlock5.Text = "Bail Out";
+                           myTextBlock5.Visibility = Visibility.Visible;
+                        }
                         else if ("Explodes" == img.Name)
+                        {
                            myState = E0481Enum.END;
+                        }
                         else if ("Continue" == img.Name)
                            myState = E0481Enum.END;
                         if (false == UpdateGrid())

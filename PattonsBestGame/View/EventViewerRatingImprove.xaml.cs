@@ -311,7 +311,7 @@ namespace Pattons_Best
          b.BorderBrush = Brushes.Black;
          b.Background = new SolidColorBrush(Colors.Transparent);
          b.Foreground = new SolidColorBrush(Colors.Transparent);
-         MapItem.SetButtonContent(b, cm); // This sets the image as the button's content
+         CrewMember.SetButtonContent(b, cm); // This sets the image as the button's content
          return b;
       }
       public void ShowDieResults(int dieRoll)

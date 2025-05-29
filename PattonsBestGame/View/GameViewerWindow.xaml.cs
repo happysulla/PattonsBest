@@ -480,7 +480,7 @@ namespace Pattons_Best
       private Button CreateButtonMapItem(List<Button> buttons, IMapItem mi)
       {
          System.Windows.Controls.Button b = new Button { Name = mi.Name, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
-         MapItem.SetButtonContent(b, mi, true); // This sets the image as the button's content
+         MapItem.SetButtonContent(b, mi, true, true); // This sets the image as the button's content
          RotateTransform rotateTransform = new RotateTransform();
          b.RenderTransformOrigin = new Point(0.5, 0.5);
          rotateTransform.Angle = mi.RotationHull + mi.RotationOffset;
@@ -1261,7 +1261,7 @@ namespace Pattons_Best
                }
                else
                {
-                  MapItem.SetButtonContent(button, mi, true);
+                  MapItem.SetButtonContent(button, mi, true, true);
                }
             }
             if (ui is Label label)  // A Game Feat Label
@@ -2110,7 +2110,7 @@ namespace Pattons_Best
             myGameInstance.Sherman.Count++;
             if (5 < myGameInstance.Sherman.Count)
                myGameInstance.Sherman.Count = 0;
-            MapItem.SetButtonContent(button, myGameInstance.Sherman, true);
+            MapItem.SetButtonContent(button, myGameInstance.Sherman, true, true);
          }
       }
       private void MouseEnterMapItem(object sender, System.Windows.Input.MouseEventArgs e)
@@ -2305,7 +2305,7 @@ namespace Pattons_Best
             return;
          }
          System.Windows.Controls.Button newButton = new Button { ContextMenu = menu, Name = sCrewMemberRole, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
-         MapItem.SetButtonContent(newButton, mi, false); // This sets the image as the button's content
+         MapItem.SetButtonContent(newButton, mi, true, false); // This sets the image as the button's content
          myTankButtons.Add(newButton);
          myCanvasTank.Children.Add(newButton);
          Canvas.SetLeft(newButton, mi.Location.X);

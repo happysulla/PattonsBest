@@ -50,6 +50,7 @@ namespace Pattons_Best
       [NonSerialized] protected static BitmapImage? theFort = theMapImages.GetBitmapImage("OFort");
       [NonSerialized] protected static BitmapImage? theBuild = theMapImages.GetBitmapImage("OBuild");
       [NonSerialized] protected static BitmapImage? theSherman75Turret = theMapImages.GetBitmapImage("c16TurretSherman75");
+      [NonSerialized] protected static BitmapImage? thePzIVTurret = theMapImages.GetBitmapImage("c79PzIVTurret");
       [NonSerialized] protected static BitmapImage? thePzVIbTurret = theMapImages.GetBitmapImage("c82PzVIbTurret");
       //--------------------------------------------------
       public string Name { get; set; } = string.Empty;
@@ -280,6 +281,8 @@ namespace Pattons_Best
             enemyUnit = "JdgPzIV";
          else if (true == this.Name.Contains("JdgPz38t") )
             enemyUnit = "JdgPz38t";
+         else
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyUnit() no assigned unit for mi.Name=" + this.Name);
          return enemyUnit;
       }
       public void SetBloodSpots(int percent=40)
@@ -320,8 +323,12 @@ namespace Pattons_Best
             mapItems = newOrder;
          }
       }
-      public static void SetButtonContent(Button b, IMapItem mi, bool isDecoration = true, bool isBloodSpotsShown = true)
+      public static void SetButtonContent(Button b, IMapItem mi, bool isMapItemZoom = false, bool isDecoration = true, bool isBloodSpotsShown = true)
       {
+         double zoom = Utilities.ZOOM;
+         if( true == isMapItemZoom )
+            zoom = mi.Zoom;
+         //----------------------------
          Grid g = new Grid() { };
          if (false == mi.IsAnimated)
          {
@@ -341,16 +348,17 @@ namespace Pattons_Best
                }
             }
             g.Children.Add(c);
-            //----------------------------------------------------
             if (true == mi.IsTurret)
             {
-               double width = mi.Zoom * Utilities.theMapItemSize;
+               double width = zoom * Utilities.theMapItemSize;
                double height = width;
                Image? imgTurret = null;
                if (true == mi.Name.Contains("Sherman"))
                   imgTurret = new Image() { Height = height, Width = width, Source = theSherman75Turret };
                else if (true == mi.Name.Contains("TANK") || true == mi.Name.Contains("PzVIe"))
                   imgTurret = new Image() { Height = height, Width = width, Source = thePzVIbTurret };
+               else if (true == mi.Name.Contains("PzIV"))
+                  imgTurret = new Image() { Height = height, Width = width, Source = thePzIVTurret };
                if (null == imgTurret)
                {
                   Logger.Log(LogEnum.LE_ERROR, "SetButtonContent(): turret=null");
@@ -369,18 +377,19 @@ namespace Pattons_Best
             //----------------------------------------------------
             if (true == isDecoration)
             {
+               //----------------------------------------------------
                if (true == mi.IsMoving)
                {
-                  double width = 0.4 * mi.Zoom * Utilities.theMapItemOffset;
+                  double width = 0.4 * zoom * Utilities.theMapItemOffset;
                   double height = 1.33 * width;
                   Image imgTerrain = new Image() { Height = height, Width = width, Source = theMoving };
                   c.Children.Add(imgTerrain);
-                  Canvas.SetLeft(imgTerrain, mi.Zoom * Utilities.theMapItemOffset - 0.5 * width);
+                  Canvas.SetLeft(imgTerrain, zoom * Utilities.theMapItemOffset - 0.5 * width);
                   Canvas.SetTop(imgTerrain, -0.5 * height);
                }
                else if (true == mi.IsHullDown)
                {
-                  double width = 0.5 * mi.Zoom * Utilities.theMapItemSize;
+                  double width = 0.5 * zoom * Utilities.theMapItemSize;
                   double height = width / 2.0;
                   Image imgTerrain = new Image() { Height = height, Width = width, Source = theHullDown };
                   c.Children.Add(imgTerrain);
@@ -389,7 +398,7 @@ namespace Pattons_Best
                }
                else if (true == mi.IsWoods)
                {
-                  double width = mi.Zoom * Utilities.theMapItemSize;
+                  double width = zoom * Utilities.theMapItemSize;
                   double height = width;
                   Image imgTerrain = new Image() { Height = height, Width = width, Source = theWood };
                   c.Children.Add(imgTerrain);
@@ -398,7 +407,7 @@ namespace Pattons_Best
                }
                else if (true == mi.IsFortification)
                {
-                  double width = mi.Zoom * Utilities.theMapItemSize;
+                  double width = zoom * Utilities.theMapItemSize;
                   double height = width;
                   Image imgTerrain = new Image() { Height = height, Width = width, Source = theFort };
                   c.Children.Add(imgTerrain);
@@ -407,7 +416,7 @@ namespace Pattons_Best
                }
                else if (true == mi.IsBuilding)
                {
-                  double width = mi.Zoom * Utilities.theMapItemSize;
+                  double width = zoom * Utilities.theMapItemSize;
                   double height = width;
                   Image imgTerrain = new Image() { Height = height, Width = width, Source = theBuild };
                   c.Children.Add(imgTerrain);

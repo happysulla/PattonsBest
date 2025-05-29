@@ -90,7 +90,7 @@
 					<LineBreak/>
 					<Run Text='(1) Beginning 1/1/45, die rolls are -1.'></Run>
 					<LineBreak/>
-					<Run Text='(2) A disabled tank is finished for the day when combat in this area is resolved. Mark a disabled tank with a Thrown Track marker. Roll 1D for effect on crew: (1-8 = No Effect), (9 =  Driver possible wounded), and (10 = Assistant driver possibly wounded). Check for wounds on the '></Run>
+					<Run Text='(2) A disabled tank is finished for the day when combat in this area is resolved. Mark a disabled tank with a Thrown Track marker. Roll 1D for effect on crew: (1-8 = No Effect), (9 =  Driver possibly wounded), and (10 = Assistant driver possibly wounded). Check for wounds on the '></Run>
 					<InlineUIContainer>
 						<Button Content='Wounds' FontFamily='Courier New'  FontSize='8'></Button>
 					</InlineUIContainer>

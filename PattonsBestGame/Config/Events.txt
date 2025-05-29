@@ -372,7 +372,7 @@ e043a	"<Bold>e043a Mine Attack Ignored</Bold>
 <LineBreak/><LineBreak/>
 No effect since Sherman is not moving. Click image to continue.
 <LineBreak/><LineBreak/>
-                                            <InlineUIContainer><Image Name='Continue043' Height='100' Width='100'></Image></InlineUIContainer>"
+                                            <InlineUIContainer><Image Name='Continue43' Height='100' Width='100'></Image></InlineUIContainer>"
 e044	"<Bold>e044 Panzerfaust Attack</Bold> 
 <InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>

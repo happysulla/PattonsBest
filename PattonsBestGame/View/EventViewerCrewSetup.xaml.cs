@@ -379,7 +379,7 @@ namespace Pattons_Best
             b.IsEnabled = isEnabled;
             b.Click += this.Button_Click;
          }
-         MapItem.SetButtonContent(b, cm); // This sets the image as the button's content
+         CrewMember.SetButtonContent(b, cm); // This sets the image as the button's content
          return b;
       }
       public void ShowDieResults(int dieRoll)

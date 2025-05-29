@@ -464,7 +464,7 @@ namespace Pattons_Best
          b.BorderThickness = new Thickness(0);
          b.Background = new SolidColorBrush(Colors.Transparent);
          b.Foreground = new SolidColorBrush(Colors.Transparent);
-         MapItem.SetButtonContent(b, mi, false, false); // This sets the image as the button's content
+         MapItem.SetButtonContent(b, mi, false, false, false); // This sets the image as the button's content
          return b;
       }
       private Button CreateButton(ICrewMember cm)
@@ -476,7 +476,7 @@ namespace Pattons_Best
          b.BorderThickness = new Thickness(0);
          b.Background = new SolidColorBrush(Colors.Transparent);
          b.Foreground = new SolidColorBrush(Colors.Transparent);
-         MapItem.SetButtonContent(b, cm, true, true); // This sets the image as the button's content
+         CrewMember.SetButtonContent(b, cm, true, true); // This sets the image as the button's content
          return b;
       }
       private string GetSectorRangeDisplay(int i)

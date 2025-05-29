@@ -821,7 +821,7 @@ namespace Pattons_Best
          b.BorderThickness = new Thickness(0);
          b.Background = new SolidColorBrush(Colors.Transparent);
          b.Foreground = new SolidColorBrush(Colors.Transparent);
-         MapItem.SetButtonContent(b, mi, false); // This sets the image as the button's content
+         MapItem.SetButtonContent(b, mi, false, false); // This sets the image as the button's content
          return b;
       }
       public void ShowDieResults(int dieRoll)
@@ -836,7 +836,7 @@ namespace Pattons_Best
          {
             case E046Enum.ACTIVATION:
                myGridRows[i].myDieRollActivation = dieRoll;
-               myGridRows[i].myActivation = TableMgr.GetEnemyUnit(myScenario, myDay, dieRoll);
+               myGridRows[i].myActivation = TableMgr.SetEnemyUnit(myScenario, myDay, dieRoll);
                if (false == CreateMapItem(i))
                {
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): CreateMapItem() returned false");

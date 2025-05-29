@@ -235,7 +235,7 @@ namespace Pattons_Best
                return "ERROR";
          }
       }
-      public static string GetEnemyUnit(EnumScenario situation, int day, int dieRoll)
+      public static string SetEnemyUnit(EnumScenario situation, int day, int dieRoll)
       {
          const int Feb1945 = 136;
          const int Mar1945 = 146;
@@ -410,6 +410,7 @@ namespace Pattons_Best
          {
             return "SPG";
          }
+         Logger.Log(LogEnum.LE_ERROR, "SetEnemyUnit(): Reached Default with dr=" + dieRoll.ToString() + " situation=" + situation.ToString() + " on day=" + day.ToString());
          return "ERROR";
       }
       public static string GetEnemyRange(string areaType, string enemyUnit, int dieRoll)

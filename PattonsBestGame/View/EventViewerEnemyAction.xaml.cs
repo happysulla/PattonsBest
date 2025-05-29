@@ -321,7 +321,7 @@ namespace Pattons_Best
             {
                foreach (IMapItem mapItem in stack.MapItems)
                {
-                  if (true == mapItem.IsKilled) //remove KIA units
+                  if ( (true == mapItem.IsKilled) && (false == mapItem.Name.Contains("Sherman")) ) //remove enemy KIA units
                      removals.Add(mapItem);
                   if( true == mapItem.TerritoryCurrent.Name.Contains("Off")) // remove all units that left the board
                      removals.Add(mapItem);
@@ -1081,7 +1081,7 @@ namespace Pattons_Best
          b.BorderThickness = new Thickness(0);
          b.Background = new SolidColorBrush(Colors.Transparent);
          b.Foreground = new SolidColorBrush(Colors.Transparent);
-         MapItem.SetButtonContent(b, mi, false, false); // This sets the image as the button's content
+         MapItem.SetButtonContent(b, mi, false, false, false); // This sets the image as the button's content
          return b;
       }
       private bool CreateMapItemMove(int i)
