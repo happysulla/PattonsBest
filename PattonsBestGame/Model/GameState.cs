@@ -2584,6 +2584,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceMinefieldRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
+                     dieRoll = 2; // <cgs> TEST
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                    }
@@ -2600,6 +2601,7 @@ namespace Pattons_Best
                      }
                      else if (gi.DieResults[key][0] < 3)
                      {
+                        gi.Sherman.IsThrownTrack = true;
                         gi.IsBailOut = true;
                         gi.EventDisplayed = gi.EventActive = "e043b";
                         gi.DieRollAction = GameAction.BattleRoundSequenceMinefieldDisableRoll;

@@ -407,14 +407,14 @@ namespace Pattons_Best
       private bool UpdateGridRowWounds()
       {
          int rowNum = STARTING_ASSIGNED_ROW;
-         IMapItem mi = myGridRowExplodes[0].myMapItem;
-         Button b1 = CreateButton(mi);
-         myGrid.Children.Add(b1);
-         Grid.SetRow(b1, rowNum);
-         Grid.SetColumn(b1, 0);
          //----------------------------
          for( int i = 0; i<myMaxRowCount; ++i)
          {
+            IMapItem cm = myGridRowWounds[i].myCrewMember;
+            Button b1 = CreateButton(cm);
+            myGrid.Children.Add(b1);
+            Grid.SetRow(b1, rowNum);
+            Grid.SetColumn(b1, 0);
             Label label1 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRowWounds[i].myWoundModifier.ToString() };
             myGrid.Children.Add(label1);
             Grid.SetRow(label1, rowNum);
@@ -483,6 +483,18 @@ namespace Pattons_Best
          MapItem.SetButtonContent(b, mi, false, false, false); // This sets the image as the button's content
          return b;
       }
+      private Button CreateButton(ICrewMember cm)
+      {
+         System.Windows.Controls.Button b = new System.Windows.Controls.Button { };
+         b.Width = Utilities.ZOOM * Utilities.theMapItemSize;
+         b.Height = Utilities.ZOOM * Utilities.theMapItemSize;
+         b.BorderThickness = new Thickness(1);
+         b.BorderBrush = Brushes.Black;
+         b.Background = new SolidColorBrush(Colors.Transparent);
+         b.Foreground = new SolidColorBrush(Colors.Transparent);
+         CrewMember.SetButtonContent(b, cm); // This sets the image as the button's content
+         return b;
+      }
       //------------------------------------------------------------------------------------
       public void ShowDieResults(int dieRoll)
       {
@@ -539,13 +551,50 @@ namespace Pattons_Best
                else
                {
                   myGameInstance.IsBailOut = true;
-                  myGridRowExplodes[0].myExplosionResult = "Shell Penetrates";
+                  myGridRowExplodes[0].myExplosionResult = "Penetration";
                }
                myState = E0481Enum.TANK_EXPLOSION_ROLL_SHOW;
+               break;
+            case E0481Enum.WOUNDS_ROLL:
+               if(2 == myRollResultColNum)
+               {
+                  myGridRowWounds[i].myDieRollWound = dieRoll;
+                  ICrewMember cm = myGridRowWounds[i].myCrewMember;
+                  myGridRowWounds[i].myWoundResult = TableMgr.SetWounds(myGameInstance, cm, dieRoll);
+                  if ("ERROR" == myGridRowWounds[i].myWoundResult)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetWounds() returned ERROR");
+                     return;
+                  }
+                  StringBuilder sb1 = new StringBuilder("At ");
+                  sb1.Append(TableMgr.GetTime(lastReport));
+                  sb1.Append(", ");
+                  sb1.Append(cm.Name);
+                  sb1.Append(" (");
+                  sb1.Append(cm.Role);
+                  sb1.Append(" ) suffered ");
+                  sb1.Append(myGridRowWounds[i].myWoundResult);
+                  lastReport.Notes.Add(sb1.ToString());
+               }
+               else if (5 == myRollResultColNum)
+               {
+                  myGridRowWounds[i].myDieRollBailout = dieRoll;
+               }
+               else
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myRollResultColNum=" + myRollResultColNum.ToString());
+                  return;
+               }
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): reached default myState=" + myState.ToString());
                return;
+         }
+         myState = E0481Enum.WOUNDS_ROLL_SHOW;
+         for ( int k=0; k<myMaxRowCount; k++)
+         {
+            if (Utilities.NO_RESULT == myGridRowWounds[k].myDieRollWound)
+               myState = E0481Enum.WOUNDS_ROLL;
          }
          if (false == UpdateGrid())
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateGrid() return false");
@@ -623,7 +672,7 @@ namespace Pattons_Best
                         if ("Wounds" == img.Name)
                         {
                            myState = E0481Enum.WOUNDS_ROLL;
-                           myTextBlock2.Text = "Wounds Modifier";
+                           myTextBlock2.Text = "Roll";
                            myTextBlock3.Text = "Roll + Modifier";
                            myTextBlock4.Text = "Wound Result";
                            myTextBlock5.Text = "Bail Out";

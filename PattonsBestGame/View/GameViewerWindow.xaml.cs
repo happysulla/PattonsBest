@@ -341,11 +341,12 @@ namespace Pattons_Best
                break;
             case GameAction.PreparationsTurretRotateLeft:
             case GameAction.PreparationsTurretRotateRight:
+            case GameAction.BattleRoundSequenceMinefieldRoll:
                Button? b100 = this.myBattleButtons.Find(gi.Sherman.Name);
                if (null == b100)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): b100=null");
                else
-                  MapItem.SetButtonContent(b100, gi.Sherman);
+                  MapItem.SetButtonContent(b100, gi.Sherman, true, true);
                break;
             case GameAction.EndGameWin:
             case GameAction.EndGameLost:

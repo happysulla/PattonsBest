@@ -175,6 +175,8 @@ namespace Pattons_Best
                break;
             case GameAction.UpdateBattleBoard:
                break;
+            case GameAction.UpdateTankExplosion:
+               break;
             case GameAction.UpdateGameOptions:
                break;
             case GameAction.UpdateUndo:
@@ -1182,20 +1184,26 @@ namespace Pattons_Best
                   {
                      myTextBlock.Inlines.Add(new Run("One Friendly Tank Knocked Out."));
                      img043 = new Image { Name = "MineFieldAttackEnd", Width = 300, Height = 250, Source = MapItem.theMapImages.GetBitmapImage("ShermanKia") };
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("                                  "));
                   }
                   else if (gi.DieResults[key][0] < 3)
                   {
                      myTextBlock.Inlines.Add(new Run("Your tank disabled."));
-                     img043 = new Image { Name = "MineFieldAttackEnd", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("c106ThrownTrack") };
+                     img043 = new Image { Name = "MineFieldAttackEnd", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c106ThrownTrack") };
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("                                            "));
                   }
                   else 
                   {
                      myTextBlock.Inlines.Add(new Run("No effect."));
                      img043 = new Image { Name = "MineFieldAttackEnd", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("                                  "));
                   }
-                  myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("                                  "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(img043));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());

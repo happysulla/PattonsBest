@@ -49,6 +49,7 @@ namespace Pattons_Best
       [NonSerialized] protected static BitmapImage? theWood = theMapImages.GetBitmapImage("OWoods");
       [NonSerialized] protected static BitmapImage? theFort = theMapImages.GetBitmapImage("OFort");
       [NonSerialized] protected static BitmapImage? theBuild = theMapImages.GetBitmapImage("OBuild");
+      [NonSerialized] protected static BitmapImage? theThrownTrack = theMapImages.GetBitmapImage("OTrack");
       [NonSerialized] protected static BitmapImage? theSherman75Turret = theMapImages.GetBitmapImage("c16TurretSherman75");
       [NonSerialized] protected static BitmapImage? thePzIVTurret = theMapImages.GetBitmapImage("c79PzIVTurret");
       [NonSerialized] protected static BitmapImage? thePzVTurret = theMapImages.GetBitmapImage("c80PzVTurret");
@@ -121,6 +122,7 @@ namespace Pattons_Best
       public bool IsWoods { get; set; } = false;
       public bool IsBuilding { get; set; } = false;
       public bool IsFortification { get; set; } = false;
+      public bool IsThrownTrack { get; set; } = false;
       //--------------------------------------------------
       public EnumSpottingResult Spotting { get; set; } = EnumSpottingResult.UNSPOTTED;
       //----------------------------------------------------------------------------
@@ -375,7 +377,7 @@ namespace Pattons_Best
                   imgTurret.RenderTransformOrigin = new Point(0.5, 0.5);
                   rotateTransform.Angle = mi.Count * 60.0;
                   imgTurret.RenderTransform = rotateTransform;
-                  c.Children.Add(imgTurret);
+                  g.Children.Add(imgTurret);
                   Canvas.SetLeft(imgTurret, 0);
                   Canvas.SetTop(imgTurret, 0);
                }
@@ -428,6 +430,15 @@ namespace Pattons_Best
                   c.Children.Add(imgTerrain);
                   Canvas.SetLeft(imgTerrain, 0);
                   Canvas.SetTop(imgTerrain, 0);
+               }
+               else if (true == mi.IsThrownTrack)
+               {
+                  double width = zoom * Utilities.theMapItemSize;
+                  double height = width;
+                  Image imgTrack = new Image() { Height = height, Width = width, Source = theThrownTrack };
+                  g.Children.Add(imgTrack);
+                  Canvas.SetLeft(imgTrack, 0);
+                  Canvas.SetTop(imgTrack, 0);
                }
                if ((EnumSpottingResult.SPOTTED == mi.Spotting) || (true == mi.IsSpotted)) // if Spotted now or previous round
                {

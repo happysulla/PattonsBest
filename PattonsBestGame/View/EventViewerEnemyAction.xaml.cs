@@ -910,11 +910,11 @@ namespace Pattons_Best
             }
             else if (Utilities.NO_RESULT < myGridRows[i].myDieRollToHitYourTank)
             {
-               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myModifierToHitYourTank.ToString() };
+               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myToHitNumberYourTank.ToString() };
                myGrid.Children.Add(label2);
                Grid.SetRow(label2, rowNum);
                Grid.SetColumn(label2, 2);
-               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myToHitNumberYourTank.ToString() };
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myModifierToHitYourTank.ToString() }; 
                myGrid.Children.Add(label3);
                Grid.SetRow(label3, rowNum);
                Grid.SetColumn(label3, 3);
@@ -930,11 +930,11 @@ namespace Pattons_Best
             }
             else
             {
-               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myModifierToHitYourTank.ToString() };
+               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myToHitNumberYourTank.ToString() }; 
                myGrid.Children.Add(label2);
                Grid.SetRow(label2, rowNum);
                Grid.SetColumn(label2, 2);
-               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myToHitNumberYourTank.ToString() };
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myModifierToHitYourTank.ToString() };
                myGrid.Children.Add(label3);
                Grid.SetRow(label3, rowNum);
                Grid.SetColumn(label3, 3);
@@ -1758,8 +1758,8 @@ namespace Pattons_Best
                            myState = E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK;
                            myTextBlockHeader.Text = "r4.75 Enemy Action - To Hit Your Tank";
                            myTextBlock2.Visibility = Visibility.Visible;
-                           myTextBlock2.Text = "Hit Modifer";
-                           myTextBlock3.Text = "Hit Number";
+                           myTextBlock2.Text = "Hit Number";
+                           myTextBlock3.Text = "Hit Modifer";
                            myTextBlock4.Visibility = Visibility.Visible;
                            myTextBlock4.Text = "Die + Modifier";
                            myTextBlock5.Text = "Results";
