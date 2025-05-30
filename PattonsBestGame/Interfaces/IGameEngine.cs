@@ -225,9 +225,8 @@ namespace Pattons_Best
       BattleAmbush,
       BattleRandomEvent,
       BattleRandomEventRoll,
-      BattleEnemyArtilleryRoll,
       BattleCollateralDamageCheck,
-      BattleMinefieldAttackRoll,
+      
       BattleEmpty,
       BattleEmptyResolve,
       BattleShermanKilled,
@@ -239,6 +238,9 @@ namespace Pattons_Best
       BattleRoundSequenceCrewOrders,
       BattleRoundSequenceAmmoOrders,
       BattleRoundSequenceShermanKilled,
+      BattleRoundSequenceEnemyArtilleryRoll,
+      BattleRoundSequenceMinefieldRoll,
+      BattleRoundSequenceMinefieldDisableRoll,
 
       EveningDebriefingStart,
       Error

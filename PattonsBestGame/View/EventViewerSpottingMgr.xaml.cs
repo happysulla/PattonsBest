@@ -135,6 +135,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformSpotting(): myGameInstance=null");
             return false;
          }
+         Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "PerformSpotting(): ++++++++++++++++++++++++++++++ battlestacks=" + myGameInstance.BattleStacks.ToString());
          if (null == myCanvas)
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformSpotting(): myCanvas=null");
@@ -236,6 +237,7 @@ namespace Pattons_Best
                      mi.IsSpotted = true;
                }
             }
+            Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "EventViewerSpottingMgr.UpdateEndState(): ------------------------------ battlestacks=" + myGameInstance.BattleStacks.ToString());
             if (null == myCallback)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myCallback=null");

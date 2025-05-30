@@ -373,6 +373,17 @@ e043a	"<Bold>e043a Mine Attack Ignored</Bold>
 No effect since Sherman is not moving. Click image to continue.
 <LineBreak/><LineBreak/>
                                             <InlineUIContainer><Image Name='Continue43' Height='100' Width='100'></Image></InlineUIContainer>"
+e043b	"<Bold>e043b Mine Attack Destroyed Tank</Bold> 
+<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<LineBreak/><LineBreak/>
+Tank is disabled for today. Place a Thrown Track marker. Roll 1D to determine crew effect as shown on 
+<InlineUIContainer><Button Content='Minefield' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Attack Table: 
+<InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer> 
+<LineBreak/><LineBreak/>
+1-8 = No Effect<LineBreak/>
+9 = Driver possibly wounded<LineBreak/>
+10 = Assistant possibly wounded
+<LineBreak/><LineBreak/>"
 e044	"<Bold>e044 Panzerfaust Attack</Bold> 
 <InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>

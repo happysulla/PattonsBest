@@ -51,7 +51,9 @@ namespace Pattons_Best
       [NonSerialized] protected static BitmapImage? theBuild = theMapImages.GetBitmapImage("OBuild");
       [NonSerialized] protected static BitmapImage? theSherman75Turret = theMapImages.GetBitmapImage("c16TurretSherman75");
       [NonSerialized] protected static BitmapImage? thePzIVTurret = theMapImages.GetBitmapImage("c79PzIVTurret");
+      [NonSerialized] protected static BitmapImage? thePzVTurret = theMapImages.GetBitmapImage("c80PzVTurret");
       [NonSerialized] protected static BitmapImage? thePzVIbTurret = theMapImages.GetBitmapImage("c82PzVIbTurret");
+      [NonSerialized] protected static BitmapImage? thePzVIeTurret = theMapImages.GetBitmapImage("c82PzVIeTurret");
       //--------------------------------------------------
       public string Name { get; set; } = string.Empty;
       public string TopImageName { get; set; } = string.Empty;
@@ -359,6 +361,10 @@ namespace Pattons_Best
                   imgTurret = new Image() { Height = height, Width = width, Source = thePzVIbTurret };
                else if (true == mi.Name.Contains("PzIV"))
                   imgTurret = new Image() { Height = height, Width = width, Source = thePzIVTurret };
+               else if (true == mi.Name.Contains("PzV"))
+                  imgTurret = new Image() { Height = height, Width = width, Source = thePzVTurret };
+               else if (true == mi.Name.Contains("PzVIe"))
+                  imgTurret = new Image() { Height = height, Width = width, Source = thePzVIeTurret };
                if (null == imgTurret)
                {
                   Logger.Log(LogEnum.LE_ERROR, "SetButtonContent(): turret=null");

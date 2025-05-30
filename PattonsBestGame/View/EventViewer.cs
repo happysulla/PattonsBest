@@ -1172,6 +1172,36 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
+            case "e043":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  Image? img043 = null;
+                  if(gi.DieResults[key][0] < 2)
+                  {
+                     myTextBlock.Inlines.Add(new Run("One Friendly Tank Knocked Out."));
+                     img043 = new Image { Name = "MineFieldAttackEnd", Width = 300, Height = 250, Source = MapItem.theMapImages.GetBitmapImage("ShermanKia") };
+                  }
+                  else if (gi.DieResults[key][0] < 3)
+                  {
+                     myTextBlock.Inlines.Add(new Run("Your tank disabled."));
+                     img043 = new Image { Name = "MineFieldAttackEnd", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("c106ThrownTrack") };
+                  }
+                  else 
+                  {
+                     myTextBlock.Inlines.Add(new Run("No effect."));
+                     img043 = new Image { Name = "MineFieldAttackEnd", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                  }
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                  "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(img043));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
             default:
                break;
          }
@@ -1975,7 +2005,11 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "EnemyArtilleryEnd":
-                           action = GameAction.BattleEnemyArtilleryRoll;
+                           action = GameAction.BattleRoundSequenceEnemyArtilleryRoll;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "MineFieldAttackEnd":
+                           action = GameAction.BattleRoundSequenceMinefieldRoll;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         default:

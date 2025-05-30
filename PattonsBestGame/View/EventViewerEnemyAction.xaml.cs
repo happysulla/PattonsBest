@@ -165,6 +165,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformEnemyAction(): myGameInstance=null");
             return false;
          }
+         Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "PerformEnemyAction(): ++++++++++++++++++++++++++++++ battlestacks=" + myGameInstance.BattleStacks.ToString());
          if (null == myCanvas)
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformEnemyAction(): myCanvas=null");
@@ -315,6 +316,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myGameInstance=null");
                return false;
             }
+
             //-----------------------------------------
             IMapItems removals = new MapItems();
             foreach (IStack stack in myGameInstance.BattleStacks)
@@ -329,6 +331,7 @@ namespace Pattons_Best
             }
             foreach (IMapItem mi in removals)
                myGameInstance.BattleStacks.Remove(mi);
+            Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "EventViewerEnemyAction.UpdateEndState(): ------------------------------ battlestacks=" + myGameInstance.BattleStacks.ToString());
             //-----------------------------------------
             if (null == myCallback)
             {

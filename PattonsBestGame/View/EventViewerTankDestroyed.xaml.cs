@@ -137,6 +137,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): myGameInstance=null");
             return false;
          }
+         Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "ResolveTankDestroyed(): ++++++++++++++++++++++++++++++ battlestacks=" + myGameInstance.BattleStacks.ToString());
          if (null == myCanvas)
          {
             Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): myCanvas=null");
@@ -227,6 +228,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myGameInstance=null");
                return false;
             }
+            Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "EventViewerTankDestroyed.UpdateEndState(): ------------------------------ battlestacks=" + myGameInstance.BattleStacks.ToString());
             //-----------------------------------------
             if (null == myCallback)
             {
@@ -629,7 +631,7 @@ namespace Pattons_Best
                         }
                         else if ("Explodes" == img.Name)
                         {
-                           myState = E0481Enum.END;
+                           myState = E0481Enum.TANK_EXPLOSION_ROLL_SHOW;
                         }
                         else if ("Continue" == img.Name)
                            myState = E0481Enum.END;

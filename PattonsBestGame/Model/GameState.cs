@@ -9,6 +9,7 @@ using System.Runtime.Versioning;
 using System.Text;
 using System.Threading;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -2320,14 +2321,14 @@ namespace Pattons_Best
                            break;
                         case "Enemy Artillery":
                            gi.EventDisplayed = gi.EventActive = "e042";
-                           gi.DieRollAction = GameAction.BattleEnemyArtilleryRoll;
+                           gi.DieRollAction = GameAction.BattleRoundSequenceEnemyArtilleryRoll;
                            break;
                         case "Mines":
                            if ( true == gi.Sherman.IsMoving )
                            {
                               gi.IsMinefieldAttack = true;
                               gi.EventDisplayed = gi.EventActive = "e043";
-                              gi.DieRollAction = GameAction.BattleMinefieldAttackRoll;
+                              gi.DieRollAction = GameAction.BattleRoundSequenceMinefieldRoll;
                            }
                            else
                            {
@@ -2503,7 +2504,7 @@ namespace Pattons_Best
                      if (false == SpottingPhaseBegin(gi, ref action))
                      {
                         returnStatus = "SpottingPhaseBegin() returned false";
-                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
                      }
                   }
                   break;
@@ -2532,19 +2533,19 @@ namespace Pattons_Best
                   foreach (IMapItem mi in removals)
                   {
                      gi.BattleStacks.Remove(mi);
-                     Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "GameStateBattle.PerformAction(): removing mi=" + mi.Name + " from BattleStacks=" + gi.BattleStacks.ToString());
+                     Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "GameStateBattleRoundSequence.PerformAction(): removing mi=" + mi.Name + " from BattleStacks=" + gi.BattleStacks.ToString());
                   }
 
                   foreach (IMapItem mi in additions)
                   {
                      gi.BattleStacks.Add(mi);
-                     Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "GameStateBattle.PerformAction(): adding mi=" + mi.Name + " from BattleStacks=" + gi.BattleStacks.ToString());
+                     Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "GameStateBattleRoundSequence.PerformAction(): adding mi=" + mi.Name + " from BattleStacks=" + gi.BattleStacks.ToString());
                   }
                   //----------------------------------------------
                   if (false == SpottingPhaseBegin(gi, ref action))
                   {
                      returnStatus = "SpottingPhaseBegin() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
                   }
                   break;
                case GameAction.BattleRoundSequenceSpottingEnd:
@@ -2559,7 +2560,7 @@ namespace Pattons_Best
                   gi.EventDisplayed = gi.EventActive = "e051";
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   break;
-               case GameAction.BattleEnemyArtilleryRoll:
+               case GameAction.BattleRoundSequenceEnemyArtilleryRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      gi.DieResults[key][0] = dieRoll;
@@ -2576,26 +2577,41 @@ namespace Pattons_Best
                      if( false == CheckCrewMemberExposed(gi, ref action)) // calls SpottingPhaseBegin() if no collateral
                      {
                         returnStatus = "CheckCrewMemberExposed() returned false";
-                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
                      }
                   }
                   break;
-               case GameAction.BattleMinefieldAttackRoll:
+               case GameAction.BattleRoundSequenceMinefieldRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
-                     if (dieRoll < 2)
-                     {
-                        lastReport.VictoryPtsFriendlyTank += 1;
-                     }
-                     else if (dieRoll < 3)
-                     {
-                     }
-                  }
+                   }
                   else
                   {
-                     action = GameAction.BattleRoundSequenceStart;
+                     if (gi.DieResults[key][0] < 2)
+                     {
+                        lastReport.VictoryPtsFriendlyTank += 1;
+                        if (false == SpottingPhaseBegin(gi, ref action))
+                        {
+                           returnStatus = "SpottingPhaseBegin() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                        }
+                     }
+                     else if (gi.DieResults[key][0] < 3)
+                     {
+                        gi.IsBailOut = true;
+                        gi.EventDisplayed = gi.EventActive = "e043b";
+                        gi.DieRollAction = GameAction.BattleRoundSequenceMinefieldDisableRoll;
+                     }
+                     else // no effect
+                     {
+                        if (false == SpottingPhaseBegin(gi, ref action))
+                        {
+                           returnStatus = "SpottingPhaseBegin() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                        }
+                     }
                   }
                   break;
                case GameAction.EndGameClose:

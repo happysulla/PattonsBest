@@ -1953,18 +1953,30 @@ namespace Pattons_Best
             return -1000;
          }
          if( false == gi.FirstShots.ContainsKey(mi.Name))
+         {
             toHitModifierNum += 10; // add 10 if first shot
+            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetToHitNumberYourTank(): eu=" + mi.Name + " +10 mod=" + toHitModifierNum.ToString() + " firstShot");
+         }
          //-----------------------------------------------
          if (true == gi.AcquiredShots.ContainsKey(mi.Name))
          {
             if (1 < gi.AcquiredShots[mi.Name])
             {
                if ('C' == range)
+               {
                   toHitModifierNum -= 10;
+                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetToHitNumberYourTank(): eu=" + mi.Name + " -10 mod=" + toHitModifierNum.ToString() + " acquire-2 close");
+               }
                else if ('M' == range)
-                  toHitModifierNum -= 20;
+               {
+                  toHitModifierNum -= 10;
+                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetToHitNumberYourTank(): eu=" + mi.Name + " -20 mod=" + toHitModifierNum.ToString() + " acquire-2 medium");
+               }
                else if ('L' == range)
+               {
                   toHitModifierNum -= 30;
+                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetToHitNumberYourTank(): eu=" + mi.Name + " -30 mod=" + toHitModifierNum.ToString() + " acquire-2 long");
+               }
                else
                {
                   Logger.Log(LogEnum.LE_ERROR, "GetToHitNumberYourTank(): 1-unknown range=" + range);
@@ -1974,11 +1986,20 @@ namespace Pattons_Best
             else // acquired 1 marker
             {
                if ('C' == range)
+               {
                   toHitModifierNum -= 5;
+                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetToHitNumberYourTank(): eu=" + mi.Name + " -5 mod=" + toHitModifierNum.ToString() + " acquire-1 close");
+               }
                else if ('M' == range)
+               {
                   toHitModifierNum -= 10;
+                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetToHitNumberYourTank(): eu=" + mi.Name + " -10 mod=" + toHitModifierNum.ToString() + " acquire-1 medium");
+               }
                else if ('L' == range)
+               {
                   toHitModifierNum -= 15;
+                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetToHitNumberYourTank(): eu=" + mi.Name + " -15 mod=" + toHitModifierNum.ToString() + " acquire-1 long");
+               }
                else
                {
                   Logger.Log(LogEnum.LE_ERROR, "GetToHitNumberYourTank(): 2-unknown range=" + range);
@@ -1988,7 +2009,10 @@ namespace Pattons_Best
          }
          //-----------------------------------------------
          if( true == gi.Sherman.IsMoving )
-               toHitModifierNum += 20; 
+         {
+            toHitModifierNum += 20;
+            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetToHitNumberYourTank(): eu=" + mi.Name + " +20 mod=" + toHitModifierNum.ToString() + " moving");
+         }
          return toHitModifierNum;
       }
       public static double GetToHitNumberYourTank(IGameInstance gi, IMapItem mi, char sector, char range)
@@ -2506,7 +2530,7 @@ namespace Pattons_Best
          if( true == gi.Sherman.IsMoving )
          {
             spottingModifer += 1;
-            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): move+1 enemyUnit=" + enemyUnit + " mod=" + spottingModifer.ToString());
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): ==> move+1 enemyUnit=" + enemyUnit + " mod=" + spottingModifer.ToString());
          }
          if( true == mi.IsWoods )
          {

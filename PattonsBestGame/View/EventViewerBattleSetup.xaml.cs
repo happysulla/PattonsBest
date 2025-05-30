@@ -146,6 +146,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): myGameInstance=null");
             return false;
          }
+         Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "SetupBattle(): ++++++++++++++++++++++++++++++ battlestacks=" + myGameInstance.BattleStacks.ToString());
          if (null == myCanvas)
          {
             Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): myCanvas=null");
@@ -172,6 +173,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): lastReport=null");
             return false;
          }
+
          //--------------------------------------------------
          myState = E046Enum.ACTIVATION;
          myMaxRowCount = 0;
@@ -285,7 +287,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myGameInstance=null");
                return false;
             }
-            Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "UpdateEndState(): BattleStacks=" + myGameInstance.BattleStacks.ToString());
+            Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "EventViewerBattleSetup.UpdateEndState(): ------------------------------ battlestacks=" + myGameInstance.BattleStacks.ToString());
             if (null == myCallback)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myCallback=null");

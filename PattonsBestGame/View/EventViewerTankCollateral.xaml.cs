@@ -126,6 +126,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ResolveCollateralDamage(): myGameInstance=null");
             return false;
          }
+         Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "ResolveCollateralDamage(): ++++++++++++++++++++++++++++++ battlestacks=" + myGameInstance.BattleStacks.ToString());
          if (null == myCanvas)
          {
             Logger.Log(LogEnum.LE_ERROR, "ResolveCollateralDamage(): myCanvas=null");
@@ -221,6 +222,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myGameInstance=null");
                return false;
             }
+            Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "EventViewerTankCollateral.UpdateEndState(): ------------------------------ battlestacks=" + myGameInstance.BattleStacks.ToString());
             //-----------------------------------------
             if (null == myCallback)
             {
