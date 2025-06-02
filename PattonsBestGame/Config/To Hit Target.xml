@@ -605,7 +605,7 @@
       <TableRow  FontSize='12' >
          <TableCell TextAlignment='Left' Background='DarkSeaGreen'>
             <Paragraph>
-               <Run Text='  *Deliverate immobilization'></Run>
+               <Run Text='  *Deliberate immobilization'></Run>
             </Paragraph>
          </TableCell>
          <TableCell ColumnSpan='3' TextAlignment='Center' Background='DarkSeaGreen'>

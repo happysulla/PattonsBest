@@ -98,6 +98,7 @@ namespace Pattons_Best
          Assistant = aar.Assistant;
          Decorations = aar.Decorations;
       }
+
    }
    //===================================================================
    public class AfterActionReports : IEnumerable, IAfterActionReports

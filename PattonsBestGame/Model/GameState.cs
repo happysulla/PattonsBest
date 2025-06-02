@@ -285,7 +285,8 @@ namespace Pattons_Best
          {
             StringBuilder sb = new StringBuilder( "At ");
             sb.Append(TableMgr.GetTime(report));
-            report.Notes.Add(", you are the Lead Tank!");
+            sb.Append(", you are the Lead Tank!");
+            report.Notes.Add(sb.ToString());
          }
          return true;
       }
@@ -616,6 +617,7 @@ namespace Pattons_Best
                   gi.GamePhase = GamePhase.MorningBriefing;
                   gi.EventDisplayed = gi.EventActive = "e007";
                   gi.DieRollAction = GameAction.MorningBriefingWeatherRoll;
+                  AddStartingTestingOptions(gi);
                }
                break;
             case GameAction.TestingStartPreparations:
@@ -631,6 +633,7 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
                   gi.Sherman.TerritoryCurrent = gi.Home;
                   gi.BattleStacks.Add(gi.Sherman);
+                  AddStartingTestingOptions(gi);
                }
                break;
             case GameAction.TestingStartMovement:
@@ -644,6 +647,7 @@ namespace Pattons_Best
                   gi.GamePhase = GamePhase.Movement;
                   gi.EventDisplayed = gi.EventActive = "e018";
                   gi.DieRollAction = GameAction.MovementStartAreaSetRoll;
+                  AddStartingTestingOptions(gi);
                }
                break;
             case GameAction.TestingStartBattle:
@@ -656,6 +660,7 @@ namespace Pattons_Best
                {
                   gi.GamePhase = GamePhase.Battle;
                   gi.DieRollAction = GameAction.DieRollActionNone;
+                  AddStartingTestingOptions(gi);
                   if (true == gi.IsAdvancingFireChosen)
                   {
                      gi.AdvancingFireMarkerCount = 6;
@@ -679,7 +684,7 @@ namespace Pattons_Best
                   gi.GamePhase = GamePhase.Battle;
                   gi.EventDisplayed = gi.EventActive = "e035";
                   gi.DieRollAction = GameAction.BattleAmbushRoll;
-                  gi.IsAdvancingFireChosen = false;
+                  AddStartingTestingOptions(gi);
                }
                break;
             case GameAction.UpdateEventViewerActive: // Only change active event
@@ -815,7 +820,8 @@ namespace Pattons_Best
          {
             StringBuilder sb = new StringBuilder("At ");
             sb.Append(TableMgr.GetTime(lastReport));
-            lastReport.Notes.Add(", you are the Lead Tank!");
+            sb.Append(", you are the Lead Tank!");
+            lastReport.Notes.Add(sb.ToString());
          }
          //--------------------------------
          gi.Sherman.IsMoving = true;
@@ -853,7 +859,6 @@ namespace Pattons_Best
                cm.Rating = (int)Math.Ceiling(dieRoll / 2.0);
             }
          }
-         AddStartingTestingOptions(gi);
          return true;
       }
       private bool PerformAutoSetupSkipMorningBriefing(IGameInstance gi)
@@ -961,7 +966,6 @@ namespace Pattons_Best
          lastReport.SunriseHour += (int)Math.Floor(dieRoll * 0.5) + 1;
          lastReport.MainGunHE -= dieRoll * 2;
          lastReport.Ammo30CalibreMG -= dieRoll;
-         AddStartingTestingOptions(gi);
          return true;
       }
       private bool PerformAutoSetupSkipPreparations(IGameInstance gi)
@@ -1056,7 +1060,6 @@ namespace Pattons_Best
          gi.Sherman.Location.X = gi.Home.CenterPoint.X - delta;
          gi.Sherman.Location.Y = gi.Home.CenterPoint.Y - delta;
          gi.BattleStacks.Add(gi.Sherman);
-         AddStartingTestingOptions(gi);
          return true;
       }
       private bool PerformAutoSetupSkipMovement(IGameInstance gi)
@@ -1139,7 +1142,6 @@ namespace Pattons_Best
                gi.MoveStacks.Add(airStrikeMarker);
             }
          }
-         AddStartingTestingOptions(gi);
          return true;
       }
       private bool PerformAutoSetupSkipBattleSetup(IGameInstance gi)
@@ -1209,7 +1211,7 @@ namespace Pattons_Best
                diceRoll = 100;
             else
                diceRoll = die1 + 10 * die2;
-            diceRoll = 45; // <cgs> TEST
+            diceRoll = 45; // <cgs> TEST - three tanks
             string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
             IMapItem? mi = null;
             string name = enemyUnit + Utilities.MapItemNum;
@@ -1281,7 +1283,6 @@ namespace Pattons_Best
             die1 = Utilities.RandomGenerator.Next(1, 11);
             string enemyTerrain = TableMgr.GetEnemyTerrain(lastReport.Scenario, gi.Day, "A", enemyUnit, die1);
          }
-         AddStartingTestingOptions(gi);
          return true;
       }
    }
@@ -1864,7 +1865,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "GameStateMovement.PerformAction(MovementBattleCheckRoll): " + gi.MoveStacks.ToString());
                   Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "GameStateMovement.PerformAction(MovementBattleCheckRoll): gi.MapItemMoves.Clear()");
                   gi.MapItemMoves.Clear();
-                  dieRoll = 10; // <cgs> TEST
+                  dieRoll = 10; // <cgs> TEST - enforce combat
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   switch (gi.BattleResistance)
@@ -2273,7 +2274,7 @@ namespace Pattons_Best
                case GameAction.BattleAmbushRoll:
                   if (true == lastReport.Weather.Contains("Rain") || true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
                      dieRoll--;
-                  dieRoll = 1; // <cgs> TEST
+                  dieRoll = 1; // <cgs> TEST - ambush
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (dieRoll < 8)
@@ -2302,7 +2303,7 @@ namespace Pattons_Best
                case GameAction.BattleRandomEventRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 22; // <cgs> TEST
+                     dieRoll = 29; // <cgs> TEST - panzerfaust attack
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -2336,6 +2337,8 @@ namespace Pattons_Best
                            }
                            break;
                         case "Panzerfaust":
+                           gi.EventDisplayed = gi.EventActive = "e044";
+                           gi.DieRollAction = GameAction.BattleRoundSequencePanzerfaustAttackRoll;
                            break;
                         case "Harrassing Fire":
                            break;
@@ -2584,7 +2587,6 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceMinefieldRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 2; // <cgs> TEST
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                    }
@@ -2602,6 +2604,7 @@ namespace Pattons_Best
                      else if (gi.DieResults[key][0] < 3)
                      {
                         gi.Sherman.IsThrownTrack = true;
+                        gi.Sherman.IsMoving = false;
                         gi.IsBailOut = true;
                         gi.EventDisplayed = gi.EventActive = "e043b";
                         gi.DieRollAction = GameAction.BattleRoundSequenceMinefieldDisableRoll;
@@ -2614,6 +2617,131 @@ namespace Pattons_Best
                            Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
                         }
                      }
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceMinefieldDisableRoll:
+                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
+                  {
+                     gi.DieResults[key][0] = dieRoll;
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else
+                  {
+                     if (9 == gi.DieResults[key][0])
+                     {
+                        gi.EventDisplayed = gi.EventActive = "e043c";
+                        gi.DieRollAction = GameAction.BattleRoundSequenceMinefieldDriverWoundRoll;
+                     }
+                     else if (10 == gi.DieResults[key][0])
+                     {
+                        gi.EventDisplayed = gi.EventActive = "e043d";
+                        gi.DieRollAction = GameAction.BattleRoundSequenceMinefieldAssistantWoundRoll;
+                     }
+                     else
+                     {
+                        if (false == SpottingPhaseBegin(gi, ref action))
+                        {
+                           returnStatus = "SpottingPhaseBegin() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                        }
+                     }
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceMinefieldDriverWoundRoll:
+                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
+                  {
+                     gi.DieResults[key][0] = dieRoll;
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else
+                  {
+                     ICrewMember? cm = gi.GetCrewMember("Driver");
+                     if(null == cm)
+                     {
+                        returnStatus = "GetCrewMember(Driver) returned null";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                     }
+                     else
+                     {
+                        string woundResult = TableMgr.GetWounds(gi, cm, dieRoll, false);
+                        if ("ERROR" == woundResult)
+                        {
+                           returnStatus = "GetWounds(Driver) returned ERROR";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                        }
+                        StringBuilder sb1 = new StringBuilder("At ");
+                        sb1.Append(TableMgr.GetTime(lastReport));
+                        sb1.Append(", ");
+                        sb1.Append(cm.Name);
+                        sb1.Append(" (");
+                        sb1.Append(cm.Role);
+                        sb1.Append(" ) suffered ");
+                        sb1.Append(woundResult);
+                        lastReport.Notes.Add(sb1.ToString());
+                        //----------------------------------
+                        if (false == SpottingPhaseBegin(gi, ref action))
+                        {
+                           returnStatus = "SpottingPhaseBegin() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                        }
+                      }
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceMinefieldAssistantWoundRoll:
+                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
+                  {
+                     gi.DieResults[key][0] = dieRoll;
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else
+                  {
+                     ICrewMember? cm = gi.GetCrewMember("Assistant");
+                     if (null == cm)
+                     {
+                        returnStatus = "GetCrewMember(Assistant) returned null";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                     }
+                     else
+                     {
+                        string woundResult = TableMgr.GetWounds(gi, cm, dieRoll, false);
+                        if ("ERROR" == woundResult)
+                        {
+                           returnStatus = "GetWounds() returned ERROR";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                        }
+                        StringBuilder sb1 = new StringBuilder("At ");
+                        sb1.Append(TableMgr.GetTime(lastReport));
+                        sb1.Append(", ");
+                        sb1.Append(cm.Name);
+                        sb1.Append(" (");
+                        sb1.Append(cm.Role);
+                        sb1.Append(" ) suffered ");
+                        sb1.Append(woundResult);
+                        lastReport.Notes.Add(sb1.ToString());
+                        //----------------------------------
+                        if (false == SpottingPhaseBegin(gi, ref action))
+                        {
+                           returnStatus = "SpottingPhaseBegin() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                        }
+                     }
+                  }
+                  break;
+               case GameAction.BattleRoundSequencePanzerfaustAttackRoll:
+                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
+                  {
+                     gi.DieResults[key][0] = dieRoll;
+                     gi.DieRollAction = GameAction.BattleRoundSequencePanzerfaustAttackRoll;
+                  }
+                  else if (Utilities.NO_RESULT == gi.DieResults[key][1])
+                  {
+                     gi.DieResults[key][1] = dieRoll;
+                     gi.DieRollAction = GameAction.BattleRoundSequencePanzerfaustAttackRoll;
+                  }
+                  else if (Utilities.NO_RESULT == gi.DieResults[key][2])
+                  {
+                     gi.DieResults[key][2] = dieRoll;
+                     gi.DieRollAction = GameAction.DieRollActionNone;
                   }
                   break;
                case GameAction.EndGameClose:

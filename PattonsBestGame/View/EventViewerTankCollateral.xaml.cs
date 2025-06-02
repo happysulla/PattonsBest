@@ -515,6 +515,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): lastReport=null");
             return;
          }
+         //-------------------------------
          Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "ShowDieResults(): myGameInstance.MapItemMoves.Clear()");
          myGameInstance.MapItemMoves.Clear();
          //-------------------------------
@@ -555,7 +556,7 @@ namespace Pattons_Best
                      }
                      else
                      {
-                        myGridRows[k].myWoundsModifier = TableMgr.GetWoundsModifier(myGameInstance, cm1);
+                        myGridRows[k].myWoundsModifier = TableMgr.GetWoundsModifier(myGameInstance, cm1, false);
                         if (myGridRows[k].myWoundsModifier < -100)
                         {
                            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetWoundsModifier() returned error for k=" + k.ToString());
@@ -575,7 +576,7 @@ namespace Pattons_Best
                }
                myGridRows[i].myDieRollWound = dieRoll;
                ICrewMember cm = myGridRows[i].myCrewMember;
-               myWoundsResults = TableMgr.SetWounds(myGameInstance, cm, dieRoll);
+               myWoundsResults = TableMgr.SetWounds(myGameInstance, cm, dieRoll, true);
                if ("ERROR" == myWoundsResults)
                {
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetWounds() returned ERROR");

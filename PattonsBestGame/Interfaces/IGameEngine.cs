@@ -241,6 +241,9 @@ namespace Pattons_Best
       BattleRoundSequenceEnemyArtilleryRoll,
       BattleRoundSequenceMinefieldRoll,
       BattleRoundSequenceMinefieldDisableRoll,
+      BattleRoundSequenceMinefieldDriverWoundRoll,
+      BattleRoundSequenceMinefieldAssistantWoundRoll,
+      BattleRoundSequencePanzerfaustAttackRoll,
 
       EveningDebriefingStart,
       Error

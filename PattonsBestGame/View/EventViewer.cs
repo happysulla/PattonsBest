@@ -1210,6 +1210,96 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
+            case "e043b":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  Image? img043b = null;
+                  if (9 == gi.DieResults[key][0])
+                  {
+                     img043b = new Image { Name = "MineFieldAttackDisableRollEnd", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("OBlood1") };
+                     myTextBlock.Inlines.Add(new Run("Possibly Driver Wounds."));
+                  }
+                  else if (10 == gi.DieResults[key][0])
+                  {
+                     img043b = new Image { Name = "MineFieldAttackDisableRollEnd", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("OBlood1") };
+                     myTextBlock.Inlines.Add(new Run("Possibly Assistant Driver Wounds."));
+                  }
+                  else
+                  {
+                     img043b = new Image { Name = "MineFieldAttackDisableRollEnd", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                     myTextBlock.Inlines.Add(new Run("No Effect."));
+                  }
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                          "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(img043b));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
+            case "e043c":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  ICrewMember? driver = gi.GetCrewMember("Driver");
+                  if( null == driver )
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): driver=null for key=" + key);
+                     return false;
+                  }
+                  driver.Zoom = 2.0;
+                  string result = TableMgr.SetWounds(gi, driver, gi.DieResults[key][0], false);
+                  if( "ERROR" ==  result )
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): driver GetWounds() returned error for key=" + key);
+                     return false;
+                  }
+                  Button bDriver = new Button() { Name = "DriverWounded", FontFamily = myFontFam1, FontSize = 12, Height = driver.Zoom * Utilities.theMapItemSize, Width = driver.Zoom * Utilities.theMapItemSize};
+                  bDriver.Click += Button_Click;
+                  CrewMember.SetButtonContent(bDriver, driver, true, true);
+                  myTextBlock.Inlines.Add(new Run("Driver: "));
+                  myTextBlock.Inlines.Add(new Run(result));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak()); 
+                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(bDriver));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+                  driver.Zoom = Utilities.ZOOM;
+               }
+               break;
+            case "e043d":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  ICrewMember? assistant = gi.GetCrewMember("Assistant");
+                  if (null == assistant)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): assistant=null for key=" + key);
+                     return false;
+                  }
+                  assistant.Zoom = 2.0;
+                  string result = TableMgr.SetWounds(gi, assistant, gi.DieResults[key][0], false);
+                  if ("ERROR" == result)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): driver GetWounds() returned error for key=" + key);
+                     return false;
+                  }
+                  Button bAssistant = new Button() { Name="AssistantWounded", FontFamily = myFontFam1, FontSize = 12, Height=assistant.Zoom * Utilities.theMapItemSize, Width = assistant.Zoom * Utilities.theMapItemSize};
+                  bAssistant.Click += Button_Click;
+                  CrewMember.SetButtonContent(bAssistant, assistant, true, true);
+                  myTextBlock.Inlines.Add(new Run("Assistant Driver: "));
+                  myTextBlock.Inlines.Add(new Run(result));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(bAssistant));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+                  assistant.Zoom = Utilities.ZOOM;
+               }
+               break;
             default:
                break;
          }
@@ -2020,6 +2110,10 @@ namespace Pattons_Best
                            action = GameAction.BattleRoundSequenceMinefieldRoll;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
+                        case "MineFieldAttackDisableRollEnd":
+                           action = GameAction.BattleRoundSequenceMinefieldDisableRoll;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
                         default:
                            break;// do nothing
                      }
@@ -2051,6 +2145,20 @@ namespace Pattons_Best
          GameAction action = GameAction.Error;
          Button b = (Button)sender;
          e.Handled = true;
+         //----------------------------------------------------
+         if ("DriverWounded" == b.Name)
+         {
+            action = GameAction.BattleRoundSequenceMinefieldDriverWoundRoll;
+            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+            return;
+         }
+         if ("AssistantWounded" == b.Name)
+         {
+            action = GameAction.BattleRoundSequenceMinefieldAssistantWoundRoll;
+            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+            return;
+         }
+         //----------------------------------------------------
          string key = (string)b.Content;
          if (true == key.StartsWith("r")) // rules based click
          {

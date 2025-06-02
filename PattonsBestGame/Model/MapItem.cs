@@ -27,15 +27,9 @@ namespace Pattons_Best
       public double myTop;    // top of where blood spot exists on canvas
       public BloodSpot(int range, Random r)
       {
-         mySize = r.Next(8) + 5;
+         mySize = r.Next(5) + 3;
          myLeft = r.Next(0, range - mySize);
          myTop  = r.Next(0, range - mySize);
-      }
-      public BloodSpot(int size, double left, double top)
-      {
-         mySize = size;
-         myLeft = left;
-         myTop = top;
       }
    }
    [Serializable]
@@ -116,8 +110,8 @@ namespace Pattons_Best
       public bool IsTurret { get; set; } = false;
       public bool IsKilled { get; set; } = false;
       public bool IsFired { get; set; } = false;
-      public bool IsSpotted { get; set; } = false;
       //--------------------------------------------------
+      public bool IsSpotted { get; set; } = false;
       public bool IsVehicle { get; set; } = false;
       public bool IsWoods { get; set; } = false;
       public bool IsBuilding { get; set; } = false;
@@ -289,11 +283,11 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "GetEnemyUnit() no assigned unit for mi.Name=" + this.Name);
          return enemyUnit;
       }
-      public void SetBloodSpots(int percent=40)
+      public void SetBloodSpots(int percent=30)
       {
          for (int spots = 0; spots < percent; ++spots) // splatter the MapItem with random blood spots
          {
-            int range = (int)(this.Zoom * Utilities.theMapItemSize);
+            int range = (int)(Utilities.theMapItemSize);
             BloodSpot spot = new BloodSpot(range, theRandom);
             myWoundSpots.Add(spot);
          }
@@ -340,18 +334,6 @@ namespace Pattons_Best
             img.Source = theMapImages.GetBitmapImage(mi.TopImageName);
             g.Children.Add(img);
             //----------------------------------------------------
-            Canvas c = new Canvas() { };
-            if (true == isBloodSpotsShown)
-            {
-               foreach (BloodSpot bs in mi.WoundSpots) // create wound spot on canvas
-               {
-                  Image spotImg = new Image() { Stretch = Stretch.Fill, Height = bs.mySize, Width = bs.mySize, Source = theBloodSpot };
-                  c.Children.Add(spotImg);
-                  Canvas.SetLeft(spotImg, bs.myLeft);
-                  Canvas.SetTop(spotImg, bs.myTop);
-               }
-            }
-            g.Children.Add(c);
             if (true == mi.IsTurret)
             {
                double width = zoom * Utilities.theMapItemSize;
@@ -382,6 +364,19 @@ namespace Pattons_Best
                   Canvas.SetTop(imgTurret, 0);
                }
             }
+            Canvas c = new Canvas() { };
+            if (true == isBloodSpotsShown)
+            {
+               foreach (BloodSpot bs in mi.WoundSpots) // create wound spot on canvas
+               {
+                  double size = bs.mySize * zoom;
+                  Image spotImg = new Image() { Stretch = Stretch.Fill, Height = size, Width = size, Source = theBloodSpot };
+                  c.Children.Add(spotImg);
+                  Canvas.SetLeft(spotImg, bs.myLeft * zoom);
+                  Canvas.SetTop(spotImg, bs.myTop * zoom);
+               }
+            }
+            g.Children.Add(c);
             //----------------------------------------------------
             if (true == isDecoration)
             {
@@ -495,8 +490,11 @@ namespace Pattons_Best
          Role = role;
          Rank = rank;
       }
-      public static void SetButtonContent(Button b, ICrewMember cm, bool isDecoration = true, bool isBloodSpotsShown = true)
+      public static void SetButtonContent(Button b, ICrewMember cm, bool isMapItemZoom = true, bool isDecoration = true, bool isBloodSpotsShown = true)
       {
+         double zoom = Utilities.ZOOM;
+         if (true == isMapItemZoom)
+            zoom = cm.Zoom;
          Grid g = new Grid() { };
          if (false == cm.IsAnimated)
          {
@@ -509,10 +507,11 @@ namespace Pattons_Best
             {
                foreach (BloodSpot bs in cm.WoundSpots) // create wound spot on canvas
                {
-                  Image spotImg = new Image() { Stretch = Stretch.Fill, Height = bs.mySize, Width = bs.mySize, Source = theBloodSpot };
+                  double size = bs.mySize * zoom;
+                  Image spotImg = new Image() { Stretch = Stretch.Fill, Height = size, Width = size, Source = theBloodSpot };
                   c.Children.Add(spotImg);
-                  Canvas.SetLeft(spotImg, bs.myLeft);
-                  Canvas.SetTop(spotImg, bs.myTop);
+                  Canvas.SetLeft(spotImg, bs.myLeft * zoom);
+                  Canvas.SetTop(spotImg, bs.myTop * zoom);
                }
             }
             g.Children.Add(c);
@@ -521,16 +520,16 @@ namespace Pattons_Best
             {
                if (true == cm.IsMoving)
                {
-                  double width = 0.4 * cm.Zoom * Utilities.theMapItemOffset;
+                  double width = 0.4 * zoom * Utilities.theMapItemOffset;
                   double height = 1.33 * width;
                   Image imgTerrain = new Image() { Height = height, Width = width, Source = theMoving };
                   c.Children.Add(imgTerrain);
-                  Canvas.SetLeft(imgTerrain, cm.Zoom * Utilities.theMapItemOffset - 0.5 * width);
+                  Canvas.SetLeft(imgTerrain, zoom * Utilities.theMapItemOffset - 0.5 * width);
                   Canvas.SetTop(imgTerrain, -0.5 * height);
                }
                else if (true == cm.IsHullDown)
                {
-                  double width = 0.5 * cm.Zoom * Utilities.theMapItemSize;
+                  double width = 0.5 * zoom * Utilities.theMapItemSize;
                   double height = width / 2.0;
                   Image imgTerrain = new Image() { Height = height, Width = width, Source = theHullDown };
                   c.Children.Add(imgTerrain);
@@ -539,7 +538,7 @@ namespace Pattons_Best
                }
                else if (true == cm.IsWoods)
                {
-                  double width = cm.Zoom * Utilities.theMapItemSize;
+                  double width = zoom * Utilities.theMapItemSize;
                   double height = width;
                   Image imgTerrain = new Image() { Height = height, Width = width, Source = theWood };
                   c.Children.Add(imgTerrain);
@@ -548,7 +547,7 @@ namespace Pattons_Best
                }
                else if (true == cm.IsFortification)
                {
-                  double width = cm.Zoom * Utilities.theMapItemSize;
+                  double width = zoom * Utilities.theMapItemSize;
                   double height = width;
                   Image imgTerrain = new Image() { Height = height, Width = width, Source = theFort };
                   c.Children.Add(imgTerrain);
@@ -557,7 +556,7 @@ namespace Pattons_Best
                }
                else if (true == cm.IsBuilding)
                {
-                  double width = cm.Zoom * Utilities.theMapItemSize;
+                  double width = zoom * Utilities.theMapItemSize;
                   double height = width;
                   Image imgTerrain = new Image() { Height = height, Width = width, Source = theBuild };
                   c.Children.Add(imgTerrain);

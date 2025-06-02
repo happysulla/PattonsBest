@@ -182,7 +182,22 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "PerformSpotting(): GetSpottedTerritories() returned null for cm=" + cm.Role);
                return false;
             }
-            if( 0 < spottedTerritories.Count)
+            if( true == Logger.theLogLevel[(int)LogEnum.LE_EVENT_VIEWER_SPOTTING]) // print out spotted territories
+            {
+               StringBuilder sb = new StringBuilder();
+               sb.Append("[");
+               int i = 0;
+               foreach (string t in spottedTerritories)
+               {
+                  sb.Append(t);
+                  if (i != (spottedTerritories.Count - 1))
+                     sb.Append(", ");
+                  i++; ;
+               }
+               sb.Append("]");
+               Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "PerformSpotting():  cm=" + cm.Role + " spottedTerritories=" + sb.ToString());
+            }
+            if ( 0 < spottedTerritories.Count)
                myAssignables.Add(cm);
          }
          //--------------------------------------------------
@@ -667,14 +682,13 @@ namespace Pattons_Best
             IStack? stack = myGameInstance.BattleStacks.Find(tName);
             if (null != stack)
             {
+               sb.Append("=(");
                foreach (IMapItem mi in stack.MapItems)
                {
-                  sb.Append("=(");
                   sb.Append(mi.Name);
-                  sb.Append(")");
                   if ((true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("SPG")))
                   {
-                     sb.Append("a");
+                     sb.Append("s");
                      myGridRows[i] = new GridRow(mi);
                      myGridRows[i].myRange = tName[count - 1];
                      myGridRows[i].mySector = tName[count - 2];
@@ -687,10 +701,12 @@ namespace Pattons_Best
                      }
                      i++;
                   }
+                  sb.Append(",");
                }
+               sb.Append(")");
             }
             if (i != (spottedTerritories.Count - 1))
-               sb.Append(',');
+               sb.Append(", ");
          }
          myMaxRowCount = i;
          Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Button_Click():myState=" + myState.ToString() + " myMaxRowCount=" + myMaxRowCount.ToString() + " " + sb.ToString() + "]");

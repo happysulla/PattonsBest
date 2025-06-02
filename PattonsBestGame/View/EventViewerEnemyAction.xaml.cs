@@ -1485,8 +1485,9 @@ namespace Pattons_Best
             //------------------------------------------------------------------------------------------------
             case E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK:
                myGridRows[i].myDieRollToHitYourTank = dieRoll;
-               Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Firing at Your Tank myState=" + myState.ToString() + " dr=" + dieRoll);
-               if (myGridRows[i].myDieRollToHitYourTank <= myGridRows[i].myToHitNumberYourTank)
+               int modifiedDieRoll = dieRoll + myGridRows[i].myModifierToHitYourTank;
+               Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Firing at Your Tank myState=" + myState.ToString() + " dr=" + modifiedDieRoll.ToString());
+               if (modifiedDieRoll <= myGridRows[i].myToHitNumberYourTank)
                {
                   myGridRows[i].myToHitResultYourTank = "Hit";
                }
@@ -1527,7 +1528,11 @@ namespace Pattons_Best
                   if ( "Miss" == myGridRows[i].myHitLocationYourTank )
                      myGridRows[i].myDieRollToKillYourTank = NO_FIRE_MISSED_TURRET;
                   if ("Track" == myGridRows[i].myHitLocationYourTank)
+                  {
                      myGridRows[i].myDieRollToKillYourTank = NO_FIRE_THROWN_TRACK;
+                     myGameInstance.Sherman.IsThrownTrack = true;
+                     myGameInstance.Sherman.IsMoving = false;
+                  }
                }
                else if (4 == myRollResultColNum)
                {
@@ -1537,6 +1542,7 @@ namespace Pattons_Best
                   {
                      myGameInstance.Sherman.SetBloodSpots();
                      myGameInstance.Sherman.IsKilled = true;
+                     myGameInstance.Sherman.IsMoving = false;
                      myGridRows[i].myToKillResultYourTank = "KO";
                      myGameInstance.Death = new ShermanDeath(myGameInstance, enemyMapItem, myGridRows[i].myHitLocationYourTank, "Enemy Action");
                      for (int j = 0; j < myMaxRowCount; ++j)

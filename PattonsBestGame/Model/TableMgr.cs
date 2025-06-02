@@ -2093,13 +2093,13 @@ namespace Pattons_Best
          if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
             toHitNum = toHitNum * 0.5;
          //------------------------------------
-         int modifier = GetToHitNumberModifierForYourTank(gi, mi, range);
-         if (modifier < -100)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank() GetToHitNumberModifierForYourTank() returned error ");
-            return toHitNum;
-         }
-         toHitNum -= modifier;
+         //int modifier = GetToHitNumberModifierForYourTank(gi, mi, range);
+         //if (modifier < -100)
+         //{
+         //   Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank() GetToHitNumberModifierForYourTank() returned error ");
+         //   return toHitNum;
+         //}
+         //toHitNum -= modifier;
          //------------------------------------
          return toHitNum;
       }
@@ -2280,7 +2280,7 @@ namespace Pattons_Best
          return modifier;
       }
       //-------------------------------------------
-      public static int GetWoundsModifier(IGameInstance gi, ICrewMember cm)
+      public static int GetWoundsModifier(IGameInstance gi, ICrewMember cm, bool isCollateralDamage)
       {
          int modifier = 0;
          //----------------------------------
@@ -2364,11 +2364,55 @@ namespace Pattons_Best
          if (true == gi.IsHarrassingFire)
             modifier -= 20;
          //----------------------------------
-         if( (true == cm.Action.Contains("FireSubMg")) || (true == cm.Action.Contains("FireAaMg")) )
-            modifier += 5;
+         if( true == isCollateralDamage )
+         {
+            if ((true == cm.Action.Contains("FireSubMg")) || (true == cm.Action.Contains("FireAaMg")))
+               modifier += 5;
+         }
          return modifier;
       }
-      public static string SetWounds(IGameInstance gi, ICrewMember cm, int dieRoll)
+      public static string GetWounds(IGameInstance gi, ICrewMember cm, int dieRoll, bool isCollateralDamage)
+      {
+         if (100 == dieRoll) // unmodified die roll 100 is always a kill
+            return "Killed";
+         int modifier = GetWoundsModifier(gi, cm, isCollateralDamage);
+         if (modifier < -100)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetWounds(): GetWoundsModifier() returned error");
+            return "ERROR";
+         }
+         dieRoll += modifier;
+         if (dieRoll < 42)
+            return "Near Miss";
+         else if (dieRoll < 48)
+         {
+            if ((true == gi.IsMinefieldAttack) || (null == gi.Death))
+               return "Unconscious";
+            else
+               return "Light Wound";
+         }
+         else if (dieRoll < 73)
+         {
+            return "Light Wound";
+         }
+         else if (dieRoll < 88)
+         {
+            return "Light Wound";
+         }
+         else if (dieRoll < 93)
+         {
+            return "Serious Wound";
+         }
+         else if (dieRoll < 98)
+         {
+            return "Serious Wound";
+         }
+         else
+         {
+            return "Killed";
+         }
+      }
+      public static string SetWounds(IGameInstance gi, ICrewMember cm, int dieRoll, bool isCollateralDamage)
       {
          if( 100 == dieRoll ) // unmodified die roll 100 is always a kill
          {
@@ -2376,7 +2420,7 @@ namespace Pattons_Best
             cm.IsKilled = true;
             return "Killed";
          }
-         int modifier = GetWoundsModifier(gi, cm);
+         int modifier = GetWoundsModifier(gi, cm, isCollateralDamage);
          if (modifier < -100)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetWounds(): GetWoundsModifier() returned error");
@@ -2392,7 +2436,7 @@ namespace Pattons_Best
             {
                cm.IsUnconscious = true;
                cm.IsIncapacitated = true;
-               return "Unconscious - Incapacitated";
+               return "Unconscious";
             }
             else
             {
@@ -2408,25 +2452,95 @@ namespace Pattons_Best
          {
             cm.SetBloodSpots(20);
             cm.IsIncapacitated = true;
-            return "Light Wound - Out one week";
+            return "Light Wound";
          }
          else if (dieRoll < 93)
          {
             cm.SetBloodSpots(30);
             cm.IsIncapacitated = true;
-            return "Serious Wound - Out 1D weeks";
+            return "Serious Wound";
          }
          else if (dieRoll < 98)
          {
             cm.SetBloodSpots(35);
             cm.IsIncapacitated = true;
-            return "Serious Wound - Sent Home";
+            return "Serious Wound";
          }
          else
          {
             cm.SetBloodSpots(40);
             cm.IsKilled = true;
             return "Killed";
+         }
+      }
+      public static string GetWoundEffect(IGameInstance gi, ICrewMember cm, int dieRoll, int modifier)
+      {
+         if (100 == dieRoll) // unmodified die roll 100 is always a kill
+            return "Killed";
+         dieRoll += modifier;
+         if (dieRoll < 42)
+            return "None";
+         else if (dieRoll < 48)
+         {
+            if ((true == gi.IsMinefieldAttack) || (null == gi.Death))
+               return "Incapacitated";
+            else
+               return "None";
+         }
+         else if (dieRoll < 73)
+         {
+            return "None";
+         }
+         else if (dieRoll < 88)
+         {
+            return "Out 1 week";
+         }
+         else if (dieRoll < 93)
+         {
+            return "Out 10 weeks";
+         }
+         else if (dieRoll < 98)
+         {
+            return "Sent Home";
+         }
+         else
+         {
+            return "Killed";
+         }
+      }
+      public static string GetBailoutEffectResult(IGameInstance gi, ICrewMember cm, int dieRoll, int modifier)
+      {
+         if (100 == dieRoll) // unmodified die roll 100 is always a kill
+            return "Cannot Bail";
+         dieRoll += modifier;
+         if (dieRoll < 42)
+            return "None";
+         else if (dieRoll < 48)
+         {
+            if ((true == gi.IsMinefieldAttack) || (null == gi.Death))
+               return "Cannot Bail";
+            else
+               return "None";
+         }
+         else if (dieRoll < 73)
+         {
+            return "None";
+         }
+         else if (dieRoll < 88)
+         {
+            return "None";
+         }
+         else if (dieRoll < 93)
+         {
+            return "Bail out +2";
+         }
+         else if (dieRoll < 98)
+         {
+            return "Cannot Bail";
+         }
+         else
+         {
+            return "Cannot Bail";
          }
       }
       //-------------------------------------------
@@ -2648,7 +2762,7 @@ namespace Pattons_Best
             mi.Spotting = EnumSpottingResult.IDENTIFIED;
             return "Identified";
          }
-         if ( (9 == dieRoll) || (10 == dieRoll) )  // an unmodified roll of 9-10 means target is hidden
+         if ( ((9 == dieRoll) || (10 == dieRoll)) && ((EnumSpottingResult.IDENTIFIED == mi.Spotting) || (EnumSpottingResult.SPOTTED == mi.Spotting)) ) // an unmodified roll of 9-10 means target is hidden
          {
             mi.Spotting = EnumSpottingResult.HIDDEN;
             return "Hidden";
@@ -2689,18 +2803,21 @@ namespace Pattons_Best
                      string name = "Pak39" + Utilities.MapItemNum.ToString();
                      Utilities.MapItemNum++;
                      appearingMapItem = new MapItem(name, mi.Zoom, "c93Pak38", mi.TerritoryCurrent);
+                     return appearingMapItem;
                   }
                   else if (true == mapItem.Name.Contains("Pak40"))
                   {
                      string name = "Pak40" + Utilities.MapItemNum.ToString();
                      Utilities.MapItemNum++;
                      appearingMapItem = new MapItem(name, mi.Zoom, "c94Pak40", mi.TerritoryCurrent);
+                     return appearingMapItem;
                   }
                   else if (true == mapItem.Name.Contains("Pak43"))
                   {
                      string name = "Pak43" + Utilities.MapItemNum.ToString();
                      Utilities.MapItemNum++;
                      appearingMapItem = new MapItem(name, mi.Zoom, "c95Pak43", mi.TerritoryCurrent);
+                     return appearingMapItem;
                   }
                }
             }
@@ -2716,12 +2833,14 @@ namespace Pattons_Best
                      string name = "PzIV" + Utilities.MapItemNum.ToString();
                      Utilities.MapItemNum++;
                      appearingMapItem = new MapItem(name, mi.Zoom, "c79PzIV", mi.TerritoryCurrent);
+                     return appearingMapItem;
                   }
                   else if (true == mapItem.Name.Contains("PzV"))
                   {
                      string name = "PzV" + Utilities.MapItemNum.ToString();
                      Utilities.MapItemNum++;
                      appearingMapItem = new MapItem(name, mi.Zoom, "c80PzV", mi.TerritoryCurrent);
+                     return appearingMapItem;
                   }
                }
             }
@@ -2737,40 +2856,41 @@ namespace Pattons_Best
                      string name = "STuGIIIg" + Utilities.MapItemNum.ToString();
                      Utilities.MapItemNum++;
                      appearingMapItem = new MapItem(name, mi.Zoom, "c85STuGIIIg", mi.TerritoryCurrent);
+                     return appearingMapItem;
                   }
                   else if (true == mapItem.Name.Contains("MARDERII"))
                   {
                      string name = "MARDERII" + Utilities.MapItemNum.ToString();
                      Utilities.MapItemNum++;
                      appearingMapItem = new MapItem(name, mi.Zoom, "c83MarderII", mi.TerritoryCurrent);
+                     return appearingMapItem;
                   }
                   else if (true == mapItem.Name.Contains("MARDERIII"))
                   {
                      string name = "MARDERIII" + Utilities.MapItemNum.ToString();
                      Utilities.MapItemNum++;
                      appearingMapItem = new MapItem(name, mi.Zoom, "c84MarderIII", mi.TerritoryCurrent);
+                     return appearingMapItem;
                   }
                   else if (true == mapItem.Name.Contains("JdgPzIV"))
                   {
                      string name = "JdgPzIV" + Utilities.MapItemNum.ToString();
                      Utilities.MapItemNum++;
                      appearingMapItem = new MapItem(name, mi.Zoom, "c86JgdPzIV", mi.TerritoryCurrent);
+                     return appearingMapItem;
                   }
                   else if (true == mapItem.Name.Contains("JdgPz38t"))
                   {
                      string name = "JdgPz38t" + Utilities.MapItemNum.ToString();
                      Utilities.MapItemNum++;
                      appearingMapItem = new MapItem(name, mi.Zoom, "c87JgdPz38t", mi.TerritoryCurrent);
+                     return appearingMapItem;
                   }
                }
             }
          }
-         else
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetAppearingUnit(): reached default mi=" + mi.Name);
-            return null;
-         }
-         return appearingMapItem;
+         Logger.Log(LogEnum.LE_ERROR, "GetAppearingUnit(): reached default mi=" + mi.Name);
+         return null;
       }
       public static IMapItem? GetAppearingUnitNew(IGameInstance gi, IMapItem mi, int dieRoll)
       {
@@ -2782,18 +2902,21 @@ namespace Pattons_Best
                string name = "Pak39" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c93Pak38", mi.TerritoryCurrent);
+               return appearingMapItem;
             }
             else if(dieRoll < 9)
             {
                string name = "Pak40" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c94Pak40", mi.TerritoryCurrent);
+               return appearingMapItem;
             }
             else 
             {
                string name = "Pak43" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c95Pak43", mi.TerritoryCurrent);
+               return appearingMapItem;
             }
          }
          else if (true == mi.Name.Contains("TANK"))
@@ -2803,12 +2926,14 @@ namespace Pattons_Best
                string name = "PzIV" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c79PzIV", mi.TerritoryCurrent);
+               return appearingMapItem;
             }
             else if (dieRoll < 10)
             {
                string name = "PzV" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
-               appearingMapItem = new MapItem(name, mi.Zoom, "c82PzVIb", mi.TerritoryCurrent);
+               appearingMapItem = new MapItem(name, mi.Zoom, "c80PzV", mi.TerritoryCurrent);
+               return appearingMapItem;
             }
             else
             {
@@ -2824,18 +2949,21 @@ namespace Pattons_Best
                   string name = "PzV" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c80PzV", mi.TerritoryCurrent);
+                  return appearingMapItem;
                }
                else if (diceRoll < 95)
                {
                   string name = "PzVIe" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c81PzVIe", mi.TerritoryCurrent);
+                  return appearingMapItem;
                }
                else
                {
                   string name = "PzVIb" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c82PzVIb", mi.TerritoryCurrent);
+                  return appearingMapItem;
                }
             }
          }
@@ -2846,38 +2974,39 @@ namespace Pattons_Best
                string name = "STuGIIIg" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c85STuGIIIg", mi.TerritoryCurrent);
+               return appearingMapItem;
             }
             else if (dieRoll < 5)
             {
                string name = "MARDERII" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c83MarderII", mi.TerritoryCurrent);
+               return appearingMapItem;
             }
             else if (dieRoll < 7)
             {
                string name = "MARDERIII" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c84MarderIII", mi.TerritoryCurrent);
+               return appearingMapItem;
             }
             else if (dieRoll < 9)
             {
                string name = "JdgPzIV" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c86JgdPzIV", mi.TerritoryCurrent);
+               return appearingMapItem;
             }
             else
             {
                string name = "JdgPz38t" + Utilities.MapItemNum.ToString();
                Utilities.MapItemNum++;
                appearingMapItem = new MapItem(name, mi.Zoom, "c87JgdPz38t", mi.TerritoryCurrent);
+               return appearingMapItem;
             }
          }
-         else
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetAppearingUnit(): reached default mi=" + mi.Name);
-            return null;
-         }
-         return appearingMapItem;
+         Logger.Log(LogEnum.LE_ERROR, "GetAppearingUnit(): reached default mi=" + mi.Name);
+         return null;
       }
       //-------------------------------------------
       private void CreateCombatCalender()

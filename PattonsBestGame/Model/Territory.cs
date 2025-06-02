@@ -156,6 +156,10 @@ namespace Pattons_Best
       public static List<String>? GetSpottedTerritories(IGameInstance gi, ICrewMember cm)
       {
          List<string> spottedTerritories = new List<string>();
+         //---------------------------------------------------
+         if( (true == cm.IsIncapacitated) || (true == cm.IsKilled) )
+            return spottedTerritories;
+         //---------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
@@ -495,8 +499,8 @@ namespace Pattons_Best
                return null;
          }
          //------------------------------------
-         List<string> returnedTerritories = new List<string>();
-         foreach( string tName in spottedTerritories )
+         List<string> returnedTerritories = new List<string>(); // filter list to only unspotted/spotted enemy units
+         foreach ( string tName in spottedTerritories )
          {
             int count = tName.Length;
             if (3 != count)
@@ -512,7 +516,10 @@ namespace Pattons_Best
                   if ((true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("SPG")))
                   {
                      if ( (EnumSpottingResult.IDENTIFIED != mi.Spotting) && (EnumSpottingResult.HIDDEN != mi.Spotting))
-                        returnedTerritories.Add(tName);
+                     {
+                        returnedTerritories.Add(tName); // only want key off one MapItem in each territory
+                        break;
+                     }
                   }
                }
             }
