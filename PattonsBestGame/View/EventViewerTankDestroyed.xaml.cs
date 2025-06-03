@@ -72,6 +72,7 @@ namespace Pattons_Best
          public int myBailoutWoundModifier = 0;
          public int myDieRollBailoutWound = Utilities.NO_RESULT;
          public string myBailoutWoundResult = "Uninit";
+         public string myBailoutWoundEffect = "Uninit";
          //------------------------------------
          public ICrewMember? myCrewMemberRescuing = null;
          public int myDieRollRescue = Utilities.NO_RESULT;
@@ -656,16 +657,16 @@ namespace Pattons_Best
             }
             else
             {
-               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRowWounds[i].myDieRollBailoutWound.ToString() };
+               int combo = myGridRowWounds[i].myBailoutWoundModifier + myGridRowWounds[i].myDieRollBailoutWound;
+               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = combo.ToString() };
                myGrid.Children.Add(label2);
                Grid.SetRow(label2, rowNum);
                Grid.SetColumn(label2, 2);
-               int combo = myGridRowWounds[i].myBailoutWoundModifier + myGridRowWounds[i].myDieRollBailoutWound;
-               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = combo.ToString() };
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRowWounds[i].myBailoutWoundResult };
                myGrid.Children.Add(label3);
                Grid.SetRow(label3, rowNum);
                Grid.SetColumn(label3, 3);
-               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRowWounds[i].myBailoutWoundResult };
+               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRowWounds[i].myBailoutWoundEffect };
                myGrid.Children.Add(label4);
                Grid.SetRow(label4, rowNum);
                Grid.SetColumn(label4, 4);
@@ -788,15 +789,13 @@ namespace Pattons_Best
                      return;
                }
                //--------------------------------------
-               if( "Near Miss" != myGridRowWounds[i].myWoundEffect)
+               if (false == myGridRowWounds[i].myWoundEffect.Contains("Near Miss"))
                {
                   StringBuilder sb1 = new StringBuilder("At ");
                   sb1.Append(TableMgr.GetTime(lastReport));
                   sb1.Append(", ");
                   sb1.Append(cm.Name);
-                  sb1.Append(" (");
-                  sb1.Append(cm.Role);
-                  sb1.Append(") suffered ");
+                  sb1.Append(" suffered ");
                   sb1.Append(myGridRowWounds[i].myWoundResult);
                   sb1.Append(" - ");
                   sb1.Append(myGridRowWounds[i].myWoundEffect);
@@ -829,19 +828,27 @@ namespace Pattons_Best
             case E0481Enum.BAILOUT_WOUNDS_ROLL:
                myGridRowWounds[i].myDieRollBailoutWound = dieRoll;
                ICrewMember cm1 = myGridRowWounds[i].myCrewMember;
-               myGridRowWounds[i].myBailoutWoundResult = TableMgr.GetWoundEffect(myGameInstance, cm1, dieRoll, myGridRowWounds[i].myBailoutWoundModifier);
-               if ("Near Miss" != myGridRowWounds[i].myBailoutWoundResult)
+               myGridRowWounds[i].myBailoutWoundResult = TableMgr.SetWounds(myGameInstance, cm1, dieRoll, myGridRowWounds[i].myBailoutWoundModifier);
+               myGridRowWounds[i].myBailoutWoundEffect = TableMgr.GetBailoutEffectResult(myGameInstance, cm1, dieRoll, myGridRowWounds[i].myBailoutWoundModifier);
+               if (false == myGridRowWounds[i].myBailoutWoundResult.Contains("Near Miss"))
                {
                   StringBuilder sb1 = new StringBuilder("At ");
                   sb1.Append(TableMgr.GetTime(lastReport));
                   sb1.Append(", ");
                   sb1.Append(cm1.Name);
-                  sb1.Append(" (");
-                  sb1.Append(cm1.Role);
-                  sb1.Append(") suffered ");
+                  sb1.Append(" suffered ");
                   sb1.Append(myGridRowWounds[i].myBailoutWoundResult);
-                  sb1.Append(" bailing out.");
+                  sb1.Append(" - ");
+                  sb1.Append(myGridRowWounds[i].myBailoutWoundEffect);
+                  sb1.Append(".");
                   lastReport.Notes.Add(sb1.ToString());
+               }
+               //--------------------------------------
+               myState = E0481Enum.BAILOUT_WOUNDS_ROLL_SHOW;
+               for (int k = 0; k < myMaxRowCount; k++)
+               {
+                  if (Utilities.NO_RESULT == myGridRowWounds[k].myDieRollBailoutWound)
+                     myState = E0481Enum.BAILOUT_WOUNDS_ROLL;
                }
                break;
             default:

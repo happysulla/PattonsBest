@@ -2304,7 +2304,7 @@ namespace Pattons_Best
                case GameAction.BattleRandomEventRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 29; // <cgs> TEST - panzerfaust attack
+                     dieRoll = 22; // <cgs> TEST - panzerfaust attack
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
