@@ -396,21 +396,57 @@ Assistant Driver possibly wounded by minefield attack. Roll 2D and look at
 <InlineUIContainer><Button Content='Wounds' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table: 
 <InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer> 
 <LineBreak/><LineBreak/>"
-e044	"<Bold>e044 Panzerfaust Attack</Bold> 
+e044	"<Bold>e044 Panzerfaust Attack - Sector</Bold> 
 <InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='Panzerfaust' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
 Determine from which sector of the Battle Board attack is originating by rolling 1D according to 
 <InlineUIContainer><Button Content='r5.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> :  
 <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/><LineBreak/>
 If the sector rolled is US controlled, no attack is made. If the sector is not US Controlled, a Panzerfaust marker is placed in the sector's close range.
+<LineBreak/><LineBreak/>"
+e044a	"<Bold>e044a Panzerfaust Attack - To Attack</Bold> 
+<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='Panzerfaust' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
-If an attack occurs, roll on the 
-<InlineUIContainer><Button Content='Panzerfaust' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Attack Table to hit Sherman:  
-<InlineUIContainer><Image Name='DieRollWhite1' Height='21' Width='21' Visibility='Hidden'> </Image></InlineUIContainer>
+Determine if attack occurs based on scenario type, roll one die: 
+<InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/><LineBreak/>
-If hits, roll again to see if your tank is knocked out (KO):  
-<InlineUIContainer><Image Name='DieRollWhite2' Height='21' Width='21' Visibility='Hidden'> </Image></InlineUIContainer>
+  1 to 3 for Advance<LineBreak/>
+  1 to 5 for Battle<LineBreak/>
+  1 to 2 for Counterattack<LineBreak/>
+<LineBreak/><LineBreak/>
+<Underline>Modifiers:</Underline><LineBreak/>
+  December 1944 or later = -1<LineBreak/>
+  Sherman moving = -1<LineBreak/>
+  Lead tank = -1<LineBreak/>
+  Advancing Fire in zone = +3<LineBreak/>
+  Attack from sector 1,2, or3 = -1<LineBreak/>
+<LineBreak/><LineBreak/>"
+e044b	"<Bold>e044b Panzerfaust Attack - To Hit</Bold> 
+<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='Panzerfaust' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<LineBreak/><LineBreak/>
+Since an attack occurred, roll to hit:   
+<InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>
+<LineBreak/><LineBreak/>
+  1 to 7 is Hit<LineBreak/>
+  8 to 10 is Miss<LineBreak/>
+<LineBreak/><LineBreak/>
+<Underline>Modifiers:</Underline><LineBreak/>
+  Sherman moving = +2<LineBreak/>
+  Advancing Fire in zone = +3<LineBreak/>
+<LineBreak/><LineBreak/>"
+e044c	"<Bold>e044c Panzerfaust Attack - To Kill</Bold> 
+<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<InlineUIContainer><Button Content='Panzerfaust' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+ <LineBreak/><LineBreak/>
+Since there was a hit, roll again to see if your tank is knocked out (KO):  
+<InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21'> </Image></InlineUIContainer>
+<LineBreak/><LineBreak/>
+  1 to 8  is KO<LineBreak/>
+  9 to 10 is No Effect<LineBreak/>
 <LineBreak/><LineBreak/>"
 e045	"<Bold>e045 Harrassing Fire</Bold> 
 <InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  

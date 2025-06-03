@@ -1248,7 +1248,8 @@ namespace Pattons_Best
                      return false;
                   }
                   driver.Zoom = 2.0;
-                  string result = TableMgr.SetWounds(gi, driver, gi.DieResults[key][0], false);
+                  int modifier = TableMgr.GetWoundsModifier(gi, driver, false, false, false);
+                  string result = TableMgr.SetWounds(gi, driver, gi.DieResults[key][0], modifier);
                   if( "ERROR" ==  result )
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): driver GetWounds() returned error for key=" + key);
@@ -1279,7 +1280,8 @@ namespace Pattons_Best
                      return false;
                   }
                   assistant.Zoom = 2.0;
-                  string result = TableMgr.SetWounds(gi, assistant, gi.DieResults[key][0], false);
+                  int modifier = TableMgr.GetWoundsModifier(gi, assistant, false, false, false);
+                  string result = TableMgr.SetWounds(gi, assistant, gi.DieResults[key][0], modifier);
                   if ("ERROR" == result)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): driver GetWounds() returned error for key=" + key);
@@ -1298,6 +1300,62 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                   assistant.Zoom = Utilities.ZOOM;
+               }
+               break;
+            case "e044":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  StringBuilder sb = new StringBuilder();
+                  sb.Append("Panzerfaust Attack Sector is ");
+                  char sector = '1';
+                  switch(gi.DieResults[key][0])
+                  {
+                     case 1: sb.Append("1."); sector = '1'; break;
+                     case 2: sb.Append("2."); sector = '2'; break;
+                     case 3: sb.Append("3."); sector = '3'; break;
+                     case 4: case 5: sb.Append("4-5."); sector = '4'; break;
+                     case 6: case 7: case 8: sb.Append("6-8."); sector = '6'; break;
+                     case 9: case 0: sb.Append("9-10."); sector = '9'; break;
+                     default:
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.BattleResistance=" + gi.BattleResistance.ToString());
+                        return false;
+                  }
+                  string tName = "B" + sector + "M";
+                  IStack? stack = gi.BattleStacks.Find(tName);
+                  if( null != stack )
+                  {
+                     foreach( IMapItem mi in stack.MapItems )
+                     {
+                        if( true == mi.Name.Contains("UsControl"))
+                        {
+                           sb.Append(" Ignore attack since sector under US Control.");
+                           break;
+                        }
+                     }
+                  }
+                  myTextBlock.Inlines.Add(new Run(sb.ToString()));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  Image imge044 = new Image { Name = "PanzerfaultSector", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c107Panzerfaust") };
+                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge044));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
+            case "e044a":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+    
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  Image imge044a = new Image { Name = "PanzerfaultToAttack", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c107Panzerfaust") };
+                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge044a));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
             default:
@@ -2112,6 +2170,22 @@ namespace Pattons_Best
                            break;
                         case "MineFieldAttackDisableRollEnd":
                            action = GameAction.BattleRoundSequenceMinefieldDisableRoll;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "PanzerfaultSector":
+                           action = GameAction.BattleRoundSequencePanzerfaustSectorRoll;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "PanzerfaultAttack":
+                           action = GameAction.BattleRoundSequencePanzerfaustAttackRoll;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "PanzerfaultToHit":
+                           action = GameAction.BattleRoundSequencePanzerfaustToHitRoll;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "PanzerfaultToKill":
+                           action = GameAction.BattleRoundSequencePanzerfaustToKillRoll;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         default:

@@ -2280,84 +2280,88 @@ namespace Pattons_Best
          return modifier;
       }
       //-------------------------------------------
-      public static int GetWoundsModifier(IGameInstance gi, ICrewMember cm, bool isCollateralDamage)
+      public static int GetWoundsModifier(IGameInstance gi, ICrewMember cm, bool isGunFire, bool isBailout, bool isCollateralDamage)
       {
          int modifier = 0;
          //----------------------------------
-         ShermanDeath? death = gi.Death;
-         if( null != death)
+         if( true == isGunFire )
          {
-            switch (death.myEnemyFireDirection)
+            ShermanDeath? death = gi.Death;
+            if (null != death)
             {
-               case "T F":
-                  if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
-                     modifier -= 20;
-                  break;
-               case "T R":
-                  if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
-                     modifier -= 20;
-                  if ("Gunner" == cm.Role)
-                     modifier += 10;
-                  if ("Loader" == cm.Role)
-                     modifier -= 10;
-                  break;
-               case "T L":
-                  if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
-                     modifier -= 20;
-                  if ("Gunner" == cm.Role)
-                     modifier -= 10;
-                  if ("Loader" == cm.Role)
-                     modifier += 10;
-                  break;
-               case "T B":
-                  if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
-                     modifier -= 20;
-                  if ("Commander" == cm.Role)
-                     modifier += 10;
-                  break;
-               case "H F":
-                  if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
-                     modifier += 10;
-                  if ("Commander" == cm.Role)
-                     modifier -= 10;
-                  break;
-               case "H FR":
-                  if (("Driver" == cm.Role) || ("Loader" == cm.Role))
-                     modifier -= 10;
-                  if (("Assistant" == cm.Role) || ("Gunner" == cm.Role))
-                     modifier += 10;
-                  break;
-               case "H BR":
-                  if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
-                     modifier -= 40;
-                  else
-                     modifier -= 30;
-                  break;
-               case "H FL":
-                  if (("Driver" == cm.Role) || ("Loader" == cm.Role))
-                     modifier += 10;
-                  if (("Assistant" == cm.Role) || ("Gunner" == cm.Role))
-                     modifier -= 10;
-                  break;
-               case "H BL":
-                  if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
-                     modifier -= 40;
-                  else
-                     modifier -= 30;
-                  break;
-               case "H B":
-                  if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
-                     modifier -= 40;
-                  else
-                     modifier -= 30;
-                  break;
-               default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetExplosionModifier(): reached default for direction=" + death.myEnemyFireDirection);
-                  return -1000;
+               switch (death.myEnemyFireDirection)
+               {
+                  case "T F":
+                     if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                        modifier -= 20;
+                     break;
+                  case "T R":
+                     if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                        modifier -= 20;
+                     if ("Gunner" == cm.Role)
+                        modifier += 10;
+                     if ("Loader" == cm.Role)
+                        modifier -= 10;
+                     break;
+                  case "T L":
+                     if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                        modifier -= 20;
+                     if ("Gunner" == cm.Role)
+                        modifier -= 10;
+                     if ("Loader" == cm.Role)
+                        modifier += 10;
+                     break;
+                  case "T B":
+                     if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                        modifier -= 20;
+                     if ("Commander" == cm.Role)
+                        modifier += 10;
+                     break;
+                  case "H F":
+                     if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                        modifier += 10;
+                     if ("Commander" == cm.Role)
+                        modifier -= 10;
+                     break;
+                  case "H FR":
+                     if (("Driver" == cm.Role) || ("Loader" == cm.Role))
+                        modifier -= 10;
+                     if (("Assistant" == cm.Role) || ("Gunner" == cm.Role))
+                        modifier += 10;
+                     break;
+                  case "H BR":
+                     if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                        modifier -= 40;
+                     else
+                        modifier -= 30;
+                     break;
+                  case "H FL":
+                     if (("Driver" == cm.Role) || ("Loader" == cm.Role))
+                        modifier += 10;
+                     if (("Assistant" == cm.Role) || ("Gunner" == cm.Role))
+                        modifier -= 10;
+                     break;
+                  case "H BL":
+                     if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                        modifier -= 40;
+                     else
+                        modifier -= 30;
+                     break;
+                  case "H B":
+                     if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                        modifier -= 40;
+                     else
+                        modifier -= 30;
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "GetExplosionModifier(): reached default for direction=" + death.myEnemyFireDirection);
+                     return -1000;
+               }
             }
          }
+
          //----------------------------------
-         if( true == gi.IsBailOut)
+         if( true == isBailout)
             modifier -= cm.Rating;
          if (true == gi.IsMinefieldAttack)
             modifier -= 20;
@@ -2371,11 +2375,11 @@ namespace Pattons_Best
          }
          return modifier;
       }
-      public static string GetWounds(IGameInstance gi, ICrewMember cm, int dieRoll, bool isCollateralDamage)
+      public static string GetWounds(IGameInstance gi, ICrewMember cm, int dieRoll, bool isGunFire, bool isBailout, bool isCollateralDamage)
       {
          if (100 == dieRoll) // unmodified die roll 100 is always a kill
             return "Killed";
-         int modifier = GetWoundsModifier(gi, cm, isCollateralDamage);
+         int modifier = GetWoundsModifier(gi, cm, isGunFire, isBailout, isCollateralDamage);
          if (modifier < -100)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetWounds(): GetWoundsModifier() returned error");
@@ -2412,19 +2416,13 @@ namespace Pattons_Best
             return "Killed";
          }
       }
-      public static string SetWounds(IGameInstance gi, ICrewMember cm, int dieRoll, bool isCollateralDamage)
+      public static string SetWounds(IGameInstance gi, ICrewMember cm, int dieRoll, int modifier)
       {
          if( 100 == dieRoll ) // unmodified die roll 100 is always a kill
          {
             cm.SetBloodSpots(40);
             cm.IsKilled = true;
             return "Killed";
-         }
-         int modifier = GetWoundsModifier(gi, cm, isCollateralDamage);
-         if (modifier < -100)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetWounds(): GetWoundsModifier() returned error");
-            return "ERROR";
          }
          dieRoll += modifier;
          if (dieRoll < 42)

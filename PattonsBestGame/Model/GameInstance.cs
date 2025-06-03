@@ -60,7 +60,6 @@ namespace Pattons_Best
       public bool IsBrokenGunsight { set; get; } = false;
       public bool IsBrokenMgAntiAircraft { set; get; } = false;
       //---------------------------------------------------------------
-      public bool IsBailOut { set; get; } = false;
       public bool IsMinefieldAttack { set; get; } = false;
       public bool IsHarrassingFire { set; get; } = false;
       //---------------------------------------------------------------

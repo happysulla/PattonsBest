@@ -21,11 +21,11 @@ namespace Pattons_Best
       public delegate bool EndRatingImproveCallback();
       private const int MAX_GRID_LEN = 5;
       private const int STARTING_ASSIGNED_ROW = 6;
-      private const int KIA_CREWMAN = -100;
+      private const int KIA_CREWMAN = 100;
       public enum E491Enum
       {
          ROLL_RATING,
-         SHOW_RESULTS,
+         ROLL_RATING_SHOW,
          END
       };
       public bool CtorError { get; } = false;
@@ -129,11 +129,11 @@ namespace Pattons_Best
          }
          //--------------------------------------------------
          myGridRows = new GridRow[MAX_GRID_LEN];
-         myState = E491Enum.ROLL_RATING;
          myIsRollInProgress = false;
          myRollResultRowNum = 0;
          myCallback = callback;
          int i = 0;
+         bool isAnyCrewmanAlive = false;
          string[] crewmembers = new string[5] { "Commander", "Gunner", "Loader", "Driver", "Assistant" };
          foreach (string crewmember in crewmembers)
          {
@@ -146,8 +146,15 @@ namespace Pattons_Best
             myGridRows[i] = new GridRow(cm);
             if (true == cm.IsKilled)
                myGridRows[i].myDieRoll = KIA_CREWMAN;
+            else
+               isAnyCrewmanAlive = true;
             ++i;
          }
+         //--------------------------------------------------
+         if (true == isAnyCrewmanAlive)
+            myState = E491Enum.ROLL_RATING;
+         else
+            myState = E491Enum.ROLL_RATING_SHOW;
          //--------------------------------------------------
          if (false == UpdateGrid())
          {
@@ -219,7 +226,7 @@ namespace Pattons_Best
             case E491Enum.ROLL_RATING:
                myTextBlockInstructions.Inlines.Add(new Run("Roll for each surviving crew member."));
                break;
-            case E491Enum.SHOW_RESULTS:
+            case E491Enum.ROLL_RATING_SHOW:
                myTextBlockInstructions.Inlines.Add(new Run("Click image to continue."));
                break;
             default:
@@ -237,7 +244,7 @@ namespace Pattons_Best
                Rectangle r = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                myStackPanelAssignable.Children.Add(r);
                break;
-            case E491Enum.SHOW_RESULTS:
+            case E491Enum.ROLL_RATING_SHOW:
                Image img1 = new Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                myStackPanelAssignable.Children.Add(img1);
                break;
@@ -324,7 +331,7 @@ namespace Pattons_Best
          }
          myGridRows[i].myDieRoll = dieRoll;
          //------------------------------------
-         myState = E491Enum.SHOW_RESULTS;
+         myState = E491Enum.ROLL_RATING_SHOW;
          for (int j = 0; j < myMaxRowCount; ++j)
          {
             if (Utilities.NO_RESULT == myGridRows[j].myDieRoll)

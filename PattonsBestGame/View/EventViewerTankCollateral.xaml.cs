@@ -556,7 +556,7 @@ namespace Pattons_Best
                      }
                      else
                      {
-                        myGridRows[k].myWoundsModifier = TableMgr.GetWoundsModifier(myGameInstance, cm1, false);
+                        myGridRows[k].myWoundsModifier = TableMgr.GetWoundsModifier(myGameInstance, cm1, false, false, true);
                         if (myGridRows[k].myWoundsModifier < -100)
                         {
                            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetWoundsModifier() returned error for k=" + k.ToString());
@@ -576,7 +576,7 @@ namespace Pattons_Best
                }
                myGridRows[i].myDieRollWound = dieRoll;
                ICrewMember cm = myGridRows[i].myCrewMember;
-               myWoundsResults = TableMgr.SetWounds(myGameInstance, cm, dieRoll, true);
+               myWoundsResults = TableMgr.SetWounds(myGameInstance, cm, dieRoll, myGridRows[i].myWoundsModifier);
                if ("ERROR" == myWoundsResults)
                {
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetWounds() returned ERROR");

@@ -17,6 +17,7 @@ using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Windows.Devices.Perception;
+using Windows.Media.Playback;
 using static Pattons_Best.EventViewerResolveRandomEvent;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.AxHost;
@@ -2338,7 +2339,7 @@ namespace Pattons_Best
                            break;
                         case "Panzerfaust":
                            gi.EventDisplayed = gi.EventActive = "e044";
-                           gi.DieRollAction = GameAction.BattleRoundSequencePanzerfaustAttackRoll;
+                           gi.DieRollAction = GameAction.BattleRoundSequencePanzerfaustSectorRoll;
                            break;
                         case "Harrassing Fire":
                            break;
@@ -2605,7 +2606,6 @@ namespace Pattons_Best
                      {
                         gi.Sherman.IsThrownTrack = true;
                         gi.Sherman.IsMoving = false;
-                        gi.IsBailOut = true;
                         gi.EventDisplayed = gi.EventActive = "e043b";
                         gi.DieRollAction = GameAction.BattleRoundSequenceMinefieldDisableRoll;
                      }
@@ -2663,7 +2663,7 @@ namespace Pattons_Best
                      }
                      else
                      {
-                        string woundResult = TableMgr.GetWounds(gi, cm, dieRoll, false);
+                        string woundResult = TableMgr.GetWounds(gi, cm, dieRoll, false, false, false);
                         if ("ERROR" == woundResult)
                         {
                            returnStatus = "GetWounds(Driver) returned ERROR";
@@ -2703,7 +2703,7 @@ namespace Pattons_Best
                      }
                      else
                      {
-                        string woundResult = TableMgr.GetWounds(gi, cm, dieRoll, false);
+                        string woundResult = TableMgr.GetWounds(gi, cm, dieRoll, false, false, false);
                         if ("ERROR" == woundResult)
                         {
                            returnStatus = "GetWounds() returned ERROR";
@@ -2727,21 +2727,92 @@ namespace Pattons_Best
                      }
                   }
                   break;
+               case GameAction.BattleRoundSequencePanzerfaustSectorRoll:
+                  if( Utilities.NO_RESULT == gi.DieResults[key][0])
+                  {
+                     gi.DieResults[key][0] = dieRoll;
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else
+                  {
+                     char sector = '0';
+                     switch (gi.DieResults[key][0])
+                     {
+                        case 1: sector = '1'; break;
+                        case 2: sector = '2'; break;
+                        case 3: sector = '3'; break;
+                        case 4: sector = '4'; break;
+                        case 6: sector = '6'; break;
+                        case 9: sector = '9'; break;
+                        default:
+                           returnStatus = " reached default gi.DieResults[key][0]=" + gi.DieResults[key][0].ToString();
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                           break;
+                     }
+                     if ('0' != sector)
+                     {
+                        string tName = "B" + sector + "M";
+                        IStack? stack = gi.BattleStacks.Find(tName);
+                        bool isUsControl = false;
+                        if (null != stack)
+                        {
+                           foreach (IMapItem mi in stack.MapItems)
+                           {
+                              if (true == mi.Name.Contains("UsControl"))
+                              {
+                                 isUsControl = true;
+                                 break;
+                              }
+                           }
+                        }
+                        if (true == isUsControl)
+                        {
+                           if (false == SpottingPhaseBegin(gi, ref action))
+                           {
+                              returnStatus = "SpottingPhaseBegin() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                           }
+                        }
+                        else
+                        {
+                           gi.EventDisplayed = gi.EventActive = "e044a";
+                           gi.DieRollAction = GameAction.BattleRoundSequencePanzerfaustAttackRoll;
+                        }
+                     }
+                  }
+                  break;
                case GameAction.BattleRoundSequencePanzerfaustAttackRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      gi.DieResults[key][0] = dieRoll;
-                     gi.DieRollAction = GameAction.BattleRoundSequencePanzerfaustAttackRoll;
-                  }
-                  else if (Utilities.NO_RESULT == gi.DieResults[key][1])
-                  {
-                     gi.DieResults[key][1] = dieRoll;
-                     gi.DieRollAction = GameAction.BattleRoundSequencePanzerfaustAttackRoll;
-                  }
-                  else if (Utilities.NO_RESULT == gi.DieResults[key][2])
-                  {
-                     gi.DieResults[key][2] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else
+                  {
+                     gi.EventDisplayed = gi.EventActive = "e044b";
+                     gi.DieRollAction = GameAction.BattleRoundSequencePanzerfaustToHitRoll;
+                  }
+                  break;
+               case GameAction.BattleRoundSequencePanzerfaustToHitRoll:
+                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
+                  {
+                     gi.DieResults[key][0] = dieRoll;
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else
+                  {
+                     gi.EventDisplayed = gi.EventActive = "e044c";
+                     gi.DieRollAction = GameAction.BattleRoundSequencePanzerfaustToKillRoll;
+                  }
+                  break;
+               case GameAction.BattleRoundSequencePanzerfaustToKillRoll:
+                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
+                  {
+                     gi.DieResults[key][0] = dieRoll;
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else
+                  {
                   }
                   break;
                case GameAction.EndGameClose:

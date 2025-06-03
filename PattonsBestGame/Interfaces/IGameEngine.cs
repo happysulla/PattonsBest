@@ -243,8 +243,10 @@ namespace Pattons_Best
       BattleRoundSequenceMinefieldDisableRoll,
       BattleRoundSequenceMinefieldDriverWoundRoll,
       BattleRoundSequenceMinefieldAssistantWoundRoll,
+      BattleRoundSequencePanzerfaustSectorRoll,
       BattleRoundSequencePanzerfaustAttackRoll,
-
+      BattleRoundSequencePanzerfaustToHitRoll,
+      BattleRoundSequencePanzerfaustToKillRoll,
       EveningDebriefingStart,
       Error
    };
