@@ -226,7 +226,7 @@ namespace Pattons_Best
                }
                break;
             case "Gunner":
-               switch (gi.Sherman.Count)
+               switch (gi.Sherman.RotationTurret)
                {
                   case 0:
                      spottedTerritories.Add("B6C");
@@ -236,7 +236,7 @@ namespace Pattons_Best
                         spottedTerritories.Add("B6L");
                      }
                      break;
-                  case 1:
+                  case 60:
                      spottedTerritories.Add("B9C");
                      if (false == isCloseRangeOnly)
                      {
@@ -244,7 +244,7 @@ namespace Pattons_Best
                         spottedTerritories.Add("B9L");
                      }
                      break;
-                  case 2:
+                  case 120:
                      spottedTerritories.Add("B1C");
                      if (false == isCloseRangeOnly)
                      {
@@ -252,7 +252,7 @@ namespace Pattons_Best
                         spottedTerritories.Add("B1L");
                      }
                      break;
-                  case 3:
+                  case 180:
                      spottedTerritories.Add("B2C");
                      if (false == isCloseRangeOnly)
                      {
@@ -260,7 +260,7 @@ namespace Pattons_Best
                         spottedTerritories.Add("B2L");
                      }
                      break;
-                  case 4:
+                  case 240:
                      spottedTerritories.Add("B3C");
                      if (false == isCloseRangeOnly)
                      {
@@ -268,7 +268,7 @@ namespace Pattons_Best
                         spottedTerritories.Add("B3L");
                      }
                      break;
-                  case 5:
+                  case 300:
                      spottedTerritories.Add("B4C");
                      if (false == isCloseRangeOnly)
                      {

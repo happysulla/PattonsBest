@@ -1239,17 +1239,22 @@ namespace Pattons_Best
                }
                break;
             case "e043c":
+               ICrewMember? driver = gi.GetCrewMember("Driver");
+               if (null == driver)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): driver=null for key=" + key);
+                  return false;
+               }
+               int modifiere043c = TableMgr.GetWoundsModifier(gi, driver, false, false, false);
+               myTextBlock.Inlines.Add(new Run("Wounds Modifier: "));
+               myTextBlock.Inlines.Add(new Run(modifiere043c.ToString()));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  ICrewMember? driver = gi.GetCrewMember("Driver");
-                  if( null == driver )
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): driver=null for key=" + key);
-                     return false;
-                  }
+                  int combo = gi.DieResults[key][0] + modifiere043c;
                   driver.Zoom = 2.0;
-                  int modifier = TableMgr.GetWoundsModifier(gi, driver, false, false, false);
-                  string result = TableMgr.SetWounds(gi, driver, gi.DieResults[key][0], modifier);
+                  string result = TableMgr.SetWounds(gi, driver, gi.DieResults[key][0], modifiere043c);
                   if( "ERROR" ==  result )
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): driver GetWounds() returned error for key=" + key);
@@ -1258,7 +1263,9 @@ namespace Pattons_Best
                   Button bDriver = new Button() { Name = "DriverWounded", FontFamily = myFontFam1, FontSize = 12, Height = driver.Zoom * Utilities.theMapItemSize, Width = driver.Zoom * Utilities.theMapItemSize};
                   bDriver.Click += Button_Click;
                   CrewMember.SetButtonContent(bDriver, driver, true, true);
-                  myTextBlock.Inlines.Add(new Run("Driver: "));
+                  myTextBlock.Inlines.Add(new Run("Roll + Modifier = "));
+                  myTextBlock.Inlines.Add(new Run(combo.ToString()));
+                  myTextBlock.Inlines.Add(new Run(" = "));
                   myTextBlock.Inlines.Add(new Run(result));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak()); 
@@ -1271,14 +1278,20 @@ namespace Pattons_Best
                }
                break;
             case "e043d":
+               ICrewMember? assistant = gi.GetCrewMember("Assistant");
+               if (null == assistant)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): assistant=null for key=" + key);
+                  return false;
+               }
+               int modifiere043d = TableMgr.GetWoundsModifier(gi, assistant, false, false, false);
+               myTextBlock.Inlines.Add(new Run("Wounds Modifier: "));
+               myTextBlock.Inlines.Add(new Run(modifiere043d.ToString()));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  ICrewMember? assistant = gi.GetCrewMember("Assistant");
-                  if (null == assistant)
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): assistant=null for key=" + key);
-                     return false;
-                  }
+                  int combo = gi.DieResults[key][0] + modifiere043d;
                   assistant.Zoom = 2.0;
                   int modifier = TableMgr.GetWoundsModifier(gi, assistant, false, false, false);
                   string result = TableMgr.SetWounds(gi, assistant, gi.DieResults[key][0], modifier);
@@ -1290,7 +1303,9 @@ namespace Pattons_Best
                   Button bAssistant = new Button() { Name="AssistantWounded", FontFamily = myFontFam1, FontSize = 12, Height=assistant.Zoom * Utilities.theMapItemSize, Width = assistant.Zoom * Utilities.theMapItemSize};
                   bAssistant.Click += Button_Click;
                   CrewMember.SetButtonContent(bAssistant, assistant, true, true);
-                  myTextBlock.Inlines.Add(new Run("Assistant Driver: "));
+                  myTextBlock.Inlines.Add(new Run("Roll + Modifier = "));
+                  myTextBlock.Inlines.Add(new Run(combo.ToString()));
+                  myTextBlock.Inlines.Add(new Run(" = "));
                   myTextBlock.Inlines.Add(new Run(result));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());

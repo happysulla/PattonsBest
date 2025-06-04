@@ -2108,9 +2108,9 @@ namespace Pattons_Best
          //-----------------------------------------------
          else if( true == button.Name.Contains("Sherman")) // This is for the turret
          {
-            myGameInstance.Sherman.Count++;
-            if (5 < myGameInstance.Sherman.Count)
-               myGameInstance.Sherman.Count = 0;
+            myGameInstance.Sherman.RotationTurret += 60;
+            if (359 < myGameInstance.Sherman.RotationTurret)
+               myGameInstance.Sherman.RotationTurret = 0;
             MapItem.SetButtonContent(button, myGameInstance.Sherman, true, true);
          }
       }

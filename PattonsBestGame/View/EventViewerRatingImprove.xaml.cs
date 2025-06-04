@@ -22,6 +22,7 @@ namespace Pattons_Best
       private const int MAX_GRID_LEN = 5;
       private const int STARTING_ASSIGNED_ROW = 6;
       private const int KIA_CREWMAN = 100;
+      private const int MAX_RATING = 101;
       public enum E491Enum
       {
          ROLL_RATING,
@@ -39,6 +40,7 @@ namespace Pattons_Best
       {
          public ICrewMember myCrewMember;
          public int myDieRoll;
+         public int myOldRating;
          public GridRow(ICrewMember cm)
          {
             myCrewMember = cm;
@@ -144,6 +146,9 @@ namespace Pattons_Best
                return false;
             }
             myGridRows[i] = new GridRow(cm);
+            myGridRows[i].myOldRating = cm.Rating;
+            if (10 == cm.Rating)
+               myGridRows[i].myDieRoll = MAX_RATING;
             if (true == cm.IsKilled)
                myGridRows[i].myDieRoll = KIA_CREWMAN;
             else
@@ -278,10 +283,10 @@ namespace Pattons_Best
             Grid.SetRow(b, rowNum);
             Grid.SetColumn(b, 0);
             //------------------------------------------
-            Label ratingLabel = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = crewMember.Rating.ToString() };
-            myGrid.Children.Add(ratingLabel);
-            Grid.SetRow(ratingLabel, rowNum);
-            Grid.SetColumn(ratingLabel, 1);
+            Label oldRatingLabel = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myOldRating.ToString() };
+            myGrid.Children.Add(oldRatingLabel);
+            Grid.SetRow(oldRatingLabel, rowNum);
+            Grid.SetColumn(oldRatingLabel, 1);
             //------------------------------------------
             if (Utilities.NO_RESULT == row.myDieRoll)
             {
@@ -300,10 +305,16 @@ namespace Pattons_Best
                string dieRollLabel = myGridRows[i].myDieRoll.ToString();
                if (KIA_CREWMAN == myGridRows[i].myDieRoll)
                   dieRollLabel = "KIA";
+               if (MAX_RATING == myGridRows[i].myDieRoll)
+                  dieRollLabel = "NA";
                Label label = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = dieRollLabel };
                myGrid.Children.Add(label);
                Grid.SetRow(label, rowNum);
                Grid.SetColumn(label, 2);
+               Label newRatingLabel = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = crewMember.Rating.ToString() };
+               myGrid.Children.Add(newRatingLabel);
+               Grid.SetRow(newRatingLabel, rowNum);
+               Grid.SetColumn(newRatingLabel, 3);
             }
          }
          return true;
@@ -330,6 +341,9 @@ namespace Pattons_Best
             return;
          }
          myGridRows[i].myDieRoll = dieRoll;
+         ICrewMember cm = myGridRows[i].myCrewMember;
+         if (cm.Rating < dieRoll)
+            cm.Rating++;
          //------------------------------------
          myState = E491Enum.ROLL_RATING_SHOW;
          for (int j = 0; j < myMaxRowCount; ++j)

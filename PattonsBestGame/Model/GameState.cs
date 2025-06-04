@@ -1519,14 +1519,14 @@ namespace Pattons_Best
                   gi.Sherman.IsTurret = true;
                   break;
                case GameAction.PreparationsTurretRotateLeft:
-                  gi.Sherman.Count--;
-                  if (gi.Sherman.Count < 0)
-                     gi.Sherman.Count = 5;
+                  gi.Sherman.RotationTurret -= 60;
+                  if (gi.Sherman.RotationTurret < 0)
+                     gi.Sherman.RotationTurret = 300;
                   break;
                case GameAction.PreparationsTurretRotateRight:
-                  gi.Sherman.Count++;
-                  if (5 < gi.Sherman.Count)
-                     gi.Sherman.Count = 0;
+                  gi.Sherman.RotationTurret += 60;
+                  if (359 < gi.Sherman.RotationTurret)
+                     gi.Sherman.RotationTurret = 0;
                   break;
                case GameAction.PreparationsLoaderSpot:
                   gi.IsTurretActive = false;
@@ -2588,6 +2588,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceMinefieldRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
+                     dieRoll = 2; // <cgs> TEST - minefield attack
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                    }

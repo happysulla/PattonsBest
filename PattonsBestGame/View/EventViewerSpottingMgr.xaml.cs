@@ -42,6 +42,7 @@ namespace Pattons_Best
       private int myRollResultRowNum = 0;
       private int myRollResultColNum = 0;
       private bool myIsRollInProgress = false;
+      private bool myIsIdentifyRollInProgress = false;
       //---------------------------------------------------
       private class GridRow
       {
@@ -161,6 +162,7 @@ namespace Pattons_Best
          myState = E0472Enum.SELECT_CREWMAN;
          myIsRollInProgress = false;
          myRollResultRowNum = 0;
+         myIsIdentifyRollInProgress = false;
          myRollResultColNum = 0;
          mySelectedCrewman = null;
          myMaxRowCount = 0;
@@ -458,15 +460,18 @@ namespace Pattons_Best
             }
             else
             {
-               BitmapImage bmi = new BitmapImage();
-               bmi.BeginInit();
-               bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollWhite.gif", UriKind.Absolute);
-               bmi.EndInit();
-               System.Windows.Controls.Image img = new System.Windows.Controls.Image { Name = "DieRoll", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
-               ImageBehavior.SetAnimatedSource(img, bmi);
-               myGrid.Children.Add(img);
-               Grid.SetRow(img, rowNum);
-               Grid.SetColumn(img, 3);
+               if( false == myIsIdentifyRollInProgress )
+               {
+                  BitmapImage bmi = new BitmapImage();
+                  bmi.BeginInit();
+                  bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollWhite.gif", UriKind.Absolute);
+                  bmi.EndInit();
+                  System.Windows.Controls.Image img = new System.Windows.Controls.Image { Name = "DieRoll", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+                  ImageBehavior.SetAnimatedSource(img, bmi);
+                  myGrid.Children.Add(img);
+                  Grid.SetRow(img, rowNum);
+                  Grid.SetColumn(img, 3);
+               }
             }
          }
          return true;
@@ -555,7 +560,7 @@ namespace Pattons_Best
             return;
          }
          IMapItem mi = myGridRows[i].myMapItem;
-         if ( 3 == myRollResultColNum)
+         if ( 3 == myRollResultColNum )
          {
             myGridRows[i].myDieRollSpotting = dieRoll + myGridRows[i].myModifier;
             myGridRows[i].myResult = TableMgr.GetSpottingResult(myGameInstance, mi, mySelectedCrewman, myGridRows[i].mySector, myGridRows[i].myRange, dieRoll);
@@ -570,8 +575,12 @@ namespace Pattons_Best
             }
             else
             {
-               IMapItem? enemyUnitAppearing = TableMgr.GetAppearingUnit(myGameInstance, mi); // check if there is an enemy type arleady set for this unidentified unit
-               if (null != enemyUnitAppearing)
+               IMapItem? enemyUnitAppearing = TableMgr.GetAppearingUnit(myGameInstance, mi); // check if there is an enemy type already set for this unidentified unit
+               if (null == enemyUnitAppearing)
+               {
+                  myIsIdentifyRollInProgress = true;
+               }
+               else
                {
                   myGridRows[i].myDieRollAppearance = ALREADY_IDENTIFIED; // no need to roll for type b/c already established
                   myGridRows[i].myMapItemAppearing = enemyUnitAppearing;
@@ -592,6 +601,7 @@ namespace Pattons_Best
          }
          else
          {
+            myIsIdentifyRollInProgress = false;
             myGridRows[i].myDieRollAppearance = dieRoll;
             IMapItem? enemyUnitAppearing = TableMgr.GetAppearingUnitNew(myGameInstance, mi, dieRoll);
             if( null == enemyUnitAppearing)

@@ -1352,7 +1352,8 @@ namespace Pattons_Best
                         Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetToKillNumberInfantry() returned " + myGridRows[i].myDieRollToHitYourTank.ToString() + " for action=" + enemyAction);
                         return;
                      }
-                     myGridRows[i].myDieRollFire = NO_FIRE;
+                     myGridRows[i].myDieRollFire = NO_FIRE; // not firing at other tanks... only firing at your tank
+                     ShowDieResultUpdateFacingTurret(i);
                   }
                   else
                   {
@@ -1618,6 +1619,27 @@ namespace Pattons_Best
             else
                mi.RotationOffset = -35 - Utilities.RandomGenerator.Next(0, 115);
          }
+         return true;
+      }
+      private bool ShowDieResultUpdateFacingTurret(Index i)
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance=null");
+            return false;
+         }
+         //----------------------------
+         IMapItem? mi = myGridRows[i].myMapItem;
+         if (null == mi)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): mi=null for i=" + i.ToString());
+            return false;
+         }
+         double xDiff = (mi.Location.X + mi.Zoom * Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.X; // first point the vehicle at the Sherman
+         double yDiff = (mi.Location.Y + mi.Zoom * Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.Y;
+         mi.RotationTurret = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;
+         mi.RotationTurret -= mi.RotationHull;
+         mi.RotationTurret -= mi.RotationOffset;
          return true;
       }
       private bool ShowDieResultUpdateTerrain(Index i)

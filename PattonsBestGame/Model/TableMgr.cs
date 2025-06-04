@@ -2474,7 +2474,7 @@ namespace Pattons_Best
       public static string GetWoundEffect(IGameInstance gi, ICrewMember cm, int dieRoll, int modifier)
       {
          if (100 == dieRoll) // unmodified die roll 100 is always a kill
-            return "Killed";
+            return "Incapacitated";
          dieRoll += modifier;
          if (dieRoll < 42)
             return "None";
@@ -2503,7 +2503,7 @@ namespace Pattons_Best
          }
          else
          {
-            return "Killed";
+            return "Incapacitated";
          }
       }
       public static string GetBailoutEffectResult(IGameInstance gi, ICrewMember cm, int dieRoll, int modifier)
@@ -2760,9 +2760,9 @@ namespace Pattons_Best
             mi.Spotting = EnumSpottingResult.IDENTIFIED;
             return "Identified";
          }
-         if ( ((9 == dieRoll) || (10 == dieRoll)) && ((EnumSpottingResult.IDENTIFIED == mi.Spotting) || (EnumSpottingResult.SPOTTED == mi.Spotting)) ) // an unmodified roll of 9-10 means target is hidden
+         if ( ((9 == dieRoll) || (10 == dieRoll)) && ((EnumSpottingResult.IDENTIFIED != mi.Spotting) || (EnumSpottingResult.SPOTTED != mi.Spotting)) ) // an unmodified roll of 9-10 means target is hidden
          {
-            mi.Spotting = EnumSpottingResult.HIDDEN;
+            mi.Spotting = EnumSpottingResult.HIDDEN; // only applies if not already spotted or identified
             return "Hidden";
          }
          //-------------------------------

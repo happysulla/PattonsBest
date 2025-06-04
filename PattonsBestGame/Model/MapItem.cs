@@ -357,7 +357,7 @@ namespace Pattons_Best
                {
                   RotateTransform rotateTransform = new RotateTransform();
                   imgTurret.RenderTransformOrigin = new Point(0.5, 0.5);
-                  rotateTransform.Angle = mi.Count * 60.0;
+                  rotateTransform.Angle = mi.RotationTurret;
                   imgTurret.RenderTransform = rotateTransform;
                   g.Children.Add(imgTurret);
                   Canvas.SetLeft(imgTurret, 0);
