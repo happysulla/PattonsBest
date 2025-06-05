@@ -336,7 +336,7 @@ namespace Pattons_Best
                else if (false == collateralCheck.ResolveCollateralDamage(ShowCollateralDamageResults))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ResolveCollateralDamage() returned false");
                break;
-            case GameAction.EveningDebriefingStart:
+            case GameAction.EveningDebriefingRatingImprovement:
                EventViewerRatingImprove crewRatingImprove = new EventViewerRatingImprove(myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == crewRatingImprove.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): crewRatingImprove.CtorError=true");
@@ -1064,7 +1064,7 @@ namespace Pattons_Best
                Button b2 = new Button() { FontFamily = myFontFam1, FontSize = 12 };
                if ( false == gi.IsDaylightLeft(report))
                {                 
-                  imge032.Name = "Debrief";
+                  imge032.Name = "DebriefStart";
                   b2.Content = "r4.9";
                   b2.Click += Button_Click;
                   myTextBlock.Inlines.Add(new Run("Since there is no daylight left, go to Evening Debriefing "));
@@ -1330,9 +1330,9 @@ namespace Pattons_Best
                      case 3: sb.Append("3."); sector = '3'; break;
                      case 4: case 5: sb.Append("4-5."); sector = '4'; break;
                      case 6: case 7: case 8: sb.Append("6-8."); sector = '6'; break;
-                     case 9: case 0: sb.Append("9-10."); sector = '9'; break;
+                     case 9: case 10: sb.Append("9-10."); sector = '9'; break;
                      default:
-                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.BattleResistance=" + gi.BattleResistance.ToString());
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default for gi.DieResults[key][0]=" + gi.DieResults[key][0].ToString());
                         return false;
                   }
                   string tName = "B" + sector + "M";
@@ -1360,14 +1360,64 @@ namespace Pattons_Best
                }
                break;
             case "e044a":
+               if (null == gi.Panzerfaust)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.Panzerfaust=null for key=" + key);
+                  return false;
+               }
+               StringBuilder sb44a = new StringBuilder();
+               if (91 < gi.Panzerfaust.myDay)
+                  sb44a.Append(" -1 for Dec 1944 or later\n");
+               if (true == gi.Panzerfaust.myIsShermanMoving)
+                  sb44a.Append(" -1 for Sherman moving\n");
+               if (true == gi.Panzerfaust.myIsLeadTank)
+                  sb44a.Append(" -1 for Lead Tank\n");
+               if (true == gi.Panzerfaust.myIsAdvancingFireZone)
+                  sb44a.Append(" +3 for Advancing Fire Zone\n");
+               if (('1' == gi.Panzerfaust.mySector) || ('2' == gi.Panzerfaust.mySector) || ('3' == gi.Panzerfaust.mySector))
+                  sb44a.Append(" -1 for Attack in Sector 1, 2, or 3\n");
+               myTextBlock.Inlines.Add(new Run(sb44a.ToString()));
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-    
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new LineBreak());
-                  Image imge044a = new Image { Name = "PanzerfaultToAttack", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c107Panzerfaust") };
+                  Image imge044a = new Image { Name = "PanzerfaultAttack", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c107Panzerfaust") };
                   myTextBlock.Inlines.Add(new Run("                                            "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge044a));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
+            case "e044b":
+               if (null == gi.Panzerfaust)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.Panzerfaust=null for key=" + key);
+                  return false;
+               }
+               StringBuilder sb44b = new StringBuilder();
+               if (true == gi.Panzerfaust.myIsShermanMoving)
+                  sb44b.Append(" +2 for Sherman moving\n");
+               if (true == gi.Panzerfaust.myIsAdvancingFireZone)
+                  sb44b.Append(" +3 for Advancing Fire Zone\n");
+               myTextBlock.Inlines.Add(new Run(sb44b.ToString()));
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  Image imge044b = new Image { Name = "PanzerfaultToHit", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c107Panzerfaust") };
+                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge044b));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
+            case "e044c":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  Image imge044c = new Image { Name = "PanzerfaultToKill", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c107Panzerfaust") };
+                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge044c));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
@@ -1912,31 +1962,6 @@ namespace Pattons_Best
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
          return true;
       }     
-      public bool ShowRatingImproveResults()
-      {
-         if (null == myGameInstance)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ShowRatingImproveResults(): myGameInstance=null");
-            return false;
-         }
-         if (null == myGameEngine)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ShowRatingImproveResults(): myGameEngine=null");
-            return false;
-         }
-         GameAction outAction = GameAction.Error;
-         if (GamePhase.GameSetup == myGameInstance.GamePhase)
-            outAction = GameAction.SetupShowCombatCalendarCheck;
-         else
-            outAction = GameAction.MorningBriefingAssignCrewRatingEnd;
-         StringBuilder sb11 = new StringBuilder("     ######ShowRatingImproveResults() :");
-         sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
-         sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
-         sb11.Append(" a="); sb11.Append(outAction.ToString());
-         Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
-         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
-         return true;
-      }
       public bool ShowTankDestroyedResults()
       {
          if (null == myGameInstance)
@@ -1952,6 +1977,27 @@ namespace Pattons_Best
          GameAction outAction = GameAction.Error;
          outAction = GameAction.EveningDebriefingStart;
          StringBuilder sb11 = new StringBuilder("     ######ShowTankDestroyedResults() :");
+         sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
+         sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
+         sb11.Append(" a="); sb11.Append(outAction.ToString());
+         Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+         return true;
+      }
+      public bool ShowRatingImproveResults()
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowRatingImproveResults(): myGameInstance=null");
+            return false;
+         }
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowRatingImproveResults(): myGameEngine=null");
+            return false;
+         }
+         GameAction outAction = GameAction.EveningDebriefingRatingImprovementEnd;
+         StringBuilder sb11 = new StringBuilder("     ######ShowRatingImproveResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
          sb11.Append(" a="); sb11.Append(outAction.ToString());
@@ -2155,8 +2201,12 @@ namespace Pattons_Best
                            action = GameAction.BattleEmptyResolve;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
-                        case "Debrief":
+                        case "DebriefStart":
                            action = GameAction.EveningDebriefingStart;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "Debrief":
+                           action = GameAction.EveningDebriefingRatingImprovement;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "c111Smoke1": // smoke depletion

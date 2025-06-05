@@ -415,15 +415,9 @@ Determine if attack occurs based on scenario type, roll one die:
 <LineBreak/><LineBreak/>
   1 to 3 for Advance<LineBreak/>
   1 to 5 for Battle<LineBreak/>
-  1 to 2 for Counterattack<LineBreak/>
+  1 to 2 for Counterattack
 <LineBreak/><LineBreak/>
-<Underline>Modifiers:</Underline><LineBreak/>
-  December 1944 or later = -1<LineBreak/>
-  Sherman moving = -1<LineBreak/>
-  Lead tank = -1<LineBreak/>
-  Advancing Fire in zone = +3<LineBreak/>
-  Attack from sector 1,2, or3 = -1<LineBreak/>
-<LineBreak/><LineBreak/>"
+<Underline>Modifiers:</Underline><LineBreak/>"
 e044b	"<Bold>e044b Panzerfaust Attack - To Hit</Bold> 
 <InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <InlineUIContainer><Button Content='Panzerfaust' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
@@ -434,10 +428,7 @@ Since an attack occurred, roll to hit:
   1 to 7 is Hit<LineBreak/>
   8 to 10 is Miss<LineBreak/>
 <LineBreak/><LineBreak/>
-<Underline>Modifiers:</Underline><LineBreak/>
-  Sherman moving = +2<LineBreak/>
-  Advancing Fire in zone = +3<LineBreak/>
-<LineBreak/><LineBreak/>"
+<Underline>Modifiers:</Underline><LineBreak/>"
 e044c	"<Bold>e044c Panzerfaust Attack - To Kill</Bold> 
 <InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='Panzerfaust' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
@@ -479,18 +470,20 @@ e049	"<Bold>e049 Flanking Fire</Bold>
 <LineBreak/><LineBreak/>
 Roll against each enemy unit on the Friendly Action Table with a die roll modifer of -10. Click image to continue.
 <LineBreak/><LineBreak/>"
-e050	"<Bold>e050 Evening Debriefing</Bold> 
-<LineBreak/><LineBreak/>
-An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
-Click image to continue.
-<LineBreak/><LineBreak/>
-                     <InlineUIContainer><Image Name='Sherman4' Height='168' Width='275'></Image></InlineUIContainer>"
-e051	"<Bold>e051 Ammo Reload Order</Bold> 
+e050	"<Bold>e050 Ammo Reload Order</Bold> 
 <InlineUIContainer><Button Content='r4.73' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r5.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>
 Right click marker or one of blue boxes to to select from pull down menu where to set Gun Reload marker and/or Ready Rack Ammo Reload marker.
+<LineBreak/><LineBreak/>"
+e100	"<Bold>e100 Evening Debriefing</Bold> 
+<LineBreak/><LineBreak/>
+An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+Click image to continue.
+<LineBreak/><LineBreak/>
+                     <InlineUIContainer><Image Name='Debrief' Height='168' Width='275'></Image></InlineUIContainer>"
+e0101	"<Bold>e101 Evening Debriefing</Bold> 
 <LineBreak/><LineBreak/>"
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"

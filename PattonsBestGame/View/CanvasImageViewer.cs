@@ -79,6 +79,9 @@ namespace Pattons_Best
                myTargetCursor = null;
                this.myCanvas.Cursor = System.Windows.Input.Cursors.Arrow; // get rid of the canvas cursor
                break;
+            case GameAction.UpdateTankExplosion:
+               ShowTankExploding(gi, myCanvas);
+               break;
             case GameAction.RemoveSplashScreen:
                theMainImage = EnumMainImage.MI_Other;
                ShowInitialScreen(myCanvas);
@@ -240,6 +243,24 @@ namespace Pattons_Best
          c.Children.Add(img);
          Canvas.SetLeft(img, 0);
          Canvas.SetTop(img, 0);
+      }
+      //-------------------------------------------------
+      private void ShowTankExploding(IGameInstance gi, Canvas c)
+      {
+
+         BitmapImage bmi2 = new BitmapImage();
+         bmi2.BeginInit();
+         bmi2.UriSource = new Uri(MapImage.theImageDirectory + "ShermanExploding.gif", UriKind.Absolute);
+         bmi2.EndInit();
+         double size = gi.Sherman.Zoom * Utilities.theMapItemSize;
+         Image img = new Image { Source = bmi2, Height = size, Width = size};
+         ImageBehavior.SetAnimatedSource(img, bmi2);
+         c.Children.Add(img);
+         double left = (double)gi.Sherman.Location.X;
+         double top = (double)gi.Sherman.Location.Y;
+         Canvas.SetLeft(img, left);
+         Canvas.SetTop(img, top);
+         Canvas.SetZIndex(img, 99999);
       }
       private void ShowEndGameSuccess(Canvas c)
       {

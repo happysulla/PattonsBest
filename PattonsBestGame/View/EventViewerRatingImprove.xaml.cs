@@ -302,16 +302,20 @@ namespace Pattons_Best
             }
             else
             {
-               string dieRollLabel = myGridRows[i].myDieRoll.ToString();
+               string sdieRoll = myGridRows[i].myDieRoll.ToString();
                if (KIA_CREWMAN == myGridRows[i].myDieRoll)
-                  dieRollLabel = "KIA";
+                  sdieRoll = "NA";
                if (MAX_RATING == myGridRows[i].myDieRoll)
-                  dieRollLabel = "NA";
-               Label label = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = dieRollLabel };
+                  sdieRoll = "NA";
+               Label label = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = sdieRoll };
                myGrid.Children.Add(label);
                Grid.SetRow(label, rowNum);
                Grid.SetColumn(label, 2);
-               Label newRatingLabel = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = crewMember.Rating.ToString() };
+               //-------------------------
+               string sRatingLabel = crewMember.Rating.ToString();
+               if (KIA_CREWMAN == myGridRows[i].myDieRoll)
+                  sRatingLabel = "KIA";
+               Label newRatingLabel = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = sRatingLabel };
                myGrid.Children.Add(newRatingLabel);
                Grid.SetRow(newRatingLabel, rowNum);
                Grid.SetColumn(newRatingLabel, 3);

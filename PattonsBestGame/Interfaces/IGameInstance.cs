@@ -26,6 +26,22 @@ namespace Pattons_Best
          myEnemyFireDirection = TableMgr.GetEnemyFireDirection(gi, eu, myHitLocation);
       }
    }
+   public class PanzerfaustAttack
+   {
+      public int myDay = 0;
+      public bool myIsShermanMoving = false;
+      public bool myIsLeadTank = false;
+      public bool myIsAdvancingFireZone = false;
+      public char mySector;
+      public PanzerfaustAttack( IGameInstance gi, bool isAdvanceFire, char sector)
+      {
+         myDay = gi.Day;
+         myIsShermanMoving = gi.Sherman.IsMoving;
+         myIsLeadTank = gi.IsLeadTank;
+         myIsAdvancingFireZone = isAdvanceFire;
+         mySector = sector;
+      }
+   }
    //-------------------------------------------------
    public interface IGameInstance
    {
@@ -84,6 +100,7 @@ namespace Pattons_Best
       Dictionary<string, bool> FirstShots { set; get; }
       Dictionary<string, int> AcquiredShots { set; get; }
       ShermanDeath? Death { set; get; }
+      PanzerfaustAttack? Panzerfaust { set; get; }
       int NumCollateralDamage { set; get; }
       //------------------------------------------------
       IMapItemMoves MapItemMoves { set; get; }

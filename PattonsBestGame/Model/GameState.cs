@@ -2304,7 +2304,7 @@ namespace Pattons_Best
                case GameAction.BattleRandomEventRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 22; // <cgs> TEST - panzerfaust attack
+                     dieRoll = 29; // <cgs> TEST - panzerfaust attack
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -2588,7 +2588,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceMinefieldRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 2; // <cgs> TEST - minefield attack
+                     //dieRoll = 2; // <cgs> TEST - minefield attack
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                    }
@@ -2623,6 +2623,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceMinefieldDisableRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
+                     //dieRoll = 9; // <cgs> TEST - minefield results - driver wounded
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -2674,9 +2675,7 @@ namespace Pattons_Best
                         sb1.Append(TableMgr.GetTime(lastReport));
                         sb1.Append(", ");
                         sb1.Append(cm.Name);
-                        sb1.Append(" (");
-                        sb1.Append(cm.Role);
-                        sb1.Append(" ) suffered ");
+                        sb1.Append(" suffered ");
                         sb1.Append(woundResult);
                         lastReport.Notes.Add(sb1.ToString());
                         //----------------------------------
@@ -2714,9 +2713,7 @@ namespace Pattons_Best
                         sb1.Append(TableMgr.GetTime(lastReport));
                         sb1.Append(", ");
                         sb1.Append(cm.Name);
-                        sb1.Append(" (");
-                        sb1.Append(cm.Role);
-                        sb1.Append(" ) suffered ");
+                        sb1.Append(" suffered ");
                         sb1.Append(woundResult);
                         lastReport.Notes.Add(sb1.ToString());
                         //----------------------------------
@@ -2752,32 +2749,56 @@ namespace Pattons_Best
                      }
                      if ('0' != sector)
                      {
-                        string tName = "B" + sector + "M";
-                        IStack? stack = gi.BattleStacks.Find(tName);
-                        bool isUsControl = false;
-                        if (null != stack)
+                        string tName1 = "B" + sector + "M";
+                        string tName2 = "B" + sector + "C";
+                        ITerritory? tPanzerfault = Territories.theTerritories.Find(tName2);
+                        if( null == tPanzerfault )
                         {
-                           foreach (IMapItem mi in stack.MapItems)
-                           {
-                              if (true == mi.Name.Contains("UsControl"))
-                              {
-                                 isUsControl = true;
-                                 break;
-                              }
-                           }
-                        }
-                        if (true == isUsControl)
-                        {
-                           if (false == SpottingPhaseBegin(gi, ref action))
-                           {
-                              returnStatus = "SpottingPhaseBegin() returned false";
-                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
-                           }
+                           returnStatus = "Unable to find tName=" + tName1;
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
                         }
                         else
                         {
-                           gi.EventDisplayed = gi.EventActive = "e044a";
-                           gi.DieRollAction = GameAction.BattleRoundSequencePanzerfaustAttackRoll;
+                           IStack? stack = gi.BattleStacks.Find(tName1);
+                           bool isUsControl = false;
+
+                           if (null != stack)
+                           {
+                              foreach (IMapItem mi in stack.MapItems)
+                              {
+                                 if (true == mi.Name.Contains("UsControl"))
+                                    isUsControl = true;
+                              }
+                           }
+                           if (true == isUsControl)
+                           {
+                              if (false == SpottingPhaseBegin(gi, ref action))
+                              {
+                                 returnStatus = "SpottingPhaseBegin() returned false";
+                                 Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                              }
+                           }
+                           else
+                           {
+                              IStack? stackPanzerfaust = gi.BattleStacks.Find(tName2);
+                              bool isAdvancingFire = false;
+                              if (null != stackPanzerfaust)
+                              {
+                                 foreach (IMapItem mi11 in stackPanzerfaust.MapItems)
+                                 {
+                                    if (true == mi11.Name.Contains("AdvanceFire"))
+                                       isAdvancingFire = true;
+                                 }
+                              }
+                              string name = "Panzerfault" + Utilities.MapItemNum;
+                              Utilities.MapItemNum++;
+                              IMapItem mi = new MapItem(name, Utilities.ZOOM, "c107Panzerfaust", tPanzerfault); // add panzerfault to battleboard
+                              gi.BattleStacks.Add(mi);
+                              //-----------------------
+                              gi.EventDisplayed = gi.EventActive = "e044a";
+                              gi.DieRollAction = GameAction.BattleRoundSequencePanzerfaustAttackRoll;
+                              gi.Panzerfaust = new PanzerfaustAttack(gi, isAdvancingFire, sector);
+                           }
                         }
                      }
                   }
@@ -2790,8 +2811,46 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     gi.EventDisplayed = gi.EventActive = "e044b";
-                     gi.DieRollAction = GameAction.BattleRoundSequencePanzerfaustToHitRoll;
+                     if (null == gi.Panzerfaust)
+                     {
+                        returnStatus = "gi.Panzerfaust=null";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                     }
+                     else
+                     {
+                        int modifier = 0;
+                        if (91 < gi.Panzerfaust.myDay)
+                           modifier -= 1;
+                        if (true == gi.Panzerfaust.myIsShermanMoving)
+                           modifier -= 1;
+                        if (true == gi.Panzerfaust.myIsLeadTank)
+                           modifier -= 1;
+                        if (true == gi.Panzerfaust.myIsAdvancingFireZone)
+                           modifier += 3;
+                        if (('1' == gi.Panzerfaust.mySector) || ('2' == gi.Panzerfaust.mySector) || ('3' == gi.Panzerfaust.mySector))
+                           modifier -= 1;
+                        int combo = gi.DieResults[key][0] + modifier;
+                        int rollNeededForAttack = 0;
+                        if (EnumScenario.Advance == lastReport.Scenario)
+                           rollNeededForAttack = 4;
+                        else if (EnumScenario.Battle == lastReport.Scenario)
+                           rollNeededForAttack = 6;
+                        else 
+                           rollNeededForAttack = 3;
+                        if (combo < rollNeededForAttack)
+                        {
+                           gi.EventDisplayed = gi.EventActive = "e044b";
+                           gi.DieRollAction = GameAction.BattleRoundSequencePanzerfaustToHitRoll;
+                        }
+                        else
+                        {
+                           if (false == SpottingPhaseBegin(gi, ref action))
+                           {
+                              returnStatus = "SpottingPhaseBegin() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                           }
+                        }
+                     }
                   }
                   break;
                case GameAction.BattleRoundSequencePanzerfaustToHitRoll:
@@ -2802,8 +2861,33 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     gi.EventDisplayed = gi.EventActive = "e044c";
-                     gi.DieRollAction = GameAction.BattleRoundSequencePanzerfaustToKillRoll;
+                     if (null == gi.Panzerfaust)
+                     {
+                        returnStatus = "gi.Panzerfaust=null";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                     }
+                     else
+                     {
+                        int modifierToHit = 0;
+                        if (true == gi.Panzerfaust.myIsShermanMoving)
+                           modifierToHit += 2;
+                        if (true == gi.Panzerfaust.myIsAdvancingFireZone)
+                           modifierToHit += 3;
+                        int combo = gi.DieResults[key][0] + modifierToHit;
+                        if( combo < 8 )
+                        {
+                           gi.EventDisplayed = gi.EventActive = "e044c";
+                           gi.DieRollAction = GameAction.BattleRoundSequencePanzerfaustToKillRoll;
+                        }
+                        else
+                        {
+                           if (false == SpottingPhaseBegin(gi, ref action))
+                           {
+                              returnStatus = "SpottingPhaseBegin() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                           }
+                        }
+                     }
                   }
                   break;
                case GameAction.BattleRoundSequencePanzerfaustToKillRoll:
@@ -2814,6 +2898,18 @@ namespace Pattons_Best
                   }
                   else
                   {
+                     if (gi.DieResults[key][0] < 9)
+                     {
+                        action = GameAction.BattleRoundSequenceShermanKilled;
+                     }
+                     else
+                     {
+                        if (false == SpottingPhaseBegin(gi, ref action))
+                        {
+                           returnStatus = "SpottingPhaseBegin() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                        }
+                     }
                   }
                   break;
                case GameAction.EndGameClose:
@@ -2957,6 +3053,12 @@ namespace Pattons_Best
             case GameAction.UpdateTankCard:
             case GameAction.UpdateShowRegion:
             case GameAction.UpdateEventViewerDisplay: // Only change active event
+               break;
+            case GameAction.EveningDebriefingStart: // Only change active event
+               gi.EventDisplayed = gi.EventActive = "e100";
+               gi.DieRollAction = GameAction.DieRollActionNone;
+               break;
+            case GameAction.EveningDebriefingRatingImprovementEnd: // Only change active event
                break;
             case GameAction.UpdateEventViewerActive: // Only change active event
                gi.EventDisplayed = gi.EventActive; // next screen to show

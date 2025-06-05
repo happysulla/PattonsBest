@@ -247,7 +247,10 @@ namespace Pattons_Best
       BattleRoundSequencePanzerfaustAttackRoll,
       BattleRoundSequencePanzerfaustToHitRoll,
       BattleRoundSequencePanzerfaustToKillRoll,
+
       EveningDebriefingStart,
+      EveningDebriefingRatingImprovement,
+      EveningDebriefingRatingImprovementEnd,
       Error
    };
    public interface IGameEngine
