@@ -247,17 +247,22 @@ namespace Pattons_Best
       //-------------------------------------------------
       private void ShowTankExploding(IGameInstance gi, Canvas c)
       {
-
          BitmapImage bmi2 = new BitmapImage();
          bmi2.BeginInit();
          bmi2.UriSource = new Uri(MapImage.theImageDirectory + "ShermanExploding.gif", UriKind.Absolute);
          bmi2.EndInit();
-         double size = gi.Sherman.Zoom * Utilities.theMapItemSize;
-         Image img = new Image { Source = bmi2, Height = size, Width = size};
+         double size = 1.5 * gi.Sherman.Zoom * Utilities.theMapItemSize;
+         Image img = new Image { Name="ShermanExploding", Source = bmi2, Height = size, Width = size, Stretch = Stretch.Fill };
          ImageBehavior.SetAnimatedSource(img, bmi2);
+         //-------------------
+         RotateTransform rotateTransform = new RotateTransform();
+         img.RenderTransformOrigin = new Point(0.5, 0.5);
+         rotateTransform.Angle = gi.Sherman.RotationHull;
+         img.RenderTransform = rotateTransform;
+         //-------------------
          c.Children.Add(img);
-         double left = (double)gi.Sherman.Location.X;
-         double top = (double)gi.Sherman.Location.Y;
+         double left = (double)gi.Sherman.Location.X - 0.25 * gi.Sherman.Zoom * Utilities.theMapItemSize;
+         double top = (double)gi.Sherman.Location.Y  - 0.25 * gi.Sherman.Zoom * Utilities.theMapItemSize;
          Canvas.SetLeft(img, left);
          Canvas.SetTop(img, top);
          Canvas.SetZIndex(img, 99999);

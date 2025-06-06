@@ -75,11 +75,6 @@ namespace Pattons_Best
          public int myDieRollBailoutWound = Utilities.NO_RESULT;
          public string myBailoutWoundResult = "Uninit";
          public string myBailoutWoundEffect = "Uninit";
-         //------------------------------------
-         public ICrewMember? myCrewMemberRescuing = null;
-         public int myDieRollRescue = Utilities.NO_RESULT;
-         public string myRescueResult = "Uninit";
-         public string myRescueEffect = "Uninit";
          //---------------------------------------------------
          public GridRowWound(ICrewMember cm)
          {
@@ -921,6 +916,7 @@ namespace Pattons_Best
          switch (myState)
          {
             case E0481Enum.TANK_EXPLOSION_ROLL:
+               dieRoll = 110; // <cgs> TEST - tank explodes
                myGridRowExplodes[0].myDieRollExplosion = dieRoll;
                int rollPlusModifier = dieRoll + myGridRowExplodes[0].myDieRollExplosion;
                if( 99 < rollPlusModifier )
@@ -966,7 +962,8 @@ namespace Pattons_Best
                   case "Cannot Bail":
                      myGridRowRescues[myMaxRowCountRescue] = new GridRowRescue(cm);
                      myMaxRowCountRescue++;
-                     myGridRowWounds[i].myDieRollBailout = NO_BAILOUT;
+                     myGridRowWounds[i].myDieRollBailout      = NO_BAILOUT;
+                     myGridRowWounds[i].myDieRollBailoutWound = NO_BAILOUT;
                      break;
                   case "None":
                      break;

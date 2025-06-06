@@ -2135,42 +2135,66 @@ namespace Pattons_Best
             return "ERROR";
          }
          char enemySector = enemyUnit.TerritoryCurrent.Name[count - 2];
-         switch(enemySector)
+         double rotation = 0.0;
+         switch (enemySector)
          {
             case '6':
-               if ("Turret" == hitLocation)
-                  return "T F";
-               else
-                  return "H F";
+               rotation = 0.0;
+               break;
             case '9':
-               if ("Turret" == hitLocation)
-                  return "T R";
-               else
-                  return "H FR";
+               rotation = 60.0;
+               break;
             case '1':
-               if ("Turret" == hitLocation)
-                  return "T R";
-               else
-                  return "H FB";
+               rotation = 120.0;
+               break;
             case '2':
-               if ("Turret" == hitLocation)
-                  return "T B";
-               else
-                  return "H B";
+               rotation = 180.0;
+               break;
             case '3':
-               if ("Turret" == hitLocation)
-                  return "T L";
-               else
-                  return "H BL";
+               rotation = 240.0;
+               break;
             case '4':
-               if ("Turret" == hitLocation)
-                  return "T L";
-               else
-                  return "H FL";
+               rotation = 300.0;
+               break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): reached default enemySector=" + enemySector);
                return "ERROR";
          }
+         rotation -= gi.Sherman.RotationHull;
+         if ( "Turret" == hitLocation )
+         {
+            rotation -= gi.Sherman.RotationTurret;
+            switch (rotation)
+            {
+               case 0.0:   return "T F";
+               case 60.0:  return "T R";
+               case 120.0: return "T R";
+               case 180.0: return "T B";
+               case 240.0: return "T L";
+               case 300.0: return "T L";
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): reached default rotation=" + rotation.ToString("F1") + " hr=" + gi.Sherman.RotationHull.ToString("F1"));
+                  return "ERROR";
+            }
+         }
+         else if ("Hull" == hitLocation)
+         {
+            rotation -= gi.Sherman.RotationHull;
+            switch (rotation)
+            {
+               case 0.0:   return "H F";
+               case 60.0:  return "H FR";
+               case 120.0: return "H FB";
+               case 180.0: return "H B";
+               case 240.0: return "H BL";
+               case 300.0: return "H FL";
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): reached default r=" + rotation.ToString("F1") + " hr=" + gi.Sherman.RotationHull.ToString("F1") + " tr=" + gi.Sherman.RotationTurret.ToString("F1"));
+                  return "ERROR";
+            }
+         }
+         Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): reached default hitLocation=" + hitLocation);
+         return "ERROR";
       }
       public static double GetToKillNumberYourTank(IGameInstance gi, IMapItem mi, string facing, char range, string hitLocation)
       {

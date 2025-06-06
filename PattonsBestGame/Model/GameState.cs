@@ -2342,6 +2342,8 @@ namespace Pattons_Best
                            gi.DieRollAction = GameAction.BattleRoundSequencePanzerfaustSectorRoll;
                            break;
                         case "Harrassing Fire":
+                           gi.EventDisplayed = gi.EventActive = "e045";
+                           gi.DieRollAction = GameAction.DieRollActionNone;
                            break;
                         case "Friendly Advance":
                            break;
@@ -2360,10 +2362,20 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleShermanKilled:
                   break;
+               case GameAction.UpdateTankExplosion:
+                  gi.BattleStacks.Remove(gi.Sherman);
+                  break;
+               case GameAction.EveningDebriefingStart:
+                  gi.GamePhase = GamePhase.EveningDebriefing;
+                  gi.EventDisplayed = gi.EventActive = "e100";
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  break;
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;
                   break;
                default:
+                  returnStatus = "reached default with action=" + action.ToString();
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
                   break;
             }
          }
@@ -2728,6 +2740,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequencePanzerfaustSectorRoll:
                   if( Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
+                     dieRoll = 6; // <cgs> Panzerfaust attack sector
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -2792,12 +2805,12 @@ namespace Pattons_Best
                               }
                               string name = "Panzerfault" + Utilities.MapItemNum;
                               Utilities.MapItemNum++;
-                              IMapItem mi = new MapItem(name, Utilities.ZOOM, "c107Panzerfaust", tPanzerfault); // add panzerfault to battleboard
-                              gi.BattleStacks.Add(mi);
+                              IMapItem enemyUnit = new MapItem(name, Utilities.ZOOM, "c107Panzerfaust", tPanzerfault); // add panzerfault to battleboard
+                              gi.BattleStacks.Add(enemyUnit);
                               //-----------------------
                               gi.EventDisplayed = gi.EventActive = "e044a";
                               gi.DieRollAction = GameAction.BattleRoundSequencePanzerfaustAttackRoll;
-                              gi.Panzerfaust = new PanzerfaustAttack(gi, isAdvancingFire, sector);
+                              gi.Panzerfaust = new PanzerfaustAttack(gi, enemyUnit, isAdvancingFire, sector);
                            }
                         }
                      }
@@ -2806,6 +2819,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequencePanzerfaustAttackRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
+                     dieRoll = 1; // <cgs> Panzerfaust To Attack
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -2856,6 +2870,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequencePanzerfaustToHitRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
+                     dieRoll = 1; // <cgs> Panzerfaust To Hit
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -2898,24 +2913,48 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     if (gi.DieResults[key][0] < 9)
+                     if( null == gi.Panzerfaust)
                      {
-                        action = GameAction.BattleRoundSequenceShermanKilled;
+                        returnStatus = "gi.Panzerfaust=null";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
                      }
                      else
                      {
-                        if (false == SpottingPhaseBegin(gi, ref action))
+                        if (gi.DieResults[key][0] < 9)
                         {
-                           returnStatus = "SpottingPhaseBegin() returned false";
-                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                           string hitLocation = "Hull";
+                           if( 0 == Utilities.RandomGenerator.Next(2))
+                              hitLocation = "Turret";
+                           gi.Death = new ShermanDeath(gi, gi.Panzerfaust.myEnemyUnit, hitLocation, "Panzerfault");
+                           action = GameAction.BattleRoundSequenceShermanKilled;
+                        }
+                        else
+                        {
+                           if (false == SpottingPhaseBegin(gi, ref action))
+                           {
+                              returnStatus = "SpottingPhaseBegin() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                           }
                         }
                      }
                   }
+                  break;
+               case GameAction.UpdateTankExplosion:
+                  gi.BattleStacks.Remove(gi.Sherman);
+                  break;
+               case GameAction.BattleRoundSequenceHarrassingFire:
+                  break;
+               case GameAction.EveningDebriefingStart:
+                  gi.GamePhase = GamePhase.EveningDebriefing;
+                  gi.EventDisplayed = gi.EventActive = "e100";
+                  gi.DieRollAction = GameAction.DieRollActionNone;
                   break;
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;
                   break;
                default:
+                  returnStatus = "reached default with action=" + action.ToString();
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
                   break;
             }
          }
@@ -3054,14 +3093,14 @@ namespace Pattons_Best
             case GameAction.UpdateShowRegion:
             case GameAction.UpdateEventViewerDisplay: // Only change active event
                break;
+            case GameAction.UpdateEventViewerActive: // Only change active event
+               gi.EventDisplayed = gi.EventActive; // next screen to show
+               break;
             case GameAction.EveningDebriefingStart: // Only change active event
                gi.EventDisplayed = gi.EventActive = "e100";
                gi.DieRollAction = GameAction.DieRollActionNone;
                break;
             case GameAction.EveningDebriefingRatingImprovementEnd: // Only change active event
-               break;
-            case GameAction.UpdateEventViewerActive: // Only change active event
-               gi.EventDisplayed = gi.EventActive; // next screen to show
                break;
             case GameAction.EndGameClose:
                gi.GamePhase = GamePhase.EndGame;

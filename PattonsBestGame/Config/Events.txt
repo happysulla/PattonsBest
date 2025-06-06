@@ -397,7 +397,7 @@ Assistant Driver possibly wounded by minefield attack. Roll 2D and look at
 <InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer> 
 <LineBreak/><LineBreak/>"
 e044	"<Bold>e044 Panzerfaust Attack - Sector</Bold> 
-<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='r15.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <InlineUIContainer><Button Content='Panzerfaust' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
 Determine from which sector of the Battle Board attack is originating by rolling 1D according to 
@@ -407,7 +407,7 @@ Determine from which sector of the Battle Board attack is originating by rolling
 If the sector rolled is US controlled, no attack is made. If the sector is not US Controlled, a Panzerfaust marker is placed in the sector's close range.
 <LineBreak/><LineBreak/>"
 e044a	"<Bold>e044a Panzerfaust Attack - To Attack</Bold> 
-<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='r15.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <InlineUIContainer><Button Content='Panzerfaust' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
 Determine if attack occurs based on scenario type, roll one die: 
@@ -419,7 +419,7 @@ Determine if attack occurs based on scenario type, roll one die:
 <LineBreak/><LineBreak/>
 <Underline>Modifiers:</Underline><LineBreak/>"
 e044b	"<Bold>e044b Panzerfaust Attack - To Hit</Bold> 
-<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='r15.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <InlineUIContainer><Button Content='Panzerfaust' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
 Since an attack occurred, roll to hit:   
@@ -430,7 +430,7 @@ Since an attack occurred, roll to hit:
 <LineBreak/><LineBreak/>
 <Underline>Modifiers:</Underline><LineBreak/>"
 e044c	"<Bold>e044c Panzerfaust Attack - To Kill</Bold> 
-<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<InlineUIContainer><Button Content='r15.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='Panzerfaust' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
  <LineBreak/><LineBreak/>
 Since there was a hit, roll again to see if your tank is knocked out (KO):  
@@ -440,25 +440,27 @@ Since there was a hit, roll again to see if your tank is knocked out (KO):
   9 to 10 is No Effect<LineBreak/>
 <LineBreak/><LineBreak/>"
 e045	"<Bold>e045 Harrassing Fire</Bold> 
-<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='r15.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
-Your tank is sprayed with small weapons fire. Roll 1D on the 
-<InlineUIContainer><Button Content='Collateral' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Damage Table:  
-<InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>
-<LineBreak/><LineBreak/>"
+Your tank is sprayed with small weapons fire. Roll on the 
+<InlineUIContainer><Button Content='Collateral' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Damage Table. 
+<LineBreak/><LineBreak/>
+Click image to continue.
+<LineBreak/><LineBreak/>
+                        <InlineUIContainer><Image Name='CollateralDamage' Height='200' Width='325'></Image></InlineUIContainer>"
 e046	"<Bold>e046 Friendly Advance</Bold> 
-<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='r15.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
 Place a US Controlled marker in a sector of your choice that is empty of enemy units and adjacent to a sector already US Controlled."
 e046a	"<Bold>e046a Friendly Advance Ignored</Bold> 
-<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='r15.8' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
 Since there is no sector adjacent to a US Controlled sector that is empty of enemy units, this event is ignored. Click image to continue."
-e047	"<Bold>e047 Enemy Reinformement</Bold> 
-<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+e047	"<Bold>e047 Enemy Reinforcement</Bold> 
+<InlineUIContainer><Button Content='r15.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>"
 e048	"<Bold>e048 Enemy Advance</Bold> 
-<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='r15.10' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
 Remove one US Control marker from sector adjacent to an enemy unit. If two sectors are eligible, it is chosen randomly"
 e048a	"<Bold>e048a Enemy Advance Ignored</Bold> 

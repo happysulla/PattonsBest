@@ -28,13 +28,15 @@ namespace Pattons_Best
    }
    public class PanzerfaustAttack
    {
+      public IMapItem myEnemyUnit;
       public int myDay = 0;
       public bool myIsShermanMoving = false;
       public bool myIsLeadTank = false;
       public bool myIsAdvancingFireZone = false;
       public char mySector;
-      public PanzerfaustAttack( IGameInstance gi, bool isAdvanceFire, char sector)
+      public PanzerfaustAttack( IGameInstance gi, IMapItem enemyUnit, bool isAdvanceFire, char sector)
       {
+         myEnemyUnit = enemyUnit;
          myDay = gi.Day;
          myIsShermanMoving = gi.Sherman.IsMoving;
          myIsLeadTank = gi.IsLeadTank;

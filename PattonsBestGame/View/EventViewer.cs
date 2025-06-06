@@ -330,6 +330,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): PerformSpotting() returned false");
                break;
             case GameAction.BattleCollateralDamageCheck:
+            case GameAction.BattleRoundSequenceHarrassingFire:
                EventViewerTankCollateral collateralCheck = new EventViewerTankCollateral(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == collateralCheck.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): collateralCheck.CtorError=true");
@@ -1414,7 +1415,6 @@ namespace Pattons_Best
             case "e044c":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  myTextBlock.Inlines.Add(new LineBreak());
                   Image imge044c = new Image { Name = "PanzerfaultToKill", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c107Panzerfaust") };
                   myTextBlock.Inlines.Add(new Run("                                            "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge044c));
@@ -2251,6 +2251,10 @@ namespace Pattons_Best
                            break;
                         case "PanzerfaultToKill":
                            action = GameAction.BattleRoundSequencePanzerfaustToKillRoll;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "CollateralDamage":
+                           action = GameAction.BattleRoundSequenceHarrassingFire;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         default:
