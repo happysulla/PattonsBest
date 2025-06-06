@@ -482,10 +482,32 @@ Right click marker or one of blue boxes to to select from pull down menu where t
 e100	"<Bold>e100 Evening Debriefing</Bold> 
 <LineBreak/><LineBreak/>
 An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
-Click image to continue.
+Click image to continue to continue to Crew Rating Improvements per 
+<InlineUIContainer><Button Content='r4.91' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>
                      <InlineUIContainer><Image Name='Debrief' Height='168' Width='275'></Image></InlineUIContainer>"
-e0101	"<Bold>e101 Evening Debriefing</Bold> 
+e101	"<Bold>e101 Evening Debriefing - Victory Point Total</Bold> 
+<LineBreak/><LineBreak/>
+The After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+is updated to reflect victory points for both yoru tank and friendly forces. 
+<LineBreak/><LineBreak/>
+If the combined victory points from both your tank and friendly forces is positive, you have won the engagement.
+<LineBreak/><LineBreak/>"
+e102	"<Bold>e102 Evening Debriefing - Promotions</Bold> 
+<InlineUIContainer><Button Content='r25.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<LineBreak/><LineBreak/>
+The After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+is updated to reflect promotions.
+<LineBreak/><LineBreak/>"
+e103	"<Bold>e103 Evening Debriefing - Decorations</Bold> 
+<InlineUIContainer><Button Content='r26.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<LineBreak/><LineBreak/>
+Roll for possible decorations on the 
+<InlineUIContainer><Button Content='Decorations' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
+Medals received are recorded on the  per After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> .
 <LineBreak/><LineBreak/>"
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"
