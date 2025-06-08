@@ -605,6 +605,7 @@ namespace Pattons_Best
             case GameAction.ShowMovementDiagramDialog:
             case GameAction.ShowAboutDialog:
             case GameAction.EndGameShowFeats:
+            case GameAction.UpdateAfterActionReport:
             case GameAction.UpdateEventViewerDisplay: // Only change active event
                break;
             case GameAction.TestingStartMorningBriefing:
@@ -806,27 +807,6 @@ namespace Pattons_Best
          else
             Logger.Log(LogEnum.LE_ERROR, sb12.ToString());
          return returnStatus;
-      }
-      private void AddStartingTestingOptions(IGameInstance gi)
-      {
-         gi.IsAdvancingFireChosen = false;
-         //--------------------------------
-         gi.IsLeadTank = true; 
-         IAfterActionReport? lastReport = gi.Reports.GetLast();
-         if (null == lastReport)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): lastReport=null");
-         }
-         else if (true == gi.IsLeadTank)
-         {
-            StringBuilder sb = new StringBuilder("At ");
-            sb.Append(TableMgr.GetTime(lastReport));
-            sb.Append(", you are the Lead Tank!");
-            lastReport.Notes.Add(sb.ToString());
-         }
-         //--------------------------------
-         gi.Sherman.IsMoving = true;
-         gi.Sherman.IsHullDown = false;
       }
       private bool PerformAutoSetup(IGameInstance gi, ref GameAction action)
       {
@@ -1286,6 +1266,15 @@ namespace Pattons_Best
          }
          return true;
       }
+      private void AddStartingTestingOptions(IGameInstance gi)
+      {
+         gi.IsAdvancingFireChosen = false;
+         //--------------------------------
+         gi.IsLeadTank = true;
+         //--------------------------------
+         gi.Sherman.IsMoving = true;
+         gi.Sherman.IsHullDown = false;
+      }
    }
    //-----------------------------------------------------
    class GameStateMorningBriefing : GameState
@@ -1319,6 +1308,7 @@ namespace Pattons_Best
                case GameAction.ShowReportErrorDialog:
                case GameAction.ShowAboutDialog:
                case GameAction.EndGameShowFeats:
+               case GameAction.UpdateAfterActionReport:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
                   break;
                case GameAction.MorningBriefingAmmoLoad:
@@ -1472,6 +1462,7 @@ namespace Pattons_Best
                case GameAction.ShowReportErrorDialog:
                case GameAction.ShowAboutDialog:
                case GameAction.EndGameShowFeats:
+               case GameAction.UpdateAfterActionReport:  
                case GameAction.UpdateEventViewerDisplay: // Only change active event
                   break;
                case GameAction.PreparationsLoaderSpotSet:
@@ -1934,6 +1925,8 @@ namespace Pattons_Best
                   break;
                case GameAction.EveningDebriefingStart:
                   gi.GamePhase = GamePhase.EveningDebriefing;
+                  gi.EventDisplayed = gi.EventActive = "e100";
+                  gi.DieRollAction = GameAction.DieRollActionNone;
                   break;
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;
@@ -2161,7 +2154,7 @@ namespace Pattons_Best
          int basePoints = 10;
          if (EnumScenario.Advance == report.Scenario || EnumScenario.Battle == report.Scenario)
             basePoints *= 2;
-         report.VictoryPtsKiaExitArea += basePoints;
+         report.VictoryPtsCapturedExitArea += basePoints;
          //--------------------------------------------------------------
          theIs1stEnemyStrengthCheckTerritory = true;
          gi.EventDisplayed = gi.EventActive = "e018";
@@ -2201,7 +2194,7 @@ namespace Pattons_Best
          if (null == lastReport)
          {
             returnStatus = "lastReport=null";
-            Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+            Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
          }
          else
          {
@@ -2223,6 +2216,7 @@ namespace Pattons_Best
                case GameAction.UpdateBattleBoard:
                case GameAction.UpdateTankCard:
                case GameAction.UpdateShowRegion:
+               case GameAction.UpdateAfterActionReport:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
                   break;
                case GameAction.UpdateEventViewerActive: // Only change active event
@@ -2369,6 +2363,7 @@ namespace Pattons_Best
                   gi.GamePhase = GamePhase.EveningDebriefing;
                   gi.EventDisplayed = gi.EventActive = "e100";
                   gi.DieRollAction = GameAction.DieRollActionNone;
+                  gi.BattleStacks.Clear();
                   break;
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;
@@ -2494,6 +2489,7 @@ namespace Pattons_Best
                case GameAction.UpdateBattleBoard:
                case GameAction.UpdateTankCard:
                case GameAction.UpdateShowRegion:
+               case GameAction.UpdateAfterActionReport:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
                   break;
                case GameAction.UpdateEventViewerActive: // Only change active event
@@ -2617,7 +2613,8 @@ namespace Pattons_Best
                      }
                      else if (gi.DieResults[key][0] < 3)
                      {
-                        gi.Sherman.IsThrownTrack = true;
+                        gi.Sherman.IsThrownTrack = true; // BattleRoundSequenceMinefieldRoll
+                        lastReport.Breakdown = "Thrown Track";
                         gi.Sherman.IsMoving = false;
                         gi.EventDisplayed = gi.EventActive = "e043b";
                         gi.DieRollAction = GameAction.BattleRoundSequenceMinefieldDisableRoll;
@@ -2740,7 +2737,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequencePanzerfaustSectorRoll:
                   if( Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 6; // <cgs> Panzerfaust attack sector
+                     //dieRoll = 6; // <cgs> Panzerfaust attack sector
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -2752,9 +2749,9 @@ namespace Pattons_Best
                         case 1: sector = '1'; break;
                         case 2: sector = '2'; break;
                         case 3: sector = '3'; break;
-                        case 4: sector = '4'; break;
-                        case 6: sector = '6'; break;
-                        case 9: sector = '9'; break;
+                        case 4: case 5: sector = '4'; break;
+                        case 6: case 7: case 8: sector = '6'; break;
+                        case 9: case 10: sector = '9'; break;
                         default:
                            returnStatus = " reached default gi.DieResults[key][0]=" + gi.DieResults[key][0].ToString();
                            Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
@@ -2922,8 +2919,9 @@ namespace Pattons_Best
                      {
                         if (gi.DieResults[key][0] < 9)
                         {
+                           gi.KillSherman(lastReport, "Panzerfaust");
                            string hitLocation = "Hull";
-                           if( 0 == Utilities.RandomGenerator.Next(2))
+                           if ( 0 == Utilities.RandomGenerator.Next(2))
                               hitLocation = "Turret";
                            gi.Death = new ShermanDeath(gi, gi.Panzerfaust.myEnemyUnit, hitLocation, "Panzerfault");
                            action = GameAction.BattleRoundSequenceShermanKilled;
@@ -3074,39 +3072,76 @@ namespace Pattons_Best
          GameAction previousDieAction = gi.DieRollAction;
          string previousEvent = gi.EventActive;
          string returnStatus = "OK";
-         switch (action)
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
          {
-            case GameAction.ShowCombatCalendarDialog:
-            case GameAction.ShowAfterActionReportDialog:
-            case GameAction.ShowInventoryDialog:
-            case GameAction.ShowGameFeats:
-            case GameAction.ShowRuleListingDialog:
-            case GameAction.ShowEventListingDialog:
-            case GameAction.ShowTableListing:
-            case GameAction.ShowMovementDiagramDialog:
-            case GameAction.ShowReportErrorDialog:
-            case GameAction.ShowAboutDialog:
-            case GameAction.EndGameShowFeats:
-            case GameAction.UpdateStatusBar:
-            case GameAction.UpdateBattleBoard:
-            case GameAction.UpdateTankCard:
-            case GameAction.UpdateShowRegion:
-            case GameAction.UpdateEventViewerDisplay: // Only change active event
-               break;
-            case GameAction.UpdateEventViewerActive: // Only change active event
-               gi.EventDisplayed = gi.EventActive; // next screen to show
-               break;
-            case GameAction.EveningDebriefingStart: // Only change active event
-               gi.EventDisplayed = gi.EventActive = "e100";
-               gi.DieRollAction = GameAction.DieRollActionNone;
-               break;
-            case GameAction.EveningDebriefingRatingImprovementEnd: // Only change active event
-               break;
-            case GameAction.EndGameClose:
-               gi.GamePhase = GamePhase.EndGame;
-               break;
-            default:
-               break;
+            returnStatus = "lastReport=null";
+            Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(): " + returnStatus);
+         }
+         else
+         {
+            switch (action)
+            {
+               case GameAction.ShowCombatCalendarDialog:
+               case GameAction.ShowAfterActionReportDialog:
+               case GameAction.ShowInventoryDialog:
+               case GameAction.ShowGameFeats:
+               case GameAction.ShowRuleListingDialog:
+               case GameAction.ShowEventListingDialog:
+               case GameAction.ShowTableListing:
+               case GameAction.ShowMovementDiagramDialog:
+               case GameAction.ShowReportErrorDialog:
+               case GameAction.ShowAboutDialog:
+               case GameAction.EndGameShowFeats:
+               case GameAction.UpdateStatusBar:
+               case GameAction.UpdateBattleBoard:
+               case GameAction.UpdateTankCard:
+               case GameAction.UpdateShowRegion:
+               case GameAction.UpdateAfterActionReport:
+               case GameAction.UpdateEventViewerDisplay: // Only change active event
+                  break;
+               case GameAction.UpdateEventViewerActive: // Only change active event
+                  gi.EventDisplayed = gi.EventActive; // next screen to show
+                  break;
+               case GameAction.EveningDebriefingStart: // Only change active event
+                  gi.EventDisplayed = gi.EventActive = "e100";
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  gi.BattleStacks.Clear();
+                  break;
+               case GameAction.EveningDebriefingRatingImprovement: // Only change active event
+                  break;
+               case GameAction.EveningDebriefingRatingImprovementEnd:
+                  gi.EventDisplayed = gi.EventActive = "e101";
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  if (false == UpdateForEveningDebriefing(gi, lastReport))
+                  {
+                     returnStatus = "UpdateForEveningDebriefing() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.EveningDebriefingVictoryPointsCalculated:
+                  gi.EventDisplayed = gi.EventActive = "e102";
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  //----------------------------------------------
+                  if( false == UpdatePromotion(gi, lastReport))
+                  {
+                     returnStatus = "UpdatePromotion() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.EventDebriefPromotion:
+                  gi.EventDisplayed = gi.EventActive = "e103";
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  break;
+               case GameAction.EndGameClose:
+                  gi.GamePhase = GamePhase.EndGame;
+                  break;
+
+               default:
+                  returnStatus = "reached default with action=" + action.ToString();
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                  break;
+            }
          }
          StringBuilder sb12 = new StringBuilder();
          if ("OK" != returnStatus)
@@ -3130,6 +3165,109 @@ namespace Pattons_Best
          else
             Logger.Log(LogEnum.LE_ERROR, sb12.ToString());
          return returnStatus;
+      }
+      public bool UpdateForEveningDebriefing(IGameInstance gi, IAfterActionReport report)
+      {
+         int scenarioMultiplierKOGermanUnit = 1;
+         int scenarioMultiplierCapturedMapArea = 1;
+         int scenarioMultiplierLoseMapArea = 1;
+         if ( EnumScenario.Advance == report.Scenario )
+         {
+            scenarioMultiplierKOGermanUnit = 1;
+            scenarioMultiplierCapturedMapArea = 1;
+            scenarioMultiplierLoseMapArea = 1;
+         }
+         else if (EnumScenario.Advance == report.Scenario)
+         {
+            scenarioMultiplierKOGermanUnit = 1;
+            scenarioMultiplierCapturedMapArea = 2;
+            scenarioMultiplierLoseMapArea = 3;
+         }
+         else if (EnumScenario.Advance == report.Scenario)
+         {
+            scenarioMultiplierKOGermanUnit = 2;
+            scenarioMultiplierCapturedMapArea = 0;
+            scenarioMultiplierLoseMapArea = 3;
+         }
+         else
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateForEveningDebriefing(): report.Scenario=" + report.Scenario.ToString());
+            return false;
+         }
+         //----------------------------------
+         int totalYourKia = report.VictoryPtsYourKiaLightWeapon;
+         totalYourKia += report.VictoryPtsYourKiaTruck;
+         totalYourKia += report.VictoryPtsYourKiaSpwOrPsw * 2;
+         totalYourKia += report.VictoryPtsYourKiaSPGun * 6;
+         totalYourKia += report.VictoryPtsYourKiaPzIV * 7; 
+         totalYourKia += report.VictoryPtsYourKiaPzV * 9;
+         totalYourKia += report.VictoryPtsYourKiaPzVI * 12;
+         totalYourKia += report.VictoryPtsYourKiaAtGun * 4;
+         totalYourKia += report.VictoryPtsYourKiaFortifiedPosition * 2;
+         report.VictoryPtsTotalYourTank = totalYourKia * scenarioMultiplierKOGermanUnit;
+         //----------------------------------
+         int totalFriendlyKia = report.VictoryPtsFriendlyKiaLightWeapon;
+         totalFriendlyKia += report.VictoryPtsFriendlyKiaTruck;
+         totalFriendlyKia += report.VictoryPtsFriendlyKiaSpwOrPsw * 2;
+         totalFriendlyKia += report.VictoryPtsFriendlyKiaSPGun * 6;
+         totalFriendlyKia += report.VictoryPtsFriendlyKiaPzIV * 7; 
+         totalFriendlyKia += report.VictoryPtsFriendlyKiaPzV * 9;
+         totalFriendlyKia += report.VictoryPtsFriendlyKiaPzVI * 12;
+         totalFriendlyKia += report.VictoryPtsFriendlyKiaAtGun * 4;
+         totalFriendlyKia += report.VictoryPtsFriendlyKiaFortifiedPosition * 2;
+         totalFriendlyKia -= report.VictoryPtsFriendlyTank * 5;
+         totalFriendlyKia -= report.VictoryPtsFriendlySquad * 3;
+         report.VictoryPtsTotalFriendlyForces = totalFriendlyKia * scenarioMultiplierKOGermanUnit;
+         //----------------------------------
+         report.VictoryPtsTotalTerritory = (report.VictoryPtsCaptureArea + report.VictoryPtsCapturedExitArea) * scenarioMultiplierCapturedMapArea;
+         report.VictoryPtsTotalTerritory -= (report.VictoryPtsLostArea * scenarioMultiplierLoseMapArea);
+         //----------------------------------
+         report.VictoryPtsTotalEngagement = report.VictoryPtsTotalYourTank + report.VictoryPtsTotalFriendlyForces + report.VictoryPtsTotalEngagement;
+         gi.VictoryPtsTotalCampaign += report.VictoryPtsTotalEngagement;
+         gi.PromotionPoints += report.VictoryPtsTotalEngagement;
+         //----------------------------------
+         report.DayEndedTime = TableMgr.GetTime(report);
+         //----------------------------------
+         return true;
+      }
+      public bool UpdatePromotion(IGameInstance gi, IAfterActionReport report)
+      {
+         string cmdrRank = report.Commander.Rank;
+         switch (cmdrRank)
+         {
+            case "Sgt":
+               if( 99 < gi.PromotionPoints )
+               {
+                  gi.PromotionDate = gi.Day;
+                  report.Commander.Rank = "Ssg";
+               }
+               break;
+            case "2Lt":
+               if (199 < gi.PromotionPoints)
+               {
+                  gi.PromotionDate = gi.Day;
+                  report.Commander.Rank = "2Lt";
+               }
+               break;
+            case "1Lt":
+               if (299 < gi.PromotionPoints)
+               {
+                  gi.PromotionDate = gi.Day;
+                  report.Commander.Rank = "1Lt";
+               }
+               break;
+            case "Cpt":
+               if (399 < gi.PromotionPoints)
+               {
+                  gi.PromotionDate = gi.Day;
+                  report.Commander.Rank = "Cpt";
+               }
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "UpdatePromotion(): reached default cmdrRank=" + cmdrRank);
+               return false;
+         }
+         return true;
       }
    }
    //-----------------------------------------------------
@@ -3159,6 +3297,7 @@ namespace Pattons_Best
             case GameAction.UpdateBattleBoard:
             case GameAction.UpdateTankCard:
             case GameAction.UpdateShowRegion:
+            case GameAction.UpdateAfterActionReport:
             case GameAction.UpdateEventViewerDisplay: // Only change active event
                break;
             case GameAction.EndGameWin:

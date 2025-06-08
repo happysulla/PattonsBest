@@ -494,7 +494,7 @@
       <!--  ++++++++++++++++++++++++++++++++++++NOTES:++++++++++++++++++++++++++++++++++++ -->
       <StackPanel  Name="myStackPanelNotes" Grid.Row="3" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left" Margin="0,10,0,0">
          <ScrollViewer Name="myScrollViewerTextBlock" MaxWidth="600" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0">
-            <TextBlock Name="myTextBlockDisplay" MinWidth="380" MaxWidth="380" MinHeight="220" MaxHeight="220" FontFamily="Arial Rounded MT Bold" FontSize="14" TextWrapping="WrapWithOverflow" IsHyphenationEnabled="true" LineStackingStrategy="BlockLineHeight"  Margin="5,5,5,5" >
+            <TextBlock Name="myTextBlockDisplay" MinWidth="380" MaxWidth="380" MinHeight="220" MaxHeight="220" FontFamily="Arial Rounded MT Bold" FontSize="10" TextWrapping="WrapWithOverflow" IsHyphenationEnabled="true" LineStackingStrategy="BlockLineHeight"  Margin="5,5,5,5" >
                NOTES:
             </TextBlock>
          </ScrollViewer>
@@ -830,11 +830,17 @@
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0" FontFamily="Arial Rounded MT Bold" FontSize="14">DAY ENDED:</Label>
             <Label Grid.Row="0" Grid.Column="1" FontFamily="Arial Rounded MT Bold" FontSize="14">Time:</Label>
-            <Label Grid.Row="0" Grid.Column="2" FontFamily="Arial Rounded MT Bold" FontSize="14">____________________________</Label>
+            <Label Grid.Row="0" Grid.Column="2" FontFamily="Arial Rounded MT Bold" FontSize="14">
+               <Span Name="mySpanTimeEnded" TextDecorations="Underline">_______________</Span>
+            </Label>
             <Label Grid.Row="0" Grid.Column="3" FontFamily="Arial Rounded MT Bold" FontSize="14">Breakdown:</Label>
-            <Label Grid.Row="0" Grid.Column="4" FontFamily="Arial Rounded MT Bold" FontSize="14">____________________________</Label>
+            <Label Grid.Row="0" Grid.Column="4" FontFamily="Arial Rounded MT Bold" FontSize="14">
+               <Span Name="mySpanBreakdown" TextDecorations="Underline">_______________</Span>
+            </Label>
             <Label Grid.Row="0" Grid.Column="5" FontFamily="Arial Rounded MT Bold" FontSize="14">Knocked Out (KO):</Label>
-            <Label Grid.Row="0" Grid.Column="6" FontFamily="Arial Rounded MT Bold" FontSize="14">____________________________</Label>
+            <Label Grid.Row="0" Grid.Column="6" FontFamily="Arial Rounded MT Bold" FontSize="14">
+               <Span Name="mySpanKnockedOut" TextDecorations="Underline">______________</Span>
+            </Label>
          </Grid>
       </StackPanel>
    </Grid>

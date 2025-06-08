@@ -97,14 +97,15 @@ namespace Pattons_Best
       RemoveSplashScreen,
       UpdateStatusBar,
       UpdateTankCard,
+      UpdateAfterActionReport,
       UpdateBattleBoard,
       UpdateTankExplosion,
       UpdateShowRegion,
       UpdateEventViewerDisplay,
       UpdateEventViewerActive,
-      DieRollActionNone, // The field in IGameInstance indicates what the roll apply. If none expected, it is set to this value.
+      DieRollActionNone,          // The field in IGameInstance indicates what the roll apply. If none expected, it is set to this value.
 
-      UpdateNewGame,  // Menu Options
+      UpdateNewGame,              // Menu Options
       UpdateGameOptions, 
       UpdateLoadingGame,
       UpdateUndo,
@@ -252,6 +253,8 @@ namespace Pattons_Best
       EveningDebriefingStart,
       EveningDebriefingRatingImprovement,
       EveningDebriefingRatingImprovementEnd,
+      EveningDebriefingVictoryPointsCalculated,
+      EventDebriefPromotion,
       Error
    };
    public interface IGameEngine

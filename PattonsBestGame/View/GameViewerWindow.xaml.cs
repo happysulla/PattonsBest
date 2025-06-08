@@ -1101,6 +1101,9 @@ namespace Pattons_Best
          }
          else
          {
+            stacks = gi.BattleStacks;
+            myBattleButtons.Clear();
+            UpdateCanvasMainClear(myBattleButtons, stacks);
             return true;
          }
          //-------------------------------------------------------

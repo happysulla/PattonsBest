@@ -1532,6 +1532,7 @@ namespace Pattons_Best
                   {
                      myGridRows[i].myDieRollToKillYourTank = NO_FIRE_THROWN_TRACK;
                      myGameInstance.Sherman.IsThrownTrack = true;
+                     lastReport.Breakdown = "Thrown Track";
                      myGameInstance.Sherman.IsMoving = false;
                   }
                }
@@ -1542,8 +1543,7 @@ namespace Pattons_Best
                   if( dieRoll <= myGridRows[i].myToKillNumberYourTank )
                   {
                      myGameInstance.Sherman.SetBloodSpots();
-                     myGameInstance.Sherman.IsKilled = true;
-                     myGameInstance.Sherman.IsMoving = false;
+                     myGameInstance.KillSherman(lastReport, "Enemy Action");
                      myGridRows[i].myToKillResultYourTank = "KO";
                      myGameInstance.Death = new ShermanDeath(myGameInstance, enemyMapItem, myGridRows[i].myHitLocationYourTank, "Enemy Action");
                      for (int j = 0; j < myMaxRowCount; ++j)

@@ -179,6 +179,10 @@ namespace Pattons_Best
                break;
             case GameAction.UpdateGameOptions:
                break;
+            case GameAction.UpdateAfterActionReport:
+               if (null != myAfterActionDialog)
+                  myAfterActionDialog.UpdateReport();
+               return;
             case GameAction.UpdateUndo:
                myScrollViewerTextBlock.Cursor = System.Windows.Input.Cursors.Arrow;
                gi.IsGridActive = false;
@@ -338,7 +342,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ResolveCollateralDamage() returned false");
                break;
             case GameAction.EveningDebriefingRatingImprovement:
-               EventViewerRatingImprove crewRatingImprove = new EventViewerRatingImprove(myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
+               EventViewerRatingImprove crewRatingImprove = new EventViewerRatingImprove(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == crewRatingImprove.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): crewRatingImprove.CtorError=true");
                else if (false == crewRatingImprove.ImproveRatings(ShowRatingImproveResults))
@@ -1423,6 +1427,91 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
+            case "e101":
+               ICrewMember? cmdr = gi.GetCrewMember("Commander");
+               if (null == cmdr)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): cmdr=null for key=" + key);
+                  return false;
+               }
+               StringBuilder sbe101 = new StringBuilder();
+               sbe101.Append("Total Engagement Victory Points: ");
+               sbe101.Append(report.VictoryPtsTotalEngagement.ToString());
+               sbe101.Append("\nTotal Campaign Victory Points: ");
+               sbe101.Append(gi.VictoryPtsTotalCampaign.ToString());
+               //----------------------------------------
+               Image? imge101 = null;
+               if ( true == cmdr.IsKilled )
+               {
+                  sbe101.Append("\n\nYou as the commander are killed. Engagement Lost!");
+                  imge101 = new Image { Name = "CampaignOver", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("CommanderDead") };
+               }
+               else if (report.VictoryPtsTotalEngagement < 0 )
+               {
+                  sbe101.Append("\n\nTotal Victory Points is less than zero. Engagement Lost!");
+                  imge101 = new Image { Name = "EventDebriefVictoryPts", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("Deny") };
+               }
+               else
+               {
+                  sbe101.Append("\n\nTotal Victory Points is greater than zero. Engagement Won!");
+                  imge101 = new Image { Name = "EventDebriefVictoryPts", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("Star") };
+               }
+               myTextBlock.Inlines.Add(new Run( sbe101.ToString()) );
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("                                    "));
+               myTextBlock.Inlines.Add(new InlineUIContainer(imge101));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               break;
+            case "e102":
+               ReplaceText("PROMOTION_POINTS", gi.VictoryPtsTotalCampaign.ToString() );
+               string promoDate = TableMgr.GetDate(gi.PromotionDate);
+               ReplaceText("PROMOTION_DATE", promoDate);
+               //------------------------------------------
+               string oldRank = report.Commander.Rank;
+               string newRank = GetNewRank(gi, report);
+               if ("ERROR" == newRank)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): TableMgr.GetDate() returned ERROR for date=" + gi.PromotionDate.ToString());
+                  return false;
+               }
+               if( oldRank != newRank )
+               {
+                  myTextBlock.Inlines.Add(new Run("Congradulations on your promotion!"));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+               }
+               //------------------------------------------
+               Image? imge102 = null;
+               switch (newRank)
+               {
+                  case "Sgt":
+                     imge102 = new Image { Name = "EventDebriefPromotion", Width = 100, Height = 132, Source = MapItem.theMapImages.GetBitmapImage("RankSergeant") };
+                     break;
+                  case "Ssg":
+                     imge102 = new Image { Name = "EventDebriefPromotion", Width = 100, Height = 157, Source = MapItem.theMapImages.GetBitmapImage("RankStaffSergeant") };
+                     break;
+                  case "2Lt":
+                     imge102 = new Image { Name = "EventDebriefPromotion", Width = 100, Height = 250, Source = MapItem.theMapImages.GetBitmapImage("RankFirstLieutenant") };
+                     break;
+                  case "1Lt":
+                     imge102 = new Image { Name = "EventDebriefPromotion", Width = 100, Height = 250, Source = MapItem.theMapImages.GetBitmapImage("RankSecondLieutenant") };
+                     break;
+                  case "Cpt":
+                     imge102 = new Image { Name = "EventDebriefPromotion", Width = 100, Height = 92, Source = MapItem.theMapImages.GetBitmapImage("RankCaptian") };
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default newRank=" + newRank);
+                     return false;
+               }
+               myTextBlock.Inlines.Add(new Run("                                              "));
+               myTextBlock.Inlines.Add(new InlineUIContainer(imge102));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               break;
             default:
                break;
          }
@@ -1589,6 +1678,36 @@ namespace Pattons_Best
          else
             b.IsEnabled = true;
          return true;
+      }
+      private string GetNewRank(IGameInstance gi, IAfterActionReport report)
+      {
+         string oldRank = report.Commander.Rank;
+         string newRank = report.Commander.Rank;   
+         switch (oldRank)
+         {
+            case "Sgt":
+               if (99 < gi.PromotionPoints)
+                  newRank = "Ssg";
+               break;
+            case "2Lt":
+               if (199 < gi.PromotionPoints)
+                  newRank = "2Lt";
+               break;
+            case "1Lt":
+               if (299 < gi.PromotionPoints)
+                  newRank = "1Lt";
+               break;
+            case "Cpt":
+               if (399 < gi.PromotionPoints)
+                  newRank = "Cpt";
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetNewRank(): reached default cmdrRank=" + oldRank);
+               return "ERROR";
+         }
+         if (gi.Day < (gi.PromotionDate + 30)) // cannot get promoted until 30 days past since last promotion
+            newRank = oldRank;
+         return newRank;
       }
       //--------------------------------------------------------------------
       public void CloseAfterActionDialog()
@@ -2255,6 +2374,18 @@ namespace Pattons_Best
                            break;
                         case "CollateralDamage":
                            action = GameAction.BattleRoundSequenceHarrassingFire;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "CampaignOver":
+                           action = GameAction.EveningDebriefingVictoryPointsCalculated;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "EventDebriefVictoryPts":
+                           action = GameAction.EveningDebriefingVictoryPointsCalculated;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "EventDebriefPromotion":
+                           action = GameAction.EventDebriefPromotion;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         default:

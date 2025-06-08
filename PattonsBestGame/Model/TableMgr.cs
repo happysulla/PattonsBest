@@ -27,11 +27,116 @@ namespace Pattons_Best
          CreateExitTable();
       }
       //-------------------------------------------
+      public static string GetDate(int day)
+      {
+         StringBuilder sb = new StringBuilder();
+         if (day < 5)
+         {
+            sb.Append("07/");
+            int dayOfMonth = day + 27;
+            if( dayOfMonth < 10)
+               sb.Append("0");
+            sb.Append(dayOfMonth.ToString());
+            sb.Append("/1944");
+         }
+         else if (day < 36) // starts day=5
+         {
+            sb.Append("08/");
+            int dayOfMonth = day - 4;
+            if (dayOfMonth < 10)
+               sb.Append("0");
+            sb.Append(dayOfMonth.ToString());
+            sb.Append("/1944");
+         }
+         else if (day < 58)
+         {
+            sb.Append("09/");
+            int dayOfMonth = day-36;
+            if ( 37 < day )
+               dayOfMonth = day - 27;
+            if (dayOfMonth < 10)
+               sb.Append("0");
+            sb.Append(dayOfMonth.ToString());
+            sb.Append("/1944");
+         }
+         else if (day < 70)
+         {
+            sb.Append("10/");
+            int dayOfMonth = day - 57;
+            sb.Append(dayOfMonth.ToString());
+            sb.Append("/1944");
+         }
+         else if (day < 92)
+         {
+            sb.Append("11/");
+            int dayOfMonth = day - 62;
+            if (dayOfMonth < 10)
+               sb.Append("0");
+            sb.Append(dayOfMonth.ToString());
+            sb.Append("/1944");
+         }
+         else if (day < 110)
+         {
+            sb.Append("12/");
+            int dayOfMonth = day - 91;
+            if (97 < day)
+               dayOfMonth = day - 78;
+            if (dayOfMonth < 10)
+               sb.Append("0");
+            sb.Append(dayOfMonth.ToString());
+            sb.Append("/1944");
+         }
+         else if (day < 137)
+         {
+            sb.Append("01/");
+            int dayOfMonth = day - 109;
+            if (112 < day)
+               dayOfMonth = day - 103;
+            if (dayOfMonth < 10)
+               sb.Append("0");
+            sb.Append(dayOfMonth.ToString());
+            sb.Append("/1945");
+         }
+         else if (day < 147)
+         {
+            sb.Append("02/");
+            int dayOfMonth = day - 136;
+            if (139 < day)
+               dayOfMonth = day - 118;
+            if (dayOfMonth < 10)
+               sb.Append("0");
+            sb.Append(dayOfMonth.ToString());
+            sb.Append("/1945");
+         }
+         else if (day < 174)
+         {
+            sb.Append("03/");
+            int dayOfMonth = day - 146;
+            if (149 < day)
+               dayOfMonth = day - 145;
+            if (157 < day)
+               dayOfMonth = day - 136;
+            if (dayOfMonth < 10)
+               sb.Append("0");
+            sb.Append(dayOfMonth.ToString());
+            sb.Append("/1945");
+         }
+         else if (day < 193)
+         {
+            sb.Append("04/");
+            int dayOfMonth = day - 173;
+            if (dayOfMonth < 10)
+               sb.Append("0");
+            sb.Append(dayOfMonth.ToString());
+            sb.Append("/1945");
+         }
+         return sb.ToString();
+      }
       public static string GetMonth(int day)
       {
          if (day < 5)
             return "Jul";
-         if (day < 37)
+         if (day < 36)
             return "Aug";
          if (day < 58)
             return "Sep";
@@ -2776,18 +2881,24 @@ namespace Pattons_Best
          }
          if ( ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling"))) && ('C' != range) )
          {
+            Logger.Log(LogEnum.LE_SHOW_SPOT_RESULT, "GetSpottingResult(): mi=" + mi.Name + " Unspotted - Fog/Falling & range=" + range.ToString());
             return "Unspotted";
          }
          //----------------------------------------------------
          if ( 1 == dieRoll ) // an unmodified roll of 1 always spots and ids it
          {
             mi.Spotting = EnumSpottingResult.IDENTIFIED;
+            Logger.Log(LogEnum.LE_SHOW_SPOT_RESULT, "GetSpottingResult(): mi=" + mi.Name + " Identified dr=" + dieRoll.ToString());
             return "Identified";
          }
-         if ( ((9 == dieRoll) || (10 == dieRoll)) && ((EnumSpottingResult.IDENTIFIED != mi.Spotting) || (EnumSpottingResult.SPOTTED != mi.Spotting)) ) // an unmodified roll of 9-10 means target is hidden
+         if ((9 == dieRoll) || (10 == dieRoll)) // an unmodified roll of 9-10 means target is hidden
          {
-            mi.Spotting = EnumSpottingResult.HIDDEN; // only applies if not already spotted or identified
-            return "Hidden";
+            if ((EnumSpottingResult.IDENTIFIED != mi.Spotting) || (EnumSpottingResult.SPOTTED != mi.Spotting))
+            {
+               Logger.Log(LogEnum.LE_SHOW_SPOT_RESULT, "GetSpottingResult(): mi=" + mi.Name + " Hidden - dr=" + dieRoll.ToString() + " mi.Spotting=" + mi.Spotting.ToString() );
+               mi.Spotting = EnumSpottingResult.HIDDEN; // only applies if not already spotted or identified
+               return "Hidden";
+            }
          }
          //-------------------------------
          int modifier = GetSpottingModifier(gi, mi, cm, sector, range);
@@ -2803,10 +2914,17 @@ namespace Pattons_Best
             int halfRating = (int)Math.Ceiling(cm.Rating * 0.5);
             if ( dieRoll <= halfRating )
             {
+               Logger.Log(LogEnum.LE_SHOW_SPOT_RESULT, "GetSpottingResult(): mi=" + mi.Name + " Identified - dr=" + dieRoll.ToString() );
                mi.Spotting = EnumSpottingResult.IDENTIFIED;
                return "Identified";
             }
+            Logger.Log(LogEnum.LE_SHOW_SPOT_RESULT, "GetSpottingResult(): mi=" + mi.Name + " Spotted - dr=" + dieRoll.ToString());
             mi.Spotting = EnumSpottingResult.SPOTTED;
+            return "Spotted";
+         }
+         if( EnumSpottingResult.SPOTTED == mi.Spotting )
+         {
+            Logger.Log(LogEnum.LE_SHOW_SPOT_RESULT, "GetSpottingResult(): mi=" + mi.Name + " Already Spotted - dr=" + dieRoll.ToString());
             return "Spotted";
          }
          return "Unspotted";
@@ -3042,7 +3160,6 @@ namespace Pattons_Best
          theCombatCalendarEntries.Add(new CombatCalendarEntry("08/01/44", EnumScenario.Advance, 2, EnumResistance.Light));
          theCombatCalendarEntries.Add(new CombatCalendarEntry("08/02/44", EnumScenario.Advance, 2, EnumResistance.Light));
          theCombatCalendarEntries.Add(new CombatCalendarEntry("08/03/44", EnumScenario.Advance, 2, EnumResistance.Light));
-         theCombatCalendarEntries.Add(new CombatCalendarEntry("08/03/44", EnumScenario.Advance, 2, EnumResistance.Light));
          theCombatCalendarEntries.Add(new CombatCalendarEntry("08/04/44", EnumScenario.Advance, 2, EnumResistance.Light));
          theCombatCalendarEntries.Add(new CombatCalendarEntry("08/05/44", EnumScenario.Advance, 4, EnumResistance.Heavy, "Vannes"));
          theCombatCalendarEntries.Add(new CombatCalendarEntry("08/06/44", EnumScenario.Advance, 2, EnumResistance.Light));
@@ -3069,7 +3186,7 @@ namespace Pattons_Best
          theCombatCalendarEntries.Add(new CombatCalendarEntry("08/27/44", EnumScenario.Advance, 2, EnumResistance.Light));
          theCombatCalendarEntries.Add(new CombatCalendarEntry("08/28/44", EnumScenario.Advance, 2, EnumResistance.Light));
          theCombatCalendarEntries.Add(new CombatCalendarEntry("08/29/44", EnumScenario.Advance, 2, EnumResistance.Light));
-         theCombatCalendarEntries.Add(new CombatCalendarEntry("08/30/44", EnumScenario.Advance, 2, EnumResistance.Light));
+         theCombatCalendarEntries.Add(new CombatCalendarEntry("08/30/44", EnumScenario.Advance, 2, EnumResistance.Light)); //
          theCombatCalendarEntries.Add(new CombatCalendarEntry("08/31/44", EnumScenario.Advance, 4, EnumResistance.Medium, "Commery")); // Day=36
          //---------------------------------------------------------------------------------------------------------------
          theCombatCalendarEntries.Add(new CombatCalendarEntry("09/01/44", EnumScenario.Advance, 2, EnumResistance.Light));

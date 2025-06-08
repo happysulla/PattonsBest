@@ -96,6 +96,10 @@ namespace Pattons_Best
       bool IsMinefieldAttack { set; get; }
       bool IsHarrassingFire { set; get; }
       //------------------------------------------------
+      int VictoryPtsTotalCampaign { get; set; }
+      int PromotionPoints { get; set; }
+      int PromotionDate { get; set; }
+      //------------------------------------------------
       int AdvancingFireMarkerCount { set; get; }
       EnumResistance BattleResistance { set; get; }
       Dictionary<string,bool> BrokenPeriscopes { set; get; }
@@ -116,5 +120,6 @@ namespace Pattons_Best
       ICrewMember? GetCrewMember(string name);
       bool IsDaylightLeft(IAfterActionReport report);
       bool IsExitArea(out bool isExitAreaReached);
+      void KillSherman(IAfterActionReport report, string reason);
    }
 }

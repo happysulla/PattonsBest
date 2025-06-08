@@ -24,6 +24,7 @@ namespace Pattons_Best
       private Canvas? myCanvas = null;
       private IDieRoller? myDieRoller = null;
       private System.Windows.Input.Cursor? myTargetCursor = null;
+      private AfterActionReportUserControl? myAarUserControl = null;
       //-------------------------------------------------
       public CanvasImageViewer(Canvas? c, IDieRoller? dr)
       {
@@ -79,6 +80,10 @@ namespace Pattons_Best
                myTargetCursor = null;
                this.myCanvas.Cursor = System.Windows.Input.Cursors.Arrow; // get rid of the canvas cursor
                break;
+            case GameAction.UpdateAfterActionReport:
+               if (null != myAarUserControl)
+                  myAarUserControl.UpdateReport();
+               return;
             case GameAction.UpdateTankExplosion:
                ShowTankExploding(gi, myCanvas);
                break;
@@ -133,6 +138,8 @@ namespace Pattons_Best
             case GameAction.MorningBriefingWeatherRollEnd:
             case GameAction.MorningBriefingTimeCheck:
             case GameAction.MorningBriefingTimeCheckRoll:
+            case GameAction.EveningDebriefingRatingImprovement:
+            case GameAction.EveningDebriefingRatingImprovementEnd:
                theMainImage = EnumMainImage.MI_Other;
                if ( false == ShowAfterActionReportDialog(gi, myCanvas, false))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowAfterActionReportDialog() returned false for a=" + action.ToString());
@@ -226,14 +233,14 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowAfterActionReportDialog():  gi.Reports.GetLast()=null");
             return false;
          }
-         AfterActionReportUserControl aarControl = new AfterActionReportUserControl(report, isEditable);
+         myAarUserControl = new AfterActionReportUserControl(report, isEditable);
          CleanCanvas(c);
-         c.Children.Add(aarControl);
+         c.Children.Add(myAarUserControl);
          c.UpdateLayout();
-         double x = (c.ActualWidth - aarControl.ActualWidth) * 0.5;
-         double y = (c.ActualHeight - aarControl.ActualHeight) * 0.5;
-         Canvas.SetLeft(aarControl, x);
-         Canvas.SetTop(aarControl, y);
+         double x = (c.ActualWidth - myAarUserControl.ActualWidth) * 0.5;
+         double y = (c.ActualHeight - myAarUserControl.ActualHeight) * 0.5;
+         Canvas.SetLeft(myAarUserControl, x);
+         Canvas.SetTop(myAarUserControl, y);
          return true;
       }
       private void ShowCombatCalendarDialog(Canvas c)

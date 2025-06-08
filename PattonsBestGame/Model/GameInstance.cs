@@ -63,6 +63,10 @@ namespace Pattons_Best
       public bool IsMinefieldAttack { set; get; } = false;
       public bool IsHarrassingFire { set; get; } = false;
       //---------------------------------------------------------------
+      public int VictoryPtsTotalCampaign { get; set; } = 0;
+      public int PromotionPoints { get; set; } = 0;
+      public int PromotionDate { get; set; } = 0;
+      //---------------------------------------------------------------
       public int AdvancingFireMarkerCount { set; get; } = 0;
       public EnumResistance BattleResistance { set; get; } = EnumResistance.None;
       public Dictionary<string, bool> BrokenPeriscopes { set; get; } = new Dictionary<string, bool>();
@@ -208,6 +212,13 @@ namespace Pattons_Best
          if (adjName == EnteredArea.Name)
             isExitAreaReached = true;
          return true;
+      }
+      public void KillSherman(IAfterActionReport report, string reason)
+      {
+         this.Sherman.IsKilled = true;
+         this.Sherman.IsMoving = false;
+         report.KnockedOut = reason;
+         report.VictoryPtsFriendlyTank++;
       }
    }
 }

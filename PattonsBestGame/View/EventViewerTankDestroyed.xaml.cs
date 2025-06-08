@@ -770,11 +770,11 @@ namespace Pattons_Best
                myGrid.Children.Add(label2);
                Grid.SetRow(label2, rowNum);
                Grid.SetColumn(label2, 2);
-               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRowWounds[i].myBailoutWoundResult };
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 14, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRowWounds[i].myBailoutWoundResult };
                myGrid.Children.Add(label3);
                Grid.SetRow(label3, rowNum);
                Grid.SetColumn(label3, 3);
-               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRowWounds[i].myBailoutWoundEffect };
+               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 14, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRowWounds[i].myBailoutWoundEffect };
                myGrid.Children.Add(label4);
                Grid.SetRow(label4, rowNum);
                Grid.SetColumn(label4, 4);
@@ -844,7 +844,7 @@ namespace Pattons_Best
                myGrid.Children.Add(label2);
                Grid.SetRow(label2, rowNum);
                Grid.SetColumn(label2, 2);
-               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRowWounds[i].myBailoutWoundResult };
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRowWounds[i].myBailoutWoundResult };
                myGrid.Children.Add(label3);
                Grid.SetRow(label3, rowNum);
                Grid.SetColumn(label3, 3);
@@ -913,15 +913,17 @@ namespace Pattons_Best
             return;
          }
          //-------------------------------
+         GameAction outAction = GameAction.Error;
          switch (myState)
          {
             case E0481Enum.TANK_EXPLOSION_ROLL:
-               dieRoll = 110; // <cgs> TEST - tank explodes
+               dieRoll = 1; // <cgs> TEST - tank explodes
                myGridRowExplodes[0].myDieRollExplosion = dieRoll;
                int rollPlusModifier = dieRoll + myGridRowExplodes[0].myDieRollExplosion;
                if( 99 < rollPlusModifier )
                {
                   myGridRowExplodes[0].myExplosionResult = "Explodes";
+                  lastReport.KnockedOut = "Explodes";
                   string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Gunner" };
                   foreach (string crewmember in crewmembers)
                   {
@@ -934,7 +936,7 @@ namespace Pattons_Best
                      cm0.IsKilled = true;
                      cm0.SetBloodSpots();
                   }
-                  GameAction outAction = GameAction.UpdateTankExplosion;
+                  outAction = GameAction.UpdateTankExplosion;
                   myGameEngine.PerformAction(ref myGameInstance, ref outAction);
                }
                else
@@ -960,8 +962,12 @@ namespace Pattons_Best
                switch (myGridRowWounds[i].myBailoutEffect)
                {
                   case "Cannot Bail":
-                     myGridRowRescues[myMaxRowCountRescue] = new GridRowRescue(cm);
-                     myMaxRowCountRescue++;
+                     Logger.Log(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED_BAILOUT, "ShowDieResults(): cm=" + cm.Role + " unable to bail- wounds - added i=" + myMaxRowCountRescue.ToString());
+                     if (false == cm.IsKilled)
+                     {
+                        myGridRowRescues[myMaxRowCountRescue] = new GridRowRescue(cm);
+                        myMaxRowCountRescue++;
+                     }
                      myGridRowWounds[i].myDieRollBailout      = NO_BAILOUT;
                      myGridRowWounds[i].myDieRollBailoutWound = NO_BAILOUT;
                      break;
@@ -979,7 +985,7 @@ namespace Pattons_Best
                {
                   StringBuilder sb1 = new StringBuilder("At ");
                   sb1.Append(TableMgr.GetTime(lastReport));
-                  sb1.Append(" when bailing out, ");
+                  sb1.Append(", ");
                   sb1.Append(cm.Name);
                   sb1.Append(" suffered ");
                   sb1.Append(myGridRowWounds[i].myWoundResult);
@@ -998,6 +1004,9 @@ namespace Pattons_Best
                   if (Utilities.NO_RESULT == myGridRowWounds[k].myDieRollWound)
                      myState = E0481Enum.WOUNDS_ROLL;
                }
+               //--------------------------------------
+               outAction = GameAction.UpdateAfterActionReport;
+               myGameEngine.PerformAction(ref myGameInstance, ref outAction);
                break;
             case E0481Enum.BAILOUT_ROLL:
                myGridRowWounds[i].myDieRollBailout = dieRoll;
@@ -1008,6 +1017,8 @@ namespace Pattons_Best
                }
                else
                {
+                  ICrewMember cm3 = myGridRowWounds[i].myCrewMember;
+                  Logger.Log(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED_BAILOUT, "ShowDieResults(): cm=" + cm3.Role + " unable to bail -  bailout wounds - added i=" + myMaxRowCountRescue.ToString());
                   myGridRowWounds[i].myBailOutResult = "Unable to bail";
                   myGridRowRescues[myMaxRowCountRescue] = new GridRowRescue(myGridRowWounds[i].myCrewMember);
                   myMaxRowCountRescue++;
@@ -1019,6 +1030,9 @@ namespace Pattons_Best
                   if (Utilities.NO_RESULT == myGridRowWounds[k].myDieRollBailout)
                      myState = E0481Enum.BAILOUT_ROLL;
                }
+               //--------------------------------------
+               outAction = GameAction.UpdateAfterActionReport;
+               myGameEngine.PerformAction(ref myGameInstance, ref outAction);
                break;
             case E0481Enum.BAILOUT_WOUNDS_ROLL:
                ICrewMember cm1 = myGridRowWounds[i].myCrewMember;
@@ -1029,7 +1043,7 @@ namespace Pattons_Best
                {
                   StringBuilder sb1 = new StringBuilder("At ");
                   sb1.Append(TableMgr.GetTime(lastReport));
-                  sb1.Append(", ");
+                  sb1.Append(" when bailing out, ");
                   sb1.Append(cm1.Name);
                   sb1.Append(" suffered ");
                   sb1.Append(myGridRowWounds[i].myBailoutWoundResult);
@@ -1048,6 +1062,9 @@ namespace Pattons_Best
                   if (Utilities.NO_RESULT == myGridRowWounds[k].myDieRollBailoutWound)
                      myState = E0481Enum.BAILOUT_WOUNDS_ROLL;
                }
+               //--------------------------------------
+               outAction = GameAction.UpdateAfterActionReport;
+               myGameEngine.PerformAction(ref myGameInstance, ref outAction);
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): reached default myState=" + myState.ToString());
@@ -1198,9 +1215,10 @@ namespace Pattons_Best
                         }
                         else if ("Rescue" == img.Name)
                         {
-                           if (0 == myMaxRowCountRescue)
+                           if (0 < myMaxRowCountRescue)
                            {
-                              Logger.Log(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED, "Grid_MouseDown(): myState=" + myState.ToString() + "-->BAILOUT_ROLL");
+                              Logger.Log(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED_BAILOUT, "Grid_MouseDown(): myMaxRowCountRescue=" + myMaxRowCountRescue.ToString());
+                              Logger.Log(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED, "Grid_MouseDown(): myState=" + myState.ToString() + "-->BAILOUT_RESCUE_SELECT");
                               myState = E0481Enum.BAILOUT_RESCUE_SELECT;
                               string[] crewmembers = new string[5] { "Commander", "Gunner", "Loader", "Driver", "Assistant" };
                               foreach (string crewmember in crewmembers)

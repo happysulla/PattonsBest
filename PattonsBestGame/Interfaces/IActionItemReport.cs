@@ -8,6 +8,7 @@ namespace Pattons_Best
 {
    public interface IAfterActionReport
    {
+
       string Day { get; set; }
       EnumScenario Scenario { get; set; }
       int Probability { get; set; }
@@ -58,21 +59,23 @@ namespace Pattons_Best
       int VictoryPtsYourKiaFortifiedPosition { get; set; }
       //----------------------------------------
       int VictoryPtsCaptureArea{ get; set; }
-      int VictoryPtsKiaExitArea { get; set; }
+      int VictoryPtsCapturedExitArea { get; set; }
+      int VictoryPtsLostArea { get; set; }
       int VictoryPtsFriendlyTank { get; set; }
       int VictoryPtsFriendlySquad { get; set; }
       //----------------------------------------
       int VictoryPtsTotalYourTank { get; set; }
       int VictoryPtsTotalFriendlyForces { get; set; }
-      int VictoryPtsTotalTerritory { get; set; } 
+      int VictoryPtsTotalTerritory { get; set; }
+      int VictoryPtsTotalEngagement { get; set; }
       //----------------------------------------
       List<EnumDecoration> Decorations { get; set; }
       //----------------------------------------
       List<String> Notes { get; set; }
       //----------------------------------------
       string DayEndedTime { get; set; }
-      bool IsBreakdown { get; set; }
-      bool IsKnockedOut { get; set; }
+      string Breakdown { get; set; }
+      string KnockedOut { get; set; }
    }
    public interface IAfterActionReports : System.Collections.IEnumerable
    {

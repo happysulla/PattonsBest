@@ -21,6 +21,9 @@ namespace Pattons_Best
    {
       public static int HEADER_INFO_LEN = 47;
       public static int CREW_NAME_LEN = 18;
+      public static int END_TIME_LEN = 15;
+      public static int DISABLED_TANK_LEN = 15;
+      public static int KO_TANK_LEN = 15;
       public bool CtorError { get; } = false;
       public IAfterActionReport Report { get; set; }
       public bool myIsEditable = false;
@@ -182,34 +185,15 @@ namespace Pattons_Best
          myRunVictoryPointsPosition.Text = pointTotal.ToString();
          //----------------------------------
          myRunVictoryPointsCaptureArea.Text = Report.VictoryPtsCaptureArea.ToString();
-         myRunVictoryPointsCaptureExit.Text = Report.VictoryPtsKiaExitArea.ToString();
+         myRunVictoryPointsCaptureExit.Text = Report.VictoryPtsCapturedExitArea.ToString();
          //----------------------------------
          myRunVictoryPointsLostTank.Text = Report.VictoryPtsFriendlyTank.ToString();
          myRunVictoryPointsLostInfantry.Text = Report.VictoryPtsFriendlySquad.ToString();
          //----------------------------------
-         //int totalYourKia = Report.VictoryPtsYourKiaLightWeapon;
-         //totalYourKia += Report.VictoryPtsYourKiaTruck;
-         //totalYourKia += Report.VictoryPtsYourKiaSpwOrPsw;
-         //totalYourKia += Report.VictoryPtsYourKiaSPGun;
-         //totalYourKia += Report.VictoryPtsYourKiaPzIV;
-         //totalYourKia += Report.VictoryPtsYourKiaPzV;
-         //totalYourKia += Report.VictoryPtsYourKiaPzVI;
-         //totalYourKia += Report.VictoryPtsYourKiaAtGun;
-         //totalYourKia += Report.VictoryPtsYourKiaFortifiedPosition;
          myRunVictoryPointsTotalTank.Text = Report.VictoryPtsTotalYourTank.ToString();
          //----------------------------------
-         //int totalFriendlyKia = Report.VictoryPtsFriendlyKiaLightWeapon;
-         //totalFriendlyKia += Report.VictoryPtsFriendlyKiaTruck;
-         //totalFriendlyKia += Report.VictoryPtsFriendlyKiaSpwOrPsw;
-         //totalFriendlyKia += Report.VictoryPtsFriendlyKiaSPGun;
-         //totalFriendlyKia += Report.VictoryPtsFriendlyKiaPzIV;
-         //totalFriendlyKia += Report.VictoryPtsFriendlyKiaPzV;
-         //totalFriendlyKia += Report.VictoryPtsFriendlyKiaPzVI;
-         //totalFriendlyKia += Report.VictoryPtsFriendlyKiaAtGun;
-         //totalFriendlyKia += Report.VictoryPtsFriendlyKiaFortifiedPosition;
          myRunVictoryPointsTotalFriendly.Text = Report.VictoryPtsTotalFriendlyForces.ToString();
          //----------------------------------
-         //int totalArea = Report.VictoryPtsCaptureArea + Report.VictoryPtsKiaExitArea;
          myRunVictoryPointsTotalTerritory.Text = Report.VictoryPtsTotalTerritory.ToString();
          //----------------------------------
          StringBuilder sb = new StringBuilder();
@@ -219,6 +203,19 @@ namespace Pattons_Best
             sb.Append("\n");
          }
          myTextBlockDisplay.Text = sb.ToString();
+         //----------------------------------
+         if( false == String.IsNullOrEmpty(Report.DayEndedTime))
+         {
+            s = AddSpaces(Report.DayEndedTime, END_TIME_LEN);
+            mySpanTimeEnded.Inlines.Clear();
+            mySpanTimeEnded.Inlines.Add(new Run(s));
+            s = AddSpaces(Report.Breakdown, DISABLED_TANK_LEN);
+            mySpanBreakdown.Inlines.Clear();
+            mySpanBreakdown.Inlines.Add(new Run(s));
+            s = AddSpaces(Report.KnockedOut, KO_TANK_LEN);
+            mySpanKnockedOut.Inlines.Clear();
+            mySpanKnockedOut.Inlines.Add(new Run(s));
+         }
          return true;
       }
       private bool UpdateReportTimeTrack(IAfterActionReport report)

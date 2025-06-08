@@ -49,6 +49,7 @@ namespace Pattons_Best
       };
       private GridRow[] myGridRows = new GridRow[MAX_GRID_LEN]; // five possible crew members
       //---------------------------------------------------
+      private IGameEngine? myGameEngine;
       private IGameInstance? myGameInstance;
       private readonly Canvas? myCanvas;
       private readonly ScrollViewer? myScrollViewer;
@@ -56,9 +57,17 @@ namespace Pattons_Best
       private IDieRoller? myDieRoller;
       private readonly FontFamily myFontFam = new FontFamily("Tahoma");
       //-------------------------------------------------------------------------------------
-      public EventViewerRatingImprove(IGameInstance? gi, Canvas? c, ScrollViewer? sv, RuleDialogViewer? rdv, IDieRoller dr)
+      public EventViewerRatingImprove(IGameEngine? ge, IGameInstance? gi, Canvas? c, ScrollViewer? sv, RuleDialogViewer? rdv, IDieRoller dr)
       {
          InitializeComponent();
+         //--------------------------------------------------
+         if (null == ge) // check parameter inputs
+         {
+            Logger.Log(LogEnum.LE_ERROR, "EventViewerCrewMgr(): ge=null");
+            CtorError = true;
+            return;
+         }
+         myGameEngine = ge;
          //--------------------------------------------------
          if (null == gi) // check parameter inputs
          {
@@ -199,17 +208,6 @@ namespace Pattons_Best
       {
          if (E491Enum.END == myState)
          {
-            for (int i = 0; i < myMaxRowCount; i++)
-            {
-               ICrewMember? crewMember = myGridRows[i].myCrewMember;
-               if( null == crewMember )
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): crewMember=null");
-                  return false;
-               }
-               if (crewMember.Rating < myGridRows[i].myDieRoll)
-                  ++crewMember.Rating;
-            }
             if (null == myCallback)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myCallback=null");
@@ -338,6 +336,17 @@ namespace Pattons_Best
       }
       public void ShowDieResults(int dieRoll)
       {
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameEngine=null");
+            return;
+         }
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance=null");
+            return;
+         }
+         //------------------------------------
          int i = myRollResultRowNum - STARTING_ASSIGNED_ROW;
          if (i < 0)
          {
@@ -355,6 +364,10 @@ namespace Pattons_Best
             if (Utilities.NO_RESULT == myGridRows[j].myDieRoll)
                myState = E491Enum.ROLL_RATING;
          }
+         //------------------------------------
+         GameAction outAction = GameAction.UpdateAfterActionReport;
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+         //------------------------------------
          if (false == UpdateGrid())
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateGrid() return false");
          myIsRollInProgress = false;

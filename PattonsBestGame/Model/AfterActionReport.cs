@@ -59,7 +59,8 @@ namespace Pattons_Best
       public int VictoryPtsYourKiaFortifiedPosition { get; set; } = 0;
       //----------------------------------------
       public int VictoryPtsCaptureArea { get; set; } = 0;
-      public int VictoryPtsKiaExitArea { get; set; } = 0;
+      public int VictoryPtsCapturedExitArea { get; set; } = 0;
+      public int VictoryPtsLostArea { get; set; } = 0;
       //----------------------------------------
       public int VictoryPtsFriendlyTank { get; set; } = 0;
       public int VictoryPtsFriendlySquad { get; set; } = 0;
@@ -68,13 +69,15 @@ namespace Pattons_Best
       public int VictoryPtsTotalFriendlyForces { get; set; } = 0;
       public int VictoryPtsTotalTerritory { get; set; } = 0;
       //----------------------------------------
+      public int VictoryPtsTotalEngagement { get; set; } = 0;
+      //----------------------------------------
       public List<EnumDecoration> Decorations { get; set; } = new List<EnumDecoration>();
       //----------------------------------------
       public List<string> Notes { get; set; } = new List<string>();
       //----------------------------------------
       public string DayEndedTime { get; set; } = "";
-      public bool IsBreakdown { get; set; } = false;
-      public bool IsKnockedOut { get; set; } = false;
+      public string Breakdown { get; set; } = "No";
+      public string KnockedOut { get; set; } = "No";
       //---------------------------------------------------------------------------------
       public AfterActionReport(ICombatCalendarEntry entry)
       {
@@ -98,7 +101,6 @@ namespace Pattons_Best
          Assistant = aar.Assistant;
          Decorations = aar.Decorations;
       }
-
    }
    //===================================================================
    public class AfterActionReports : IEnumerable, IAfterActionReports
