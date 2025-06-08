@@ -20,6 +20,7 @@ namespace Pattons_Best
       private const int STARTING_ASSIGNED_ROW = 6;
       private const int KIA_CREWMAN = 0;
       private const int NO_BAILOUT = 100;
+      private const int AUTO_BAILOUT = 101;
       public enum E0481Enum
       {
          TANK_EXPLOSION_ROLL,
@@ -663,7 +664,7 @@ namespace Pattons_Best
             Grid.SetColumn(label1, 1);
             //----------------------------
             string content = myGridRowWounds[i].myBailOutModifier.ToString();
-            if (NO_BAILOUT == myGridRowWounds[i].myDieRollBailout)
+            if ((NO_BAILOUT == myGridRowWounds[i].myDieRollBailout) || (AUTO_BAILOUT == myGridRowWounds[i].myDieRollBailout) )
                content = "NA";
             Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = content };
             myGrid.Children.Add(label2);
@@ -677,6 +678,17 @@ namespace Pattons_Best
                Grid.SetRow(label3, rowNum);
                Grid.SetColumn(label3, 3);
                Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
+               myGrid.Children.Add(label4);
+               Grid.SetRow(label4, rowNum);
+               Grid.SetColumn(label4, 4);
+            }
+            else if (AUTO_BAILOUT == myGridRowWounds[i].myDieRollBailout)
+            {
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
+               myGrid.Children.Add(label3);
+               Grid.SetRow(label3, rowNum);
+               Grid.SetColumn(label3, 3);
+               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "Crewman out" };
                myGrid.Children.Add(label4);
                Grid.SetRow(label4, rowNum);
                Grid.SetColumn(label4, 4);
@@ -980,6 +992,8 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): reached default bailouteffect=" + myGridRowWounds[i].myBailoutEffect);
                      return;
                }
+               if ((0 == myGridRowWounds[i].myBailOutModifier) && ( Utilities.NO_RESULT == myGridRowWounds[i].myDieRollBailout) )  // automatically succeed unless there is modifier
+                  myGridRowWounds[i].myDieRollBailout = AUTO_BAILOUT;
                //--------------------------------------
                if (false == myGridRowWounds[i].myWoundResult.Contains("Near Miss"))
                {
@@ -1245,11 +1259,11 @@ namespace Pattons_Best
                                     else
                                        myAssignables.Add(cm);
                                  }
-                                 if( 0 == myAssignables.Count )
-                                 {
-                                    Logger.Log(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED, "Grid_MouseDown(): myState=" + myState.ToString() + "-->END");
-                                    myState = E0481Enum.END;
-                                 }
+                              }
+                              if (0 == myAssignables.Count)
+                              {
+                                 Logger.Log(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED, "Grid_MouseDown(): myState=" + myState.ToString() + "-->END");
+                                 myState = E0481Enum.END;
                               }
                            }
                            else

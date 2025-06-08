@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
@@ -1468,6 +1469,8 @@ namespace Pattons_Best
             case "e102":
                ReplaceText("PROMOTION_POINTS", gi.VictoryPtsTotalCampaign.ToString() );
                string promoDate = TableMgr.GetDate(gi.PromotionDate);
+               if ("07/27/1944" == promoDate)
+                  promoDate = "Not promoted yet";
                ReplaceText("PROMOTION_DATE", promoDate);
                //------------------------------------------
                string oldRank = report.Commander.Rank;
@@ -1511,6 +1514,119 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               break;
+            case "e103":
+               ICrewMember? commander = gi.GetCrewMember("Commander");
+               if (null == commander)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): commander=null for key=" + key);
+                  return false;
+               }
+               int modifierDecoration = 0;
+               StringBuilder sbe103 = new StringBuilder();
+               //----------------------------------------
+               int victoryPointsYourTank = report.VictoryPtsTotalYourTank * 2;
+               if( -1 < victoryPointsYourTank)
+                  sbe103.Append("+");
+               sbe103.Append(victoryPointsYourTank.ToString());
+               sbe103.Append(" for VPs from your tank\n");
+               modifierDecoration += victoryPointsYourTank;
+               //----------------------------------------
+               int victoryPointsOther = report.VictoryPtsTotalFriendlyForces + report.VictoryPtsTotalTerritory;
+               if (-1 < victoryPointsOther)
+                  sbe103.Append("+");
+               sbe103.Append(victoryPointsOther.ToString());
+               sbe103.Append(" for VPs from friendly forces and captured territory\n");
+               modifierDecoration += victoryPointsOther;
+               //----------------------------------------
+               if ( true == gi.IsCommanderRescuePerformed )
+               {
+                  sbe103.Append("+25 for rescuing crewman\n");
+                  modifierDecoration += 25;
+               }
+               //----------------------------------------
+               if (("2Lt" == commander.Rank) || ("1Lt" == commander.Rank) || ("Cpt" == commander.Rank))
+               {
+                  sbe103.Append("+5 since you are officer\n");
+                  modifierDecoration += 5;
+               }
+               //----------------------------------------
+               if ( "None" != commander.Wound )
+               {
+                  sbe103.Append("+10 since you were wounded\n");
+                  modifierDecoration += 10;
+               }
+               //----------------------------------------
+               string month = TableMgr.GetMonth(gi.Day);
+               if ( ("Nov" == month) || ("Dec" == month) )
+               {
+                  sbe103.Append("+5 since month is ");
+                  sbe103.Append(month);
+                  sbe103.Append("\n");
+                  modifierDecoration += 5;
+               }
+               myTextBlock.Inlines.Add(new Run(sbe103.ToString()));
+               //----------------------------------------
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  myTextBlock.Inlines.Add(new Run(sbe103.ToString()));
+                  int combo = gi.DieResults[key][0] + modifierDecoration;
+                  if (199 < combo)
+                  {
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add("Qualify for Decoration. Click one of the images to continue:");
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     Image imgBronze = new Image { Name = "DecorationBronzeStar", Width = 100, Height = 180, Source = MapItem.theMapImages.GetBitmapImage("DecorationBronzeStar") };
+                     Image imgSilver = new Image { Name = "DecorationSilverStar", Width = 100, Height = 180, Source = MapItem.theMapImages.GetBitmapImage("DecorationSilverStar") };
+                     Image imgCross = new Image { Name = "DecorationDistinguishedCross", Width = 100, Height = 180, Source = MapItem.theMapImages.GetBitmapImage("DecorationDistinguishedCross") };
+                     Image imgHonor = new Image { Name = "DecorationMedalOfHonor", Width = 100, Height = 180, Source = MapItem.theMapImages.GetBitmapImage("DecorationMedalOfHonor") };
+                     if (299 < combo)
+                     {
+                        myTextBlock.Inlines.Add(new Run("              "));
+                        myTextBlock.Inlines.Add(new InlineUIContainer(imgBronze));
+                        myTextBlock.Inlines.Add(new Run("     "));
+                        myTextBlock.Inlines.Add(new InlineUIContainer(imgSilver));
+                        myTextBlock.Inlines.Add(new Run("     "));
+                        myTextBlock.Inlines.Add(new InlineUIContainer(imgCross));
+                        myTextBlock.Inlines.Add(new Run("     "));
+                        myTextBlock.Inlines.Add(new InlineUIContainer(imgHonor));
+                     }
+                     else if (249 < combo)
+                     {
+                        myTextBlock.Inlines.Add(new Run("                        "));
+                        myTextBlock.Inlines.Add(new InlineUIContainer(imgBronze));
+                        myTextBlock.Inlines.Add(new Run("     "));
+                        myTextBlock.Inlines.Add(new InlineUIContainer(imgSilver));
+                        myTextBlock.Inlines.Add(new Run("     "));
+                        myTextBlock.Inlines.Add(new InlineUIContainer(imgCross));
+                     }
+                     else if (224 < combo)
+                     {
+                        myTextBlock.Inlines.Add(new Run("                                  "));
+                        myTextBlock.Inlines.Add(new InlineUIContainer(imgBronze));
+                        myTextBlock.Inlines.Add(new Run("     "));
+                        myTextBlock.Inlines.Add(new InlineUIContainer(imgSilver));
+                     }
+                     else
+                     {
+                        myTextBlock.Inlines.Add(new Run("                                            "));
+                        myTextBlock.Inlines.Add(new InlineUIContainer(imgBronze));
+                     }
+                  }
+                  else
+                  {
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add("Do not qualify for decoration. Click image to continue.");
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("                                            "));
+                     Image imge103 = new Image { Name = "Continue103", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                     myTextBlock.Inlines.Add(new InlineUIContainer(imge103));
+                  }
+               }
                break;
             default:
                break;
@@ -2385,6 +2501,26 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "EventDebriefPromotion":
+                           action = GameAction.EventDebriefPromotion;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Continue103":
+                           action = GameAction.EventDebriefPromotion;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "DecorationBronzeStar":
+                           action = GameAction.EventDebriefPromotion;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "DecorationSilverStar":
+                           action = GameAction.EventDebriefPromotion;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "DecorationDistinguishedCross":
+                           action = GameAction.EventDebriefPromotion;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "DecorationMedalOfHonor":
                            action = GameAction.EventDebriefPromotion;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;

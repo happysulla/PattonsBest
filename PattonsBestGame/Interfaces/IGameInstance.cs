@@ -92,6 +92,7 @@ namespace Pattons_Best
       bool IsShermanFiringAtFront { set; get; }
       bool IsBrokenGunsight { set; get; }
       bool IsBrokenMgAntiAircraft { set; get; }
+      bool IsCommanderRescuePerformed { set; get; }
       //------------------------------------------------
       bool IsMinefieldAttack { set; get; }
       bool IsHarrassingFire { set; get; }

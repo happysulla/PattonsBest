@@ -375,6 +375,14 @@ namespace Pattons_Best
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
+            case GameAction.EveningDebriefingRatingImprovement:
+               UpdateCanvasMainClear(myBattleButtons, gi.BattleStacks);
+               foreach (Button b in myBattleButtons)
+                  myCanvasMain.Children.Remove(b);
+               myBattleButtons.Clear();
+               foreach (IStack stack in gi.BattleStacks)
+                  stack.MapItems.Clear();
+               break;
             default:
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
@@ -1101,9 +1109,6 @@ namespace Pattons_Best
          }
          else
          {
-            stacks = gi.BattleStacks;
-            myBattleButtons.Clear();
-            UpdateCanvasMainClear(myBattleButtons, stacks);
             return true;
          }
          //-------------------------------------------------------

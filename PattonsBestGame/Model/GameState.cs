@@ -3106,7 +3106,6 @@ namespace Pattons_Best
                case GameAction.EveningDebriefingStart: // Only change active event
                   gi.EventDisplayed = gi.EventActive = "e100";
                   gi.DieRollAction = GameAction.DieRollActionNone;
-                  gi.BattleStacks.Clear();
                   break;
                case GameAction.EveningDebriefingRatingImprovement: // Only change active event
                   break;
