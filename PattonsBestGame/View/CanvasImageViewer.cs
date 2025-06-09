@@ -87,6 +87,9 @@ namespace Pattons_Best
             case GameAction.UpdateTankExplosion:
                ShowTankExploding(gi, myCanvas);
                break;
+            case GameAction.UpdateTankBrewUp:
+               ShowTankExploding(gi, myCanvas);
+               break;
             case GameAction.RemoveSplashScreen:
                theMainImage = EnumMainImage.MI_Other;
                ShowInitialScreen(myCanvas);

@@ -173,11 +173,9 @@ namespace Pattons_Best
          {
             case GameAction.UnitTestCommand:
             case GameAction.UnitTestNext:
-               break;
             case GameAction.UpdateBattleBoard:
-               break;
             case GameAction.UpdateTankExplosion:
-               break;
+            case GameAction.UpdateTankBrewUp:
             case GameAction.UpdateGameOptions:
                break;
             case GameAction.UpdateAfterActionReport:
@@ -785,7 +783,7 @@ namespace Pattons_Best
                //-----------------------------------------------
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new Run("                                     "));
+               myTextBlock.Inlines.Add(new Run("                                             "));
                Image imgContinue = new Image { Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = 100, Height = 100, Name = "GotoMorningAmmoLimitsSetEnd" };
                myTextBlock.Inlines.Add(new InlineUIContainer(imgContinue));
                myTextBlock.Inlines.Add(new LineBreak());
@@ -1567,7 +1565,31 @@ namespace Pattons_Best
                }
                myTextBlock.Inlines.Add(new Run(sbe103.ToString()));
                //----------------------------------------
-               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               if (modifierDecoration < 100)
+               {
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add("Do not qualify for decoration. Click image to continue.");
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  Image imge103 = new Image { Name = "Continue103", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge103));
+               }
+               else if (Utilities.NO_RESULT == gi.DieResults[key][0])
+               {
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add("Roll for Decoration: ");
+                  BitmapImage bmi = new BitmapImage();
+                  bmi.BeginInit();
+                  bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
+                  bmi.EndInit();
+                  Image imgDice = new Image { Name= "DieRollBlue", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+                  ImageBehavior.SetAnimatedSource(imgDice, bmi);
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
+               }
+               else if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
                   myTextBlock.Inlines.Add(new Run(sbe103.ToString()));
                   int combo = gi.DieResults[key][0] + modifierDecoration;
@@ -1627,6 +1649,9 @@ namespace Pattons_Best
                      myTextBlock.Inlines.Add(new InlineUIContainer(imge103));
                   }
                }
+               break;
+            case "e104":
+               ReplaceText("NUMBER_PURPLE_HEARTS", gi.NumPurpleHeart.ToString());
                break;
             default:
                break;
@@ -2505,23 +2530,27 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue103":
-                           action = GameAction.EventDebriefPromotion;
+                           action = GameAction.EventDebriefDecorationContinue;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "DecorationBronzeStar":
-                           action = GameAction.EventDebriefPromotion;
+                           action = GameAction.EventDebriefDecorationBronzeStar;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "DecorationSilverStar":
-                           action = GameAction.EventDebriefPromotion;
+                           action = GameAction.EventDebriefDecorationSilverStar;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "DecorationDistinguishedCross":
-                           action = GameAction.EventDebriefPromotion;
+                           action = GameAction.EventDebriefDecorationCross;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "DecorationMedalOfHonor":
-                           action = GameAction.EventDebriefPromotion;
+                           action = GameAction.EventDebriefDecorationHonor;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "DecorationPurpleHeart":
+                           action = GameAction.EventDebriefDecorationHeart;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         default:

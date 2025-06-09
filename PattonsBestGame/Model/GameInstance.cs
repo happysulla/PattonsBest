@@ -67,6 +67,7 @@ namespace Pattons_Best
       public int VictoryPtsTotalCampaign { get; set; } = 0;
       public int PromotionPoints { get; set; } = 0;
       public int PromotionDate { get; set; } = 0;
+      public int NumPurpleHeart { get; set; } = 0;
       //---------------------------------------------------------------
       public int AdvancingFireMarkerCount { set; get; } = 0;
       public EnumResistance BattleResistance { set; get; } = EnumResistance.None;

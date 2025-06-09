@@ -100,6 +100,7 @@ namespace Pattons_Best
       UpdateAfterActionReport,
       UpdateBattleBoard,
       UpdateTankExplosion,
+      UpdateTankBrewUp,
       UpdateShowRegion,
       UpdateEventViewerDisplay,
       UpdateEventViewerActive,
@@ -255,6 +256,13 @@ namespace Pattons_Best
       EveningDebriefingRatingImprovementEnd,
       EveningDebriefingVictoryPointsCalculated,
       EventDebriefPromotion,
+      EventDebriefDecorationStart,
+      EventDebriefDecorationContinue,
+      EventDebriefDecorationBronzeStar,
+      EventDebriefDecorationSilverStar,
+      EventDebriefDecorationCross,
+      EventDebriefDecorationHonor,
+      EventDebriefDecorationHeart,
       Error
    };
    public interface IGameEngine

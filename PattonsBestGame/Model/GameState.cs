@@ -1141,7 +1141,8 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------------------
-         for (int k = 0; k < 3; k++)
+         int NumEnemyUnitsAppearing = 1; // <cgs> TEST - number of enemy units appearing
+         for (int k = 0; k < NumEnemyUnitsAppearing; k++)
          {
             int die1 = Utilities.RandomGenerator.Next(0, 3);
             int die2 = Utilities.RandomGenerator.Next(0, 3);
@@ -2357,6 +2358,7 @@ namespace Pattons_Best
                case GameAction.BattleShermanKilled:
                   break;
                case GameAction.UpdateTankExplosion:
+               case GameAction.UpdateTankBrewUp:
                   gi.BattleStacks.Remove(gi.Sherman);
                   break;
                case GameAction.EveningDebriefingStart:
@@ -2938,6 +2940,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.UpdateTankExplosion:
+               case GameAction.UpdateTankBrewUp:
                   gi.BattleStacks.Remove(gi.Sherman);
                   break;
                case GameAction.BattleRoundSequenceHarrassingFire:
@@ -3080,6 +3083,7 @@ namespace Pattons_Best
          }
          else
          {
+            string key = gi.EventActive;
             switch (action)
             {
                case GameAction.ShowCombatCalendarDialog:
@@ -3130,12 +3134,33 @@ namespace Pattons_Best
                   break;
                case GameAction.EventDebriefPromotion:
                   gi.EventDisplayed = gi.EventActive = "e103";
+                  gi.DieRollAction = GameAction.EventDebriefDecorationStart;
+                  break;
+               case GameAction.EventDebriefDecorationStart:
                   gi.DieRollAction = GameAction.DieRollActionNone;
+                  gi.DieResults[key][0] = dieRoll;
+                  break;
+               case GameAction.EventDebriefDecorationContinue:
+               case GameAction.EventDebriefDecorationBronzeStar:
+               case GameAction.EventDebriefDecorationSilverStar:
+               case GameAction.EventDebriefDecorationCross:
+               case GameAction.EventDebriefDecorationHonor:
+                  if( false == UpdateDecoration(gi, lastReport, action))
+                  {
+                     returnStatus = "UpdateDecoration() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.EventDebriefDecorationHeart:
+                  if (false == ResetDay(gi, lastReport))
+                  {
+                     returnStatus = "ResetDay() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                  }
                   break;
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;
                   break;
-
                default:
                   returnStatus = "reached default with action=" + action.ToString();
                   Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
@@ -3265,6 +3290,114 @@ namespace Pattons_Best
             default:
                Logger.Log(LogEnum.LE_ERROR, "UpdatePromotion(): reached default cmdrRank=" + cmdrRank);
                return false;
+         }
+         return true;
+      }
+      public bool UpdateDecoration(IGameInstance gi, IAfterActionReport report, GameAction action)
+      {
+         ICrewMember? commander = gi.GetCrewMember("Commander");
+         if (null == commander)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateDecoration(): commander=null");
+            return false;
+         }
+         StringBuilder sb1 = new StringBuilder(commander.Name);
+         //----------------------------------------------------
+         switch (action)
+         {
+            case GameAction.EventDebriefDecorationContinue:
+               break;
+            case GameAction.EventDebriefDecorationBronzeStar:
+               sb1.Append(" received the Bronze Star.");
+               report.Notes.Add(sb1.ToString());
+               break;
+            case GameAction.EventDebriefDecorationSilverStar:
+               sb1.Append(" received the Silver Star.");
+               report.Notes.Add(sb1.ToString());
+               break;
+            case GameAction.EventDebriefDecorationCross:
+               sb1.Append(" received the Distinguished Cross.");
+               report.Notes.Add(sb1.ToString());
+               break;
+            case GameAction.EventDebriefDecorationHonor:
+               sb1.Append(" received the Medal of Honor.");
+               report.Notes.Add(sb1.ToString());
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "UpdateDecoration(): reached default action=" + action.ToString());
+               return false;
+         }
+         //---------------------------------------------
+         if ("None" != commander.Wound)
+         {
+            gi.EventDisplayed = gi.EventActive = "e104";
+            gi.NumPurpleHeart++;
+         }
+         else
+         {
+            if( false == ResetDay(gi, report))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateDecoration(): ResetDay(=null) returned false");
+               return false;
+            }
+         }
+         return true;
+      }
+      public bool ResetDay(IGameInstance gi, IAfterActionReport report)
+      {
+         ++gi.Day;
+         ICombatCalendarEntry? newEntry = TableMgr.theCombatCalendarEntries[gi.Day];
+         if (null == newEntry)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateDecoration(): newEntry=null");
+            return false;
+         }
+         IAfterActionReport newReport = new AfterActionReport(newEntry, report);
+         gi.Reports.Add(newReport);
+         gi.GamePhase = GamePhase.MorningBriefing;
+         gi.EventDisplayed = gi.EventActive = "e006";
+         gi.DieResults[gi.EventActive][0] = Utilities.NO_RESULT;
+         gi.DieRollAction = GameAction.MorningBriefingCalendarRoll;
+         //-------------------------------------------------------
+         gi.BattlePhase = BattlePhase.Ambush;
+         gi.ReadyRacks.Clear();
+         gi.Hatches.Clear();
+         gi.GunLoads.Clear();
+         gi.CrewActions.Clear();
+         gi.EnemyStrengthCheckTerritory = null;
+         gi.ArtillerySupportCheck = null;
+         gi.EnteredArea = null;
+         gi.AdvanceFire = null;
+         gi.IsTurretActive = false;
+         gi.IsHatchesActive = false;
+         gi.IsLeadTank = false;
+         gi.IsAirStrikePending = false;
+         gi.IsAdvancingFireChosen = false;
+         gi.IsShermanFiring = false;
+         gi.IsShermanFiringAtFront = false;
+         gi.IsBrokenGunsight = false;
+         gi.IsBrokenMgAntiAircraft = false;
+         gi.IsCommanderRescuePerformed = false;
+         gi.IsMinefieldAttack = false;
+         gi.IsHarrassingFire = false;
+         gi.AdvancingFireMarkerCount = 0;
+         gi.BattleResistance = EnumResistance.None;
+         gi.BrokenPeriscopes.Clear();
+         gi.FirstShots.Clear();
+         gi.AcquiredShots.Clear();
+         gi.Death = null;
+         gi.Panzerfaust = null;
+         gi.NumCollateralDamage = 0;
+         gi.MapItemMoves.Clear();
+         gi.TankStacks.Clear();
+         gi.MoveStacks.Clear();
+         gi.BattleStacks.Clear();
+         gi.EnteredHexes.Clear();
+         //-------------------------------------------------------
+         if ( false == ResetDieResults(gi))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateDecoration(): ResetDieResults() returned false");
+            return false;
          }
          return true;
       }

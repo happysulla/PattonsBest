@@ -1130,13 +1130,13 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): lastReport=null");
             return "ERROR";
          }
-         bool isDoNothingIfFiring = false;
+         bool isDoNothingInsteadOfFiring = false;  // If fog or falling snow, do not fire if not at close range
          string name = mi.TerritoryCurrent.Name;
          if ('C' != name[name.Length - 1])
          {
             string weather = lastReport.Weather;
             if (true == weather.Contains("Fog") || true == weather.Contains("Falling"))
-               isDoNothingIfFiring = true;
+               isDoNothingInsteadOfFiring = true;
          }
          //----------------------------------------------------
          int modifier = GetEnemyActionModifier(gi, mi);
@@ -1145,6 +1145,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): GetEnemyActionModifier() returned error");
             return "ERROR";
          }
+         modifier = 0; // <cgs> TEST
          dieRoll += modifier;
          //----------------------------------------------------
          if (EnumScenario.Advance == lastReport.Scenario)
@@ -1165,11 +1166,11 @@ namespace Pattons_Best
                      return "Move-B";
                   if (dieRoll < 96)
                   {
-                     if (true == isDoNothingIfFiring)
+                     if (true == isDoNothingInsteadOfFiring)
                         return "Do Nothing";
                      return "Fire-Infantry";
                   }
-                  if (true == isDoNothingIfFiring)
+                  if (true == isDoNothingInsteadOfFiring)
                      return "Do Nothing";
                   return "Collateral";
                case "ATG":
@@ -1182,7 +1183,7 @@ namespace Pattons_Best
                      return "Do Nothing";
                   if (dieRoll < 66)
                   {
-                     if (true == isDoNothingIfFiring)
+                     if (true == isDoNothingInsteadOfFiring)
                         return "Do Nothing";
                      else if (true == gi.IsShermanFiring)
                         return "Fire-Your Tank";
@@ -1191,11 +1192,11 @@ namespace Pattons_Best
                   }
                   if (dieRoll < 71)
                   {
-                     if (true == isDoNothingIfFiring)
+                     if (true == isDoNothingInsteadOfFiring)
                         return "Do Nothing";
                      return "Fire-Any Tank";
                   }
-                  if (true == isDoNothingIfFiring)
+                  if (true == isDoNothingInsteadOfFiring)
                      return "Do Nothing";
                   return "Fire-Lead Tank";
                case "TRUCK":
@@ -1224,11 +1225,11 @@ namespace Pattons_Best
                      return "Move-B";
                   if (dieRoll < 96)
                   {
-                     if (true == isDoNothingIfFiring)
+                     if (true == isDoNothingInsteadOfFiring)
                         return "Do Nothing";
                      return "Fire-Infantry";
                   }
-                  if (true == isDoNothingIfFiring)
+                  if (true == isDoNothingInsteadOfFiring)
                      return "Do Nothing";
                   return "Collateral";
                case "TANK":
@@ -1258,7 +1259,7 @@ namespace Pattons_Best
                   {
                      if (true == gi.IsShermanFiringAtFront)
                      {
-                        if (true == isDoNothingIfFiring)
+                        if (true == isDoNothingInsteadOfFiring)
                            return "Do Nothing";
                         return "Fire-Your Tank";
                      }
@@ -1268,18 +1269,18 @@ namespace Pattons_Best
                      }
                      else
                      {
-                        if (true == isDoNothingIfFiring)
+                        if (true == isDoNothingInsteadOfFiring)
                            return "Do Nothing";
                         return "Fire-Any Tank";
                      }
                   }
                   if (dieRoll < 86)
                   {
-                     if (true == isDoNothingIfFiring)
+                     if (true == isDoNothingInsteadOfFiring)
                         return "Do Nothing";
                      return "Fire-Your Tank";
                   }
-                  if (true == isDoNothingIfFiring)
+                  if (true == isDoNothingInsteadOfFiring)
                      return "Do Nothing";
                   return "Fire-Lead Tank";
                default:
@@ -1316,7 +1317,7 @@ namespace Pattons_Best
                      return "Do Nothing";
                   if (dieRoll < 81)
                   {
-                     if (true == isDoNothingIfFiring)
+                     if (true == isDoNothingInsteadOfFiring)
                         return "Do Nothing";
                      else if (true == gi.IsShermanFiring)
                         return "Fire-Your Tank";
@@ -1325,11 +1326,11 @@ namespace Pattons_Best
                   }
                   if (dieRoll < 91)
                   {
-                     if (true == isDoNothingIfFiring)
+                     if (true == isDoNothingInsteadOfFiring)
                         return "Do Nothing";
                      return "Fire-Any Tank";
                   }
-                  if (true == isDoNothingIfFiring)
+                  if (true == isDoNothingInsteadOfFiring)
                      return "Do Nothing";
                   return "Fire-Lead Tank";
                case "TANK":
@@ -1359,7 +1360,7 @@ namespace Pattons_Best
                   {
                      if (true == gi.IsShermanFiringAtFront)
                      {
-                        if (true == isDoNothingIfFiring)
+                        if (true == isDoNothingInsteadOfFiring)
                            return "Do Nothing";
                         return "Fire-Your Tank";
                      }
@@ -1369,18 +1370,18 @@ namespace Pattons_Best
                      }
                      else
                      {
-                        if (true == isDoNothingIfFiring)
+                        if (true == isDoNothingInsteadOfFiring)
                            return "Do Nothing";
                         return "Fire-Any Tank";
                      }
                   }
                   if (dieRoll < 91)
                   {
-                     if (true == isDoNothingIfFiring)
+                     if (true == isDoNothingInsteadOfFiring)
                         return "Do Nothing";
                      return "Fire-Your Tank";
                   }
-                  if (true == isDoNothingIfFiring)
+                  if (true == isDoNothingInsteadOfFiring)
                      return "Do Nothing";
                   return "Fire-Lead Tank";
                default:
@@ -1406,11 +1407,11 @@ namespace Pattons_Best
                      return "Move-B";
                   if (dieRoll < 76)
                   {
-                     if (true == isDoNothingIfFiring)
+                     if (true == isDoNothingInsteadOfFiring)
                         return "Do Nothing";
                      return "Fire-Infantry";
                   }
-                  if (true == isDoNothingIfFiring)
+                  if (true == isDoNothingInsteadOfFiring)
                      return "Do Nothing";
                   return "Collateral";
                case "TANK":
@@ -1440,7 +1441,7 @@ namespace Pattons_Best
                   {
                      if (true == gi.IsShermanFiringAtFront)
                      {
-                        if (true == isDoNothingIfFiring)
+                        if (true == isDoNothingInsteadOfFiring)
                            return "Do Nothing";
                         return "Fire-Your Tank";
                      }
@@ -1450,12 +1451,12 @@ namespace Pattons_Best
                      }
                      else
                      {
-                        if (true == isDoNothingIfFiring)
+                        if (true == isDoNothingInsteadOfFiring)
                            return "Do Nothing";
                         return "Fire-Any Tank";
                      }
                   }
-                  if (true == isDoNothingIfFiring)
+                  if (true == isDoNothingInsteadOfFiring)
                      return "Do Nothing";
                   return "Fire-Your Tank";
                default:
@@ -2551,6 +2552,7 @@ namespace Pattons_Best
          {
             cm.SetBloodSpots(40);
             cm.IsKilled = true;
+            cm.Wound = "Killed";
             return "Killed";
          }
          dieRoll += modifier;
@@ -2567,36 +2569,47 @@ namespace Pattons_Best
             }
             else
             {
+               if("None" ==  cm.Wound )
+                  cm.Wound = "Light Wound";
                return "Light Wound";
             }
          }
          else if (dieRoll < 73)
          {
             cm.SetBloodSpots(10);
+            if ("None" == cm.Wound)
+               cm.Wound = "Light Wound";
             return "Light Wound";
          }
          else if (dieRoll < 88)
          {
             cm.SetBloodSpots(20);
             cm.IsIncapacitated = true;
+            if ("None" == cm.Wound)
+               cm.Wound = "Light Wound";
             return "Light Wound";
          }
          else if (dieRoll < 93)
          {
             cm.SetBloodSpots(30);
             cm.IsIncapacitated = true;
+            if ("Killed" != cm.Wound)
+               cm.Wound = "Serious Wound";
             return "Serious Wound";
          }
          else if (dieRoll < 98)
          {
             cm.SetBloodSpots(35);
             cm.IsIncapacitated = true;
+            if ("Killed" != cm.Wound)
+               cm.Wound = "Serious Wound";
             return "Serious Wound";
          }
          else
          {
             cm.SetBloodSpots(40);
             cm.IsKilled = true;
+            cm.Wound = "Killed";
             return "Killed";
          }
       }
@@ -2668,6 +2681,64 @@ namespace Pattons_Best
          else
          {
             return "Cannot Bail";
+         }
+      }
+      public static int GetBrewUpNumber(IGameInstance gi)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetBrewUpNumber(): lastReport=null");
+            return -1000;
+         }
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         if (null == gi.Death)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetBrewUpNumber(): gi.Death=null");
+            return -1000;
+         }
+         //-----------------------------------------------
+         bool isWetStorage = card.myIsWetStowage;
+         if( true == isWetStorage) // wet stowage only applies if not carrying extra rounds
+         {
+            int roundsOnBoard = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
+            int diff = roundsOnBoard - card.myNumMainGunRound;
+            if (0 < diff) // extra rounds on board if positive
+               isWetStorage = false;
+         }
+         //-----------------------------------------------
+         ShermanDeath death = gi.Death;
+         if( true == death.myCause.Contains("Panzerfault"))
+         {
+            if (true == isWetStorage)
+               return 20;
+            else if( "M4" == card.myChasis )
+               return 85;
+            else if ("M4A1" == card.myChasis)
+               return 80;
+            else if ("M4A3" == card.myChasis)
+               return 75;
+            else
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetBrewUpNumber(): reached default for Panzerfaut myChassis=" + card.myChasis);
+               return -1000;
+            }
+         }
+         else // gunfire
+         {
+            if (true == isWetStorage)
+               return 15;
+            else if ("M4" == card.myChasis)
+               return 80;
+            else if ("M4A1" == card.myChasis)
+               return 75;
+            else if ("M4A3" == card.myChasis)
+               return 70;
+            else
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetBrewUpNumber(): reached default for Panzerfaut myChassis=" + card.myChasis);
+               return -1000;
+            }
          }
       }
       //-------------------------------------------
