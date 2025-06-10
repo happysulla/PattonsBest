@@ -1283,6 +1283,8 @@ namespace Pattons_Best
                   continue;
                if (true == img.Name.Contains("ShermanExploding"))
                   continue;
+               if (true == img.Name.Contains("ShermanBrewUp"))
+                  continue;
                elements.Add(ui);
             }
             if (ui is TextBlock tb)

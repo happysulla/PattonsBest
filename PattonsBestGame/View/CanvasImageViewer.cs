@@ -88,7 +88,7 @@ namespace Pattons_Best
                ShowTankExploding(gi, myCanvas);
                break;
             case GameAction.UpdateTankBrewUp:
-               ShowTankExploding(gi, myCanvas);
+               ShowTankBrewUp(gi, myCanvas);
                break;
             case GameAction.RemoveSplashScreen:
                theMainImage = EnumMainImage.MI_Other;
@@ -273,6 +273,24 @@ namespace Pattons_Best
          c.Children.Add(img);
          double left = (double)gi.Sherman.Location.X - 0.25 * gi.Sherman.Zoom * Utilities.theMapItemSize;
          double top = (double)gi.Sherman.Location.Y  - 0.25 * gi.Sherman.Zoom * Utilities.theMapItemSize;
+         Canvas.SetLeft(img, left);
+         Canvas.SetTop(img, top);
+         Canvas.SetZIndex(img, 99999);
+      }
+      //-------------------------------------------------
+      private void ShowTankBrewUp(IGameInstance gi, Canvas c)
+      {
+         BitmapImage bmi2 = new BitmapImage();
+         bmi2.BeginInit();
+         bmi2.UriSource = new Uri(MapImage.theImageDirectory + "ShermanBrewUp.gif", UriKind.Absolute);
+         bmi2.EndInit();
+         double size = 1.1 * gi.Sherman.Zoom * Utilities.theMapItemSize;
+         Image img = new Image { Name = "ShermanBrewUp", Source = bmi2, Height = 1.6 * size, Width = size, Stretch = Stretch.Fill };
+         ImageBehavior.SetAnimatedSource(img, bmi2);
+         //-------------------
+         c.Children.Add(img);
+         double left = (double)gi.Sherman.Location.X - 0.1 * gi.Sherman.Zoom * Utilities.theMapItemSize;
+         double top = (double)gi.Sherman.Location.Y - 1.0 * gi.Sherman.Zoom * Utilities.theMapItemSize;
          Canvas.SetLeft(img, left);
          Canvas.SetTop(img, top);
          Canvas.SetZIndex(img, 99999);
