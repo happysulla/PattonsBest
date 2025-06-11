@@ -63,10 +63,11 @@ namespace Pattons_Best
       //---------------------------------------------------------------
       public bool IsMinefieldAttack { set; get; } = false;
       public bool IsHarrassingFire { set; get; } = false;
+      public bool IsPromoted { set; get; } = false;
       //---------------------------------------------------------------
       public int VictoryPtsTotalCampaign { get; set; } = 0;
-      public int PromotionPoints { get; set; } = 0;
-      public int PromotionDate { get; set; } = 0;
+      public int PromotionPointNum { get; set; } = 0;
+      public int PromotionDay { get; set; } = -1;
       public int NumPurpleHeart { get; set; } = 0;
       //---------------------------------------------------------------
       public int AdvancingFireMarkerCount { set; get; } = 0;

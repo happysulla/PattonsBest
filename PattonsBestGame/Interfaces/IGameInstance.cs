@@ -96,10 +96,11 @@ namespace Pattons_Best
       //------------------------------------------------
       bool IsMinefieldAttack { set; get; }
       bool IsHarrassingFire { set; get; }
+      bool IsPromoted { set; get; }
       //------------------------------------------------
       int VictoryPtsTotalCampaign { get; set; }
-      int PromotionPoints { get; set; }
-      int PromotionDate { get; set; }
+      int PromotionPointNum { get; set; }
+      int PromotionDay { get; set; }
       int NumPurpleHeart { get; set; }
       //------------------------------------------------
       int AdvancingFireMarkerCount { set; get; }

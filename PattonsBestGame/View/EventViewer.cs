@@ -1465,28 +1465,18 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new Run("Click image to continue."));
                break;
             case "e102":
-               ReplaceText("PROMOTION_POINTS", gi.VictoryPtsTotalCampaign.ToString() );
-               string promoDate = TableMgr.GetDate(gi.PromotionDate);
-               if ("07/27/1944" == promoDate)
-                  promoDate = "Not promoted yet";
-               ReplaceText("PROMOTION_DATE", promoDate);
-               //------------------------------------------
-               string oldRank = report.Commander.Rank;
-               string newRank = GetNewRank(gi, report);
-               if ("ERROR" == newRank)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): TableMgr.GetDate() returned ERROR for date=" + gi.PromotionDate.ToString());
-                  return false;
-               }
-               if( oldRank != newRank )
-               {
-                  myTextBlock.Inlines.Add(new Run("Congradulations on your promotion!"));
-                  myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new LineBreak());
-               }
+               string promoDate = TableMgr.GetDate(gi.PromotionDay);
+               StringBuilder sbPromo = new StringBuilder();
+               sbPromo.Append("Promotion Points: ");
+               sbPromo.Append(gi.PromotionPointNum.ToString());
+               sbPromo.Append("\nPromotion Date:     ");
+               sbPromo.Append(promoDate);
+               myTextBlock.Inlines.Add(sbPromo.ToString());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
                //------------------------------------------
                Image? imge102 = null;
-               switch (newRank)
+               switch (report.Commander.Rank)
                {
                   case "Sgt":
                      imge102 = new Image { Name = "EventDebriefPromotion", Width = 100, Height = 132, Source = MapItem.theMapImages.GetBitmapImage("RankSergeant") };
@@ -1504,13 +1494,15 @@ namespace Pattons_Best
                      imge102 = new Image { Name = "EventDebriefPromotion", Width = 100, Height = 92, Source = MapItem.theMapImages.GetBitmapImage("RankCaptian") };
                      break;
                   default:
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default newRank=" + newRank);
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default newRank=" + report.Commander.Rank);
                      return false;
                }
                myTextBlock.Inlines.Add(new Run("                                              "));
                myTextBlock.Inlines.Add(new InlineUIContainer(imge102));
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
+               if (true == gi.IsPromoted)
+                  myTextBlock.Inlines.Add(new Run("Congratulations on promotion! "));
                myTextBlock.Inlines.Add(new Run("Click image to continue."));
                break;
             case "e103":
@@ -1524,7 +1516,7 @@ namespace Pattons_Best
                StringBuilder sbe103 = new StringBuilder();
                //----------------------------------------
                int victoryPointsYourTank = report.VictoryPtsTotalYourTank * 2;
-               if( -1 < victoryPointsYourTank)
+               if ( -1 < victoryPointsYourTank)
                   sbe103.Append("+");
                sbe103.Append(victoryPointsYourTank.ToString());
                sbe103.Append(" for VPs from your tank\n");
@@ -1591,13 +1583,9 @@ namespace Pattons_Best
                }
                else if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  myTextBlock.Inlines.Add(new Run(sbe103.ToString()));
                   int combo = gi.DieResults[key][0] + modifierDecoration;
                   if (199 < combo)
                   {
-                     myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add("Qualify for Decoration. Click one of the images to continue:");
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
                      Image imgBronze = new Image { Name = "DecorationBronzeStar", Width = 100, Height = 180, Source = MapItem.theMapImages.GetBitmapImage("DecorationBronzeStar") };
@@ -1606,7 +1594,10 @@ namespace Pattons_Best
                      Image imgHonor = new Image { Name = "DecorationMedalOfHonor", Width = 100, Height = 180, Source = MapItem.theMapImages.GetBitmapImage("DecorationMedalOfHonor") };
                      if (299 < combo)
                      {
-                        myTextBlock.Inlines.Add(new Run("              "));
+                        myTextBlock.Inlines.Add("Qualify for Decoration. Click one of images to continue:");
+                        myTextBlock.Inlines.Add(new LineBreak());
+                        myTextBlock.Inlines.Add(new LineBreak());
+                        myTextBlock.Inlines.Add(new Run("         "));
                         myTextBlock.Inlines.Add(new InlineUIContainer(imgBronze));
                         myTextBlock.Inlines.Add(new Run("     "));
                         myTextBlock.Inlines.Add(new InlineUIContainer(imgSilver));
@@ -1617,7 +1608,10 @@ namespace Pattons_Best
                      }
                      else if (249 < combo)
                      {
-                        myTextBlock.Inlines.Add(new Run("                        "));
+                        myTextBlock.Inlines.Add("Qualify for Decoration. Click one of images to continue:");
+                        myTextBlock.Inlines.Add(new LineBreak());
+                        myTextBlock.Inlines.Add(new LineBreak());
+                        myTextBlock.Inlines.Add(new Run("                   "));
                         myTextBlock.Inlines.Add(new InlineUIContainer(imgBronze));
                         myTextBlock.Inlines.Add(new Run("     "));
                         myTextBlock.Inlines.Add(new InlineUIContainer(imgSilver));
@@ -1626,21 +1620,25 @@ namespace Pattons_Best
                      }
                      else if (224 < combo)
                      {
-                        myTextBlock.Inlines.Add(new Run("                                  "));
+                        myTextBlock.Inlines.Add("Qualify for Decoration. Click one of images to continue:");
+                        myTextBlock.Inlines.Add(new LineBreak());
+                        myTextBlock.Inlines.Add(new LineBreak());
+                        myTextBlock.Inlines.Add(new Run("                             "));
                         myTextBlock.Inlines.Add(new InlineUIContainer(imgBronze));
                         myTextBlock.Inlines.Add(new Run("     "));
                         myTextBlock.Inlines.Add(new InlineUIContainer(imgSilver));
                      }
                      else
                      {
+                        myTextBlock.Inlines.Add("Qualify for Decoration. Click image to continue:");
+                        myTextBlock.Inlines.Add(new LineBreak());
+                        myTextBlock.Inlines.Add(new LineBreak());
                         myTextBlock.Inlines.Add(new Run("                                            "));
                         myTextBlock.Inlines.Add(new InlineUIContainer(imgBronze));
                      }
                   }
                   else
                   {
-                     myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add("Do not qualify for decoration. Click image to continue.");
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
@@ -1819,36 +1817,6 @@ namespace Pattons_Best
          else
             b.IsEnabled = true;
          return true;
-      }
-      private string GetNewRank(IGameInstance gi, IAfterActionReport report)
-      {
-         string oldRank = report.Commander.Rank;
-         string newRank = report.Commander.Rank;   
-         switch (oldRank)
-         {
-            case "Sgt":
-               if (99 < gi.PromotionPoints)
-                  newRank = "Ssg";
-               break;
-            case "2Lt":
-               if (199 < gi.PromotionPoints)
-                  newRank = "2Lt";
-               break;
-            case "1Lt":
-               if (299 < gi.PromotionPoints)
-                  newRank = "1Lt";
-               break;
-            case "Cpt":
-               if (399 < gi.PromotionPoints)
-                  newRank = "Cpt";
-               break;
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "GetNewRank(): reached default cmdrRank=" + oldRank);
-               return "ERROR";
-         }
-         if (gi.Day < (gi.PromotionDate + 30)) // cannot get promoted until 30 days past since last promotion
-            newRank = oldRank;
-         return newRank;
       }
       //--------------------------------------------------------------------
       public void CloseAfterActionDialog()

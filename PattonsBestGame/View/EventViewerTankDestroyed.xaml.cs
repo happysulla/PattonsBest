@@ -1094,7 +1094,7 @@ namespace Pattons_Best
          switch (myState)
          {
             case E0481Enum.TANK_EXPLOSION_ROLL:
-               dieRoll = 1; // <cgs> TEST - tank explodes
+               //dieRoll = 1; // <cgs> TEST - tank explodes
                myGridRowExplodes[0].myDieRollExplosion = dieRoll;
                int rollPlusModifier = dieRoll + myGridRowExplodes[0].myDieRollExplosion;
                if( 99 < rollPlusModifier )

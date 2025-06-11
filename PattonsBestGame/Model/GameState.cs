@@ -731,7 +731,6 @@ namespace Pattons_Best
                      gi.EventDisplayed = gi.EventActive = "e000"; // next screen to show
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
-                  AddStartingTestingOptions(gi);
                   PrintDiagnosticInfoToLog();
                }
                break;
@@ -1193,7 +1192,7 @@ namespace Pattons_Best
                diceRoll = 100;
             else
                diceRoll = die1 + 10 * die2;
-            diceRoll = 45; // <cgs> TEST - three tanks
+            //diceRoll = 45; // <cgs> TEST - three tanks
             string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
             IMapItem? mi = null;
             string name = enemyUnit + Utilities.MapItemNum;
@@ -1275,6 +1274,8 @@ namespace Pattons_Best
          //--------------------------------
          gi.Sherman.IsMoving = true;
          gi.Sherman.IsHullDown = false;
+         //--------------------------------
+         gi.PromotionPointNum = 290;
       }
    }
    //-----------------------------------------------------
@@ -1858,7 +1859,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "GameStateMovement.PerformAction(MovementBattleCheckRoll): " + gi.MoveStacks.ToString());
                   Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "GameStateMovement.PerformAction(MovementBattleCheckRoll): gi.MapItemMoves.Clear()");
                   gi.MapItemMoves.Clear();
-                  dieRoll = 10; // <cgs> TEST - enforce combat
+                  // dieRoll = 10; // <cgs> TEST - enforce combat
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   switch (gi.BattleResistance)
@@ -2299,7 +2300,7 @@ namespace Pattons_Best
                case GameAction.BattleRandomEventRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 29; // <cgs> TEST - panzerfaust attack
+                     dieRoll = 33; // <cgs> TEST - harassing fire
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -2339,6 +2340,7 @@ namespace Pattons_Best
                         case "Harrassing Fire":
                            gi.EventDisplayed = gi.EventActive = "e045";
                            gi.DieRollAction = GameAction.DieRollActionNone;
+                           gi.NumCollateralDamage++;
                            break;
                         case "Friendly Advance":
                            break;
@@ -2365,7 +2367,6 @@ namespace Pattons_Best
                   gi.GamePhase = GamePhase.EveningDebriefing;
                   gi.EventDisplayed = gi.EventActive = "e100";
                   gi.DieRollAction = GameAction.DieRollActionNone;
-                  gi.BattleStacks.Clear();
                   break;
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;
@@ -2818,7 +2819,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequencePanzerfaustAttackRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 1; // <cgs> Panzerfaust To Attack
+                     //dieRoll = 1; // <cgs> Panzerfaust To Attack
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -2869,7 +2870,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequencePanzerfaustToHitRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 1; // <cgs> Panzerfaust To Hit
+                     //dieRoll = 1; // <cgs> Panzerfaust To Hit
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -3112,6 +3113,7 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   break;
                case GameAction.EveningDebriefingRatingImprovement: // Only change active event
+                  gi.BattleStacks.Clear();
                   break;
                case GameAction.EveningDebriefingRatingImprovementEnd:
                   gi.EventDisplayed = gi.EventActive = "e101";
@@ -3248,7 +3250,7 @@ namespace Pattons_Best
          //----------------------------------
          report.VictoryPtsTotalEngagement = report.VictoryPtsTotalYourTank + report.VictoryPtsTotalFriendlyForces + report.VictoryPtsTotalEngagement;
          gi.VictoryPtsTotalCampaign += report.VictoryPtsTotalEngagement;
-         gi.PromotionPoints += report.VictoryPtsTotalEngagement;
+         gi.PromotionPointNum += report.VictoryPtsTotalYourTank;
          //----------------------------------
          report.DayEndedTime = TableMgr.GetTime(report);
          //----------------------------------
@@ -3256,40 +3258,62 @@ namespace Pattons_Best
       }
       public bool UpdatePromotion(IGameInstance gi, IAfterActionReport report)
       {
-         string cmdrRank = report.Commander.Rank;
-         switch (cmdrRank)
+         string oldRank = report.Commander.Rank;
+         switch (oldRank)
          {
             case "Sgt":
-               if( 99 < gi.PromotionPoints )
+               if( 99 < gi.PromotionPointNum )
                {
-                  gi.PromotionDate = gi.Day;
+                  gi.PromotionDay = gi.Day;
                   report.Commander.Rank = "Ssg";
                }
                break;
             case "2Lt":
-               if (199 < gi.PromotionPoints)
+               if (199 < gi.PromotionPointNum)
                {
-                  gi.PromotionDate = gi.Day;
+                  gi.PromotionDay = gi.Day;
                   report.Commander.Rank = "2Lt";
                }
                break;
             case "1Lt":
-               if (299 < gi.PromotionPoints)
+               if (299 < gi.PromotionPointNum)
                {
-                  gi.PromotionDate = gi.Day;
+                  gi.PromotionDay = gi.Day;
                   report.Commander.Rank = "1Lt";
                }
                break;
             case "Cpt":
-               if (399 < gi.PromotionPoints)
+               if (399 < gi.PromotionPointNum)
                {
-                  gi.PromotionDate = gi.Day;
+                  gi.PromotionDay = gi.Day;
                   report.Commander.Rank = "Cpt";
                }
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "UpdatePromotion(): reached default cmdrRank=" + cmdrRank);
+               Logger.Log(LogEnum.LE_ERROR, "UpdatePromotion(): reached default cmdrRank=" + oldRank);
                return false;
+         }
+         string promoDate = TableMgr.GetDate(gi.PromotionDay);
+         if( "Boot Camp" == promoDate )
+         {
+            gi.PromotionDay = gi.Day;
+            return true;
+         }
+         string currentDate = TableMgr.GetDate(gi.Day);
+         int diff = Utilities.DiffInDates(promoDate, currentDate);
+         if( diff < -999 )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdatePromotion(): Utilities.DiffInDates() returned error");
+            return false;
+         }
+         if (("07/27/1944" == promoDate) || (29 < diff))  // cannot get promoted until 30 days past since last promotion
+         {
+            gi.PromotionDay = gi.Day;
+            gi.IsPromoted = true;
+         }
+         else
+         {
+            report.Commander.Rank = oldRank;
          }
          return true;
       }
@@ -3332,6 +3356,9 @@ namespace Pattons_Best
          {
             gi.EventDisplayed = gi.EventActive = "e104";
             gi.NumPurpleHeart++;
+            StringBuilder sb2 = new StringBuilder(commander.Name);
+            sb2.Append(" received the Purple Heart.");
+            report.Notes.Add(sb1.ToString());
          }
          else
          {
@@ -3380,6 +3407,7 @@ namespace Pattons_Best
          gi.IsCommanderRescuePerformed = false;
          gi.IsMinefieldAttack = false;
          gi.IsHarrassingFire = false;
+         gi.IsPromoted = false;
          gi.AdvancingFireMarkerCount = 0;
          gi.BattleResistance = EnumResistance.None;
          gi.BrokenPeriscopes.Clear();
@@ -3393,6 +3421,14 @@ namespace Pattons_Best
          gi.MoveStacks.Clear();
          gi.BattleStacks.Clear();
          gi.EnteredHexes.Clear();
+         ICrewMember? commander = gi.GetCrewMember("Commander");
+         if (null == commander)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateDecoration(): commander=null");
+            return false;
+         }
+         if (true == commander.IsKilled)
+            gi.PromotionPointNum = 0;
          //-------------------------------------------------------
          if ( false == ResetDieResults(gi))
          {

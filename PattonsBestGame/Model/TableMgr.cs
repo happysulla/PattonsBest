@@ -29,6 +29,8 @@ namespace Pattons_Best
       //-------------------------------------------
       public static string GetDate(int day)
       {
+         if (day < 0)
+            return "Boot Camp";
          StringBuilder sb = new StringBuilder();
          if (day < 5)
          {
@@ -1145,7 +1147,6 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetEnemyActionResult(): GetEnemyActionModifier() returned error");
             return "ERROR";
          }
-         modifier = 0; // <cgs> TEST
          dieRoll += modifier;
          //----------------------------------------------------
          if (EnumScenario.Advance == lastReport.Scenario)
@@ -2711,13 +2712,13 @@ namespace Pattons_Best
          if( true == death.myCause.Contains("Panzerfault"))
          {
             if (true == isWetStorage)
-               return 20;
+               return 19;
             else if( "M4" == card.myChasis )
-               return 85;
+               return 84;
             else if ("M4A1" == card.myChasis)
-               return 80;
+               return 79;
             else if ("M4A3" == card.myChasis)
-               return 75;
+               return 74;
             else
             {
                Logger.Log(LogEnum.LE_ERROR, "GetBrewUpNumber(): reached default for Panzerfaut myChassis=" + card.myChasis);
@@ -2729,11 +2730,11 @@ namespace Pattons_Best
             if (true == isWetStorage)
                return 15;
             else if ("M4" == card.myChasis)
-               return 80;
+               return 79;
             else if ("M4A1" == card.myChasis)
                return 75;
             else if ("M4A3" == card.myChasis)
-               return 70;
+               return 69;
             else
             {
                Logger.Log(LogEnum.LE_ERROR, "GetBrewUpNumber(): reached default for Panzerfaut myChassis=" + card.myChasis);

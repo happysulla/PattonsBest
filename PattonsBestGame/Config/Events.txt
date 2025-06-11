@@ -504,9 +504,6 @@ You are promoted when promotion points reach these values. However, cannot be pr
 200 = 2nd Lieutenant<LineBreak/>
 300 = 1st Lieutenant<LineBreak/>
 400 = Captian
-<LineBreak/><LineBreak/>
-Promotion Points:  PROMOTION_POINTS<LineBreak/>
-Promotion Date:     PROMOTION_DATE<LineBreak/>
 <LineBreak/><LineBreak/>"
 e103	"<Bold>e103 Evening Debriefing - Decorations</Bold> 
 <InlineUIContainer><Button Content='r26.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 

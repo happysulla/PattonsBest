@@ -79,6 +79,39 @@ namespace Pattons_Best
          sb.Append(min.ToString());
          return sb.ToString();
       }
+      static public int DiffInDates(string day1, string day2)
+      {
+         if( 10 != day1.Length )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "DiffInDates(): 10 != day1.Length for day1=" + day1);
+            return -1000;
+         }
+         if (10 != day2.Length)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "DiffInDates(): 10 != day1.Length for day1=" + day2);
+            return -1000;
+         }
+         try
+         {
+            string sDay1Month = day1.Substring(0, 2);  // "07"
+            string sDay1Day = day1.Substring(3, 2);    // "28"
+            string sDay1Year = day1.Substring(6);      // "1944" 
+            //------------------------------------------------
+            string sDay2Month = day2.Substring(0, 2);  // "08"
+            string sDay2Day = day2.Substring(3, 2);    // "10"
+            string sDay2Year = day2.Substring(6);      // "1944" 
+            //------------------------------------------------
+            DateTime startDate = new DateTime(Int32.Parse(sDay1Year), Int32.Parse(sDay1Month), Int32.Parse(sDay1Day));
+            DateTime endDate = new DateTime(Int32.Parse(sDay2Year), Int32.Parse(sDay2Month), Int32.Parse(sDay2Day));
+            TimeSpan difference = endDate.Subtract(startDate);
+            return difference.Days;
+         }
+         catch (Exception e)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "DiffInDates(): e=\n" + e.ToString());
+            return -1000;
+         }
+      }
       //--------------------------------------------
       // Utilities Functions
       public static void InitializeRandomNumGenerators()
