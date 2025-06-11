@@ -488,6 +488,7 @@ namespace Pattons_Best
       }
       private Button CreateButtonMapItem(List<Button> buttons, IMapItem mi)
       {
+         Logger.Log(LogEnum.LE_SHOW_ORDERS_MENU, "CreateButtonMapItem(): creating new button=" + mi.Name);
          System.Windows.Controls.Button b = new Button { Name = mi.Name, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
          MapItem.SetButtonContent(b, mi, true, true); // This sets the image as the button's content
          RotateTransform rotateTransform = new RotateTransform();
@@ -2091,6 +2092,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): button = null");
             return;
          }
+         Logger.Log(LogEnum.LE_SHOW_ORDERS_MENU, "ClickButtonMapItem(): adding new button=" + button.Name );
          if ( (true == button.Name.Contains("OpenHatch")) && ( (true == myGameInstance.IsHatchesActive) || (BattlePhase.Orders == myGameInstance.BattlePhase) ) )
          {
             string[] crewmembers = new string[4] { "Driver", "Assistant", "Commander", "Loader" };
@@ -2317,7 +2319,8 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): menu=null");
             return;
          }
-         System.Windows.Controls.Button newButton = new Button { ContextMenu = menu, Name = sCrewMemberRole, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
+         Logger.Log(LogEnum.LE_SHOW_ORDERS_MENU, "MenuItemCrewActionClick(): adding new button=" + menuitem.Name + " for sCrewMemberRole=" + sCrewMemberRole);
+         System.Windows.Controls.Button newButton = new Button { ContextMenu = menu, Name = menuitem.Name, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
          MapItem.SetButtonContent(newButton, mi, true, false); // This sets the image as the button's content
          myTankButtons.Add(newButton);
          myCanvasTank.Children.Add(newButton);

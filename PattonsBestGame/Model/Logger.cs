@@ -30,6 +30,7 @@ namespace Pattons_Best
       LE_SHOW_HIT_YOU_MOD,
       LE_SHOW_SPOT_MOD,
       LE_SHOW_SPOT_RESULT,
+      LE_SHOW_ORDERS_MENU,
       //-------------
       LE_VIEW_ADV_FIRE_RESOLVE,
       LE_VIEW_ART_FIRE_RESOLVE,
@@ -104,9 +105,10 @@ namespace Pattons_Best
          // SetOn(LogEnum.LE_SHOW_ROTATION);
          //SetOn(LogEnum.LE_SHOW_MAPITEM_TANK);
          //SetOn(LogEnum.LE_SHOW_BATTLE_PHASE);
-         SetOn(LogEnum.LE_SHOW_HIT_YOU_MOD);
-         SetOn(LogEnum.LE_SHOW_SPOT_MOD);
-         SetOn(LogEnum.LE_SHOW_SPOT_RESULT);
+         //SetOn(LogEnum.LE_SHOW_HIT_YOU_MOD);
+         //SetOn(LogEnum.LE_SHOW_SPOT_MOD);
+         //SetOn(LogEnum.LE_SHOW_SPOT_RESULT);
+         SetOn(LogEnum.LE_SHOW_ORDERS_MENU);
          //-------------------------------
          //SetOn(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE);
          //SetOn(LogEnum.LE_VIEW_ART_FIRE_RESOLVE);
@@ -119,10 +121,10 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_VIEW_MIM_CLEAR);
          //SetOn(LogEnum.LE_VIEW_TIME_TRACK);
          //-------------------------------
-         SetOn(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION);
-         SetOn(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED);
-         SetOn(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED_BAILOUT);
-         SetOn(LogEnum.LE_EVENT_VIEWER_SPOTTING);
+         //SetOn(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION);
+         //SetOn(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED);
+         //SetOn(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED_BAILOUT);
+         //SetOn(LogEnum.LE_EVENT_VIEWER_SPOTTING);
          SetOn(LogEnum.LE_EVENT_VIEWER_ORDERS);
          return true;
       }
