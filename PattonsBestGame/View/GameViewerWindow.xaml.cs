@@ -578,8 +578,29 @@ namespace Pattons_Best
          menuItem7.Header = "Repair Periscope";
          menuItem7.Click += MenuItemCrewActionClick;
          if ((false == gi.BrokenPeriscopes.ContainsKey("Loader") || (0 == lastReport.AmmoPeriscope)) )
-            menuItem6.IsEnabled = false;
+            menuItem7.IsEnabled = false;
          myContextMenuCrewActions["Loader"].Items.Add(menuItem7);
+         MenuItem menuItem8 = new MenuItem();
+         menuItem8.Name = "Loader_FireAaMg";
+         menuItem8.Header = "Fire AA MG";
+         menuItem8.Click += MenuItemCrewActionClick;
+         if ((false == isLoaderOpenHatch) || (0 == lastReport.Ammo50CalibreMG) || (true == isCommanderFireAaMg))
+            menuItem8.IsEnabled = false;
+         myContextMenuCrewActions["Loader"].Items.Add(menuItem8);
+         MenuItem menuItem9 = new MenuItem();
+         menuItem9.Name = "Loader_RepairAaMg";
+         menuItem9.Header = "Repair AA MG";
+         menuItem9.Click += MenuItemCrewActionClick;
+         if (true == gi.IsBrokenMgAntiAircraft)
+            menuItem9.IsEnabled = false;
+         myContextMenuCrewActions["Loader"].Items.Add(menuItem9);
+         menuItem8 = new MenuItem();
+         menuItem8.Name = "Loader_FireSubMg";
+         menuItem8.Header = "Fire Sub MG";
+         menuItem8.Click += MenuItemCrewActionClick;
+         if ((false == isLoaderOpenHatch) || (0 == lastReport.Ammo50CalibreMG) )
+            menuItem8.IsEnabled = false;
+         myContextMenuCrewActions["Loader"].Items.Add(menuItem8);
          //---------------------------------
          myContextMenuCrewActions["Driver"].Items.Clear();
          myContextMenuCrewActions["Driver"].Visibility = Visibility.Visible;
@@ -621,6 +642,13 @@ namespace Pattons_Best
          if (true == gi.Sherman.IsThrownTrack)
             menuItem6.IsEnabled = false;
          myContextMenuCrewActions["Driver"].Items.Add(menuItem6);
+         menuItem7 = new MenuItem();
+         menuItem7.Name = "Driver_RepairScope";
+         menuItem7.Header = "Driver Periscope";
+         menuItem7.Click += MenuItemCrewActionClick;
+         if ((false == gi.BrokenPeriscopes.ContainsKey("Driver") || (0 == lastReport.AmmoPeriscope)))
+            menuItem7.IsEnabled = false;
+         myContextMenuCrewActions["Driver"].Items.Add(menuItem7);
          //---------------------------------
          myContextMenuCrewActions["Gunner"].Items.Clear();
          myContextMenuCrewActions["Gunner"].Visibility = Visibility.Visible;
@@ -662,6 +690,13 @@ namespace Pattons_Best
          if ((false == isGunnerOpenHatch) || (0 == lastReport.AmmoSmokeGrenade))
             menuItem6.IsEnabled = false;
          myContextMenuCrewActions["Gunner"].Items.Add(menuItem6);
+         menuItem7 = new MenuItem();
+         menuItem7.Name = "Gunner_RepairScope";
+         menuItem7.Header = "Gunner Periscope";
+         menuItem7.Click += MenuItemCrewActionClick;
+         if ((false == gi.BrokenPeriscopes.ContainsKey("Gunner") || (0 == lastReport.AmmoPeriscope)))
+            menuItem7.IsEnabled = false;
+         myContextMenuCrewActions["Gunner"].Items.Add(menuItem7);
          //---------------------------------
          myContextMenuCrewActions["Assistant"].Items.Clear();
          myContextMenuCrewActions["Assistant"].Visibility = Visibility.Visible;
@@ -686,6 +721,13 @@ namespace Pattons_Best
          if (0 == totalAmmo)
             menuItem3.IsEnabled = false;
          myContextMenuCrewActions["Assistant"].Items.Add(menuItem3);
+         menuItem4 = new MenuItem();
+         menuItem4.Name = "Assistant_RepairScope";
+         menuItem4.Header = "Assistant Periscope";
+         menuItem4.Click += MenuItemCrewActionClick;
+         if ((false == gi.BrokenPeriscopes.ContainsKey("Assistant") || (0 == lastReport.AmmoPeriscope)))
+            menuItem4.IsEnabled = false;
+         myContextMenuCrewActions["Assistant"].Items.Add(menuItem4);
          //---------------------------------
          myContextMenuCrewActions["Commander"].Items.Clear();
          myContextMenuCrewActions["Commander"].Visibility = Visibility.Visible;
@@ -713,6 +755,41 @@ namespace Pattons_Best
          if ((false == isCommanderOpenHatch) || (0 == lastReport.Ammo50CalibreMG) || (true == isLoaderFireAaMg))
             menuItem4.IsEnabled = false;
          myContextMenuCrewActions["Commander"].Items.Add(menuItem4);
+         menuItem5 = new MenuItem();
+         menuItem5.Name = "Commander_RepairScope";
+         menuItem5.Header = "Commander Periscope";
+         menuItem5.Click += MenuItemCrewActionClick;
+         if ((false == gi.BrokenPeriscopes.ContainsKey("Commander") || (0 == lastReport.AmmoPeriscope)))
+            menuItem5.IsEnabled = false;
+         myContextMenuCrewActions["Commander"].Items.Add(menuItem5);
+         menuItem6 = new MenuItem();
+         menuItem6.Name = "Commander_FireAaMg";
+         menuItem6.Header = "Fire AA MG";
+         menuItem6.Click += MenuItemCrewActionClick;
+         if ((false == isCommanderOpenHatch) || (0 == lastReport.Ammo50CalibreMG) || (true == isLoaderFireAaMg))
+            menuItem6.IsEnabled = false;
+         myContextMenuCrewActions["Commander"].Items.Add(menuItem6);
+         menuItem7 = new MenuItem();
+         menuItem7.Name = "Commander_RepairAaMg";
+         menuItem7.Header = "Repair AA MG";
+         menuItem7.Click += MenuItemCrewActionClick;
+         if (true == gi.IsBrokenMgAntiAircraft)
+            menuItem3.IsEnabled = false;
+         myContextMenuCrewActions["Commander"].Items.Add(menuItem7);
+         menuItem8 = new MenuItem();
+         menuItem8.Name = "Commander_FireSubMg";
+         menuItem8.Header = "Fire Sub MG";
+         menuItem8.Click += MenuItemCrewActionClick;
+         if (true == gi.IsBrokenMgAntiAircraft)
+            menuItem8.IsEnabled = false;
+         myContextMenuCrewActions["Commander"].Items.Add(menuItem8);
+         menuItem9 = new MenuItem();
+         menuItem9.Name = "Commander_FireSubMg";
+         menuItem9.Header = "Fire Sub MG";
+         menuItem9.Click += MenuItemCrewActionClick;
+         if ((false == isCommanderOpenHatch) || (0 == lastReport.Ammo50CalibreMG))
+            menuItem9.IsEnabled = false;
+         myContextMenuCrewActions["Commander"].Items.Add(menuItem9);
          //---------------------------------
          return true;
       }
@@ -2304,6 +2381,22 @@ namespace Pattons_Best
                mi = new MapItem(menuitem.Name, 1.0, "c60LRestockReadyRack", t);
                menu = myContextMenuCrewActions["Loader"];
                break;
+            case "Loader_RepairScope":
+               mi = new MapItem(menuitem.Name, 1.0, "c73ReplacePeriscope", t);
+               menu = myContextMenuCrewActions["Loader"];
+               break;
+            case "Loader_FireAaMg":
+               mi = new MapItem(menuitem.Name, 1.0, "c71FireAaMg", t);
+               menu = myContextMenuCrewActions["Loader"];
+               break;
+            case "Loader_RepairAaMg":
+               mi = new MapItem(menuitem.Name, 1.0, "c72RepairAaMg", t);
+               menu = myContextMenuCrewActions["Loader"];
+               break;
+            case "Loader_FireSubMg":
+               mi = new MapItem(menuitem.Name, 1.0, "c74FireSubMg", t);
+               menu = myContextMenuCrewActions["Loader"];
+               break;
             case "Driver_Stop":
                mi = new MapItem(menuitem.Name, 1.0, "c61DStop", t);
                menu = myContextMenuCrewActions["Driver"];
@@ -2322,6 +2415,10 @@ namespace Pattons_Best
                break;
             case "Driver_ReverseToHullDown":
                mi = new MapItem(menuitem.Name, 1.0, "c65DReverseToHullDown", t);
+               menu = myContextMenuCrewActions["Driver"];
+               break;
+            case "Driver_RepairScope":
+               mi = new MapItem(menuitem.Name, 1.0, "c73ReplacePeriscope", t);
                menu = myContextMenuCrewActions["Driver"];
                break;
             case "Gunner_FireMainGun":
@@ -2344,6 +2441,10 @@ namespace Pattons_Best
                mi = new MapItem(menuitem.Name, 1.0, "c57GRepairMainGun", t);
                menu = myContextMenuCrewActions["Gunner"];
                break;
+            case "Gunner_RepairScope":
+               mi = new MapItem(menuitem.Name, 1.0, "c73ReplacePeriscope", t);
+               menu = myContextMenuCrewActions["Gunner"];
+               break;
             case "Assistant_FireBowMg":
                mi = new MapItem(menuitem.Name, 1.0, "c67AFireBowMg", t);
                menu = myContextMenuCrewActions["Assistant"];
@@ -2356,12 +2457,32 @@ namespace Pattons_Best
                mi = new MapItem(menuitem.Name, 1.0, "c69APassAmmo", t);
                menu = myContextMenuCrewActions["Assistant"];
                break;
+            case "Assistant_RepairScope":
+               mi = new MapItem(menuitem.Name, 1.0, "c73ReplacePeriscope", t);
+               menu = myContextMenuCrewActions["Assistant"];
+               break;
             case "Commander_Move":
                mi = new MapItem(menuitem.Name, 1.0, "c48CDirectMove", t);
                menu = myContextMenuCrewActions["Commander"];
                break;
             case "Commander_Fire":
                mi = new MapItem(menuitem.Name, 1.0, "c49CDirectFire", t);
+               menu = myContextMenuCrewActions["Commander"];
+               break;
+            case "Commander_RepairScope":
+               mi = new MapItem(menuitem.Name, 1.0, "c73ReplacePeriscope", t);
+               menu = myContextMenuCrewActions["Commander"];
+               break;
+            case "Commander_FireAaMg":
+               mi = new MapItem(menuitem.Name, 1.0, "c71FireAaMg", t);
+               menu = myContextMenuCrewActions["Commander"];
+               break;
+            case "Commander_RepairAaMg":
+               mi = new MapItem(menuitem.Name, 1.0, "c72RepairAaMg", t);
+               menu = myContextMenuCrewActions["Commander"];
+               break;
+            case "Commander_FireSubMg":
+               mi = new MapItem(menuitem.Name, 1.0, "c74FireSubMg", t);
                menu = myContextMenuCrewActions["Commander"];
                break;
             default:
