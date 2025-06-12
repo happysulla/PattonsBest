@@ -2572,7 +2572,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceCrewOrders:
                   break;
                case GameAction.BattleRoundSequenceAmmoOrders:
-                  gi.EventDisplayed = gi.EventActive = "e051";
+                  gi.EventDisplayed = gi.EventActive = "e050";
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   break;
                case GameAction.BattleRoundSequenceEnemyArtilleryRoll:

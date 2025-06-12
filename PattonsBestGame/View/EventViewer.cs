@@ -1139,7 +1139,19 @@ namespace Pattons_Best
                }
                break;
             case "e038":
-               if (5 == gi.CrewActions.Count)
+               bool isAssistantSet = false;
+               bool isGunnerSet = false;
+               bool isCommanderSet = false;
+               foreach (IMapItem mi in gi.CrewActions) // Loader and Driver have default actions
+               {
+                  if (true == mi.Name.Contains("Assistant"))
+                     isAssistantSet = true;
+                  else if (true == mi.Name.Contains("Gunner"))
+                     isGunnerSet = true;
+                  else if (true == mi.Name.Contains("Commander"))
+                     isCommanderSet = true;
+               }
+               if ( (true == isAssistantSet) && (true == isGunnerSet) && (true == isCommanderSet))
                {
                   Image imge038 = new Image { Name = "Continue38", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
                   myTextBlock.Inlines.Add(new Run("                                          "));

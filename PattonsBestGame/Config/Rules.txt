@@ -377,11 +377,86 @@ respective Enemy Combat Fire Table. Record friendly casualties on the After Acti
 <LineBreak/><LineBreak/>
 4.) Continue with Friendly Action Phase per <InlineUIContainer><Button Content='r4.76' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>"
 r4.76	"<Bold>r4.76  Friendly Action Phase</Bold>
+<LineBreak/><LineBreak/>
+1.) Roll on the 
+<InlineUIContainer><Button Content='Friendly Action' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table 
+once against each enemy unit on the Battle Board. Remove any knocked out units and record victory points on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Place any Smoke markers generated due to dice roll.
+<LineBreak/><LineBreak/>
+2.) After all Friendly Action is resolved, go to the Random Events Phase 
+<InlineUIContainer><Button Content='r4.77' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>"
 r4.77	"<Bold>r4.77   Random Events Phase</Bold>
-<LineBreak/><LineBreak/>"
+<LineBreak/><LineBreak/>
+1.) Roll once on the 
+<InlineUIContainer><Button Content='Random Events' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table based on the appropriate scenario.
+ And resolve the event.
+<LineBreak/><LineBreak/>
+2.) If the Battle Board is now empty of enemy units, the battle for the area is over. Mark the area on the Movement Board with a US Control makrer. Record Victory Points on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for capture territory. Return to the Prepare for Battle Step, i.e., 
+<InlineUIContainer><Button Content='r4.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+3.) If the battle does not end, return to the Smoke Depletion Phase, i.e., 
+<InlineUIContainer><Button Content='r4.71' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r4.8	"<Bold>r4.8  When Your Tanks Is Target</Bold>
-<LineBreak/><LineBreak/>"
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r4.81' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Attacks from Enemy Tanks, SPG, and AT Guns<LineBreak/>
+<InlineUIContainer><Button Content='r4.82' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Attacks from LW, MG, PSW, and SPW Units<LineBreak/>"
+r4.81	"<Bold>r4.81  Attacks from Enemy Tanks, SPG, and AT Guns</Bold>
+<LineBreak/><LineBreak/>
+1.) Roll on the 
+<InlineUIContainer><Button Content='Enemy AP To Hit' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table 
+to determine if your tank is hit. If the shot misses, continue resolving Enemy Actions per 
+<InlineUIContainer><Button Content='r4.75' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. If it hits, go to step 2.
+<LineBreak/><LineBreak/>
+2.) Roll on the 
+<InlineUIContainer><Button Content='Hit Location' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table 
+to determine where your tank is hit.
+<LineBreak/><LineBreak/>
+3.) Roll on the 
+<InlineUIContainer><Button Content='Enemy AP To Kill' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table 
+to determine if the shell penetrates your tank. If no penetration, continue resolving Enemy Actions per 
+<InlineUIContainer><Button Content='r4.75' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+If shell penetrates, go to step <InlineUIContainer><Button Content='r4.81.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r4.81.4	"<Bold>r4.81.4  Your Tank is Knocked Out</Bold>
+<LineBreak/><LineBreak/>
+a.) Roll for explosion on the Tank 
+<InlineUIContainer><Button Content='Explosion' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. 
+If the tank exploses, the entire crew is killed. Go to Evening Debriefing
+<InlineUIContainer><Button Content='r4.95' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+b.) Roll for crew casualties on the 
+<InlineUIContainer><Button Content='Wounds' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
+<LineBreak/><LineBreak/>
+c.) Surviving crewman roll for escape on the 
+<InlineUIContainer><Button Content='Bail Out' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
+<LineBreak/><LineBreak/>
+d.) Roll for crew rescues on the 
+<InlineUIContainer><Button Content='Wounds' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. See 
+<InlineUIContainer><Button Content='r19.14' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<LineBreak/><LineBreak/>
+e.) Roll on the  
+<InlineUIContainer><Button Content='Brew Up' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table to 
+see if the tank burns. If it burns, all crewmen still inside are killed. If it does not burn, all crewmen are automatically rescued with no chance of wounds.
+<LineBreak/><LineBreak/>
+f.) Record crew casualties and how the tank was destroyed in the notes ection of the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+g.) The engagement ends with destruction of your tank. Go to the Evening Debriefing phase per 
+<InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r4.82	"<Bold>r4.82  Attacks from LW, MG, PSW, and SPW Units</Bold>
+<LineBreak/><LineBreak/>
+1.) If there is no effect, go back to 
+<InlineUIContainer><Button Content='r4.75' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> and continue resolving Enemy Actions.
+<LineBreak/><LineBreak/>
+2.) If your tank is hit, note any damage on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+Roll for possible hit crewmen on the 
+After Action Report 
+<InlineUIContainer><Button Content='Wounds' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table per 
+<InlineUIContainer><Button Content='r19.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+Continue resolving Enemy Actions."
 r4.9	"<Bold>r4.9  Evening Debrief</Bold>
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r4.91' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Rating Improvements<LineBreak/>

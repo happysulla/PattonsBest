@@ -57,7 +57,10 @@ namespace Pattons_Best
       public bool IsAdvancingFireChosen { set; get; } = false;
       public bool IsShermanFiring { set; get; } = false;
       public bool IsShermanFiringAtFront { set; get; } = false;
+      public bool IsBrokenMainGun { set; get; } = false;
       public bool IsBrokenGunsight { set; get; } = false;
+      public bool IsBrokenMgCoaxial { set; get; } = false;
+      public bool IsBrokenMgBow { set; get; } = false;
       public bool IsBrokenMgAntiAircraft { set; get; } = false;
       public bool IsCommanderRescuePerformed { set; get; } = false;
       //---------------------------------------------------------------
