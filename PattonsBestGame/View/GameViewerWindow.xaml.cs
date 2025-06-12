@@ -213,12 +213,6 @@ namespace Pattons_Best
          myContextMenuCrewActions["Loader"] = new ContextMenu();
          myContextMenuCrewActions["Driver"] = new ContextMenu();
          myContextMenuCrewActions["Assistant"] = new ContextMenu();
-         if (false == CreateContextMenuAction(myGameInstance))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): CreateContextMenuAction() returned false");
-            CtorError = true;
-            return;
-         }
          //---------------------------------------------------------------
          myDieRoller = new DieRoller(myCanvasMain, CloseSplashScreen); // Close the splash screen when die resources are loaded
          if (true == myDieRoller.CtorError)
@@ -328,6 +322,8 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
                break;
             case GameAction.BattleRoundSequenceCrewOrders:
+               if (false == CreateContextMenuAction(myGameInstance))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): CreateContextMenuAction() returned false");
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                //if (false == UpdateCanvasMain(gi, action))
