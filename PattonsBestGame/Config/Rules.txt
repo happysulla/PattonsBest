@@ -355,7 +355,59 @@ r4.73	"<Bold>r4.73  Orders Phase</Bold>
 3. Ammo Reload Segment: Mark ammo reload if firing main gun by placing the Gun Reload marker in the box on the Tank Card for the ammo type you wish to reload per 
 <InlineUIContainer><Button Content='r5.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Also, mark the ammo is to be drawn from the ready rack by placing the Ready Rack Ammo Reload marker with the Gun Reload marker. Continue with <InlineUIContainer><Button Content='r4.74' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>"
 r4.74	"<Bold>r4.74  Crew Actions Phase</Bold>
-<LineBreak/><LineBreak/>"
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r4.74.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Tank Movement<LineBreak/>
+<InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Tank Main Gun Fire<LineBreak/>
+<InlineUIContainer><Button Content='r4.74.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Tank MG Fire<LineBreak/>
+<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Miscellaenous Actions<LineBreak/>
+<LineBreak/><LineBreak/>
+After all crew actions are resolved, go to the Enemy Action Phase, step 
+<InlineUIContainer><Button Content='r4.75' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+r4.74.1	"<Bold>r4.74.1  Crew Actions Phase - Tank Movement</Bold>
+<LineBreak/><LineBreak/>
+Resolve on 
+<InlineUIContainer><Button Content='Movement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table per 
+<InlineUIContainer><Button Content='r11.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+<LineBreak/><LineBreak/>
+Tank movement may require the shifting of enemy units on the Battle Board."
+r4.74.2	"<Bold>r4.74.2  Crew Actions Phase - Tank Main Gun Fire</Bold>  
+<InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
+a.) Mark off ammo on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.<LineBreak/>
+b.) Consult the correct 
+<InlineUIContainer><Button Content='To Hit Target' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table for gun to determine if target is hit. Mark a hit by placing either an HE or AP hit marker on the target.<LineBreak/>
+c.) If the Rate of Fire is possible per 
+<InlineUIContainer><Button Content='r9.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, 
+gun may be fired again and again. Mark off ammo for each shot and mark any hits.
+<LineBreak/>
+d.) After all possible shots are fired, roll for each hit roll on the correct To Kill Table:<LineBreak/>
+   -- <InlineUIContainer><Button Content='AP To Kill (75)' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
+   -- <InlineUIContainer><Button Content='AP To Kill (76L)' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
+   -- <InlineUIContainer><Button Content='AP To Kill (76LL)' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
+   -- <InlineUIContainer><Button Content='HE To Kill (75)' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
+   -- <InlineUIContainer><Button Content='HE To Kill (76)' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
+e.) Remove knocked out enemy units from the board and record the victory points for their destruction on the After Action Report."
+r4.74.3	"<Bold>r4.74.3  Crew Actions Phase - Tank MG Fire</Bold>
+<InlineUIContainer><Button Content='r10.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
+a.) Mark any Advancing Fire and consult the 
+<InlineUIContainer><Button Content='Sherman MG' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table 
+for ammo use and gun malfunctions.<LineBreak/><LineBreak/>
+b.) Conduct fire against spotted targets on the  same table. Mark off ammo used per 
+<InlineUIContainer><Button Content='r16.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.<LineBreak/><LineBreak/>
+c.) Remove knocked out enemy units from the board and record the victory points for their destruction on the After Action Report."
+r4.74.4	"<Bold>r4.74.4  Crew Actions Phase - Miscellaenous Actions</Bold>
+<LineBreak/><LineBreak/>
+a.) Replace periscopes: Mark off a periscope replacement on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for each replacement. <LineBreak/><LineBreak/>
+b.) Attempt to repair guns that have malfunctioned by consulting the 
+<InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
+<LineBreak/><LineBreak/>
+c.) Fire 2"" smoke mortar. Place Smoke marker in target zone and mark off one smoke bomb from the After Action Report per 
+<InlineUIContainer><Button Content='r18.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. <LineBreak/><LineBreak/>
+d.) Throw smoke grenade. Place smoke marker on your tank and mark off one smoke grenade from the After Action Report per 
+<InlineUIContainer><Button Content='r18.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. "
 r4.75	"<Bold>r4.75  Enemy Actions Phase</Bold>
 <LineBreak/><LineBreak/>
 Roll on the respective table for each enemy unit on the Battle Board:
@@ -410,7 +462,7 @@ to determine if your tank is hit. If the shot misses, continue resolving Enemy A
 <InlineUIContainer><Button Content='r4.75' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. If it hits, go to step 2.
 <LineBreak/><LineBreak/>
 2.) Roll on the 
-<InlineUIContainer><Button Content='Hit Location' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table 
+<InlineUIContainer><Button Content='Hit Location Tank' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table 
 to determine where your tank is hit.
 <LineBreak/><LineBreak/>
 3.) Roll on the 
@@ -991,8 +1043,8 @@ Achieving Rate of Fire allows for your crew to immediately fire another shot fro
 <LineBreak/><LineBreak/>
 If the roll is low enough (30 or less for a 75mm gun and 20 or less for a 76L mm gun), you may immediately elect to fire again. You can continue to fire again until either the Rate of Fire roll is not acheived or the ammo runs out.
 <LineBreak/><LineBreak/>
-<InlineUIContainer><Button Content='r9.31' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Rate of Fire Modifiers<LineBreak/>
-<InlineUIContainer><Button Content='r9.32' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Successive Rate of Fire"
+<InlineUIContainer><Button Content='r9.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Rate of Fire Modifiers<LineBreak/>
+<InlineUIContainer><Button Content='r9.42' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Successive Rate of Fire"
 r9.41	"<Bold>r9.41 Rate of Fire Modifiers</Bold> 
 <LineBreak/><LineBreak/>
 The 
@@ -1598,13 +1650,16 @@ Table to determine if you are required to carry extra ammo. If not required, you
  <LineBreak/><LineBreak/>Extra ammo can result in more danger to the crew. See 
 <InlineUIContainer><Button Content='Brew Up' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  and Tank 
 <InlineUIContainer><Button Content='Explosion' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Tables."
-r16.23	"<Bold>r16.23 Ammo Ready Rack</Bold> 
+r16.23	"<Bold>r16.23 Ammo Ready Rack</Bold> B5
 <LineBreak/><LineBreak/>
 On the Tank Card, mark the number and types of rounds loaded into your ready rack with the Rounds Left markers. Reloading from the ready rack during battle increases the chance of achieving 
 <InlineUIContainer><Button Content='Rate of Fire' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 additional attacks. Each Sherman variant has a ready rack that cannot be exceeded.
 <LineBreak/><LineBreak/>
              <InlineUIContainer><Image Name='ReadyRack'  Height='270' Width='350'></Image></InlineUIContainer>"
+r16.3	"<Bold>r16.3 Machine Gun (MG) Ammo (OPTIONAL)</Bold> 
+<LineBreak/><LineBreak/>
+All rules dealing with MG ammunition should be considered optional and be followed only by choice. For most players, the additional problems posed by the consideration of MG ammo are not worth the record keeping involved. Continue to check for MG malfunctions, but otherwise assume there is sufficient MG ammo on hand for all firing."
 r17.0	"<Bold>r17.0 Spotting</Bold> 
 <LineBreak/><LineBreak/>
 Spotting is the attempt by your members to see and identify enemy units on the Battle Board. The placement of activated enemy units on the board does not mean that you see them. You know they are there perhaps because you have heard them or by radio reports. Until a crewman spots the unit, you do not see them and cannot shoot at it.
