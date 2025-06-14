@@ -95,6 +95,7 @@ namespace Pattons_Best
       bool IsBrokenMgCoaxial { set; get; }
       bool IsBrokenMgBow { set; get; }
       bool IsBrokenMgAntiAircraft { set; get; }
+      bool IsBrokenMgSub { set; get; }
       bool IsCommanderRescuePerformed { set; get; }
       //------------------------------------------------
       bool IsMinefieldAttack { set; get; }

@@ -2028,10 +2028,6 @@ namespace Pattons_Best
          {
             outAction = GameAction.BattleRoundSequenceStart;
          }
-         else if (GamePhase.BattleRoundSequence == myGameInstance.GamePhase) // Friendly action during normal Battle Road Sequence as part of Random Events
-         {
-            outAction = GameAction.BattleRoundSequenceStart;
-         }
          else
          {
             if (null == myGameInstance.EnteredArea)

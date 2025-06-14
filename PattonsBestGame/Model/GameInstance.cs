@@ -62,6 +62,7 @@ namespace Pattons_Best
       public bool IsBrokenMgCoaxial { set; get; } = false;
       public bool IsBrokenMgBow { set; get; } = false;
       public bool IsBrokenMgAntiAircraft { set; get; } = false;
+      public bool IsBrokenMgSub { set; get; } = false;
       public bool IsCommanderRescuePerformed { set; get; } = false;
       //---------------------------------------------------------------
       public bool IsMinefieldAttack { set; get; } = false;

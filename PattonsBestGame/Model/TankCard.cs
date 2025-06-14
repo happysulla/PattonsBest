@@ -29,40 +29,6 @@ namespace Pattons_Best
          switch (num)
          {
             case 1:
-               break;
-            case 2:
-               break;
-            case 3:
-               break;
-            case 4:
-               break;
-            case 5:
-               break;
-            case 6:
-               break;
-            case 7:
-               break;
-            case 8:
-               break;
-            case 9:
-               break;
-            case 10:
-               break;
-            case 11:
-               break;
-            case 12:
-               break;
-            case 13:
-               break;
-            case 14:
-               break;
-            case 15:
-               break;
-            case 16:
-               break;
-            case 17:
-               break;
-            case 18:
                myChasis = "M4";
                myTurret = "A";
                myMainGun = "75";
@@ -72,6 +38,244 @@ namespace Pattons_Best
                myMaxReadyRackCount = 8;
                myIsLoaderHatch = false;
                myIsSmokeMortar = false;
+               myIsVisionCupola = false;
+               myIsWetStowage = false;
+               myIsHvss = false;
+               break;
+            case 2:
+               myChasis = "M4";
+               myTurret = "B";
+               myMainGun = "75";
+               myArmorClass = "I";
+               myNumMainGunRound = 97;
+               myRateOfFire = 30;
+               myMaxReadyRackCount = 8;
+               myIsLoaderHatch = true;
+               myIsVisionCupola = false;
+               myIsSmokeMortar = true;
+               myIsWetStowage = false;
+               myIsHvss = false;
+               break;
+            case 3:
+               myChasis = "M4";
+               myTurret = "C";
+               myMainGun = "75";
+               myArmorClass = "I";
+               myNumMainGunRound = 97;
+               myRateOfFire = 30;
+               myMaxReadyRackCount = 8;
+               myIsLoaderHatch = true;
+               myIsVisionCupola = true;
+               myIsSmokeMortar = true;
+               myIsWetStowage = false;
+               myIsHvss = false;
+               break;
+            case 4:
+               myChasis = "M4A1";
+               myTurret = "A";
+               myMainGun = "75";
+               myArmorClass = "II";
+               myNumMainGunRound = 91;
+               myRateOfFire = 30;
+               myMaxReadyRackCount = 8;
+               myIsLoaderHatch = false;
+               myIsVisionCupola = false;
+               myIsSmokeMortar = false;
+               myIsWetStowage = false;
+               myIsHvss = false;
+               break;
+            case 5:
+               myChasis = "M4A1";
+               myTurret = "B";
+               myMainGun = "75";
+               myArmorClass = "II";
+               myNumMainGunRound = 91;
+               myRateOfFire = 30;
+               myMaxReadyRackCount = 8;
+               myIsLoaderHatch = true;
+               myIsVisionCupola = false;
+               myIsSmokeMortar = true;
+               myIsWetStowage = false;
+               myIsHvss = false;
+               break;
+            case 6:
+               myChasis = "M4A1";
+               myTurret = "C";
+               myMainGun = "75";
+               myArmorClass = "II";
+               myNumMainGunRound = 91;
+               myRateOfFire = 30;
+               myMaxReadyRackCount = 8;
+               myIsLoaderHatch = true;
+               myIsVisionCupola = true;
+               myIsSmokeMortar = true;
+               myIsWetStowage = false;
+               myIsHvss = false;
+               break;
+            case 7:
+               myChasis = "M4A3";
+               myTurret = "A";
+               myMainGun = "75";
+               myArmorClass = "I";
+               myNumMainGunRound = 97;
+               myRateOfFire = 30;
+               myMaxReadyRackCount = 8;
+               myIsLoaderHatch = false;
+               myIsVisionCupola = false;
+               myIsSmokeMortar = false;
+               myIsWetStowage = false;
+               myIsHvss = false;
+               break;
+            case 8:
+               myChasis = "M4A3";
+               myTurret = "B";
+               myMainGun = "75";
+               myArmorClass = "I";
+               myNumMainGunRound = 97;
+               myRateOfFire = 30;
+               myMaxReadyRackCount = 8;
+               myIsLoaderHatch = true;
+               myIsVisionCupola = false;
+               myIsSmokeMortar = true;
+               myIsWetStowage = false;
+               myIsHvss = false;
+               break;
+            case 9:
+               myChasis = "M4A3";
+               myTurret = "C";
+               myMainGun = "75";
+               myArmorClass = "I";
+               myNumMainGunRound = 97;
+               myRateOfFire = 30;
+               myMaxReadyRackCount = 8;
+               myIsLoaderHatch = true;
+               myIsVisionCupola = true;
+               myIsSmokeMortar = true;
+               myIsWetStowage = false;
+               myIsHvss = false;
+               break;
+            case 10:
+               myChasis = "M4A3(75)";
+               myTurret = "D";
+               myMainGun = "75";
+               myArmorClass = "II";
+               myNumMainGunRound = 104;
+               myRateOfFire = 30;
+               myMaxReadyRackCount = 4;
+               myIsLoaderHatch = true;
+               myIsVisionCupola = false;
+               myIsSmokeMortar = true;
+               myIsWetStowage = false;
+               myIsHvss = false;
+               break;
+            case 11:
+               myChasis = "M4A3(75)W";
+               myTurret = "E";
+               myMainGun = "75";
+               myArmorClass = "II";
+               myNumMainGunRound = 104;
+               myRateOfFire = 30;
+               myMaxReadyRackCount = 4;
+               myIsLoaderHatch = true;
+               myIsVisionCupola = true;
+               myIsSmokeMortar = true;
+               myIsWetStowage = true;
+               myIsHvss = true;
+               break;
+            case 12:
+               myChasis = "M4A3WE2(75)W";
+               myTurret = "F";
+               myMainGun = "75";
+               myArmorClass = "III";
+               myNumMainGunRound = 104;
+               myRateOfFire = 30;
+               myMaxReadyRackCount = 4;
+               myIsLoaderHatch = true;
+               myIsVisionCupola = true;
+               myIsSmokeMortar = true;
+               myIsWetStowage = true;
+               myIsHvss = true;
+               break;
+            case 13:
+               myChasis = "M4A3WE2(76)W";
+               myTurret = "F";
+               myMainGun = "76L";
+               myArmorClass = "III";
+               myNumMainGunRound = 71;
+               myRateOfFire = 20;
+               myMaxReadyRackCount = 6;
+               myIsLoaderHatch = true;
+               myIsVisionCupola = true;
+               myIsSmokeMortar = true;
+               myIsWetStowage = true;
+               myIsHvss = true;
+               break;
+            case 14:
+               myChasis = "M4A1(76)W";
+               myTurret = "G";
+               myMainGun = "76L";
+               myArmorClass = "II";
+               myNumMainGunRound = 71;
+               myRateOfFire = 20;
+               myMaxReadyRackCount = 6;
+               myIsLoaderHatch = true;
+               myIsVisionCupola = true;
+               myIsSmokeMortar = true;
+               myIsWetStowage = true;
+               myIsHvss = true;
+               break;
+            case 15:
+               myChasis = "M4A1(76)W";
+               myTurret = "H";
+               myMainGun = "76L";
+               myArmorClass = "II";
+               myNumMainGunRound = 71;
+               myRateOfFire = 20;
+               myMaxReadyRackCount = 6;
+               myIsLoaderHatch = true;
+               myIsVisionCupola = true;
+               myIsSmokeMortar = true;
+               myIsWetStowage = true;
+               myIsHvss = true;
+               break;
+            case 16:
+               myChasis = "M4A3(76)W";
+               myTurret = "G";
+               myMainGun = "76L";
+               myArmorClass = "II";
+               myNumMainGunRound = 71;
+               myRateOfFire = 20;
+               myMaxReadyRackCount = 6;
+               myIsLoaderHatch = true;
+               myIsVisionCupola = true;
+               myIsSmokeMortar = true;
+               myIsWetStowage = true;
+               myIsHvss = true;
+               break;
+            case 17:
+               myChasis = "M4A3(76)W";
+               myTurret = "H";
+               myMainGun = "76L";
+               myArmorClass = "II";
+               myNumMainGunRound = 71;
+               myRateOfFire = 20;
+               myMaxReadyRackCount = 6;
+               myIsLoaderHatch = true;
+               myIsVisionCupola = true;
+               myIsSmokeMortar = true;
+               myIsWetStowage = true;
+               myIsHvss = true;
+               break;
+            case 18:
+               myChasis = "VC";
+               myTurret = "I";
+               myMainGun = "76LL";
+               myArmorClass = "II";
+               myNumMainGunRound = 78;
+               myRateOfFire = 20;
+               myMaxReadyRackCount = 5;
+               myIsLoaderHatch = true;
+               myIsSmokeMortar = true;
                myIsVisionCupola = false;
                myIsWetStowage = false;
                myIsHvss = false;

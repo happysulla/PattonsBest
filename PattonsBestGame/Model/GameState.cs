@@ -2570,6 +2570,7 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   break;
                case GameAction.BattleRoundSequenceCrewOrders:
+                  gi.BattlePhase = BattlePhase.Orders;
                   break;
                case GameAction.BattleRoundSequenceAmmoOrders:
                   gi.EventDisplayed = gi.EventActive = "e050";

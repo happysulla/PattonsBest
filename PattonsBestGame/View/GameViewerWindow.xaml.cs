@@ -18,7 +18,6 @@ using Button = System.Windows.Controls.Button;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Point = System.Windows.Point;
 using Pattons_Best.Properties;
-using System.Security.Cryptography.Pkcs;
 
 namespace Pattons_Best
 {
@@ -115,7 +114,7 @@ namespace Pattons_Best
       private readonly List<Button> myTankButtons = new List<Button>();
       private readonly SplashDialog mySplashScreen;
       private Dictionary<string, ContextMenu> myContextMenuCrewActions = new Dictionary<string, ContextMenu>();
-      private ContextMenu myContextMenuGunLoadAction = new ContextMenu();
+      private Dictionary<string, ContextMenu> myContextMenuGunLoadActions = new Dictionary<string, ContextMenu>();
       private readonly DoubleCollection myDashArray = new DoubleCollection();
       private int myBrushIndex = 0;
       private readonly List<Brush> myBrushes = new List<Brush>();
@@ -213,6 +212,11 @@ namespace Pattons_Best
          myContextMenuCrewActions["Loader"] = new ContextMenu();
          myContextMenuCrewActions["Driver"] = new ContextMenu();
          myContextMenuCrewActions["Assistant"] = new ContextMenu();
+         myContextMenuGunLoadActions["MainGunHE"] = new ContextMenu();
+         myContextMenuGunLoadActions["MainGunAP"] = new ContextMenu();
+         myContextMenuGunLoadActions["MainGunHBCI"] = new ContextMenu();
+         myContextMenuGunLoadActions["MainGunWP"] = new ContextMenu();
+         myContextMenuGunLoadActions["MainGunHVAP"] = new ContextMenu();
          //---------------------------------------------------------------
          myDieRoller = new DieRoller(myCanvasMain, CloseSplashScreen); // Close the splash screen when die resources are loaded
          if (true == myDieRoller.CtorError)
@@ -322,12 +326,20 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
                break;
             case GameAction.BattleRoundSequenceCrewOrders:
-               if (false == CreateContextMenuAction(myGameInstance))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): CreateContextMenuAction() returned false");
+               if (false == CreateContextMenuCrewAction(myGameInstance))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): CreateContextMenuCrewAction() returned false");
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
-               //if (false == UpdateCanvasMain(gi, action))
-               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
+               if (false == UpdateCanvasAnimateBattlePhase(gi))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
+               break;
+            case GameAction.BattleRoundSequenceAmmoOrders:
+               if (false == CreateContextMenuGunLoadAction(myGameInstance))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): CreateContextMenuGunLoadAction() returned false");
+               if (false == UpdateCanvasTank(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               if (false == UpdateCanvasAnimateBattlePhase(gi))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
                break;
             case GameAction.PreparationsTurret:
                if (false == UpdateCanvasTank(gi, action))
@@ -499,34 +511,52 @@ namespace Pattons_Best
          b.MouseLeave += MouseLeaveMapItem;
          return b;
       }
-      private bool CreateContextMenuAction(IGameInstance gi)
+      private bool CreateContextMenuCrewAction(IGameInstance gi)
       {
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuAction(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): lastReport=null");
             return false;
          }
          int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
          //----------------------------------
+         TankCard card = new TankCard(lastReport.TankCardNum);
+
+         //----------------------------------
          bool isCommanderFireAaMg = false;
          bool isLoaderFireAaMg = false;
+         bool isCommanderRepairAaMg = false;
+         bool isLoaderRepairAaMg = false;
+         bool isCommanderFireSubMg = false;
+         bool isLoaderFireSubMg = false;
+         bool isCommanderThrowGrenade = false;
+         bool isGunnerThrowGrenade = false;
          foreach (IMapItem mi in gi.CrewActions) // Loader and Driver have default actions
          {
             if (true == mi.Name.Contains("Commander_FireAaMg"))
                isCommanderFireAaMg = true;
             if (true == mi.Name.Contains("Loader_FireAaMg"))
                isLoaderFireAaMg = true;
+            if (true == mi.Name.Contains("Commander_RepairAaMg"))
+               isCommanderRepairAaMg = true;
+            if (true == mi.Name.Contains("Loader_RepairAaMg"))
+               isLoaderRepairAaMg = true;
+            if (true == mi.Name.Contains("Commander_FireSubMg"))
+               isCommanderFireSubMg = true;
+            if (true == mi.Name.Contains("Loader_FireSubMg"))
+               isLoaderFireSubMg = true;
+            if (true == mi.Name.Contains("Commander_ThrowGrenade"))
+               isCommanderThrowGrenade = true;
+            if (true == mi.Name.Contains("Gunner_ThrowGrenade"))
+               isGunnerThrowGrenade = true;
          }
          bool isCommanderOpenHatch = false;
-         bool isGunnerOpenHatch= false;
          bool isLoaderOpenHatch = false;
          foreach (IMapItem mi in gi.Hatches) // Loader and Driver have default actions
          {
             if (true == mi.Name.Contains("Commander"))
                isCommanderOpenHatch = true;
-            if (true == mi.Name.Contains("Gunner"))
-               isGunnerOpenHatch = true;
             if (true == mi.Name.Contains("Loader"))
                isLoaderOpenHatch = true;
          }
@@ -538,69 +568,78 @@ namespace Pattons_Best
          menuItem1.Header = "Load";
          menuItem1.Click += MenuItemCrewActionClick;
          myContextMenuCrewActions["Loader"].Items.Add(menuItem1);
-         MenuItem menuItem2 = new MenuItem();
-         menuItem2.Name = "Loader_RepairMainGun";
-         menuItem2.Header = "Repair Main Gun";
-         menuItem2.Click += MenuItemCrewActionClick;
          if (true == gi.IsBrokenMainGun)
-            menuItem2.IsEnabled = false;
-         myContextMenuCrewActions["Loader"].Items.Add(menuItem2);
-         MenuItem menuItem3 = new MenuItem();
-         menuItem3.Name = "Loader_RepairCoaxialMg";
-         menuItem3.Header = "Repair Coaxial MG";
-         menuItem3.Click += MenuItemCrewActionClick;
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Loader_RepairMainGun";
+            menuItem1.Header = "Repair Main Gun";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Loader"].Items.Add(menuItem1);
+         }
          if (true == gi.IsBrokenMgCoaxial)
-            menuItem3.IsEnabled = false;
-         myContextMenuCrewActions["Loader"].Items.Add(menuItem3);
-         MenuItem menuItem4 = new MenuItem();
-         menuItem4.Name = "Loader_FireMortar";
-         menuItem4.Header = "Fire Mortar";
-         menuItem4.Click += MenuItemCrewActionClick;
-         if (0 == lastReport.AmmoSmokeBomb)
-            menuItem4.IsEnabled = false;
-         myContextMenuCrewActions["Loader"].Items.Add(menuItem4);
-         MenuItem menuItem5 = new MenuItem();
-         menuItem5.Name = "Loader_ChangeGunLoad";
-         menuItem5.Header = "Change Gun Load";
-         menuItem5.Click += MenuItemCrewActionClick;
-         if (0 == totalAmmo)
-            menuItem5.IsEnabled = false;
-         myContextMenuCrewActions["Loader"].Items.Add(menuItem5);
-         MenuItem menuItem6 = new MenuItem();
-         menuItem6.Name = "Loader_RestockReadyRack";
-         menuItem6.Header = "Restock Ready Rack";
-         menuItem6.Click += MenuItemCrewActionClick;
-         if (0 == totalAmmo)
-            menuItem6.IsEnabled = false;
-         myContextMenuCrewActions["Loader"].Items.Add(menuItem6);
-         MenuItem menuItem7 = new MenuItem();
-         menuItem7.Name = "Loader_RepairScope";
-         menuItem7.Header = "Repair Periscope";
-         menuItem7.Click += MenuItemCrewActionClick;
-         if ((false == gi.BrokenPeriscopes.ContainsKey("Loader") || (0 == lastReport.AmmoPeriscope)) )
-            menuItem7.IsEnabled = false;
-         myContextMenuCrewActions["Loader"].Items.Add(menuItem7);
-         MenuItem menuItem8 = new MenuItem();
-         menuItem8.Name = "Loader_FireAaMg";
-         menuItem8.Header = "Fire AA MG";
-         menuItem8.Click += MenuItemCrewActionClick;
-         if ((false == isLoaderOpenHatch) || (0 == lastReport.Ammo50CalibreMG) || (true == isCommanderFireAaMg))
-            menuItem8.IsEnabled = false;
-         myContextMenuCrewActions["Loader"].Items.Add(menuItem8);
-         MenuItem menuItem9 = new MenuItem();
-         menuItem9.Name = "Loader_RepairAaMg";
-         menuItem9.Header = "Repair AA MG";
-         menuItem9.Click += MenuItemCrewActionClick;
-         if (true == gi.IsBrokenMgAntiAircraft)
-            menuItem9.IsEnabled = false;
-         myContextMenuCrewActions["Loader"].Items.Add(menuItem9);
-         menuItem8 = new MenuItem();
-         menuItem8.Name = "Loader_FireSubMg";
-         menuItem8.Header = "Fire Sub MG";
-         menuItem8.Click += MenuItemCrewActionClick;
-         if ((false == isLoaderOpenHatch) || (0 == lastReport.Ammo50CalibreMG) )
-            menuItem8.IsEnabled = false;
-         myContextMenuCrewActions["Loader"].Items.Add(menuItem8);
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Loader_RepairCoaxialMg";
+            menuItem1.Header = "Repair Coaxial MG";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Loader"].Items.Add(menuItem1);
+         }
+         if ((0 < lastReport.AmmoSmokeBomb) && (true == card.myIsSmokeMortar) )
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Loader_FireMortar";
+            menuItem1.Header = "Fire Mortar";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Loader"].Items.Add(menuItem1);
+         }
+         if (0 < totalAmmo)
+         { 
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Loader_ChangeGunLoad";
+            menuItem1.Header = "Change Gun Load";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Loader"].Items.Add(menuItem1);
+         }
+         if (0 < totalAmmo)
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Loader_RestockReadyRack";
+            menuItem1.Header = "Restock Ready Rack";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Loader"].Items.Add(menuItem1);
+         }
+         if ((true == gi.BrokenPeriscopes.ContainsKey("Loader") && (0 < lastReport.AmmoPeriscope)))
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Loader_RepairScope";
+            menuItem1.Header = "Repair Periscope";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Loader"].Items.Add(menuItem1);
+         }
+         if ((true == isLoaderOpenHatch) && (0 == lastReport.Ammo50CalibreMG) && (false == isCommanderFireAaMg) && (false == gi.IsBrokenMgAntiAircraft))
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Loader_FireAaMg";
+            menuItem1.Header = "Fire AA MG";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Loader"].Items.Add(menuItem1);
+         }
+         if ((true == gi.IsBrokenMgAntiAircraft) && (false == isCommanderRepairAaMg) )
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Loader_RepairAaMg";
+            menuItem1.Header = "Repair AA MG";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Loader"].Items.Add(menuItem1);
+         }
+         if ((true == isLoaderOpenHatch) && (0 < lastReport.Ammo50CalibreMG) && (false == isCommanderFireSubMg) && ("A" == card.myChasis) )
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Loader_FireSubMg";
+            menuItem1.Header = "Fire Sub MG";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Loader"].Items.Add(menuItem1);
+         }
          //---------------------------------
          myContextMenuCrewActions["Driver"].Items.Clear();
          myContextMenuCrewActions["Driver"].Visibility = Visibility.Visible;
@@ -609,125 +648,130 @@ namespace Pattons_Best
          menuItem1.Header = "Stop";
          menuItem1.Click += MenuItemCrewActionClick;
          myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
-         menuItem2 = new MenuItem();
-         menuItem2.Name = "Driver_Forward";
-         menuItem2.Header = "Forward";
-         menuItem2.Click += MenuItemCrewActionClick;
-         if (true == gi.Sherman.IsThrownTrack)
-            menuItem2.IsEnabled = false;
-         myContextMenuCrewActions["Driver"].Items.Add(menuItem2);
-         menuItem3 = new MenuItem();
-         menuItem3.Name = "Driver_ForwardToHullDown";
-         menuItem3.Header = "Forward To Hull Down";
-         menuItem3.Click += MenuItemCrewActionClick;
-         if (true == gi.Sherman.IsThrownTrack)
-            menuItem3.IsEnabled = false;
-         myContextMenuCrewActions["Driver"].Items.Add(menuItem3);
-         menuItem4 = new MenuItem();
-         menuItem4.Name = "Driver_Reverse";
-         menuItem4.Header = "Reverse";
-         menuItem4.Click += MenuItemCrewActionClick;
-         myContextMenuCrewActions["Driver"].Items.Add(menuItem4);
-         menuItem5 = new MenuItem();
-         menuItem5.Name = "Driver_ReverseToHullDown";
-         menuItem5.Header = "Reverse To Hull Down";
-         menuItem5.Click += MenuItemCrewActionClick;
-         if (true == gi.Sherman.IsThrownTrack)
-            menuItem5.IsEnabled = false;
-         myContextMenuCrewActions["Driver"].Items.Add(menuItem5);
-         menuItem6 = new MenuItem();
-         menuItem6.Name = "Driver_PivotTank";
-         menuItem6.Header = "Pivot Tank";         
-         menuItem6.Click += MenuItemCrewActionClick;
-         if (true == gi.Sherman.IsThrownTrack)
-            menuItem6.IsEnabled = false;
-         myContextMenuCrewActions["Driver"].Items.Add(menuItem6);
-         menuItem7 = new MenuItem();
-         menuItem7.Name = "Driver_RepairScope";
-         menuItem7.Header = "Driver Periscope";
-         menuItem7.Click += MenuItemCrewActionClick;
-         if ((false == gi.BrokenPeriscopes.ContainsKey("Driver") || (0 == lastReport.AmmoPeriscope)))
-            menuItem7.IsEnabled = false;
-         myContextMenuCrewActions["Driver"].Items.Add(menuItem7);
+         if (false == gi.Sherman.IsThrownTrack)
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Driver_Forward";
+            menuItem1.Header = "Forward";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Driver_ForwardToHullDown";
+            menuItem1.Header = "Forward To Hull Down";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Driver_Reverse";
+            menuItem1.Header = "Reverse";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Driver_ReverseToHullDown";
+            menuItem1.Header = "Reverse To Hull Down";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Driver_PivotTank";
+            menuItem1.Header = "Pivot Tank";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
+         }
+         if ((true == gi.BrokenPeriscopes.ContainsKey("Driver")) && (0 < lastReport.AmmoPeriscope) )
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Driver_RepairScope";
+            menuItem1.Header = "Repair Periscope";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
+         }
          //---------------------------------
          myContextMenuCrewActions["Gunner"].Items.Clear();
          myContextMenuCrewActions["Gunner"].Visibility = Visibility.Visible;
-         menuItem1 = new MenuItem();
-         menuItem1.Name = "Gunner_FireMainGun";
-         menuItem1.Header = "Fire Main Gun";
          if (0 < totalAmmo)
-            menuItem1.IsEnabled = false;
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Gunner_FireMainGun";
+            menuItem1.Header = "Fire Main Gun";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Gunner"].Items.Add(menuItem1);
+         }
+         if (0 < lastReport.Ammo30CalibreMG)
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Gunner_FireCoaxialMg";
+            menuItem1.Header = "Fire Co-Axial MG";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Gunner"].Items.Add(menuItem1);
+         }
+         menuItem1 = new MenuItem();
+         menuItem1.Name = "Gunner_RotateTurret";
+         menuItem1.Header = "Rotate Turret";
          menuItem1.Click += MenuItemCrewActionClick;
          myContextMenuCrewActions["Gunner"].Items.Add(menuItem1);
-         menuItem2 = new MenuItem();
-         menuItem2.Name = "Gunner_FireCoaxialMg";
-         menuItem2.Header = "Fire Co-Axial MG";
-         if (0 == lastReport.Ammo30CalibreMG)
-            menuItem2.IsEnabled = false;
-         menuItem2.Click += MenuItemCrewActionClick;
-         myContextMenuCrewActions["Gunner"].Items.Add(menuItem2);
-         menuItem3 = new MenuItem();
-         menuItem3.Name = "Gunner_RotateTurret";
-         menuItem3.Header = "Rotate Turret";
-         menuItem3.Click += MenuItemCrewActionClick;
-         myContextMenuCrewActions["Gunner"].Items.Add(menuItem3);
-         menuItem4 = new MenuItem();
-         menuItem4.Name = "Gunner_RotateFireMainGun";
-         menuItem4.Header = "Rotate & Fire Main Gun";
-         menuItem4.Click += MenuItemCrewActionClick;
-         myContextMenuCrewActions["Gunner"].Items.Add(menuItem4);
-         menuItem5 = new MenuItem();
-         menuItem5.Name = "Gunner_RepairMainGun";
-         menuItem5.Header = "Repair Main Gun";
-         menuItem5.Click += MenuItemCrewActionClick;
+         menuItem1 = new MenuItem();
+         menuItem1.Name = "Gunner_RotateFireMainGun";
+         menuItem1.Header = "Rotate & Fire Main Gun";
+         menuItem1.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Gunner"].Items.Add(menuItem1);
          if (true == gi.IsBrokenMainGun)
-            menuItem5.IsEnabled = false;
-         myContextMenuCrewActions["Gunner"].Items.Add(menuItem5);
-         menuItem6 = new MenuItem();
-         menuItem6.Name = "Gunner_ThrowGrenade";
-         menuItem6.Header = "Throw Smoke Grenade";
-         menuItem6.Click += MenuItemCrewActionClick;
-         if ((false == isGunnerOpenHatch) || (0 == lastReport.AmmoSmokeGrenade))
-            menuItem6.IsEnabled = false;
-         myContextMenuCrewActions["Gunner"].Items.Add(menuItem6);
-         menuItem7 = new MenuItem();
-         menuItem7.Name = "Gunner_RepairScope";
-         menuItem7.Header = "Gunner Periscope";
-         menuItem7.Click += MenuItemCrewActionClick;
-         if ((false == gi.BrokenPeriscopes.ContainsKey("Gunner") || (0 == lastReport.AmmoPeriscope)))
-            menuItem7.IsEnabled = false;
-         myContextMenuCrewActions["Gunner"].Items.Add(menuItem7);
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Gunner_RepairMainGun";
+            menuItem1.Header = "Repair Main Gun";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Gunner"].Items.Add(menuItem1);
+         }
+         if ((true == isCommanderOpenHatch) && (0 == lastReport.AmmoSmokeGrenade) && (false == isCommanderThrowGrenade) ) // Gunner must throw grenade out commander hatch
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Gunner_ThrowGrenade";
+            menuItem1.Header = "Throw Smoke Grenade";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Gunner"].Items.Add(menuItem1);
+         }
+         if ((true == gi.BrokenPeriscopes.ContainsKey("Gunner")) && (0 < lastReport.AmmoPeriscope))
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Gunner_RepairScope";
+            menuItem1.Header = "Repair Periscope";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Gunner"].Items.Add(menuItem1);
+         }
          //---------------------------------
          myContextMenuCrewActions["Assistant"].Items.Clear();
          myContextMenuCrewActions["Assistant"].Visibility = Visibility.Visible;
-         menuItem1 = new MenuItem();
-         menuItem1.Name = "Assistant_FireBowMg";
-         menuItem1.Header = "Fire Bow MG";
          if (0 < lastReport.Ammo30CalibreMG)
-            menuItem1.IsEnabled = false;
-         menuItem1.Click += MenuItemCrewActionClick;
-         myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
-         menuItem2 = new MenuItem();
-         menuItem2.Name = "Assistant_RepairBowMg";
-         menuItem2.Header = "Repair Bow MG";
-         menuItem2.Click += MenuItemCrewActionClick;
-         if( false == gi.IsBrokenMgBow )
-            menuItem2.IsEnabled = false;
-         myContextMenuCrewActions["Assistant"].Items.Add(menuItem2);
-         menuItem3 = new MenuItem();
-         menuItem3.Name = "Assistant_PassAmmo";
-         menuItem3.Header = "Pass Ammo";
-         menuItem3.Click += MenuItemCrewActionClick;
-         if (0 == totalAmmo)
-            menuItem3.IsEnabled = false;
-         myContextMenuCrewActions["Assistant"].Items.Add(menuItem3);
-         menuItem4 = new MenuItem();
-         menuItem4.Name = "Assistant_RepairScope";
-         menuItem4.Header = "Assistant Periscope";
-         menuItem4.Click += MenuItemCrewActionClick;
-         if ((false == gi.BrokenPeriscopes.ContainsKey("Assistant") || (0 == lastReport.AmmoPeriscope)))
-            menuItem4.IsEnabled = false;
-         myContextMenuCrewActions["Assistant"].Items.Add(menuItem4);
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Assistant_FireBowMg";
+            menuItem1.Header = "Fire Bow MG";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+         }
+         if (true == gi.IsBrokenMgBow)
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Assistant_RepairBowMg";
+            menuItem1.Header = "Repair Bow MG";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+         }
+         if (0 < totalAmmo)
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Assistant_PassAmmo";
+            menuItem1.Header = "Pass Ammo";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+         }
+         if ((true == gi.BrokenPeriscopes.ContainsKey("Assistant")) && (0 < lastReport.AmmoPeriscope))
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Assistant_RepairScope";
+            menuItem1.Header = "Assistant Periscope";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+         }
          //---------------------------------
          myContextMenuCrewActions["Commander"].Items.Clear();
          myContextMenuCrewActions["Commander"].Visibility = Visibility.Visible;
@@ -736,61 +780,143 @@ namespace Pattons_Best
          menuItem1.Header = "Direct Move";
          menuItem1.Click += MenuItemCrewActionClick;
          myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
-         menuItem2 = new MenuItem();
-         menuItem2.Name = "Commander_Fire";
-         menuItem2.Header = "Direct Fire";
-         menuItem2.Click += MenuItemCrewActionClick;
-         myContextMenuCrewActions["Commander"].Items.Add(menuItem2);
-         menuItem3 = new MenuItem();
-         menuItem3.Name = "Commander_ThrowGrenade";
-         menuItem3.Header = "Throw Smoke Grenade";
-         menuItem3.Click += MenuItemCrewActionClick;
-         if( (false == isCommanderOpenHatch) || (0 == lastReport.AmmoSmokeGrenade))
-            menuItem3.IsEnabled = false;
-         myContextMenuCrewActions["Commander"].Items.Add(menuItem3);
-         menuItem4 = new MenuItem();
-         menuItem4.Name = "Commander_ThrowGrenade";
-         menuItem4.Header = "Throw Smoke Grenade";
-         menuItem4.Click += MenuItemCrewActionClick;
-         if ((false == isCommanderOpenHatch) || (0 == lastReport.Ammo50CalibreMG) || (true == isLoaderFireAaMg))
-            menuItem4.IsEnabled = false;
-         myContextMenuCrewActions["Commander"].Items.Add(menuItem4);
-         menuItem5 = new MenuItem();
-         menuItem5.Name = "Commander_RepairScope";
-         menuItem5.Header = "Commander Periscope";
-         menuItem5.Click += MenuItemCrewActionClick;
-         if ((false == gi.BrokenPeriscopes.ContainsKey("Commander") || (0 == lastReport.AmmoPeriscope)))
-            menuItem5.IsEnabled = false;
-         myContextMenuCrewActions["Commander"].Items.Add(menuItem5);
-         menuItem6 = new MenuItem();
-         menuItem6.Name = "Commander_FireAaMg";
-         menuItem6.Header = "Fire AA MG";
-         menuItem6.Click += MenuItemCrewActionClick;
-         if ((false == isCommanderOpenHatch) || (0 == lastReport.Ammo50CalibreMG) || (true == isLoaderFireAaMg))
-            menuItem6.IsEnabled = false;
-         myContextMenuCrewActions["Commander"].Items.Add(menuItem6);
-         menuItem7 = new MenuItem();
-         menuItem7.Name = "Commander_RepairAaMg";
-         menuItem7.Header = "Repair AA MG";
-         menuItem7.Click += MenuItemCrewActionClick;
-         if (true == gi.IsBrokenMgAntiAircraft)
-            menuItem3.IsEnabled = false;
-         myContextMenuCrewActions["Commander"].Items.Add(menuItem7);
-         menuItem8 = new MenuItem();
-         menuItem8.Name = "Commander_FireSubMg";
-         menuItem8.Header = "Fire Sub MG";
-         menuItem8.Click += MenuItemCrewActionClick;
-         if (true == gi.IsBrokenMgAntiAircraft)
-            menuItem8.IsEnabled = false;
-         myContextMenuCrewActions["Commander"].Items.Add(menuItem8);
-         menuItem9 = new MenuItem();
-         menuItem9.Name = "Commander_FireSubMg";
-         menuItem9.Header = "Fire Sub MG";
-         menuItem9.Click += MenuItemCrewActionClick;
-         if ((false == isCommanderOpenHatch) || (0 == lastReport.Ammo50CalibreMG))
-            menuItem9.IsEnabled = false;
-         myContextMenuCrewActions["Commander"].Items.Add(menuItem9);
+         menuItem1 = new MenuItem();
+         menuItem1.Name = "Commander_Fire";
+         menuItem1.Header = "Direct Fire";
+         menuItem1.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
+         if ((true == isCommanderOpenHatch) && (0 < lastReport.AmmoSmokeGrenade) && (false == isGunnerThrowGrenade))
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Commander_ThrowGrenade";
+            menuItem1.Header = "Throw Smoke Grenade";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
+         }
+         if ((true == gi.BrokenPeriscopes.ContainsKey("Commander") && (0 < lastReport.AmmoPeriscope)))
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Commander_RepairScope";
+            menuItem1.Header = "Replace Periscope";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
+         }
+         if ((true == isCommanderOpenHatch) && (0 < lastReport.Ammo50CalibreMG) && (false == isLoaderFireAaMg) && (false == gi.IsBrokenMgAntiAircraft))
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Commander_FireAaMg";
+            menuItem1.Header = "Fire AA MG";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
+         }
+         if ((true == gi.IsBrokenMgAntiAircraft) && (false == isLoaderRepairAaMg) )
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Commander_RepairAaMg";
+            menuItem1.Header = "Repair AA MG";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
+         }
+         if ((true == isCommanderOpenHatch) && (0 < lastReport.Ammo50CalibreMG) && (false == isLoaderFireSubMg) && (false == gi.IsBrokenMgSub))
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Commander_FireSubMg";
+            menuItem1.Header = "Fire Sub MG";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
+         }
          //---------------------------------
+         return true;
+      }
+      private bool CreateContextMenuGunLoadAction(IGameInstance gi)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuGunLoadAction(): lastReport=null");
+            return false;
+         }
+         MenuItem menuitem = new MenuItem();
+         if ( 0 < lastReport.MainGunHE )
+         {
+            menuitem = new MenuItem();
+            menuitem.Name = "MainGunHE_GunLoad";
+            menuitem.Header = "Place Gun Reload";
+            menuitem.Click += MenuItemGunLoadClick;
+            myContextMenuGunLoadActions["MainGunHE"].Items.Add(menuitem);
+            if (1 < lastReport.MainGunHE)
+            {
+               menuitem = new MenuItem();
+               menuitem.Name = "MainGunHE_LoadReady";
+               menuitem.Header = "Place Gun & Ready Rack Reload";
+               menuitem.Click += MenuItemGunLoadClick;
+               myContextMenuGunLoadActions["MainGunHE"].Items.Add(menuitem);
+            }
+         }
+         if (0 < lastReport.MainGunAP)
+         {
+            menuitem = new MenuItem();
+            menuitem.Name = "MainGunAP_GunLoad";
+            menuitem.Header = "Place Gun Reload";
+            menuitem.Click += MenuItemGunLoadClick;
+            myContextMenuGunLoadActions["MainGunAP"].Items.Add(menuitem);
+            if (1 < lastReport.MainGunAP)
+            {
+               menuitem = new MenuItem();
+               menuitem.Name = "MainGunAP_LoadReady";
+               menuitem.Header = "Place Gun & Ready Rack Reload";
+               menuitem.Click += MenuItemGunLoadClick;
+               myContextMenuGunLoadActions["MainGunAP"].Items.Add(menuitem);
+            }
+         }
+         if (0 < lastReport.MainGunHBCI)
+         {
+            menuitem = new MenuItem();
+            menuitem.Name = "MainGunHBCI_GunLoad";
+            menuitem.Header = "Place Gun Reload";
+            menuitem.Click += MenuItemGunLoadClick;
+            myContextMenuGunLoadActions["MainGunHBCI"].Items.Add(menuitem);
+            if (1 < lastReport.MainGunHBCI)
+            {
+               menuitem = new MenuItem();
+               menuitem.Name = "MainGunHBCI_LoadReady";
+               menuitem.Header = "Place Gun & Ready Rack Reload";
+               menuitem.Click += MenuItemGunLoadClick;
+               myContextMenuGunLoadActions["MainGunHBCI"].Items.Add(menuitem);
+            }
+         }
+         if (0 < lastReport.MainGunWP)
+         {
+            menuitem = new MenuItem();
+            menuitem.Name = "MainGunWP_GunLoad";
+            menuitem.Header = "Place Gun Reload";
+            menuitem.Click += MenuItemGunLoadClick;
+            myContextMenuGunLoadActions["MainGunWP"].Items.Add(menuitem);
+            if (1 < lastReport.MainGunWP)
+            {
+               menuitem = new MenuItem();
+               menuitem.Name = "MainGunWP_LoadReady";
+               menuitem.Header = "Place Gun & Ready Rack Reload";
+               menuitem.Click += MenuItemGunLoadClick;
+               myContextMenuGunLoadActions["MainGunWP"].Items.Add(menuitem);
+            }
+         }
+         if (0 < lastReport.MainGunHVAP)
+         {
+            menuitem = new MenuItem();
+            menuitem.Name = "MainGunHVAP_GunLoad";
+            menuitem.Header = "Place Gun Reload";
+            menuitem.Click += MenuItemGunLoadClick;
+            myContextMenuGunLoadActions["MainGunHVAP"].Items.Add(menuitem);
+            if (1 < lastReport.MainGunWP)
+            {
+               menuitem = new MenuItem();
+               menuitem.Name = "MainGunHVAP_LoadReady";
+               menuitem.Header = "Place Gun & Ready Rack Reload";
+               menuitem.Click += MenuItemGunLoadClick;
+               myContextMenuGunLoadActions["MainGunHVAP"].Items.Add(menuitem);
+            }
+         }
          return true;
       }
       private bool SetTerritory(IMapItem mi, ITerritory newT)
@@ -2231,7 +2357,7 @@ namespace Pattons_Best
             return;
          }
          Logger.Log(LogEnum.LE_SHOW_ORDERS_MENU, "ClickButtonMapItem(): adding new button=" + button.Name );
-         if ( (true == button.Name.Contains("OpenHatch")) && ( (true == myGameInstance.IsHatchesActive) || (BattlePhase.Orders == myGameInstance.BattlePhase) ) )
+         if ((true == button.Name.Contains("OpenHatch")) && ((true == myGameInstance.IsHatchesActive) || (BattlePhase.Orders == myGameInstance.BattlePhase)))
          {
             string[] crewmembers = new string[4] { "Driver", "Assistant", "Commander", "Loader" };
             foreach (string s in crewmembers)
@@ -2242,13 +2368,42 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): s=" + s);
                   return;
                }
-               if (true == button.Name.Contains(s))
+               //----------------------------------
+               if (true == button.Name.Contains(s)) //Remove the open hatch
                {
                   crewMember.IsButtonedUp = true;
                   myGameInstance.Hatches.Remove(button.Name);
                   this.myTankButtons.Remove(button);
                   myCanvasTank.Children.Remove(button);
-                  //----------------------------------------------
+                  //----------------------------------
+                  IMapItems removals = new MapItems();  // Remove Loader, Gunner, and Commander actions that require open hatch
+                  foreach (IMapItem crewAction in myGameInstance.CrewActions)
+                  {
+                     if ("Commander" == s)
+                     {
+                        if ((true == crewAction.Name.Contains("Commander_FireAaMg")) || (true == crewAction.Name.Contains("Commander_ThrowGrenade")) || (true == crewAction.Name.Contains("Gunner_ThrowGrenade")) || (true == crewAction.Name.Contains("Commander_FireSubMg")))
+                           removals.Add(crewAction);
+                     }
+                     else if ("Loader" == s)
+                     {
+                        if ((true == crewAction.Name.Contains("Loader_FireAaMg")) || (true == crewAction.Name.Contains("Loader_FireSubMg")))
+                           removals.Add(crewAction);
+                     }
+                  }
+                  foreach (IMapItem crewAction in removals)
+                  {
+                     myGameInstance.CrewActions.Remove(crewAction);
+                     foreach (Button oldButton in myTankButtons)     // Remove corresponding Button
+                     {
+                        if (oldButton.Name == crewAction.Name)
+                        {
+                           myTankButtons.Remove(oldButton);
+                           myCanvasTank.Children.Remove(oldButton);
+                           break;
+                        }
+                     }
+                  }
+                  //----------------------------------
                   GameAction outAction = GameAction.BattleRoundSequenceCrewOrders;
                   if (GamePhase.Preparations == myGameInstance.GamePhase)
                      outAction = GameAction.PreparationsHatches;
@@ -2347,6 +2502,7 @@ namespace Pattons_Best
                   if( oldButton.Name == crewAction.Name )
                   {
                      myTankButtons.Remove(oldButton);
+                     myCanvasTank.Children.Remove(oldButton);
                      break;
                   }
                }
@@ -2417,6 +2573,10 @@ namespace Pattons_Best
                mi = new MapItem(menuitem.Name, 1.0, "c65DReverseToHullDown", t);
                menu = myContextMenuCrewActions["Driver"];
                break;
+            case "Driver_PivotTank":
+               mi = new MapItem(menuitem.Name, 1.0, "c66DPivotTank", t);
+               menu = myContextMenuCrewActions["Driver"];
+               break;
             case "Driver_RepairScope":
                mi = new MapItem(menuitem.Name, 1.0, "c73ReplacePeriscope", t);
                menu = myContextMenuCrewActions["Driver"];
@@ -2443,6 +2603,10 @@ namespace Pattons_Best
                break;
             case "Gunner_RepairScope":
                mi = new MapItem(menuitem.Name, 1.0, "c73ReplacePeriscope", t);
+               menu = myContextMenuCrewActions["Gunner"];
+               break;
+            case "Gunner_ThrowGrenade":
+               mi = new MapItem(menuitem.Name, 1.0, "c70ThrowSmokeGrenade", t);
                menu = myContextMenuCrewActions["Gunner"];
                break;
             case "Assistant_FireBowMg":
@@ -2485,6 +2649,10 @@ namespace Pattons_Best
                mi = new MapItem(menuitem.Name, 1.0, "c74FireSubMg", t);
                menu = myContextMenuCrewActions["Commander"];
                break;
+            case "Commander_ThrowGrenade":
+               mi = new MapItem(menuitem.Name, 1.0, "c70ThrowSmokeGrenade", t);
+               menu = myContextMenuCrewActions["Commander"];
+               break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): reached default name=" + menuitem.Name);
                return;
@@ -2497,6 +2665,221 @@ namespace Pattons_Best
          myGameInstance.CrewActions.Add(mi);
          //--------------------------------------
          if( null == menu )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): menu=null");
+            return;
+         }
+         Logger.Log(LogEnum.LE_SHOW_ORDERS_MENU, "MenuItemCrewActionClick(): adding new button=" + menuitem.Name + " for sCrewMemberRole=" + sCrewMemberRole);
+         System.Windows.Controls.Button newButton = new Button { ContextMenu = menu, Name = menuitem.Name, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
+         MapItem.SetButtonContent(newButton, mi, true, false); // This sets the image as the button's content
+         myTankButtons.Add(newButton);
+         myCanvasTank.Children.Add(newButton);
+         Canvas.SetLeft(newButton, mi.Location.X);
+         Canvas.SetTop(newButton, mi.Location.Y);
+         Canvas.SetZIndex(newButton, 900);
+         //--------------------------------------
+         GameAction outaction = GameAction.BattleRoundSequenceCrewOrders;
+         myGameEngine.PerformAction(ref myGameInstance, ref outaction, 0);
+
+      }
+      public void MenuItemGunLoadClick(object sender, RoutedEventArgs e)
+      {
+         MenuItem? menuitem = sender as MenuItem;
+         if (null == menuitem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): menuitem=null");
+            return;
+         }
+         //--------------------------------------
+         IMapItem? mi = null;
+         string[] aStringArray1 = menuitem.Name.Split(new char[] { '_' });
+         if (aStringArray1.Length < 2)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): underscore not found in " + menuitem.Name + " len=" + aStringArray1.Length);
+            return;
+         }
+         string sCrewMemberRole = aStringArray1[0];
+         //--------------------------------------
+         string tName = aStringArray1[0] + "Action";
+         ITerritory? t = Territories.theTerritories.Find(tName);
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): t=null for " + tName);
+            return;
+         }
+         foreach (IMapItem crewAction in myGameInstance.CrewActions) // get rid of existing crew action for this crew member
+         {
+            if (true == crewAction.Name.Contains(sCrewMemberRole))
+            {
+               myGameInstance.CrewActions.Remove(crewAction); // Remove existing Crew Action
+               foreach (Button oldButton in myTankButtons)     // Remove existing Button
+               {
+                  if (oldButton.Name == crewAction.Name)
+                  {
+                     myTankButtons.Remove(oldButton);
+                     myCanvasTank.Children.Remove(oldButton);
+                     break;
+                  }
+               }
+               break;
+            }
+         }
+         //--------------------------------------
+         ContextMenu? menu = null;  // Add in new button
+         switch (menuitem.Name)
+         {
+            case "Loader_Load":
+               mi = new MapItem(menuitem.Name, 1.0, "c54LLoad", t);
+               menu = myContextMenuCrewActions["Loader"];
+               break;
+            case "Loader_RepairMainGun":
+               mi = new MapItem(menuitem.Name, 1.0, "c55LRepairMainGun", t);
+               menu = myContextMenuCrewActions["Loader"];
+               break;
+            case "Loader_RepairCoaxialMg":
+               mi = new MapItem(menuitem.Name, 1.0, "c56LRepairCoaxialMg", t);
+               menu = myContextMenuCrewActions["Loader"];
+               break;
+            case "Loader_FireMortar":
+               mi = new MapItem(menuitem.Name, 1.0, "c58LFireMortar", t);
+               menu = myContextMenuCrewActions["Loader"];
+               break;
+            case "Loader_ChangeGunLoad":
+               mi = new MapItem(menuitem.Name, 1.0, "c59LChangeGunLoad", t);
+               menu = myContextMenuCrewActions["Loader"];
+               break;
+            case "Loader_RestockReadyRack":
+               mi = new MapItem(menuitem.Name, 1.0, "c60LRestockReadyRack", t);
+               menu = myContextMenuCrewActions["Loader"];
+               break;
+            case "Loader_RepairScope":
+               mi = new MapItem(menuitem.Name, 1.0, "c73ReplacePeriscope", t);
+               menu = myContextMenuCrewActions["Loader"];
+               break;
+            case "Loader_FireAaMg":
+               mi = new MapItem(menuitem.Name, 1.0, "c71FireAaMg", t);
+               menu = myContextMenuCrewActions["Loader"];
+               break;
+            case "Loader_RepairAaMg":
+               mi = new MapItem(menuitem.Name, 1.0, "c72RepairAaMg", t);
+               menu = myContextMenuCrewActions["Loader"];
+               break;
+            case "Loader_FireSubMg":
+               mi = new MapItem(menuitem.Name, 1.0, "c74FireSubMg", t);
+               menu = myContextMenuCrewActions["Loader"];
+               break;
+            case "Driver_Stop":
+               mi = new MapItem(menuitem.Name, 1.0, "c61DStop", t);
+               menu = myContextMenuCrewActions["Driver"];
+               break;
+            case "Driver_Forward":
+               mi = new MapItem(menuitem.Name, 1.0, "c62DForward", t);
+               menu = myContextMenuCrewActions["Driver"];
+               break;
+            case "Driver_ForwardToHullDown":
+               mi = new MapItem(menuitem.Name, 1.0, "c63DForwardToHullDown", t);
+               menu = myContextMenuCrewActions["Driver"];
+               break;
+            case "Driver_Reverse":
+               mi = new MapItem(menuitem.Name, 1.0, "c64DReverse", t);
+               menu = myContextMenuCrewActions["Driver"];
+               break;
+            case "Driver_ReverseToHullDown":
+               mi = new MapItem(menuitem.Name, 1.0, "c65DReverseToHullDown", t);
+               menu = myContextMenuCrewActions["Driver"];
+               break;
+            case "Driver_PivotTank":
+               mi = new MapItem(menuitem.Name, 1.0, "c66DPivotTank", t);
+               menu = myContextMenuCrewActions["Driver"];
+               break;
+            case "Driver_RepairScope":
+               mi = new MapItem(menuitem.Name, 1.0, "c73ReplacePeriscope", t);
+               menu = myContextMenuCrewActions["Driver"];
+               break;
+            case "Gunner_FireMainGun":
+               mi = new MapItem(menuitem.Name, 1.0, "c50GFireMainGun", t);
+               menu = myContextMenuCrewActions["Gunner"];
+               break;
+            case "Gunner_FireCoaxialMg":
+               mi = new MapItem(menuitem.Name, 1.0, "c51GFireCoaxialMg", t);
+               menu = myContextMenuCrewActions["Gunner"];
+               break;
+            case "Gunner_RotateTurret":
+               mi = new MapItem(menuitem.Name, 1.0, "c52GRotateTurret", t);
+               menu = myContextMenuCrewActions["Gunner"];
+               break;
+            case "Gunner_RotateFireMainGun":
+               mi = new MapItem(menuitem.Name, 1.0, "c53GRotateTurretFireMainGun", t);
+               menu = myContextMenuCrewActions["Gunner"];
+               break;
+            case "Gunner_RepairMainGun":
+               mi = new MapItem(menuitem.Name, 1.0, "c57GRepairMainGun", t);
+               menu = myContextMenuCrewActions["Gunner"];
+               break;
+            case "Gunner_RepairScope":
+               mi = new MapItem(menuitem.Name, 1.0, "c73ReplacePeriscope", t);
+               menu = myContextMenuCrewActions["Gunner"];
+               break;
+            case "Gunner_ThrowGrenade":
+               mi = new MapItem(menuitem.Name, 1.0, "c70ThrowSmokeGrenade", t);
+               menu = myContextMenuCrewActions["Gunner"];
+               break;
+            case "Assistant_FireBowMg":
+               mi = new MapItem(menuitem.Name, 1.0, "c67AFireBowMg", t);
+               menu = myContextMenuCrewActions["Assistant"];
+               break;
+            case "Assistant_RepairBowMg":
+               mi = new MapItem(menuitem.Name, 1.0, "c68ARepairBowMg", t);
+               menu = myContextMenuCrewActions["Assistant"];
+               break;
+            case "Assistant_PassAmmo":
+               mi = new MapItem(menuitem.Name, 1.0, "c69APassAmmo", t);
+               menu = myContextMenuCrewActions["Assistant"];
+               break;
+            case "Assistant_RepairScope":
+               mi = new MapItem(menuitem.Name, 1.0, "c73ReplacePeriscope", t);
+               menu = myContextMenuCrewActions["Assistant"];
+               break;
+            case "Commander_Move":
+               mi = new MapItem(menuitem.Name, 1.0, "c48CDirectMove", t);
+               menu = myContextMenuCrewActions["Commander"];
+               break;
+            case "Commander_Fire":
+               mi = new MapItem(menuitem.Name, 1.0, "c49CDirectFire", t);
+               menu = myContextMenuCrewActions["Commander"];
+               break;
+            case "Commander_RepairScope":
+               mi = new MapItem(menuitem.Name, 1.0, "c73ReplacePeriscope", t);
+               menu = myContextMenuCrewActions["Commander"];
+               break;
+            case "Commander_FireAaMg":
+               mi = new MapItem(menuitem.Name, 1.0, "c71FireAaMg", t);
+               menu = myContextMenuCrewActions["Commander"];
+               break;
+            case "Commander_RepairAaMg":
+               mi = new MapItem(menuitem.Name, 1.0, "c72RepairAaMg", t);
+               menu = myContextMenuCrewActions["Commander"];
+               break;
+            case "Commander_FireSubMg":
+               mi = new MapItem(menuitem.Name, 1.0, "c74FireSubMg", t);
+               menu = myContextMenuCrewActions["Commander"];
+               break;
+            case "Commander_ThrowGrenade":
+               mi = new MapItem(menuitem.Name, 1.0, "c70ThrowSmokeGrenade", t);
+               menu = myContextMenuCrewActions["Commander"];
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): reached default name=" + menuitem.Name);
+               return;
+         }
+         if (null == mi)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): mi=null");
+            return;
+         }
+         myGameInstance.CrewActions.Add(mi);
+         //--------------------------------------
+         if (null == menu)
          {
             Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): menu=null");
             return;
