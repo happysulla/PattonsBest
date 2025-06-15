@@ -1246,7 +1246,7 @@ namespace Pattons_Best
                myCanvasTank.Children.Add(aPolygon);
                aPolygon.MouseDown += MouseDownPolygonGunLoad;
                //-------------------------------------------
-               if( BattlePhase.AmmoOrders == gi.BattlePhase )
+               if( BattlePhase.MarkAmmoReload == gi.BattlePhase )
                {
                   foreach(Button b in this.myTankButtons)
                   {
@@ -1378,7 +1378,7 @@ namespace Pattons_Best
             Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = t.ToString() };
             myPolygons.Add(aPolygon);
             myCanvasTank.Children.Add(aPolygon);
-            if( BattlePhase.AmmoOrders == gi.BattlePhase )
+            if( BattlePhase.MarkAmmoReload == gi.BattlePhase )
             {
                aPolygon.MouseDown += MouseDownPolygonAmmoActions;
                aPolygon.ContextMenu = myContextMenuGunLoadActions[tName];
@@ -2384,7 +2384,7 @@ namespace Pattons_Best
             return;
          }
          Logger.Log(LogEnum.LE_SHOW_ORDERS_MENU, "ClickButtonMapItem(): adding new button=" + button.Name );
-         if ((true == button.Name.Contains("OpenHatch")) && ((true == myGameInstance.IsHatchesActive) || (BattlePhase.Orders == myGameInstance.BattlePhase)))
+         if ((true == button.Name.Contains("OpenHatch")) && ((true == myGameInstance.IsHatchesActive) || (BattlePhase.MarkCrewAction == myGameInstance.BattlePhase)))
          {
             string[] crewmembers = new string[4] { "Driver", "Assistant", "Commander", "Loader" };
             foreach (string s in crewmembers)
@@ -2446,6 +2446,36 @@ namespace Pattons_Best
             if (359 < myGameInstance.Sherman.RotationTurret)
                myGameInstance.Sherman.RotationTurret = 0;
             MapItem.SetButtonContent(button, myGameInstance.Sherman, true, true);
+         }
+         else if ((true == button.Name.Contains("GunLoad")) && (BattlePhase.MarkAmmoReload == myGameInstance.BattlePhase) )
+         {
+            IMapItem? selectedMapItem = myGameInstance.GunLoads.Find(button.Name);
+            if ( null == selectedMapItem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): selectedMapItem=null for button.Name=" + button.Name);
+               return;
+            }
+            myGameInstance.GunLoads.Rotate(1);
+            int count = 0;
+            foreach (IMapItem mi in myGameInstance.GunLoads) 
+            {
+               if( mi.TerritoryCurrent.Name == selectedMapItem.TerritoryCurrent.Name )
+               {
+                  mi.Location.X = selectedMapItem.TerritoryCurrent.CenterPoint.X + count * 3 - mi.Zoom * Utilities.theMapItemOffset;
+                  mi.Location.Y = selectedMapItem.TerritoryCurrent.CenterPoint.Y + count * 3 - mi.Zoom * Utilities.theMapItemOffset;
+                  foreach(Button b in myTankButtons )
+                  {
+                     if (b.Name == mi.Name)
+                     {
+                        Canvas.SetLeft(b, mi.Location.X);
+                        Canvas.SetTop(b, mi.Location.Y);
+                        Canvas.SetZIndex(b, count);
+                     }
+                  }
+                  count++;
+               }
+            }
+            e.Handled = true;
          }
       }
       private void MouseEnterMapItem(object sender, System.Windows.Input.MouseEventArgs e)

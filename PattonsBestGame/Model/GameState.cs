@@ -2574,16 +2574,16 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleRoundSequenceSpottingEnd:
                   action = GameAction.BattleRoundSequenceCrewOrders;
-                  gi.BattlePhase = BattlePhase.Orders;
+                  gi.BattlePhase = BattlePhase.MarkCrewAction;
                   gi.EventDisplayed = gi.EventActive = "e038";
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   break;
                case GameAction.BattleRoundSequenceCrewOrders:
-                  gi.BattlePhase = BattlePhase.Orders;
+                  gi.BattlePhase = BattlePhase.MarkCrewAction;
                   break;
                case GameAction.BattleRoundSequenceAmmoOrders:
-                  Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattle.GameStateBattleRoundSequence(BattleRoundSequenceAmmoOrders): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.AmmoOrders");
-                  gi.BattlePhase = BattlePhase.AmmoOrders;
+                  Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattle.GameStateBattleRoundSequence(BattleRoundSequenceAmmoOrders): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.MarkAmmoReload");
+                  gi.BattlePhase = BattlePhase.MarkAmmoReload;
                   gi.EventDisplayed = gi.EventActive = "e050";
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   break;
@@ -2958,6 +2958,13 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleRoundSequenceHarrassingFire:
                   break;
+               case GameAction.BattleRoundSequenceConductCrewAction:
+                  if( false == ConductCrewAction(gi))
+                  {
+                     returnStatus = "ConductCrewAction() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                  }
+                  break;
                case GameAction.EveningDebriefingStart:
                   gi.GamePhase = GamePhase.EveningDebriefing;
                   gi.EventDisplayed = gi.EventActive = "e100";
@@ -3072,10 +3079,15 @@ namespace Pattons_Best
             }
          }
          outAction = GameAction.BattleRoundSequenceCrewOrders;
-         Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "SpottingPhaseBegin(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Orders");
-         gi.BattlePhase = BattlePhase.Orders;
+         Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "SpottingPhaseBegin(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.MarkCrewAction");
+         gi.BattlePhase = BattlePhase.MarkCrewAction;
          gi.EventDisplayed = gi.EventActive = "e038";
          gi.DieRollAction = GameAction.DieRollActionNone;
+         return true;
+      }
+      private bool ConductCrewAction(IGameInstance gi)
+      {
+         gi.BattlePhase = BattlePhase.ConductCrewAction;
          return true;
       }
    }

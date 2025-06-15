@@ -79,9 +79,9 @@ namespace Pattons_Best
       Ambush,
       AmbushRandomEvent,
       Spotting,
-      Orders,
-      AmmoOrders,
-      CrewAction,
+      MarkCrewAction,
+      MarkAmmoReload,
+      ConductCrewAction,
       EnemyAction,
       FriendlyAction,
       RandomEvent,
@@ -239,6 +239,7 @@ namespace Pattons_Best
       BattleRoundSequenceSpottingEnd,
       BattleRoundSequenceCrewOrders,
       BattleRoundSequenceAmmoOrders,
+      BattleRoundSequenceConductCrewAction,
       BattleRoundSequenceShermanKilled,
       BattleRoundSequenceEnemyArtilleryRoll,
       BattleRoundSequenceMinefieldRoll,
@@ -250,6 +251,7 @@ namespace Pattons_Best
       BattleRoundSequencePanzerfaustToHitRoll,
       BattleRoundSequencePanzerfaustToKillRoll,
       BattleRoundSequenceHarrassingFire,
+
 
       EveningDebriefingStart,
       EveningDebriefingRatingImprovement,

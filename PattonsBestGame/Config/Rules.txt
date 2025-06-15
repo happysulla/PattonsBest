@@ -325,7 +325,7 @@ r4.7	"<Bold>r4.7  Battle Round Sequence</Bold>
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r4.71' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Smoke Depletion Phase<LineBreak/>
 <InlineUIContainer><Button Content='r4.72' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Spotting Phase<LineBreak/>
-<InlineUIContainer><Button Content='r4.73' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Orders Phase<LineBreak/>
+<InlineUIContainer><Button Content='r4.73' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> MarkCrewAction Phase<LineBreak/>
 <InlineUIContainer><Button Content='r4.74' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Crew Actions Phase<LineBreak/>
 <InlineUIContainer><Button Content='r4.75' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Actions Phase<LineBreak/>
 <InlineUIContainer><Button Content='r4.76' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Friendly Action Phase<LineBreak/>
@@ -345,11 +345,11 @@ Mark those enemy units spotted or hidden with the Spotted and Hidden markers per
 <InlineUIContainer><Button Content='r17.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Determine the specific unit type for any unit identified per 
 <InlineUIContainer><Button Content='r17.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Continue with 
 <InlineUIContainer><Button Content='r4.73' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
-r4.73	"<Bold>r4.73  Orders Phase</Bold>
+r4.73	"<Bold>r4.73  MarkCrewAction Phase</Bold>
 <LineBreak/><LineBreak/>
 1. Hatch Segment: Open or close hatches by placing or removing Open Hatch marks on the Tank Card.
 <LineBreak/><LineBreak/>
-2. Orders Segment: Mark crew battle actions by placing Crew Actions markers in the crew boxes of the Tank Card per 
+2. MarkCrewAction Segment: Mark crew battle actions by placing Crew Actions markers in the crew boxes of the Tank Card per 
 <InlineUIContainer><Button Content='r8.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Place only one marker per crewman.
 <LineBreak/><LineBreak/>
 3. Ammo Reload Segment: Mark ammo reload if firing main gun by placing the Gun Reload marker in the box on the Tank Card for the ammo type you wish to reload per 
@@ -2185,7 +2185,7 @@ You may fire your tank's MGs into zones containing no spotted units as a type of
 vs. Infantry Targets Table. Any kills are recorded as victory points on the After Action Report 
 <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
  <LineBreak/><LineBreak/>
--- Remove these Advancing Fire markers specific for your MGs at the beginning of the Orders Phase 
+-- Remove these Advancing Fire markers specific for your MGs at the beginning of the MarkCrewAction Phase 
 <InlineUIContainer><Button Content='r4.73' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> of the next round
 <LineBreak/><LineBreak/>
                                         <InlineUIContainer><Image Name='c42FireBowMg'  Height='80' Width='80'></Image></InlineUIContainer>"

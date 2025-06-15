@@ -2493,6 +2493,10 @@ namespace Pattons_Best
                            action = GameAction.BattleRoundSequenceHarrassingFire;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
+                        case "Continue50":
+                           action = GameAction.BattleRoundSequenceConductCrewAction;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
                         case "CampaignOver":
                            action = GameAction.EveningDebriefingVictoryPointsCalculated;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);

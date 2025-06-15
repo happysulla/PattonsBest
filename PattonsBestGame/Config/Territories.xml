@@ -2284,7 +2284,7 @@
     </Points>
     <Adjacents count="0" />
   </Territory>
-  <Territory value="Orders">
+  <Territory value="MarkCrewAction">
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0197.50" Y="0112.76" />
@@ -2296,7 +2296,7 @@
     </Points>
     <Adjacents count="0" />
   </Territory>
-  <Territory value="AmmoOrders">
+  <Territory value="MarkAmmoReload">
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0316.50" Y="0059.76" />
@@ -2308,7 +2308,7 @@
     </Points>
     <Adjacents count="0" />
   </Territory>
-  <Territory value="CrewAction">
+  <Territory value="ConductCrewAction">
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0682.50" Y="0060.76" />
