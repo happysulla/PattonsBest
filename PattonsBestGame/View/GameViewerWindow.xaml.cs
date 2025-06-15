@@ -2788,6 +2788,7 @@ namespace Pattons_Best
             myGameInstance.GunLoads.Add(readyRackReLoad);
             Logger.Log(LogEnum.LE_SHOW_AMMMO_MENU, "MenuItemAmmoReloadClick(): adding new button=" + menuitem.Name);
             newButton = new Button { ContextMenu = menu, Name = menuitem.Name, Width = size, Height = size, BorderThickness = thickness, Background = brush, Foreground = brush };
+            newButton.Click += ClickButtonMapItem;
             MapItem.SetButtonContent(newButton, readyRackReLoad, true, false); // This sets the image as the button's content
             myTankButtons.Add(newButton);
             myCanvasTank.Children.Add(newButton);
@@ -2803,6 +2804,7 @@ namespace Pattons_Best
          ammoLoad.Location.X = t.CenterPoint.X + ammoLoadLocationOffset;
          ammoLoad.Location.Y = t.CenterPoint.Y + ammoLoadLocationOffset;
          newButton = new Button { ContextMenu = menu, Name = ammoLoad.Name, Width = size, Height = size, BorderThickness = thickness, Background = brush, Foreground = brush };
+         newButton.Click += ClickButtonMapItem;
          MapItem.SetButtonContent(newButton, ammoLoad, true, false); // This sets the image as the button's content
          myTankButtons.Add(newButton);
          myCanvasTank.Children.Add(newButton);
@@ -2822,6 +2824,7 @@ namespace Pattons_Best
          gunLoad.Location.Y = gunLoad.TerritoryCurrent.CenterPoint.Y + gunLoadLocationOffset;
          Logger.Log(LogEnum.LE_SHOW_AMMMO_MENU, "MenuItemAmmoReloadClick(): adding new button=" + gunLoad.Name);
          newButton = new Button { ContextMenu = myContextMenuGunLoadActions[gunLoad.TerritoryCurrent.Name], Name = gunLoad.Name, Width = size, Height = size, BorderThickness = thickness, Background = brush, Foreground = brush };
+         newButton.Click += ClickButtonMapItem;
          MapItem.SetButtonContent(newButton, gunLoad, true, false); // This sets the image as the button's content
          myTankButtons.Add(newButton);
          myCanvasTank.Children.Add(newButton);
