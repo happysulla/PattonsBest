@@ -74,7 +74,6 @@ namespace Pattons_Best
       {
          gi.MoveStacks.Clear();
          gi.BattleStacks.Clear();
-         gi.TankStacks.Clear();
          return true;
       }
       protected void UndoCommand(ref IGameInstance gi, ref GameAction action)
@@ -1031,7 +1030,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t11=null");
             return false;
          }
-         IMapItem gunLoad = new MapItem("GunLoad", 1.0, "c17GunLoad", t11);
+         IMapItem gunLoad = new MapItem("GunLoadInGun", 1.0, "c17GunLoad", t11);
          gi.GunLoads.Add(gunLoad);
          //------------------------------------
          gi.Sherman.IsTurret = true;
@@ -1500,7 +1499,7 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     IMapItem gunLoad = new MapItem("GunLoad", 1.0, "c17GunLoad", t);
+                     IMapItem gunLoad = new MapItem("GunLoadInGun", 1.0, "c17GunLoad", t);
                      gi.GunLoads.Add(gunLoad);
                   }
                   break;
@@ -2271,13 +2270,20 @@ namespace Pattons_Best
                case GameAction.BattleAmbushRoll:
                   if (true == lastReport.Weather.Contains("Rain") || true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
                      dieRoll--;
-                  dieRoll = 1; // <cgs> TEST - ambush
+                  dieRoll = 10; // <cgs> TEST - ambush
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (dieRoll < 8)
+                  {
+                     Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattle.PerformAction(BattleAmbushRoll): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
                      gi.BattlePhase = BattlePhase.Ambush;
+                  }
                   else
+                  {
+                     Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattle.PerformAction(BattleAmbushRoll): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Spotting");
+                     gi.GamePhase = GamePhase.BattleRoundSequence;
                      gi.BattlePhase = BattlePhase.Spotting;
+                  }
                   break;
                case GameAction.BattleEmpty:
                   gi.GamePhase = GamePhase.Preparations;
@@ -2291,8 +2297,10 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleAmbush: // Handled with EventViewerBattleAmbush class
+               case GameAction.BattleCollateralDamageCheck: // Handled with EventViewerTankCollateral class
                   break;
                case GameAction.BattleRandomEvent:
+                  Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattle.PerformAction(BattleRandomEvent): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.AmbushRandomEvent");
                   gi.BattlePhase = BattlePhase.AmbushRandomEvent;
                   gi.EventDisplayed = gi.EventActive = "e039";
                   gi.DieRollAction = GameAction.BattleRandomEventRoll;
@@ -2499,6 +2507,7 @@ namespace Pattons_Best
                   gi.EventDisplayed = gi.EventActive; // next screen to show
                   break;
                case GameAction.BattleRoundSequenceStart:
+                  Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceStart): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Spotting");
                   gi.BattlePhase = BattlePhase.Spotting;
                   int smokeCount = 0;
                   foreach (IStack stack in gi.BattleStacks)
@@ -2573,6 +2582,8 @@ namespace Pattons_Best
                   gi.BattlePhase = BattlePhase.Orders;
                   break;
                case GameAction.BattleRoundSequenceAmmoOrders:
+                  Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattle.GameStateBattleRoundSequence(BattleRoundSequenceAmmoOrders): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.AmmoOrders");
+                  gi.BattlePhase = BattlePhase.AmmoOrders;
                   gi.EventDisplayed = gi.EventActive = "e050";
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   break;
@@ -3027,7 +3038,7 @@ namespace Pattons_Best
             ICrewMember? cm = gi.GetCrewMember(crewmember);
             if (null == cm)
             {
-               Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): gi.GetCrewMember() returned null");
+               Logger.Log(LogEnum.LE_ERROR, "SpottingPhaseBegin(): gi.GetCrewMember() returned null");
                return false;
             }
             else
@@ -3035,7 +3046,7 @@ namespace Pattons_Best
                List<string>? spottedTerritories = Territory.GetSpottedTerritories(gi, cm);
                if (null == spottedTerritories)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): GetSpottedTerritories() returned null");
+                  Logger.Log(LogEnum.LE_ERROR, "SpottingPhaseBegin(): GetSpottedTerritories() returned null");
                   return false;
                }
                if( true == Logger.theLogLevel[(int)LogEnum.LE_EVENT_VIEWER_SPOTTING])
@@ -3061,6 +3072,7 @@ namespace Pattons_Best
             }
          }
          outAction = GameAction.BattleRoundSequenceCrewOrders;
+         Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "SpottingPhaseBegin(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Orders");
          gi.BattlePhase = BattlePhase.Orders;
          gi.EventDisplayed = gi.EventActive = "e038";
          gi.DieRollAction = GameAction.DieRollActionNone;
@@ -3418,7 +3430,6 @@ namespace Pattons_Best
          gi.Panzerfaust = null;
          gi.NumCollateralDamage = 0;
          gi.MapItemMoves.Clear();
-         gi.TankStacks.Clear();
          gi.MoveStacks.Clear();
          gi.BattleStacks.Clear();
          gi.EnteredHexes.Clear();

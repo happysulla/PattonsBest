@@ -36,8 +36,8 @@ namespace Pattons_Best
       public IMapItems NewMembers { set; get; } = new MapItems();
       public IMapItems ReadyRacks { set; get; } = new MapItems();
       public IMapItems Hatches { set; get; } = new MapItems();
-      public IMapItems GunLoads { set; get; } = new MapItems();
       public IMapItems CrewActions { set; get; } = new MapItems();
+      public IMapItems GunLoads { set; get; } = new MapItems();
       public IMapItem Sherman { set; get; } = new MapItem("Sherman1", 2.0, "t001", new Territory());
       //------------------------------------------------
       public ITerritory Home { get; set; } = new Territory();
@@ -84,7 +84,6 @@ namespace Pattons_Best
       public int NumCollateralDamage { set; get; } = 0;
       //------------------------------------------------
       public IMapItemMoves MapItemMoves { get; set; } = new MapItemMoves();
-      public IStacks TankStacks { get; set; } = new Stacks();
       public IStacks MoveStacks { get; set; } = new Stacks();
       public IStacks BattleStacks { get; set; } = new Stacks();
       private List<EnteredHex> myEnteredHexes = new List<EnteredHex>();

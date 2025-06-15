@@ -3217,7 +3217,7 @@ namespace Pattons_Best
                return appearingMapItem;
             }
          }
-         Logger.Log(LogEnum.LE_ERROR, "GetAppearingUnit(): reached default mi=" + mi.Name);
+         Logger.Log(LogEnum.LE_ERROR, "GetAppearingUnitNew(): reached default mi=" + mi.Name);
          return null;
       }
       //-------------------------------------------

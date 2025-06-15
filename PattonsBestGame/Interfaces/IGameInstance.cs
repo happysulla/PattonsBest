@@ -71,8 +71,8 @@ namespace Pattons_Best
       IMapItems NewMembers { set; get; }
       IMapItems ReadyRacks { set; get; }
       IMapItems Hatches { set; get; }
-      IMapItems GunLoads { set; get; }
       IMapItems CrewActions { set; get; }
+      IMapItems GunLoads { set; get; }
       IMapItem Sherman { set; get; }
       //------------------------------------------------
       ITerritory Home { get; set; }
@@ -117,7 +117,6 @@ namespace Pattons_Best
       int NumCollateralDamage { set; get; }
       //------------------------------------------------
       IMapItemMoves MapItemMoves { set; get; }
-      IStacks TankStacks { set; get; }
       IStacks MoveStacks { set; get; }
       IStacks BattleStacks { set; get; }
       List<EnteredHex> EnteredHexes { get; }

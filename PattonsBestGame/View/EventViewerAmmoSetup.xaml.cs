@@ -1007,27 +1007,10 @@ namespace Pattons_Best
       }
       private bool SetTerritory(IMapItem mi, ITerritory newT)
       {
-         if( null == myGameInstance )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetTerritory(): myGameInstance=null");
-            return false;
-         }
-         myGameInstance.TankStacks.Remove(mi);
-         //-------------------------------------
-         IStack? stack = myGameInstance.TankStacks.Find(mi.TerritoryCurrent);
-         if (null == stack)
-         {
-            stack = new Stack(newT, mi);
-            myGameInstance.TankStacks.Add(stack);
-         }
-         else // add to top of stack
-         {
-            mi.TerritoryCurrent = newT;
-            double offset = mi.Zoom * Utilities.theMapItemOffset + stack.MapItems.Count * Utilities.STACK;
-            mi.Location.X = newT.CenterPoint.X - offset;
-            mi.Location.Y = newT.CenterPoint.Y - offset;
-            stack.MapItems.Add(mi);
-         }
+         mi.TerritoryCurrent = newT;
+         double offset = mi.Zoom * Utilities.theMapItemOffset;
+         mi.Location.X = newT.CenterPoint.X - offset;
+         mi.Location.Y = newT.CenterPoint.Y - offset;
          return true;
       }
       //------------------------------------------------------------------------------------

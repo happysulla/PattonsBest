@@ -346,27 +346,35 @@ namespace Pattons_Best
                myStackPanelAssignable.Children.Add(label1);
                break;
             case E0472Enum.ROLL_SPOTTING_SHOW:
-               Image img2 = new Image { Name = "ContinueNext", Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
-               for ( int i=0; i<myMaxRowCount; ++i )
+               if( true == myIsIdentifyRollInProgress )
                {
-                  if (Utilities.NO_RESULT == myGridRows[i].myDieRollSpotting)
+                  Rectangle r51 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  myStackPanelAssignable.Children.Add(r51);
+               }
+               else
+               {
+                  Image img2 = new Image { Name = "ContinueNext", Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  for (int i = 0; i < myMaxRowCount; ++i)
                   {
-                     img2 = new Image { Name = "Spotting", Source = MapItem.theMapImages.GetBitmapImage("Spotting"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
-                     break;
+                     if (Utilities.NO_RESULT == myGridRows[i].myDieRollSpotting)
+                     {
+                        img2 = new Image { Name = "Spotting", Source = MapItem.theMapImages.GetBitmapImage("Spotting"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                        break;
+                     }
                   }
+                  myStackPanelAssignable.Children.Add(img2);
+                  Rectangle r4 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  myStackPanelAssignable.Children.Add(r4);
+                  if (null == mySelectedCrewman)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): mySelectedCrewman=null");
+                     return false;
+                  }
+                  Button b2 = CreateButton(mySelectedCrewman);
+                  myStackPanelAssignable.Children.Add(b2);
+                  Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = " rating = " + mySelectedCrewman.Rating.ToString() };
+                  myStackPanelAssignable.Children.Add(label2);
                }
-               myStackPanelAssignable.Children.Add(img2);
-               Rectangle r4 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
-               myStackPanelAssignable.Children.Add(r4);
-               if (null == mySelectedCrewman)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): mySelectedCrewman=null");
-                  return false;
-               }
-               Button b2 = CreateButton(mySelectedCrewman);
-               myStackPanelAssignable.Children.Add(b2);
-               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = " rating = " + mySelectedCrewman.Rating.ToString() };
-               myStackPanelAssignable.Children.Add(label2);
                break;
             case E0472Enum.ROLL_APPEARANCE:
                Rectangle r41 = new Rectangle() { Visibility = Visibility.Hidden, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
