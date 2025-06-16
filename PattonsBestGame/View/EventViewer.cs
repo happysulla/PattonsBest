@@ -1438,6 +1438,35 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
+            case "e051":
+               string modiferString = UpdateEventContentGetMovingModifier(gi);
+               myTextBlock.Inlines.Add(new Run(modiferString));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add("Roll for Effect on Sherman: ");
+               if (Utilities.NO_RESULT == gi.DieResults[key][0])
+               {
+                  BitmapImage bmi = new BitmapImage();
+                  bmi.BeginInit();
+                  bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
+                  bmi.EndInit();
+                  Image imgDice = new Image { Name = "DieRollBlue", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+                  ImageBehavior.SetAnimatedSource(imgDice, bmi);
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
+               }
+               else
+               {
+                  myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  Image imge51 = new Image { Name = "Continue51", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge51));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
             case "e101":
                ICrewMember? cmdr = gi.GetCrewMember("Commander");
                if (null == cmdr)
@@ -1667,6 +1696,70 @@ namespace Pattons_Best
                break;
          }
          return true;
+      }
+      private string UpdateEventContentGetMovingModifier(IGameInstance gi)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetMovingModifier(): lastReport=null");
+            return "ERROR";
+         }
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         //-------------------------------------------------
+         ICrewMember? commander = gi.GetCrewMember("Commander");
+         if (null == commander)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetMovingModifier(): commander=null");
+            return "ERROR";
+         }
+         //-------------------------------------------------
+         ICrewMember? driver = gi.GetCrewMember("Driver");
+         if (null == driver)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetMovingModifier(): driver=null");
+            return "ERROR";
+         }
+         //-------------------------------------------------
+         StringBuilder sb51 = new StringBuilder();
+         sb51.Append("-");
+         sb51.Append(driver.Rating.ToString());
+         sb51.Append(" for driver rating\n");
+         //-------------------------------------------------
+         bool isCommanderDirectingMovement = false;
+         foreach (IMapItem crewAction in gi.CrewActions)
+         {
+            if ("Commander_Move" == crewAction.Name)
+               isCommanderDirectingMovement = true;
+         }
+         if( true == isCommanderDirectingMovement )
+         {
+            if (false == commander.IsButtonedUp)
+            {
+               sb51.Append("-");
+               sb51.Append(commander.Rating.ToString());
+               sb51.Append(" for cmdr rating directing move\n");
+            }
+            else if (true == card.myIsVisionCupola)
+            {
+               int rating = (int)Math.Floor(commander.Rating / 2.0);
+               sb51.Append(rating.ToString());
+               sb51.Append(" for cmdr rating directing move using cupola\n");
+            }
+         }
+         if( true == card.myIsHvss )
+            sb51.Append("-2 for HVSS suspension\n");
+         if (true == driver.IsButtonedUp)
+            sb51.Append("+5 Driver buttoned up\n");
+         //-------------------------------------------------
+         if (true == lastReport.Weather.Contains("Ground Snow"))
+            sb51.Append("+3 for Ground Snow\n");
+         else if (true == lastReport.Weather.Contains("Falling Snow"))
+            sb51.Append("+6 for Deep Snow\n");
+         else if (true == lastReport.Weather.Contains("Mud"))
+            sb51.Append("+9 for Mud\n");
+         //-------------------------------------------------
+         return sb51.ToString();
       }
       private void ReplaceText(string keyword, string newString)
       {
@@ -2495,6 +2588,10 @@ namespace Pattons_Best
                            break;
                         case "Continue50":
                            action = GameAction.BattleRoundSequenceConductCrewAction;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Continue51":
+                           action = GameAction.BattleRoundSequenceMovementRoll;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "CampaignOver":

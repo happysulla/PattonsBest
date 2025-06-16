@@ -240,6 +240,8 @@ namespace Pattons_Best
       BattleRoundSequenceCrewOrders,
       BattleRoundSequenceAmmoOrders,
       BattleRoundSequenceConductCrewAction,
+      BattleRoundSequenceMovementRoll,
+
       BattleRoundSequenceShermanKilled,
       BattleRoundSequenceEnemyArtilleryRoll,
       BattleRoundSequenceMinefieldRoll,

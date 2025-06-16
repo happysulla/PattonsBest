@@ -3221,6 +3221,63 @@ namespace Pattons_Best
          return null;
       }
       //-------------------------------------------
+      public static int GetMovingModifier(IGameInstance gi)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetMovingModifier(): lastReport=null");
+            return -1000;
+         }
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         //-------------------------------------------------
+         ICrewMember? commander = gi.GetCrewMember("Commander");
+         if(null == commander)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetMovingModifier(): commander=null");
+            return -1000;
+         }
+         //-------------------------------------------------
+         ICrewMember? driver = gi.GetCrewMember("Driver");
+         if (null == driver)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetMovingModifier(): driver=null");
+            return -1000;
+         }
+         //-------------------------------------------------
+         bool isCommanderDirectingMovement = false;
+         foreach(IMapItem crewAction in gi.CrewActions)
+         {
+            if ("Commander_Move" == crewAction.Name)
+               isCommanderDirectingMovement = true;
+         }
+         //-------------------------------------------------
+         int movingModifier = 0;
+         movingModifier -= driver.Rating;
+         //-------------------------------------------------
+         if(true == isCommanderDirectingMovement)
+         {
+            if (false == commander.IsButtonedUp)
+               movingModifier -= commander.Rating;
+            else if( true == card.myIsVisionCupola)
+               movingModifier -= (int) Math.Floor(commander.Rating/2.0);
+         }
+         //-------------------------------------------------
+         if( true == card.myIsHvss )
+            movingModifier -= 2;
+         //-------------------------------------------------
+         if( true == driver.IsButtonedUp )
+            movingModifier += 5;
+         //-------------------------------------------------
+         if( true == lastReport.Weather.Contains("Ground Snow"))
+            movingModifier += 3;
+         else if (true == lastReport.Weather.Contains("Falling Snow"))
+            movingModifier += 6;
+         else if (true == lastReport.Weather.Contains("Mud"))
+            movingModifier += 9;
+         return movingModifier;
+      }
+      //-------------------------------------------
       private void CreateCombatCalender()
       {
          theCombatCalendarEntries.Add(new CombatCalendarEntry("07/27/44", EnumScenario.Advance, 3, EnumResistance.Light, "Corba Breakout"));

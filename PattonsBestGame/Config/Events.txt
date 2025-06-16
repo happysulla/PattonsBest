@@ -310,7 +310,7 @@ Deplete smoke in each zone by converting one white full strength Smoke marker to
 <InlineUIContainer><Button Content='r4.72' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
                                               <InlineUIContainer><Image Name='c111Smoke1' Height='100' Width='100'></Image></InlineUIContainer>"
-e038	"<Bold>e038 MarkCrewAction Phase</Bold> 
+e038	"<Bold>e038 Orders Phase</Bold> 
 <InlineUIContainer><Button Content='r4.73' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <InlineUIContainer><Button Content='r8.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
@@ -480,6 +480,14 @@ e050	"<Bold>e050 Ammo Reload Order</Bold>
 Right click marker or one of blue boxes to to select from pull down menu where to set Gun Reload marker and/or Ready Rack Ammo Reload marker.
 <LineBreak/><LineBreak/>
                                             <InlineUIContainer><Image Name='Continue50' Height='100' Width='100'></Image></InlineUIContainer>"
+e051	"<Bold>e051 Crew Actions - Tank Movement</Bold> 
+<InlineUIContainer><Button Content='r4.74.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<InlineUIContainer><Button Content='r11.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<LineBreak/><LineBreak/>
+Resolve movement per the 
+<InlineUIContainer><Button Content='Movement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Tables.
+<LineBreak/><LineBreak/>
+<Underline>Modifiers:</Underline><LineBreak/>"
 e100	"<Bold>e100 Evening Debriefing</Bold> 
 <LineBreak/><LineBreak/>
 An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 

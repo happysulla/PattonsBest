@@ -2965,6 +2965,17 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
                   }
                   break;
+               case GameAction.BattleRoundSequenceMovementRoll:
+                  if( Utilities.NO_RESULT == gi.DieResults[key][0] )
+                  {
+                     gi.DieResults[key][0] = dieRoll;
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else
+                  {
+
+                  }
+                  break;
                case GameAction.EveningDebriefingStart:
                   gi.GamePhase = GamePhase.EveningDebriefing;
                   gi.EventDisplayed = gi.EventActive = "e100";
@@ -3088,6 +3099,25 @@ namespace Pattons_Best
       private bool ConductCrewAction(IGameInstance gi)
       {
          gi.BattlePhase = BattlePhase.ConductCrewAction;
+         bool isTankMoving = false;
+         foreach (IMapItem crewAction in gi.CrewActions)
+         {
+            if ("Driver_Forward" == crewAction.Name)
+               isTankMoving = true;
+            if ("Driver_ForwardToHullDown" == crewAction.Name)
+               isTankMoving = true;
+            if ("Driver_Reverse" == crewAction.Name)
+               isTankMoving = true;
+            if ("Driver_ReverseToHullDown" == crewAction.Name)
+               isTankMoving = true;
+            if ("Driver_ReverseToHullDown" == crewAction.Name)
+               isTankMoving = true;
+         }
+         if( true == isTankMoving )
+         {
+            gi.EventDisplayed = gi.EventActive = "e051";
+            gi.DieRollAction = GameAction.BattleRoundSequenceMovementRoll;
+         }
          return true;
       }
    }
