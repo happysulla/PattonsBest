@@ -25,6 +25,8 @@ namespace Pattons_Best
       private LoadEndCallback myCallbackEndLoad;
       private int myDieRollResults = 0;
       public bool CtorError { get; } = false;
+      static private int theWhiteDie = 0;
+      static public int WhiteDie { get => theWhiteDie; }
       //-----------------------------------------------------------
       private Canvas? myCanvas;
       public List<Button> theDice = new List<Button>();
@@ -133,6 +135,10 @@ namespace Pattons_Best
             myDieRollResults = 100;
          else
             myDieRollResults = die1 + 10 * die2;
+         if (0 == die1)
+            theWhiteDie = 10;
+         else
+            theWhiteDie = die1;
          return myDieRollResults;
       }
       //-----------------------------------------------------------

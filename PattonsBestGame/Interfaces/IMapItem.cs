@@ -38,6 +38,7 @@ namespace Pattons_Best
       bool IsBuilding { get; set; }
       bool IsFortification { get; set; }
       bool IsThrownTrack { get; set; }
+      bool IsBoggedDown { get; set; }
       //----------------------------------------
       EnumSpottingResult Spotting { get; set; }
       //----------------------------------------

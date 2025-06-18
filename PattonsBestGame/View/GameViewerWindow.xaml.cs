@@ -357,6 +357,11 @@ namespace Pattons_Best
                else
                   MapItem.SetButtonContent(b100, gi.Sherman, true, true);
                break;
+            case GameAction.BattleRoundSequencePivotLeft:
+            case GameAction.BattleRoundSequencePivotRight:
+               if (false == UpdateCanvasMain(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
+               break;
             case GameAction.EndGameWin:
             case GameAction.EndGameLost:
                SaveDefaultsToSettings();

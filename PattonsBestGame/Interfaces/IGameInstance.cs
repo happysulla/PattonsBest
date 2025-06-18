@@ -59,14 +59,17 @@ namespace Pattons_Best
       List<string> Events { set; get; }
       Dictionary<string, int[]> DieResults { get; }
       //----------------------------------------------
+      int Day { get; set; }
       int GameTurn { set; get; }
       GamePhase GamePhase { set; get; }
-      BattlePhase BattlePhase { set; get; }
-      int Day { get; set; }
-      IAfterActionReports Reports { get; set; }
       GameAction DieRollAction { set; get; } // Used in EventViewerPanel when die roll happens to indicate next event for die roll
       bool IsUndoCommandAvailable { set; get; } // Allow user to back up if selected wrong user action
       String EndGameReason { set; get; }
+      //----------------------------------------------
+      IAfterActionReports Reports { get; set; }
+      BattlePhase BattlePhase { set; get; }
+      string MovementEffectOnSherman { set; get; }
+      string MovementEffectOnEnemy { set; get; }
       //----------------------------------------------
       IMapItems NewMembers { set; get; }
       IMapItems ReadyRacks { set; get; }
@@ -74,6 +77,7 @@ namespace Pattons_Best
       IMapItems CrewActions { set; get; }
       IMapItems GunLoads { set; get; }
       IMapItem Sherman { set; get; }
+      IMapItem? Target { set; get; }
       //------------------------------------------------
       ITerritory Home { get; set; }
       ITerritory? EnemyStrengthCheckTerritory { get; set; }
@@ -85,11 +89,12 @@ namespace Pattons_Best
       bool IsTurretActive { set; get; }
       bool IsHatchesActive { set; get; }
       //------------------------------------------------
+      bool IsShermanFiring { set; get; }
+      bool IsShermanFiringAtFront { set; get; }
+      //------------------------------------------------
       bool IsLeadTank { set; get; }
       bool IsAirStrikePending { set; get; }
       bool IsAdvancingFireChosen { set; get; }
-      bool IsShermanFiring { set; get; } 
-      bool IsShermanFiringAtFront { set; get; }
       bool IsBrokenMainGun { set; get; }
       bool IsBrokenGunsight { set; get; }
       bool IsBrokenMgCoaxial { set; get; }

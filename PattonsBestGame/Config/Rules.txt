@@ -325,7 +325,7 @@ r4.7	"<Bold>r4.7  Battle Round Sequence</Bold>
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r4.71' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Smoke Depletion Phase<LineBreak/>
 <InlineUIContainer><Button Content='r4.72' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Spotting Phase<LineBreak/>
-<InlineUIContainer><Button Content='r4.73' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> MarkCrewAction Phase<LineBreak/>
+<InlineUIContainer><Button Content='r4.73' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Orders Phase<LineBreak/>
 <InlineUIContainer><Button Content='r4.74' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Crew Actions Phase<LineBreak/>
 <InlineUIContainer><Button Content='r4.75' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Actions Phase<LineBreak/>
 <InlineUIContainer><Button Content='r4.76' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Friendly Action Phase<LineBreak/>
@@ -345,11 +345,11 @@ Mark those enemy units spotted or hidden with the Spotted and Hidden markers per
 <InlineUIContainer><Button Content='r17.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Determine the specific unit type for any unit identified per 
 <InlineUIContainer><Button Content='r17.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Continue with 
 <InlineUIContainer><Button Content='r4.73' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
-r4.73	"<Bold>r4.73  MarkCrewAction Phase</Bold>
+r4.73	"<Bold>r4.73  Orders Phase</Bold>
 <LineBreak/><LineBreak/>
 1. Hatch Segment: Open or close hatches by placing or removing Open Hatch marks on the Tank Card.
 <LineBreak/><LineBreak/>
-2. MarkCrewAction Segment: Mark crew battle actions by placing Crew Actions markers in the crew boxes of the Tank Card per 
+2. Orders Segment: Mark crew battle actions by placing Crew Actions markers in the crew boxes of the Tank Card per 
 <InlineUIContainer><Button Content='r8.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Place only one marker per crewman.
 <LineBreak/><LineBreak/>
 3. Ammo Reload Segment: Mark ammo reload if firing main gun by placing the Gun Reload marker in the box on the Tank Card for the ammo type you wish to reload per 
@@ -2185,7 +2185,7 @@ You may fire your tank's MGs into zones containing no spotted units as a type of
 vs. Infantry Targets Table. Any kills are recorded as victory points on the After Action Report 
 <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
  <LineBreak/><LineBreak/>
--- Remove these Advancing Fire markers specific for your MGs at the beginning of the MarkCrewAction Phase 
+-- Remove these Advancing Fire markers specific for your MGs at the beginning of the Orders Phase 
 <InlineUIContainer><Button Content='r4.73' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> of the next round
 <LineBreak/><LineBreak/>
                                         <InlineUIContainer><Image Name='c42FireBowMg'  Height='80' Width='80'></Image></InlineUIContainer>"
@@ -2368,6 +2368,72 @@ In order to use the stabilizer, your crew must be trained in its use. If not tra
 Trained crews may fire the main gun when the tank is moving or pivoting, although with the pentalty shown on the To Hit Tables. 
 <LineBreak/><LineBreak/>
 Gyrostabilizer training takes place during Refitting periods. "
+r28.0	"<Bold>r28.0 Hints of Play</Bold>
+<LineBreak/><LineBreak/>
+The Sherman tank was not designed to engage enemy tanks, but was to instead support infantry attacks and conduct sweeping movements behind breakthroughs in emeny lines. It fulfilled this role well.
+<LineBreak/><LineBreak/>
+However, once ashore in France, Allied tnakers often found their Shermans engaging much superior German tanks. The Serman tank could be easily knocked out byt German guns, while Sherman guns often had little effect against German vehicles. 
+<LineBreak/><LineBreak/>
+As the war continued, Allied tankers worked to develop new tactics and improve the Sherman tank to overcome German advantages. To survive, you will need luck and good tactics. 
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r28.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> r4.2 Ammo Loads<LineBreak/>
+<InlineUIContainer><Button Content='r28.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> r4.42 Hatches<LineBreak/>
+<InlineUIContainer><Button Content='r28.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> r4.43 Gun Load<LineBreak/>
+<InlineUIContainer><Button Content='r28.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> r4.44 Tank Facing<LineBreak/>
+<InlineUIContainer><Button Content='r28.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> r4.45 Spotting Markers<LineBreak/>
+<InlineUIContainer><Button Content='r28.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> r4.54 Operations<LineBreak/>
+<InlineUIContainer><Button Content='r28.7' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> r4.61 Advancing Fire Markers<LineBreak/>
+<InlineUIContainer><Button Content='r28.8' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> r4.73 Hatches and Ammo Reload<LineBreak/>
+<InlineUIContainer><Button Content='r28.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> r4.74 Crew Actions"
+r28.1	"<Bold>r28.1 Hints - Ammo Loads</Bold>  
+<InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
+Load about 60% HE, 20% AP, and 10% smoke for the 75 gun. Take all the HBCI you can get and accumulate it from day to day, but do not carry more than 15 rounds of it. 
+<LineBreak/><LineBreak/>
+Load the ready rack with at least half AP, one or two smoke rounds, adn the rest with HE rounds. 
+<LineBreak/><LineBreak/>
+For the 76L, load 60% HE and 40% AP including all the HVAP you can get. 
+<LineBreak/><LineBreak/>
+Accumulate any left over HVAP from day to day. Load ready rack 75% with AP and 25% HE."
+r28.2	"<Bold>r28.2 Hints - Hatches</Bold>  
+<InlineUIContainer><Button Content='r4.42' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
+Enter new areas with at least the commander&apos;s hatch open. Possibly also the loader, driver, and assistant driver."
+r28.3	"<Bold>r28.3 Hints - Gun Load</Bold>  
+<InlineUIContainer><Button Content='r4.43' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
+The most common load is HE but smoke and AP can be considered. AP is a good choice for Counterattack scenarios. If you are planning to use Advancing Fire, you must load HE."
+r28.4	"<Bold>r28.4 Hints - Tank Facing</Bold>  
+<InlineUIContainer><Button Content='r4.44' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
+Face the tank and turret toward Sectors 6-8. The first enemy units will all appear within one sector to your left or right, and this facing will minimize any turret rotation."
+r28.5	"<Bold>r28.5 Hints - Spotting Markers</Bold>  
+<InlineUIContainer><Button Content='r4.45' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
+Place the Loader Spot marker outside Sectors 4-5. If the commander is buttoned up with no vision cupola, place is marker outside Sector 9-10."
+r28.6	"<Bold>r28.6 Hints - Operations</Bold>  
+<InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
+Call for Artillery Support or Air Strikes and use Advancing Fire only when entering areas with expected heavy or medium resisitance."
+r28.7	"<Bold>r28.7 Hints - Advancing Fire Markers</Bold>  
+<InlineUIContainer><Button Content='r4.61' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
+Cover as many zones as possible but be certain to cover all non-US Controlled close range zones."
+r28.8	"<Bold>r28.8 Hints - Hatches and Ammo Reload</Bold>  
+<InlineUIContainer><Button Content='r4.73' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
+Once the battle begins, close up all hatches except possibly the commander&apos;s.
+<LineBreak/><LineBreak/>
+Reload from ready rack only if engaging a target that can knock you out."
+r28.9	"<Bold>r28.10 Hints - Crew Actions</Bold>  
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r4.74.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Tank Movement - Try to get hull down. Move to get closer to targets and to try and get side or rear shots. Face you tank at a target you are trying to close the distance.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Tank Main Gun Fire - Fire at targets you can knock out. Use smoke to hide yourself from Pz V and Pz VI tanks, especially those at long range. Do not fire at targets you have a poor chance of killing as you may draw their fire. Instead, move to spoil their aim and get yourself a better shot.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r4.74.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Tank MG Fire - Have the assistant driver fire Advancing Fire into the close zone to the tank's front if he has no target. Rarely fire the AA or Sub MGs.
+<LineBreak/><LineBreak/>
+<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Smoke Mortars and Smoke Grenades - Those are most useful when you are bogged down or the main gun has malfunctioned. They also can be used to provide smoke when you are moving."
 r29.0	"<Bold>r29.0 Fuel (Optional)</Bold>
 <LineBreak/><LineBreak/>
 All Sherman tank models carry a maxium of 35 units of fuel, where each unit equals 5 gallons (175 gallons total). During the Time Check step 
@@ -2397,11 +2463,38 @@ When the driver performs the actions Forward, Forward to Hull Down, Reversion, a
 If the colored die is 1-3, mark off 1 unit of fuel. 
 <LineBreak/><LineBreak/>
 A tank with no fuel may not perform the above movement actions, nor may the tank pivot."
-	
-	
-	
-	
-	
+r30.0	"<Bold>r30.0 British Firefly Variant</Bold>
+<LineBreak/><LineBreak/>
+The Sherman Firefly was a British variant of the Sherman tank notable become of its gun, the British 17 pounder (a 76LL). The gun fired a 17 pound shell at a very high velocity, and was capable of penetrating all but the thickest German armor. Although this gun was offered to the US, for various reasons, it was never was used by US troops.
+<LineBreak/><LineBreak/>
+For historical interest and comparison, a Tank Card (#18) and an 
+<InlineUIContainer><Button Content='AP To Kill (76LL)' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table have been included for one of the Firefly models. This allows you to experience commanding one of the best Sherman variants, even though it was never used by the 4th Armored Division.
+<LineBreak/><LineBreak/>
+When employing the Firefly variant, make the following adjustments to the normal rules at the noted step in the Sequence of Play:<LineBreak/>
+<InlineUIContainer><Button Content='r30.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Firefly Crew<LineBreak/>
+<InlineUIContainer><Button Content='r30.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Firefly Terrain<LineBreak/>
+<InlineUIContainer><Button Content='r30.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Firefly To Hit<LineBreak/>
+<InlineUIContainer><Button Content='r30.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> German Tactics against Firefly"
+r30.1	"<Bold>r30.1 Firefly Crew</Bold>
+<LineBreak/><LineBreak/>
+The Firefly crew consists of only four men as the assistant driver is eliminated to accommodate the extra large rounds of ammo for the 76LL gun. There is no Bow MG."
+r30.2	"<Bold>r30.2 Firefly Terrain</Bold>
+<LineBreak/><LineBreak/>
+The Firefly tank begins all engagements stopped/hulled down to provide cover fire. Mark the tank with the Hull down marker."
+r30.3	"<Bold>r30.3 Firefly To Hit</Bold>
+<LineBreak/><LineBreak/>
+Use the 
+<InlineUIContainer><Button Content='AP To Hit (76LL)' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table 
+when firing the 76LL gun. 
+<LineBreak/><LineBreak/>
+Use the 
+<InlineUIContainer><Button Content='AP To Kill (76LL)' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table 
+when firing the 76LL gun. "
+r30.4	"<Bold>r30.4 German Tactics against Firefly</Bold>
+<LineBreak/><LineBreak/>
+When rolling for non-Ambush Enemy Action; enemy tanks, SPGs, and AT guns fir at your tank on rolls 91-100 in addition to other rolls.
+<LineBreak/><LineBreak/>
+This represents the German tactic of trying to knock out Firefly tanks as soon as they were identified."
 	
 	
 	

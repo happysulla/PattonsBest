@@ -2965,9 +2965,9 @@ namespace Pattons_Best
          }
          if ((9 == dieRoll) || (10 == dieRoll)) // an unmodified roll of 9-10 means target is hidden
          {
-            if ((EnumSpottingResult.IDENTIFIED != mi.Spotting) || (EnumSpottingResult.SPOTTED != mi.Spotting))
+            if ( (EnumSpottingResult.IDENTIFIED != mi.Spotting) && (EnumSpottingResult.SPOTTED != mi.Spotting))
             {
-               Logger.Log(LogEnum.LE_SHOW_SPOT_RESULT, "GetSpottingResult(): mi=" + mi.Name + " Hidden - dr=" + dieRoll.ToString() + " mi.Spotting=" + mi.Spotting.ToString() );
+               Logger.Log(LogEnum.LE_ERROR, "GetSpottingResult(): mi=" + mi.Name + " Hidden - dr=" + dieRoll.ToString() + " mi.Spotting=" + mi.Spotting.ToString() );
                mi.Spotting = EnumSpottingResult.HIDDEN; // only applies if not already spotted or identified
                return "Hidden";
             }
@@ -3276,6 +3276,148 @@ namespace Pattons_Best
          else if (true == lastReport.Weather.Contains("Mud"))
             movingModifier += 9;
          return movingModifier;
+      }
+      public static string GetMovingResultSherman(IGameInstance gi, int dieRoll)
+      {
+         gi.Sherman.IsMoving = false;
+         gi.Sherman.IsHullDown = false;
+         if (100 == dieRoll) // unmodified dieroll=100 is bogged down
+         {
+            gi.Sherman.IsBoggedDown = true;
+            return "Bogged Down";
+         }
+         int modifier = GetMovingModifier(gi);
+         if( modifier < -100)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetMovingResultSherman(): GetMovingModifier() returned error");
+            return "ERROR";
+         }
+         dieRoll += modifier;
+         foreach (IMapItem crewAction in gi.CrewActions)
+         {
+            if (true== crewAction.Name.Contains("Driver"))
+            {
+               switch(crewAction.Name)
+               {
+                  case "Driver_Forward":
+                  case "Driver_Reverse":
+                     if (dieRoll < 98)
+                     {
+                        gi.Sherman.IsMoving = true;
+                        return "No Accident";
+                     }
+                     else if (dieRoll < 100)
+                     {
+                        gi.Sherman.IsThrownTrack = true;
+                        return "Thrown Track";
+                     }
+                     else
+                     {
+                        gi.Sherman.IsBoggedDown = true;
+                        return "Bogged Down";
+                     }
+                  case "Driver_ForwardToHullDown":
+                     if (dieRoll < 21)
+                     {
+                        gi.Sherman.IsHullDown = true;
+                        return "Hull Down";
+                     }
+                     else if (dieRoll < 98)
+                     {
+                        gi.Sherman.IsMoving = true;
+                        return "No Accident";
+                     }
+                     else if (dieRoll < 100)
+                     {
+                        gi.Sherman.IsThrownTrack = true;
+                        return "Thrown Track";
+                     }
+                     else
+                     {
+                        gi.Sherman.IsBoggedDown = true;
+                        return "Bogged Down";
+                     }
+                  case "Driver_ReverseToHullDown":
+                     if (dieRoll < 11)
+                     {
+                        gi.Sherman.IsHullDown = true;
+                        return "Hull Down";
+                     }
+                     else if (dieRoll < 98)
+                     {
+                        gi.Sherman.IsMoving = true;
+                        return "No Accident";
+                     }
+                     else if (dieRoll < 100)
+                     {
+                        gi.Sherman.IsThrownTrack = true;
+                        return "Thrown Track";
+                     }
+                     else
+                     {
+                        gi.Sherman.IsBoggedDown = true;
+                        return "Bogged Down";
+                     }
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "GetMovingResultSherman(): reached default crewaction=" + crewAction.Name);
+                     return "ERROR";
+               }
+            }
+         }
+         Logger.Log(LogEnum.LE_ERROR, "GetMovingResultSherman(): reached default");
+         return "ERROR";
+      }
+      public static string GetMovingResultEnemy(IGameInstance gi)
+      {
+         int dieRoll = DieRoller.WhiteDie;
+         if( dieRoll < 1 || 10 < dieRoll )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetMovingResultEnemy(): invalid dieRoll=" + dieRoll.ToString());
+            return "ERROR";
+         }
+         foreach (IMapItem crewAction in gi.CrewActions)
+         {
+            if (true == crewAction.Name.Contains("Driver"))
+            {
+               switch (crewAction.Name)
+               {
+                  case "Driver_Forward":
+                     if (dieRoll < 5)
+                        return "A";
+                     if (dieRoll < 6)
+                        return "C";
+                     return "None";
+                  case "Driver_Reverse":
+                     if (dieRoll < 3)
+                        return "B";
+                     if (dieRoll < 5)
+                        return "C";
+                     return "None";
+                  case "Driver_ForwardToHullDown":
+                     if (dieRoll < 3)
+                        return "A";
+                     if (dieRoll < 4)
+                        return "C";
+                     return "None";
+                  case "Driver_ReverseToHullDown":
+                     if (dieRoll < 2)
+                        return "B";
+                     if (dieRoll < 3)
+                        return "C";
+                     return "None";
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "GetMovingResultEnemy(): reached default crewaction=" + crewAction.Name);
+                     return "ERROR";
+               }
+            }
+         }
+         Logger.Log(LogEnum.LE_ERROR, "GetMovingResultEnemy(): reached default");
+         return "ERROR";
+      }
+      public static int GetToHitModifier(IGameInstance gi)
+      {
+         int modifier = 0;
+         return modifier;
       }
       //-------------------------------------------
       private void CreateCombatCalender()

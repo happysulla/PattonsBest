@@ -488,6 +488,17 @@ Resolve movement per the
 <InlineUIContainer><Button Content='Movement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Tables.
 <LineBreak/><LineBreak/>
 <Underline>Modifiers:</Underline><LineBreak/>"
+e052	"<Bold>e052 Pivot Tank</Bold> 
+<InlineUIContainer><Button Content='r4.74.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<InlineUIContainer><Button Content='r8.46' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<LineBreak/><LineBreak/>
+Select the plus or minus buttons to rotate.  
+<LineBreak/><LineBreak/>
+                                   <InlineUIContainer><Button Content='   -   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<InlineUIContainer><Image Name='Sherman'  Height='150' Width='150'></Image></InlineUIContainer> 
+<InlineUIContainer><Button Content='   +   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>
+When you are satisfied with the current orientation, click Sherman image between buttons to continue."
 e100	"<Bold>e100 Evening Debriefing</Bold> 
 <LineBreak/><LineBreak/>
 An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 

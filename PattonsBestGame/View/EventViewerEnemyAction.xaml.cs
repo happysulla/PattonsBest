@@ -323,7 +323,7 @@ namespace Pattons_Best
             {
                foreach (IMapItem mapItem in stack.MapItems)
                {
-                  if ( (true == mapItem.IsKilled) && (false == mapItem.Name.Contains("Sherman")) ) //remove enemy KIA units
+                  if ( (true == mapItem.IsKilled) && (false == mapItem.Name.Contains("Sherman")) ) // remove enemy KIA units
                      removals.Add(mapItem);
                   if( true == mapItem.TerritoryCurrent.Name.Contains("Off")) // remove all units that left the board
                      removals.Add(mapItem);

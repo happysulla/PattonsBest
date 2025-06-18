@@ -117,6 +117,7 @@ namespace Pattons_Best
       public bool IsBuilding { get; set; } = false;
       public bool IsFortification { get; set; } = false;
       public bool IsThrownTrack { get; set; } = false;
+      public bool IsBoggedDown { get; set; } = false;
       //--------------------------------------------------
       public EnumSpottingResult Spotting { get; set; } = EnumSpottingResult.UNSPOTTED;
       //----------------------------------------------------------------------------
@@ -351,7 +352,7 @@ namespace Pattons_Best
                   imgTurret = new Image() { Height = height, Width = width, Source = thePzVIeTurret };
                if (null == imgTurret)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "SetButtonContent(): turret=null");
+                  Logger.Log(LogEnum.LE_ERROR, "SetButtonContent(): turret=null mi=" + mi.Name);
                }
                else
                {

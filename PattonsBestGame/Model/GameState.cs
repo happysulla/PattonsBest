@@ -2965,11 +2965,27 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
                   }
                   break;
+               case GameAction.BattleRoundSequencePivotLeft:
+                  gi.Sherman.IsHullDown = false;
+                  gi.Sherman.IsMoving = false;
+                  gi.Sherman.RotationHull -= 60;
+                  if (gi.Sherman.RotationHull < 0)
+                     gi.Sherman.RotationHull = 300;
+                  break;
+               case GameAction.BattleRoundSequencePivotRight:
+                  gi.Sherman.IsHullDown = false;
+                  gi.Sherman.IsMoving = false;
+                  gi.Sherman.RotationHull += 60;
+                  if (359 < gi.Sherman.RotationHull)
+                     gi.Sherman.RotationHull = 0;
+                  break;
                case GameAction.BattleRoundSequenceMovementRoll:
                   if( Utilities.NO_RESULT == gi.DieResults[key][0] )
                   {
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
+                     gi.MovementEffectOnSherman = TableMgr.GetMovingResultSherman(gi, dieRoll);
+                     gi.MovementEffectOnEnemy = TableMgr.GetMovingResultEnemy(gi);
                   }
                   else
                   {
@@ -3100,6 +3116,7 @@ namespace Pattons_Best
       {
          gi.BattlePhase = BattlePhase.ConductCrewAction;
          bool isTankMoving = false;
+         bool isTankPivoting = false;
          foreach (IMapItem crewAction in gi.CrewActions)
          {
             if ("Driver_Forward" == crewAction.Name)
@@ -3112,11 +3129,18 @@ namespace Pattons_Best
                isTankMoving = true;
             if ("Driver_ReverseToHullDown" == crewAction.Name)
                isTankMoving = true;
+            if ("Driver_PivotTank" == crewAction.Name)
+               isTankPivoting = true;
          }
          if( true == isTankMoving )
          {
             gi.EventDisplayed = gi.EventActive = "e051";
             gi.DieRollAction = GameAction.BattleRoundSequenceMovementRoll;
+         }
+         if (true == isTankPivoting)
+         {
+            gi.EventDisplayed = gi.EventActive = "e052";
+            gi.DieRollAction = GameAction.BattleRoundSequencePivot;
          }
          return true;
       }
@@ -3428,6 +3452,11 @@ namespace Pattons_Best
       public bool ResetDay(IGameInstance gi, IAfterActionReport report)
       {
          ++gi.Day;
+         gi.GameTurn++;
+         gi.GamePhase = GamePhase.MorningBriefing;
+         gi.EventDisplayed = gi.EventActive = "e006";
+         gi.DieRollAction = GameAction.MorningBriefingCalendarRoll;
+         //-------------------------------------------------------
          ICombatCalendarEntry? newEntry = TableMgr.theCombatCalendarEntries[gi.Day];
          if (null == newEntry)
          {
@@ -3436,33 +3465,41 @@ namespace Pattons_Best
          }
          IAfterActionReport newReport = new AfterActionReport(newEntry, report);
          gi.Reports.Add(newReport);
-         gi.GamePhase = GamePhase.MorningBriefing;
-         gi.EventDisplayed = gi.EventActive = "e006";
-         gi.DieResults[gi.EventActive][0] = Utilities.NO_RESULT;
-         gi.DieRollAction = GameAction.MorningBriefingCalendarRoll;
-         //-------------------------------------------------------
          gi.BattlePhase = BattlePhase.Ambush;
+         gi.MovementEffectOnSherman = "unit";
+         gi.MovementEffectOnEnemy = "unit";
+         //-------------------------------------------------------
+         gi.NewMembers.Clear();
          gi.ReadyRacks.Clear();
          gi.Hatches.Clear();
-         gi.GunLoads.Clear();
          gi.CrewActions.Clear();
+         gi.GunLoads.Clear();
+         gi.Target = null;
+         //-------------------------------------------------------
          gi.EnemyStrengthCheckTerritory = null;
          gi.ArtillerySupportCheck = null;
+         gi.AirStrikeCheckTerritory = null;
          gi.EnteredArea = null;
          gi.AdvanceFire = null;
+         //-------------------------------------------------------
          gi.IsTurretActive = false;
          gi.IsHatchesActive = false;
+         //-------------------------------------------------------
          gi.IsLeadTank = false;
          gi.IsAirStrikePending = false;
          gi.IsAdvancingFireChosen = false;
          gi.IsShermanFiring = false;
          gi.IsShermanFiringAtFront = false;
          gi.IsBrokenGunsight = false;
+         gi.IsBrokenMgBow = false;
          gi.IsBrokenMgAntiAircraft = false;
+         gi.IsBrokenMgSub = false;
          gi.IsCommanderRescuePerformed = false;
+         //-------------------------------------------------------
          gi.IsMinefieldAttack = false;
          gi.IsHarrassingFire = false;
          gi.IsPromoted = false;
+         //-------------------------------------------------------
          gi.AdvancingFireMarkerCount = 0;
          gi.BattleResistance = EnumResistance.None;
          gi.BrokenPeriscopes.Clear();
@@ -3471,10 +3508,12 @@ namespace Pattons_Best
          gi.Death = null;
          gi.Panzerfaust = null;
          gi.NumCollateralDamage = 0;
+         //-------------------------------------------------------
          gi.MapItemMoves.Clear();
          gi.MoveStacks.Clear();
          gi.BattleStacks.Clear();
          gi.EnteredHexes.Clear();
+         //-------------------------------------------------------
          ICrewMember? commander = gi.GetCrewMember("Commander");
          if (null == commander)
          {

@@ -24,14 +24,17 @@ namespace Pattons_Best
       private Dictionary<string, int[]> myDieResults = new Dictionary<string, int[]>();
       public Dictionary<string, int[]> DieResults { get => myDieResults; }
       //------------------------------------------------
+      public int Day { get; set; } = 0;
       public int GameTurn { get; set; } = 0;
       public GamePhase GamePhase { get; set; } = GamePhase.GameSetup;
-      public BattlePhase BattlePhase { set; get; } = BattlePhase.None;
-      public int Day { get; set; } = 0;
-      public IAfterActionReports Reports { get; set; } = new AfterActionReports();
       public GameAction DieRollAction { get; set; } = GameAction.DieRollActionNone;
       public bool IsUndoCommandAvailable { set; get; } = false;
       public string EndGameReason { set; get; } = "";
+      //------------------------------------------------
+      public IAfterActionReports Reports { get; set; } = new AfterActionReports();
+      public BattlePhase BattlePhase { set; get; } = BattlePhase.None;
+      public string MovementEffectOnSherman { set; get; } = "unitialized";
+      public string MovementEffectOnEnemy { set; get; } = "unitialized";
       //---------------------------------------------------------------
       public IMapItems NewMembers { set; get; } = new MapItems();
       public IMapItems ReadyRacks { set; get; } = new MapItems();
@@ -39,6 +42,7 @@ namespace Pattons_Best
       public IMapItems CrewActions { set; get; } = new MapItems();
       public IMapItems GunLoads { set; get; } = new MapItems();
       public IMapItem Sherman { set; get; } = new MapItem("Sherman1", 2.0, "t001", new Territory());
+      public IMapItem? Target { set; get; } = null;
       //------------------------------------------------
       public ITerritory Home { get; set; } = new Territory();
       public ITerritory? EnemyStrengthCheckTerritory { get; set; } = null;
