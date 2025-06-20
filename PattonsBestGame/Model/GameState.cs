@@ -969,14 +969,17 @@ namespace Pattons_Best
             return false;
          }
          cm.IsButtonedUp = false;
-         ITerritory? t = Territories.theTerritories.Find("CommanderHatch");
-         if (null == t)
+         if (false == cm.IsButtonedUp)
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for CommanderHatch");
-            return false;
+            ITerritory? t = Territories.theTerritories.Find("CommanderHatch");
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for CommanderHatch");
+               return false;
+            }
+            IMapItem mi = new MapItem(cm.Role + "OpenHatch", 1.0, "c15OpenHatch", t);
+            gi.Hatches.Add(mi);
          }
-         IMapItem mi = new MapItem(cm.Role + "OpenHatch", 1.0, "c15OpenHatch", t);
-         gi.Hatches.Add(mi);
          //------------------------------------
          cm = gi.GetCrewMember("Driver");
          if (null == cm)
@@ -984,15 +987,18 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Driver");
             return false;
          }
-         cm.IsButtonedUp = false;
-         t = Territories.theTerritories.Find("DriverHatch");
-         if (null == t)
+         cm.IsButtonedUp = true;
+         if (false == cm.IsButtonedUp)
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for DriverHatch");
-            return false;
+            ITerritory? t = Territories.theTerritories.Find("DriverHatch");
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for DriverHatch");
+               return false;
+            }
+            IMapItem mi = new MapItem(cm.Role + "OpenHatch", 1.0, "c15OpenHatch", t);
+            gi.Hatches.Add(mi);
          }
-         mi = new MapItem(cm.Role + "OpenHatch", 1.0, "c15OpenHatch", t);
-         gi.Hatches.Add(mi);
          //------------------------------------
          cm = gi.GetCrewMember("Assistant");
          if (null == cm)
@@ -1000,15 +1006,18 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Assistant");
             return false;
          }
-         cm.IsButtonedUp = false;
-         t = Territories.theTerritories.Find("AssistantHatch");
-         if (null == t)
+         cm.IsButtonedUp = true;
+         if (false == cm.IsButtonedUp)
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for AssistantHatch");
-            return false;
+            ITerritory? t = Territories.theTerritories.Find("AssistantHatch");
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for AssistantHatch");
+               return false;
+            }
+            IMapItem mi = new MapItem(cm.Role + "OpenHatch", 1.0, "c15OpenHatch", t);
+            gi.Hatches.Add(mi);
          }
-         mi = new MapItem(cm.Role + "OpenHatch", 1.0, "c15OpenHatch", t);
-         gi.Hatches.Add(mi);
          //------------------------------------
          ITerritory? t1 = Territories.theTerritories.Find("Spot4");
          if (null == t1)
@@ -1079,7 +1088,7 @@ namespace Pattons_Best
          }
          if (true == tName.EndsWith("E"))
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): tName =" + tName);
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): unable to find random territory after count=" + count.ToString() + " tries - choosing tName=" + tName);
             tName = "M030";
          }
          gi.EnteredArea = Territories.theTerritories.Find(tName);
@@ -1138,11 +1147,11 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------------------
-         int NumEnemyUnitsAppearing = 7; // <cgs> TEST - number of enemy units appearing
+         int NumEnemyUnitsAppearing = 1; // <cgs> TEST - number of enemy units appearing
          for (int k = 0; k < NumEnemyUnitsAppearing; k++)
          {
             int die1 = Utilities.RandomGenerator.Next(0, 3);
-            die1 += 3; // <cgs> TEST - create enemy in US Sectors
+            //die1 += 3; // <cgs> TEST - create enemy in US Sectors
             int die2 = Utilities.RandomGenerator.Next(0, 3);
             string? tName = null;
             if (0 == die1)
@@ -1294,10 +1303,12 @@ namespace Pattons_Best
       }
       private void AddStartingTestingOptions(IGameInstance gi)
       {
-         gi.IsAdvancingFireChosen = false;
+         gi.IsAdvancingFireChosen = false; // <cgs> TEST
          //--------------------------------
          gi.IsLeadTank = true;
          //--------------------------------
+         //gi.Sherman.RotationHull = 300; // <cgs> TEST - &&&&&&&
+         //gi.Sherman.RotationTurret = 60;
          gi.Sherman.IsMoving = true;
          gi.Sherman.IsHullDown = false;
          //--------------------------------
@@ -3021,8 +3032,7 @@ namespace Pattons_Best
                      }
                      else
                      {
-                        gi.MovementEffectOnEnemy = "A"; // <cgs> TEST 
-                        gi.Sherman.RotationHull = 0;  // <cgs> TEST 
+                        // gi.MovementEffectOnEnemy = "B"; // <cgs> TEST - &&&&&&&
                         if (("A" == gi.MovementEffectOnEnemy) || ("B" == gi.MovementEffectOnEnemy))
                         {
                            if (false == MoveEnemyUnits(gi))

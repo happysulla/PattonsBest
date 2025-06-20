@@ -226,7 +226,10 @@ namespace Pattons_Best
                }
                break;
             case "Gunner":
-               switch (gi.Sherman.RotationTurret)
+               double rotation = gi.Sherman.RotationHull + gi.Sherman.RotationTurret;
+               if (359 < rotation)
+                  rotation -= 360.0;
+               switch (rotation)
                {
                   case 0:
                      spottedTerritories.Add("B6C");
@@ -277,7 +280,7 @@ namespace Pattons_Best
                      }
                      break;
                   default:
-                     Logger.Log(LogEnum.LE_ERROR, "GetSpottedTerritories(): 1-reached default for RotationHull=" + gi.Sherman.RotationHull.ToString());
+                     Logger.Log(LogEnum.LE_ERROR, "GetSpottedTerritories(): 1-reached default for rotation=" + rotation.ToString());
                      return null;
                }
                break;
