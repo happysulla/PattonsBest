@@ -19,6 +19,7 @@ using MenuItem = System.Windows.Controls.MenuItem;
 using Point = System.Windows.Point;
 using Pattons_Best.Properties;
 using System.Diagnostics;
+using System.Windows.Media.Media3D;
 
 namespace Pattons_Best
 {
@@ -1512,6 +1513,7 @@ namespace Pattons_Best
                   break;
                case GameAction.MovementAdvanceFireChoice:
                case GameAction.UpdateBattleBoard:
+               case GameAction.BattleRoundSequenceMovementRoll:
                   if (false == UpdateCanvasMovement(gi, action, stacks, buttons))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMovement() returned false");
@@ -2014,9 +2016,14 @@ namespace Pattons_Best
       private bool MovePathAnimate(IMapItemMove mim, List<Button> buttons)
       {
          const int ANIMATE_TIME_SEC = 4;
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): myGameInstance=null for n=" + mim.MapItem.Name);
+            return false;
+         }
          if (null == mim.NewTerritory)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): b=null for n=" + mim.MapItem.Name);
+            Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): mim.NewTerritory=null n=" + mim.MapItem.Name);
             return false;
          }
          Button? b = buttons.Find(mim.MapItem.Name);
@@ -2050,13 +2057,24 @@ namespace Pattons_Best
                aPathFigure.Segments.Add(lineSegment);
             }
             // Add the last line segment
-            IMapPoint mp = Territory.GetRandomPoint(mim.NewTerritory, mim.MapItem.Zoom * Utilities.theMapItemOffset);
+            IMapPoint mp;
+            if (BattlePhase.EnemyAction == myGameInstance.BattlePhase)
+            {
+               mp = Territory.GetRandomPoint(mim.NewTerritory, mim.MapItem.Zoom * Utilities.theMapItemOffset);
+            }
+            else
+            {
+               mp = Territory.GetRandomPoint(mim.NewTerritory, mim.MapItem.Zoom * Utilities.theMapItemOffset);
+               //double diffY = Math.Abs(myGameInstance.Home.CenterPoint.Y - yStart);
+               //mp = new MapPoint(xStart, yStart + diffY);
+            }
             if ((Math.Abs(mp.X - xStart) < 2) && (Math.Abs(mp.Y - yStart) < 2)) // if already at final location, skip animation or get runtime exception
                return true;
             theOldXAfterAnimation = mp.X;
             theOldYAfterAnimation = mp.Y;
             //----------------------------------------------------
             System.Windows.Point newPoint2 = new System.Windows.Point(mp.X, mp.Y);
+
             LineSegment lineSegment2 = new LineSegment(newPoint2, false);
             aPathFigure.Segments.Add(lineSegment2);
             // Animiate the map item along the line segment
@@ -2072,15 +2090,20 @@ namespace Pattons_Best
             yAnimiation.Duration = TimeSpan.FromSeconds(ANIMATE_TIME_SEC);
             yAnimiation.Source = PathAnimationSource.Y;
             b.RenderTransform = new TranslateTransform();
+            b.RenderTransformOrigin = new Point(0.5, 0.5);
+            RotateTransform rotateTransform = new RotateTransform();
             //----------------------------------------------------
-            if( true == mim.MapItem.IsVehicle )
+            if ( (true == mim.MapItem.IsVehicle) && (BattlePhase.EnemyAction == myGameInstance.BattlePhase) )
             {
                double xDiff = xStart - mp.X;
                double yDiff = yStart - mp.Y;
                double angleRotation = Math.Atan2(yDiff, xDiff) * 180 / Math.PI - 90;
-               RotateTransform rotateTransform = new RotateTransform();
-               b.RenderTransformOrigin = new Point(0.5, 0.5);
                rotateTransform.Angle = angleRotation;
+               b.RenderTransform = rotateTransform;
+            }
+            else
+            {
+               rotateTransform.Angle = mim.MapItem.RotationOffset + mim.MapItem.RotationHull;
                b.RenderTransform = rotateTransform;
             }
             //----------------------------------------------------

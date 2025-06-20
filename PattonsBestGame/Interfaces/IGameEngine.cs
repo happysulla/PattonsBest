@@ -87,6 +87,19 @@ namespace Pattons_Best
       RandomEvent,
       Error
    };
+   [Serializable]
+   public enum CrewActionPhase
+   {
+      None,
+      Movement,
+      TankMainGunFire,
+      TankMgFire,
+      ReplacePeriscope,
+      RepairGun,
+      FireMortar,
+      ThrowGrenades,
+      Error
+   };
    // GameState is a subclass representing the state pattern. For each game state, there can be different
    // game phases and game actions. The GameEngine makes a call that each class can act on..
    // GameEngine.PerformAction() ==> GameState.PerformAction()
@@ -244,6 +257,9 @@ namespace Pattons_Best
       BattleRoundSequencePivot,
       BattleRoundSequencePivotLeft,
       BattleRoundSequencePivotRight,
+      BattleRoundSequenceMovementPivotEnd,
+      BattleRoundSequenceShermanFiringMainGun,
+      BattleRoundSequenceEnemyAction,
 
       BattleRoundSequenceShermanKilled,
       BattleRoundSequenceEnemyArtilleryRoll,

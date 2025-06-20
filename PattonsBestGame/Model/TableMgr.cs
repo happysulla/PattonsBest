@@ -1707,6 +1707,533 @@ namespace Pattons_Best
          }
          return newT;
       }
+      public static ITerritory? SetNewTerritoryShermanMove(IMapItem sherman, IMapItem mi, string originalMove)
+      {
+         if (EnumSpottingResult.HIDDEN == mi.Spotting)
+            mi.Spotting = EnumSpottingResult.UNSPOTTED;
+         ITerritory oldT = mi.TerritoryCurrent;
+         string? newTerritoryName = null;
+         double rotation = sherman.RotationHull;
+         string move = originalMove;
+         if( "A" == move )
+         {
+            if (180.0 == sherman.RotationHull)
+            {
+               move = "B";
+               rotation = 0.0;
+            }
+            if (240 == sherman.RotationHull)
+            {
+               move = "B";
+               rotation = 60.0;
+            }
+            if (120 == sherman.RotationHull)
+            {
+               move = "B";
+               rotation = 300.0;
+            }
+         }
+         else if ("B" == move)
+         {
+            if (180.0 == sherman.RotationHull)
+            {
+               move = "A";
+               rotation = 0.0;
+            }
+            if (240 == sherman.RotationHull)
+            {
+               move = "A";
+               rotation = 60.0;
+            }
+            if (120 == sherman.RotationHull)
+            {
+               move = "A";
+               rotation = 300.0;
+            }
+         }
+         else 
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move);
+            return null;
+         }
+         //----------------------------------
+         switch (rotation)
+         {
+            case 0.0:
+               switch(oldT.Name)
+               {
+                  case "B1C":
+                     if ("A" == move)
+                        newTerritoryName = "B1M";
+                     else if ("B" == move)
+                        newTerritoryName = "B9C";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + rotation.ToString());
+                     break;
+                  case "B1M":
+                     if ("A" == move)
+                        newTerritoryName = "B1L";
+                     else if ("B" == move)
+                        newTerritoryName = "B9M";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + rotation.ToString());
+                     break;
+                  case "B1L":
+                     if ("A" == move)
+                        newTerritoryName = "OffBottomRight";
+                     else if ("B" == move)
+                        newTerritoryName = "B9L";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + rotation.ToString());
+                     break;
+                  case "B2C":
+                     if ("A" == move)
+                        newTerritoryName = "B2M";
+                     else if ("B" == move)
+                        newTerritoryName = "B6C";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + rotation.ToString());
+                     break;
+                  case "B2M":
+                     if ("A" == move)
+                        newTerritoryName = "B2L";
+                     else if ("B" == move)
+                        newTerritoryName = "B2C";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + rotation.ToString());
+                     break;
+                  case "B2L":
+                     if ("A" == move)
+                        newTerritoryName = "OffBottomLeft";
+                     else if ("B" == move)
+                        newTerritoryName = "B2M";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + rotation.ToString());
+                     break;
+                  case "B3C":
+                     if ("A" == move)
+                        newTerritoryName = "B3M";
+                     else if ("B" == move)
+                        newTerritoryName = "B4C";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + rotation.ToString());
+                     break;
+                  case "B3M":
+                     if ("A" == move)
+                        newTerritoryName = "B3L";
+                     else if ("B" == move)
+                        newTerritoryName = "B4M";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + rotation.ToString());
+                     break;
+                  case "B3L":
+                     if ("A" == move)
+                        newTerritoryName = "OffBottomLeft";
+                     else if ("B" == move)
+                        newTerritoryName = "B4L";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + rotation.ToString());
+                     break;
+                  case "B4C":
+                     if ("A" == move)
+                        newTerritoryName = "B3C";
+                     else if ("B" == move)
+                        newTerritoryName = "B4M";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + rotation.ToString());
+                     break;
+                  case "B4M":
+                     if ("A" == move)
+                        newTerritoryName = "B3M";
+                     else if ("B" == move)
+                        newTerritoryName = "B4L";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + rotation.ToString());
+                     break;
+                  case "B4L":
+                     if ("A" == move)
+                        newTerritoryName = "B3L";
+                     else if ("B" == move)
+                        newTerritoryName = "OffTopLeft";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + rotation.ToString());
+                     break;
+                  case "B6C":
+                     if ("A" == move)
+                        newTerritoryName = "B2C";
+                     else if ("B" == move)
+                        newTerritoryName = "B6M";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + rotation.ToString());
+                     break;
+                  case "B6M":
+                     if ("A" == move)
+                        newTerritoryName = "B6C";
+                     else if ("B" == move)
+                        newTerritoryName = "B6L";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + rotation.ToString());
+                     break;
+                  case "B6L":
+                     if ("A" == move)
+                        newTerritoryName = "B6M";
+                     else if ("B" == move)
+                        newTerritoryName = "OffTopRight";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + rotation.ToString());
+                     break;
+                  case "B9C":
+                     if ("A" == move)
+                        newTerritoryName = "B1C";
+                     else if ("B" == move)
+                        newTerritoryName = "B9M";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + rotation.ToString());
+                     break;
+                  case "B9M":
+                     if ("A" == move)
+                        newTerritoryName = "B1M";
+                     else if ("B" == move)
+                        newTerritoryName = "B9L";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + rotation.ToString());
+                     break;
+                  case "B9L":
+                     if ("A" == move)
+                        newTerritoryName = "B1L";
+                     else if ("B" == move)
+                        newTerritoryName = "OffTopRight";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + rotation.ToString());
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + rotation.ToString());
+                     break;
+               }
+               break;
+            case 60.0:
+               switch (oldT.Name)
+               {
+                  case "B1C":
+                     if ("A" == move)
+                        newTerritoryName = "B2C";
+                     else if ("B" == move)
+                        newTerritoryName = "B1M";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B1M":
+                     if ("A" == move)
+                        newTerritoryName = "B2M";
+                     else if ("B" == move)
+                        newTerritoryName = "B1L";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B1L":
+                     if ("A" == move)
+                        newTerritoryName = "B2L";
+                     else if ("B" == move)
+                        newTerritoryName = "OffBottomRight";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B2C":
+                     if ("A" == move)
+                        newTerritoryName = "B2M";
+                     else if ("B" == move)
+                        newTerritoryName = "B1C";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B2M":
+                     if ("A" == move)
+                        newTerritoryName = "B2L";
+                     else if ("B" == move)
+                        newTerritoryName = "B1M";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B2L":
+                     if ("A" == move)
+                        newTerritoryName = "OffBottomLeft";
+                     else if ("B" == move)
+                        newTerritoryName = "B1L";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B3C":
+                     if ("A" == move)
+                        newTerritoryName = "B3M";
+                     else if ("B" == move)
+                        newTerritoryName = "B9C";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B3M":
+                     if ("A" == move)
+                        newTerritoryName = "B3L";
+                     else if ("B" == move)
+                        newTerritoryName = "B3C";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B3L":
+                     if ("A" == move)
+                        newTerritoryName = "OffBottomLeft";
+                     else if ("B" == move)
+                        newTerritoryName = "B3M";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B4C":
+                     if ("A" == move)
+                        newTerritoryName = "B4M";
+                     else if ("B" == move)
+                        newTerritoryName = "B6C";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B4M":
+                     if ("A" == move)
+                        newTerritoryName = "B4L";
+                     else if ("B" == move)
+                        newTerritoryName = "B6M";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B4L":
+                     if ("A" == move)
+                        newTerritoryName = "OffTopLeft";
+                     else if ("B" == move)
+                        newTerritoryName = "B6L";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B6C":
+                     if ("A" == move)
+                        newTerritoryName = "B4C";
+                     else if ("B" == move)
+                        newTerritoryName = "B6M";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B6M":
+                     if ("A" == move)
+                        newTerritoryName = "B4M";
+                     else if ("B" == move)
+                        newTerritoryName = "B6L";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B6L":
+                     if ("A" == move)
+                        newTerritoryName = "B4L";
+                     else if ("B" == move)
+                        newTerritoryName = "OffTopLeft";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B9C":
+                     if ("A" == move)
+                        newTerritoryName = "B3C";
+                     else if ("B" == move)
+                        newTerritoryName = "B9M";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B9M":
+                     if ("A" == move)
+                        newTerritoryName = "B9C";
+                     else if ("B" == move)
+                        newTerritoryName = "B9L";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B9L":
+                     if ("A" == move)
+                        newTerritoryName = "B9M";
+                     else if ("B" == move)
+                        newTerritoryName = "OffTopRight";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+               }
+               break;
+            case 300.0:
+               switch (oldT.Name)
+               {
+                  case "B1C":
+                     if ("A" == move)
+                        newTerritoryName = "B1M";
+                     else if ("B" == move)
+                        newTerritoryName = "B4C";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B1M":
+                     if ("A" == move)
+                        newTerritoryName = "B1L";
+                     else if ("B" == move)
+                        newTerritoryName = "B1C";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B1L":
+                     if ("A" == move)
+                        newTerritoryName = "OffBottomRight";
+                     else if ("B" == move)
+                        newTerritoryName = "B1M";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B2C":
+                     if ("A" == move)
+                        newTerritoryName = "B2M";
+                     else if ("B" == move)
+                        newTerritoryName = "B3C";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B2M":
+                     if ("A" == move)
+                        newTerritoryName = "B2L";
+                     else if ("B" == move)
+                        newTerritoryName = "B3M";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B2L":
+                     if ("A" == move)
+                        newTerritoryName = "OffBottomLeft";
+                     else if ("B" == move)
+                        newTerritoryName = "B3L";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B3C":
+                     if ("A" == move)
+                        newTerritoryName = "B2C";
+                     else if ("B" == move)
+                        newTerritoryName = "B3M";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B3M":
+                     if ("A" == move)
+                        newTerritoryName = "B2M";
+                     else if ("B" == move)
+                        newTerritoryName = "B3L";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B3L":
+                     if ("A" == move)
+                        newTerritoryName = "B2L";
+                     else if ("B" == move)
+                        newTerritoryName = "OffBottomLeft";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B4C":
+                     if ("A" == move)
+                        newTerritoryName = "B1C";
+                     else if ("B" == move)
+                        newTerritoryName = "B4M";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B4M":
+                     if ("A" == move)
+                        newTerritoryName = "B4C";
+                     else if ("B" == move)
+                        newTerritoryName = "B4L";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B4L":
+                     if ("A" == move)
+                        newTerritoryName = "B4M";
+                     else if ("B" == move)
+                        newTerritoryName = "OffTopLeft";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B6C":
+                     if ("A" == move)
+                        newTerritoryName = "B9C";
+                     else if ("B" == move)
+                        newTerritoryName = "B6M";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B6M":
+                     if ("A" == move)
+                        newTerritoryName = "B9M";
+                     else if ("B" == move)
+                        newTerritoryName = "B6L";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B6L":
+                     if ("A" == move)
+                        newTerritoryName = "B9L";
+                     else if ("B" == move)
+                        newTerritoryName = "OffTopLeft";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B9C":
+                     if ("A" == move)
+                        newTerritoryName = "B9M";
+                     else if ("B" == move)
+                        newTerritoryName = "B6C";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B9M":
+                     if ("A" == move)
+                        newTerritoryName = "B9L";
+                     else if ("B" == move)
+                        newTerritoryName = "B6M";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "B9L":
+                     if ("A" == move)
+                        newTerritoryName = "OffTopRight";
+                     else if ("B" == move)
+                        newTerritoryName = "B6L";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+               }
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default rot=" + sherman.RotationHull.ToString() + " oldT=" + oldT.Name + " move=" + move + " rot=" + sherman.RotationHull.ToString());
+               return null;
+         }
+         //----------------------------------
+         if (null == newTerritoryName)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): newTerritoryName=null move=" + move + " for oldT=" + oldT.Name);
+            return null;
+         }
+         ITerritory? newT = Territories.theTerritories.Find(newTerritoryName);
+         if (null == newT)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): newT=null newTerritoryName=" + newTerritoryName);
+            return null;
+         }
+         Logger.Log(LogEnum.LE_SHOW_SHERMAN_MOVE, "SetNewTerritoryShermanMove(): " + oldT.Name + "-->" + newTerritoryName + " m=" + originalMove + " r=" + sherman.RotationHull.ToString("F0"));
+         return newT;
+      }
       //-------------------------------------------
       public static double GetToKillNumberInfantry(IGameInstance gi, IMapItem mi, char sector, char range)
       {

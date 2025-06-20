@@ -68,6 +68,7 @@ namespace Pattons_Best
       //----------------------------------------------
       IAfterActionReports Reports { get; set; }
       BattlePhase BattlePhase { set; get; }
+      CrewActionPhase CrewActionPhase { set; get; }
       string MovementEffectOnSherman { set; get; }
       string MovementEffectOnEnemy { set; get; }
       //----------------------------------------------

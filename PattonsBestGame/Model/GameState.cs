@@ -1125,7 +1125,6 @@ namespace Pattons_Best
       }
       private bool PerformAutoSetupSkipBattleSetup(IGameInstance gi)
       {
-
          if (false == PerformAutoSetupSkipMovement(gi))
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): PerformAutoSetupSkipMovement() returned false");
@@ -1139,10 +1138,11 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------------------
-         int NumEnemyUnitsAppearing = 1; // <cgs> TEST - number of enemy units appearing
+         int NumEnemyUnitsAppearing = 7; // <cgs> TEST - number of enemy units appearing
          for (int k = 0; k < NumEnemyUnitsAppearing; k++)
          {
             int die1 = Utilities.RandomGenerator.Next(0, 3);
+            die1 += 3; // <cgs> TEST - create enemy in US Sectors
             int die2 = Utilities.RandomGenerator.Next(0, 3);
             string? tName = null;
             if (0 == die1)
@@ -1171,6 +1171,33 @@ namespace Pattons_Best
                   tName = "B9M";
                else if (2 == die2)
                   tName = "B9L";
+            }
+            else if (3 == die1)
+            {
+               if (0 == die2)
+                  tName = "B1C";
+               else if (1 == die2)
+                  tName = "B1M";
+               else if (2 == die2)
+                  tName = "B1L";
+            }
+            else if (4 == die1)
+            {
+               if (0 == die2)
+                  tName = "B2C";
+               else if (1 == die2)
+                  tName = "B2M";
+               else if (2 == die2)
+                  tName = "B2L";
+            }
+            else if (5 == die1)
+            {
+               if (0 == die2)
+                  tName = "B3C";
+               else if (1 == die2)
+                  tName = "B3M";
+               else if (2 == die2)
+                  tName = "B3L";
             }
             if (null == tName)
             {
@@ -2959,7 +2986,8 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceHarrassingFire:
                   break;
                case GameAction.BattleRoundSequenceConductCrewAction:
-                  if( false == ConductCrewAction(gi))
+                   gi.CrewActionPhase = CrewActionPhase.Movement;
+                  if ( false == ConductCrewAction(gi, ref action))
                   {
                      returnStatus = "ConductCrewAction() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
@@ -2980,16 +3008,39 @@ namespace Pattons_Best
                      gi.Sherman.RotationHull = 0;
                   break;
                case GameAction.BattleRoundSequenceMovementRoll:
-                  if( Utilities.NO_RESULT == gi.DieResults[key][0] )
+                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                      gi.MovementEffectOnSherman = TableMgr.GetMovingResultSherman(gi, dieRoll);
                      gi.MovementEffectOnEnemy = TableMgr.GetMovingResultEnemy(gi);
+                     if ("ERROR" == gi.MovementEffectOnEnemy)
+                     {
+                        returnStatus = "GetMovingResultEnemy() returned ERROR";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                     }
+                     else
+                     {
+                        gi.MovementEffectOnEnemy = "A"; // <cgs> TEST 
+                        gi.Sherman.RotationHull = 0;  // <cgs> TEST 
+                        if (("A" == gi.MovementEffectOnEnemy) || ("B" == gi.MovementEffectOnEnemy))
+                        {
+                           if (false == MoveEnemyUnits(gi))
+                           {
+                              returnStatus = "MoveEnemyUnits(gi) returned false for a=" + action.ToString();
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                           }
+                        }
+                     }
                   }
                   else
                   {
-
+                     gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
+                     if (false == ConductCrewAction(gi, ref action))
+                     {
+                        returnStatus = "ConductCrewAction() returned false";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                     }
                   }
                   break;
                case GameAction.EveningDebriefingStart:
@@ -3112,35 +3163,146 @@ namespace Pattons_Best
          gi.DieRollAction = GameAction.DieRollActionNone;
          return true;
       }
-      private bool ConductCrewAction(IGameInstance gi)
+      private bool ConductCrewAction(IGameInstance gi, ref GameAction outAction)
       {
          gi.BattlePhase = BattlePhase.ConductCrewAction;
-         bool isTankMoving = false;
-         bool isTankPivoting = false;
-         foreach (IMapItem crewAction in gi.CrewActions)
+         if( CrewActionPhase.Movement == gi.CrewActionPhase )
          {
-            if ("Driver_Forward" == crewAction.Name)
-               isTankMoving = true;
-            if ("Driver_ForwardToHullDown" == crewAction.Name)
-               isTankMoving = true;
-            if ("Driver_Reverse" == crewAction.Name)
-               isTankMoving = true;
-            if ("Driver_ReverseToHullDown" == crewAction.Name)
-               isTankMoving = true;
-            if ("Driver_ReverseToHullDown" == crewAction.Name)
-               isTankMoving = true;
-            if ("Driver_PivotTank" == crewAction.Name)
-               isTankPivoting = true;
+            gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
+            bool isTankMoving = false;
+            bool isTankPivoting = false;
+            foreach (IMapItem crewAction in gi.CrewActions)
+            {
+               if ("Driver_Forward" == crewAction.Name)
+                  isTankMoving = true;
+               if ("Driver_ForwardToHullDown" == crewAction.Name)
+                  isTankMoving = true;
+               if ("Driver_Reverse" == crewAction.Name)
+                  isTankMoving = true;
+               if ("Driver_ReverseToHullDown" == crewAction.Name)
+                  isTankMoving = true;
+               if ("Driver_ReverseToHullDown" == crewAction.Name)
+                  isTankMoving = true;
+               if ("Driver_PivotTank" == crewAction.Name)
+                  isTankPivoting = true;
+            }
+            if (true == isTankMoving)
+            {
+               gi.CrewActionPhase = CrewActionPhase.Movement;
+               gi.EventDisplayed = gi.EventActive = "e051";
+               gi.DieRollAction = GameAction.BattleRoundSequenceMovementRoll;
+            }
+            if (true == isTankPivoting)
+            {
+               gi.CrewActionPhase = CrewActionPhase.Movement;
+               gi.EventDisplayed = gi.EventActive = "e052";
+               gi.DieRollAction = GameAction.BattleRoundSequencePivot;
+            }
          }
-         if( true == isTankMoving )
+         if (CrewActionPhase.TankMainGunFire == gi.CrewActionPhase)
          {
-            gi.EventDisplayed = gi.EventActive = "e051";
-            gi.DieRollAction = GameAction.BattleRoundSequenceMovementRoll;
+            gi.CrewActionPhase = CrewActionPhase.TankMgFire;
+            bool isTankFiringMainGun = false;
+            foreach (IMapItem crewAction in gi.CrewActions)
+            {
+               if ("Gunner_FireMainGun" == crewAction.Name)
+                  isTankFiringMainGun = true;
+            }
+            if( true == isTankFiringMainGun)
+            {
+               outAction = GameAction.BattleRoundSequenceShermanFiringMainGun;
+               gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
+               gi.EventDisplayed = gi.EventActive = "e053";
+               gi.DieRollAction = GameAction.DieRollActionNone;
+            }
          }
-         if (true == isTankPivoting)
+         if (CrewActionPhase.TankMgFire == gi.CrewActionPhase)
          {
-            gi.EventDisplayed = gi.EventActive = "e052";
-            gi.DieRollAction = GameAction.BattleRoundSequencePivot;
+            gi.CrewActionPhase = CrewActionPhase.ReplacePeriscope;
+         }
+         if (CrewActionPhase.ReplacePeriscope == gi.CrewActionPhase)
+         {
+            gi.CrewActionPhase = CrewActionPhase.RepairGun;
+         }
+         if (CrewActionPhase.RepairGun == gi.CrewActionPhase)
+         {
+            gi.CrewActionPhase = CrewActionPhase.FireMortar;
+         }
+         if (CrewActionPhase.FireMortar == gi.CrewActionPhase)
+         {
+            gi.CrewActionPhase = CrewActionPhase.ThrowGrenades;
+         }
+         if (CrewActionPhase.ThrowGrenades == gi.CrewActionPhase)
+         {
+            gi.CrewActionPhase = CrewActionPhase.None;
+         }
+         if (CrewActionPhase.None == gi.CrewActionPhase)
+         {
+            gi.DieRollAction = GameAction.BattleRoundSequenceEnemyAction;
+         }
+         return true;
+      }
+      private bool MoveEnemyUnits(IGameInstance gi)
+      {
+         IMapItems enemyUnits = new MapItems();
+         foreach(IStack stack in gi.BattleStacks )
+         {
+            foreach(IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.IsEnemyUnit())
+                  enemyUnits.Add(mi);
+            }
+         }
+         foreach(IMapItem mi in enemyUnits)
+         {
+            ITerritory? newT = TableMgr.SetNewTerritoryShermanMove(gi.Sherman, mi, gi.MovementEffectOnEnemy);
+            if (null == newT)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MoveEnemyUnits(): SetNewTerritoryShermanMove() returned null");
+               return false;
+            }
+            //--------------------------------------------
+            if (3 == newT.Name.Length)
+            {
+               char sector = newT.Name[newT.Name.Length - 2];
+               string tName = "B" + sector + "M";
+               IStack? stack = gi.BattleStacks.Find(tName);
+               if (null != stack)
+               {
+                  IMapItems removals = new MapItems();
+                  foreach (MapItem removal in stack.MapItems)
+                  {
+                     if (true == removal.Name.Contains("UsControl"))
+                        removals.Add(removal);
+                  }
+                  foreach (IMapItem removal in removals)
+                     gi.BattleStacks.Remove(removal);
+               }
+            }
+            MapItemMove mim = new MapItemMove(Territories.theTerritories, mi, newT);
+            if (true == mim.CtorError)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MoveEnemyUnits(): mim.CtorError=true for start=" + mi.TerritoryStarting.ToString() + " for newT=" + newT.Name);
+               return false;
+            }
+            if (null == mim.NewTerritory)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MoveEnemyUnits(): Invalid Parameter mim.NewTerritory=null" + " for start=" + mi.TerritoryStarting.ToString() + " for newT=" + newT.Name);
+               return false;
+            }
+            if (null == mim.BestPath)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MoveEnemyUnits(): Invalid Parameter mim.BestPath=null" + " for start=" + mi.TerritoryStarting.ToString() + " for newT=" + newT.Name);
+               return false;
+            }
+            if (0 == mim.BestPath.Territories.Count)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MoveEnemyUnits(): Invalid State Territories.Count=" + mim.BestPath.Territories.Count.ToString() + " for start=" + mi.TerritoryStarting.ToString() + " for newT=" + newT.Name);
+               return false;
+            }
+            gi.MapItemMoves.Insert(0, mim); // add at front
+            Logger.Log(LogEnum.LE_VIEW_MIM_ADD, "MoveEnemyUnits(): mi=" + mi.Name + " moving to t=" + newT.Name);
+            //--------------------------------------------
          }
          return true;
       }
@@ -3466,6 +3628,7 @@ namespace Pattons_Best
          IAfterActionReport newReport = new AfterActionReport(newEntry, report);
          gi.Reports.Add(newReport);
          gi.BattlePhase = BattlePhase.Ambush;
+         gi.CrewActionPhase = CrewActionPhase.Movement;
          gi.MovementEffectOnSherman = "unit";
          gi.MovementEffectOnEnemy = "unit";
          //-------------------------------------------------------

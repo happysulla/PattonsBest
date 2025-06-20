@@ -33,6 +33,7 @@ namespace Pattons_Best
       //------------------------------------------------
       public IAfterActionReports Reports { get; set; } = new AfterActionReports();
       public BattlePhase BattlePhase { set; get; } = BattlePhase.None;
+      public CrewActionPhase CrewActionPhase { set; get; } = CrewActionPhase.None;
       public string MovementEffectOnSherman { set; get; } = "unitialized";
       public string MovementEffectOnEnemy { set; get; } = "unitialized";
       //---------------------------------------------------------------

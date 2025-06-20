@@ -32,6 +32,7 @@ namespace Pattons_Best
       LE_SHOW_SPOT_RESULT,
       LE_SHOW_ORDERS_MENU,
       LE_SHOW_AMMMO_MENU,
+      LE_SHOW_SHERMAN_MOVE,
       //-------------
       LE_VIEW_ADV_FIRE_RESOLVE,
       LE_VIEW_ART_FIRE_RESOLVE,
@@ -110,7 +111,8 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_SPOT_MOD);
          //SetOn(LogEnum.LE_SHOW_SPOT_RESULT);
          //SetOn(LogEnum.LE_SHOW_ORDERS_MENU);
-         SetOn(LogEnum.LE_SHOW_AMMMO_MENU);
+         //SetOn(LogEnum.LE_SHOW_AMMMO_MENU);
+         SetOn(LogEnum.LE_SHOW_SHERMAN_MOVE);
          //-------------------------------
          //SetOn(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE);
          //SetOn(LogEnum.LE_VIEW_ART_FIRE_RESOLVE);

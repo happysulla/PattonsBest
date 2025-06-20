@@ -495,10 +495,17 @@ e052	"<Bold>e052 Pivot Tank</Bold>
 Select the plus or minus buttons to rotate.  
 <LineBreak/><LineBreak/>
                                    <InlineUIContainer><Button Content='   -   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-<InlineUIContainer><Image Name='Sherman'  Height='150' Width='150'></Image></InlineUIContainer> 
+<InlineUIContainer><Image Name='ShermanPivot'  Height='150' Width='150'></Image></InlineUIContainer> 
 <InlineUIContainer><Button Content='   +   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
 When you are satisfied with the current orientation, click Sherman image between buttons to continue."
+e053	"<Bold>e053 Main Gun Firing</Bold> 
+<InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<LineBreak/><LineBreak/>
+Select a target by clicking the enemy unit. Consult the <InlineUIContainer><Button Content='To Hit Target' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table to determine if target is hit.
+<LineBreak/><LineBreak/>
+<Underline>Modifiers:</Underline><LineBreak/>"
 e100	"<Bold>e100 Evening Debriefing</Bold> 
 <LineBreak/><LineBreak/>
 An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 

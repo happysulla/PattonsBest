@@ -2691,7 +2691,7 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "ShermanPivot":
-                           action = GameAction.BattleRoundSequenceMovementRoll;
+                           action = GameAction.BattleRoundSequenceMovementPivotEnd;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "CampaignOver":
