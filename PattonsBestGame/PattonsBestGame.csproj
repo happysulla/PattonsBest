@@ -961,4 +961,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Page Update="View\EventViewerChangeFacing.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
 </Project>

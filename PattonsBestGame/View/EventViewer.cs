@@ -340,6 +340,13 @@ namespace Pattons_Best
                else if (false == collateralCheck.ResolveCollateralDamage(ShowCollateralDamageResults))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ResolveCollateralDamage() returned false");
                break;
+            case GameAction.BattleRoutSequenceChangeFacing:
+               EventViewerChangeFacing facingChangeMgr = new EventViewerChangeFacing(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
+               if (true == facingChangeMgr.CtorError)
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): facingChangeMgr.CtorError=true");
+               else if (false == facingChangeMgr.PerformFacingChange(ShowFacingChangeResults))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): PerformFacingChange() returned false");
+               break;
             case GameAction.EveningDebriefingRatingImprovement:
                EventViewerRatingImprove crewRatingImprove = new EventViewerRatingImprove(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == crewRatingImprove.CtorError)
@@ -2423,6 +2430,27 @@ namespace Pattons_Best
          }
          GameAction outAction = GameAction.EveningDebriefingRatingImprovementEnd;
          StringBuilder sb11 = new StringBuilder("     ######ShowRatingImproveResults() :");
+         sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
+         sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
+         sb11.Append(" a="); sb11.Append(outAction.ToString());
+         Logger.Log(LogEnum.LE_VIEW_UPDATE_EVENTVIEWER, sb11.ToString());
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+         return true;
+      }
+      public bool ShowFacingChangeResults()
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowFacingChangeResults(): myGameInstance=null");
+            return false;
+         }
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowFacingChangeResults(): myGameEngine=null");
+            return false;
+         }
+         GameAction outAction = GameAction.BattleRoutSequenceChangeFacingEnd;
+         StringBuilder sb11 = new StringBuilder("     ######ShowFacingChangeResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
          sb11.Append(" a="); sb11.Append(outAction.ToString());

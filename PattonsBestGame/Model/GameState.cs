@@ -1147,7 +1147,7 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------------------
-         int NumEnemyUnitsAppearing = 1; // <cgs> TEST - number of enemy units appearing
+         int NumEnemyUnitsAppearing = Utilities.RandomGenerator.Next(1, 4); ; // <cgs> TEST - number of enemy units appearing
          for (int k = 0; k < NumEnemyUnitsAppearing; k++)
          {
             int die1 = Utilities.RandomGenerator.Next(0, 3);
@@ -1285,14 +1285,14 @@ namespace Pattons_Best
                die1 = Utilities.RandomGenerator.Next(0, 3);
                if (1 == die1)
                {
-                  mi.RotationOffset = 150 + Utilities.RandomGenerator.Next(0, 60);
+                  mi.RotationOffset = 151 + Utilities.RandomGenerator.Next(0, 59);
                }
                else if (2 == die1)
                {
                   if (0 == Utilities.RandomGenerator.Next(0, 2))
-                     mi.RotationOffset = 35 + Utilities.RandomGenerator.Next(0, 115);
+                     mi.RotationOffset = 36 + Utilities.RandomGenerator.Next(0, 114);
                   else
-                     mi.RotationOffset = -35 - Utilities.RandomGenerator.Next(0, 115);
+                     mi.RotationOffset = -34 - Utilities.RandomGenerator.Next(0, 114);
                }
             }
             //-----------------------------------------
@@ -3032,7 +3032,7 @@ namespace Pattons_Best
                      }
                      else
                      {
-                        // gi.MovementEffectOnEnemy = "B"; // <cgs> TEST - &&&&&&&
+                        //gi.MovementEffectOnEnemy = "A"; // <cgs> TEST - &&&&&&&
                         if (("A" == gi.MovementEffectOnEnemy) || ("B" == gi.MovementEffectOnEnemy))
                         {
                            if (false == MoveEnemyUnits(gi))
@@ -3041,16 +3041,23 @@ namespace Pattons_Best
                               Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
                            }
                         }
-                     }
+                      }
                   }
                   else
                   {
-                     gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
-                     if (false == ConductCrewAction(gi, ref action))
+                     if ( false == EnemiesFacingCheck(gi, ref action))
                      {
-                        returnStatus = "ConductCrewAction() returned false";
+                        returnStatus = "EnemyFacingCheck() returned false for a=" + action.ToString();
                         Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
                      }
+                  }
+                  break;
+               case GameAction.BattleRoutSequenceChangeFacingEnd:
+                  gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
+                  if (false == ConductCrewAction(gi, ref action))
+                  {
+                     returnStatus = "ConductCrewAction() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
                   }
                   break;
                case GameAction.EveningDebriefingStart:
@@ -3313,6 +3320,31 @@ namespace Pattons_Best
             gi.MapItemMoves.Insert(0, mim); // add at front
             Logger.Log(LogEnum.LE_VIEW_MIM_ADD, "MoveEnemyUnits(): mi=" + mi.Name + " moving to t=" + newT.Name);
             //--------------------------------------------
+         }
+         return true;
+      }
+      private bool EnemiesFacingCheck(IGameInstance gi, ref GameAction outAction )
+      {
+         if (("A" == gi.MovementEffectOnEnemy) || ("B" == gi.MovementEffectOnEnemy) || ("C" == gi.MovementEffectOnEnemy))
+         {
+            foreach (IStack stack in gi.BattleStacks)
+            {
+               foreach (IMapItem mi in stack.MapItems)
+               {
+                  if ((true == mi.IsEnemyUnit()) && (true == mi.IsVehicle))
+                  {
+                     outAction = GameAction.BattleRoutSequenceChangeFacing;
+                     return true;
+                  }
+               }
+            }
+         }
+         //------------------------------------------------
+         gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
+         if (false == ConductCrewAction(gi, ref outAction))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): ConductCrewAction() return false");
+            return false;
          }
          return true;
       }

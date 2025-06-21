@@ -1613,14 +1613,14 @@ namespace Pattons_Best
          //----------------------------
          if ("Rear" == myGridRows[i].myFacing)
          {
-            mi.RotationOffset = 150 + Utilities.RandomGenerator.Next(0, 60);
+            mi.RotationOffset = 151 + Utilities.RandomGenerator.Next(0, 61);
          }
          else if ("Side" == myGridRows[i].myFacing)
          {
             if (0 == Utilities.RandomGenerator.Next(0, 2))
-               mi.RotationOffset = 35 + Utilities.RandomGenerator.Next(0, 115);
+               mi.RotationOffset = 36 + Utilities.RandomGenerator.Next(0, 114);
             else
-               mi.RotationOffset = -35 - Utilities.RandomGenerator.Next(0, 115);
+               mi.RotationOffset = -34 - Utilities.RandomGenerator.Next(0, 114);
          }
          return true;
       }

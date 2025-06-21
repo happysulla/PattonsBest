@@ -258,6 +258,8 @@ namespace Pattons_Best
       BattleRoundSequencePivotLeft,
       BattleRoundSequencePivotRight,
       BattleRoundSequenceMovementPivotEnd,
+      BattleRoutSequenceChangeFacing,
+      BattleRoutSequenceChangeFacingEnd,
       BattleRoundSequenceShermanFiringMainGun,
       BattleRoundSequenceEnemyAction,
 
