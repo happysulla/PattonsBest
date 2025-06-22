@@ -2131,79 +2131,91 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------------
-         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
-         if (null == lastReport)
+         GameAction outAction = GameAction.Error;
+         if ( BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase ) // Friendly Action Result during Ambush phase
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): lastReport=null");
-            return false;
+            outAction = GameAction.BattleRoundSequenceStart;
          }
-         if (null == myGameInstance.EnteredArea)
+         else if (BattlePhase.FriendlyAction == myGameInstance.BattlePhase) // Friendly Action Result in BattleRoundSequence phase
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): myGameInstance.EnteredArea=null");
-            return false;
+            outAction = GameAction.BattleRoundSequenceStart;
          }
-         IStack? stackEnteredArea = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
-         if (null == stackEnteredArea)
+         else                                                               // Battle Setup phase
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): stackEnteredArea=null");
-            return false;
-         }
-         bool isAirStrike = false;
-         bool isArtilleryStrike = false;
-         foreach (IMapItem mi in stackEnteredArea.MapItems)
-         {
-            if (true == mi.Name.Contains("Air"))
-               isAirStrike = true;
-            if (true == mi.Name.Contains("Artillery"))
-               isArtilleryStrike = true;
-         }
-         //--------------------------------------------------
-         GameAction outAction = GameAction.BattleAmbushStart;
-         int enemyCount = 0;
-         bool isEnemyUnitAvailableForAirStrike = false;
-         IMapItems removals = new MapItems();
-         foreach (IStack stack in myGameInstance.BattleStacks)
-         {
-            Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ShowBattleSetupFireResults(): stack=" + stack.ToString());
-            bool isEnemyUnitInTerritory = false;
-            IMapItem? advanceFireMarker = null; ;
-            foreach (IMapItem mi in stack.MapItems)
+            IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
+            if (null == lastReport)
             {
-               Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ShowBattleSetupFireResults(): mi=" + mi.Name);
-               if (true == mi.IsEnemyUnit())
-               {
-                  ++enemyCount;
-                  Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ShowBattleSetupFireResults(): c=" + enemyCount);
-                  if (((false == lastReport.Weather.Contains("Fog")) && (false == lastReport.Weather.Contains("Falling"))) || (("B6M" != stack.Territory.Name) && ("B6L" != stack.Territory.Name)))
-                  {
-                     isEnemyUnitAvailableForAirStrike = true;
-                     isEnemyUnitInTerritory = true;
-                     break;
-                  }
-               }
-               if (true == mi.Name.Contains("AdvanceFire"))
-                  advanceFireMarker = mi;
+               Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): lastReport=null");
+               return false;
             }
-            if (null == advanceFireMarker)
-               continue;
-            if (true == isEnemyUnitInTerritory)
-               outAction = GameAction.BattleResolveAdvanceFire;
-            else
-               removals.Add(advanceFireMarker);
+            if (null == myGameInstance.EnteredArea)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): myGameInstance.EnteredArea=null");
+               return false;
+            }
+            IStack? stackEnteredArea = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
+            if (null == stackEnteredArea)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): stackEnteredArea=null");
+               return false;
+            }
+            bool isAirStrike = false;
+            bool isArtilleryStrike = false;
+            foreach (IMapItem mi in stackEnteredArea.MapItems)
+            {
+               if (true == mi.Name.Contains("Air"))
+                  isAirStrike = true;
+               if (true == mi.Name.Contains("Artillery"))
+                  isArtilleryStrike = true;
+            }
+            //--------------------------------------------------
+            outAction = GameAction.BattleAmbushStart;
+            int enemyCount = 0;
+            bool isEnemyUnitAvailableForAirStrike = false;
+            IMapItems removals = new MapItems();
+            foreach (IStack stack in myGameInstance.BattleStacks)
+            {
+               Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ShowBattleSetupFireResults(): stack=" + stack.ToString());
+               bool isEnemyUnitInTerritory = false;
+               IMapItem? advanceFireMarker = null; ;
+               foreach (IMapItem mi in stack.MapItems)
+               {
+                  Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ShowBattleSetupFireResults(): mi=" + mi.Name);
+                  if (true == mi.IsEnemyUnit())
+                  {
+                     ++enemyCount;
+                     Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ShowBattleSetupFireResults(): c=" + enemyCount);
+                     if (((false == lastReport.Weather.Contains("Fog")) && (false == lastReport.Weather.Contains("Falling"))) || (("B6M" != stack.Territory.Name) && ("B6L" != stack.Territory.Name)))
+                     {
+                        isEnemyUnitAvailableForAirStrike = true;
+                        isEnemyUnitInTerritory = true;
+                        break;
+                     }
+                  }
+                  if (true == mi.Name.Contains("AdvanceFire"))
+                     advanceFireMarker = mi;
+               }
+               if (null == advanceFireMarker)
+                  continue;
+               if (true == isEnemyUnitInTerritory)
+                  outAction = GameAction.BattleResolveAdvanceFire;
+               else
+                  removals.Add(advanceFireMarker);
+            }
+            //--------------------------------------------------
+            if (GameAction.BattleResolveAdvanceFire != outAction)
+            {
+               if (true == isArtilleryStrike)
+                  outAction = GameAction.BattleResolveArtilleryFire;
+               else if ((true == isAirStrike) && (true == isEnemyUnitAvailableForAirStrike))
+                  outAction = GameAction.BattleResolveAirStrike;
+            }
+            if (0 == enemyCount)
+               outAction = GameAction.BattleEmpty;
+            //--------------------------------------------------
+            foreach (IMapItem mi in removals)
+               myGameInstance.BattleStacks.Remove(mi);
          }
-         //--------------------------------------------------
-         if (GameAction.BattleResolveAdvanceFire != outAction) 
-         {
-            if (true == isArtilleryStrike)
-               outAction = GameAction.BattleResolveArtilleryFire;
-            else if ((true == isAirStrike) && (true == isEnemyUnitAvailableForAirStrike))
-               outAction = GameAction.BattleResolveAirStrike;
-         }
-         if (0 == enemyCount)
-            outAction = GameAction.BattleEmpty;
-         //--------------------------------------------------
-         foreach (IMapItem mi in removals)
-            myGameInstance.BattleStacks.Remove(mi);
          //--------------------------------------------------
          StringBuilder sb11 = new StringBuilder("     ######ShowBattleSetupResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());

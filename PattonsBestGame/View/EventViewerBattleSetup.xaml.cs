@@ -190,28 +190,39 @@ namespace Pattons_Best
          }
          myAreaType = myGameInstance.EnteredArea.Type;
          //--------------------------------------------------
-         IStack? stack = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
-         if (null == stack)
+         if( GamePhase.Battle == myGameInstance.GamePhase )
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): stack=null");
-            return false;
-         }
-         foreach (IMapItem mi1 in stack.MapItems)
-         {
-            if (true == mi1.Name.Contains("Strength"))
+            IStack? stack = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
+            if (null == stack)
             {
-               if( 1 == mi1.Count )
-                     myMaxRowCount = 2;
-               else if (2 == mi1.Count)
-                  myMaxRowCount = 3;
-               else if (3 == mi1.Count)
-                  myMaxRowCount = 4;
-               else
+               Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): stack=null");
+               return false;
+            }
+            foreach (IMapItem mi1 in stack.MapItems)  // determine how many to activiate based on enemy strength in area
+            {
+               if (true == mi1.Name.Contains("Strength"))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): reached default mi1.Count =" + mi1.Count.ToString());
-                  return false;
+                  if (1 == mi1.Count)
+                     myMaxRowCount = 2;
+                  else if (2 == mi1.Count)
+                     myMaxRowCount = 3;
+                  else if (3 == mi1.Count)
+                     myMaxRowCount = 4;
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): reached default mi1.Count =" + mi1.Count.ToString());
+                     return false;
+                  }
+                  break;
                }
             }
+         }
+         else
+         {
+            if (EnumScenario.Advance == lastReport.Scenario) // activate one additional for Advance and two additional for Battle | Counterattack
+               myMaxRowCount = 1;
+            else
+               myMaxRowCount = 2;
          }
          //--------------------------------------------------
          string[] sectors = new string[6] {"B1M", "B2M", "B3M", "B4M", "B6M", "B9M" };
@@ -455,17 +466,6 @@ namespace Pattons_Best
                   myGrid.Children.Add(label2);
                   Grid.SetRow(label2, rowNum);
                   Grid.SetColumn(label2, 0);
-                  //-----------------------
-                  IMapItem? mi2 = myGridRows[i].myMapItem;
-                  if (null == mi2)
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): myGridRows[i].myMapItem=null for i=" + i);
-                     return false;
-                  }
-                  Button b2 = CreateButton(mi2);
-                  myGrid.Children.Add(b2);
-                  Grid.SetRow(b2, rowNum);
-                  Grid.SetColumn(b2, 1);
                   break;
                case E046Enum.PLACE_SECTOR:
                   Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRollActivation.ToString() };

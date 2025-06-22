@@ -3289,7 +3289,7 @@ namespace Pattons_Best
                if (dieRoll < 61)
                   return "Friendly Advance";
                if (dieRoll < 81)
-                  return "Enemy Reinfore";
+                  return "Enemy Reinforce";
                return "Flanking Fire";
             case EnumScenario.Battle:
                if (dieRoll < 6)
@@ -3307,7 +3307,7 @@ namespace Pattons_Best
                if (dieRoll < 46)
                   return "Friendly Advance";
                if (dieRoll < 61)
-                  return "Enemy Reinfore";
+                  return "Enemy Reinforce";
                if (dieRoll < 81)
                   return "Enemy Advance";
                return "Flanking Fire";
@@ -3325,7 +3325,7 @@ namespace Pattons_Best
                if (dieRoll < 51)
                   return "Friendly Advance";
                if (dieRoll < 76)
-                  return "Enemy Reinfore";
+                  return "Enemy Reinforce";
                if (dieRoll < 91)
                   return "Enemy Advance";
                return "Flanking Fire";

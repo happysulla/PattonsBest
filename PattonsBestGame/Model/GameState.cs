@@ -2346,7 +2346,7 @@ namespace Pattons_Best
                case GameAction.BattleRandomEventRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 100; // <cgs> TEST - Random Event
+                     dieRoll = 70; // <cgs> TEST - Random Event
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -2395,7 +2395,8 @@ namespace Pattons_Best
                               Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
                            }
                            break;
-                        case "Enemy Reinfore":
+                        case "Enemy Reinforce":
+                           action = GameAction.BattleActivation; 
                            break;
                         case "Enemy Advance":
                            break;
@@ -2666,6 +2667,7 @@ namespace Pattons_Best
                   gi.EventDisplayed = gi.EventActive; // next screen to show
                   break;
                case GameAction.BattleRoundSequenceStart:
+                  gi.IsFlankingFire = false;
                   if (false == BattleRoundSequenceStart(gi, ref action))
                   {
                      returnStatus = "BattleRoundSequenceStart() returned false";
@@ -3093,6 +3095,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceFriendlyAdvance:
+               case GameAction.BattleActivation:
                   break;
                case GameAction.BattleRoundSequenceFriendlyAdvanceSelected:
                   if (null == gi.FriendlyAdvance)
@@ -3849,6 +3852,7 @@ namespace Pattons_Best
          //-------------------------------------------------------
          gi.IsMinefieldAttack = false;
          gi.IsHarrassingFire = false;
+         gi.IsFlankingFire = false;
          gi.IsPromoted = false;
          //-------------------------------------------------------
          gi.AdvancingFireMarkerCount = 0;

@@ -467,7 +467,7 @@ namespace Pattons_Best
                   case "Friendly Advance":
                      myState = E0477Enum.FRIENDLY_ADVANCE;
                      break;
-                  case "Enemy Reinfore":
+                  case "Enemy Reinforce":
                      myState = E0477Enum.ENEMY_REINFORCE;
                      break;
                   case "Enemy Advance":
