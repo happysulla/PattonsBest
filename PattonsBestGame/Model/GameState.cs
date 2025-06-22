@@ -1305,7 +1305,7 @@ namespace Pattons_Best
       {
          gi.IsAdvancingFireChosen = false; // <cgs> TEST
          //--------------------------------
-         gi.IsLeadTank = true;
+         //gi.IsLeadTank = true;
          //--------------------------------
          //gi.Sherman.RotationHull = 300; // <cgs> TEST - &&&&&&&
          //gi.Sherman.RotationTurret = 60;
@@ -2346,7 +2346,7 @@ namespace Pattons_Best
                case GameAction.BattleRandomEventRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 38; // <cgs> TEST - friendly advance
+                     dieRoll = 100; // <cgs> TEST - Random Event
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -2400,6 +2400,8 @@ namespace Pattons_Best
                         case "Enemy Advance":
                            break;
                         case "Flanking Fire":
+                           action = GameAction.BattleResolveArtilleryFire;
+                           gi.IsFlankingFire = true;
                            break;
                         default:
                            returnStatus = "reached default with randomEvent=" + randomEvent;

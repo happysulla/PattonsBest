@@ -107,6 +107,7 @@ namespace Pattons_Best
       //------------------------------------------------
       bool IsMinefieldAttack { set; get; }
       bool IsHarrassingFire { set; get; }
+      bool IsFlankingFire { set; get; }
       bool IsPromoted { set; get; }
       //------------------------------------------------
       int VictoryPtsTotalCampaign { get; set; }

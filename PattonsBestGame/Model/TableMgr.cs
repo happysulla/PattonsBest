@@ -822,7 +822,7 @@ namespace Pattons_Best
                return "ERROR";
          }
       }
-      public static int GetFriendlyActionModifier(IGameInstance gi, IMapItem mi, int numUsControlledSector, bool isAdvancingFire, bool isArtilleryFire, bool isAirStrike, bool isFlankingFire)
+      public static int GetFriendlyActionModifier(IGameInstance gi, IMapItem mi, int numUsControlledSector, bool isAdvancingFire, bool isArtilleryFire, bool isAirStrike)
       {
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
@@ -894,7 +894,7 @@ namespace Pattons_Best
                return -1;
          }
          //----------------------------------------------------
-         if (true == isFlankingFire)
+         if (true == gi.IsFlankingFire)
             modifier -= 10;
          //----------------------------------------------------
          if (true == isTargetVehicle && true == isAirStrike)
@@ -917,7 +917,7 @@ namespace Pattons_Best
          //----------------------------------------------------
          return modifier;
       }
-      public static string SetFriendlyActionResult(IGameInstance gi, IMapItem mi, int dieRoll, int numUsControlledSector, bool isAdvancingFire, bool isArtilleryFire, bool isAirStrike, bool isFlankingFire)
+      public static string SetFriendlyActionResult(IGameInstance gi, IMapItem mi, int dieRoll, int numUsControlledSector, bool isAdvancingFire, bool isArtilleryFire, bool isAirStrike)
       {
          //----------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
@@ -1001,7 +1001,7 @@ namespace Pattons_Best
             return "Smoke"; // if smoke occurs, no chance of killing target
          }
          //----------------------------------------------------
-         int modifier = GetFriendlyActionModifier(gi, mi, numUsControlledSector, isAdvancingFire, isArtilleryFire, isAirStrike, isFlankingFire);
+         int modifier = GetFriendlyActionModifier(gi, mi, numUsControlledSector, isAdvancingFire, isArtilleryFire, isAirStrike);
          if (modifier < -99)
          {
             Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): GetFriendlyActionModifier() returned error");

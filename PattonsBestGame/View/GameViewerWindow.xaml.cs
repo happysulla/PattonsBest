@@ -2174,7 +2174,7 @@ namespace Pattons_Best
             b.RenderTransformOrigin = new Point(0.5, 0.5);
             RotateTransform rotateTransform = new RotateTransform();
             //----------------------------------------------------
-            if ( (true == mim.MapItem.IsVehicle) && (BattlePhase.EnemyAction == myGameInstance.BattlePhase) )
+            if ( (true == mim.MapItem.IsVehicle) && (BattlePhase.ConductCrewAction != myGameInstance.BattlePhase) )
             {
                double xDiff = xStart - mp.X;
                double yDiff = yStart - mp.Y;

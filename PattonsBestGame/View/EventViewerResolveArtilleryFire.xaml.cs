@@ -246,7 +246,7 @@ namespace Pattons_Best
          myMaxRowCount = i;
          //--------------------------------------------------
          for(int k=0; k<myMaxRowCount; ++k )
-            myGridRows[k].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[k].myMapItemEnemy, myNumUseControlled, false, true, false, false);
+            myGridRows[k].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[k].myMapItemEnemy, myNumUseControlled, false, true, false);
          //--------------------------------------------------
          if (false == UpdateGrid())
          {
@@ -438,7 +438,8 @@ namespace Pattons_Best
             }
             else if (Utilities.NO_RESULT < myGridRows[i].myDieRoll)
             {
-               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRoll.ToString() };
+               int combo = myGridRows[i].myDieRoll + myGridRows[i].myModifier;
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = combo.ToString() };
                myGrid.Children.Add(label3);
                Grid.SetRow(label3, rowNum);
                Grid.SetColumn(label3, 3);
@@ -490,7 +491,7 @@ namespace Pattons_Best
          }
          IMapItem mi = myGridRows[i].myMapItemEnemy;
          myGridRows[i].myDieRoll = dieRoll;
-         myGridRows[i].myResult = TableMgr.SetFriendlyActionResult(myGameInstance, mi, dieRoll, myNumUseControlled, false, true, false, false);
+         myGridRows[i].myResult = TableMgr.SetFriendlyActionResult(myGameInstance, mi, dieRoll, myNumUseControlled, false, true, false);
          if ( "ERROR" == myGridRows[i].myResult )
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): SetFriendlyActionResult() returned ERROR");
@@ -514,7 +515,7 @@ namespace Pattons_Best
             for (int j = 0; j < myMaxRowCount; ++j)
             {
                if (Utilities.NO_RESULT == myGridRows[j].myDieRoll)
-                  myGridRows[j].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[j].myMapItemEnemy, myNumUseControlled, false, true, false, false);
+                  myGridRows[j].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[j].myMapItemEnemy, myNumUseControlled, false, true, false);
             }
          }
          //-------------------------------

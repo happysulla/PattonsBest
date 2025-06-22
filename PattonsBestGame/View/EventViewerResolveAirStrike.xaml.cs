@@ -235,7 +235,7 @@ namespace Pattons_Best
          myMaxRowCount = i;
          //--------------------------------------------------
          for(int k=0; k<myMaxRowCount; ++k )
-            myGridRows[k].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[k].myMapItemEnemy, myNumUseControlled, false, false, true, false);
+            myGridRows[k].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[k].myMapItemEnemy, myNumUseControlled, false, false, true);
          //--------------------------------------------------
          if (false == UpdateGrid())
          {
@@ -479,7 +479,7 @@ namespace Pattons_Best
          }
          IMapItem mi = myGridRows[i].myMapItemEnemy;
          myGridRows[i].myDieRoll = dieRoll;
-         myGridRows[i].myResult = TableMgr.SetFriendlyActionResult(myGameInstance, mi, dieRoll, myNumUseControlled, false, false, true, false);
+         myGridRows[i].myResult = TableMgr.SetFriendlyActionResult(myGameInstance, mi, dieRoll, myNumUseControlled, false, false, true);
          if ( "ERROR" == myGridRows[i].myResult )
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): SetFriendlyActionResult() returned ERROR");
@@ -503,7 +503,7 @@ namespace Pattons_Best
             for (int j = 0; j < myMaxRowCount; ++j)
             {
                if (Utilities.NO_RESULT == myGridRows[j].myDieRoll)
-                  myGridRows[j].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[j].myMapItemEnemy, myNumUseControlled, false, false, true, false);
+                  myGridRows[j].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[j].myMapItemEnemy, myNumUseControlled, false, false, true);
             }
          }
          //-------------------------------
