@@ -52,6 +52,7 @@ namespace Pattons_Best
       public ITerritory? EnteredArea { get; set; } = null;
       public ITerritory? AdvanceFire { get; set; } = null;
       public ITerritory? FriendlyAdvance { get; set; } = null;
+      public ITerritory? EnemyAdvance { get; set; } = null;
       //---------------------------------------------------------------
       public bool IsTurretActive { set; get; } = false;
       public bool IsHatchesActive { set; get; } = false;
@@ -74,6 +75,7 @@ namespace Pattons_Best
       public bool IsMinefieldAttack { set; get; } = false;
       public bool IsHarrassingFire { set; get; } = false;
       public bool IsFlankingFire { set; get; } = false;
+      public bool IsEnemyAdvanceComplete { set; get; } = false;
       public bool IsPromoted { set; get; } = false;
       //---------------------------------------------------------------
       public int VictoryPtsTotalCampaign { get; set; } = 0;

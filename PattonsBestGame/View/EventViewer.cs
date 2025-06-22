@@ -1171,6 +1171,10 @@ namespace Pattons_Best
             case "e039":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
+                  string result = "=   " + TableMgr.GetRandomEvent(report.Scenario, gi.DieResults[key][0]);
+                  myTextBlock.Inlines.Add(new Run(result));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
                   Image imge039 = new Image { Name = "Continue39", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
                   myTextBlock.Inlines.Add(new Run("                                          "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge039));
@@ -1458,6 +1462,20 @@ namespace Pattons_Best
                else
                {
                   myTextBlock.Inlines.Add(new Run("Click highlighted region to choose."));
+               }
+               break;
+            case "e048":
+               if (null != gi.EnemyAdvance)
+               {
+                  if( true == gi.IsEnemyAdvanceComplete)
+                  {
+                     Image imge046 = new Image { Name = "Continue047", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c36Light") };
+                     myTextBlock.Inlines.Add(new Run("                                            "));
+                     myTextBlock.Inlines.Add(new InlineUIContainer(imge046));
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("Click image to continue."));
+                  }
                }
                break;
             case "e051":
@@ -2738,6 +2756,7 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue046a":
+                        case "Continue047":
                            action = GameAction.BattleRoundSequenceStart;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;

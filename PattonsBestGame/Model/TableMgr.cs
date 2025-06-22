@@ -2317,6 +2317,7 @@ namespace Pattons_Best
                   else if ('L' == range)
                      toKillNum = 03;
                   break;
+               case "TANK":
                case "PzIV":
                case "PzV":
                case "PzVI":

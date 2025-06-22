@@ -310,6 +310,8 @@ namespace Pattons_Best
             case GameAction.MorningBriefingCalendarRoll:
             case GameAction.MorningBriefingEnd:
                break;
+            case GameAction.BattleRandomEventRoll:
+               break;
             case GameAction.TestingStartMorningBriefing:
             case GameAction.TestingStartPreparations:
             case GameAction.TestingStartMovement:
@@ -366,6 +368,16 @@ namespace Pattons_Best
             case GameAction.BattleRoundSequenceFriendlyAdvance:
                if (false == UpdateCanvasFriendlyAdvance(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasFriendlyAdvance() returned error ");
+               break;
+            case GameAction.BattleRoundSequenceEnemyAdvance:
+               if (false == UpdateCanvasMain(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
+               if (false == UpdateCanvasEnemyAdvance(gi))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasEnemyAdvance() returned error ");
+               break;
+            case GameAction.EveningDebriefingStart:
+               if (false == UpdateCanvasTank(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                break;
             case GameAction.EndGameWin:
             case GameAction.EndGameLost:
@@ -1795,7 +1807,7 @@ namespace Pattons_Best
          {
             if (3 != t.Name.Length)
             {
-               Logger.Log(LogEnum.LE_ERROR, "FriendlyAdvanceCheck(): 3 != t.Name.Length for t=" + t.Name);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasFriendlyAdvance(): 3 != t.Name.Length for t=" + t.Name);
                return false;
             }
             string sector = t.Name[1].ToString();
@@ -1878,7 +1890,7 @@ namespace Pattons_Best
                      highlightedTerritoryNames.Add(adjName);
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "FriendlyAdvanceCheck(): reached default sector=" + sector.ToString());
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasFriendlyAdvance(): reached default sector=" + sector.ToString());
                   return false;
             }
             foreach( string s in highlightedTerritoryNames )
@@ -1886,18 +1898,34 @@ namespace Pattons_Best
                ITerritory? highlighted = Territories.theTerritories.Find(s);
                if( null == highlighted )
                {
-                  Logger.Log(LogEnum.LE_ERROR, "FriendlyAdvanceCheck(): highlighted=null for s=" + s);
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasFriendlyAdvance(): highlighted=null for s=" + s);
                   return false;
                }
                PointCollection points = new PointCollection();
                foreach (IMapPoint mp1 in highlighted.Points)
                   points.Add(new System.Windows.Point(mp1.X, mp1.Y));
                Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = highlighted.Name };
-               aPolygon.MouseDown += MouseDownPolygonPlaceFriendlyAdvance;
+               aPolygon.MouseDown += MouseDownPolygonFriendlyAdvance;
                myPolygons.Add(aPolygon);
                myCanvasMain.Children.Add(aPolygon);
             }
          }
+         return true;
+      }
+      private bool UpdateCanvasEnemyAdvance(IGameInstance gi)
+      {
+         if (null == myGameInstance.EnemyAdvance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasEnemyAdvance(): myGameInstance.EnemyAdvance=null");
+            return false;
+         }
+         PointCollection points = new PointCollection();
+         foreach (IMapPoint mp1 in myGameInstance.EnemyAdvance.Points)
+            points.Add(new System.Windows.Point(mp1.X, mp1.Y));
+         Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = myGameInstance.EnemyAdvance.Name };
+         aPolygon.MouseDown += MouseDownPolygonEnemyAdvance;
+         myPolygons.Add(aPolygon);
+         myCanvasMain.Children.Add(aPolygon);
          return true;
       }
       //---------------------------------------
@@ -2484,21 +2512,32 @@ namespace Pattons_Best
          GameAction outAction = GameAction.BattlePlaceAdvanceFire;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
-      private void MouseDownPolygonPlaceFriendlyAdvance(object sender, MouseButtonEventArgs e)
+      private void MouseDownPolygonFriendlyAdvance(object sender, MouseButtonEventArgs e)
       {
          Polygon? clickedPolygon = sender as Polygon;
          if (null == clickedPolygon)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonPlaceFriendlyAdvance(): clickedPolygon=null");
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonFriendlyAdvance(): clickedPolygon=null");
             return;
          }
          myGameInstance.FriendlyAdvance = Territories.theTerritories.Find(clickedPolygon.Name);
          if ( null == myGameInstance.FriendlyAdvance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonPlaceFriendlyAdvance(): myGameInstance.FriendlyAdvance=null");
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonFriendlyAdvance(): myGameInstance.FriendlyAdvance=null");
             return;
          }
          GameAction outAction = GameAction.BattleRoundSequenceFriendlyAdvanceSelected;
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+      }
+      private void MouseDownPolygonEnemyAdvance(object sender, MouseButtonEventArgs e)
+      {
+         Polygon? clickedPolygon = sender as Polygon;
+         if (null == clickedPolygon)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonEnemyAdvance(): clickedPolygon=null");
+            return;
+         }
+         GameAction outAction = GameAction.BattleRoundSequenceEnemyAdvanceEnd;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
       private void ClickButtonMapItem(object sender, RoutedEventArgs e)

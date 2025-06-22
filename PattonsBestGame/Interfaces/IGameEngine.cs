@@ -276,7 +276,8 @@ namespace Pattons_Best
       BattleRoundSequenceHarrassingFire,
       BattleRoundSequenceFriendlyAdvance,
       BattleRoundSequenceFriendlyAdvanceSelected,
-
+      BattleRoundSequenceEnemyAdvance,
+      BattleRoundSequenceEnemyAdvanceEnd,
 
       EveningDebriefingStart,
       EveningDebriefingRatingImprovement,

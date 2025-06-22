@@ -321,11 +321,6 @@ Right click crew member action boxes to select from a pull down to assign crew a
 e039	"<Bold>e039 Random Events for Ambush</Bold> 
 <InlineUIContainer><Button Content='r4.65' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
-Roll on the 
-<InlineUIContainer><Button Content='Random Events' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-Table:  
-<InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer>
-<LineBreak/><LineBreak/>
   <InlineUIContainer><Button Content='e040' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Time Passes<LineBreak/>
   <InlineUIContainer><Button Content='e041' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Friendly Artillery<LineBreak/>
   <InlineUIContainer><Button Content='e042' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Artillery<LineBreak/>
@@ -333,11 +328,16 @@ Table:
   <InlineUIContainer><Button Content='e044' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Panzerfaust Attack<LineBreak/>
   <InlineUIContainer><Button Content='e045' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Harrassing Fire<LineBreak/>
   <InlineUIContainer><Button Content='e046' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Friendly Advance<LineBreak/>
-  <InlineUIContainer><Button Content='e047' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Reinforcment<LineBreak/>
+  <InlineUIContainer><Button Content='e047' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Reinforcement<LineBreak/>
   <InlineUIContainer><Button Content='e048' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Advance<LineBreak/>
-  <InlineUIContainer><Button Content='e049' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Flanking Fire<LineBreak/>
-<LineBreak/>"
+  <InlineUIContainer><Button Content='e049' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Flanking Fire
+<LineBreak/><LineBreak/>
+Roll on the 
+<InlineUIContainer><Button Content='Random Events' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table:  
+<InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer>"
 e040	"<Bold>e040 Time Passes</Bold> 
+<InlineUIContainer><Button Content='r15.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <InlineUIContainer><Button Content='r21.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
 Fifteen minutes pass on the After Action Report 
@@ -347,12 +347,14 @@ Click image to continue.
 <LineBreak/><LineBreak/>
                                    <InlineUIContainer><Image Name='MilitaryWatch' Height='100' Width='200'></Image></InlineUIContainer>"
 e041	"<Bold>e041 Friendly Artillery</Bold> 
+<InlineUIContainer><Button Content='r15.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <InlineUIContainer><Button Content='r23.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
 Friendly artillery support arrives. Click image to continue.
 <LineBreak/><LineBreak/>
                                         <InlineUIContainer><Image Name='c39ArtillerySupport'  Height='80' Width='80'></Image></InlineUIContainer>"
-e042	"<Bold>e042 Enemy Artillery</Bold> 
+e042	"<Bold>e042 Enemy Artillery</Bold>
+<InlineUIContainer><Button Content='r15.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>
 Enemy artillery arrives. Roll 1D to knock out (KO) friendly units: 
 <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>
@@ -449,29 +451,32 @@ Click image to continue.
 <LineBreak/><LineBreak/>
                         <InlineUIContainer><Image Name='CollateralDamage' Height='200' Width='325'></Image></InlineUIContainer>"
 e046	"<Bold>e046 Friendly Advance</Bold> 
-<InlineUIContainer><Button Content='r15.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='r15.7' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
 Place a US Controlled marker in a sector of your choice that is empty of enemy units and adjacent to a sector already US Controlled.
 <LineBreak/><LineBreak/>"
 e046a	"<Bold>e046a Friendly Advance Ignored</Bold> 
-<InlineUIContainer><Button Content='r15.8' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='r15.7' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
 Since there is no sector adjacent to a US Controlled sector that is empty of enemy units, this event is ignored. Click image to continue.
 <LineBreak/><LineBreak/>
                                             <InlineUIContainer><Image Name='Continue046a' Height='100' Width='100'></Image></InlineUIContainer>"
 e047	"<Bold>e047 Enemy Reinforcement</Bold> 
-<InlineUIContainer><Button Content='r15.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='r15.8' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>"
 e048	"<Bold>e048 Enemy Advance</Bold> 
-<InlineUIContainer><Button Content='r15.10' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='r15.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
-Remove one US Control marker from sector adjacent to an enemy unit. If two sectors are eligible, it is chosen randomly"
+One US Control marker will be removed from the highlighted sector adjacent to an enemy unit. If two or more sectors were eligible, it was chosen randomly. Click highlighted region to continue.
+<LineBreak/><LineBreak/>"
 e048a	"<Bold>e048a Enemy Advance Ignored</Bold> 
-<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='r15.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
-Since no sector is adjacent to an enemy unit, this event is ignored. Click image to continue."
+Since no sector is adjacent to an enemy unit, this event is ignored. Click image to continue.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='Continue047' Height='100' Width='100'></Image></InlineUIContainer>"
 e049	"<Bold>e049 Flanking Fire</Bold> 
-<InlineUIContainer><Button Content='r15.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='r15.A' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
 Roll against each enemy unit on the Friendly Action Table with a die roll modifer of -10. Click image to continue.
 <LineBreak/><LineBreak/>"

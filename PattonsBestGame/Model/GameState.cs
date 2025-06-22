@@ -18,6 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Windows.Devices.Perception;
 using Windows.Media.Playback;
+using Windows.Services.Cortana;
 using static Pattons_Best.EventViewerResolveRandomEvent;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.AxHost;
@@ -819,6 +820,15 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipCrewAssignments(): gi.Reports.GetLast() returned null");
             return false;
          }
+         int randNum = Utilities.RandomGenerator.Next(3);
+         if( 0 == randNum )
+            report.Scenario = EnumScenario.Advance;
+         else if (1 == randNum)
+            report.Scenario = EnumScenario.Battle;
+         else
+            report.Scenario = EnumScenario.Counterattack;
+         report.Scenario = EnumScenario.Battle; // <cgs> TEST - choose scenario
+         //-------------------------------
          gi.NewMembers.Add(report.Commander);
          gi.NewMembers.Add(report.Gunner);
          gi.NewMembers.Add(report.Loader);
@@ -1301,8 +1311,9 @@ namespace Pattons_Best
          }
          return true;
       }
-      private void AddStartingTestingOptions(IGameInstance gi)
+      private bool AddStartingTestingOptions(IGameInstance gi)
       {
+         //--------------------------------
          gi.IsAdvancingFireChosen = false; // <cgs> TEST
          //--------------------------------
          //gi.IsLeadTank = true;
@@ -1313,6 +1324,7 @@ namespace Pattons_Best
          gi.Sherman.IsHullDown = false;
          //--------------------------------
          gi.PromotionPointNum = 290;
+         return true;
       }
    }
    //-----------------------------------------------------
@@ -2346,7 +2358,7 @@ namespace Pattons_Best
                case GameAction.BattleRandomEventRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 70; // <cgs> TEST - Random Event
+                     //dieRoll = 70; // <cgs> TEST - Random Event
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -2399,6 +2411,11 @@ namespace Pattons_Best
                            action = GameAction.BattleActivation; 
                            break;
                         case "Enemy Advance":
+                           if (false == EnemyAdvanceCheck(gi, ref action))
+                           {
+                              returnStatus = "EnemyAdvanceCheck() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
+                           }
                            break;
                         case "Flanking Fire":
                            action = GameAction.BattleResolveArtilleryFire;
@@ -2622,6 +2639,127 @@ namespace Pattons_Best
          }
          gi.EventDisplayed = gi.EventActive = "e046a";
          return true;
+      }
+      private bool EnemyAdvanceCheck(IGameInstance gi, ref GameAction outAction)
+      {
+         gi.DieRollAction = GameAction.DieRollActionNone;
+         //--------------------------------------------
+         List<ITerritory> usControlledTerritory = new List<ITerritory>();
+         foreach (IStack stack in gi.BattleStacks)
+         {
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.Name.Contains("UsControl"))
+                  usControlledTerritory.Add(stack.Territory);
+            }
+         }
+         //--------------------------------------------
+         List<string> possibleEnemyCapture = new List<string>();
+         foreach (ITerritory t in usControlledTerritory)
+         {
+            if (3 != t.Name.Length)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "EnemyAdvanceCheck(): 3 != t.Name.Length for t=" + t.Name);
+               return false;
+            }
+            string sector = t.Name[1].ToString();
+            string adjName;
+            string adjSector;
+            switch (sector)
+            {
+               case "1":
+                  adjName = "B9M";
+                  adjSector = adjName[1].ToString();
+                  if (true == Territory.IsEnemyUnitInSector(gi, adjSector))
+                     possibleEnemyCapture.Add(t.Name);
+                  adjName = "B2M";
+                  adjSector = adjName[1].ToString();
+                  if (true == Territory.IsEnemyUnitInSector(gi, adjSector))
+                     possibleEnemyCapture.Add(t.Name);
+                  break;
+               case "2":
+                  adjName = "B1M";
+                  adjSector = adjName[1].ToString();
+                  if (true == Territory.IsEnemyUnitInSector(gi, adjSector))
+                     possibleEnemyCapture.Add(t.Name);
+                  adjName = "B3M";
+                  adjSector = adjName[1].ToString();
+                  if (true == Territory.IsEnemyUnitInSector(gi, adjSector))
+                     possibleEnemyCapture.Add(t.Name);
+                  break;
+               case "3":
+                  adjName = "B2M";
+                  adjSector = adjName[1].ToString();
+                  if (true == Territory.IsEnemyUnitInSector(gi, adjSector))
+                     possibleEnemyCapture.Add(t.Name);
+                  adjName = "B4M";
+                  adjSector = adjName[1].ToString();
+                  if (true == Territory.IsEnemyUnitInSector(gi, adjSector))
+                     possibleEnemyCapture.Add(t.Name);
+                  break;
+               case "4":
+                  adjName = "B3M";
+                  adjSector = adjName[1].ToString();
+                  if (true == Territory.IsEnemyUnitInSector(gi, adjSector))
+                     possibleEnemyCapture.Add(t.Name);
+                  adjName = "B6M";
+                  adjSector = adjName[1].ToString();
+                  if (true == Territory.IsEnemyUnitInSector(gi, adjSector))
+                     possibleEnemyCapture.Add(t.Name);
+                  break;
+               case "6":
+                  adjName = "B4M";
+                  adjSector = adjName[1].ToString();
+                  if (true == Territory.IsEnemyUnitInSector(gi, adjSector))
+                     possibleEnemyCapture.Add(t.Name);
+                  adjName = "B9M";
+                  adjSector = adjName[1].ToString();
+                  if (true == Territory.IsEnemyUnitInSector(gi, adjSector))
+                     possibleEnemyCapture.Add(t.Name);
+                  break;
+               case "9":
+                  adjName = "B6M";
+                  adjSector = adjName[1].ToString();
+                  if (true == Territory.IsEnemyUnitInSector(gi, adjSector))
+                     possibleEnemyCapture.Add(t.Name);
+                  adjName = "B1M";
+                  adjSector = adjName[1].ToString();
+                  if (true == Territory.IsEnemyUnitInSector(gi, adjSector))
+                     possibleEnemyCapture.Add(t.Name);
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "EnemyAdvanceCheck(): reached default sector=" + sector.ToString());
+                  return false;
+            }
+         }
+         if( 0 == possibleEnemyCapture.Count )
+         {
+            gi.EventDisplayed = gi.EventActive = "e048a";
+            return true;
+         }
+         else
+         {
+            gi.EventDisplayed = gi.EventActive = "e048";
+            outAction = GameAction.BattleRoundSequenceEnemyAdvance;
+            int randNum = Utilities.RandomGenerator.Next(possibleEnemyCapture.Count);
+            string tName = possibleEnemyCapture[randNum];
+            IStack? stack = gi.BattleStacks.Find(tName);
+            if( null == stack )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "EnemyAdvanceCheck(): stack=null for tName=" + tName);
+               return false;
+            }
+            foreach(IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.Name.Contains("UsControl"))
+               {
+                  gi.EnemyAdvance = stack.Territory;
+                  return true;
+               }
+            }
+         }
+         Logger.Log(LogEnum.LE_ERROR, "EnemyAdvanceCheck(): reached default");
+         return false;
       }
    }
    //-----------------------------------------------------
@@ -3095,6 +3233,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceFriendlyAdvance:
+               case GameAction.BattleRoundSequenceEnemyAdvance:
                case GameAction.BattleActivation:
                   break;
                case GameAction.BattleRoundSequenceFriendlyAdvanceSelected:
@@ -3108,6 +3247,34 @@ namespace Pattons_Best
                      string name = "UsControl" + Utilities.MapItemNum.ToString();
                      ++Utilities.MapItemNum;
                      gi.BattleStacks.Add(new MapItem(name, Utilities.ZOOM, "c28UsControl", gi.FriendlyAdvance));
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceEnemyAdvanceEnd:
+                  if( null == gi.EnemyAdvance)
+                  {
+                     returnStatus = "gi.BattleStacks.Find()  gi.EnemyAdvance=null";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                  }
+                  else
+                  {
+                     gi.IsEnemyAdvanceComplete = true;
+                     IStack? stack = gi.BattleStacks.Find(gi.EnemyAdvance);
+                     if( null == stack )
+                     {
+                        returnStatus = "gi.BattleStacks.Find() is null for " + gi.EnemyAdvance.Name;
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                     }
+                     else
+                     {
+                        foreach (IMapItem mi in stack.MapItems)
+                        {
+                           if (true == mi.Name.Contains("UsControl"))
+                           {
+                              gi.BattleStacks.Remove(mi);
+                              break;
+                           }
+                        }
+                     }
                   }
                   break;
                case GameAction.UpdateTankExplosion:
@@ -3243,7 +3410,6 @@ namespace Pattons_Best
                return false;
             }
          }
-         gi.FriendlyAdvance = null;
          return true;
       }
       private bool CheckCrewMemberExposed(IGameInstance gi, ref GameAction outAction)
@@ -3543,6 +3709,11 @@ namespace Pattons_Best
                case GameAction.EveningDebriefingStart: // Only change active event
                   gi.EventDisplayed = gi.EventActive = "e100";
                   gi.DieRollAction = GameAction.DieRollActionNone;
+                  gi.NewMembers.Clear();  // clear out tank card
+                  gi.ReadyRacks.Clear();
+                  gi.Hatches.Clear();
+                  gi.CrewActions.Clear();
+                  gi.GunLoads.Clear();
                   break;
                case GameAction.EveningDebriefingRatingImprovement: // Only change active event
                   gi.BattleStacks.Clear();
@@ -3853,6 +4024,7 @@ namespace Pattons_Best
          gi.IsMinefieldAttack = false;
          gi.IsHarrassingFire = false;
          gi.IsFlankingFire = false;
+         gi.IsEnemyAdvanceComplete = false;
          gi.IsPromoted = false;
          //-------------------------------------------------------
          gi.AdvancingFireMarkerCount = 0;
