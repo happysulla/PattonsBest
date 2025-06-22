@@ -1445,6 +1445,21 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
+            case "e046":
+               if (null != gi.FriendlyAdvance )
+               {
+                  Image imge046 = new Image { Name = "Continue046a", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c28UsControl") };
+                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge046));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               else
+               {
+                  myTextBlock.Inlines.Add(new Run("Click highlighted region to choose."));
+               }
+               break;
             case "e051":
                string modiferString = UpdateEventContentGetMovingModifier(gi);
                myTextBlock.Inlines.Add(new Run(modiferString));
@@ -2708,6 +2723,10 @@ namespace Pattons_Best
                            break;
                         case "CollateralDamage":
                            action = GameAction.BattleRoundSequenceHarrassingFire;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Continue046a":
+                           action = GameAction.BattleRoundSequenceStart;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue50":

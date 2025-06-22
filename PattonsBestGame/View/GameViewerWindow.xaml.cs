@@ -363,6 +363,10 @@ namespace Pattons_Best
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
+            case GameAction.BattleRoundSequenceFriendlyAdvance:
+               if (false == UpdateCanvasFriendlyAdvance(gi))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasFriendlyAdvance() returned error ");
+               break;
             case GameAction.EndGameWin:
             case GameAction.EndGameLost:
                SaveDefaultsToSettings();
@@ -932,51 +936,6 @@ namespace Pattons_Best
                menuitem.Click += MenuItemAmmoReloadClick;
                myContextMenuGunLoadActions["GunLoadHvap"].Items.Add(menuitem);
             }
-         }
-         return true;
-      }
-      private bool SetTerritory(IMapItem mi, ITerritory newT)
-      {
-         if (null == myGameInstance)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetTerritory(): myGameInstance=null");
-            return false;
-         }
-         //-------------------------------------
-         IStacks? stacks = null;
-         if ("Main" == newT.CanvasName)
-         {
-            if( "Battle" == newT.Type )
-               stacks = myGameInstance.BattleStacks;
-            else if (("A" == newT.Type) || ("B" == newT.Type) || ("D" == newT.Type) || ("D" == newT.Type) || ("E" == newT.Type))
-               stacks = myGameInstance.MoveStacks;
-         }
-         else
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetTerritory(): reached default with newT.CanvasName" + newT.CanvasName);
-            return false;
-         }
-         if( null == stacks )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetTerritory(): unknown Parent=" + newT.CanvasName + " or unknown Type=" + newT.Type);
-            return false;
-         }
-         int delta = (int) (mi.Zoom * Utilities.theMapItemOffset);
-         stacks.Remove(mi);
-         IStack? stack = stacks.Find(mi.TerritoryCurrent);
-         if (null == stack)
-         {
-            stack = new Stack(newT, mi);
-            mi.Location.X = newT.CenterPoint.X - delta;
-            mi.Location.Y = newT.CenterPoint.Y - delta;
-            stacks.Add(stack);
-         }
-         else // add to top of stack
-         {
-            mi.TerritoryCurrent = newT;
-            mi.Location.X = newT.CenterPoint.X - delta;
-            mi.Location.Y = newT.CenterPoint.Y - delta;
-            stack.MapItems.Add(mi);
          }
          return true;
       }
@@ -1819,6 +1778,128 @@ namespace Pattons_Best
          Canvas.SetTop(r, p1.Y);
          return true;
       }
+      private bool UpdateCanvasFriendlyAdvance(IGameInstance gi)
+      {
+         //--------------------------------------------
+         List<ITerritory> usControlledTerritory = new List<ITerritory>();
+         foreach (IStack stack in gi.BattleStacks)
+         {
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.Name.Contains("UsControl"))
+                  usControlledTerritory.Add(stack.Territory);
+            }
+         }
+         //--------------------------------------------
+         foreach (ITerritory t in usControlledTerritory)
+         {
+            if (3 != t.Name.Length)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "FriendlyAdvanceCheck(): 3 != t.Name.Length for t=" + t.Name);
+               return false;
+            }
+            string sector = t.Name[1].ToString();
+            List<string> highlightedTerritoryNames = new List<string>();
+            string adjName;
+            string adjSector;
+            ITerritory? adjTerritory = null;
+            switch (sector)
+            {
+               case "1":
+                  adjName = "B9M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if( (null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)) )
+                     highlightedTerritoryNames.Add(adjName);
+                  adjName = "B2M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     highlightedTerritoryNames.Add(adjName);
+                  break;
+               case "2":
+                  adjName = "B1M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     highlightedTerritoryNames.Add(adjName);
+                  adjName = "B3M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     highlightedTerritoryNames.Add(adjName);
+                  break;
+               case "3":
+                  adjName = "B2M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     highlightedTerritoryNames.Add(adjName);
+                  adjName = "B4M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     highlightedTerritoryNames.Add(adjName);
+                  break;
+               case "4":
+                  adjName = "B3M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     highlightedTerritoryNames.Add(adjName);
+                  adjName = "B6M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     highlightedTerritoryNames.Add(adjName);
+                  break;
+               case "6":
+                  adjName = "B4M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     highlightedTerritoryNames.Add(adjName);
+                  adjName = "B9M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     highlightedTerritoryNames.Add(adjName);
+                  break;
+               case "9":
+                  adjName = "B6M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     highlightedTerritoryNames.Add(adjName);
+                  adjName = "B1M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     highlightedTerritoryNames.Add(adjName);
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "FriendlyAdvanceCheck(): reached default sector=" + sector.ToString());
+                  return false;
+            }
+            foreach( string s in highlightedTerritoryNames )
+            {
+               ITerritory? highlighted = Territories.theTerritories.Find(s);
+               if( null == highlighted )
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "FriendlyAdvanceCheck(): highlighted=null for s=" + s);
+                  return false;
+               }
+               PointCollection points = new PointCollection();
+               foreach (IMapPoint mp1 in highlighted.Points)
+                  points.Add(new System.Windows.Point(mp1.X, mp1.Y));
+               Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = highlighted.Name };
+               aPolygon.MouseDown += MouseDownPolygonPlaceFriendlyAdvance;
+               myPolygons.Add(aPolygon);
+               myCanvasMain.Children.Add(aPolygon);
+            }
+         }
+         return true;
+      }
       //---------------------------------------
       private bool UpdateCanvasMainEnemyStrengthCheckTerritory(IGameInstance gi, GameAction action)
       {
@@ -2401,6 +2482,23 @@ namespace Pattons_Best
             return;
          }
          GameAction outAction = GameAction.BattlePlaceAdvanceFire;
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+      }
+      private void MouseDownPolygonPlaceFriendlyAdvance(object sender, MouseButtonEventArgs e)
+      {
+         Polygon? clickedPolygon = sender as Polygon;
+         if (null == clickedPolygon)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonPlaceFriendlyAdvance(): clickedPolygon=null");
+            return;
+         }
+         myGameInstance.FriendlyAdvance = Territories.theTerritories.Find(clickedPolygon.Name);
+         if ( null == myGameInstance.FriendlyAdvance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonPlaceFriendlyAdvance(): myGameInstance.FriendlyAdvance=null");
+            return;
+         }
+         GameAction outAction = GameAction.BattleRoundSequenceFriendlyAdvanceSelected;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
       private void ClickButtonMapItem(object sender, RoutedEventArgs e)

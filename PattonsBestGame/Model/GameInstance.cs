@@ -51,6 +51,7 @@ namespace Pattons_Best
       public ITerritory? AirStrikeCheckTerritory { get; set; } = null;
       public ITerritory? EnteredArea { get; set; } = null;
       public ITerritory? AdvanceFire { get; set; } = null;
+      public ITerritory? FriendlyAdvance { get; set; } = null;
       //---------------------------------------------------------------
       public bool IsTurretActive { set; get; } = false;
       public bool IsHatchesActive { set; get; } = false;

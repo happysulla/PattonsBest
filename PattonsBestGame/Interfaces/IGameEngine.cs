@@ -274,6 +274,8 @@ namespace Pattons_Best
       BattleRoundSequencePanzerfaustToHitRoll,
       BattleRoundSequencePanzerfaustToKillRoll,
       BattleRoundSequenceHarrassingFire,
+      BattleRoundSequenceFriendlyAdvance,
+      BattleRoundSequenceFriendlyAdvanceSelected,
 
 
       EveningDebriefingStart,

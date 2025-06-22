@@ -451,11 +451,14 @@ Click image to continue.
 e046	"<Bold>e046 Friendly Advance</Bold> 
 <InlineUIContainer><Button Content='r15.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
-Place a US Controlled marker in a sector of your choice that is empty of enemy units and adjacent to a sector already US Controlled."
+Place a US Controlled marker in a sector of your choice that is empty of enemy units and adjacent to a sector already US Controlled.
+<LineBreak/><LineBreak/>"
 e046a	"<Bold>e046a Friendly Advance Ignored</Bold> 
 <InlineUIContainer><Button Content='r15.8' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
-Since there is no sector adjacent to a US Controlled sector that is empty of enemy units, this event is ignored. Click image to continue."
+Since there is no sector adjacent to a US Controlled sector that is empty of enemy units, this event is ignored. Click image to continue.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='Continue046a' Height='100' Width='100'></Image></InlineUIContainer>"
 e047	"<Bold>e047 Enemy Reinforcement</Bold> 
 <InlineUIContainer><Button Content='r15.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>"

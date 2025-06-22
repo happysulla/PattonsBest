@@ -529,6 +529,42 @@ namespace Pattons_Best
          }
          return returnedTerritories;
       }
+      public static bool IsEnemyUnitInSector(IGameInstance gi, string sector)
+      {
+         string tName = "B" + sector + "C";
+         IStack? stack = gi.BattleStacks.Find(tName);
+         if (null != stack)
+         {
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.IsEnemyUnit())
+                  return true;
+            }
+         }
+         //--------------------------------------
+         tName = "B" + sector + "M";
+         stack = gi.BattleStacks.Find(tName);
+         if (null != stack)
+         {
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.IsEnemyUnit())
+                  return true;
+            }
+         }
+         //--------------------------------------
+         tName = "B" + sector + "L";
+         stack = gi.BattleStacks.Find(tName);
+         if (null != stack)
+         {
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.IsEnemyUnit())
+                  return true;
+            }
+         }
+         return false;
+      }
       //---------------------------------------------------------------
       public Territory()
       {

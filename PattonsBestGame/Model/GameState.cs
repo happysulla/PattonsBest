@@ -2308,7 +2308,7 @@ namespace Pattons_Best
                case GameAction.BattleAmbushRoll:
                   if (true == lastReport.Weather.Contains("Rain") || true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
                      dieRoll--;
-                  dieRoll = 10; // <cgs> TEST - ambush
+                  dieRoll = 1; // <cgs> TEST - ambush
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (dieRoll < 8)
@@ -2346,7 +2346,7 @@ namespace Pattons_Best
                case GameAction.BattleRandomEventRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 33; // <cgs> TEST - harassing fire
+                     dieRoll = 38; // <cgs> TEST - friendly advance
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -2389,6 +2389,11 @@ namespace Pattons_Best
                            gi.NumCollateralDamage++;
                            break;
                         case "Friendly Advance":
+                           if( false == FriendlyAdvanceCheck(gi, ref action))
+                           {
+                              returnStatus = "FriendlyAdvanceCheck() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
+                           }
                            break;
                         case "Enemy Reinfore":
                            break;
@@ -2501,6 +2506,120 @@ namespace Pattons_Best
          }
          return true;
       }
+      private bool FriendlyAdvanceCheck(IGameInstance gi, ref GameAction outAction)
+      {
+         gi.DieRollAction = GameAction.DieRollActionNone;
+         //--------------------------------------------
+         List<ITerritory> usControlledTerritory = new List<ITerritory>(); 
+         foreach( IStack stack in gi.BattleStacks)
+         {
+            foreach(IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.Name.Contains("UsControl"))
+                  usControlledTerritory.Add(stack.Territory);
+            }
+         }
+         //--------------------------------------------
+         foreach(ITerritory t in usControlledTerritory)
+         {
+            if( 3 != t.Name.Length )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "FriendlyAdvanceCheck(): 3 != t.Name.Length for t=" + t.Name );
+               return false;
+            }
+            string sector = t.Name[1].ToString();
+            bool isEmptySectorAdjacentToUsControl = false;
+            string adjName;
+            string adjSector;
+            ITerritory? adjTerritory = null;
+            switch (sector)
+            {
+               case "1":
+                  adjName = "B9M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     isEmptySectorAdjacentToUsControl = true;
+                  adjName = "B2M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     isEmptySectorAdjacentToUsControl = true;
+                  break;
+               case "2":
+                  adjName = "B1M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     isEmptySectorAdjacentToUsControl = true;
+                  adjName = "B3M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     isEmptySectorAdjacentToUsControl = true;
+                  break;
+               case "3":
+                  adjName = "B2M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     isEmptySectorAdjacentToUsControl = true;
+                  adjName = "B4M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     isEmptySectorAdjacentToUsControl = true;
+                  break;
+               case "4":
+                  adjName = "B3M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     isEmptySectorAdjacentToUsControl = true;
+                  adjName = "B6M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     isEmptySectorAdjacentToUsControl = true;
+                  break;
+               case "6":
+                  adjName = "B4M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     isEmptySectorAdjacentToUsControl = true;
+                  adjName = "B9M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     isEmptySectorAdjacentToUsControl = true;
+                  break;
+               case "9":
+                  adjName = "B6M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     isEmptySectorAdjacentToUsControl = true;
+                  adjName = "B1M";
+                  adjSector = adjName[1].ToString();
+                  adjTerritory = usControlledTerritory.Find(adjName);
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                     isEmptySectorAdjacentToUsControl = true;
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "FriendlyAdvanceCheck(): reached default sector=" + sector.ToString());
+                  return false;
+            }
+            if (true == isEmptySectorAdjacentToUsControl)
+            {
+               gi.EventDisplayed = gi.EventActive = "e046";
+               outAction = GameAction.BattleRoundSequenceFriendlyAdvance;
+               return true;
+            }
+         }
+         gi.EventDisplayed = gi.EventActive = "e046a";
+         return true;
+      }
    }
    //-----------------------------------------------------
    class GameStateBattleRoundSequence : GameState
@@ -2545,29 +2664,10 @@ namespace Pattons_Best
                   gi.EventDisplayed = gi.EventActive; // next screen to show
                   break;
                case GameAction.BattleRoundSequenceStart:
-                  Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceStart): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Spotting");
-                  gi.BattlePhase = BattlePhase.Spotting;
-                  int smokeCount = 0;
-                  foreach (IStack stack in gi.BattleStacks)
+                  if (false == BattleRoundSequenceStart(gi, ref action))
                   {
-                     foreach (IMapItem mi in stack.MapItems)
-                     {
-                        if (true == mi.Name.Contains("Smoke"))
-                           smokeCount++;
-                     }
-                  }
-                  if (0 < smokeCount)
-                  {
-                     gi.EventDisplayed = gi.EventActive = "e037";
-                     gi.DieRollAction = GameAction.DieRollActionNone;
-                  }
-                  else
-                  {
-                     if (false == SpottingPhaseBegin(gi, ref action))
-                     {
-                        returnStatus = "SpottingPhaseBegin() returned false";
-                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
-                     }
+                     returnStatus = "BattleRoundSequenceStart() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
                   }
                   break;
                case GameAction.BattleRoundSequenceSmokeDepletionEnd:
@@ -2990,6 +3090,21 @@ namespace Pattons_Best
                      }
                   }
                   break;
+               case GameAction.BattleRoundSequenceFriendlyAdvance:
+                  break;
+               case GameAction.BattleRoundSequenceFriendlyAdvanceSelected:
+                  if (null == gi.FriendlyAdvance)
+                  {
+                     returnStatus = "myGameInstance.FriendlyAdvance=null";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                  }
+                  else
+                  {
+                     string name = "UsControl" + Utilities.MapItemNum.ToString();
+                     ++Utilities.MapItemNum;
+                     gi.BattleStacks.Add(new MapItem(name, Utilities.ZOOM, "c28UsControl", gi.FriendlyAdvance));
+                  }
+                  break;
                case GameAction.UpdateTankExplosion:
                case GameAction.UpdateTankBrewUp:
                   gi.BattleStacks.Remove(gi.Sherman);
@@ -3096,6 +3211,35 @@ namespace Pattons_Best
          else
             Logger.Log(LogEnum.LE_ERROR, sb12.ToString());
          return returnStatus;
+      }
+      private bool BattleRoundSequenceStart(IGameInstance gi, ref GameAction action)
+      {
+         Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "BattleRoundSequenceStart(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Spotting");
+         gi.BattlePhase = BattlePhase.Spotting;
+         int smokeCount = 0;
+         foreach (IStack stack in gi.BattleStacks)
+         {
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.Name.Contains("Smoke"))
+                  smokeCount++;
+            }
+         }
+         if (0 < smokeCount)
+         {
+            gi.EventDisplayed = gi.EventActive = "e037";
+            gi.DieRollAction = GameAction.DieRollActionNone;
+         }
+         else
+         {
+            if (false == SpottingPhaseBegin(gi, ref action))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "BattleRoundSequenceStart(): SpottingPhaseBegin() returned false");
+               return false;
+            }
+         }
+         gi.FriendlyAdvance = null;
+         return true;
       }
       private bool CheckCrewMemberExposed(IGameInstance gi, ref GameAction outAction)
       {
