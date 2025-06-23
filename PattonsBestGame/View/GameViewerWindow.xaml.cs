@@ -375,6 +375,8 @@ namespace Pattons_Best
                if (false == UpdateCanvasEnemyAdvance(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasEnemyAdvance() returned error ");
                break;
+            case GameAction.BattleRoundSequenceShermanFiringSelectTarget:
+               break;
             case GameAction.EveningDebriefingStart:
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
