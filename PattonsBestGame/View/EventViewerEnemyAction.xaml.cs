@@ -1326,10 +1326,10 @@ namespace Pattons_Best
                if (true == enemyAction.Contains("Infantry"))
                {
                   mi.IsFired = true;
-                  myGridRows[i].myToKillNumber = (int) TableMgr.GetToKillNumberInfantry(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
+                  myGridRows[i].myToKillNumber = (int) TableMgr.GetEnemyToKillNumberInfantry(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
                   if(myGridRows[i].myToKillNumber < -100 )
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetToKillNumberInfantry() returned " + myGridRows[i].myToKillNumber.ToString() + " for action=" + enemyAction);
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetEnemyToKillNumberInfantry() returned " + myGridRows[i].myToKillNumber.ToString() + " for action=" + enemyAction);
                      return;
                   }
                   myGridRows[i].myDieRollToHitYourTank = NO_FIRE_YOUR_TANK;
@@ -1341,16 +1341,16 @@ namespace Pattons_Best
                   if ( ( (true == enemyAction.Contains("Lead") ) && (true == myGameInstance.IsLeadTank)) || (true == enemyAction.Contains("Your") ) )
                   {
                      Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Firing at Your Tank myState=" + myState.ToString() + " enemyAction=" + enemyAction);
-                     myGridRows[i].myModifierToHitYourTank = (int)TableMgr.GetToHitNumberModifierForYourTank(myGameInstance, mi, myGridRows[i].myRange);
+                     myGridRows[i].myModifierToHitYourTank = (int)TableMgr.GetEnemyToHitNumberModifierForYourTank(myGameInstance, mi, myGridRows[i].myRange);
                      if (myGridRows[i].myModifierToHitYourTank < -100)
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetToKillNumberInfantry() returned " + myGridRows[i].myDieRollToHitYourTank.ToString() + " for action=" + enemyAction);
+                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetEnemyToKillNumberInfantry() returned " + myGridRows[i].myDieRollToHitYourTank.ToString() + " for action=" + enemyAction);
                         return;
                      }
-                     myGridRows[i].myToHitNumberYourTank = (int)TableMgr.GetToHitNumberYourTank(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
+                     myGridRows[i].myToHitNumberYourTank = (int)TableMgr.GetEnemyToHitNumberYourTank(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
                      if (myGridRows[i].myToHitNumberYourTank < -100)
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetToKillNumberInfantry() returned " + myGridRows[i].myDieRollToHitYourTank.ToString() + " for action=" + enemyAction);
+                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetEnemyToKillNumberInfantry() returned " + myGridRows[i].myDieRollToHitYourTank.ToString() + " for action=" + enemyAction);
                         return;
                      }
                      myGridRows[i].myDieRollFire = NO_FIRE; // not firing at other tanks... only firing at your tank
@@ -1359,10 +1359,10 @@ namespace Pattons_Best
                   else
                   {
                      Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Firing at Any Tank myState=" + myState.ToString() + " enemyAction=" + enemyAction);
-                     myGridRows[i].myToKillNumber = (int)TableMgr.GetToKillNumberTank(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
+                     myGridRows[i].myToKillNumber = (int)TableMgr.GetEnemyToKillNumberTank(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
                      if (myGridRows[i].myToKillNumber < -100)
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetToKillNumberInfantry() returned " + myGridRows[i].myToKillNumber.ToString() + " for action=" + enemyAction);
+                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetEnemyToKillNumberInfantry() returned " + myGridRows[i].myToKillNumber.ToString() + " for action=" + enemyAction);
                         return;
                      }
                      myGridRows[i].myDieRollToHitYourTank = NO_FIRE_YOUR_TANK;
@@ -1517,16 +1517,16 @@ namespace Pattons_Best
                {
                   Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Hit Location for myState=" + myState.ToString() + " dr=" + dieRoll);
                   myGridRows[i].myDieRollHitLocationYourTank = dieRoll;
-                  myGridRows[i].myHitLocationYourTank = TableMgr.GetHitLocationYourTank(myGameInstance, dieRoll);
+                  myGridRows[i].myHitLocationYourTank = TableMgr.GetEnemyHitLocationYourTank(myGameInstance, dieRoll);
                   if ("ERROR" == myGridRows[i].myHitLocationYourTank)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.myHitLocationYourTank() returned ERROR");
                      return;
                   }
-                  myGridRows[i].myToKillNumberYourTank = (int)TableMgr.GetToKillNumberYourTank(myGameInstance, myGridRows[i].myMapItem, myGridRows[i].myFacing, myGridRows[i].myRange, myGridRows[i].myHitLocationYourTank);
+                  myGridRows[i].myToKillNumberYourTank = (int)TableMgr.GetEnemyToKillNumberYourTank(myGameInstance, myGridRows[i].myMapItem, myGridRows[i].myFacing, myGridRows[i].myRange, myGridRows[i].myHitLocationYourTank);
                   if (myGridRows[i].myToKillNumberYourTank < -100)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetToKillNumberYourTank() returned error=" + myGridRows[i].myToKillNumberYourTank.ToString());
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyToKillNumberYourTank() returned error=" + myGridRows[i].myToKillNumberYourTank.ToString());
                      return;
                   }
                   if ( "Miss" == myGridRows[i].myHitLocationYourTank )

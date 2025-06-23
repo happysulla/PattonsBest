@@ -2235,20 +2235,20 @@ namespace Pattons_Best
          return newT;
       }
       //-------------------------------------------
-      public static double GetToKillNumberInfantry(IGameInstance gi, IMapItem mi, char sector, char range)
+      public static double GetEnemyToKillNumberInfantry(IGameInstance gi, IMapItem mi, char sector, char range)
       {
          double toKillNum = -1000.0;
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberInfantry(): unknown enemyUnit=" + mi.Name);
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberInfantry(): unknown enemyUnit=" + mi.Name);
             return toKillNum;
          }
          //----------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberInfantry(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberInfantry(): lastReport=null");
             return toKillNum;
          }
          //----------------------------------------------------
@@ -2293,7 +2293,7 @@ namespace Pattons_Best
                      toKillNum = 10;
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberInfantry(): Advance - reached default with enemyUnit=" + enemyUnit);
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberInfantry(): Advance - reached default with enemyUnit=" + enemyUnit);
                   return toKillNum;
             }
          }
@@ -2333,20 +2333,20 @@ namespace Pattons_Best
                      toKillNum = 10;
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberInfantry(): Battle - reached default with enemyUnit=" + enemyUnit);
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberInfantry(): Battle - reached default with enemyUnit=" + enemyUnit);
                   return toKillNum;
             }
          }
          else
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberInfantry():  reached default with scearno=" + lastReport.Scenario);
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberInfantry():  reached default with scearno=" + lastReport.Scenario);
             return toKillNum;
          }
          //------------------------------------
          int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
          if (numSmokeMarkers < 0)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): GetSmokeCount() returned error");
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): GetSmokeCount() returned error");
             return toKillNum;
          }
          if ( 0 < numSmokeMarkers)
@@ -2357,20 +2357,20 @@ namespace Pattons_Best
          //------------------------------------
          return toKillNum;
       }
-      public static double GetToKillNumberTank(IGameInstance gi, IMapItem mi, char sector, char range)
+      public static double GetEnemyToKillNumberTank(IGameInstance gi, IMapItem mi, char sector, char range)
       {
          double toKillNum = -1000.0;
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): unknown enemyUnit=" + mi.Name);
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): unknown enemyUnit=" + mi.Name);
             return toKillNum;
          }
          //----------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): lastReport=null");
             return toKillNum;
          }
          //----------------------------------------------------
@@ -2429,7 +2429,7 @@ namespace Pattons_Best
                      toKillNum = 61;
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): Advance - reached default with enemyUnit=" + enemyUnit);
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): Advance - reached default with enemyUnit=" + enemyUnit);
                   return toKillNum;
             }
          }
@@ -2480,20 +2480,20 @@ namespace Pattons_Best
                      toKillNum = 51;
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): Advance - reached default with enemyUnit=" + enemyUnit);
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): Advance - reached default with enemyUnit=" + enemyUnit);
                   return toKillNum;
             }
          }
          else 
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): reached default scenario=" + lastReport.Scenario);
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): reached default scenario=" + lastReport.Scenario);
             return toKillNum;
          }
          //------------------------------------
          int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
          if (numSmokeMarkers < 0 )
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): GetSmokeCount() returned error");
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): GetSmokeCount() returned error");
             return toKillNum;
          }
          if (0 < numSmokeMarkers)
@@ -2578,19 +2578,19 @@ namespace Pattons_Best
          return "ERROR";
       }
       //-------------------------------------------
-      public static int GetToHitNumberModifierForYourTank(IGameInstance gi, IMapItem mi, char range)
+      public static int GetEnemyToHitNumberModifierForYourTank(IGameInstance gi, IMapItem mi, char range)
       {
          int toHitModifierNum = 0;
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetToHitNumberYourTank(): unknown enemyUnit=" + mi.Name);
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): unknown enemyUnit=" + mi.Name);
             return -1000;
          }
          if( false == gi.FirstShots.ContainsKey(mi.Name))
          {
             toHitModifierNum += 10; // add 10 if first shot
-            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetToHitNumberYourTank(): eu=" + mi.Name + " +10 mod=" + toHitModifierNum.ToString() + " firstShot");
+            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemyToHitNumberYourTank(): eu=" + mi.Name + " +10 mod=" + toHitModifierNum.ToString() + " firstShot");
          }
          //-----------------------------------------------
          if (true == gi.AcquiredShots.ContainsKey(mi.Name))
@@ -2600,21 +2600,21 @@ namespace Pattons_Best
                if ('C' == range)
                {
                   toHitModifierNum -= 10;
-                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetToHitNumberYourTank(): eu=" + mi.Name + " -10 mod=" + toHitModifierNum.ToString() + " acquire-2 close");
+                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemyToHitNumberYourTank(): eu=" + mi.Name + " -10 mod=" + toHitModifierNum.ToString() + " acquire-2 close");
                }
                else if ('M' == range)
                {
                   toHitModifierNum -= 10;
-                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetToHitNumberYourTank(): eu=" + mi.Name + " -20 mod=" + toHitModifierNum.ToString() + " acquire-2 medium");
+                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemyToHitNumberYourTank(): eu=" + mi.Name + " -20 mod=" + toHitModifierNum.ToString() + " acquire-2 medium");
                }
                else if ('L' == range)
                {
                   toHitModifierNum -= 30;
-                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetToHitNumberYourTank(): eu=" + mi.Name + " -30 mod=" + toHitModifierNum.ToString() + " acquire-2 long");
+                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemyToHitNumberYourTank(): eu=" + mi.Name + " -30 mod=" + toHitModifierNum.ToString() + " acquire-2 long");
                }
                else
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetToHitNumberYourTank(): 1-unknown range=" + range);
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): 1-unknown range=" + range);
                   return -1000;
                }
             }
@@ -2623,21 +2623,21 @@ namespace Pattons_Best
                if ('C' == range)
                {
                   toHitModifierNum -= 5;
-                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetToHitNumberYourTank(): eu=" + mi.Name + " -5 mod=" + toHitModifierNum.ToString() + " acquire-1 close");
+                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemyToHitNumberYourTank(): eu=" + mi.Name + " -5 mod=" + toHitModifierNum.ToString() + " acquire-1 close");
                }
                else if ('M' == range)
                {
                   toHitModifierNum -= 10;
-                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetToHitNumberYourTank(): eu=" + mi.Name + " -10 mod=" + toHitModifierNum.ToString() + " acquire-1 medium");
+                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemyToHitNumberYourTank(): eu=" + mi.Name + " -10 mod=" + toHitModifierNum.ToString() + " acquire-1 medium");
                }
                else if ('L' == range)
                {
                   toHitModifierNum -= 15;
-                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetToHitNumberYourTank(): eu=" + mi.Name + " -15 mod=" + toHitModifierNum.ToString() + " acquire-1 long");
+                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemyToHitNumberYourTank(): eu=" + mi.Name + " -15 mod=" + toHitModifierNum.ToString() + " acquire-1 long");
                }
                else
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetToHitNumberYourTank(): 2-unknown range=" + range);
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): 2-unknown range=" + range);
                   return -1000;
                }
             }
@@ -2646,25 +2646,25 @@ namespace Pattons_Best
          if( true == gi.Sherman.IsMoving )
          {
             toHitModifierNum += 20;
-            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetToHitNumberYourTank(): eu=" + mi.Name + " +20 mod=" + toHitModifierNum.ToString() + " moving");
+            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemyToHitNumberYourTank(): eu=" + mi.Name + " +20 mod=" + toHitModifierNum.ToString() + " moving");
          }
          return toHitModifierNum;
       }
-      public static double GetToHitNumberYourTank(IGameInstance gi, IMapItem mi, char sector, char range)
+      public static double GetEnemyToHitNumberYourTank(IGameInstance gi, IMapItem mi, char sector, char range)
       {
          double toHitNum = -1000.0;
          //----------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): lastReport=null");
             return toHitNum;
          }
          //----------------------------------------------------
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetToHitNumberYourTank(): unknown enemyUnit=" + mi.Name);
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): unknown enemyUnit=" + mi.Name);
             return toHitNum;
          }
          switch (enemyUnit)
@@ -2677,7 +2677,7 @@ namespace Pattons_Best
                else if ('L' == range)
                   toHitNum = 34;
                else
-                  Logger.Log(LogEnum.LE_ERROR, "GetToHitNumberYourTank(): unknown enemyUnit=" + enemyUnit);
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): unknown enemyUnit=" + enemyUnit);
                break;
             case "Pak40":
             case "SPG":
@@ -2696,7 +2696,7 @@ namespace Pattons_Best
                else if ('L' == range)
                   toHitNum = 67;
                else
-                  Logger.Log(LogEnum.LE_ERROR, "GetToHitNumberYourTank(): unknown enemyUnit=" + enemyUnit);
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): unknown enemyUnit=" + enemyUnit);
                break;
             case "ATG":
             case "Pak43":
@@ -2709,17 +2709,17 @@ namespace Pattons_Best
                else if ('L' == range)
                   toHitNum = 79;
                else
-                  Logger.Log(LogEnum.LE_ERROR, "GetToHitNumberYourTank(): unknown enemyUnit=" + enemyUnit);
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): unknown enemyUnit=" + enemyUnit);
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetToHitNumberYourTank(): Reached Default enemyUnit=" + enemyUnit);
+               Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): Reached Default enemyUnit=" + enemyUnit);
                return toHitNum;
          }
          //------------------------------------
          int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
          if (numSmokeMarkers < 0)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank(): GetSmokeCount() returned error");
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): GetSmokeCount() returned error");
             return toHitNum;
          }
          if (0 < numSmokeMarkers)
@@ -2728,17 +2728,17 @@ namespace Pattons_Best
          if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
             toHitNum = toHitNum * 0.5;
          //------------------------------------
-         //int modifier = GetToHitNumberModifierForYourTank(gi, mi, range);
+         //int modifier = GetEnemyToHitNumberModifierForYourTank(gi, mi, range);
          //if (modifier < -100)
          //{
-         //   Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberTank() GetToHitNumberModifierForYourTank() returned error ");
+         //   Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank() GetEnemyToHitNumberModifierForYourTank() returned error ");
          //   return toHitNum;
          //}
          //toHitNum -= modifier;
          //------------------------------------
          return toHitNum;
       }
-      public static string GetHitLocationYourTank(IGameInstance gi, int dieRoll)
+      public static string GetEnemyHitLocationYourTank(IGameInstance gi, int dieRoll)
       {
          if( true == gi.Sherman.IsHullDown )
          {
@@ -2746,7 +2746,7 @@ namespace Pattons_Best
                return "Turret";
             else if( dieRoll < 11)
                return "Miss";
-            Logger.Log(LogEnum.LE_ERROR, "GetHitLocationYourTank(): 1-dieRoll=" + dieRoll.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyHitLocationYourTank(): 1-dieRoll=" + dieRoll.ToString());
             return "ERROR";
          }
          else
@@ -2757,7 +2757,7 @@ namespace Pattons_Best
                return "Hull";
             else if (dieRoll == 10)
                return "Track";
-            Logger.Log(LogEnum.LE_ERROR, "GetHitLocationYourTank(): 2-dieRoll=" + dieRoll.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyHitLocationYourTank(): 2-dieRoll=" + dieRoll.ToString());
             return "ERROR";
          }
       }
@@ -2830,13 +2830,13 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): reached default hitLocation=" + hitLocation);
          return "ERROR";
       }
-      public static double GetToKillNumberYourTank(IGameInstance gi, IMapItem mi, string facing, char range, string hitLocation)
+      public static double GetEnemyToKillNumberYourTank(IGameInstance gi, IMapItem mi, string facing, char range, string hitLocation)
       {
          double toKillNum = -1000.0;
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberYourTank(): unknown enemyUnit=" + mi.Name);
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberYourTank(): unknown enemyUnit=" + mi.Name);
             return toKillNum;
          }
          //----------------------------------------------------
@@ -2869,14 +2869,14 @@ namespace Pattons_Best
                gun = "88LL";
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetToHitNumberYourTank(): Reached Default enemyUnit=" + enemyUnit);
+               Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): Reached Default enemyUnit=" + enemyUnit);
                return toKillNum;
          }
          //----------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetToKillNumberYourTank(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberYourTank(): lastReport=null");
             return toKillNum;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
@@ -3971,6 +3971,13 @@ namespace Pattons_Best
       {
          int modifier = 0;
          return modifier;
+      }
+      //-------------------------------------------
+      public static int GetShermanToHitModifier(IGameInstance gi, IMapItem enemyUnit)
+      {
+         int toHitModifierNum = 0;
+
+         return toHitModifierNum;
       }
       //-------------------------------------------
       private void CreateCombatCalender()

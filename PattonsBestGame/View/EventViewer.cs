@@ -1510,7 +1510,7 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
-            case "e053": //$$$$
+            case "e053b": //$$$$
                string modiferMainGunFiring = UpdateEventContentGetToHitModifier(gi);
                myTextBlock.Inlines.Add(new Run(modiferMainGunFiring));
                myTextBlock.Inlines.Add(new LineBreak());
@@ -2494,7 +2494,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowFacingChangeResults(): myGameEngine=null");
             return false;
          }
-         GameAction outAction = GameAction.BattleRoutSequenceChangeFacingEnd;
+         GameAction outAction = GameAction.BattleRoundSequenceChangeFacingEnd;
          StringBuilder sb11 = new StringBuilder("     ######ShowFacingChangeResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);

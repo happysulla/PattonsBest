@@ -507,13 +507,25 @@ Select the plus or minus buttons to rotate.
 <InlineUIContainer><Button Content='   +   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
 When you are satisfied with the current orientation, click Sherman image between buttons to continue."
-e053	"<Bold>e053 Main Gun Firing</Bold> 
+e053	"<Bold>e053 Main Gun Firing - Select Target</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
-Select a target by clicking the enemy unit. Consult the <InlineUIContainer><Button Content='To Hit Target' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table to determine if target is hit.
+Select a target by clicking the enemy unit on the Battle Board. Only enemy units that have been spotted may be selected. The main gun may only fire at a target in the turret&apos;s sector unless the <Bold>Rotate Turret - Fire Main Gun</Bold> action was taken.
+<LineBreak/><LineBreak/>"
+e053a	"<Bold>e053a Main Gun Firing - No Target Available</Bold> 
+<InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
-<Underline>Modifiers:</Underline><LineBreak/>"
+There is no target that is selectable. Only enemy units that have been spotted may be selected. The main gun may only fire at a target in the turret&apos;s front sector unless the <Bold>Rotate Turret - Fire Main Gun</Bold> action was taken. Click image to continue.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='Continue53a' Height='100' Width='100'></Image></InlineUIContainer>"
+e053b	"<Bold>e053b Main Gun Firing</Bold> 
+<InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<LineBreak/><LineBreak/>
+Select a target by clicking the enemy unit on the Battle Board. 
+<LineBreak/><LineBreak/>"
 e100	"<Bold>e100 Evening Debriefing</Bold> 
 <LineBreak/><LineBreak/>
 An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 

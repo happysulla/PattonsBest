@@ -2320,7 +2320,7 @@ namespace Pattons_Best
                case GameAction.BattleAmbushRoll:
                   if (true == lastReport.Weather.Contains("Rain") || true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
                      dieRoll--;
-                  dieRoll = 1; // <cgs> TEST - ambush
+                  dieRoll = 10; // <cgs> TEST - ambush
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (dieRoll < 8)
@@ -3305,6 +3305,14 @@ namespace Pattons_Best
                   if (359 < gi.Sherman.RotationHull)
                      gi.Sherman.RotationHull = 0;
                   break;
+               case GameAction.BattleRoundSequenceMovementPivotEnd:
+                  gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
+                  if (false == ConductCrewAction(gi, ref action))
+                  {
+                     returnStatus = "ConductCrewAction() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                  }
+                  break;
                case GameAction.BattleRoundSequenceMovementRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
@@ -3339,7 +3347,7 @@ namespace Pattons_Best
                      }
                   }
                   break;
-               case GameAction.BattleRoutSequenceChangeFacingEnd:
+               case GameAction.BattleRoundSequenceChangeFacingEnd:
                   gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
                   if (false == ConductCrewAction(gi, ref action))
                   {
@@ -3535,17 +3543,37 @@ namespace Pattons_Best
          {
             gi.CrewActionPhase = CrewActionPhase.TankMgFire;
             bool isTankFiringMainGun = false;
+            bool isRotateTurret = false;
             foreach (IMapItem crewAction in gi.CrewActions)
             {
                if ("Gunner_FireMainGun" == crewAction.Name)
                   isTankFiringMainGun = true;
+               if ("Gunner_RotateFireMainGun" == crewAction.Name)
+               {
+                  isTankFiringMainGun = true;
+                  isRotateTurret = true;
+               }
             }
-            if( true == isTankFiringMainGun)
+            if (true == isTankFiringMainGun)
             {
-               outAction = GameAction.BattleRoundSequenceShermanFiringMainGun;
-               gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
-               gi.EventDisplayed = gi.EventActive = "e053";
-               gi.DieRollAction = GameAction.DieRollActionNone;
+               if (false == GetShermanTargets(gi, ref outAction, isRotateTurret))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): GetShermanTargets() returned false");
+                  return false;
+               }
+               if( 0 < gi.Targets.Count )
+               {
+                  outAction = GameAction.BattleRoundSequenceShermanFiringSelectTarget;
+                  gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
+                  gi.EventDisplayed = gi.EventActive = "e053";
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+               }
+               else
+               {
+                  gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
+                  gi.EventDisplayed = gi.EventActive = "e053a";
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+               }
             }
          }
          if (CrewActionPhase.TankMgFire == gi.CrewActionPhase)
@@ -3660,6 +3688,76 @@ namespace Pattons_Best
          {
             Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): ConductCrewAction() return false");
             return false;
+         }
+         return true;
+      }
+      private bool GetShermanTargets(IGameInstance gi, ref GameAction outAction, bool isRotateTurret)
+      {
+         if( true == isRotateTurret ) // any enemy unit may be chosen
+         {
+            foreach(IStack stack in gi.BattleStacks)
+            {
+               foreach(IMapItem mi in stack.MapItems)
+               {
+                  if (true == mi.IsEnemyUnit())
+                     gi.Targets.Add(mi);
+               }
+            }
+         }
+         else // only choose targets that are within the turret's front
+         {
+            List<String> tNames = new List<String>(); 
+            double rotation = gi.Sherman.RotationHull + gi.Sherman.RotationTurret;
+            if (359 < rotation)
+               rotation -= 360.0;
+            switch (rotation)
+            {
+               case 0:
+                  tNames.Add("B6C");
+                  tNames.Add("B6M");
+                  tNames.Add("B6L");
+                  break;
+               case 60:
+                  tNames.Add("B9C");
+                  tNames.Add("B9M");
+                  tNames.Add("B9L");
+                  break;
+               case 120:
+                  tNames.Add("B1C");
+                  tNames.Add("B1M");
+                  tNames.Add("B1L");
+                  break;
+               case 180:
+                  tNames.Add("B2C");
+                  tNames.Add("B2M");
+                  tNames.Add("B2L");
+                  break;
+               case 240:
+                  tNames.Add("B3C");
+                  tNames.Add("B3M");
+                  tNames.Add("B3L");
+                  break;
+               case 300:
+                  tNames.Add("B4C");
+                  tNames.Add("B4M");
+                  tNames.Add("B4L");
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanTargets(): reached default for rotation=" + rotation.ToString());
+                  return false;
+            }
+            foreach(string tName in tNames)
+            {
+               IStack? stack = gi.BattleStacks.Find(tName);
+               if( null != stack )
+               {
+                  foreach (IMapItem mi in stack.MapItems)
+                  {
+                     if (true == mi.IsEnemyUnit())
+                        gi.Targets.Add(mi);
+                  }
+               }
+            }
          }
          return true;
       }
