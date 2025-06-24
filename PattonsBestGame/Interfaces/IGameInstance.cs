@@ -71,6 +71,7 @@ namespace Pattons_Best
       CrewActionPhase CrewActionPhase { set; get; }
       string MovementEffectOnSherman { set; get; }
       string MovementEffectOnEnemy { set; get; }
+      string ShermanTypeOfFire { set; get; }
       //----------------------------------------------
       IMapItems NewMembers { set; get; }
       IMapItems ReadyRacks { set; get; }
@@ -135,6 +136,7 @@ namespace Pattons_Best
       List<IUnitTest> UnitTests { get; }
       //=========================================================
       ICrewMember? GetCrewMember(string name);
+      string GetGunLoad();
       bool IsDaylightLeft(IAfterActionReport report);
       bool IsExitArea(out bool isExitAreaReached);
       void KillSherman(IAfterActionReport report, string reason);

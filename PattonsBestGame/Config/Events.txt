@@ -290,7 +290,7 @@ Since the Battle Board is now empty of enemy units, the battle for this area is 
 <LineBreak/><LineBreak/>
 1.) Flip Resistance marker to US Controlled on Movement Board.
 <LineBreak/>
-2.) Victory points for control of the area added to the 
+2.) Victory points for control of the area added to the After Action Report 
 <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/>
 3.) If daylight remains, return to Prepare for Battle per 
@@ -511,6 +511,8 @@ e053	"<Bold>e053 Main Gun Firing - Select Target</Bold>
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
+The appropriate type of ammo is marked off the After Action Report <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
 Select a target by clicking the enemy unit on the Battle Board. Only enemy units that have been spotted may be selected. The main gun may only fire at a target in the turret&apos;s sector unless the <Bold>Rotate Turret - Fire Main Gun</Bold> action was taken.
 <LineBreak/><LineBreak/>"
 e053a	"<Bold>e053a Main Gun Firing - No Target Available</Bold> 
@@ -520,11 +522,12 @@ e053a	"<Bold>e053a Main Gun Firing - No Target Available</Bold>
 There is no target that is selectable. Only enemy units that have been spotted may be selected. The main gun may only fire at a target in the turret&apos;s front sector unless the <Bold>Rotate Turret - Fire Main Gun</Bold> action was taken. Click image to continue.
 <LineBreak/><LineBreak/>
                                             <InlineUIContainer><Image Name='Continue53a' Height='100' Width='100'></Image></InlineUIContainer>"
-e053b	"<Bold>e053b Main Gun Firing</Bold> 
+e053b	"<Bold>e053b Main Gun Firing - Target Selected</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
-Select a target by clicking the enemy unit on the Battle Board. 
+Choose  <InlineUIContainer><Button Content='Direct' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   or    
+<InlineUIContainer><Button Content=' Area ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   fire.
 <LineBreak/><LineBreak/>"
 e100	"<Bold>e100 Evening Debriefing</Bold> 
 <LineBreak/><LineBreak/>

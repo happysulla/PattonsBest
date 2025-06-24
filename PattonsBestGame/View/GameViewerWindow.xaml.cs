@@ -2642,8 +2642,21 @@ namespace Pattons_Best
                   count++;
                }
             }
-            e.Handled = true;
          }
+         else if( BattlePhase.ConductCrewAction == myGameInstance.BattlePhase )
+         {
+            IMapItem? selectedMapItem = myGameInstance.BattleStacks.FindMapItem(button.Name);
+            if (null != selectedMapItem)
+            {
+               if( true == myGameInstance.Targets.Contains(selectedMapItem))
+               {
+                  myGameInstance.Target = selectedMapItem;
+                  GameAction outAction = GameAction.BattleRoundSequenceShermanFiringMainGun;
+                  myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+               }
+            }
+         }
+         e.Handled = true;
       }
       private void MouseEnterMapItem(object sender, System.Windows.Input.MouseEventArgs e)
       {

@@ -1511,34 +1511,50 @@ namespace Pattons_Best
                }
                break;
             case "e053b": //$$$$
-               string modiferMainGunFiring = UpdateEventContentGetToHitModifier(gi);
-               myTextBlock.Inlines.Add(new Run(modiferMainGunFiring));
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add("Roll To Hit: ");
-               if (Utilities.NO_RESULT == gi.DieResults[key][0])
+               if( null == gi.Target )
                {
-                  BitmapImage bmi = new BitmapImage();
-                  bmi.BeginInit();
-                  bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
-                  bmi.EndInit();
-                  Image imgDice = new Image { Name = "DieRollBlue", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
-                  ImageBehavior.SetAnimatedSource(imgDice, bmi);
-                  myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.Tareget=null for key=" + key);
+                  return false;
                }
-               else
+               System.Windows.Controls.Button bEnemy = new Button { Width = 100, Height = 100, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
+               MapItem.SetButtonContent(bEnemy, gi.Target);
+               myTextBlock.Inlines.Add(new Run("                                            "));
+               myTextBlock.Inlines.Add(new InlineUIContainer(bEnemy));
+               //----------------------------------------------
+               if (false == String.IsNullOrEmpty(gi.ShermanTypeOfFire))
                {
-                  myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("                                            "));
-                  Image imge51 = new Image { Name = "Continue53", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
-                  myTextBlock.Inlines.Add(new InlineUIContainer(imge51));
+                  myTextBlock.Inlines.Add(new Run("Modifiers") { TextDecorations = TextDecorations.Underline });
                   myTextBlock.Inlines.Add(new LineBreak());
+                  string modiferMainGunFiring = UpdateEventContentGetToHitModifier(gi);
+                  myTextBlock.Inlines.Add(new Run(modiferMainGunFiring));
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+                  myTextBlock.Inlines.Add(new Run("Roll To Hit: "));
+                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
+                  {
+                     BitmapImage bmi = new BitmapImage();
+                     bmi.BeginInit();
+                     bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
+                     bmi.EndInit();
+                     Image imgDice = new Image { Name = "DieRollBlue", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+                     ImageBehavior.SetAnimatedSource(imgDice, bmi);
+                     myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
+                  }
+                  else
+                  {
+                     myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("                                            "));
+                     Image imge51 = new Image { Name = "Continue53b", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                     myTextBlock.Inlines.Add(new InlineUIContainer(imge51));
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("Click image to continue."));
+                  }
                }
-               break;
+                break;
             case "e101":
                ICrewMember? cmdr = gi.GetCrewMember("Commander");
                if (null == cmdr)
@@ -1986,6 +2002,19 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): SetButtonStateEnemyStrength() returned false");
                      return false;
                   }
+               }
+               break;
+            case "e053b":
+               string gunload = gi.GetGunLoad();
+               if ("Direct" == content)
+               {
+                  if (("Hbci" == gunload) || ("Wp" == gunload)) //cannot be direct fire
+                     b.IsEnabled = false;
+               }
+               if (" Area " == content)
+               {
+                  if( ("Ap" == gunload) || ("Hvap" == gunload) ) // AP and HVAP cannot be area fire
+                     b.IsEnabled = false;
                }
                break;
             default:
@@ -2908,6 +2937,11 @@ namespace Pattons_Best
                action = GameAction.BattleRoundSequencePivotRight;
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
+            case " Area ":
+               myGameInstance.ShermanTypeOfFire = "Area";
+               action = GameAction.BattleRoundSequenceShermanFiringMainGun;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
             case "AAR":
                if (null == myAfterActionDialog)
                {
@@ -2938,6 +2972,11 @@ namespace Pattons_Best
                break;
             case "Cancel":
                action = GameAction.MovementAirStrikeCancel;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "Direct":
+               myGameInstance.ShermanTypeOfFire = "Direct";
+               action = GameAction.BattleRoundSequenceShermanFiringMainGun;
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Enter":

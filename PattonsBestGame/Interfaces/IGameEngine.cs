@@ -262,6 +262,7 @@ namespace Pattons_Best
       BattleRoundSequenceChangeFacingEnd,
       BattleRoundSequenceShermanFiringSelectTarget,
       BattleRoundSequenceShermanFiringMainGun,
+      BattleRoundSequenceShermanToHitRoll,
 
       BattleRoundSequenceEnemyAction,
 

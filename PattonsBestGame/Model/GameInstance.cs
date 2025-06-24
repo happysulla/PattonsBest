@@ -36,6 +36,7 @@ namespace Pattons_Best
       public CrewActionPhase CrewActionPhase { set; get; } = CrewActionPhase.None;
       public string MovementEffectOnSherman { set; get; } = "unitialized";
       public string MovementEffectOnEnemy { set; get; } = "unitialized";
+      public string ShermanTypeOfFire { set; get; } = "";
       //---------------------------------------------------------------
       public IMapItems NewMembers { set; get; } = new MapItems();
       public IMapItems ReadyRacks { set; get; } = new MapItems();
@@ -188,6 +189,27 @@ namespace Pattons_Best
                break;
          }
          return crewmember;
+      }
+      public string GetGunLoad()
+      {
+         foreach(IMapItem mi in this.GunLoads )
+         {
+            if( true == mi.Name.Contains("GunLoad"))
+            {
+               if (true == mi.TerritoryCurrent.Name.Contains("Hvap"))
+                  return "Hvap";
+               if (true == mi.TerritoryCurrent.Name.Contains("He"))
+                  return "He";
+               if (true == mi.TerritoryCurrent.Name.Contains("Ap"))
+                  return "Ap";
+               if (true == mi.TerritoryCurrent.Name.Contains("Wp"))
+                  return "Wp";
+               if (true == mi.TerritoryCurrent.Name.Contains("Hbci"))
+                  return "Hbci";
+            }
+         }
+         Logger.Log(LogEnum.LE_ERROR, "GetGunLoad(): reached default for GunLoad");
+         return "ERROR";
       }
       public bool IsDaylightLeft(IAfterActionReport report)
       {
