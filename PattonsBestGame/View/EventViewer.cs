@@ -1513,7 +1513,7 @@ namespace Pattons_Best
             case "e053b": //$$$$
                if( null == gi.Target )
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.Tareget=null for key=" + key);
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.Target=null for key=" + key);
                   return false;
                }
                System.Windows.Controls.Button bEnemy = new Button { Width = 100, Height = 100, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
@@ -2801,6 +2801,10 @@ namespace Pattons_Best
                            action = GameAction.BattleRoundSequenceMovementPivotEnd;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
+                        case "Continue53a":
+                           action = GameAction.BattleRoundSequenceShermanFiringMainGunEnd;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
                         case "CampaignOver":
                            action = GameAction.EveningDebriefingVictoryPointsCalculated;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
@@ -2992,6 +2996,11 @@ namespace Pattons_Best
                break;
             case "Resupply":
                action = GameAction.MovementResupplyCheck;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case " Skip ":
+               myGameInstance.ShermanTypeOfFire = "Skip";
+               action = GameAction.BattleRoundSequenceShermanFiringMainGunEnd;
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Strength Check":

@@ -1043,7 +1043,7 @@ namespace Pattons_Best
             return false;
          }
          //------------------------------------
-         ITerritory? t11 = Territories.theTerritories.Find("GunLoadHe");
+         ITerritory? t11 = Territories.theTerritories.Find("GunLoadHbci");
          if (null == t11)
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t11=null");
@@ -3361,6 +3361,14 @@ namespace Pattons_Best
                   gi.EventDisplayed = gi.EventActive = "e053b";
                   gi.DieRollAction = GameAction.BattleRoundSequenceShermanToHitRoll;
                   break;
+               case GameAction.BattleRoundSequenceShermanFiringMainGunEnd:
+                  gi.CrewActionPhase = CrewActionPhase.TankMgFire;
+                  if (false == ConductCrewAction(gi, ref action))
+                  {
+                     returnStatus = "ConductCrewAction() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                  }
+                  break;
                case GameAction.BattleRoundSequenceShermanToHitRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
@@ -3595,7 +3603,7 @@ namespace Pattons_Best
          }
          if (CrewActionPhase.TankMgFire == gi.CrewActionPhase)
          {
-            gi.CrewActionPhase = CrewActionPhase.ReplacePeriscope;
+            //gi.CrewActionPhase = CrewActionPhase.ReplacePeriscope;
          }
          if (CrewActionPhase.ReplacePeriscope == gi.CrewActionPhase)
          {
@@ -3615,7 +3623,7 @@ namespace Pattons_Best
          }
          if (CrewActionPhase.None == gi.CrewActionPhase)
          {
-            gi.DieRollAction = GameAction.BattleRoundSequenceEnemyAction;
+            outAction = GameAction.BattleRoundSequenceEnemyAction;
          }
          return true;
       }

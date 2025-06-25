@@ -511,24 +511,37 @@ e053	"<Bold>e053 Main Gun Firing - Select Target</Bold>
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
-The appropriate type of ammo is marked off the After Action Report <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+Select a target by clicking the enemy unit on the Battle Board or <InlineUIContainer><Button Content=' Skip ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> firing. 
 <LineBreak/><LineBreak/>
-Select a target by clicking the enemy unit on the Battle Board. Only enemy units that have been spotted may be selected. The main gun may only fire at a target in the turret&apos;s sector unless the <Bold>Rotate Turret - Fire Main Gun</Bold> action was taken.
+Only enemy units that have been spotted may be selected. 
+<LineBreak/><LineBreak/>
+The main gun may only fire at a target in the turret&apos;s front sector unless the &quot;Rotate Turret - Fire Main Gun&quot; action was taken.
 <LineBreak/><LineBreak/>"
 e053a	"<Bold>e053a Main Gun Firing - No Target Available</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
-There is no target that is selectable. Only enemy units that have been spotted may be selected. The main gun may only fire at a target in the turret&apos;s front sector unless the <Bold>Rotate Turret - Fire Main Gun</Bold> action was taken. Click image to continue.
+There is no target that is selectable. Only enemy units that have been spotted may be selected.
+<LineBreak/><LineBreak/>
+The main gun may only fire at a target in the turret&apos;s front sector unless the &quot;Rotate Turret - Fire Main Gun&quot; action was taken. Click image to continue.
 <LineBreak/><LineBreak/>
                                             <InlineUIContainer><Image Name='Continue53a' Height='100' Width='100'></Image></InlineUIContainer>"
 e053b	"<Bold>e053b Main Gun Firing - Target Selected</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
+The appropriate type of ammo is marked off the After Action Report <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
 Choose  <InlineUIContainer><Button Content='Direct' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   or    
-<InlineUIContainer><Button Content=' Area ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   fire.
+<InlineUIContainer><Button Content=' Area ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    fire.
 <LineBreak/><LineBreak/>"
+e053c	"<Bold>e053c MG Gun Firing - Select Target</Bold> 
+<InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<LineBreak/><LineBreak/>
+Click either the highlighted zone or an spotted target or <InlineUIContainer><Button Content='Skip MG' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> . 
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='Continue53c' Height='100' Width='100'></Image></InlineUIContainer>"
 e100	"<Bold>e100 Evening Debriefing</Bold> 
 <LineBreak/><LineBreak/>
 An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
