@@ -719,50 +719,57 @@ namespace Pattons_Best
             case "LW":
                t = tRight;
                mi = new MapItem(name, Utilities.ZOOM, "c91Lw", t);
+               mi.IsSpotted = true; 
                myGridRows[i].myDieRollFacing = NO_FACING;
                myGridRows[i].myFacing = "NA";
                break;
             case "MG":
                t = tRight;
                mi = new MapItem(name, Utilities.ZOOM, "c92MgTeam", t);
+               mi.IsSpotted = true;
                myGridRows[i].myDieRollFacing = NO_FACING;
                myGridRows[i].myFacing = "NA";
                break;
             case "PSW/SPW":
                t = tLeft;
                mi = new MapItem(name, Utilities.ZOOM, "SpwOrPsw", t);
+               mi.IsSpotted = true;
                mi.IsVehicle = true;
                return true;
             case "PSW":
                t = tLeft;
                mi = new MapItem(name, Utilities.ZOOM + 0.2, "c89Psw232", t);
-               myIsVehicleActivated = true;
+               mi.IsSpotted = true;
                mi.IsVehicle = true;
+               myIsVehicleActivated = true;
                break;
             case "SPW":
                t = tLeft;
                mi = new MapItem(name, Utilities.ZOOM + 0.2, "c90Spw251", t);
-               myIsVehicleActivated = true;
+               mi.IsSpotted = true;
                mi.IsVehicle = true;
+               myIsVehicleActivated = true;
                break;
             case "SPG":
                t = tLeft;
                mi = new MapItem(name, Utilities.ZOOM + 0.5, "c77UnidentifiedSpg", t);
-               myIsVehicleActivated = true;
+               mi.IsSpotted = true;
                mi.IsVehicle = true;
+               myIsVehicleActivated = true;
                break;
             case "TANK":
                t = tLeft;
                mi = new MapItem(name, Utilities.ZOOM + 0.5, "c78UnidentifiedTank", t);
-               myIsVehicleActivated = true;
                mi.IsVehicle = true;
                mi.IsTurret = true;
+               myIsVehicleActivated = true;
                break;
             case "TRUCK":
                t = tRight;
                mi = new MapItem(name, Utilities.ZOOM + 0.3, "c88Truck", t);
-               myIsVehicleActivated = true;
+               mi.IsSpotted = true;
                mi.IsVehicle = true;
+               myIsVehicleActivated = true;
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): reached default with enemyUnit=" + myGridRows[i].myActivation);

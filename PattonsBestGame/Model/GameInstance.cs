@@ -59,13 +59,18 @@ namespace Pattons_Best
       public bool IsTurretActive { set; get; } = false;
       public bool IsHatchesActive { set; get; } = false;
       //---------------------------------------------------------------
+      public bool IsShermanFirstShot { set; get; } = false;
+      public bool IsShermanFiring { set; get; } = false;
+      public bool IsShermanFiringAtFront { set; get; } = false;
+      public bool IsShermanDeliberateImmobilization { set; get; } = false;
+      public int NumOfShermanShot { set; get; } = 0;
+      public int NumShermanTurretRotation { set; get; } = 0;
+      //---------------------------------------------------------------
       public bool IsHulledDown { set; get; } = false;
       public bool IsMoving { set; get; } = false;
       public bool IsLeadTank { set; get; } = false;
       public bool IsAirStrikePending { set; get; } = false;
       public bool IsAdvancingFireChosen { set; get; } = false;
-      public bool IsShermanFiring { set; get; } = false;
-      public bool IsShermanFiringAtFront { set; get; } = false;
       public bool IsBrokenMainGun { set; get; } = false;
       public bool IsBrokenGunsight { set; get; } = false;
       public bool IsBrokenMgCoaxial { set; get; } = false;
@@ -208,8 +213,47 @@ namespace Pattons_Best
                   return "Hbci";
             }
          }
-         Logger.Log(LogEnum.LE_ERROR, "GetGunLoad(): reached default for GunLoad");
-         return "ERROR";
+         return "None";
+      }
+      public string GetAmmoReload()
+      {
+         foreach (IMapItem mi in this.GunLoads)
+         {
+            if (true == mi.Name.Contains("AmmoReload"))
+            {
+               if (true == mi.TerritoryCurrent.Name.Contains("Hvap"))
+                  return "Hvap";
+               if (true == mi.TerritoryCurrent.Name.Contains("He"))
+                  return "He";
+               if (true == mi.TerritoryCurrent.Name.Contains("Ap"))
+                  return "Ap";
+               if (true == mi.TerritoryCurrent.Name.Contains("Wp"))
+                  return "Wp";
+               if (true == mi.TerritoryCurrent.Name.Contains("Hbci"))
+                  return "Hbci";
+            }
+         }
+         return "None";
+      }
+      public string GetReadyRackReload()
+      {
+         foreach (IMapItem mi in this.GunLoads)
+         {
+            if (true == mi.Name.Contains("ReadyRackReload"))
+            {
+               if (true == mi.TerritoryCurrent.Name.Contains("Hvap"))
+                  return "Hvap";
+               if (true == mi.TerritoryCurrent.Name.Contains("He"))
+                  return "He";
+               if (true == mi.TerritoryCurrent.Name.Contains("Ap"))
+                  return "Ap";
+               if (true == mi.TerritoryCurrent.Name.Contains("Wp"))
+                  return "Wp";
+               if (true == mi.TerritoryCurrent.Name.Contains("Hbci"))
+                  return "Hbci";
+            }
+         }
+         return "None";
       }
       public bool IsDaylightLeft(IAfterActionReport report)
       {

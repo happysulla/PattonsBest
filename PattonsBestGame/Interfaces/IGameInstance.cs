@@ -94,8 +94,12 @@ namespace Pattons_Best
       bool IsTurretActive { set; get; }
       bool IsHatchesActive { set; get; }
       //------------------------------------------------
+      bool IsShermanFirstShot { set; get; }
       bool IsShermanFiring { set; get; }
       bool IsShermanFiringAtFront { set; get; }
+      bool IsShermanDeliberateImmobilization { set; get; }
+      int NumOfShermanShot { set; get; }
+      int NumShermanTurretRotation { set; get; }
       //------------------------------------------------
       bool IsLeadTank { set; get; }
       bool IsAirStrikePending { set; get; }
@@ -137,6 +141,8 @@ namespace Pattons_Best
       //=========================================================
       ICrewMember? GetCrewMember(string name);
       string GetGunLoad();
+      string GetAmmoReload();
+      string GetReadyRackReload();
       bool IsDaylightLeft(IAfterActionReport report);
       bool IsExitArea(out bool isExitAreaReached);
       void KillSherman(IAfterActionReport report, string reason);

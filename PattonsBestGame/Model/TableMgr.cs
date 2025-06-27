@@ -2727,15 +2727,6 @@ namespace Pattons_Best
          //------------------------------------
          if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
             toHitNum = toHitNum * 0.5;
-         //------------------------------------
-         //int modifier = GetEnemyToHitNumberModifierForYourTank(gi, mi, range);
-         //if (modifier < -100)
-         //{
-         //   Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank() GetEnemyToHitNumberModifierForYourTank() returned error ");
-         //   return toHitNum;
-         //}
-         //toHitNum -= modifier;
-         //------------------------------------
          return toHitNum;
       }
       public static string GetEnemyHitLocationYourTank(IGameInstance gi, int dieRoll)
@@ -3967,17 +3958,632 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_ERROR, "GetMovingResultEnemy(): reached default");
          return "ERROR";
       }
-      public static int GetToHitModifier(IGameInstance gi)
-      {
-         int modifier = 0;
-         return modifier;
-      }
       //-------------------------------------------
       public static int GetShermanToHitModifier(IGameInstance gi, IMapItem enemyUnit)
       {
+         //------------------------------------
+         if ( 3 != enemyUnit.TerritoryCurrent.Name.Length)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
+            return -10000;
+         }
+         char range = enemyUnit.TerritoryCurrent.Name[2];
+         //------------------------------------
          int toHitModifierNum = 0;
+         bool isCommanderDirectingFire = false;
+         bool isShermanMoving = false;
+         foreach (IMapItem crewAction in gi.CrewActions)
+         {
+            if ("Commander_Fire" == crewAction.Name)
+               isCommanderDirectingFire = true;
+            if ("Driver_Forward" == crewAction.Name)
+               isShermanMoving = true;
+            if ("Driver_ForwardToHullDown" == crewAction.Name)
+               isShermanMoving = true;
+            if ("Driver_Reverse" == crewAction.Name)
+               isShermanMoving = true;
+            if ("Driver_ReverseToHullDown" == crewAction.Name)
+               isShermanMoving = true;
+            if ("Driver_ReverseToHullDown" == crewAction.Name)
+               isShermanMoving = true;
+            if ("Driver_PivotTank" == crewAction.Name)
+               isShermanMoving = true;
+         }
+         //------------------------------------
+         ICrewMember? commander = gi.GetCrewMember("Commander");
+         if (null == commander)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): commander=null");
+            return -10000;
+         }
+         ICrewMember? gunner = gi.GetCrewMember("Gunner");
+         if (null == gunner)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): gunner=null");
+            return -10000;
+         }
+         //------------------------------------
+         if (1 == gi.NumOfShermanShot)
+         {
+            if ((false == isCommanderDirectingFire) || (true == commander.IsButtonedUp))
+            {
+               toHitModifierNum += 10;
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): first shot at close range +10 mod=" + toHitModifierNum.ToString());
+            }
+         }
+         else if (2 == gi.NumOfShermanShot)
+         {
+            if( 'C' == range )
+            {
+               toHitModifierNum -= 5;
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): acq1 at close range -5 mod=" + toHitModifierNum.ToString());
+            }
+            else if ('M' == range)
+            {
+               toHitModifierNum -= 10;
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): acq1 at close range -10 mod=" + toHitModifierNum.ToString());
+            }
+            else if ('L' == range)
+            {
+               toHitModifierNum -= 15;
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): acq1 at close range -15 mod=" + toHitModifierNum.ToString());
+            }
+            else
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+               return -10000;
+            }
+         }
+         else if (2 < gi.NumOfShermanShot)
+         {
+            if ('C' == range)
+            {
+               toHitModifierNum -= 10;
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): acq2 at close range -10 mod=" + toHitModifierNum.ToString());
+            }
+            else if ('M' == range)
+            {
+               toHitModifierNum -= 20;
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): acq2 at close range -20 mod=" + toHitModifierNum.ToString());
+            }
+            else if ('L' == range)
+            {
+               toHitModifierNum -= 30;
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier():  acq2 at close range -30 mod=" + toHitModifierNum.ToString());
+            }
+            else
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+               return -10000;
+            }
+         }
+         //------------------------------------
+         if ((true == enemyUnit.IsVehicle) && (true == enemyUnit.IsMoving))
+         {
+            if ('C' == range)
+            {
+               toHitModifierNum += 20;
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): Target.IsMoving close range +20 mod=" + toHitModifierNum.ToString());
+            }
+            else if ('M' == range)
+            {
+               toHitModifierNum += 25;
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): Target.IsMoving medium rating +25 mod=" + toHitModifierNum.ToString());
+            }
+            else if ('L' == range)
+            {
+               toHitModifierNum += 25;
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): Target.IsMoving Long Range +25 mod=" + toHitModifierNum.ToString());
+            }
+            else
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+               return -10000;
+            }
+         }
+         //------------------------------------
+         if( true == isCommanderDirectingFire )
+         {
+            toHitModifierNum -= commander.Rating;
+            Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): cmdr rating -" + commander.Rating.ToString() + "  mod=" + toHitModifierNum.ToString());
+         }
+         toHitModifierNum -= gunner.Rating;
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): gunner rating -" + gunner.Rating.ToString() + "  mod=" + toHitModifierNum.ToString());
+         //------------------------------------
+         int turretMod = 10 * gi.NumShermanTurretRotation;
+         toHitModifierNum += turretMod;
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): turretMod +" + turretMod.ToString() + "  mod=" + toHitModifierNum.ToString());
+         //------------------------------------
+         if (true == enemyUnit.Name.Contains("Pak43"))
+         {
+            toHitModifierNum += 10;
+            Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): Pak43 +10 mod=" + toHitModifierNum.ToString());
+         }
+         else if ((true == enemyUnit.Name.Contains("Pak40")) || (true == enemyUnit.Name.Contains("Pak38")))
+         {
+            toHitModifierNum += 20;
+            Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): Pak38/40 +20 mod=" + toHitModifierNum.ToString());
+         }
+         //==================================
+         if ("Direct" == gi.ShermanTypeOfFire)
+         {
+            if (true == enemyUnit.IsVehicle)
+            {
+               if (true == gi.IsShermanDeliberateImmobilization)
+               {
+                  if ('C' == range)
+                  {
+                     toHitModifierNum += 65;
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): IsShermanDeliberateImmobilization close range +65 mod=" + toHitModifierNum.ToString());
+                  }
+                  else if ('M' == range)
+                  {
+                     toHitModifierNum += 55;
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): IsShermanDeliberateImmobilization medium rating +55 mod=" + toHitModifierNum.ToString());
+                  }
+                  else if ('L' == range)
+                  {
+                     toHitModifierNum += 45;
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): IsShermanDeliberateImmobilization Long Range +45 mod=" + toHitModifierNum.ToString());
+                  }
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                     return -10000;
+                  }
+               }
+               //----------------------------
+               string enemyUnitType = enemyUnit.GetEnemyUnit();
+               if ("ERROR" == enemyUnitType)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): unknown enemyUnit=" + enemyUnit.Name);
+                  return -1000;
+               }
+               switch (enemyUnitType)
+               {
+                  case "STG":
+                  case "STuGIIIg": // small size
+                  case "JdgPzIV":
+                  case "JdgPz38t":
+                     toHitModifierNum += 10;
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): small size +10 mod=" + toHitModifierNum.ToString());
+                     break;
+                  case "PzIV":  // average size
+                  case "MARDERII":
+                  case "MARDERIII":
+                     break;
+                  case "TANK":
+                  case "PzV":  // large size
+                  case "PzVIe":
+                     if ('C' == range)
+                     {
+                        toHitModifierNum -= 5;
+                        Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): large size close range -5 mod=" + toHitModifierNum.ToString());
+                     }
+                     else if ('M' == range)
+                     {
+                        toHitModifierNum -= 10;
+                        Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): large size medium rating -10 mod=" + toHitModifierNum.ToString());
+                     }
+                     else if ('L' == range)
+                     {
+                        toHitModifierNum -= 15;
+                        Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): large size Long Range -15 mod=" + toHitModifierNum.ToString());
+                     }
+                     else
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                        return -10000;
+                     }
+                     break;
+                  case "PzVIb": // very large size
+                     if ('C' == range)
+                     {
+                        toHitModifierNum -= 10;
+                        Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): large size close range -10 mod=" + toHitModifierNum.ToString());
+                     }
+                     else if ('M' == range)
+                     {
+                        toHitModifierNum -= 20;
+                        Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): large size medium rating -20 mod=" + toHitModifierNum.ToString());
+                     }
+                     else if ('L' == range)
+                     {
+                        toHitModifierNum -= 30;
+                        Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): large size Long Range -30 mod=" + toHitModifierNum.ToString());
+                     }
+                     else
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                        return -10000;
+                     }
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): Reached Default enemyUnitType=" + enemyUnitType);
+                     return -1000;
+               }
+               //----------------------------
+               if (true == isShermanMoving)
+               {
+                  toHitModifierNum += 25;
+                  Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): Sherman moving +25 mod=" + toHitModifierNum.ToString());
 
+               }
+               //----------------------------
+               if (true == enemyUnit.IsWoods)
+               {
+                  if ('C' == range)
+                  {
+                     toHitModifierNum += 5;
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): woods +5 close range mod=" + toHitModifierNum.ToString());
+                  }
+                  else if ('M' == range)
+                  {
+                     toHitModifierNum += 10;
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): woods +10 medium range mod=" + toHitModifierNum.ToString());
+                  }
+                  else if ('L' == range)
+                  {
+                     toHitModifierNum += 15;
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): woods +15 long range mod=" + toHitModifierNum.ToString());
+                  }
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                     return -10000;
+                  }
+               }
+               if ((true == enemyUnit.IsBuilding) && (false == enemyUnit.IsVehicle))
+               {
+                  if ('C' == range)
+                  {
+                     toHitModifierNum += 10;
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): building +10 close range mod=" + toHitModifierNum.ToString());
+                  }
+                  else if ('M' == range)
+                  {
+                     toHitModifierNum += 15;
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): building +15 medium range mod=" + toHitModifierNum.ToString());
+                  }
+                  else if ('L' == range)
+                  {
+                     toHitModifierNum += 25;
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): building +25 long range mod=" + toHitModifierNum.ToString());
+                  }
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                     return -10000;
+                  }
+               }
+               if ((true == enemyUnit.IsFortification) && (false == enemyUnit.IsVehicle))
+               {
+                  if ('C' == range)
+                  {
+                     toHitModifierNum += 15;
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): fort +15 close range mod=" + toHitModifierNum.ToString());
+                  }
+                  else if ('M' == range)
+                  {
+                     toHitModifierNum += 25;
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): fort +25 medium range mod=" + toHitModifierNum.ToString());
+                  }
+                  else if ('L' == range)
+                  {
+                     toHitModifierNum += 35;
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): fort +35 long range mod=" + toHitModifierNum.ToString());
+                  }
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                     return -10000;
+                  }
+               }
+            }
+         }
          return toHitModifierNum;
+      }
+      public static double GetShermanToHitNumber(IGameInstance gi, IMapItem enemyUnit)
+      {
+         double toHitNum = 0.0;
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): lastReport=null");
+            return -1000;
+         }
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         string guntype = card.myMainGun;
+         //------------------------------------
+         if (3 != enemyUnit.TerritoryCurrent.Name.Length)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
+            return -1000;
+         }
+         char sector = enemyUnit.TerritoryCurrent.Name[1];
+         char range = enemyUnit.TerritoryCurrent.Name[2];
+         //----------------------------------------------------
+         string enemyUnitType = enemyUnit.GetEnemyUnit();
+         if ("ERROR" == enemyUnitType)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): unknown enemyUnit=" + enemyUnit.Name);
+            return -1000;
+         }
+         switch (enemyUnitType)
+         {
+            case "LW":
+            case "MG":
+            case "TRUCK":
+            case "ATG":
+            case "Pak38":
+            case "Pak40":
+            case "Pak43":
+               if( "75" ==  guntype )
+               {
+                  if( "Direct" == gi.ShermanTypeOfFire)
+                  {
+                     if ('C' == range)
+                        toHitNum = 55;
+                     else if ('M' == range)
+                        toHitNum = 30;
+                     else if ('L' == range)
+                        toHitNum = 00;
+                     else
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): unknown range=" + range.ToString());
+                        return -10000;
+                     }
+                  }
+                  else if ("Area" == gi.ShermanTypeOfFire)
+                  {
+                     if ('C' == range)
+                        toHitNum = 45;
+                     else if ('M' == range)
+                        toHitNum = 60;
+                     else if ('L' == range)
+                        toHitNum = 50;
+                     else
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): unknown range=" + range.ToString());
+                        return -1000;
+                     }
+                  }
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): ShermanTypeOfFire=" + gi.ShermanTypeOfFire);
+                     return -1000;
+                  }
+               }
+               else if ("76L" == guntype)
+               {
+                  if ("Direct" == gi.ShermanTypeOfFire)
+                  {
+                     if ('C' == range)
+                        toHitNum = 55;
+                     else if ('M' == range)
+                        toHitNum = 45;
+                     else if ('L' == range)
+                        toHitNum = 05;
+                     else
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): unknown range=" + range.ToString());
+                        return -1000;
+                     }
+                  }
+                  else if ("Area" == gi.ShermanTypeOfFire)
+                  {
+                     if ('C' == range)
+                        toHitNum = 45;
+                     else if ('M' == range)
+                        toHitNum = 60;
+                     else if ('L' == range)
+                        toHitNum = 55;
+                     else
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): unknown range=" + range.ToString());
+                        return -1000;
+                     }
+                  }
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): ShermanTypeOfFire=" + gi.ShermanTypeOfFire);
+                     return -1000;
+                  }
+               }
+               else
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): unknown guntype=" + guntype);
+                  return -1000;
+               }
+               break;
+            case "PSW":
+            case "SPW":
+            case "PzIV":
+            case "PzV":
+            case "TANK":
+            case "PzVIe":
+            case "PzVIb":
+            case "SPG":
+            case "STuGIIIg":
+            case "MARDERII":
+            case "MARDERIII":
+            case "JdgPzIV":
+            case "JdgPz38t":
+               if ("75" == guntype)
+               {
+                  if ("Direct" == gi.ShermanTypeOfFire)
+                  {
+                     if ('C' == range)
+                        toHitNum = 75;
+                     else if ('M' == range)
+                        toHitNum = 55;
+                     else if ('L' == range)
+                        toHitNum = 20;
+                     else
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): unknown range=" + range.ToString());
+                        return -1000;
+                     }
+                  }
+                  else if ("Area" == gi.ShermanTypeOfFire)
+                  {
+                     if ('C' == range)
+                        toHitNum = 45;
+                     else if ('M' == range)
+                        toHitNum = 60;
+                     else if ('L' == range)
+                        toHitNum = 50;
+                     else
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): unknown range=" + range.ToString());
+                        return -1000;
+                     }
+                  }
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): ShermanTypeOfFire=" + gi.ShermanTypeOfFire);
+                     return toHitNum;
+                  }
+               }
+               else if ("76L" == guntype)
+               {
+                  if ("Direct" == gi.ShermanTypeOfFire)
+                  {
+                     if ('C' == range)
+                        toHitNum = 75;
+                     else if ('M' == range)
+                        toHitNum = 65;
+                     else if ('L' == range)
+                        toHitNum = 40;
+                     else
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): unknown range=" + range.ToString());
+                        return -1000;
+                     }
+                  }
+                  else if ("Area" == gi.ShermanTypeOfFire)
+                  {
+                     if ('C' == range)
+                        toHitNum = 45;
+                     else if ('M' == range)
+                        toHitNum = 60;
+                     else if ('L' == range)
+                        toHitNum = 55;
+                     else
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): unknown range=" + range.ToString());
+                        return -1000;
+                     }
+                  }
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): ShermanTypeOfFire=" + gi.ShermanTypeOfFire);
+                     return -1000;
+                  }
+               }
+               else
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): unknown guntype=" + guntype);
+                  return -1000;
+               }
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): Reached Default enemyUnit=" + enemyUnit);
+               return -1000;
+         }
+         //------------------------------------
+         int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
+         if (numSmokeMarkers < 0)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): GetSmokeCount() returned error");
+            return -1000;
+         }
+         if (0 < numSmokeMarkers)
+            toHitNum = toHitNum * numSmokeMarkers * 0.5;
+         //------------------------------------
+         if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
+            toHitNum = toHitNum * 0.5;
+         //------------------------------------
+         int modifier = GetShermanToHitModifier(gi, enemyUnit);
+         if (modifier < -100)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): GetSmokeCount() returned error");
+            return -1000;
+         }
+         toHitNum -= modifier;
+         return toHitNum;
+      }
+      public static int GetShermanRateOfFireModifier(IGameInstance gi)
+      {
+         int rateOfFireModifier = 0;
+         //-------------------------------------------------
+         ICrewMember? gunner = gi.GetCrewMember("Gunner");
+         if (null == gunner)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanRateOfFireModifier(): gunner=null");
+            return -1000;
+         }
+         rateOfFireModifier -= gunner.Rating;
+         //-------------------------------------------------
+         ICrewMember? loader = gi.GetCrewMember("Loader");
+         if (null == loader)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanRateOfFireModifier(): loader=null");
+            return -1000;
+         }
+         rateOfFireModifier -= loader.Rating;
+         //-------------------------------------------------
+         if( "None" != gi.GetReadyRackReload())
+         {
+            rateOfFireModifier -= 10;
+         }
+         else
+         {
+            bool isAssistantPassesAmmo = false;
+            foreach (IMapItem crewAction in gi.CrewActions)
+            {
+               if ("Assistant_PassAmmo" == crewAction.Name)
+                  isAssistantPassesAmmo = true;
+            }
+            if (true == isAssistantPassesAmmo)
+            {
+               ICrewMember? assistant = gi.GetCrewMember("Assistant");
+               if (null == assistant)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanRateOfFireModifier(): assistant=null");
+                  return -1000;
+               }
+               rateOfFireModifier -= assistant.Rating;
+            }
+         }
+         return rateOfFireModifier;
+      }
+      public static int GetShermanRateOfFire(IGameInstance gi)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): lastReport=null");
+            return -1000;
+         }
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         //---------------------------------------------------
+         int rateOfFireNumber = 0;
+         if ("75" == card.myMainGun)
+         {
+            rateOfFireNumber = 30;
+         }
+         else if ("75" == card.myMainGun)
+         {
+            rateOfFireNumber = 20;
+         }
+         else
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): reached default guntype=" + card.myMainGun);
+            return -1000;
+         }
+         rateOfFireNumber -= GetShermanRateOfFireModifier(gi);
+         return rateOfFireNumber;
       }
       //-------------------------------------------
       private void CreateCombatCalender()

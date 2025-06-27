@@ -1516,21 +1516,30 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.Target=null for key=" + key);
                   return false;
                }
-               System.Windows.Controls.Button bEnemy = new Button { Width = 100, Height = 100, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
+               System.Windows.Controls.Button bEnemy = new Button { Width = 40, Height = 40, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
                MapItem.SetButtonContent(bEnemy, gi.Target);
-               myTextBlock.Inlines.Add(new Run("                                            "));
+               myTextBlock.Inlines.Add(new Run("                                                   "));
                myTextBlock.Inlines.Add(new InlineUIContainer(bEnemy));
                //----------------------------------------------
                if (false == String.IsNullOrEmpty(gi.ShermanTypeOfFire))
                {
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Modifiers") { TextDecorations = TextDecorations.Underline });
                   myTextBlock.Inlines.Add(new LineBreak());
-                  string modiferMainGunFiring = UpdateEventContentGetToHitModifier(gi);
+                  string modiferMainGunFiring = UpdateEventContentGetToHitModifier(gi, gi.Target);
                   myTextBlock.Inlines.Add(new Run(modiferMainGunFiring));
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("Roll To Hit: "));
+                  double toHitNum = TableMgr.GetShermanToHitNumber(gi, gi.Target);
+                  if( toHitNum < -100)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): GetShermanToHitNumber() returned error for key=" + key);
+                     return false;
+                  }
+                  StringBuilder sb = new StringBuilder();
+                  sb.Append("To hit, roll ");
+                  sb.Append(toHitNum.ToString("F0"));
+                  sb.Append(" or less: ");
+                  myTextBlock.Inlines.Add(new Run(sb.ToString()));
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      BitmapImage bmi = new BitmapImage();
@@ -1544,17 +1553,42 @@ namespace Pattons_Best
                   else
                   {
                      myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
+                     Image? imge51 = null;
+                     if ( toHitNum < gi.DieResults[key][0] )
+                     {
+                        myTextBlock.Inlines.Add("  =  MISS.");
+                        imge51 = new Image { Name = "Continue53b", Width = 40, Height = 40, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                     }
+                     else
+                     {
+                        myTextBlock.Inlines.Add("  =  HIT.");
+                        string gunLoad = gi.GetGunLoad();
+                        switch( gunLoad )
+                        {
+                           case "Ap":
+                           case "Hvap":
+                              imge51 = new Image { Name = "BattleRoundSequenceShermanHit", Width = 40, Height = 40, Source = MapItem.theMapImages.GetBitmapImage("c100ApHit") };
+                              break;
+                           case "He":
+                              imge51 = new Image { Name = "BattleRoundSequenceShermanHit", Width = 40, Height = 40, Source = MapItem.theMapImages.GetBitmapImage("c101HeHit") };
+                              break;
+                           case "Wp":
+                           case "Hbci":
+                              imge51 = new Image { Name = "BattleRoundSequenceShermanHit", Width = 40, Height = 40, Source = MapItem.theMapImages.GetBitmapImage("c102SmokeHit") };
+                              break;
+                           default:
+                              Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default gunLoad=" + gunLoad + " for key=" + key);
+                              return false;
+                        }
+                     }
+                     myTextBlock.Inlines.Add(new Run("  Click image to continue."));
                      myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new Run("                                            "));
-                     Image imge51 = new Image { Name = "Continue53b", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                     myTextBlock.Inlines.Add(new Run("                                                 "));
+
                      myTextBlock.Inlines.Add(new InlineUIContainer(imge51));
-                     myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new Run("Click image to continue."));
                   }
                }
-                break;
+               break;
             case "e101":
                ICrewMember? cmdr = gi.GetCrewMember("Commander");
                if (null == cmdr)
@@ -1849,68 +1883,239 @@ namespace Pattons_Best
          //-------------------------------------------------
          return sb51.ToString();
       }
-      private string UpdateEventContentGetToHitModifier(IGameInstance gi)
+      private string UpdateEventContentGetToHitModifier(IGameInstance gi, IMapItem enemyUnit)
       {
-         IAfterActionReport? lastReport = gi.Reports.GetLast();
-         if (null == lastReport)
+         //------------------------------------
+         if (3 != enemyUnit.TerritoryCurrent.Name.Length)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetMovingModifier(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
             return "ERROR";
          }
-         TankCard card = new TankCard(lastReport.TankCardNum);
-         //-------------------------------------------------
+         char range = enemyUnit.TerritoryCurrent.Name[2];
+         //------------------------------------
+         bool isCommanderDirectingFire = false;
+         bool isShermanMoving = false;
+         foreach (IMapItem crewAction in gi.CrewActions)
+         {
+            if ("Commander_Fire" == crewAction.Name)
+               isCommanderDirectingFire = true;
+            if ("Driver_Forward" == crewAction.Name)
+               isShermanMoving = true;
+            if ("Driver_ForwardToHullDown" == crewAction.Name)
+               isShermanMoving = true;
+            if ("Driver_Reverse" == crewAction.Name)
+               isShermanMoving = true;
+            if ("Driver_ReverseToHullDown" == crewAction.Name)
+               isShermanMoving = true;
+            if ("Driver_ReverseToHullDown" == crewAction.Name)
+               isShermanMoving = true;
+            if ("Driver_PivotTank" == crewAction.Name)
+               isShermanMoving = true;
+         }
+         //------------------------------------
          ICrewMember? commander = gi.GetCrewMember("Commander");
          if (null == commander)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetMovingModifier(): commander=null");
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): commander=null");
             return "ERROR";
          }
-         //-------------------------------------------------
-         ICrewMember? driver = gi.GetCrewMember("Driver");
-         if (null == driver)
+         ICrewMember? gunner = gi.GetCrewMember("Gunner");
+         if (null == gunner)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetMovingModifier(): driver=null");
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): gunner=null");
             return "ERROR";
          }
-         //-------------------------------------------------
          StringBuilder sb51 = new StringBuilder();
+         //------------------------------------
+         if (1 == gi.NumOfShermanShot)
+         {
+            if ( (false == isCommanderDirectingFire) || (true == commander.IsButtonedUp) )
+               sb51.Append("+10 for first shot\n");
+         }
+         else if (2 == gi.NumOfShermanShot)
+         {
+            if ('C' == range)
+               sb51.Append("-5 for 2nd shot at close range\n");
+            else if ('M' == range)
+               sb51.Append("-10 for 2nd shot at medium range\n");
+            else if ('L' == range)
+               sb51.Append("-15 for 2nd shot at long range\n");
+            else
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+               return "ERROR";
+            }
+         }
+         else if (2 < gi.NumOfShermanShot)
+         {
+            if ('C' == range)
+               sb51.Append("-10 for 3rd shot at close range\n");
+            else if ('M' == range)
+               sb51.Append("-20 for 3rd shot at medium range\n");
+            else if ('L' == range)
+               sb51.Append("-30 for 3rd shot at long range\n");
+            else
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+               return "ERROR";
+            }
+         }
+         //------------------------------------
+         if ((true == enemyUnit.IsVehicle) && (true == enemyUnit.IsMoving))
+         {
+            if ('C' == range)
+               sb51.Append("+20 for moving target at close range\n");
+            else if ('M' == range)
+               sb51.Append("+25 for moving target at medium range\n");
+            else if ('L' == range)
+               sb51.Append("+25 for moving target at long range\n");
+            else
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+               return "ERROR";
+            }
+         }
+         //------------------------------------
+         if (true == isCommanderDirectingFire)
+         {
+            sb51.Append("-");
+            sb51.Append(commander.Rating.ToString());
+            sb51.Append(" for commander rating directing fire\n");
+         }
          sb51.Append("-");
-         sb51.Append(driver.Rating.ToString());
-         sb51.Append(" for driver rating\n");
-         //-------------------------------------------------
-         bool isCommanderDirectingMovement = false;
-         foreach (IMapItem crewAction in gi.CrewActions)
+         sb51.Append(gunner.Rating.ToString());
+         sb51.Append(" for gunner rating\n");
+         //------------------------------------
+         if(0 < gi.NumShermanTurretRotation)
          {
-            if ("Commander_Move" == crewAction.Name)
-               isCommanderDirectingMovement = true;
+            int turretMod = 10 * gi.NumShermanTurretRotation;
+            sb51.Append("+");
+            sb51.Append(turretMod.ToString());
+            sb51.Append(" for turret rotations\n");
          }
-         if (true == isCommanderDirectingMovement)
+         //------------------------------------
+         if (true == enemyUnit.Name.Contains("Pak43"))
+            sb51.Append("+10 for firing at 88LL AT Gun\n");
+         else if ((true == enemyUnit.Name.Contains("Pak40")) || (true == enemyUnit.Name.Contains("Pak38")))
+            sb51.Append("+20 for firing at 50L or 75L AT Gun\n");
+         //==================================
+         if ("Direct" == gi.ShermanTypeOfFire)
          {
-            if (false == commander.IsButtonedUp)
+            if (true == enemyUnit.IsVehicle)
             {
-               sb51.Append("-");
-               sb51.Append(commander.Rating.ToString());
-               sb51.Append(" for cmdr rating directing move\n");
-            }
-            else if (true == card.myIsVisionCupola)
-            {
-               int rating = (int)Math.Floor(commander.Rating / 2.0);
-               sb51.Append(rating.ToString());
-               sb51.Append(" for cmdr rating directing move using cupola\n");
+               if (true == gi.IsShermanDeliberateImmobilization)
+               {
+                  if ('C' == range)
+                     sb51.Append("+65 for deliberate immobilization\n");
+                  else if ('M' == range)
+                     sb51.Append("+55 for deliberate immobilization\n");
+                  else if ('L' == range)
+                     sb51.Append("+45 for deliberate immobilization\n");
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                     return "ERROR";
+                  }
+               }
+               //----------------------------
+               string enemyUnitType = enemyUnit.GetEnemyUnit();
+               if ("ERROR" == enemyUnitType)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): unknown enemyUnit=" + enemyUnit.Name);
+                  return "ERROR";
+               }
+               switch (enemyUnitType)
+               {
+                  case "STG":
+                  case "STuGIIIg": // small size
+                  case "JdgPzIV":
+                  case "JdgPz38t":
+                     sb51.Append("+10 for small target\n"); break;
+                  case "PzIV":  // average size
+                  case "MARDERII":
+                  case "MARDERIII":
+                     break;
+                  case "TANK":
+                  case "PzV":  // large size
+                  case "PzVIe":
+                     if ('C' == range)
+                        sb51.Append("-5 for large target at close range\n");
+                     else if ('M' == range)
+                        sb51.Append("-10 for large target at medium range\n");
+                     else if ('L' == range)
+                        sb51.Append("-15 for large target at large range\n");
+
+                     else
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                        return "ERROR";
+                     }
+                     break;
+                  case "PzVIb": // very large size
+                     if ('C' == range)
+                        sb51.Append("-10 for very large target at close range\n");
+                     else if ('M' == range)
+                        sb51.Append("-20 for very large target at medium range\n");
+                     else if ('L' == range)
+                        sb51.Append("-30 for very large target at large range\n");
+                     else
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                        return "ERROR";
+                     }
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): Reached Default enemyUnitType=" + enemyUnitType);
+                     return "ERROR";
+               }
+               //----------------------------
+               if (true == isShermanMoving)
+                  sb51.Append("+25 for moving or pivoting Sherman\n");
+               //----------------------------
+               if (true == enemyUnit.IsWoods)
+               {
+                  if ('C' == range)
+                     sb51.Append("+5 for target in woods at close range\n");
+                  else if ('M' == range)
+                     sb51.Append("+10 for target in woods at medium range\n");
+                  else if ('L' == range)
+                     sb51.Append("+15 for target in woods at large range\n");
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                     return "ERROR";
+                  }
+               }
+               if ((true == enemyUnit.IsBuilding) && (false == enemyUnit.IsVehicle))
+               {
+                  if ('C' == range)
+                     sb51.Append("+10 for target in building at close range\n");
+                  else if ('M' == range)
+                     sb51.Append("+15 for target in building at medium range\n");
+                  else if ('L' == range)
+                     sb51.Append("+25 for target in building at large range\n");
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                     return "ERROR";
+                  }
+               }
+               if ((true == enemyUnit.IsFortification) && (false == enemyUnit.IsVehicle))
+               {
+                  if ('C' == range)
+                     sb51.Append("+15 for target in fortification at close range\n");
+                  else if ('M' == range)
+                     sb51.Append("+25 for target in fortification at medium range\n");
+                  else if ('L' == range)
+                     sb51.Append("+35 for target in fortification at large range\n");
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                     return "ERROR";
+                  }
+               }
             }
          }
-         if (true == card.myIsHvss)
-            sb51.Append("-2 for HVSS suspension\n");
-         if (true == driver.IsButtonedUp)
-            sb51.Append("+5 Driver buttoned up\n");
-         //-------------------------------------------------
-         if (true == lastReport.Weather.Contains("Ground Snow"))
-            sb51.Append("+3 for Ground Snow\n");
-         else if (true == lastReport.Weather.Contains("Falling Snow"))
-            sb51.Append("+6 for Deep Snow\n");
-         else if (true == lastReport.Weather.Contains("Mud"))
-            sb51.Append("+9 for Mud\n");
-         //-------------------------------------------------
          return sb51.ToString();
       }
       private void ReplaceText(string keyword, string newString)
@@ -2008,12 +2213,12 @@ namespace Pattons_Best
                string gunload = gi.GetGunLoad();
                if ("Direct" == content)
                {
-                  if (("Hbci" == gunload) || ("Wp" == gunload)) //cannot be direct fire
+                  if (("Hbci" == gunload) || ("Wp" == gunload) || ("None" == gunload)) // cannot be direct fire
                      b.IsEnabled = false;
                }
-               if (" Area " == content)
+               else if (" Area " == content)
                {
-                  if( ("Ap" == gunload) || ("Hvap" == gunload) ) // AP and HVAP cannot be area fire
+                  if( ("Ap" == gunload) || ("Hvap" == gunload) || ("None" == gunload)) // AP and HVAP cannot be area fire
                      b.IsEnabled = false;
                }
                break;
@@ -2803,6 +3008,10 @@ namespace Pattons_Best
                            break;
                         case "Continue53a":
                            action = GameAction.BattleRoundSequenceShermanFiringMainGunEnd;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "BattleRoundSequenceShermanHit":
+                           action = GameAction.BattleRoundSequenceShermanToHitRoll;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "CampaignOver":

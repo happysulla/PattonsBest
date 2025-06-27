@@ -360,8 +360,13 @@ namespace Pattons_Best
                else
                   MapItem.SetButtonContent(b100, gi.Sherman, true, true);
                break;
+            case GameAction.BattleRoundSequenceConductCrewAction:
             case GameAction.BattleRoundSequencePivotLeft:
             case GameAction.BattleRoundSequencePivotRight:
+               foreach (Button b in myTankButtons)
+                  b.ContextMenu = null;
+               if (false == UpdateCanvasTank(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
@@ -376,6 +381,12 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasEnemyAdvance() returned error ");
                break;
             case GameAction.BattleRoundSequenceShermanFiringSelectTarget:
+               foreach (Button b in myTankButtons)
+                  b.ContextMenu = null;
+               if (false == UpdateCanvasTank(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               if ( false == UpdateCanvasShermanSelectTarget(gi))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasShermanSelectTarget() returned error ");
                break;
             case GameAction.EveningDebriefingStart:
                if (false == UpdateCanvasTank(gi, action))
@@ -1930,6 +1941,21 @@ namespace Pattons_Best
          myCanvasMain.Children.Add(aPolygon);
          return true;
       }
+      private bool UpdateCanvasShermanSelectTarget(IGameInstance gi)
+      {
+         foreach(IMapItem mi in gi.Targets)
+         {
+            foreach(Button b in myBattleButtons)
+            {
+               if( mi.Name == b.Name )
+               {
+                  b.BorderBrush = mySolidColorBrushRed;
+                  b.BorderThickness = new Thickness(3);
+               }
+            }
+         }
+         return true;
+      }
       //---------------------------------------
       private bool UpdateCanvasMainEnemyStrengthCheckTerritory(IGameInstance gi, GameAction action)
       {
@@ -2619,7 +2645,7 @@ namespace Pattons_Best
             IMapItem? selectedMapItem = myGameInstance.GunLoads.Find(button.Name);
             if ( null == selectedMapItem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): selectedMapItem=null for button.Name=" + button.Name);
+               Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): GunLoad selectedMapItem=null for button.Name=" + button.Name);
                return;
             }
             myGameInstance.GunLoads.Rotate(1);
@@ -2646,14 +2672,22 @@ namespace Pattons_Best
          else if( BattlePhase.ConductCrewAction == myGameInstance.BattlePhase )
          {
             IMapItem? selectedMapItem = myGameInstance.BattleStacks.FindMapItem(button.Name);
-            if (null != selectedMapItem)
+            if (null == selectedMapItem)
             {
-               if( true == myGameInstance.Targets.Contains(selectedMapItem))
-               {
-                  myGameInstance.Target = selectedMapItem;
-                  GameAction outAction = GameAction.BattleRoundSequenceShermanFiringMainGun;
-                  myGameEngine.PerformAction(ref myGameInstance, ref outAction);
-               }
+               Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): ConductCrewAction: selectedMapItem=null for button.Name=" + button.Name);
+               return;
+            }
+            if( true == myGameInstance.Targets.Contains(selectedMapItem))
+            {
+               myGameInstance.NumOfShermanShot++;
+               myGameInstance.Target = selectedMapItem;
+               GameAction outAction = GameAction.BattleRoundSequenceShermanFiringMainGun;
+               myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+            }
+            foreach (IMapItem mi in myGameInstance.Targets)
+            {
+               foreach (Button b in myBattleButtons)
+                  b.BorderThickness = new Thickness(0);
             }
          }
          e.Handled = true;
@@ -2932,7 +2966,7 @@ namespace Pattons_Best
          string[] aStringArray = menuitem.Name.Split(new char[] { '_' });
          if (aStringArray.Length < 2)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): underscore not found in " + menuitem.Name + " len=" + aStringArray.Length);
+            Logger.Log(LogEnum.LE_ERROR, "MenuItemAmmoReloadClick(): underscore not found in " + menuitem.Name + " len=" + aStringArray.Length);
             return;
          }
          string tName = aStringArray[0];

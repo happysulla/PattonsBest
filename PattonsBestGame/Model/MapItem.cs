@@ -44,6 +44,7 @@ namespace Pattons_Best
       [NonSerialized] protected static BitmapImage? theFort = theMapImages.GetBitmapImage("OFort");
       [NonSerialized] protected static BitmapImage? theBuild = theMapImages.GetBitmapImage("OBuild");
       [NonSerialized] protected static BitmapImage? theThrownTrack = theMapImages.GetBitmapImage("OTrack");
+      [NonSerialized] protected static BitmapImage? theHeHit = theMapImages.GetBitmapImage("OHeHit");
       [NonSerialized] protected static BitmapImage? theSherman75Turret = theMapImages.GetBitmapImage("c16TurretSherman75");
       [NonSerialized] protected static BitmapImage? thePzIVTurret = theMapImages.GetBitmapImage("c79PzIVTurret");
       [NonSerialized] protected static BitmapImage? thePzVTurret = theMapImages.GetBitmapImage("c80PzVTurret");
@@ -119,6 +120,7 @@ namespace Pattons_Best
       public bool IsThrownTrack { get; set; } = false;
       public bool IsBoggedDown { get; set; } = false;
       //--------------------------------------------------
+      public int NumHeHit { get; set; } = 0;
       public EnumSpottingResult Spotting { get; set; } = EnumSpottingResult.UNSPOTTED;
       //----------------------------------------------------------------------------
       protected MapItem(string name)
@@ -438,8 +440,11 @@ namespace Pattons_Best
                }
                if ((EnumSpottingResult.SPOTTED == mi.Spotting) || (true == mi.IsSpotted)) // if Spotted now or previous round
                {
-                  Image overlay = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage("OSPOT") };
-                  g.Children.Add(overlay);
+                  if ( (true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("SPG") ) )
+                  {
+                     Image overlay = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage("OSPOT") };
+                     g.Children.Add(overlay);
+                  }
                }
                if (EnumSpottingResult.HIDDEN == mi.Spotting)
                {
@@ -449,6 +454,15 @@ namespace Pattons_Best
                   rotateTransform.Angle = -(mi.RotationHull + mi.RotationOffset);
                   overlay1.RenderTransform = rotateTransform;
                   g.Children.Add(overlay1);
+               }
+               if (0 < mi.NumHeHit ) 
+               {
+                  double width = zoom * Utilities.theMapItemSize;
+                  double height = width;
+                  Image imgTrack = new Image() { Height = height, Width = width, Source = theHeHit };
+                  g.Children.Add(imgTrack);
+                  Canvas.SetLeft(imgTrack, 0);
+                  Canvas.SetTop(imgTrack, 0);
                }
             }
             //----------------------------------

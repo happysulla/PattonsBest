@@ -250,7 +250,7 @@ namespace Pattons_Best
             {
                foreach(IMapItem mi in stack.MapItems)
                {
-                  if (EnumSpottingResult.SPOTTED == mi.Spotting)
+                  if ((EnumSpottingResult.SPOTTED == mi.Spotting) || (EnumSpottingResult.IDENTIFIED == mi.Spotting))
                      mi.IsSpotted = true;
                }
             }

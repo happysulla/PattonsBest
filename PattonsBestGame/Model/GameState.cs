@@ -1043,7 +1043,7 @@ namespace Pattons_Best
             return false;
          }
          //------------------------------------
-         ITerritory? t11 = Territories.theTerritories.Find("GunLoadHbci");
+         ITerritory? t11 = Territories.theTerritories.Find("GunLoadHe");
          if (null == t11)
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t11=null");
@@ -1249,9 +1249,11 @@ namespace Pattons_Best
                   break;
                case "LW":
                   mi = new MapItem(name, Utilities.ZOOM, "c91Lw", t);
+                  mi.IsSpotted = true;
                   break;
                case "MG":
                   mi = new MapItem(name, Utilities.ZOOM, "c92MgTeam", t);
+                  mi.IsSpotted = true;
                   break;
                case "PSW/SPW":
                   enemyUnit = "SPW";
@@ -1259,6 +1261,7 @@ namespace Pattons_Best
                   Utilities.MapItemNum++;
                   mi = new MapItem(name, Utilities.ZOOM + 0.2, "c89Psw232", t);
                   mi.IsVehicle = true;
+                  mi.IsSpotted = true;
                   break;
                case "SPG":
                   mi = new MapItem(name, Utilities.ZOOM + 0.5, "c77UnidentifiedSpg", t);
@@ -1272,6 +1275,7 @@ namespace Pattons_Best
                case "TRUCK":
                   mi = new MapItem(name, Utilities.ZOOM + 0.3, "c88Truck", t);
                   mi.IsVehicle = true;
+                  mi.IsSpotted = true;
                   break;
                default:
                   Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): reached default with enemyUnit=" + enemyUnit);
@@ -3292,6 +3296,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequencePivotLeft:
+                  gi.Sherman.IsMoved = true;
                   gi.Sherman.IsHullDown = false;
                   gi.Sherman.IsMoving = false;
                   gi.Sherman.RotationHull -= 60;
@@ -3299,6 +3304,7 @@ namespace Pattons_Best
                      gi.Sherman.RotationHull = 300;
                   break;
                case GameAction.BattleRoundSequencePivotRight:
+                  gi.Sherman.IsMoved = true;
                   gi.Sherman.IsHullDown = false;
                   gi.Sherman.IsMoving = false;
                   gi.Sherman.RotationHull += 60;
@@ -3372,12 +3378,54 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceShermanToHitRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
+                     dieRoll = 10; // <cgs> TEST - Sherman To Hit Roll
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
                   else
                   {
-
+                     if( null == gi.Target)
+                     {
+                        returnStatus = "gi.Target=null";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                     }
+                     else
+                     {
+                        double toHitNumber = TableMgr.GetShermanToHitNumber(gi, gi.Target);
+                        if (toHitNumber < -100.0)
+                        {
+                           returnStatus = "GetShermanToHitNumber() returned error";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                        }
+                        else if (dieRoll <= toHitNumber)
+                        {
+                           gi.Sherman.NumHeHit++;
+                           int rateOfFireNumber = TableMgr.GetShermanRateOfFire(gi);
+                           if (rateOfFireNumber < -100.0)
+                           {
+                              returnStatus = "GetShermanToHitNumber() returned error";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                           }
+                           else
+                           {
+                              if (dieRoll <= rateOfFireNumber)
+                              {
+                                 gi.EventDisplayed = gi.EventActive = "e053c";
+                                 gi.DieRollAction = GameAction.DieRollActionNone;
+                              }
+                              else
+                              {
+                                 gi.EventDisplayed = gi.EventActive = "e053d";
+                                 gi.DieRollAction = GameAction.DieRollActionNone;
+                              }
+                           }
+                        }
+                        else
+                        {
+                           gi.EventDisplayed = gi.EventActive = "e053d";
+                           gi.DieRollAction = GameAction.DieRollActionNone;
+                        }
+                     }
                   }
                   break;
                case GameAction.EveningDebriefingStart:
@@ -3530,6 +3578,14 @@ namespace Pattons_Best
       }
       private bool ConductCrewAction(IGameInstance gi, ref GameAction outAction)
       {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): lastReport=null");
+            return false;
+         }
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         //---------------------------------------------------
          gi.BattlePhase = BattlePhase.ConductCrewAction;
          if( CrewActionPhase.Movement == gi.CrewActionPhase )
          {
@@ -3553,6 +3609,7 @@ namespace Pattons_Best
             }
             if (true == isTankMoving)
             {
+               gi.Sherman.IsMoved = true;
                gi.CrewActionPhase = CrewActionPhase.Movement;
                gi.EventDisplayed = gi.EventActive = "e051";
                gi.DieRollAction = GameAction.BattleRoundSequenceMovementRoll;
@@ -3579,7 +3636,7 @@ namespace Pattons_Best
                   isRotateTurret = true;
                }
             }
-            if (true == isTankFiringMainGun)
+            if ( (true == isTankFiringMainGun) && ((false == gi.Sherman.IsMoved) || (true == card.myIsHvss) ) )
             {
                if (false == GetShermanTargets(gi, ref outAction, isRotateTurret))
                {
@@ -3724,7 +3781,7 @@ namespace Pattons_Best
             {
                foreach(IMapItem mi in stack.MapItems)
                {
-                  if (true == mi.IsEnemyUnit())
+                  if ((true == mi.IsEnemyUnit()) && (true == mi.IsSpotted) )
                      gi.Targets.Add(mi);
                }
             }
@@ -3778,7 +3835,7 @@ namespace Pattons_Best
                {
                   foreach (IMapItem mi in stack.MapItems)
                   {
-                     if (true == mi.IsEnemyUnit())
+                     if ((true == mi.IsEnemyUnit()) && (true == mi.IsSpotted))
                         gi.Targets.Add(mi);
                   }
                }
@@ -4163,6 +4220,8 @@ namespace Pattons_Best
          gi.MoveStacks.Clear();
          gi.BattleStacks.Clear();
          gi.EnteredHexes.Clear();
+         //-------------------------------------------------------
+         gi.Sherman.IsMoved = false;
          //-------------------------------------------------------
          ICrewMember? commander = gi.GetCrewMember("Commander");
          if (null == commander)
