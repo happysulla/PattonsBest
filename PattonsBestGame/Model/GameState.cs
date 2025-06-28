@@ -3399,7 +3399,7 @@ namespace Pattons_Best
                         }
                         else if (dieRoll <= toHitNumber)
                         {
-                           gi.Sherman.NumHeHit++;
+                           gi.Target.NumHeHit++;
                            int rateOfFireNumber = TableMgr.GetShermanRateOfFire(gi);
                            if (rateOfFireNumber < -100.0)
                            {

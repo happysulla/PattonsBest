@@ -1553,11 +1553,11 @@ namespace Pattons_Best
                   else
                   {
                      myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
-                     Image? imge51 = null;
+                     Image? imge53b = null;
                      if ( toHitNum < gi.DieResults[key][0] )
                      {
                         myTextBlock.Inlines.Add("  =  MISS.");
-                        imge51 = new Image { Name = "Continue53b", Width = 40, Height = 40, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                        imge53b = new Image { Name = "Continue53b", Width = 80, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
                      }
                      else
                      {
@@ -1567,14 +1567,14 @@ namespace Pattons_Best
                         {
                            case "Ap":
                            case "Hvap":
-                              imge51 = new Image { Name = "BattleRoundSequenceShermanHit", Width = 40, Height = 40, Source = MapItem.theMapImages.GetBitmapImage("c100ApHit") };
+                              imge53b = new Image { Name = "BattleRoundSequenceShermanHit", Width = 80, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("c100ApHit") };
                               break;
                            case "He":
-                              imge51 = new Image { Name = "BattleRoundSequenceShermanHit", Width = 40, Height = 40, Source = MapItem.theMapImages.GetBitmapImage("c101HeHit") };
+                              imge53b = new Image { Name = "BattleRoundSequenceShermanHit", Width = 80, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("c101HeHit") };
                               break;
                            case "Wp":
                            case "Hbci":
-                              imge51 = new Image { Name = "BattleRoundSequenceShermanHit", Width = 40, Height = 40, Source = MapItem.theMapImages.GetBitmapImage("c102SmokeHit") };
+                              imge53b = new Image { Name = "BattleRoundSequenceShermanHit", Width = 80, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("c102SmokeHit") };
                               break;
                            default:
                               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default gunLoad=" + gunLoad + " for key=" + key);
@@ -1583,11 +1583,18 @@ namespace Pattons_Best
                      }
                      myTextBlock.Inlines.Add(new Run("  Click image to continue."));
                      myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new Run("                                                 "));
-
-                     myTextBlock.Inlines.Add(new InlineUIContainer(imge51));
+                     myTextBlock.Inlines.Add(new InlineUIContainer(imge53b));
                   }
                }
+               break;
+            case "e053c":
+               myTextBlock.Inlines.Add(new Run("Modifiers") { TextDecorations = TextDecorations.Underline });
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               string modiferRateOfFire = UpdateEventContentRateOfFireModifier(gi);
+               myTextBlock.Inlines.Add(new Run(modiferRateOfFire));
                break;
             case "e101":
                ICrewMember? cmdr = gi.GetCrewMember("Commander");
@@ -2118,6 +2125,60 @@ namespace Pattons_Best
          }
          return sb51.ToString();
       }
+      public string UpdateEventContentRateOfFireModifier(IGameInstance gi)
+      {
+         int rateOfFireModifier = 0;
+         StringBuilder sb51 = new StringBuilder();
+         //-------------------------------------------------
+         ICrewMember? gunner = gi.GetCrewMember("Gunner");
+         if (null == gunner)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanRateOfFireModifier(): gunner=null");
+            return "ERROR";
+         }
+         sb51.Append("-");
+         sb51.Append(gunner.Rating.ToString());
+         sb51.Append(" for gunner rating\n");
+         //-------------------------------------------------
+         ICrewMember? loader = gi.GetCrewMember("Loader");
+         if (null == loader)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanRateOfFireModifier(): loader=null");
+            return "ERROR";
+         }
+         sb51.Append("-");
+         sb51.Append(loader.Rating.ToString());
+         sb51.Append(" for loader rating\n");
+         //-------------------------------------------------
+         if ("None" != gi.GetReadyRackReload())
+         {
+            rateOfFireModifier -= 10;
+            sb51.Append("-10 for pulling from ready rack\n");
+         }
+         else
+         {
+            bool isAssistantPassesAmmo = false;
+            foreach (IMapItem crewAction in gi.CrewActions)
+            {
+               if ("Assistant_PassAmmo" == crewAction.Name)
+                  isAssistantPassesAmmo = true;
+            }
+            if (true == isAssistantPassesAmmo)
+            {
+               ICrewMember? assistant = gi.GetCrewMember("Assistant");
+               if (null == assistant)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanRateOfFireModifier(): assistant=null");
+                  return "ERROR";
+               }
+               sb51.Append("-");
+               sb51.Append(assistant.Rating.ToString());
+               sb51.Append(" for assistant rating\n");
+            }
+         }
+         return sb51.ToString();
+      }
+      //--------------------------------------------------------------------
       private void ReplaceText(string keyword, string newString)
       {
          if (null == myTextBlock)
