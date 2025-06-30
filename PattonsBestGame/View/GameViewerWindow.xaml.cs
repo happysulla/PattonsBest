@@ -346,6 +346,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
                break;
             case GameAction.PreparationsTurret:
+            case GameAction.BattleRoundSequenceTurretEnd:
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                if (false == UpdateCanvasMain(gi, action))
@@ -353,6 +354,8 @@ namespace Pattons_Best
                break;
             case GameAction.PreparationsTurretRotateLeft:
             case GameAction.PreparationsTurretRotateRight:
+            case GameAction.BattleRoundSequenceTurretEndRotateLeft:
+            case GameAction.BattleRoundSequenceTurretEndRotateRight:
             case GameAction.BattleRoundSequenceMinefieldRoll:
                Button? b100 = this.myBattleButtons.Find(gi.Sherman.Name);
                if (null == b100)
@@ -2633,7 +2636,7 @@ namespace Pattons_Best
             }
          }
          //-----------------------------------------------
-         else if( true == button.Name.Contains("Sherman")) // This is for the turret
+         else if( (true == button.Name.Contains("Sherman")) && (true == myGameInstance.IsTurretActive) ) // This is for the turret
          {
             myGameInstance.Sherman.RotationTurret += 60;
             if (359 < myGameInstance.Sherman.RotationTurret)

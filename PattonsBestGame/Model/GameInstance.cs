@@ -63,8 +63,10 @@ namespace Pattons_Best
       public bool IsShermanFiring { set; get; } = false;
       public bool IsShermanFiringAtFront { set; get; } = false;
       public bool IsShermanDeliberateImmobilization { set; get; } = false;
+      public bool IsShermanRepeatFire { set; get; } = false;
+      public bool IsShermanTurretRotated { set; get; } = false;
+      public double ShermanRotationTurretOld { set; get; } = 0.0;
       public int NumOfShermanShot { set; get; } = 0;
-      public int NumShermanTurretRotation { set; get; } = 0;
       //---------------------------------------------------------------
       public bool IsHulledDown { set; get; } = false;
       public bool IsMoving { set; get; } = false;
@@ -215,6 +217,29 @@ namespace Pattons_Best
          }
          return "None";
       }
+      public bool SetGunLoad(string ammoType)
+      {
+         string name = "GunLoad" + ammoType;
+         ITerritory? newT = Territories.theTerritories.Find(name);
+         if( null == newT)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetGunLoad(): unable to find territory name=" + name);
+            return false;
+         }
+         foreach (IMapItem mi in this.GunLoads)
+         {
+            if (true == mi.Name.Contains("GunLoad"))
+            {
+               mi.TerritoryCurrent = newT;
+               double offset = mi.Zoom * Utilities.theMapItemOffset;
+               mi.Location.X = newT.CenterPoint.X - offset;
+               mi.Location.Y = newT.CenterPoint.Y - offset;
+               return true;
+            }
+         }
+         Logger.Log(LogEnum.LE_ERROR, "SetGunLoad(): reached default");
+         return false;
+      }
       public string GetAmmoReload()
       {
          foreach (IMapItem mi in this.GunLoads)
@@ -235,26 +260,90 @@ namespace Pattons_Best
          }
          return "None";
       }
-      public string GetReadyRackReload()
+      public bool SetAmmoReload(string ammoType)
+      {
+         string name = "GunLoad" + ammoType;
+         ITerritory? newT = Territories.theTerritories.Find(name);
+         if (null == newT)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetAmmoReload(): unable to find name=" + name);
+            return false;
+         }
+         foreach (IMapItem mi in this.GunLoads)
+         {
+            if (true == mi.Name.Contains("AmmoReload"))
+            {
+               mi.TerritoryCurrent = newT;
+               double offset = mi.Zoom * Utilities.theMapItemOffset;
+               mi.Location.X = newT.CenterPoint.X - offset;
+               mi.Location.Y = newT.CenterPoint.Y - offset;
+               return true;
+            }
+         }
+         Logger.Log(LogEnum.LE_ERROR, "SetAmmoReload(): reached default");
+         return false;
+      }
+      public bool IsReadyRackReload()
       {
          foreach (IMapItem mi in this.GunLoads)
          {
             if (true == mi.Name.Contains("ReadyRackReload"))
             {
                if (true == mi.TerritoryCurrent.Name.Contains("Hvap"))
-                  return "Hvap";
+                  return true;
                if (true == mi.TerritoryCurrent.Name.Contains("He"))
-                  return "He";
+                  return true;
                if (true == mi.TerritoryCurrent.Name.Contains("Ap"))
-                  return "Ap";
+                  return true;
                if (true == mi.TerritoryCurrent.Name.Contains("Wp"))
-                  return "Wp";
+                  return true;
                if (true == mi.TerritoryCurrent.Name.Contains("Hbci"))
-                  return "Hbci";
+                  return true;
             }
          }
-         return "None";
+         return false;
       }
+      public int GetReadyRackReload(string ammoType)
+      {
+         foreach (IMapItem mi in this.ReadyRacks)
+         {
+            if (true == mi.Name.Contains(ammoType))
+               return mi.Count;
+         }
+         Logger.Log(LogEnum.LE_ERROR, "GetReadyRackReload(): reached default");
+         return -100;
+      }
+      public bool SetReadyRackReload(string ammoType, int value)
+      {
+         IMapItem? rrMarker = null;
+         foreach ( IMapItem mi in this.ReadyRacks)
+         {
+            if( true == mi.Name.Contains(ammoType))
+            {
+               rrMarker = mi;
+               break;
+            }
+         }
+         if (null == rrMarker)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetReadyRack(): rrMarker=null");
+            return false;
+         }
+         rrMarker.Count = value;
+         string tName = rrMarker.Name + rrMarker.Count.ToString();
+         ITerritory? newT = Territories.theTerritories.Find(tName);
+         if (null == newT)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetReadyRack(): newT=null for " + tName);
+            return false;
+         }
+         rrMarker.TerritoryCurrent = newT;
+         double offset = rrMarker.Zoom * Utilities.theMapItemOffset;
+         rrMarker.Location.X = newT.CenterPoint.X - offset;
+         rrMarker.Location.Y = newT.CenterPoint.Y - offset;
+         return true;
+      }
+      //---------------------------------------------------------------
       public bool IsDaylightLeft(IAfterActionReport report)
       {
          if (report.SunsetHour < report.SunriseHour)

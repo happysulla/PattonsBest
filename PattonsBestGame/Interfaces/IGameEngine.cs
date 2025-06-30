@@ -253,6 +253,7 @@ namespace Pattons_Best
       BattleRoundSequenceCrewOrders,
       BattleRoundSequenceAmmoOrders,
       BattleRoundSequenceConductCrewAction,
+
       BattleRoundSequenceMovementRoll,
       BattleRoundSequencePivot,
       BattleRoundSequencePivotLeft,
@@ -260,10 +261,16 @@ namespace Pattons_Best
       BattleRoundSequenceMovementPivotEnd,
       BattleRoutSequenceChangeFacing,
       BattleRoundSequenceChangeFacingEnd,
+      BattleRoundSequenceTurretEnd,
+      BattleRoundSequenceTurretEndRotateLeft,
+      BattleRoundSequenceTurretEndRotateRight,
+
       BattleRoundSequenceShermanFiringSelectTarget,
       BattleRoundSequenceShermanFiringMainGun,
       BattleRoundSequenceShermanFiringMainGunEnd,
       BattleRoundSequenceShermanToHitRoll,
+      BattleRoundSequenceShermanSkipRateOfFire,
+      BattleRoundSequenceShermanToKillRoll,
 
       BattleRoundSequenceEnemyAction,
 

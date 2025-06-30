@@ -511,13 +511,14 @@ e052a	"<Bold>e052 Pivot Turret</Bold>
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r8.24' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
-Select the plus or minus buttons to rotate.  
+If you want the turret to face a different sector, click tank counter on center of Battle Board. 
+Alternatively, select buttons here:
 <LineBreak/><LineBreak/>
-                                   <InlineUIContainer><Button Content='   -   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-<InlineUIContainer><Image Name='ShermanPivot'  Height='150' Width='150'></Image></InlineUIContainer> 
-<InlineUIContainer><Button Content='   +   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+                                   <InlineUIContainer><Button Content='  -  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<InlineUIContainer><Image Name='c16TurretSherman75'  Height='150' Width='150'></Image></InlineUIContainer> 
+<InlineUIContainer><Button Content='  +  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
-When you are satisfied with the current orientation, click Sherman image between buttons to continue."
+When you are satisfied with the current turret orientation, click turret image between buttons to continue."
 e053	"<Bold>e053 Main Gun Firing - Select Target</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
@@ -548,19 +549,14 @@ Choose  <InlineUIContainer><Button Content='Direct' FontFamily='Courier New'  Fo
 e053c	"<Bold>e053c Main Gun Firing - Rate of Fire</Bold> 
 <InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-<LineBreak/><LineBreak/>
-Rolled low enough on the 
-<InlineUIContainer><Button Content='Rate of Fire' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table to repeat fire on same target.
-<LineBreak/><LineBreak/>
- Choose 
- <InlineUIContainer><Button Content='Fire' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   or  
- <InlineUIContainer><Button Content='Skip' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   to continue."
+<InlineUIContainer><Button Content='Rate of Fire' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<LineBreak/><LineBreak/>"
 e053d	"<Bold>e053d Main Gun Fire - Resolution</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
 For each hit scored against a target, consult the correct To Kill Table to determine if the target is knocked out (KO'ed)."
-e053e	"<Bold>e053e MG Gun Firing - Select Target</Bold> 
+e053e	"<Bold>e053e Machine Gun (MG) Firing - Select Target</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>

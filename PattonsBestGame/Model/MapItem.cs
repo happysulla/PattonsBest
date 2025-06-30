@@ -121,6 +121,10 @@ namespace Pattons_Best
       public bool IsBoggedDown { get; set; } = false;
       //--------------------------------------------------
       public int NumHeHit { get; set; } = 0;
+      public int NumApHit { get; set; } = 0;
+      public int NumHbciHit { get; set; } = 0;
+      public int NumWpHit { get; set; } = 0;
+      public int NumHvapHit { get; set; } = 0;
       public EnumSpottingResult Spotting { get; set; } = EnumSpottingResult.UNSPOTTED;
       //----------------------------------------------------------------------------
       protected MapItem(string name)

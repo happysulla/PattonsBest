@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
@@ -1516,7 +1517,8 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.Target=null for key=" + key);
                   return false;
                }
-               System.Windows.Controls.Button bEnemy = new Button { Width = 40, Height = 40, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
+               double size = gi.Target.Zoom * Utilities.theMapItemSize;
+               System.Windows.Controls.Button bEnemy = new Button { Width = size, Height = size, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
                MapItem.SetButtonContent(bEnemy, gi.Target);
                myTextBlock.Inlines.Add(new Run("                                                   "));
                myTextBlock.Inlines.Add(new InlineUIContainer(bEnemy));
@@ -1590,11 +1592,18 @@ namespace Pattons_Best
                }
                break;
             case "e053c":
-               myTextBlock.Inlines.Add(new Run("Modifiers") { TextDecorations = TextDecorations.Underline });
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new LineBreak());
                string modiferRateOfFire = UpdateEventContentRateOfFireModifier(gi);
                myTextBlock.Inlines.Add(new Run(modiferRateOfFire));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("Choose either   "));
+               Button be53c1 = new Button() { FontFamily = myFontFam1, FontSize = 12, Content="Fire" };
+               be53c1.Click += Button_Click;
+               myTextBlock.Inlines.Add(new InlineUIContainer(be53c1));
+               myTextBlock.Inlines.Add(new Run("   or   "));
+               Button be53c2 = new Button() { FontFamily = myFontFam1, FontSize = 12, Content = "Skip" };
+               be53c2.Click += Button_Click;
+               myTextBlock.Inlines.Add(new InlineUIContainer(be53c2));
+               myTextBlock.Inlines.Add(new Run("   to continue."));
                break;
             case "e101":
                ICrewMember? cmdr = gi.GetCrewMember("Commander");
@@ -1993,9 +2002,15 @@ namespace Pattons_Best
          sb51.Append(gunner.Rating.ToString());
          sb51.Append(" for gunner rating\n");
          //------------------------------------
-         if(0 < gi.NumShermanTurretRotation)
+         if(gi.Sherman.RotationTurret != gi.ShermanRotationTurretOld)
          {
-            int turretMod = 10 * gi.NumShermanTurretRotation;
+            double t1 = 360 - gi.Sherman.RotationTurret;
+            double t2 = gi.ShermanRotationTurretOld;
+            double totalAngle = t1 + t2;
+            if (180.0 < totalAngle)
+               totalAngle = 360 - totalAngle;
+            int numRotations = (int)(totalAngle / 60.0);
+            int turretMod = (int)(10.0 * numRotations);
             sb51.Append("+");
             sb51.Append(turretMod.ToString());
             sb51.Append(" for turret rotations\n");
@@ -2127,8 +2142,13 @@ namespace Pattons_Best
       }
       public string UpdateEventContentRateOfFireModifier(IGameInstance gi)
       {
-         int rateOfFireModifier = 0;
-         StringBuilder sb51 = new StringBuilder();
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetMovingModifier(): lastReport=null");
+            return "ERROR";
+         }
+         TankCard card = new TankCard(lastReport.TankCardNum);
          //-------------------------------------------------
          ICrewMember? gunner = gi.GetCrewMember("Gunner");
          if (null == gunner)
@@ -2136,9 +2156,6 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "GetShermanRateOfFireModifier(): gunner=null");
             return "ERROR";
          }
-         sb51.Append("-");
-         sb51.Append(gunner.Rating.ToString());
-         sb51.Append(" for gunner rating\n");
          //-------------------------------------------------
          ICrewMember? loader = gi.GetCrewMember("Loader");
          if (null == loader)
@@ -2146,11 +2163,24 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "GetShermanRateOfFireModifier(): loader=null");
             return "ERROR";
          }
+         //-------------------------------------------------
+         int rateOfFireModifier = 0;
+         StringBuilder sb51 = new StringBuilder();
+         sb51.Append("Rate of fire is achieved when the to hit die roll (");
+         sb51.Append(gi.DieResults["e053b"][0]);
+         sb51.Append(") is less that the rate of fire base number (");
+         if( "75" == card.myMainGun )
+            sb51.Append("30) plus these modifiers: \n");
+         else
+            sb51.Append("20) plus these modifiers: \n");
+         sb51.Append("-");
+         sb51.Append(gunner.Rating.ToString());
+         sb51.Append(" for gunner rating\n");
          sb51.Append("-");
          sb51.Append(loader.Rating.ToString());
          sb51.Append(" for loader rating\n");
          //-------------------------------------------------
-         if ("None" != gi.GetReadyRackReload())
+         if (true == gi.IsReadyRackReload())
          {
             rateOfFireModifier -= 10;
             sb51.Append("-10 for pulling from ready rack\n");
@@ -2919,7 +2949,10 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "c16TurretSherman75":
-                           action = GameAction.PreparationsLoaderSpot;
+                           if( BattlePhase.ConductCrewAction == myGameInstance.BattlePhase)
+                              action = GameAction.BattleRoundSequenceTurretEnd;
+                           else
+                              action = GameAction.PreparationsLoaderSpot;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "PreparationsCommanderSpot":
@@ -3196,11 +3229,17 @@ namespace Pattons_Best
          switch (content)
          {
             case "  -  ":
-               action = GameAction.PreparationsTurretRotateLeft;
+               if( BattlePhase.ConductCrewAction == myGameInstance.BattlePhase)
+                  action = GameAction.BattleRoundSequenceTurretEndRotateLeft;
+               else
+                  action = GameAction.PreparationsTurretRotateLeft;
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "  +  ":
-               action = GameAction.PreparationsTurretRotateRight;
+               if (BattlePhase.ConductCrewAction == myGameInstance.BattlePhase)
+                  action = GameAction.BattleRoundSequenceTurretEndRotateRight;
+               else
+                  action = GameAction.PreparationsTurretRotateRight;
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "   -   ":
@@ -3257,6 +3296,10 @@ namespace Pattons_Best
                action = GameAction.MovementEnterArea;
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
+            case "Fire":
+               action = GameAction.BattleRoundSequenceShermanFiringMainGun;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
             case "Read Rules":
                if (false == ShowRule("r1.1"))
                {
@@ -3266,6 +3309,13 @@ namespace Pattons_Best
                break;
             case "Resupply":
                action = GameAction.MovementResupplyCheck;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "Skip":
+               if( (0 < myGameInstance.Sherman.NumHeHit) || (0 < myGameInstance.Sherman.NumApHit) || (0 < myGameInstance.Sherman.NumHbciHit) || (0 < myGameInstance.Sherman.NumWpHit) || (0 < myGameInstance.Sherman.NumHvapHit) )
+                  action = GameAction.BattleRoundSequenceShermanSkipRateOfFire;
+               else
+                  action = GameAction.BattleRoundSequenceShermanFiringMainGunEnd;
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case " Skip ":

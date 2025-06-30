@@ -4090,9 +4090,15 @@ namespace Pattons_Best
          toHitModifierNum -= gunner.Rating;
          Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): gunner rating -" + gunner.Rating.ToString() + "  mod=" + toHitModifierNum.ToString());
          //------------------------------------
-         int turretMod = 10 * gi.NumShermanTurretRotation;
+         double t1 = 360 - gi.Sherman.RotationTurret;
+         double t2 = gi.ShermanRotationTurretOld;
+         double totalAngle = t1 + t2;
+         if (180.0 < totalAngle)
+            totalAngle = 360 - totalAngle;
+         int numRotations = (int)(totalAngle / 60.0);
+         int turretMod = (int)(10.0 * numRotations);
          toHitModifierNum += turretMod;
-         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): turretMod +" + turretMod.ToString() + "  mod=" + toHitModifierNum.ToString());
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): t1=" + t1.ToString() + " t2=" + t2.ToString() + " #r=" + numRotations.ToString() + " turretMod= +" + turretMod.ToString() + " mod=" + toHitModifierNum.ToString());
          //------------------------------------
          if (true == enemyUnit.Name.Contains("Pak43"))
          {
@@ -4507,7 +4513,7 @@ namespace Pattons_Best
          int modifier = GetShermanToHitModifier(gi, enemyUnit);
          if (modifier < -100)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): GetSmokeCount() returned error");
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): GetShermanToHitModifier() returned error");
             return -1000;
          }
          toHitNum -= modifier;
@@ -4533,7 +4539,7 @@ namespace Pattons_Best
          }
          rateOfFireModifier -= loader.Rating;
          //-------------------------------------------------
-         if( "None" != gi.GetReadyRackReload())
+         if( true == gi.IsReadyRackReload())
          {
             rateOfFireModifier -= 10;
          }

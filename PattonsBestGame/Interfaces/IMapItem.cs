@@ -20,7 +20,7 @@ namespace Pattons_Best
       int Count { get; set; }
       IMapPoint Location { get; set; }       // top left corner of MapItem
       double RotationOffset { get; set; }      
-      double RotationTurret { get; set; }    
+      double RotationTurret { get; set; }
       double RotationHull { get; set; }      // rotation to point at location
       //----------------------------------------
       ITerritory TerritoryCurrent { get; set; }
@@ -41,6 +41,10 @@ namespace Pattons_Best
       bool IsBoggedDown { get; set; }
       //----------------------------------------
       int NumHeHit { get; set; }
+      int NumApHit { get; set; }
+      int NumHbciHit { get; set; }
+      int NumWpHit { get; set; }
+      int NumHvapHit { get; set; }
       EnumSpottingResult Spotting { get; set; }
       //----------------------------------------
       void Clone(IMapItem mi);

@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
 using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Forms;
@@ -866,7 +867,7 @@ namespace Pattons_Best
             return false;
          }
          //---------------------------------
-         dieRoll = Utilities.RandomGenerator.Next(1, 11);             // assign wehater randomly
+         dieRoll = Utilities.RandomGenerator.Next(1, 11);             // assign weather randomly
          lastReport.Weather = TableMgr.GetWeather(gi.Day, dieRoll);
          if (true == lastReport.Weather.Contains("Snow"))
          {
@@ -1043,14 +1044,13 @@ namespace Pattons_Best
             return false;
          }
          //------------------------------------
-         ITerritory? t11 = Territories.theTerritories.Find("GunLoadHe");
-         if (null == t11)
+         IMapItem gunLoad = new MapItem("GunLoadInGun", 1.0, "c17GunLoad", new Territory());
+         gi.GunLoads.Add(gunLoad);
+         if (false == gi.SetGunLoad("He"))
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t11=null");
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): SetGunLoad() returned false");
             return false;
          }
-         IMapItem gunLoad = new MapItem("GunLoadInGun", 1.0, "c17GunLoad", t11);
-         gi.GunLoads.Add(gunLoad);
          //------------------------------------
          gi.Sherman.IsTurret = true;
          gi.Sherman.TerritoryCurrent = gi.Home;
@@ -1545,16 +1545,12 @@ namespace Pattons_Best
                case GameAction.PreparationsGunLoad:
                   gi.EventDisplayed = gi.EventActive = "e013";
                   gi.IsHatchesActive = false;
-                  ITerritory? t = Territories.theTerritories.Find("GunLoadHe");
-                  if (null == t)
+                  IMapItem gunLoad = new MapItem("GunLoadInGun", 1.0, "c17GunLoad", new Territory());
+                  gi.GunLoads.Add(gunLoad);
+                  if( false == gi.SetGunLoad("He"))
                   {
-                     returnStatus = "theTerritories.Find() returned null for GunLoadHe";
+                     returnStatus = "SetGunLoad() returned null for GunLoadHe";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsGunLoad): " + returnStatus);
-                  }
-                  else
-                  {
-                     IMapItem gunLoad = new MapItem("GunLoadInGun", 1.0, "c17GunLoad", t);
-                     gi.GunLoads.Add(gunLoad);
                   }
                   break;
                case GameAction.PreparationsGunLoadSelect:
@@ -3361,6 +3357,25 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
                   }
                   break;
+               case GameAction.BattleRoundSequenceTurretEnd:
+                  gi.IsTurretActive = false;
+                  gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
+                  if (false == ConductCrewAction(gi, ref action))
+                  {
+                     returnStatus = "ConductCrewAction() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceTurretEndRotateLeft:
+                  gi.Sherman.RotationTurret -= 60;
+                  if (gi.Sherman.RotationTurret < 0)
+                     gi.Sherman.RotationTurret = 300;
+                  break;
+               case GameAction.BattleRoundSequenceTurretEndRotateRight:
+                  gi.Sherman.RotationTurret += 60;
+                  if (359 < gi.Sherman.RotationTurret)
+                     gi.Sherman.RotationTurret = 0;
+                  break;
                case GameAction.BattleRoundSequenceShermanFiringSelectTarget:
                   break;
                case GameAction.BattleRoundSequenceShermanFiringMainGun:
@@ -3375,6 +3390,10 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
                   }
                   break;
+               case GameAction.BattleRoundSequenceShermanSkipRateOfFire:
+                  gi.EventDisplayed = gi.EventActive = "e053d";
+                  gi.DieRollAction = GameAction.BattleRoundSequenceShermanToKillRoll;
+                  break;
                case GameAction.BattleRoundSequenceShermanToHitRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
@@ -3384,47 +3403,10 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     if( null == gi.Target)
+                     if (false == FireAtEnemyUnits(gi, ref action, gi.DieResults[key][0]))
                      {
-                        returnStatus = "gi.Target=null";
+                        returnStatus = "FireAtEnemyUnits() returned false";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
-                     }
-                     else
-                     {
-                        double toHitNumber = TableMgr.GetShermanToHitNumber(gi, gi.Target);
-                        if (toHitNumber < -100.0)
-                        {
-                           returnStatus = "GetShermanToHitNumber() returned error";
-                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
-                        }
-                        else if (dieRoll <= toHitNumber)
-                        {
-                           gi.Target.NumHeHit++;
-                           int rateOfFireNumber = TableMgr.GetShermanRateOfFire(gi);
-                           if (rateOfFireNumber < -100.0)
-                           {
-                              returnStatus = "GetShermanToHitNumber() returned error";
-                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
-                           }
-                           else
-                           {
-                              if (dieRoll <= rateOfFireNumber)
-                              {
-                                 gi.EventDisplayed = gi.EventActive = "e053c";
-                                 gi.DieRollAction = GameAction.DieRollActionNone;
-                              }
-                              else
-                              {
-                                 gi.EventDisplayed = gi.EventActive = "e053d";
-                                 gi.DieRollAction = GameAction.DieRollActionNone;
-                              }
-                           }
-                        }
-                        else
-                        {
-                           gi.EventDisplayed = gi.EventActive = "e053d";
-                           gi.DieRollAction = GameAction.DieRollActionNone;
-                        }
                      }
                   }
                   break;
@@ -3636,9 +3618,18 @@ namespace Pattons_Best
                   isRotateTurret = true;
                }
             }
-            if ( (true == isTankFiringMainGun) && ((false == gi.Sherman.IsMoved) || (true == card.myIsHvss) ) )
+            if( (true == isRotateTurret ) && (false == gi.IsShermanTurretRotated) )
             {
-               if (false == GetShermanTargets(gi, ref outAction, isRotateTurret))
+               gi.IsShermanTurretRotated = true;
+               gi.ShermanRotationTurretOld = gi.Sherman.RotationTurret;
+               gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
+               gi.IsTurretActive = true;
+               gi.EventDisplayed = gi.EventActive = "e052a";
+               gi.DieRollAction = GameAction.DieRollActionNone;
+            }
+            else if ( (true == isTankFiringMainGun) && ((false == gi.Sherman.IsMoved) || (true == card.myIsHvss) ) )
+            {
+               if (false == GetShermanTargets(gi, ref outAction))
                {
                   Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): GetShermanTargets() returned false");
                   return false;
@@ -3773,73 +3764,171 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool GetShermanTargets(IGameInstance gi, ref GameAction outAction, bool isRotateTurret)
+      private bool GetShermanTargets(IGameInstance gi, ref GameAction outAction)
       {
-         if( true == isRotateTurret ) // any enemy unit may be chosen
+         List<String> tNames = new List<String>(); 
+         double rotation = gi.Sherman.RotationHull + gi.Sherman.RotationTurret;
+         if (359 < rotation)
+            rotation -= 360.0;
+         switch (rotation)
          {
-            foreach(IStack stack in gi.BattleStacks)
+            case 0:
+               tNames.Add("B6C");
+               tNames.Add("B6M");
+               tNames.Add("B6L");
+               break;
+            case 60:
+               tNames.Add("B9C");
+               tNames.Add("B9M");
+               tNames.Add("B9L");
+               break;
+            case 120:
+               tNames.Add("B1C");
+               tNames.Add("B1M");
+               tNames.Add("B1L");
+               break;
+            case 180:
+               tNames.Add("B2C");
+               tNames.Add("B2M");
+               tNames.Add("B2L");
+               break;
+            case 240:
+               tNames.Add("B3C");
+               tNames.Add("B3M");
+               tNames.Add("B3L");
+               break;
+            case 300:
+               tNames.Add("B4C");
+               tNames.Add("B4M");
+               tNames.Add("B4L");
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanTargets(): reached default for rotation=" + rotation.ToString());
+               return false;
+         }
+         foreach(string tName in tNames)
+         {
+            IStack? stack = gi.BattleStacks.Find(tName);
+            if( null != stack )
             {
-               foreach(IMapItem mi in stack.MapItems)
+               foreach (IMapItem mi in stack.MapItems)
                {
-                  if ((true == mi.IsEnemyUnit()) && (true == mi.IsSpotted) )
+                  if ((true == mi.IsEnemyUnit()) && (true == mi.IsSpotted))
                      gi.Targets.Add(mi);
                }
             }
          }
-         else // only choose targets that are within the turret's front
+         return true;
+      }
+      private bool FireAtEnemyUnits(IGameInstance gi, ref GameAction outAction, int dieRoll)
+      {
+         if (null == gi.Target)
          {
-            List<String> tNames = new List<String>(); 
-            double rotation = gi.Sherman.RotationHull + gi.Sherman.RotationTurret;
-            if (359 < rotation)
-               rotation -= 360.0;
-            switch (rotation)
+            Logger.Log(LogEnum.LE_ERROR, "FireAtEnemyUnitson(): Target=null");
+            return false;
+         }
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "FireAtEnemyUnitson(): lastReport=null");
+            return false;
+         }
+         //---------------------------------------------------------------
+         string gunLoad = gi.GetGunLoad();
+         bool isReadyRackReload = false;
+         if (true == gi.IsShermanRepeatFire)
+         {
+            gunLoad = gi.GetAmmoReload();
+            isReadyRackReload = gi.IsReadyRackReload();
+         }
+         //---------------------------------------------------------------
+         switch (gunLoad) // decrease on AAR the type of ammunition used
+         {
+            case "He":
+               --lastReport.MainGunHE;
+               break;
+            case "Ap":
+               --lastReport.MainGunAP;
+               break;
+            case "Hbci":
+               --lastReport.MainGunHBCI;
+               break;
+            case "Wp":
+               --lastReport.MainGunWP;
+               break;
+            case "Hvap":
+               --lastReport.MainGunHVAP;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "FireAtEnemyUnits(): GetShermanToHitNumber() reached default gunload=" + gunLoad + " for a=" + outAction.ToString());
+               return false;
+         }
+         if (true == isReadyRackReload) // decrease the ready rack by the type of ammunition used
+         {
+            int readyRackLoad = gi.GetReadyRackReload(gunLoad);
+            if( false == gi.SetReadyRackReload(gunLoad, --readyRackLoad))
             {
-               case 0:
-                  tNames.Add("B6C");
-                  tNames.Add("B6M");
-                  tNames.Add("B6L");
-                  break;
-               case 60:
-                  tNames.Add("B9C");
-                  tNames.Add("B9M");
-                  tNames.Add("B9L");
-                  break;
-               case 120:
-                  tNames.Add("B1C");
-                  tNames.Add("B1M");
-                  tNames.Add("B1L");
-                  break;
-               case 180:
-                  tNames.Add("B2C");
-                  tNames.Add("B2M");
-                  tNames.Add("B2L");
-                  break;
-               case 240:
-                  tNames.Add("B3C");
-                  tNames.Add("B3M");
-                  tNames.Add("B3L");
-                  break;
-               case 300:
-                  tNames.Add("B4C");
-                  tNames.Add("B4M");
-                  tNames.Add("B4L");
-                  break;
-               default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetShermanTargets(): reached default for rotation=" + rotation.ToString());
-                  return false;
+               Logger.Log(LogEnum.LE_ERROR, "FireAtEnemyUnits(): SetReadyRackReload() returned false");
+               return false;
             }
-            foreach(string tName in tNames)
+         }
+         //---------------------------------------------------------------
+         double toHitNumber = TableMgr.GetShermanToHitNumber(gi, gi.Target);  // determine the To Hit number
+         if (toHitNumber < -100.0)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "FireAtEnemyUnits(): GetShermanToHitNumber() returned error");
+            return false;
+         }
+         //---------------------------------------------------------------
+         if (toHitNumber < dieRoll) // Miss Target - move to next Crew Action
+         {
+            gi.CrewActionPhase = CrewActionPhase.TankMgFire;
+            if (false == ConductCrewAction(gi, ref outAction))
             {
-               IStack? stack = gi.BattleStacks.Find(tName);
-               if( null != stack )
-               {
-                  foreach (IMapItem mi in stack.MapItems)
-                  {
-                     if ((true == mi.IsEnemyUnit()) && (true == mi.IsSpotted))
-                        gi.Targets.Add(mi);
-                  }
-               }
+               Logger.Log(LogEnum.LE_ERROR, "FireAtEnemyUnits(): ConductCrewAction() returned error");
+               return false;
             }
+            return true;
+         }
+         //---------------------------------------------------------------
+         switch (gunLoad) // mark off hit
+         {
+            case "He":
+               gi.Target.NumHeHit++;
+               break;
+            case "Ap":
+               gi.Target.NumApHit++;
+               break;
+            case "Hbci":
+               gi.Target.NumHbciHit++;
+               break;
+            case "Wp":
+               gi.Target.NumWpHit++;
+               break;
+            case "Hvap":
+               gi.Target.NumHvapHit++;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): GetShermanToHitNumber() reached default gunload=" + gunLoad + " for a=" + outAction.ToString());
+               return false;
+         }
+         //---------------------------------------------------------------
+         int rateOfFireNumber = TableMgr.GetShermanRateOfFire(gi);  // Hit target - determine if reach rate of fire
+         if (rateOfFireNumber < -100.0)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "FireAtEnemyUnits(): GetShermanRateOfFire() returned error");
+            return false;
+         }
+         if (dieRoll <= rateOfFireNumber) 
+         {
+            gi.EventDisplayed = gi.EventActive = "e053c";  // achieve rate of fire - show event
+            gi.DieRollAction = GameAction.DieRollActionNone;
+            gi.IsShermanRepeatFire = true;
+         }
+         else
+         {
+            gi.EventDisplayed = gi.EventActive = "e053d"; // resolve attack
+            gi.DieRollAction = GameAction.BattleRoundSequenceShermanToKillRoll;
          }
          return true;
       }
