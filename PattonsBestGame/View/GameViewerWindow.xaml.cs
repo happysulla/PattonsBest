@@ -391,6 +391,10 @@ namespace Pattons_Best
                if ( false == UpdateCanvasShermanSelectTarget(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasShermanSelectTarget() returned error ");
                break;
+            case GameAction.BattleRoundSequenceShermanToHitRoll:
+               if (false == UpdateCanvasTank(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               break;
             case GameAction.EveningDebriefingStart:
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
@@ -2682,8 +2686,8 @@ namespace Pattons_Best
             }
             if( true == myGameInstance.Targets.Contains(selectedMapItem))
             {
-               myGameInstance.NumOfShermanShot++;
                myGameInstance.Target = selectedMapItem;
+               selectedMapItem = null;
                GameAction outAction = GameAction.BattleRoundSequenceShermanFiringMainGun;
                myGameEngine.PerformAction(ref myGameInstance, ref outAction);
             }

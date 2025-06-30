@@ -1943,12 +1943,12 @@ namespace Pattons_Best
          }
          StringBuilder sb51 = new StringBuilder();
          //------------------------------------
-         if (1 == gi.NumOfShermanShot)
+         if (0 == gi.NumOfShermanShot)
          {
             if ( (false == isCommanderDirectingFire) || (true == commander.IsButtonedUp) )
                sb51.Append("+10 for first shot\n");
          }
-         else if (2 == gi.NumOfShermanShot)
+         else if (1 == gi.NumOfShermanShot)
          {
             if ('C' == range)
                sb51.Append("-5 for 2nd shot at close range\n");
@@ -1962,7 +1962,7 @@ namespace Pattons_Best
                return "ERROR";
             }
          }
-         else if (2 < gi.NumOfShermanShot)
+         else if (1 < gi.NumOfShermanShot)
          {
             if ('C' == range)
                sb51.Append("-10 for 3rd shot at close range\n");

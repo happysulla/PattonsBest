@@ -4003,7 +4003,7 @@ namespace Pattons_Best
             return -10000;
          }
          //------------------------------------
-         if (1 == gi.NumOfShermanShot)
+         if (0 == gi.NumOfShermanShot)
          {
             if ((false == isCommanderDirectingFire) || (true == commander.IsButtonedUp))
             {
@@ -4011,7 +4011,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): first shot at close range +10 mod=" + toHitModifierNum.ToString());
             }
          }
-         else if (2 == gi.NumOfShermanShot)
+         else if (1 == gi.NumOfShermanShot)
          {
             if( 'C' == range )
             {
@@ -4034,7 +4034,7 @@ namespace Pattons_Best
                return -10000;
             }
          }
-         else if (2 < gi.NumOfShermanShot)
+         else if (1 < gi.NumOfShermanShot)
          {
             if ('C' == range)
             {
@@ -4498,6 +4498,7 @@ namespace Pattons_Best
                return -1000;
          }
          //------------------------------------
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitNumber(): 1-base#=" + toHitNum.ToString());
          int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
          if (numSmokeMarkers < 0)
          {
@@ -4510,6 +4511,7 @@ namespace Pattons_Best
          if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
             toHitNum = toHitNum * 0.5;
          //------------------------------------
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitNumber(): 2-base#=" + toHitNum.ToString());
          int modifier = GetShermanToHitModifier(gi, enemyUnit);
          if (modifier < -100)
          {
@@ -4517,6 +4519,7 @@ namespace Pattons_Best
             return -1000;
          }
          toHitNum -= modifier;
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitNumber(): 3-base#=" + toHitNum.ToString() + " mod=" + modifier.ToString());
          return toHitNum;
       }
       public static int GetShermanRateOfFireModifier(IGameInstance gi)

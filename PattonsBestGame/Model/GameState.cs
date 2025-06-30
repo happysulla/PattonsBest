@@ -3376,7 +3376,7 @@ namespace Pattons_Best
                   if (359 < gi.Sherman.RotationTurret)
                      gi.Sherman.RotationTurret = 0;
                   break;
-               case GameAction.BattleRoundSequenceShermanFiringSelectTarget:
+               case GameAction.BattleRoundSequenceShermanFiringSelectTarget:  
                   break;
                case GameAction.BattleRoundSequenceShermanFiringMainGun:
                   gi.EventDisplayed = gi.EventActive = "e053b";
@@ -3833,6 +3833,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "FireAtEnemyUnitson(): lastReport=null");
             return false;
          }
+         gi.NumOfShermanShot++;
          //---------------------------------------------------------------
          string gunLoad = gi.GetGunLoad();
          bool isReadyRackReload = false;
@@ -3923,6 +3924,7 @@ namespace Pattons_Best
          {
             gi.DieResults["e053c"][0] = gi.DieResults["e053b"][0];
             gi.DieResults["e053b"][0] = Utilities.NO_RESULT;
+            gi.ShermanTypeOfFire = "";
             gi.EventDisplayed = gi.EventActive = "e053c";  // achieve rate of fire - show event
             gi.DieRollAction = GameAction.DieRollActionNone;
             gi.IsShermanRepeatFire = true;
