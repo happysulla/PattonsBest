@@ -2167,23 +2167,23 @@ namespace Pattons_Best
          int rateOfFireModifier = 0;
          StringBuilder sb51 = new StringBuilder();
          sb51.Append("Rate of fire is achieved when the to hit die roll (");
-         sb51.Append(gi.DieResults["e053b"][0]);
-         sb51.Append(") is less that the rate of fire base number (");
+         sb51.Append(gi.DieResults["e053c"][0]);
+         sb51.Append(") is less or equal to  rate of fire base number (");
          if( "75" == card.myMainGun )
-            sb51.Append("30) plus these modifiers: \n");
+            sb51.Append("30) plus these modifiers: \n\n");
          else
-            sb51.Append("20) plus these modifiers: \n");
-         sb51.Append("-");
+            sb51.Append("20) plus these modifiers: \n\n");
+         sb51.Append("+");
          sb51.Append(gunner.Rating.ToString());
          sb51.Append(" for gunner rating\n");
-         sb51.Append("-");
+         sb51.Append("+");
          sb51.Append(loader.Rating.ToString());
          sb51.Append(" for loader rating\n");
          //-------------------------------------------------
          if (true == gi.IsReadyRackReload())
          {
             rateOfFireModifier -= 10;
-            sb51.Append("-10 for pulling from ready rack\n");
+            sb51.Append("+10 for pulling from ready rack\n");
          }
          else
          {
@@ -2201,7 +2201,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "GetShermanRateOfFireModifier(): assistant=null");
                   return "ERROR";
                }
-               sb51.Append("-");
+               sb51.Append("+");
                sb51.Append(assistant.Rating.ToString());
                sb51.Append(" for assistant rating\n");
             }
@@ -3312,7 +3312,7 @@ namespace Pattons_Best
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Skip":
-               if( (0 < myGameInstance.Sherman.NumHeHit) || (0 < myGameInstance.Sherman.NumApHit) || (0 < myGameInstance.Sherman.NumHbciHit) || (0 < myGameInstance.Sherman.NumWpHit) || (0 < myGameInstance.Sherman.NumHvapHit) )
+               if( (0 < myGameInstance.Target.NumHeHit) || (0 < myGameInstance.Target.NumApHit) || (0 < myGameInstance.Target.NumHbciHit) || (0 < myGameInstance.Target.NumWpHit) || (0 < myGameInstance.Target.NumHvapHit) )
                   action = GameAction.BattleRoundSequenceShermanSkipRateOfFire;
                else
                   action = GameAction.BattleRoundSequenceShermanFiringMainGunEnd;

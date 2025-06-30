@@ -3921,6 +3921,8 @@ namespace Pattons_Best
          }
          if (dieRoll <= rateOfFireNumber) 
          {
+            gi.DieResults["e053c"][0] = gi.DieResults["e053b"][0];
+            gi.DieResults["e053b"][0] = Utilities.NO_RESULT;
             gi.EventDisplayed = gi.EventActive = "e053c";  // achieve rate of fire - show event
             gi.DieRollAction = GameAction.DieRollActionNone;
             gi.IsShermanRepeatFire = true;
