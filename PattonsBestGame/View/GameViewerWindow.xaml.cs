@@ -729,15 +729,20 @@ namespace Pattons_Best
          //---------------------------------
          myContextMenuCrewActions["Gunner"].Items.Clear();
          myContextMenuCrewActions["Gunner"].Visibility = Visibility.Visible;
-         if (0 < totalAmmo)
+         if ( (0 < totalAmmo) && (false == gi.IsBrokenMainGun) )
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Gunner_FireMainGun";
             menuItem1.Header = "Fire Main Gun";
             menuItem1.Click += MenuItemCrewActionClick;
             myContextMenuCrewActions["Gunner"].Items.Add(menuItem1);
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Gunner_RotateFireMainGun";
+            menuItem1.Header = "Rotate & Fire Main Gun";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Gunner"].Items.Add(menuItem1);
          }
-         if (0 < lastReport.Ammo30CalibreMG)
+         if ( (0 < lastReport.Ammo30CalibreMG) && (false == gi.IsBrokenMgCoaxial))
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Gunner_FireCoaxialMg";
@@ -748,11 +753,6 @@ namespace Pattons_Best
          menuItem1 = new MenuItem();
          menuItem1.Name = "Gunner_RotateTurret";
          menuItem1.Header = "Rotate Turret";
-         menuItem1.Click += MenuItemCrewActionClick;
-         myContextMenuCrewActions["Gunner"].Items.Add(menuItem1);
-         menuItem1 = new MenuItem();
-         menuItem1.Name = "Gunner_RotateFireMainGun";
-         menuItem1.Header = "Rotate & Fire Main Gun";
          menuItem1.Click += MenuItemCrewActionClick;
          myContextMenuCrewActions["Gunner"].Items.Add(menuItem1);
          if (true == gi.IsBrokenMainGun)
@@ -782,7 +782,7 @@ namespace Pattons_Best
          //---------------------------------
          myContextMenuCrewActions["Assistant"].Items.Clear();
          myContextMenuCrewActions["Assistant"].Visibility = Visibility.Visible;
-         if (0 < lastReport.Ammo30CalibreMG)
+         if ( (0 < lastReport.Ammo30CalibreMG) && (false == gi.IsBrokenMgBow) )
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Assistant_FireBowMg";
@@ -888,7 +888,7 @@ namespace Pattons_Best
             menuitem.Header = "Place Ammo Reload";
             menuitem.Click += MenuItemAmmoReloadClick;
             myContextMenuGunLoadActions["GunLoadHe"].Items.Add(menuitem);
-            if (1 < lastReport.MainGunHE)
+            if (0 < gi.GetReadyRackReload("He"))
             {
                menuitem = new MenuItem();
                menuitem.Name = "GunLoadHe_ReadyRackReload";
@@ -906,7 +906,7 @@ namespace Pattons_Best
             menuitem.Header = "Place Ammo Reload";
             menuitem.Click += MenuItemAmmoReloadClick;
             myContextMenuGunLoadActions["GunLoadAp"].Items.Add(menuitem);
-            if (1 < lastReport.MainGunAP)
+            if (0 < gi.GetReadyRackReload("Ap"))
             {
                menuitem = new MenuItem();
                menuitem.Name = "GunLoadAp_ReadyRackReload";
@@ -924,7 +924,7 @@ namespace Pattons_Best
             menuitem.Header = "Place Ammo Reload";
             menuitem.Click += MenuItemAmmoReloadClick;
             myContextMenuGunLoadActions["GunLoadHbci"].Items.Add(menuitem);
-            if (1 < lastReport.MainGunHBCI)
+            if (0 < gi.GetReadyRackReload("Hbci"))
             {
                menuitem = new MenuItem();
                menuitem.Name = "GunLoadHbci_ReadyRackReload";
@@ -942,7 +942,7 @@ namespace Pattons_Best
             menuitem.Header = "Place Ammo Reload";
             menuitem.Click += MenuItemAmmoReloadClick;
             myContextMenuGunLoadActions["GunLoadWp"].Items.Add(menuitem);
-            if (1 < lastReport.MainGunWP)
+            if (0 < gi.GetReadyRackReload("Wp"))
             {
                menuitem = new MenuItem();
                menuitem.Name = "GunLoadWp_ReadyRackReload";
@@ -956,11 +956,11 @@ namespace Pattons_Best
          if (0 < lastReport.MainGunHVAP)
          {
             menuitem = new MenuItem();
-            menuitem.Name = "GunLoadHvap_AmmoReload";
+            menuitem.Name = "GunLoadHvap_AmmoReload"; 
             menuitem.Header = "Place Ammo Reload";
             menuitem.Click += MenuItemAmmoReloadClick;
             myContextMenuGunLoadActions["GunLoadHvap"].Items.Add(menuitem);
-            if (1 < lastReport.MainGunWP)
+            if (0 < gi.GetReadyRackReload("Hvap"))
             {
                menuitem = new MenuItem();
                menuitem.Name = "GunLoadHvap_ReadyRackReload";
@@ -1381,7 +1381,7 @@ namespace Pattons_Best
                aPolygon.ContextMenu = myContextMenuGunLoadActions[tName];
                //--------------------------------------
                IMapItem? gunLoad = null;
-               foreach(IMapItem mi in gi.GunLoads)
+               foreach(IMapItem mi in gi.GunLoads) // The context menu is assigned to the GunLoad Button
                {
                   if (true == mi.Name.Contains("GunLoadInGun"))
                      gunLoad = mi;

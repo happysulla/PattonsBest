@@ -35,6 +35,7 @@ namespace Pattons_Best
       LE_SHOW_SHERMAN_MOVE,
       LE_SHOW_APPEARING_UNITS,
       LE_SHOW_TO_HIT_MODIFIER,
+      LE_SHOW_TO_KILL_MODIFIER,
       //-------------
       LE_VIEW_ADV_FIRE_RESOLVE,
       LE_VIEW_ART_FIRE_RESOLVE,
@@ -117,6 +118,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_SHERMAN_MOVE); 
          //SetOn(LogEnum.LE_SHOW_APPEARING_UNITS);
          SetOn(LogEnum.LE_SHOW_TO_HIT_MODIFIER);
+         SetOn(LogEnum.LE_SHOW_TO_KILL_MODIFIER);
          //-------------------------------
          //SetOn(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE);
          //SetOn(LogEnum.LE_VIEW_ART_FIRE_RESOLVE);

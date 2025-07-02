@@ -45,6 +45,7 @@ namespace Pattons_Best
       [NonSerialized] protected static BitmapImage? theBuild = theMapImages.GetBitmapImage("OBuild");
       [NonSerialized] protected static BitmapImage? theThrownTrack = theMapImages.GetBitmapImage("OTrack");
       [NonSerialized] protected static BitmapImage? theHeHit = theMapImages.GetBitmapImage("OHeHit");
+      [NonSerialized] protected static BitmapImage? theApHit = theMapImages.GetBitmapImage("OApHit");
       [NonSerialized] protected static BitmapImage? theSherman75Turret = theMapImages.GetBitmapImage("c16TurretSherman75");
       [NonSerialized] protected static BitmapImage? thePzIVTurret = theMapImages.GetBitmapImage("c79PzIVTurret");
       [NonSerialized] protected static BitmapImage? thePzVTurret = theMapImages.GetBitmapImage("c80PzVTurret");
@@ -120,11 +121,8 @@ namespace Pattons_Best
       public bool IsThrownTrack { get; set; } = false;
       public bool IsBoggedDown { get; set; } = false;
       //--------------------------------------------------
-      public int NumHeHit { get; set; } = 0;
-      public int NumApHit { get; set; } = 0;
-      public int NumHbciHit { get; set; } = 0;
-      public int NumWpHit { get; set; } = 0;
-      public int NumHvapHit { get; set; } = 0;
+      public bool IsHeHit { get; set; } = false;
+      public bool IsApHit { get; set; } = false;
       public EnumSpottingResult Spotting { get; set; } = EnumSpottingResult.UNSPOTTED;
       //----------------------------------------------------------------------------
       protected MapItem(string name)
@@ -268,6 +266,8 @@ namespace Pattons_Best
             enemyUnit = "Pak38";
          else if (true == this.Name.Contains("Pak40"))
             enemyUnit = "Pak40";
+         else if (true == this.Name.Contains("Pak43"))
+            enemyUnit = "Pak43";
          else if (true == this.Name.Contains("PzIV"))
             enemyUnit = "PzIV";
          else if (true == this.Name.Contains("PzV"))
@@ -459,11 +459,20 @@ namespace Pattons_Best
                   overlay1.RenderTransform = rotateTransform;
                   g.Children.Add(overlay1);
                }
-               if (0 < mi.NumHeHit ) 
+               if (true == mi.IsHeHit) 
                {
                   double width = zoom * Utilities.theMapItemSize;
                   double height = width;
                   Image imgTrack = new Image() { Height = height, Width = width, Source = theHeHit };
+                  g.Children.Add(imgTrack);
+                  Canvas.SetLeft(imgTrack, 0);
+                  Canvas.SetTop(imgTrack, 0);
+               }
+               else if (true == mi.IsApHit)
+               {
+                  double width = zoom * Utilities.theMapItemSize;
+                  double height = width;
+                  Image imgTrack = new Image() { Height = height, Width = width, Source = theApHit };
                   g.Children.Add(imgTrack);
                   Canvas.SetLeft(imgTrack, 0);
                   Canvas.SetTop(imgTrack, 0);

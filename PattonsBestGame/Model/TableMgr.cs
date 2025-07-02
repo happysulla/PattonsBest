@@ -4147,7 +4147,7 @@ namespace Pattons_Best
                }
                switch (enemyUnitType)
                {
-                  case "STG":
+                  case "SPG":
                   case "STuGIIIg": // small size
                   case "JdgPzIV":
                   case "JdgPz38t":
@@ -4494,7 +4494,7 @@ namespace Pattons_Best
                }
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): Reached Default enemyUnit=" + enemyUnit);
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): 2-Reached Default enemyUnit=" + enemyUnit);
                return -1000;
          }
          //------------------------------------
@@ -4593,6 +4593,159 @@ namespace Pattons_Best
          }
          rateOfFireNumber -= GetShermanRateOfFireModifier(gi);
          return rateOfFireNumber;
+      }
+      public static int GetShermanToKillInfantryModifier(IGameInstance gi, IMapItem enemyUnit, ShermanAttack hit)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillInfantryModifier(): lastReport=null");
+            return -1000;
+         }
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         //------------------------------------
+         int toKillModifierNum = 0;
+         if (("Direct" != hit.myAttackType) || (true == hit.myIsCriticalHit))
+         {
+            if (true == enemyUnit.IsBuilding)
+            {
+               if (false == hit.myIsCriticalHit)
+               {
+                  toKillModifierNum += 15;
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): Building +15 mod=" + toKillModifierNum.ToString());
+               }
+               else
+               {
+                  toKillModifierNum -= 15;
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): Building -15 mod=" + toKillModifierNum.ToString());
+               }
+            }
+            if (true == enemyUnit.IsWoods)
+            {
+               if (false == hit.myIsCriticalHit)
+               {
+                  toKillModifierNum += 10;
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): Woods +10 mod=" + toKillModifierNum.ToString());
+               }
+               else
+               {
+                  toKillModifierNum -= 10;
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): Woods -10 mod=" + toKillModifierNum.ToString());
+               }
+            }
+            if (true == enemyUnit.IsFortification) 
+            {
+               if (false == hit.myIsCriticalHit)
+               {
+                  toKillModifierNum += 20;
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): Fort +20 mod=" + toKillModifierNum.ToString());
+               }
+               else
+               {
+                  toKillModifierNum -= 20;
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): Fort -20 mod=" + toKillModifierNum.ToString());
+               }
+            }
+         }
+         //------------------------------------
+         if ((true == enemyUnit.Name.Contains("ATG")) || (true == enemyUnit.Name.Contains("Pak43")) || (true == enemyUnit.Name.Contains("Pak40")) || (true == enemyUnit.Name.Contains("Pak38")))
+         {
+            if (false == hit.myIsCriticalHit)
+            {
+               toKillModifierNum += 15;
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): ATG +15 mod=" + toKillModifierNum.ToString());
+            }
+            else
+            {
+               toKillModifierNum += 1000;
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): ATG +1000 mod=" + toKillModifierNum.ToString());
+            }
+         }
+         //------------------------------------
+         if ( true == enemyUnit.IsMoving )
+         {
+            toKillModifierNum -= 10;
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): Moving In Open -10 mod=" + toKillModifierNum.ToString());
+         }
+         //------------------------------------
+         if (true == lastReport.Weather.Contains("Deep Snow") || true == lastReport.Weather.Contains("Mud"))
+         {
+            toKillModifierNum += 5;
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): Snow/Mud +5 mod=" + toKillModifierNum.ToString());
+         }
+         return toKillModifierNum;
+      }
+      public static int GetShermanToKillInfantryNumber(IGameInstance gi, IMapItem enemyUnit, ShermanAttack hit)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillInfantryNumber(): lastReport=null");
+            return -1000;
+         }
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         //---------------------------------------------------
+         int toKillNum = 0;
+         if( "75" == card.myMainGun )
+         {
+            if ("Direct" == hit.myAttackType)
+            {
+               if (false == hit.myIsCriticalHit)
+                  toKillNum = 55;
+               else
+                  toKillNum = 80;
+            }
+            else if ("Area" == hit.myAttackType)
+            {
+               if (false == hit.myIsCriticalHit)
+                  toKillNum = 35;
+               else
+                  toKillNum = 55;
+            }
+            else
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillInfantryNumber(): hit.myAttackType=" + hit.myAttackType);
+               return -1000;
+            }
+         }
+         else if ("76L" == card.myMainGun)
+         {
+            if ("Direct" == hit.myAttackType)
+            {
+               if (false == hit.myIsCriticalHit)
+                  toKillNum = 30;
+               else
+                  toKillNum = 55;
+            }
+            else if ("Area" == hit.myAttackType)
+            {
+               if (false == hit.myIsCriticalHit)
+                  toKillNum = 20;
+               else
+                  toKillNum = 30;
+            }
+            else
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillInfantryNumber(): hit.myAttackType=" + hit.myAttackType);
+               return -1000;
+            }
+         }
+         else
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillInfantryNumber(): card.myMainGun=" + card.myMainGun);
+            return -1000;
+         }
+         //--------------------------------------
+         int modifier = GetShermanToKillInfantryModifier(gi, enemyUnit, hit);
+         if( modifier < -100 )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillInfantryNumber(): GetShermanToKillInfantryModifier() returned error");
+            return -1000;
+         }
+         if (900 < modifier) // automatic KIA
+            return modifier;
+         toKillNum += modifier;
+         return toKillNum;
       }
       //-------------------------------------------
       private void CreateCombatCalender()

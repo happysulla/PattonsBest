@@ -63,6 +63,7 @@ namespace Pattons_Best
       public bool IsShermanFiring { set; get; } = false;
       public bool IsShermanFiringAtFront { set; get; } = false;
       public bool IsShermanDeliberateImmobilization { set; get; } = false;
+      public bool IsShermanFireCritical { set; get; } = false;
       public bool IsShermanRepeatFire { set; get; } = false;
       public bool IsShermanTurretRotated { set; get; } = false;
       public double ShermanRotationTurretOld { set; get; } = 0.0;
@@ -99,6 +100,7 @@ namespace Pattons_Best
       public Dictionary<string, int> AcquiredShots { set; get; } = new Dictionary<string, int>();
       public ShermanDeath? Death { set; get; } = null;
       public PanzerfaustAttack? Panzerfaust { set; get; } = null;
+      public List<ShermanAttack> ShermanHits { set; get; } = new List<ShermanAttack>();
       public int NumCollateralDamage { set; get; } = 0;
       //------------------------------------------------
       public IMapItemMoves MapItemMoves { get; set; } = new MapItemMoves();

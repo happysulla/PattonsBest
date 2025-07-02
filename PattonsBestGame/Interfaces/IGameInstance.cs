@@ -44,6 +44,18 @@ namespace Pattons_Best
          mySector = sector;
       }
    }
+   public class ShermanAttack
+   {
+      public string myAttackType; // area or direct fire
+      public string myAmmoType;   // He, Ap, Hbci, Wp,
+      public bool myIsCriticalHit;
+      public ShermanAttack( string attack, string ammo, bool critical)
+      {
+         myAttackType = attack;
+         myAmmoType = ammo;
+         myIsCriticalHit = critical;   
+      }
+   }
    //-------------------------------------------------
    public interface IGameInstance
    {
@@ -132,6 +144,7 @@ namespace Pattons_Best
       Dictionary<string, int> AcquiredShots { set; get; }
       ShermanDeath? Death { set; get; }
       PanzerfaustAttack? Panzerfaust { set; get; }
+      List<ShermanAttack> ShermanHits { set; get; }
       int NumCollateralDamage { set; get; }
       //------------------------------------------------
       IMapItemMoves MapItemMoves { set; get; }

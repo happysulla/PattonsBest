@@ -551,12 +551,20 @@ e053c	"<Bold>e053c Main Gun Firing - Rate of Fire</Bold>
 <InlineUIContainer><Button Content='r9.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <InlineUIContainer><Button Content='Rate of Fire' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>"
-e053d	"<Bold>e053d Main Gun Fire - Resolution</Bold> 
+e053d	"<Bold>e053d Main Gun Fire Against Infantry - Resolution</Bold> 
+<InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<LineBreak/><LineBreak/>
+For each hit scored against a target, consult the  
+<InlineUIContainer><Button Content='To Kill Infantry' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+ Table to determine if the target is knocked out (KO'ed) using these modifier:
+<LineBreak/><LineBreak/>"
+e053e	"<Bold>e053e Main Gun Fire Against Vehicle - Resolution</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
 For each hit scored against a target, consult the correct To Kill Table to determine if the target is knocked out (KO'ed)."
-e053e	"<Bold>e053e Machine Gun (MG) Firing - Select Target</Bold> 
+e053f	"<Bold>e053f Machine Gun (MG) Firing - Select Target</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>

@@ -3391,8 +3391,19 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceShermanSkipRateOfFire:
-                  gi.EventDisplayed = gi.EventActive = "e053d";
-                  gi.DieRollAction = GameAction.BattleRoundSequenceShermanToKillRoll;
+                  if( null == gi.Target)
+                  {
+                     returnStatus = "gi.Target=null for a=" + action.ToString();
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                  }
+                  else
+                  {
+                     if ((true == gi.Target.Name.Contains("LW")) || (true == gi.Target.Name.Contains("MG")) || (true == gi.Target.Name.Contains("Pak")) || (true == gi.Target.Name.Contains("ATG")))
+                        gi.EventDisplayed = gi.EventActive = "e053d"; // resolve attack
+                     else
+                        gi.EventDisplayed = gi.EventActive = "e053e"; // resolve attack
+                     gi.DieRollAction = GameAction.BattleRoundSequenceShermanToKillRoll;
+                  }
                   break;
                case GameAction.BattleRoundSequenceShermanToHitRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
@@ -3881,6 +3892,12 @@ namespace Pattons_Best
             return false;
          }
          //---------------------------------------------------------------
+         bool isCriticalHit = false;
+         if (dieRoll < 4)
+            isCriticalHit = true; 
+         if ( 97 < dieRoll ) 
+            gi.IsBrokenMainGun = true;
+         //---------------------------------------------------------------
          if (toHitNumber < dieRoll) // Miss Target - move to next Crew Action
          {
             gi.CrewActionPhase = CrewActionPhase.TankMgFire;
@@ -3892,22 +3909,18 @@ namespace Pattons_Best
             return true;
          }
          //---------------------------------------------------------------
+         gi.ShermanHits.Add(new ShermanAttack(gi.ShermanTypeOfFire, gunLoad, isCriticalHit));
          switch (gunLoad) // mark off hit
          {
             case "He":
-               gi.Target.NumHeHit++;
+               gi.Target.IsHeHit = true;
                break;
             case "Ap":
-               gi.Target.NumApHit++;
+            case "Hvap":
+               gi.Target.IsApHit = true;
                break;
             case "Hbci":
-               gi.Target.NumHbciHit++;
-               break;
             case "Wp":
-               gi.Target.NumWpHit++;
-               break;
-            case "Hvap":
-               gi.Target.NumHvapHit++;
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): GetShermanToHitNumber() reached default gunload=" + gunLoad + " for a=" + outAction.ToString());
@@ -3920,7 +3933,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "FireAtEnemyUnits(): GetShermanRateOfFire() returned error");
             return false;
          }
-         if (dieRoll <= rateOfFireNumber) 
+         if ( (dieRoll <= rateOfFireNumber) && (false == gi.IsBrokenMainGun) )
          {
             gi.DieResults["e053c"][0] = gi.DieResults["e053b"][0];
             gi.DieResults["e053b"][0] = Utilities.NO_RESULT;
@@ -3931,7 +3944,10 @@ namespace Pattons_Best
          }
          else
          {
-            gi.EventDisplayed = gi.EventActive = "e053d"; // resolve attack
+            if( (true == gi.Target.Name.Contains("LW")) || (true == gi.Target.Name.Contains("MG")) || (true == gi.Target.Name.Contains("Pak")) || (true == gi.Target.Name.Contains("ATG")) )
+               gi.EventDisplayed = gi.EventActive = "e053d"; // resolve attack
+            else
+               gi.EventDisplayed = gi.EventActive = "e053e"; // resolve attack
             gi.DieRollAction = GameAction.BattleRoundSequenceShermanToKillRoll;
          }
          return true;

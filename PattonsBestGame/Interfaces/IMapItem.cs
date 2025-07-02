@@ -40,11 +40,8 @@ namespace Pattons_Best
       bool IsThrownTrack { get; set; }
       bool IsBoggedDown { get; set; }
       //----------------------------------------
-      int NumHeHit { get; set; }
-      int NumApHit { get; set; }
-      int NumHbciHit { get; set; }
-      int NumWpHit { get; set; }
-      int NumHvapHit { get; set; }
+      bool IsHeHit { get; set; }
+      bool IsApHit { get; set; } 
       EnumSpottingResult Spotting { get; set; }
       //----------------------------------------
       void Clone(IMapItem mi);
