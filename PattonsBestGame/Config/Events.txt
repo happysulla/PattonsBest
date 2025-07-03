@@ -486,8 +486,7 @@ e050	"<Bold>e050 Ammo Reload Order</Bold>
 <InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>
 Right click marker or one of blue boxes to to select from pull down menu where to set Gun Reload marker and/or Ready Rack Ammo Reload marker.
-<LineBreak/><LineBreak/>
-                                            <InlineUIContainer><Image Name='Continue50' Height='100' Width='100'></Image></InlineUIContainer>"
+<LineBreak/><LineBreak/>"
 e051	"<Bold>e051 Crew Actions - Tank Movement</Bold> 
 <InlineUIContainer><Button Content='r4.74.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r11.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
@@ -551,7 +550,7 @@ e053c	"<Bold>e053c Main Gun Firing - Rate of Fire</Bold>
 <InlineUIContainer><Button Content='r9.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <InlineUIContainer><Button Content='Rate of Fire' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>"
-e053d	"<Bold>e053d Main Gun Fire Against Infantry - Resolution</Bold> 
+e053d	"<Bold>e053d Main Gun Against Infantry</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
@@ -559,7 +558,7 @@ For each hit scored against a target, consult the
 <InlineUIContainer><Button Content='To Kill Infantry' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
  Table to determine if the target is knocked out (KO'ed) using these modifier:
 <LineBreak/><LineBreak/>"
-e053e	"<Bold>e053e Main Gun Fire Against Vehicle - Resolution</Bold> 
+e053e	"<Bold>e053e Main Gun Against Vehicle</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>

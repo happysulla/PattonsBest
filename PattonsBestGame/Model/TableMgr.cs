@@ -4744,7 +4744,7 @@ namespace Pattons_Best
          }
          if (900 < modifier) // automatic KIA
             return modifier;
-         toKillNum += modifier;
+         toKillNum -= modifier;
          return toKillNum;
       }
       //-------------------------------------------

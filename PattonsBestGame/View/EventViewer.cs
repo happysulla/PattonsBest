@@ -1479,6 +1479,17 @@ namespace Pattons_Best
                   }
                }
                break;
+            case "e050":
+               if ("None" != gi.GetAmmoReload())
+               {
+                  Image imge050 = new Image { Name = "Continue50", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                  myTextBlock.Inlines.Add(new Run("                                          "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge050));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
             case "e051":
                string modiferString = UpdateEventContentGetMovingModifier(gi);
                myTextBlock.Inlines.Add(new Run(modiferString));
@@ -1558,12 +1569,12 @@ namespace Pattons_Best
                      Image? imge53b = null;
                      if ( toHitNum < gi.DieResults[key][0] )
                      {
-                        myTextBlock.Inlines.Add("  =  MISS.");
+                        myTextBlock.Inlines.Add("  =  MISS");
                         imge53b = new Image { Name = "Continue53b", Width = 80, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
                      }
                      else
                      {
-                        myTextBlock.Inlines.Add("  =  HIT.");
+                        myTextBlock.Inlines.Add("  =  HIT");
                         string gunLoad = gi.GetGunLoad();
                         if (true == gi.IsShermanRepeatFire)
                            gunLoad = gi.GetAmmoReload();
@@ -1620,9 +1631,13 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.Target=null for key=" + key);
                      return false;
                   }
-                  myTextBlock.Inlines.Add(new Run("Modifiers") { TextDecorations = TextDecorations.Underline });
-                  myTextBlock.Inlines.Add(new LineBreak());
+                  if (0 == gi.ShermanHits.Count)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.ShermanHits.Count=0 for key=" + key);
+                     return false;
+                  }
                   myTextBlock.Inlines.Add(new Run(modiferToKillInfantry));
+                  myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   double toKillNum = TableMgr.GetShermanToKillInfantryNumber(gi, gi.Target, gi.ShermanHits[0]);
                   if (toKillNum < -100)
@@ -1647,6 +1662,11 @@ namespace Pattons_Best
                   }
                   else
                   {
+                     myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
+                     if (toKillNum < gi.DieResults[key][0])
+                        myTextBlock.Inlines.Add("  =  NO EFFECT");
+                     else
+                        myTextBlock.Inlines.Add("  =  KILL");
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new Run("                                            "));
@@ -1950,7 +1970,10 @@ namespace Pattons_Best
          else if (true == lastReport.Weather.Contains("Mud"))
             sb51.Append("+9 for Mud\n");
          //-------------------------------------------------
-         return sb51.ToString();
+         if (0 == sb51.Length)
+            return "None";
+         else
+            return sb51.ToString();
       }
       private string UpdateEventContentGetToHitModifier(IGameInstance gi, IMapItem enemyUnit)
       {
@@ -2191,7 +2214,10 @@ namespace Pattons_Best
                }
             }
          }
-         return sb51.ToString();
+         if (0 == sb51.Length)
+            return "None";
+         else
+            return sb51.ToString();
       }
       public string UpdateEventContentRateOfFireModifier(IGameInstance gi)
       {
@@ -2259,7 +2285,10 @@ namespace Pattons_Best
                sb51.Append(" for assistant rating\n");
             }
          }
-         return sb51.ToString();
+         if (0 == sb51.Length)
+            return "None";
+         else
+            return sb51.ToString();
       }
       public string UpdateEventContentToKillInfantryModifier(IGameInstance gi)
       {
@@ -2322,7 +2351,10 @@ namespace Pattons_Best
          //------------------------------------
          if (true == lastReport.Weather.Contains("Deep Snow") || true == lastReport.Weather.Contains("Mud"))         
             sb51.Append("+5 Mud or Deep Snow Weather\n");
-         return sb51.ToString();
+         if (0 == sb51.Length)
+            return "None";
+         else
+            return sb51.ToString();
       }
       //--------------------------------------------------------------------
       private void ReplaceText(string keyword, string newString)
@@ -3218,6 +3250,14 @@ namespace Pattons_Best
                            break;
                         case "Continue53a":
                            action = GameAction.BattleRoundSequenceShermanFiringMainGunEnd;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Continue53b":
+                           action = GameAction.BattleRoundSequenceShermanFiringMainGunEnd;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Continue53d":
+                           action = GameAction.BattleRoundSequenceShermanToKillRoll;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "BattleRoundSequenceShermanHit":

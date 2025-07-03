@@ -3421,6 +3421,58 @@ namespace Pattons_Best
                      }
                   }
                   break;
+               case GameAction.BattleRoundSequenceShermanToKillRoll:
+                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
+                  {
+                     dieRoll = 10; // <cgs> TEST - Sherman To Hit Roll
+                     gi.DieResults[key][0] = dieRoll;
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                     if (false == ResolveKillEnemyUnits(gi, ref action, gi.DieResults[key][0]))
+                     {
+                        returnStatus = "FireAtEnemyUnits() returned false";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                     }
+                  }
+                  else
+                  {
+                     IMapItems shermanRemovals = new MapItems();
+                     foreach (IStack stack in gi.BattleStacks)
+                     {
+                        foreach (IMapItem mapItem in stack.MapItems)
+                        {
+                           if (true == mapItem.IsKilled)
+                              shermanRemovals.Add(mapItem);
+                        }
+                     }
+                     foreach (IMapItem mi in shermanRemovals)
+                        gi.BattleStacks.Remove(mi);
+                     //--------------------------------------
+                     gi.ShermanHits.RemoveAt(0);
+                     if (null == gi.Target)
+                     {
+                        returnStatus = "gi.Target=null";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanToKillRoll): " + returnStatus);
+                     }
+                     else if ( (0 < gi.ShermanHits.Count ) && ( false == gi.Target.IsKilled)  )
+                     {
+                        if ((true == gi.Target.Name.Contains("LW")) || (true == gi.Target.Name.Contains("MG")) || (true == gi.Target.Name.Contains("Pak")) || (true == gi.Target.Name.Contains("ATG")))
+                           gi.EventDisplayed = gi.EventActive = "e053d"; // resolve attack
+                        else
+                           gi.EventDisplayed = gi.EventActive = "e053e"; // resolve attack
+                        gi.DieRollAction = GameAction.BattleRoundSequenceShermanToKillRoll;
+                        gi.DieResults[key][0] = Utilities.NO_RESULT;
+                     }
+                     else
+                     {
+                        gi.CrewActionPhase = CrewActionPhase.TankMgFire;
+                        if (false == ConductCrewAction(gi, ref action))
+                        {
+                           returnStatus = "ConductCrewAction() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                        }
+                     }
+                  }
+                  break;
                case GameAction.EveningDebriefingStart:
                   gi.GamePhase = GamePhase.EveningDebriefing;
                   gi.EventDisplayed = gi.EventActive = "e100";
@@ -3663,6 +3715,45 @@ namespace Pattons_Best
          if (CrewActionPhase.TankMgFire == gi.CrewActionPhase)
          {
             //gi.CrewActionPhase = CrewActionPhase.ReplacePeriscope;
+            bool isSubMgFire = false;
+            bool isSubAAFire = false;
+            bool isCoaxialMgFire = false;
+            bool isBowMgFire = false;
+            foreach (IMapItem crewAction in gi.CrewActions)
+            {
+               if ("Loader_FireSubMg" == crewAction.Name)
+                  isSubMgFire = true;
+               if ("Loader_FireAaMg" == crewAction.Name)
+                  isSubAAFire = true;
+               if ("Gunner_FireCoaxialMg" == crewAction.Name)
+                  isCoaxialMgFire = true;
+               if ("Assistant_RepairBowMg" == crewAction.Name)
+                  isBowMgFire = true;
+               if ("Commander_FireSubMg" == crewAction.Name)
+                  isSubMgFire = true;
+               if ("Commander_FireAaMg" == crewAction.Name)
+                  isSubAAFire = true;
+            }
+            if( true == isCoaxialMgFire)
+            {
+               outAction = GameAction.BattleRoudSequenceFireMachineGun;
+               gi.CrewActionPhase = CrewActionPhase.TankMgFire;
+            }
+            if (true == isBowMgFire)
+            {
+               outAction = GameAction.BattleRoudSequenceFireMachineGun;
+               gi.CrewActionPhase = CrewActionPhase.TankMgFire;
+            }
+            if (true == isSubAAFire)
+            {
+               outAction = GameAction.BattleRoudSequenceFireMachineGun;
+               gi.CrewActionPhase = CrewActionPhase.TankMgFire;
+            }
+            if (true == isSubMgFire)
+            {
+               outAction = GameAction.BattleRoudSequenceFireMachineGun;
+               gi.CrewActionPhase = CrewActionPhase.TankMgFire;
+            }
          }
          if (CrewActionPhase.ReplacePeriscope == gi.CrewActionPhase)
          {
@@ -3949,6 +4040,82 @@ namespace Pattons_Best
             else
                gi.EventDisplayed = gi.EventActive = "e053e"; // resolve attack
             gi.DieRollAction = GameAction.BattleRoundSequenceShermanToKillRoll;
+         }
+         return true;
+      }
+      private bool ResolveKillEnemyUnits(IGameInstance gi, ref GameAction outAction, int dieRoll)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResolveKillEnemyUnits(): lastReport=null");
+            return false;
+         }
+         //-------------------------------------------------
+         if (null == gi.Target)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResolveKillEnemyUnits(): Target=null");
+            return false;
+         }
+         gi.Target.IsHeHit = false;
+         gi.Target.IsApHit = false;
+         //-------------------------------------------------
+         if (0 == gi.ShermanHits.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResolveKillEnemyUnits(): gi.ShermanHits.Count=0");
+            return false;
+         }
+         ShermanAttack hit = gi.ShermanHits[0];
+         //-------------------------------------------------
+         int toKillNum = 10000;
+         if ((true == gi.Target.Name.Contains("LW")) || (true == gi.Target.Name.Contains("MG")) || (true == gi.Target.Name.Contains("Pak")) || (true == gi.Target.Name.Contains("ATG")))
+         {
+            toKillNum = TableMgr.GetShermanToKillInfantryNumber(gi, gi.Target, hit);
+            if (toKillNum < -100)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ResolveKillEnemyUnits(): GetShermanToKillInfantryNumber() returned error");
+               return false;
+            }
+         }
+         else
+         {
+         }
+         //---------------------------------------------------------------
+         if (toKillNum < dieRoll) // No Effect
+            return true;
+         //---------------------------------------------------------------
+         string gunLoad = gi.GetGunLoad();
+         switch (gunLoad) // mark off hit
+         {
+            case "He":    // kill the unit
+            case "Ap":
+            case "Hvap":
+               gi.Target.IsKilled = true;
+               gi.Target.IsMoving = false;
+               gi.Target.SetBloodSpots();
+               break;
+            case "Hbci": // Lay two smoke in the target's zone
+               for (int i = 0; i < 2; i++)
+               {
+                  string miName1 = "SmokeWhite" + Utilities.MapItemNum;
+                  Utilities.MapItemNum++;
+                  IMapItem smoke1 = new MapItem(miName1, Utilities.ZOOM + 0.75, "c108Smoke1", gi.Target.TerritoryCurrent);
+                  IMapPoint mp1 = Territory.GetRandomPoint(gi.Target.TerritoryCurrent, gi.Target.Zoom * Utilities.theMapItemOffset);
+                  smoke1.Location = mp1;
+                  gi.BattleStacks.Add(smoke1);
+               }
+               break;
+            case "Wp":   // Lay smoke in the target's zone
+               string miName = "SmokeWhite" + Utilities.MapItemNum;
+               Utilities.MapItemNum++;
+               IMapItem smoke = new MapItem(miName, Utilities.ZOOM + 0.75, "c108Smoke1", gi.Target.TerritoryCurrent);
+               IMapPoint mp = Territory.GetRandomPoint(gi.Target.TerritoryCurrent, gi.Target.Zoom * Utilities.theMapItemOffset);
+               smoke.Location = mp;
+               gi.BattleStacks.Add(smoke);
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "ResolveKillEnemyUnits(): gunload=" + gunLoad + " for a=" + outAction.ToString());
+               return false;
          }
          return true;
       }
