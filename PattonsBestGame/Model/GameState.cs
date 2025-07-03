@@ -3736,22 +3736,22 @@ namespace Pattons_Best
             }
             if( true == isCoaxialMgFire)
             {
-               outAction = GameAction.BattleRoudSequenceFireMachineGun;
+               outAction = GameAction.BattleRoundSequenceFireMachineGun;
                gi.CrewActionPhase = CrewActionPhase.TankMgFire;
             }
             if ((true == isBowMgFire) && (false == gi.Sherman.IsHullDown))
             {
-               outAction = GameAction.BattleRoudSequenceFireMachineGun;
+               outAction = GameAction.BattleRoundSequenceFireMachineGun;
                gi.CrewActionPhase = CrewActionPhase.TankMgFire;
             }
             if (true == isSubAAFire)
             {
-               outAction = GameAction.BattleRoudSequenceFireMachineGun;
+               outAction = GameAction.BattleRoundSequenceFireMachineGun;
                gi.CrewActionPhase = CrewActionPhase.TankMgFire;
             }
             if (true == isSubMgFire)
             {
-               outAction = GameAction.BattleRoudSequenceFireMachineGun;
+               outAction = GameAction.BattleRoundSequenceFireMachineGun;
                gi.CrewActionPhase = CrewActionPhase.TankMgFire;
             }
          }
