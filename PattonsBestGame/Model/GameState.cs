@@ -3714,7 +3714,7 @@ namespace Pattons_Best
          }
          if (CrewActionPhase.TankMgFire == gi.CrewActionPhase)
          {
-            //gi.CrewActionPhase = CrewActionPhase.ReplacePeriscope;
+            gi.CrewActionPhase = CrewActionPhase.ReplacePeriscope;
             bool isSubMgFire = false;
             bool isSubAAFire = false;
             bool isCoaxialMgFire = false;
@@ -3739,7 +3739,7 @@ namespace Pattons_Best
                outAction = GameAction.BattleRoudSequenceFireMachineGun;
                gi.CrewActionPhase = CrewActionPhase.TankMgFire;
             }
-            if (true == isBowMgFire)
+            if ((true == isBowMgFire) && (false == gi.Sherman.IsHullDown))
             {
                outAction = GameAction.BattleRoudSequenceFireMachineGun;
                gi.CrewActionPhase = CrewActionPhase.TankMgFire;
@@ -3758,18 +3758,80 @@ namespace Pattons_Best
          if (CrewActionPhase.ReplacePeriscope == gi.CrewActionPhase)
          {
             gi.CrewActionPhase = CrewActionPhase.RepairGun;
+            bool isReplacePeriscope = false;
+            foreach (IMapItem crewAction in gi.CrewActions)
+            {
+               if ("Loader_RepairScope" == crewAction.Name)
+                  isReplacePeriscope = true;
+               if ("Driver_RepairScope" == crewAction.Name)
+                  isReplacePeriscope = true;
+               if ("Gunner_RepairScope" == crewAction.Name)
+                  isReplacePeriscope = true;
+               if ("Assistant_RepairScope" == crewAction.Name)
+                  isReplacePeriscope = true;
+               if ("Commander_RepairScope" == crewAction.Name)
+                  isReplacePeriscope = true;
+            }
+            if (true == isReplacePeriscope)
+            {
+               gi.CrewActionPhase = CrewActionPhase.ReplacePeriscope;
+            }
          }
          if (CrewActionPhase.RepairGun == gi.CrewActionPhase)
          {
             gi.CrewActionPhase = CrewActionPhase.FireMortar;
+            bool isRepairGun = false;
+            bool isRepairGunHelp = false;
+            bool isRepairCoaxialMg = false;
+            bool isRepairBowMg = false;
+            bool isRepairAaMg = false;
+            foreach (IMapItem crewAction in gi.CrewActions)
+            {
+               if ("Gunner_RepairMainGun" == crewAction.Name)
+                  isRepairGun = true;
+               if ("Loader_RepairMainGun" == crewAction.Name)
+                  isRepairGunHelp = true;
+               if ("Loader_RepairCoaxialMg" == crewAction.Name)
+                  isRepairCoaxialMg = true;
+               if ("Assistant_RepairBowMg" == crewAction.Name)
+                  isRepairBowMg = true;
+               if ("Loader_RepairAaMg" == crewAction.Name)
+                  isRepairAaMg = true;
+               if ("Commander_RepairAaMg" == crewAction.Name)
+                  isRepairAaMg = true;
+            }
+            if (true == isRepairGun)
+            {
+               gi.CrewActionPhase = CrewActionPhase.RepairGun;
+            }
          }
          if (CrewActionPhase.FireMortar == gi.CrewActionPhase)
          {
             gi.CrewActionPhase = CrewActionPhase.ThrowGrenades;
+            bool isFireMortar = false;
+            foreach (IMapItem crewAction in gi.CrewActions)
+            {
+               if ("Loader_FireMortar" == crewAction.Name)
+                  isFireMortar = true;
+            }
+            if (true == isFireMortar)
+            {
+               gi.CrewActionPhase = CrewActionPhase.FireMortar;
+            }
          }
          if (CrewActionPhase.ThrowGrenades == gi.CrewActionPhase)
          {
             gi.CrewActionPhase = CrewActionPhase.None;
+            bool isThrowGrenade = false;
+            foreach (IMapItem crewAction in gi.CrewActions)
+            {
+               if ("Gunner_ThrowGrenade" == crewAction.Name)
+                  isThrowGrenade = true;
+            }
+            if (true == isThrowGrenade)
+            {
+               gi.CrewActionPhase = CrewActionPhase.ThrowGrenades;
+            }
          }
          if (CrewActionPhase.None == gi.CrewActionPhase)
          {
