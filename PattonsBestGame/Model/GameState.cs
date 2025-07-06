@@ -3426,6 +3426,7 @@ namespace Pattons_Best
                   action = GameAction.BattleRoundSequenceShermanFiringSelectTarget;
                   gi.EventDisplayed = gi.EventActive = "e054"; // resolve attack
                   gi.DieRollAction = GameAction.DieRollActionNone;
+                  gi.Target = null;
                   gi.IsShermanFiringAaMg = true;
                   gi.IsShermanFiringBowMg = false;
                   gi.IsShermanFiringCoaxialMg = false;
@@ -3439,6 +3440,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceFireBowMg:
                   action = GameAction.BattleRoundSequenceShermanFiringSelectTarget;
                   gi.EventDisplayed = gi.EventActive = "e054"; // resolve attack
+                  gi.Target = null;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   gi.IsShermanFiringAaMg = false;
                   gi.IsShermanFiringBowMg = true;
@@ -3461,6 +3463,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceFireCoaxialMg:
                   action = GameAction.BattleRoundSequenceShermanFiringSelectTarget;
                   gi.EventDisplayed = gi.EventActive = "e054"; // resolve attack
+                  gi.Target = null;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   gi.IsShermanFiringAaMg = false;
                   gi.IsShermanFiringBowMg = false;
@@ -3475,6 +3478,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceFireSubMg:
                   action = GameAction.BattleRoundSequenceShermanFiringSelectTarget;
                   gi.EventDisplayed = gi.EventActive = "e054"; // resolve attack
+                  gi.Target = null;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   gi.IsShermanFiringAaMg = false;
                   gi.IsShermanFiringBowMg = false;
@@ -3520,7 +3524,6 @@ namespace Pattons_Best
                               gi.Target.IsKilled = true;
                               gi.Target.IsMoving = false;
                               gi.Target.SetBloodSpots();
-                              gi.Target = null;
                            }
                         }
                      }
@@ -3638,6 +3641,14 @@ namespace Pattons_Best
                            Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(BattleRandomEventRoll): " + returnStatus);
                            break;
                      }
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceBackToSpotting:
+                  gi.BattlePhase = BattlePhase.BackToSpotting;
+                  if ( false == ResetRound(gi))
+                  {
+                     returnStatus = "ResetRound() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(BattleRoundSequenceBackToSpotting): " + returnStatus);
                   }
                   break;
                case GameAction.BattleShermanKilled:
@@ -4332,11 +4343,21 @@ namespace Pattons_Best
                else
                {
                   if (9 < gi.DieResults[key][0])
+                  {
                      gi.ShermanHits[0].myHitLocation = "Thrown Track";
+                     if( false == gi.Target.Name.Contains("Truck"))
+                        gi.Target.IsThrownTrack = true;
+                     gi.Target.IsMoving = false;
+                     gi.Target.IsApHit = false;
+                  }
                   else if (4 < gi.DieResults[key][0])
+                  {
                      gi.ShermanHits[0].myHitLocation = "Hull";
+                  }
                   else
+                  {
                      gi.ShermanHits[0].myHitLocation = "Turret";
+                  }
                }
             }
             else
@@ -4656,7 +4677,7 @@ namespace Pattons_Best
          }
          return true;
       }
-      public bool ResetRound(IGameInstance gi)
+      private bool ResetRound(IGameInstance gi)
       {
          gi.BattlePhase = BattlePhase.Spotting;
          gi.CrewActionPhase = CrewActionPhase.Movement;

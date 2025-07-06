@@ -3274,18 +3274,18 @@ namespace Pattons_Best
             IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
             if (null == lastReport)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): lastReport=null");
+               Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupResults(): lastReport=null");
                return false;
             }
             if (null == myGameInstance.EnteredArea)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): myGameInstance.EnteredArea=null");
+               Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupResults(): myGameInstance.EnteredArea=null");
                return false;
             }
             IStack? stackEnteredArea = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
             if (null == stackEnteredArea)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): stackEnteredArea=null");
+               Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupResults(): stackEnteredArea=null");
                return false;
             }
             bool isAirStrike = false;
@@ -3304,16 +3304,16 @@ namespace Pattons_Best
             IMapItems removals = new MapItems();
             foreach (IStack stack in myGameInstance.BattleStacks)
             {
-               Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ShowBattleSetupFireResults(): stack=" + stack.ToString());
+               Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ShowBattleSetupResults(): stack=" + stack.ToString());
                bool isEnemyUnitInTerritory = false;
                IMapItem? advanceFireMarker = null; ;
                foreach (IMapItem mi in stack.MapItems)
                {
-                  Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ShowBattleSetupFireResults(): mi=" + mi.Name);
+                  Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ShowBattleSetupResults(): mi=" + mi.Name);
                   if (true == mi.IsEnemyUnit())
                   {
                      ++enemyCount;
-                     Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ShowBattleSetupFireResults(): c=" + enemyCount);
+                     Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ShowBattleSetupResults(): c=" + enemyCount);
                      if (((false == lastReport.Weather.Contains("Fog")) && (false == lastReport.Weather.Contains("Falling"))) || (("B6M" != stack.Territory.Name) && ("B6L" != stack.Territory.Name)))
                      {
                         isEnemyUnitAvailableForAirStrike = true;
@@ -3339,9 +3339,9 @@ namespace Pattons_Best
                else if ((true == isAirStrike) && (true == isEnemyUnitAvailableForAirStrike))
                   outAction = GameAction.BattleResolveAirStrike;
             }
+            //--------------------------------------------------
             if (0 == enemyCount)
                outAction = GameAction.BattleEmpty;
-            //--------------------------------------------------
             foreach (IMapItem mi in removals)
                myGameInstance.BattleStacks.Remove(mi);
          }
@@ -3376,10 +3376,14 @@ namespace Pattons_Best
          bool isAirStrike = false;
          bool isArtilleryStrike = false;
          GameAction outAction = GameAction.BattleAmbushStart;
-         if ( (BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase) || (GamePhase.BattleRoundSequence == myGameInstance.GamePhase) ) // Friendly action during ambush as part of Random Events
+         if( BattlePhase.RandomEvent == myGameInstance.BattlePhase )
          {
-            Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "ShowBattleSetupFireResults(): AmbushRandomEvent | BattleRoundSequence e=" + myGameInstance.EventActive);
-            outAction = GameAction.BattleRoundSequenceStart; // ShowBattleSetupFireResults() - AmbushRandomEvent | BattleRoundSequence
+            outAction = GameAction.BattleRoundSequenceBackToSpotting; // ShowBattleSetupFireResults() - AmbushRandomEvent 
+         }
+         else if (BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase)  // Friendly action during ambush as part of Random Events
+         {
+            Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "ShowBattleSetupFireResults(): AmbushRandomEvent e=" + myGameInstance.EventActive);
+            outAction = GameAction.BattleRoundSequenceStart; // ShowBattleSetupFireResults() - AmbushRandomEvent 
          }
          else
          {

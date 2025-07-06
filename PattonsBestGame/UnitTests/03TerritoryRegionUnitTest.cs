@@ -330,7 +330,7 @@ namespace Pattons_Best
             // are part of any other region.  If a point is found
             // that is very close, assume that is the correct
             // point to add instead of the mouse click.
-            double minDistance = 20;
+            double minDistance = 5;
             IMapPoint selectedMp = mp;
             foreach (String s in myAnchorTerritory.Adjacents)
             {

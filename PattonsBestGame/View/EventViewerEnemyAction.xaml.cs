@@ -1376,7 +1376,7 @@ namespace Pattons_Best
                   myGridRows[i].myDieRollToKillYourTank = NO_FIRE_YOUR_TANK;
                }
                //----------------------------------------
-               if ( true == enemyAction.Contains("Move") )
+               if ( (true == enemyAction.Contains("Move") ) && (false == mi.IsThrownTrack) )
                {
                   mi.IsMoved = true;
                   mi.IsHullDown = false;

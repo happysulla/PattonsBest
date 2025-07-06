@@ -1,4 +1,4 @@
-﻿<Territories count="146">
+﻿<Territories count="147">
   <Territory value="M000">
     <Parent value="Main" />
     <Type value="B" />
@@ -1487,17 +1487,18 @@
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0622.91" Y="0610.10" />
-    <Points count="10">
-      <regionPoint X="0542.64" Y="0550.32" />
-      <regionPoint X="0734.64" Y="0548.51" />
-      <regionPoint X="0728.00" Y="0584.74" />
-      <regionPoint X="0707.47" Y="0628.21" />
-      <regionPoint X="0685.74" Y="0653.57" />
-      <regionPoint X="0646.49" Y="0684.36" />
-      <regionPoint X="0617.51" Y="0701.27" />
-      <regionPoint X="0587.32" Y="0709.11" />
-      <regionPoint X="0518.49" Y="0593.19" />
-      <regionPoint X="0542.64" Y="0550.93" />
+    <Points count="11">
+      <regionPoint X="0543.29" Y="0552.02" />
+      <regionPoint X="0735.29" Y="0552.59" />
+      <regionPoint X="0732.43" Y="0573.42" />
+      <regionPoint X="0723.86" Y="0596.85" />
+      <regionPoint X="0708.43" Y="0625.99" />
+      <regionPoint X="0685.57" Y="0655.70" />
+      <regionPoint X="0655.86" Y="0680.85" />
+      <regionPoint X="0631.29" Y="0695.70" />
+      <regionPoint X="0606.71" Y="0705.42" />
+      <regionPoint X="0587.29" Y="0710.56" />
+      <regionPoint X="0520.43" Y="0594.56" />
     </Points>
     <Adjacents count="4">
       <adjacent value="B2C" />
@@ -1510,12 +1511,11 @@
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0494.78" Y="0655.68" />
-    <Points count="5">
-      <regionPoint X="0519.24" Y="0592.29" />
-      <regionPoint X="0585.35" Y="0710.02" />
-      <regionPoint X="0400.59" Y="0708.21" />
-      <regionPoint X="0467.61" Y="0593.19" />
-      <regionPoint X="0517.42" Y="0593.19" />
+    <Points count="4">
+      <regionPoint X="0468.86" Y="0593.17" />
+      <regionPoint X="0520.43" Y="0594.56" />
+      <regionPoint X="0587.29" Y="0710.56" />
+      <regionPoint X="0401.43" Y="0709.74" />
     </Points>
     <Adjacents count="4">
       <adjacent value="B3C" />
@@ -1529,16 +1529,16 @@
     <Type value="Battle" />
     <CenterPoint X="0368.72" Y="0612.51" />
     <Points count="10">
-      <regionPoint X="0252.07" Y="0547.91" />
-      <regionPoint X="0444.07" Y="0552.44" />
-      <regionPoint X="0466.71" Y="0590.47" />
-      <regionPoint X="0399.69" Y="0708.21" />
-      <regionPoint X="0361.65" Y="0694.62" />
-      <regionPoint X="0329.05" Y="0674.70" />
-      <regionPoint X="0300.97" Y="0650.25" />
-      <regionPoint X="0274.71" Y="0617.64" />
-      <regionPoint X="0259.31" Y="0580.51" />
-      <regionPoint X="0252.97" Y="0550.62" />
+      <regionPoint X="0252.19" Y="0550.84" />
+      <regionPoint X="0444.19" Y="0552.05" />
+      <regionPoint X="0468.86" Y="0593.17" />
+      <regionPoint X="0401.43" Y="0709.74" />
+      <regionPoint X="0379.14" Y="0702.88" />
+      <regionPoint X="0349.43" Y="0689.74" />
+      <regionPoint X="0311.14" Y="0662.88" />
+      <regionPoint X="0283.71" Y="0631.45" />
+      <regionPoint X="0262.57" Y="0593.17" />
+      <regionPoint X="0252.19" Y="0550.84" />
     </Points>
     <Adjacents count="4">
       <adjacent value="B9C" />
@@ -1576,17 +1576,18 @@
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0497.92" Y="0410.76" />
-    <Points count="10">
-      <regionPoint X="0374.15" Y="0343.14" />
-      <regionPoint X="0415.81" Y="0325.63" />
-      <regionPoint X="0453.85" Y="0315.37" />
-      <regionPoint X="0499.13" Y="0311.74" />
-      <regionPoint X="0535.96" Y="0315.97" />
-      <regionPoint X="0579.43" Y="0327.44" />
-      <regionPoint X="0613.25" Y="0343.14" />
-      <regionPoint X="0517.85" Y="0507.97" />
-      <regionPoint X="0470.15" Y="0507.37" />
-      <regionPoint X="0373.55" Y="0343.14" />
+    <Points count="11">
+      <regionPoint X="0374.15" Y="0344.35" />
+      <regionPoint X="0404.29" Y="0328.59" />
+      <regionPoint X="0432.86" Y="0319.45" />
+      <regionPoint X="0464.29" Y="0313.74" />
+      <regionPoint X="0494.57" Y="0311.45" />
+      <regionPoint X="0536.86" Y="0316.02" />
+      <regionPoint X="0564.86" Y="0322.31" />
+      <regionPoint X="0591.71" Y="0332.59" />
+      <regionPoint X="0614.57" Y="0344.02" />
+      <regionPoint X="0519.14" Y="0509.17" />
+      <regionPoint X="0468.94" Y="0508.57" />
     </Points>
     <Adjacents count="4">
       <adjacent value="B2C" />
@@ -1599,17 +1600,18 @@
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0629.73" Y="0476.36" />
-    <Points count="10">
-      <regionPoint X="0612.08" Y="0343.74" />
-      <regionPoint X="0651.93" Y="0370.31" />
-      <regionPoint X="0677.29" Y="0398.08" />
-      <regionPoint X="0699.63" Y="0428.88" />
-      <regionPoint X="0718.95" Y="0467.52" />
-      <regionPoint X="0731.02" Y="0513.40" />
-      <regionPoint X="0735.25" Y="0549.03" />
-      <regionPoint X="0543.25" Y="0551.44" />
-      <regionPoint X="0518.49" Y="0507.37" />
-      <regionPoint X="0612.68" Y="0342.54" />
+    <Points count="11">
+      <regionPoint X="0519.14" Y="0509.17" />
+      <regionPoint X="0614.57" Y="0344.02" />
+      <regionPoint X="0634.71" Y="0357.17" />
+      <regionPoint X="0661.57" Y="0380.59" />
+      <regionPoint X="0683.86" Y="0405.74" />
+      <regionPoint X="0702.71" Y="0433.17" />
+      <regionPoint X="0720.43" Y="0472.02" />
+      <regionPoint X="0728.43" Y="0498.31" />
+      <regionPoint X="0733.57" Y="0526.88" />
+      <regionPoint X="0735.29" Y="0552.59" />
+      <regionPoint X="0543.29" Y="0552.02" />
     </Points>
     <Adjacents count="4">
       <adjacent value="B3C" />
@@ -1622,22 +1624,27 @@
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0729.35" Y="0691.00" />
-    <Points count="15">
-      <regionPoint X="0585.89" Y="0709.11" />
-      <regionPoint X="0624.53" Y="0697.04" />
-      <regionPoint X="0646.27" Y="0683.76" />
-      <regionPoint X="0689.74" Y="0649.34" />
-      <regionPoint X="0705.44" Y="0630.02" />
-      <regionPoint X="0725.36" Y="0589.57" />
-      <regionPoint X="0734.42" Y="0549.72" />
-      <regionPoint X="0863.02" Y="0549.11" />
-      <regionPoint X="0857.59" Y="0584.74" />
-      <regionPoint X="0840.68" Y="0632.44" />
-      <regionPoint X="0806.87" Y="0687.38" />
-      <regionPoint X="0761.59" Y="0735.08" />
-      <regionPoint X="0703.02" Y="0771.91" />
-      <regionPoint X="0636.61" Y="0794.85" />
-      <regionPoint X="0587.10" Y="0707.91" />
+    <Points count="20">
+      <regionPoint X="0587.29" Y="0710.56" />
+      <regionPoint X="0606.71" Y="0705.42" />
+      <regionPoint X="0655.86" Y="0680.85" />
+      <regionPoint X="0655.86" Y="0680.85" />
+      <regionPoint X="0685.57" Y="0655.70" />
+      <regionPoint X="0708.43" Y="0625.99" />
+      <regionPoint X="0723.86" Y="0596.85" />
+      <regionPoint X="0732.43" Y="0573.42" />
+      <regionPoint X="0735.29" Y="0552.59" />
+      <regionPoint X="0865.00" Y="0551.45" />
+      <regionPoint X="0861.00" Y="0576.28" />
+      <regionPoint X="0851.86" Y="0608.85" />
+      <regionPoint X="0837.57" Y="0642.56" />
+      <regionPoint X="0816.43" Y="0678.56" />
+      <regionPoint X="0791.29" Y="0707.70" />
+      <regionPoint X="0755.29" Y="0741.99" />
+      <regionPoint X="0721.57" Y="0764.28" />
+      <regionPoint X="0691.86" Y="0779.13" />
+      <regionPoint X="0663.86" Y="0787.70" />
+      <regionPoint X="0637.00" Y="0795.70" />
     </Points>
     <Adjacents count="4">
       <adjacent value="B1C" />
@@ -1650,12 +1657,11 @@
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0489.50" Y="0756.76" />
-    <Points count="5">
-      <regionPoint X="0402.41" Y="0706.40" />
-      <regionPoint X="0585.35" Y="0708.21" />
-      <regionPoint X="0635.16" Y="0794.25" />
-      <regionPoint X="0349.88" Y="0793.34" />
-      <regionPoint X="0398.78" Y="0707.30" />
+    <Points count="4">
+      <regionPoint X="0401.43" Y="0709.74" />
+      <regionPoint X="0587.29" Y="0710.56" />
+      <regionPoint X="0637.00" Y="0795.70" />
+      <regionPoint X="0350.00" Y="0795.45" />
     </Points>
     <Adjacents count="4">
       <adjacent value="B2C" />
@@ -1668,22 +1674,25 @@
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0257.62" Y="0679.53" />
-    <Points count="15">
-      <regionPoint X="0125.27" Y="0551.53" />
-      <regionPoint X="0251.16" Y="0551.53" />
-      <regionPoint X="0260.22" Y="0585.04" />
-      <regionPoint X="0275.61" Y="0618.55" />
-      <regionPoint X="0295.54" Y="0646.62" />
-      <regionPoint X="0325.42" Y="0674.70" />
-      <regionPoint X="0359.84" Y="0696.44" />
-      <regionPoint X="0397.88" Y="0708.21" />
-      <regionPoint X="0347.16" Y="0791.53" />
-      <regionPoint X="0280.14" Y="0768.89" />
-      <regionPoint X="0217.65" Y="0724.51" />
-      <regionPoint X="0192.29" Y="0699.15" />
-      <regionPoint X="0166.93" Y="0662.93" />
-      <regionPoint X="0139.76" Y="0607.68" />
-      <regionPoint X="0127.08" Y="0551.53" />
+    <Points count="18">
+      <regionPoint X="0349.43" Y="0689.74" />
+      <regionPoint X="0311.14" Y="0662.88" />
+      <regionPoint X="0283.71" Y="0631.45" />
+      <regionPoint X="0283.71" Y="0631.45" />
+      <regionPoint X="0262.57" Y="0593.17" />
+      <regionPoint X="0252.19" Y="0550.84" />
+      <regionPoint X="0125.40" Y="0551.44" />
+      <regionPoint X="0131.71" Y="0586.31" />
+      <regionPoint X="0146.57" Y="0627.45" />
+      <regionPoint X="0163.71" Y="0660.02" />
+      <regionPoint X="0184.86" Y="0691.45" />
+      <regionPoint X="0215.14" Y="0722.88" />
+      <regionPoint X="0253.43" Y="0754.31" />
+      <regionPoint X="0294.00" Y="0777.17" />
+      <regionPoint X="0339.14" Y="0794.31" />
+      <regionPoint X="0350.00" Y="0795.45" />
+      <regionPoint X="0401.43" Y="0709.74" />
+      <regionPoint X="0349.43" Y="0689.74" />
     </Points>
     <Adjacents count="4">
       <adjacent value="B3C" />
@@ -1728,26 +1737,27 @@
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0497.92" Y="0259.22" />
-    <Points count="19">
-      <regionPoint X="0612.68" Y="0343.14" />
-      <regionPoint X="0576.46" Y="0325.63" />
-      <regionPoint X="0540.83" Y="0315.37" />
-      <regionPoint X="0499.78" Y="0311.14" />
-      <regionPoint X="0461.74" Y="0312.95" />
-      <regionPoint X="0417.06" Y="0323.82" />
-      <regionPoint X="0372.98" Y="0343.74" />
-      <regionPoint X="0314.42" Y="0231.44" />
-      <regionPoint X="0354.87" Y="0208.50" />
-      <regionPoint X="0374.19" Y="0200.05" />
-      <regionPoint X="0411.63" Y="0189.78" />
-      <regionPoint X="0461.74" Y="0183.14" />
-      <regionPoint X="0502.19" Y="0181.93" />
-      <regionPoint X="0531.17" Y="0183.14" />
-      <regionPoint X="0557.13" Y="0185.55" />
-      <regionPoint X="0606.04" Y="0198.84" />
-      <regionPoint X="0644.08" Y="0213.33" />
-      <regionPoint X="0676.68" Y="0232.65" />
-      <regionPoint X="0612.68" Y="0342.54" />
+    <Points count="20">
+      <regionPoint X="0679.14" Y="0232.59" />
+      <regionPoint X="0614.57" Y="0344.02" />
+      <regionPoint X="0564.86" Y="0322.31" />
+      <regionPoint X="0536.86" Y="0316.02" />
+      <regionPoint X="0536.86" Y="0316.02" />
+      <regionPoint X="0494.57" Y="0311.45" />
+      <regionPoint X="0464.29" Y="0313.74" />
+      <regionPoint X="0432.86" Y="0319.45" />
+      <regionPoint X="0404.29" Y="0328.59" />
+      <regionPoint X="0374.15" Y="0344.35" />
+      <regionPoint X="0313.77" Y="0231.44" />
+      <regionPoint X="0339.71" Y="0217.74" />
+      <regionPoint X="0372.86" Y="0203.45" />
+      <regionPoint X="0415.14" Y="0191.45" />
+      <regionPoint X="0459.14" Y="0185.17" />
+      <regionPoint X="0497.43" Y="0182.31" />
+      <regionPoint X="0532.29" Y="0186.31" />
+      <regionPoint X="0574.57" Y="0191.45" />
+      <regionPoint X="0620.29" Y="0204.59" />
+      <regionPoint X="0660.29" Y="0222.88" />
     </Points>
     <Adjacents count="4">
       <adjacent value="B6C" />
@@ -1760,23 +1770,27 @@
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0759.77" Y="0405.93" />
-    <Points count="16">
-      <regionPoint X="0678.36" Y="0232.65" />
-      <regionPoint X="0721.23" Y="0261.03" />
-      <regionPoint X="0761.68" Y="0297.86" />
-      <regionPoint X="0793.08" Y="0335.29" />
-      <regionPoint X="0832.32" Y="0403.52" />
-      <regionPoint X="0853.45" Y="0466.91" />
-      <regionPoint X="0863.11" Y="0526.08" />
-      <regionPoint X="0864.92" Y="0550.84" />
-      <regionPoint X="0735.72" Y="0550.84" />
-      <regionPoint X="0733.91" Y="0520.65" />
-      <regionPoint X="0724.85" Y="0480.20" />
-      <regionPoint X="0707.34" Y="0439.14" />
-      <regionPoint X="0681.98" Y="0401.71" />
-      <regionPoint X="0651.79" Y="0369.71" />
-      <regionPoint X="0613.15" Y="0343.14" />
-      <regionPoint X="0678.36" Y="0232.05" />
+    <Points count="20">
+      <regionPoint X="0720.43" Y="0472.02" />
+      <regionPoint X="0702.71" Y="0433.17" />
+      <regionPoint X="0683.86" Y="0405.74" />
+      <regionPoint X="0661.57" Y="0380.59" />
+      <regionPoint X="0634.71" Y="0357.17" />
+      <regionPoint X="0614.57" Y="0344.02" />
+      <regionPoint X="0679.14" Y="0232.59" />
+      <regionPoint X="0702.14" Y="0246.31" />
+      <regionPoint X="0723.86" Y="0262.31" />
+      <regionPoint X="0746.14" Y="0281.17" />
+      <regionPoint X="0774.14" Y="0311.45" />
+      <regionPoint X="0799.86" Y="0342.88" />
+      <regionPoint X="0821.57" Y="0380.02" />
+      <regionPoint X="0839.86" Y="0420.02" />
+      <regionPoint X="0851.29" Y="0452.02" />
+      <regionPoint X="0859.29" Y="0489.17" />
+      <regionPoint X="0863.86" Y="0519.45" />
+      <regionPoint X="0865.00" Y="0551.45" />
+      <regionPoint X="0735.29" Y="0552.59" />
+      <regionPoint X="0733.57" Y="0526.88" />
     </Points>
     <Adjacents count="4">
       <adjacent value="B9C" />
@@ -1789,24 +1803,34 @@
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0816.52" Y="0753.19" />
-    <Points count="17">
-      <regionPoint X="0637.21" Y="0794.25" />
-      <regionPoint X="0702.42" Y="0771.30" />
-      <regionPoint X="0764.00" Y="0732.66" />
-      <regionPoint X="0804.46" Y="0688.59" />
-      <regionPoint X="0840.08" Y="0633.04" />
-      <regionPoint X="0857.59" Y="0585.94" />
-      <regionPoint X="0863.62" Y="0551.53" />
-      <regionPoint X="0980.15" Y="0550.93" />
-      <regionPoint X="0973.51" Y="0595.00" />
-      <regionPoint X="0951.17" Y="0657.79" />
-      <regionPoint X="0927.02" Y="0704.89" />
-      <regionPoint X="0891.40" Y="0752.59" />
-      <regionPoint X="0843.10" Y="0801.49" />
-      <regionPoint X="0786.95" Y="0839.53" />
-      <regionPoint X="0730.79" Y="0867.30" />
-      <regionPoint X="0684.97" Y="0879.38" />
-      <regionPoint X="0636.07" Y="0792.44" />
+    <Points count="27">
+      <regionPoint X="0865.00" Y="0551.45" />
+      <regionPoint X="0980.43" Y="0550.88" />
+      <regionPoint X="0980.22" Y="0558.78" />
+      <regionPoint X="0977.57" Y="0583.13" />
+      <regionPoint X="0968.43" Y="0616.85" />
+      <regionPoint X="0955.29" Y="0652.28" />
+      <regionPoint X="0946.14" Y="0673.42" />
+      <regionPoint X="0922.71" Y="0714.56" />
+      <regionPoint X="0903.29" Y="0741.99" />
+      <regionPoint X="0879.29" Y="0769.99" />
+      <regionPoint X="0858.71" Y="0790.56" />
+      <regionPoint X="0833.00" Y="0812.85" />
+      <regionPoint X="0802.14" Y="0832.28" />
+      <regionPoint X="0774.71" Y="0848.28" />
+      <regionPoint X="0747.29" Y="0861.99" />
+      <regionPoint X="0715.86" Y="0872.85" />
+      <regionPoint X="0685.20" Y="0880.93" />
+      <regionPoint X="0637.00" Y="0795.70" />
+      <regionPoint X="0668.50" Y="0784.76" />
+      <regionPoint X="0699.50" Y="0772.76" />
+      <regionPoint X="0725.50" Y="0759.76" />
+      <regionPoint X="0762.50" Y="0734.76" />
+      <regionPoint X="0791.29" Y="0707.70" />
+      <regionPoint X="0816.43" Y="0678.56" />
+      <regionPoint X="0833.50" Y="0648.76" />
+      <regionPoint X="0849.50" Y="0615.76" />
+      <regionPoint X="0858.50" Y="0585.76" />
     </Points>
     <Adjacents count="4">
       <adjacent value="B1M" />
@@ -1819,12 +1843,11 @@
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0488.50" Y="0839.76" />
-    <Points count="5">
-      <regionPoint X="0351.69" Y="0793.34" />
-      <regionPoint X="0634.25" Y="0794.25" />
-      <regionPoint X="0684.97" Y="0880.29" />
-      <regionPoint X="0304.59" Y="0881.19" />
-      <regionPoint X="0348.97" Y="0792.44" />
+    <Points count="4">
+      <regionPoint X="0350.00" Y="0795.45" />
+      <regionPoint X="0637.00" Y="0795.70" />
+      <regionPoint X="0685.20" Y="0880.93" />
+      <regionPoint X="0305.50" Y="0881.76" />
     </Points>
     <Adjacents count="4">
       <adjacent value="B2M" />
@@ -1837,23 +1860,28 @@
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0164.04" Y="0746.55" />
-    <Points count="16">
-      <regionPoint X="0009.35" Y="0553.34" />
-      <regionPoint X="0125.27" Y="0552.44" />
-      <regionPoint X="0135.24" Y="0595.91" />
-      <regionPoint X="0156.07" Y="0647.53" />
-      <regionPoint X="0195.01" Y="0701.87" />
-      <regionPoint X="0233.05" Y="0738.10" />
-      <regionPoint X="0279.24" Y="0768.89" />
-      <regionPoint X="0348.07" Y="0792.44" />
-      <regionPoint X="0301.88" Y="0879.38" />
-      <regionPoint X="0253.88" Y="0864.89" />
-      <regionPoint X="0202.25" Y="0840.44" />
-      <regionPoint X="0159.69" Y="0811.45" />
-      <regionPoint X="0101.73" Y="0755.30" />
-      <regionPoint X="0051.01" Y="0677.42" />
-      <regionPoint X="0023.84" Y="0607.68" />
-      <regionPoint X="0012.07" Y="0550.62" />
+    <Points count="21">
+      <regionPoint X="0305.50" Y="0881.76" />
+      <regionPoint X="0350.00" Y="0795.45" />
+      <regionPoint X="0350.00" Y="0795.45" />
+      <regionPoint X="0294.00" Y="0777.17" />
+      <regionPoint X="0253.43" Y="0754.31" />
+      <regionPoint X="0215.14" Y="0722.88" />
+      <regionPoint X="0184.86" Y="0691.45" />
+      <regionPoint X="0163.71" Y="0660.02" />
+      <regionPoint X="0131.71" Y="0586.31" />
+      <regionPoint X="0125.40" Y="0552.05" />
+      <regionPoint X="0125.40" Y="0552.05" />
+      <regionPoint X="0010.08" Y="0552.05" />
+      <regionPoint X="0013.50" Y="0579.76" />
+      <regionPoint X="0024.50" Y="0620.76" />
+      <regionPoint X="0048.50" Y="0676.76" />
+      <regionPoint X="0071.50" Y="0715.76" />
+      <regionPoint X="0096.50" Y="0749.76" />
+      <regionPoint X="0134.50" Y="0790.76" />
+      <regionPoint X="0176.50" Y="0823.76" />
+      <regionPoint X="0211.50" Y="0845.76" />
+      <regionPoint X="0256.50" Y="0867.76" />
     </Points>
     <Adjacents count="4">
       <adjacent value="B3M" />
@@ -1899,28 +1927,30 @@
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0499.74" Y="0134.23" />
-    <Points count="21">
-      <regionPoint X="0257.02" Y="0131.22" />
-      <regionPoint X="0308.94" Y="0105.86" />
-      <regionPoint X="0368.11" Y="0085.33" />
-      <regionPoint X="0426.08" Y="0072.65" />
-      <regionPoint X="0465.92" Y="0069.63" />
-      <regionPoint X="0525.70" Y="0069.03" />
-      <regionPoint X="0580.04" Y="0075.67" />
-      <regionPoint X="0616.87" Y="0082.31" />
-      <regionPoint X="0657.32" Y="0096.20" />
-      <regionPoint X="0702.00" Y="0114.31" />
-      <regionPoint X="0736.62" Y="0133.63" />
-      <regionPoint X="0678.05" Y="0231.44" />
-      <regionPoint X="0639.41" Y="0210.91" />
-      <regionPoint X="0608.62" Y="0199.44" />
-      <regionPoint X="0556.69" Y="0186.76" />
-      <regionPoint X="0502.35" Y="0181.93" />
-      <regionPoint X="0464.92" Y="0183.14" />
-      <regionPoint X="0419.64" Y="0189.78" />
-      <regionPoint X="0374.96" Y="0201.86" />
-      <regionPoint X="0313.98" Y="0230.84" />
-      <regionPoint X="0256.62" Y="0131.82" />
+    <Points count="23">
+      <regionPoint X="0737.30" Y="0134.31" />
+      <regionPoint X="0679.14" Y="0232.59" />
+      <regionPoint X="0679.14" Y="0232.59" />
+      <regionPoint X="0620.29" Y="0204.59" />
+      <regionPoint X="0574.57" Y="0191.45" />
+      <regionPoint X="0532.29" Y="0186.31" />
+      <regionPoint X="0497.43" Y="0182.31" />
+      <regionPoint X="0459.14" Y="0185.17" />
+      <regionPoint X="0415.14" Y="0191.45" />
+      <regionPoint X="0372.86" Y="0203.45" />
+      <regionPoint X="0313.77" Y="0231.44" />
+      <regionPoint X="0256.42" Y="0131.82" />
+      <regionPoint X="0288.72" Y="0114.88" />
+      <regionPoint X="0329.87" Y="0097.17" />
+      <regionPoint X="0383.01" Y="0081.17" />
+      <regionPoint X="0425.87" Y="0073.17" />
+      <regionPoint X="0466.44" Y="0070.31" />
+      <regionPoint X="0501.87" Y="0068.02" />
+      <regionPoint X="0543.58" Y="0070.31" />
+      <regionPoint X="0584.15" Y="0076.02" />
+      <regionPoint X="0629.30" Y="0086.88" />
+      <regionPoint X="0669.87" Y="0100.59" />
+      <regionPoint X="0712.15" Y="0119.45" />
     </Points>
     <Adjacents count="4">
       <adjacent value="B6M" />
@@ -1933,25 +1963,33 @@
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0873.27" Y="0338.31" />
-    <Points count="18">
-      <regionPoint X="0737.53" Y="0133.63" />
-      <regionPoint X="0793.08" Y="0171.06" />
-      <regionPoint X="0844.40" Y="0216.35" />
-      <regionPoint X="0890.28" Y="0270.08" />
-      <regionPoint X="0918.66" Y="0315.37" />
-      <regionPoint X="0945.23" Y="0369.10" />
-      <regionPoint X="0967.57" Y="0438.54" />
-      <regionPoint X="0977.83" Y="0496.50" />
-      <regionPoint X="0980.85" Y="0551.44" />
-      <regionPoint X="0865.53" Y="0551.44" />
-      <regionPoint X="0861.30" Y="0498.91" />
-      <regionPoint X="0846.21" Y="0437.33" />
-      <regionPoint X="0821.45" Y="0378.16" />
-      <regionPoint X="0791.87" Y="0331.67" />
-      <regionPoint X="0755.04" Y="0290.01" />
-      <regionPoint X="0710.36" Y="0251.97" />
-      <regionPoint X="0678.36" Y="0230.84" />
-      <regionPoint X="0736.92" Y="0132.42" />
+    <Points count="26">
+      <regionPoint X="0865.00" Y="0551.45" />
+      <regionPoint X="0863.86" Y="0519.45" />
+      <regionPoint X="0859.29" Y="0489.17" />
+      <regionPoint X="0851.29" Y="0452.02" />
+      <regionPoint X="0839.86" Y="0420.02" />
+      <regionPoint X="0821.57" Y="0380.02" />
+      <regionPoint X="0799.86" Y="0342.88" />
+      <regionPoint X="0774.14" Y="0311.45" />
+      <regionPoint X="0774.14" Y="0311.45" />
+      <regionPoint X="0723.86" Y="0262.31" />
+      <regionPoint X="0702.14" Y="0246.31" />
+      <regionPoint X="0679.14" Y="0232.59" />
+      <regionPoint X="0737.30" Y="0134.31" />
+      <regionPoint X="0765.57" Y="0152.02" />
+      <regionPoint X="0792.43" Y="0169.74" />
+      <regionPoint X="0821.00" Y="0194.31" />
+      <regionPoint X="0853.00" Y="0225.74" />
+      <regionPoint X="0883.29" Y="0261.74" />
+      <regionPoint X="0907.86" Y="0297.74" />
+      <regionPoint X="0930.71" Y="0338.88" />
+      <regionPoint X="0949.57" Y="0382.88" />
+      <regionPoint X="0959.86" Y="0412.59" />
+      <regionPoint X="0970.71" Y="0453.17" />
+      <regionPoint X="0977.57" Y="0496.02" />
+      <regionPoint X="0979.29" Y="0531.45" />
+      <regionPoint X="0980.43" Y="0550.88" />
     </Points>
     <Adjacents count="4">
       <adjacent value="B9M" />
@@ -1964,14 +2002,13 @@
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0495.00" Y="0552.03" />
-    <Points count="7">
-      <regionPoint X="0469.42" Y="0508.06" />
-      <regionPoint X="0516.52" Y="0507.15" />
-      <regionPoint X="0541.88" Y="0550.62" />
-      <regionPoint X="0517.42" Y="0593.19" />
-      <regionPoint X="0466.71" Y="0590.47" />
-      <regionPoint X="0446.78" Y="0551.53" />
-      <regionPoint X="0468.52" Y="0506.25" />
+    <Points count="6">
+      <regionPoint X="0467.29" Y="0594.31" />
+      <regionPoint X="0519.86" Y="0594.31" />
+      <regionPoint X="0544.43" Y="0550.88" />
+      <regionPoint X="0517.57" Y="0508.02" />
+      <regionPoint X="0470.71" Y="0508.59" />
+      <regionPoint X="0444.43" Y="0552.59" />
     </Points>
     <Adjacents count="0" />
   </Territory>
@@ -2002,19 +2039,23 @@
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0059.16" Y="0834.10" />
-    <Points count="12">
-      <regionPoint X="0305.50" Y="0879.38" />
-      <regionPoint X="0304.59" Y="0889.34" />
-      <regionPoint X="0001.20" Y="0886.62" />
-      <regionPoint X="0010.25" Y="0550.62" />
-      <regionPoint X="0018.41" Y="0597.72" />
-      <regionPoint X="0041.05" Y="0660.21" />
-      <regionPoint X="0068.22" Y="0710.93" />
-      <regionPoint X="0110.78" Y="0767.98" />
-      <regionPoint X="0158.78" Y="0810.55" />
-      <regionPoint X="0204.97" Y="0842.25" />
-      <regionPoint X="0256.59" Y="0866.70" />
-      <regionPoint X="0303.69" Y="0880.29" />
+    <Points count="16">
+      <regionPoint X="0010.08" Y="0552.05" />
+      <regionPoint X="0000.50" Y="0550.76" />
+      <regionPoint X="0000.50" Y="0886.76" />
+      <regionPoint X="0305.50" Y="0888.76" />
+      <regionPoint X="0305.50" Y="0881.76" />
+      <regionPoint X="0280.50" Y="0875.76" />
+      <regionPoint X="0247.50" Y="0863.76" />
+      <regionPoint X="0216.50" Y="0849.76" />
+      <regionPoint X="0176.50" Y="0823.76" />
+      <regionPoint X="0143.50" Y="0798.76" />
+      <regionPoint X="0115.50" Y="0771.76" />
+      <regionPoint X="0084.50" Y="0735.76" />
+      <regionPoint X="0055.50" Y="0691.76" />
+      <regionPoint X="0036.50" Y="0651.76" />
+      <regionPoint X="0020.50" Y="0606.76" />
+      <regionPoint X="0013.50" Y="0579.76" />
     </Points>
     <Adjacents count="1">
       <adjacent value="B3L" />
@@ -2260,18 +2301,18 @@
     </Points>
     <Adjacents count="0" />
   </Territory>
-   <Territory value="AmbushRandomEvent">
-      <Parent value="Main" />
-      <Type value="Battle" />
-      <CenterPoint X="0076.29" Y="0226.88" />
-      <Points count="4">
-         <regionPoint X="0038.00" Y="0206.31" />
-         <regionPoint X="0112.29" Y="0206.31" />
-         <regionPoint X="0112.29" Y="0242.88" />
-         <regionPoint X="0038.00" Y="0242.88" />
-      </Points>
-      <Adjacents count="0" />
-   </Territory>
+  <Territory value="AmbushRandomEvent">
+    <Parent value="Main" />
+    <Type value="Battle" />
+    <CenterPoint X="0076.29" Y="0226.88" />
+    <Points count="4">
+      <regionPoint X="0038.00" Y="0206.31" />
+      <regionPoint X="0112.29" Y="0206.31" />
+      <regionPoint X="0112.29" Y="0242.88" />
+      <regionPoint X="0038.00" Y="0242.88" />
+    </Points>
+    <Adjacents count="0" />
+  </Territory>
   <Territory value="Spotting">
     <Parent value="Main" />
     <Type value="Battle" />
@@ -2353,6 +2394,19 @@
       <regionPoint X="0948.58" Y="0206.31" />
       <regionPoint X="0948.58" Y="0243.45" />
       <regionPoint X="0874.87" Y="0243.45" />
+    </Points>
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="ReturnToSpotting">
+    <Parent value="Main" />
+    <Type value="Battle" />
+    <CenterPoint X="0958.50" Y="0284.76" />
+    <Points count="5">
+      <regionPoint X="0917.33" Y="0264.03" />
+      <regionPoint X="0994.67" Y="0264.03" />
+      <regionPoint X="0994.67" Y="0296.69" />
+      <regionPoint X="0917.33" Y="0298.03" />
+      <regionPoint X="0916.67" Y="0264.69" />
     </Points>
     <Adjacents count="0" />
   </Territory>

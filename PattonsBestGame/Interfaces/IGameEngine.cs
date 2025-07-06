@@ -85,6 +85,7 @@ namespace Pattons_Best
       EnemyAction,
       FriendlyAction,
       RandomEvent,
+      BackToSpotting,
       Error
    };
    [Serializable]
@@ -285,6 +286,7 @@ namespace Pattons_Best
       BattleRoundSequenceCollateralDamageCheck,
       BattleRoundSequenceFriendlyAction,
       BattleRoundSequenceRandomEvent,
+      BattleRoundSequenceBackToSpotting,
 
       BattleRoundSequenceShermanKilled,
       BattleRoundSequenceEnemyArtilleryRoll,

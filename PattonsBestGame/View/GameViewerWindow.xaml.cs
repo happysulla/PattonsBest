@@ -1024,9 +1024,16 @@ namespace Pattons_Best
                   continue;
                elements.Add(ui);
             }
+            if (BattlePhase.BackToSpotting == gi.BattlePhase)
+            {
+               foreach (IMapItem mi in gi.CrewActions)
+               {
+                  Button? b = myTankButtons.Find(mi.Name);
+                  if (null != b)
+                     elements.Add(b);
+               }
+            }
          }
-         foreach (UIElement ui1 in elements)
-            myCanvasTank.Children.Remove(ui1);
          //-------------------------------------------------------
          if (GamePhase.UnitTest == gi.GamePhase)
             return true;
