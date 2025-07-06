@@ -271,9 +271,20 @@ namespace Pattons_Best
       BattleRoundSequenceShermanToHitRoll,
       BattleRoundSequenceShermanSkipRateOfFire,
       BattleRoundSequenceShermanToKillRoll,
-      BattleRoundSequenceFireMachineGun,
+
+      BattleRoundSequenceFireAaMg,
+      BattleRoundSequenceFireBowMg,
+      BattleRoundSequenceFireCoaxialMg,
+      BattleRoundSequenceFireSubMg,
+      BattleRoundSequenceFireMgSkip,
+      BattleRoundSequenceShermanFiringMachineGun,
+      BattleRoundSequenceFireMachineGunRoll,
+      BattleRoundSequenceFireMachineGunRollEnd,
 
       BattleRoundSequenceEnemyAction,
+      BattleRoundSequenceCollateralDamageCheck,
+      BattleRoundSequenceFriendlyAction,
+      BattleRoundSequenceRandomEvent,
 
       BattleRoundSequenceShermanKilled,
       BattleRoundSequenceEnemyArtilleryRoll,

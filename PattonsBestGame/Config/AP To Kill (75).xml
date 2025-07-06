@@ -299,7 +299,7 @@
                      </TableCell>
                      <TableCell TextAlignment='Center' Background='DarkSeaGreen'>
                         <Paragraph>
-                           <Run Text=' '></Run>
+                           <Run Text=' '>100</Run>
                            <LineBreak/>
                         </Paragraph>
                      </TableCell>

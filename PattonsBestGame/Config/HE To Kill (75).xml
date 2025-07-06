@@ -395,7 +395,6 @@
                      <TableCell ColumnSpan='3' TextAlignment='Center' BorderBrush='Black' BorderThickness='1'>
                         <Paragraph>
                            <Run>CRITICAL HIT</Run>
-                           <Run Typography.Variants='Superscript'>3</Run>
                         </Paragraph>
                      </TableCell>
                   </TableRow>

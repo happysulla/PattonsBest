@@ -321,6 +321,7 @@ namespace Pattons_Best
             case GameAction.PreparationsHatches:
             case GameAction.PreparationsGunLoad:
             case GameAction.PreparationsGunLoadSelect:
+            case GameAction.BattleRoundSequenceStart:
             case GameAction.UpdateTankCard:
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
@@ -2684,17 +2685,24 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): ConductCrewAction: selectedMapItem=null for button.Name=" + button.Name);
                return;
             }
-            if( true == myGameInstance.Targets.Contains(selectedMapItem))
+            if( (CrewActionPhase.TankMainGunFire == myGameInstance.CrewActionPhase) || (CrewActionPhase.TankMgFire == myGameInstance.CrewActionPhase) )
             {
-               myGameInstance.Target = selectedMapItem;
-               selectedMapItem = null;
-               GameAction outAction = GameAction.BattleRoundSequenceShermanFiringMainGun;
-               myGameEngine.PerformAction(ref myGameInstance, ref outAction);
-            }
-            foreach (IMapItem mi in myGameInstance.Targets)
-            {
-               foreach (Button b in myBattleButtons)
-                  b.BorderThickness = new Thickness(0);
+               if (true == myGameInstance.Targets.Contains(selectedMapItem))
+               {
+                  myGameInstance.Target = selectedMapItem;
+                  selectedMapItem = null;
+                  foreach (IMapItem mi in myGameInstance.Targets)
+                  {
+                     foreach (Button b in myBattleButtons)
+                        b.BorderThickness = new Thickness(0);
+                  }
+                  GameAction outAction = GameAction.Error;
+                  if (CrewActionPhase.TankMainGunFire == myGameInstance.CrewActionPhase)
+                     outAction = GameAction.BattleRoundSequenceShermanFiringMainGun;
+                  else
+                     outAction = GameAction.BattleRoundSequenceShermanFiringMachineGun;
+                  myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+               }
             }
          }
          e.Handled = true;

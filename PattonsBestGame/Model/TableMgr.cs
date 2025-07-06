@@ -16,6 +16,9 @@ namespace Pattons_Best
 {
    public class TableMgr
    {
+      public const int NO_CHANCE = +120;
+      public const int KIA = -100;
+      public const int FN_ERROR = -1000;
       public static ICombatCalanderEntries theCombatCalendarEntries = new CombatCalendarEntries();
       public static int[,] theExits = new int[10, 10];
       //public static int[,,,] theApToKills = new int[3,3,3,2]; // armor class, facing, range, T/H
@@ -2238,19 +2241,19 @@ namespace Pattons_Best
       //-------------------------------------------
       public static double GetEnemyToKillNumberInfantry(IGameInstance gi, IMapItem mi, char sector, char range)
       {
-         double toKillNum = -1000.0;
+         double toKillNum = 0;
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberInfantry(): unknown enemyUnit=" + mi.Name);
-            return toKillNum;
+            return FN_ERROR;
          }
          //----------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberInfantry(): lastReport=null");
-            return toKillNum;
+            return FN_ERROR;
          }
          //----------------------------------------------------
          if ( (EnumScenario.Advance == lastReport.Scenario) || (EnumScenario.Counterattack == lastReport.Scenario) )
@@ -2295,7 +2298,7 @@ namespace Pattons_Best
                   break;
                default:
                   Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberInfantry(): Advance - reached default with enemyUnit=" + enemyUnit);
-                  return toKillNum;
+                  return FN_ERROR;
             }
          }
          else if (EnumScenario.Battle == lastReport.Scenario)
@@ -2335,20 +2338,20 @@ namespace Pattons_Best
                   break;
                default:
                   Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberInfantry(): Battle - reached default with enemyUnit=" + enemyUnit);
-                  return toKillNum;
+                  return FN_ERROR;
             }
          }
          else
          {
             Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberInfantry():  reached default with scearno=" + lastReport.Scenario);
-            return toKillNum;
+            return FN_ERROR;
          }
          //------------------------------------
          int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
          if (numSmokeMarkers < 0)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): GetSmokeCount() returned error");
-            return toKillNum;
+            return FN_ERROR;
          }
          if ( 0 < numSmokeMarkers)
             toKillNum = toKillNum * numSmokeMarkers * 0.5;
@@ -2360,7 +2363,7 @@ namespace Pattons_Best
       }
       public static double GetEnemyToKillNumberTank(IGameInstance gi, IMapItem mi, char sector, char range)
       {
-         double toKillNum = -1000.0;
+         double toKillNum = 0.0;
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
@@ -2431,7 +2434,7 @@ namespace Pattons_Best
                   break;
                default:
                   Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): Advance - reached default with enemyUnit=" + enemyUnit);
-                  return toKillNum;
+                  return FN_ERROR;
             }
          }
          else if (EnumScenario.Battle == lastReport.Scenario)
@@ -2482,20 +2485,20 @@ namespace Pattons_Best
                   break;
                default:
                   Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): Advance - reached default with enemyUnit=" + enemyUnit);
-                  return toKillNum;
+                  return FN_ERROR;
             }
          }
          else 
          {
             Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): reached default scenario=" + lastReport.Scenario);
-            return toKillNum;
+            return FN_ERROR;
          }
          //------------------------------------
          int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
          if (numSmokeMarkers < 0 )
          {
             Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): GetSmokeCount() returned error");
-            return toKillNum;
+            return FN_ERROR;
          }
          if (0 < numSmokeMarkers)
             toKillNum = toKillNum * numSmokeMarkers * 0.5;
@@ -2586,7 +2589,7 @@ namespace Pattons_Best
          if ("ERROR" == enemyUnit)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): unknown enemyUnit=" + mi.Name);
-            return -1000;
+            return FN_ERROR;
          }
          if( false == gi.FirstShots.ContainsKey(mi.Name))
          {
@@ -2616,7 +2619,7 @@ namespace Pattons_Best
                else
                {
                   Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): 1-unknown range=" + range);
-                  return -1000;
+                  return FN_ERROR;
                }
             }
             else // acquired 1 marker
@@ -2639,7 +2642,7 @@ namespace Pattons_Best
                else
                {
                   Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): 2-unknown range=" + range);
-                  return -1000;
+                  return FN_ERROR;
                }
             }
          }
@@ -2653,20 +2656,20 @@ namespace Pattons_Best
       }
       public static double GetEnemyToHitNumberYourTank(IGameInstance gi, IMapItem mi, char sector, char range)
       {
-         double toHitNum = -1000.0;
+         double toHitNum = 0.0;
          //----------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): lastReport=null");
-            return toHitNum;
+            return FN_ERROR;
          }
          //----------------------------------------------------
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): unknown enemyUnit=" + mi.Name);
-            return toHitNum;
+            return FN_ERROR;
          }
          switch (enemyUnit)
          {
@@ -2678,7 +2681,10 @@ namespace Pattons_Best
                else if ('L' == range)
                   toHitNum = 34;
                else
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): unknown enemyUnit=" + enemyUnit);
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): unknown range=" + range.ToString());
+                  return FN_ERROR;
+               }
                break;
             case "Pak40":
             case "SPG":
@@ -2697,7 +2703,10 @@ namespace Pattons_Best
                else if ('L' == range)
                   toHitNum = 67;
                else
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): unknown enemyUnit=" + enemyUnit);
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): unknown range=" + range.ToString());
+                  return FN_ERROR;
+               }
                break;
             case "ATG":
             case "Pak43":
@@ -2710,18 +2719,21 @@ namespace Pattons_Best
                else if ('L' == range)
                   toHitNum = 79;
                else
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): unknown enemyUnit=" + enemyUnit);
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): unknown range=" + range.ToString());
+                  return FN_ERROR;
+               }
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): Reached Default enemyUnit=" + enemyUnit);
-               return toHitNum;
+               return FN_ERROR;
          }
          //------------------------------------
          int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
          if (numSmokeMarkers < 0)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): GetSmokeCount() returned error");
-            return toHitNum;
+            return FN_ERROR;
          }
          if (0 < numSmokeMarkers)
             toHitNum = toHitNum * numSmokeMarkers * 0.5;
@@ -2824,12 +2836,12 @@ namespace Pattons_Best
       }
       public static double GetEnemyToKillNumberYourTank(IGameInstance gi, IMapItem mi, string facing, char range, string hitLocation)
       {
-         double toKillNum = -1000.0;
+         double toKillNum = 0.0;
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberYourTank(): unknown enemyUnit=" + mi.Name);
-            return toKillNum;
+            return FN_ERROR;
          }
          //----------------------------------------------------
          string gun = "Unknown";
@@ -2862,14 +2874,14 @@ namespace Pattons_Best
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): Reached Default enemyUnit=" + enemyUnit);
-               return toKillNum;
+               return FN_ERROR;
          }
          //----------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberYourTank(): lastReport=null");
-            return toKillNum;
+            return FN_ERROR;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
          int armorclass = 0;
@@ -2904,7 +2916,7 @@ namespace Pattons_Best
          if (null == lastReport)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetExplosionModifier(): lastReport=null");
-            return -1000;
+            return FN_ERROR;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
          //----------------------------------
@@ -3005,7 +3017,7 @@ namespace Pattons_Best
                      break;
                   default:
                      Logger.Log(LogEnum.LE_ERROR, "GetExplosionModifier(): reached default for direction=" + death.myEnemyFireDirection);
-                     return -1000;
+                     return FN_ERROR;
                }
             }
          }
@@ -3209,13 +3221,13 @@ namespace Pattons_Best
          if (null == lastReport)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetBrewUpNumber(): lastReport=null");
-            return -1000;
+            return FN_ERROR;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
          if (null == gi.Death)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetBrewUpNumber(): gi.Death=null");
-            return -1000;
+            return FN_ERROR;
          }
          //-----------------------------------------------
          bool isWetStorage = card.myIsWetStowage;
@@ -3241,7 +3253,7 @@ namespace Pattons_Best
             else
             {
                Logger.Log(LogEnum.LE_ERROR, "GetBrewUpNumber(): reached default for Panzerfaut myChassis=" + card.myChasis);
-               return -1000;
+               return FN_ERROR;
             }
          }
          else // gunfire
@@ -3257,7 +3269,7 @@ namespace Pattons_Best
             else
             {
                Logger.Log(LogEnum.LE_ERROR, "GetBrewUpNumber(): reached default for Panzerfaut myChassis=" + card.myChasis);
-               return -1000;
+               return FN_ERROR;
             }
          }
       }
@@ -3334,14 +3346,14 @@ namespace Pattons_Best
          if (null == lastReport)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetSpottingModifier(): lastReport=null");
-            return -1000;
+            return FN_ERROR;
          }
          //--------------------------------------------------------------
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetSpottingModifier(): unknown enemyUnit=" + mi.Name);
-            return -1000;
+            return FN_ERROR;
          }
          //-------------------------------------------------------
          TankCard card = new TankCard(lastReport.TankCardNum);
@@ -3393,7 +3405,7 @@ namespace Pattons_Best
          if (numSmokeMarkers < 0)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetSpottingModifier(): GetSmokeCount() returned error");
-            return -1000;
+            return FN_ERROR;
          }
          spottingModifer += numSmokeMarkers;
          Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): smoke+" + numSmokeMarkers.ToString() + " enemyUnit=" + enemyUnit + " mod=" + spottingModifer.ToString());
@@ -3427,7 +3439,7 @@ namespace Pattons_Best
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "GetSpottingModifier(): Reached Default enemyUnit=" + enemyUnit);
-               return -1000;
+               return FN_ERROR;
          }
 
          //----------------------------------------------------
@@ -3772,7 +3784,7 @@ namespace Pattons_Best
          if (null == lastReport)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetMovingModifier(): lastReport=null");
-            return -1000;
+            return FN_ERROR;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
          //-------------------------------------------------
@@ -3780,14 +3792,14 @@ namespace Pattons_Best
          if(null == commander)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetMovingModifier(): commander=null");
-            return -1000;
+            return FN_ERROR;
          }
          //-------------------------------------------------
          ICrewMember? driver = gi.GetCrewMember("Driver");
          if (null == driver)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetMovingModifier(): driver=null");
-            return -1000;
+            return FN_ERROR;
          }
          //-------------------------------------------------
          bool isCommanderDirectingMovement = false;
@@ -3966,7 +3978,7 @@ namespace Pattons_Best
          if ( 3 != enemyUnit.TerritoryCurrent.Name.Length)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
-            return -10000;
+            return FN_ERROR;
          }
          char range = enemyUnit.TerritoryCurrent.Name[2];
          //------------------------------------
@@ -3995,13 +4007,13 @@ namespace Pattons_Best
          if (null == commander)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): commander=null");
-            return -10000;
+            return FN_ERROR;
          }
          ICrewMember? gunner = gi.GetCrewMember("Gunner");
          if (null == gunner)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): gunner=null");
-            return -10000;
+            return FN_ERROR;
          }
          //------------------------------------
          if (0 == gi.NumOfShermanShot)
@@ -4032,7 +4044,7 @@ namespace Pattons_Best
             else
             {
                Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
-               return -10000;
+               return FN_ERROR;
             }
          }
          else if (1 < gi.NumOfShermanShot)
@@ -4055,7 +4067,7 @@ namespace Pattons_Best
             else
             {
                Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
-               return -10000;
+               return FN_ERROR;
             }
          }
          //------------------------------------
@@ -4079,7 +4091,7 @@ namespace Pattons_Best
             else
             {
                Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
-               return -10000;
+               return FN_ERROR;
             }
          }
          //------------------------------------
@@ -4136,7 +4148,7 @@ namespace Pattons_Best
                   else
                   {
                      Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
-                     return -10000;
+                     return FN_ERROR;
                   }
                }
                //----------------------------
@@ -4144,7 +4156,7 @@ namespace Pattons_Best
                if ("ERROR" == enemyUnitType)
                {
                   Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): unknown enemyUnit=" + enemyUnit.Name);
-                  return -1000;
+                  return FN_ERROR;
                }
                switch (enemyUnitType)
                {
@@ -4180,7 +4192,7 @@ namespace Pattons_Best
                      else
                      {
                         Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
-                        return -10000;
+                        return FN_ERROR;
                      }
                      break;
                   case "PzVIb": // very large size
@@ -4202,12 +4214,12 @@ namespace Pattons_Best
                      else
                      {
                         Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
-                        return -10000;
+                        return FN_ERROR;
                      }
                      break;
                   default:
                      Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): Reached Default enemyUnitType=" + enemyUnitType);
-                     return -1000;
+                     return FN_ERROR;
                }
                //----------------------------
                if (true == isShermanMoving)
@@ -4237,7 +4249,7 @@ namespace Pattons_Best
                   else
                   {
                      Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
-                     return -10000;
+                     return FN_ERROR;
                   }
                }
                if ((true == enemyUnit.IsBuilding) && (false == enemyUnit.IsVehicle))
@@ -4260,7 +4272,7 @@ namespace Pattons_Best
                   else
                   {
                      Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
-                     return -10000;
+                     return FN_ERROR;
                   }
                }
                if ((true == enemyUnit.IsFortification) && (false == enemyUnit.IsVehicle))
@@ -4283,7 +4295,7 @@ namespace Pattons_Best
                   else
                   {
                      Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
-                     return -10000;
+                     return FN_ERROR;
                   }
                }
             }
@@ -4297,7 +4309,7 @@ namespace Pattons_Best
          if (null == lastReport)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): lastReport=null");
-            return -1000;
+            return FN_ERROR;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
          string guntype = card.myMainGun;
@@ -4305,7 +4317,7 @@ namespace Pattons_Best
          if (3 != enemyUnit.TerritoryCurrent.Name.Length)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
-            return -1000;
+            return FN_ERROR;
          }
          char sector = enemyUnit.TerritoryCurrent.Name[1];
          char range = enemyUnit.TerritoryCurrent.Name[2];
@@ -4314,7 +4326,7 @@ namespace Pattons_Best
          if ("ERROR" == enemyUnitType)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): unknown enemyUnit=" + enemyUnit.Name);
-            return -1000;
+            return FN_ERROR;
          }
          switch (enemyUnitType)
          {
@@ -4338,7 +4350,7 @@ namespace Pattons_Best
                      else
                      {
                         Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): unknown range=" + range.ToString());
-                        return -10000;
+                        return FN_ERROR;
                      }
                   }
                   else if ("Area" == gi.ShermanTypeOfFire)
@@ -4352,13 +4364,13 @@ namespace Pattons_Best
                      else
                      {
                         Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): unknown range=" + range.ToString());
-                        return -1000;
+                        return FN_ERROR;
                      }
                   }
                   else
                   {
                      Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): ShermanTypeOfFire=" + gi.ShermanTypeOfFire);
-                     return -1000;
+                     return FN_ERROR;
                   }
                }
                else if ("76L" == guntype)
@@ -4374,7 +4386,7 @@ namespace Pattons_Best
                      else
                      {
                         Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): unknown range=" + range.ToString());
-                        return -1000;
+                        return FN_ERROR;
                      }
                   }
                   else if ("Area" == gi.ShermanTypeOfFire)
@@ -4388,19 +4400,19 @@ namespace Pattons_Best
                      else
                      {
                         Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): unknown range=" + range.ToString());
-                        return -1000;
+                        return FN_ERROR;
                      }
                   }
                   else
                   {
                      Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): ShermanTypeOfFire=" + gi.ShermanTypeOfFire);
-                     return -1000;
+                     return FN_ERROR;
                   }
                }
                else
                {
                   Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): unknown guntype=" + guntype);
-                  return -1000;
+                  return FN_ERROR;
                }
                break;
             case "PSW":
@@ -4429,7 +4441,7 @@ namespace Pattons_Best
                      else
                      {
                         Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): unknown range=" + range.ToString());
-                        return -1000;
+                        return FN_ERROR;
                      }
                   }
                   else if ("Area" == gi.ShermanTypeOfFire)
@@ -4443,7 +4455,7 @@ namespace Pattons_Best
                      else
                      {
                         Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): unknown range=" + range.ToString());
-                        return -1000;
+                        return FN_ERROR;
                      }
                   }
                   else
@@ -4465,7 +4477,7 @@ namespace Pattons_Best
                      else
                      {
                         Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): unknown range=" + range.ToString());
-                        return -1000;
+                        return FN_ERROR;
                      }
                   }
                   else if ("Area" == gi.ShermanTypeOfFire)
@@ -4479,24 +4491,24 @@ namespace Pattons_Best
                      else
                      {
                         Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): unknown range=" + range.ToString());
-                        return -1000;
+                        return FN_ERROR;
                      }
                   }
                   else
                   {
                      Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): ShermanTypeOfFire=" + gi.ShermanTypeOfFire);
-                     return -1000;
+                     return FN_ERROR;
                   }
                }
                else
                {
                   Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): unknown guntype=" + guntype);
-                  return -1000;
+                  return FN_ERROR;
                }
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): 2-Reached Default enemyUnit=" + enemyUnit);
-               return -1000;
+               return FN_ERROR;
          }
          //------------------------------------
          Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitNumber(): 1-base#=" + toHitNum.ToString());
@@ -4504,7 +4516,7 @@ namespace Pattons_Best
          if (numSmokeMarkers < 0)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): GetSmokeCount() returned error");
-            return -1000;
+            return FN_ERROR;
          }
          if (0 < numSmokeMarkers)
             toHitNum = toHitNum * numSmokeMarkers * 0.5;
@@ -4514,10 +4526,10 @@ namespace Pattons_Best
          //------------------------------------
          Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitNumber(): 2-base#=" + toHitNum.ToString());
          int modifier = GetShermanToHitModifier(gi, enemyUnit);
-         if (modifier < -100)
+         if (FN_ERROR == modifier)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): GetShermanToHitModifier() returned error");
-            return -1000;
+            return FN_ERROR;
          }
          toHitNum -= modifier;
          Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitNumber(): 3-base#=" + toHitNum.ToString() + " mod=" + modifier.ToString());
@@ -4531,7 +4543,7 @@ namespace Pattons_Best
          if (null == gunner)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanRateOfFireModifier(): gunner=null");
-            return -1000;
+            return FN_ERROR;
          }
          rateOfFireModifier -= gunner.Rating;
          //-------------------------------------------------
@@ -4539,7 +4551,7 @@ namespace Pattons_Best
          if (null == loader)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanRateOfFireModifier(): loader=null");
-            return -1000;
+            return FN_ERROR;
          }
          rateOfFireModifier -= loader.Rating;
          //-------------------------------------------------
@@ -4561,7 +4573,7 @@ namespace Pattons_Best
                if (null == assistant)
                {
                   Logger.Log(LogEnum.LE_ERROR, "GetShermanRateOfFireModifier(): assistant=null");
-                  return -1000;
+                  return FN_ERROR;
                }
                rateOfFireModifier -= assistant.Rating;
             }
@@ -4574,7 +4586,7 @@ namespace Pattons_Best
          if (null == lastReport)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): lastReport=null");
-            return -1000;
+            return FN_ERROR;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
          //---------------------------------------------------
@@ -4590,7 +4602,7 @@ namespace Pattons_Best
          else
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): reached default guntype=" + card.myMainGun);
-            return -1000;
+            return FN_ERROR;
          }
          rateOfFireNumber -= GetShermanRateOfFireModifier(gi);
          return rateOfFireNumber;
@@ -4601,7 +4613,7 @@ namespace Pattons_Best
          if (null == lastReport)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillInfantryModifier(): lastReport=null");
-            return -1000;
+            return FN_ERROR;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
          //------------------------------------
@@ -4682,7 +4694,7 @@ namespace Pattons_Best
          if (null == lastReport)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillInfantryNumber(): lastReport=null");
-            return -1000;
+            return FN_ERROR;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
          //---------------------------------------------------
@@ -4706,7 +4718,7 @@ namespace Pattons_Best
             else
             {
                Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillInfantryNumber(): hit.myAttackType=" + hit.myAttackType);
-               return -1000;
+               return FN_ERROR;
             }
          }
          else if ("76L" == card.myMainGun)
@@ -4728,20 +4740,20 @@ namespace Pattons_Best
             else
             {
                Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillInfantryNumber(): hit.myAttackType=" + hit.myAttackType);
-               return -1000;
+               return FN_ERROR;
             }
          }
          else
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillInfantryNumber(): card.myMainGun=" + card.myMainGun);
-            return -1000;
+            return FN_ERROR;
          }
          //--------------------------------------
          int modifier = GetShermanToKillInfantryModifier(gi, enemyUnit, hit);
          if( modifier < -100 )
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillInfantryNumber(): GetShermanToKillInfantryModifier() returned error");
-            return -1000;
+            return FN_ERROR;
          }
          if (900 < modifier) // automatic KIA
             return modifier;
@@ -4822,43 +4834,37 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): reached default hitLocation=" + hitLocation);
          return "ERROR";
       }
-      public static int GetShermanToKillApVehicleNumber(IGameInstance gi, IMapItem enemyUnit, ShermanAttack hit, string hitLocation)
+      public static int GetShermanToKill75ApVehicleNumber(IGameInstance gi, IMapItem enemyUnit, ShermanAttack hit, string hitLocation)
       {
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): lastReport=null");
-            return -1000;
-         }
-         TankCard card = new TankCard(lastReport.TankCardNum);
-         if ( ("75" != card.myMainGun) && ("76L" != card.myMainGun) && ("76LL" != card.myMainGun) )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): invald card.myMainGun=" + card.myMainGun);
-            return -1000;
+            return FN_ERROR;
          }
          //---------------------------------------------------
          if (3 != enemyUnit.TerritoryCurrent.Name.Length)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
-            return -1000;
+            return FN_ERROR;
          }
          char range = enemyUnit.TerritoryCurrent.Name[2];
          if( ('C' != range) && ('M' != range) && ('L' != range) )
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): invald range=" + range.ToString());
-            return -1000;
+            return FN_ERROR;
          }
          //---------------------------------------------------
          string facing = GetShermanFireDirection(gi, enemyUnit, hitLocation);
          if( "ERROR" == facing )
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): lastReport=null");
-            return -1000;
+            return FN_ERROR;
          }
          if (("Side" != facing) && ("Front" != facing) && ("Rear" != facing))
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): invald facing=" + facing);
-            return -1000;
+            return FN_ERROR;
          }
          //----------------------------------------------------
 
@@ -4866,105 +4872,1874 @@ namespace Pattons_Best
          if ("ERROR" == enemyUnitType)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): unknown enemyUnit=" + enemyUnit.Name);
-            return -1000;
+            return FN_ERROR;
          }
          //---------------------------------------------------
          int toKillNum = 0;
-         if( false == hit.myIsCriticalHit)
+         if (true == hit.myIsCriticalHit) // CRITICAL HIT
+         {
+            if ("PzV" == enemyUnitType)
+            {
+               if ("Turret" == hitLocation)
+               {
+                  if ('C' == range) toKillNum = 100;
+                  else if ('M' == range) toKillNum = 100;
+                  else toKillNum = 97;
+               }
+               else
+               {
+                  if ('C' == range) toKillNum = 83;
+                  else if ('M' == range) toKillNum = 72;
+                  else toKillNum = 58;
+               }
+            }
+            else if ("PzVIe" == enemyUnitType)
+            {
+               if ('C' == range) toKillNum = 100;
+               else if ('M' == range) toKillNum = 100;
+               else toKillNum = 97;
+            }
+            else if (("PzVIb" == enemyUnitType) || ("TANK" == enemyUnitType))
+            {
+               if ("Turret" == hitLocation)
+               {
+                  if ('C' == range) toKillNum = 83;
+                  else if ('M' == range) toKillNum = 72;
+                  else toKillNum = 58;
+               }
+               else
+               {
+                  toKillNum = NO_CHANCE;
+               }
+            }
+            else
+            {
+               toKillNum = KIA;
+            }
+            return toKillNum;
+         }
+         //---------------------------------------------------
+         switch (enemyUnitType)
+         {
+            case "PzIV":
+               if ("Front" == facing)
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 58;
+                     else if ('M' == range) toKillNum = 42;
+                     else toKillNum = 28;
+                  }
+                  else
+                  {
+                     if ('C' == range) toKillNum = 28;
+                     else if ('M' == range) toKillNum = 17;
+                     else toKillNum = 03;
+                  }
+               }
+               else if ("Side" == facing)
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 83;
+                     else if ('M' == range) toKillNum = 72;
+                     else toKillNum = 58;
+                  }
+                  else
+                  {
+                     if ('C' == range) toKillNum = 92;
+                     else if ('M' == range) toKillNum = 83;
+                     else toKillNum = 72;
+                  }
+               }
+               else  // rear
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 92;
+                     else if ('M' == range) toKillNum = 83;
+                     else toKillNum = 72;
+                  }
+                  else
+                  {
+                     if ('C' == range) toKillNum = 95;
+                     else if ('M' == range) toKillNum = 92;
+                     else toKillNum = 83;
+                  }
+               }
+               break;
+            case "PzV":
+               if ("Front" == facing)
+               {
+                  toKillNum = NO_CHANCE;  // no chance
+               }
+               else if ("Side" == facing)
+               {
+                  if ('C' == range) toKillNum = 58;
+                  else if ('M' == range) toKillNum = 42;
+                  else toKillNum = 28;
+               }
+               else  // rear
+               {
+                  if ('C' == range) toKillNum = 72;
+                  else if ('M' == range) toKillNum = 58;
+                  else toKillNum = 42;
+               }
+               break;
+            case "PzVIe":
+               if ("Front" == facing)
+               {
+                  toKillNum = NO_CHANCE;  // no chance
+               }
+               else if ("Side" == facing)
+               {
+                  if ('C' == range) toKillNum = 28;
+                  else if ('M' == range) toKillNum = 17;
+                  else toKillNum = 08;
+               }
+               else  // rear
+               {
+                  if ('C' == range) toKillNum = 42;
+                  else if ('M' == range) toKillNum = 28;
+                  else toKillNum = 17;
+               }
+               break;
+            case "TANK":
+            case "PzVIb":
+               if ("Front" == facing)
+               {
+                  toKillNum = NO_CHANCE;  // no chance
+               }
+               else if ("Side" == facing)
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 03;
+                     else if ('M' == range) toKillNum = NO_CHANCE;
+                     else toKillNum = NO_CHANCE;
+                  }
+                  else
+                  {
+                     if ('C' == range) toKillNum = 28;
+                     else if ('M' == range) toKillNum = 17;
+                     else toKillNum = 08;
+                  }
+               }
+               else  // rear
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 08;
+                     else if ('M' == range) toKillNum = 03;
+                     else toKillNum = NO_CHANCE;
+                  }
+                  else
+                  {
+                     if ('C' == range) toKillNum = 42;
+                     else if ('M' == range) toKillNum = 28;
+                     else toKillNum = 17;
+                  }
+               }
+               break;
+            case "STG":
+            case "STuGIIIg":
+               if ("Front" == facing)
+               {
+                  if ('C' == range) toKillNum = 28;
+                  else if ('M' == range) toKillNum = 17;
+                  else toKillNum = 08;
+               }
+               else if ("Side" == facing)
+               {
+                  if ('C' == range) toKillNum = 92;
+                  else if ('M' == range) toKillNum = 83;
+                  else toKillNum = 72;
+               }
+               else  // rear
+               {
+                  if ('C' == range) toKillNum = 95;
+                  else if ('M' == range) toKillNum = 92;
+                  else toKillNum = 83;
+               }
+               break;
+            case "MARDERII":
+               if ("Front" == facing)
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 95;
+                     else if ('M' == range) toKillNum = 92;
+                     else toKillNum = 83;
+                  }
+                  else
+                  {
+                     if ('C' == range) toKillNum = 92;
+                     else if ('M' == range) toKillNum = 83;
+                     else toKillNum = 72;
+                  }
+               }
+               else if ("Side" == facing)
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     toKillNum = 95;
+                  }
+                  else
+                  {
+                     if ('C' == range) toKillNum = 95;
+                     else if ('M' == range) toKillNum = 95;
+                     else toKillNum = 92;
+                  }
+               }
+               else  // rear
+               {
+                  toKillNum = 95;
+               }
+               break;
+            case "MARDERIII":
+               if ("Front" == facing)
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 95;
+                     else if ('M' == range) toKillNum = 95;
+                     else toKillNum = 92;
+                  }
+                  else
+                  {
+                     if ('C' == range) toKillNum = 95;
+                     else if ('M' == range) toKillNum = 92;
+                     else toKillNum = 83;
+                  }
+               }
+               else if ("Side" == facing)
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     toKillNum = 95;
+                  }
+                  else
+                  {
+                     if ('C' == range) toKillNum = 95;
+                     else if ('M' == range) toKillNum = 95;
+                     else toKillNum = 92;
+                  }
+               }
+               else  // rear
+               {
+                  toKillNum = KIA;
+               }
+               break;
+            case "JdgPzIV":
+               if ("Front" == facing)
+               {
+                  toKillNum = NO_CHANCE;
+               }
+               else if ("Side" == facing)
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 83;
+                     else if ('M' == range) toKillNum = 72;
+                     else toKillNum = 58;
+                  }
+                  else
+                  {
+                     if ('C' == range) toKillNum = 92;
+                     else if ('M' == range) toKillNum = 83;
+                     else toKillNum = 72;
+                  }
+               }
+               else  // rear
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 92;
+                     else if ('M' == range) toKillNum = 83;
+                     else toKillNum = 72;
+                  }
+                  else
+                  {
+                     if ('C' == range) toKillNum = 95;
+                     else if ('M' == range) toKillNum = 92;
+                     else toKillNum = 83;
+                  }
+               }
+               break;
+            case "JdgPz38t":
+               if ("Front" == facing)
+               {
+                  toKillNum = NO_CHANCE;
+               }
+               else if ("Side" == facing)
+               {
+                  if ('C' == range) toKillNum = 92;
+                  else if ('M' == range) toKillNum = 83;
+                  else toKillNum = 72;
+               }
+               else  // rear
+               {
+                  if ('C' == range) toKillNum = 97;
+                  else if ('M' == range) toKillNum = 92;
+                  else toKillNum = 83;
+               }
+               break;
+            case "PSW":
+            case "SPW":
+               toKillNum = 95;
+               break;
+            case "TRUCK":
+               toKillNum = 75;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): 2-Reached Default enemyUnit=" + enemyUnit);
+               return FN_ERROR;
+         }
+         //--------------------------------------
+         return toKillNum;
+      }
+      public static int GetShermanToKill76ApVehicleNumber(IGameInstance gi, IMapItem enemyUnit, ShermanAttack hit, string hitLocation)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): lastReport=null");
+            return FN_ERROR;
+         }
+         //---------------------------------------------------
+         if (3 != enemyUnit.TerritoryCurrent.Name.Length)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
+            return FN_ERROR;
+         }
+         char range = enemyUnit.TerritoryCurrent.Name[2];
+         if (('C' != range) && ('M' != range) && ('L' != range))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): invald range=" + range.ToString());
+            return FN_ERROR;
+         }
+         //---------------------------------------------------
+         string facing = GetShermanFireDirection(gi, enemyUnit, hitLocation);
+         if ("ERROR" == facing)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): lastReport=null");
+            return FN_ERROR;
+         }
+         if (("Side" != facing) && ("Front" != facing) && ("Rear" != facing))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): invald facing=" + facing);
+            return FN_ERROR;
+         }
+         //----------------------------------------------------
+         string enemyUnitType = enemyUnit.GetEnemyUnit();
+         if ("ERROR" == enemyUnitType)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): unknown enemyUnit=" + enemyUnit.Name);
+            return FN_ERROR;
+         }
+         //---------------------------------------------------
+         int toKillNum = 0;
+         if (true == hit.myIsCriticalHit) // CRITICAL HIT
+         {
+            if ( (("TANK" == enemyUnitType) || ("PzVIb" == enemyUnitType)) && ("Front" == facing) && ("Hull" == hitLocation))
+            {
+               if ('C' == range) toKillNum = 58;
+               else if ('M' == range) toKillNum = 42;
+               else toKillNum = 28;
+            }
+            else
+            {
+               toKillNum = KIA;
+            }
+            return toKillNum;
+         }
+         //---------------------------------------------------
+         switch (enemyUnitType)
+         {
+            case "PzIV":
+               if ("Front" == facing)
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 92;
+                     else if ('M' == range) toKillNum = 83;
+                     else toKillNum = 72;
+                  }
+                  else
+                  {
+                     if ('C' == range) toKillNum = 72;
+                     else if ('M' == range) toKillNum = 58;
+                     else toKillNum = 42;
+                  }
+               }
+               else if ("Side" == facing)
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 95;
+                     else if ('M' == range) toKillNum = 92;
+                     else toKillNum = 83;
+                  }
+                  else
+                  {
+                     if ('C' == range) toKillNum = 95;
+                     else if ('M' == range) toKillNum = 95;
+                     else toKillNum = 92;
+                  }
+               }
+               else  // rear
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 95;
+                     else if ('M' == range) toKillNum = 95;
+                     else toKillNum = 92;
+                  }
+                  else
+                  {
+                     toKillNum = 95;
+                  }
+               }
+               break;
+            case "PzV":
+               if ("Front" == facing)
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 03;
+                     else if ('M' == range) toKillNum = NO_CHANCE;
+                     else toKillNum = NO_CHANCE;
+                  }
+                  else
+                  {
+                     toKillNum = NO_CHANCE;
+                  }
+               }
+               else if ("Side" == facing)
+               {
+                  if ('C' == range) toKillNum = 92;
+                  else if ('M' == range) toKillNum = 83;
+                  else toKillNum = 72;
+               }
+               else  // rear
+               {
+                  if ('C' == range) toKillNum = 95;
+                  else if ('M' == range) toKillNum = 92;
+                  else toKillNum = 83;
+               }
+               break;
+            case "PzVIe":
+               if ("Front" == facing)
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 03;
+                     else if ('M' == range) toKillNum = NO_CHANCE;
+                     else toKillNum = NO_CHANCE;
+                  }
+                  else
+                  {
+                     toKillNum = NO_CHANCE;
+                  }
+               }
+               else if ("Side" == facing)
+               {
+                  if ('C' == range) toKillNum = 72;
+                  else if ('M' == range) toKillNum = 58;
+                  else toKillNum = 42;
+               }
+               else  // rear
+               {
+                  if ('C' == range) toKillNum = 83;
+                  else if ('M' == range) toKillNum = 72;
+                  else toKillNum = 58;
+               }
+               break;
+            case "TANK":
+            case "PzVIb":
+               if ("Front" == facing)
+               {
+                  toKillNum = NO_CHANCE;  // no chance
+               }
+               else if ("Side" == facing)
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 28;
+                     else if ('M' == range) toKillNum = 17;
+                     else toKillNum = 08;
+                  }
+                  else
+                  {
+                     if ('C' == range) toKillNum = 72;
+                     else if ('M' == range) toKillNum = 58;
+                     else toKillNum = 42;
+                  }
+               }
+               else  // rear
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 42;
+                     else if ('M' == range) toKillNum = 28;
+                     else toKillNum = 17;
+                  }
+                  else
+                  {
+                     if ('C' == range) toKillNum = 83;
+                     else if ('M' == range) toKillNum = 72;
+                     else toKillNum = 58;
+                  }
+               }
+               break;
+            case "SPG":
+            case "STuGIIIg":
+               if ("Front" == facing)
+               {
+                  if ('C' == range) toKillNum = 72;
+                  else if ('M' == range) toKillNum = 58;
+                  else toKillNum = 42;
+               }
+               else if ("Side" == facing)
+               {
+                  toKillNum = 83;
+               }
+               else  // rear
+               {
+                  toKillNum = 95;
+               }
+               break;
+            case "MARDERII":
+               toKillNum = 95;
+               break;
+            case "MARDERIII":
+               toKillNum = 95;
+               break;
+            case "JdgPzIV":
+               if ("Front" == facing)
+               {
+                  if ('C' == range) toKillNum = 03;
+                  else if ('M' == range) toKillNum = NO_CHANCE;
+                  else toKillNum = NO_CHANCE;
+               }
+               else if ("Side" == facing)
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 95;
+                     else if ('M' == range) toKillNum = 95;
+                     else toKillNum = 92;
+                  }
+                  else
+                  {
+                     toKillNum = 95;
+                  }
+               }
+               else  // rear
+               {
+                  toKillNum = 95;
+               }
+               break;
+            case "JdgPz38t":
+               if ("Front" == facing)
+               {
+                  if ('C' == range) toKillNum = 03;
+                  else if ('M' == range) toKillNum = NO_CHANCE;
+                  else toKillNum = NO_CHANCE;
+               }
+               else if ("Side" == facing)
+               {
+                  toKillNum = 95;
+               }
+               else  // rear
+               {
+                  toKillNum = 95;
+               }
+               break;
+            case "PSW":
+            case "SPW":
+               toKillNum = 95;
+               break;
+            case "TRUCK":
+               toKillNum = 75;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): 2-Reached Default enemyUnit=" + enemyUnit);
+               return FN_ERROR;
+         }
+         //--------------------------------------
+         return toKillNum;
+      }
+      public static int GetShermanToKill76HvapVehicleNumber(IGameInstance gi, IMapItem enemyUnit, ShermanAttack hit, string hitLocation)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): lastReport=null");
+            return FN_ERROR;
+         }
+         //---------------------------------------------------
+         if (3 != enemyUnit.TerritoryCurrent.Name.Length)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
+            return FN_ERROR;
+         }
+         char range = enemyUnit.TerritoryCurrent.Name[2];
+         if (('C' != range) && ('M' != range) && ('L' != range))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): invald range=" + range.ToString());
+            return FN_ERROR;
+         }
+         //---------------------------------------------------
+         string facing = GetShermanFireDirection(gi, enemyUnit, hitLocation);
+         if ("ERROR" == facing)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): lastReport=null");
+            return FN_ERROR;
+         }
+         if (("Side" != facing) && ("Front" != facing) && ("Rear" != facing))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): invald facing=" + facing);
+            return FN_ERROR;
+         }
+         //----------------------------------------------------
+         string enemyUnitType = enemyUnit.GetEnemyUnit();
+         if ("ERROR" == enemyUnitType)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): unknown enemyUnit=" + enemyUnit.Name);
+            return FN_ERROR;
+         }
+         //---------------------------------------------------
+         int toKillNum = 0;
+         if (true == hit.myIsCriticalHit) // CRITICAL HIT
+         {
+            toKillNum = KIA;
+            return toKillNum;
+         }
+         //---------------------------------------------------
+         switch (enemyUnitType)
+         {
+            case "PzIV":
+               if ("Front" == facing)
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 95;
+                     else if ('M' == range) toKillNum = 95;
+                     else toKillNum = 92;
+                  }
+                  else
+                  {
+                     if ('C' == range) toKillNum = 95;
+                     else if ('M' == range) toKillNum = 95;
+                     else toKillNum = 72;
+                  }
+               }
+               else if ("Side" == facing)
+               {
+                  toKillNum = 95;
+               }
+               else  // rear
+               {
+                  toKillNum = 95;
+               }
+               break;
+            case "PzV":
+               if ("Front" == facing)
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 83;
+                     else if ('M' == range) toKillNum = 42;
+                     else toKillNum = 03;
+                  }
+                  else
+                  {
+                     if ('C' == range) toKillNum = 28;
+                     else if ('M' == range) toKillNum = 03;
+                     else toKillNum = NO_CHANCE;
+                  }
+               }
+               else if ("Side" == facing)
+               {
+                  if ('C' == range) toKillNum = 95;
+                  else if ('M' == range) toKillNum = 95;
+                  else toKillNum = 92;
+               }
+               else  // rear
+               {
+                  toKillNum = 95;
+               }
+               break;
+            case "PzVIe":
+               if ("Front" == facing)
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 83;
+                     else if ('M' == range) toKillNum = 42;
+                     else toKillNum = 03;
+                  }
+                  else
+                  {
+                     if ('C' == range) toKillNum = 95;
+                     else if ('M' == range) toKillNum = 83;
+                     else toKillNum = 28;
+                  }
+               }
+               else if ("Side" == facing)
+               {
+                  if ('C' == range) toKillNum = 95;
+                  else if ('M' == range) toKillNum = 95;
+                  else toKillNum = 72;
+               }
+               else  // rear
+               {
+                  if ('C' == range) toKillNum = 95;
+                  else if ('M' == range) toKillNum = 95;
+                  else toKillNum = 72;
+               }
+               break;
+            case "TANK":
+            case "PzVIb":
+               if ("Front" == facing)
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 28;
+                     else if ('M' == range) toKillNum = 03;
+                     else toKillNum = NO_CHANCE;
+                  }
+                  else
+                  {
+                     toKillNum = NO_CHANCE;
+                  }
+               }
+               else if ("Side" == facing)
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 95;
+                     else if ('M' == range) toKillNum = 83;
+                     else toKillNum = 28;
+                  }
+                  else
+                  {
+                     if ('C' == range) toKillNum = 95;
+                     else if ('M' == range) toKillNum = 95;
+                     else toKillNum = 72;
+                  }
+               }
+               else  // rear
+               {
+                  if ("Turret" == hitLocation)
+                  {
+                     if ('C' == range) toKillNum = 95;
+                     else if ('M' == range) toKillNum = 95;
+                     else toKillNum = 42;
+                  }
+                  else
+                  {
+                     if ('C' == range) toKillNum = 95;
+                     else if ('M' == range) toKillNum = 95;
+                     else toKillNum = 83;
+                  }
+               }
+               break;
+            case "SPG":
+            case "STuGIIIg":
+               if ("Front" == facing)
+               {
+                  if ('C' == range) toKillNum = 95;
+                  else if ('M' == range) toKillNum = 95;
+                  else toKillNum = 72;
+               }
+               else if ("Side" == facing)
+               {
+                  toKillNum = 95;
+               }
+               else  // rear
+               {
+                  toKillNum = 95;
+               }
+               break;
+            case "MARDERII":
+               toKillNum = 95;
+               break;
+            case "MARDERIII":
+               toKillNum = 95;
+               break;
+            case "JdgPzIV":
+               if ("Front" == facing)
+               {
+                  if ('C' == range) toKillNum = 83;
+                  else if ('M' == range) toKillNum = 42;
+                  else toKillNum = 03;
+               }
+               else if ("Side" == facing)
+               {
+                  toKillNum = 95;
+               }
+               else  // rear
+               {
+                  toKillNum = 95;
+               }
+               break;
+            case "JdgPz38t":
+               if ("Front" == facing)
+               {
+                  if ('C' == range) toKillNum = 83;
+                  else if ('M' == range) toKillNum = 42;
+                  else toKillNum = 03;
+               }
+               else if ("Side" == facing)
+               {
+                  toKillNum = 95;
+               }
+               else  // rear
+               {
+                  toKillNum = 95;
+               }
+               break;
+            case "PSW":
+            case "SPW":
+               toKillNum = 95;
+               break;
+            case "TRUCK":
+               toKillNum = 75;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): 2-Reached Default enemyUnit=" + enemyUnit);
+               return FN_ERROR;
+         }
+         //--------------------------------------
+         return toKillNum;
+      }
+      public static int GetShermanToKill75HeVehicleNumber(IGameInstance gi, IMapItem enemyUnit, ShermanAttack hit, string hitLocation)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill75HeVehicleNumber(): lastReport=null");
+            return FN_ERROR;
+         }
+         //---------------------------------------------------
+         if (3 != enemyUnit.TerritoryCurrent.Name.Length)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill75HeVehicleNumber(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
+            return FN_ERROR;
+         }
+         char range = enemyUnit.TerritoryCurrent.Name[2];
+         if (('C' != range) && ('M' != range) && ('L' != range))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill75HeVehicleNumber(): invald range=" + range.ToString());
+            return FN_ERROR;
+         }
+         //---------------------------------------------------
+         string facing = GetShermanFireDirection(gi, enemyUnit, hitLocation);
+         if ("ERROR" == facing)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill75HeVehicleNumber(): lastReport=null");
+            return FN_ERROR;
+         }
+         if (("Side" != facing) && ("Front" != facing) && ("Rear" != facing))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill75HeVehicleNumber(): invald facing=" + facing);
+            return FN_ERROR;
+         }
+         //----------------------------------------------------
+
+         string enemyUnitType = enemyUnit.GetEnemyUnit();
+         if ("ERROR" == enemyUnitType)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill75HeVehicleNumber(): unknown enemyUnit=" + enemyUnit.Name);
+            return FN_ERROR;
+         }
+         //---------------------------------------------------
+         int toKillNum = 0;
+         if( false == hit.myIsCriticalHit )
          {
             switch (enemyUnitType)
             {
                case "PzIV":
-                  if ("75" == card.myMainGun)
+                  if ("Front" == facing)
                   {
-                     if ("Front" == facing)
-                     {
-                        if ("Turret" == hitLocation)
-                        {
-                           if ('C' == range) toKillNum = 58;
-                           else if ('M' == range) toKillNum = 42;
-                           else toKillNum = 28;
-                        }
-                        else
-                        {
-                           if ('C' == range) toKillNum = 28;
-                           else if ('M' == range) toKillNum = 17;
-                           else toKillNum = 03;
-                        }
-                     }
-                     else if ("Side" == facing)
-                     {
-                        if ("Turret" == hitLocation)
-                        {
-                           if ('C' == range) toKillNum = 83;
-                           else if ('M' == range) toKillNum = 72;
-                           else toKillNum = 58;
-                        }
-                        else
-                        {
-                           if ('C' == range) toKillNum = 92;
-                           else if ('M' == range) toKillNum = 83;
-                           else toKillNum = 72;
-                        }
-                     }
-                     else  // rear
-                     {
-                        if ("Turret" == hitLocation)
-                        {
-                           if ('C' == range) toKillNum = 92;
-                           else if ('M' == range) toKillNum = 83;
-                           else toKillNum = 72;
-                        }
-                        else
-                        {
-                           if ('C' == range) toKillNum = 95;
-                           else if ('M' == range) toKillNum = 58;
-                           else toKillNum = 83;
-                        }
-                     }
+                     toKillNum = NO_CHANCE;
                   }
-                  else if ("76L" == card.myMainGun)
+                  else if ("Side" == facing)
                   {
-
+                     if ("Turret" == hitLocation)
+                        toKillNum = 03;
+                     else
+                        toKillNum = 08;
                   }
-                  else
+                  else  // rear
                   {
-
+                     if ("Turret" == hitLocation)
+                        toKillNum = 08;
+                     else
+                        toKillNum = 17;
                   }
                   break;
                case "PzV":
-                  break;
                case "PzVIe":
-                  break;
+               case "TANK":
                case "PzVIb":
+                  toKillNum = NO_CHANCE;
                   break;
+               case "SPG":
                case "STuGIIIg":
+                  if ("Front" == facing)
+                  {
+                     toKillNum = NO_CHANCE;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     toKillNum = 08;
+                  }
+                  else  // rear
+                  {
+                     toKillNum = 17;
+                  }
                   break;
                case "MARDERII":
+                  if ("Front" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 17;
+                     else
+                        toKillNum = 08;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 42;
+                     else
+                        toKillNum = 28;
+                  }
+                  else  // rear
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 58;
+                     else
+                        toKillNum = 42;
+                  }
                   break;
                case "MARDERIII":
+                  if ("Front" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 28;
+                     else
+                        toKillNum = 17;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 42;
+                     else
+                        toKillNum = 28;
+                  }
+                  else  // rear
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 58;
+                     else
+                        toKillNum = 42;
+                  }
                   break;
                case "JdgPzIV":
+                  if ("Front" == facing)
+                  {
+                     toKillNum = NO_CHANCE;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 03;
+                     else
+                        toKillNum = 08;
+                  }
+                  else  // rear
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 08;
+                     else
+                        toKillNum = 17;
+                  }
                   break;
                case "JdgPz38t":
+                  if ("Front" == facing)
+                  {
+                     toKillNum = NO_CHANCE;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     toKillNum = 08;
+                  }
+                  else  // rear
+                  {
+                     toKillNum = 17;
+                  }
                   break;
                case "PSW":
                case "SPW":
+                  if ("Front" == facing)
+                  {
+                     toKillNum = 28;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     toKillNum = 28;
+                  }
+                  else  // rear
+                  {
+                     toKillNum = 42;
+                  }
                   break;
                case "TRUCK":
+                  toKillNum = 95;
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): 2-Reached Default enemyUnit=" + enemyUnit);
-                  return -1000;
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill75HeVehicleNumber(): 2-Reached Default enemyUnit=" + enemyUnit);
+                  return FN_ERROR;
             }
+         }
+         //---------------------------------------------------
+         else
+         {
+            switch (enemyUnitType)
+            {
+               case "PzIV":
+                  if ("Front" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 58;
+                     else
+                        toKillNum = 42;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 83;
+                     else
+                        toKillNum = 92;
+                  }
+                  else  // rear
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 92;
+                     else
+                        toKillNum = 97;
+                  }
+                  break;
+               case "PzV":
+                  if ("Front" == facing)
+                  {
+                     toKillNum = NO_CHANCE;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     toKillNum = 58;
+                  }
+                  else  // rear
+                  {
+                     toKillNum = 72;
+                  }
+                  break;
+               case "PzVIe":
+                  if ("Front" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = NO_CHANCE;
+                     else
+                        toKillNum = 03;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     toKillNum = 28;
+                  }
+                  else  // rear
+                  {
+                     toKillNum = 42;
+                  }
+                  break;
+               case "TANK":
+               case "PzVIb":
+                  if ("Front" == facing)
+                  {
+                     toKillNum = NO_CHANCE;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 03;
+                     else
+                        toKillNum = 28;
+                  }
+                  else  // rear
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 08;
+                     else
+                        toKillNum = 42;
+                  }
+                  break;
+               case "SPG":
+               case "STuGIIIg":
+                  if ("Front" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 97;
+                     else
+                        toKillNum = 92;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     toKillNum = 100;
+                  }
+                  else  // rear
+                  {
+                     toKillNum = 100;
+                  }
+                  break;
+               case "MARDERII":
+                  if ("Front" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 97;
+                     else
+                        toKillNum = 92;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     toKillNum = 100;
+                  }
+                  else  // rear
+                  {
+                     toKillNum = 100;
+                  }
+                  break;
+               case "MARDERIII":
+                  if ("Front" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 100;
+                     else
+                        toKillNum = 97;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     toKillNum = 100;
+                  }
+                  else  // rear
+                  {
+                     toKillNum = 100;
+                  }
+                  break;
+               case "JdgPzIV":
+                  if ("Front" == facing)
+                  {
+                     toKillNum = NO_CHANCE;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 83;
+                     else
+                        toKillNum = 92;
+                  }
+                  else  // rear
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 92;
+                     else
+                        toKillNum = 97;
+                  }
+                  break;
+               case "JdgPz38t":
+                  if ("Front" == facing)
+                  {
+                     toKillNum = NO_CHANCE;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     toKillNum = 92;
+                  }
+                  else  // rear
+                  {
+                     toKillNum = 97;
+                  }
+                  break;
+               case "PSW":
+               case "SPW":
+                  toKillNum = 100;
+                  break;
+               case "TRUCK":
+                  toKillNum = 100;
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill75HeVehicleNumber(): 2-Reached Default enemyUnit=" + enemyUnit);
+                  return FN_ERROR;
+            }
+         }
+         //--------------------------------------
+         return toKillNum;
+      }
+      public static int GetShermanToKill76HeVehicleNumber(IGameInstance gi, IMapItem enemyUnit, ShermanAttack hit, string hitLocation)
+      {
+         const int NO_CHANCE = -120;
+         const int KIA = +120;
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill76HeVehicleNumber(): lastReport=null");
+            return FN_ERROR;
+         }
+         //---------------------------------------------------
+         if (3 != enemyUnit.TerritoryCurrent.Name.Length)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill76HeVehicleNumber(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
+            return FN_ERROR;
+         }
+         char range = enemyUnit.TerritoryCurrent.Name[2];
+         if (('C' != range) && ('M' != range) && ('L' != range))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill76HeVehicleNumber(): invald range=" + range.ToString());
+            return FN_ERROR;
+         }
+         //---------------------------------------------------
+         string facing = GetShermanFireDirection(gi, enemyUnit, hitLocation);
+         if ("ERROR" == facing)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill76HeVehicleNumber(): lastReport=null");
+            return FN_ERROR;
+         }
+         if (("Side" != facing) && ("Front" != facing) && ("Rear" != facing))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill76HeVehicleNumber(): invald facing=" + facing);
+            return FN_ERROR;
+         }
+         //----------------------------------------------------
+
+         string enemyUnitType = enemyUnit.GetEnemyUnit();
+         if ("ERROR" == enemyUnitType)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill76HeVehicleNumber(): unknown enemyUnit=" + enemyUnit.Name);
+            return FN_ERROR;
+         }
+         //---------------------------------------------------
+         int toKillNum = 0;
+         if (false == hit.myIsCriticalHit)
+         {
+            switch (enemyUnitType)
+            {
+               case "PzIV":
+                  if ("Front" == facing)
+                  {
+                     toKillNum = NO_CHANCE;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     toKillNum = NO_CHANCE;
+                  }
+                  else  // rear
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = NO_CHANCE;
+                     else
+                        toKillNum = 02;
+                  }
+                  break;
+               case "PzV":
+               case "PzVIe":
+               case "PzVIb":
+               case "TANK":
+                  toKillNum = NO_CHANCE;
+                  break;
+               case "SPG":
+               case "STuGIIIg":
+                  if ("Front" == facing)
+                  {
+                     toKillNum = NO_CHANCE;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     toKillNum = NO_CHANCE;
+                  }
+                  else  // rear
+                  {
+                     toKillNum = 02;
+                  }
+                  break;
+               case "MARDERII":
+                  if ("Front" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 02;
+                     else
+                        toKillNum = NO_CHANCE;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 27;
+                     else
+                        toKillNum = 13;
+                  }
+                  else  // rear
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 43;
+                     else
+                        toKillNum = 27;
+                  }
+                  break;
+               case "MARDERIII":
+                  if ("Front" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 13;
+                     else
+                        toKillNum = 02;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 27;
+                     else
+                        toKillNum = 13;
+                  }
+                  else  // rear
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 43;
+                     else
+                        toKillNum = 27;
+                  }
+                  break;
+               case "JdgPzIV":
+                  if ("Front" == facing)
+                  {
+                     toKillNum = NO_CHANCE;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     toKillNum = NO_CHANCE;
+                  }
+                  else  // rear
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = NO_CHANCE;
+                     else
+                        toKillNum = 02;
+                  }
+                  break;
+               case "JdgPz38t":
+                  if ("Front" == facing)
+                  {
+                     toKillNum = NO_CHANCE;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     toKillNum = 02;
+                  }
+                  else  // rear
+                  {
+                     toKillNum = 02;
+                  }
+                  break;
+               case "PSW":
+               case "SPW":
+                  if ("Front" == facing)
+                  {
+                     toKillNum = 13;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     toKillNum = 13;
+                  }
+                  else  // rear
+                  {
+                     toKillNum = 27;
+                  }
+                  break;
+               case "TRUCK":
+                  toKillNum = 95;
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill75HeVehicleNumber(): 2-Reached Default enemyUnit=" + enemyUnit);
+                  return FN_ERROR;
+            }
+         }
+         //---------------------------------------------------
+         else
+         {
+            switch (enemyUnitType)
+            {
+               case "PzIV":
+                  if ("Front" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 43;
+                     else
+                        toKillNum = 27;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 88;
+                     else
+                        toKillNum = 77;
+                  }
+                  else  // rear
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 77;
+                     else
+                        toKillNum = 82;
+                  }
+                  break;
+               case "PzV":
+                  if ("Front" == facing)
+                  {
+                     toKillNum = NO_CHANCE;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     toKillNum = 43;
+                  }
+                  else  // rear
+                  {
+                     toKillNum = 57;
+                  }
+                  break;
+               case "PzVIe":
+                  if ("Front" == facing)
+                  {
+                     toKillNum = NO_CHANCE;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     toKillNum = 13;
+                  }
+                  else  // rear
+                  {
+                     toKillNum = 27;
+                  }
+                  break;
+               case "TANK":
+               case "PzVIb":
+                  if ("Front" == facing)
+                  {
+                     toKillNum = NO_CHANCE;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = NO_CHANCE;
+                     else
+                        toKillNum = 13;
+                  }
+                  else  // rear
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = NO_CHANCE;
+                     else
+                        toKillNum = 27;
+                  }
+                  break;
+               case "SPG":
+               case "STuGIIIg":
+                  if ("Front" == facing)
+                  {
+                     toKillNum = 13;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     toKillNum = 77;
+                  }
+                  else  // rear
+                  {
+                     toKillNum = 82;
+                  }
+                  break;
+               case "MARDERII":
+                  if ("Front" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 82;
+                     else
+                        toKillNum = 77;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     toKillNum = 100;
+                  }
+                  else  // rear
+                  {
+                     toKillNum = 100;
+                  }
+                  break;
+               case "MARDERIII":
+                  if ("Front" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 100;
+                     else
+                        toKillNum = 82;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     toKillNum = 100;
+                  }
+                  else  // rear
+                  {
+                     toKillNum = 100;
+                  }
+                  break;
+               case "JdgPzIV":
+                  if ("Front" == facing)
+                  {
+                     toKillNum = NO_CHANCE;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 67;
+                     else
+                        toKillNum = 77;
+                  }
+                  else  // rear
+                  {
+                     if ("Turret" == hitLocation)
+                        toKillNum = 77;
+                     else
+                        toKillNum = 82;
+                  }
+                  break;
+               case "JdgPz38t":
+                  if ("Front" == facing)
+                  {
+                     toKillNum = NO_CHANCE;
+                  }
+                  else if ("Side" == facing)
+                  {
+                     toKillNum = 77;
+                  }
+                  else  // rear
+                  {
+                     toKillNum = 82;
+                  }
+                  break;
+               case "PSW":
+               case "SPW":
+                  toKillNum = 100;
+                  break;
+               case "TRUCK":
+                  toKillNum = 100;
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill75HeVehicleNumber(): 2-Reached Default enemyUnit=" + enemyUnit);
+                  return FN_ERROR;
+            }
+         }
+         //--------------------------------------
+         return toKillNum;
+      }
+      public static int GetShermanMgToKillModifier(IGameInstance gi, IMapItem enemyUnit)
+      {
+         string mgType = "None";
+         if (true == gi.IsShermanFiringAaMg)
+            mgType = "Aa";
+         else if (true == gi.IsShermanFiringBowMg)
+            mgType = "Bow";
+         else if (true == gi.IsShermanFiringCoaxialMg)
+            mgType = "Coaxial";
+         else if (true == gi.IsShermanFiringSubMg)
+            mgType = "Sub";
+         else
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): unknown MG firing");
+            return FN_ERROR;
+         }
+         //------------------------------------
+         if (3 != enemyUnit.TerritoryCurrent.Name.Length)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
+            return FN_ERROR;
+         }
+         char range = enemyUnit.TerritoryCurrent.Name[2];
+         if( ('C' != range) && ('M' != range) && ('L' != range) )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): unknown range=" + range.ToString());
+            return FN_ERROR;
+         }
+         //------------------------------------
+         if( null == gi.Target )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): gi.Target=null");
+            return FN_ERROR;
+         }
+         //------------------------------------
+         string enemyUnitType = enemyUnit.GetEnemyUnit();
+         if (("LW" != enemyUnitType) && ("MG" != enemyUnitType) && ("ATG" != enemyUnitType) && ("Pak38" != enemyUnitType) && ("Pak40" != enemyUnitType) && ("Pak43" != enemyUnitType) && ("TRUCK" != enemyUnitType))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): unknown enemyType=" + enemyUnitType);
+            return FN_ERROR;
+         }
+         //------------------------------------
+         bool isCommanderFiring = false;
+         bool isLoaderFiring = false;
+         bool isGunnerFiring = false;
+         bool isAssistantFiring = false;
+         bool isMovingOrPivoting = false;
+         foreach (IMapItem crewAction in gi.CrewActions)
+         {
+            if ("Commander_FireAaMg" == crewAction.Name)
+               isCommanderFiring = true;
+            if ("Commander_FireSubMg" == crewAction.Name)
+               isCommanderFiring = true;
+            if ("Loader_FireAaMg" == crewAction.Name)
+               isLoaderFiring = true;
+            if ("Loader_FireSubMg" == crewAction.Name)
+               isLoaderFiring = true;
+            if ("Gunner_FireCoaxialMg" == crewAction.Name)
+               isGunnerFiring = true;
+            if ("Assistant_FireBowMg" == crewAction.Name)
+               isAssistantFiring = true;
+            if ("Driver_Forward" == crewAction.Name)
+               isMovingOrPivoting = true;
+            if ("Driver_ForwardToHullDown" == crewAction.Name)
+               isMovingOrPivoting = true;
+            if ("Driver_Reverse" == crewAction.Name)
+               isMovingOrPivoting = true;
+            if ("Driver_ReverseToHullDown" == crewAction.Name)
+               isMovingOrPivoting = true;
+            if ("Driver_PivotTank" == crewAction.Name)
+               isMovingOrPivoting = true;
+         }
+         //------------------------------------
+         int toKillModifierNum = 0;
+         //------------------------------------
+         if( true == gi.IsCommanderDirectingMgFire )
+         {
+            ICrewMember? commander = gi.GetCrewMember("Commander");
+            if (null == commander)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): commander=null");
+               return FN_ERROR;
+            }
+            toKillModifierNum -= commander.Rating;
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): commander directing fire rating -" + commander.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
+         }
+         //------------------------------------
+         if (true == isCommanderFiring)
+         {
+            ICrewMember? commander = gi.GetCrewMember("Commander");
+            if (null == commander)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): commander=null");
+               return FN_ERROR;
+            }
+            toKillModifierNum -= commander.Rating;
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): commander rating -" + commander.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
+         }
+         //------------------------------------
+         if ( true==isLoaderFiring )
+         {
+            ICrewMember? loader = gi.GetCrewMember("Loader");
+            if (null == loader)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): loader=null");
+               return FN_ERROR;
+            }
+            toKillModifierNum -= loader.Rating;
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): gunner rating -" + loader.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
+         }
+         //------------------------------------
+         if (true == isGunnerFiring)
+         {
+            ICrewMember? gunner = gi.GetCrewMember("Gunner");
+            if (null == gunner)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): gunner=null");
+               return FN_ERROR;
+            }
+            toKillModifierNum -= gunner.Rating;
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): gunner rating -" + gunner.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
+         }
+         //------------------------------------
+         if (true == isAssistantFiring)
+         {
+            ICrewMember? assistant = gi.GetCrewMember("Assistant");
+            if (null == assistant)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): assistant=null");
+               return FN_ERROR;
+            }
+            toKillModifierNum -= assistant.Rating;
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): gunner rating -" + assistant.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
+         }
+         //------------------------------------
+         if( true == gi.Target.IsMoving )
+         {
+            if( "Bow" == mgType )
+            {
+               toKillModifierNum -= 10;
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): moving in open -10 mod=" + toKillModifierNum.ToString());
+            }
+            else if ("Coaxial" == mgType)
+            {
+               toKillModifierNum -= 15;
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): moving in open -10 mod=" + toKillModifierNum.ToString());
+            }
+            else if ("Aa" == mgType)
+            {
+               toKillModifierNum -= 15;
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): moving in open -10 mod=" + toKillModifierNum.ToString());
+            }
+            else if ("Sub" == mgType)
+            {
+               toKillModifierNum -= 5;
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): moving in open -10 mod=" + toKillModifierNum.ToString());
+            }
+            else
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): unknown mgType=" + mgType);
+               return FN_ERROR;
+            }
+         }
+         //------------------------------------
+         if (true == isMovingOrPivoting)
+         {
+            toKillModifierNum += 10;
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): sherman moving +10 mod=" + toKillModifierNum.ToString());
+         }
+         //------------------------------------
+         if (true == gi.Target.IsWoods)
+         {
+            toKillModifierNum += 10;
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): in woods +10 mod=" + toKillModifierNum.ToString());
+         }
+         //------------------------------------
+         if (true == gi.Target.IsBuilding) 
+         {
+            toKillModifierNum += 15;
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): in building +15 mod=" + toKillModifierNum.ToString());
+         }
+         //------------------------------------
+         if (("ATG" == enemyUnitType) || ("Pak38" == enemyUnitType) || ("Pak40" == enemyUnitType) || ("Pak43" == enemyUnitType))
+         {
+            toKillModifierNum += 15;
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): ATG +15 mod=" + toKillModifierNum.ToString());
+         }
+         //------------------------------------
+         if (true == gi.Target.IsFortification)
+         {
+            toKillModifierNum += 20;
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): in IsFortification +20 mod=" + toKillModifierNum.ToString());
+         }
+         return toKillModifierNum;
+      }
+      public static double GetShermanMgToKillNumber(IGameInstance gi, IMapItem enemyUnit) 
+      {
+         //------------------------------------
+         string mgType = "None";
+         if (true == gi.IsShermanFiringAaMg)
+            mgType = "Aa";
+         else if (true == gi.IsShermanFiringBowMg)
+            mgType = "Bow";
+         else if (true == gi.IsShermanFiringCoaxialMg)
+            mgType = "Coaxial";
+         else if (true == gi.IsShermanFiringSubMg)
+            mgType = "Sub";
+         else
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillNumber(): unknown MG firing");
+            return FN_ERROR;
+         }
+         //------------------------------------
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillNumber(): lastReport=null");
+            return FN_ERROR;
+         }
+         //------------------------------------
+         if (3 != enemyUnit.TerritoryCurrent.Name.Length)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
+            return FN_ERROR;
+         }
+         char sector = enemyUnit.TerritoryCurrent.Name[1];
+         char range = enemyUnit.TerritoryCurrent.Name[2];
+         if (('C' != range) && ('M' != range) && ('L' != range))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): unknown range=" + range.ToString());
+            return FN_ERROR;
+         }
+         //------------------------------------
+         double toKillNumber = 0.0;
+         if ("Bow" == mgType)
+         {
+            if ('C' == range)
+               toKillNumber = 20.0;
+            else if ('M' == range)
+               toKillNumber = 0.0;
+            else
+               toKillNumber = 0.0;
+         }
+         else if ("Coaxial" == mgType)
+         {
+            if ('C' == range)
+               toKillNumber = 25.0;
+            else if ('M' == range)
+               toKillNumber = 20.0;
+            else
+               toKillNumber = 15.0;
+         }
+         else if ("Aa" == mgType)
+         {
+            if ('C' == range)
+               toKillNumber = 30.0;
+            else if ('M' == range)
+               toKillNumber = 20.0;
+            else
+               toKillNumber = 10.0;
          }
          else
          {
-
+            if ('C' == range)
+               toKillNumber = 10.0;
+            else if ('M' == range)
+               toKillNumber = NO_CHANCE;
+            else
+               toKillNumber = NO_CHANCE;
          }
-
-         //--------------------------------------
-         return toKillNum;
+         //------------------------------------
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanMgToKillNumber(): 1-base#=" + toKillNumber.ToString());
+         int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
+         if (numSmokeMarkers < 0)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillNumber(): GetSmokeCount() returned error");
+            return FN_ERROR;
+         }
+         if (0 < numSmokeMarkers)
+            toKillNumber = toKillNumber * numSmokeMarkers * 0.5;
+         //------------------------------------
+         if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
+            toKillNumber = toKillNumber * 0.5;
+         //------------------------------------
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanMgToKillNumber(): 2-base#=" + toKillNumber.ToString());
+         int modifier = GetShermanMgToKillModifier(gi, enemyUnit);
+         if (FN_ERROR == modifier)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillNumber(): GetShermanMgToKillModifier() returned error");
+            return FN_ERROR;
+         }
+         toKillNumber -= modifier;
+         return toKillNumber;
       }
       //-------------------------------------------
       private void CreateCombatCalender()

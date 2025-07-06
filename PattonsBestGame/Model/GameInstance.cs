@@ -63,29 +63,43 @@ namespace Pattons_Best
       public bool IsShermanFiring { set; get; } = false;
       public bool IsShermanFiringAtFront { set; get; } = false;
       public bool IsShermanDeliberateImmobilization { set; get; } = false;
-      public bool IsShermanFireCritical { set; get; } = false;
       public bool IsShermanRepeatFire { set; get; } = false;
+      public bool IsShermanRepeatFirePending { set; get; } = false; // change IsShermanRepeatFire = true after first To Kill roll
+      public int NumOfShermanShot { set; get; } = 0;
+      public bool IsBrokenMainGun { set; get; } = false;
+      public bool IsBrokenGunsight { set; get; } = false;
+      public Dictionary<string, bool> FirstShots { set; get; } = new Dictionary<string, bool>();
+      public Dictionary<string, int> AcquiredShots { set; get; } = new Dictionary<string, int>();
+      public List<ShermanAttack> ShermanHits { set; get; } = new List<ShermanAttack>();
+      //---------------------------------------------------------------
+      public bool IsShermanFiringAaMg { set; get; } = false;
+      public bool IsShermanFiringBowMg { set; get; } = false;
+      public bool IsShermanFiringCoaxialMg { set; get; } = false;
+      public bool IsShermanFiringSubMg { set; get; } = false;
+      public bool IsCommanderDirectingMgFire { set; get; } = false;
+      public bool IsShermanFiredAaMg { set; get; } = false;
+      public bool IsShermanFiredBowMg { set; get; } = false;
+      public bool IsShermanFiredCoaxialMg { set; get; } = false;
+      public bool IsShermanFiredSubMg { set; get; } = false;
+      public bool IsBrokenMgAntiAircraft { set; get; } = false;
+      public bool IsBrokenMgBow { set; get; } = false;
+      public bool IsBrokenMgCoaxial { set; get; } = false;
+      public bool IsBrokenMgSub { set; get; } = false;
+      //---------------------------------------------------------------
       public bool IsShermanTurretRotated { set; get; } = false;
       public double ShermanRotationTurretOld { set; get; } = 0.0;
-      public int NumOfShermanShot { set; get; } = 0;
       //---------------------------------------------------------------
-      public bool IsHulledDown { set; get; } = false;
-      public bool IsMoving { set; get; } = false;
       public bool IsLeadTank { set; get; } = false;
       public bool IsAirStrikePending { set; get; } = false;
       public bool IsAdvancingFireChosen { set; get; } = false;
-      public bool IsBrokenMainGun { set; get; } = false;
-      public bool IsBrokenGunsight { set; get; } = false;
-      public bool IsBrokenMgCoaxial { set; get; } = false;
-      public bool IsBrokenMgBow { set; get; } = false;
-      public bool IsBrokenMgAntiAircraft { set; get; } = false;
-      public bool IsBrokenMgSub { set; get; } = false;
-      public bool IsCommanderRescuePerformed { set; get; } = false;
       //---------------------------------------------------------------
       public bool IsMinefieldAttack { set; get; } = false;
       public bool IsHarrassingFire { set; get; } = false;
       public bool IsFlankingFire { set; get; } = false;
       public bool IsEnemyAdvanceComplete { set; get; } = false;
+      public int AdvancingFireMarkerCount { set; get; } = 0;
+      //---------------------------------------------------------------
+      public bool IsCommanderRescuePerformed { set; get; } = false;
       public bool IsPromoted { set; get; } = false;
       //---------------------------------------------------------------
       public int VictoryPtsTotalCampaign { get; set; } = 0;
@@ -93,14 +107,10 @@ namespace Pattons_Best
       public int PromotionDay { get; set; } = -1;
       public int NumPurpleHeart { get; set; } = 0;
       //---------------------------------------------------------------
-      public int AdvancingFireMarkerCount { set; get; } = 0;
       public EnumResistance BattleResistance { set; get; } = EnumResistance.None;
       public Dictionary<string, bool> BrokenPeriscopes { set; get; } = new Dictionary<string, bool>();
-      public Dictionary<string, bool> FirstShots { set; get; } = new Dictionary<string, bool>();
-      public Dictionary<string, int> AcquiredShots { set; get; } = new Dictionary<string, int>();
       public ShermanDeath? Death { set; get; } = null;
       public PanzerfaustAttack? Panzerfaust { set; get; } = null;
-      public List<ShermanAttack> ShermanHits { set; get; } = new List<ShermanAttack>();
       public int NumCollateralDamage { set; get; } = 0;
       //------------------------------------------------
       public IMapItemMoves MapItemMoves { get; set; } = new MapItemMoves();
@@ -201,7 +211,9 @@ namespace Pattons_Best
       }
       public string GetGunLoad()
       {
-         foreach(IMapItem mi in this.GunLoads )
+         if (false == this.IsShermanRepeatFire) // If this is repeat fire due to ROF, pull from Ammo Reload
+            return GetAmmoReload();
+         foreach (IMapItem mi in this.GunLoads )
          {
             if( true == mi.Name.Contains("GunLoad"))
             {
@@ -287,6 +299,8 @@ namespace Pattons_Best
       }
       public bool IsReadyRackReload()
       {
+         if( false == this.IsShermanRepeatFire ) // Ready Rack Reload only happens on repeat fire
+               return false;
          foreach (IMapItem mi in this.GunLoads)
          {
             if (true == mi.Name.Contains("ReadyRackReload"))

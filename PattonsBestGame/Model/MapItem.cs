@@ -107,7 +107,7 @@ namespace Pattons_Best
       protected ITerritory myTerritoryStarting = new Territory("Offboard");
       public ITerritory TerritoryStarting { get => myTerritoryStarting; set => myTerritoryStarting = value; }
       //--------------------------------------------------
-      public bool IsMoving { get; set; } = false;  
+      public bool IsMoving { get; set; } = false;
       public bool IsHullDown { get; set; } = false;
       public bool IsTurret { get; set; } = false;
       public bool IsKilled { get; set; } = false;

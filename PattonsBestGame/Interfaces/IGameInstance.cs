@@ -50,6 +50,7 @@ namespace Pattons_Best
       public string myAttackType; // area or direct fire
       public string myAmmoType;   // He, Ap, Hbci, Wp,
       public bool myIsCriticalHit;
+      public string myHitLocation = ""; // Turret, Hull, Thrown Track
       public ShermanAttack( string attack, string ammo, bool critical)
       {
          myAttackType = attack;
@@ -112,9 +113,21 @@ namespace Pattons_Best
       bool IsShermanFiringAtFront { set; get; }
       bool IsShermanDeliberateImmobilization { set; get; }
       bool IsShermanRepeatFire { set; get; }
+      bool IsShermanRepeatFirePending { set; get; }
+      int NumOfShermanShot { set; get; }
+      //------------------------------------------------
+      bool IsCommanderDirectingMgFire { set; get; }
+      bool IsShermanFiringAaMg { set; get; }
+      bool IsShermanFiringBowMg { set; get; }
+      bool IsShermanFiringCoaxialMg { set; get; }
+      bool IsShermanFiringSubMg { set; get; }
+      bool IsShermanFiredAaMg { set; get; }
+      bool IsShermanFiredBowMg { set; get; }
+      bool IsShermanFiredCoaxialMg { set; get; }
+      bool IsShermanFiredSubMg { set; get; }
+      //------------------------------------------------
       bool IsShermanTurretRotated { set; get; }
       double ShermanRotationTurretOld { set; get; }
-      int NumOfShermanShot { set; get; }
       //------------------------------------------------
       bool IsLeadTank { set; get; }
       bool IsAirStrikePending { set; get; }

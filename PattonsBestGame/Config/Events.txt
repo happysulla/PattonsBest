@@ -318,7 +318,7 @@ Click on blue squares to open hatches. Click on Open Hatch marker to close.
  <LineBreak/><LineBreak/>
 Right click crew member action boxes to select from a pull down to assign crew actions for each crew member.
 <LineBreak/><LineBreak/>"
-e039	"<Bold>e039 Random Events for Ambush</Bold> 
+e039	"<Bold>e039 Random Events</Bold> 
 <InlineUIContainer><Button Content='r4.65' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
   <InlineUIContainer><Button Content='e040' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Time Passes<LineBreak/>
@@ -506,7 +506,7 @@ Select the plus or minus buttons to rotate.
 <InlineUIContainer><Button Content='   +   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
 When you are satisfied with the current orientation, click Sherman image between buttons to continue."
-e052a	"<Bold>e052 Pivot Turret</Bold> 
+e052a	"<Bold>e052a Pivot Turret</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r8.24' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
@@ -546,9 +546,9 @@ Choose  <InlineUIContainer><Button Content='Direct' FontFamily='Courier New'  Fo
 <InlineUIContainer><Button Content=' Area ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    fire.
 <LineBreak/><LineBreak/>"
 e053c	"<Bold>e053c Main Gun Firing - Rate of Fire</Bold> 
-<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <InlineUIContainer><Button Content='r9.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-<InlineUIContainer><Button Content='Rate of Fire' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<InlineUIContainer><Button Content='Rate of Fire' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>"
 e053d	"<Bold>e053d Main Gun Against Infantry</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
@@ -562,14 +562,26 @@ e053e	"<Bold>e053e Main Gun Against Vehicle</Bold>
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
-For each hit scored against a target, consult the correct To Kill Table to determine if the target is knocked out (KO'ed)."
-e053f	"<Bold>e053f Machine Gun (MG) Firing - Select Target</Bold> 
-<InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
-<InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+For each hit scored against a target, consult the  "
+e054	"<Bold>e054 MG Firing - Select Target</Bold> 
+<InlineUIContainer><Button Content='r4.74.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<InlineUIContainer><Button Content='r10.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
-Click either the highlighted zone or an spotted target or <InlineUIContainer><Button Content='Skip MG' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> . 
+Choose a MG to fire or select skip: 
 <LineBreak/><LineBreak/>
-                                            <InlineUIContainer><Image Name='Continue53c' Height='100' Width='100'></Image></InlineUIContainer>"
+  <InlineUIContainer><Button Content='   Skip   '  FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+  <InlineUIContainer><Button Content='  AA MG   '  FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+  <InlineUIContainer><Button Content='  Bow MG  '  FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+  <InlineUIContainer><Button Content='Coaxial MG'  FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+  <InlineUIContainer><Button Content='  Sub MG  '  FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>"
+e054a	"<Bold>e054a MG Firing - Target Selected</Bold> 
+<InlineUIContainer><Button Content='r4.74.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<InlineUIContainer><Button Content='r10.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<LineBreak/><LineBreak/>
+The MG ammo is marked off the After Action Report <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Roll for results on the 
+<InlineUIContainer><Button Content='Sherman MG' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
+<LineBreak/><LineBreak/>"
 e100	"<Bold>e100 Evening Debriefing</Bold> 
 <LineBreak/><LineBreak/>
 An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
