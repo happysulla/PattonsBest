@@ -301,7 +301,7 @@ Since the Battle Board is now empty of enemy units, the battle for this area is 
 <LineBreak/>
 5.) Click image to continue.
 <LineBreak/><LineBreak/>
-          <InlineUIContainer><Image Name='Debrief' Height='225' Width='450'></Image></InlineUIContainer>"
+                                            <InlineUIContainer><Image Name='Continue36' Height='100' Width='100'></Image></InlineUIContainer>"
 e037	"<Bold>e037 Smoke Depletion Phase</Bold> 
 <InlineUIContainer><Button Content='r4.71' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
@@ -318,19 +318,55 @@ Click on blue squares to open hatches. Click on Open Hatch marker to close.
  <LineBreak/><LineBreak/>
 Right click crew member action boxes to select from a pull down to assign crew actions for each crew member.
 <LineBreak/><LineBreak/>"
-e039	"<Bold>e039 Random Events</Bold> 
+e039a	"<Bold>e039a Advance Scenario - Random Events</Bold> 
 <InlineUIContainer><Button Content='r4.65' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
-  <InlineUIContainer><Button Content='e040' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Time Passes<LineBreak/>
-  <InlineUIContainer><Button Content='e041' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Friendly Artillery<LineBreak/>
-  <InlineUIContainer><Button Content='e042' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Artillery<LineBreak/>
-  <InlineUIContainer><Button Content='e043' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Mine Attack<LineBreak/>
-  <InlineUIContainer><Button Content='e044' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Panzerfaust Attack<LineBreak/>
-  <InlineUIContainer><Button Content='e045' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Harrassing Fire<LineBreak/>
-  <InlineUIContainer><Button Content='e046' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Friendly Advance<LineBreak/>
-  <InlineUIContainer><Button Content='e047' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Reinforcement<LineBreak/>
-  <InlineUIContainer><Button Content='e048' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Enemy Advance<LineBreak/>
-  <InlineUIContainer><Button Content='e049' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Flanking Fire
+  <InlineUIContainer><Button Content='e040' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 01-05   Time Passes<LineBreak/>
+  <InlineUIContainer><Button Content='e041' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 06-15    Friendly Artillery<LineBreak/>
+  <InlineUIContainer><Button Content='e042' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 16-20    Enemy Artillery<LineBreak/>
+  <InlineUIContainer><Button Content='e043' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 21-25    Mine Attack<LineBreak/>
+  <InlineUIContainer><Button Content='e044' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 26-30    Panzerfaust Attack<LineBreak/>
+  <InlineUIContainer><Button Content='e045' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 31-35    Harrassing Fire<LineBreak/>
+  <InlineUIContainer><Button Content='e046' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 36-60    Friendly Advance<LineBreak/>
+  <InlineUIContainer><Button Content='e047' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 61-80    Enemy Reinforcement<LineBreak/>
+  <InlineUIContainer><Button Content='e048' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> --------     Enemy Advance<LineBreak/>
+  <InlineUIContainer><Button Content='e049' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 81-100+ Flanking Fire
+<LineBreak/><LineBreak/>
+Roll on the 
+<InlineUIContainer><Button Content='Random Events' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table:  
+<InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer>"
+e039b	"<Bold>e039b Battle Scenario - Random Events</Bold> 
+<InlineUIContainer><Button Content='r4.65' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<LineBreak/><LineBreak/>
+  <InlineUIContainer><Button Content='e040' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 01-05   Time Passes<LineBreak/>
+  <InlineUIContainer><Button Content='e041' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 06-20    Friendly Artillery<LineBreak/>
+  <InlineUIContainer><Button Content='e042' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 21-30    Enemy Artillery<LineBreak/>
+  <InlineUIContainer><Button Content='e043' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 31-35    Mine Attack<LineBreak/>
+  <InlineUIContainer><Button Content='e044' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 36-40    Panzerfaust Attack<LineBreak/>
+  <InlineUIContainer><Button Content='e045' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 41-45    Harrassing Fire<LineBreak/>
+  <InlineUIContainer><Button Content='e046' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 46-60    Friendly Advance<LineBreak/>
+  <InlineUIContainer><Button Content='e047' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 61-80    Enemy Reinforcement<LineBreak/>
+  <InlineUIContainer><Button Content='e048' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 81-85     Enemy Advance<LineBreak/>
+  <InlineUIContainer><Button Content='e049' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 86-100+ Flanking Fire
+<LineBreak/><LineBreak/>
+Roll on the 
+<InlineUIContainer><Button Content='Random Events' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+Table:  
+<InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer>"
+e039c	"<Bold>e039c Counterattack Scenario - Random Events</Bold> 
+<InlineUIContainer><Button Content='r4.65' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<LineBreak/><LineBreak/>
+  <InlineUIContainer><Button Content='e040' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 01-05   Time Passes<LineBreak/>
+  <InlineUIContainer><Button Content='e041' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 06-25    Friendly Artillery<LineBreak/>
+  <InlineUIContainer><Button Content='e042' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 25-35    Enemy Artillery<LineBreak/>
+  <InlineUIContainer><Button Content='e043' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> --------     Mine Attack<LineBreak/>
+  <InlineUIContainer><Button Content='e044' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 36-40    Panzerfaust Attack<LineBreak/>
+  <InlineUIContainer><Button Content='e045' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 41-45    Harrassing Fire<LineBreak/>
+  <InlineUIContainer><Button Content='e046' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 46-50    Friendly Advance<LineBreak/>
+  <InlineUIContainer><Button Content='e047' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 51-75    Enemy Reinforcement<LineBreak/>
+  <InlineUIContainer><Button Content='e048' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 76-90     Enemy Advance<LineBreak/>
+  <InlineUIContainer><Button Content='e049' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 91-100+ Flanking Fire
 <LineBreak/><LineBreak/>
 Roll on the 
 <InlineUIContainer><Button Content='Random Events' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
@@ -582,6 +618,12 @@ e054a	"<Bold>e054a MG Firing - Target Selected</Bold>
 The MG ammo is marked off the After Action Report <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Roll for results on the 
 <InlineUIContainer><Button Content='Sherman MG' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
 <LineBreak/><LineBreak/>"
+e060	"<Bold>e060 Reset Round</Bold> 
+<InlineUIContainer><Button Content='r4.77' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Since the round did not end, reset and return back to Spotting Round. Click image to continue.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='Continue60' Height='100' Width='100'></Image></InlineUIContainer>"
 e100	"<Bold>e100 Evening Debriefing</Bold> 
 <LineBreak/><LineBreak/>
 An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 

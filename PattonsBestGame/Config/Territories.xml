@@ -2397,7 +2397,7 @@
     </Points>
     <Adjacents count="0" />
   </Territory>
-  <Territory value="ReturnToSpotting">
+  <Territory value="BackToSpotting">
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0958.50" Y="0284.76" />

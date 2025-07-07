@@ -211,8 +211,6 @@ namespace Pattons_Best
       }
       public string GetGunLoad()
       {
-         if (false == this.IsShermanRepeatFire) // If this is repeat fire due to ROF, pull from Ammo Reload
-            return GetAmmoReload();
          foreach (IMapItem mi in this.GunLoads )
          {
             if( true == mi.Name.Contains("GunLoad"))
@@ -274,36 +272,13 @@ namespace Pattons_Best
          }
          return "None";
       }
-      public bool SetAmmoReload(string ammoType)
-      {
-         string name = "GunLoad" + ammoType;
-         ITerritory? newT = Territories.theTerritories.Find(name);
-         if (null == newT)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetAmmoReload(): unable to find name=" + name);
-            return false;
-         }
-         foreach (IMapItem mi in this.GunLoads)
-         {
-            if (true == mi.Name.Contains("AmmoReload"))
-            {
-               mi.TerritoryCurrent = newT;
-               double offset = mi.Zoom * Utilities.theMapItemOffset;
-               mi.Location.X = newT.CenterPoint.X - offset;
-               mi.Location.Y = newT.CenterPoint.Y - offset;
-               return true;
-            }
-         }
-         Logger.Log(LogEnum.LE_ERROR, "SetAmmoReload(): reached default");
-         return false;
-      }
       public bool IsReadyRackReload()
       {
          if( false == this.IsShermanRepeatFire ) // Ready Rack Reload only happens on repeat fire
                return false;
          foreach (IMapItem mi in this.GunLoads)
          {
-            if (true == mi.Name.Contains("ReadyRackReload"))
+            if (true == mi.Name.Contains("ReadyRackAmmoReload"))
             {
                if (true == mi.TerritoryCurrent.Name.Contains("Hvap"))
                   return true;

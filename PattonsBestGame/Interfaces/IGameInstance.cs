@@ -172,7 +172,6 @@ namespace Pattons_Best
       string GetGunLoad();
       bool SetGunLoad(string ammoType);
       string GetAmmoReload();
-      bool SetAmmoReload(string ammoType);
       bool IsReadyRackReload();
       int GetReadyRackReload(string ammoType);
       bool SetReadyRackReload(string name, int value);

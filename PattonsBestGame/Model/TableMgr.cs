@@ -3299,21 +3299,21 @@ namespace Pattons_Best
             case EnumScenario.Battle:
                if (dieRoll < 6)
                   return "Time Passes";
-               if (dieRoll < 16)
-                  return "Friendly Artillery";
                if (dieRoll < 21)
-                  return "Enemy Artillery";
+                  return "Friendly Artillery";
                if (dieRoll < 31)
-                  return "Mines";
+                  return "Enemy Artillery";
                if (dieRoll < 36)
-                  return "Panzerfaust";
+                  return "Mines";
                if (dieRoll < 41)
-                  return "Harrassing Fire";
+                  return "Panzerfaust";
                if (dieRoll < 46)
-                  return "Friendly Advance";
+                  return "Harrassing Fire";
                if (dieRoll < 61)
-                  return "Enemy Reinforce";
+                  return "Friendly Advance";
                if (dieRoll < 81)
+                  return "Enemy Reinforce";
+               if (dieRoll < 86)
                   return "Enemy Advance";
                return "Flanking Fire";
             case EnumScenario.Counterattack:
@@ -4812,7 +4812,7 @@ namespace Pattons_Best
                case 240.0: return "Side";
                case 300.0: return "Side";
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): reached default rotation=" + rotation.ToString("F1") + " hr=" + gi.Sherman.RotationHull.ToString("F1"));
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): reached default rotation=" + rotation.ToString("F1") + " hr=" + gi.Target.RotationHull.ToString("F1") + " tr=" + gi.Target.RotationTurret.ToString("F1"));
                   return "ERROR";
             }
          }

@@ -248,6 +248,11 @@ namespace Pattons_Best
          for(int k=0; k<myMaxRowCount; ++k )
             myGridRows[k].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[k].myMapItemEnemy, myNumUseControlled, false, true, false);
          //--------------------------------------------------
+         if( BattlePhase.FriendlyAction == myGameInstance.BattlePhase)
+         {
+            myTextBlockHeader.Text = "r4.76 Friendly Action";
+            myButtonR464.Content = "r4.76";
+         }
          if (false == UpdateGrid())
          {
             Logger.Log(LogEnum.LE_ERROR, "ResolveArtilleryFire(): UpdateGrid() return false");
