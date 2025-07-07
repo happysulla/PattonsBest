@@ -1449,7 +1449,7 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------------------
-         int NumEnemyUnitsAppearing = Utilities.RandomGenerator.Next(1, 4); ; // <cgs> TEST - number of enemy units appearing
+         int NumEnemyUnitsAppearing = Utilities.RandomGenerator.Next(3, 5); // <cgs> TEST - number of enemy units appearing
          for (int k = 0; k < NumEnemyUnitsAppearing; k++)
          {
             int die1 = Utilities.RandomGenerator.Next(0, 3);
@@ -1529,7 +1529,7 @@ namespace Pattons_Best
                diceRoll = 100;
             else
                diceRoll = die1 + 10 * die2;
-            //diceRoll = 45; // <cgs> TEST - three tanks
+            diceRoll = 45; // <cgs> TEST -  tanks
             string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
             IMapItem? mi = null;
             string name = enemyUnit + Utilities.MapItemNum;

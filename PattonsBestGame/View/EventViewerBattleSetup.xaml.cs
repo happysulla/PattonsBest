@@ -818,7 +818,9 @@ namespace Pattons_Best
          }
          double xDiff = (mi.Location.X + mi.Zoom*Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.X;
          double yDiff = (mi.Location.Y + mi.Zoom * Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.Y;
-         mi.RotationHull = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;
+         mi.RotationHull = 0;
+         mi.RotationTurret = 0;
+         mi.RotationOffset = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;
          Logger.Log(LogEnum.LE_SHOW_ROTATION, "CreateMapItemRotation(): " + caller + "(): xDiff=" + xDiff.ToString("F2") + " yDiff=" + yDiff.ToString("F2") + " r=" + mi.RotationHull.ToString("F2") + " t=" + mi.TerritoryCurrent.Name + " X=" + mi.Location.X + " Y=" + mi.Location.Y);
          return true;
       }
@@ -1180,9 +1182,13 @@ namespace Pattons_Best
          else if ("Side" == myGridRows[i].myFacing)
          {
             if (0 == Utilities.RandomGenerator.Next(0, 2))
-               mi.RotationOffset = 36 + Utilities.RandomGenerator.Next(0, 114);
+               mi.RotationOffset = 36 + Utilities.RandomGenerator.Next(0, 109);
             else
-               mi.RotationOffset = -34 - Utilities.RandomGenerator.Next(0, 114);
+               mi.RotationOffset = -34 - Utilities.RandomGenerator.Next(0, 109);
+         }
+         else
+         {
+
          }
          return true;
       }
