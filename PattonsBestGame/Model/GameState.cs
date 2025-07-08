@@ -1584,21 +1584,22 @@ namespace Pattons_Best
             //-----------------------------------------
             if (true == mi.IsVehicle)
             {
-               double xDiff = mi.Location.X + mi.Zoom * Utilities.theMapItemOffset - gi.Home.CenterPoint.X;
-               double yDiff = mi.Location.Y + mi.Zoom * Utilities.theMapItemOffset - gi.Home.CenterPoint.Y;
-               mi.RotationHull = Math.Atan2(yDiff, xDiff) * 180 / Math.PI - 90;
-               //-----------------------------------------
-               die1 = Utilities.RandomGenerator.Next(0, 3);
-               if (1 == die1)
+               if(false == mi.SetMapItemRotation(gi.Sherman))
                {
-                  mi.RotationOffset = 151 + Utilities.RandomGenerator.Next(0, 59);
+                  Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): SetMapItemRotation() returned false");
+                  return false;
                }
-               else if (2 == die1)
+               die1 = Utilities.RandomGenerator.Next(1, 11);
+               string facing = TableMgr.GetEnemyFacing(enemyUnit, die1);
+               if ("ERROR" == facing)
                {
-                  if (0 == Utilities.RandomGenerator.Next(0, 2))
-                     mi.RotationOffset = 36 + Utilities.RandomGenerator.Next(0, 114);
-                  else
-                     mi.RotationOffset = -34 - Utilities.RandomGenerator.Next(0, 114);
+                  Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): GetEnemyFacing() returned error");
+                  return false;
+               }
+               if ( false == mi.UpdateMapRotation(facing))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): UpdateMapRotation() returned false");
+                  return false;
                }
             }
             //-----------------------------------------
@@ -3412,7 +3413,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceShermanToHitRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 2; // <cgs> TEST - Sherman To Hit Roll
+                     dieRoll = 11; // <cgs> TEST - Sherman To Hit Roll
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -4409,11 +4410,11 @@ namespace Pattons_Best
          {
             //dieRoll = 10; // <cgs> TEST - Sherman To Kill Roll
             gi.DieResults[key][0] = dieRoll;
-            gi.DieRollAction = GameAction.DieRollActionNone;
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnit(): set d1=" + gi.DieResults[key][0].ToString() + " v?=" + gi.Target.IsVehicle + " hd?=" + gi.Target.IsHullDown);
             //----------------------------------------------
             if (true == gi.Target.IsVehicle) // first die is hit location
             {
+               gi.DieRollAction = GameAction.BattleRoundSequenceShermanToKillRoll;
                if (true == gi.Target.IsHullDown)
                {
                   if (5 < gi.DieResults[key][0])
@@ -4443,6 +4444,7 @@ namespace Pattons_Best
             }
             else
             {
+               gi.DieRollAction = GameAction.DieRollActionNone;
                Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnit(): ResolveToKillEnemyUnitFinal(infantry)" );
                if (false == ResolveToKillEnemyUnitFinal(gi, ref outAction, gi.DieResults[key][0]))
                {

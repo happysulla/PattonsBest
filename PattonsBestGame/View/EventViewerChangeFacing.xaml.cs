@@ -515,24 +515,15 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): mi=null for i=" + i.ToString());
             return false;
          }
-         double xDiff = (mi.Location.X + mi.Zoom * Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.X; // first point the vehicle at the Sherman
-         double yDiff = (mi.Location.Y + mi.Zoom * Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.Y;
-         mi.RotationHull = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;
-         mi.RotationOffset = 0.0; // add a little rotation for fun
-         //----------------------------
-         if ("Front" == myGridRows[i].myFacingNew)
-            return true;
-         //----------------------------
-         if ("Rear" == myGridRows[i].myFacingNew)
+         if( false == mi.SetMapItemRotation(myGameInstance.Sherman))
          {
-            mi.RotationOffset = 151 + Utilities.RandomGenerator.Next(0, 59);
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): SetMapItemRotation() returned false");
+            return false;
          }
-         else if ("Side" == myGridRows[i].myFacingNew)
+         if (false == mi.UpdateMapRotation(myGridRows[i].myFacingNew))
          {
-            if (0 == Utilities.RandomGenerator.Next(0, 2))
-               mi.RotationOffset = 36 + Utilities.RandomGenerator.Next(0, 114);
-            else
-               mi.RotationOffset = -34 - Utilities.RandomGenerator.Next(0, 114);
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): UpdateMapRotation() returned false for i=" + i.ToString());
+            return false;
          }
          return true;
       }

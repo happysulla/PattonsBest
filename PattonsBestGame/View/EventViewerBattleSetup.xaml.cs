@@ -787,43 +787,6 @@ namespace Pattons_Best
          myGridRows[i].myMapItem = mi;
          return true;
       }
-      private bool CreateMapItemRotation(Index i, string caller)
-      {
-         if (null == myGameInstance)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateMapItemRotation(): myGameInstance=null");
-            return false;
-         }
-         IMapItem? mi = myGridRows[i].myMapItem;   
-         if( null == mi )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateMapItemRotation(): mi=null");
-            return false;
-         }
-         switch (myGridRows[i].myActivation)
-         {
-            case "ATG":
-            case "LW":
-            case "MG":
-               return true;
-            case "PSW":
-            case "SPW":
-            case "SPG":
-            case "TANK":
-            case "TRUCK":
-               break;
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "CreateMapItemRotation(): reached default with enemyUnit=" + myGridRows[i].myActivation);
-               return false;
-         }
-         double xDiff = (mi.Location.X + mi.Zoom*Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.X;
-         double yDiff = (mi.Location.Y + mi.Zoom * Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.Y;
-         mi.RotationHull = 0;
-         mi.RotationTurret = 0;
-         mi.RotationOffset = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;
-         Logger.Log(LogEnum.LE_SHOW_ROTATION, "CreateMapItemRotation(): " + caller + "(): xDiff=" + xDiff.ToString("F2") + " yDiff=" + yDiff.ToString("F2") + " r=" + mi.RotationHull.ToString("F2") + " t=" + mi.TerritoryCurrent.Name + " X=" + mi.Location.X + " Y=" + mi.Location.Y);
-         return true;
-      }
       private Button CreateButton(IMapItem mi)
       {
          System.Windows.Controls.Button b = new Button { };
@@ -930,9 +893,15 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyFacing() returned ERROR");
                   return;
                }
-               if (false == ShowDieResultUpdateFacing(i))
+               IMapItem? mi = myGridRows[i].myMapItem;
+               if (null == mi)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResultUpdateFacing() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): mi=null for i=" + i.ToString());
+                  return;
+               }
+               if (false == mi.UpdateMapRotation(myGridRows[i].myFacing))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateMapRotation() returned false");
                   return;
                }
                myState = E046Enum.PLACE_TERRAIN;
@@ -1116,9 +1085,9 @@ namespace Pattons_Best
             mi.TerritoryCurrent = mi.TerritoryStarting = t;
             myGameInstance.BattleStacks.Remove(mi.Name);
             myGameInstance.BattleStacks.Add(mi);
-            if (false == CreateMapItemRotation(i, "ShowDieResultUpdateSector"))
+            if (false == mi.SetMapItemRotation(myGameInstance.Sherman))
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateMapItem(): CreateMapItemRotation() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): SetMapItemRotation() returned false");
                return false;
             }
          }
@@ -1156,39 +1125,10 @@ namespace Pattons_Best
          myGameInstance.BattleStacks.Add(mi);
          IMapPoint mp = Territory.GetRandomPoint(t, mi.Zoom * Utilities.theMapItemOffset);
          mi.Location = mp;
-         if (false == CreateMapItemRotation(i, "ShowDieResultUpdateRange"))
+         if (false == mi.SetMapItemRotation(myGameInstance.Sherman))
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateRange(): CreateMapItemRotation() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateRange(): SetMapItemRotation() returned false");
             return false;
-         }
-         return true;
-      }
-      private bool ShowDieResultUpdateFacing(Index i)
-      {
-         if ("Front" == myGridRows[i].myFacing)
-            return true;
-         //----------------------------
-         IMapItem? mi = myGridRows[i].myMapItem;
-         if (null == mi)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): mi=null for i=" + i.ToString());
-            return false;
-         }
-         //----------------------------
-         if ("Rear" == myGridRows[i].myFacing)
-         {
-            mi.RotationOffset = 151 + Utilities.RandomGenerator.Next(0, 59);
-         }
-         else if ("Side" == myGridRows[i].myFacing)
-         {
-            if (0 == Utilities.RandomGenerator.Next(0, 2))
-               mi.RotationOffset = 36 + Utilities.RandomGenerator.Next(0, 109);
-            else
-               mi.RotationOffset = -34 - Utilities.RandomGenerator.Next(0, 109);
-         }
-         else
-         {
-
          }
          return true;
       }
@@ -1197,7 +1137,7 @@ namespace Pattons_Best
          IMapItem? mi = myGridRows[i].myMapItem;
          if (null == mi)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): mi=null for i=" + i.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateTerrain(): mi=null for i=" + i.ToString());
             return false;
          }
          switch (myGridRows[i].myTerrain)

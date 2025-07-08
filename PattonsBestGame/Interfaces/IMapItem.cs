@@ -48,6 +48,8 @@ namespace Pattons_Best
       bool IsEnemyUnit();
       string GetEnemyUnit();
       void SetBloodSpots(int percent = 40);
+      bool SetMapItemRotation(IMapItem target);
+      bool UpdateMapRotation(string facing);
    }
    //==========================================
    public interface IMapItems : System.Collections.IEnumerable

@@ -16,8 +16,8 @@ namespace Pattons_Best
 {
    public class TableMgr
    {
-      public const int NO_CHANCE = +120;
-      public const int KIA = -100;
+      public const int NO_CHANCE = 3;
+      public const int KIA = -99;
       public const int FN_ERROR = -1000;
       public static ICombatCalanderEntries theCombatCalendarEntries = new CombatCalendarEntries();
       public static int[,] theExits = new int[10, 10];
@@ -4511,7 +4511,7 @@ namespace Pattons_Best
                return FN_ERROR;
          }
          //------------------------------------
-         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitNumber(): 1-base#=" + toHitNum.ToString());
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitNumber(): Original To Hit base#=" + toHitNum.ToString());
          int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
          if (numSmokeMarkers < 0)
          {
@@ -4524,7 +4524,7 @@ namespace Pattons_Best
          if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
             toHitNum = toHitNum * 0.5;
          //------------------------------------
-         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitNumber(): 2-base#=" + toHitNum.ToString());
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitNumber(): After Smoke/Fog base#=" + toHitNum.ToString());
          int modifier = GetShermanToHitModifier(gi, enemyUnit);
          if (FN_ERROR == modifier)
          {
@@ -4532,7 +4532,7 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          toHitNum -= modifier;
-         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitNumber(): 3-base#=" + toHitNum.ToString() + " mod=" + modifier.ToString());
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitNumber(): Final base#=" + toHitNum.ToString() + " which includes mod=" + modifier.ToString());
          return toHitNum;
       }
       public static int GetShermanRateOfFireModifier(IGameInstance gi)
@@ -4762,11 +4762,6 @@ namespace Pattons_Best
       }
       public static string GetShermanFireDirection(IGameInstance gi, IMapItem enemyUnit, string hitLocation)
       {
-         if( null == gi.Target )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): gi.Target=null");
-            return "ERROR";
-         }
          int count = enemyUnit.TerritoryCurrent.Name.Count();
          if (3 != count)
          {
@@ -4799,10 +4794,12 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): reached default enemySector=" + enemySector);
                return "ERROR";
          }
-         rotation -= gi.Target.RotationHull;
+         rotation -= enemyUnit.RotationHull;
          if ("Turret" == hitLocation)
          {
-            rotation -= gi.Target.RotationTurret;
+            rotation -= enemyUnit.RotationTurret;
+            if (rotation < 0.0)
+               rotation += 360;
             switch (rotation)
             {
                case 0.0: return "Rear";
@@ -4812,12 +4809,14 @@ namespace Pattons_Best
                case 240.0: return "Side";
                case 300.0: return "Side";
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): reached default rotation=" + rotation.ToString("F1") + " hr=" + gi.Target.RotationHull.ToString("F1") + " tr=" + gi.Target.RotationTurret.ToString("F1"));
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): reached default 1-rotation=" + rotation.ToString("F1") + " hr=" + enemyUnit.RotationHull.ToString("F1") + " tr=" + enemyUnit.RotationTurret.ToString("F1"));
                   return "ERROR";
             }
          }
          else if ("Hull" == hitLocation)
          {
+            if (rotation < 0.0)
+               rotation += 360;
             switch (rotation)
             {
                case 0.0: return "Rear";
@@ -4827,7 +4826,7 @@ namespace Pattons_Best
                case 240.0: return "Side";
                case 300.0: return "Side";
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): reached default r=" + rotation.ToString("F1") + " hr=" + gi.Sherman.RotationHull.ToString("F1") + " tr=" + gi.Sherman.RotationTurret.ToString("F1"));
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): 2-reached default r=" + rotation.ToString("F1") + " hr=" + enemyUnit.RotationHull.ToString("F1") + " tr=" + enemyUnit.RotationTurret.ToString("F1"));
                   return "ERROR";
             }
          }
@@ -4839,39 +4838,38 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill75ApVehicleNumber(): lastReport=null");
             return FN_ERROR;
          }
          //---------------------------------------------------
          if (3 != enemyUnit.TerritoryCurrent.Name.Length)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill75ApVehicleNumber(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
             return FN_ERROR;
          }
          char range = enemyUnit.TerritoryCurrent.Name[2];
          if( ('C' != range) && ('M' != range) && ('L' != range) )
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): invald range=" + range.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill75ApVehicleNumber(): invald range=" + range.ToString());
             return FN_ERROR;
          }
          //---------------------------------------------------
          string facing = GetShermanFireDirection(gi, enemyUnit, hitLocation);
          if( "ERROR" == facing )
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill75ApVehicleNumber(): lastReport=null");
             return FN_ERROR;
          }
          if (("Side" != facing) && ("Front" != facing) && ("Rear" != facing))
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): invald facing=" + facing);
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill75ApVehicleNumber(): invald facing=" + facing);
             return FN_ERROR;
          }
          //----------------------------------------------------
-
          string enemyUnitType = enemyUnit.GetEnemyUnit();
          if ("ERROR" == enemyUnitType)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): unknown enemyUnit=" + enemyUnit.Name);
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill75ApVehicleNumber(): unknown enemyUnit=" + enemyUnit.Name);
             return FN_ERROR;
          }
          //---------------------------------------------------
@@ -5192,7 +5190,7 @@ namespace Pattons_Best
                toKillNum = 75;
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): 2-Reached Default enemyUnit=" + enemyUnit);
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill75ApVehicleNumber(): 2-Reached Default enemyUnit=" + enemyUnit);
                return FN_ERROR;
          }
          //--------------------------------------
@@ -5203,31 +5201,31 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill76ApVehicleNumber(): lastReport=null");
             return FN_ERROR;
          }
          //---------------------------------------------------
          if (3 != enemyUnit.TerritoryCurrent.Name.Length)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill76ApVehicleNumber(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
             return FN_ERROR;
          }
          char range = enemyUnit.TerritoryCurrent.Name[2];
          if (('C' != range) && ('M' != range) && ('L' != range))
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): invald range=" + range.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill76ApVehicleNumber(): invald range=" + range.ToString());
             return FN_ERROR;
          }
          //---------------------------------------------------
          string facing = GetShermanFireDirection(gi, enemyUnit, hitLocation);
          if ("ERROR" == facing)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill76ApVehicleNumber(): lastReport=null");
             return FN_ERROR;
          }
          if (("Side" != facing) && ("Front" != facing) && ("Rear" != facing))
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): invald facing=" + facing);
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill76ApVehicleNumber(): invald facing=" + facing);
             return FN_ERROR;
          }
          //----------------------------------------------------
@@ -5464,7 +5462,7 @@ namespace Pattons_Best
                toKillNum = 75;
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): 2-Reached Default enemyUnit=" + enemyUnit);
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill76ApVehicleNumber(): 2-Reached Default enemyUnit=" + enemyUnit);
                return FN_ERROR;
          }
          //--------------------------------------
@@ -5475,38 +5473,38 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill76HvapVehicleNumber(): lastReport=null");
             return FN_ERROR;
          }
          //---------------------------------------------------
          if (3 != enemyUnit.TerritoryCurrent.Name.Length)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill76HvapVehicleNumber(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
             return FN_ERROR;
          }
          char range = enemyUnit.TerritoryCurrent.Name[2];
          if (('C' != range) && ('M' != range) && ('L' != range))
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): invald range=" + range.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill76HvapVehicleNumber(): invald range=" + range.ToString());
             return FN_ERROR;
          }
          //---------------------------------------------------
          string facing = GetShermanFireDirection(gi, enemyUnit, hitLocation);
          if ("ERROR" == facing)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill76HvapVehicleNumber(): lastReport=null");
             return FN_ERROR;
          }
          if (("Side" != facing) && ("Front" != facing) && ("Rear" != facing))
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): invald facing=" + facing);
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill76HvapVehicleNumber(): invald facing=" + facing);
             return FN_ERROR;
          }
          //----------------------------------------------------
          string enemyUnitType = enemyUnit.GetEnemyUnit();
          if ("ERROR" == enemyUnitType)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillApVehicleNumber(): unknown enemyUnit=" + enemyUnit.Name);
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill76HvapVehicleNumber(): unknown enemyUnit=" + enemyUnit.Name);
             return FN_ERROR;
          }
          //---------------------------------------------------
@@ -5709,7 +5707,7 @@ namespace Pattons_Best
                toKillNum = 75;
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitNumber(): 2-Reached Default enemyUnit=" + enemyUnit);
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill76HvapVehicleNumber(): 2-Reached Default enemyUnit=" + enemyUnit);
                return FN_ERROR;
          }
          //--------------------------------------
@@ -6088,8 +6086,6 @@ namespace Pattons_Best
       }
       public static int GetShermanToKill76HeVehicleNumber(IGameInstance gi, IMapItem enemyUnit, ShermanAttack hit, string hitLocation)
       {
-         const int NO_CHANCE = -120;
-         const int KIA = +120;
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {

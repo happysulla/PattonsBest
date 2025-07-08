@@ -2340,6 +2340,7 @@ namespace Pattons_Best
             myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
             myTextBlock.Inlines.Add(new Run("  =  "));
             myTextBlock.Inlines.Add(new Run(hit.myHitLocation));
+            myTextBlock.Inlines.Add(new LineBreak());
             //------------------------------------
             if (true == hit.myHitLocation.Contains("MISS"))
             {
@@ -2369,9 +2370,23 @@ namespace Pattons_Best
                if ("76L" == tankcard.myMainGun)
                {
                   if ("He" == hit.myAmmoType)
+                  {
                      toKillNum = TableMgr.GetShermanToKill75HeVehicleNumber(gi, gi.Target, gi.ShermanHits[0], hit.myHitLocation);
+                     if (TableMgr.FN_ERROR == toKillNum)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToKill75HeVehicleNumber() returned false");
+                        return false;
+                     }
+                  }
                   else if ("Ap" == hit.myAmmoType)
+                  {
                      toKillNum = TableMgr.GetShermanToKill75ApVehicleNumber(gi, gi.Target, gi.ShermanHits[0], hit.myHitLocation);
+                     if (TableMgr.FN_ERROR == toKillNum)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToKill75ApVehicleNumber() returned false");
+                        return false;
+                     }
+                  }
                   else
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unsupported ammo type=" + hit.myAmmoType);
@@ -2381,11 +2396,27 @@ namespace Pattons_Best
                else
                {
                   if ("He" == hit.myAmmoType)
+                  {
                      toKillNum = TableMgr.GetShermanToKill76HeVehicleNumber(gi, gi.Target, gi.ShermanHits[0], hit.myHitLocation);
+                     if (TableMgr.FN_ERROR == toKillNum)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToKill76HeVehicleNumber() returned false");
+                        return false;
+                     }
+                  }
                   else if ("Ap" == hit.myAmmoType)
+                  {
                      toKillNum = TableMgr.GetShermanToKill76ApVehicleNumber(gi, gi.Target, gi.ShermanHits[0], hit.myHitLocation);
+                     if( TableMgr.FN_ERROR == toKillNum )
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToKill76ApVehicleNumber() returned false");
+                        return false;
+                     }
+                  }
                   else if ("Hvap" == hit.myAmmoType)
+                  {
                      toKillNum = TableMgr.GetShermanToKill76HvapVehicleNumber(gi, gi.Target, gi.ShermanHits[0], hit.myHitLocation);
+                  }
                   else
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unsupported ammo type=" + hit.myAmmoType);

@@ -299,6 +299,93 @@ namespace Pattons_Best
             myWoundSpots.Add(spot);
          }
       }
+      public bool SetMapItemRotation(IMapItem target)
+      {
+         string enemyUnit = GetEnemyUnit();
+         if( "ERROR" == enemyUnit )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetMapItemRotation(): reached default with enemyUnit=" + this.Name);
+            return false;
+         }
+         switch (enemyUnit)
+         {
+            case "ATG":
+            case "LW":
+            case "MG":
+               return true;
+            default:
+               break;
+         }
+         double xDiff = (this.Location.X + this.Zoom * Utilities.theMapItemOffset) - target.TerritoryCurrent.CenterPoint.X;
+         double yDiff = (this.Location.Y + this.Zoom * Utilities.theMapItemOffset) - target.TerritoryCurrent.CenterPoint.Y;
+         double rotation = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;
+         if (rotation < 0)
+            rotation += 360.0;
+         if ( 0.0 < rotation && rotation <= 30.0)
+         {
+            this.RotationHull = 0.0;
+         }
+         else if (30.0 < rotation && rotation <= 90.0) //------------
+         {
+            this.RotationHull = 60.0;
+         }
+         else if (90.0 < rotation && rotation <= 150.0)  //------------
+         {
+            this.RotationHull = 120.0;
+         }
+         else if (150.0 < rotation && rotation <= 210.0) //------------
+         {
+            this.RotationHull = 180.0;
+         }
+         else if (210.0 < rotation && rotation <= 270.0) //------------
+         {
+            this.RotationHull = 240.0;
+         }
+         else if (270.0 < rotation && rotation <= 360.0) //------------
+         {
+            this.RotationHull = 300.0;
+         }
+         else  //------------
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetMapItemRotation(): reached default with rotation=" + rotation.ToString() + " mi=" + this.Name + " t=" + this.TerritoryCurrent.Name);
+            return false;
+         }
+         this.RotationOffset = rotation - this.RotationHull;
+         Logger.Log(LogEnum.LE_SHOW_ROTATION, "SetMapItemRotation(): xDiff=" + xDiff.ToString("F2") + " yDiff=" + yDiff.ToString("F2") + " r=" + this.RotationHull.ToString("F2") + " t=" + this.TerritoryCurrent.Name + " X=" + this.Location.X + " Y=" + this.Location.Y);
+         return true;
+      }
+      public bool UpdateMapRotation(string facing)
+      {
+         if ("Front" == facing)
+         {
+            // do nothing
+         }
+         else if("Side" == facing)
+         {
+            int randomNum = Utilities.RandomGenerator.Next(0, 2);
+            if( 0 == randomNum )
+            {
+               this.RotationHull -= 60.0;
+               this.RotationOffset += -30 + Utilities.RandomGenerator.Next(0, 60);
+            }
+            else
+            {
+               this.RotationHull += 60.0;
+               this.RotationOffset += -30 + Utilities.RandomGenerator.Next(0, 60);
+            }
+         }
+         else if ("Rear" == facing)
+         {
+            this.RotationHull -= 180.0;
+            this.RotationOffset += -15 + Utilities.RandomGenerator.Next(0, 30);
+         }
+         else 
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateMapRotation(): reached default with facing=" + facing);
+            return false;
+         }
+         return true;
+      }
       public override string ToString()
       {
          StringBuilder sb = new StringBuilder("Name=<");
