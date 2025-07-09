@@ -3922,18 +3922,6 @@ namespace Pattons_Best
                gi.EventDisplayed = gi.EventActive = "e051";
                gi.DieRollAction = GameAction.BattleRoundSequenceMovementRoll;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 1-phase=" + gi.CrewActionPhase.ToString());
-            }
-            if (true == isTankPivoting)
-            {
-               gi.Sherman.IsMoved = true;
-               gi.CrewActionPhase = CrewActionPhase.Movement;
-               gi.EventDisplayed = gi.EventActive = "e052";
-               gi.DieRollAction = GameAction.DieRollActionNone;
-               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 2-phase=" + gi.CrewActionPhase.ToString());
-            }
-            //---------------------------------
-            if ( true == gi.Sherman.IsMoved ) // if Sherman Moves, units that are hidden become unspotted
-            {
                foreach (IStack stack in gi.BattleStacks)
                {
                   foreach (IMapItem mi in stack.MapItems)
@@ -3942,6 +3930,14 @@ namespace Pattons_Best
                         mi.Spotting = EnumSpottingResult.UNSPOTTED;
                   }
                }
+            }
+            if (true == isTankPivoting)
+            {
+               gi.Sherman.IsMoved = true;
+               gi.CrewActionPhase = CrewActionPhase.Movement;
+               gi.EventDisplayed = gi.EventActive = "e052";
+               gi.DieRollAction = GameAction.DieRollActionNone;
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 2-phase=" + gi.CrewActionPhase.ToString());
             }
          }
          //---------------------------------------------------------

@@ -2401,12 +2401,11 @@
     <Parent value="Main" />
     <Type value="Battle" />
     <CenterPoint X="0958.50" Y="0284.76" />
-    <Points count="5">
+    <Points count="4">
       <regionPoint X="0917.33" Y="0264.03" />
       <regionPoint X="0994.67" Y="0264.03" />
       <regionPoint X="0994.67" Y="0296.69" />
-      <regionPoint X="0917.33" Y="0298.03" />
-      <regionPoint X="0916.67" Y="0264.69" />
+      <regionPoint X="0917.33" Y="0298.69" />
     </Points>
     <Adjacents count="0" />
   </Territory>

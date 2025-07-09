@@ -396,6 +396,12 @@ namespace Pattons_Best
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                break;
+            case GameAction.BattleRoundSequenceBackToSpotting:
+               if (false == UpdateCanvasAnimateBattlePhase(gi))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
+               if (false == UpdateCanvasTank(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               break;
             case GameAction.EveningDebriefingStart:
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
@@ -1024,18 +1030,38 @@ namespace Pattons_Best
                   continue;
                elements.Add(ui);
             }
-            if (BattlePhase.BackToSpotting == gi.BattlePhase)
+            if ((BattlePhase.BackToSpotting == gi.BattlePhase) && (ui is Button b) )
             {
-               foreach (IMapItem mi in gi.CrewActions)
+               IMapItem? mi = gi.Hatches.Find(b.Name);
+               if( null == mi )
+                  mi = gi.ReadyRacks.Find(b.Name);
+               if (null == mi)
+                  mi = gi.GunLoads.Find(b.Name);
+               if (null == mi) // If Button does not have corresponding MapItem, remove button.
                {
-                  Button? b = myTankButtons.Find(mi.Name);
-                  if (null != b)
-                     elements.Add(b);
+                  elements.Add(ui);
+                  myTankButtons.Remove(b);
                }
             }
          }
          foreach (UIElement ui1 in elements)
             myCanvasTank.Children.Remove(ui1);
+         //-------------------------------------------------------
+         if( true == Logger.theLogLevel[(int)LogEnum.LE_SHOW_TANK_BUTTONS])
+         {
+            StringBuilder sbbuttons = new StringBuilder();
+            int lastParen = myTankButtons.Count - 1;
+            sbbuttons.Append("[");
+            int i = 0;
+            foreach (Button b in myTankButtons)
+            {
+               sbbuttons.Append(b.Name);
+               if (i++ != lastParen)
+                  sbbuttons.Append(",");
+            }
+            sbbuttons.Append("]");
+            Logger.Log(LogEnum.LE_SHOW_TANK_BUTTONS, "UpdateCanvasTank(): gp=" + gi.GamePhase.ToString() + " bp=" + gi.BattlePhase.ToString() + " Buttons =" + sbbuttons.ToString());
+         }
          //-------------------------------------------------------
          if (GamePhase.UnitTest == gi.GamePhase)
             return true;

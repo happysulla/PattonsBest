@@ -3611,14 +3611,14 @@ namespace Pattons_Best
             return false;
          }
          //-----------------------------------------
-         bool isBattleBoardEmpty = false;
+         bool isBattleBoardEmpty = true;
          foreach (IStack stack in myGameInstance.BattleStacks)
          {
             foreach (IMapItem mi in stack.MapItems)
             {
                if (true == mi.IsEnemyUnit())
                {
-                  isBattleBoardEmpty = true;
+                  isBattleBoardEmpty = false;
                   break;
                }
             }
