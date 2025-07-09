@@ -1336,7 +1336,7 @@ namespace Pattons_Best
                   myGridRows[i].myDieRollToKillYourTank = NO_FIRE_YOUR_TANK;
                }
                else if (true == enemyAction.Contains("Tank"))
-               {
+               {                  
                   mi.IsFired = true;
                   if ( ( (true == enemyAction.Contains("Lead") ) && (true == myGameInstance.IsLeadTank)) || (true == enemyAction.Contains("Your") ) )
                   {
@@ -1378,6 +1378,8 @@ namespace Pattons_Best
                //----------------------------------------
                if ( (true == enemyAction.Contains("Move") ) && (false == mi.IsThrownTrack) )
                {
+                  if (EnumSpottingResult.HIDDEN == mi.Spotting) // Hidden units that move become unspotted
+                     mi.Spotting = EnumSpottingResult.UNSPOTTED;
                   mi.IsMoved = true;
                   mi.IsHullDown = false;
                   mi.IsBuilding = false;

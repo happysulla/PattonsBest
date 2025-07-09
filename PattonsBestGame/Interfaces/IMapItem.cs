@@ -16,7 +16,7 @@ namespace Pattons_Best
       List<BloodSpot> WoundSpots { get; }
       double Zoom { get; set; }
       bool IsAnimated { get; set; }
-      bool IsMoved { get; set; }
+      bool IsMoved { get; set; }               // If Sherman moved, it cannot fire unless it has HVSS
       int Count { get; set; }
       IMapPoint Location { get; set; }       // top left corner of MapItem
       double RotationOffset { get; set; }      

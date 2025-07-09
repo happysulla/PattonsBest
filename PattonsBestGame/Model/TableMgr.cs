@@ -16,7 +16,7 @@ namespace Pattons_Best
 {
    public class TableMgr
    {
-      public const int NO_CHANCE = 3;
+      public const int NO_CHANCE = 100;
       public const int KIA = -99;
       public const int FN_ERROR = -1000;
       public static ICombatCalanderEntries theCombatCalendarEntries = new CombatCalendarEntries();
@@ -1145,6 +1145,10 @@ namespace Pattons_Best
                isDoNothingInsteadOfFiring = true;
          }
          //----------------------------------------------------
+         bool isDoNothingInsteadOfFiringAtYourTank = false;
+         if (EnumSpottingResult.HIDDEN == mi.Spotting)
+            isDoNothingInsteadOfFiringAtYourTank = true;
+         //----------------------------------------------------
          int modifier = GetEnemyActionModifier(gi, mi);
          if (modifier < 0)
          {
@@ -1191,7 +1195,11 @@ namespace Pattons_Best
                      if (true == isDoNothingInsteadOfFiring)
                         return "Do Nothing";
                      else if (true == gi.IsShermanFiring)
+                     {
+                        if (true == isDoNothingInsteadOfFiringAtYourTank)
+                           return "Do Nothing";
                         return "Fire-Your Tank";
+                     }
                      else
                         return "Fire-Any Tank";
                   }
@@ -1202,6 +1210,8 @@ namespace Pattons_Best
                      return "Fire-Any Tank";
                   }
                   if (true == isDoNothingInsteadOfFiring)
+                     return "Do Nothing";
+                  if ((true == isDoNothingInsteadOfFiringAtYourTank) && (true == gi.IsLeadTank)) 
                      return "Do Nothing";
                   return "Fire-Lead Tank";
                case "TRUCK":
@@ -1266,6 +1276,8 @@ namespace Pattons_Best
                      {
                         if (true == isDoNothingInsteadOfFiring)
                            return "Do Nothing";
+                        if (true == isDoNothingInsteadOfFiringAtYourTank)
+                           return "Do Nothing";
                         return "Fire-Your Tank";
                      }
                      else if (true == gi.IsShermanFiring)
@@ -1283,9 +1295,13 @@ namespace Pattons_Best
                   {
                      if (true == isDoNothingInsteadOfFiring)
                         return "Do Nothing";
+                     if (true == isDoNothingInsteadOfFiringAtYourTank)
+                        return "Do Nothing";
                      return "Fire-Your Tank";
                   }
                   if (true == isDoNothingInsteadOfFiring)
+                     return "Do Nothing";
+                  if ((true == isDoNothingInsteadOfFiringAtYourTank) && (true == gi.IsLeadTank))
                      return "Do Nothing";
                   return "Fire-Lead Tank";
                default:
@@ -1325,7 +1341,11 @@ namespace Pattons_Best
                      if (true == isDoNothingInsteadOfFiring)
                         return "Do Nothing";
                      else if (true == gi.IsShermanFiring)
+                     {
+                        if (true == isDoNothingInsteadOfFiringAtYourTank)
+                           return "Do Nothing";
                         return "Fire-Your Tank";
+                     }
                      else
                         return "Fire-Any Tank";
                   }
@@ -1336,6 +1356,8 @@ namespace Pattons_Best
                      return "Fire-Any Tank";
                   }
                   if (true == isDoNothingInsteadOfFiring)
+                     return "Do Nothing";
+                  if ((true == isDoNothingInsteadOfFiringAtYourTank) && (true == gi.IsLeadTank))
                      return "Do Nothing";
                   return "Fire-Lead Tank";
                case "TANK":
@@ -1367,6 +1389,8 @@ namespace Pattons_Best
                      {
                         if (true == isDoNothingInsteadOfFiring)
                            return "Do Nothing";
+                        if (true == isDoNothingInsteadOfFiringAtYourTank)
+                           return "Do Nothing";
                         return "Fire-Your Tank";
                      }
                      else if (true == gi.IsShermanFiring)
@@ -1384,9 +1408,13 @@ namespace Pattons_Best
                   {
                      if (true == isDoNothingInsteadOfFiring)
                         return "Do Nothing";
+                     if (true == isDoNothingInsteadOfFiringAtYourTank)
+                        return "Do Nothing";
                      return "Fire-Your Tank";
                   }
                   if (true == isDoNothingInsteadOfFiring)
+                     return "Do Nothing";
+                  if ((true == isDoNothingInsteadOfFiringAtYourTank) && (true == gi.IsLeadTank))
                      return "Do Nothing";
                   return "Fire-Lead Tank";
                default:
@@ -1448,6 +1476,8 @@ namespace Pattons_Best
                      {
                         if (true == isDoNothingInsteadOfFiring)
                            return "Do Nothing";
+                        if (true == isDoNothingInsteadOfFiringAtYourTank)
+                           return "Do Nothing";
                         return "Fire-Your Tank";
                      }
                      else if (true == gi.IsShermanFiring)
@@ -1462,6 +1492,8 @@ namespace Pattons_Best
                      }
                   }
                   if (true == isDoNothingInsteadOfFiring)
+                     return "Do Nothing";
+                  if (true == isDoNothingInsteadOfFiringAtYourTank)
                      return "Do Nothing";
                   return "Fire-Your Tank";
                default:
@@ -4029,17 +4061,17 @@ namespace Pattons_Best
             if( 'C' == range )
             {
                toHitModifierNum -= 5;
-               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): acq1 at close range -5 mod=" + toHitModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): acq1 at Close range -5 mod=" + toHitModifierNum.ToString());
             }
             else if ('M' == range)
             {
                toHitModifierNum -= 10;
-               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): acq1 at close range -10 mod=" + toHitModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): acq1 at Medium range -10 mod=" + toHitModifierNum.ToString());
             }
             else if ('L' == range)
             {
                toHitModifierNum -= 15;
-               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): acq1 at close range -15 mod=" + toHitModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): acq1 at Long range -15 mod=" + toHitModifierNum.ToString());
             }
             else
             {
@@ -4052,17 +4084,17 @@ namespace Pattons_Best
             if ('C' == range)
             {
                toHitModifierNum -= 10;
-               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): acq2 at close range -10 mod=" + toHitModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): acq2 at Close range -10 mod=" + toHitModifierNum.ToString());
             }
             else if ('M' == range)
             {
                toHitModifierNum -= 20;
-               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): acq2 at close range -20 mod=" + toHitModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): acq2 at Medium range -20 mod=" + toHitModifierNum.ToString());
             }
             else if ('L' == range)
             {
                toHitModifierNum -= 30;
-               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier():  acq2 at close range -30 mod=" + toHitModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier():  acq2 at Long range -30 mod=" + toHitModifierNum.ToString());
             }
             else
             {
@@ -4833,7 +4865,7 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): reached default hitLocation=" + hitLocation);
          return "ERROR";
       }
-      public static int GetShermanToKill75ApVehicleNumber(IGameInstance gi, IMapItem enemyUnit, ShermanAttack hit, string hitLocation)
+      public static int GetShermanToKill75ApVehicleNumber(IGameInstance gi, IMapItem enemyUnit, ShermanAttack hit)
       {
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -4854,7 +4886,7 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          //---------------------------------------------------
-         string facing = GetShermanFireDirection(gi, enemyUnit, hitLocation);
+         string facing = GetShermanFireDirection(gi, enemyUnit, hit.myHitLocation);
          if( "ERROR" == facing )
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill75ApVehicleNumber(): lastReport=null");
@@ -4878,7 +4910,7 @@ namespace Pattons_Best
          {
             if ("PzV" == enemyUnitType)
             {
-               if ("Turret" == hitLocation)
+               if ("Turret" == hit.myHitLocation)
                {
                   if ('C' == range) toKillNum = 100;
                   else if ('M' == range) toKillNum = 100;
@@ -4899,7 +4931,7 @@ namespace Pattons_Best
             }
             else if (("PzVIb" == enemyUnitType) || ("TANK" == enemyUnitType))
             {
-               if ("Turret" == hitLocation)
+               if ("Turret" == hit.myHitLocation)
                {
                   if ('C' == range) toKillNum = 83;
                   else if ('M' == range) toKillNum = 72;
@@ -4922,7 +4954,7 @@ namespace Pattons_Best
             case "PzIV":
                if ("Front" == facing)
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 58;
                      else if ('M' == range) toKillNum = 42;
@@ -4937,7 +4969,7 @@ namespace Pattons_Best
                }
                else if ("Side" == facing)
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 83;
                      else if ('M' == range) toKillNum = 72;
@@ -4952,7 +4984,7 @@ namespace Pattons_Best
                }
                else  // rear
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 92;
                      else if ('M' == range) toKillNum = 83;
@@ -5010,7 +5042,7 @@ namespace Pattons_Best
                }
                else if ("Side" == facing)
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 03;
                      else if ('M' == range) toKillNum = NO_CHANCE;
@@ -5025,7 +5057,7 @@ namespace Pattons_Best
                }
                else  // rear
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 08;
                      else if ('M' == range) toKillNum = 03;
@@ -5063,7 +5095,7 @@ namespace Pattons_Best
             case "MARDERII":
                if ("Front" == facing)
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 95;
                      else if ('M' == range) toKillNum = 92;
@@ -5078,7 +5110,7 @@ namespace Pattons_Best
                }
                else if ("Side" == facing)
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      toKillNum = 95;
                   }
@@ -5097,7 +5129,7 @@ namespace Pattons_Best
             case "MARDERIII":
                if ("Front" == facing)
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 95;
                      else if ('M' == range) toKillNum = 95;
@@ -5112,7 +5144,7 @@ namespace Pattons_Best
                }
                else if ("Side" == facing)
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      toKillNum = 95;
                   }
@@ -5135,7 +5167,7 @@ namespace Pattons_Best
                }
                else if ("Side" == facing)
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 83;
                      else if ('M' == range) toKillNum = 72;
@@ -5150,7 +5182,7 @@ namespace Pattons_Best
                }
                else  // rear
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 92;
                      else if ('M' == range) toKillNum = 83;
@@ -5196,7 +5228,7 @@ namespace Pattons_Best
          //--------------------------------------
          return toKillNum;
       }
-      public static int GetShermanToKill76ApVehicleNumber(IGameInstance gi, IMapItem enemyUnit, ShermanAttack hit, string hitLocation)
+      public static int GetShermanToKill76ApVehicleNumber(IGameInstance gi, IMapItem enemyUnit, ShermanAttack hit)
       {
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -5217,7 +5249,7 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          //---------------------------------------------------
-         string facing = GetShermanFireDirection(gi, enemyUnit, hitLocation);
+         string facing = GetShermanFireDirection(gi, enemyUnit, hit.myHitLocation);
          if ("ERROR" == facing)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill76ApVehicleNumber(): lastReport=null");
@@ -5239,7 +5271,7 @@ namespace Pattons_Best
          int toKillNum = 0;
          if (true == hit.myIsCriticalHit) // CRITICAL HIT
          {
-            if ( (("TANK" == enemyUnitType) || ("PzVIb" == enemyUnitType)) && ("Front" == facing) && ("Hull" == hitLocation))
+            if ( (("TANK" == enemyUnitType) || ("PzVIb" == enemyUnitType)) && ("Front" == facing) && ("Hull" == hit.myHitLocation))
             {
                if ('C' == range) toKillNum = 58;
                else if ('M' == range) toKillNum = 42;
@@ -5257,7 +5289,7 @@ namespace Pattons_Best
             case "PzIV":
                if ("Front" == facing)
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 92;
                      else if ('M' == range) toKillNum = 83;
@@ -5272,7 +5304,7 @@ namespace Pattons_Best
                }
                else if ("Side" == facing)
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 95;
                      else if ('M' == range) toKillNum = 92;
@@ -5287,7 +5319,7 @@ namespace Pattons_Best
                }
                else  // rear
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 95;
                      else if ('M' == range) toKillNum = 95;
@@ -5302,7 +5334,7 @@ namespace Pattons_Best
             case "PzV":
                if ("Front" == facing)
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 03;
                      else if ('M' == range) toKillNum = NO_CHANCE;
@@ -5329,7 +5361,7 @@ namespace Pattons_Best
             case "PzVIe":
                if ("Front" == facing)
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 03;
                      else if ('M' == range) toKillNum = NO_CHANCE;
@@ -5361,7 +5393,7 @@ namespace Pattons_Best
                }
                else if ("Side" == facing)
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 28;
                      else if ('M' == range) toKillNum = 17;
@@ -5376,7 +5408,7 @@ namespace Pattons_Best
                }
                else  // rear
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 42;
                      else if ('M' == range) toKillNum = 28;
@@ -5422,7 +5454,7 @@ namespace Pattons_Best
                }
                else if ("Side" == facing)
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 95;
                      else if ('M' == range) toKillNum = 95;
@@ -5468,7 +5500,7 @@ namespace Pattons_Best
          //--------------------------------------
          return toKillNum;
       }
-      public static int GetShermanToKill76HvapVehicleNumber(IGameInstance gi, IMapItem enemyUnit, ShermanAttack hit, string hitLocation)
+      public static int GetShermanToKill76HvapVehicleNumber(IGameInstance gi, IMapItem enemyUnit, ShermanAttack hit)
       {
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -5489,7 +5521,7 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          //---------------------------------------------------
-         string facing = GetShermanFireDirection(gi, enemyUnit, hitLocation);
+         string facing = GetShermanFireDirection(gi, enemyUnit, hit.myHitLocation);
          if ("ERROR" == facing)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill76HvapVehicleNumber(): lastReport=null");
@@ -5520,7 +5552,7 @@ namespace Pattons_Best
             case "PzIV":
                if ("Front" == facing)
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 95;
                      else if ('M' == range) toKillNum = 95;
@@ -5545,7 +5577,7 @@ namespace Pattons_Best
             case "PzV":
                if ("Front" == facing)
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 83;
                      else if ('M' == range) toKillNum = 42;
@@ -5572,7 +5604,7 @@ namespace Pattons_Best
             case "PzVIe":
                if ("Front" == facing)
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 83;
                      else if ('M' == range) toKillNum = 42;
@@ -5602,7 +5634,7 @@ namespace Pattons_Best
             case "PzVIb":
                if ("Front" == facing)
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 28;
                      else if ('M' == range) toKillNum = 03;
@@ -5615,7 +5647,7 @@ namespace Pattons_Best
                }
                else if ("Side" == facing)
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 95;
                      else if ('M' == range) toKillNum = 83;
@@ -5630,7 +5662,7 @@ namespace Pattons_Best
                }
                else  // rear
                {
-                  if ("Turret" == hitLocation)
+                  if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 95;
                      else if ('M' == range) toKillNum = 95;
@@ -5713,7 +5745,7 @@ namespace Pattons_Best
          //--------------------------------------
          return toKillNum;
       }
-      public static int GetShermanToKill75HeVehicleNumber(IGameInstance gi, IMapItem enemyUnit, ShermanAttack hit, string hitLocation)
+      public static int GetShermanToKill75HeVehicleNumber(IGameInstance gi, IMapItem enemyUnit, ShermanAttack hit)
       {
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -5734,7 +5766,7 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          //---------------------------------------------------
-         string facing = GetShermanFireDirection(gi, enemyUnit, hitLocation);
+         string facing = GetShermanFireDirection(gi, enemyUnit, hit.myHitLocation);
          if ("ERROR" == facing)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill75HeVehicleNumber(): lastReport=null");
@@ -5766,14 +5798,14 @@ namespace Pattons_Best
                   }
                   else if ("Side" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 03;
                      else
                         toKillNum = 08;
                   }
                   else  // rear
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 08;
                      else
                         toKillNum = 17;
@@ -5803,21 +5835,21 @@ namespace Pattons_Best
                case "MARDERII":
                   if ("Front" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 17;
                      else
                         toKillNum = 08;
                   }
                   else if ("Side" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 42;
                      else
                         toKillNum = 28;
                   }
                   else  // rear
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 58;
                      else
                         toKillNum = 42;
@@ -5826,21 +5858,21 @@ namespace Pattons_Best
                case "MARDERIII":
                   if ("Front" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 28;
                      else
                         toKillNum = 17;
                   }
                   else if ("Side" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 42;
                      else
                         toKillNum = 28;
                   }
                   else  // rear
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 58;
                      else
                         toKillNum = 42;
@@ -5853,14 +5885,14 @@ namespace Pattons_Best
                   }
                   else if ("Side" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 03;
                      else
                         toKillNum = 08;
                   }
                   else  // rear
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 08;
                      else
                         toKillNum = 17;
@@ -5911,21 +5943,21 @@ namespace Pattons_Best
                case "PzIV":
                   if ("Front" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 58;
                      else
                         toKillNum = 42;
                   }
                   else if ("Side" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 83;
                      else
                         toKillNum = 92;
                   }
                   else  // rear
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 92;
                      else
                         toKillNum = 97;
@@ -5948,7 +5980,7 @@ namespace Pattons_Best
                case "PzVIe":
                   if ("Front" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = NO_CHANCE;
                      else
                         toKillNum = 03;
@@ -5970,14 +6002,14 @@ namespace Pattons_Best
                   }
                   else if ("Side" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 03;
                      else
                         toKillNum = 28;
                   }
                   else  // rear
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 08;
                      else
                         toKillNum = 42;
@@ -5987,7 +6019,7 @@ namespace Pattons_Best
                case "STuGIIIg":
                   if ("Front" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 97;
                      else
                         toKillNum = 92;
@@ -6004,7 +6036,7 @@ namespace Pattons_Best
                case "MARDERII":
                   if ("Front" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 97;
                      else
                         toKillNum = 92;
@@ -6021,7 +6053,7 @@ namespace Pattons_Best
                case "MARDERIII":
                   if ("Front" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 100;
                      else
                         toKillNum = 97;
@@ -6042,14 +6074,14 @@ namespace Pattons_Best
                   }
                   else if ("Side" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 83;
                      else
                         toKillNum = 92;
                   }
                   else  // rear
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 92;
                      else
                         toKillNum = 97;
@@ -6084,7 +6116,7 @@ namespace Pattons_Best
          //--------------------------------------
          return toKillNum;
       }
-      public static int GetShermanToKill76HeVehicleNumber(IGameInstance gi, IMapItem enemyUnit, ShermanAttack hit, string hitLocation)
+      public static int GetShermanToKill76HeVehicleNumber(IGameInstance gi, IMapItem enemyUnit, ShermanAttack hit)
       {
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -6105,7 +6137,7 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          //---------------------------------------------------
-         string facing = GetShermanFireDirection(gi, enemyUnit, hitLocation);
+         string facing = GetShermanFireDirection(gi, enemyUnit, hit.myHitLocation);
          if ("ERROR" == facing)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToKill76HeVehicleNumber(): lastReport=null");
@@ -6141,7 +6173,7 @@ namespace Pattons_Best
                   }
                   else  // rear
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = NO_CHANCE;
                      else
                         toKillNum = 02;
@@ -6171,21 +6203,21 @@ namespace Pattons_Best
                case "MARDERII":
                   if ("Front" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 02;
                      else
                         toKillNum = NO_CHANCE;
                   }
                   else if ("Side" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 27;
                      else
                         toKillNum = 13;
                   }
                   else  // rear
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 43;
                      else
                         toKillNum = 27;
@@ -6194,21 +6226,21 @@ namespace Pattons_Best
                case "MARDERIII":
                   if ("Front" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 13;
                      else
                         toKillNum = 02;
                   }
                   else if ("Side" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 27;
                      else
                         toKillNum = 13;
                   }
                   else  // rear
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 43;
                      else
                         toKillNum = 27;
@@ -6225,7 +6257,7 @@ namespace Pattons_Best
                   }
                   else  // rear
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = NO_CHANCE;
                      else
                         toKillNum = 02;
@@ -6276,21 +6308,21 @@ namespace Pattons_Best
                case "PzIV":
                   if ("Front" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 43;
                      else
                         toKillNum = 27;
                   }
                   else if ("Side" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 88;
                      else
                         toKillNum = 77;
                   }
                   else  // rear
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 77;
                      else
                         toKillNum = 82;
@@ -6332,14 +6364,14 @@ namespace Pattons_Best
                   }
                   else if ("Side" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = NO_CHANCE;
                      else
                         toKillNum = 13;
                   }
                   else  // rear
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = NO_CHANCE;
                      else
                         toKillNum = 27;
@@ -6363,7 +6395,7 @@ namespace Pattons_Best
                case "MARDERII":
                   if ("Front" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 82;
                      else
                         toKillNum = 77;
@@ -6380,7 +6412,7 @@ namespace Pattons_Best
                case "MARDERIII":
                   if ("Front" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 100;
                      else
                         toKillNum = 82;
@@ -6401,14 +6433,14 @@ namespace Pattons_Best
                   }
                   else if ("Side" == facing)
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 67;
                      else
                         toKillNum = 77;
                   }
                   else  // rear
                   {
-                     if ("Turret" == hitLocation)
+                     if ("Turret" == hit.myHitLocation)
                         toKillNum = 77;
                      else
                         toKillNum = 82;

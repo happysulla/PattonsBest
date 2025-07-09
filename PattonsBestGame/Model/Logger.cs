@@ -112,7 +112,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_RANDOM_PT);
          // SetOn(LogEnum.LE_SHOW_ROTATION);
          //SetOn(LogEnum.LE_SHOW_MAPITEM_TANK);
-         //SetOn(LogEnum.LE_SHOW_BATTLE_PHASE);
+         SetOn(LogEnum.LE_SHOW_BATTLE_PHASE);
          //SetOn(LogEnum.LE_SHOW_HIT_YOU_MOD);
          //SetOn(LogEnum.LE_SHOW_SPOT_MOD);
          SetOn(LogEnum.LE_SHOW_SPOT_RESULT);
@@ -140,7 +140,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION);
          //SetOn(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED);
          //SetOn(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED_BAILOUT);
-         //SetOn(LogEnum.LE_EVENT_VIEWER_SPOTTING);
+         SetOn(LogEnum.LE_EVENT_VIEWER_SPOTTING);
          SetOn(LogEnum.LE_EVENT_VIEWER_ORDERS);
          return true;
       }

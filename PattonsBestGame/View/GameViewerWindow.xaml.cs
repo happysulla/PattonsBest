@@ -327,16 +327,16 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                break;
             case GameAction.BattleRoundSequenceSpotting:
-               if (false == UpdateCanvasAnimateBattlePhase(gi))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
+               if (false == UpdateCanvasMain(gi, action)) // update smoke depletion
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
             case GameAction.BattleRoundSequenceCrewOrders:
                if (false == CreateContextMenuCrewAction(myGameInstance))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): CreateContextMenuCrewAction() returned false");
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
-               if (false == UpdateCanvasAnimateBattlePhase(gi))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
+               if (false == UpdateCanvasMain(gi, action)) // update smoke depletion
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
             case GameAction.BattleRoundSequenceAmmoOrders:
                if (false == CreateContextMenuGunLoadAction(myGameInstance))

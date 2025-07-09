@@ -51,7 +51,7 @@ namespace Pattons_Best
       public string myAmmoType;   // He, Ap, Hbci, Wp,
       public bool myIsCriticalHit;
       public string myHitLocation = ""; // Turret, Hull, Thrown Track
-      public ShermanAttack( string attack, string ammo, bool critical)
+      public ShermanAttack( string attack, string ammo, bool critical )
       {
          myAttackType = attack;
          myAmmoType = ammo;

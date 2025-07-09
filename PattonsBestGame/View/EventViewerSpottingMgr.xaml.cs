@@ -704,20 +704,28 @@ namespace Pattons_Best
                foreach (IMapItem mi in stack.MapItems)
                {
                   sb.Append(mi.Name);
-                  if ((true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("SPG")))
+                  if (EnumSpottingResult.HIDDEN == mi.Spotting)
                   {
-                     sb.Append("s");
-                     myGridRows[i] = new GridRow(mi);
-                     myGridRows[i].myRange = tName[count - 1];
-                     myGridRows[i].mySector = tName[count - 2];
-                     myGridRows[i].mySectorRangeDisplay = GetSectorRangeDisplay(i);
-                     myGridRows[i].myModifier = TableMgr.GetSpottingModifier(myGameInstance, mi, mySelectedCrewman, myGridRows[i].mySector, myGridRows[i].myRange);
-                     if (myGridRows[i].myModifier < -100)
+                     sb.Append("h");
+                  }
+                  else
+                  {
+                     if ((true == mi.Name.Contains("ATG")) || (true == mi.Name.Contains("TANK")) || (true == mi.Name.Contains("SPG")))
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "Button_Click(): invalid mod=" + myGridRows[i].myModifier);
-                        return;
+
+                        sb.Append("s");
+                        myGridRows[i] = new GridRow(mi);
+                        myGridRows[i].myRange = tName[count - 1];
+                        myGridRows[i].mySector = tName[count - 2];
+                        myGridRows[i].mySectorRangeDisplay = GetSectorRangeDisplay(i);
+                        myGridRows[i].myModifier = TableMgr.GetSpottingModifier(myGameInstance, mi, mySelectedCrewman, myGridRows[i].mySector, myGridRows[i].myRange);
+                        if (TableMgr.FN_ERROR == myGridRows[i].myModifier)
+                        {
+                           Logger.Log(LogEnum.LE_ERROR, "Button_Click(): invalid mod=" + myGridRows[i].myModifier);
+                           return;
+                        }
+                        i++;
                      }
-                     i++;
                   }
                   sb.Append(",");
                }
