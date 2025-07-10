@@ -1509,6 +1509,41 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
+            case "e051a":
+               string modiferStringe051a = UpdateEventContentGetBoggedDownModifier(gi);
+               myTextBlock.Inlines.Add(new Run(modiferStringe051a));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  int comboe51a = gi.DieResults[key][0] + 0;
+                  myTextBlock.Inlines.Add(new Run(comboe51a.ToString()));
+                  if (comboe51a < 11)
+                  {
+                     myTextBlock.Inlines.Add(new Run("  =   Tank Free"));
+                  }
+                  else if (comboe51a < 81)
+                  {
+                     myTextBlock.Inlines.Add(new Run("  =   No Effect"));
+                  }
+                  else if (comboe51a < 91)
+                  {
+                     myTextBlock.Inlines.Add(new Run("  =   Tank Throws Track"));
+                  }
+                  else 
+                  {
+                     myTextBlock.Inlines.Add(new Run("  =   Assistance Needed"));
+                  }
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  Image imge51a = new Image { Name = "Continue51a", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge51a));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
             case "e053b": 
                if( false == UpdateEventContentToGetToHit(gi))
                {
@@ -1708,6 +1743,60 @@ namespace Pattons_Best
             sb51.Append("+6 for Deep Snow\n");
          else if (true == lastReport.Weather.Contains("Mud"))
             sb51.Append("+9 for Mud\n");
+         //-------------------------------------------------
+         if (0 == sb51.Length)
+            return "None";
+         else
+            return sb51.ToString();
+      }
+      private string UpdateEventContentGetBoggedDownModifier(IGameInstance gi)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetMovingModifier(): lastReport=null");
+            return "ERROR";
+         }
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         //-------------------------------------------------
+         ICrewMember? commander = gi.GetCrewMember("Commander");
+         if (null == commander)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetMovingModifier(): commander=null");
+            return "ERROR";
+         }
+         //-------------------------------------------------
+         ICrewMember? driver = gi.GetCrewMember("Driver");
+         if (null == driver)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetMovingModifier(): driver=null");
+            return "ERROR";
+         }
+         //-------------------------------------------------
+         StringBuilder sb51 = new StringBuilder();
+         sb51.Append("-");
+         sb51.Append(driver.Rating.ToString());
+         sb51.Append(" for driver rating\n");
+         //-------------------------------------------------
+         bool isCommanderDirectingMovement = false;
+         foreach (IMapItem crewAction in gi.CrewActions)
+         {
+            if ("Commander_Move" == crewAction.Name)
+               isCommanderDirectingMovement = true;
+         }
+         if (true == isCommanderDirectingMovement)
+         {
+            if (false == commander.IsButtonedUp)
+            {
+               sb51.Append("-");
+               sb51.Append(commander.Rating.ToString());
+               sb51.Append(" for cmdr rating directing move\n");
+            }
+         }
+         if (true == card.myIsHvss)
+            sb51.Append("-5 for HVSS suspension\n");
+         if (true == driver.IsButtonedUp)
+            sb51.Append("+10 Driver buttoned up\n");
          //-------------------------------------------------
          if (0 == sb51.Length)
             return "None";
@@ -3137,8 +3226,11 @@ namespace Pattons_Best
                }
                else if (" Area " == content)
                {
-                  if( ("Ap" == gunload) || ("Hvap" == gunload) || ("None" == gunload) || (true == gi.Target.IsVehicle) || (false == String.IsNullOrEmpty(gi.ShermanTypeOfFire))) // AP and HVAP cannot be area fire
-                     b.IsEnabled = false;
+                  if (("Wp" != gunload) && ("Hbci" != gunload) )
+                  {
+                     if (("Ap" == gunload) || ("Hvap" == gunload) || ("None" == gunload) || (true == gi.Target.IsVehicle) || (false == String.IsNullOrEmpty(gi.ShermanTypeOfFire))) // AP and HVAP cannot be area fire
+                        b.IsEnabled = false;
+                  }
                }
                break;
             case "e054":
@@ -4104,6 +4196,10 @@ namespace Pattons_Best
                            break;
                         case "Continue51":
                            action = GameAction.BattleRoundSequenceMovementRoll;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Continue51a":
+                           action = GameAction.BattleRoundSequenceBoggedDownRoll;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "ShermanPivot":

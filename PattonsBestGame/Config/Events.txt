@@ -531,6 +531,13 @@ Resolve movement per the
 <InlineUIContainer><Button Content='Movement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Tables.
 <LineBreak/><LineBreak/>
 <Underline>Modifiers:</Underline><LineBreak/>"
+e051a	"<Bold>e051a Bogged Down</Bold> 
+<InlineUIContainer><Button Content='r4.74.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<InlineUIContainer><Button Content='r11.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+A bogged down tank may not move or pivot until it has freed itself by using reverse movement on the
+ <InlineUIContainer><Button Content='Bogged Down' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table.
+<LineBreak/><LineBreak/>
+<Underline>Modifiers:</Underline><LineBreak/>"
 e052	"<Bold>e052 Pivot Tank</Bold> 
 <InlineUIContainer><Button Content='r4.74.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r8.46' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 

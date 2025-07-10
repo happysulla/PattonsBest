@@ -3358,6 +3358,49 @@ namespace Pattons_Best
                      }
                   }
                   break;
+               case GameAction.BattleRoundSequenceBoggedDownRoll:
+                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
+                  {
+                     gi.DieResults[key][0] = dieRoll;
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else
+                  {
+                     int modifer = TableMgr.GetBoggedDownModifier(gi);
+                     if( TableMgr.FN_ERROR == modifer)
+                     {
+                        returnStatus = "GetBoggedDownModifier() returned error";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceBoggedDownRoll): " + returnStatus);
+                     }
+                     else
+                     {
+                        int combo51a = gi.DieResults[key][0] + modifer;
+                        if (combo51a < 11)
+                        {
+                           gi.Sherman.IsBoggedDown = false;
+                        }
+                        else if (combo51a < 81)
+                        {
+                           // do nothing
+                        }
+                        else if (combo51a < 91)
+                        {
+                           gi.Sherman.IsThrownTrack = false;
+                        }
+                        else
+                        {
+                           gi.IsAssistanceNeeded = true;
+                        }
+                        //---------------------------------------------------
+                        gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
+                        if (false == ConductCrewAction(gi, ref action))
+                        {
+                           returnStatus = "ConductCrewAction() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceBoggedDownRoll): " + returnStatus);
+                        }
+                     }
+                  }
+                  break;
                case GameAction.BattleRoundSequenceChangeFacingEnd:
                   gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
                   if (false == ConductCrewAction(gi, ref action))
@@ -3917,17 +3960,25 @@ namespace Pattons_Best
             }
             if (true == isTankMoving)
             {
-               gi.Sherman.IsMoved = true;
                gi.CrewActionPhase = CrewActionPhase.Movement;
-               gi.EventDisplayed = gi.EventActive = "e051";
-               gi.DieRollAction = GameAction.BattleRoundSequenceMovementRoll;
-               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 1-phase=" + gi.CrewActionPhase.ToString());
-               foreach (IStack stack in gi.BattleStacks)
+               if( true == gi.Sherman.IsBoggedDown )
                {
-                  foreach (IMapItem mi in stack.MapItems)
+                  gi.EventDisplayed = gi.EventActive = "e051a";
+                  gi.DieRollAction = GameAction.BattleRoundSequenceBoggedDownRoll;
+               }
+               else
+               {
+                  gi.Sherman.IsMoved = true;
+                  gi.EventDisplayed = gi.EventActive = "e051";
+                  gi.DieRollAction = GameAction.BattleRoundSequenceMovementRoll;
+                  Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 1-phase=" + gi.CrewActionPhase.ToString());
+                  foreach (IStack stack in gi.BattleStacks)
                   {
-                     if (EnumSpottingResult.HIDDEN == mi.Spotting)
-                        mi.Spotting = EnumSpottingResult.UNSPOTTED;
+                     foreach (IMapItem mi in stack.MapItems)
+                     {
+                        if (EnumSpottingResult.HIDDEN == mi.Spotting)
+                           mi.Spotting = EnumSpottingResult.UNSPOTTED;
+                     }
                   }
                }
             }
@@ -4880,6 +4931,13 @@ namespace Pattons_Best
          gi.MapItemMoves.Clear();
          //-------------------------------------------------------
          gi.Sherman.IsMoved = false;
+         gi.Sherman.RotationOffset = 0.0;
+         gi.Sherman.RotationTurret = 0.0;
+         gi.Sherman.RotationHull = 0.0;
+         gi.Sherman.IsMoving = false;
+         gi.Sherman.IsHullDown = false;
+         gi.Sherman.IsKilled = false;
+         gi.Sherman.IsBoggedDown = false;
          //-------------------------------------------------------
          if (false == ResetDieResults(gi))
          {
@@ -5290,6 +5348,7 @@ namespace Pattons_Best
          gi.ShermanRotationTurretOld = 0.0;
          //-------------------------------------------------------
          gi.IsLeadTank = false;
+         gi.IsAssistanceNeeded = false;
          gi.IsAirStrikePending = false;
          gi.IsAdvancingFireChosen = false;
          gi.AdvancingFireMarkerCount = 0;
@@ -5314,6 +5373,13 @@ namespace Pattons_Best
          gi.EnteredHexes.Clear();
          //-------------------------------------------------------
          gi.Sherman.IsMoved = false;
+         gi.Sherman.RotationOffset = 0.0;
+         gi.Sherman.RotationTurret = 0.0;
+         gi.Sherman.RotationHull = 0.0;
+         gi.Sherman.IsMoving = false;
+         gi.Sherman.IsHullDown = false;
+         gi.Sherman.IsKilled = false;
+         gi.Sherman.IsBoggedDown = false;
          //-------------------------------------------------------
          ICrewMember? commander = gi.GetCrewMember("Commander");
          if (null == commander)

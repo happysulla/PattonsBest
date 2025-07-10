@@ -700,30 +700,39 @@ namespace Pattons_Best
          if (false == gi.Sherman.IsThrownTrack)
          {
             menuItem1 = new MenuItem();
-            menuItem1.Name = "Driver_Forward";
-            menuItem1.Header = "Forward";
-            menuItem1.Click += MenuItemCrewActionClick;
-            myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
-            menuItem1 = new MenuItem();
-            menuItem1.Name = "Driver_ForwardToHullDown";
-            menuItem1.Header = "Forward To Hull Down";
-            menuItem1.Click += MenuItemCrewActionClick;
-            myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
-            menuItem1 = new MenuItem();
-            menuItem1.Name = "Driver_Reverse";
-            menuItem1.Header = "Reverse";
-            menuItem1.Click += MenuItemCrewActionClick;
-            myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
-            menuItem1 = new MenuItem();
-            menuItem1.Name = "Driver_ReverseToHullDown";
-            menuItem1.Header = "Reverse To Hull Down";
-            menuItem1.Click += MenuItemCrewActionClick;
-            myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
-            menuItem1 = new MenuItem();
-            menuItem1.Name = "Driver_PivotTank";
-            menuItem1.Header = "Pivot Tank";
-            menuItem1.Click += MenuItemCrewActionClick;
-            myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
+            if ( false == gi.Sherman.IsBoggedDown ) // bogged tanks can only attempt to free themselves by ordering reverse.
+            {
+               menuItem1.Name = "Driver_Forward";
+               menuItem1.Header = "Forward";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
+               menuItem1 = new MenuItem();
+               menuItem1.Name = "Driver_ForwardToHullDown";
+               menuItem1.Header = "Forward To Hull Down";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
+            }
+            if (false == gi.IsAssistanceNeeded) // if assistenance is needed, the tank is stuck and cannot free itself
+            {
+               menuItem1 = new MenuItem();
+               menuItem1.Name = "Driver_Reverse";
+               menuItem1.Header = "Reverse";
+               menuItem1.Click += MenuItemCrewActionClick;
+            }
+            if (false == gi.Sherman.IsBoggedDown)
+            {
+               myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
+               menuItem1 = new MenuItem();
+               menuItem1.Name = "Driver_ReverseToHullDown";
+               menuItem1.Header = "Reverse To Hull Down";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
+               menuItem1 = new MenuItem();
+               menuItem1.Name = "Driver_PivotTank";
+               menuItem1.Header = "Pivot Tank";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
+            }
          }
          if ((true == gi.BrokenPeriscopes.ContainsKey("Driver")) && (0 < lastReport.AmmoPeriscope) )
          {
@@ -734,9 +743,10 @@ namespace Pattons_Best
             myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
          }
          //---------------------------------
+         string gunload = myGameInstance.GetGunLoad();
          myContextMenuCrewActions["Gunner"].Items.Clear();
          myContextMenuCrewActions["Gunner"].Visibility = Visibility.Visible;
-         if ( (0 < totalAmmo) && (false == gi.IsBrokenMainGun) )
+         if ( (0 < totalAmmo) && (false == gi.IsBrokenMainGun) && ("None" != gunload) )
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Gunner_FireMainGun";

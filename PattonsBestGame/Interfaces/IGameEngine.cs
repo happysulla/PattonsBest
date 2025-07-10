@@ -256,6 +256,7 @@ namespace Pattons_Best
       BattleRoundSequenceConductCrewAction,
 
       BattleRoundSequenceMovementRoll,
+      BattleRoundSequenceBoggedDownRoll,
       BattleRoundSequencePivot,
       BattleRoundSequencePivotLeft,
       BattleRoundSequencePivotRight,

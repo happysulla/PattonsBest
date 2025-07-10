@@ -44,6 +44,7 @@ namespace Pattons_Best
       [NonSerialized] protected static BitmapImage? theFort = theMapImages.GetBitmapImage("OFort");
       [NonSerialized] protected static BitmapImage? theBuild = theMapImages.GetBitmapImage("OBuild");
       [NonSerialized] protected static BitmapImage? theThrownTrack = theMapImages.GetBitmapImage("OTrack");
+      [NonSerialized] protected static BitmapImage? theBoggedDown = theMapImages.GetBitmapImage("OBogged");
       [NonSerialized] protected static BitmapImage? theHeHit = theMapImages.GetBitmapImage("OHeHit");
       [NonSerialized] protected static BitmapImage? theApHit = theMapImages.GetBitmapImage("OApHit");
       [NonSerialized] protected static BitmapImage? theSherman75Turret = theMapImages.GetBitmapImage("c16TurretSherman75");
@@ -674,6 +675,15 @@ namespace Pattons_Best
                   double width = zoom * Utilities.theMapItemSize;
                   double height = width;
                   Image imgTerrain = new Image() { Height = height, Width = width, Source = theBuild };
+                  c.Children.Add(imgTerrain);
+                  Canvas.SetLeft(imgTerrain, 0);
+                  Canvas.SetTop(imgTerrain, 0);
+               }
+               else if (true == cm.IsBoggedDown)
+               {
+                  double width = zoom * Utilities.theMapItemSize;
+                  double height = width;
+                  Image imgTerrain = new Image() { Height = height, Width = width, Source = theBoggedDown };
                   c.Children.Add(imgTerrain);
                   Canvas.SetLeft(imgTerrain, 0);
                   Canvas.SetTop(imgTerrain, 0);

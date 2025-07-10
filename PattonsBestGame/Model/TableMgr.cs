@@ -4003,6 +4003,54 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_ERROR, "GetMovingResultEnemy(): reached default");
          return "ERROR";
       }
+      public static int GetBoggedDownModifier(IGameInstance gi)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetMovingModifier(): lastReport=null");
+            return FN_ERROR;
+         }
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         //-------------------------------------------------
+         ICrewMember? commander = gi.GetCrewMember("Commander");
+         if (null == commander)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetMovingModifier(): commander=null");
+            return FN_ERROR;
+         }
+         //-------------------------------------------------
+         ICrewMember? driver = gi.GetCrewMember("Driver");
+         if (null == driver)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetMovingModifier(): driver=null");
+            return FN_ERROR;
+         }
+         //-------------------------------------------------
+         bool isCommanderDirectingMovement = false;
+         foreach (IMapItem crewAction in gi.CrewActions)
+         {
+            if ("Commander_Move" == crewAction.Name)
+               isCommanderDirectingMovement = true;
+         }
+         //-------------------------------------------------
+         int movingModifier = 0;
+         movingModifier -= driver.Rating;
+         //-------------------------------------------------
+         if (true == isCommanderDirectingMovement)
+         {
+            if (false == commander.IsButtonedUp)
+               movingModifier -= commander.Rating;
+         }
+         //-------------------------------------------------
+         if (true == card.myIsHvss)
+            movingModifier -= 5;
+         //-------------------------------------------------
+         if (true == driver.IsButtonedUp)
+            movingModifier += 10;
+         //-------------------------------------------------
+         return movingModifier;
+      }
       //-------------------------------------------
       public static int GetShermanToHitModifier(IGameInstance gi, IMapItem enemyUnit)
       {

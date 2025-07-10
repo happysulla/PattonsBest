@@ -90,6 +90,7 @@ namespace Pattons_Best
       public double ShermanRotationTurretOld { set; get; } = 0.0;
       //---------------------------------------------------------------
       public bool IsLeadTank { set; get; } = false;
+      public bool IsAssistanceNeeded { set; get; } = false;
       public bool IsAirStrikePending { set; get; } = false;
       public bool IsAdvancingFireChosen { set; get; } = false;
       //---------------------------------------------------------------
