@@ -45,6 +45,7 @@ namespace Pattons_Best
       [NonSerialized] protected static BitmapImage? theBuild = theMapImages.GetBitmapImage("OBuild");
       [NonSerialized] protected static BitmapImage? theThrownTrack = theMapImages.GetBitmapImage("OTrack");
       [NonSerialized] protected static BitmapImage? theBoggedDown = theMapImages.GetBitmapImage("OBogged");
+      [NonSerialized] protected static BitmapImage? theBoggedDownStuck = theMapImages.GetBitmapImage("OBoggedStuck");
       [NonSerialized] protected static BitmapImage? theHeHit = theMapImages.GetBitmapImage("OHeHit");
       [NonSerialized] protected static BitmapImage? theApHit = theMapImages.GetBitmapImage("OApHit");
       [NonSerialized] protected static BitmapImage? theSherman75Turret = theMapImages.GetBitmapImage("c16TurretSherman75");
@@ -121,6 +122,7 @@ namespace Pattons_Best
       public bool IsFortification { get; set; } = false;
       public bool IsThrownTrack { get; set; } = false;
       public bool IsBoggedDown { get; set; } = false;
+      public bool IsAssistanceNeeded { get; set; } = false;
       //--------------------------------------------------
       public bool IsHeHit { get; set; } = false;
       public bool IsApHit { get; set; } = false;
@@ -547,6 +549,7 @@ namespace Pattons_Best
                   overlay1.RenderTransform = rotateTransform;
                   g.Children.Add(overlay1);
                }
+               //-------------------------------
                if (true == mi.IsHeHit) 
                {
                   double width = zoom * Utilities.theMapItemSize;
@@ -564,6 +567,25 @@ namespace Pattons_Best
                   g.Children.Add(imgTrack);
                   Canvas.SetLeft(imgTrack, 0);
                   Canvas.SetTop(imgTrack, 0);
+               }
+               //-------------------------------
+               if (true == mi.IsAssistanceNeeded)
+               {
+                  double width = zoom * 1.3 * Utilities.theMapItemSize;
+                  double height = width;
+                  Image imgTerrain = new Image() { Height = height, Width = width, Source = theBoggedDownStuck };
+                  c.Children.Add(imgTerrain);
+                  Canvas.SetLeft(imgTerrain, -15);
+                  Canvas.SetTop(imgTerrain, -15);
+               }
+               else if (true == mi.IsBoggedDown)
+               {
+                  double width = zoom * 1.3 * Utilities.theMapItemSize;
+                  double height = width;
+                  Image imgTerrain = new Image() { Height = height, Width = width, Source = theBoggedDown };
+                  c.Children.Add(imgTerrain);
+                  Canvas.SetLeft(imgTerrain, -15);
+                  Canvas.SetTop(imgTerrain, -15);
                }
             }
             //----------------------------------
@@ -675,15 +697,6 @@ namespace Pattons_Best
                   double width = zoom * Utilities.theMapItemSize;
                   double height = width;
                   Image imgTerrain = new Image() { Height = height, Width = width, Source = theBuild };
-                  c.Children.Add(imgTerrain);
-                  Canvas.SetLeft(imgTerrain, 0);
-                  Canvas.SetTop(imgTerrain, 0);
-               }
-               else if (true == cm.IsBoggedDown)
-               {
-                  double width = zoom * Utilities.theMapItemSize;
-                  double height = width;
-                  Image imgTerrain = new Image() { Height = height, Width = width, Source = theBoggedDown };
                   c.Children.Add(imgTerrain);
                   Canvas.SetLeft(imgTerrain, 0);
                   Canvas.SetTop(imgTerrain, 0);

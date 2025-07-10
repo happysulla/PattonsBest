@@ -1514,9 +1514,21 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new Run(modiferStringe051a));
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
-               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               myTextBlock.Inlines.Add(new Run("Roll for Result: "));
+               if (Utilities.NO_RESULT == gi.DieResults[key][0])
                {
-                  int comboe51a = gi.DieResults[key][0] + 0;
+                  BitmapImage bmi = new BitmapImage();
+                  bmi.BeginInit();
+                  bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
+                  bmi.EndInit();
+                  Image imgDice = new Image { Name = "DieRollBlue", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+                  ImageBehavior.SetAnimatedSource(imgDice, bmi);
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
+               }
+               else
+               {
+                  int modifier = TableMgr.GetBoggedDownModifier(gi);
+                  int comboe51a = gi.DieResults[key][0] + modifier;
                   myTextBlock.Inlines.Add(new Run(comboe51a.ToString()));
                   if (comboe51a < 11)
                   {

@@ -585,6 +585,13 @@ namespace Pattons_Best
       }
       protected bool ResolveEmptyBattleBoard(IGameInstance gi, IAfterActionReport report)
       {
+         gi.Sherman.RotationOffset = 0.0;
+         gi.Sherman.RotationTurret = 0.0;
+         gi.Sherman.RotationHull = 0.0;
+         gi.Sherman.IsMoving = false;
+         gi.Sherman.IsHullDown = false;
+         gi.Sherman.IsBoggedDown = false;
+         //--------------------------------
          if (null == gi.EnteredArea)
          {
             Logger.Log(LogEnum.LE_ERROR, "ResolveEmptyBattleBoard(): gi.EnteredArea=null");
@@ -1617,8 +1624,10 @@ namespace Pattons_Best
          //--------------------------------
          //gi.Sherman.RotationHull = 300; // <cgs> TEST - &&&&&&&
          //gi.Sherman.RotationTurret = 60;
-         gi.Sherman.IsMoving = true;
+         gi.Sherman.IsMoving = false;
          gi.Sherman.IsHullDown = false;
+         gi.Sherman.IsBoggedDown = true;
+         gi.Sherman.IsAssistanceNeeded = false;
          //--------------------------------
          gi.PromotionPointNum = 290;
          return true;
@@ -3385,11 +3394,11 @@ namespace Pattons_Best
                         }
                         else if (combo51a < 91)
                         {
-                           gi.Sherman.IsThrownTrack = false;
+                           gi.Sherman.IsThrownTrack = true;
                         }
                         else
                         {
-                           gi.IsAssistanceNeeded = true;
+                           gi.Sherman.IsAssistanceNeeded = true;
                         }
                         //---------------------------------------------------
                         gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
@@ -3758,13 +3767,13 @@ namespace Pattons_Best
                   gi.BattleStacks.Remove(gi.Sherman);
                   break;
                case GameAction.BattleEmpty:
-                  if( false == ResetRound(gi))
-                  {
-                     returnStatus = "ResetRound() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
-                  }
                   break;
                case GameAction.BattleEmptyResolve:
+                  if (false == ResetRound(gi))
+                  {
+                     returnStatus = "ResetRound() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleEmptyResolve): " + returnStatus);
+                  }
                   if (false == ResolveEmptyBattleBoard(gi, lastReport))
                   {
                      returnStatus = "ResolveEmptyBattleBoard() returned false";
@@ -4931,13 +4940,6 @@ namespace Pattons_Best
          gi.MapItemMoves.Clear();
          //-------------------------------------------------------
          gi.Sherman.IsMoved = false;
-         gi.Sherman.RotationOffset = 0.0;
-         gi.Sherman.RotationTurret = 0.0;
-         gi.Sherman.RotationHull = 0.0;
-         gi.Sherman.IsMoving = false;
-         gi.Sherman.IsHullDown = false;
-         gi.Sherman.IsKilled = false;
-         gi.Sherman.IsBoggedDown = false;
          //-------------------------------------------------------
          if (false == ResetDieResults(gi))
          {
@@ -5348,7 +5350,6 @@ namespace Pattons_Best
          gi.ShermanRotationTurretOld = 0.0;
          //-------------------------------------------------------
          gi.IsLeadTank = false;
-         gi.IsAssistanceNeeded = false;
          gi.IsAirStrikePending = false;
          gi.IsAdvancingFireChosen = false;
          gi.AdvancingFireMarkerCount = 0;
@@ -5380,6 +5381,7 @@ namespace Pattons_Best
          gi.Sherman.IsHullDown = false;
          gi.Sherman.IsKilled = false;
          gi.Sherman.IsBoggedDown = false;
+         gi.Sherman.IsAssistanceNeeded = false;
          //-------------------------------------------------------
          ICrewMember? commander = gi.GetCrewMember("Commander");
          if (null == commander)

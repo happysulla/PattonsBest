@@ -699,9 +699,9 @@ namespace Pattons_Best
          myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
          if (false == gi.Sherman.IsThrownTrack)
          {
-            menuItem1 = new MenuItem();
             if ( false == gi.Sherman.IsBoggedDown ) // bogged tanks can only attempt to free themselves by ordering reverse.
             {
+               menuItem1 = new MenuItem();
                menuItem1.Name = "Driver_Forward";
                menuItem1.Header = "Forward";
                menuItem1.Click += MenuItemCrewActionClick;
@@ -712,16 +712,16 @@ namespace Pattons_Best
                menuItem1.Click += MenuItemCrewActionClick;
                myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
             }
-            if (false == gi.IsAssistanceNeeded) // if assistenance is needed, the tank is stuck and cannot free itself
+            if (false == gi.Sherman.IsAssistanceNeeded) // if assistenance is needed, the tank is stuck and cannot free itself
             {
                menuItem1 = new MenuItem();
                menuItem1.Name = "Driver_Reverse";
                menuItem1.Header = "Reverse";
                menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
             }
             if (false == gi.Sherman.IsBoggedDown)
             {
-               myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
                menuItem1 = new MenuItem();
                menuItem1.Name = "Driver_ReverseToHullDown";
                menuItem1.Header = "Reverse To Hull Down";
