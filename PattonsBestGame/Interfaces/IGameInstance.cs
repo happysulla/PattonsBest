@@ -94,7 +94,8 @@ namespace Pattons_Best
       IMapItems GunLoads { set; get; }
       IMapItem Sherman { set; get; }
       IMapItems Targets { set; get; }
-      IMapItem? Target { set; get; }
+      IMapItem? TargetMainGun { set; get; }
+      IMapItem? TargetMg { set; get; }
       //------------------------------------------------
       ITerritory Home { get; set; }
       ITerritory? EnemyStrengthCheckTerritory { get; set; }

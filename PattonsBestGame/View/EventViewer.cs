@@ -1823,14 +1823,14 @@ namespace Pattons_Best
             return false;
          }
          string key = gi.EventActive;
-         if (null == gi.Target)
+         if (null == gi.TargetMainGun)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToGetToHit(): gi.Target=null for key=" + key);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToGetToHit(): gi.TargetMainGun=null for key=" + key);
             return false;
          }
-         double size = gi.Target.Zoom * Utilities.theMapItemSize;
+         double size = gi.TargetMainGun.Zoom * Utilities.theMapItemSize;
          System.Windows.Controls.Button bEnemy = new Button { Width = size, Height = size, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
-         MapItem.SetButtonContent(bEnemy, gi.Target);
+         MapItem.SetButtonContent(bEnemy, gi.TargetMainGun);
          myTextBlock.Inlines.Add(new Run("                                                   "));
          myTextBlock.Inlines.Add(new InlineUIContainer(bEnemy));
          //----------------------------------------------
@@ -1839,10 +1839,10 @@ namespace Pattons_Best
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new Run("Modifiers") { TextDecorations = TextDecorations.Underline });
             myTextBlock.Inlines.Add(new LineBreak());
-            string modiferMainGunFiring = UpdateEventContentGetToHitModifier(gi, gi.Target);
+            string modiferMainGunFiring = UpdateEventContentGetToHitModifier(gi, gi.TargetMainGun);
             myTextBlock.Inlines.Add(new Run(modiferMainGunFiring));
             myTextBlock.Inlines.Add(new LineBreak());
-            double toHitNum = TableMgr.GetShermanToHitNumber(gi, gi.Target);
+            double toHitNum = TableMgr.GetShermanToHitNumber(gi, gi.TargetMainGun);
             if (TableMgr.FN_ERROR == toHitNum)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToGetToHit(): GetShermanToHitNumber() returned error for key=" + key);
@@ -2242,9 +2242,9 @@ namespace Pattons_Best
          }
          else
          {
-            if (null == gi.Target)
+            if (null == gi.TargetMainGun)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.Target=null for key=" + key);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.TargetMainGun=null for key=" + key);
                return false;
             }
             if (0 == gi.ShermanHits.Count)
@@ -2255,7 +2255,7 @@ namespace Pattons_Best
             myTextBlock.Inlines.Add(new Run(modiferToKillInfantry));
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new LineBreak());
-            double toKillNum = TableMgr.GetShermanToKillInfantryNumber(gi, gi.Target, gi.ShermanHits[0]);
+            double toKillNum = TableMgr.GetShermanToKillInfantryNumber(gi, gi.TargetMainGun, gi.ShermanHits[0]);
             if (toKillNum < -100)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): GetShermanToHitNumber() returned error for key=" + key);
@@ -2304,9 +2304,9 @@ namespace Pattons_Best
             return "ERROR";
          }
          //-------------------------------------------------
-         if (null == gi.Target)
+         if (null == gi.TargetMainGun)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillInfantryModifier(): gi.Target=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillInfantryModifier(): gi.TargetMainGun=null");
             return "ERROR";
          }
          //-------------------------------------------------
@@ -2320,21 +2320,21 @@ namespace Pattons_Best
          StringBuilder sb51 = new StringBuilder();
          if (("Direct" != hit.myAttackType) || (true == hit.myIsCriticalHit))
          {
-            if (true == gi.Target.IsBuilding)
+            if (true == gi.TargetMainGun.IsBuilding)
             {
                if (false == hit.myIsCriticalHit)
                   sb51.Append("+15 Target in Building\n");
                else
                   sb51.Append("-15 Target in Building\n");
             }
-            if (true == gi.Target.IsWoods)
+            if (true == gi.TargetMainGun.IsWoods)
             {
                if (false == hit.myIsCriticalHit)
                   sb51.Append("+10 Target in Woods\n");
                else
                   sb51.Append("-10 Target in Woods\n");
             }
-            if (true == gi.Target.IsFortification)
+            if (true == gi.TargetMainGun.IsFortification)
             {
                if (false == hit.myIsCriticalHit)
                   sb51.Append("+20 Target in Fortification\n");
@@ -2343,7 +2343,7 @@ namespace Pattons_Best
             }
          }
          //------------------------------------
-         if ((true == gi.Target.Name.Contains("ATG")) || (true == gi.Target.Name.Contains("Pak43")) || (true == gi.Target.Name.Contains("Pak40")) || (true == gi.Target.Name.Contains("Pak38")))
+         if ((true == gi.TargetMainGun.Name.Contains("ATG")) || (true == gi.TargetMainGun.Name.Contains("Pak43")) || (true == gi.TargetMainGun.Name.Contains("Pak40")) || (true == gi.TargetMainGun.Name.Contains("Pak38")))
          {
             if (false == hit.myIsCriticalHit)
                sb51.Append("+15 for ATG Target\n");
@@ -2351,7 +2351,7 @@ namespace Pattons_Best
                return "KILL";
          }
          //------------------------------------
-         if (true == gi.Target.IsMoving)
+         if (true == gi.TargetMainGun.IsMoving)
             sb51.Append("-10 Target Moving in Open\n");
          //------------------------------------
          if (true == lastReport.Weather.Contains("Deep Snow") || true == lastReport.Weather.Contains("Mud"))         
@@ -2370,9 +2370,9 @@ namespace Pattons_Best
          }
          string key = gi.EventActive;
          //------------------------------------
-         if (null == gi.Target)
+         if (null == gi.TargetMainGun)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): gi.Target=null for key=" + key);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): gi.TargetMainGun=null for key=" + key);
             return false;
          }
          //------------------------------------
@@ -2479,7 +2479,7 @@ namespace Pattons_Best
                {
                   if ("He" == hit.myAmmoType)
                   {
-                     toKillNum = TableMgr.GetShermanToKill75HeVehicleNumber(gi, gi.Target, gi.ShermanHits[0]);
+                     toKillNum = TableMgr.GetShermanToKill75HeVehicleNumber(gi, gi.TargetMainGun, gi.ShermanHits[0]);
                      if (TableMgr.FN_ERROR == toKillNum)
                      {
                         Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToKill75HeVehicleNumber() returned false");
@@ -2488,7 +2488,7 @@ namespace Pattons_Best
                   }
                   else if ("Ap" == hit.myAmmoType)
                   {
-                     toKillNum = TableMgr.GetShermanToKill75ApVehicleNumber(gi, gi.Target, gi.ShermanHits[0]);
+                     toKillNum = TableMgr.GetShermanToKill75ApVehicleNumber(gi, gi.TargetMainGun, gi.ShermanHits[0]);
                      if (TableMgr.FN_ERROR == toKillNum)
                      {
                         Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToKill75ApVehicleNumber() returned false");
@@ -2505,7 +2505,7 @@ namespace Pattons_Best
                {
                   if ("He" == hit.myAmmoType)
                   {
-                     toKillNum = TableMgr.GetShermanToKill76HeVehicleNumber(gi, gi.Target, gi.ShermanHits[0]);
+                     toKillNum = TableMgr.GetShermanToKill76HeVehicleNumber(gi, gi.TargetMainGun, gi.ShermanHits[0]);
                      if (TableMgr.FN_ERROR == toKillNum)
                      {
                         Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToKill76HeVehicleNumber() returned false");
@@ -2514,7 +2514,7 @@ namespace Pattons_Best
                   }
                   else if ("Ap" == hit.myAmmoType)
                   {
-                     toKillNum = TableMgr.GetShermanToKill76ApVehicleNumber(gi, gi.Target, gi.ShermanHits[0]);
+                     toKillNum = TableMgr.GetShermanToKill76ApVehicleNumber(gi, gi.TargetMainGun, gi.ShermanHits[0]);
                      if (TableMgr.FN_ERROR == toKillNum)
                      {
                         Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToKill76ApVehicleNumber() returned false");
@@ -2523,7 +2523,7 @@ namespace Pattons_Best
                   }
                   else if ("Hvap" == hit.myAmmoType)
                   {
-                     toKillNum = TableMgr.GetShermanToKill76HvapVehicleNumber(gi, gi.Target, gi.ShermanHits[0]);
+                     toKillNum = TableMgr.GetShermanToKill76HvapVehicleNumber(gi, gi.TargetMainGun, gi.ShermanHits[0]);
                   }
                   else
                   {
@@ -2613,9 +2613,9 @@ namespace Pattons_Best
          }
          string key = gi.EventActive;
          //------------------------------------
-         if (null == gi.Target)
+         if (null == gi.TargetMg)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill(): gi.Target=null for key=" + key);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill(): gi.TargetMainGun=null for key=" + key);
             return false;
          }
          //------------------------------------
@@ -2638,7 +2638,7 @@ namespace Pattons_Best
          myTextBlock.Inlines.Add(new Run(modiferMgFiring));
          myTextBlock.Inlines.Add(new LineBreak());
          //------------------------------------
-         double toKillNum = TableMgr.GetShermanMgToKillNumber(gi, gi.Target);
+         double toKillNum = TableMgr.GetShermanMgToKillNumber(gi, gi.TargetMg);
          if (TableMgr.FN_ERROR == toKillNum)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill(): GetShermanMgToKillNumber() returned error for key=" + key);
@@ -2680,9 +2680,9 @@ namespace Pattons_Best
       private string UpdateEventContentMgToKillModifier(IGameInstance gi)
       {
          //------------------------------------
-         if (null == gi.Target)
+         if (null == gi.TargetMg)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): gi.Target=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): gi.TargetMg=null");
             return "ERROR";
          }
          //------------------------------------
@@ -2701,19 +2701,19 @@ namespace Pattons_Best
             return "ERROR";
          }
          //------------------------------------
-         if (3 != gi.Target.TerritoryCurrent.Name.Length)
+         if (3 != gi.TargetMg.TerritoryCurrent.Name.Length)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): 3 != TerritoryCurrent.Name.Length=" + gi.Target.TerritoryCurrent.Name);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): 3 != TerritoryCurrent.Name.Length=" + gi.TargetMg.TerritoryCurrent.Name);
             return "ERROR";
          }
-         char range = gi.Target.TerritoryCurrent.Name[2];
+         char range = gi.TargetMg.TerritoryCurrent.Name[2];
          if (('C' != range) && ('M' != range) && ('L' != range))
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): unknown range=" + range.ToString() + " t=" + gi.Target.TerritoryCurrent.Name);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): unknown range=" + range.ToString() + " t=" + gi.TargetMg.TerritoryCurrent.Name);
             return "ERROR";
          }
          //------------------------------------
-         string enemyUnitType = gi.Target.GetEnemyUnit();
+         string enemyUnitType = gi.TargetMg.GetEnemyUnit();
          if (("LW" != enemyUnitType) && ("MG" != enemyUnitType) && ("ATG" != enemyUnitType) && ("Pak38" != enemyUnitType) && ("Pak40" != enemyUnitType) && ("Pak43" != enemyUnitType) && ("TRUCK" != enemyUnitType))
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): MG fire not appropriate for enemyType=" + enemyUnitType);
@@ -2818,7 +2818,7 @@ namespace Pattons_Best
             sb.Append(" for assistant rating\n");
          }
          //------------------------------------
-         if (true == gi.Target.IsMoving)
+         if (true == gi.TargetMg.IsMoving)
          {
             if ("Bow" == mgType)
             {
@@ -2843,17 +2843,22 @@ namespace Pattons_Best
             sb.Append("+10 for moving or pivoting\n");
          }
          //------------------------------------
-         if (true == gi.Target.IsWoods)
+         if (true == gi.TargetMg.IsWoods)
          {
             sb.Append("+10 for target in woods\n");
          }
          //------------------------------------
-         if ((true == gi.Target.IsBuilding) || ("ATG" == enemyUnitType) || ("Pak38" == enemyUnitType) || ("Pak40" == enemyUnitType) || ("Pak43" == enemyUnitType))
+         if (true == gi.TargetMg.IsBuilding) 
          {
-            sb.Append("+15 for target building or against ATG\n");
+            sb.Append("+15 for target in building \n");
          }
          //------------------------------------
-         if (true == gi.Target.IsFortification)
+         else if ( ("ATG" == enemyUnitType) || ("Pak38" == enemyUnitType) || ("Pak40" == enemyUnitType) || ("Pak43" == enemyUnitType))
+         {
+            sb.Append("+15 for target is ATG\n");
+         }
+         //------------------------------------
+         if (true == gi.TargetMg.IsFortification)
          {
             sb.Append("+20 for target in fortification\n");
          }
@@ -3225,9 +3230,9 @@ namespace Pattons_Best
                }
                break;
             case "e053b":
-               if( null == gi.Target )
+               if( null == gi.TargetMainGun )
                {
-                  Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): gi.Target= null");
+                  Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): gi.TargetMainGun= null");
                   return false;
                }
                string gunload = gi.GetGunLoad();
@@ -3240,7 +3245,7 @@ namespace Pattons_Best
                {
                   if (("Wp" != gunload) && ("Hbci" != gunload) )
                   {
-                     if (("Ap" == gunload) || ("Hvap" == gunload) || ("None" == gunload) || (true == gi.Target.IsVehicle) || (false == String.IsNullOrEmpty(gi.ShermanTypeOfFire))) // AP and HVAP cannot be area fire
+                     if (("Ap" == gunload) || ("Hvap" == gunload) || ("None" == gunload) || (true == gi.TargetMainGun.IsVehicle) || (false == String.IsNullOrEmpty(gi.ShermanTypeOfFire))) // AP and HVAP cannot be area fire
                         b.IsEnabled = false;
                   }
                }

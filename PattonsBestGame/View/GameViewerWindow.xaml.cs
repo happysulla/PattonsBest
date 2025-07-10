@@ -2734,8 +2734,7 @@ namespace Pattons_Best
             {
                if (true == myGameInstance.Targets.Contains(selectedMapItem))
                {
-                  myGameInstance.Target = selectedMapItem;
-                  selectedMapItem = null;
+
                   foreach (IMapItem mi in myGameInstance.Targets)
                   {
                      foreach (Button b in myBattleButtons)
@@ -2743,9 +2742,16 @@ namespace Pattons_Best
                   }
                   GameAction outAction = GameAction.Error;
                   if (CrewActionPhase.TankMainGunFire == myGameInstance.CrewActionPhase)
+                  {
+                     myGameInstance.TargetMainGun = selectedMapItem;
                      outAction = GameAction.BattleRoundSequenceShermanFiringMainGun;
+                  }
                   else
+                  {
+                     myGameInstance.TargetMainGun = selectedMapItem;
                      outAction = GameAction.BattleRoundSequenceShermanFiringMachineGun;
+                  }
+                  selectedMapItem = null;
                   myGameEngine.PerformAction(ref myGameInstance, ref outAction);
                }
             }

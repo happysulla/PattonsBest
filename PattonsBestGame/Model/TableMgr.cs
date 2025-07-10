@@ -4880,6 +4880,8 @@ namespace Pattons_Best
             rotation -= enemyUnit.RotationTurret;
             if (rotation < 0.0)
                rotation += 360;
+            if( 359 < rotation )
+               rotation -= 360;
             switch (rotation)
             {
                case 0.0: return "Rear";
@@ -4897,6 +4899,8 @@ namespace Pattons_Best
          {
             if (rotation < 0.0)
                rotation += 360;
+            if (359 < rotation)
+               rotation -= 360;
             switch (rotation)
             {
                case 0.0: return "Rear";
@@ -6552,9 +6556,9 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          //------------------------------------
-         if( null == gi.Target )
+         if( null == gi.TargetMg)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): gi.Target=null");
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): gi.TargetMg=null");
             return FN_ERROR;
          }
          //------------------------------------
@@ -6658,7 +6662,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): gunner rating -" + assistant.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
-         if( true == gi.Target.IsMoving )
+         if( true == gi.TargetMg.IsMoving )
          {
             if( "Bow" == mgType )
             {
@@ -6693,13 +6697,13 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): sherman moving +10 mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
-         if (true == gi.Target.IsWoods)
+         if (true == gi.TargetMg.IsWoods)
          {
             toKillModifierNum += 10;
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): in woods +10 mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
-         if (true == gi.Target.IsBuilding) 
+         if (true == gi.TargetMg.IsBuilding) 
          {
             toKillModifierNum += 15;
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): in building +15 mod=" + toKillModifierNum.ToString());
@@ -6711,7 +6715,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): ATG +15 mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
-         if (true == gi.Target.IsFortification)
+         if (true == gi.TargetMg.IsFortification)
          {
             toKillModifierNum += 20;
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): in IsFortification +20 mod=" + toKillModifierNum.ToString());

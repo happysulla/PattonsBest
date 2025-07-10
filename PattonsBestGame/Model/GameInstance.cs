@@ -45,7 +45,8 @@ namespace Pattons_Best
       public IMapItems GunLoads { set; get; } = new MapItems();
       public IMapItem Sherman { set; get; } = new MapItem("Sherman1", 2.0, "t001", new Territory());
       public IMapItems Targets { set; get; } = new MapItems();
-      public IMapItem? Target { set; get; } = null;
+      public IMapItem? TargetMainGun { set; get; } = null;
+      public IMapItem? TargetMg { set; get; } = null;
       //------------------------------------------------
       public ITerritory Home { get; set; } = new Territory();
       public ITerritory? EnemyStrengthCheckTerritory { get; set; } = null;
