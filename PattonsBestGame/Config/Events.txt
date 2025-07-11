@@ -542,25 +542,20 @@ e052	"<Bold>e052 Pivot Tank</Bold>
 <InlineUIContainer><Button Content='r4.74.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r8.46' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
-Select the plus or minus buttons to rotate.  
+If you want the Sherman to face a different sector, select buttons here:
 <LineBreak/><LineBreak/>
-                                   <InlineUIContainer><Button Content='   -   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-<InlineUIContainer><Image Name='ShermanPivot'  Height='150' Width='150'></Image></InlineUIContainer> 
+                                           <InlineUIContainer><Button Content='   -   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>      
 <InlineUIContainer><Button Content='   +   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
-<LineBreak/><LineBreak/>
-When you are satisfied with the current orientation, click Sherman image between buttons to continue."
+<LineBreak/><LineBreak/>"
 e052a	"<Bold>e052a Pivot Turret</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r8.24' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
-If you want the turret to face a different sector, click tank counter on center of Battle Board. 
-Alternatively, select buttons here:
+If you want the turret to face a different sector, select buttons here: 
 <LineBreak/><LineBreak/>
-                                   <InlineUIContainer><Button Content='  -  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-<InlineUIContainer><Image Name='c16TurretSherman75'  Height='150' Width='150'></Image></InlineUIContainer> 
+                                             <InlineUIContainer><Button Content='  -  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>           
 <InlineUIContainer><Button Content='  +  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
-<LineBreak/><LineBreak/>
-When you are satisfied with the current turret orientation, click turret image between buttons to continue."
+<LineBreak/><LineBreak/>"
 e053	"<Bold>e053 Main Gun Firing - Select Target</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
@@ -583,10 +578,6 @@ The main gun may only fire at a target in the turret&apos;s front sector unless 
 e053b	"<Bold>e053b Main Gun Firing - Target Selected</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-<LineBreak/><LineBreak/>
-The appropriate type of ammo is marked off the After Action Report <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
-Choose  <InlineUIContainer><Button Content='Direct' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   or    
-<InlineUIContainer><Button Content=' Area ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    fire.
 <LineBreak/><LineBreak/>"
 e053c	"<Bold>e053c Main Gun Firing - Rate of Fire</Bold> 
 <InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 

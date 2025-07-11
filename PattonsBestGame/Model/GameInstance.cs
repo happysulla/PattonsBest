@@ -56,7 +56,6 @@ namespace Pattons_Best
       public ITerritory? FriendlyAdvance { get; set; } = null;
       public ITerritory? EnemyAdvance { get; set; } = null;
       //---------------------------------------------------------------
-      public bool IsTurretActive { set; get; } = false;
       public bool IsHatchesActive { set; get; } = false;
       //---------------------------------------------------------------
       public bool IsShermanFirstShot { set; get; } = false;

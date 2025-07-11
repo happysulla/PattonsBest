@@ -887,10 +887,10 @@ namespace Pattons_Best
                break;
             case E046Enum.PLACE_FACING:
                myGridRows[i].myDieRollFacing= dieRoll;
-               myGridRows[i].myFacing = TableMgr.GetEnemyFacing(myGridRows[i].myActivation, dieRoll);
+               myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGridRows[i].myActivation, dieRoll);
                if ("ERROR" == myGridRows[i].myFacing)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyFacing() returned ERROR");
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyNewFacing() returned ERROR");
                   return;
                }
                IMapItem? mi = myGridRows[i].myMapItem;

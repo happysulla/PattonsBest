@@ -8,6 +8,7 @@ namespace Pattons_Best
 {
    public class ShermanDeath
    {
+      public bool myCtorError = false;
       public IMapItem myEnemyUnit;
       public string myHitLocation = "";
       public string myEnemyFireDirection = "";
@@ -21,6 +22,11 @@ namespace Pattons_Best
       {
          myEnemyUnit = eu;
          myHitLocation = loc;
+         if ("ERROR" == loc)
+         {
+            myCtorError = true;
+            Logger.Log(LogEnum.LE_ERROR, "ShermanDeath(): loc=ERROR");
+         }
          myCause = cause;
          myDay = gi.Day;
          myIsAmbush = ((BattlePhase.Ambush == gi.BattlePhase) || (BattlePhase.AmbushRandomEvent == gi.BattlePhase) );
@@ -105,7 +111,6 @@ namespace Pattons_Best
       ITerritory? FriendlyAdvance { get; set; }
       ITerritory? EnemyAdvance { get; set; }
       //------------------------------------------------
-      bool IsTurretActive { set; get; }
       bool IsHatchesActive { set; get; }
       //------------------------------------------------
       bool IsShermanFirstShot { set; get; }

@@ -1556,6 +1556,73 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
+            case "e052":
+               myTextBlock.Inlines.Add(new Run("                                             "));
+               Image? imge52 = null;
+               switch (gi.Sherman.RotationHull)
+               {
+                  case 0.0:
+                     imge52 = new Image { Name = "ShermanPivot", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("ShermanPivot") };
+                     break;
+                  case 60.0:
+                     imge52 = new Image { Name = "ShermanPivot", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("ShermanPivot-60") };
+                     break;
+                  case 120.0:
+                     imge52 = new Image { Name = "ShermanPivot", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("ShermanPivot-120") };
+                     break;
+                  case 180.0:
+                     imge52 = new Image { Name = "ShermanPivot", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("ShermanPivot-180") };
+                     break;
+                  case 240.0:
+                     imge52 = new Image { Name = "ShermanPivot", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("ShermanPivot-240") };
+                     break;
+                  case 300.0:
+                     imge52 = new Image { Name = "ShermanPivot", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("ShermanPivot-300") };
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default tr=" + gi.Sherman.RotationTurret.ToString());
+                     return false;
+               }
+               myTextBlock.Inlines.Add(new InlineUIContainer(imge52));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("When you are satisfied with the current orientation, click image between buttons to continue."));
+               break;
+            case "e052a":
+               myTextBlock.Inlines.Add(new Run("                                               "));
+               Image? imge52a = null;
+               double rotation = gi.Sherman.RotationHull + gi.Sherman.RotationTurret;
+               if (359.0 < rotation)
+                  rotation -= 360.0;
+               switch (rotation)
+               {
+                  case 0.0:
+                     imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75") };
+                     break;
+                  case 60.0:
+                     imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75-60") };
+                     break;
+                  case 120.0:
+                     imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75-120") };
+                     break;
+                  case 180.0:
+                     imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75-180") };
+                     break;
+                  case 240.0:
+                     imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75-240") };
+                     break;
+                  case 300.0:
+                     imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75-300") };
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default tr=" + gi.Sherman.RotationTurret.ToString());
+                     return false;
+               }
+               myTextBlock.Inlines.Add(new InlineUIContainer(imge52a));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("When you are satisfied with the current orientation, click image between buttons to continue."));
+               break;
             case "e053b": 
                if( false == UpdateEventContentToGetToHit(gi))
                {
@@ -1833,15 +1900,35 @@ namespace Pattons_Best
          MapItem.SetButtonContent(bEnemy, gi.Target);
          myTextBlock.Inlines.Add(new Run("                                                   "));
          myTextBlock.Inlines.Add(new InlineUIContainer(bEnemy));
+         myTextBlock.Inlines.Add(new LineBreak());
+         myTextBlock.Inlines.Add(new LineBreak());
+         //----------------------------------------------
+         string gunload = gi.GetGunLoad();
+         myTextBlock.Inlines.Add(new Run("Choose either   "));
+         Button be53b1 = new Button() { FontFamily = myFontFam1, FontSize = 12, Content = "Direct" };
+         if (("Hbci" == gunload) || ("Wp" == gunload) || ("None" == gunload) || (false == String.IsNullOrEmpty(gi.ShermanTypeOfFire))) // cannot be direct fire
+            be53b1.IsEnabled = false;
+         be53b1.Click += Button_Click;
+         myTextBlock.Inlines.Add(new InlineUIContainer(be53b1));
+         myTextBlock.Inlines.Add(new Run("   or   "));
+         Button be53b2 = new Button() { FontFamily = myFontFam1, FontSize = 12, Content = " Area " };
+         if (("Wp" != gunload) && ("Hbci" != gunload))
+         {
+            if (("Ap" == gunload) || ("Hvap" == gunload) || ("None" == gunload) || (true == gi.Target.IsVehicle) || (false == String.IsNullOrEmpty(gi.ShermanTypeOfFire))) // AP and HVAP cannot be area fire
+               be53b2.IsEnabled = false;
+         }
+         be53b2.Click += Button_Click;
+         myTextBlock.Inlines.Add(new InlineUIContainer(be53b2));
          //----------------------------------------------
          if (false == String.IsNullOrEmpty(gi.ShermanTypeOfFire))
          {
+            myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new Run("Modifiers") { TextDecorations = TextDecorations.Underline });
             myTextBlock.Inlines.Add(new LineBreak());
             string modiferMainGunFiring = UpdateEventContentGetToHitModifier(gi, gi.Target);
             myTextBlock.Inlines.Add(new Run(modiferMainGunFiring));
-            myTextBlock.Inlines.Add(new LineBreak());
+             myTextBlock.Inlines.Add(new LineBreak());
             double toHitNum = TableMgr.GetShermanToHitNumber(gi, gi.Target);
             if (TableMgr.FN_ERROR == toHitNum)
             {
@@ -2011,6 +2098,8 @@ namespace Pattons_Best
             double t1 = 360 - gi.Sherman.RotationTurret;
             double t2 = gi.ShermanRotationTurretOld;
             double totalAngle = t1 + t2;
+            if (360.0 < totalAngle)
+               totalAngle = totalAngle - 360;
             if (180.0 < totalAngle)
                totalAngle = 360 - totalAngle;
             int numRotations = (int)(totalAngle / 60.0);
@@ -3221,27 +3310,6 @@ namespace Pattons_Best
                   {
                      Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): SetButtonStateEnemyStrength() returned false");
                      return false;
-                  }
-               }
-               break;
-            case "e053b":
-               if( null == gi.Target )
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): gi.Target= null");
-                  return false;
-               }
-               string gunload = gi.GetGunLoad();
-               if ("Direct" == content)
-               {
-                  if (("Hbci" == gunload) || ("Wp" == gunload) || ("None" == gunload) || (false == String.IsNullOrEmpty(gi.ShermanTypeOfFire))) // cannot be direct fire
-                     b.IsEnabled = false;
-               }
-               else if (" Area " == content)
-               {
-                  if (("Wp" != gunload) && ("Hbci" != gunload) )
-                  {
-                     if (("Ap" == gunload) || ("Hvap" == gunload) || ("None" == gunload) || (true == gi.Target.IsVehicle) || (false == String.IsNullOrEmpty(gi.ShermanTypeOfFire))) // AP and HVAP cannot be area fire
-                        b.IsEnabled = false;
                   }
                }
                break;

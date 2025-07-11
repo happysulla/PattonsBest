@@ -1597,10 +1597,10 @@ namespace Pattons_Best
                   return false;
                }
                die1 = Utilities.RandomGenerator.Next(1, 11);
-               string facing = TableMgr.GetEnemyFacing(enemyUnit, die1);
+               string facing = TableMgr.GetEnemyNewFacing(enemyUnit, die1);
                if ("ERROR" == facing)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): GetEnemyFacing() returned error");
+                  Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): GetEnemyNewFacing() returned error");
                   return false;
                }
                if ( false == mi.UpdateMapRotation(facing))
@@ -1624,10 +1624,10 @@ namespace Pattons_Best
          //--------------------------------
          //gi.Sherman.RotationHull = 300; // <cgs> TEST - &&&&&&&
          //gi.Sherman.RotationTurret = 60;
-         gi.Sherman.IsMoving = false;
+         //gi.Sherman.IsMoving = false;
          gi.Sherman.IsHullDown = false;
-         gi.Sherman.IsBoggedDown = true;
-         gi.Sherman.IsAssistanceNeeded = false;
+         //gi.Sherman.IsBoggedDown = true;
+         //gi.Sherman.IsAssistanceNeeded = true;
          //--------------------------------
          gi.PromotionPointNum = 290;
          return true;
@@ -1858,7 +1858,6 @@ namespace Pattons_Best
                case GameAction.PreparationsGunLoadSelect:
                   break;
                case GameAction.PreparationsTurret:
-                  gi.IsTurretActive = true;
                   gi.EventDisplayed = gi.EventActive = "e014";
                   gi.Sherman.IsTurret = true;
                   break;
@@ -1873,7 +1872,6 @@ namespace Pattons_Best
                      gi.Sherman.RotationTurret = 0;
                   break;
                case GameAction.PreparationsLoaderSpot:
-                  gi.IsTurretActive = false;
                   if (null == lastReport.Loader)
                   {
                      returnStatus = "lastReport.Loader=null";
@@ -3243,7 +3241,15 @@ namespace Pattons_Best
                            if ( 0 == Utilities.RandomGenerator.Next(2))
                               hitLocation = "Turret";
                            gi.Death = new ShermanDeath(gi, gi.Panzerfaust.myEnemyUnit, hitLocation, "Panzerfault");
-                           action = GameAction.BattleRoundSequenceShermanKilled;
+                           if( true == gi.Death.myCtorError )
+                           {
+                              returnStatus = "gi.Death.myCtorError= true";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequencePanzerfaustToKillRoll): " + returnStatus);
+                           }
+                           else
+                           {
+                              action = GameAction.BattleRoundSequenceShermanKilled;
+                           }
                         }
                         else
                         {
@@ -3419,7 +3425,6 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceTurretEnd: 
-                  gi.IsTurretActive = false;
                   gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
                   if (false == ConductCrewAction(gi, ref action))
                   {
@@ -3972,6 +3977,7 @@ namespace Pattons_Best
                gi.CrewActionPhase = CrewActionPhase.Movement;
                if( true == gi.Sherman.IsBoggedDown )
                {
+                  gi.Sherman.IsMoved = true;
                   gi.EventDisplayed = gi.EventActive = "e051a";
                   gi.DieRollAction = GameAction.BattleRoundSequenceBoggedDownRoll;
                }
@@ -4023,7 +4029,6 @@ namespace Pattons_Best
                gi.IsShermanTurretRotated = true;
                gi.ShermanRotationTurretOld = gi.Sherman.RotationTurret;
                gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
-               gi.IsTurretActive = true;
                gi.EventDisplayed = gi.EventActive = "e052a";
                gi.DieRollAction = GameAction.DieRollActionNone;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 3-phase=" + gi.CrewActionPhase.ToString());
@@ -4895,7 +4900,6 @@ namespace Pattons_Best
             gi.GunLoads.Remove(mi);
          gi.Target = null;
          //-------------------------------------------------------
-         gi.IsTurretActive = false;
          gi.IsHatchesActive = false;
          //------------------------------------------------
          gi.IsShermanFirstShot = false;
@@ -5316,7 +5320,6 @@ namespace Pattons_Best
          gi.EnteredArea = null;
          gi.AdvanceFire = null;
          //-------------------------------------------------------
-         gi.IsTurretActive = false;
          gi.IsHatchesActive = false;
          //------------------------------------------------
          gi.IsShermanFirstShot = false;

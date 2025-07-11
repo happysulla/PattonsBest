@@ -465,10 +465,10 @@ namespace Pattons_Best
             return;
          }
          myGridRows[i].myDieRollFacing = dieRoll;
-         myGridRows[i].myFacingNew = TableMgr.GetEnemyFacing(enemyUnit, dieRoll);
+         myGridRows[i].myFacingNew = TableMgr.GetEnemyNewFacing(enemyUnit, dieRoll);
          if ("ERROR" == myGridRows[i].myFacingNew)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyFacing() returned ERROR");
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyNewFacing() returned ERROR");
             return;
          }
          if (false == ShowDieResultUpdateFacing(i))
