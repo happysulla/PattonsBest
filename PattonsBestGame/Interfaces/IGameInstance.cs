@@ -174,9 +174,10 @@ namespace Pattons_Best
       List<IUnitTest> UnitTests { get; }
       //=========================================================
       ICrewMember? GetCrewMember(string name);
-      string GetGunLoad();
-      bool SetGunLoad(string ammoType);
-      string GetAmmoReload();
+      string GetGunLoadType();
+      bool SetGunLoadTerritory(string ammoType);
+      string GetAmmoReloadType();
+      bool ReloadGun();
       bool IsReadyRackReload();
       int GetReadyRackReload(string ammoType);
       bool SetReadyRackReload(string name, int value);

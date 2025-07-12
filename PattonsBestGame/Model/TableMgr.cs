@@ -2386,10 +2386,13 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          if ( 0 < numSmokeMarkers)
-            toKillNum = toKillNum * numSmokeMarkers * 0.5;
+         {
+            double multiplier = Math.Pow(0.5, numSmokeMarkers);
+            toKillNum *= multiplier;
+         }
          //------------------------------------
          if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
-            toKillNum = toKillNum * 0.5;
+            toKillNum *= 0.5;
          //------------------------------------
          return toKillNum;
       }
@@ -2533,10 +2536,13 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          if (0 < numSmokeMarkers)
-            toKillNum = toKillNum * numSmokeMarkers * 0.5;
+         {
+            double multiplier = Math.Pow(0.5, numSmokeMarkers);
+            toKillNum *= multiplier;
+         }
          //------------------------------------
          if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
-            toKillNum = toKillNum * 0.5;
+            toKillNum *= 0.5;
          //------------------------------------
          return toKillNum;
       }
@@ -2768,10 +2774,13 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          if (0 < numSmokeMarkers)
-            toHitNum = toHitNum * numSmokeMarkers * 0.5;
+         {
+            double multiplier = Math.Pow(0.5, numSmokeMarkers);
+            toHitNum *= multiplier;
+         }
          //------------------------------------
          if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
-            toHitNum = toHitNum * 0.5;
+            toHitNum *= 0.5;
          return toHitNum;
       }
       public static string GetEnemyHitLocationYourTank(IGameInstance gi, int dieRoll)
@@ -4602,10 +4611,13 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          if (0 < numSmokeMarkers)
-            toHitNum = toHitNum * numSmokeMarkers * 0.5;
+         {
+            double multiplier = Math.Pow(0.5, numSmokeMarkers);
+            toHitNum *= multiplier;
+         }
          //------------------------------------
          if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
-            toHitNum = toHitNum * 0.5;
+            toHitNum *= 0.5;
          //------------------------------------
          Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitNumber(): After Smoke/Fog base#=" + toHitNum.ToString());
          int modifier = GetShermanToHitModifier(gi, enemyUnit);
@@ -6805,10 +6817,13 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          if (0 < numSmokeMarkers)
-            toKillNumber = toKillNumber * numSmokeMarkers * 0.5;
+         {
+            double multiplier = Math.Pow(0.5, numSmokeMarkers);
+            toKillNumber *= multiplier;
+         }
          //------------------------------------
          if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
-            toKillNumber = toKillNumber * 0.5;
+            toKillNumber *= 0.5;
          //------------------------------------
          Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanMgToKillNumber(): 2-base#=" + toKillNumber.ToString());
          int modifier = GetShermanMgToKillModifier(gi, enemyUnit);

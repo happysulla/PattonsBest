@@ -428,7 +428,7 @@ namespace Pattons_Best
                sb.Append("Off");
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetSectorRangeDisplay(): Reached default sector=" + myGridRows[i].mySector);
+               Logger.Log(LogEnum.LE_ERROR, "EventViewerChangeFacing.GetSectorRangeDisplay(): Reached default sector=" + myGridRows[i].mySector + " for mi=" + myGridRows[i].myMapItem.Name + " t=" + myGridRows[i].myMapItem.TerritoryCurrent.Name);
                return "ERROR";
          }
          Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "GetSectorRangeDisplay(): loc=" + sb.ToString());

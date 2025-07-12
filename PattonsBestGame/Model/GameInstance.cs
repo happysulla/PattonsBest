@@ -5,6 +5,7 @@ using System.Windows;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using Windows.ApplicationModel.Appointments.AppointmentsProvider;
 
 namespace Pattons_Best
 { 
@@ -208,11 +209,11 @@ namespace Pattons_Best
          }
          return crewmember;
       }
-      public string GetGunLoad()
+      public string GetGunLoadType()
       {
          foreach (IMapItem mi in this.GunLoads )
          {
-            if( true == mi.Name.Contains("GunLoad"))
+            if( true == mi.Name.Contains("GunLoadInGun"))
             {
                if (true == mi.TerritoryCurrent.Name.Contains("Hvap"))
                   return "Hvap";
@@ -228,18 +229,18 @@ namespace Pattons_Best
          }
          return "None";
       }
-      public bool SetGunLoad(string ammoType)
+      public bool SetGunLoadTerritory(string ammoType)
       {
-         string name = "GunLoad" + ammoType;
-         ITerritory? newT = Territories.theTerritories.Find(name);
+         string tName = "GunLoad" + ammoType;
+         ITerritory? newT = Territories.theTerritories.Find(tName);
          if( null == newT)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetGunLoad(): unable to find territory name=" + name);
+            Logger.Log(LogEnum.LE_ERROR, "SetGunLoad(): unable to find territory name=" + tName);
             return false;
          }
          foreach (IMapItem mi in this.GunLoads)
          {
-            if (true == mi.Name.Contains("GunLoad"))
+            if (true == mi.Name.Contains("GunLoadInGun"))
             {
                mi.TerritoryCurrent = newT;
                double offset = mi.Zoom * Utilities.theMapItemOffset;
@@ -251,7 +252,7 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_ERROR, "SetGunLoad(): reached default");
          return false;
       }
-      public string GetAmmoReload()
+      public string GetAmmoReloadType()
       {
          foreach (IMapItem mi in this.GunLoads)
          {
@@ -271,24 +272,147 @@ namespace Pattons_Best
          }
          return "None";
       }
+      public bool ReloadGun()
+      {
+         IAfterActionReport? lastReport = this.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): lastReport=null");
+            return false;
+         }
+         //-----------------------------------------------
+         string gunLoad = this.GetGunLoadType();
+         switch (gunLoad) // decrease on AAR the type of ammunition used
+         {
+            case "He": --lastReport.MainGunHE; break;
+            case "Ap": --lastReport.MainGunAP; break;
+            case "Hvap": --lastReport.MainGunHVAP; break;
+            case "Hbci": --lastReport.MainGunHBCI; break;
+            case "Wp": --lastReport.MainGunWP; break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "FireMainGunAtEnemyUnits(): GetShermanToHitNumber() reached default gunload=" + gunLoad );
+               return false;
+         }
+         //-----------------------------------------------
+         string ammoReloadType = this.GetAmmoReloadType(); // look at the next ammunition to use
+         int ammoCount = 0;
+         switch (ammoReloadType) // get count of what is still available
+         {
+            case "He": ammoCount = lastReport.MainGunHE;   break;
+            case "Ap": ammoCount = lastReport.MainGunAP;   break;
+            case "Hvap": ammoCount = lastReport.MainGunHVAP; break;
+            case "Hbci": ammoCount = lastReport.MainGunHBCI; break;
+            case "Wp": ammoCount = lastReport.MainGunWP;   break;
+            default: Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): reached default gunload=" + ammoReloadType ); return false;
+         }
+         //-----------------------------------------------
+         int readyRackLoadCount = this.GetReadyRackReload(ammoReloadType);
+         if ( 0 == ammoCount ) // if count is zero, there is nothing in the gun until the gunner changes load
+         {
+            foreach(IMapItem mi in this.GunLoads )
+            { 
+               if( true == mi.Name.Contains("GunLoadInGun"))
+               {
+                  this.GunLoads.Remove( mi );
+                  break;
+               }
+            }
+            this.SetReadyRackReload(ammoReloadType, 0);
+            readyRackLoadCount = 0;
+         }
+         else
+         {
+            if (false == this.SetGunLoadTerritory(ammoReloadType)) // The Gun Load becomes the Ammo Reload after firing
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): SetGunLoadTerritory() returned error for ammoReload=" + ammoReloadType);
+               return false;
+            }
+            if (ammoCount <= readyRackLoadCount) // pull ammo from ready rack if ammo count equal to ready rack
+            {
+               if (false == this.SetReadyRackReload(ammoReloadType, ammoCount))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): SetReadyRackReload() returned false");
+                  return false;
+               }
+            }
+            else
+            {
+               if (true == this.IsReadyRackReload()) // decrease the ready rack by the type of ammunition used
+               {
+                  if (readyRackLoadCount < 1)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): GetReadyRackReload() returned 1 > load=" + readyRackLoadCount.ToString() + " for gunLoad=" + gunLoad);
+                     return false;
+                  }
+                  readyRackLoadCount--;
+                  if (false == this.SetReadyRackReload(ammoReloadType, readyRackLoadCount))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): SetReadyRackReload() returned false");
+                     return false;
+                  }
+               }
+            }
+         }
+         //---------------------------------------
+         if( 0 == readyRackLoadCount)
+         {
+            foreach (IMapItem mi in this.GunLoads)
+            {
+               if (true == mi.Name.Contains("ReadyRackReload"))
+               {
+                  IMapItem ammoLoad = new MapItem("AmmoReload", 1.0, "c29AmmoReload", mi.TerritoryCurrent);
+                  ammoLoad.Location.X = mi.Location.X;
+                  ammoLoad.Location.Y = mi.Location.Y;
+                  this.GunLoads.Add(ammoLoad);
+                  this.GunLoads.Remove(mi);
+                  break;
+               }
+            }
+         }
+         return true;
+      }
       public bool IsReadyRackReload()
       {
-         if( false == this.IsShermanRepeatFire ) // Ready Rack Reload only happens on repeat fire
-               return false;
          foreach (IMapItem mi in this.GunLoads)
          {
             if (true == mi.Name.Contains("ReadyRackAmmoReload"))
             {
-               if (true == mi.TerritoryCurrent.Name.Contains("Hvap"))
-                  return true;
-               if (true == mi.TerritoryCurrent.Name.Contains("He"))
-                  return true;
-               if (true == mi.TerritoryCurrent.Name.Contains("Ap"))
-                  return true;
-               if (true == mi.TerritoryCurrent.Name.Contains("Wp"))
-                  return true;
-               if (true == mi.TerritoryCurrent.Name.Contains("Hbci"))
-                  return true;
+               ITerritory t = mi.TerritoryCurrent;
+               if (true == t.Name.Contains("GunLoadHe"))
+               {
+                  if (0 < GetReadyRackReload("He"))
+                     return true;
+                  else
+                     return false;
+               }
+               if ( true == t.Name.Contains("GunLoadAp") )
+               {
+                  if (0 < GetReadyRackReload("Ap"))
+                     return true;
+                  else
+                     return false;
+               }
+               if (true == t.Name.Contains("GunLoadHvap"))
+               {
+                  if (0 < GetReadyRackReload("Hvap"))
+                     return true;
+                  else
+                     return false;
+               }
+               if (true == t.Name.Contains("GunLoadWp"))
+               {
+                  if (0 < GetReadyRackReload("Wp"))
+                     return true;
+                  else
+                     return false;
+               }
+               if (true == t.Name.Contains("GunLoadHbci"))
+               {
+                  if (0 < GetReadyRackReload("Hbci"))
+                     return true;
+                  else
+                     return false;
+               }
             }
          }
          return false;
@@ -316,7 +440,7 @@ namespace Pattons_Best
          }
          if (null == rrMarker)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetReadyRack(): rrMarker=null");
+            Logger.Log(LogEnum.LE_ERROR, "SetReadyRackReload(): rrMarker=null");
             return false;
          }
          rrMarker.Count = value;
@@ -324,7 +448,7 @@ namespace Pattons_Best
          ITerritory? newT = Territories.theTerritories.Find(tName);
          if (null == newT)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetReadyRack(): newT=null for " + tName);
+            Logger.Log(LogEnum.LE_ERROR, "SetReadyRackReload(): newT=null for " + tName);
             return false;
          }
          rrMarker.TerritoryCurrent = newT;

@@ -298,6 +298,18 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myGameInstance=null");
                return false;
             }
+            //-----------------------------------------
+            IMapItems removals = new MapItems();
+            foreach (IStack stack in myGameInstance.BattleStacks)
+            {
+               foreach (IMapItem mapItem in stack.MapItems)
+               {
+                  if (true == mapItem.TerritoryCurrent.Name.Contains("Off")) // remove all units that left the board
+                     removals.Add(mapItem);
+               }
+            }
+            foreach (IMapItem mi in removals)
+               myGameInstance.BattleStacks.Remove(mi);
             Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "EventViewerBattleSetup.UpdateEndState(): ------------------------------ battlestacks=" + myGameInstance.BattleStacks.ToString());
             if (null == myCallback)
             {

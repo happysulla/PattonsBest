@@ -316,7 +316,6 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myGameInstance=null");
                return false;
             }
-
             //-----------------------------------------
             IMapItems removals = new MapItems();
             foreach (IStack stack in myGameInstance.BattleStacks)
@@ -1218,7 +1217,7 @@ namespace Pattons_Best
                sb.Append("Off");
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetSectorRangeDisplay(): Reached default sector=" + myGridRows[i].mySector);
+               Logger.Log(LogEnum.LE_ERROR, "EventViewerEnemyAction.GetSectorRangeDisplay(): Reached default sector=" + myGridRows[i].mySector + " for mi=" + myGridRows[i].myMapItem.Name + " t=" + myGridRows[i].myMapItem.TerritoryCurrent.Name);
                return "ERROR";
          }
          Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "GetSectorRangeDisplay(): loc=" + sb.ToString());
