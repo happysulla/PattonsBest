@@ -521,8 +521,25 @@ e050	"<Bold>e050 Ammo Reload Order</Bold>
 <InlineUIContainer><Button Content='r5.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>
-Right click marker or one of blue boxes to to select from pull down menu where to set Gun Reload marker and/or Ready Rack Ammo Reload marker.
+Right click marker or one of blue boxes to to select from pull down menu where to set the Gun Reload marker and/or Ready Rack Ammo Reload marker. Alternatively, right click on the Gun Load marker and choose from pull down menu.
 <LineBreak/><LineBreak/>"
+e050a	"<Bold>e050a No Gun Round Loaded</Bold> 
+<InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Since the gun is unloaded at the start of the round, choose one of the highlighted boxes to load the gun.
+<LineBreak/><LineBreak/>"
+e050b	"<Bold>e050b Out of Main Gun Rounds</Bold> 
+<InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Main Gun is empty, and there are no rounds to load. Click image to continue.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='Continue50b' Height='100' Width='100'></Image></InlineUIContainer>"
+e050c	"<Bold>e050c No Gun Rounds to Load</Bold> 
+<InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Only one gun round exists in the main gun. There is nothing else to load. Click image to continue.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='Continue50c' Height='100' Width='100'></Image></InlineUIContainer>"
 e051	"<Bold>e051 Crew Actions - Tank Movement</Bold> 
 <InlineUIContainer><Button Content='r4.74.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r11.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  

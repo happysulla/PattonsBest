@@ -396,6 +396,8 @@ namespace Pattons_Best
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                break;
+            case GameAction.BattleRoundSequenceLoadMainGun:
+            case GameAction.BattleRoundSequenceLoadMainGunEnd:
             case GameAction.BattleRoundSequenceBackToSpotting:
                if (false == UpdateCanvasAnimateBattlePhase(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
@@ -1109,6 +1111,7 @@ namespace Pattons_Best
                   break;
                case GameAction.PreparationsGunLoad:
                case GameAction.PreparationsGunLoadSelect:
+               case GameAction.BattleRoundSequenceLoadMainGun:
                   if (false == UpdateCanvasTankGunLoad(gi, action))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasTankGunLoad() returned false");
@@ -2427,8 +2430,8 @@ namespace Pattons_Best
          }
          if (null == gunLoad)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonGunLoad(): t=null for " + clickedPolygon.Name.ToString());
-            return;
+            gunLoad = new MapItem("GunLoadInGun", 1.0, "c17GunLoad", newT);
+            myGameInstance.GunLoads.Add(gunLoad);
          }
          gunLoad.TerritoryCurrent = newT;
          double delta = gunLoad.Zoom * Utilities.theMapItemOffset;
@@ -2438,6 +2441,8 @@ namespace Pattons_Best
          GameAction outAction = GameAction.BattleRoundSequenceAmmoOrders;
          if (GamePhase.Preparations == myGameInstance.GamePhase)
             outAction = GameAction.PreparationsGunLoadSelect;
+         else if (BattlePhase.BackToSpotting == myGameInstance.BattlePhase)
+            outAction = GameAction.BattleRoundSequenceLoadMainGunEnd;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
       private void MouseDownPolygonCrewActions(object sender, MouseButtonEventArgs e)

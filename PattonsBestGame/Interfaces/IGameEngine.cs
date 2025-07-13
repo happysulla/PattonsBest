@@ -288,6 +288,8 @@ namespace Pattons_Best
       BattleRoundSequenceFriendlyAction,
       BattleRoundSequenceRandomEvent,
       BattleRoundSequenceBackToSpotting,
+      BattleRoundSequenceLoadMainGun,
+      BattleRoundSequenceLoadMainGunEnd,
 
       BattleRoundSequenceShermanKilled,
       BattleRoundSequenceEnemyArtilleryRoll,

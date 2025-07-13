@@ -364,19 +364,19 @@
     <None Update="Images\c15OpenHatch.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Images\c16TurretSherman75-120.gif">
+    <None Update="Images\c16TurretSherman75t120.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Images\c16TurretSherman75-180.gif">
+    <None Update="Images\c16TurretSherman75t180.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Images\c16TurretSherman75-240.gif">
+    <None Update="Images\c16TurretSherman75t240.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Images\c16TurretSherman75-300.gif">
+    <None Update="Images\c16TurretSherman75t300.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Images\c16TurretSherman75-60.gif">
+    <None Update="Images\c16TurretSherman75t060.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Images\c16TurretSherman75.gif">
@@ -871,19 +871,19 @@
     <None Update="Images\ReadyRack.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Images\ShermanPivot-120.gif">
+    <None Update="Images\ShermanPivoth120.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Images\ShermanPivot-180.gif">
+    <None Update="Images\ShermanPivoth180.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Images\ShermanPivot-240.gif">
+    <None Update="Images\ShermanPivoth240.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Images\ShermanPivot-300.gif">
+    <None Update="Images\ShermanPivoth300.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Images\ShermanPivot-60.gif">
+    <None Update="Images\ShermanPivoth060.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Images\ShermanPivot.gif">

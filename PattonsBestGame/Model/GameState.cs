@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using System.Windows;
@@ -19,6 +20,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Windows.ApplicationModel.Activation;
 using Windows.Devices.Perception;
 using Windows.Media.Playback;
 using Windows.Services.Cortana;
@@ -1199,7 +1201,7 @@ namespace Pattons_Best
          //unassignedCount -= lastReport.MainGunHE;
          //lastReport.MainGunAP = unassignedCount;
          lastReport.MainGunHE = 0;
-         lastReport.MainGunAP = 2;
+         lastReport.MainGunAP = 3;
          lastReport.MainGunWP = 0;
          lastReport.MainGunHBCI = 1;
          //--------------------------------------------------
@@ -2898,8 +2900,16 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceAmmoOrders:
                   Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattle.GameStateBattleRoundSequence(BattleRoundSequenceAmmoOrders): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.MarkAmmoReload");
                   gi.BattlePhase = BattlePhase.MarkAmmoReload;
-                  gi.EventDisplayed = gi.EventActive = "e050";
-                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  if( "None" == gi.GetAmmoReloadType())
+                  {
+                     gi.EventDisplayed = gi.EventActive = "e050c";
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else
+                  {
+                     gi.EventDisplayed = gi.EventActive = "e050";
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
                   break;
                case GameAction.BattleRoundSequenceEnemyArtilleryRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
@@ -3603,6 +3613,7 @@ namespace Pattons_Best
                      dieRoll = 11; // <cgs> TEST - Sherman To Hit Roll
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
+                     gi.FiredAmmoType = gi.GetGunLoadType();
                   }
                   else
                   {
@@ -3822,6 +3833,21 @@ namespace Pattons_Best
                               returnStatus = "ResetRound() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRandomEventRoll): " + returnStatus);
                            }
+                           else if (("None" == gi.GetGunLoadType()) && (BattlePhase.BackToSpotting == gi.BattlePhase))
+                           {
+                              int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
+                              if (0 < totalAmmo)
+                              {
+                                 action = GameAction.BattleRoundSequenceLoadMainGun;
+                                 gi.EventDisplayed = gi.EventActive = "e050a";
+                                 gi.DieRollAction = GameAction.DieRollActionNone;
+                              }
+                              else
+                              {
+                                 gi.EventDisplayed = gi.EventActive = "e050b";
+                                 gi.DieRollAction = GameAction.DieRollActionNone;
+                              }
+                           }
                            break;
                         case "Enemy Artillery":
                            gi.EventDisplayed = gi.EventActive = "e042";
@@ -3876,6 +3902,21 @@ namespace Pattons_Best
                               returnStatus = "ResetRound() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRandomEventRoll): " + returnStatus);
                            }
+                           else if (("None" == gi.GetGunLoadType()) && (BattlePhase.BackToSpotting == gi.BattlePhase))
+                           {
+                              int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
+                              if (0 < totalAmmo)
+                              {
+                                 action = GameAction.BattleRoundSequenceLoadMainGun;
+                                 gi.EventDisplayed = gi.EventActive = "e050a";
+                                 gi.DieRollAction = GameAction.DieRollActionNone;
+                              }
+                              else
+                              {
+                                 gi.EventDisplayed = gi.EventActive = "e050b";
+                                 gi.DieRollAction = GameAction.DieRollActionNone;
+                              }
+                           }
                            break;
                         default:
                            returnStatus = "reached default with randomEvent=" + randomEvent;
@@ -3889,6 +3930,31 @@ namespace Pattons_Best
                   {
                      returnStatus = "ResetRound() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceBackToSpotting): " + returnStatus);
+                  }
+                  else if (("None" == gi.GetGunLoadType()) && (BattlePhase.BackToSpotting == gi.BattlePhase))
+                  {
+                     int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
+                     if (0 < totalAmmo)
+                     {
+                        action = GameAction.BattleRoundSequenceLoadMainGun;
+                        gi.EventDisplayed = gi.EventActive = "e050a";
+                        gi.DieRollAction = GameAction.DieRollActionNone;
+                     }
+                     else
+                     {
+                        gi.EventDisplayed = gi.EventActive = "e050b";
+                        gi.DieRollAction = GameAction.DieRollActionNone;
+                     }
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceLoadMainGun:
+                  break;
+               case GameAction.BattleRoundSequenceLoadMainGunEnd:
+                  gi.EventDisplayed = gi.EventActive = "e060";
+                  if (false == gi.ReloadGun())
+                  {
+                     returnStatus = "ReloadGun() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceLoadMainGun): " + returnStatus);
                   }
                   break;
                case GameAction.BattleShermanKilled:
@@ -4495,7 +4561,7 @@ namespace Pattons_Best
          gi.NumOfShermanShot++;
          //---------------------------------------------------------------
          string gunLoadType = gi.GetGunLoadType();
-         if( false == gi.ReloadGun())
+         if( false == gi.FireAndReloadGun())
          {
             Logger.Log(LogEnum.LE_ERROR, "FireMainGunAtEnemyUnits(): ReloadGun() returned false");
             return false;
@@ -4529,12 +4595,18 @@ namespace Pattons_Best
          {
             case "He":
                gi.Target.IsHeHit = true;
-               gi.ShermanHits.Add(new ShermanAttack(gi.ShermanTypeOfFire, gunLoadType, isCriticalHit));
+               ShermanAttack hitHe = new ShermanAttack(gi.ShermanTypeOfFire, gunLoadType, isCriticalHit);
+               gi.ShermanHits.Add(hitHe);
                break;
             case "Ap":
+               gi.Target.IsApHit = true;
+               ShermanAttack hitAp = new ShermanAttack(gi.ShermanTypeOfFire, gunLoadType, isCriticalHit);
+               gi.ShermanHits.Add(hitAp);
+               break;
             case "Hvap":
                gi.Target.IsApHit = true;
-               gi.ShermanHits.Add(new ShermanAttack(gi.ShermanTypeOfFire, gunLoadType, isCriticalHit));
+               ShermanAttack hitHvap = new ShermanAttack(gi.ShermanTypeOfFire, gunLoadType, isCriticalHit);
+               gi.ShermanHits.Add(hitHvap);
                break;
             case "Hbci": // Lay two smoke in the target's zone
                for (int i = 0; i < 2; i++)
@@ -4609,8 +4681,16 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnit(): gi.ShermanHits.Count=0");
             return false;
          }
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnit(): lastReport=null");
+            return false;
+         }
+         TankCard card = new TankCard(lastReport.TankCardNum);
          //-----------------------------------------------------------------------------------
-         if (Utilities.NO_RESULT == gi.DieResults[key][0])
+         ShermanAttack hit = gi.ShermanHits[0];
+         if ( (Utilities.NO_RESULT == gi.DieResults[key][0]) && (false == hit.myIsNoChance) )
          {
             dieRoll = 2; // <cgs> TEST - Sherman To Kill Roll
             gi.DieResults[key][0] = dieRoll;
@@ -4622,15 +4702,15 @@ namespace Pattons_Best
                if (true == gi.Target.IsHullDown)
                {
                   if (5 < gi.DieResults[key][0])
-                     gi.ShermanHits[0].myHitLocation = "MISS";
+                     hit.myHitLocation = "MISS";
                   else
-                     gi.ShermanHits[0].myHitLocation = "Turret";
+                     hit.myHitLocation = "Turret";
                }
                else
                {
                   if (9 < gi.DieResults[key][0])
                   {
-                     gi.ShermanHits[0].myHitLocation = "Thrown Track";
+                     hit.myHitLocation = "Thrown Track";
                      if( false == gi.Target.Name.Contains("Truck"))
                         gi.Target.IsThrownTrack = true;
                      gi.Target.IsMoving = false;
@@ -4638,12 +4718,71 @@ namespace Pattons_Best
                   }
                   else if (4 < gi.DieResults[key][0])
                   {
-                     gi.ShermanHits[0].myHitLocation = "Hull";
+                     hit.myHitLocation = "Hull";
                   }
                   else
                   {
-                     gi.ShermanHits[0].myHitLocation = "Turret";
+                     hit.myHitLocation = "Turret";
                   }
+               }
+               //---------------------------------------------------------------
+               double toKillNum = 0.0;
+               switch (hit.myAmmoType) 
+               {
+                  case "He":
+                     if ("75" == card.myMainGun)
+                        toKillNum = TableMgr.GetShermanToKill75HeVehicleNumber(gi, gi.Target, hit);
+                     else if ("76L" == card.myMainGun)
+                        toKillNum = TableMgr.GetShermanToKill76HeVehicleNumber(gi, gi.Target, hit);
+                     else if ("76LL" == card.myMainGun)
+                        toKillNum = TableMgr.GetShermanToKill76HeVehicleNumber(gi, gi.Target, hit);
+                     else
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnit(): reached default unknown myMainGun=" + card.myMainGun);
+                        return false;
+                     }
+                     break;
+                  case "Ap":
+                     if ("75" == card.myMainGun)
+                        toKillNum = TableMgr.GetShermanToKill75ApVehicleNumber(gi, gi.Target, hit);
+                     else if ("76L" == card.myMainGun)
+                        toKillNum = TableMgr.GetShermanToKill76ApVehicleNumber(gi, gi.Target, hit);
+                     else if ("76LL" == card.myMainGun)
+                        toKillNum = TableMgr.GetShermanToKill76ApVehicleNumber(gi, gi.Target, hit);
+                     else
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnit(): reached default unknown myMainGun=" + card.myMainGun);
+                        return false;
+                     }
+                     break;
+                  case "Hvap":
+                     if ("76L" == card.myMainGun)
+                        toKillNum = TableMgr.GetShermanToKill76HvapVehicleNumber(gi, gi.Target, hit);
+                     else if ("76LL" == card.myMainGun)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnit(): reached default unknown myMainGun=" + card.myMainGun);
+                        return false;
+                     }
+                     else
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnit(): reached default unknown myMainGun=" + card.myMainGun);
+                        return false;
+                     }
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnit(): gunload=" + hit.myAmmoType + " for a=" + outAction.ToString());
+                     return false;
+               }
+               if( TableMgr.FN_ERROR == toKillNum )
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnit(): FN_ERROR when for hitAmmo="  + hit.myAmmoType + " gt=" + card.myMainGun);
+                  return false;
+               }
+               if (TableMgr.NO_CHANCE == toKillNum)
+               {
+                  gi.ShermanHits.RemoveAt(0);
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnit(): 1-ConductCrewAction(TankMgFire)");
                }
             }
             else
@@ -4986,18 +5125,19 @@ namespace Pattons_Best
          gi.CrewActionPhase = CrewActionPhase.Movement;
          gi.MovementEffectOnSherman = "unit";
          gi.MovementEffectOnEnemy = "unit";
-         //-------------------------------------------------------
          gi.CrewActions.Clear();
+         //-------------------------------------------------------
          IMapItems removals = new MapItems();
          foreach(IMapItem mi in gi.GunLoads)
          {
             if (true == mi.Name.Contains("AmmoReload"))
-               removals.Remove(mi);
+               removals.Add(mi);
             if (true == mi.Name.Contains("ReadyRack"))
-               removals.Remove(mi);
+               removals.Add(mi);
          }
          foreach(IMapItem mi in removals)
             gi.GunLoads.Remove(mi);
+         //-------------------------------------------------------
          gi.Target = null;
          //-------------------------------------------------------
          gi.IsHatchesActive = false;

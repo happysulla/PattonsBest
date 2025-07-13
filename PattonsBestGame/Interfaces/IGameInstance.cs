@@ -57,6 +57,7 @@ namespace Pattons_Best
       public string myAmmoType;   // He, Ap, Hbci, Wp,
       public bool myIsCriticalHit;
       public string myHitLocation = ""; // Turret, Hull, Thrown Track
+      public bool myIsNoChance = false;
       public ShermanAttack( string attack, string ammo, bool critical )
       {
          myAttackType = attack;
@@ -92,6 +93,7 @@ namespace Pattons_Best
       string MovementEffectOnSherman { set; get; }
       string MovementEffectOnEnemy { set; get; }
       string ShermanTypeOfFire { set; get; }
+      string FiredAmmoType { set; get; }  
       //----------------------------------------------
       IMapItems NewMembers { set; get; }
       IMapItems ReadyRacks { set; get; }
@@ -176,8 +178,9 @@ namespace Pattons_Best
       ICrewMember? GetCrewMember(string name);
       string GetGunLoadType();
       bool SetGunLoadTerritory(string ammoType);
-      string GetAmmoReloadType();
       bool ReloadGun();
+      string GetAmmoReloadType();
+      bool FireAndReloadGun();
       bool IsReadyRackReload();
       int GetReadyRackReload(string ammoType);
       bool SetReadyRackReload(string name, int value);

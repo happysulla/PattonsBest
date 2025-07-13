@@ -5003,6 +5003,7 @@ namespace Pattons_Best
                else
                {
                   toKillNum = NO_CHANCE;
+                  hit.myIsNoChance = true;
                }
             }
             else
@@ -5065,6 +5066,7 @@ namespace Pattons_Best
                if ("Front" == facing)
                {
                   toKillNum = NO_CHANCE;  // no chance
+                  hit.myIsNoChance = true;
                }
                else if ("Side" == facing)
                {
@@ -5083,6 +5085,7 @@ namespace Pattons_Best
                if ("Front" == facing)
                {
                   toKillNum = NO_CHANCE;  // no chance
+                  hit.myIsNoChance = true;
                }
                else if ("Side" == facing)
                {
@@ -5102,14 +5105,23 @@ namespace Pattons_Best
                if ("Front" == facing)
                {
                   toKillNum = NO_CHANCE;  // no chance
+                  hit.myIsNoChance = true;
                }
                else if ("Side" == facing)
                {
                   if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 03;
-                     else if ('M' == range) toKillNum = NO_CHANCE;
-                     else toKillNum = NO_CHANCE;
+                     else if ('M' == range)
+                     {
+                        toKillNum = NO_CHANCE;
+                        hit.myIsNoChance = true;
+                     }
+                     else
+                     {
+                        toKillNum = NO_CHANCE;
+                        hit.myIsNoChance = true;
+                     }
                   }
                   else
                   {
@@ -5124,7 +5136,11 @@ namespace Pattons_Best
                   {
                      if ('C' == range) toKillNum = 08;
                      else if ('M' == range) toKillNum = 03;
-                     else toKillNum = NO_CHANCE;
+                     else
+                     {
+                        toKillNum = NO_CHANCE;
+                        hit.myIsNoChance = true;
+                     }
                   }
                   else
                   {
@@ -5227,6 +5243,7 @@ namespace Pattons_Best
                if ("Front" == facing)
                {
                   toKillNum = NO_CHANCE;
+                  hit.myIsNoChance = true;
                }
                else if ("Side" == facing)
                {
@@ -5263,6 +5280,7 @@ namespace Pattons_Best
                if ("Front" == facing)
                {
                   toKillNum = NO_CHANCE;
+                  hit.myIsNoChance = true;
                }
                else if ("Side" == facing)
                {
@@ -5400,12 +5418,21 @@ namespace Pattons_Best
                   if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 03;
-                     else if ('M' == range) toKillNum = NO_CHANCE;
-                     else toKillNum = NO_CHANCE;
+                     else if ('M' == range)
+                     {
+                        toKillNum = NO_CHANCE;
+                        hit.myIsNoChance = true;
+                     }
+                     else
+                     {
+                        toKillNum = NO_CHANCE;
+                        hit.myIsNoChance = true;
+                     }
                   }
                   else
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                }
                else if ("Side" == facing)
@@ -5427,12 +5454,21 @@ namespace Pattons_Best
                   if ("Turret" == hit.myHitLocation)
                   {
                      if ('C' == range) toKillNum = 03;
-                     else if ('M' == range) toKillNum = NO_CHANCE;
-                     else toKillNum = NO_CHANCE;
+                     else if ('M' == range)
+                     {
+                        toKillNum = NO_CHANCE;
+                        hit.myIsNoChance = true;
+                     }
+                     else
+                     {
+                        toKillNum = NO_CHANCE;
+                        hit.myIsNoChance = true;
+                     }
                   }
                   else
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                }
                else if ("Side" == facing)
@@ -5453,6 +5489,7 @@ namespace Pattons_Best
                if ("Front" == facing)
                {
                   toKillNum = NO_CHANCE;  // no chance
+                  hit.myIsNoChance = true;
                }
                else if ("Side" == facing)
                {
@@ -5512,8 +5549,16 @@ namespace Pattons_Best
                if ("Front" == facing)
                {
                   if ('C' == range) toKillNum = 03;
-                  else if ('M' == range) toKillNum = NO_CHANCE;
-                  else toKillNum = NO_CHANCE;
+                  else if ('M' == range)
+                  {
+                     toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
+                  }
+                  else
+                  {
+                     toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
+                  }
                }
                else if ("Side" == facing)
                {
@@ -5537,8 +5582,16 @@ namespace Pattons_Best
                if ("Front" == facing)
                {
                   if ('C' == range) toKillNum = 03;
-                  else if ('M' == range) toKillNum = NO_CHANCE;
-                  else toKillNum = NO_CHANCE;
+                  else if ('M' == range)
+                  {
+                     toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
+                  }
+                  else
+                  {
+                     toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
+                  }
                }
                else if ("Side" == facing)
                {
@@ -5650,7 +5703,11 @@ namespace Pattons_Best
                   {
                      if ('C' == range) toKillNum = 28;
                      else if ('M' == range) toKillNum = 03;
-                     else toKillNum = NO_CHANCE;
+                     else
+                     {
+                        toKillNum = NO_CHANCE;
+                        hit.myIsNoChance = true;
+                     }
                   }
                }
                else if ("Side" == facing)
@@ -5701,11 +5758,16 @@ namespace Pattons_Best
                   {
                      if ('C' == range) toKillNum = 28;
                      else if ('M' == range) toKillNum = 03;
-                     else toKillNum = NO_CHANCE;
+                     else
+                     {
+                        toKillNum = NO_CHANCE;
+                        hit.myIsNoChance = true;
+                     }
                   }
                   else
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                }
                else if ("Side" == facing)
@@ -5858,6 +5920,7 @@ namespace Pattons_Best
                   if ("Front" == facing)
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                   else if ("Side" == facing)
                   {
@@ -5879,12 +5942,14 @@ namespace Pattons_Best
                case "TANK":
                case "PzVIb":
                   toKillNum = NO_CHANCE;
+                  hit.myIsNoChance = true;
                   break;
                case "SPG":
                case "STuGIIIg":
                   if ("Front" == facing)
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                   else if ("Side" == facing)
                   {
@@ -5945,6 +6010,7 @@ namespace Pattons_Best
                   if ("Front" == facing)
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                   else if ("Side" == facing)
                   {
@@ -5965,6 +6031,7 @@ namespace Pattons_Best
                   if ("Front" == facing)
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                   else if ("Side" == facing)
                   {
@@ -6030,6 +6097,7 @@ namespace Pattons_Best
                   if ("Front" == facing)
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                   else if ("Side" == facing)
                   {
@@ -6044,9 +6112,14 @@ namespace Pattons_Best
                   if ("Front" == facing)
                   {
                      if ("Turret" == hit.myHitLocation)
+                     {
                         toKillNum = NO_CHANCE;
+                        hit.myIsNoChance = true;
+                     }
                      else
+                     {
                         toKillNum = 03;
+                     }
                   }
                   else if ("Side" == facing)
                   {
@@ -6062,6 +6135,7 @@ namespace Pattons_Best
                   if ("Front" == facing)
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                   else if ("Side" == facing)
                   {
@@ -6134,6 +6208,7 @@ namespace Pattons_Best
                   if ("Front" == facing)
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                   else if ("Side" == facing)
                   {
@@ -6154,6 +6229,7 @@ namespace Pattons_Best
                   if ("Front" == facing)
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                   else if ("Side" == facing)
                   {
@@ -6229,17 +6305,24 @@ namespace Pattons_Best
                   if ("Front" == facing)
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                   else if ("Side" == facing)
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                   else  // rear
                   {
                      if ("Turret" == hit.myHitLocation)
+                     {
                         toKillNum = NO_CHANCE;
+                        hit.myIsNoChance = true;
+                     }
                      else
+                     {
                         toKillNum = 02;
+                     }
                   }
                   break;
                case "PzV":
@@ -6247,16 +6330,19 @@ namespace Pattons_Best
                case "PzVIb":
                case "TANK":
                   toKillNum = NO_CHANCE;
+                  hit.myIsNoChance = true;
                   break;
                case "SPG":
                case "STuGIIIg":
                   if ("Front" == facing)
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                   else if ("Side" == facing)
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                   else  // rear
                   {
@@ -6267,9 +6353,14 @@ namespace Pattons_Best
                   if ("Front" == facing)
                   {
                      if ("Turret" == hit.myHitLocation)
+                     {
                         toKillNum = 02;
+                     }
                      else
+                     {
                         toKillNum = NO_CHANCE;
+                        hit.myIsNoChance = true;
+                     }
                   }
                   else if ("Side" == facing)
                   {
@@ -6313,23 +6404,31 @@ namespace Pattons_Best
                   if ("Front" == facing)
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                   else if ("Side" == facing)
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                   else  // rear
                   {
                      if ("Turret" == hit.myHitLocation)
+                     {
                         toKillNum = NO_CHANCE;
+                        hit.myIsNoChance = true;
+                     }   
                      else
+                     {
                         toKillNum = 02;
+                     }
                   }
                   break;
                case "JdgPz38t":
                   if ("Front" == facing)
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                   else if ("Side" == facing)
                   {
@@ -6395,6 +6494,7 @@ namespace Pattons_Best
                   if ("Front" == facing)
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                   else if ("Side" == facing)
                   {
@@ -6409,6 +6509,7 @@ namespace Pattons_Best
                   if ("Front" == facing)
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                   else if ("Side" == facing)
                   {
@@ -6424,20 +6525,31 @@ namespace Pattons_Best
                   if ("Front" == facing)
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                   else if ("Side" == facing)
                   {
                      if ("Turret" == hit.myHitLocation)
+                     {
                         toKillNum = NO_CHANCE;
+                        hit.myIsNoChance = true;
+                     }
                      else
+                     {
                         toKillNum = 13;
+                     }
                   }
                   else  // rear
                   {
                      if ("Turret" == hit.myHitLocation)
+                     {
                         toKillNum = NO_CHANCE;
+                        hit.myIsNoChance = true;
+                     }
                      else
+                     {
                         toKillNum = 27;
+                     }
                   }
                   break;
                case "SPG":
@@ -6493,6 +6605,7 @@ namespace Pattons_Best
                   if ("Front" == facing)
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                   else if ("Side" == facing)
                   {
@@ -6513,6 +6626,7 @@ namespace Pattons_Best
                   if ("Front" == facing)
                   {
                      toKillNum = NO_CHANCE;
+                     hit.myIsNoChance = true;
                   }
                   else if ("Side" == facing)
                   {
@@ -6804,9 +6918,13 @@ namespace Pattons_Best
             if ('C' == range)
                toKillNumber = 10.0;
             else if ('M' == range)
+            {
                toKillNumber = NO_CHANCE;
+            }
             else
+            {
                toKillNumber = NO_CHANCE;
+            }
          }
          //------------------------------------
          Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanMgToKillNumber(): 1-base#=" + toKillNumber.ToString());

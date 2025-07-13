@@ -1478,6 +1478,17 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
+            case "e050a":
+               if ("None" != gi.GetGunLoadType())  // only show continue image after user selected a Ammo Reload 
+               {
+                  Image imge050 = new Image { Name = "Continue50a", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                  myTextBlock.Inlines.Add(new Run("                                          "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge050));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
             case "e051":
                string modiferString = UpdateEventContentGetMovingModifier(gi);
                myTextBlock.Inlines.Add(new Run(modiferString));
@@ -1567,19 +1578,19 @@ namespace Pattons_Best
                      imge52 = new Image { Name = "ShermanPivot", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("ShermanPivot") };
                      break;
                   case 60.0:
-                     imge52 = new Image { Name = "ShermanPivot", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("ShermanPivot-60") };
+                     imge52 = new Image { Name = "ShermanPivot", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("ShermanPivoth060") };
                      break;
                   case 120.0:
-                     imge52 = new Image { Name = "ShermanPivot", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("ShermanPivot-120") };
+                     imge52 = new Image { Name = "ShermanPivot", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("ShermanPivoth120") };
                      break;
                   case 180.0:
-                     imge52 = new Image { Name = "ShermanPivot", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("ShermanPivot-180") };
+                     imge52 = new Image { Name = "ShermanPivot", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("ShermanPivoth180") };
                      break;
                   case 240.0:
-                     imge52 = new Image { Name = "ShermanPivot", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("ShermanPivot-240") };
+                     imge52 = new Image { Name = "ShermanPivot", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("ShermanPivoth240") };
                      break;
                   case 300.0:
-                     imge52 = new Image { Name = "ShermanPivot", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("ShermanPivot-300") };
+                     imge52 = new Image { Name = "ShermanPivot", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("ShermanPivoth300") };
                      break;
                   default:
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default tr=" + gi.Sherman.RotationTurret.ToString());
@@ -1602,19 +1613,19 @@ namespace Pattons_Best
                      imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75") };
                      break;
                   case 60.0:
-                     imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75-60") };
+                     imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t060") };
                      break;
                   case 120.0:
-                     imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75-120") };
+                     imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t120") };
                      break;
                   case 180.0:
-                     imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75-180") };
+                     imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t180") };
                      break;
                   case 240.0:
-                     imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75-240") };
+                     imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t240") };
                      break;
                   case 300.0:
-                     imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75-300") };
+                     imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t300") };
                      break;
                   default:
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default tr=" + gi.Sherman.RotationTurret.ToString());
@@ -1964,8 +1975,7 @@ namespace Pattons_Best
                else
                {
                   myTextBlock.Inlines.Add("  =  HIT");
-                  string gunLoad = gi.GetGunLoadType();
-                  switch (gunLoad)
+                  switch (gi.FiredAmmoType)
                   {
                      case "Ap":
                      case "Hvap":
@@ -1979,7 +1989,7 @@ namespace Pattons_Best
                         imge53b = new Image { Name = "BattleRoundSequenceShermanHit", Width = 80, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("c102SmokeHit") };
                         break;
                      default:
-                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToGetToHit(): reached default gunLoad=" + gunLoad + " for key=" + key);
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToGetToHit(): reached default gunLoad=" + gi.ShermanTypeOfFire + " for key=" + key);
                         return false;
                   }
                }
@@ -4289,7 +4299,16 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue50":
+                        case "Continue50c":
                            action = GameAction.BattleRoundSequenceConductCrewAction;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Continue50a":
+                           action = GameAction.BattleRoundSequenceLoadMainGunEnd;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Continue50b":
+                           action = GameAction.BattleRoundSequenceStart;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue51":
