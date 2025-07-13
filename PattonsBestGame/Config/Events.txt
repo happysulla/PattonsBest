@@ -540,6 +540,12 @@ e050c	"<Bold>e050c No Gun Rounds to Load</Bold>
 Only one gun round exists in the main gun. There is nothing else to load. Click image to continue.
 <LineBreak/><LineBreak/>
                                             <InlineUIContainer><Image Name='Continue50c' Height='100' Width='100'></Image></InlineUIContainer>"
+e050d	"<Bold>e050c No Gun Rounds to Load</Bold> 
+<InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+The tank is empty of all main gun rounds. Click image to continue.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='Continue50d' Height='100' Width='100'></Image></InlineUIContainer>"
 e051	"<Bold>e051 Crew Actions - Tank Movement</Bold> 
 <InlineUIContainer><Button Content='r4.74.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r11.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  

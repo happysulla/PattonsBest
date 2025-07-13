@@ -2900,7 +2900,13 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceAmmoOrders:
                   Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattle.GameStateBattleRoundSequence(BattleRoundSequenceAmmoOrders): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.MarkAmmoReload");
                   gi.BattlePhase = BattlePhase.MarkAmmoReload;
-                  if( "None" == gi.GetAmmoReloadType())
+                  int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
+                  if (0 == totalAmmo)
+                  {
+                     gi.EventDisplayed = gi.EventActive = "e050d";
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else if (1 == totalAmmo)
                   {
                      gi.EventDisplayed = gi.EventActive = "e050c";
                      gi.DieRollAction = GameAction.DieRollActionNone;
@@ -2944,19 +2950,10 @@ namespace Pattons_Best
                      if (gi.DieResults[key][0] < 2)
                      {
                         lastReport.VictoryPtsFriendlyTank += 1;
-                        if (BattlePhase.RandomEvent == gi.BattlePhase)
+                        if (false == NextStepAfterRandomEvent(gi, ref action))
                         {
-                           action = GameAction.BattleEmpty;
-                           gi.EventDisplayed = gi.EventActive = "e036";
-                           gi.DieRollAction = GameAction.DieRollActionNone;
-                        }
-                        else
-                        {
-                           if (false == SpottingPhaseBegin(gi, ref action))
-                           {
-                              returnStatus = "SpottingPhaseBegin() returned false";
-                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMinefieldRoll): " + returnStatus);
-                           }
+                           returnStatus = "NextStepAfterRandomEvent() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMinefieldRoll): " + returnStatus);
                         }
                      }
                      else if (gi.DieResults[key][0] < 3)
@@ -2969,28 +2966,10 @@ namespace Pattons_Best
                      }
                      else // no effect
                      {
-                        if (BattlePhase.RandomEvent == gi.BattlePhase)
+                        if (false == NextStepAfterRandomEvent(gi, ref action))
                         {
-                           action = GameAction.BattleEmpty;
-                           gi.EventDisplayed = gi.EventActive = "e036";
-                           gi.DieRollAction = GameAction.DieRollActionNone;
-                        }
-                        else
-                        {
-                           if (BattlePhase.RandomEvent == gi.BattlePhase)
-                           {
-                              action = GameAction.BattleEmpty;
-                              gi.EventDisplayed = gi.EventActive = "e036";
-                              gi.DieRollAction = GameAction.DieRollActionNone;
-                           }
-                           else
-                           {
-                              if (false == SpottingPhaseBegin(gi, ref action))
-                              {
-                                 returnStatus = "SpottingPhaseBegin() returned false";
-                                 Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMinefieldRoll): " + returnStatus);
-                              }
-                           }
+                           returnStatus = "NextStepAfterRandomEvent() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMinefieldRoll): " + returnStatus);
                         }
                      }
                   }
@@ -3016,19 +2995,10 @@ namespace Pattons_Best
                      }
                      else
                      {
-                        if (BattlePhase.RandomEvent == gi.BattlePhase)
+                        if (false == NextStepAfterRandomEvent(gi, ref action))
                         {
-                           action = GameAction.BattleEmpty;
-                           gi.EventDisplayed = gi.EventActive = "e036";
-                           gi.DieRollAction = GameAction.DieRollActionNone;
-                        }
-                        else
-                        {
-                           if (false == SpottingPhaseBegin(gi, ref action))
-                           {
-                              returnStatus = "SpottingPhaseBegin() returned false";
-                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMinefieldDisableRoll): " + returnStatus);
-                           }
+                           returnStatus = "NextStepAfterRandomEvent() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMinefieldRoll): " + returnStatus);
                         }
                      }
                   }
@@ -3063,21 +3033,12 @@ namespace Pattons_Best
                         sb1.Append(woundResult);
                         lastReport.Notes.Add(sb1.ToString());
                         //----------------------------------
-                        if (BattlePhase.RandomEvent == gi.BattlePhase)
+                        if (false == NextStepAfterRandomEvent(gi, ref action))
                         {
-                           action = GameAction.BattleEmpty;
-                           gi.EventDisplayed = gi.EventActive = "e036";
-                           gi.DieRollAction = GameAction.DieRollActionNone;
+                           returnStatus = "NextStepAfterRandomEvent() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMinefieldRoll): " + returnStatus);
                         }
-                        else
-                        {
-                           if (false == SpottingPhaseBegin(gi, ref action))
-                           {
-                              returnStatus = "SpottingPhaseBegin() returned false";
-                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMinefieldDriverWoundRoll): " + returnStatus);
-                           }
-                        }
-                      }
+                     }
                   }
                   break;
                case GameAction.BattleRoundSequenceMinefieldAssistantWoundRoll:
@@ -3110,28 +3071,10 @@ namespace Pattons_Best
                         sb1.Append(woundResult);
                         lastReport.Notes.Add(sb1.ToString());
                         //----------------------------------
-                        if (BattlePhase.RandomEvent == gi.BattlePhase)
+                        if (false == NextStepAfterRandomEvent(gi, ref action))
                         {
-                           action = GameAction.BattleEmpty;
-                           gi.EventDisplayed = gi.EventActive = "e036";
-                           gi.DieRollAction = GameAction.DieRollActionNone;
-                        }
-                        else
-                        {
-                           if (BattlePhase.RandomEvent == gi.BattlePhase)
-                           {
-                              action = GameAction.BattleEmpty;
-                              gi.EventDisplayed = gi.EventActive = "e036";
-                              gi.DieRollAction = GameAction.DieRollActionNone;
-                           }
-                           else
-                           {
-                              if (false == SpottingPhaseBegin(gi, ref action))
-                              {
-                                 returnStatus = "SpottingPhaseBegin() returned false";
-                                 Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMinefieldAssistantWoundRoll): " + returnStatus);
-                              }
-                           }
+                           returnStatus = "NextStepAfterRandomEvent() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMinefieldRoll): " + returnStatus);
                         }
                      }
                   }
@@ -3184,19 +3127,10 @@ namespace Pattons_Best
                            }
                            if (true == isUsControl)
                            {
-                              if( BattlePhase.RandomEvent == gi.BattlePhase )
+                              if (false == NextStepAfterRandomEvent(gi, ref action))
                               {
-                                 action = GameAction.BattleEmpty;
-                                 gi.EventDisplayed = gi.EventActive = "e036";
-                                 gi.DieRollAction = GameAction.DieRollActionNone;
-                              }
-                              else
-                              {
-                                 if (false == SpottingPhaseBegin(gi, ref action))
-                                 {
-                                    returnStatus = "SpottingPhaseBegin() returned false";
-                                    Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequencePanzerfaustSectorRoll): " + returnStatus);
-                                 }
+                                 returnStatus = "NextStepAfterRandomEvent() returned false";
+                                 Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMinefieldRoll): " + returnStatus);
                               }
                            }
                            else
@@ -3266,19 +3200,10 @@ namespace Pattons_Best
                         }
                         else
                         {
-                           if (BattlePhase.RandomEvent == gi.BattlePhase)
+                           if (false == NextStepAfterRandomEvent(gi, ref action))
                            {
-                              action = GameAction.BattleEmpty;
-                              gi.EventDisplayed = gi.EventActive = "e036";
-                              gi.DieRollAction = GameAction.DieRollActionNone;
-                           }
-                           else
-                           {
-                              if (false == SpottingPhaseBegin(gi, ref action))
-                              {
-                                 returnStatus = "SpottingPhaseBegin() returned false";
-                                 Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequencePanzerfaustAttackRoll): " + returnStatus);
-                              }
+                              returnStatus = "NextStepAfterRandomEvent() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMinefieldRoll): " + returnStatus);
                            }
                         }
                      }
@@ -3356,19 +3281,10 @@ namespace Pattons_Best
                         }
                         else
                         {
-                           if (BattlePhase.RandomEvent == gi.BattlePhase)
+                           if (false == NextStepAfterRandomEvent(gi, ref action))
                            {
-                              action = GameAction.BattleEmpty;
-                              gi.EventDisplayed = gi.EventActive = "e036";
-                              gi.DieRollAction = GameAction.DieRollActionNone;
-                           }
-                           else
-                           {
-                              if (false == SpottingPhaseBegin(gi, ref action))
-                              {
-                                 returnStatus = "SpottingPhaseBegin() returned false";
-                                 Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequencePanzerfaustToKillRoll): " + returnStatus);
-                              }
+                              returnStatus = "NextStepAfterRandomEvent() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMinefieldRoll): " + returnStatus);
                            }
                         }
                      }
@@ -3495,9 +3411,11 @@ namespace Pattons_Best
                      //----------------------------------------------
                      if( false == isAnyEnemyLeft)
                      {
-                        action = GameAction.BattleEmpty;
-                        gi.EventDisplayed = gi.EventActive = "e036";
-                        gi.DieRollAction = GameAction.DieRollActionNone;
+                        if (false == NextStepAfterRandomEvent(gi, ref action))
+                        {
+                           returnStatus = "NextStepAfterRandomEvent() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMinefieldRoll): " + returnStatus);
+                        }
                      }
                      else
                      {
@@ -3835,8 +3753,8 @@ namespace Pattons_Best
                            }
                            else if (("None" == gi.GetGunLoadType()) && (BattlePhase.BackToSpotting == gi.BattlePhase))
                            {
-                              int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
-                              if (0 < totalAmmo)
+                              int totalAmmoFriendlyArtillery = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
+                              if (0 < totalAmmoFriendlyArtillery)
                               {
                                  action = GameAction.BattleRoundSequenceLoadMainGun;
                                  gi.EventDisplayed = gi.EventActive = "e050a";
@@ -3904,8 +3822,8 @@ namespace Pattons_Best
                            }
                            else if (("None" == gi.GetGunLoadType()) && (BattlePhase.BackToSpotting == gi.BattlePhase))
                            {
-                              int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
-                              if (0 < totalAmmo)
+                              int totalAmmoFlankingFire = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
+                              if (0 < totalAmmoFlankingFire)
                               {
                                  action = GameAction.BattleRoundSequenceLoadMainGun;
                                  gi.EventDisplayed = gi.EventActive = "e050a";
@@ -3933,8 +3851,8 @@ namespace Pattons_Best
                   }
                   else if (("None" == gi.GetGunLoadType()) && (BattlePhase.BackToSpotting == gi.BattlePhase))
                   {
-                     int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
-                     if (0 < totalAmmo)
+                     int totalAmmoBackToSpotting = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
+                     if (0 < totalAmmoBackToSpotting)
                      {
                         action = GameAction.BattleRoundSequenceLoadMainGun;
                         gi.EventDisplayed = gi.EventActive = "e050a";
@@ -4563,7 +4481,7 @@ namespace Pattons_Best
          string gunLoadType = gi.GetGunLoadType();
          if( false == gi.FireAndReloadGun())
          {
-            Logger.Log(LogEnum.LE_ERROR, "FireMainGunAtEnemyUnits(): ReloadGun() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "FireMainGunAtEnemyUnits(): FireAndReloadGun() returned false");
             return false;
          }
          //---------------------------------------------------------------
@@ -5113,6 +5031,48 @@ namespace Pattons_Best
                   bool isVehicleTarget = ((true == mi.IsVehicle) && (false == mi.Name.Contains("TRUCK"))); // allowed to show MG at trucks
                   if ((true == mi.IsEnemyUnit()) && (true == mi.IsSpotted) && (false == mi.IsKilled) && (false == isVehicleTarget))
                      gi.Targets.Add(mi);
+               }
+            }
+         }
+         return true;
+      }
+      private bool NextStepAfterRandomEvent(IGameInstance gi, ref GameAction outAction)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "NextStepAfterRandomEvent(): lastReport=null" );
+            return false;
+         }
+         //--------------------------------------------------
+         if (BattlePhase.AmbushRandomEvent == gi.BattlePhase)
+         {
+            if (false == SpottingPhaseBegin(gi, ref outAction))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "NextStepAfterRandomEvent(): SpottingPhaseBegin() returned false");
+               return false;
+            }
+         }
+         else
+         {
+            if (false == ResetRound(gi))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "NextStepAfterRandomEvent(): ResetRound() returned false");
+               return false;
+            }
+            else if (("None" == gi.GetGunLoadType()) && (BattlePhase.BackToSpotting == gi.BattlePhase))
+            {
+               int totalAmmoFriendlyArtillery = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
+               if (0 < totalAmmoFriendlyArtillery)
+               {
+                  outAction = GameAction.BattleRoundSequenceLoadMainGun;
+                  gi.EventDisplayed = gi.EventActive = "e050a";
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+               }
+               else
+               {
+                  gi.EventDisplayed = gi.EventActive = "e050b";
+                  gi.DieRollAction = GameAction.DieRollActionNone;
                }
             }
          }

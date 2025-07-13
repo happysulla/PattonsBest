@@ -392,6 +392,7 @@ namespace Pattons_Best
                if ( false == UpdateCanvasShermanSelectTarget(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasShermanSelectTarget() returned error ");
                break;
+            case GameAction.BattleRoundSequenceEnemyAction:
             case GameAction.BattleRoundSequenceShermanToHitRoll:
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
@@ -897,11 +898,17 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuGunLoadAction(): lastReport=null");
             return false;
          }
+         string gunLoadType = gi.GetGunLoadType();
          MenuItem menuitem = new MenuItem();
          //--------------------------------------------------
          myContextMenuGunLoadActions["GunLoadHe"].Items.Clear();
-         if ( 0 < lastReport.MainGunHE )
+         int minCount = 0;
+         if ("He" == gunLoadType)
+            minCount = 1;
+         if (minCount < lastReport.MainGunHE )
          {
+            myContextMenuGunLoadActions["GunLoadHe"].IsEnabled = true;
+            myContextMenuGunLoadActions["GunLoadHe"].Visibility = Visibility.Visible;
             menuitem = new MenuItem();
             menuitem.Name = "GunLoadHe_AmmoReload";
             menuitem.Header = "Place Ammo Reload";
@@ -916,10 +923,20 @@ namespace Pattons_Best
                myContextMenuGunLoadActions["GunLoadHe"].Items.Add(menuitem);
             }
          }
+         else
+         {
+            myContextMenuGunLoadActions["GunLoadHe"].IsEnabled = false;
+            myContextMenuGunLoadActions["GunLoadHe"].Visibility = Visibility.Collapsed;
+         }
          //--------------------------------------------------
          myContextMenuGunLoadActions["GunLoadAp"].Items.Clear();
-         if (0 < lastReport.MainGunAP)
+         minCount = 0;
+         if ("Ap" == gunLoadType) // if the one ammo is loaded in gun, cannot perform ammo reload
+            minCount = 1;
+         if (minCount < lastReport.MainGunAP)
          {
+            myContextMenuGunLoadActions["GunLoadAp"].IsEnabled = true;
+            myContextMenuGunLoadActions["GunLoadAp"].Visibility = Visibility.Visible;
             menuitem = new MenuItem();
             menuitem.Name = "GunLoadAp_AmmoReload";
             menuitem.Header = "Place Ammo Reload";
@@ -934,10 +951,20 @@ namespace Pattons_Best
                myContextMenuGunLoadActions["GunLoadAp"].Items.Add(menuitem);
             }
          }
+         else
+         {
+            myContextMenuGunLoadActions["GunLoadAp"].IsEnabled = false;
+            myContextMenuGunLoadActions["GunLoadAp"].Visibility = Visibility.Collapsed;
+         }
          //--------------------------------------------------
+         minCount = 0;
+         if ("Hbci" == gunLoadType) // if the one ammo is loaded in gun, cannot perform ammo reload
+            minCount = 1;
          myContextMenuGunLoadActions["GunLoadHbci"].Items.Clear();
          if (0 < lastReport.MainGunHBCI)
          {
+            myContextMenuGunLoadActions["GunLoadHbci"].IsEnabled = true;
+            myContextMenuGunLoadActions["GunLoadHbci"].Visibility = Visibility.Visible;
             menuitem = new MenuItem();
             menuitem.Name = "GunLoadHbci_AmmoReload";
             menuitem.Header = "Place Ammo Reload";
@@ -952,10 +979,20 @@ namespace Pattons_Best
                myContextMenuGunLoadActions["GunLoadHbci"].Items.Add(menuitem);
             }
          }
+         else
+         {
+            myContextMenuGunLoadActions["GunLoadHbci"].IsEnabled = false;
+            myContextMenuGunLoadActions["GunLoadHbci"].Visibility = Visibility.Collapsed;
+         }
          //--------------------------------------------------
          myContextMenuGunLoadActions["GunLoadWp"].Items.Clear();
+         minCount = 0;
+         if ("Wp" == gunLoadType) // if the one ammo is loaded in gun, cannot perform ammo reload
+            minCount = 1;
          if (0 < lastReport.MainGunWP)
          {
+            myContextMenuGunLoadActions["GunLoadWp"].IsEnabled = true;
+            myContextMenuGunLoadActions["GunLoadWp"].Visibility = Visibility.Visible;
             menuitem = new MenuItem();
             menuitem.Name = "GunLoadWp_AmmoReload";
             menuitem.Header = "Place Ammo Reload";
@@ -970,10 +1007,19 @@ namespace Pattons_Best
                myContextMenuGunLoadActions["GunLoadWp"].Items.Add(menuitem);
             }
          }
+         else
+         {
+            myContextMenuGunLoadActions["GunLoadWp"].IsEnabled = false;
+            myContextMenuGunLoadActions["GunLoadWp"].Visibility = Visibility.Collapsed;
+         }
          //--------------------------------------------------
          myContextMenuGunLoadActions["GunLoadHvap"].Items.Clear();
+         if ("Hvap" == gunLoadType) // if the one ammo is loaded in gun, cannot perform ammo reload
+            minCount = 1;
          if (0 < lastReport.MainGunHVAP)
          {
+            myContextMenuGunLoadActions["GunLoadHvap"].IsEnabled = true;
+            myContextMenuGunLoadActions["GunLoadHvap"].Visibility = Visibility.Visible;
             menuitem = new MenuItem();
             menuitem.Name = "GunLoadHvap_AmmoReload"; 
             menuitem.Header = "Place Ammo Reload";
@@ -987,6 +1033,11 @@ namespace Pattons_Best
                menuitem.Click += MenuItemAmmoReloadClick;
                myContextMenuGunLoadActions["GunLoadHvap"].Items.Add(menuitem);
             }
+         }
+         else
+         {
+            myContextMenuGunLoadActions["GunLoadHvap"].IsEnabled = false;
+            myContextMenuGunLoadActions["GunLoadHvap"].Visibility = Visibility.Collapsed;
          }
          return true;
       }

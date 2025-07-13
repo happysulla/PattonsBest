@@ -310,7 +310,7 @@ namespace Pattons_Best
          int maxReadyRackLoadCount = ammoCount - 1; // this ammo is loaded in the gun - the ready rack must be one less than ammo count
          if (maxReadyRackLoadCount <= readyRackLoadCount) // pull ammo from ready rack if ammo count less to ready rack
          {
-            Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "FireAndReloadGun(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString() + "--> ammoCount=" + ammoCount.ToString());
+            Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "ReloadGun(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString() + "--> ammoCount=" + maxReadyRackLoadCount.ToString());
             if (false == this.SetReadyRackReload(gunLoadType, maxReadyRackLoadCount))
             {
                Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): 2-SetReadyRackReload() returned false");
@@ -372,7 +372,7 @@ namespace Pattons_Best
             int maxReadyRackLoad = ammoCount - 1;
             if (maxReadyRackLoad <= readyRackLoadCount) // pull ammo from ready rack if ammo count equal to ready rack
             {
-               Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "FireAndReloadGun(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString() + "--> ammoCount=" + ammoCount.ToString() );
+               Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "FireAndReloadGun(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString() + "--> ammoCount=" + maxReadyRackLoad.ToString() );
                if (false == this.SetReadyRackReload(ammoReloadType, maxReadyRackLoad))
                {
                   Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): 2-SetReadyRackReload() returned false");

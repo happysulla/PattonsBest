@@ -4300,6 +4300,7 @@ namespace Pattons_Best
                            break;
                         case "Continue50":
                         case "Continue50c":
+                        case "Continue50d":
                            action = GameAction.BattleRoundSequenceConductCrewAction;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;

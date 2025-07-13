@@ -2818,24 +2818,12 @@ namespace Pattons_Best
          double rotation = 0.0;
          switch (enemySector)
          {
-            case '6':
-               rotation = 0.0;
-               break;
-            case '9':
-               rotation = 60.0;
-               break;
-            case '1':
-               rotation = 120.0;
-               break;
-            case '2':
-               rotation = 180.0;
-               break;
-            case '3':
-               rotation = 240.0;
-               break;
-            case '4':
-               rotation = 300.0;
-               break;
+            case '6': rotation = 0.0; break;
+            case '9': rotation = 60.0; break;
+            case '1': rotation = 120.0; break;
+            case '2': rotation = 180.0; break;
+            case '3': rotation = 240.0; break;
+            case '4': rotation = 300.0; break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): reached default enemySector=" + enemySector);
                return "ERROR";
@@ -4867,34 +4855,26 @@ namespace Pattons_Best
          double rotation = 0.0;
          switch (enemySector)
          {
-            case '6':
-               rotation = 0.0;
-               break;
-            case '9':
-               rotation = 60.0;
-               break;
-            case '1':
-               rotation = 120.0;
-               break;
-            case '2':
-               rotation = 180.0;
-               break;
-            case '3':
-               rotation = 240.0;
-               break;
-            case '4':
-               rotation = 300.0;
-               break;
+            case '6': rotation = 0.0; break;
+            case '9': rotation = 60.0; break;
+            case '1': rotation = 120.0; break;
+            case '2': rotation = 180.0; break;
+            case '3': rotation = 240.0; break;
+            case '4': rotation = 300.0; break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): reached default enemySector=" + enemySector);
                return "ERROR";
          }
-         rotation -= enemyUnit.RotationHull;
+         double tr = rotation - enemyUnit.RotationHull;
          if ("Turret" == hitLocation)
          {
-            rotation -= enemyUnit.RotationTurret;
-            if (rotation < 0.0)
-               rotation += 360;
+            tr = rotation - enemyUnit.RotationTurret;
+            if (tr < 0.0)
+               tr += 360.0;
+            if (360.0 < tr)
+               tr = tr - 360;
+            if (180.0 < tr)
+               tr = 360 - tr;
             switch (rotation)
             {
                case 0.0: return "Rear";
@@ -4904,14 +4884,18 @@ namespace Pattons_Best
                case 240.0: return "Side";
                case 300.0: return "Side";
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): reached default 1-rotation=" + rotation.ToString("F1") + " hr=" + enemyUnit.RotationHull.ToString("F1") + " tr=" + enemyUnit.RotationTurret.ToString("F1"));
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): reached default 1-rotation=" +  tr.ToString("F1") + " r=" + rotation.ToString("F1") + " enemy hr=" + enemyUnit.RotationHull.ToString("F1") + " enemy tr=" + enemyUnit.RotationTurret.ToString("F1"));
                   return "ERROR";
             }
          }
          else if ("Hull" == hitLocation)
          {
-            if (rotation < 0.0)
-               rotation += 360;
+            if (tr < 0.0)
+               tr += 360.0;
+            if (360.0 < tr)
+               tr = tr - 360;
+            if (180.0 < tr)
+               tr = 360 - tr;
             switch (rotation)
             {
                case 0.0: return "Rear";
