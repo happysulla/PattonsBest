@@ -421,7 +421,9 @@ namespace Pattons_Best
       public static void SetButtonContent(Button b, IMapItem mi, bool isMapItemZoom = false, bool isDecoration = true, bool isBloodSpotsShown = true)
       {
          double zoom = Utilities.ZOOM;
-         if( true == isMapItemZoom )
+         if (true == mi.Name.Contains("Smoke")) // smoke always uses mi.Zoom
+            zoom = mi.Zoom;
+         else if ( true == isMapItemZoom ) 
             zoom = mi.Zoom;
          //----------------------------
          Grid g = new Grid() { };

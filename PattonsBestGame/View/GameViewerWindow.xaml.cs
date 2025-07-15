@@ -396,6 +396,8 @@ namespace Pattons_Best
             case GameAction.BattleRoundSequenceShermanToHitRoll:
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               if (false == UpdateCanvasMain(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
             case GameAction.BattleRoundSequenceLoadMainGun:
             case GameAction.BattleRoundSequenceLoadMainGunEnd:

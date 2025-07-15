@@ -116,12 +116,12 @@ namespace Pattons_Best
       bool IsHatchesActive { set; get; }
       //------------------------------------------------
       bool IsShermanFirstShot { set; get; }
+      bool IsPullingFromReadyRack { set; get; }
       bool IsShermanFiring { set; get; }
       bool IsShermanFiringAtFront { set; get; }
       bool IsShermanDeliberateImmobilization { set; get; }
-      bool IsShermanRepeatFire { set; get; }
-      bool IsShermanRepeatFirePending { set; get; }
       int NumOfShermanShot { set; get; }
+      int NumSmokeAttacksThisRound { set; get; }
       //------------------------------------------------
       bool IsCommanderDirectingMgFire { set; get; }
       bool IsShermanFiringAaMg { set; get; }
@@ -188,5 +188,7 @@ namespace Pattons_Best
       bool IsDaylightLeft(IAfterActionReport report);
       bool IsExitArea(out bool isExitAreaReached);
       void KillSherman(IAfterActionReport report, string reason);
+      void ScoreYourVictoryPoint(IAfterActionReport report, IMapItem enemy);
+      void ScoreFriendlyVictoryPoint(IAfterActionReport report, IMapItem enemy);
    }
 }

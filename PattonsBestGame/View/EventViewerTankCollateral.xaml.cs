@@ -618,7 +618,7 @@ namespace Pattons_Best
          {
             if (false == myRulesMgr.ShowRule(key))
             {
-               Logger.Log(LogEnum.LE_ERROR, "Button_Click(): ShowRule() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ButtonRule_Click(): ShowRule() returned false");
                return;
             }
          }
@@ -626,7 +626,7 @@ namespace Pattons_Best
          {
             if (false == myRulesMgr.ShowTable(key))
             {
-               Logger.Log(LogEnum.LE_ERROR, "Button_Click(): ShowTable() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ButtonRule_Click(): ShowTable() returned false");
                return;
             }
          }

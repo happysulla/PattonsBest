@@ -261,7 +261,7 @@ namespace Pattons_Best
       BattleRoundSequencePivotLeft,
       BattleRoundSequencePivotRight,
       BattleRoundSequenceMovementPivotEnd,
-      BattleRoutSequenceChangeFacing,
+      BattleRoundSequenceChangeFacing,
       BattleRoundSequenceChangeFacingEnd,
       BattleRoundSequenceTurretEnd,
       BattleRoundSequenceTurretEndRotateLeft,

@@ -25,13 +25,7 @@ namespace Pattons_Best
    {
       public delegate bool EndResolveChangeFacingCallback();
       private const int STARTING_ASSIGNED_ROW = 6;
-      private const int NO_MOVE = 100;
-      private const int NO_FIRE = 101;
-      private const int NO_FACING = 102;
-      private const int KEEP_TERRAIN = 103;
-      private const int NO_FIRE_YOUR_TANK = 105;
-      private const int NO_FIRE_THROWN_TRACK = 106;
-      private const int NO_FIRE_MISSED_TURRET = 107;
+      private const int THROWN_TRACK = 106;
       public enum E04741Enum
       {
          ENEMY_FACING_ROLL,
@@ -219,6 +213,11 @@ namespace Pattons_Best
                      return false;
                   }
                   myGridRows[i].myFacingOld = GetFacingDisplay(i);
+                  if (true == mi.IsThrownTrack)
+                  {
+                     myGridRows[i].myDieRollFacing = THROWN_TRACK;
+                     myGridRows[i].myFacingNew = myGridRows[i].myFacingOld;
+                  }
                   ++i;
                }
             }
@@ -356,7 +355,19 @@ namespace Pattons_Best
             Grid.SetRow(oldFacingLabel, rowNum);
             Grid.SetColumn(oldFacingLabel, 2);
             //-------------------------------
-            if (Utilities.NO_RESULT < myGridRows[i].myDieRollFacing)
+            if( THROWN_TRACK == myGridRows[i].myDieRollFacing)
+            {
+               Label dieRollLabel = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "Thrown Track" };
+               myGrid.Children.Add(dieRollLabel);
+               Grid.SetRow(dieRollLabel, rowNum);
+               Grid.SetColumn(dieRollLabel, 3);
+               Label newFacingLabel = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myFacingNew };
+               myGrid.Children.Add(newFacingLabel);
+               Grid.SetRow(newFacingLabel, rowNum);
+               Grid.SetColumn(newFacingLabel, 4);
+
+            }
+            else if (Utilities.NO_RESULT < myGridRows[i].myDieRollFacing)
             {
                Label dieRollLabel = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRollFacing.ToString() };
                myGrid.Children.Add(dieRollLabel);
@@ -465,7 +476,10 @@ namespace Pattons_Best
             return;
          }
          myGridRows[i].myDieRollFacing = dieRoll;
-         myGridRows[i].myFacingNew = TableMgr.GetEnemyNewFacing(enemyUnit, dieRoll);
+         if (true == mi.IsThrownTrack)
+            myGridRows[i].myFacingNew = myGridRows[i].myFacingOld;  // do not change facing if thrown track
+         else
+            myGridRows[i].myFacingNew = TableMgr.GetEnemyNewFacing(enemyUnit, dieRoll);
          if ("ERROR" == myGridRows[i].myFacingNew)
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyNewFacing() returned ERROR");

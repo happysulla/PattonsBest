@@ -114,6 +114,12 @@ e013	"<Bold>e013 Gun Load</Bold>
 Mark the type of round you want loaded in the main gun before any action begins by clicking the highlighted box on the Tank Card in the correct ammo type box. Click image below to continue.
 <LineBreak/><LineBreak/>
                                                   <InlineUIContainer><Image Name='c17GunLoad'  Height='80' Width='80'></Image></InlineUIContainer>"
+e013a	"<Bold>e013a Out of Main Gun Rounds</Bold> 
+<InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Main Gun is empty, and there are no rounds to load. Tehrefore, the main gun cannot be loaded. Click image to continue.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='Continue13a' Height='100' Width='100'></Image></InlineUIContainer>"
 e014	"<Bold>e014 Tank &amp; Turret Orientation</Bold> 
 <InlineUIContainer><Button Content='r4.44' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
@@ -521,7 +527,13 @@ e050	"<Bold>e050 Ammo Reload Order</Bold>
 <InlineUIContainer><Button Content='r5.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>
-Right click marker or one of blue boxes to to select from pull down menu where to set the Gun Reload marker and/or Ready Rack Ammo Reload marker. Alternatively, right click on the Gun Load marker and choose from pull down menu.
+Right click marker or one of blue boxes to show the ammo reload context menu.  Alternatively, or if no blue box is shown, right click on the Gun Load marker to show the context menu.
+<LineBreak/><LineBreak/>
+The context menu allows setting the Ammo Reload marker. When no ammo can be reloaded, this marker disappears.
+<LineBreak/><LineBreak/>
+The selection of Ready Rack Ammo Reload marker over the Ammo Reload marker supports higher chance of performing rate of fire. <InlineUIContainer><Button Content='r9.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+The Gun Load marker shows the round in the main gun. The Gun Load marker changes to the Ammo Reload location when the gun is fired. 
 <LineBreak/><LineBreak/>"
 e050a	"<Bold>e050a No Gun Round Loaded</Bold> 
 <InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
@@ -618,8 +630,14 @@ For each hit scored against a target, consult the
 e053e	"<Bold>e053e Main Gun Against Vehicle</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<LineBreak/><LineBreak/>"
+e053f	"<Bold>e053f Smoke Round Hits</Bold> 
+<InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<InlineUIContainer><Button Content='r9.32' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
-For each hit scored against a target, consult the  "
+When a hit is scored with a smoke round, place Smoke marker(s) in the zone. HBCI ammo generates two Smoke Markers for each hit.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='Continue53f' Height='100' Width='100'></Image></InlineUIContainer>"
 e054	"<Bold>e054 MG Firing - Select Target</Bold> 
 <InlineUIContainer><Button Content='r4.74.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r10.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
@@ -642,7 +660,7 @@ The MG ammo is marked off the After Action Report <InlineUIContainer><Button Con
 e060	"<Bold>e060 Reset Round</Bold> 
 <InlineUIContainer><Button Content='r4.77' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>
-Since the round did not end, reset and return back to Spotting Round. Click image to continue.
+Since the battle did not end, reset and return back to Spotting Round. Click image to continue.
 <LineBreak/><LineBreak/>
                                             <InlineUIContainer><Image Name='Continue60' Height='100' Width='100'></Image></InlineUIContainer>"
 e100	"<Bold>e100 Evening Debriefing</Bold> 

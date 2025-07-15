@@ -61,12 +61,12 @@ namespace Pattons_Best
       public bool IsHatchesActive { set; get; } = false;
       //---------------------------------------------------------------
       public bool IsShermanFirstShot { set; get; } = false;
+      public bool IsPullingFromReadyRack { set; get; } = false;
       public bool IsShermanFiring { set; get; } = false;
       public bool IsShermanFiringAtFront { set; get; } = false;
       public bool IsShermanDeliberateImmobilization { set; get; } = false;
-      public bool IsShermanRepeatFire { set; get; } = false;
-      public bool IsShermanRepeatFirePending { set; get; } = false; // change IsShermanRepeatFire = true after first To Kill roll
       public int NumOfShermanShot { set; get; } = 0;
+      public int NumSmokeAttacksThisRound { set; get; } = 0;
       public bool IsBrokenMainGun { set; get; } = false;
       public bool IsBrokenGunsight { set; get; } = false;
       public Dictionary<string, bool> FirstShots { set; get; } = new Dictionary<string, bool>();
@@ -328,6 +328,7 @@ namespace Pattons_Best
             return false;
          }
          //-----------------------------------------------
+         this.IsPullingFromReadyRack = false;
          string gunLoad = this.GetGunLoadType();  // This is the ammo that fired
          Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "FireAndReloadGun(): Gun Load That Was Fired is " + gunLoad);
          switch (gunLoad) // decrease on AAR the type of ammunition used
@@ -373,6 +374,7 @@ namespace Pattons_Best
             if (maxReadyRackLoad <= readyRackLoadCount) // pull ammo from ready rack if ammo count equal to ready rack
             {
                Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "FireAndReloadGun(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString() + "--> ammoCount=" + maxReadyRackLoad.ToString() );
+               this.IsPullingFromReadyRack = true;
                if (false == this.SetReadyRackReload(ammoReloadType, maxReadyRackLoad))
                {
                   Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): 2-SetReadyRackReload() returned false");
@@ -389,6 +391,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): GetReadyRackReload() returned 1 > load=" + readyRackLoadCount.ToString() + " for gunLoad=" + gunLoad);
                      return false;
                   }
+                  this.IsPullingFromReadyRack = true;
                   readyRackLoadCount--;
                   if (false == this.SetReadyRackReload(ammoReloadType, readyRackLoadCount))
                   {
@@ -571,6 +574,102 @@ namespace Pattons_Best
          this.Sherman.IsMoving = false;
          report.KnockedOut = reason;
          report.VictoryPtsFriendlyTank++;
+      }
+      public void ScoreYourVictoryPoint(IAfterActionReport report, IMapItem enemy)
+      {
+         string enemyUnit = enemy.GetEnemyUnit();
+         switch (enemyUnit)
+         {
+            case "LW":
+            case "MG":
+               report.VictoryPtsYourKiaLightWeapon++;
+               break;
+            case "ATG":
+            case "Pak43":
+            case "Pak38":
+            case "Pak40":
+               report.VictoryPtsYourKiaAtGun++;
+               break;
+            case "TRUCK":
+               report.VictoryPtsYourKiaTruck++;
+               break;
+            case "PSW":
+            case "SPW":
+               report.VictoryPtsYourKiaSpwOrPsw++;
+               break;
+            case "PzIV":
+               report.VictoryPtsYourKiaPzIV++;
+               break;
+            case "PzV":
+               report.VictoryPtsYourKiaPzV++;
+               break;
+            case "TANK":
+            case "PzVIe":
+            case "PzVIb":
+               report.VictoryPtsYourKiaPzVI++;
+               break;
+            case "SPG":
+            case "STuGIIIg":
+            case "MARDERII":
+            case "MARDERIII":
+            case "JdgPzIV":
+            case "JdgPz38t":
+               report.VictoryPtsYourKiaSPGun++;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "ScoreYourVictoryPoint(): reached default with enemyUnit=" + enemyUnit);
+               break;
+         }
+         if (true == enemy.IsFortification)
+            report.VictoryPtsYourKiaFortifiedPosition++;
+      }
+      public void ScoreFriendlyVictoryPoint(IAfterActionReport report, IMapItem enemy)
+      {
+         string enemyUnit = enemy.GetEnemyUnit();
+         switch (enemyUnit)
+         {
+            case "LW":
+            case "MG":
+               report.VictoryPtsFriendlyKiaLightWeapon++;
+               break;
+            case "ATG":
+            case "Pak43":
+            case "Pak38":
+            case "Pak40":
+               report.VictoryPtsFriendlyKiaAtGun++;
+               break;
+            case "TRUCK":
+               report.VictoryPtsFriendlyKiaTruck++;
+               break;
+            case "PSW":
+            case "SPW":
+               report.VictoryPtsFriendlyKiaSpwOrPsw++;
+               break;
+            case "PzIV":
+               report.VictoryPtsFriendlyKiaPzIV++;
+               break;
+            case "PzV":
+               report.VictoryPtsFriendlyKiaPzV++;
+               break;
+            case "TANK":
+            case "PzVIe":
+            case "PzVIb":
+               report.VictoryPtsFriendlyKiaPzVI++;
+               break;
+            case "SPG":
+            case "STuGIIIg":
+            case "MARDERII":
+            case "MARDERIII":
+            case "JdgPzIV":
+            case "JdgPz38t":
+               report.VictoryPtsFriendlyKiaSPGun++;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "ScoreYourVictoryPoint(): reached default with enemyUnit=" + enemyUnit);
+               break;
+         }
+         if (true == enemy.IsFortification)
+            report.VictoryPtsYourKiaFortifiedPosition++;
       }
    }
 }

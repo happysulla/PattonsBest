@@ -124,7 +124,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_APPEARING_UNITS);
          //SetOn(LogEnum.LE_SHOW_TO_HIT_MODIFIER);
          //SetOn(LogEnum.LE_SHOW_TO_KILL_MODIFIER);
-         //SetOn(LogEnum.LE_SHOW_TO_KILL_ATTACK);
+         SetOn(LogEnum.LE_SHOW_TO_KILL_ATTACK);
          //SetOn(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION);
          SetOn(LogEnum.LE_SHOW_BATTLE_ROUND_START);
          // SetOn(LogEnum.LE_SHOW_TANK_BUTTONS);

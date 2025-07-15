@@ -765,7 +765,6 @@ namespace Pattons_Best
             case "SPG":
                t = tLeft;
                mi = new MapItem(name, Utilities.ZOOM + 0.5, "c77UnidentifiedSpg", t);
-               mi.IsSpotted = true;
                mi.IsVehicle = true;
                myIsVehicleActivated = true;
                break;

@@ -44,6 +44,7 @@ namespace Pattons_Best
       private ScrollViewer? myScrollViewerTextBlock;
       private Canvas? myCanvasMain = null;
       private TextBlock? myTextBlock = null;
+      private int myNumSmokeAttacksThisRound = 0;
       //--------------------------------------------------------------------
       private readonly FontFamily myFontFam1 = new FontFamily("Courier New");
       //--------------------------------------------------------------------
@@ -359,7 +360,7 @@ namespace Pattons_Best
                else if (false == collateralCheck.ResolveCollateralDamage(ShowCollateralDamageResults))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ResolveCollateralDamage() returned false");
                break;
-            case GameAction.BattleRoutSequenceChangeFacing:
+            case GameAction.BattleRoundSequenceChangeFacing:
                EventViewerChangeFacing facingChangeMgr = new EventViewerChangeFacing(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == facingChangeMgr.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): facingChangeMgr.CtorError=true");
@@ -1897,7 +1898,8 @@ namespace Pattons_Best
       }
       private bool UpdateEventContentToGetToHit(IGameInstance gi)
       {
-         if( null == myTextBlock )
+         myNumSmokeAttacksThisRound = 0;
+         if ( null == myTextBlock )
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToGetToHit(): myTextBlock=null");
             return false;
@@ -2471,6 +2473,12 @@ namespace Pattons_Best
          }
          string key = gi.EventActive;
          //------------------------------------
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): myGameInstance=null for key=" + key);
+            return false;
+         }
+         //------------------------------------
          if (null == gi.Target)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): gi.Target=null for key=" + key);
@@ -2482,242 +2490,288 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): gi.ShermanHits.Count=0 for key=" + key);
             return false;
          }
+         //------------------------------------
          ShermanAttack hit = gi.ShermanHits[0];
-         //------------------------------------
-         IAfterActionReport? report = gi.Reports.GetLast();
-         if (null == report)
+         if ("Wp" == hit.myAmmoType) 
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  gi.Reports.GetLast()");
-            return false;
-         }
-         TankCard tankcard = new TankCard(report.TankCardNum);
-         //------------------------------------
-         Button be53ce1 = new Button() { FontFamily = myFontFam1, FontSize = 12 };
-         be53ce1.Click += Button_Click;
-         if ("75" == tankcard.myMainGun) // This screen only applies to HE and AP hits against enemy vehicles
-         {
-            if ("He" == hit.myAmmoType)
-               be53ce1.Content = "HE to Kill (75)";
-            else if ("Ap" == hit.myAmmoType)
-               be53ce1.Content = "AP to Kill (75)";
-            else
-            {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unknown ammotype=" + hit.myAmmoType + " guntype=" + tankcard.myMainGun);
-               return false;
-            }
-         }
-         else if ("76L" == tankcard.myMainGun)
-         {
-            if ("He" == hit.myAmmoType)
-               be53ce1.Content = "HE to Kill (76)";
-            else if (("Ap" == hit.myAmmoType) || ("Hvap" == hit.myAmmoType) )
-               be53ce1.Content = "AP to Kill (76L)";
-            else
-            {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unknown ammotype=" + hit.myAmmoType + " guntype=" + tankcard.myMainGun);
-               return false;
-            }
-         }
-         else if ("76LL" == tankcard.myMainGun)
-         {
-            if ("He" == hit.myAmmoType)
-               be53ce1.Content = "HE to Kill (76)";
-            else if (("Ap" == hit.myAmmoType) || ("Hvap" == hit.myAmmoType))
-               be53ce1.Content = "AP to Kill (76LL)";
-            else
-            {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unknown ammotype=" + hit.myAmmoType + " guntype=" + tankcard.myMainGun);
-               return false;
-            }
-         }
-         else 
-         {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unknown guntype=" + tankcard.myMainGun);
-            return false;
-         }
-         myTextBlock.Inlines.Add(new InlineUIContainer(be53ce1));
-         be53ce1.Click += Button_Click;
-         myTextBlock.Inlines.Add(new Run(" Table to determine if the target is knocked out (KO'ed)."));
-         //------------------------------------
-         if( true == hit.myIsCriticalHit )
-         {
+            myNumSmokeAttacksThisRound++;
+            StringBuilder sb1 = new StringBuilder();
+            sb1.Append("The hit with the WP round already caused one Smoke Marker to appear in the target&apos; zone.\n\n");
+            sb1.Append("Smoke Attack #");
+            sb1.Append(myNumSmokeAttacksThisRound.ToString());
+            sb1.Append(" out of ");
+            sb1.Append(myGameInstance.NumSmokeAttacksThisRound.ToString());
+            myTextBlock.Inlines.Add(new Run(sb1.ToString()));
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new LineBreak());
-            myTextBlock.Inlines.Add(new Run(" CRITICAL HIT!! "));
+            myTextBlock.Inlines.Add(new Run("The hit with the WP round already caused one Smoke Marker to appear in the target&apos; zone."));
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new Run("                                            "));
+            Image imge53e = new Image { Name = "Continue53f", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+            myTextBlock.Inlines.Add(new InlineUIContainer(imge53e));
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new Run("Click image to continue."));
          }
-         //------------------------------------
-         myTextBlock.Inlines.Add(new LineBreak());
-         myTextBlock.Inlines.Add(new LineBreak());
-         myTextBlock.Inlines.Add(new Run("First, roll hit location: "));
-         if (Utilities.NO_RESULT == gi.DieResults[key][0])
+         else if ("Hbci" == hit.myAmmoType)
          {
-            BitmapImage bmi = new BitmapImage();
-            bmi.BeginInit();
-            bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollWhite.gif", UriKind.Absolute);
-            bmi.EndInit();
-            Image imgDice = new Image { Name = "DieRollWhite", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
-            ImageBehavior.SetAnimatedSource(imgDice, bmi);
-            myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
+            myNumSmokeAttacksThisRound++;
+            StringBuilder sb1 = new StringBuilder();
+            sb1.Append("The hit with the HBCI round already caused two Smoke Marker to appear in the target&apos; zone.\n\n");
+            sb1.Append("Smoke Attack #");
+            sb1.Append(myNumSmokeAttacksThisRound.ToString());
+            sb1.Append(" out of ");
+            sb1.Append(myGameInstance.NumSmokeAttacksThisRound.ToString());
+            myTextBlock.Inlines.Add(new Run(sb1.ToString()));
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new Run("                                            "));
+            Image imge53e = new Image { Name = "Continue53f", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+            myTextBlock.Inlines.Add(new InlineUIContainer(imge53e));
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new Run("Click image to continue."));
          }
          else
          {
-            myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
-            myTextBlock.Inlines.Add(new Run("  =  "));
-            myTextBlock.Inlines.Add(new Run(hit.myHitLocation));
-            myTextBlock.Inlines.Add(new LineBreak());
+            IAfterActionReport? report = gi.Reports.GetLast();
+            if (null == report)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  gi.Reports.GetLast()");
+               return false;
+            }
+            TankCard tankcard = new TankCard(report.TankCardNum);
             //------------------------------------
-            if (true == hit.myHitLocation.Contains("MISS"))
+            Button be53ce1 = new Button() { FontFamily = myFontFam1, FontSize = 12 };
+            be53ce1.Click += Button_Click;
+            myTextBlock.Inlines.Add(new Run("For each hit scored against a target, consult the "));
+            if ("75" == tankcard.myMainGun) // This screen only applies to HE and AP hits against enemy vehicles   
             {
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new Run("                                            "));
-               Image imge53e = new Image { Name = "Miss", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
-               myTextBlock.Inlines.Add(new InlineUIContainer(imge53e));
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               if ("He" == hit.myAmmoType)
+                  be53ce1.Content = "HE to Kill (75)";
+               else if ("Ap" == hit.myAmmoType)
+                  be53ce1.Content = "AP to Kill (75)";
+               else
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unknown ammotype=" + hit.myAmmoType + " guntype=" + tankcard.myMainGun);
+                  return false;
+               }
             }
-            else if (true == hit.myHitLocation.Contains("Thrown Track"))
+            else if ("76L" == tankcard.myMainGun)
             {
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new Run("                                            "));
-               Image imge53e = new Image { Name = "ThrownTrack", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c106ThrownTrack") };
-               myTextBlock.Inlines.Add(new InlineUIContainer(imge53e));
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               if ("He" == hit.myAmmoType)
+                  be53ce1.Content = "HE to Kill (76)";
+               else if (("Ap" == hit.myAmmoType) || ("Hvap" == hit.myAmmoType))
+                  be53ce1.Content = "AP to Kill (76L)";
+               else
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unknown ammotype=" + hit.myAmmoType + " guntype=" + tankcard.myMainGun);
+                  return false;
+               }
             }
-            else if ((true == hit.myHitLocation.Contains("Hull")) || (true == hit.myHitLocation.Contains("Turret")))
+            else if ("76LL" == tankcard.myMainGun)
             {
+               if ("He" == hit.myAmmoType)
+                  be53ce1.Content = "HE to Kill (76)";
+               else if (("Ap" == hit.myAmmoType) || ("Hvap" == hit.myAmmoType))
+                  be53ce1.Content = "AP to Kill (76LL)";
+               else
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unknown ammotype=" + hit.myAmmoType + " guntype=" + tankcard.myMainGun);
+                  return false;
+               }
+            }
+            else
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unknown guntype=" + tankcard.myMainGun);
+               return false;
+            }
+            myTextBlock.Inlines.Add(new InlineUIContainer(be53ce1));
+            be53ce1.Click += Button_Click;
+            myTextBlock.Inlines.Add(new Run(" Table to determine if the target is knocked out (KO'ed)."));
+            //------------------------------------
+            if (true == hit.myIsCriticalHit)
+            {
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run(" CRITICAL HIT!! "));
+            }
+            //------------------------------------
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new Run("First, roll hit location: "));
+            if (Utilities.NO_RESULT == gi.DieResults[key][0])
+            {
+               BitmapImage bmi = new BitmapImage();
+               bmi.BeginInit();
+               bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollWhite.gif", UriKind.Absolute);
+               bmi.EndInit();
+               Image imgDice = new Image { Name = "DieRollWhite", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+               ImageBehavior.SetAnimatedSource(imgDice, bmi);
+               myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
+            }
+            else
+            {
+               myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
+               myTextBlock.Inlines.Add(new Run("  =  "));
+               myTextBlock.Inlines.Add(new Run(hit.myHitLocation));
+               myTextBlock.Inlines.Add(new LineBreak());
                //------------------------------------
-               int toKillNum = 0;
-               if ("75" == tankcard.myMainGun)
-               {
-                  if ("He" == hit.myAmmoType)
-                  {
-                     toKillNum = TableMgr.GetShermanToKill75HeVehicleNumber(gi, gi.Target, gi.ShermanHits[0]);
-                     if (TableMgr.FN_ERROR == toKillNum)
-                     {
-                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToKill75HeVehicleNumber() returned false");
-                        return false;
-                     }
-                  }
-                  else if ("Ap" == hit.myAmmoType)
-                  {
-                     toKillNum = TableMgr.GetShermanToKill75ApVehicleNumber(gi, gi.Target, gi.ShermanHits[0]);
-                     if (TableMgr.FN_ERROR == toKillNum)
-                     {
-                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToKill75ApVehicleNumber() returned false");
-                        return false;
-                     }
-                  }
-                  else
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unsupported ammo type=" + hit.myAmmoType);
-                     return false;
-                  }
-               }
-               else if ("76L" == tankcard.myMainGun)
-               {
-                  if ("He" == hit.myAmmoType)
-                  {
-                     toKillNum = TableMgr.GetShermanToKill76HeVehicleNumber(gi, gi.Target, gi.ShermanHits[0]);
-                     if (TableMgr.FN_ERROR == toKillNum)
-                     {
-                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToKill76HeVehicleNumber() returned false");
-                        return false;
-                     }
-                  }
-                  else if ("Ap" == hit.myAmmoType)
-                  {
-                     toKillNum = TableMgr.GetShermanToKill76ApVehicleNumber(gi, gi.Target, gi.ShermanHits[0]);
-                     if (TableMgr.FN_ERROR == toKillNum)
-                     {
-                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToKill76ApVehicleNumber() returned false");
-                        return false;
-                     }
-                  }
-                  else if ("Hvap" == hit.myAmmoType)
-                  {
-                     toKillNum = TableMgr.GetShermanToKill76HvapVehicleNumber(gi, gi.Target, gi.ShermanHits[0]);
-                  }
-                  else
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unsupported ammo type=" + hit.myAmmoType);
-                     return false;
-                  }
-               }
-               else if ("76LL" == tankcard.myMainGun)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unsupported gun type=" + tankcard.myMainGun);
-                  return false;
-               }
-               else
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unknown gun type=" + tankcard.myMainGun);
-                  return false;
-               }
-               if (TableMgr.FN_ERROR == toKillNum)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToHitNumber() returned error for key=" + key);
-                  return false;
-               }
-               //--------------------------------------------------------------
-               bool isShowImage = false;
-               if (TableMgr.KIA == toKillNum)
-               {
-                  isShowImage = true;
-                  myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("Target is automatically killed!"));
-               }
-               else if (TableMgr.NO_CHANCE == toKillNum)
-               {
-                  isShowImage = true;
-                  myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("No chance in killing the target!"));
-               }
-               else
-               {
-                  StringBuilder sb = new StringBuilder();
-                  sb.Append("To kill, roll ");
-                  sb.Append(toKillNum.ToString("F0"));
-                  sb.Append(" or less: ");
-                  myTextBlock.Inlines.Add(new Run(sb.ToString()));
-                  if (Utilities.NO_RESULT == gi.DieResults[key][1])
-                  {
-                     BitmapImage bmi = new BitmapImage();
-                     bmi.BeginInit();
-                     bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
-                     bmi.EndInit();
-                     Image imgDice = new Image { Name = "DieRollBlue", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
-                     ImageBehavior.SetAnimatedSource(imgDice, bmi);
-                     myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
-                  }
-                  else
-                  {
-                     isShowImage = true;
-                     myTextBlock.Inlines.Add(new Run(gi.DieResults[key][1].ToString()));
-                     if (toKillNum < gi.DieResults[key][1])
-                        myTextBlock.Inlines.Add("  =  NO EFFECT");
-                     else
-                        myTextBlock.Inlines.Add("  =  KILL");
-                  }
-               }
-               if (true == isShowImage)
+               if (true == hit.myHitLocation.Contains("MISS"))
                {
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("                                            "));
-                  Image imge53e = new Image { Name = "Continue53e", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                  Image imge53e = new Image { Name = "Miss", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge53e));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
+               else if (true == hit.myHitLocation.Contains("Thrown Track"))
+               {
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  Image imge53e = new Image { Name = "ThrownTrack", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c106ThrownTrack") };
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge53e));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               else if ((true == hit.myHitLocation.Contains("Hull")) || (true == hit.myHitLocation.Contains("Turret")))
+               {
+                  //------------------------------------
+                  int toKillNum = 0;
+                  if ("75" == tankcard.myMainGun)
+                  {
+                     if ("He" == hit.myAmmoType)
+                     {
+                        toKillNum = TableMgr.GetShermanToKill75HeVehicleNumber(gi, gi.Target, gi.ShermanHits[0]);
+                        if (TableMgr.FN_ERROR == toKillNum)
+                        {
+                           Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToKill75HeVehicleNumber() returned false");
+                           return false;
+                        }
+                     }
+                     else if ("Ap" == hit.myAmmoType)
+                     {
+                        toKillNum = TableMgr.GetShermanToKill75ApVehicleNumber(gi, gi.Target, gi.ShermanHits[0]);
+                        if (TableMgr.FN_ERROR == toKillNum)
+                        {
+                           Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToKill75ApVehicleNumber() returned false");
+                           return false;
+                        }
+                     }
+                     else
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unsupported ammo type=" + hit.myAmmoType);
+                        return false;
+                     }
+                  }
+                  else if ("76L" == tankcard.myMainGun)
+                  {
+                     if ("He" == hit.myAmmoType)
+                     {
+                        toKillNum = TableMgr.GetShermanToKill76HeVehicleNumber(gi, gi.Target, gi.ShermanHits[0]);
+                        if (TableMgr.FN_ERROR == toKillNum)
+                        {
+                           Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToKill76HeVehicleNumber() returned false");
+                           return false;
+                        }
+                     }
+                     else if ("Ap" == hit.myAmmoType)
+                     {
+                        toKillNum = TableMgr.GetShermanToKill76ApVehicleNumber(gi, gi.Target, gi.ShermanHits[0]);
+                        if (TableMgr.FN_ERROR == toKillNum)
+                        {
+                           Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToKill76ApVehicleNumber() returned false");
+                           return false;
+                        }
+                     }
+                     else if ("Hvap" == hit.myAmmoType)
+                     {
+                        toKillNum = TableMgr.GetShermanToKill76HvapVehicleNumber(gi, gi.Target, gi.ShermanHits[0]);
+                     }
+                     else
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unsupported ammo type=" + hit.myAmmoType);
+                        return false;
+                     }
+                  }
+                  else if ("76LL" == tankcard.myMainGun)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unsupported gun type=" + tankcard.myMainGun);
+                     return false;
+                  }
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unknown gun type=" + tankcard.myMainGun);
+                     return false;
+                  }
+                  if (TableMgr.FN_ERROR == toKillNum)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToHitNumber() returned error for key=" + key);
+                     return false;
+                  }
+                  //--------------------------------------------------------------
+                  bool isShowImage = false;
+                  if (TableMgr.KIA == toKillNum)
+                  {
+                     isShowImage = true;
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("Target is automatically killed!"));
+                  }
+                  else if (TableMgr.NO_CHANCE == toKillNum)
+                  {
+                     isShowImage = true;
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("No chance in killing the target!"));
+                  }
+                  else
+                  {
+                     StringBuilder sb = new StringBuilder();
+                     sb.Append("To kill, roll ");
+                     sb.Append(toKillNum.ToString("F0"));
+                     sb.Append(" or less: ");
+                     myTextBlock.Inlines.Add(new Run(sb.ToString()));
+                     if (Utilities.NO_RESULT == gi.DieResults[key][1])
+                     {
+                        BitmapImage bmi = new BitmapImage();
+                        bmi.BeginInit();
+                        bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
+                        bmi.EndInit();
+                        Image imgDice = new Image { Name = "DieRollBlue", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+                        ImageBehavior.SetAnimatedSource(imgDice, bmi);
+                        myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
+                     }
+                     else
+                     {
+                        isShowImage = true;
+                        myTextBlock.Inlines.Add(new Run(gi.DieResults[key][1].ToString()));
+                        if (toKillNum < gi.DieResults[key][1])
+                           myTextBlock.Inlines.Add("  =  NO EFFECT");
+                        else
+                           myTextBlock.Inlines.Add("  =  KILL");
+                     }
+                  }
+                  if (true == isShowImage)
+                  {
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("                                            "));
+                     Image imge53e = new Image { Name = "Continue53e", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                     myTextBlock.Inlines.Add(new InlineUIContainer(imge53e));
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("Click image to continue."));
+                  }
+               }
             }
+
          }
          return true;
       }
@@ -4126,6 +4180,7 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "c17GunLoad":
+                        case "Continue13a":
                            action = GameAction.PreparationsTurret;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
@@ -4332,28 +4387,32 @@ namespace Pattons_Best
                            action = GameAction.BattleRoundSequenceShermanFiringMainGunEnd;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
-                        case "Continue53d":
-                           action = GameAction.BattleRoundSequenceShermanToKillRoll;
-                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                           break;
-                        case "Continue54a":
-                           action = GameAction.BattleRoundSequenceFireMachineGunRollEnd;
+                        case "BattleRoundSequenceShermanHit":
+                           action = GameAction.BattleRoundSequenceShermanToHitRoll;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Miss":
                            action = GameAction.BattleRoundSequenceShermanFiringMainGunEnd;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
+                        case "ThrownTrack":
+                           action = GameAction.BattleRoundSequenceShermanFiringMainGunEnd;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Continue53d":
+                           action = GameAction.BattleRoundSequenceShermanToKillRoll;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
                         case "Continue53e":
                            action = GameAction.BattleRoundSequenceShermanToKillRoll;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
-                        case "BattleRoundSequenceShermanHit":
-                           action = GameAction.BattleRoundSequenceShermanToHitRoll;
+                        case "Continue53f":
+                           action = GameAction.BattleRoundSequenceShermanToKillRoll;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
-                        case "ThrownTrack":
-                           action = GameAction.BattleRoundSequenceShermanFiringMainGunEnd;
+                        case "Continue54a":
+                           action = GameAction.BattleRoundSequenceFireMachineGunRollEnd;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue60":

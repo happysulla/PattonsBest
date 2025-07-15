@@ -1123,6 +1123,7 @@ namespace Pattons_Best
       }
       public static string SetEnemyActionResult(IGameInstance gi, IMapItem mi, int dieRoll)
       {
+         bool isThrownTrack = mi.IsThrownTrack;
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
@@ -1231,13 +1232,33 @@ namespace Pattons_Best
                   if (dieRoll < 31)
                      return "Do Nothing";
                   if (dieRoll < 41)
-                     return "Move-F";
+                  {
+                     if( true == isThrownTrack )
+                        return "Do Nothing";
+                     else 
+                        return "Move-F";
+                  }
                   if (dieRoll < 51)
-                     return "Move-L";
+                  {
+                     if (true == isThrownTrack)
+                        return "Do Nothing";
+                     else
+                        return "Move-L";
+                  }
                   if (dieRoll < 61)
-                     return "Move-R";
+                  {
+                     if (true == isThrownTrack)
+                        return "Do Nothing";
+                     else
+                        return "Move-R";
+                  }
                   if (dieRoll < 91)
-                     return "Move-B";
+                  {
+                     if (true == isThrownTrack)
+                        return "Do Nothing";
+                     else
+                        return "Move-B";
+                  }
                   if (dieRoll < 96)
                   {
                      if (true == isDoNothingInsteadOfFiring)
@@ -1261,13 +1282,33 @@ namespace Pattons_Best
                   if (dieRoll < 11)
                      return "Do Nothing";
                   if (dieRoll < 21)
-                     return "Move-F";
+                  {
+                     if (true == isThrownTrack)
+                        return "Do Nothing";
+                     else
+                        return "Move-F";
+                  }
                   if (dieRoll < 31)
-                     return "Move-L";
+                  {
+                     if (true == isThrownTrack)
+                        return "Do Nothing";
+                     else
+                        return "Move-L";
+                  }
                   if (dieRoll < 41)
-                     return "Move-R";
+                  {
+                     if (true == isThrownTrack)
+                        return "Do Nothing";
+                     else
+                        return "Move-R";
+                  }
                   if (dieRoll < 61)
-                     return "Move-B";
+                  {
+                     if (true == isThrownTrack)
+                        return "Do Nothing";
+                     else
+                        return "Move-B";
+                  }
                   if (dieRoll < 66)
                      return "Fire-Infantry";
                   if (dieRoll < 81)
@@ -1282,7 +1323,10 @@ namespace Pattons_Best
                      }
                      else if (true == gi.IsShermanFiring)
                      {
-                        return "Move-B";
+                        if (true == isThrownTrack)
+                           return "Do Nothing";
+                        else
+                           return "Move-B";
                      }
                      else
                      {
@@ -1374,13 +1418,33 @@ namespace Pattons_Best
                   if (dieRoll < 11)
                      return "Do Nothing";
                   if (dieRoll < 16)
-                     return "Move-F";
+                  {
+                     if (true == isThrownTrack)
+                        return "Do Nothing";
+                     else
+                        return "Move-F";
+                  }
                   if (dieRoll < 21)
-                     return "Move-L";
+                  {
+                     if (true == isThrownTrack)
+                        return "Do Nothing";
+                     else
+                        return "Move-L";
+                  }
                   if (dieRoll < 26)
-                     return "Move-R";
+                  {
+                     if (true == isThrownTrack)
+                        return "Do Nothing";
+                     else
+                        return "Move-R";
+                  }
                   if (dieRoll < 36)
-                     return "Move-B";
+                  {
+                     if (true == isThrownTrack)
+                        return "Do Nothing";
+                     else
+                        return "Move-B";
+                  }
                   if (dieRoll < 41)
                      return "Fire-Infantry";
                   if (dieRoll < 86)
@@ -1395,7 +1459,10 @@ namespace Pattons_Best
                      }
                      else if (true == gi.IsShermanFiring)
                      {
-                        return "Move-B";
+                        if (true == isThrownTrack)
+                           return "Do Nothing";
+                        else
+                           return "Move-B";
                      }
                      else
                      {
@@ -1461,13 +1528,33 @@ namespace Pattons_Best
                   if (dieRoll < 11)
                      return "Do Nothing";
                   if (dieRoll < 41)
-                     return "Move-F";
+                  {
+                     if (true == isThrownTrack)
+                        return "Do Nothing";
+                     else
+                        return "Move-F";
+                  }
                   if (dieRoll < 51)
-                     return "Move-L";
+                  {
+                     if (true == isThrownTrack)
+                        return "Do Nothing";
+                     else
+                        return "Move-L";
+                  }
                   if (dieRoll < 61)
-                     return "Move-R";
+                  {
+                     if (true == isThrownTrack)
+                        return "Do Nothing";
+                     else
+                        return "Move-R";
+                  }
                   if (dieRoll < 71)
-                     return "Move-B";
+                  {
+                     if (true == isThrownTrack)
+                        return "Do Nothing";
+                     else
+                        return "Move-B";
+                  }
                   if (dieRoll < 76)
                      return "Fire-Infantry";
                   if (dieRoll < 96)
@@ -1482,7 +1569,10 @@ namespace Pattons_Best
                      }
                      else if (true == gi.IsShermanFiring)
                      {
-                        return "Move-B";
+                        if (true == isThrownTrack)
+                           return "Do Nothing";
+                        else
+                           return "Move-B";
                      }
                      else
                      {
