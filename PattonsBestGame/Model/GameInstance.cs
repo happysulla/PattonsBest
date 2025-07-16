@@ -345,7 +345,7 @@ namespace Pattons_Best
          }
          //-----------------------------------------------
          string ammoReloadType = this.GetAmmoReloadType(); // This is the ammo loaded into gun after firing
-         Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "FireAndReloadGun(): Loadding Gun with this Ammo  ----->" + ammoReloadType + "<-------------");
+         Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "FireAndReloadGun(): Loading Gun with this Ammo  ----->" + ammoReloadType + "<-------------");
          int ammoCount = 0;
          switch (ammoReloadType) // get count of what is still available
          {

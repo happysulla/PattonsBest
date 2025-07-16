@@ -123,14 +123,11 @@ Main Gun is empty, and there are no rounds to load. Tehrefore, the main gun cann
 e014	"<Bold>e014 Tank &amp; Turret Orientation</Bold> 
 <InlineUIContainer><Button Content='r4.44' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
-The Sherman tank counter is placed at the center of the battle board. If you want the turret to face a different sector, click tank counter on center of Battle Board. 
-Alternatively, select buttons here:
+The Sherman tank counter is placed at the center of the battle board. If you want the turret to face a different sector, select buttons here: 
 <LineBreak/><LineBreak/>
-                                   <InlineUIContainer><Button Content='  -  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-<InlineUIContainer><Image Name='c16TurretSherman75'  Height='150' Width='150'></Image></InlineUIContainer> 
+                                             <InlineUIContainer><Button Content='  -  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>           
 <InlineUIContainer><Button Content='  +  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
-<LineBreak/><LineBreak/>
-When you are satisfied with the current turret orientation, click turret image between buttons to continue."
+<LineBreak/><LineBreak/>"
 e015	"<Bold>e015 Loader Spotting</Bold> 
 <InlineUIContainer><Button Content='r4.45' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
@@ -585,12 +582,7 @@ If you want the Sherman to face a different sector, select buttons here:
 e052a	"<Bold>e052a Pivot Turret</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r8.24' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-<LineBreak/><LineBreak/>
-If you want the turret to face a different sector, select buttons here: 
-<LineBreak/><LineBreak/>
-                                             <InlineUIContainer><Button Content='  -  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>           
-<InlineUIContainer><Button Content='  +  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
-<LineBreak/><LineBreak/>"
++B13"
 e053	"<Bold>e053 Main Gun Firing - Select Target</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 

@@ -41,6 +41,7 @@ namespace Pattons_Best
       LE_SHOW_BATTLE_ROUND_START,
       LE_SHOW_TANK_BUTTONS,
       LE_SHOW_GUN_RELOAD,
+      LE_SHOW_FIRE_DIRECTION,
       //-------------
       LE_VIEW_ADV_FIRE_RESOLVE,
       LE_VIEW_ART_FIRE_RESOLVE,
@@ -128,7 +129,8 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION);
          SetOn(LogEnum.LE_SHOW_BATTLE_ROUND_START);
          // SetOn(LogEnum.LE_SHOW_TANK_BUTTONS);
-         SetOn(LogEnum.LE_SHOW_GUN_RELOAD);
+         //SetOn(LogEnum.LE_SHOW_GUN_RELOAD);
+         SetOn(LogEnum.LE_SHOW_FIRE_DIRECTION);
          //-------------------------------
          //SetOn(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE);
          //SetOn(LogEnum.LE_VIEW_ART_FIRE_RESOLVE);

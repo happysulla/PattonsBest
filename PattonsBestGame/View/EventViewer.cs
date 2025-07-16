@@ -850,6 +850,41 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
+            case "e014":
+               myTextBlock.Inlines.Add(new Run("                                               "));
+               Image? imgee014 = null;
+               double rotation = gi.Sherman.RotationHull + gi.Sherman.RotationTurret;
+               if (359.0 < rotation)
+                  rotation -= 360.0;
+               switch (rotation)
+               {
+                  case 0.0:
+                     imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75") };
+                     break;
+                  case 60.0:
+                     imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t060") };
+                     break;
+                  case 120.0:
+                     imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t120") };
+                     break;
+                  case 180.0:
+                     imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t180") };
+                     break;
+                  case 240.0:
+                     imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t240") };
+                     break;
+                  case 300.0:
+                     imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t300") };
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default tr=" + gi.Sherman.RotationTurret.ToString());
+                     return false;
+               }
+               myTextBlock.Inlines.Add(new InlineUIContainer(imgee014));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("When you are satisfied with the current orientation, click image between buttons to continue."));
+               break;
             case "e015":
                IMapItem? loaderSpot = gi.BattleStacks.FindMapItem("LoaderSpot");
                if (null != loaderSpot)
@@ -1606,10 +1641,10 @@ namespace Pattons_Best
             case "e052a":
                myTextBlock.Inlines.Add(new Run("                                               "));
                Image? imge52a = null;
-               double rotation = gi.Sherman.RotationHull + gi.Sherman.RotationTurret;
-               if (359.0 < rotation)
-                  rotation -= 360.0;
-               switch (rotation)
+               double rotation52a = gi.Sherman.RotationHull + gi.Sherman.RotationTurret;
+               if (359.0 < rotation52a)
+                  rotation52a -= 360.0;
+               switch (rotation52a)
                {
                   case 0.0:
                      imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75") };
@@ -1958,15 +1993,29 @@ namespace Pattons_Best
             string modiferMainGunFiring = UpdateEventContentGetToHitModifier(gi, gi.TargetMainGun);
             myTextBlock.Inlines.Add(new Run(modiferMainGunFiring));
              myTextBlock.Inlines.Add(new LineBreak());
-            double toHitNum = TableMgr.GetShermanToHitNumber(gi, gi.TargetMainGun);
+            double toHitNum = TableMgr.GetShermanToHitBaseNumber(gi, gi.TargetMainGun);
             if (TableMgr.FN_ERROR == toHitNum)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToGetToHit(): GetShermanToHitNumber() returned error for key=" + key);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToGetToHit(): GetShermanToHitBaseNumber() returned error for key=" + key);
                return false;
             }
+            double modifier = TableMgr.GetShermanToHitModifier(gi, gi.TargetMainGun);
+            if (TableMgr.FN_ERROR == toHitNum)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToGetToHit(): GetShermanToHitModifier() returned error for key=" + key);
+               return false;
+            }
+            double combo = toHitNum - modifier;
             StringBuilder sb = new StringBuilder();
             sb.Append("To hit, roll ");
             sb.Append(toHitNum.ToString("F0"));
+            if( modifier < 0 )
+               sb.Append(" + ");
+            else
+               sb.Append(" - ");
+            sb.Append(Math.Abs(modifier).ToString("F0"));
+            sb.Append(" = ");
+            sb.Append(combo.ToString("F0"));
             sb.Append(" or less: ");
             myTextBlock.Inlines.Add(new Run(sb.ToString()));
             if (Utilities.NO_RESULT == gi.DieResults[key][0])
@@ -2345,89 +2394,88 @@ namespace Pattons_Best
          string key = gi.EventActive;
          //--------------------------------------------------------------------------
          string modiferToKillInfantry = UpdateEventContentToKillInfantryModifier(gi);
-         if ("KILL" == modiferToKillInfantry)
+         bool isImageShown = false;
+         if (null == gi.TargetMainGun)
          {
-            myTextBlock.Inlines.Add(new Run("Automatic Kill! No die roll needed."));
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillInfantry(): gi.TargetMainGun=null for key=" + key);
+            return false;
+         }
+         if (0 == gi.ShermanHits.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillInfantry(): gi.ShermanHits.Count=0 for key=" + key);
+            return false;
+         }
+         ShermanAttack hit = gi.ShermanHits[0];
+         myTextBlock.Inlines.Add(new Run(modiferToKillInfantry));
+         myTextBlock.Inlines.Add(new LineBreak());
+         myTextBlock.Inlines.Add(new LineBreak());
+         int toKillNum = TableMgr.GetShermanToKillInfantryBaseNumber(gi, gi.TargetMainGun, hit);
+         if (TableMgr.FN_ERROR == toKillNum)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillInfantry(): GetShermanToKillInfantryBaseNumber() returned error for key=" + key);
+            return false;
+         }
+         int modifier = TableMgr.GetShermanToKillInfantryModifier(gi, gi.TargetMainGun, hit);
+         if (TableMgr.FN_ERROR == modifier)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillInfantry(): GetShermanToKillInfantryModifier() returned error for key=" + key);
+            return false;
+         }
+         if (TableMgr.KIA == modifier)
+         {
+            myTextBlock.Inlines.Add(new Run("Target is automatically killed!"));
+            isImageShown = true;
+         }
+         else if (TableMgr.NO_CHANCE == modifier)
+         {
+            myTextBlock.Inlines.Add(new Run("No chance to kill target with " + hit.myAmmoType.ToUpper() + " ammo!"));
+            isImageShown = true;
+         }
+         else
+         {
+            int combo = toKillNum - modifier;
+            StringBuilder sb = new StringBuilder();
+            sb.Append("To kill, roll ");
+            sb.Append(toKillNum.ToString());
+            if (modifier < 0)
+               sb.Append(" + ");
+            else
+               sb.Append(" - ");
+            sb.Append(Math.Abs(modifier).ToString("F0"));
+            sb.Append(" = ");
+            sb.Append(combo.ToString());
+            sb.Append(" or less: ");
+            myTextBlock.Inlines.Add(new Run(sb.ToString()));
+            if (Utilities.NO_RESULT == gi.DieResults[key][0])
+            {
+               BitmapImage bmi = new BitmapImage();
+               bmi.BeginInit();
+               bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
+               bmi.EndInit();
+               Image imgDice = new Image { Name = "DieRollBlue", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+               ImageBehavior.SetAnimatedSource(imgDice, bmi);
+               myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
+            }
+            else
+            {
+               myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
+               if (toKillNum < gi.DieResults[key][0])
+                  myTextBlock.Inlines.Add("  =  NO EFFECT");
+               else
+                  myTextBlock.Inlines.Add("  =  KILL");
+               isImageShown = true;
+            }
+         }
+         if (true == isImageShown)
+         {
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new Run("                                            "));
             Image imge53d = new Image { Name = "Continue53d", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
-            myTextBlock.Inlines.Add(new Run("                                                 "));
             myTextBlock.Inlines.Add(new InlineUIContainer(imge53d));
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new Run("Click image to continue."));
-         }
-         else
-         {
-            bool isImageShown = false;
-            if (null == gi.TargetMainGun)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillInfantry(): gi.TargetMainGun=null for key=" + key);
-               return false;
-            }
-            if (0 == gi.ShermanHits.Count)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillInfantry(): gi.ShermanHits.Count=0 for key=" + key);
-               return false;
-            }
-            ShermanAttack hit = gi.ShermanHits[0];
-            myTextBlock.Inlines.Add(new Run(modiferToKillInfantry));
-            myTextBlock.Inlines.Add(new LineBreak());
-            myTextBlock.Inlines.Add(new LineBreak());
-            double toKillNum = TableMgr.GetShermanToKillInfantryNumber(gi, gi.TargetMainGun, hit);
-            if (TableMgr.FN_ERROR == toKillNum)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillInfantry(): GetShermanToKillInfantryNumber() returned error for key=" + key);
-               return false;
-            }
-            else if (TableMgr.KIA == toKillNum)
-            {
-               myTextBlock.Inlines.Add(new Run("Target is automatically killed!"));
-               isImageShown = true;
-            }
-            else if (TableMgr.NO_CHANCE == toKillNum)
-            {
-               myTextBlock.Inlines.Add(new Run("No chance to kill target with " + hit.myAmmoType.ToUpper() + " ammo!"));
-               isImageShown = true;
-            }
-            else
-            {
-               StringBuilder sb = new StringBuilder();
-               sb.Append("To kill, roll ");
-               sb.Append(toKillNum.ToString("F0"));
-               sb.Append(" or less: ");
-               myTextBlock.Inlines.Add(new Run(sb.ToString()));
-               if (Utilities.NO_RESULT == gi.DieResults[key][0])
-               {
-                  BitmapImage bmi = new BitmapImage();
-                  bmi.BeginInit();
-                  bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
-                  bmi.EndInit();
-                  Image imgDice = new Image { Name = "DieRollBlue", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
-                  ImageBehavior.SetAnimatedSource(imgDice, bmi);
-                  myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
-               }
-               else
-               {
-                  myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
-                  if (toKillNum < gi.DieResults[key][0])
-                     myTextBlock.Inlines.Add("  =  NO EFFECT");
-                  else
-                     myTextBlock.Inlines.Add("  =  KILL");
-                  isImageShown = true;
-               }
-            }
-            if (true == isImageShown)
-            {
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new Run("                                            "));
-               Image imge53d = new Image { Name = "Continue53d", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
-               myTextBlock.Inlines.Add(new InlineUIContainer(imge53d));
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new Run("Click image to continue."));
-            }
          }
          return true;
       }
@@ -2481,10 +2529,7 @@ namespace Pattons_Best
          //------------------------------------
          if ((true == gi.TargetMainGun.Name.Contains("ATG")) || (true == gi.TargetMainGun.Name.Contains("Pak43")) || (true == gi.TargetMainGun.Name.Contains("Pak40")) || (true == gi.TargetMainGun.Name.Contains("Pak38")))
          {
-            if (false == hit.myIsCriticalHit)
-               sb51.Append("+15 for ATG Target\n");
-            else
-               return "KILL";
+            sb51.Append("+15 for ATG Target\n");
          }
          //------------------------------------
          if (true == gi.TargetMainGun.IsMoving)
@@ -2675,80 +2720,12 @@ namespace Pattons_Best
                }
                else if ((true == hit.myHitLocation.Contains("Hull")) || (true == hit.myHitLocation.Contains("Turret")))
                {
-                  //------------------------------------
-                  int toKillNum = 0;
-                  if ("75" == tankcard.myMainGun)
-                  {
-                     if ("He" == hit.myAmmoType)
-                     {
-                        toKillNum = TableMgr.GetShermanToKill75HeVehicleNumber(gi, gi.TargetMainGun, gi.ShermanHits[0]);
-                        if (TableMgr.FN_ERROR == toKillNum)
-                        {
-                           Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToKill75HeVehicleNumber() returned false");
-                           return false;
-                        }
-                     }
-                     else if ("Ap" == hit.myAmmoType)
-                     {
-                        toKillNum = TableMgr.GetShermanToKill75ApVehicleNumber(gi, gi.TargetMainGun, gi.ShermanHits[0]);
-                        if (TableMgr.FN_ERROR == toKillNum)
-                        {
-                           Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToKill75ApVehicleNumber() returned false");
-                           return false;
-                        }
-                     }
-                     else
-                     {
-                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unsupported ammo type=" + hit.myAmmoType);
-                        return false;
-                     }
-                  }
-                  else if ("76L" == tankcard.myMainGun)
-                  {
-                     if ("He" == hit.myAmmoType)
-                     {
-                        toKillNum = TableMgr.GetShermanToKill76HeVehicleNumber(gi, gi.TargetMainGun, gi.ShermanHits[0]);
-                        if (TableMgr.FN_ERROR == toKillNum)
-                        {
-                           Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToKill76HeVehicleNumber() returned false");
-                           return false;
-                        }
-                     }
-                     else if ("Ap" == hit.myAmmoType)
-                     {
-                        toKillNum = TableMgr.GetShermanToKill76ApVehicleNumber(gi, gi.TargetMainGun, gi.ShermanHits[0]);
-                        if (TableMgr.FN_ERROR == toKillNum)
-                        {
-                           Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToKill76ApVehicleNumber() returned false");
-                           return false;
-                        }
-                     }
-                     else if ("Hvap" == hit.myAmmoType)
-                     {
-                        toKillNum = TableMgr.GetShermanToKill76HvapVehicleNumber(gi, gi.TargetMainGun, gi.ShermanHits[0]);
-                     }
-                     else
-                     {
-                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unsupported ammo type=" + hit.myAmmoType);
-                        return false;
-                     }
-                  }
-                  else if ("76LL" == tankcard.myMainGun)
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unsupported gun type=" + tankcard.myMainGun);
-                     return false;
-                  }
-                  else
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unknown gun type=" + tankcard.myMainGun);
-                     return false;
-                  }
+                  int toKillNum = UpdateEventContentToKillVehicleGetToKillNum(gi, tankcard, hit);
                   if (TableMgr.FN_ERROR == toKillNum)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): GetShermanToHitNumber() returned error for key=" + key);
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): UpdateEventContentToKillVehicleCheckGetToKillNum() returned false");
                      return false;
                   }
-                  //--------------------------------------------------------------
                   bool isShowImage = false;
                   if (TableMgr.KIA == toKillNum)
                   {
@@ -2804,9 +2781,60 @@ namespace Pattons_Best
                   }
                }
             }
-
          }
          return true;
+      }
+      private int UpdateEventContentToKillVehicleGetToKillNum(IGameInstance gi,TankCard tankcard, ShermanAttack hit)
+      {
+         if( null == gi.TargetMainGun )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicleCheckIfNoChance(): gi.TargetMainGun=null");
+            return TableMgr.FN_ERROR;
+         }
+         //------------------------------------
+         int toKillNum = 0;
+         if ("75" == tankcard.myMainGun)
+         {
+            if ("He" == hit.myAmmoType)
+               toKillNum = TableMgr.GetShermanToKill75HeVehicleBaseNumber(gi, gi.TargetMainGun, hit);
+            else if ("Ap" == hit.myAmmoType)
+               toKillNum = TableMgr.GetShermanToKill75ApVehicleBaseNumber(gi, gi.TargetMainGun, hit);
+            else
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicleCheckIfNoChance():  unsupported ammo type=" + hit.myAmmoType);
+               return TableMgr.FN_ERROR;
+            }
+         }
+         else if ("76L" == tankcard.myMainGun)
+         {
+            if ("He" == hit.myAmmoType)
+               toKillNum = TableMgr.GetShermanToKill76HeVehicleBaseNumber(gi, gi.TargetMainGun, gi.ShermanHits[0]);
+            else if ("Ap" == hit.myAmmoType)
+               toKillNum = TableMgr.GetShermanToKill76ApVehicleBaseNumber(gi, gi.TargetMainGun, gi.ShermanHits[0]);
+            else if ("Hvap" == hit.myAmmoType)
+               toKillNum = TableMgr.GetShermanToKill76HvapVehicleBaseNumber(gi, gi.TargetMainGun, gi.ShermanHits[0]);
+            else
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicleCheckIfNoChance():  unsupported ammo type=" + hit.myAmmoType);
+               return TableMgr.FN_ERROR;
+            }
+         }
+         else if ("76LL" == tankcard.myMainGun)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicleCheckIfNoChance():  unsupported gun type=" + tankcard.myMainGun);
+            return TableMgr.FN_ERROR;
+         }
+         else
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicleCheckIfNoChance():  unknown gun type=" + tankcard.myMainGun);
+            return TableMgr.FN_ERROR;
+         }
+         if (TableMgr.FN_ERROR == toKillNum)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicleCheckIfNoChance(): GetShermanToHitBaseNumber() returned error");
+            return TableMgr.FN_ERROR;
+         }
+         return toKillNum;
       }
       private bool UpdateEventContentMgToKill(IGameInstance gi)
       {
@@ -2848,9 +2876,23 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill(): GetShermanMgToKillNumber() returned error for key=" + key);
             return false;
          }
+         int modifier = TableMgr.GetShermanMgToKillModifier(gi, gi.TargetMainGun);
+         if (TableMgr.FN_ERROR == modifier)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill(): GetShermanMgToKillModifier() returned error for key=" + key);
+            return false;
+         }
+         int comboMg = (int)toKillNum - modifier;
          StringBuilder sb = new StringBuilder();
          sb.Append("To kill, roll ");
          sb.Append(toKillNum.ToString("F0"));
+         if (modifier < 0)
+            sb.Append(" + ");
+         else
+            sb.Append(" - ");
+         sb.Append(Math.Abs(modifier).ToString());
+         sb.Append(" = ");
+         sb.Append(comboMg.ToString());
          sb.Append(" or less: ");
          myTextBlock.Inlines.Add(new Run(sb.ToString()));
          if (Utilities.NO_RESULT == gi.DieResults[key][0])
@@ -4429,7 +4471,7 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "ThrownTrack":
-                           action = GameAction.BattleRoundSequenceShermanFiringMainGunEnd;
+                           action = GameAction.BattleRoundSequenceShermanToKillRoll;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue53d":
