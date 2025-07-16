@@ -102,7 +102,8 @@ namespace Pattons_Best
       IMapItems GunLoads { set; get; }
       IMapItem Sherman { set; get; }
       IMapItems Targets { set; get; }
-      IMapItem? Target { set; get; }
+      IMapItem? TargetMainGun { set; get; }
+      IMapItem? TargetMg { set; get; }
       //------------------------------------------------
       ITerritory Home { get; set; }
       ITerritory? EnemyStrengthCheckTerritory { get; set; }
@@ -144,7 +145,6 @@ namespace Pattons_Best
       bool IsBrokenMgCoaxial { set; get; }
       bool IsBrokenMgBow { set; get; }
       bool IsBrokenMgAntiAircraft { set; get; }
-      bool IsBrokenMgSub { set; get; }
       bool IsCommanderRescuePerformed { set; get; }
       //------------------------------------------------
       bool IsMinefieldAttack { set; get; }

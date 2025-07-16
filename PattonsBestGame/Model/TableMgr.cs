@@ -2378,7 +2378,7 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          //----------------------------------------------------
-         if ( (EnumScenario.Advance == lastReport.Scenario) || (EnumScenario.Counterattack == lastReport.Scenario) )
+         if ( (EnumScenario.Advance == lastReport.Scenario) || (EnumScenario.Battle == lastReport.Scenario) )
          {
             switch (enemyUnit)
             {
@@ -2419,27 +2419,27 @@ namespace Pattons_Best
                      toKillNum = 10;
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberInfantry(): Advance - reached default with enemyUnit=" + enemyUnit);
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberInfantry(): Advance | Battle - reached default with enemyUnit=" + enemyUnit);
                   return FN_ERROR;
             }
          }
-         else if (EnumScenario.Battle == lastReport.Scenario)
+         else if (EnumScenario.Counterattack == lastReport.Scenario)
          {
             switch (enemyUnit)
             {
                case "LW":
                   if ('C' == range)
-                     toKillNum = 30;
-                  else if ('M' == range)
                      toKillNum = 20;
+                  else if ('M' == range)
+                     toKillNum = 10;
                   else if ('L' == range)
                      toKillNum = 03;
                   break;
                case "MG":
                   if ('C' == range)
-                     toKillNum = 55;
+                     toKillNum = 45;
                   else if ('M' == range)
-                     toKillNum = 30;
+                     toKillNum = 20;
                   else if ('L' == range)
                      toKillNum = 03;
                   break;
@@ -2452,14 +2452,14 @@ namespace Pattons_Best
                case "MARDER":
                case "JdgPz":
                   if ('C' == range)
-                     toKillNum = 65;
+                     toKillNum = 55;
                   else if ('M' == range)
-                     toKillNum = 40;
+                     toKillNum = 30;
                   else if ('L' == range)
-                     toKillNum = 10;
+                     toKillNum = 05;
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberInfantry(): Battle - reached default with enemyUnit=" + enemyUnit);
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberInfantry(): Counterattack - reached default with enemyUnit=" + enemyUnit);
                   return FN_ERROR;
             }
          }
@@ -2503,7 +2503,7 @@ namespace Pattons_Best
             return toKillNum;
          }
          //----------------------------------------------------
-         if ( (EnumScenario.Advance == lastReport.Scenario) || (EnumScenario.Counterattack == lastReport.Scenario) )
+         if ( (EnumScenario.Advance == lastReport.Scenario) || (EnumScenario.Battle == lastReport.Scenario) )
          {
             switch (enemyUnit)
             {
@@ -2558,11 +2558,11 @@ namespace Pattons_Best
                      toKillNum = 61;
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): Advance - reached default with enemyUnit=" + enemyUnit);
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): Advance | Battle - reached default with enemyUnit=" + enemyUnit);
                   return FN_ERROR;
             }
          }
-         else if (EnumScenario.Battle == lastReport.Scenario)
+         else if (EnumScenario.Counterattack == lastReport.Scenario)
          {
             switch (enemyUnit)
             {
@@ -2609,7 +2609,7 @@ namespace Pattons_Best
                      toKillNum = 51;
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): Advance - reached default with enemyUnit=" + enemyUnit);
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): Counterattack - reached default with enemyUnit=" + enemyUnit);
                   return FN_ERROR;
             }
          }
@@ -4155,7 +4155,7 @@ namespace Pattons_Best
          bool isShermanMoving = false;
          foreach (IMapItem crewAction in gi.CrewActions)
          {
-            if ("Commander_Fire" == crewAction.Name)
+            if ("Commander_MainGunFire" == crewAction.Name)
                isCommanderDirectingFire = true;
             if ("Driver_Forward" == crewAction.Name)
                isShermanMoving = true;
@@ -4790,6 +4790,12 @@ namespace Pattons_Best
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
          //------------------------------------
+         if(("Direct" == hit.myAttackType) && ("He" != hit.myAmmoType ) )
+         {
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): Direct fire with AP or HVAP does nothing against infantry targets");
+            return NO_CHANCE;
+         }
+         //------------------------------------
          int toKillModifierNum = 0;
          if (("Direct" != hit.myAttackType) || (true == hit.myIsCriticalHit))
          {
@@ -4843,7 +4849,7 @@ namespace Pattons_Best
             }
             else
             {
-               toKillModifierNum += 1000;
+               toKillModifierNum = KIA; // automatically kill ATG on critical hit
                Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): ATG +1000 mod=" + toKillModifierNum.ToString());
             }
          }
@@ -4923,13 +4929,19 @@ namespace Pattons_Best
          }
          //--------------------------------------
          int modifier = GetShermanToKillInfantryModifier(gi, enemyUnit, hit);
-         if( modifier < -100 )
+         if( FN_ERROR == modifier )
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillInfantryNumber(): GetShermanToKillInfantryModifier() returned error");
             return FN_ERROR;
          }
-         if (900 < modifier) // automatic KIA
-            return modifier;
+         if (KIA == modifier)
+            return KIA;
+         if (NO_CHANCE == modifier)
+         {
+            hit.myIsNoChance = true;
+            return NO_CHANCE;
+         }
+
          toKillNum -= modifier;
          return toKillNum;
       }
@@ -6755,9 +6767,9 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          //------------------------------------
-         if( null == gi.Target )
+         if( null == gi.TargetMainGun )
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): gi.Target=null");
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): gi.TargetMainGun=null");
             return FN_ERROR;
          }
          //------------------------------------
@@ -6861,7 +6873,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): gunner rating -" + assistant.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
-         if( true == gi.Target.IsMoving )
+         if( true == gi.TargetMainGun.IsMoving )
          {
             if( "Bow" == mgType )
             {
@@ -6896,13 +6908,13 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): sherman moving +10 mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
-         if (true == gi.Target.IsWoods)
+         if (true == gi.TargetMainGun.IsWoods)
          {
             toKillModifierNum += 10;
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): in woods +10 mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
-         if (true == gi.Target.IsBuilding) 
+         if (true == gi.TargetMainGun.IsBuilding) 
          {
             toKillModifierNum += 15;
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): in building +15 mod=" + toKillModifierNum.ToString());
@@ -6914,7 +6926,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): ATG +15 mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
-         if (true == gi.Target.IsFortification)
+         if (true == gi.TargetMainGun.IsFortification)
          {
             toKillModifierNum += 20;
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): in IsFortification +20 mod=" + toKillModifierNum.ToString());

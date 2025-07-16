@@ -1360,7 +1360,7 @@ namespace Pattons_Best
                   {
                      Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Firing at Any Tank myState=" + myState.ToString() + " enemyAction=" + enemyAction);
                      myGridRows[i].myToKillNumber = (int)TableMgr.GetEnemyToKillNumberTank(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
-                     if (myGridRows[i].myToKillNumber < -100)
+                     if (TableMgr.FN_ERROR == myGridRows[i].myToKillNumber)
                      {
                         Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetEnemyToKillNumberInfantry() returned " + myGridRows[i].myToKillNumber.ToString() + " for action=" + enemyAction);
                         return;

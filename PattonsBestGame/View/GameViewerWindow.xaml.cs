@@ -844,11 +844,24 @@ namespace Pattons_Best
          menuItem1.Header = "Direct Move";
          menuItem1.Click += MenuItemCrewActionClick;
          myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
-         menuItem1 = new MenuItem();
-         menuItem1.Name = "Commander_Fire";
-         menuItem1.Header = "Direct Fire";
-         menuItem1.Click += MenuItemCrewActionClick;
-         myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
+         if( (false == gi.IsBrokenMainGun) && (false == gi.IsBrokenGunsight) && (0 < totalAmmo) )
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Commander_MainGunFire";
+            menuItem1.Header = "Direct Main Gun Fire";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
+         }
+         bool is30CalibreMGFirePossible = (0 < lastReport.Ammo30CalibreMG) && ((false == gi.IsBrokenMgBow) || (false == gi.IsBrokenMgCoaxial)); // bow and coaxial MGs
+         bool is50CalibreMGFirePossible = (0 < lastReport.Ammo50CalibreMG); // subMG can always be fired
+         if ( (true == is30CalibreMGFirePossible) || (true == is50CalibreMGFirePossible) )
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Commander_MGFire";
+            menuItem1.Header = "Direct MG Fire";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
+         }
          if ((true == isCommanderOpenHatch) && (0 < lastReport.AmmoSmokeGrenade) && (false == isGunnerThrowGrenade))
          {
             menuItem1 = new MenuItem();
@@ -881,7 +894,7 @@ namespace Pattons_Best
             menuItem1.Click += MenuItemCrewActionClick;
             myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
          }
-         if ((true == isCommanderOpenHatch) && (0 < lastReport.Ammo50CalibreMG) && (false == isLoaderFireSubMg) && (false == gi.IsBrokenMgSub))
+         if ((true == isCommanderOpenHatch) && (0 < lastReport.Ammo50CalibreMG) && (false == isLoaderFireSubMg) )
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Commander_FireSubMg";
@@ -2785,8 +2798,6 @@ namespace Pattons_Best
             {
                if (true == myGameInstance.Targets.Contains(selectedMapItem))
                {
-                  myGameInstance.Target = selectedMapItem;
-                  selectedMapItem = null;
                   foreach (IMapItem mi in myGameInstance.Targets)
                   {
                      foreach (Button b in myBattleButtons)
@@ -2794,9 +2805,16 @@ namespace Pattons_Best
                   }
                   GameAction outAction = GameAction.Error;
                   if (CrewActionPhase.TankMainGunFire == myGameInstance.CrewActionPhase)
+                  {
+                     myGameInstance.TargetMainGun = selectedMapItem;
                      outAction = GameAction.BattleRoundSequenceShermanFiringMainGun;
+                  }
                   else
+                  {
+                     myGameInstance.TargetMg= selectedMapItem;
                      outAction = GameAction.BattleRoundSequenceShermanFiringMachineGun;
+                  }
+                  selectedMapItem = null;
                   myGameEngine.PerformAction(ref myGameInstance, ref outAction);
                }
             }
@@ -3012,8 +3030,12 @@ namespace Pattons_Best
                mi = new MapItem(menuitem.Name, 1.0, "c48CDirectMove", t);
                menu = myContextMenuCrewActions["Commander"];
                break;
-            case "Commander_Fire":
-               mi = new MapItem(menuitem.Name, 1.0, "c49CDirectFire", t);
+            case "Commander_MainGunFire":
+               mi = new MapItem(menuitem.Name, 1.0, "c49CDirectMainGunFire", t);
+               menu = myContextMenuCrewActions["Commander"];
+               break;
+            case "Commander_MGFire":
+               mi = new MapItem(menuitem.Name, 1.0, "c49CDirectMGFire", t);
                menu = myContextMenuCrewActions["Commander"];
                break;
             case "Commander_RepairScope":

@@ -520,7 +520,7 @@
                   <TableRowGroup>
                      <TableRow  FontSize='12'>
                         <TableCell TextAlignment='Right'>
-                           <Paragraph>KO Light Truck, MG (1):</Paragraph>
+                           <Paragraph>KO Light Weapons, MG (1):</Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
                            <Paragraph>
@@ -563,14 +563,6 @@
                            <Paragraph>KO PzIV (7):</Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
-                           <Paragraph>0</Paragraph>
-                        </TableCell>
-                     </TableRow>
-                     <TableRow  FontSize='12'>
-                        <TableCell TextAlignment='Right'>
-                           <Paragraph>KO PzV (9):</Paragraph>
-                        </TableCell>
-                        <TableCell TextAlignment='Center'>
                            <Paragraph>
                               <Run Name="myRunVictoryPointsPzIV" Text="0"/>
                            </Paragraph>
@@ -578,7 +570,7 @@
                      </TableRow>
                      <TableRow  FontSize='12'>
                         <TableCell TextAlignment='Right'>
-                           <Paragraph>KO PzV(9):</Paragraph>
+                           <Paragraph>KO PzV (9):</Paragraph>
                         </TableCell>
                         <TableCell TextAlignment='Center'>
                            <Paragraph>

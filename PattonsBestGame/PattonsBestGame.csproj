@@ -481,7 +481,10 @@
     <None Update="Images\c48CDirectMove.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Images\c49CDirectFire.gif">
+    <None Update="Images\c49CDirectMainGunFire.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Images\c49CDirectMGFire.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Images\c50GFireMainGun.gif">
