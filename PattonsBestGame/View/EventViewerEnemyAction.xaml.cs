@@ -316,7 +316,6 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myGameInstance=null");
                return false;
             }
-
             //-----------------------------------------
             IMapItems removals = new MapItems();
             foreach (IStack stack in myGameInstance.BattleStacks)
@@ -1218,7 +1217,7 @@ namespace Pattons_Best
                sb.Append("Off");
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetSectorRangeDisplay(): Reached default sector=" + myGridRows[i].mySector);
+               Logger.Log(LogEnum.LE_ERROR, "EventViewerEnemyAction.GetSectorRangeDisplay(): Reached default sector=" + myGridRows[i].mySector + " for mi=" + myGridRows[i].myMapItem.Name + " t=" + myGridRows[i].myMapItem.TerritoryCurrent.Name);
                return "ERROR";
          }
          Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "GetSectorRangeDisplay(): loc=" + sb.ToString());
@@ -1309,6 +1308,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): mi.GetEnemyUnit() returned error");
             return;
          }
+         mi.IsFired = false; // set to true if unit fires
          //-------------------------------
          switch (myState)
          {
@@ -1327,7 +1327,7 @@ namespace Pattons_Best
                {
                   mi.IsFired = true;
                   myGridRows[i].myToKillNumber = (int) TableMgr.GetEnemyToKillNumberInfantry(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
-                  if(myGridRows[i].myToKillNumber < -100 )
+                  if(TableMgr.FN_ERROR == myGridRows[i].myToKillNumber )
                   {
                      Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetEnemyToKillNumberInfantry() returned " + myGridRows[i].myToKillNumber.ToString() + " for action=" + enemyAction);
                      return;
@@ -1342,13 +1342,13 @@ namespace Pattons_Best
                   {
                      Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Firing at Your Tank myState=" + myState.ToString() + " enemyAction=" + enemyAction);
                      myGridRows[i].myModifierToHitYourTank = (int)TableMgr.GetEnemyToHitNumberModifierForYourTank(myGameInstance, mi, myGridRows[i].myRange);
-                     if (myGridRows[i].myModifierToHitYourTank < -100)
+                     if (TableMgr.FN_ERROR == myGridRows[i].myModifierToHitYourTank)
                      {
                         Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetEnemyToKillNumberInfantry() returned " + myGridRows[i].myDieRollToHitYourTank.ToString() + " for action=" + enemyAction);
                         return;
                      }
                      myGridRows[i].myToHitNumberYourTank = (int)TableMgr.GetEnemyToHitNumberYourTank(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
-                     if (myGridRows[i].myToHitNumberYourTank < -100)
+                     if (TableMgr.FN_ERROR == myGridRows[i].myToHitNumberYourTank)
                      {
                         Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetEnemyToKillNumberInfantry() returned " + myGridRows[i].myDieRollToHitYourTank.ToString() + " for action=" + enemyAction);
                         return;
@@ -1360,7 +1360,7 @@ namespace Pattons_Best
                   {
                      Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Firing at Any Tank myState=" + myState.ToString() + " enemyAction=" + enemyAction);
                      myGridRows[i].myToKillNumber = (int)TableMgr.GetEnemyToKillNumberTank(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
-                     if (myGridRows[i].myToKillNumber < -100)
+                     if (TableMgr.FN_ERROR == myGridRows[i].myToKillNumber)
                      {
                         Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetEnemyToKillNumberInfantry() returned " + myGridRows[i].myToKillNumber.ToString() + " for action=" + enemyAction);
                         return;
@@ -1412,10 +1412,10 @@ namespace Pattons_Best
                if( 2 == myRollResultColNum )
                {
                   myGridRows[i].myDieRollFacing = dieRoll;
-                  myGridRows[i].myFacing = TableMgr.GetEnemyFacing(enemyUnit, dieRoll);
+                  myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(enemyUnit, dieRoll);
                   if ("ERROR" == myGridRows[i].myFacing)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyFacing() returned ERROR");
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyNewFacing() returned ERROR");
                      return;
                   }
                   if (false == ShowDieResultUpdateFacing(i))
@@ -1551,6 +1551,11 @@ namespace Pattons_Best
                      myGameInstance.KillSherman(lastReport, "Enemy Action");
                      myGridRows[i].myToKillResultYourTank = "KO";
                      myGameInstance.Death = new ShermanDeath(myGameInstance, enemyMapItem, myGridRows[i].myHitLocationYourTank, "Enemy Action");
+                     if( true == myGameInstance.Death.myCtorError)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShermanDeath.myCtorError = true");
+                        return;
+                     }
                      for (int j = 0; j < myMaxRowCount; ++j)
                      {
                         if (Utilities.NO_RESULT == myGridRows[j].myDieRollHitLocationYourTank)
@@ -1605,24 +1610,15 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): mi=null for i=" + i.ToString());
             return false;
          }
-         double xDiff = (mi.Location.X + mi.Zoom * Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.X; // first point the vehicle at the Sherman
-         double yDiff = (mi.Location.Y + mi.Zoom * Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.Y;
-         mi.RotationHull = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;
-         mi.RotationOffset = 0.0;
-         //----------------------------
-         if ("Front" == myGridRows[i].myFacing)
-            return true;
-         //----------------------------
-         if ("Rear" == myGridRows[i].myFacing)
+         if (false == mi.SetMapItemRotation(myGameInstance.Sherman))
          {
-            mi.RotationOffset = 151 + Utilities.RandomGenerator.Next(0, 61);
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): SetMapItemRotation() returned false");
+            return false;
          }
-         else if ("Side" == myGridRows[i].myFacing)
+         if (false == mi.UpdateMapRotation(myGridRows[i].myFacing))
          {
-            if (0 == Utilities.RandomGenerator.Next(0, 2))
-               mi.RotationOffset = 36 + Utilities.RandomGenerator.Next(0, 114);
-            else
-               mi.RotationOffset = -34 - Utilities.RandomGenerator.Next(0, 114);
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): UpdateMapRotation() returned false");
+            return false;
          }
          return true;
       }

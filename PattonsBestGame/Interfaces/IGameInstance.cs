@@ -8,6 +8,7 @@ namespace Pattons_Best
 {
    public class ShermanDeath
    {
+      public bool myCtorError = false;
       public IMapItem myEnemyUnit;
       public string myHitLocation = "";
       public string myEnemyFireDirection = "";
@@ -21,6 +22,11 @@ namespace Pattons_Best
       {
          myEnemyUnit = eu;
          myHitLocation = loc;
+         if ("ERROR" == loc)
+         {
+            myCtorError = true;
+            Logger.Log(LogEnum.LE_ERROR, "ShermanDeath(): loc=ERROR");
+         }
          myCause = cause;
          myDay = gi.Day;
          myIsAmbush = ((BattlePhase.Ambush == gi.BattlePhase) || (BattlePhase.AmbushRandomEvent == gi.BattlePhase) );
@@ -51,6 +57,7 @@ namespace Pattons_Best
       public string myAmmoType;   // He, Ap, Hbci, Wp,
       public bool myIsCriticalHit;
       public string myHitLocation = ""; // Turret, Hull, Thrown Track
+      public bool myIsNoChance = false;
       public ShermanAttack( string attack, string ammo, bool critical )
       {
          myAttackType = attack;
@@ -86,6 +93,7 @@ namespace Pattons_Best
       string MovementEffectOnSherman { set; get; }
       string MovementEffectOnEnemy { set; get; }
       string ShermanTypeOfFire { set; get; }
+      string FiredAmmoType { set; get; }  
       //----------------------------------------------
       IMapItems NewMembers { set; get; }
       IMapItems ReadyRacks { set; get; }
@@ -106,16 +114,14 @@ namespace Pattons_Best
       ITerritory? FriendlyAdvance { get; set; }
       ITerritory? EnemyAdvance { get; set; }
       //------------------------------------------------
-      bool IsTurretActive { set; get; }
       bool IsHatchesActive { set; get; }
       //------------------------------------------------
       bool IsShermanFirstShot { set; get; }
-      bool IsShermanFiring { set; get; }
+      bool IsPullingFromReadyRack { set; get; }
       bool IsShermanFiringAtFront { set; get; }
       bool IsShermanDeliberateImmobilization { set; get; }
-      bool IsShermanRepeatFire { set; get; }
-      bool IsShermanRepeatFirePending { set; get; }
       int NumOfShermanShot { set; get; }
+      int NumSmokeAttacksThisRound { set; get; }
       //------------------------------------------------
       bool IsCommanderDirectingMgFire { set; get; }
       bool IsShermanFiringAaMg { set; get; }
@@ -138,7 +144,6 @@ namespace Pattons_Best
       bool IsBrokenMgCoaxial { set; get; }
       bool IsBrokenMgBow { set; get; }
       bool IsBrokenMgAntiAircraft { set; get; }
-      bool IsBrokenMgSub { set; get; }
       bool IsCommanderRescuePerformed { set; get; }
       //------------------------------------------------
       bool IsMinefieldAttack { set; get; }
@@ -170,9 +175,11 @@ namespace Pattons_Best
       List<IUnitTest> UnitTests { get; }
       //=========================================================
       ICrewMember? GetCrewMember(string name);
-      string GetGunLoad();
-      bool SetGunLoad(string ammoType);
-      string GetAmmoReload();
+      string GetGunLoadType();
+      bool SetGunLoadTerritory(string ammoType);
+      bool ReloadGun();
+      string GetAmmoReloadType();
+      bool FireAndReloadGun();
       bool IsReadyRackReload();
       int GetReadyRackReload(string ammoType);
       bool SetReadyRackReload(string name, int value);
@@ -180,5 +187,7 @@ namespace Pattons_Best
       bool IsDaylightLeft(IAfterActionReport report);
       bool IsExitArea(out bool isExitAreaReached);
       void KillSherman(IAfterActionReport report, string reason);
+      void ScoreYourVictoryPoint(IAfterActionReport report, IMapItem enemy);
+      void ScoreFriendlyVictoryPoint(IAfterActionReport report, IMapItem enemy);
    }
 }

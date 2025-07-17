@@ -296,13 +296,23 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myGameInstance=null");
                return false;
             }
+            IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
+            if (null == lastReport)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "EventViewerResolveAdvanceFire.UpdateEndState(): lastReport=null");
+               return false;
+            }
+            //-------------------------------------------
             IMapItems removals = new MapItems();
             foreach (IStack stack in myGameInstance.BattleStacks)
             {
                foreach (IMapItem mapItem in stack.MapItems)
                {
                   if (true == mapItem.IsKilled)
+                  {
                      removals.Add(mapItem);
+                     myGameInstance.ScoreFriendlyVictoryPoint(lastReport, mapItem);
+                  }
                }
             }
             foreach (IMapItem mi in removals)

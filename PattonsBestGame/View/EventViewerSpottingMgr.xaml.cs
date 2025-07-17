@@ -542,7 +542,7 @@ namespace Pattons_Best
                sb.Append("Off");
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetSectorRangeDisplay(): Reached default sector=" + myGridRows[i].mySector);
+               Logger.Log(LogEnum.LE_ERROR, "EventViewerSpottingMgr.GetSectorRangeDisplay(): Reached default sector=" + myGridRows[i].mySector + " for mi=" + myGridRows[i].myMapItem.Name + " t=" + myGridRows[i].myMapItem.TerritoryCurrent.Name);
                return "ERROR";
          }
          return sb.ToString();
@@ -653,8 +653,22 @@ namespace Pattons_Best
          }
          Button b = (Button)sender;
          string key = (string)b.Content;
-         if (false == myRulesMgr.ShowRule(key))
-            Logger.Log(LogEnum.LE_ERROR, "ButtonRule_Click(): myRulesMgr.ShowRule() returned false key=" + key);
+         if (true == key.StartsWith("r")) // rules based click
+         {
+            if (false == myRulesMgr.ShowRule(key))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ButtonRule_Click(): ShowRule() returned false");
+               return;
+            }
+         }
+         else  // table based click
+         {
+            if (false == myRulesMgr.ShowTable(key))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ButtonRule_Click(): ShowTable() returned false");
+               return;
+            }
+         }
       }
       private void Button_Click(object sender, RoutedEventArgs e)
       {

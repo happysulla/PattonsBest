@@ -114,17 +114,20 @@ e013	"<Bold>e013 Gun Load</Bold>
 Mark the type of round you want loaded in the main gun before any action begins by clicking the highlighted box on the Tank Card in the correct ammo type box. Click image below to continue.
 <LineBreak/><LineBreak/>
                                                   <InlineUIContainer><Image Name='c17GunLoad'  Height='80' Width='80'></Image></InlineUIContainer>"
+e013a	"<Bold>e013a Out of Main Gun Rounds</Bold> 
+<InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Main Gun is empty, and there are no rounds to load. Tehrefore, the main gun cannot be loaded. Click image to continue.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='Continue13a' Height='100' Width='100'></Image></InlineUIContainer>"
 e014	"<Bold>e014 Tank &amp; Turret Orientation</Bold> 
 <InlineUIContainer><Button Content='r4.44' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
-The Sherman tank counter is placed at the center of the battle board. If you want the turret to face a different sector, click tank counter on center of Battle Board. 
-Alternatively, select buttons here:
+The Sherman tank counter is placed at the center of the battle board. If you want the turret to face a different sector, select buttons here: 
 <LineBreak/><LineBreak/>
-                                   <InlineUIContainer><Button Content='  -  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-<InlineUIContainer><Image Name='c16TurretSherman75'  Height='150' Width='150'></Image></InlineUIContainer> 
+                                             <InlineUIContainer><Button Content='  -  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>           
 <InlineUIContainer><Button Content='  +  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
-<LineBreak/><LineBreak/>
-When you are satisfied with the current turret orientation, click turret image between buttons to continue."
+<LineBreak/><LineBreak/>"
 e015	"<Bold>e015 Loader Spotting</Bold> 
 <InlineUIContainer><Button Content='r4.45' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
@@ -521,8 +524,37 @@ e050	"<Bold>e050 Ammo Reload Order</Bold>
 <InlineUIContainer><Button Content='r5.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>
-Right click marker or one of blue boxes to to select from pull down menu where to set Gun Reload marker and/or Ready Rack Ammo Reload marker.
+Right click marker or one of blue boxes to show the ammo reload context menu.  Alternatively, or if no blue box is shown, right click on the Gun Load marker to show the context menu.
+<LineBreak/><LineBreak/>
+The context menu allows setting the Ammo Reload marker. When no ammo can be reloaded, this marker disappears.
+<LineBreak/><LineBreak/>
+The selection of Ready Rack Ammo Reload marker over the Ammo Reload marker supports higher chance of performing rate of fire. <InlineUIContainer><Button Content='r9.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+The Gun Load marker shows the round in the main gun. The Gun Load marker changes to the Ammo Reload location when the gun is fired. 
 <LineBreak/><LineBreak/>"
+e050a	"<Bold>e050a No Gun Round Loaded</Bold> 
+<InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Since the gun is unloaded at the start of the round, choose one of the highlighted boxes to load the gun.
+<LineBreak/><LineBreak/>"
+e050b	"<Bold>e050b Out of Main Gun Rounds</Bold> 
+<InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Main Gun is empty, and there are no rounds to load. Click image to continue.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='Continue50b' Height='100' Width='100'></Image></InlineUIContainer>"
+e050c	"<Bold>e050c No Gun Rounds to Load</Bold> 
+<InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Only one gun round exists in the main gun. There is nothing else to load. Click image to continue.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='Continue50c' Height='100' Width='100'></Image></InlineUIContainer>"
+e050d	"<Bold>e050c No Gun Rounds to Load</Bold> 
+<InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+The tank is empty of all main gun rounds. Click image to continue.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='Continue50d' Height='100' Width='100'></Image></InlineUIContainer>"
 e051	"<Bold>e051 Crew Actions - Tank Movement</Bold> 
 <InlineUIContainer><Button Content='r4.74.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r11.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
@@ -542,25 +574,20 @@ e052	"<Bold>e052 Pivot Tank</Bold>
 <InlineUIContainer><Button Content='r4.74.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r8.46' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
-Select the plus or minus buttons to rotate.  
+If you want the Sherman to face a different sector, select buttons here:
 <LineBreak/><LineBreak/>
-                                   <InlineUIContainer><Button Content='   -   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-<InlineUIContainer><Image Name='ShermanPivot'  Height='150' Width='150'></Image></InlineUIContainer> 
+                                           <InlineUIContainer><Button Content='   -   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>      
 <InlineUIContainer><Button Content='   +   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
-<LineBreak/><LineBreak/>
-When you are satisfied with the current orientation, click Sherman image between buttons to continue."
+<LineBreak/><LineBreak/>"
 e052a	"<Bold>e052a Pivot Turret</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r8.24' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
-If you want the turret to face a different sector, click tank counter on center of Battle Board. 
-Alternatively, select buttons here:
+If you want the turret to face a different sector, select buttons here: 
 <LineBreak/><LineBreak/>
-                                   <InlineUIContainer><Button Content='  -  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-<InlineUIContainer><Image Name='c16TurretSherman75'  Height='150' Width='150'></Image></InlineUIContainer> 
+                                             <InlineUIContainer><Button Content='  -  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>           
 <InlineUIContainer><Button Content='  +  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
-<LineBreak/><LineBreak/>
-When you are satisfied with the current turret orientation, click turret image between buttons to continue."
+<LineBreak/><LineBreak/>"
 e053	"<Bold>e053 Main Gun Firing - Select Target</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
@@ -583,10 +610,6 @@ The main gun may only fire at a target in the turret&apos;s front sector unless 
 e053b	"<Bold>e053b Main Gun Firing - Target Selected</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-<LineBreak/><LineBreak/>
-The appropriate type of ammo is marked off the After Action Report <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
-Choose  <InlineUIContainer><Button Content='Direct' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   or    
-<InlineUIContainer><Button Content=' Area ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    fire.
 <LineBreak/><LineBreak/>"
 e053c	"<Bold>e053c Main Gun Firing - Rate of Fire</Bold> 
 <InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
@@ -604,8 +627,14 @@ For each hit scored against a target, consult the
 e053e	"<Bold>e053e Main Gun Against Vehicle</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<LineBreak/><LineBreak/>"
+e053f	"<Bold>e053f Smoke Round Hits</Bold> 
+<InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<InlineUIContainer><Button Content='r9.32' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
-For each hit scored against a target, consult the  "
+When a hit is scored with a smoke round, place Smoke marker(s) in the zone. HBCI ammo generates two Smoke Markers for each hit.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='Continue53f' Height='100' Width='100'></Image></InlineUIContainer>"
 e054	"<Bold>e054 MG Firing - Select Target</Bold> 
 <InlineUIContainer><Button Content='r4.74.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r10.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
@@ -628,7 +657,7 @@ The MG ammo is marked off the After Action Report <InlineUIContainer><Button Con
 e060	"<Bold>e060 Reset Round</Bold> 
 <InlineUIContainer><Button Content='r4.77' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>
-Since the round did not end, reset and return back to Spotting Round. Click image to continue.
+Since the battle did not end, reset and return back to Spotting Round. Click image to continue.
 <LineBreak/><LineBreak/>
                                             <InlineUIContainer><Image Name='Continue60' Height='100' Width='100'></Image></InlineUIContainer>"
 e100	"<Bold>e100 Evening Debriefing</Bold> 

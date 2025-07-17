@@ -392,10 +392,15 @@ namespace Pattons_Best
                if ( false == UpdateCanvasShermanSelectTarget(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasShermanSelectTarget() returned error ");
                break;
+            case GameAction.BattleRoundSequenceEnemyAction:
             case GameAction.BattleRoundSequenceShermanToHitRoll:
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               if (false == UpdateCanvasMain(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
+            case GameAction.BattleRoundSequenceLoadMainGun:
+            case GameAction.BattleRoundSequenceLoadMainGunEnd:
             case GameAction.BattleRoundSequenceBackToSpotting:
                if (false == UpdateCanvasAnimateBattlePhase(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
@@ -743,7 +748,7 @@ namespace Pattons_Best
             myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
          }
          //---------------------------------
-         string gunload = myGameInstance.GetGunLoad();
+         string gunload = myGameInstance.GetGunLoadType();
          myContextMenuCrewActions["Gunner"].Items.Clear();
          myContextMenuCrewActions["Gunner"].Visibility = Visibility.Visible;
          if ( (0 < totalAmmo) && (false == gi.IsBrokenMainGun) && ("None" != gunload) )
@@ -839,11 +844,24 @@ namespace Pattons_Best
          menuItem1.Header = "Direct Move";
          menuItem1.Click += MenuItemCrewActionClick;
          myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
-         menuItem1 = new MenuItem();
-         menuItem1.Name = "Commander_Fire";
-         menuItem1.Header = "Direct Fire";
-         menuItem1.Click += MenuItemCrewActionClick;
-         myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
+         if( (false == gi.IsBrokenMainGun) && (false == gi.IsBrokenGunsight) && (0 < totalAmmo) )
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Commander_MainGunFire";
+            menuItem1.Header = "Direct Main Gun Fire";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
+         }
+         bool is30CalibreMGFirePossible = (0 < lastReport.Ammo30CalibreMG) && ((false == gi.IsBrokenMgBow) || (false == gi.IsBrokenMgCoaxial)); // bow and coaxial MGs
+         bool is50CalibreMGFirePossible = (0 < lastReport.Ammo50CalibreMG); // subMG can always be fired
+         if ( (true == is30CalibreMGFirePossible) || (true == is50CalibreMGFirePossible) )
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Commander_MGFire";
+            menuItem1.Header = "Direct MG Fire";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
+         }
          if ((true == isCommanderOpenHatch) && (0 < lastReport.AmmoSmokeGrenade) && (false == isGunnerThrowGrenade))
          {
             menuItem1 = new MenuItem();
@@ -876,7 +894,7 @@ namespace Pattons_Best
             menuItem1.Click += MenuItemCrewActionClick;
             myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
          }
-         if ((true == isCommanderOpenHatch) && (0 < lastReport.Ammo50CalibreMG) && (false == isLoaderFireSubMg) && (false == gi.IsBrokenMgSub))
+         if ((true == isCommanderOpenHatch) && (0 < lastReport.Ammo50CalibreMG) && (false == isLoaderFireSubMg) )
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Commander_FireSubMg";
@@ -895,11 +913,17 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuGunLoadAction(): lastReport=null");
             return false;
          }
+         string gunLoadType = gi.GetGunLoadType();
          MenuItem menuitem = new MenuItem();
          //--------------------------------------------------
          myContextMenuGunLoadActions["GunLoadHe"].Items.Clear();
-         if ( 0 < lastReport.MainGunHE )
+         int minCount = 0;
+         if ("He" == gunLoadType)
+            minCount = 1;
+         if (minCount < lastReport.MainGunHE )
          {
+            myContextMenuGunLoadActions["GunLoadHe"].IsEnabled = true;
+            myContextMenuGunLoadActions["GunLoadHe"].Visibility = Visibility.Visible;
             menuitem = new MenuItem();
             menuitem.Name = "GunLoadHe_AmmoReload";
             menuitem.Header = "Place Ammo Reload";
@@ -914,10 +938,20 @@ namespace Pattons_Best
                myContextMenuGunLoadActions["GunLoadHe"].Items.Add(menuitem);
             }
          }
+         else
+         {
+            myContextMenuGunLoadActions["GunLoadHe"].IsEnabled = false;
+            myContextMenuGunLoadActions["GunLoadHe"].Visibility = Visibility.Collapsed;
+         }
          //--------------------------------------------------
          myContextMenuGunLoadActions["GunLoadAp"].Items.Clear();
-         if (0 < lastReport.MainGunAP)
+         minCount = 0;
+         if ("Ap" == gunLoadType) // if the one ammo is loaded in gun, cannot perform ammo reload
+            minCount = 1;
+         if (minCount < lastReport.MainGunAP)
          {
+            myContextMenuGunLoadActions["GunLoadAp"].IsEnabled = true;
+            myContextMenuGunLoadActions["GunLoadAp"].Visibility = Visibility.Visible;
             menuitem = new MenuItem();
             menuitem.Name = "GunLoadAp_AmmoReload";
             menuitem.Header = "Place Ammo Reload";
@@ -932,10 +966,20 @@ namespace Pattons_Best
                myContextMenuGunLoadActions["GunLoadAp"].Items.Add(menuitem);
             }
          }
+         else
+         {
+            myContextMenuGunLoadActions["GunLoadAp"].IsEnabled = false;
+            myContextMenuGunLoadActions["GunLoadAp"].Visibility = Visibility.Collapsed;
+         }
          //--------------------------------------------------
+         minCount = 0;
+         if ("Hbci" == gunLoadType) // if the one ammo is loaded in gun, cannot perform ammo reload
+            minCount = 1;
          myContextMenuGunLoadActions["GunLoadHbci"].Items.Clear();
          if (0 < lastReport.MainGunHBCI)
          {
+            myContextMenuGunLoadActions["GunLoadHbci"].IsEnabled = true;
+            myContextMenuGunLoadActions["GunLoadHbci"].Visibility = Visibility.Visible;
             menuitem = new MenuItem();
             menuitem.Name = "GunLoadHbci_AmmoReload";
             menuitem.Header = "Place Ammo Reload";
@@ -950,10 +994,20 @@ namespace Pattons_Best
                myContextMenuGunLoadActions["GunLoadHbci"].Items.Add(menuitem);
             }
          }
+         else
+         {
+            myContextMenuGunLoadActions["GunLoadHbci"].IsEnabled = false;
+            myContextMenuGunLoadActions["GunLoadHbci"].Visibility = Visibility.Collapsed;
+         }
          //--------------------------------------------------
          myContextMenuGunLoadActions["GunLoadWp"].Items.Clear();
+         minCount = 0;
+         if ("Wp" == gunLoadType) // if the one ammo is loaded in gun, cannot perform ammo reload
+            minCount = 1;
          if (0 < lastReport.MainGunWP)
          {
+            myContextMenuGunLoadActions["GunLoadWp"].IsEnabled = true;
+            myContextMenuGunLoadActions["GunLoadWp"].Visibility = Visibility.Visible;
             menuitem = new MenuItem();
             menuitem.Name = "GunLoadWp_AmmoReload";
             menuitem.Header = "Place Ammo Reload";
@@ -968,10 +1022,19 @@ namespace Pattons_Best
                myContextMenuGunLoadActions["GunLoadWp"].Items.Add(menuitem);
             }
          }
+         else
+         {
+            myContextMenuGunLoadActions["GunLoadWp"].IsEnabled = false;
+            myContextMenuGunLoadActions["GunLoadWp"].Visibility = Visibility.Collapsed;
+         }
          //--------------------------------------------------
          myContextMenuGunLoadActions["GunLoadHvap"].Items.Clear();
+         if ("Hvap" == gunLoadType) // if the one ammo is loaded in gun, cannot perform ammo reload
+            minCount = 1;
          if (0 < lastReport.MainGunHVAP)
          {
+            myContextMenuGunLoadActions["GunLoadHvap"].IsEnabled = true;
+            myContextMenuGunLoadActions["GunLoadHvap"].Visibility = Visibility.Visible;
             menuitem = new MenuItem();
             menuitem.Name = "GunLoadHvap_AmmoReload"; 
             menuitem.Header = "Place Ammo Reload";
@@ -985,6 +1048,11 @@ namespace Pattons_Best
                menuitem.Click += MenuItemAmmoReloadClick;
                myContextMenuGunLoadActions["GunLoadHvap"].Items.Add(menuitem);
             }
+         }
+         else
+         {
+            myContextMenuGunLoadActions["GunLoadHvap"].IsEnabled = false;
+            myContextMenuGunLoadActions["GunLoadHvap"].Visibility = Visibility.Collapsed;
          }
          return true;
       }
@@ -1040,10 +1108,12 @@ namespace Pattons_Best
                   continue;
                elements.Add(ui);
             }
-            if ((BattlePhase.BackToSpotting == gi.BattlePhase) && (ui is Button b) )
+            if (ui is Button b)
             {
                IMapItem? mi = gi.Hatches.Find(b.Name);
-               if( null == mi )
+               if (null == mi)
+                  mi = gi.CrewActions.Find(b.Name);
+               if ( null == mi )
                   mi = gi.ReadyRacks.Find(b.Name);
                if (null == mi)
                   mi = gi.GunLoads.Find(b.Name);
@@ -1107,6 +1177,7 @@ namespace Pattons_Best
                   break;
                case GameAction.PreparationsGunLoad:
                case GameAction.PreparationsGunLoadSelect:
+               case GameAction.BattleRoundSequenceLoadMainGun:
                   if (false == UpdateCanvasTankGunLoad(gi, action))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasTankGunLoad() returned false");
@@ -1421,26 +1492,24 @@ namespace Pattons_Best
             Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = t.ToString() };
             myPolygons.Add(aPolygon);
             myCanvasTank.Children.Add(aPolygon);
+            //------------------------------------------------
             if( BattlePhase.MarkAmmoReload == gi.BattlePhase )
             {
                aPolygon.MouseDown += MouseDownPolygonAmmoActions;
                aPolygon.ContextMenu = myContextMenuGunLoadActions[tName];
-               //--------------------------------------
                IMapItem? gunLoad = null;
                foreach(IMapItem mi in gi.GunLoads) // The context menu is assigned to the GunLoad Button
                {
                   if (true == mi.Name.Contains("GunLoadInGun"))
                      gunLoad = mi;
                }
-               if (null == gunLoad)
+               if (null != gunLoad)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankAmmoOrders(): gunLoad=null");
-                  return false;
-               }
-               foreach(Button b in myTankButtons)
-               {
-                  if (b.Name == gunLoad.Name)
-                     b.ContextMenu = myContextMenuGunLoadActions[gunLoad.TerritoryCurrent.Name];
+                  foreach (Button b in myTankButtons)
+                  {
+                     if (b.Name == gunLoad.Name)
+                        b.ContextMenu = myContextMenuGunLoadActions[gunLoad.TerritoryCurrent.Name];
+                  }
                }
             }
             else
@@ -2427,8 +2496,8 @@ namespace Pattons_Best
          }
          if (null == gunLoad)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonGunLoad(): t=null for " + clickedPolygon.Name.ToString());
-            return;
+            gunLoad = new MapItem("GunLoadInGun", 1.0, "c17GunLoad", newT);
+            myGameInstance.GunLoads.Add(gunLoad);
          }
          gunLoad.TerritoryCurrent = newT;
          double delta = gunLoad.Zoom * Utilities.theMapItemOffset;
@@ -2438,6 +2507,8 @@ namespace Pattons_Best
          GameAction outAction = GameAction.BattleRoundSequenceAmmoOrders;
          if (GamePhase.Preparations == myGameInstance.GamePhase)
             outAction = GameAction.PreparationsGunLoadSelect;
+         else if (BattlePhase.BackToSpotting == myGameInstance.BattlePhase)
+            outAction = GameAction.BattleRoundSequenceLoadMainGunEnd;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
       private void MouseDownPolygonCrewActions(object sender, MouseButtonEventArgs e)
@@ -2686,13 +2757,6 @@ namespace Pattons_Best
             }
          }
          //-----------------------------------------------
-         else if( (true == button.Name.Contains("Sherman")) && (true == myGameInstance.IsTurretActive) ) // This is for the turret
-         {
-            myGameInstance.Sherman.RotationTurret += 60;
-            if (359 < myGameInstance.Sherman.RotationTurret)
-               myGameInstance.Sherman.RotationTurret = 0;
-            MapItem.SetButtonContent(button, myGameInstance.Sherman, true, true);
-         }
          else if ((true == button.Name.Contains("GunLoad")) && (BattlePhase.MarkAmmoReload == myGameInstance.BattlePhase) )
          {
             IMapItem? selectedMapItem = myGameInstance.GunLoads.Find(button.Name);
@@ -2727,14 +2791,13 @@ namespace Pattons_Best
             IMapItem? selectedMapItem = myGameInstance.BattleStacks.FindMapItem(button.Name);
             if (null == selectedMapItem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): ConductCrewAction: selectedMapItem=null for button.Name=" + button.Name);
+               Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): selectedMapItem=null for button.Name=" + button.Name);
                return;
             }
             if( (CrewActionPhase.TankMainGunFire == myGameInstance.CrewActionPhase) || (CrewActionPhase.TankMgFire == myGameInstance.CrewActionPhase) )
             {
                if (true == myGameInstance.Targets.Contains(selectedMapItem))
                {
-
                   foreach (IMapItem mi in myGameInstance.Targets)
                   {
                      foreach (Button b in myBattleButtons)
@@ -2748,7 +2811,7 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     myGameInstance.TargetMainGun = selectedMapItem;
+                     myGameInstance.TargetMg= selectedMapItem;
                      outAction = GameAction.BattleRoundSequenceShermanFiringMachineGun;
                   }
                   selectedMapItem = null;
@@ -2967,8 +3030,12 @@ namespace Pattons_Best
                mi = new MapItem(menuitem.Name, 1.0, "c48CDirectMove", t);
                menu = myContextMenuCrewActions["Commander"];
                break;
-            case "Commander_Fire":
-               mi = new MapItem(menuitem.Name, 1.0, "c49CDirectFire", t);
+            case "Commander_MainGunFire":
+               mi = new MapItem(menuitem.Name, 1.0, "c49CDirectMainGunFire", t);
+               menu = myContextMenuCrewActions["Commander"];
+               break;
+            case "Commander_MGFire":
+               mi = new MapItem(menuitem.Name, 1.0, "c49CDirectMGFire", t);
                menu = myContextMenuCrewActions["Commander"];
                break;
             case "Commander_RepairScope":
@@ -3051,11 +3118,6 @@ namespace Pattons_Best
             if (true == mi.Name.Contains("GunLoadInGun"))
                gunLoad = mi;
          }
-         if ( null == gunLoad )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MenuItemAmmoReloadClick(): gunLoad=null");
-            return;
-         }
          //--------------------------------------
          List<Button> removalButtons = new List<Button>();
          foreach (IMapItem mapItem in myGameInstance.GunLoads) // get rid of existing gunloads for this crew member
@@ -3104,8 +3166,11 @@ namespace Pattons_Best
             Canvas.SetLeft(newButton, readyRackReLoad.Location.X);
             Canvas.SetTop(newButton, readyRackReLoad.Location.Y);
             Canvas.SetZIndex(newButton, 900);
-            if( t.Name == gunLoad.TerritoryCurrent.Name )
-               count++;
+            if (null != gunLoad)
+            {
+               if (tName == gunLoad.TerritoryCurrent.Name)
+                  count++;
+            }
          }
          else
          {
@@ -3124,22 +3189,28 @@ namespace Pattons_Best
             Canvas.SetZIndex(newButton, 900);
             myGameInstance.GunLoads.Insert(0, ammoLoad);
             Logger.Log(LogEnum.LE_SHOW_AMMMO_MENU, "MenuItemAmmoReloadClick(): adding new button=" + menuitem.Name);
-            if (tName == gunLoad.TerritoryCurrent.Name)
-               count++;
+            if( null != gunLoad)
+            {
+               if (tName == gunLoad.TerritoryCurrent.Name)
+                  count++;
+            }
          }
          //--------------------------------------
-         double gunLoadLocationOffset = count * 3 - ( gunLoad.Zoom * Utilities.theMapItemOffset);
-         myGameInstance.GunLoads.Insert(0, gunLoad); // GunLoad must be first entry in MapItems
-         gunLoad.Location.X = gunLoad.TerritoryCurrent.CenterPoint.X + gunLoadLocationOffset;
-         gunLoad.Location.Y = gunLoad.TerritoryCurrent.CenterPoint.Y + gunLoadLocationOffset;
-         Logger.Log(LogEnum.LE_SHOW_AMMMO_MENU, "MenuItemAmmoReloadClick(): adding new button=" + gunLoad.Name);
-         newButton = new Button { ContextMenu = myContextMenuGunLoadActions[gunLoad.TerritoryCurrent.Name], Name = gunLoad.Name, Width = size, Height = size, BorderThickness = thickness, Background = brush, Foreground = brush };
-         newButton.Click += ClickButtonMapItem;
-         MapItem.SetButtonContent(newButton, gunLoad, true, false); // This sets the image as the button's content
-         myTankButtons.Add(newButton);
-         myCanvasTank.Children.Add(newButton);
-         Canvas.SetLeft(newButton, gunLoad.Location.X);
-         Canvas.SetTop(newButton, gunLoad.Location.Y);
+         if( null != gunLoad )
+         {
+            double gunLoadLocationOffset = count * 3 - (gunLoad.Zoom * Utilities.theMapItemOffset);
+            myGameInstance.GunLoads.Insert(0, gunLoad); // GunLoad must be first entry in MapItems
+            gunLoad.Location.X = gunLoad.TerritoryCurrent.CenterPoint.X + gunLoadLocationOffset;
+            gunLoad.Location.Y = gunLoad.TerritoryCurrent.CenterPoint.Y + gunLoadLocationOffset;
+            Logger.Log(LogEnum.LE_SHOW_AMMMO_MENU, "MenuItemAmmoReloadClick(): adding new button=" + gunLoad.Name);
+            newButton = new Button { ContextMenu = myContextMenuGunLoadActions[gunLoad.TerritoryCurrent.Name], Name = gunLoad.Name, Width = size, Height = size, BorderThickness = thickness, Background = brush, Foreground = brush };
+            newButton.Click += ClickButtonMapItem;
+            MapItem.SetButtonContent(newButton, gunLoad, true, false); // This sets the image as the button's content
+            myTankButtons.Add(newButton);
+            myCanvasTank.Children.Add(newButton);
+            Canvas.SetLeft(newButton, gunLoad.Location.X);
+            Canvas.SetTop(newButton, gunLoad.Location.Y);
+         }
          //--------------------------------------
          GameAction outaction = GameAction.BattleRoundSequenceAmmoOrders;
          myGameEngine.PerformAction(ref myGameInstance, ref outaction, 0);

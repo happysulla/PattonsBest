@@ -298,6 +298,18 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myGameInstance=null");
                return false;
             }
+            //-----------------------------------------
+            IMapItems removals = new MapItems();
+            foreach (IStack stack in myGameInstance.BattleStacks)
+            {
+               foreach (IMapItem mapItem in stack.MapItems)
+               {
+                  if (true == mapItem.TerritoryCurrent.Name.Contains("Off")) // remove all units that left the board
+                     removals.Add(mapItem);
+               }
+            }
+            foreach (IMapItem mi in removals)
+               myGameInstance.BattleStacks.Remove(mi);
             Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "EventViewerBattleSetup.UpdateEndState(): ------------------------------ battlestacks=" + myGameInstance.BattleStacks.ToString());
             if (null == myCallback)
             {
@@ -753,7 +765,6 @@ namespace Pattons_Best
             case "SPG":
                t = tLeft;
                mi = new MapItem(name, Utilities.ZOOM + 0.5, "c77UnidentifiedSpg", t);
-               mi.IsSpotted = true;
                mi.IsVehicle = true;
                myIsVehicleActivated = true;
                break;
@@ -887,10 +898,10 @@ namespace Pattons_Best
                break;
             case E046Enum.PLACE_FACING:
                myGridRows[i].myDieRollFacing= dieRoll;
-               myGridRows[i].myFacing = TableMgr.GetEnemyFacing(myGridRows[i].myActivation, dieRoll);
+               myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGridRows[i].myActivation, dieRoll);
                if ("ERROR" == myGridRows[i].myFacing)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyFacing() returned ERROR");
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyNewFacing() returned ERROR");
                   return;
                }
                IMapItem? mi = myGridRows[i].myMapItem;

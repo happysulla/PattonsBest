@@ -40,6 +40,8 @@ namespace Pattons_Best
       LE_SHOW_CONDUCT_CREW_ACTION,
       LE_SHOW_BATTLE_ROUND_START,
       LE_SHOW_TANK_BUTTONS,
+      LE_SHOW_GUN_RELOAD,
+      LE_SHOW_FIRE_DIRECTION,
       //-------------
       LE_VIEW_ADV_FIRE_RESOLVE,
       LE_VIEW_ART_FIRE_RESOLVE,
@@ -113,7 +115,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_RANDOM_PT);
          // SetOn(LogEnum.LE_SHOW_ROTATION);
          //SetOn(LogEnum.LE_SHOW_MAPITEM_TANK);
-         SetOn(LogEnum.LE_SHOW_BATTLE_PHASE);
+         //SetOn(LogEnum.LE_SHOW_BATTLE_PHASE);
          //SetOn(LogEnum.LE_SHOW_HIT_YOU_MOD);
          //SetOn(LogEnum.LE_SHOW_SPOT_MOD);
          //SetOn(LogEnum.LE_SHOW_SPOT_RESULT);
@@ -121,12 +123,14 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_AMMMO_MENU);
          //SetOn(LogEnum.LE_SHOW_SHERMAN_MOVE); 
          //SetOn(LogEnum.LE_SHOW_APPEARING_UNITS);
-         SetOn(LogEnum.LE_SHOW_TO_HIT_MODIFIER);
-         SetOn(LogEnum.LE_SHOW_TO_KILL_MODIFIER);
+         //SetOn(LogEnum.LE_SHOW_TO_HIT_MODIFIER);
+         //SetOn(LogEnum.LE_SHOW_TO_KILL_MODIFIER);
          SetOn(LogEnum.LE_SHOW_TO_KILL_ATTACK);
-         SetOn(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION);
+         //SetOn(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION);
          SetOn(LogEnum.LE_SHOW_BATTLE_ROUND_START);
-         SetOn(LogEnum.LE_SHOW_TANK_BUTTONS);
+         // SetOn(LogEnum.LE_SHOW_TANK_BUTTONS);
+         //SetOn(LogEnum.LE_SHOW_GUN_RELOAD);
+         SetOn(LogEnum.LE_SHOW_FIRE_DIRECTION);
          //-------------------------------
          //SetOn(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE);
          //SetOn(LogEnum.LE_VIEW_ART_FIRE_RESOLVE);
@@ -143,7 +147,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED);
          //SetOn(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED_BAILOUT);
          //SetOn(LogEnum.LE_EVENT_VIEWER_SPOTTING);
-         SetOn(LogEnum.LE_EVENT_VIEWER_ORDERS);
+         //SetOn(LogEnum.LE_EVENT_VIEWER_ORDERS);
          return true;
       }
       static public void SetOn(LogEnum logLevel)
