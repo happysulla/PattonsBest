@@ -3144,7 +3144,7 @@ namespace Pattons_Best
          //------------------------------------
          if ((true == gi.TargetMainGun.IsBuilding) || ("ATG" == enemyUnitType) || ("Pak38" == enemyUnitType) || ("Pak40" == enemyUnitType) || ("Pak43" == enemyUnitType))
          {
-            sb.Append("+15 for target building or against ATG\n");
+            sb.Append("+15 for target in building \n");
          }
          //------------------------------------
          if (true == gi.TargetMainGun.IsFortification)
