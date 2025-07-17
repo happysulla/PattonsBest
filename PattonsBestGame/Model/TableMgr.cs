@@ -1196,7 +1196,7 @@ namespace Pattons_Best
                   {
                      if (true == isDoNothingInsteadOfFiring)
                         return "Do Nothing";
-                     else if (true == gi.IsShermanFiring)
+                     else if ((null != gi.TargetMainGun) && (mi.Name == gi.TargetMainGun.Name))
                      {
                         if (true == isDoNothingInsteadOfFiringAtYourTank)
                            return "Do Nothing";
@@ -1322,7 +1322,7 @@ namespace Pattons_Best
                            return "Do Nothing";
                         return "Fire-Your Tank";
                      }
-                     else if (true == gi.IsShermanFiring)
+                     else if ((null != gi.TargetMainGun) && (mi.Name == gi.TargetMainGun.Name))
                      {
                         if (true == isThrownTrack)
                            return "Do Nothing";
@@ -1385,7 +1385,7 @@ namespace Pattons_Best
                   {
                      if (true == isDoNothingInsteadOfFiring)
                         return "Do Nothing";
-                     else if (true == gi.IsShermanFiring)
+                     else if ((null != gi.TargetMainGun) && (mi.Name == gi.TargetMainGun.Name))
                      {
                         if (true == isDoNothingInsteadOfFiringAtYourTank)
                            return "Do Nothing";
@@ -1458,7 +1458,7 @@ namespace Pattons_Best
                            return "Do Nothing";
                         return "Fire-Your Tank";
                      }
-                     else if (true == gi.IsShermanFiring)
+                     else if ((null != gi.TargetMainGun) && (mi.Name == gi.TargetMainGun.Name))
                      {
                         if (true == isThrownTrack)
                            return "Do Nothing";
@@ -1568,7 +1568,7 @@ namespace Pattons_Best
                            return "Do Nothing";
                         return "Fire-Your Tank";
                      }
-                     else if (true == gi.IsShermanFiring)
+                     else if ((null != gi.TargetMainGun) && (mi.Name == gi.TargetMainGun.Name))
                      {
                         if (true == isThrownTrack)
                            return "Do Nothing";

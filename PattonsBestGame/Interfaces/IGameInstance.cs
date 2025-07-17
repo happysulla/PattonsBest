@@ -118,7 +118,6 @@ namespace Pattons_Best
       //------------------------------------------------
       bool IsShermanFirstShot { set; get; }
       bool IsPullingFromReadyRack { set; get; }
-      bool IsShermanFiring { set; get; }
       bool IsShermanFiringAtFront { set; get; }
       bool IsShermanDeliberateImmobilization { set; get; }
       int NumOfShermanShot { set; get; }

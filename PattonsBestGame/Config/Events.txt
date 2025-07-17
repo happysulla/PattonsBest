@@ -582,7 +582,12 @@ If you want the Sherman to face a different sector, select buttons here:
 e052a	"<Bold>e052a Pivot Turret</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r8.24' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-+B13"
+<LineBreak/><LineBreak/>
+If you want the turret to face a different sector, select buttons here: 
+<LineBreak/><LineBreak/>
+                                             <InlineUIContainer><Button Content='  -  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>           
+<InlineUIContainer><Button Content='  +  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>"
 e053	"<Bold>e053 Main Gun Firing - Select Target</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 

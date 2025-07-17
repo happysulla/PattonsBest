@@ -1716,8 +1716,8 @@ namespace Pattons_Best
                   if (("Commander_MGFire" == crewAction.Name) && (false == gi.IsCommanderDirectingMgFire))
                   {
                      CheckBox cbe054 = new CheckBox() { FontSize = 12, IsEnabled = true, IsChecked = false, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = System.Windows.VerticalAlignment.Center };
-                     cbe054.Checked += CheckBoxCmdFire_Checked;
-                     cbe054.Unchecked += CheckBoxCmdFire_Unchecked;
+                     cbe054.Checked += CheckBoxCmdrFire_Checked;
+                     cbe054.Unchecked += CheckBoxCmdrFire_Unchecked;
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak()); 
                      myTextBlock.Inlines.Add(new InlineUIContainer(cbe054));
@@ -1984,6 +1984,12 @@ namespace Pattons_Best
          be53b2.Click += Button_Click;
          myTextBlock.Inlines.Add(new InlineUIContainer(be53b2));
          //----------------------------------------------
+         if (false == UpdateEventContentGetToHitModifierImmobilization(gi, gi.TargetMainGun))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToGetToHit(): UpdateEventContentGetToHitModifierImmobilization() returned false");
+            return false;
+         }
+         //----------------------------------------------
          if (false == String.IsNullOrEmpty(gi.ShermanTypeOfFire))
          {
             myTextBlock.Inlines.Add(new LineBreak());
@@ -2193,23 +2199,55 @@ namespace Pattons_Best
          //==================================
          if ("Direct" == gi.ShermanTypeOfFire)
          {
+            //----------------------------
+            if (true == isShermanMoving)
+               sb51.Append("+25 for moving or pivoting Sherman\n");
+            //----------------------------
+            if (true == enemyUnit.IsWoods)
+            {
+               if ('C' == range)
+                  sb51.Append("+5 for target in woods at close range\n");
+               else if ('M' == range)
+                  sb51.Append("+10 for target in woods at medium range\n");
+               else if ('L' == range)
+                  sb51.Append("+15 for target in woods at large range\n");
+               else
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                  return "ERROR";
+               }
+            }
+            if ((true == enemyUnit.IsBuilding) && (false == enemyUnit.IsVehicle))
+            {
+               if ('C' == range)
+                  sb51.Append("+10 for target in building at close range\n");
+               else if ('M' == range)
+                  sb51.Append("+15 for target in building at medium range\n");
+               else if ('L' == range)
+                  sb51.Append("+25 for target in building at large range\n");
+               else
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                  return "ERROR";
+               }
+            }
+            if ((true == enemyUnit.IsFortification) && (false == enemyUnit.IsVehicle))
+            {
+               if ('C' == range)
+                  sb51.Append("+15 for target in fortification at close range\n");
+               else if ('M' == range)
+                  sb51.Append("+25 for target in fortification at medium range\n");
+               else if ('L' == range)
+                  sb51.Append("+35 for target in fortification at large range\n");
+               else
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                  return "ERROR";
+               }
+            }
+            //----------------------------
             if (true == enemyUnit.IsVehicle)
             {
-               if (true == gi.IsShermanDeliberateImmobilization)
-               {
-                  if ('C' == range)
-                     sb51.Append("+65 for deliberate immobilization\n");
-                  else if ('M' == range)
-                     sb51.Append("+55 for deliberate immobilization\n");
-                  else if ('L' == range)
-                     sb51.Append("+45 for deliberate immobilization\n");
-                  else
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
-                     return "ERROR";
-                  }
-               }
-               //----------------------------
                string enemyUnitType = enemyUnit.GetEnemyUnit();
                if ("ERROR" == enemyUnitType)
                {
@@ -2260,46 +2298,14 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): Reached Default enemyUnitType=" + enemyUnitType);
                      return "ERROR";
                }
-               //----------------------------
-               if (true == isShermanMoving)
-                  sb51.Append("+25 for moving or pivoting Sherman\n");
-               //----------------------------
-               if (true == enemyUnit.IsWoods)
+               if (true == gi.IsShermanDeliberateImmobilization)
                {
                   if ('C' == range)
-                     sb51.Append("+5 for target in woods at close range\n");
+                     sb51.Append("+65 for deliberate immobilization\n");
                   else if ('M' == range)
-                     sb51.Append("+10 for target in woods at medium range\n");
+                     sb51.Append("+55 for deliberate immobilization\n");
                   else if ('L' == range)
-                     sb51.Append("+15 for target in woods at large range\n");
-                  else
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
-                     return "ERROR";
-                  }
-               }
-               if ((true == enemyUnit.IsBuilding) && (false == enemyUnit.IsVehicle))
-               {
-                  if ('C' == range)
-                     sb51.Append("+10 for target in building at close range\n");
-                  else if ('M' == range)
-                     sb51.Append("+15 for target in building at medium range\n");
-                  else if ('L' == range)
-                     sb51.Append("+25 for target in building at large range\n");
-                  else
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
-                     return "ERROR";
-                  }
-               }
-               if ((true == enemyUnit.IsFortification) && (false == enemyUnit.IsVehicle))
-               {
-                  if ('C' == range)
-                     sb51.Append("+15 for target in fortification at close range\n");
-                  else if ('M' == range)
-                     sb51.Append("+25 for target in fortification at medium range\n");
-                  else if ('L' == range)
-                     sb51.Append("+35 for target in fortification at large range\n");
+                     sb51.Append("+45 for deliberate immobilization\n");
                   else
                   {
                      Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
@@ -2312,6 +2318,48 @@ namespace Pattons_Best
             return "None";
          else
             return sb51.ToString();
+      }
+      private bool UpdateEventContentGetToHitModifierImmobilization(IGameInstance gi, IMapItem enemyUnit)
+      {
+         if (null == myTextBlock)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifierImmobilization(): myTextBlock=null");
+            return false;
+         }
+         if ( null == gi.TargetMainGun)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifierImmobilization(): gi.TargetMainGun=null");
+            return false;
+         }
+         if ((true == gi.TargetMainGun.IsVehicle) && ("Direct" ==  gi.ShermanTypeOfFire) )
+         {
+            if (3 != enemyUnit.TerritoryCurrent.Name.Length)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifierImmobilization(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
+               return false;
+            }
+            CheckBox cbe053 = new CheckBox() { FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = System.Windows.VerticalAlignment.Center };
+            if( Utilities.NO_RESULT == gi.DieResults["e053b"][0])
+               cbe053.IsEnabled = true;
+            else
+               cbe053.IsEnabled = false;
+            if (true == gi.IsShermanDeliberateImmobilization)
+            {
+               cbe053.IsChecked = true;
+               cbe053.Unchecked += CheckBoxImmobilization_Unchecked;
+            }
+            else
+            {
+               cbe053.IsChecked = false;
+               cbe053.Checked += CheckBoxImmobilization_Checked;
+            }
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new InlineUIContainer(cbe053));
+            myTextBlock.Inlines.Add(new Run(" Check if trying to immobilize"));
+         }
+         //------------------------------------
+         return true;
       }
       private string UpdateEventContentRateOfFireModifier(IGameInstance gi)
       {
@@ -4603,7 +4651,7 @@ namespace Pattons_Best
             }
          }
       }
-      private void CheckBoxCmdFire_Checked(object sender, RoutedEventArgs e)
+      private void CheckBoxCmdrFire_Checked(object sender, RoutedEventArgs e)
       {
          CheckBox cb = (CheckBox)sender;
          cb.IsChecked = true;
@@ -4614,7 +4662,7 @@ namespace Pattons_Best
          }
          myGameInstance.IsCommanderDirectingMgFire = true;
       }
-      private void CheckBoxCmdFire_Unchecked(object sender, RoutedEventArgs e)
+      private void CheckBoxCmdrFire_Unchecked(object sender, RoutedEventArgs e)
       {
          CheckBox cb = (CheckBox)sender;
          cb.IsChecked = false;
@@ -4624,6 +4672,32 @@ namespace Pattons_Best
             return;
          }
          myGameInstance.IsCommanderDirectingMgFire = false;
+      }
+      private void CheckBoxImmobilization_Checked(object sender, RoutedEventArgs e)
+      {
+         CheckBox cb = (CheckBox)sender;
+         cb.IsChecked = true;
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CheckBoxCmdFire_Checked(): myGameInstance=null");
+            return;
+         }
+         myGameInstance.IsShermanDeliberateImmobilization = true;
+         if (false == OpenEvent(myGameInstance, myGameInstance.EventActive))
+            Logger.Log(LogEnum.LE_ERROR, "CheckBoxImmobilization_Checked(): OpenEvent() returned false ae=" + myGameInstance.EventActive );
+      }
+      private void CheckBoxImmobilization_Unchecked(object sender, RoutedEventArgs e)
+      {
+         CheckBox cb = (CheckBox)sender;
+         cb.IsChecked = false;
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CheckBoxCmdFire_Unchecked(): myGameInstance=null");
+            return;
+         }
+         myGameInstance.IsShermanDeliberateImmobilization = false;
+         if (false == OpenEvent(myGameInstance, myGameInstance.EventActive))
+            Logger.Log(LogEnum.LE_ERROR, "CheckBoxImmobilization_Checked(): OpenEvent() returned false ae=" + myGameInstance.EventActive );
       }
       private bool Button_ClickShowOther(string content, string name, out GameAction action)
       {
