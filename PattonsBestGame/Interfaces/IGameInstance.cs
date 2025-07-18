@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
 
 namespace Pattons_Best
 {
@@ -113,6 +110,7 @@ namespace Pattons_Best
       ITerritory? AdvanceFire { get; set; }
       ITerritory? FriendlyAdvance { get; set; }
       ITerritory? EnemyAdvance { get; set; }
+      ITerritories AreaTargets { get; set; }
       //------------------------------------------------
       bool IsHatchesActive { set; get; }
       //------------------------------------------------

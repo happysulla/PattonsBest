@@ -1,16 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
-using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
-using System.Xml.Linq;
-using Windows.Graphics.Printing3D;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Windows.Forms.AxHost;
 
 namespace Pattons_Best
 {

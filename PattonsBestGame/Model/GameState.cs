@@ -3593,7 +3593,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceFireAaMg:
-                  action = GameAction.BattleRoundSequenceShermanFiringSelectTarget;
+                  action = GameAction.BattleRoundSequenceShermanFiringSelectTargetMg;
                   gi.EventDisplayed = gi.EventActive = "e054"; // resolve attack
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   gi.TargetMg = null;
@@ -3608,7 +3608,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceFireBowMg:
-                  action = GameAction.BattleRoundSequenceShermanFiringSelectTarget;
+                  action = GameAction.BattleRoundSequenceShermanFiringSelectTargetMg;
                   gi.EventDisplayed = gi.EventActive = "e054"; // resolve attack
                   gi.TargetMg = null;
                   gi.DieRollAction = GameAction.DieRollActionNone;
@@ -3631,7 +3631,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceFireCoaxialMg:
-                  action = GameAction.BattleRoundSequenceShermanFiringSelectTarget;
+                  action = GameAction.BattleRoundSequenceShermanFiringSelectTargetMg;
                   gi.EventDisplayed = gi.EventActive = "e054"; // resolve attack
                   gi.TargetMg = null;
                   gi.DieRollAction = GameAction.DieRollActionNone;
@@ -3646,7 +3646,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceFireSubMg:
-                  action = GameAction.BattleRoundSequenceShermanFiringSelectTarget;
+                  action = GameAction.BattleRoundSequenceShermanFiringSelectTargetMg;
                   gi.EventDisplayed = gi.EventActive = "e054"; // resolve attack
                   gi.TargetMg = null;
                   gi.DieRollAction = GameAction.DieRollActionNone;
@@ -4512,6 +4512,13 @@ namespace Pattons_Best
          }
          foreach(string tName in tNames)
          {
+            ITerritory? t = Territories.theTerritories.Find(tName);
+            if( tName == null )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanMainGunTargets(): t=null for tName=" + tName);
+               return false;
+            }
+            gi.AreaTargets.Add(t);
             IStack? stack = gi.BattleStacks.Find(tName);
             if( null != stack )
             {

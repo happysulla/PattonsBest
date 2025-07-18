@@ -58,6 +58,7 @@ namespace Pattons_Best
       public ITerritory? AdvanceFire { get; set; } = null;
       public ITerritory? FriendlyAdvance { get; set; } = null;
       public ITerritory? EnemyAdvance { get; set; } = null;
+      public ITerritories AreaTargets { get; set; } = new Territories();
       //---------------------------------------------------------------
       public bool IsHatchesActive { set; get; } = false;
       //---------------------------------------------------------------

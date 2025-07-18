@@ -392,6 +392,14 @@ namespace Pattons_Best
                if ( false == UpdateCanvasShermanSelectTarget(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasShermanSelectTarget() returned error ");
                break;
+            case GameAction.BattleRoundSequenceShermanFiringSelectTargetMg:
+               foreach (Button b in myTankButtons)
+                  b.ContextMenu = null;
+               if (false == UpdateCanvasTank(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               if (false == UpdateCanvasShermanSelectTargetMg(gi))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasShermanSelectTargetMg() returned error ");
+               break;
             case GameAction.BattleRoundSequenceEnemyAction:
             case GameAction.BattleRoundSequenceShermanToHitRoll:
                if (false == UpdateCanvasTank(gi, action))
@@ -2076,6 +2084,23 @@ namespace Pattons_Best
                }
             }
          }
+         return true;
+      }
+      private bool UpdateCanvasShermanSelectTargetMg(IGameInstance gi)
+      {
+         //------------------------------------------------
+         foreach (IMapItem mi in gi.Targets) // All buttons in the target view are selected
+         {
+            foreach (Button b in myBattleButtons)
+            {
+               if (mi.Name == b.Name)
+               {
+                  b.BorderBrush = mySolidColorBrushRed;
+                  b.BorderThickness = new Thickness(3);
+               }
+            }
+         }
+         //------------------------------------------------
          return true;
       }
       //---------------------------------------
