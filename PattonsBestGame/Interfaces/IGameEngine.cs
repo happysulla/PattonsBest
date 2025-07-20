@@ -283,6 +283,9 @@ namespace Pattons_Best
       BattleRoundSequenceShermanFiringMachineGun,
       BattleRoundSequenceFireMachineGunRoll,
       BattleRoundSequenceFireMachineGunRollEnd,
+      BattleRoundSequencePlaceAdvanceFire,
+      BattleRoundSequencePlaceAdvanceFireRoll,
+      BattleRoundSequencePlaceAdvanceFireRollEnd,
 
       BattleRoundSequenceEnemyAction,
       BattleRoundSequenceCollateralDamageCheck,

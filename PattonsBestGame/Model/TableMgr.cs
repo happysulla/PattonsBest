@@ -6730,6 +6730,13 @@ namespace Pattons_Best
       }
       public static int GetShermanMgToKillModifier(IGameInstance gi, IMapItem enemyUnit)
       {
+         //------------------------------------
+         if (null == gi.TargetMg)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): gi.TargetMg=null");
+            return FN_ERROR;
+         }
+         //------------------------------------
          string mgType = "None";
          if (true == gi.IsShermanFiringAaMg)
             mgType = "Aa";
@@ -6757,12 +6764,6 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          //------------------------------------
-         if( null == gi.TargetMainGun )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): gi.TargetMainGun=null");
-            return FN_ERROR;
-         }
-         //------------------------------------
          string enemyUnitType = enemyUnit.GetEnemyUnit();
          if (("LW" != enemyUnitType) && ("MG" != enemyUnitType) && ("ATG" != enemyUnitType) && ("Pak38" != enemyUnitType) && ("Pak40" != enemyUnitType) && ("Pak43" != enemyUnitType) && ("TRUCK" != enemyUnitType))
          {
@@ -6770,25 +6771,75 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          //------------------------------------
-         bool isCommanderFiring = false;
-         bool isLoaderFiring = false;
-         bool isGunnerFiring = false;
-         bool isAssistantFiring = false;
+         int toKillModifierNum = 0;
          bool isMovingOrPivoting = false;
          foreach (IMapItem crewAction in gi.CrewActions)
          {
-            if ("Commander_FireAaMg" == crewAction.Name)
-               isCommanderFiring = true;
-            if ("Commander_FireSubMg" == crewAction.Name)
-               isCommanderFiring = true;
-            if ("Loader_FireAaMg" == crewAction.Name)
-               isLoaderFiring = true;
-            if ("Loader_FireSubMg" == crewAction.Name)
-               isLoaderFiring = true;
-            if ("Gunner_FireCoaxialMg" == crewAction.Name)
-               isGunnerFiring = true;
-            if ("Assistant_FireBowMg" == crewAction.Name)
-               isAssistantFiring = true;
+            if (("Commander_FireAaMg" == crewAction.Name) && ("Aa" == mgType)) 
+            {
+               ICrewMember? commander = gi.GetCrewMember("Commander");
+               if (null == commander)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): commander=null");
+                  return FN_ERROR;
+               }
+               toKillModifierNum -= commander.Rating;
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): commander rating -" + commander.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
+            }
+            if (("Commander_FireSubMg" == crewAction.Name) && ("Sub" == mgType))
+            {
+               ICrewMember? commander = gi.GetCrewMember("Commander");
+               if (null == commander)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): commander=null");
+                  return FN_ERROR;
+               }
+               toKillModifierNum -= commander.Rating;
+            }
+            if (("Loader_FireSubMg" == crewAction.Name) && ("Sub" == mgType))
+            {
+               ICrewMember? loader = gi.GetCrewMember("Loader");
+               if (null == loader)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): loader=null");
+                  return FN_ERROR;
+               }
+               toKillModifierNum -= loader.Rating;
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): gunner rating -" + loader.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
+            }
+            if (("Loader_FireAaMg" == crewAction.Name) && ("Aa" == mgType))
+            {
+               ICrewMember? loader = gi.GetCrewMember("Loader");
+               if (null == loader)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): loader=null");
+                  return FN_ERROR;
+               }
+               toKillModifierNum -= loader.Rating;
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): gunner rating -" + loader.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
+            }
+            if (("Gunner_FireCoaxialMg" == crewAction.Name) && ("Coaxial" == mgType))
+            {
+               ICrewMember? gunner = gi.GetCrewMember("Gunner");
+               if (null == gunner)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): gunner=null");
+                  return FN_ERROR;
+               }
+               toKillModifierNum -= gunner.Rating;
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): gunner rating -" + gunner.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
+            }
+            if (("Assistant_FireBowMg" == crewAction.Name) && ("Bow" == mgType))
+            {
+               ICrewMember? assistant = gi.GetCrewMember("Assistant");
+               if (null == assistant)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): assistant=null");
+                  return FN_ERROR;
+               }
+               toKillModifierNum -= assistant.Rating;
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): Assistant rating -" + assistant.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
+            }
             if ("Driver_Forward" == crewAction.Name)
                isMovingOrPivoting = true;
             if ("Driver_ForwardToHullDown" == crewAction.Name)
@@ -6800,8 +6851,6 @@ namespace Pattons_Best
             if ("Driver_PivotTank" == crewAction.Name)
                isMovingOrPivoting = true;
          }
-         //------------------------------------
-         int toKillModifierNum = 0;
          //------------------------------------
          if( true == gi.IsCommanderDirectingMgFire )
          {
@@ -6815,55 +6864,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): commander directing fire rating -" + commander.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
-         if (true == isCommanderFiring)
-         {
-            ICrewMember? commander = gi.GetCrewMember("Commander");
-            if (null == commander)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): commander=null");
-               return FN_ERROR;
-            }
-            toKillModifierNum -= commander.Rating;
-            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): commander rating -" + commander.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
-         }
-         //------------------------------------
-         if ( true==isLoaderFiring )
-         {
-            ICrewMember? loader = gi.GetCrewMember("Loader");
-            if (null == loader)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): loader=null");
-               return FN_ERROR;
-            }
-            toKillModifierNum -= loader.Rating;
-            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): gunner rating -" + loader.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
-         }
-         //------------------------------------
-         if (true == isGunnerFiring)
-         {
-            ICrewMember? gunner = gi.GetCrewMember("Gunner");
-            if (null == gunner)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): gunner=null");
-               return FN_ERROR;
-            }
-            toKillModifierNum -= gunner.Rating;
-            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): gunner rating -" + gunner.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
-         }
-         //------------------------------------
-         if (true == isAssistantFiring)
-         {
-            ICrewMember? assistant = gi.GetCrewMember("Assistant");
-            if (null == assistant)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): assistant=null");
-               return FN_ERROR;
-            }
-            toKillModifierNum -= assistant.Rating;
-            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): gunner rating -" + assistant.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
-         }
-         //------------------------------------
-         if( true == gi.TargetMainGun.IsMoving )
+         if( true == gi.TargetMg.IsMoving )
          {
             if( "Bow" == mgType )
             {
@@ -6898,13 +6899,13 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): sherman moving +10 mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
-         if (true == gi.TargetMainGun.IsWoods)
+         if (true == gi.TargetMg.IsWoods)
          {
             toKillModifierNum += 10;
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): in woods +10 mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
-         if (true == gi.TargetMainGun.IsBuilding) 
+         if (true == gi.TargetMg.IsBuilding) 
          {
             toKillModifierNum += 15;
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): in building +15 mod=" + toKillModifierNum.ToString());
@@ -6916,7 +6917,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): ATG +15 mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
-         if (true == gi.TargetMainGun.IsFortification)
+         if (true == gi.TargetMg.IsFortification)
          {
             toKillModifierNum += 20;
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): in IsFortification +20 mod=" + toKillModifierNum.ToString());

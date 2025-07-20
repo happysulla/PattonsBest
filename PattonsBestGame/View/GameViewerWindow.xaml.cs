@@ -694,7 +694,7 @@ namespace Pattons_Best
             menuItem1.Click += MenuItemCrewActionClick;
             myContextMenuCrewActions["Loader"].Items.Add(menuItem1);
          }
-         if ((true == isLoaderOpenHatch) && (0 < lastReport.Ammo50CalibreMG) && (false == isCommanderFireSubMg) && ("A" == card.myChasis) )
+         if ((true == isLoaderOpenHatch) && (false == isCommanderFireSubMg) && ("A" == card.myChasis) ) // Sub MG uses own ammo
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Loader_FireSubMg";
@@ -759,7 +759,7 @@ namespace Pattons_Best
          string gunload = myGameInstance.GetGunLoadType();
          myContextMenuCrewActions["Gunner"].Items.Clear();
          myContextMenuCrewActions["Gunner"].Visibility = Visibility.Visible;
-         if ( (0 < totalAmmo) && (false == gi.IsBrokenMainGun) && ("None" != gunload) )
+         if ( (0 < totalAmmo) && (false == gi.IsBrokenMainGun) && (false == gi.IsBrokenGunsight) && ("None" != gunload) )
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Gunner_FireMainGun";
@@ -902,7 +902,7 @@ namespace Pattons_Best
             menuItem1.Click += MenuItemCrewActionClick;
             myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
          }
-         if ((true == isCommanderOpenHatch) && (0 < lastReport.Ammo50CalibreMG) && (false == isLoaderFireSubMg) )
+         if ((true == isCommanderOpenHatch) && (false == isLoaderFireSubMg) )
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Commander_FireSubMg";
@@ -2101,6 +2101,16 @@ namespace Pattons_Best
             }
          }
          //------------------------------------------------
+         foreach (ITerritory t in gi.AreaTargets)
+         {
+            PointCollection points = new PointCollection();
+            foreach (IMapPoint mp1 in t.Points)
+               points.Add(new System.Windows.Point(mp1.X, mp1.Y));
+            Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = t.Name };
+            aPolygon.MouseDown += MouseDownPolygonPlaceAdvanceFire;
+            myPolygons.Add(aPolygon);
+            myCanvasMain.Children.Add(aPolygon);
+         }
          return true;
       }
       //---------------------------------------
@@ -2686,7 +2696,16 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonPlaceAdvanceFire(): t=null for " + clickedPolygon.Name.ToString());
             return;
          }
-         GameAction outAction = GameAction.BattlePlaceAdvanceFire;
+         foreach (IMapItem mi in myGameInstance.Targets)
+         {
+            foreach (Button b in myBattleButtons)
+               b.BorderThickness = new Thickness(0);
+         }
+         GameAction outAction = GameAction.Error;
+         if( GamePhase.BattleRoundSequence == myGameInstance.GamePhase )
+            outAction = GameAction.BattleRoundSequencePlaceAdvanceFire;
+         else if( GamePhase.Preparations == myGameInstance.GamePhase )
+            outAction = GameAction.BattlePlaceAdvanceFire;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
       private void MouseDownPolygonFriendlyAdvance(object sender, MouseButtonEventArgs e)

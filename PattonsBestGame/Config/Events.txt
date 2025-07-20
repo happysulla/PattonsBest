@@ -654,6 +654,18 @@ e054a	"<Bold>e054a MG Firing - Target Selected</Bold>
 The MG ammo is marked off the After Action Report <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Roll for results on the 
 <InlineUIContainer><Button Content='Sherman MG' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
 <LineBreak/><LineBreak/>"
+e054b	"<Bold>e054b MG Firing - Advancing Fire</Bold> 
+<InlineUIContainer><Button Content='r4.74.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<InlineUIContainer><Button Content='r22.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<LineBreak/><LineBreak/>
+Advancing fire attacks infantry targets that move into the zone. It also help protect against Panzerfaust attacks. 
+<LineBreak/><LineBreak/>
+Roll 2D for ammo expected:<LineBreak/>
+01 - 30 = 1 box expended<LineBreak/>
+31 - 97 = no effect<LineBreak/>
+98 - 100 = MG malfunctions
+<LineBreak/><LineBreak/>
+Die Roll = <InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer>"
 e060	"<Bold>e060 Reset Round</Bold> 
 <InlineUIContainer><Button Content='r4.77' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>

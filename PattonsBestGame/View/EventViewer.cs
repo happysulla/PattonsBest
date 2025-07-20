@@ -1708,7 +1708,7 @@ namespace Pattons_Best
                   return false;
                }
                break;
-            case "e054": //$$$$
+            case "e054": 
                if ( 0 < gi.Targets.Count )
                   myTextBlock.Inlines.Add(new Run("Select either a blue zone for area fire or a target enclosed by a red box. Only spotted units may be targeted."));
                foreach (IMapItem crewAction in gi.CrewActions)
@@ -1730,6 +1730,25 @@ namespace Pattons_Best
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): UpdateEventContentMgToKillVehicle() returned error for key=" + key);
                   return false;
+               }
+               break;
+            case "e054b":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  if (gi.DieResults[key][0] < 31) // Assume that sub MG do not use ammo
+                     myTextBlock.Inlines.Add("  =  Use One MG Ammo box.");
+                  else if (97 < gi.DieResults[key][0])
+                     myTextBlock.Inlines.Add("  =  MG malfunction!");
+                  else 
+                     myTextBlock.Inlines.Add("  =  No Effect.");
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  Image imge54b = new Image { Name = "Continue54b", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge54b));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
             case "e101":
@@ -2893,9 +2912,9 @@ namespace Pattons_Best
          }
          string key = gi.EventActive;
          //------------------------------------
-         if (null == gi.TargetMainGun)
+         if (null == gi.TargetMg)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill(): gi.TargetMainGun=null for key=" + key);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill(): gi.TargetMg=null for key=" + key);
             return false;
          }
          //------------------------------------
@@ -2918,13 +2937,13 @@ namespace Pattons_Best
          myTextBlock.Inlines.Add(new Run(modiferMgFiring));
          myTextBlock.Inlines.Add(new LineBreak());
          //------------------------------------
-         double toKillNum = TableMgr.GetShermanMgToKillNumber(gi, gi.TargetMainGun);
+         double toKillNum = TableMgr.GetShermanMgToKillNumber(gi, gi.TargetMg);
          if (TableMgr.FN_ERROR == toKillNum)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill(): GetShermanMgToKillNumber() returned error for key=" + key);
             return false;
          }
-         int modifier = TableMgr.GetShermanMgToKillModifier(gi, gi.TargetMainGun);
+         int modifier = TableMgr.GetShermanMgToKillModifier(gi, gi.TargetMg);
          if (TableMgr.FN_ERROR == modifier)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill(): GetShermanMgToKillModifier() returned error for key=" + key);
@@ -2960,6 +2979,15 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add("  =  NO EFFECT");
             else
                myTextBlock.Inlines.Add("  =  KILL");
+            StringBuilder sbe53e = new StringBuilder();
+            if ((1 == DieRoller.BlueDie) || (2 == DieRoller.BlueDie) || (3 == DieRoller.BlueDie) || (97 < gi.DieResults[key][0]))
+               sbe53e.Append("\n\n");
+            if (97 < gi.DieResults[key][0])
+               sbe53e.Append("MG Malfunction! ");
+            if (( 1 == DieRoller.BlueDie) || (2 == DieRoller.BlueDie) || (3 == DieRoller.BlueDie) )
+               sbe53e.Append("One MG Ammo Expended! ");
+            if( 0 < sbe53e.Length)
+               myTextBlock.Inlines.Add(new Run(sbe53e.ToString()));
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new Run("                                            "));
@@ -2974,9 +3002,9 @@ namespace Pattons_Best
       private string UpdateEventContentMgToKillModifier(IGameInstance gi)
       {
          //------------------------------------
-         if (null == gi.TargetMainGun)
+         if (null == gi.TargetMg)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): gi.TargetMainGun=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): gi.TargetMg=null");
             return "ERROR";
          }
          //------------------------------------
@@ -2995,19 +3023,19 @@ namespace Pattons_Best
             return "ERROR";
          }
          //------------------------------------
-         if (3 != gi.TargetMainGun.TerritoryCurrent.Name.Length)
+         if (3 != gi.TargetMg.TerritoryCurrent.Name.Length)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): 3 != TerritoryCurrent.Name.Length=" + gi.TargetMainGun.TerritoryCurrent.Name);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): 3 != TerritoryCurrent.Name.Length=" + gi.TargetMg.TerritoryCurrent.Name);
             return "ERROR";
          }
-         char range = gi.TargetMainGun.TerritoryCurrent.Name[2];
+         char range = gi.TargetMg.TerritoryCurrent.Name[2];
          if (('C' != range) && ('M' != range) && ('L' != range))
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): unknown range=" + range.ToString() + " t=" + gi.TargetMainGun.TerritoryCurrent.Name);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): unknown range=" + range.ToString() + " t=" + gi.TargetMg.TerritoryCurrent.Name);
             return "ERROR";
          }
          //------------------------------------
-         string enemyUnitType = gi.TargetMainGun.GetEnemyUnit();
+         string enemyUnitType = gi.TargetMg.GetEnemyUnit();
          if (("LW" != enemyUnitType) && ("MG" != enemyUnitType) && ("ATG" != enemyUnitType) && ("Pak38" != enemyUnitType) && ("Pak40" != enemyUnitType) && ("Pak43" != enemyUnitType) && ("TRUCK" != enemyUnitType))
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): MG fire not appropriate for enemyType=" + enemyUnitType);
@@ -3112,23 +3140,23 @@ namespace Pattons_Best
             sb.Append(" for assistant rating\n");
          }
          //------------------------------------
-         if (true == gi.TargetMainGun.IsMoving)
+         if (true == gi.TargetMg.IsMoving)
          {
             if ("Bow" == mgType)
             {
-               sb.Append("+10 for moving with bow MG\n");
+               sb.Append("+10 if target moving with bow MG\n");
             }
             else if ("Coaxial" == mgType)
             {
-               sb.Append("-15 for moving with co-axial MG\n");
+               sb.Append("-15 if target moving with co-axial MG\n");
             }
             else if ("Aa" == mgType)
             {
-               sb.Append("-15 for moving with AA MG\n");
+               sb.Append("-15 if target moving with AA MG\n");
             }
             else
             {
-               sb.Append("-5 for moving with Sub MG\n");
+               sb.Append("-5 if target moving with Sub MG\n");
             }
          }
          //------------------------------------
@@ -3137,19 +3165,26 @@ namespace Pattons_Best
             sb.Append("+10 for moving or pivoting\n");
          }
          //------------------------------------
-         if (true == gi.TargetMainGun.IsWoods)
+         if (true == gi.TargetMg.IsWoods)
          {
-            sb.Append("+10 for target in woods\n");
+            sb.Append("+10 if target in woods\n");
          }
          //------------------------------------
-         if ((true == gi.TargetMainGun.IsBuilding) || ("ATG" == enemyUnitType) || ("Pak38" == enemyUnitType) || ("Pak40" == enemyUnitType) || ("Pak43" == enemyUnitType))
+         if (true == gi.TargetMg.IsBuilding)
          {
-            sb.Append("+15 for target in building \n");
+            sb.Append("+15 if target in building \n");
          }
          //------------------------------------
-         if (true == gi.TargetMainGun.IsFortification)
+         if (("ATG" == enemyUnitType) || ("Pak38" == enemyUnitType) || ("Pak40" == enemyUnitType) || ("Pak43" == enemyUnitType))
          {
-            sb.Append("+20 for target in fortification\n");
+            sb.Append("+15 if target is ");
+            sb.Append(enemyUnitType);
+            sb.Append("\n");
+         }
+         //------------------------------------
+         if (true == gi.TargetMg.IsFortification)
+         {
+            sb.Append("+20 if target in fortification\n");
          }
          return sb.ToString() ;
       }
@@ -4536,6 +4571,10 @@ namespace Pattons_Best
                            break;
                         case "Continue54a":
                            action = GameAction.BattleRoundSequenceFireMachineGunRollEnd;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Continue54b":
+                           action = GameAction.BattleRoundSequencePlaceAdvanceFireRollEnd;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue60":

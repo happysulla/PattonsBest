@@ -1555,7 +1555,7 @@ namespace Pattons_Best
                diceRoll = 100;
             else
                diceRoll = die1 + 10 * die2;
-            diceRoll = 45; // <cgs> TEST -  tanks
+            //diceRoll = 45; // <cgs> TEST -  tanks
             //diceRoll = 51; // <cgs> TEST -  ATG
             string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
             IMapItem? mi = null;
@@ -3654,6 +3654,7 @@ namespace Pattons_Best
                   gi.IsShermanFiringBowMg = false;
                   gi.IsShermanFiringCoaxialMg = false;
                   gi.IsShermanFiringSubMg = true;
+                  gi.TargetMg = null;
                   if (false == GetShermanMgTargets(gi, "Sub"))
                   {
                      returnStatus = "GetShermanMgTargets() returned faulse";
@@ -3664,9 +3665,14 @@ namespace Pattons_Best
                   gi.EventDisplayed = gi.EventActive = "e054a";
                   gi.DieRollAction = GameAction.BattleRoundSequenceFireMachineGunRoll;
                   if (true == gi.IsShermanFiringAaMg) gi.IsShermanFiredAaMg = true;
-                  if (true == gi.IsShermanFiringBowMg) gi.IsShermanFiredBowMg = true;
-                  if (true == gi.IsShermanFiringCoaxialMg) gi.IsShermanFiredCoaxialMg = true;
-                  if (true == gi.IsShermanFiringSubMg) gi.IsShermanFiredSubMg = true;
+                  else if (true == gi.IsShermanFiringBowMg) gi.IsShermanFiredBowMg = true;
+                  else if (true == gi.IsShermanFiringCoaxialMg) gi.IsShermanFiredCoaxialMg = true;
+                  else if (true == gi.IsShermanFiringSubMg) gi.IsShermanFiredSubMg = true;
+                  else
+                  {
+                     returnStatus = "reached default no MG selected";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanFiringMachineGun): " + returnStatus);
+                  }
                   break;
                case GameAction.BattleRoundSequenceFireMachineGunRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
@@ -3681,6 +3687,19 @@ namespace Pattons_Best
                      }
                      else
                      {
+                        if( (1==DieRoller.BlueDie) || (2 == DieRoller.BlueDie) || (3 == DieRoller.BlueDie) ) // expend ammo if blue die = 1, 2, or 3
+                        {
+                           if (true == gi.IsShermanFiringAaMg) lastReport.Ammo50CalibreMG--;
+                           else if (true == gi.IsShermanFiringBowMg) lastReport.Ammo30CalibreMG--;
+                           else if (true == gi.IsShermanFiringCoaxialMg) lastReport.Ammo30CalibreMG--;
+                           else if (true == gi.IsShermanFiringSubMg) { } // do nothing
+                           else
+                           {
+                              returnStatus = "unknown MG";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceFireMachineGunRoll): " + returnStatus);
+                           }
+                        }
+                        //------------------------------------------------------------------
                         double toKillNum = TableMgr.GetShermanMgToKillNumber(gi, gi.TargetMg);
                         if (TableMgr.FN_ERROR == toKillNum)
                         {
@@ -3732,7 +3751,93 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceFireMgSkip:
+                  gi.TargetMg = null;
+                  gi.Targets.Clear();
+                  gi.AreaTargets.Clear();
                   gi.CrewActionPhase = CrewActionPhase.ReplacePeriscope;
+                  if (false == ConductCrewAction(gi, ref action))
+                  {
+                     returnStatus = "ConductCrewAction() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceFireMgSkip): " + returnStatus);
+                  }
+                  break;
+               case GameAction.BattleRoundSequencePlaceAdvanceFire: //*************
+                  if (null == gi.AdvanceFire)
+                  {
+                     returnStatus = "gi.AdvanceFire=null";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequencePlaceAdvanceFire): " + returnStatus);
+                  }
+                  else
+                  {
+                     IMapPoint mp1 = Territory.GetRandomPoint(gi.AdvanceFire, Utilities.theMapItemOffset);
+                     string miName = "AdvanceFire" + Utilities.MapItemNum;
+                     Utilities.MapItemNum++;
+                     IMapItem? advanceMg = null;
+                     if (true == gi.IsShermanFiringAaMg)
+                     {
+                        gi.IsShermanFiredAaMg = true;
+                        advanceMg = new MapItem(miName, 1.0, "c45AdvanceFireAaMg", gi.AdvanceFire);
+                     }
+                     else if (true == gi.IsShermanFiringBowMg)
+                     {
+                        gi.IsShermanFiredBowMg = true;
+                        advanceMg = new MapItem(miName, 1.0, "c46AdvanceFireBowMg", gi.AdvanceFire);
+                     }
+                     else if (true == gi.IsShermanFiringCoaxialMg)
+                     {
+                        gi.IsShermanFiredCoaxialMg = true;
+                        advanceMg = new MapItem(miName, 1.0, "c47AdvanceFireCoaxialMg", gi.AdvanceFire); ;
+                     }
+                     else if (true == gi.IsShermanFiringSubMg)
+                     {
+                        gi.IsShermanFiredSubMg = true;
+                        advanceMg = new MapItem(miName, 1.0, "c46AdvanceFireSubMg", gi.AdvanceFire);
+                     }
+                     if (null == advanceMg)
+                     {
+                        returnStatus = "advanceMg = null";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequencePlaceAdvanceFire): " + returnStatus);
+                     }
+                     else
+                     {
+                        advanceMg.Location = mp1;
+                        gi.BattleStacks.Add(advanceMg);
+                        gi.AdvanceFire = null;
+                        gi.Targets.Clear();
+                        gi.AreaTargets.Clear();
+                        gi.EventDisplayed = gi.EventActive = "e054b";
+                        gi.DieRollAction = GameAction.BattleRoundSequencePlaceAdvanceFireRoll;
+                     }
+                  }
+                  break;
+               case GameAction.BattleRoundSequencePlaceAdvanceFireRoll:
+                  gi.DieResults[key][0] = dieRoll;
+                  if(gi.DieResults[key][0] < 31) // Assume that sub MG do not use ammo
+                  {
+                     if (true == gi.IsShermanFiringAaMg)
+                        lastReport.Ammo50CalibreMG--;
+                     else if ((true == gi.IsShermanFiringBowMg) || (true == gi.IsShermanFiringCoaxialMg))
+                        lastReport.Ammo30CalibreMG--;
+                  }
+                  else if (97 < gi.DieResults[key][0])
+                  {
+                     if (true == gi.IsShermanFiringAaMg)
+                        gi.IsBrokenMgAntiAircraft = true;
+                     else if (true == gi.IsShermanFiringBowMg)
+                        gi.IsBrokenMgBow = true;
+                     else if (true == gi.IsShermanFiringCoaxialMg)
+                        gi.IsBrokenMgCoaxial = true;
+                     else if (true == gi.IsShermanFiringSubMg) {  }  // do nothing
+                     else
+                     {
+                        returnStatus = "reached default no MG fired";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequencePlaceAdvanceFireRoll): " + returnStatus);
+                     }
+                  }
+                  break;
+               case GameAction.BattleRoundSequencePlaceAdvanceFireRollEnd:
+                  gi.DieResults[key][0] = Utilities.NO_RESULT; 
+                  gi.CrewActionPhase = CrewActionPhase.TankMgFire;
                   if (false == ConductCrewAction(gi, ref action))
                   {
                      returnStatus = "ConductCrewAction() returned false";
@@ -3989,15 +4094,6 @@ namespace Pattons_Best
       private bool BattleRoundSequenceStart(IGameInstance gi, ref GameAction action)
       {
          //-------------------------------------------------------
-         // Reset the battle round
-         gi.IsMinefieldAttack = false;
-         gi.IsHarrassingFire = false;
-         gi.IsFlankingFire = false;
-         gi.IsEnemyAdvanceComplete = false;
-         gi.NumOfShermanShot = 0;
-         gi.TargetMainGun = null;           // Reset the battle round
-         gi.IsShermanFiringAtFront = false; // Reset the battle round
-         //-------------------------------------------------------
          Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "BattleRoundSequenceStart(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Spotting");
          gi.BattlePhase = BattlePhase.Spotting;
          int smokeCount = 0;
@@ -4206,9 +4302,9 @@ namespace Pattons_Best
             }
             else if ( (true == isTankFiringMainGun) && ((false == gi.Sherman.IsMoved) || (true == card.myIsHvss) ) )
             {
-               if (false == GetShermanMainGunTargets(gi, ref outAction))
+               if (false == GetShermanTargets(gi, ref outAction))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): GetShermanMainGunTargets() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): GetShermanTargets() returned false");
                   return false;
                }
                if( 0 < gi.Targets.Count )
@@ -4248,7 +4344,7 @@ namespace Pattons_Best
                if (("Commander_FireAaMg" == crewAction.Name) && (false == gi.IsShermanFiredAaMg) )
                   isMgFire = true;
             }
-            if( true == isMgFire)
+            if ( true == isMgFire)
             {
                gi.EventDisplayed = gi.EventActive = "e054";
                gi.DieRollAction = GameAction.DieRollActionNone;
@@ -4467,9 +4563,10 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool GetShermanMainGunTargets(IGameInstance gi, ref GameAction outAction)
+      private bool GetShermanTargets(IGameInstance gi, ref GameAction outAction)
       {
          gi.Targets.Clear();
+         gi.AreaTargets.Clear();
          List<String> tNames = new List<String>(); 
          double rotation = gi.Sherman.RotationHull + gi.Sherman.RotationTurret;
          if (359 < rotation)
@@ -4507,18 +4604,11 @@ namespace Pattons_Best
                tNames.Add("B4L");
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetShermanMainGunTargets(): reached default for rotation=" + rotation.ToString());
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanTargets(): reached default for rotation=" + rotation.ToString());
                return false;
          }
          foreach(string tName in tNames)
          {
-            ITerritory? t = Territories.theTerritories.Find(tName);
-            if( tName == null )
-            {
-               Logger.Log(LogEnum.LE_ERROR, "GetShermanMainGunTargets(): t=null for tName=" + tName);
-               return false;
-            }
-            gi.AreaTargets.Add(t);
             IStack? stack = gi.BattleStacks.Find(tName);
             if( null != stack )
             {
@@ -5150,6 +5240,8 @@ namespace Pattons_Best
       private bool GetShermanMgTargets(IGameInstance gi, string mgType)
       {
          gi.Targets.Clear();
+         gi.TargetMg = null;
+         gi.AreaTargets.Clear();
          List<String> tNames = new List<String>();
          if (("Aa" == mgType) || (("Sub" == mgType)))
          {
@@ -5212,19 +5304,26 @@ namespace Pattons_Best
                   tNames.Add("B4L");
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetShermanMainGunTargets(): reached default for rotation=" + rotation.ToString());
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanTargets(): reached default for rotation=" + rotation.ToString());
                   return false;
             }
          }
          else
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanMainGunTargets(): reached default for mgType=" + mgType);
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanTargets(): reached default for mgType=" + mgType);
             return false;
          }
          //---------------------------------------------
          foreach (string tName in tNames)
          {
-            IStack? stack = gi.BattleStacks.Find(tName);
+            ITerritory? t = Territories.theTerritories.Find(tName);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanTargets(): t=null for tName=" + tName);
+               return false;
+            }
+            gi.AreaTargets.Add(t);
+            IStack? stack = gi.BattleStacks.Find(t);
             if (null != stack)
             {
                foreach (IMapItem mi in stack.MapItems)
@@ -5315,9 +5414,6 @@ namespace Pattons_Best
          gi.IsShermanFiredBowMg = false;
          gi.IsShermanFiredCoaxialMg = false;
          gi.IsShermanFiredSubMg = false;
-         gi.IsBrokenMgAntiAircraft = false;
-         gi.IsBrokenMgBow = false;
-         gi.IsBrokenMgCoaxial = false;
          //-------------------------------------------------------
          gi.IsShermanTurretRotated = false;
          gi.ShermanRotationTurretOld = gi.Sherman.RotationTurret ;
@@ -5424,6 +5520,18 @@ namespace Pattons_Best
                case GameAction.EveningDebriefingStart: // Only change active event
                   gi.EventDisplayed = gi.EventActive = "e100";
                   gi.DieRollAction = GameAction.DieRollActionNone;
+                   gi.IsMinefieldAttack = false; // Reset the battle round
+                  gi.IsHarrassingFire = false;
+                  gi.IsFlankingFire = false;
+                  gi.IsEnemyAdvanceComplete = false;
+                  gi.NumOfShermanShot = 0;
+                  gi.TargetMainGun = null;           // Reset the battle round
+                  gi.IsShermanFiringAtFront = false; // Reset the battle round
+                  gi.IsBrokenMgAntiAircraft = false;
+                  gi.IsBrokenMgBow = false;
+                  gi.IsBrokenMgCoaxial = false;
+                  gi.IsBrokenGunsight = false;
+                  gi.IsBrokenMainGun = false;
                   gi.NewMembers.Clear();  // clear out tank card
                   gi.ReadyRacks.Clear();
                   gi.Hatches.Clear();
