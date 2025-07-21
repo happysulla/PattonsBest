@@ -68,11 +68,13 @@ namespace Pattons_Best
       public bool IsShermanDeliberateImmobilization { set; get; } = false;
       public int NumOfShermanShot { set; get; } = 0;
       public int NumSmokeAttacksThisRound { set; get; } = 0;
+      public bool IsMalfunctionedMainGun { set; get; } = false;
       public bool IsBrokenMainGun { set; get; } = false;
       public bool IsBrokenGunsight { set; get; } = false;
       public Dictionary<string, bool> FirstShots { set; get; } = new Dictionary<string, bool>();
       public Dictionary<string, int> AcquiredShots { set; get; } = new Dictionary<string, int>();
       public List<ShermanAttack> ShermanHits { set; get; } = new List<ShermanAttack>();
+      public ShermanDeath? Death { set; get; } = null;
       //---------------------------------------------------------------
       public bool IsShermanFiringAaMg { set; get; } = false;
       public bool IsShermanFiringBowMg { set; get; } = false;
@@ -83,10 +85,18 @@ namespace Pattons_Best
       public bool IsShermanFiredBowMg { set; get; } = false;
       public bool IsShermanFiredCoaxialMg { set; get; } = false;
       public bool IsShermanFiredSubMg { set; get; } = false;
+      public bool IsMalfunctionedMgAntiAircraft { set; get; } = false;
+      public bool IsMalfunctionedMgBow { set; get; } = false;
+      public bool IsMalfunctionedMgCoaxial { set; get; } = false;
       public bool IsBrokenMgAntiAircraft { set; get; } = false;
       public bool IsBrokenMgBow { set; get; } = false;
       public bool IsBrokenMgCoaxial { set; get; } = false;
-      public bool IsBrokenMgSub { set; get; } = false;
+      //---------------------------------------------------------------
+      public bool IsBrokenPeriscopeDriver { set; get; } = false;
+      public bool IsBrokenPeriscopeLoader { set; get; } = false;
+      public bool IsBrokenPeriscopeAssistant { set; get; } = false;
+      public bool IsBrokenPeriscopeGunner { set; get; } = false;
+      public bool IsBrokenPeriscopeCommander { set; get; } = false;
       //---------------------------------------------------------------
       public bool IsShermanTurretRotated { set; get; } = false;
       public double ShermanRotationTurretOld { set; get; } = 0.0;
@@ -94,27 +104,23 @@ namespace Pattons_Best
       public bool IsLeadTank { set; get; } = false;
       public bool IsAirStrikePending { set; get; } = false;
       public bool IsAdvancingFireChosen { set; get; } = false;
+      public int AdvancingFireMarkerCount { set; get; } = 0;
+      public EnumResistance BattleResistance { set; get; } = EnumResistance.None;
       //---------------------------------------------------------------
       public bool IsMinefieldAttack { set; get; } = false;
       public bool IsHarrassingFire { set; get; } = false;
       public bool IsFlankingFire { set; get; } = false;
       public bool IsEnemyAdvanceComplete { set; get; } = false;
-      public int AdvancingFireMarkerCount { set; get; } = 0;
-      //---------------------------------------------------------------
-      public bool IsCommanderRescuePerformed { set; get; } = false;
-      public bool IsPromoted { set; get; } = false;
+      public PanzerfaustAttack? Panzerfaust { set; get; } = null;
+      public int NumCollateralDamage { set; get; } = 0;
       //---------------------------------------------------------------
       public int VictoryPtsTotalCampaign { get; set; } = 0;
       public int PromotionPointNum { get; set; } = 0;
       public int PromotionDay { get; set; } = -1;
       public int NumPurpleHeart { get; set; } = 0;
+      public bool IsCommanderRescuePerformed { set; get; } = false;
+      public bool IsPromoted { set; get; } = false;
       //---------------------------------------------------------------
-      public EnumResistance BattleResistance { set; get; } = EnumResistance.None;
-      public Dictionary<string, bool> BrokenPeriscopes { set; get; } = new Dictionary<string, bool>();
-      public ShermanDeath? Death { set; get; } = null;
-      public PanzerfaustAttack? Panzerfaust { set; get; } = null;
-      public int NumCollateralDamage { set; get; } = 0;
-      //------------------------------------------------
       public IMapItemMoves MapItemMoves { get; set; } = new MapItemMoves();
       public IStacks MoveStacks { get; set; } = new Stacks();
       public IStacks BattleStacks { get; set; } = new Stacks();

@@ -139,10 +139,16 @@ namespace Pattons_Best
             myStatusBar.Items.Add(imgAF);
          }
          //-------------------------------------------------------
-         if (0 < gi.BrokenPeriscopes.Count)
+         int numBrokenScopes = 0;
+         if (true == gi.IsBrokenPeriscopeDriver) numBrokenScopes++;
+         if (true == gi.IsBrokenPeriscopeLoader) numBrokenScopes++;
+         if (true == gi.IsBrokenPeriscopeAssistant) numBrokenScopes++;
+         if (true == gi.IsBrokenPeriscopeGunner) numBrokenScopes++;
+         if (true == gi.IsBrokenPeriscopeCommander) numBrokenScopes++;
+         if (0  <  numBrokenScopes)
          {
             myStatusBar.Items.Add(new Separator());
-            Label labelBrokenScope = new Label() { FontFamily = myFontFam, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = gi.BrokenPeriscopes.Count.ToString() };
+            Label labelBrokenScope = new Label() { FontFamily = myFontFam, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = numBrokenScopes.ToString() };
             Image imgBrokenScope = new Image { Source = MapItem.theMapImages.GetBitmapImage("BrokenPeriscope"), Width = 50, Height = 30 };
             myStatusBar.Items.Add(labelBrokenScope);
             myStatusBar.Items.Add(imgBrokenScope);
@@ -151,12 +157,37 @@ namespace Pattons_Best
          if (true == gi.IsBrokenGunsight)
          {
             myStatusBar.Items.Add(new Separator());
-            Label labelBrokenSite = new Label() { FontFamily = myFontFam, FontSize = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = gi.BrokenPeriscopes.Count.ToString() };
             Image imgBrokenSite = new Image { Source = MapItem.theMapImages.GetBitmapImage("BrokenGunsight"), Width = 30, Height = 30 };
-            myStatusBar.Items.Add(labelBrokenSite);
             myStatusBar.Items.Add(imgBrokenSite);
          }
-
+         //-------------------------------------------------------
+         if (true == gi.IsMalfunctionedMainGun)
+         {
+            myStatusBar.Items.Add(new Separator());
+            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c118MalFunctionMainGun"), Width = 30, Height = 30 };
+            myStatusBar.Items.Add(imgMalfunctingMg);
+         }
+         //-------------------------------------------------------
+         if (true == gi.IsMalfunctionedMgAntiAircraft)
+         {
+            myStatusBar.Items.Add(new Separator());
+            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c115MalfunctionAaMg"), Width = 30, Height = 30 };
+            myStatusBar.Items.Add(imgMalfunctingMg);
+         }
+         //-------------------------------------------------------
+         if (true == gi.IsMalfunctionedMgBow)
+         {
+            myStatusBar.Items.Add(new Separator());
+            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c116MalFunctionBowMg"), Width = 30, Height = 30 };
+            myStatusBar.Items.Add(imgMalfunctingMg);
+         }
+         //-------------------------------------------------------
+         if (true == gi.IsMalfunctionedMgCoaxial)
+         {
+            myStatusBar.Items.Add(new Separator());
+            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c117MalFunctionCoaxialMg"), Width = 30, Height = 30 };
+            myStatusBar.Items.Add(imgMalfunctingMg);
+         }
       }
       //-----------------------------------------------------------------
       private void ButtonEventActive_Click(object sender, RoutedEventArgs e)

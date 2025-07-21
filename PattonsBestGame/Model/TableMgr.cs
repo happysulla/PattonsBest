@@ -2634,27 +2634,27 @@ namespace Pattons_Best
             return "No Effect";
          if (dieRoll < 53)
          {
-            gi.BrokenPeriscopes["Driver"] = true;
+            gi.IsBrokenPeriscopeDriver = true;
             return "Driver Periscope Broken";
          }
          if (dieRoll < 55)
          {
-            gi.BrokenPeriscopes["Assistant"] = true;
+            gi.IsBrokenPeriscopeAssistant = true;
             return "Assistant Periscope Broken";
          }
          if (dieRoll < 58)
          {
-            gi.BrokenPeriscopes["Gunner"] = true;
+            gi.IsBrokenPeriscopeGunner = true;
             return "Gunner Periscope Broken";
          }
          if (dieRoll < 61)
          {
-            gi.BrokenPeriscopes["Loader"] = true;
+            gi.IsBrokenPeriscopeLoader = true;
             return "Loader Periscope Broken";
          }
          if (dieRoll < 64)
          {
-            gi.BrokenPeriscopes["Commander"] = true;
+            gi.IsBrokenPeriscopeCommander = true;
             return "Commander Periscope Broken";
          }
          if (dieRoll < 66)

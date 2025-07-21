@@ -120,16 +120,35 @@ namespace Pattons_Best
       bool IsShermanDeliberateImmobilization { set; get; }
       int NumOfShermanShot { set; get; }
       int NumSmokeAttacksThisRound { set; get; }
+      bool IsMalfunctionedMainGun { set; get; }
+      bool IsBrokenMainGun { set; get; }
+      bool IsBrokenGunsight { set; get; }
+      Dictionary<string, bool> FirstShots { set; get; }
+      Dictionary<string, int> AcquiredShots { set; get; }
+      List<ShermanAttack> ShermanHits { set; get; }
+      ShermanDeath? Death { set; get; }
       //------------------------------------------------
-      bool IsCommanderDirectingMgFire { set; get; }
       bool IsShermanFiringAaMg { set; get; }
       bool IsShermanFiringBowMg { set; get; }
       bool IsShermanFiringCoaxialMg { set; get; }
       bool IsShermanFiringSubMg { set; get; }
+      bool IsCommanderDirectingMgFire { set; get; }
       bool IsShermanFiredAaMg { set; get; }
       bool IsShermanFiredBowMg { set; get; }
       bool IsShermanFiredCoaxialMg { set; get; }
       bool IsShermanFiredSubMg { set; get; }
+      bool IsMalfunctionedMgCoaxial { set; get; }
+      bool IsMalfunctionedMgBow { set; get; }
+      bool IsMalfunctionedMgAntiAircraft { set; get; }
+      bool IsBrokenMgAntiAircraft { set; get; }
+      bool IsBrokenMgBow { set; get; }
+      bool IsBrokenMgCoaxial { set; get; }
+      //------------------------------------------------
+      bool IsBrokenPeriscopeDriver { set; get; }
+      bool IsBrokenPeriscopeLoader { set; get; }
+      bool IsBrokenPeriscopeAssistant { set; get; }
+      bool IsBrokenPeriscopeGunner { set; get; }
+      bool IsBrokenPeriscopeCommander { set; get; }
       //------------------------------------------------
       bool IsShermanTurretRotated { set; get; }
       double ShermanRotationTurretOld { set; get; }
@@ -137,33 +156,22 @@ namespace Pattons_Best
       bool IsLeadTank { set; get; }
       bool IsAirStrikePending { set; get; }
       bool IsAdvancingFireChosen { set; get; }
-      bool IsBrokenMainGun { set; get; }
-      bool IsBrokenGunsight { set; get; }
-      bool IsBrokenMgCoaxial { set; get; }
-      bool IsBrokenMgBow { set; get; }
-      bool IsBrokenMgAntiAircraft { set; get; }
-      bool IsCommanderRescuePerformed { set; get; }
+      int AdvancingFireMarkerCount { set; get; }
+      EnumResistance BattleResistance { set; get; }
       //------------------------------------------------
       bool IsMinefieldAttack { set; get; }
       bool IsHarrassingFire { set; get; }
       bool IsFlankingFire { set; get; }
       bool IsEnemyAdvanceComplete { set; get; }
-      bool IsPromoted { set; get; }
+      PanzerfaustAttack? Panzerfaust { set; get; }
+      int NumCollateralDamage { set; get; }
       //------------------------------------------------
       int VictoryPtsTotalCampaign { get; set; }
       int PromotionPointNum { get; set; }
       int PromotionDay { get; set; }
       int NumPurpleHeart { get; set; }
-      //------------------------------------------------
-      int AdvancingFireMarkerCount { set; get; }
-      EnumResistance BattleResistance { set; get; }
-      Dictionary<string,bool> BrokenPeriscopes { set; get; }
-      Dictionary<string, bool> FirstShots { set; get; }
-      Dictionary<string, int> AcquiredShots { set; get; }
-      ShermanDeath? Death { set; get; }
-      PanzerfaustAttack? Panzerfaust { set; get; }
-      List<ShermanAttack> ShermanHits { set; get; }
-      int NumCollateralDamage { set; get; }
+      bool IsCommanderRescuePerformed { set; get; }
+      bool IsPromoted { set; get; }
       //------------------------------------------------
       IMapItemMoves MapItemMoves { set; get; }
       IStacks MoveStacks { set; get; }

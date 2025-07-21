@@ -3822,11 +3822,11 @@ namespace Pattons_Best
                   else if (97 < gi.DieResults[key][0])
                   {
                      if (true == gi.IsShermanFiringAaMg)
-                        gi.IsBrokenMgAntiAircraft = true;
+                        gi.IsMalfunctionedMgAntiAircraft = true;
                      else if (true == gi.IsShermanFiringBowMg)
-                        gi.IsBrokenMgBow = true;
+                        gi.IsMalfunctionedMgBow = true;
                      else if (true == gi.IsShermanFiringCoaxialMg)
-                        gi.IsBrokenMgCoaxial = true;
+                        gi.IsMalfunctionedMgCoaxial = true;
                      else if (true == gi.IsShermanFiringSubMg) {  }  // do nothing
                      else
                      {
@@ -4373,6 +4373,8 @@ namespace Pattons_Best
             if (true == isReplacePeriscope)
             {
                gi.CrewActionPhase = CrewActionPhase.ReplacePeriscope;
+               gi.EventDisplayed = gi.EventActive = "e055";
+               gi.DieRollAction = GameAction.DieRollActionNone;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 10-phase=" + gi.CrewActionPhase.ToString());
             }
          }
@@ -4381,27 +4383,24 @@ namespace Pattons_Best
          {
             gi.CrewActionPhase = CrewActionPhase.FireMortar;
             bool isRepairGun = false;
-            bool isRepairGunHelp = false;
-            bool isRepairCoaxialMg = false;
-            bool isRepairBowMg = false;
-            bool isRepairAaMg = false;
             foreach (IMapItem crewAction in gi.CrewActions)
             {
-               if ("Gunner_RepairMainGun" == crewAction.Name)
-                  isRepairGun = true;
                if ("Loader_RepairMainGun" == crewAction.Name)
-                  isRepairGunHelp = true;
+                  isRepairGun = true;
                if ("Loader_RepairCoaxialMg" == crewAction.Name)
-                  isRepairCoaxialMg = true;
+                  isRepairGun = true;
                if ("Assistant_RepairBowMg" == crewAction.Name)
-                  isRepairBowMg = true;
+                  isRepairGun = true;
                if ("Loader_RepairAaMg" == crewAction.Name)
-                  isRepairAaMg = true;
+                  isRepairGun = true;
                if ("Commander_RepairAaMg" == crewAction.Name)
-                  isRepairAaMg = true;
+                  isRepairGun = true;
             }
             if (true == isRepairGun)
             {
+               outAction = GameAction.BattleRoundSequenceShermanRepairGun;
+               gi.EventDisplayed = gi.EventActive = "e056";
+               gi.DieRollAction = GameAction.DieRollActionNone;
                gi.CrewActionPhase = CrewActionPhase.RepairGun;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 11-phase=" + gi.CrewActionPhase.ToString());
             }
@@ -4681,7 +4680,7 @@ namespace Pattons_Best
          if (dieRoll < 4)
             isCriticalHit = true; 
          if ( 97 < dieRoll ) 
-            gi.IsBrokenMainGun = true;
+            gi.IsMalfunctionedMainGun = true;
          //---------------------------------------------------------------
          if (toHitNumber < dieRoll) // Miss Target - move to next Crew Action
          {
@@ -4740,7 +4739,7 @@ namespace Pattons_Best
             return false;
          }
          //---------------------------------------------------------------
-         if ( (dieRoll <= rateOfFireNumber) && (false == gi.IsBrokenMainGun) && ("None" != gi.GetGunLoadType()) )
+         if ( (dieRoll <= rateOfFireNumber) && (false == gi.IsMalfunctionedMainGun) && ("None" != gi.GetGunLoadType()) )
          {
             gi.DieResults["e053c"][0] = gi.DieResults["e053b"][0];
             gi.DieResults["e053b"][0] = Utilities.NO_RESULT;
@@ -5527,11 +5526,11 @@ namespace Pattons_Best
                   gi.NumOfShermanShot = 0;
                   gi.TargetMainGun = null;           // Reset the battle round
                   gi.IsShermanFiringAtFront = false; // Reset the battle round
-                  gi.IsBrokenMgAntiAircraft = false;
-                  gi.IsBrokenMgBow = false;
-                  gi.IsBrokenMgCoaxial = false;
+                  gi.IsMalfunctionedMgAntiAircraft = false;
+                  gi.IsMalfunctionedMgBow = false;
+                  gi.IsMalfunctionedMgCoaxial = false;
                   gi.IsBrokenGunsight = false;
-                  gi.IsBrokenMainGun = false;
+                  gi.IsMalfunctionedMainGun = false;
                   gi.NewMembers.Clear();  // clear out tank card
                   gi.ReadyRacks.Clear();
                   gi.Hatches.Clear();
@@ -5837,7 +5836,7 @@ namespace Pattons_Best
          gi.IsShermanFirstShot = false;
          gi.IsShermanDeliberateImmobilization = false;
          gi.NumOfShermanShot = 0;
-         gi.IsBrokenMainGun = false;
+         gi.IsMalfunctionedMainGun = false;
          gi.IsBrokenGunsight = false;
          gi.FirstShots.Clear();
          gi.AcquiredShots.Clear();
@@ -5852,9 +5851,15 @@ namespace Pattons_Best
          gi.IsShermanFiredBowMg = false;
          gi.IsShermanFiredCoaxialMg = false;
          gi.IsShermanFiredSubMg = false;
-         gi.IsBrokenMgAntiAircraft = false;
-         gi.IsBrokenMgBow = false;
-         gi.IsBrokenMgCoaxial = false;
+         gi.IsMalfunctionedMgAntiAircraft = false;
+         gi.IsMalfunctionedMgBow = false;
+         gi.IsMalfunctionedMgCoaxial = false;
+         //-------------------------------------------------------
+         gi.IsBrokenPeriscopeDriver = false;
+         gi.IsBrokenPeriscopeLoader = false;
+         gi.IsBrokenPeriscopeAssistant = false;
+         gi.IsBrokenPeriscopeGunner = false;
+         gi.IsBrokenPeriscopeCommander = false;
          //-------------------------------------------------------
          gi.IsShermanTurretRotated = false;
          gi.ShermanRotationTurretOld = 0.0;
@@ -5873,7 +5878,6 @@ namespace Pattons_Best
          gi.IsPromoted = false;
          //-------------------------------------------------------
          gi.BattleResistance = EnumResistance.None;
-         gi.BrokenPeriscopes.Clear();
          gi.Death = null;
          gi.Panzerfaust = null;
          gi.NumCollateralDamage = 0;

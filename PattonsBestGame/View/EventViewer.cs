@@ -1168,19 +1168,13 @@ namespace Pattons_Best
                }
                break;
             case "e038":
-               bool isAssistantSet = false;
-               bool isGunnerSet = false;
-               bool isCommanderSet = false;
-               foreach (IMapItem mi in gi.CrewActions) // Loader and Driver have default actions
+               bool isOrdersGiven = false;
+               if (false == IsOrdersGiven(gi, out isOrdersGiven))
                {
-                  if (true == mi.Name.Contains("Assistant"))
-                     isAssistantSet = true;
-                  else if (true == mi.Name.Contains("Gunner"))
-                     isGunnerSet = true;
-                  else if (true == mi.Name.Contains("Commander"))
-                     isCommanderSet = true;
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): IsOrdersGiven() returned false for key=" + key);
+                  return false;
                }
-               if ( (true == isAssistantSet) && (true == isGunnerSet) && (true == isCommanderSet))
+               if( true == isOrdersGiven )
                {
                   Image imge038 = new Image { Name = "Continue38", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
                   myTextBlock.Inlines.Add(new Run("                                          "));
@@ -1750,6 +1744,26 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
+               break;
+            case "e055":
+               int replacementCount = 0;
+               foreach (IMapItem crewAction in gi.CrewActions)
+               {
+                  if (true == crewAction.Name.Contains("RepairScope") )
+                     replacementCount++;
+               }
+               if (0 == replacementCount)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): 0 = replacementCount=" + replacementCount.ToString() );
+                  return false;
+               }
+               if (report.AmmoPeriscope < replacementCount)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): replacementCount=" + replacementCount.ToString() + " > periscopeCount=" + report.AmmoPeriscope.ToString());
+                  return false;
+               }
+               ReplaceText("PERISCOPE_REPLACEMENT", replacementCount.ToString());
+               ReplaceText("PERISCOPE_REPLACEMENT_TOTAL", report.AmmoPeriscope.ToString());
                break;
             case "e101":
                if (false == UpdateEventContentPromotion(gi))
@@ -3462,6 +3476,67 @@ namespace Pattons_Best
          return true;
       }
       //--------------------------------------------------------------------
+      private bool IsOrdersGiven(IGameInstance gi, out bool isOrdersGiven)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): lastReport=null");
+            isOrdersGiven = false;
+            return false;
+         }
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
+         //-----------------------------------------------
+         bool isAssistantSet = false;
+         bool isGunnerSet = false;
+         bool isCommanderSet = false;
+         int periscopeRepairCount = 0;
+         foreach (IMapItem mi in gi.CrewActions) // Loader and Driver have default actions
+         {
+            if (true == mi.Name.Contains("Assistant")) // assistant can always pass ammo
+               isAssistantSet = true;
+            else if (true == mi.Name.Contains("Gunner"))
+               isGunnerSet = true;
+            else if (true == mi.Name.Contains("Commander"))
+               isCommanderSet = true;
+            if (true == mi.Name.Contains("RepairScope"))
+               periscopeRepairCount++;
+         }
+         int diffPeriscopes = lastReport.AmmoPeriscope - periscopeRepairCount; // How many periscopes can be repaired
+         //-----------------------------------------------
+         bool isGunnerOpenHatch = false;
+         bool isDriverOpenHatch = false;
+         bool isCommanderOpenHatch = false;
+         foreach (IMapItem mi in gi.Hatches) // Loader and Driver have default actions
+         {
+            if (true == mi.Name.Contains("Driver"))
+               isDriverOpenHatch = true;
+            if (true == mi.Name.Contains("Gunner"))
+               isGunnerOpenHatch = true;
+            if (true == mi.Name.Contains("Commander"))
+               isCommanderOpenHatch = true;
+         }
+         //-----------------------------------------------
+         bool isCoaxialMgFiringAvailable = ((false == gi.IsBrokenPeriscopeGunner) || (true == isGunnerOpenHatch));
+         bool isMainGunFiringAvailable = ((false == gi.IsMalfunctionedMainGun) && (false == gi.IsBrokenMainGun) && (false == gi.IsBrokenGunsight) && (0 < totalAmmo) && ("None" != gi.GetGunLoadType()));
+         bool isFixBrokenGunnerPeriscopeAvailable = ((true == gi.IsBrokenPeriscopeGunner) && (0 < diffPeriscopes));
+         if ( (false == isMainGunFiringAvailable) && (false == isCoaxialMgFiringAvailable) && (false == isFixBrokenGunnerPeriscopeAvailable) )
+            isGunnerSet = true;
+         //-----------------------------------------------
+         if ((true == gi.IsBrokenPeriscopeCommander) && (false == isCommanderOpenHatch) && (false == card.myIsVisionCupola))
+            isCommanderSet = true;
+         bool isDirectMoveOptionAvailable = ( ((false == gi.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch)) && (false == gi.Sherman.IsThrownTrack));
+         bool isFixBrokenCmdrPeriscopeAvailable = ((true == gi.IsBrokenPeriscopeGunner) && (0 < diffPeriscopes));
+         if ((false == isMainGunFiringAvailable) && (false == isDirectMoveOptionAvailable) && (false == isFixBrokenCmdrPeriscopeAvailable))
+            isCommanderSet = true;
+         //-----------------------------------------------
+         if ((true == isAssistantSet) && (true == isGunnerSet) && (true == isCommanderSet))
+            isOrdersGiven = true;
+         else
+            isOrdersGiven = false;
+         return true;
+      }
       private void ReplaceText(string keyword, string newString)
       {
          if (null == myTextBlock)
