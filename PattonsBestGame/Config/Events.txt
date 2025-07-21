@@ -666,6 +666,18 @@ Roll 2D for ammo expected:<LineBreak/>
 98 - 100 = MG malfunctions
 <LineBreak/><LineBreak/>
 Die Roll = <InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer>"
+e055	"<Bold>e055 Replace Periscopes</Bold> 
+<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Replacing PERISCOPE_REPLACEMENT out of PERISCOPE_REPLACEMENT_TOTAL left as shown on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Click image to continue.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='BrokenPeriscope' Height='350' Width='222'></Image></InlineUIContainer>"
+e056	"<Bold>e056 Repair Gun</Bold> 
+<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Attempt to repair malfunction gun by rolling on the <InlineUIContainer><Button Content=Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
+<LineBreak/><LineBreak/>"
 e060	"<Bold>e060 Reset Round</Bold> 
 <InlineUIContainer><Button Content='r4.77' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>

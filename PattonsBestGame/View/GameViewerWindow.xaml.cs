@@ -685,7 +685,7 @@ namespace Pattons_Best
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Loader_RepairScope";
-            menuItem1.Header = "Repair Periscope";
+            menuItem1.Header = "Replace Periscope";
             menuItem1.Click += MenuItemCrewActionClick;
             myContextMenuCrewActions["Loader"].Items.Add(menuItem1);
          }
@@ -765,7 +765,7 @@ namespace Pattons_Best
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Driver_RepairScope";
-            menuItem1.Header = "Repair Periscope";
+            menuItem1.Header = "Replace Periscope";
             menuItem1.Click += MenuItemCrewActionClick;
             myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
          }
@@ -825,7 +825,7 @@ namespace Pattons_Best
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Gunner_RepairScope";
-            menuItem1.Header = "Repair Periscope";
+            menuItem1.Header = "Replace Periscope";
             menuItem1.Click += MenuItemCrewActionClick;
             myContextMenuCrewActions["Gunner"].Items.Add(menuItem1);
          }
@@ -860,7 +860,7 @@ namespace Pattons_Best
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Assistant_RepairScope";
-            menuItem1.Header = "Assistant Periscope";
+            menuItem1.Header = "Replace Periscope";
             menuItem1.Click += MenuItemCrewActionClick;
             myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
          }

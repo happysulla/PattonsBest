@@ -1649,6 +1649,13 @@ namespace Pattons_Best
          //gi.Sherman.IsBoggedDown = true;
          //gi.Sherman.IsAssistanceNeeded = true;
          //--------------------------------
+         gi.IsBrokenGunsight = true;
+         gi.IsBrokenPeriscopeDriver = true;
+         gi.IsBrokenPeriscopeLoader = true;
+         gi.IsBrokenPeriscopeAssistant = true;
+         gi.IsBrokenPeriscopeGunner = true;
+         gi.IsBrokenPeriscopeCommander = true;
+         //--------------------------------
          gi.PromotionPointNum = 290;
          return true;
       }
