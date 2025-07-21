@@ -672,7 +672,7 @@ e055	"<Bold>e055 Replace Periscopes</Bold>
 Replacing PERISCOPE_REPLACEMENT out of PERISCOPE_REPLACEMENT_TOTAL left as shown on the After Action Report 
 <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Click image to continue.
 <LineBreak/><LineBreak/>
-                                            <InlineUIContainer><Image Name='BrokenPeriscope' Height='350' Width='222'></Image></InlineUIContainer>"
+                                            <InlineUIContainer><Image Name='BrokenPeriscope' Height='222' Width='350'></Image></InlineUIContainer>"
 e056	"<Bold>e056 Repair Gun</Bold> 
 <InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>
