@@ -645,6 +645,7 @@ namespace Pattons_Best
             basePoints *= 2;
          report.VictoryPtsCaptureArea += basePoints;
          //-----------------------------------
+         gi.BattlePhase = BattlePhase.None;
          if (true == gi.IsDaylightLeft(report))
          {
             gi.GamePhase = GamePhase.Preparations;
@@ -1278,6 +1279,9 @@ namespace Pattons_Best
       }
       private bool PerformAutoSetupSkipPreparations(IGameInstance gi)
       {
+         bool isCommanderButtonUp = false;
+         bool isDriverButtonUp = false;
+         bool isAssistantButtonUp = false;
          if (false == PerformAutoSetupSkipMorningBriefing(gi))
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): PerformAutoSetupStartMorningBriefing() returned false");
@@ -1297,7 +1301,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Commander");
             return false;
          }
-         cm.IsButtonedUp = true;
+         cm.IsButtonedUp = isCommanderButtonUp;
          if (false == cm.IsButtonedUp)
          {
             ITerritory? t = Territories.theTerritories.Find("CommanderHatch");
@@ -1316,7 +1320,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Driver");
             return false;
          }
-         cm.IsButtonedUp = true;
+         cm.IsButtonedUp = isDriverButtonUp;
          if (false == cm.IsButtonedUp)
          {
             ITerritory? t = Territories.theTerritories.Find("DriverHatch");
@@ -1335,7 +1339,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Assistant");
             return false;
          }
-         cm.IsButtonedUp = true;
+         cm.IsButtonedUp = isAssistantButtonUp;
          if (false == cm.IsButtonedUp)
          {
             ITerritory? t = Territories.theTerritories.Find("AssistantHatch");
@@ -4098,8 +4102,10 @@ namespace Pattons_Best
                   gi.BattleStacks.Remove(gi.Sherman);
                   break;
                case GameAction.BattleEmpty:
+                  gi.EventDisplayed = gi.EventActive = "e036";
                   break;
                case GameAction.BattleEmptyResolve:
+                  gi.CrewActions.Clear();
                   if (false == ResetRound(gi))
                   {
                      returnStatus = "ResetRound() returned false";

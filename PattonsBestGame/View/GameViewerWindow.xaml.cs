@@ -353,6 +353,10 @@ namespace Pattons_Best
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
+            case GameAction.BattleEmptyResolve:
+               if (false == UpdateCanvasAnimateBattlePhase(gi))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
+               break;
             case GameAction.PreparationsTurretRotateLeft:
             case GameAction.PreparationsTurretRotateRight:
             case GameAction.BattleRoundSequenceTurretEndRotateLeft:
@@ -421,6 +425,8 @@ namespace Pattons_Best
                break;
             case GameAction.EndGameWin:
             case GameAction.EndGameLost:
+               if (false == UpdateCanvasAnimateBattlePhase(gi))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
                SaveDefaultsToSettings();
                break;
             case GameAction.RemoveSplashScreen:

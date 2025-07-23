@@ -289,7 +289,7 @@ Roll 1D for possible Ambush:
 e036	"<Bold>e036 Battle Board Empty</Bold> 
 <InlineUIContainer><Button Content='r4.77' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
-Since the Battle Board is now empty of enemy units, the battle for this area is over. 
+Since the Battle Board is now empty of enemy units, the battle for this area is finished. 
 <LineBreak/><LineBreak/>
 1.) Flip Resistance marker to US Controlled on Movement Board.
 <LineBreak/>
