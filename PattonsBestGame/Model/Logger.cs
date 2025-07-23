@@ -118,7 +118,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_BATTLE_PHASE);
          //SetOn(LogEnum.LE_SHOW_HIT_YOU_MOD);
          //SetOn(LogEnum.LE_SHOW_SPOT_MOD);
-         //SetOn(LogEnum.LE_SHOW_SPOT_RESULT);
+         SetOn(LogEnum.LE_SHOW_SPOT_RESULT);
          //SetOn(LogEnum.LE_SHOW_ORDERS_MENU);
          //SetOn(LogEnum.LE_SHOW_AMMMO_MENU);
          //SetOn(LogEnum.LE_SHOW_SHERMAN_MOVE); 

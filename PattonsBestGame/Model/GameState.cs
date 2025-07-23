@@ -3433,7 +3433,7 @@ namespace Pattons_Best
                      }
                      else
                      {
-                        //gi.MovementEffectOnEnemy = "A"; // <cgs> TEST - &&&&&&&
+                        //gi.MovementEffectOnEnemy = "A"; // <cgs> TEST
                         if (("A" == gi.MovementEffectOnEnemy) || ("B" == gi.MovementEffectOnEnemy))
                         {
                            if (false == MoveEnemyUnits(gi))
