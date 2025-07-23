@@ -636,6 +636,8 @@ namespace Pattons_Best
             if (true == mi.Name.Contains("Commander"))
                isCommanderOpenHatch = true;
          }
+         bool isMainGunFiringAvailable = ((false == gi.IsMalfunctionedMainGun) && (false == gi.IsBrokenMainGun) && (false == gi.IsBrokenGunsight) && (0 < totalAmmo) && ("None" != gi.GetGunLoadType()));
+         bool isShermanMoveAvailable = ((false == gi.Sherman.IsThrownTrack) && (false == gi.Sherman.IsAssistanceNeeded) && (false == gi.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch));
          //---------------------------------
          myContextMenuCrewActions["Loader"].Items.Clear();
          myContextMenuCrewActions["Loader"].Visibility = Visibility.Visible;
@@ -721,7 +723,7 @@ namespace Pattons_Best
          menuItem1.Header = "Stop";
          menuItem1.Click += MenuItemCrewActionClick;
          myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
-         if((false == gi.IsBrokenPeriscopeDriver) || (true==isDriverOpenHatch) ) // If broken scope and button up, cannot drive
+         if((true == isDriverOpenHatch) || (false == gi.IsBrokenPeriscopeDriver)) // If broken scope and button up, cannot drive
          {
                if (false == gi.Sherman.IsThrownTrack)
                {
@@ -786,7 +788,7 @@ namespace Pattons_Best
             menuItem1.Click += MenuItemCrewActionClick;
             myContextMenuCrewActions["Gunner"].Items.Add(menuItem1);
          }
-         if ((false == gi.IsBrokenPeriscopeGunner) || (true == isDriverOpenHatch)) // If broken scope and button up, cannot shoot coaxial
+         if ((true == isGunnerOpenHatch) || (false == gi.IsBrokenPeriscopeGunner)) // If broken scope and button up, cannot shoot coaxial
          {
             if ((0 < lastReport.Ammo30CalibreMG) && (false == gi.IsMalfunctionedMgCoaxial) && (false == gi.IsBrokenMgCoaxial))
             {
@@ -796,9 +798,6 @@ namespace Pattons_Best
                menuItem1.Click += MenuItemCrewActionClick;
                myContextMenuCrewActions["Gunner"].Items.Add(menuItem1);
             }
-         }
-         if ((false == gi.IsBrokenGunsight) || (true == isGunnerOpenHatch))
-         {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Gunner_RotateTurret";
             menuItem1.Header = "Rotate Turret";
@@ -832,10 +831,15 @@ namespace Pattons_Best
          //===========================================================================================================
          myContextMenuCrewActions["Assistant"].Items.Clear();
          myContextMenuCrewActions["Assistant"].Visibility = Visibility.Visible;
-         if ((false == gi.IsBrokenPeriscopeAssistant) || (true == isAssistantOpenHatch)) // If broken scope and button up, cannot drive
+         menuItem1 = new MenuItem();
+         menuItem1.Name = "Assistant_PassAmmo";
+         menuItem1.Header = "Pass Ammo";
+         menuItem1.Click += MenuItemCrewActionClick;
+         myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+         if ((true == isAssistantOpenHatch) || (false == gi.IsBrokenPeriscopeAssistant)) // If broken scope and button up, cannot drive
          {
             if ((0 < lastReport.Ammo30CalibreMG) && (false == gi.IsMalfunctionedMgBow) && (false == gi.IsBrokenMgBow) )
-         {
+            {
                menuItem1 = new MenuItem();
                menuItem1.Name = "Assistant_FireBowMg";
                menuItem1.Header = "Fire Bow MG";
@@ -843,10 +847,6 @@ namespace Pattons_Best
                myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
             }
          }
-         menuItem1 = new MenuItem();
-         menuItem1.Name = "Assistant_PassAmmo";
-         menuItem1.Header = "Pass Ammo";
-         menuItem1.Click += MenuItemCrewActionClick;
          if (true == gi.IsMalfunctionedMgBow)
          {
             menuItem1 = new MenuItem();
@@ -855,7 +855,6 @@ namespace Pattons_Best
             menuItem1.Click += MenuItemCrewActionClick;
             myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
          }
-         myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
          if ((true == gi.IsBrokenPeriscopeAssistant) && (0 < diffPeriscopes))
          {
             menuItem1 = new MenuItem();
@@ -867,9 +866,11 @@ namespace Pattons_Best
          //===========================================================================================================
          myContextMenuCrewActions["Commander"].Items.Clear();
          myContextMenuCrewActions["Commander"].Visibility = Visibility.Visible;
-         if ((false == gi.IsBrokenPeriscopeCommander) || (true == isCommanderOpenHatch) || (true == card.myIsVisionCupola)) // If broken scope and button up, cannot direct
+         bool is30CalibreMGFirePossible = (0 < lastReport.Ammo30CalibreMG) && (((false == gi.IsBrokenMgBow) && (false == gi.IsMalfunctionedMgBow)) || ((false == gi.IsBrokenMgCoaxial) && (false == gi.IsMalfunctionedMgCoaxial))); // bow and coaxial MGs
+         bool is50CalibreMGFirePossible = (0 < lastReport.Ammo50CalibreMG) && ((false == gi.IsBrokenMgAntiAircraft) && (false == gi.IsMalfunctionedMgAntiAircraft) && (false == isLoaderFireAaMg)); // subMG can always be fired
+         if ((true == isCommanderOpenHatch) || (false == gi.IsBrokenPeriscopeCommander) || (true == card.myIsVisionCupola)) // If broken scope and button up, cannot direct
          {
-            if ((false == gi.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch) && (false == gi.Sherman.IsThrownTrack) ) // If broken scope and button up, cannot drive
+            if (true == isShermanMoveAvailable) // If broken scope and button up, cannot drive
             {
                menuItem1 = new MenuItem();
                menuItem1.Name = "Commander_Move";
@@ -877,7 +878,7 @@ namespace Pattons_Best
                menuItem1.Click += MenuItemCrewActionClick;
                myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
             }
-            if ((false == gi.IsMalfunctionedMainGun) && (false == gi.IsBrokenMainGun) && (false == gi.IsBrokenGunsight) && (0 < totalAmmo) && ("None" != gi.GetGunLoadType()))
+            if (true == isMainGunFiringAvailable)
             {
                menuItem1 = new MenuItem();
                menuItem1.Name = "Commander_MainGunFire";
@@ -885,8 +886,6 @@ namespace Pattons_Best
                menuItem1.Click += MenuItemCrewActionClick;
                myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
             }
-            bool is30CalibreMGFirePossible = (0 < lastReport.Ammo30CalibreMG) && ( ((false == gi.IsBrokenMgBow) && (false == gi.IsMalfunctionedMgBow)) || ((false == gi.IsBrokenMgCoaxial) && (false == gi.IsMalfunctionedMgCoaxial)) ); // bow and coaxial MGs
-            bool is50CalibreMGFirePossible = (0 < lastReport.Ammo50CalibreMG) && ( (false == gi.IsBrokenMgAntiAircraft) && (false == gi.IsMalfunctionedMgAntiAircraft) ); // subMG can always be fired
             if ((true == is30CalibreMGFirePossible) || (true == is50CalibreMGFirePossible))
             {
                menuItem1 = new MenuItem();
@@ -920,7 +919,7 @@ namespace Pattons_Best
             menuItem1.Click += MenuItemCrewActionClick;
             myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
          }
-         if ((true == gi.IsMalfunctionedMgAntiAircraft) && (false == isLoaderRepairAaMg) && (false == gi.IsMalfunctionedMgAntiAircraft))
+         if ((true == gi.IsMalfunctionedMgAntiAircraft) && (false == isLoaderRepairAaMg) && (false == gi.IsBrokenMgAntiAircraft))
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Commander_RepairAaMg";
@@ -1220,14 +1219,14 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceCrewOrders:
                   if (false == UpdateCanvasTankOrders(gi, action))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasTankOrders() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasTankOrders() returned false");
                      return false;
                   }
                   break;
                case GameAction.BattleRoundSequenceAmmoOrders:
                   if (false == UpdateCanvasTankAmmoOrders(gi, action))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasTankAmmoOrders() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): UpdateCanvasTankAmmoOrders() returned false");
                      return false;
                   }
                   break;
@@ -1241,7 +1240,7 @@ namespace Pattons_Best
          }
          catch (Exception e)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): EXCEPTION THROWN a=" + action.ToString() + "\ne=" + e.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTank(): EXCEPTION THROWN a=" + action.ToString() + "\ne=" + e.ToString());
             return false;
          }
          //-------------------------------------------------------
@@ -2763,6 +2762,11 @@ namespace Pattons_Best
       }
       private void ClickButtonMapItem(object sender, RoutedEventArgs e)
       {
+         if( null == myGameInstance )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): myGameInstance=null");
+            return;
+         }
          Button? button = sender as Button;
          if (null == button)
          {
@@ -2792,16 +2796,8 @@ namespace Pattons_Best
                   IMapItems removals = new MapItems();  // Remove Loader, Gunner, and Commander actions that require open hatch
                   foreach (IMapItem crewAction in myGameInstance.CrewActions)
                   {
-                     if ("Commander" == s)
-                     {
-                        if ((true == crewAction.Name.Contains("Commander_FireAaMg")) || (true == crewAction.Name.Contains("Commander_ThrowGrenade")) || (true == crewAction.Name.Contains("Gunner_ThrowGrenade")) || (true == crewAction.Name.Contains("Commander_FireSubMg")))
-                           removals.Add(crewAction);
-                     }
-                     else if ("Loader" == s)
-                     {
-                        if ((true == crewAction.Name.Contains("Loader_FireAaMg")) || (true == crewAction.Name.Contains("Loader_FireSubMg")))
-                           removals.Add(crewAction);
-                     }
+                     if( false == myGameInstance.IsCrewActionPossibleButtonedUp(crewAction.Name))
+                        removals.Add(crewAction);
                   }
                   foreach (IMapItem crewAction in removals)
                   {

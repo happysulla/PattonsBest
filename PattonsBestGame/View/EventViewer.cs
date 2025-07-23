@@ -3491,45 +3491,39 @@ namespace Pattons_Best
          bool isAssistantSet = false;
          bool isGunnerSet = false;
          bool isCommanderSet = false;
-         int periscopeRepairCount = 0;
          foreach (IMapItem mi in gi.CrewActions) // Loader and Driver have default actions
          {
             if (true == mi.Name.Contains("Assistant")) // assistant can always pass ammo
                isAssistantSet = true;
-            else if (true == mi.Name.Contains("Gunner"))
-               isGunnerSet = true;
-            else if (true == mi.Name.Contains("Commander"))
-               isCommanderSet = true;
-            if (true == mi.Name.Contains("RepairScope"))
-               periscopeRepairCount++;
+            if (true == mi.Name.Contains("Gunner")) 
+               isAssistantSet = true;
+            if (true == mi.Name.Contains("Commander")) 
+               isAssistantSet = true;
          }
-         int diffPeriscopes = lastReport.AmmoPeriscope - periscopeRepairCount; // How many periscopes can be repaired
          //-----------------------------------------------
-         bool isGunnerOpenHatch = false;
-         bool isDriverOpenHatch = false;
-         bool isCommanderOpenHatch = false;
-         foreach (IMapItem mi in gi.Hatches) // Loader and Driver have default actions
+         if( false == isGunnerSet)
          {
-            if (true == mi.Name.Contains("Driver"))
-               isDriverOpenHatch = true;
-            if (true == mi.Name.Contains("Gunner"))
-               isGunnerOpenHatch = true;
-            if (true == mi.Name.Contains("Commander"))
-               isCommanderOpenHatch = true;
+            bool isGunnerOrderPossible;
+            if (false == gi.IsCrewActionPossible("Gunner", out isGunnerOrderPossible))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): lastReport=null");
+               isOrdersGiven = false;
+               return false;
+            }
+            isGunnerSet = !isGunnerOrderPossible;
          }
          //-----------------------------------------------
-         bool isCoaxialMgFiringAvailable = ((false == gi.IsBrokenPeriscopeGunner) || (true == isGunnerOpenHatch));
-         bool isMainGunFiringAvailable = ((false == gi.IsMalfunctionedMainGun) && (false == gi.IsBrokenMainGun) && (false == gi.IsBrokenGunsight) && (0 < totalAmmo) && ("None" != gi.GetGunLoadType()));
-         bool isFixBrokenGunnerPeriscopeAvailable = ((true == gi.IsBrokenPeriscopeGunner) && (0 < diffPeriscopes));
-         if ( (false == isMainGunFiringAvailable) && (false == isCoaxialMgFiringAvailable) && (false == isFixBrokenGunnerPeriscopeAvailable) )
-            isGunnerSet = true;
-         //-----------------------------------------------
-         if ((true == gi.IsBrokenPeriscopeCommander) && (false == isCommanderOpenHatch) && (false == card.myIsVisionCupola))
-            isCommanderSet = true;
-         bool isDirectMoveOptionAvailable = ( ((false == gi.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch)) && (false == gi.Sherman.IsThrownTrack));
-         bool isFixBrokenCmdrPeriscopeAvailable = ((true == gi.IsBrokenPeriscopeGunner) && (0 < diffPeriscopes));
-         if ((false == isMainGunFiringAvailable) && (false == isDirectMoveOptionAvailable) && (false == isFixBrokenCmdrPeriscopeAvailable))
-            isCommanderSet = true;
+         if (false == isCommanderSet)
+         {
+            bool isCommanderOrderPossible;
+            if (false == gi.IsCrewActionPossible("Commander", out isCommanderOrderPossible))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): lastReport=null");
+               isOrdersGiven = false;
+               return false;
+            }
+            isCommanderSet = !isCommanderOrderPossible;
+         }
          //-----------------------------------------------
          if ((true == isAssistantSet) && (true == isGunnerSet) && (true == isCommanderSet))
             isOrdersGiven = true;
@@ -4650,6 +4644,10 @@ namespace Pattons_Best
                            break;
                         case "Continue54b":
                            action = GameAction.BattleRoundSequencePlaceAdvanceFireRollEnd;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "BrokenPeriscope":
+                           action = GameAction.BattleRoundSequenceReplacePeriscopes;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue60":

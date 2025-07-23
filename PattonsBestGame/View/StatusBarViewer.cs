@@ -3,6 +3,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -156,8 +157,9 @@ namespace Pattons_Best
          //-------------------------------------------------------
          if (true == gi.IsBrokenGunsight)
          {
+            Thickness margin = new Thickness(10, 0, 10, 0);
             myStatusBar.Items.Add(new Separator());
-            Image imgBrokenSite = new Image { Source = MapItem.theMapImages.GetBitmapImage("BrokenGunsight"), Width = 30, Height = 30 };
+            Image imgBrokenSite = new Image { Source = MapItem.theMapImages.GetBitmapImage("BrokenGunsight"), Width = 30, Height = 30, Margin=margin };
             myStatusBar.Items.Add(imgBrokenSite);
          }
          //-------------------------------------------------------

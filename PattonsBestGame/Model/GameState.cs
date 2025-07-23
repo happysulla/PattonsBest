@@ -1297,7 +1297,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Commander");
             return false;
          }
-         cm.IsButtonedUp = false;
+         cm.IsButtonedUp = true;
          if (false == cm.IsButtonedUp)
          {
             ITerritory? t = Territories.theTerritories.Find("CommanderHatch");
@@ -1316,7 +1316,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Driver");
             return false;
          }
-         cm.IsButtonedUp = false;
+         cm.IsButtonedUp = true;
          if (false == cm.IsButtonedUp)
          {
             ITerritory? t = Territories.theTerritories.Find("DriverHatch");
@@ -1335,7 +1335,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Assistant");
             return false;
          }
-         cm.IsButtonedUp = false;
+         cm.IsButtonedUp = true;
          if (false == cm.IsButtonedUp)
          {
             ITerritory? t = Territories.theTerritories.Find("AssistantHatch");
@@ -1649,12 +1649,20 @@ namespace Pattons_Best
          //gi.Sherman.IsBoggedDown = true;
          //gi.Sherman.IsAssistanceNeeded = true;
          //--------------------------------
-         gi.IsBrokenGunsight = true;
-         gi.IsBrokenPeriscopeDriver = true;
-         gi.IsBrokenPeriscopeLoader = true;
-         gi.IsBrokenPeriscopeAssistant = true;
-         gi.IsBrokenPeriscopeGunner = true;
-         gi.IsBrokenPeriscopeCommander = true;
+         //gi.IsBrokenPeriscopeDriver = true;
+         //gi.IsBrokenPeriscopeLoader = true;
+         //gi.IsBrokenPeriscopeAssistant = true;
+         //gi.IsBrokenPeriscopeGunner = true;
+         //gi.IsBrokenPeriscopeCommander = true;
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingOptions(): lastReport=null");
+            return false;
+         }
+         lastReport.AmmoPeriscope = 3;
+         //--------------------------------
+         //gi.IsBrokenGunsight = true;
          //--------------------------------
          gi.PromotionPointNum = 290;
          return true;
@@ -2926,6 +2934,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceSpottingEnd:
+                  gi.CrewActions.Clear(); // reset newxt round for spotting
                   action = GameAction.BattleRoundSequenceCrewOrders;
                   Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceSpottingEnd): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.MarkCrewAction");
                   gi.BattlePhase = BattlePhase.MarkCrewAction;
@@ -3851,6 +3860,47 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceFireMgSkip): " + returnStatus);
                   }
                   break;
+               case GameAction.BattleRoundSequenceReplacePeriscopes:
+                  foreach (IMapItem crewAction in gi.CrewActions)
+                  {
+                     if (true == crewAction.Name.Contains("Driver_RepairScope"))
+                     {
+                        lastReport.AmmoPeriscope--;
+                        gi.IsBrokenPeriscopeDriver = false;
+                     }
+                     if (true == crewAction.Name.Contains("Loader_RepairScope"))
+                     {
+                        lastReport.AmmoPeriscope--;
+                        gi.IsBrokenPeriscopeLoader = false;
+                     }
+                     if (true == crewAction.Name.Contains("Assistant_RepairScope"))
+                     {
+                        lastReport.AmmoPeriscope--;
+                        gi.IsBrokenPeriscopeAssistant = false;
+                     }
+                     if (true == crewAction.Name.Contains("Gunner_RepairScope"))
+                     {
+                        lastReport.AmmoPeriscope--;
+                        gi.IsBrokenPeriscopeGunner = false;
+                     }
+                     if (true == crewAction.Name.Contains("Commander_RepairScope"))
+                     {
+                        lastReport.AmmoPeriscope--;
+                        gi.IsBrokenPeriscopeCommander = false;
+                     }
+                  }
+                  if (lastReport.AmmoPeriscope < 0)
+                  {
+                     returnStatus = "lastReport.AmmoPeriscope < 0";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceReplacePeriscopes): " + returnStatus);
+                  }
+                  gi.CrewActionPhase = CrewActionPhase.RepairGun;
+                  if (false == ConductCrewAction(gi, ref action))
+                  {
+                     returnStatus = "ConductCrewAction() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceReplacePeriscopes): " + returnStatus);
+                  }
+                  break;
                case GameAction.BattleRoundSequenceEnemyAction:
                   Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceEnemyAction): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.EnemyAction");
                   gi.BattlePhase = BattlePhase.EnemyAction;
@@ -4203,6 +4253,7 @@ namespace Pattons_Best
                }
             }
          }
+         gi.CrewActions.Clear();
          outAction = GameAction.BattleRoundSequenceCrewOrders;
          Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "SpottingPhaseBegin(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.MarkCrewAction");
          gi.BattlePhase = BattlePhase.MarkCrewAction;
@@ -5391,7 +5442,6 @@ namespace Pattons_Best
          gi.CrewActionPhase = CrewActionPhase.Movement;
          gi.MovementEffectOnSherman = "unit";
          gi.MovementEffectOnEnemy = "unit";
-         gi.CrewActions.Clear();
          //-------------------------------------------------------
          IMapItems removals = new MapItems();
          foreach(IMapItem mi in gi.GunLoads)

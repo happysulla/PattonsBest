@@ -286,6 +286,7 @@ namespace Pattons_Best
       BattleRoundSequencePlaceAdvanceFire,
       BattleRoundSequencePlaceAdvanceFireRoll,
       BattleRoundSequencePlaceAdvanceFireRollEnd,
+      BattleRoundSequenceReplacePeriscopes,
       BattleRoundSequenceShermanRepairGun,
       BattleRoundSequenceShermanRepairGunRoll,
 
