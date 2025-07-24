@@ -607,7 +607,7 @@ There is no target that is selectable. Only enemy units that have been spotted m
 The main gun may only fire at a target in the turret&apos;s front sector. 
 Since that is not possible, the gun fires at no target.
 <LineBreak/><LineBreak/>
-Roll for malfuntioning gun (98, 99, or 100): <InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer>"
+Roll for malfunctioning gun (98, 99, or 100): <InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer>"
 e053b	"<Bold>e053b Main Gun Firing - Target Selected</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r9.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
