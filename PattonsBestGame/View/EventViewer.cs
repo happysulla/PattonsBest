@@ -1671,11 +1671,12 @@ namespace Pattons_Best
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
                   if ((98 == gi.DieResults[key][0]) || (99 == gi.DieResults[key][0]) || (100 == gi.DieResults[key][0]))
-                     myTextBlock.Inlines.Add("  =  GUN MALFUNCTIONS!");
+                     myTextBlock.Inlines.Add("=  GUN MALFUNCTIONS!");
                   else
-                     myTextBlock.Inlines.Add("  =  No Effect");
+                     myTextBlock.Inlines.Add("=  No Effect");
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                            "));
                   Image imge053a = new Image { Name = "Continue53a", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge053a));
                   myTextBlock.Inlines.Add(new LineBreak());
