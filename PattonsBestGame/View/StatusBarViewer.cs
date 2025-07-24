@@ -169,11 +169,23 @@ namespace Pattons_Best
             Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c118MalFunctionMainGun"), Width = 30, Height = 30 };
             myStatusBar.Items.Add(imgMalfunctingMg);
          }
+         else if (true == gi.IsBrokenMainGun)
+         {
+            myStatusBar.Items.Add(new Separator());
+            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c118BrokenMainGun"), Width = 30, Height = 30 };
+            myStatusBar.Items.Add(imgMalfunctingMg);
+         }
          //-------------------------------------------------------
          if (true == gi.IsMalfunctionedMgAntiAircraft)
          {
             myStatusBar.Items.Add(new Separator());
             Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c115MalfunctionAaMg"), Width = 30, Height = 30 };
+            myStatusBar.Items.Add(imgMalfunctingMg);
+         }
+         else if (true == gi.IsBrokenMgAntiAircraft)
+         {
+            myStatusBar.Items.Add(new Separator());
+            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c115BrokenAaMg"), Width = 30, Height = 30 };
             myStatusBar.Items.Add(imgMalfunctingMg);
          }
          //-------------------------------------------------------
@@ -183,11 +195,23 @@ namespace Pattons_Best
             Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c116MalFunctionBowMg"), Width = 30, Height = 30 };
             myStatusBar.Items.Add(imgMalfunctingMg);
          }
+         else if (true == gi.IsBrokenMgBow)
+         {
+            myStatusBar.Items.Add(new Separator());
+            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c116BrokenBowMg"), Width = 30, Height = 30 };
+            myStatusBar.Items.Add(imgMalfunctingMg);
+         }
          //-------------------------------------------------------
          if (true == gi.IsMalfunctionedMgCoaxial)
          {
             myStatusBar.Items.Add(new Separator());
             Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c117MalFunctionCoaxialMg"), Width = 30, Height = 30 };
+            myStatusBar.Items.Add(imgMalfunctingMg);
+         }
+         if (true == gi.IsBrokenMgCoaxial)
+         {
+            myStatusBar.Items.Add(new Separator());
+            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c117BrokenCoaxialMg"), Width = 30, Height = 30 };
             myStatusBar.Items.Add(imgMalfunctingMg);
          }
       }

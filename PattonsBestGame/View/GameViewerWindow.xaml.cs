@@ -353,6 +353,10 @@ namespace Pattons_Best
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
+            case GameAction.BattleEmptyResolve:
+               if (false == UpdateCanvasAnimateBattlePhase(gi))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
+               break;
             case GameAction.PreparationsTurretRotateLeft:
             case GameAction.PreparationsTurretRotateRight:
             case GameAction.BattleRoundSequenceTurretEndRotateLeft:
@@ -421,6 +425,8 @@ namespace Pattons_Best
                break;
             case GameAction.EndGameWin:
             case GameAction.EndGameLost:
+               if (false == UpdateCanvasAnimateBattlePhase(gi))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
                SaveDefaultsToSettings();
                break;
             case GameAction.RemoveSplashScreen:
@@ -2777,16 +2783,16 @@ namespace Pattons_Best
          if ((true == button.Name.Contains("OpenHatch")) && ((true == myGameInstance.IsHatchesActive) || (BattlePhase.MarkCrewAction == myGameInstance.BattlePhase)))
          {
             string[] crewmembers = new string[4] { "Driver", "Assistant", "Commander", "Loader" };
-            foreach (string s in crewmembers)
+            foreach (string role in crewmembers)
             {
-               ICrewMember? crewMember = myGameInstance.GetCrewMember(s);
+               ICrewMember? crewMember = myGameInstance.GetCrewMember(role);
                if (null == crewMember)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): s=" + s);
+                  Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): role=" + role);
                   return;
                }
                //----------------------------------
-               if (true == button.Name.Contains(s)) //Remove the open hatch
+               if (true == button.Name.Contains(role)) //Remove the open hatch
                {
                   crewMember.IsButtonedUp = true;
                   myGameInstance.Hatches.Remove(button.Name);
@@ -2796,7 +2802,7 @@ namespace Pattons_Best
                   IMapItems removals = new MapItems();  // Remove Loader, Gunner, and Commander actions that require open hatch
                   foreach (IMapItem crewAction in myGameInstance.CrewActions)
                   {
-                     if( false == myGameInstance.IsCrewActionPossibleButtonedUp(crewAction.Name))
+                     if( false == myGameInstance.IsCrewActionPossibleButtonedUp(role, crewAction.Name))
                         removals.Add(crewAction);
                   }
                   foreach (IMapItem crewAction in removals)

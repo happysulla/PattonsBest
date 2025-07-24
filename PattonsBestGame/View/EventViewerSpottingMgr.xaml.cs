@@ -193,11 +193,11 @@ namespace Pattons_Best
             }
             cm.Name = cm.Role;
             //---------------------------------------
-            bool isButtonUp = false;
+            bool isButtonUp = true;
             foreach (IMapItem mi in myGameInstance.Hatches) // Loader and Driver have default actions
             {
                if (true == mi.Name.Contains(cm.Role))
-                  isButtonUp = true;
+                  isButtonUp = false;
             }
             //---------------------------------------
             List<string>? spottedTerritories = Territory.GetSpottedTerritories(myGameInstance, cm);
@@ -226,18 +226,49 @@ namespace Pattons_Best
                bool isCrewMemberAdded = true;
                foreach (IMapItem crewaction in myGameInstance.CrewActions)
                {
-                  if( true == crewaction.Name.Contains(cm.Role))
+                  if (("Loader" == cm.Role) && (true == crewaction.Name.Contains(cm.Role)) )
                   {
                      if ( (("Loader_Load" != crewaction.Name) && ("Loader_FireAaMg" != crewaction.Name) && ("Loader_FireSubMg" != crewaction.Name)) || ((true == myGameInstance.IsBrokenPeriscopeLoader) && (true == isButtonUp)) || (true== isMainGunBeingFired) )
+                     {
                         isCrewMemberAdded = false;
-                     if ( ("Driver_Stop" != crewaction.Name) && ((true == myGameInstance.IsBrokenPeriscopeDriver) && (true == isButtonUp)) )
+                        Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "PerformSpotting():  isCrewMemberAdded=FALSE for cm=" + cm.Role + " crewaction=" + crewaction.Name);
+                     }
+                     break;
+                  }
+                  else  if (("Driver" == cm.Role) && (true == crewaction.Name.Contains(cm.Role)) )
+                  {
+                     if (("Driver_Stop" != crewaction.Name) && ((true == myGameInstance.IsBrokenPeriscopeDriver) && (true == isButtonUp)))
+                     {
                         isCrewMemberAdded = false;
-                     if ( (("Gunner_FireCoaxialMg" != crewaction.Name) && ("Gunner_ThrowGrenade" != crewaction.Name) ) || ((true == myGameInstance.IsBrokenPeriscopeGunner) && (true == isButtonUp)) )
+                        Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "PerformSpotting():  isCrewMemberAdded=FALSE for cm=" + cm.Role + " crewaction=" + crewaction.Name);
+                     }
+                     break;
+                  }
+                  else if ( ("Gunner" == cm.Role)  && (true == crewaction.Name.Contains(cm.Role)) )
+                  {
+                     if ((("Gunner_FireCoaxialMg" != crewaction.Name) && ("Gunner_ThrowGrenade" != crewaction.Name)) || ((true == myGameInstance.IsBrokenPeriscopeGunner) && (true == isButtonUp)))
+                     {
                         isCrewMemberAdded = false;
-                     if (("Assistant_FireBowMg" != crewaction.Name) || ((true == myGameInstance.IsBrokenPeriscopeAssistant) && (true == isButtonUp)) )
+                        Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "PerformSpotting():  isCrewMemberAdded=FALSE for cm=" + cm.Role + " crewaction=" + crewaction.Name);
+                     }
+                     break;
+                  }
+                  else if ( ("Assistant" == cm.Role) && (true == crewaction.Name.Contains(cm.Role)) )
+                  {
+                     if (("Assistant_FireBowMg" != crewaction.Name) || ((true == myGameInstance.IsBrokenPeriscopeAssistant) && (true == isButtonUp)))
+                     {
                         isCrewMemberAdded = false;
-                     if ( (("Commander_Move" != crewaction.Name) && ("Commander_MainGunFire" != crewaction.Name) && ("Commander_MGFire" != crewaction.Name) && ("Commander_ThrowGrenade" != crewaction.Name) && ("Commander_FireAaMg" != crewaction.Name) && ("Commander_FireSubMg" != crewaction.Name)) || ((true == myGameInstance.IsBrokenPeriscopeCommander) && (true == isButtonUp) && (false == card.myIsVisionCupola)) )
+                        Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "PerformSpotting():  isCrewMemberAdded=FALSE for cm=" + cm.Role + " crewaction=" + crewaction.Name);
+                     }
+                     break;
+                  }
+                  else if ( ("Commander" == cm.Role) && (true == crewaction.Name.Contains(cm.Role)) )
+                  {
+                     if ((("Commander_Move" != crewaction.Name) && ("Commander_MainGunFire" != crewaction.Name) && ("Commander_MGFire" != crewaction.Name) && ("Commander_ThrowGrenade" != crewaction.Name) && ("Commander_FireAaMg" != crewaction.Name) && ("Commander_FireSubMg" != crewaction.Name)) || ((true == myGameInstance.IsBrokenPeriscopeCommander) && (true == isButtonUp) && (false == card.myIsVisionCupola)))
+                     {
                         isCrewMemberAdded = false;
+                        Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "PerformSpotting():  isCrewMemberAdded=FALSE for cm=" + cm.Role + " crewaction=" + crewaction.Name);
+                     }
                      break;
                   }
                }
@@ -289,7 +320,8 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myGameInstance=null");
                return false;
             }
-            foreach(IStack stack in myGameInstance.BattleStacks) // for each mapitem spotted this round, mark as spotted for future rounds
+            //------------------------------------------------------
+            foreach (IStack stack in myGameInstance.BattleStacks) // for each mapitem spotted this round, mark as spotted for future rounds
             {
                foreach(IMapItem mi in stack.MapItems)
                {
@@ -593,6 +625,7 @@ namespace Pattons_Best
       //------------------------------------------------------------------------------------
       public void ShowDieResults(int dieRoll)
       {
+         dieRoll = 8; // <cgs> TEST - Spotting Denied
          Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "EventViewerSpottingMgr.ShowDieResults(): +++++++++++++++++myState=" + myState.ToString() + " dr=" + dieRoll.ToString() );
          if (null == myGameInstance)
          {

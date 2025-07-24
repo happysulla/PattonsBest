@@ -182,7 +182,7 @@ namespace Pattons_Best
       //=========================================================
       ICrewMember? GetCrewMember(string name);
       bool IsCrewActionPossible(string crewRole, out bool isGiven);
-      bool IsCrewActionPossibleButtonedUp(string crewAction);
+      bool IsCrewActionPossibleButtonedUp(string crewRole, string crewAction);
       //------------------------------------------------
       string GetGunLoadType();
       bool SetGunLoadTerritory(string ammoType);

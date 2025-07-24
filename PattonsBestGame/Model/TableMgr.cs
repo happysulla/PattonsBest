@@ -3617,17 +3617,18 @@ namespace Pattons_Best
          }
          //-------------------------------
          int modifier = GetSpottingModifier(gi, mi, cm, sector, range);
-         if( modifier < -100 )
+         if( TableMgr.FN_ERROR == modifier )
          {
             Logger.Log(LogEnum.LE_ERROR, "GetSpottingResult(): GetSpottingModifier() returned error");
             return "ERROR";
          }
-         dieRoll += modifier;
+         int total = dieRoll + modifier;
+         Logger.Log(LogEnum.LE_SHOW_SPOT_RESULT, "GetSpottingResult(): mi=" + mi.Name + " dr=" + dieRoll.ToString() + " modifier=" + modifier.ToString() + " = " + total.ToString());
          //-------------------------------
-         if( dieRoll <= cm.Rating )
+         if(total <= cm.Rating )
          {
             int halfRating = (int)Math.Ceiling(cm.Rating * 0.5);
-            if ( dieRoll <= halfRating )
+            if (total <= halfRating )
             {
                Logger.Log(LogEnum.LE_SHOW_SPOT_RESULT, "GetSpottingResult(): mi=" + mi.Name + " Identified - dr=" + dieRoll.ToString() );
                mi.Spotting = EnumSpottingResult.IDENTIFIED;

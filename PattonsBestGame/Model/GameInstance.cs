@@ -285,35 +285,42 @@ namespace Pattons_Best
                return false;
          }
       }
-      public bool IsCrewActionPossibleButtonedUp(string crewAction)
+      public bool IsCrewActionPossibleButtonedUp(string crewRole, string crewAction)
       {
-         switch (crewAction)
+         switch (crewRole)
          {
-            case "Loader_FireAaMg":
-            case "Loader_FireSubMg":
-               return false;
-            case "Driver_ForwardToHullDown":
-            case "Driver_Forward":
-            case "Driver_Reverse":
-            case "Driver_ReverseToHullDown":
-            case "Driver_PivotTank":
-               if (true == this.IsBrokenPeriscopeGunner)
-                  return false;
-               return true;
-            case "Gunner_FireCoaxialMg":
-            case "Gunner_RotateTurret":
-               if (true == this.IsBrokenPeriscopeGunner)
-                  return false;
+            case "Loader":
+               {
+                  if (("Loader_FireAaMg" == crewAction) || ("Loader_FireSubMg" == crewAction))
+                     return false;
+               }
                break;
-            case "Gunner_ThrowGrenade":
-               return false;
-            case "Assistant_FireBowMg":
+            case "Driver":
+               if (true == this.IsBrokenPeriscopeGunner)
+               {
+                  if (("Driver_ForwardToHullDown" == crewAction) || ("Driver_Forward" == crewAction) || ("Driver_Reverse" == crewAction) || ("Driver_ReverseToHullDown" == crewAction) || ("Driver_ReverseToHullDown" == crewAction) )
+                     return false;
+               }
+               break;
+            case "Gunner":
+               if (true == this.IsBrokenPeriscopeGunner)
+               {
+                  if (("Gunner_FireCoaxialMg" == crewAction) || ("Gunner_RotateTurret" == crewAction) )
+                     return false;
+               }
+               if ("Gunner_ThrowGrenade" == crewAction)
+               {
+                  return false;
+               }
+               break;
+            case "Assistant":
                if (true == this.IsBrokenPeriscopeAssistant)
-                  return false;
+               {
+                  if ("Assistant_FireBowMg" == crewAction) 
+                     return false;
+               }
                break;
-            case "Commander_Move":
-            case "Commander_MainGunFire":
-            case "Commander_MGFire":
+            case "Commander":
                IAfterActionReport? lastReport = this.Reports.GetLast();
                if (null == lastReport)
                {
@@ -322,13 +329,15 @@ namespace Pattons_Best
                }
                TankCard card = new TankCard(lastReport.TankCardNum);
                if ((true == this.IsBrokenPeriscopeCommander) && (false == card.myIsVisionCupola))
+               {
+                  if (("Commander_Move" == crewAction) || ("Commander_MainGunFire" == crewAction) || ("Commander_MGFire" == crewAction) )
+                     return false;
+               }
+               if (("Commander_ThrowGrenade" == crewAction) || ("Commander_FireAaMg" == crewAction) || ("Commander_FireSubMg" == crewAction))
                   return false;
                break;
-            case "Commander_ThrowGrenade":
-            case "Commander_FireAaMg":
-            case "Commander_FireSubMg":
-               return false;
             default:
+               Logger.Log(LogEnum.LE_ERROR, "IsCrewActionPossibleButtonedUp(): reached default crew role=" + crewRole);
                break;
          }
          return true;

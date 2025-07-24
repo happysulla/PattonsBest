@@ -673,7 +673,7 @@ namespace Pattons_Best
          {
             case "e006":
                ReplaceText("DATE", report.Day);
-               switch(report.Resistance)
+               switch (report.Resistance)
                {
                   case EnumResistance.Light:
                      ReplaceText("RESISTANCE", "Light");
@@ -689,7 +689,7 @@ namespace Pattons_Best
                      return false;
                }
                ReplaceText("PROBABILITY", report.Probability.ToString());
-               if (Utilities.NO_RESULT == firstDieResult) 
+               if (Utilities.NO_RESULT == firstDieResult)
                {
                   Image imgSun = new Image { Source = MapItem.theMapImages.GetBitmapImage("Morning"), Width = 300, Height = 150 };
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -698,13 +698,13 @@ namespace Pattons_Best
                }
                else if (report.Probability < firstDieResult) // skip today action
                {
-                  Image imgSkip = new Image { Source = MapItem.theMapImages.GetBitmapImage("Sherman4"), Width = 300, Height = 190, Name = "GotoMorningBriefingEnd" }; 
+                  Image imgSkip = new Image { Source = MapItem.theMapImages.GetBitmapImage("Sherman4"), Width = 300, Height = 190, Name = "GotoMorningBriefingEnd" };
                   myTextBlock.Inlines.Add(new Run("                               "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imgSkip));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("No combat for today. Sleep good tonight. Click image to continue."));
                }
-               else 
+               else
                {
                   Image imgBrief = new Image { Source = MapItem.theMapImages.GetBitmapImage("DailyDecision"), Width = 200, Height = 200, Name = "GotoMorningBriefing" };
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -716,7 +716,7 @@ namespace Pattons_Best
                }
                break;
             case "e007":
-               if( false == UpdateEventContentWeather(gi))
+               if (false == UpdateEventContentWeather(gi))
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): UpdateEventContentWeather() returned false for key=" + key);
                   return false;
@@ -814,7 +814,7 @@ namespace Pattons_Best
                {
                   StringBuilder sbE011 = new StringBuilder();
                   sbE011.Append(" Is Hulled Down =  ");
-                  sbE011.Append( gi.Sherman.IsHullDown.ToString() );
+                  sbE011.Append(gi.Sherman.IsHullDown.ToString());
                   sbE011.Append("\n Is Moving  = ");
                   sbE011.Append(gi.Sherman.IsMoving.ToString());
                   sbE011.Append("\n Is Lead Tank  = ");
@@ -830,7 +830,7 @@ namespace Pattons_Best
                      imge011.Height = 150;
                      myTextBlock.Inlines.Add(new Run("                            "));
                   }
-                  else if( true == gi.Sherman.IsMoving )
+                  else if (true == gi.Sherman.IsMoving)
                   {
                      imge011.Source = MapItem.theMapImages.GetBitmapImage("c13Moving");
                      imge011.Width = 100;
@@ -938,19 +938,19 @@ namespace Pattons_Best
             case "e021":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  if( null == gi.EnemyStrengthCheckTerritory )
+                  if (null == gi.EnemyStrengthCheckTerritory)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.EnemyStrenthCheck=null");
                      return false;
                   }
                   Image imge021 = new Image { Width = 100, Height = 100, Name = "MovementChooseOption" };
                   IStack? stack = gi.MoveStacks.Find(gi.EnemyStrengthCheckTerritory);
-                  if( null == stack )
+                  if (null == stack)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): stack=null for e021");
                      return false;
                   }
-                  if( 0 < stack.MapItems.Count )
+                  if (0 < stack.MapItems.Count)
                   {
                      IMapItem? mi = stack.MapItems[0];
                      if (null == mi)
@@ -986,12 +986,12 @@ namespace Pattons_Best
             case "e024":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  Image imge024 = new Image { Source= MapItem.theMapImages.GetBitmapImage("c39ArtillerySupport"), Width = 100, Height = 100, Name = "MovementChooseOption" };
+                  Image imge024 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c39ArtillerySupport"), Width = 100, Height = 100, Name = "MovementChooseOption" };
                   myTextBlock.Inlines.Add(new Run("                                           "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge024));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
-                  if ( 7 < gi.DieResults[key][0] )
+                  if (7 < gi.DieResults[key][0])
                      myTextBlock.Inlines.Add(new Run("No Artillery Support available now. Click image to continue."));
                   else
                      myTextBlock.Inlines.Add(new Run("Click image to continue."));
@@ -1055,7 +1055,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.EnemyStrenthCheck=null");
                      return false;
                   }
-                  Image imge030 = new Image { Width = 100, Height = 100, Name= "MovementBattleCheck" };
+                  Image imge030 = new Image { Width = 100, Height = 100, Name = "MovementBattleCheck" };
                   if (EnumResistance.Light == gi.BattleResistance)
                      imge030.Source = MapItem.theMapImages.GetBitmapImage("c36Light");
                   else if (EnumResistance.Medium == gi.BattleResistance)
@@ -1079,7 +1079,7 @@ namespace Pattons_Best
             case "e032": // This event is only shown if battle check resulted in combat
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  Image imge031 = new Image { Width = 150, Height = 150, Name = "BattleStart", Source = MapItem.theMapImages.GetBitmapImage("Combat") }; 
+                  Image imge031 = new Image { Width = 150, Height = 150, Name = "BattleStart", Source = MapItem.theMapImages.GetBitmapImage("Combat") };
                   myTextBlock.Inlines.Add(new Run("Combat! Enter Battle Board."));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -1095,8 +1095,8 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new LineBreak());
                Image imge032 = new Image { Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c28UsControl") };
                Button b2 = new Button() { FontFamily = myFontFam1, FontSize = 12 };
-               if ( false == gi.IsDaylightLeft(report))
-               {                 
+               if (false == gi.IsDaylightLeft(report))
+               {
                   imge032.Name = "DebriefStart";
                   b2.Content = "r4.9";
                   b2.Click += Button_Click;
@@ -1107,12 +1107,12 @@ namespace Pattons_Best
                else
                {
                   bool isExitArea;
-                  if( false == gi.IsExitArea(out isExitArea))
+                  if (false == gi.IsExitArea(out isExitArea))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.IsExitArea() returned false");
                      return false;
                   }
-                  if( true == isExitArea )
+                  if (true == isExitArea)
                   {
                      imge032.Name = "MovementStartAreaRestart";
                      b2.Content = "r4.51";
@@ -1154,7 +1154,7 @@ namespace Pattons_Best
                   else
                   {
                      myTextBlock.Inlines.Add(new Run("No ambush. Click image to continue."));
-                     imge035 = new Image { Name="Continue35", Width = 200, Height = 210, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                     imge035 = new Image { Name = "Continue35", Width = 200, Height = 210, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new Run("                                  "));
@@ -1174,7 +1174,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): IsOrdersGiven() returned false for key=" + key);
                   return false;
                }
-               if( true == isOrdersGiven )
+               if (true == isOrdersGiven)
                {
                   Image imge038 = new Image { Name = "Continue38", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
                   myTextBlock.Inlines.Add(new Run("                                          "));
@@ -1205,7 +1205,7 @@ namespace Pattons_Best
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
                   myTextBlock.Inlines.Add(new Run("Num of Friendly Tanks Knocked Out: "));
-                  if (gi.DieResults[key][0] < 7 )
+                  if (gi.DieResults[key][0] < 7)
                      myTextBlock.Inlines.Add(new Run("1 Tank"));
                   else if (gi.DieResults[key][0] < 10)
                      myTextBlock.Inlines.Add(new Run("2 Tank"));
@@ -1225,7 +1225,7 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   Image? img043 = null;
-                  if(gi.DieResults[key][0] < 2)
+                  if (gi.DieResults[key][0] < 2)
                   {
                      myTextBlock.Inlines.Add(new Run("One Friendly Tank Knocked Out."));
                      img043 = new Image { Name = "MineFieldAttackEnd", Width = 300, Height = 250, Source = MapItem.theMapImages.GetBitmapImage("ShermanKia") };
@@ -1241,7 +1241,7 @@ namespace Pattons_Best
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new Run("                                            "));
                   }
-                  else 
+                  else
                   {
                      myTextBlock.Inlines.Add(new Run("No effect."));
                      img043 = new Image { Name = "MineFieldAttackEnd", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
@@ -1300,12 +1300,12 @@ namespace Pattons_Best
                   int combo = gi.DieResults[key][0] + modifiere043c;
                   driver.Zoom = 2.0;
                   string result = TableMgr.SetWounds(gi, driver, gi.DieResults[key][0], modifiere043c);
-                  if( "ERROR" ==  result )
+                  if ("ERROR" == result)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): driver GetWounds() returned error for key=" + key);
                      return false;
                   }
-                  Button bDriver = new Button() { Name = "DriverWounded", FontFamily = myFontFam1, FontSize = 12, Height = driver.Zoom * Utilities.theMapItemSize, Width = driver.Zoom * Utilities.theMapItemSize};
+                  Button bDriver = new Button() { Name = "DriverWounded", FontFamily = myFontFam1, FontSize = 12, Height = driver.Zoom * Utilities.theMapItemSize, Width = driver.Zoom * Utilities.theMapItemSize };
                   bDriver.Click += Button_Click;
                   CrewMember.SetButtonContent(bDriver, driver, true, true);
                   myTextBlock.Inlines.Add(new Run("Roll + Modifier = "));
@@ -1313,7 +1313,7 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run(" = "));
                   myTextBlock.Inlines.Add(new Run(result));
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new LineBreak()); 
+                  myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("                                            "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(bDriver));
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -1345,7 +1345,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): driver GetWounds() returned error for key=" + key);
                      return false;
                   }
-                  Button bAssistant = new Button() { Name="AssistantWounded", FontFamily = myFontFam1, FontSize = 12, Height=assistant.Zoom * Utilities.theMapItemSize, Width = assistant.Zoom * Utilities.theMapItemSize};
+                  Button bAssistant = new Button() { Name = "AssistantWounded", FontFamily = myFontFam1, FontSize = 12, Height = assistant.Zoom * Utilities.theMapItemSize, Width = assistant.Zoom * Utilities.theMapItemSize };
                   bAssistant.Click += Button_Click;
                   CrewMember.SetButtonContent(bAssistant, assistant, true, true);
                   myTextBlock.Inlines.Add(new Run("Roll + Modifier = "));
@@ -1368,7 +1368,7 @@ namespace Pattons_Best
                   StringBuilder sb = new StringBuilder();
                   sb.Append("Panzerfaust Attack Sector is ");
                   char sector = '1';
-                  switch(gi.DieResults[key][0])
+                  switch (gi.DieResults[key][0])
                   {
                      case 1: sb.Append("1."); sector = '1'; break;
                      case 2: sb.Append("2."); sector = '2'; break;
@@ -1382,11 +1382,11 @@ namespace Pattons_Best
                   }
                   string tName = "B" + sector + "M";
                   IStack? stack = gi.BattleStacks.Find(tName);
-                  if( null != stack )
+                  if (null != stack)
                   {
-                     foreach( IMapItem mi in stack.MapItems )
+                     foreach (IMapItem mi in stack.MapItems)
                      {
-                        if( true == mi.Name.Contains("UsControl"))
+                        if (true == mi.Name.Contains("UsControl"))
                         {
                            sb.Append(" Ignore attack since sector under US Control.");
                            break;
@@ -1421,7 +1421,7 @@ namespace Pattons_Best
                   sb44a.Append(" +3 for Advancing Fire Zone\n");
                if (('1' == gi.Panzerfaust.mySector) || ('2' == gi.Panzerfaust.mySector) || ('3' == gi.Panzerfaust.mySector))
                   sb44a.Append(" -1 for Attack in Sector 1, 2, or 3\n");
-               if( 0 == sb44a.Length )
+               if (0 == sb44a.Length)
                   sb44a.Append(" None\n");
                myTextBlock.Inlines.Add(new Run(sb44a.ToString()));
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
@@ -1470,7 +1470,7 @@ namespace Pattons_Best
                }
                break;
             case "e046":
-               if (null != gi.FriendlyAdvance )
+               if (null != gi.FriendlyAdvance)
                {
                   Image imge046 = new Image { Name = "Continue046a", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c28UsControl") };
                   myTextBlock.Inlines.Add(new Run("                                            "));
@@ -1487,7 +1487,7 @@ namespace Pattons_Best
             case "e048":
                if (null != gi.EnemyAdvance)
                {
-                  if( true == gi.IsEnemyAdvanceComplete)
+                  if (true == gi.IsEnemyAdvanceComplete)
                   {
                      Image imge046 = new Image { Name = "Continue047", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c36Light") };
                      myTextBlock.Inlines.Add(new Run("                                            "));
@@ -1586,7 +1586,7 @@ namespace Pattons_Best
                   {
                      myTextBlock.Inlines.Add(new Run("  =   Tank Throws Track"));
                   }
-                  else 
+                  else
                   {
                      myTextBlock.Inlines.Add(new Run("  =   Assistance Needed"));
                   }
@@ -1666,6 +1666,22 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new Run("When you are satisfied with the current orientation, click image between buttons to continue."));
+               break;
+            case "e053a":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  if ((98 == gi.DieResults[key][0]) || (99 == gi.DieResults[key][0]) || (100 == gi.DieResults[key][0]))
+                     myTextBlock.Inlines.Add("  =  GUN MALFUNCTIONS!");
+                  else
+                     myTextBlock.Inlines.Add("  =  No Effect");
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  Image imge053a = new Image { Name = "Continue53a", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge053a));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add("Click image to continue.");
+               }
                break;
             case "e053b": 
                if( false == UpdateEventContentToGetToHit(gi))
@@ -2071,7 +2087,12 @@ namespace Pattons_Best
             {
                myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
                Image? imge53b = null;
-               if (toHitNum < gi.DieResults[key][0])
+               if ( (98 == gi.DieResults[key][0]) || (99 == gi.DieResults[key][0]) || (100 == gi.DieResults[key][0]) )
+               {
+                  myTextBlock.Inlines.Add("  =  GUN MALFUNCTIONS!");
+                  imge53b = new Image { Name = "Continue53b", Width = 80, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+               }
+               else if (toHitNum < gi.DieResults[key][0])
                {
                   myTextBlock.Inlines.Add("  =  MISS");
                   imge53b = new Image { Name = "Continue53b", Width = 80, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
@@ -4607,7 +4628,7 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue53a":
-                           action = GameAction.BattleRoundSequenceShermanFiringMainGunEnd;
+                           action = GameAction.BattleRoundSequenceShermanToHitRollNothing;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue53b":
