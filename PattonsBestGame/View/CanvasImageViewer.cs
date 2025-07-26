@@ -101,6 +101,7 @@ namespace Pattons_Best
             case GameAction.SetupShowMovementBoard:
             case GameAction.MovementStartAreaSet:
             case GameAction.TestingStartMovement:
+            case GameAction.MovementEnemyStrengthChoice:
                theMainImage = EnumMainImage.MI_Move;
                ShowMovementMap(myCanvas);
                break;

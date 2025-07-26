@@ -7,10 +7,10 @@ namespace Pattons_Best
 {
    public class TableMgr
    {
-      public const int NO_CHANCE = 100;
-      public const int KIA = -99;
+      public const int NO_CHANCE = -100;
+      public const int KIA = 1000;
       public const int FN_ERROR = -1000;
-      public const int THROWN_TRACK = 101;
+      public const int THROWN_TRACK = 1001;
       public static ICombatCalanderEntries theCombatCalendarEntries = new CombatCalendarEntries();
       public static int[,] theExits = new int[10, 10];
       //public static int[,,,] theApToKills = new int[3,3,3,2]; // armor class, facing, range, T/H
@@ -2659,7 +2659,7 @@ namespace Pattons_Best
          }
          if (dieRoll < 66)
          {
-            gi.IsBrokenGunsight = true;
+            gi.IsBrokenGunSight = true;
             return "Gunsight Broken";
          }
          if (dieRoll < 71)

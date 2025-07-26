@@ -339,6 +339,8 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
             case GameAction.BattleRoundSequenceAmmoOrders:
+               foreach (Button b in myTankButtons)
+                  b.ContextMenu = null;
                if (false == CreateContextMenuGunLoadAction(myGameInstance))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): CreateContextMenuGunLoadAction() returned false");
                if (false == UpdateCanvasTank(gi, action))
@@ -600,6 +602,7 @@ namespace Pattons_Best
          bool isLoaderFireSubMg = false;
          bool isCommanderThrowGrenade = false;
          bool isGunnerThrowGrenade = false;
+         bool isLoaderRepairingGun = false;
          int periscopeRepairCount = 0; 
          foreach (IMapItem mi in gi.CrewActions) // This menu is created on each crew action
          {
@@ -611,6 +614,8 @@ namespace Pattons_Best
                isCommanderRepairAaMg = true;
             if (true == mi.Name.Contains("Loader_RepairAaMg"))
                isLoaderRepairAaMg = true;
+            if (true == mi.Name.Contains("Loader_RepairMainGun"))
+               isLoaderRepairingGun = true;
             if (true == mi.Name.Contains("Commander_FireSubMg"))
                isCommanderFireSubMg = true;
             if (true == mi.Name.Contains("Loader_FireSubMg"))
@@ -642,7 +647,7 @@ namespace Pattons_Best
             if (true == mi.Name.Contains("Commander"))
                isCommanderOpenHatch = true;
          }
-         bool isMainGunFiringAvailable = ((false == gi.IsMalfunctionedMainGun) && (false == gi.IsBrokenMainGun) && (false == gi.IsBrokenGunsight) && (0 < totalAmmo) && ("None" != gi.GetGunLoadType()));
+         bool isMainGunFiringAvailable = ((false == gi.IsMalfunctionedMainGun) && (false == gi.IsBrokenMainGun) && (false == gi.IsBrokenGunSight) && (0 < totalAmmo) && ("None" != gi.GetGunLoadType()));
          bool isShermanMoveAvailable = ((false == gi.Sherman.IsThrownTrack) && (false == gi.Sherman.IsAssistanceNeeded) && (false == gi.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch));
          //---------------------------------
          myContextMenuCrewActions["Loader"].Items.Clear();
@@ -676,7 +681,7 @@ namespace Pattons_Best
             menuItem1.Click += MenuItemCrewActionClick;
             myContextMenuCrewActions["Loader"].Items.Add(menuItem1);
          }
-         if ((0 < totalAmmo) && ( false == gi.IsBrokenMainGun) && (false == gi.IsBrokenGunsight)) 
+         if ((0 < totalAmmo) && ( false == gi.IsBrokenMainGun) && (false == gi.IsBrokenGunSight)) 
          { 
             menuItem1 = new MenuItem();
             menuItem1.Name = "Loader_ChangeGunLoad";
@@ -781,7 +786,7 @@ namespace Pattons_Best
          string gunload = myGameInstance.GetGunLoadType();
          myContextMenuCrewActions["Gunner"].Items.Clear();
          myContextMenuCrewActions["Gunner"].Visibility = Visibility.Visible;
-         if ( (0 < totalAmmo) && (false == gi.IsMalfunctionedMainGun) && (false == gi.IsBrokenGunsight) && (false == gi.IsBrokenMainGun) && ("None" != gunload) )
+         if ( (0 < totalAmmo) && (false == gi.IsMalfunctionedMainGun) && (false == gi.IsBrokenGunSight) && (false == gi.IsBrokenMainGun) && ("None" != gunload) )
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Gunner_FireMainGun";
@@ -810,7 +815,7 @@ namespace Pattons_Best
             menuItem1.Click += MenuItemCrewActionClick;
             myContextMenuCrewActions["Gunner"].Items.Add(menuItem1);
          }
-         if (true == gi.IsMalfunctionedMainGun)
+         if ((true == gi.IsMalfunctionedMainGun) && (true == isLoaderRepairingGun) ) // can only help loader repair main gun
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Gunner_RepairMainGun";
@@ -844,7 +849,7 @@ namespace Pattons_Best
          myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
          if ((true == isAssistantOpenHatch) || (false == gi.IsBrokenPeriscopeAssistant)) // If broken scope and button up, cannot drive
          {
-            if ((0 < lastReport.Ammo30CalibreMG) && (false == gi.IsMalfunctionedMgBow) && (false == gi.IsBrokenMgBow) )
+            if ((0 < lastReport.Ammo30CalibreMG) && (false == gi.IsMalfunctionedMgBow) && (false == gi.IsBrokenMgBow) && ( false == gi.Sherman.IsHullDown) )
             {
                menuItem1 = new MenuItem();
                menuItem1.Name = "Assistant_FireBowMg";
@@ -2799,10 +2804,10 @@ namespace Pattons_Best
                   this.myTankButtons.Remove(button);
                   myCanvasTank.Children.Remove(button);
                   //----------------------------------
-                  IMapItems removals = new MapItems();  // Remove Loader, Gunner, and Commander actions that require open hatch
+                  IMapItems removals = new MapItems();  // Remove Loader, Gunner, and Commander actions that require open hatch - remove Gunner_RepairGun if Loader not repairing
                   foreach (IMapItem crewAction in myGameInstance.CrewActions)
                   {
-                     if( false == myGameInstance.IsCrewActionPossibleButtonedUp(role, crewAction.Name))
+                     if( false == myGameInstance.IsCrewActionPossibleButtonUp(role, crewAction.Name))
                         removals.Add(crewAction);
                   }
                   foreach (IMapItem crewAction in removals)
@@ -2938,7 +2943,7 @@ namespace Pattons_Best
             mySpeedRatioMarquee = 0.5;
          myStoryboard.SetSpeedRatio(this, mySpeedRatioMarquee);
       }
-      public void MenuItemCrewActionClick(object sender, RoutedEventArgs e)
+      private void MenuItemCrewActionClick(object sender, RoutedEventArgs e)
       {
          MenuItem? menuitem = sender as MenuItem;
          if( null == menuitem)
@@ -2988,6 +2993,7 @@ namespace Pattons_Best
             case "Loader_Load":
                mi = new MapItem(menuitem.Name, 1.0, "c54LLoad", t);
                menu = myContextMenuCrewActions["Loader"];
+               MenuItemCrewActionClickRemoveGunnerRepair();
                break;
             case "Loader_RepairMainGun":
                mi = new MapItem(menuitem.Name, 1.0, "c55LRepairMainGun", t);
@@ -2996,34 +3002,42 @@ namespace Pattons_Best
             case "Loader_RepairCoaxialMg":
                mi = new MapItem(menuitem.Name, 1.0, "c56LRepairCoaxialMg", t);
                menu = myContextMenuCrewActions["Loader"];
+               MenuItemCrewActionClickRemoveGunnerRepair();
                break;
             case "Loader_FireMortar":
                mi = new MapItem(menuitem.Name, 1.0, "c58LFireMortar", t);
                menu = myContextMenuCrewActions["Loader"];
+               MenuItemCrewActionClickRemoveGunnerRepair();
                break;
             case "Loader_ChangeGunLoad":
                mi = new MapItem(menuitem.Name, 1.0, "c59LChangeGunLoad", t);
                menu = myContextMenuCrewActions["Loader"];
+               MenuItemCrewActionClickRemoveGunnerRepair();
                break;
             case "Loader_RestockReadyRack":
                mi = new MapItem(menuitem.Name, 1.0, "c60LRestockReadyRack", t);
                menu = myContextMenuCrewActions["Loader"];
+               MenuItemCrewActionClickRemoveGunnerRepair();
                break;
             case "Loader_RepairScope":
                mi = new MapItem(menuitem.Name, 1.0, "c73ReplacePeriscope", t);
                menu = myContextMenuCrewActions["Loader"];
+               MenuItemCrewActionClickRemoveGunnerRepair();
                break;
             case "Loader_FireAaMg":
                mi = new MapItem(menuitem.Name, 1.0, "c71FireAaMg", t);
                menu = myContextMenuCrewActions["Loader"];
+               MenuItemCrewActionClickRemoveGunnerRepair();
                break;
             case "Loader_RepairAaMg":
                mi = new MapItem(menuitem.Name, 1.0, "c72RepairAaMg", t);
                menu = myContextMenuCrewActions["Loader"];
+               MenuItemCrewActionClickRemoveGunnerRepair();
                break;
             case "Loader_FireSubMg":
                mi = new MapItem(menuitem.Name, 1.0, "c74FireSubMg", t);
                menu = myContextMenuCrewActions["Loader"];
+               MenuItemCrewActionClickRemoveGunnerRepair();
                break;
             case "Driver_Stop":
                mi = new MapItem(menuitem.Name, 1.0, "c61DStop", t);
@@ -3157,7 +3171,30 @@ namespace Pattons_Best
          GameAction outaction = GameAction.BattleRoundSequenceCrewOrders;
          myGameEngine.PerformAction(ref myGameInstance, ref outaction, 0);
       }
-      public void MenuItemAmmoReloadClick(object sender, RoutedEventArgs e)
+      private void MenuItemCrewActionClickRemoveGunnerRepair()
+      {
+         foreach (IMapItem crewaction in myGameInstance.CrewActions) // This menu is created on each crew action
+         {
+            if ("Gunner_RepairMainGun" == crewaction.Name)
+            {
+               IMapItem? mi = myGameInstance.CrewActions.Find("Gunner_RepairMainGun");
+               if (null != mi)
+               {
+                  myGameInstance.CrewActions.Remove(mi);
+                  foreach (Button oldButton in myTankButtons)     // Remove existing Button
+                  {
+                     if (oldButton.Name == mi.Name)
+                     {
+                        myTankButtons.Remove(oldButton);
+                        myCanvasTank.Children.Remove(oldButton);
+                        return;
+                     }
+                  }
+               }
+            }
+         }
+      }
+      private void MenuItemAmmoReloadClick(object sender, RoutedEventArgs e)
       {
          MenuItem? menuitem = sender as MenuItem;
          if (null == menuitem)

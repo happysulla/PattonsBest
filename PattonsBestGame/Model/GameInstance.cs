@@ -69,8 +69,9 @@ namespace Pattons_Best
       public int NumOfShermanShot { set; get; } = 0;
       public int NumSmokeAttacksThisRound { set; get; } = 0;
       public bool IsMalfunctionedMainGun { set; get; } = false;
+      public bool IsMainGunRepairAttempted { set; get; } = false;
       public bool IsBrokenMainGun { set; get; } = false;
-      public bool IsBrokenGunsight { set; get; } = false;
+      public bool IsBrokenGunSight { set; get; } = false;
       public Dictionary<string, bool> FirstShots { set; get; } = new Dictionary<string, bool>();
       public Dictionary<string, int> AcquiredShots { set; get; } = new Dictionary<string, int>();
       public List<ShermanAttack> ShermanHits { set; get; } = new List<ShermanAttack>();
@@ -85,9 +86,13 @@ namespace Pattons_Best
       public bool IsShermanFiredBowMg { set; get; } = false;
       public bool IsShermanFiredCoaxialMg { set; get; } = false;
       public bool IsShermanFiredSubMg { set; get; } = false;
+      //---------------------------------------------------------------
       public bool IsMalfunctionedMgAntiAircraft { set; get; } = false;
       public bool IsMalfunctionedMgBow { set; get; } = false;
       public bool IsMalfunctionedMgCoaxial { set; get; } = false;
+      public bool IsCoaxialMgRepairAttempted { set; get; } = false;
+      public bool IsBowMgRepairAttempted { set; get; } = false;
+      public bool IsAaMgRepairAttempted { set; get; } = false;
       public bool IsBrokenMgAntiAircraft { set; get; } = false;
       public bool IsBrokenMgBow { set; get; } = false;
       public bool IsBrokenMgCoaxial { set; get; } = false;
@@ -217,13 +222,13 @@ namespace Pattons_Best
          }
          return crewmember;
       }
-      public bool IsCrewActionPossible(string crewRole, out bool isGiven)
+      public bool IsCrewActionSelectable(string crewRole, out bool isGiven)
       {
          isGiven = false;
          IAfterActionReport? lastReport = this.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsCrewActionPossible(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "IsCrewActionSelectable(): lastReport=null");
             return false;
          }
          int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
@@ -259,7 +264,7 @@ namespace Pattons_Best
                isCommanderOpenHatch = true;
          }
          //---------------------------------
-         bool isMainGunFiringAvailable = ((false == this.IsMalfunctionedMainGun) && (false == this.IsBrokenMainGun) && (false == this.IsBrokenGunsight) && (0 < totalAmmo) && ("None" != this.GetGunLoadType()));
+         bool isMainGunFiringAvailable = ((false == this.IsMalfunctionedMainGun) && (false == this.IsBrokenMainGun) && (false == this.IsBrokenGunSight) && (0 < totalAmmo) && ("None" != this.GetGunLoadType()));
          bool isShermanMoveAvailable = ((false == this.Sherman.IsThrownTrack) && (false == this.Sherman.IsAssistanceNeeded) && (false == this.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch) );
          switch (crewRole)
          {
@@ -281,11 +286,11 @@ namespace Pattons_Best
                   isGiven = true;
                return true;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "IsCrewActionPossible(): reached default crewRole=" + crewRole);
+               Logger.Log(LogEnum.LE_ERROR, "IsCrewActionSelectable(): reached default crewRole=" + crewRole);
                return false;
          }
       }
-      public bool IsCrewActionPossibleButtonedUp(string crewRole, string crewAction)
+      public bool IsCrewActionPossibleButtonUp(string crewRole, string crewAction)
       {
          switch (crewRole)
          {
@@ -324,7 +329,7 @@ namespace Pattons_Best
                IAfterActionReport? lastReport = this.Reports.GetLast();
                if (null == lastReport)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "IsCrewActionPossibleButtonedUp(): lastReport=null");
+                  Logger.Log(LogEnum.LE_ERROR, "IsCrewActionPossibleButtonUp(): lastReport=null");
                   return false;
                }
                TankCard card = new TankCard(lastReport.TankCardNum);
@@ -337,7 +342,7 @@ namespace Pattons_Best
                   return false;
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "IsCrewActionPossibleButtonedUp(): reached default crew role=" + crewRole);
+               Logger.Log(LogEnum.LE_ERROR, "IsCrewActionPossibleButtonUp(): reached default crew role=" + crewRole);
                break;
          }
          return true;

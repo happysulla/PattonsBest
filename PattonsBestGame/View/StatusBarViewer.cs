@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing.Printing;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,6 +23,7 @@ namespace Pattons_Best
       //---------------------------------------------
       private readonly FontFamily myFontFam = new FontFamily("Tahoma");
       private readonly FontFamily myFontFam1 = new FontFamily("Courier New");
+      private readonly Thickness myThickness = new Thickness(10, 0, 10, 0);
       //------------------------------------------------------------------------------------------------------
       public StatusBarViewer(StatusBar sb, IGameEngine ge, IGameInstance gi, Canvas c)
       {
@@ -155,63 +157,63 @@ namespace Pattons_Best
             myStatusBar.Items.Add(imgBrokenScope);
          }
          //-------------------------------------------------------
-         if (true == gi.IsBrokenGunsight)
+         if (true == gi.IsBrokenGunSight)
          {
-            Thickness margin = new Thickness(10, 0, 10, 0);
+
             myStatusBar.Items.Add(new Separator());
-            Image imgBrokenSite = new Image { Source = MapItem.theMapImages.GetBitmapImage("BrokenGunsight"), Width = 30, Height = 30, Margin=margin };
-            myStatusBar.Items.Add(imgBrokenSite);
+            Image imgBrokeSight = new Image { Source = MapItem.theMapImages.GetBitmapImage("BrokenGunsight"), Width = 30, Height = 30, Margin= myThickness };
+            myStatusBar.Items.Add(imgBrokeSight);
          }
          //-------------------------------------------------------
          if (true == gi.IsMalfunctionedMainGun)
          {
             myStatusBar.Items.Add(new Separator());
-            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c118MalFunctionMainGun"), Width = 30, Height = 30 };
+            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c118MalFunctionMainGun"), Width = 30, Height = 30, Margin = myThickness };
             myStatusBar.Items.Add(imgMalfunctingMg);
          }
          else if (true == gi.IsBrokenMainGun)
          {
             myStatusBar.Items.Add(new Separator());
-            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c118BrokenMainGun"), Width = 30, Height = 30 };
+            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c118BrokenMainGun"), Width = 30, Height = 30, Margin = myThickness };
             myStatusBar.Items.Add(imgMalfunctingMg);
          }
          //-------------------------------------------------------
          if (true == gi.IsMalfunctionedMgAntiAircraft)
          {
             myStatusBar.Items.Add(new Separator());
-            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c115MalfunctionAaMg"), Width = 30, Height = 30 };
+            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c115MalfunctionAaMg"), Width = 30, Height = 30, Margin = myThickness };
             myStatusBar.Items.Add(imgMalfunctingMg);
          }
          else if (true == gi.IsBrokenMgAntiAircraft)
          {
             myStatusBar.Items.Add(new Separator());
-            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c115BrokenAaMg"), Width = 30, Height = 30 };
+            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c115BrokenAaMg"), Width = 30, Height = 30, Margin = myThickness };
             myStatusBar.Items.Add(imgMalfunctingMg);
          }
          //-------------------------------------------------------
          if (true == gi.IsMalfunctionedMgBow)
          {
             myStatusBar.Items.Add(new Separator());
-            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c116MalFunctionBowMg"), Width = 30, Height = 30 };
+            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c116MalFunctionBowMg"), Width = 30, Height = 30, Margin = myThickness };
             myStatusBar.Items.Add(imgMalfunctingMg);
          }
          else if (true == gi.IsBrokenMgBow)
          {
             myStatusBar.Items.Add(new Separator());
-            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c116BrokenBowMg"), Width = 30, Height = 30 };
+            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c116BrokenBowMg"), Width = 30, Height = 30, Margin = myThickness };
             myStatusBar.Items.Add(imgMalfunctingMg);
          }
          //-------------------------------------------------------
          if (true == gi.IsMalfunctionedMgCoaxial)
          {
             myStatusBar.Items.Add(new Separator());
-            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c117MalFunctionCoaxialMg"), Width = 30, Height = 30 };
+            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c117MalFunctionCoaxialMg"), Width = 30, Height = 30, Margin = myThickness };
             myStatusBar.Items.Add(imgMalfunctingMg);
          }
          if (true == gi.IsBrokenMgCoaxial)
          {
             myStatusBar.Items.Add(new Separator());
-            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c117BrokenCoaxialMg"), Width = 30, Height = 30 };
+            Image imgMalfunctingMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("c117BrokenCoaxialMg"), Width = 30, Height = 30, Margin = myThickness };
             myStatusBar.Items.Add(imgMalfunctingMg);
          }
       }

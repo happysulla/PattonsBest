@@ -1571,24 +1571,31 @@ namespace Pattons_Best
                }
                else
                {
-                  int modifier = TableMgr.GetBoggedDownModifier(gi);
-                  int comboe51a = gi.DieResults[key][0] + modifier;
-                  myTextBlock.Inlines.Add(new Run(comboe51a.ToString()));
-                  if (comboe51a < 11)
+                  if( 100 == gi.DieResults[key][0] )
                   {
-                     myTextBlock.Inlines.Add(new Run("  =   Tank Free"));
-                  }
-                  else if (comboe51a < 81)
-                  {
-                     myTextBlock.Inlines.Add(new Run("  =   No Effect"));
-                  }
-                  else if (comboe51a < 91)
-                  {
-                     myTextBlock.Inlines.Add(new Run("  =   Tank Throws Track"));
+                     myTextBlock.Inlines.Add(new Run("= Assistance Needed"));
                   }
                   else
                   {
-                     myTextBlock.Inlines.Add(new Run("  =   Assistance Needed"));
+                     int modifier = TableMgr.GetBoggedDownModifier(gi);
+                     int comboe51a = gi.DieResults[key][0] + modifier;
+                     myTextBlock.Inlines.Add(new Run(comboe51a.ToString()));
+                     if (comboe51a < 11)
+                     {
+                        myTextBlock.Inlines.Add(new Run("= Tank Free"));
+                     }
+                     else if (comboe51a < 81)
+                     {
+                        myTextBlock.Inlines.Add(new Run("= No Effect"));
+                     }
+                     else if (comboe51a < 91)
+                     {
+                        myTextBlock.Inlines.Add(new Run("= Tank Throws Track"));
+                     }
+                     else
+                     {
+                        myTextBlock.Inlines.Add(new Run("= Assistance Needed"));
+                     }
                   }
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -1747,11 +1754,11 @@ namespace Pattons_Best
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
                   if (gi.DieResults[key][0] < 31) // Assume that sub MG do not use ammo
-                     myTextBlock.Inlines.Add("  =  Use One MG Ammo box.");
+                     myTextBlock.Inlines.Add("= Use One MG Ammo box.");
                   else if (97 < gi.DieResults[key][0])
-                     myTextBlock.Inlines.Add("  =  MG malfunction!");
+                     myTextBlock.Inlines.Add("= MG malfunction!");
                   else 
-                     myTextBlock.Inlines.Add("  =  No Effect.");
+                     myTextBlock.Inlines.Add("= No Effect.");
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("                                            "));
@@ -1781,6 +1788,188 @@ namespace Pattons_Best
                }
                ReplaceText("PERISCOPE_REPLACEMENT", replacementCount.ToString());
                ReplaceText("PERISCOPE_REPLACEMENT_TOTAL", report.AmmoPeriscope.ToString());
+               break;
+            case "e056":
+               myTextBlock.Inlines.Add(new Run("Modifiers") { TextDecorations = TextDecorations.Underline });
+               myTextBlock.Inlines.Add(new LineBreak());
+               int modifier56;
+               string modiferStringe56 = UpdateEventContentMainGunRepair(gi, out modifier56);
+               if ("ERROR" == modiferStringe56)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): UpdateEventContentMainGunRepair() returned ERROR");
+                  return false;
+               }
+               myTextBlock.Inlines.Add(new Run(modiferStringe56));
+               myTextBlock.Inlines.Add(new Run("Die Roll: "));
+               if (Utilities.NO_RESULT == gi.DieResults[key][0])
+               {
+                  BitmapImage bmi = new BitmapImage();
+                  bmi.BeginInit();
+                  bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
+                  bmi.EndInit();
+                  Image imgDice = new Image { Name = "DieRollBlue", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+                  ImageBehavior.SetAnimatedSource(imgDice, bmi);
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
+               }
+               else
+               {
+                  int combo = gi.DieResults[key][0] + modifier56;
+                  myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
+                  myTextBlock.Inlines.Add(new Run( " - " + Math.Abs(modifier56).ToString()));
+                  myTextBlock.Inlines.Add(new Run(" = " + combo.ToString()));
+                  if (gi.DieResults[key][0] < 21) // Assume that sub MG do not use ammo
+                     myTextBlock.Inlines.Add(new Run(" = Gun Repaired."));
+                  else if ((90 < combo) || (97 < gi.DieResults[key][0]))
+                     myTextBlock.Inlines.Add(new Run(" = GUN BROKEN!"));
+                  else
+                     myTextBlock.Inlines.Add(new Run(" = No Effect."));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  Image imge54b = new Image { Name = "Continue56", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge54b));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
+            case "e056a":
+               myTextBlock.Inlines.Add(new Run("Modifiers") { TextDecorations = TextDecorations.Underline });
+               myTextBlock.Inlines.Add(new LineBreak());
+               int modifier56a;
+               string modiferStringe56a = UpdateEventContentAaMgRepair(gi, out modifier56a);
+               if ("ERROR" == modiferStringe56a)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): UpdateEventContentAaMgRepair() returned ERROR");
+                  return false;
+               }
+               myTextBlock.Inlines.Add(new Run(modiferStringe56a));
+               myTextBlock.Inlines.Add(new Run("Die Roll: "));
+               if (Utilities.NO_RESULT == gi.DieResults[key][0])
+               {
+                  BitmapImage bmi = new BitmapImage();
+                  bmi.BeginInit();
+                  bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
+                  bmi.EndInit();
+                  Image imgDice = new Image { Name = "DieRollBlue", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+                  ImageBehavior.SetAnimatedSource(imgDice, bmi);
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
+               }
+               else
+               {
+                  int combo = gi.DieResults[key][0] + modifier56a;
+                  myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
+                  myTextBlock.Inlines.Add(new Run(" - " + Math.Abs(modifier56a).ToString()));
+                  myTextBlock.Inlines.Add(new Run(" = " + combo.ToString()));
+                  if (combo < 21) // Assume that sub MG do not use ammo
+                     myTextBlock.Inlines.Add(new Run(" = Gun Repaired."));
+                  else if ((90 < combo) || (97 < gi.DieResults[key][0]) )
+                     myTextBlock.Inlines.Add(new Run(" = GUN BROKEN!"));
+                  else
+                     myTextBlock.Inlines.Add(new Run(" = No Effect."));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  Image imge54b = new Image { Name = "Continue56a", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge54b));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
+            case "e056b":
+               myTextBlock.Inlines.Add(new Run("Modifiers") { TextDecorations = TextDecorations.Underline });
+               myTextBlock.Inlines.Add(new LineBreak());
+               StringBuilder sbe056b = new StringBuilder();
+               ICrewMember? assistante56b = gi.GetCrewMember("Assistant");
+               if (null == assistante56b)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): assistant=null");
+                  return false;
+               }
+               sbe056b.Append(" -");
+               sbe056b.Append(assistante56b.Rating.ToString());
+               sbe056b.Append(" for assistant rating\n\n");
+               myTextBlock.Inlines.Add(new Run(sbe056b.ToString()));
+               myTextBlock.Inlines.Add(new Run("Die Roll: "));
+               if (Utilities.NO_RESULT == gi.DieResults[key][0])
+               {
+                  BitmapImage bmi = new BitmapImage();
+                  bmi.BeginInit();
+                  bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
+                  bmi.EndInit();
+                  Image imgDice = new Image { Name = "DieRollBlue", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+                  ImageBehavior.SetAnimatedSource(imgDice, bmi);
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
+               }
+               else
+               {
+                  int combo = gi.DieResults[key][0] - assistante56b.Rating;
+                  myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
+                  myTextBlock.Inlines.Add(new Run(" - " + assistante56b.Rating.ToString()));
+                  myTextBlock.Inlines.Add(new Run(" = " + combo.ToString()));
+                  if (gi.DieResults[key][0] < 21) // Assume that sub MG do not use ammo
+                     myTextBlock.Inlines.Add(" = Gun Repaired.");
+                  else if ((90 < combo) || (97 < gi.DieResults[key][0]))
+                     myTextBlock.Inlines.Add(" = GUN BROKEN!");
+                  else
+                     myTextBlock.Inlines.Add(" = No Effect.");
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  Image imge56b = new Image { Name = "Continue56b", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge56b));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
+            case "e056c":
+               myTextBlock.Inlines.Add(new Run("Modifiers") { TextDecorations = TextDecorations.Underline });
+               myTextBlock.Inlines.Add(new LineBreak());
+               StringBuilder sbe056c = new StringBuilder();
+               ICrewMember? loader56c = gi.GetCrewMember("Loader");
+               if (null == loader56c)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): assistant=null");
+                  return false;
+               }
+               sbe056c.Append(" -");
+               sbe056c.Append(loader56c.Rating.ToString());
+               sbe056c.Append(" for loader rating\n\n");
+               myTextBlock.Inlines.Add(new Run(sbe056c.ToString()));
+               myTextBlock.Inlines.Add(new Run("Die Roll: "));
+               if (Utilities.NO_RESULT == gi.DieResults[key][0])
+               {
+                  BitmapImage bmi = new BitmapImage();
+                  bmi.BeginInit();
+                  bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
+                  bmi.EndInit();
+                  Image imgDice = new Image { Name = "DieRollBlue", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+                  ImageBehavior.SetAnimatedSource(imgDice, bmi);
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
+               }
+               else
+               {
+                  int combo = gi.DieResults[key][0] - loader56c.Rating;
+                  myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
+                  myTextBlock.Inlines.Add(new Run(" - " + loader56c.Rating.ToString()));
+                  myTextBlock.Inlines.Add(new Run(" = " + combo.ToString()));
+                  if (gi.DieResults[key][0] < 21) // Assume that sub MG do not use ammo
+                     myTextBlock.Inlines.Add(" = Gun Repaired.");
+                  else if ((90 < combo) || (97 < gi.DieResults[key][0]))
+                     myTextBlock.Inlines.Add(" = GUN BROKEN!");
+                  else
+                     myTextBlock.Inlines.Add(" = No Effect.");
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  Image imge56c = new Image { Name = "Continue56c", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge56c));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
                break;
             case "e101":
                if (false == UpdateEventContentPromotion(gi))
@@ -2119,7 +2308,8 @@ namespace Pattons_Best
                         return false;
                   }
                }
-               myTextBlock.Inlines.Add(new Run("  Click image to continue."));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("Click image to continue."));
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new Run("                                                 "));
@@ -2979,6 +3169,17 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill(): GetShermanMgToKillNumber() returned error for key=" + key);
             return false;
          }
+         if (TableMgr.NO_CHANCE == toKillNum)
+         {
+            myTextBlock.Inlines.Add(new Run("No chance to kill. "));
+            myTextBlock.Inlines.Add(new Run("Click image to continue."));
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new Run("                                            "));
+            Image imge53e = new Image { Name = "Continue54a", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+            myTextBlock.Inlines.Add(new InlineUIContainer(imge53e));
+            return true;
+         }
          int modifier = TableMgr.GetShermanMgToKillModifier(gi, gi.TargetMg);
          if (TableMgr.FN_ERROR == modifier)
          {
@@ -3011,7 +3212,7 @@ namespace Pattons_Best
          else
          {
             myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
-            if (toKillNum < gi.DieResults[key][0])
+            if (comboMg < gi.DieResults[key][0])
                myTextBlock.Inlines.Add("  =  NO EFFECT");
             else
                myTextBlock.Inlines.Add("  =  KILL");
@@ -3497,57 +3698,123 @@ namespace Pattons_Best
          myTextBlock.Inlines.Add(new Run("Click image to continue."));
          return true;
       }
+      private string UpdateEventContentMainGunRepair(IGameInstance gi, out int modifier)
+      {
+         modifier = 0;
+         bool isGunnerHelpingRepair = false;
+         foreach (IMapItem crewAction in gi.CrewActions)
+         {
+            if ("Gunner_RepairMainGun" == crewAction.Name)
+               isGunnerHelpingRepair = true;
+         }
+         string key = gi.EventActive;
+         StringBuilder sbe056 = new StringBuilder();
+         ICrewMember? loader = gi.GetCrewMember("Loader");
+         if (null == loader)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): loader=null");
+            return "ERROR";
+         }
+         modifier -= loader.Rating;
+         sbe056.Append(" -");
+         sbe056.Append(loader.Rating.ToString());
+         sbe056.Append(" for loader rating\n");
+         if (true == isGunnerHelpingRepair)
+         {
+            ICrewMember? gunner = gi.GetCrewMember("Gunner");
+            if (null == gunner)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gunner=null");
+               return "ERROR";
+            }
+            modifier -= gunner.Rating;
+            sbe056.Append(" -");
+            sbe056.Append(gunner.Rating.ToString());
+            sbe056.Append(" for gunner rating\n");
+         }
+         sbe056.Append("\n");
+         return sbe056.ToString();
+      }
+      private string UpdateEventContentAaMgRepair(IGameInstance gi, out int modifier)
+      {
+         modifier = 0;
+         bool isCommanderRepairing = false;
+         bool isLoaderRepairing = false;
+         foreach (IMapItem crewAction in gi.CrewActions)
+         {
+            if ("Commander_RepairAaMg" == crewAction.Name)
+               isCommanderRepairing = true;
+            if ("Loader_RepairAaMg" == crewAction.Name)
+               isLoaderRepairing = true;
+         }
+         string key = gi.EventActive;
+         StringBuilder sbe056 = new StringBuilder();
+         if (true == isLoaderRepairing)
+         {
+            ICrewMember? loader = gi.GetCrewMember("Loader");
+            if (null == loader)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): loader=null");
+               return "ERROR";
+            }
+            modifier -= loader.Rating;
+            sbe056.Append(" -");
+            sbe056.Append(loader.Rating.ToString());
+            sbe056.Append(" for loader rating\n");
+         }
+         if (true == isCommanderRepairing)
+         {
+            ICrewMember? commander = gi.GetCrewMember("Commander");
+            if (null == commander)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): commander=null");
+               return "ERROR";
+            }
+            modifier -= commander.Rating;
+            sbe056.Append(" -");
+            sbe056.Append(commander.Rating.ToString());
+            sbe056.Append(" for commander rating\n");
+         }
+         sbe056.Append("\n");
+         return sbe056.ToString();
+      }
       //--------------------------------------------------------------------
       private bool IsOrdersGiven(IGameInstance gi, out bool isOrdersGiven)
       {
-         IAfterActionReport? lastReport = gi.Reports.GetLast();
-         if (null == lastReport)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): lastReport=null");
-            isOrdersGiven = false;
-            return false;
-         }
-         TankCard card = new TankCard(lastReport.TankCardNum);
-         int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
-         //-----------------------------------------------
-         bool isAssistantSet = false;
-         bool isGunnerSet = false;
-         bool isCommanderSet = false;
+         bool isAssistantOrderGiven = false;
+         bool isGunnerOrderGiven = false;
+         bool isCommanderOrderGiven = false;
          foreach (IMapItem mi in gi.CrewActions) // Loader and Driver have default actions
          {
             if (true == mi.Name.Contains("Assistant")) // assistant can always pass ammo
-               isAssistantSet = true;
-            if (true == mi.Name.Contains("Gunner")) 
-               isAssistantSet = true;
-            if (true == mi.Name.Contains("Commander")) 
-               isAssistantSet = true;
+               isAssistantOrderGiven = true;
+            if (true == mi.Name.Contains("Gunner"))
+               isGunnerOrderGiven = true;
+            if (true == mi.Name.Contains("Commander"))
+               isCommanderOrderGiven = true;
          }
          //-----------------------------------------------
-         if( false == isGunnerSet)
+         if( false == isGunnerOrderGiven)
          {
-            bool isGunnerOrderPossible;
-            if (false == gi.IsCrewActionPossible("Gunner", out isGunnerOrderPossible))
+            if (false == gi.IsCrewActionSelectable("Gunner", out isGunnerOrderGiven))
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): lastReport=null");
                isOrdersGiven = false;
                return false;
             }
-            isGunnerSet = !isGunnerOrderPossible;
          }
          //-----------------------------------------------
-         if (false == isCommanderSet)
+         if (false == isCommanderOrderGiven)
          {
-            bool isCommanderOrderPossible;
-            if (false == gi.IsCrewActionPossible("Commander", out isCommanderOrderPossible))
+            if (false == gi.IsCrewActionSelectable("Commander", out isCommanderOrderGiven))
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): lastReport=null");
                isOrdersGiven = false;
                return false;
             }
-            isCommanderSet = !isCommanderOrderPossible;
          }
          //-----------------------------------------------
-         if ((true == isAssistantSet) && (true == isGunnerSet) && (true == isCommanderSet))
+         if ((true == isAssistantOrderGiven) && (true == isGunnerOrderGiven) && (true == isCommanderOrderGiven))
             isOrdersGiven = true;
          else
             isOrdersGiven = false;
@@ -4449,7 +4716,22 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "Continue017":
-                           action = GameAction.MovementStartAreaSet;
+                           bool isMapStartAreaExist = false;
+                           foreach( IStack stack in myGameInstance.MoveStacks )
+                           {
+                              foreach(IMapItem mi in stack.MapItems )
+                              { 
+                                 if( true == mi.Name.Contains("StartArea"))
+                                 {
+                                    isMapStartAreaExist = true;
+                                    break;
+                                 }
+                              }
+                           }
+                           if( false == isMapStartAreaExist)
+                              action = GameAction.MovementStartAreaSet;
+                           else
+                              action = GameAction.MovementEnemyStrengthChoice;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "MovementExitAreaSet":
@@ -4670,6 +4952,22 @@ namespace Pattons_Best
                            break;
                         case "BrokenPeriscope":
                            action = GameAction.BattleRoundSequenceReplacePeriscopes;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Continue56":
+                           action = GameAction.BattleRoundSequenceRepairMainGunRoll;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Continue56a":
+                           action = GameAction.BattleRoundSequenceRepairAaMgRoll;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Continue56b":
+                           action = GameAction.BattleRoundSequenceRepairBowMgRoll;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Continue56c":
+                           action = GameAction.BattleRoundSequenceRepairCoaxialMgRoll;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue60":

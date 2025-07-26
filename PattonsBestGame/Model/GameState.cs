@@ -646,7 +646,14 @@ namespace Pattons_Best
          report.VictoryPtsCaptureArea += basePoints;
          //-----------------------------------
          gi.BattlePhase = BattlePhase.None;
-         if (true == gi.IsDaylightLeft(report))
+         //-------------------------------------------------------
+         if ((true == gi.IsBrokenMainGun) || (true == gi.IsBrokenGunSight))
+         {
+            gi.GamePhase = GamePhase.EveningDebriefing;
+            gi.EventDisplayed = gi.EventActive = "e100a";
+            gi.DieRollAction = GameAction.DieRollActionNone;
+         }
+         else if (true == gi.IsDaylightLeft(report))
          {
             gi.GamePhase = GamePhase.Preparations;
             gi.EventDisplayed = gi.EventActive = "e011";
@@ -1479,8 +1486,9 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------------------
-         int NumEnemyUnitsAppearing = Utilities.RandomGenerator.Next(4, 6); // <cgs> TEST - number of enemy units appearing
-         for (int k = 0; k < NumEnemyUnitsAppearing; k++)
+         int numEnemyUnitsAppearing = Utilities.RandomGenerator.Next(4, 6); 
+         numEnemyUnitsAppearing = 1; // <cgs> TEST - number of enemy units appearing
+         for (int k = 0; k < numEnemyUnitsAppearing; k++)
          {
             int die1 = Utilities.RandomGenerator.Next(0, 3);
             //die1 += 3; // <cgs> TEST - create enemy in US Sectors
@@ -1559,6 +1567,7 @@ namespace Pattons_Best
                diceRoll = 100;
             else
                diceRoll = die1 + 10 * die2;
+            diceRoll = 11; // <cgs> TEST -  infantry
             //diceRoll = 45; // <cgs> TEST -  tanks
             //diceRoll = 51; // <cgs> TEST -  ATG
             string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
@@ -1641,34 +1650,38 @@ namespace Pattons_Best
       }
       private bool AddStartingTestingOptions(IGameInstance gi)
       {
-         //--------------------------------
-         gi.IsAdvancingFireChosen = false; // <cgs> TEST
-         //--------------------------------
-         //gi.IsLeadTank = true;
-         //--------------------------------
-         //gi.Sherman.RotationHull = 300; // <cgs> TEST - &&&&&&&
-         //gi.Sherman.RotationTurret = 60;
-         //gi.Sherman.IsMoving = false;
-         gi.Sherman.IsHullDown = false;
-         //gi.Sherman.IsBoggedDown = true;
-         //gi.Sherman.IsAssistanceNeeded = true;
-         //--------------------------------
-         //gi.IsBrokenPeriscopeDriver = true;
-         //gi.IsBrokenPeriscopeLoader = true;
-         //gi.IsBrokenPeriscopeAssistant = true;
-         //gi.IsBrokenPeriscopeGunner = true;
-         //gi.IsBrokenPeriscopeCommander = true;
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
             Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingOptions(): lastReport=null");
             return false;
          }
-         lastReport.AmmoPeriscope = 3;
          //--------------------------------
-         //gi.IsBrokenGunsight = true;
+         gi.IsAdvancingFireChosen = false; // <cgs> TEST
          //--------------------------------
-         gi.PromotionPointNum = 290;
+         //gi.IsLeadTank = true;
+         //--------------------------------
+         //gi.Sherman.RotationHull = 300; // <cgs> TEST
+         //gi.Sherman.RotationTurret = 60;
+         //gi.Sherman.IsMoving = false;
+         //gi.Sherman.IsHullDown = false;
+         //gi.Sherman.IsBoggedDown = true;
+         //gi.Sherman.IsAssistanceNeeded = true;
+         //--------------------------------
+         //lastReport.AmmoPeriscope = 3;
+         //gi.IsBrokenPeriscopeDriver = true;
+         //gi.IsBrokenPeriscopeLoader = true;
+         //gi.IsBrokenPeriscopeAssistant = true;
+         //gi.IsBrokenPeriscopeGunner = true;
+         //gi.IsBrokenPeriscopeCommander = true;
+         //--------------------------------
+         //gi.IsMalfunctionedMainGun = true;
+         //gi.IsBrokenGunSight = true;
+         //gi.IsMalfunctionedMgAntiAircraft = true;
+         //gi.IsMalfunctionedMgBow = true;
+         //gi.IsMalfunctionedMgCoaxial = true;
+         //--------------------------------
+         gi.PromotionPointNum = 400;
          return true;
       }
    }
@@ -2071,7 +2084,7 @@ namespace Pattons_Best
                   gi.EventDisplayed = gi.EventActive; // next screen to show
                   break;
                case GameAction.MovementStartAreaSet:
-                  theIs1stEnemyStrengthCheckTerritory = true;
+                  theIs1stEnemyStrengthCheckTerritory = true; // do not do enemy strength check on first area which is the start area
                   gi.EventDisplayed = gi.EventActive = "e018";
                   break;
                case GameAction.MovementStartAreaRestart:
@@ -2113,7 +2126,7 @@ namespace Pattons_Best
                   gi.EventDisplayed = gi.EventActive = "e021";
                   gi.DieRollAction = GameAction.MovementEnemyStrengthCheckTerritoryRoll;
                   break;
-               case GameAction.MovementEnemyStrengthCheckTerritoryRoll:
+               case GameAction.MovementEnemyStrengthCheckTerritoryRoll: 
                   theIs1stEnemyStrengthCheckTerritory = false;
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
@@ -2822,20 +2835,20 @@ namespace Pattons_Best
          }
          StringBuilder sb12 = new StringBuilder();
          if ("OK" != returnStatus)
-            sb12.Append("<<<<ERROR2::::::GameStateBattle.PerformAction():");
+            sb12.Append("<<<<ERROR2::::::GameStateBattle.PerformAction(): ");
          sb12.Append("===>p=");
          sb12.Append(previousPhase.ToString());
          if (previousPhase != gi.GamePhase)
-         { sb12.Append("=>"); sb12.Append(gi.GamePhase.ToString()); }
+            { sb12.Append("=>"); sb12.Append(gi.GamePhase.ToString()); }
          sb12.Append(" a="); sb12.Append(previousAction.ToString());
          if (previousAction != action)
-         { sb12.Append("=>"); sb12.Append(action.ToString()); }
+            { sb12.Append("=>"); sb12.Append(action.ToString()); }
          sb12.Append(" dra="); sb12.Append(previousDieAction.ToString());
          if (previousDieAction != gi.DieRollAction)
-         { sb12.Append("=>"); sb12.Append(gi.DieRollAction.ToString()); }
+            { sb12.Append("=>"); sb12.Append(gi.DieRollAction.ToString()); }
          sb12.Append(" e="); sb12.Append(previousEvent);
          if (previousEvent != gi.EventActive)
-         { sb12.Append("=>"); sb12.Append(gi.EventActive); }
+            { sb12.Append("=>"); sb12.Append(gi.EventActive); }
          sb12.Append(" dr="); sb12.Append(dieRoll.ToString());
          if ("OK" == returnStatus)
             Logger.Log(LogEnum.LE_NEXT_ACTION, sb12.ToString());
@@ -2931,7 +2944,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "GameStateBattleRoundSequence.PerformAction(): adding mi=" + addition.Name + " from BattleStacks=" + gi.BattleStacks.ToString());
                   }
                   //----------------------------------------------
-                  if (false == SpottingPhaseBegin(gi, ref action))
+                  if (false == SpottingPhaseBegin(gi, ref action, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceSmokeDepletionEnd)"))
                   {
                      returnStatus = "SpottingPhaseBegin() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceSmokeDepletionEnd): " + returnStatus);
@@ -2943,13 +2956,14 @@ namespace Pattons_Best
                   gi.BattlePhase = BattlePhase.MarkCrewAction;
                   gi.EventDisplayed = gi.EventActive = "e038";
                   gi.DieRollAction = GameAction.DieRollActionNone;
-                  gi.CrewActions.Clear(); // reset newxt round for spotting
+                  gi.CrewActions.Clear();           // GameStateBattleRoundSequence.BattleRoundSequenceSpottingEnd
                   break;
                case GameAction.BattleRoundSequenceCrewOrders:
                   Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceCrewOrders): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.MarkCrewAction");
                   gi.BattlePhase = BattlePhase.MarkCrewAction;
                   break;
                case GameAction.BattleRoundSequenceAmmoOrders:
+                  gi.IsHatchesActive = false;
                   if( false == SetDefaultCrewActions(gi))
                   {
                      returnStatus = "SetDefaultCrewActions() returned false";
@@ -3298,10 +3312,10 @@ namespace Pattons_Best
                         }
                         else
                         {
-                           if (false == SpottingPhaseBegin(gi, ref action))
+                           if (false == NextStepAfterRandomEvent(gi, ref action))
                            {
-                              returnStatus = "SpottingPhaseBegin() returned false";
-                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequencePanzerfaustToHitRoll): " + returnStatus);
+                              returnStatus = "NextStepAfterRandomEvent() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMinefieldRoll): " + returnStatus);
                            }
                         }
                      }
@@ -3495,37 +3509,44 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     int modifer = TableMgr.GetBoggedDownModifier(gi);
-                     if( TableMgr.FN_ERROR == modifer)
+                     if (100 == gi.DieResults[key][0]) //  unmodified roll of 100 means assistance needed
                      {
-                        returnStatus = "GetBoggedDownModifier() returned error";
-                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceBoggedDownRoll): " + returnStatus);
+                        gi.Sherman.IsAssistanceNeeded = true;
                      }
                      else
                      {
-                        int combo51a = gi.DieResults[key][0] + modifer;
-                        if (combo51a < 11)
+                        int modifer = TableMgr.GetBoggedDownModifier(gi);
+                        if (TableMgr.FN_ERROR == modifer)
                         {
-                           gi.Sherman.IsBoggedDown = false;
-                        }
-                        else if (combo51a < 81)
-                        {
-                           // do nothing
-                        }
-                        else if (combo51a < 91)
-                        {
-                           gi.Sherman.IsThrownTrack = true;
+                           returnStatus = "GetBoggedDownModifier() returned error";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceBoggedDownRoll): " + returnStatus);
                         }
                         else
                         {
-                           gi.Sherman.IsAssistanceNeeded = true;
-                        }
-                        //---------------------------------------------------
-                        gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
-                        if (false == ConductCrewAction(gi, ref action))
-                        {
-                           returnStatus = "ConductCrewAction() returned false";
-                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceBoggedDownRoll): " + returnStatus);
+                           int combo51a = gi.DieResults[key][0] + modifer;
+                           if (combo51a < 11)
+                           {
+                              gi.Sherman.IsBoggedDown = false;
+                           }
+                           else if (combo51a < 81)
+                           {
+                              // do nothing
+                           }
+                           else if (combo51a < 91)
+                           {
+                              gi.Sherman.IsThrownTrack = true;
+                           }
+                           else
+                           {
+                              gi.Sherman.IsAssistanceNeeded = true;
+                           }
+                           //---------------------------------------------------
+                           gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
+                           if (false == ConductCrewAction(gi, ref action))
+                           {
+                              returnStatus = "ConductCrewAction() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceBoggedDownRoll): " + returnStatus);
+                           }
                         }
                      }
                   }
@@ -3599,7 +3620,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceShermanToHitRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 98; // <cgs> TEST - Sherman To Hit Roll
+                     //dieRoll = 98; // <cgs> TEST - Sherman To Hit Roll
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                      gi.FiredAmmoType = gi.GetGunLoadType();  // used in EventViewer.UpdateEventContentToGetToHit()
@@ -3616,7 +3637,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceShermanToHitRollNothing:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 98; // <cgs> TEST - Sherman To Hit Roll
+                     // dieRoll = 98; // <cgs> TEST - Sherman To Hit Roll
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -4130,6 +4151,58 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceLoadMainGun): " + returnStatus);
                   }
                   break;
+               case GameAction.BattleRoundSequenceRepairMainGunRoll:
+                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
+                  {
+                     //dieRoll = 99; // <cgs> TEST - break main gun
+                     gi.DieResults[key][0] = dieRoll;
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else if( false == RepairMainGunAttempt(gi, ref action))
+                  {
+                     returnStatus = "RepairMainGunAttempt() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceRepairMainGunRoll): " + returnStatus);
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceRepairAaMgRoll:
+                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
+                  {
+                     //dieRoll = 01; // <cgs> TEST - break AAMG
+                     gi.DieResults[key][0] = dieRoll;
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else if (false == RepairAntiAircraftMgAttempt(gi, ref action))
+                  {
+                     returnStatus = "RepairAntiAircraftMgAttempt() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceRepairMainGunRoll): " + returnStatus);
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceRepairBowMgRoll:
+                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
+                  {
+                     //dieRoll = 01; // <cgs> TEST - break BMG
+                     gi.DieResults[key][0] = dieRoll;
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else if (false == RepairBowMgAttempt(gi, ref action))
+                  {
+                     returnStatus = "RepairBowMgAttempt() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceRepairBowMgRoll): " + returnStatus);
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceRepairCoaxialMgRoll:
+                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
+                  {
+                     //dieRoll = 01; // <cgs> TEST - break CMG
+                     gi.DieResults[key][0] = dieRoll;
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else if (false == RepairCoaxialMgAttempt(gi, ref action))
+                  {
+                     returnStatus = "RepairCoaxialMgAttempt() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceRepairCoaxialMgRoll): " + returnStatus);
+                  }
+                  break;
                case GameAction.BattleShermanKilled:
                   break;
                case GameAction.UpdateTankExplosion:
@@ -4140,7 +4213,7 @@ namespace Pattons_Best
                   gi.EventDisplayed = gi.EventActive = "e036";
                   break;
                case GameAction.BattleEmptyResolve:
-                  gi.CrewActions.Clear();
+                  gi.CrewActions.Clear();           // GameStateBattleRoundSequence.BattleEmptyResolve
                   if (false == ResetRound(gi))
                   {
                      returnStatus = "ResetRound() returned false";
@@ -4210,7 +4283,7 @@ namespace Pattons_Best
          }
          else
          {
-            if (false == SpottingPhaseBegin(gi, ref action))
+            if (false == SpottingPhaseBegin(gi, ref action, "BattleRoundSequenceStart()"))
             {
                Logger.Log(LogEnum.LE_ERROR, "BattleRoundSequenceStart(): SpottingPhaseBegin() returned false");
                return false;
@@ -4246,14 +4319,14 @@ namespace Pattons_Best
             outAction = GameAction.BattleCollateralDamageCheck;
             gi.NumCollateralDamage++; // check for collateral damage after resolving artillery roll
          }
-         else if (false == SpottingPhaseBegin(gi, ref outAction))
+         else if (false == SpottingPhaseBegin(gi, ref outAction, "CheckCrewMemberExposed()"))
          {
             Logger.Log(LogEnum.LE_ERROR, "CheckCrewMemberExposed(): SpottingPhaseBegin() returned false");
             return false;
          }
          return true;
       }
-      private bool SpottingPhaseBegin(IGameInstance gi, ref GameAction outAction)
+      private bool SpottingPhaseBegin(IGameInstance gi, ref GameAction outAction, string caller)
       {
          string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Gunner" };
          foreach (string crewmember in crewmembers)
@@ -4274,7 +4347,7 @@ namespace Pattons_Best
                }
                if( true == Logger.theLogLevel[(int)LogEnum.LE_EVENT_VIEWER_SPOTTING])
                {
-                  StringBuilder sb = new StringBuilder("GameStateBattle.PerformAction(): cm=");
+                  StringBuilder sb = new StringBuilder("SpottingPhaseBegin(): " + caller + ": cm=");
                   sb.Append(cm.Role);
                   sb.Append(" spotting for territories=(");
                   int i = 0;
@@ -4294,6 +4367,7 @@ namespace Pattons_Best
                }
             }
          }
+         gi.CrewActions.Clear();         // SpottingPhaseBegin() - skipping spotting b/c nobody to find
          outAction = GameAction.BattleRoundSequenceCrewOrders;
          Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "SpottingPhaseBegin(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.MarkCrewAction");
          gi.BattlePhase = BattlePhase.MarkCrewAction;
@@ -4517,27 +4591,54 @@ namespace Pattons_Best
          if (CrewActionPhase.RepairGun == gi.CrewActionPhase)
          {
             gi.CrewActionPhase = CrewActionPhase.FireMortar;
-            bool isRepairGun = false;
+            bool isRepairMainGun = false;
+            bool isRepairAaMg = false;
+            bool isRepairCoaxialMg = false;
+            bool isRepairBowMg= false;
             foreach (IMapItem crewAction in gi.CrewActions)
             {
                if ("Loader_RepairMainGun" == crewAction.Name)
-                  isRepairGun = true;
+                  isRepairMainGun = true;
                if ("Loader_RepairCoaxialMg" == crewAction.Name)
-                  isRepairGun = true;
+                  isRepairCoaxialMg = true;
                if ("Assistant_RepairBowMg" == crewAction.Name)
-                  isRepairGun = true;
+                  isRepairBowMg = true;
                if ("Loader_RepairAaMg" == crewAction.Name)
-                  isRepairGun = true;
+                  isRepairAaMg = true;
                if ("Commander_RepairAaMg" == crewAction.Name)
-                  isRepairGun = true;
+                  isRepairAaMg = true;
             }
-            if (true == isRepairGun)
+            if ( (true == isRepairMainGun) && (false == gi.IsMainGunRepairAttempted) )
             {
-               outAction = GameAction.BattleRoundSequenceShermanRepairGun;
+               gi.IsMainGunRepairAttempted = true;
                gi.EventDisplayed = gi.EventActive = "e056";
-               gi.DieRollAction = GameAction.DieRollActionNone;
+               gi.DieRollAction = GameAction.BattleRoundSequenceRepairMainGunRoll;
                gi.CrewActionPhase = CrewActionPhase.RepairGun;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 11-phase=" + gi.CrewActionPhase.ToString());
+            }
+            else if ( (true == isRepairAaMg) && (false == gi.IsAaMgRepairAttempted) )
+            {
+               gi.IsAaMgRepairAttempted = true;
+               gi.EventDisplayed = gi.EventActive = "e056a";
+               gi.DieRollAction = GameAction.BattleRoundSequenceRepairAaMgRoll;
+               gi.CrewActionPhase = CrewActionPhase.RepairGun;
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 12-phase=" + gi.CrewActionPhase.ToString());
+            }
+            else if ( (true == isRepairBowMg) && (false == gi.IsBowMgRepairAttempted) )
+            {
+               gi.IsBowMgRepairAttempted = true;
+               gi.EventDisplayed = gi.EventActive = "e056b";
+               gi.DieRollAction = GameAction.BattleRoundSequenceRepairCoaxialMgRoll;
+               gi.CrewActionPhase = CrewActionPhase.RepairGun;
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 13-phase=" + gi.CrewActionPhase.ToString());
+            }
+            else if ( (true == isRepairCoaxialMg) && (false == gi.IsCoaxialMgRepairAttempted) )
+            {
+               gi.IsCoaxialMgRepairAttempted = true;
+               gi.EventDisplayed = gi.EventActive = "e056c";
+               gi.DieRollAction = GameAction.BattleRoundSequenceRepairBowMgRoll;
+               gi.CrewActionPhase = CrewActionPhase.RepairGun;
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 14-phase=" + gi.CrewActionPhase.ToString());
             }
          }
          //---------------------------------------------------------
@@ -4553,7 +4654,7 @@ namespace Pattons_Best
             if (true == isFireMortar)
             {
                gi.CrewActionPhase = CrewActionPhase.FireMortar;
-               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 12-phase=" + gi.CrewActionPhase.ToString());
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 15-phase=" + gi.CrewActionPhase.ToString());
             }
          }
          //---------------------------------------------------------
@@ -4569,9 +4670,10 @@ namespace Pattons_Best
             if (true == isThrowGrenade)
             {
                gi.CrewActionPhase = CrewActionPhase.ThrowGrenades;
-               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 13-phase=" + gi.CrewActionPhase.ToString());
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 16-phase=" + gi.CrewActionPhase.ToString());
             }
          }
+         //---------------------------------------------------------
          if (CrewActionPhase.None == gi.CrewActionPhase)
          {
             Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "ConductCrewAction(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.RandomEvent");
@@ -4956,7 +5058,7 @@ namespace Pattons_Best
                }
                else
                {
-                  if (9 < gi.DieResults[key][0])
+                  if ((9 < gi.DieResults[key][0]) || (true == gi.IsShermanDeliberateImmobilization) )
                   {
                      hit.myHitLocation = "Thrown Track";
                      if (true == gi.TargetMainGun.Name.Contains("Truck"))
@@ -5051,6 +5153,7 @@ namespace Pattons_Best
          {
             toKillNum = TableMgr.GetShermanToKillInfantryBaseNumber(gi, gi.TargetMainGun, hit);
             int modifier = TableMgr.GetShermanToKillInfantryModifier(gi, gi.TargetMainGun, hit);
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): vs Infantry target tokill=" + toKillNum.ToString() + " mod=" + modifier.ToString() + " IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
             if (TableMgr.FN_ERROR == modifier)
             {
                Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitKill(): GetShermanToKillInfantryModifier() returned error");
@@ -5470,6 +5573,174 @@ namespace Pattons_Best
          }
          return true;
       }
+      private bool RepairMainGunAttempt(IGameInstance gi, ref GameAction outAction)
+      {
+         string key = gi.EventActive;
+         int combo = gi.DieResults[key][0];
+         //-------------------------------------------------------
+         ICrewMember? loader = gi.GetCrewMember("Loader");
+         if (null == loader)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "RepairMainGunAttempt(): loader=null");
+            return false;
+         }
+         combo -= loader.Rating;
+         //-------------------------------------------------------
+         bool isGunnerHelpingRepair = false;
+         foreach (IMapItem crewAction in gi.CrewActions)
+         {
+            if ("Gunner_RepairMainGun" == crewAction.Name)
+               isGunnerHelpingRepair = true;
+         }
+         if (true == isGunnerHelpingRepair)
+         {
+            ICrewMember? gunner = gi.GetCrewMember("Gunner");
+            if (null == gunner)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "RepairMainGunAttempt(): gunner=null");
+               return false;
+            }
+            combo -= gunner.Rating;
+         }
+         //-------------------------------------------------------
+         if (combo < 21)
+         {
+            gi.IsMalfunctionedMainGun = false;
+         }
+         else if ((90 < combo) || (97 < gi.DieResults[key][0])) // gun automatically breaks on unmodified die roll greater than 97
+         {
+            gi.IsMalfunctionedMainGun = false;
+            gi.IsBrokenMainGun = true;
+         }
+         gi.CrewActionPhase = CrewActionPhase.RepairGun;
+         if (false == ConductCrewAction(gi, ref outAction))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "RepairMainGunAttempt(): ConductCrewAction() returned false");
+            return false;
+         }
+         gi.DieResults[key][0] = Utilities.NO_RESULT;
+         return true;
+      }
+      private bool RepairAntiAircraftMgAttempt(IGameInstance gi, ref GameAction outAction)
+      {
+         string key = gi.EventActive;
+         int combo = gi.DieResults[key][0];
+         //-------------------------------------------------------
+         bool isCommanderRepairing = false;
+         bool isLoaderRepairing = false;
+         foreach (IMapItem crewAction in gi.CrewActions)
+         {
+            if ("Commander_RepairAaMg" == crewAction.Name)
+               isCommanderRepairing = true;
+            if ("Loader_RepairAaMg" == crewAction.Name)
+               isLoaderRepairing = true;
+         }
+         //-------------------------------------------------------
+         if( true == isLoaderRepairing )
+         {
+            ICrewMember? loader = gi.GetCrewMember("Loader");
+            if (null == loader)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "RepairAntiAircraftMgAttempt(): loader=null");
+               return false;
+            }
+            combo -= loader.Rating;
+         }
+         //-------------------------------------------------------
+         if (true == isCommanderRepairing)
+         {
+            ICrewMember? commander = gi.GetCrewMember("Commander");
+            if (null == commander)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "RepairAntiAircraftMgAttempt(): commander=null");
+               return false;
+            }
+            combo -= commander.Rating;
+         }
+         //-------------------------------------------------------
+         if (combo < 21)
+         {
+            gi.IsMalfunctionedMgAntiAircraft = false;
+         }
+         else if ( (90 < combo) || (97 < gi.DieResults[key][0]) ) // gun automatically breaks on unmodified die roll greater than 97
+         {
+            gi.IsMalfunctionedMgAntiAircraft = false;
+            gi.IsBrokenMgAntiAircraft = true;
+         }
+         //-------------------------------------------------------
+         gi.CrewActionPhase = CrewActionPhase.RepairGun;
+         if (false == ConductCrewAction(gi, ref outAction))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "RepairAntiAircraftMgAttempt(): ConductCrewAction() returned false");
+            return false;
+         }
+         gi.DieResults[key][0] = Utilities.NO_RESULT;
+         return true;
+      }
+      private bool RepairBowMgAttempt(IGameInstance gi, ref GameAction outAction)
+      {
+         string key = gi.EventActive;
+         int combo = gi.DieResults[key][0];
+         //-------------------------------------------------------
+         ICrewMember? assistant = gi.GetCrewMember("Assistant");
+         if (null == assistant)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "RepairBowMgAttempt(): assistant=null");
+            return false;
+         }
+         combo -= assistant.Rating;
+         //-------------------------------------------------------
+         if (combo < 21)
+         {
+            gi.IsMalfunctionedMgBow = false;
+         }
+         else if ((90 < combo) || (97 < gi.DieResults[key][0])) // gun automatically breaks on unmodified die roll greater than 97
+         {
+            gi.IsMalfunctionedMgBow = false;
+            gi.IsBrokenMgBow = true;
+         }
+         //-------------------------------------------------------
+         gi.CrewActionPhase = CrewActionPhase.RepairGun;
+         if (false == ConductCrewAction(gi, ref outAction))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "RepairBowMgAttempt(): ConductCrewAction() returned false");
+            return false;
+         }
+         gi.DieResults[key][0] = Utilities.NO_RESULT;
+         return true;
+      }
+      private bool RepairCoaxialMgAttempt(IGameInstance gi, ref GameAction outAction)
+      {
+         string key = gi.EventActive;
+         int combo = gi.DieResults[key][0];
+         //-------------------------------------------------------
+         ICrewMember? loader = gi.GetCrewMember("Loader");
+         if (null == loader)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "RepairBowCoaxialAttempt(): loader=null");
+            return false;
+         }
+         combo -= loader.Rating;
+         //-------------------------------------------------------
+         if (combo < 21)
+         {
+            gi.IsMalfunctionedMgCoaxial = false;
+         }
+         else if ((90 < combo) || (97 < gi.DieResults[key][0])) // gun automatically breaks on unmodified die roll greater than 97
+         {
+            gi.IsMalfunctionedMgCoaxial = false;
+            gi.IsBrokenMgCoaxial = true;
+         }
+         //-------------------------------------------------------
+         gi.CrewActionPhase = CrewActionPhase.RepairGun;
+         if (false == ConductCrewAction(gi, ref outAction))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "RepairBowCoaxialAttempt(): ConductCrewAction() returned false");
+            return false;
+         }
+         gi.DieResults[key][0] = Utilities.NO_RESULT;
+         return true;
+      }
       private bool NextStepAfterRandomEvent(IGameInstance gi, ref GameAction outAction)
       {
          IAfterActionReport? lastReport = gi.Reports.GetLast();
@@ -5481,7 +5752,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (BattlePhase.AmbushRandomEvent == gi.BattlePhase)
          {
-            if (false == SpottingPhaseBegin(gi, ref outAction))
+            if (false == SpottingPhaseBegin(gi, ref outAction, "NextStepAfterRandomEvent()"))
             {
                Logger.Log(LogEnum.LE_ERROR, "NextStepAfterRandomEvent(): SpottingPhaseBegin() returned false");
                return false;
@@ -5546,7 +5817,7 @@ namespace Pattons_Best
          gi.IsHatchesActive = false;
          //-------------------------------------------------------
          gi.IsShermanFirstShot = false;
-         gi.IsShermanDeliberateImmobilization = false;
+         gi.IsShermanDeliberateImmobilization = false; // ResetRound()
          gi.NumSmokeAttacksThisRound = 0;
          gi.ShermanHits.Clear();
          //-------------------------------------------------------
@@ -5559,6 +5830,11 @@ namespace Pattons_Best
          gi.IsShermanFiredBowMg = false;
          gi.IsShermanFiredCoaxialMg = false;
          gi.IsShermanFiredSubMg = false;
+         //-------------------------------------------------------
+         gi.IsMainGunRepairAttempted = false;
+         gi.IsAaMgRepairAttempted = false;
+         gi.IsBowMgRepairAttempted = false;
+         gi.IsCoaxialMgRepairAttempted = false;
          //-------------------------------------------------------
          gi.IsShermanTurretRotated = false;
          gi.ShermanRotationTurretOld = gi.Sherman.RotationTurret ;
@@ -5585,7 +5861,6 @@ namespace Pattons_Best
          }
          //-------------------------------------------------------
          gi.MapItemMoves.Clear();
-         //-------------------------------------------------------
          gi.Sherman.IsMoved = false;
          //-------------------------------------------------------
          if (false == ResetDieResults(gi))
@@ -5615,7 +5890,6 @@ namespace Pattons_Best
          else
          {
             gi.EventDisplayed = gi.EventActive = "e036";
-
          }
          return true;
       }
@@ -5665,23 +5939,7 @@ namespace Pattons_Best
                case GameAction.EveningDebriefingStart: // Only change active event
                   gi.EventDisplayed = gi.EventActive = "e100";
                   gi.DieRollAction = GameAction.DieRollActionNone;
-                   gi.IsMinefieldAttack = false; // Reset the battle round
-                  gi.IsHarrassingFire = false;
-                  gi.IsFlankingFire = false;
-                  gi.IsEnemyAdvanceComplete = false;
-                  gi.NumOfShermanShot = 0;
-                  gi.TargetMainGun = null;           // Reset the battle round
-                  gi.IsShermanFiringAtFront = false; // Reset the battle round
-                  gi.IsMalfunctionedMgAntiAircraft = false;
-                  gi.IsMalfunctionedMgBow = false;
-                  gi.IsMalfunctionedMgCoaxial = false;
-                  gi.IsBrokenGunsight = false;
-                  gi.IsMalfunctionedMainGun = false;
-                  gi.NewMembers.Clear();  // clear out tank card
-                  gi.ReadyRacks.Clear();
-                  gi.Hatches.Clear();
-                  gi.CrewActions.Clear();
-                  gi.GunLoads.Clear();
+
                   break;
                case GameAction.EveningDebriefingRatingImprovement: // Only change active event
                   gi.BattleStacks.Clear();
@@ -5966,10 +6224,10 @@ namespace Pattons_Best
          gi.NewMembers.Clear();
          gi.ReadyRacks.Clear();
          gi.Hatches.Clear();
-         gi.CrewActions.Clear();
+         gi.CrewActions.Clear();            // ResetDay()
          gi.GunLoads.Clear();
-         gi.TargetMainGun = null;           // Reset the day
-         gi.IsShermanFiringAtFront = false; // Reset the day
+         gi.TargetMainGun = null;           // ResetDay()
+         gi.IsShermanFiringAtFront = false; // ResetDay()
          //-------------------------------------------------------
          gi.EnemyStrengthCheckTerritory = null;
          gi.ArtillerySupportCheck = null;
@@ -5978,12 +6236,20 @@ namespace Pattons_Best
          gi.AdvanceFire = null;
          //-------------------------------------------------------
          gi.IsHatchesActive = false;
+         //-------------------------------------------------------
+         gi.IsMinefieldAttack = false; // Reset the battle round
+         gi.IsHarrassingFire = false;
+         gi.IsFlankingFire = false;
+         gi.IsEnemyAdvanceComplete = false;
          //------------------------------------------------
          gi.IsShermanFirstShot = false;
-         gi.IsShermanDeliberateImmobilization = false;
+         gi.IsShermanFiringAtFront = false; // Reset the battle round
+         gi.IsShermanDeliberateImmobilization = false; // ResetDay()
+         gi.TargetMainGun = null;           // Reset the battle round
          gi.NumOfShermanShot = 0;
          gi.IsMalfunctionedMainGun = false;
-         gi.IsBrokenGunsight = false;
+         gi.IsBrokenMainGun = false;
+         gi.IsBrokenGunSight = false;
          gi.FirstShots.Clear();
          gi.AcquiredShots.Clear();
          gi.ShermanHits.Clear();
@@ -6000,6 +6266,9 @@ namespace Pattons_Best
          gi.IsMalfunctionedMgAntiAircraft = false;
          gi.IsMalfunctionedMgBow = false;
          gi.IsMalfunctionedMgCoaxial = false;
+         gi.IsBrokenMgAntiAircraft = false;
+         gi.IsBrokenMgCoaxial = false;
+         gi.IsBrokenMgAntiAircraft = false;
          //-------------------------------------------------------
          gi.IsBrokenPeriscopeDriver = false;
          gi.IsBrokenPeriscopeLoader = false;

@@ -676,10 +676,25 @@ Replacing PERISCOPE_REPLACEMENT out of PERISCOPE_REPLACEMENT_TOTAL left as shown
                         <InlineUIContainer><Image Name='BrokenPeriscope' Height='222' Width='350'></Image></InlineUIContainer>
 <LineBreak/><LineBreak/>
 Click image to continue."
-e056	"<Bold>e056 Repair Gun</Bold> 
+e056	"<Bold>056 Repair Main Gun</Bold> 
 <InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>
-Attempt to repair malfunction gun by rolling on the <InlineUIContainer><Button Content=Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
+Attempt to repair malfunction gun by rolling on the <InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
+<LineBreak/><LineBreak/>"
+e056a	"<Bold>e056a Repair AA Machine Gun</Bold> 
+<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Attempt to repair malfunction gun by rolling on the <InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
+<LineBreak/><LineBreak/>"
+e056b	"<Bold>e056b Repair Bow Machine Gun</Bold> 
+<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Attempt to repair malfunction gun by rolling on the <InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
+<LineBreak/><LineBreak/>"
+e056c	"<Bold>e056c Repair Coaxial Machine Gun</Bold> 
+<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Attempt to repair malfunction gun by rolling on the <InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
 <LineBreak/><LineBreak/>"
 e060	"<Bold>e060 Reset Round</Bold> 
 <InlineUIContainer><Button Content='r4.77' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
@@ -689,6 +704,14 @@ Since the battle did not end, reset and return back to Spotting Round. Click ima
                                             <InlineUIContainer><Image Name='Continue60' Height='100' Width='100'></Image></InlineUIContainer>"
 e100	"<Bold>e100 Evening Debriefing</Bold> 
 <LineBreak/><LineBreak/>
+An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+Click image to continue to continue to Crew Rating Improvements per 
+<InlineUIContainer><Button Content='r4.91' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+                  <InlineUIContainer><Image Name='Debrief' Height='200' Width='400'></Image></InlineUIContainer>"
+e100a	"<Bold>e100a Tank Retires for Today</Bold> 
+<LineBreak/><LineBreak/>
+Due to broken gun or broken gunsite, the tank must be retired for today. <LineBreak/>
 An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
 Click image to continue to continue to Crew Rating Improvements per 
 <InlineUIContainer><Button Content='r4.91' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   

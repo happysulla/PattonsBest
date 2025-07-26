@@ -121,8 +121,9 @@ namespace Pattons_Best
       int NumOfShermanShot { set; get; }
       int NumSmokeAttacksThisRound { set; get; }
       bool IsMalfunctionedMainGun { set; get; }
+      bool IsMainGunRepairAttempted { set; get; }
       bool IsBrokenMainGun { set; get; }
-      bool IsBrokenGunsight { set; get; }
+      bool IsBrokenGunSight { set; get; }
       Dictionary<string, bool> FirstShots { set; get; }
       Dictionary<string, int> AcquiredShots { set; get; }
       List<ShermanAttack> ShermanHits { set; get; }
@@ -137,9 +138,13 @@ namespace Pattons_Best
       bool IsShermanFiredBowMg { set; get; }
       bool IsShermanFiredCoaxialMg { set; get; }
       bool IsShermanFiredSubMg { set; get; }
+      //------------------------------------------------
       bool IsMalfunctionedMgCoaxial { set; get; }
       bool IsMalfunctionedMgBow { set; get; }
       bool IsMalfunctionedMgAntiAircraft { set; get; }
+      bool IsCoaxialMgRepairAttempted { set; get; }
+      bool IsBowMgRepairAttempted { set; get; }
+      bool IsAaMgRepairAttempted { set; get; }
       bool IsBrokenMgAntiAircraft { set; get; }
       bool IsBrokenMgBow { set; get; }
       bool IsBrokenMgCoaxial { set; get; }
@@ -181,8 +186,8 @@ namespace Pattons_Best
       List<IUnitTest> UnitTests { get; }
       //=========================================================
       ICrewMember? GetCrewMember(string name);
-      bool IsCrewActionPossible(string crewRole, out bool isGiven);
-      bool IsCrewActionPossibleButtonedUp(string crewRole, string crewAction);
+      bool IsCrewActionSelectable(string crewRole, out bool isGiven);
+      bool IsCrewActionPossibleButtonUp(string crewRole, string crewAction);
       //------------------------------------------------
       string GetGunLoadType();
       bool SetGunLoadTerritory(string ammoType);
