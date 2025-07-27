@@ -495,7 +495,7 @@ namespace Pattons_Best
          else if (true == myCollateralDamage.Contains("Gunsight"))
             img = new System.Windows.Controls.Image { Name = name, Source = MapItem.theMapImages.GetBitmapImage("BrokenGunsight"), Width = Utilities.ZOOM * Utilities.theMapItemSize * 2, Height = Utilities.ZOOM * Utilities.theMapItemSize * 2 };
          else if (true == myCollateralDamage.Contains("AA MG"))
-            img = new System.Windows.Controls.Image { Name = name, Source = MapItem.theMapImages.GetBitmapImage("c72RepairAaMg"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+            img = new System.Windows.Controls.Image { Name = name, Source = MapItem.theMapImages.GetBitmapImage("c115BrokenAaMg"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
          else
             img = new System.Windows.Controls.Image { Name = name, Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
          return img;

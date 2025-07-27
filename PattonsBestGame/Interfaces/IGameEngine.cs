@@ -99,6 +99,7 @@ namespace Pattons_Best
       RepairGun,
       FireMortar,
       ThrowGrenades,
+      RestockReadyRack,
       Error
    };
    // GameState is a subclass representing the state pattern. For each game state, there can be different
@@ -292,6 +293,8 @@ namespace Pattons_Best
       BattleRoundSequenceRepairAaMgRoll,
       BattleRoundSequenceRepairCoaxialMgRoll ,
       BattleRoundSequenceRepairBowMgRoll,
+      BattleRoundSequenceShermanFiringMortar,
+      BattleRoundSequenceShermanThrowGrenade,
 
       BattleRoundSequenceEnemyAction,
       BattleRoundSequenceCollateralDamageCheck,

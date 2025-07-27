@@ -237,9 +237,14 @@ namespace Pattons_Best
          bool isLoaderFireAaMg = false;
          bool isLoaderRepairAaMg = false;
          bool isLoaderFireSubMg = false;
+         bool isLoaderChangingLoad = false;
          int periscopeRepairCount = 0;
          foreach (IMapItem mi in this.CrewActions) // This menu is created on each crew action
          {
+            if (true == mi.Name.Contains("Loader_ChangeGunLoad"))
+               isLoaderChangingLoad = true;
+            if (true == mi.Name.Contains("Loader_FireAaMg"))
+               isLoaderFireAaMg = true;
             if (true == mi.Name.Contains("Loader_FireAaMg"))
                isLoaderFireAaMg = true;
              if (true == mi.Name.Contains("Loader_RepairAaMg"))
@@ -264,7 +269,7 @@ namespace Pattons_Best
                isCommanderOpenHatch = true;
          }
          //---------------------------------
-         bool isMainGunFiringAvailable = ((false == this.IsMalfunctionedMainGun) && (false == this.IsBrokenMainGun) && (false == this.IsBrokenGunSight) && (0 < totalAmmo) && ("None" != this.GetGunLoadType()));
+         bool isMainGunFiringAvailable = ((false == this.IsMalfunctionedMainGun) && (false == this.IsBrokenMainGun) && (false == this.IsBrokenGunSight) && (0 < totalAmmo) && ("None" != this.GetGunLoadType()) && (false == isLoaderChangingLoad));
          bool isShermanMoveAvailable = ((false == this.Sherman.IsThrownTrack) && (false == this.Sherman.IsAssistanceNeeded) && (false == this.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch) );
          switch (crewRole)
          {

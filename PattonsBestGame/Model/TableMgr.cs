@@ -2702,6 +2702,74 @@ namespace Pattons_Best
          return "ERROR";
       }
       //-------------------------------------------
+      public static string GetEnemyFireDirection(IGameInstance gi, IMapItem enemyUnit, string hitLocation)
+      {
+         int count = enemyUnit.TerritoryCurrent.Name.Count();
+         if (3 != count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): 3 != enemyUnit.TerritoryCurrent.Name=" + enemyUnit.TerritoryCurrent.Name);
+            return "ERROR";
+         }
+         char enemySector = enemyUnit.TerritoryCurrent.Name[count - 2];
+         double rotation = 0.0;
+         switch (enemySector)
+         {
+            case '6': rotation = 0.0; break;
+            case '9': rotation = 60.0; break;
+            case '1': rotation = 120.0; break;
+            case '2': rotation = 180.0; break;
+            case '3': rotation = 240.0; break;
+            case '4': rotation = 300.0; break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): reached default enemySector=" + enemySector);
+               return "ERROR";
+         }
+         double totalRotation = rotation - gi.Sherman.RotationHull;
+         double or = totalRotation;
+         if ("Hull" == hitLocation)
+         {
+            if (totalRotation < 0.0)
+               totalRotation += 360.0;
+            if (359.9 < totalRotation)
+               totalRotation = totalRotation - 360.0;
+            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "GetEnemyFireDirection(): turret: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ")  or=" + or.ToString("F1"));
+            switch (totalRotation)
+            {
+               case 0.0: return "H F";
+               case 60.0: return "H FR";
+               case 120.0: return "H FB";
+               case 180.0: return "H B";
+               case 240.0: return "H BL";
+               case 300.0: return "H FL";
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): reached default r=" + rotation.ToString("F1") + " hr=" + gi.Sherman.RotationHull.ToString("F1") + " tr=" + gi.Sherman.RotationTurret.ToString("F1"));
+                  return "ERROR";
+            }
+         }
+         if ("Turret" == hitLocation)
+         {
+            totalRotation -= enemyUnit.RotationTurret;
+            if (totalRotation < 0.0)
+               totalRotation += 360.0;
+            if (359.9 < totalRotation)
+               totalRotation = totalRotation - 360.0;
+            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "GetEnemyFireDirection(): turret: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ") - (tr=" + enemyUnit.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1"));
+            switch (totalRotation)
+            {
+               case 0.0: return "T F";
+               case 60.0: return "T R";
+               case 120.0: return "T R";
+               case 180.0: return "T B";
+               case 240.0: return "T L";
+               case 300.0: return "T L";
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): reached default rotation=" + rotation.ToString("F1") + " hr=" + gi.Sherman.RotationHull.ToString("F1"));
+                  return "ERROR";
+            }
+         }
+         Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): reached default hitLocation=" + hitLocation);
+         return "ERROR";
+      }
       public static int GetEnemyToHitNumberModifierForYourTank(IGameInstance gi, IMapItem mi, char range)
       {
          int toHitModifierNum = 0;
@@ -2887,63 +2955,6 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "GetEnemyHitLocationYourTank(): 2-dieRoll=" + dieRoll.ToString());
             return "ERROR";
          }
-      }
-      public static string GetEnemyFireDirection(IGameInstance gi, IMapItem enemyUnit, string hitLocation)
-      {
-         int count = enemyUnit.TerritoryCurrent.Name.Count();
-         if ( 3 != count)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): 3 != enemyUnit.TerritoryCurrent.Name=" + enemyUnit.TerritoryCurrent.Name);
-            return "ERROR";
-         }
-         char enemySector = enemyUnit.TerritoryCurrent.Name[count - 2];
-         double rotation = 0.0;
-         switch (enemySector)
-         {
-            case '6': rotation = 0.0; break;
-            case '9': rotation = 60.0; break;
-            case '1': rotation = 120.0; break;
-            case '2': rotation = 180.0; break;
-            case '3': rotation = 240.0; break;
-            case '4': rotation = 300.0; break;
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): reached default enemySector=" + enemySector);
-               return "ERROR";
-         }
-         rotation -= gi.Sherman.RotationHull;
-         if ( "Turret" == hitLocation )
-         {
-            rotation -= gi.Sherman.RotationTurret;
-            switch (rotation)
-            {
-               case 0.0:   return "T F";
-               case 60.0:  return "T R";
-               case 120.0: return "T R";
-               case 180.0: return "T B";
-               case 240.0: return "T L";
-               case 300.0: return "T L";
-               default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): reached default rotation=" + rotation.ToString("F1") + " hr=" + gi.Sherman.RotationHull.ToString("F1"));
-                  return "ERROR";
-            }
-         }
-         else if ("Hull" == hitLocation)
-         {
-            switch (rotation)
-            {
-               case 0.0:   return "H F";
-               case 60.0:  return "H FR";
-               case 120.0: return "H FB";
-               case 180.0: return "H B";
-               case 240.0: return "H BL";
-               case 300.0: return "H FL";
-               default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): reached default r=" + rotation.ToString("F1") + " hr=" + gi.Sherman.RotationHull.ToString("F1") + " tr=" + gi.Sherman.RotationTurret.ToString("F1"));
-                  return "ERROR";
-            }
-         }
-         Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): reached default hitLocation=" + hitLocation);
-         return "ERROR";
       }
       public static double GetEnemyToKillNumberYourTank(IGameInstance gi, IMapItem mi, string facing, char range, string hitLocation)
       {
@@ -4133,6 +4144,76 @@ namespace Pattons_Best
          return movingModifier;
       }
       //-------------------------------------------
+      public static string GetShermanFireDirection(IGameInstance gi, IMapItem enemyUnit, string hitLocation)
+      {
+         if ("Thrown Track" == hitLocation)
+            return "Thrown Track";
+         int count = enemyUnit.TerritoryCurrent.Name.Count();
+         if (3 != count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): 3 != enemyUnit.TerritoryCurrent.Name=" + enemyUnit.TerritoryCurrent.Name);
+            return "ERROR";
+         }
+         char enemySector = enemyUnit.TerritoryCurrent.Name[count - 2];
+         double rotation = 0.0;
+         switch (enemySector)
+         {
+            case '6': rotation = 0.0; break;
+            case '9': rotation = 60.0; break;
+            case '1': rotation = 120.0; break;
+            case '2': rotation = 180.0; break;
+            case '3': rotation = 240.0; break;
+            case '4': rotation = 300.0; break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): reached default enemySector=" + enemySector);
+               return "ERROR";
+         }
+         double totalRotation = rotation - enemyUnit.RotationHull;
+         double or = totalRotation;
+         if ("Hull" == hitLocation)
+         {
+            if (totalRotation < 0.0)
+               totalRotation += 360.0;
+            if (359.9 < totalRotation)
+               totalRotation = totalRotation - 360.0;
+            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "GetShermanFireDirection(): turret: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ")  or=" + or.ToString("F1"));
+            switch (totalRotation)
+            {
+               case 0.0: return "Rear";
+               case 60.0: return "Side";
+               case 120.0: return "Side";
+               case 180.0: return "Front";
+               case 240.0: return "Side";
+               case 300.0: return "Side";
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): 2-reached default total=" + totalRotation.ToString("F1") + " r=" + rotation.ToString("F1") + " hr=" + enemyUnit.RotationHull.ToString("F1") + " tr=" + enemyUnit.RotationTurret.ToString("F1"));
+                  return "ERROR";
+            }
+         }
+         else if ("Turret" == hitLocation)
+         {
+            totalRotation -= enemyUnit.RotationTurret;
+            if (totalRotation < 0.0)
+               totalRotation += 360.0;
+            if (359.9 < totalRotation)
+               totalRotation = totalRotation - 360.0;
+            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "GetShermanFireDirection(): turret: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ") - (tr=" + enemyUnit.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1"));
+            switch (totalRotation)
+            {
+               case 0.0: return "Rear";
+               case 60.0: return "Side";
+               case 120.0: return "Side";
+               case 180.0: return "Front";
+               case 240.0: return "Side";
+               case 300.0: return "Side";
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): reached default total=" + totalRotation.ToString("F1") + " r=" + rotation.ToString("F1") + " hr=" + enemyUnit.RotationHull.ToString("F1") + " tr=" + enemyUnit.RotationTurret.ToString("F1"));
+                  return "ERROR";
+            }
+         }
+         Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): reached default hitLocation=" + hitLocation);
+         return "ERROR";
+      }
       public static int GetShermanToHitModifier(IGameInstance gi, IMapItem enemyUnit)
       {
          //------------------------------------
@@ -4914,76 +4995,6 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          return toKillNum;
-      }
-      public static string GetShermanFireDirection(IGameInstance gi, IMapItem enemyUnit, string hitLocation)
-      {
-         if ("Thrown Track" == hitLocation)
-            return "Thrown Track";
-         int count = enemyUnit.TerritoryCurrent.Name.Count();
-         if (3 != count)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): 3 != enemyUnit.TerritoryCurrent.Name=" + enemyUnit.TerritoryCurrent.Name);
-            return "ERROR";
-         }
-         char enemySector = enemyUnit.TerritoryCurrent.Name[count - 2];
-         double rotation = 0.0;
-         switch (enemySector)
-         {
-            case '6': rotation = 0.0; break;
-            case '9': rotation = 60.0; break;
-            case '1': rotation = 120.0; break;
-            case '2': rotation = 180.0; break;
-            case '3': rotation = 240.0; break;
-            case '4': rotation = 300.0; break;
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): reached default enemySector=" + enemySector);
-               return "ERROR";
-         }
-         double totalRotation = rotation - enemyUnit.RotationHull;
-         double or = totalRotation;
-         if ("Turret" == hitLocation)
-         {
-            totalRotation -= enemyUnit.RotationTurret;
-            if (totalRotation < 0.0)
-               totalRotation += 360.0;
-            if (360.0 < totalRotation)
-               totalRotation = totalRotation - 360;
-            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "GetShermanFireDirection(): turret: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ") - (tr=" + enemyUnit.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1")  );
-            switch (totalRotation)
-            {
-               case 0.0: return "Rear";
-               case 60.0: return "Side";
-               case 120.0: return "Side";
-               case 180.0: return "Front";
-               case 240.0: return "Side";
-               case 300.0: return "Side";
-               default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): reached default total=" + totalRotation.ToString("F1") + " r=" + rotation.ToString("F1") + " hr=" + enemyUnit.RotationHull.ToString("F1") + " tr=" + enemyUnit.RotationTurret.ToString("F1"));
-                  return "ERROR";
-            }
-         }
-         else if ("Hull" == hitLocation)
-         {
-            if (totalRotation < 0.0)
-               totalRotation += 360.0;
-            if (360.0 < totalRotation)
-               totalRotation = totalRotation - 360;
-            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "GetShermanFireDirection(): turret: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ")  or=" + or.ToString("F1"));
-            switch (totalRotation)
-            {
-               case 0.0: return "Rear";
-               case 60.0: return "Side";
-               case 120.0: return "Side";
-               case 180.0: return "Front";
-               case 240.0: return "Side";
-               case 300.0: return "Side";
-               default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): 2-reached default total=" + totalRotation.ToString("F1") + " r=" + rotation.ToString("F1") + " hr=" + enemyUnit.RotationHull.ToString("F1") + " tr=" + enemyUnit.RotationTurret.ToString("F1"));
-                  return "ERROR";
-            }
-         }
-         Logger.Log(LogEnum.LE_ERROR, "GetShermanFireDirection(): reached default hitLocation=" + hitLocation);
-         return "ERROR";
       }
       public static int GetShermanToKill75ApVehicleBaseNumber(IGameInstance gi, IMapItem enemyUnit, ShermanAttack hit)
       {

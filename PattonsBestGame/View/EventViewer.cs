@@ -4208,16 +4208,16 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): myGameEngine=null");
             return false;
          }
-         //--------------------------------------------------
          IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
          if (null == lastReport)
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): lastReport=null");
             return false;
          }
+         //--------------------------------------------------
          bool isAirStrike = false;
          bool isArtilleryStrike = false;
-         GameAction outAction = GameAction.BattleAmbushStart;
+         GameAction outAction = GameAction.Error;
          if( BattlePhase.RandomEvent == myGameInstance.BattlePhase )
          {
             outAction = GameAction.BattleRoundSequenceBackToSpotting; // ShowBattleSetupFireResults() - AmbushRandomEvent 
@@ -4267,6 +4267,12 @@ namespace Pattons_Best
                outAction = GameAction.BattleResolveArtilleryFire;
             else if ((true == isAirStrike) && (true == isEnemyUnitAvailableForAirStrike))
                outAction = GameAction.BattleResolveAirStrike;
+            else
+               outAction = GameAction.BattleAmbushStart;
+         }
+         else if (GamePhase.Battle == myGameInstance.GamePhase) // Advancing Fire Finished
+         {
+            outAction = GameAction.BattleAmbushStart;
          }
          else
          {
@@ -4820,7 +4826,24 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue38":
-                           action = GameAction.BattleRoundSequenceAmmoOrders;
+                           bool isLoaderLoading = true;
+                           foreach (IMapItem crewAction in myGameInstance.CrewActions)
+                           {
+                              if (true == crewAction.Name.Contains("Loader_Load"))
+                              {
+                                 isLoaderLoading = true;
+                                 break;
+                              }
+                              if (true == crewAction.Name.Contains("Loader")) // if loader is doing anything other than loading, do not load gun
+                              {
+                                 isLoaderLoading = false;
+                                 break;
+                              }
+                           }
+                           if( true == isLoaderLoading)
+                              action = GameAction.BattleRoundSequenceAmmoOrders;
+                           else
+                              action = GameAction.BattleRoundSequenceConductCrewAction; // skip ammo orders
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue39":
@@ -4968,6 +4991,18 @@ namespace Pattons_Best
                            break;
                         case "Continue56c":
                            action = GameAction.BattleRoundSequenceRepairCoaxialMgRoll;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "c58LFireMortar":
+                           action = GameAction.BattleRoundSequenceShermanFiringMortar;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "c70ThrowSmokeGrenade":
+                           action = GameAction.BattleRoundSequenceShermanThrowGrenade;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "c60LRestockReadyRack":
+                           action = GameAction.BattleRoundSequenceShermanThrowGrenade;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue60":

@@ -696,6 +696,41 @@ e056c	"<Bold>e056c Repair Coaxial Machine Gun</Bold>
 <LineBreak/><LineBreak/>
 Attempt to repair malfunction gun by rolling on the <InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
 <LineBreak/><LineBreak/>"
+e057	"<Bold>e057 Fire 2 Inch Mortar</Bold> 
+<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<InlineUIContainer><Button Content='r18.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+One Smoke Marker is placed in the close zone in front of turret, and mark off one smoke grenade on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='c58LFireMortar' Height='100' Width='100'></Image></InlineUIContainer>  "
+e058	"<Bold>e058 Throw Grenade</Bold> 
+<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<InlineUIContainer><Button Content='r18.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+One Smoke Marker is placed your tank by a crewman throwing a grenade. Mark off one smoke grenade on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='c70ThrowSmokeGrenade' Height='100' Width='100'></Image></InlineUIContainer>  "
+e059	"<Bold>e059 Restock Ready Rack</Bold> 
+<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<InlineUIContainer><Button Content='r16.23' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Loader restocks the ready rack from available ammo shown on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Click buttons to adjust or the image when done.
+<LineBreak/><LineBreak/>
+   <InlineUIContainer><Button Name='HeMinus' Content='   -   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Name='HePlus'  Content='   +   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for HE Ammo<LineBreak/>
+   <InlineUIContainer><Button Name='ApMinus' Content='   -   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Name='ApPlus' Content='   +   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for AP Ammo<LineBreak/>
+   <InlineUIContainer><Button Name='WpMinus' Content='   -   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Name='WpPlus' Content='   +   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for WP Ammo<LineBreak/>
+   <InlineUIContainer><Button Name='HcbiMinus' Content='   -   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Name='HcbiPlus' Content='   +   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for HCBI Ammo<LineBreak/>
+   <InlineUIContainer><Button Name='HvapMinus' Content='   -   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Name='HvapPlus' Content='   +   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for HVAP Ammo<LineBreak/>
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='c60LRestockReadyRack' Height='100' Width='100'></Image></InlineUIContainer>  "
 e060	"<Bold>e060 Reset Round</Bold> 
 <InlineUIContainer><Button Content='r4.77' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>
@@ -711,7 +746,7 @@ Click image to continue to continue to Crew Rating Improvements per
                   <InlineUIContainer><Image Name='Debrief' Height='200' Width='400'></Image></InlineUIContainer>"
 e100a	"<Bold>e100a Tank Retires for Today</Bold> 
 <LineBreak/><LineBreak/>
-Due to broken gun or broken gunsite, the tank must be retired for today. <LineBreak/>
+Due to broken gun or broken gun sight, the tank must be retired for today. <LineBreak/>
 An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
 Click image to continue to continue to Crew Rating Improvements per 
 <InlineUIContainer><Button Content='r4.91' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   

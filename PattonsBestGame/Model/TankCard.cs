@@ -19,6 +19,7 @@ namespace Pattons_Best
       public int myRateOfFire = 30;
       public int myMaxReadyRackCount = 8;
       public bool myIsLoaderHatch = false;
+      public bool myIsLoaderAaMgMount = false;
       public bool myIsSmokeMortar = false;
       public bool myIsVisionCupola = false;
       public bool myIsWetStowage = false;
@@ -37,6 +38,7 @@ namespace Pattons_Best
                myRateOfFire = 30;
                myMaxReadyRackCount = 8;
                myIsLoaderHatch = false;
+               myIsLoaderAaMgMount = false;
                myIsSmokeMortar = false;
                myIsVisionCupola = false;
                myIsWetStowage = false;
@@ -51,6 +53,7 @@ namespace Pattons_Best
                myRateOfFire = 30;
                myMaxReadyRackCount = 8;
                myIsLoaderHatch = true;
+               myIsLoaderAaMgMount = false;
                myIsVisionCupola = false;
                myIsSmokeMortar = true;
                myIsWetStowage = false;
@@ -65,6 +68,7 @@ namespace Pattons_Best
                myRateOfFire = 30;
                myMaxReadyRackCount = 8;
                myIsLoaderHatch = true;
+               myIsLoaderAaMgMount = false;
                myIsVisionCupola = true;
                myIsSmokeMortar = true;
                myIsWetStowage = false;
@@ -79,6 +83,7 @@ namespace Pattons_Best
                myRateOfFire = 30;
                myMaxReadyRackCount = 8;
                myIsLoaderHatch = false;
+               myIsLoaderAaMgMount = false;
                myIsVisionCupola = false;
                myIsSmokeMortar = false;
                myIsWetStowage = false;
@@ -93,6 +98,7 @@ namespace Pattons_Best
                myRateOfFire = 30;
                myMaxReadyRackCount = 8;
                myIsLoaderHatch = true;
+               myIsLoaderAaMgMount = false;
                myIsVisionCupola = false;
                myIsSmokeMortar = true;
                myIsWetStowage = false;
@@ -107,6 +113,7 @@ namespace Pattons_Best
                myRateOfFire = 30;
                myMaxReadyRackCount = 8;
                myIsLoaderHatch = true;
+               myIsLoaderAaMgMount = false;
                myIsVisionCupola = true;
                myIsSmokeMortar = true;
                myIsWetStowage = false;
@@ -121,6 +128,7 @@ namespace Pattons_Best
                myRateOfFire = 30;
                myMaxReadyRackCount = 8;
                myIsLoaderHatch = false;
+               myIsLoaderAaMgMount = false;
                myIsVisionCupola = false;
                myIsSmokeMortar = false;
                myIsWetStowage = false;
@@ -135,6 +143,7 @@ namespace Pattons_Best
                myRateOfFire = 30;
                myMaxReadyRackCount = 8;
                myIsLoaderHatch = true;
+               myIsLoaderAaMgMount = false;
                myIsVisionCupola = false;
                myIsSmokeMortar = true;
                myIsWetStowage = false;
@@ -149,6 +158,7 @@ namespace Pattons_Best
                myRateOfFire = 30;
                myMaxReadyRackCount = 8;
                myIsLoaderHatch = true;
+               myIsLoaderAaMgMount = false;
                myIsVisionCupola = true;
                myIsSmokeMortar = true;
                myIsWetStowage = false;
@@ -163,6 +173,7 @@ namespace Pattons_Best
                myRateOfFire = 30;
                myMaxReadyRackCount = 4;
                myIsLoaderHatch = true;
+               myIsLoaderAaMgMount = false;
                myIsVisionCupola = false;
                myIsSmokeMortar = true;
                myIsWetStowage = false;
@@ -177,6 +188,7 @@ namespace Pattons_Best
                myRateOfFire = 30;
                myMaxReadyRackCount = 4;
                myIsLoaderHatch = true;
+               myIsLoaderAaMgMount = false;
                myIsVisionCupola = true;
                myIsSmokeMortar = true;
                myIsWetStowage = true;
@@ -191,6 +203,7 @@ namespace Pattons_Best
                myRateOfFire = 30;
                myMaxReadyRackCount = 4;
                myIsLoaderHatch = true;
+               myIsLoaderAaMgMount = false;
                myIsVisionCupola = true;
                myIsSmokeMortar = true;
                myIsWetStowage = true;
@@ -205,6 +218,7 @@ namespace Pattons_Best
                myRateOfFire = 20;
                myMaxReadyRackCount = 6;
                myIsLoaderHatch = true;
+               myIsLoaderAaMgMount = false;
                myIsVisionCupola = true;
                myIsSmokeMortar = true;
                myIsWetStowage = true;
@@ -219,6 +233,7 @@ namespace Pattons_Best
                myRateOfFire = 20;
                myMaxReadyRackCount = 6;
                myIsLoaderHatch = true;
+               myIsLoaderAaMgMount = true;
                myIsVisionCupola = true;
                myIsSmokeMortar = true;
                myIsWetStowage = true;
@@ -233,6 +248,7 @@ namespace Pattons_Best
                myRateOfFire = 20;
                myMaxReadyRackCount = 6;
                myIsLoaderHatch = true;
+               myIsLoaderAaMgMount = false;
                myIsVisionCupola = true;
                myIsSmokeMortar = true;
                myIsWetStowage = true;
@@ -247,6 +263,7 @@ namespace Pattons_Best
                myRateOfFire = 20;
                myMaxReadyRackCount = 6;
                myIsLoaderHatch = true;
+               myIsLoaderAaMgMount = true;
                myIsVisionCupola = true;
                myIsSmokeMortar = true;
                myIsWetStowage = true;
@@ -261,6 +278,7 @@ namespace Pattons_Best
                myRateOfFire = 20;
                myMaxReadyRackCount = 6;
                myIsLoaderHatch = true;
+               myIsLoaderAaMgMount = false;
                myIsVisionCupola = true;
                myIsSmokeMortar = true;
                myIsWetStowage = true;
@@ -275,6 +293,7 @@ namespace Pattons_Best
                myRateOfFire = 20;
                myMaxReadyRackCount = 5;
                myIsLoaderHatch = true;
+               myIsLoaderAaMgMount = false;
                myIsSmokeMortar = true;
                myIsVisionCupola = false;
                myIsWetStowage = false;
