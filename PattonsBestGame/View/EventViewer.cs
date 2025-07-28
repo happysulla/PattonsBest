@@ -3885,6 +3885,15 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): content=null for key=" + key);
             return false;
          }
+         //---------------------------------------------------
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): lastReport=null");
+            return false;
+         }
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         //---------------------------------------------------
          if ((key != gi.EventActive) && (false == content.StartsWith("e")))
          {
             b.IsEnabled = false;
@@ -3940,6 +3949,108 @@ namespace Pattons_Best
                   b.IsEnabled = isCoaxialMgFire;
                else if ("  Sub MG  " == content)
                   b.IsEnabled = isSubMgFire;
+               break;
+            case "e059":
+               string name = b.Name;
+               if( true == String.IsNullOrEmpty(name))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): name is null or empty for key=" + key + " content=" + content);
+                  return false;
+               }
+               int readyRackLoadCount = 0;
+               switch (name)
+               {
+                  case "HeMinus":
+                     readyRackLoadCount = gi.GetReadyRackReload("He");
+                     if(readyRackLoadCount  < - 99 )
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): GetReadyRackReload() returned error");
+                        return false;
+                     }
+                     if (0 < readyRackLoadCount)
+                        b.IsEnabled = true;
+                     else
+                        b.IsEnabled = false;
+                     break;
+                  case "ApMinus":
+                     readyRackLoadCount = gi.GetReadyRackReload("Ap");
+                     if (readyRackLoadCount < -99)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): GetReadyRackReload() returned error");
+                        return false;
+                     }
+                     if (0 < readyRackLoadCount)
+                        b.IsEnabled = true;
+                     else
+                        b.IsEnabled = false;
+                     break;
+                  case "WpMinus":
+                     readyRackLoadCount = gi.GetReadyRackReload("Wp");
+                     if (readyRackLoadCount < -99)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): GetReadyRackReload() returned error");
+                        return false;
+                     }
+                     if (0 < readyRackLoadCount)
+                        b.IsEnabled = true;
+                     else
+                        b.IsEnabled = false;
+                     break;
+                  case "HbciMinus":
+                     readyRackLoadCount = gi.GetReadyRackReload("Hbci");
+                     if (readyRackLoadCount < -99)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): GetReadyRackReload() returned error");
+                        return false;
+                     }
+                     if (0 < readyRackLoadCount)
+                        b.IsEnabled = true;
+                     else
+                        b.IsEnabled = false;
+                     break;
+                  case "HvapMinus":
+                     readyRackLoadCount = gi.GetReadyRackReload("Hvap");
+                     if (readyRackLoadCount < -99)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): GetReadyRackReload() returned error");
+                        return false;
+                     }
+                     if (0 < readyRackLoadCount)
+                        b.IsEnabled = true;
+                     else
+                        b.IsEnabled = false;
+                     break;
+                  case "HePlus":
+                     //---------------------------------------------------
+                     int ammoAvailable = lastReport.MainGunHE;
+                     string gunLoadType = gi.GetGunLoadType();
+                     if ("He" == gunLoadType) // subtract one if a round is int the gun tube
+                        ammoAvailable--;
+                      readyRackLoadCount = gi.GetReadyRackReload("He");
+                     if (readyRackLoadCount < -99)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): GetReadyRackReload(He) returned error");
+                        return false;
+                     }
+                     int diffInReadyRack = card.myMaxReadyRackCount - readyRackLoadCount;
+                     int maxReloadCapability = Math.Max(diffInReadyRack, ammoAvailable);
+                     if (maxReloadCapability == readyRackLoadCount)
+                        b.IsEnabled = true;
+                     else
+                        b.IsEnabled = false;
+                     break;
+                  case "ApPlus":
+                     break;
+                  case "WpPlus":
+                     break;
+                  case "HbciPlus":
+                     break;
+                  case "HvapPlus":
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): reached default key=" + key + " name=" + name);
+                     return false;
+               }
                break;
             default:
                break;
@@ -5195,26 +5306,70 @@ namespace Pattons_Best
          }
          switch (content)
          {
-            case "  -  ":
-               if( BattlePhase.ConductCrewAction == myGameInstance.BattlePhase)
-                  action = GameAction.BattleRoundSequenceTurretEndRotateLeft;
-               else
-                  action = GameAction.PreparationsTurretRotateLeft;
-               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-               break;
-            case "  +  ":
-               if (BattlePhase.ConductCrewAction == myGameInstance.BattlePhase)
-                  action = GameAction.BattleRoundSequenceTurretEndRotateRight;
-               else
-                  action = GameAction.PreparationsTurretRotateRight;
-               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-               break;
             case "   -   ":
-               action = GameAction.BattleRoundSequencePivotLeft;
+               switch( name )
+               {
+                  case "ButtonPivotHullLeft":
+                     action = GameAction.BattleRoundSequencePivotLeft;
+                     break;
+                  case "ButtonPivotTurretLeft":
+                     if (BattlePhase.ConductCrewAction == myGameInstance.BattlePhase)
+                        action = GameAction.BattleRoundSequenceTurretEndRotateLeft;
+                     else
+                        action = GameAction.PreparationsTurretRotateLeft;
+                     break;
+                  case "HeMinus":
+                     action = GameAction.BattleRoundSequenceReadyRackHeMinus;
+                     break;
+                  case "ApMinus":
+                     action = GameAction.BattleRoundSequenceReadyRackApMinus;
+                     break;
+                  case "WpMinus":
+                     action = GameAction.BattleRoundSequenceReadyRackWpMinus;
+                     break;
+                  case "HcbiMinus":
+                     action = GameAction.BattleRoundSequenceReadyRackHbciMinus;
+                     break;
+                  case "HvapMinus":
+                     action = GameAction.BattleRoundSequenceReadyRackHvapMinus;
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): reached default Unknown name=" + name);
+                     return false;
+               }
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "   +   ":
-               action = GameAction.BattleRoundSequencePivotRight;
+               switch (name)
+               {
+                  case "ButtonPivotHullRight":
+                     action = GameAction.BattleRoundSequencePivotRight;
+                     break;
+                  case "ButtonPivotTurretRight":
+                     if (BattlePhase.ConductCrewAction == myGameInstance.BattlePhase)
+                        action = GameAction.BattleRoundSequenceTurretEndRotateRight;
+                     else
+                        action = GameAction.PreparationsTurretRotateRight;
+                     break;
+                  case "HePlus":
+                        action = GameAction.BattleRoundSequenceReadyRackHePlus;
+                     break;
+                  case "ApPlus":
+                     action = GameAction.BattleRoundSequenceReadyRackApPlus;
+                     break;
+                  case "WpPlus":
+                     action = GameAction.BattleRoundSequenceReadyRackWpPlus;
+                     break;
+                  case "HcbiPlus":
+                     action = GameAction.BattleRoundSequenceReadyRackHbciPlus;
+                     break;
+                  case "HvapPlus":
+                     action = GameAction.BattleRoundSequenceReadyRackHvapPlus;
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): reached default Unknown name=" + name);
+                     return false;
+               }
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case " Area ":
