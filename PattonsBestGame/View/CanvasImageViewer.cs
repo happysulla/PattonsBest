@@ -202,6 +202,7 @@ namespace Pattons_Best
          c.Children.Add(img);
          Canvas.SetLeft(img, 0);
          Canvas.SetTop(img, 0);
+         Canvas.SetZIndex(img, 0);
       }
       public void ShowBattleMap(Canvas c)
       {
@@ -210,6 +211,7 @@ namespace Pattons_Best
          c.Children.Add(img);
          Canvas.SetLeft(img, 0);
          Canvas.SetTop(img, 0);
+         Canvas.SetZIndex(img, 0);
       }
       //-------------------------------------------------
       private void ShowInitialScreen(Canvas c)

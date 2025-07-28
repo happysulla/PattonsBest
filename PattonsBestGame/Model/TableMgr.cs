@@ -818,244 +818,6 @@ namespace Pattons_Best
                return "ERROR";
          }
       }
-      public static int GetFriendlyActionModifier(IGameInstance gi, IMapItem mi, int numUsControlledSector, bool isAdvancingFire, bool isArtilleryFire, bool isAirStrike)
-      {
-         string enemyUnit = mi.GetEnemyUnit();
-         if ("ERROR" == enemyUnit)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetFriendlyActionModifier(): unknown enemyUnit=" + mi.Name);
-            return -100;
-         }
-         //----------------------------------------------------
-         IAfterActionReport? lastReport = gi.Reports.GetLast();
-         if (null == lastReport)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetFriendlyActionModifier(): lastReport=null");
-            return -100;
-         }
-         //----------------------------------------------------
-         IStack? stack = gi.BattleStacks.Find(mi.TerritoryCurrent);
-         if (null == stack)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetFriendlyActionModifier(): stack=null for t=" + mi.TerritoryCurrent.Name);
-            return -100;
-         }
-         //----------------------------------------------------
-         int numSmokeInTargetZone = 0;
-         foreach (IMapItem smoke in stack.MapItems)
-         {
-            if (true == smoke.Name.Contains("Smoke"))
-               numSmokeInTargetZone++;
-         }
-         int modifier = numSmokeInTargetZone * 10;
-         //----------------------------------------------------
-         bool isTargetVehicle = false;
-         bool isTargetInWoods = false;
-         int friendlySquadsLost = 0;
-         int friendlyTanksLost = 0;
-         switch (enemyUnit)
-         {
-            case "LW":
-            case "MG":
-               isTargetInWoods = mi.IsWoods;
-               friendlySquadsLost = lastReport.VictoryPtsFriendlySquad;
-               break;
-            case "ATG":
-            case "Pak43":
-            case "Pak38":
-            case "Pak40":
-               isTargetInWoods = mi.IsWoods;
-               break;
-            case "TRUCK":
-               friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
-               break;
-            case "SPG":
-            case "STuGIIIg":
-            case "TANK":
-            case "PzVIe":
-            case "PzIV":
-            case "PzV":
-            case "PzVIb":
-            case "PSW":
-            case "SPW":
-            case "MARDERII":
-            case "MARDERIII":
-            case "JdgPzIV":
-            case "JdgPz38t":
-               isTargetVehicle = true;
-               friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
-               break;
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "GetFriendlyActionModifier(): reached default with enemyUnit=" + enemyUnit);
-               return -1;
-         }
-         //----------------------------------------------------
-         if (true == gi.IsFlankingFire)
-            modifier -= 10;
-         //----------------------------------------------------
-         if (true == isTargetVehicle && true == isAirStrike)
-            modifier -= 10;
-         //----------------------------------------------------
-         modifier -= 3 * numUsControlledSector;
-         //----------------------------------------------------
-         if (true == isTargetInWoods)
-            modifier -= 3;
-         //----------------------------------------------------
-         modifier += friendlySquadsLost;
-         //----------------------------------------------------
-         modifier += 2 * friendlyTanksLost;
-         //----------------------------------------------------
-         if (true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
-            modifier += 10;
-         //----------------------------------------------------
-         if (true == isTargetVehicle && (true == isAdvancingFire || true == isArtilleryFire))
-            modifier += 10;
-         //----------------------------------------------------
-         return modifier;
-      }
-      public static string SetFriendlyActionResult(IGameInstance gi, IMapItem mi, int dieRoll, int numUsControlledSector, bool isAdvancingFire, bool isArtilleryFire, bool isAirStrike)
-      {
-         //----------------------------------------------------
-         IAfterActionReport? lastReport = gi.Reports.GetLast();
-         if (null == lastReport)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): lastReport=null");
-            return "ERROR";
-         }
-         if (false == isArtilleryFire && (true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling")))
-         {
-            if ("B6M" == mi.TerritoryCurrent.Name || "B6L" == mi.TerritoryCurrent.Name) // no Friendly action allowed in these regions unless artillery
-               return "ERROR";
-         }
-         //----------------------------------------------------
-         if (dieRoll < 4) // always a kill if below 4 regardless of modifiers
-         {
-            mi.IsKilled = true;
-            mi.SetBloodSpots();
-            return "KO";
-         }
-         //----------------------------------------------------
-         string enemyUnit = mi.GetEnemyUnit();
-         if ("ERROR" == enemyUnit)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): unknown enemyUnit=" + mi.Name);
-            return "ERROR";
-         }
-         //----------------------------------------------------
-         IStack? stack = gi.BattleStacks.Find(mi.TerritoryCurrent);
-         if (null == stack)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): stack=null for t=" + mi.TerritoryCurrent.Name);
-            return "ERROR";
-         }
-         bool isSmokeAddedToTerritory = false;
-         switch (enemyUnit) // modifiers do not apply for smoke
-         {
-            case "LW":
-            case "MG":
-            case "TRUCK":
-            case "PSW":
-            case "SPW":
-            case "MARDERII":
-            case "MARDERIII":
-               // no smoke possible
-               break;
-            case "ATG":
-            case "Pak43":
-            case "Pak38":
-            case "Pak40":
-            case "PzV":
-            case "JdgPzIV":
-            case "JdgPz38t":
-               if (79 < dieRoll)
-                  isSmokeAddedToTerritory = true;
-               break;
-            case "PzIV":
-            case "STuGIIIg":
-            case "SPG":
-               if (89 < dieRoll)
-                  isSmokeAddedToTerritory = true;
-               break;
-            case "TANK":
-            case "PzVIe":
-            case "PzVIb":
-               if (59 < dieRoll)
-                  isSmokeAddedToTerritory = true;
-               break;
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): reached default with enemyUnit=" + enemyUnit);
-               return "ERROR";
-         }
-         if (true == isSmokeAddedToTerritory)
-         {
-            string miName = "SmokeWhite" + Utilities.MapItemNum;
-            Utilities.MapItemNum++;
-            IMapItem smoke = new MapItem(miName, Utilities.ZOOM + 0.75, "c108Smoke1", mi.TerritoryCurrent);
-            IMapPoint mp = Territory.GetRandomPoint(mi.TerritoryCurrent, mi.Zoom * Utilities.theMapItemOffset);
-            smoke.Location = mp;
-            stack.MapItems.Add(smoke);
-            return "Smoke"; // if smoke occurs, no chance of killing target
-         }
-         //----------------------------------------------------
-         int modifier = GetFriendlyActionModifier(gi, mi, numUsControlledSector, isAdvancingFire, isArtilleryFire, isAirStrike);
-         if (modifier < -99)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): GetFriendlyActionModifier() returned error");
-            return "ERROR";
-         }
-         dieRoll += modifier;
-         //----------------------------------------------------
-         switch (enemyUnit) // modifiers do not apply for smoke
-         {
-            case "LW":
-            case "MG":
-            case "PzIV":
-            case "STuGIIIg":
-            case "SPG":
-               if (dieRoll < 31)
-                  mi.IsKilled = true;
-               break;
-            case "ATG":
-            case "Pak43":
-            case "Pak38":
-            case "Pak40":
-            case "PzV":
-            case "JdgPzIV":
-            case "JdgPz38t":
-               if (dieRoll < 21)
-                  mi.IsKilled = true;
-               break;
-            case "TRUCK":
-               if (dieRoll < 61)
-                  mi.IsKilled = true;
-               break;
-            case "PSW":
-            case "SPW":
-               if (dieRoll < 41)
-                  mi.IsKilled = true;
-               break;
-            case "MARDERII":
-            case "MARDERIII":
-               if (dieRoll < 51)
-                  mi.IsKilled = true;
-               break;
-            case "PzVIe":
-            case "PzVIb":
-            case "TANK":
-               if (dieRoll < 11)
-                  mi.IsKilled = true;
-               break;
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): reached default with enemyUnit=" + enemyUnit);
-               return "ERROR";
-         }
-         if (true == mi.IsKilled)
-         {
-            mi.SetBloodSpots();
-            return "KO";
-         }
-         return "None";
-      }
       public static int GetEnemyActionModifier(IGameInstance gi, IMapItem mi)
       {
          string enemyUnit = mi.GetEnemyUnit();
@@ -2024,6 +1786,14 @@ namespace Pattons_Best
                      else
                         Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + rotation.ToString());
                      break;
+                  case "Home":
+                     if ("A" == move)
+                        newTerritoryName = "B2C";
+                     else if ("B" == move)
+                        newTerritoryName = "B6C";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
                   default:
                      Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + rotation.ToString());
                      break;
@@ -2176,6 +1946,14 @@ namespace Pattons_Best
                      else
                         Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
                      break;
+                  case "Home":
+                     if ("A" == move)
+                        newTerritoryName = "B3C";
+                     else if ("B" == move)
+                        newTerritoryName = "B9C";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
                   default:
                      Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
                      break;
@@ -2325,6 +2103,14 @@ namespace Pattons_Best
                         newTerritoryName = "OffTopRight";
                      else if ("B" == move)
                         newTerritoryName = "B6L";
+                     else
+                        Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
+                     break;
+                  case "Home":
+                     if ("A" == move)
+                        newTerritoryName = "B1C";
+                     else if ("B" == move)
+                        newTerritoryName = "B4C";
                      else
                         Logger.Log(LogEnum.LE_ERROR, "SetNewTerritoryShermanMove(): reached default move=" + move + " for oldT=" + oldT.Name + " rot=" + sherman.RotationHull.ToString());
                      break;
@@ -4144,6 +3930,245 @@ namespace Pattons_Best
          return movingModifier;
       }
       //-------------------------------------------
+      public static int GetFriendlyActionModifier(IGameInstance gi, IMapItem mi, int numUsControlledSector, bool isAdvancingFire, bool isArtilleryFire, bool isAirStrike)
+      {
+         string enemyUnit = mi.GetEnemyUnit();
+         if ("ERROR" == enemyUnit)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetFriendlyActionModifier(): unknown enemyUnit=" + mi.Name);
+            return -100;
+         }
+         //----------------------------------------------------
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetFriendlyActionModifier(): lastReport=null");
+            return -100;
+         }
+         //----------------------------------------------------
+         IStack? stack = gi.BattleStacks.Find(mi.TerritoryCurrent);
+         if (null == stack)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetFriendlyActionModifier(): stack=null for t=" + mi.TerritoryCurrent.Name);
+            return -100;
+         }
+         //----------------------------------------------------
+         int numSmokeInTargetZone = 0;
+         foreach (IMapItem smoke in stack.MapItems)
+         {
+            if (true == smoke.Name.Contains("Smoke"))
+               numSmokeInTargetZone++;
+         }
+         int modifier = numSmokeInTargetZone * 10;
+         //----------------------------------------------------
+         bool isTargetVehicle = false;
+         bool isTargetInWoods = false;
+         int friendlySquadsLost = 0;
+         int friendlyTanksLost = 0;
+         switch (enemyUnit)
+         {
+            case "LW":
+            case "MG":
+               isTargetInWoods = mi.IsWoods;
+               friendlySquadsLost = lastReport.VictoryPtsFriendlySquad;
+               break;
+            case "ATG":
+            case "Pak43":
+            case "Pak38":
+            case "Pak40":
+               isTargetInWoods = mi.IsWoods;
+               break;
+            case "TRUCK":
+               friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
+               break;
+            case "SPG":
+            case "STuGIIIg":
+            case "TANK":
+            case "PzVIe":
+            case "PzIV":
+            case "PzV":
+            case "PzVIb":
+            case "PSW":
+            case "SPW":
+            case "MARDERII":
+            case "MARDERIII":
+            case "JdgPzIV":
+            case "JdgPz38t":
+               isTargetVehicle = true;
+               friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetFriendlyActionModifier(): reached default with enemyUnit=" + enemyUnit);
+               return -1;
+         }
+         //----------------------------------------------------
+         if (true == gi.IsFlankingFire)
+            modifier -= 10;
+         //----------------------------------------------------
+         if (true == isTargetVehicle && true == isAirStrike)
+            modifier -= 10;
+         //----------------------------------------------------
+         modifier -= 3 * numUsControlledSector;
+         //----------------------------------------------------
+         if (true == isTargetInWoods)
+            modifier -= 3;
+         //----------------------------------------------------
+         modifier += friendlySquadsLost;
+         //----------------------------------------------------
+         modifier += 2 * friendlyTanksLost;
+         //----------------------------------------------------
+         if (true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
+            modifier += 10;
+         //----------------------------------------------------
+         if (true == isTargetVehicle && (true == isAdvancingFire || true == isArtilleryFire))
+            modifier += 10;
+         //----------------------------------------------------
+         return modifier;
+      }
+      public static string SetFriendlyActionResult(IGameInstance gi, IMapItem mi, int dieRoll, int numUsControlledSector, bool isAdvancingFire, bool isArtilleryFire, bool isAirStrike)
+      {
+         //----------------------------------------------------
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): lastReport=null");
+            return "ERROR";
+         }
+         if (false == isArtilleryFire && (true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling")))
+         {
+            if ("B6M" == mi.TerritoryCurrent.Name || "B6L" == mi.TerritoryCurrent.Name) // no Friendly action allowed in these regions unless artillery
+               return "ERROR";
+         }
+         //----------------------------------------------------
+         if (dieRoll < 4) // always a kill if below 4 regardless of modifiers
+         {
+            mi.IsKilled = true;
+            mi.SetBloodSpots();
+            return "KO";
+         }
+         //----------------------------------------------------
+         string enemyUnit = mi.GetEnemyUnit();
+         if ("ERROR" == enemyUnit)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): unknown enemyUnit=" + mi.Name);
+            return "ERROR";
+         }
+         //----------------------------------------------------
+         IStack? stack = gi.BattleStacks.Find(mi.TerritoryCurrent);
+         if (null == stack)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): stack=null for t=" + mi.TerritoryCurrent.Name);
+            return "ERROR";
+         }
+         bool isSmokeAddedToTerritory = false;
+         switch (enemyUnit) // modifiers do not apply for smoke
+         {
+            case "LW":
+            case "MG":
+            case "TRUCK":
+            case "PSW":
+            case "SPW":
+            case "MARDERII":
+            case "MARDERIII":
+               // no smoke possible
+               break;
+            case "ATG":
+            case "Pak43":
+            case "Pak38":
+            case "Pak40":
+            case "PzV":
+            case "JdgPzIV":
+            case "JdgPz38t":
+               if (79 < dieRoll)
+                  isSmokeAddedToTerritory = true;
+               break;
+            case "PzIV":
+            case "STuGIIIg":
+            case "SPG":
+               if (89 < dieRoll)
+                  isSmokeAddedToTerritory = true;
+               break;
+            case "TANK":
+            case "PzVIe":
+            case "PzVIb":
+               if (59 < dieRoll)
+                  isSmokeAddedToTerritory = true;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): reached default with enemyUnit=" + enemyUnit);
+               return "ERROR";
+         }
+         if (true == isSmokeAddedToTerritory)
+         {
+            string miName = "SmokeWhite" + Utilities.MapItemNum;
+            Utilities.MapItemNum++;
+            IMapItem smoke = new MapItem(miName, Utilities.ZOOM + 0.75, "c108Smoke1", mi.TerritoryCurrent);
+            IMapPoint mp = Territory.GetRandomPoint(mi.TerritoryCurrent, mi.Zoom * Utilities.theMapItemOffset);
+            smoke.Location = mp;
+            stack.MapItems.Add(smoke);
+            return "Smoke"; // if smoke occurs, no chance of killing target
+         }
+         //----------------------------------------------------
+         int modifier = GetFriendlyActionModifier(gi, mi, numUsControlledSector, isAdvancingFire, isArtilleryFire, isAirStrike);
+         if (modifier < -99)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): GetFriendlyActionModifier() returned error");
+            return "ERROR";
+         }
+         dieRoll += modifier;
+         //----------------------------------------------------
+         switch (enemyUnit) // modifiers do not apply for smoke
+         {
+            case "LW":
+            case "MG":
+            case "PzIV":
+            case "STuGIIIg":
+            case "SPG":
+               if (dieRoll < 31)
+                  mi.IsKilled = true;
+               break;
+            case "ATG":
+            case "Pak43":
+            case "Pak38":
+            case "Pak40":
+            case "PzV":
+            case "JdgPzIV":
+            case "JdgPz38t":
+               if (dieRoll < 21)
+                  mi.IsKilled = true;
+               break;
+            case "TRUCK":
+               if (dieRoll < 61)
+                  mi.IsKilled = true;
+               break;
+            case "PSW":
+            case "SPW":
+               if (dieRoll < 41)
+                  mi.IsKilled = true;
+               break;
+            case "MARDERII":
+            case "MARDERIII":
+               if (dieRoll < 51)
+                  mi.IsKilled = true;
+               break;
+            case "PzVIe":
+            case "PzVIb":
+            case "TANK":
+               if (dieRoll < 11)
+                  mi.IsKilled = true;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): reached default with enemyUnit=" + enemyUnit);
+               return "ERROR";
+         }
+         if (true == mi.IsKilled)
+         {
+            mi.SetBloodSpots();
+            return "KO";
+         }
+         return "None";
+      }
+      //-------------------------------------------
       public static string GetShermanFireDirection(IGameInstance gi, IMapItem enemyUnit, string hitLocation)
       {
          if ("Thrown Track" == hitLocation)
@@ -4239,8 +4264,6 @@ namespace Pattons_Best
                isShermanMoving = true;
             if ("Driver_ReverseToHullDown" == crewAction.Name)
                isShermanMoving = true;
-            if ("Driver_ReverseToHullDown" == crewAction.Name)
-               isShermanMoving = true;
             if ("Driver_PivotTank" == crewAction.Name)
                isShermanMoving = true;
          }
@@ -4260,15 +4283,18 @@ namespace Pattons_Best
          //------------------------------------
          if (0 == gi.NumOfShermanShot)
          {
+            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "GetShermanToHitModifier(): NumOfShermanShot=" + gi.NumOfShermanShot.ToString());
             if ((false == isCommanderDirectingFire) || (true == commander.IsButtonedUp))
             {
+               Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "GetShermanToHitModifier(): NumOfShermanShot=" + gi.NumOfShermanShot.ToString() + "isCommanderDirectingFire=" + isCommanderDirectingFire.ToString() + "commander.IsButtonedUp=" + commander.IsButtonedUp.ToString());
                toHitModifierNum += 10;
                Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): first shot at close range +10 mod=" + toHitModifierNum.ToString());
             }
          }
          else if (1 == gi.NumOfShermanShot)
          {
-            if( 'C' == range )
+            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "GetShermanToHitModifier(): +1 acq NumOfShermanShot=" + gi.NumOfShermanShot.ToString());
+            if ( 'C' == range )
             {
                toHitModifierNum -= 5;
                Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): acq1 at Close range -5 mod=" + toHitModifierNum.ToString());
@@ -4291,6 +4317,7 @@ namespace Pattons_Best
          }
          else if (1 < gi.NumOfShermanShot)
          {
+            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "GetShermanToHitModifier(): +2 acq NumOfShermanShot=" + gi.NumOfShermanShot.ToString());
             if ('C' == range)
             {
                toHitModifierNum -= 10;
@@ -4368,7 +4395,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): Pak38/40 +20 mod=" + toHitModifierNum.ToString());
          }
          //==================================
-         if ("Direct" == gi.ShermanTypeOfFire)
+         if ("Direct" == gi.ShermanTypeOfFire) // TableMgr.GetShermanToHitModifier()
          {
             if (true == enemyUnit.IsVehicle)
             {
@@ -4583,7 +4610,7 @@ namespace Pattons_Best
             case "Pak43":
                if( "75" ==  guntype )
                {
-                  if( "Direct" == gi.ShermanTypeOfFire)
+                  if( "Direct" == gi.ShermanTypeOfFire) // TableMgr.GetShermanToHitBaseNumber()
                   {
                      if ('C' == range)
                         toHitNum = 55;
@@ -4619,7 +4646,7 @@ namespace Pattons_Best
                }
                else if ("76L" == guntype)
                {
-                  if ("Direct" == gi.ShermanTypeOfFire)
+                  if ("Direct" == gi.ShermanTypeOfFire) // TableMgr.GetShermanToHitBaseNumber()
                   {
                      if ('C' == range)
                         toHitNum = 55;
@@ -4633,7 +4660,7 @@ namespace Pattons_Best
                         return FN_ERROR;
                      }
                   }
-                  else if ("Area" == gi.ShermanTypeOfFire)
+                  else if ("Area" == gi.ShermanTypeOfFire) // TableMgr.GetShermanToHitBaseNumber()
                   {
                      if ('C' == range)
                         toHitNum = 45;
@@ -4674,7 +4701,7 @@ namespace Pattons_Best
             case "JdgPz38t":
                if ("75" == guntype)
                {
-                  if ("Direct" == gi.ShermanTypeOfFire)
+                  if ("Direct" == gi.ShermanTypeOfFire) // TableMgr.GetShermanToHitBaseNumber()
                   {
                      if ('C' == range)
                         toHitNum = 75;
@@ -4688,7 +4715,7 @@ namespace Pattons_Best
                         return FN_ERROR;
                      }
                   }
-                  else if ("Area" == gi.ShermanTypeOfFire)
+                  else if ("Area" == gi.ShermanTypeOfFire) // TableMgr.GetShermanToHitBaseNumber()
                   {
                      if ('C' == range)
                         toHitNum = 45;
@@ -4710,7 +4737,7 @@ namespace Pattons_Best
                }
                else if ("76L" == guntype)
                {
-                  if ("Direct" == gi.ShermanTypeOfFire)
+                  if ("Direct" == gi.ShermanTypeOfFire) // TableMgr.GetShermanToHitBaseNumber()
                   {
                      if ('C' == range)
                         toHitNum = 75;
@@ -4724,7 +4751,7 @@ namespace Pattons_Best
                         return FN_ERROR;
                      }
                   }
-                  else if ("Area" == gi.ShermanTypeOfFire)
+                  else if ("Area" == gi.ShermanTypeOfFire) // TableMgr.GetShermanToHitBaseNumber()
                   {
                      if ('C' == range)
                         toHitNum = 45;

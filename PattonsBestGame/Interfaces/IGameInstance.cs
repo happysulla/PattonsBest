@@ -89,7 +89,6 @@ namespace Pattons_Best
       CrewActionPhase CrewActionPhase { set; get; }
       string MovementEffectOnSherman { set; get; }
       string MovementEffectOnEnemy { set; get; }
-      string ShermanTypeOfFire { set; get; }
       string FiredAmmoType { set; get; }  
       //----------------------------------------------
       IMapItems NewMembers { set; get; }
@@ -119,6 +118,7 @@ namespace Pattons_Best
       bool IsShermanFiringAtFront { set; get; }
       bool IsShermanDeliberateImmobilization { set; get; }
       int NumOfShermanShot { set; get; }
+      string ShermanTypeOfFire { set; get; }
       int NumSmokeAttacksThisRound { set; get; }
       bool IsMalfunctionedMainGun { set; get; }
       bool IsMainGunRepairAttempted { set; get; }

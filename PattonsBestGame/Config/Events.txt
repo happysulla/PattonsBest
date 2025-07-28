@@ -111,7 +111,7 @@ Click image in this text box when satisfied and want to continue."
 e013	"<Bold>e013 Gun Load</Bold> 
 <InlineUIContainer><Button Content='r4.43' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
-Mark the type of round you want loaded in the main gun before any action begins by clicking the highlighted box on the Tank Card in the correct ammo type box. Click image below to continue.
+Mark the type of round you want loaded in the main gun before any action begins by clicking the highlighted box on the Tank Card in the correct ammo type box. If you do not want to load the gun or have finished selecting the gun load, click image below to continue.
 <LineBreak/><LineBreak/>
                                                   <InlineUIContainer><Image Name='c17GunLoad'  Height='80' Width='80'></Image></InlineUIContainer>"
 e013a	"<Bold>e013a Out of Main Gun Rounds</Bold> 
@@ -312,7 +312,7 @@ Deplete smoke in each zone by converting one white full strength Smoke marker to
 <InlineUIContainer><Button Content='r18.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for the smoke rules. Click image to continue with 
 <InlineUIContainer><Button Content='r4.72' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
-                                              <InlineUIContainer><Image Name='c111Smoke1' Height='100' Width='100'></Image></InlineUIContainer>"
+                                    <InlineUIContainer><Image Name='c108Smoke1' Height='200' Width='200'></Image></InlineUIContainer>"
 e038	"<Bold>e038 Orders Phase</Bold> 
 <InlineUIContainer><Button Content='r4.73' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <InlineUIContainer><Button Content='r8.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    

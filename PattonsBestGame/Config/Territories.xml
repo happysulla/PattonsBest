@@ -1502,9 +1502,9 @@
     </Points>
     <Adjacents count="4">
       <adjacent value="B2C" />
-      <adjacent value="B4C" />
-      <adjacent value="B9C" />
       <adjacent value="B1M" />
+      <adjacent value="B9C" />
+      <adjacent value="Home" />
     </Adjacents>
   </Territory>
   <Territory value="B2C">
@@ -1519,9 +1519,9 @@
     </Points>
     <Adjacents count="4">
       <adjacent value="B3C" />
-      <adjacent value="B6C" />
-      <adjacent value="B1C" />
       <adjacent value="B2M" />
+      <adjacent value="B1C" />
+      <adjacent value="Home" />
     </Adjacents>
   </Territory>
   <Territory value="B3C">
@@ -1541,10 +1541,10 @@
       <regionPoint X="0252.19" Y="0550.84" />
     </Points>
     <Adjacents count="4">
-      <adjacent value="B9C" />
-      <adjacent value="B2C" />
       <adjacent value="B3M" />
       <adjacent value="B4C" />
+      <adjacent value="B2C" />
+      <adjacent value="Home" />
     </Adjacents>
   </Territory>
   <Territory value="B4C">
@@ -1569,7 +1569,7 @@
       <adjacent value="B3C" />
       <adjacent value="B4M" />
       <adjacent value="B6C" />
-      <adjacent value="B1C" />
+      <adjacent value="Home" />
     </Adjacents>
   </Territory>
   <Territory value="B6C">
@@ -1590,10 +1590,10 @@
       <regionPoint X="0468.94" Y="0508.57" />
     </Points>
     <Adjacents count="4">
-      <adjacent value="B2C" />
-      <adjacent value="B4C" />
       <adjacent value="B6M" />
       <adjacent value="B9C" />
+      <adjacent value="B4C" />
+      <adjacent value="Home" />
     </Adjacents>
   </Territory>
   <Territory value="B9C">
@@ -1614,10 +1614,10 @@
       <regionPoint X="0543.29" Y="0552.02" />
     </Points>
     <Adjacents count="4">
-      <adjacent value="B3C" />
       <adjacent value="B6C" />
       <adjacent value="B9M" />
       <adjacent value="B1C" />
+      <adjacent value="Home" />
     </Adjacents>
   </Territory>
   <Territory value="B1M">
@@ -2001,7 +2001,7 @@
   <Territory value="Home">
     <Parent value="Main" />
     <Type value="Battle" />
-    <CenterPoint X="0495.00" Y="0552.03" />
+    <CenterPoint X="0495.50" Y="0555.76" />
     <Points count="6">
       <regionPoint X="0467.29" Y="0594.31" />
       <regionPoint X="0519.86" Y="0594.31" />
@@ -2010,7 +2010,14 @@
       <regionPoint X="0470.71" Y="0508.59" />
       <regionPoint X="0444.43" Y="0552.59" />
     </Points>
-    <Adjacents count="0" />
+    <Adjacents count="6">
+      <adjacent value="B6C" />
+      <adjacent value="B9C" />
+      <adjacent value="B1C" />
+      <adjacent value="B2C" />
+      <adjacent value="B3C" />
+      <adjacent value="B4C" />
+    </Adjacents>
   </Territory>
   <Territory value="OffBottomRight">
     <Parent value="Main" />

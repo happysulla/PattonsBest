@@ -271,6 +271,7 @@ namespace Pattons_Best
       BattleRoundSequenceShermanFiringSelectTarget,
       BattleRoundSequenceShermanFiringMainGun,
       BattleRoundSequenceShermanFiringMainGunEnd,
+      BattleRoundSequenceShermanFiringMainGunNot,
       BattleRoundSequenceShermanToHitRoll,
       BattleRoundSequenceShermanSkipRateOfFire,
       BattleRoundSequenceShermanToKillRoll,

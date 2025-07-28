@@ -238,6 +238,7 @@ namespace Pattons_Best
          bool isLoaderRepairAaMg = false;
          bool isLoaderFireSubMg = false;
          bool isLoaderChangingLoad = false;
+         bool isTankMoving = false;
          int periscopeRepairCount = 0;
          foreach (IMapItem mi in this.CrewActions) // This menu is created on each crew action
          {
@@ -251,6 +252,16 @@ namespace Pattons_Best
                isLoaderRepairAaMg = true;
             if (true == mi.Name.Contains("Loader_FireSubMg"))
                isLoaderFireSubMg = true;
+            if (true == mi.Name.Contains("Driver_Forward"))
+               isTankMoving = true;
+            if (true == mi.Name.Contains("Driver_ForwardToHullDown"))
+               isTankMoving = true;
+            if (true == mi.Name.Contains("Driver_Reverse"))
+               isTankMoving = true;
+            if (true == mi.Name.Contains("Driver_ReverseToHullDown"))
+               isTankMoving = true;
+            if (true == mi.Name.Contains("Driver_PivotTank"))
+               isTankMoving = true;
             if (true == mi.Name.Contains("RepairScope"))
                periscopeRepairCount++;
          }
@@ -269,7 +280,7 @@ namespace Pattons_Best
                isCommanderOpenHatch = true;
          }
          //---------------------------------
-         bool isMainGunFiringAvailable = ((false == this.IsMalfunctionedMainGun) && (false == this.IsBrokenMainGun) && (false == this.IsBrokenGunSight) && (0 < totalAmmo) && ("None" != this.GetGunLoadType()) && (false == isLoaderChangingLoad));
+         bool isMainGunFiringAvailable = ((false == isTankMoving) && (false == this.IsMalfunctionedMainGun) && (false == this.IsBrokenMainGun) && (false == this.IsBrokenGunSight) && (0 < totalAmmo) && ("None" != this.GetGunLoadType()) && (false == isLoaderChangingLoad));
          bool isShermanMoveAvailable = ((false == this.Sherman.IsThrownTrack) && (false == this.Sherman.IsAssistanceNeeded) && (false == this.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch) );
          switch (crewRole)
          {
@@ -469,6 +480,12 @@ namespace Pattons_Best
          {
             Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): lastReport=null");
             return false;
+         }
+         //-----------------------------------------------
+         if (null != TargetMainGun)
+         {
+            NumOfShermanShot++;
+            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "FireAndReloadGun(): +++NumOfShermanShot=" + NumOfShermanShot.ToString());
          }
          //-----------------------------------------------
          this.IsPullingFromReadyRack = false;

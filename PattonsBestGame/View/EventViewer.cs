@@ -2229,7 +2229,7 @@ namespace Pattons_Best
             return false;
          }
          //----------------------------------------------
-         if (false == String.IsNullOrEmpty(gi.ShermanTypeOfFire))
+         if (false == String.IsNullOrEmpty(gi.ShermanTypeOfFire))  // EventViewer.UpdateEventContentToGetToHit()
          {
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new LineBreak());
@@ -2282,7 +2282,7 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add("  =  GUN MALFUNCTIONS!");
                   imge53b = new Image { Name = "Continue53b", Width = 80, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
                }
-               else if (toHitNum < gi.DieResults[key][0])
+               else if ((combo < gi.DieResults[key][0]) )
                {
                   myTextBlock.Inlines.Add("  =  MISS");
                   imge53b = new Image { Name = "Continue53b", Width = 80, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
@@ -2323,7 +2323,7 @@ namespace Pattons_Best
          //------------------------------------
          if (3 != enemyUnit.TerritoryCurrent.Name.Length)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
             return "ERROR";
          }
          char range = enemyUnit.TerritoryCurrent.Name[2];
@@ -2342,8 +2342,6 @@ namespace Pattons_Best
                isShermanMoving = true;
             if ("Driver_ReverseToHullDown" == crewAction.Name)
                isShermanMoving = true;
-            if ("Driver_ReverseToHullDown" == crewAction.Name)
-               isShermanMoving = true;
             if ("Driver_PivotTank" == crewAction.Name)
                isShermanMoving = true;
          }
@@ -2351,24 +2349,26 @@ namespace Pattons_Best
          ICrewMember? commander = gi.GetCrewMember("Commander");
          if (null == commander)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): commander=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): commander=null");
             return "ERROR";
          }
          ICrewMember? gunner = gi.GetCrewMember("Gunner");
          if (null == gunner)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): gunner=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): gunner=null");
             return "ERROR";
          }
          StringBuilder sb51 = new StringBuilder();
          //------------------------------------
          if (0 == gi.NumOfShermanShot)
          {
+            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "UpdateEventContentGetToHitModifier(): NumOfShermanShot=" + gi.NumOfShermanShot.ToString() + "isCommanderDirectingFire=" + isCommanderDirectingFire.ToString() + "commander.IsButtonedUp=" + commander.IsButtonedUp.ToString());
             if ( (false == isCommanderDirectingFire) || (true == commander.IsButtonedUp) )
                sb51.Append("+10 for first shot\n");
          }
          else if (1 == gi.NumOfShermanShot)
          {
+            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "UpdateEventContentGetToHitModifier(): SHOW +1 acq NumOfShermanShot=" + gi.NumOfShermanShot.ToString());
             if ('C' == range)
                sb51.Append("-5 for 2nd shot at close range\n");
             else if ('M' == range)
@@ -2377,12 +2377,13 @@ namespace Pattons_Best
                sb51.Append("-15 for 2nd shot at long range\n");
             else
             {
-               Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): reached default range=" + range);
                return "ERROR";
             }
          }
          else if (1 < gi.NumOfShermanShot)
          {
+            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "UpdateEventContentGetToHitModifier(): SHOW +2 acq NumOfShermanShot=" + gi.NumOfShermanShot.ToString());
             if ('C' == range)
                sb51.Append("-10 for 3rd shot at close range\n");
             else if ('M' == range)
@@ -2391,7 +2392,7 @@ namespace Pattons_Best
                sb51.Append("-30 for 3rd shot at long range\n");
             else
             {
-               Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): reached default range=" + range);
                return "ERROR";
             }
          }
@@ -2406,7 +2407,7 @@ namespace Pattons_Best
                sb51.Append("+25 for moving target at long range\n");
             else
             {
-               Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): reached default range=" + range);
                return "ERROR";
             }
          }
@@ -2442,7 +2443,7 @@ namespace Pattons_Best
          else if ((true == enemyUnit.Name.Contains("Pak40")) || (true == enemyUnit.Name.Contains("Pak38")))
             sb51.Append("+20 for firing at 50L or 75L AT Gun\n");
          //==================================
-         if ("Direct" == gi.ShermanTypeOfFire)
+         if ("Direct" == gi.ShermanTypeOfFire)   // EventViewer.UpdateEventContentGetToHitModifier()
          {
             //----------------------------
             if (true == isShermanMoving)
@@ -2458,7 +2459,7 @@ namespace Pattons_Best
                   sb51.Append("+15 for target in woods at large range\n");
                else
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): reached default range=" + range);
                   return "ERROR";
                }
             }
@@ -2472,7 +2473,7 @@ namespace Pattons_Best
                   sb51.Append("+25 for target in building at large range\n");
                else
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): reached default range=" + range);
                   return "ERROR";
                }
             }
@@ -2486,7 +2487,7 @@ namespace Pattons_Best
                   sb51.Append("+35 for target in fortification at large range\n");
                else
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): reached default range=" + range);
                   return "ERROR";
                }
             }
@@ -2496,7 +2497,7 @@ namespace Pattons_Best
                string enemyUnitType = enemyUnit.GetEnemyUnit();
                if ("ERROR" == enemyUnitType)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): unknown enemyUnit=" + enemyUnit.Name);
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): unknown enemyUnit=" + enemyUnit.Name);
                   return "ERROR";
                }
                switch (enemyUnitType)
@@ -2522,7 +2523,7 @@ namespace Pattons_Best
 
                      else
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): reached default range=" + range);
                         return "ERROR";
                      }
                      break;
@@ -2535,12 +2536,12 @@ namespace Pattons_Best
                         sb51.Append("-30 for very large target at large range\n");
                      else
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): reached default range=" + range);
                         return "ERROR";
                      }
                      break;
                   default:
-                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): Reached Default enemyUnitType=" + enemyUnitType);
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): Reached Default enemyUnitType=" + enemyUnitType);
                      return "ERROR";
                }
                if (true == gi.IsShermanDeliberateImmobilization)
@@ -2553,7 +2554,7 @@ namespace Pattons_Best
                      sb51.Append("+45 for deliberate immobilization\n");
                   else
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): reached default range=" + range);
                      return "ERROR";
                   }
                }
@@ -2576,7 +2577,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifierImmobilization(): gi.TargetMainGun=null");
             return false;
          }
-         if ((true == gi.TargetMainGun.IsVehicle) && ("Direct" ==  gi.ShermanTypeOfFire) )
+         if ((true == gi.TargetMainGun.IsVehicle) && ("Direct" ==  gi.ShermanTypeOfFire)) // EventViewer.UpdateEventContentGetToHitModifierImmobilization()
          {
             if (3 != enemyUnit.TerritoryCurrent.Name.Length)
             {
@@ -2752,7 +2753,7 @@ namespace Pattons_Best
             else
             {
                myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
-               if (toKillNum < gi.DieResults[key][0])
+               if (combo < gi.DieResults[key][0])
                   myTextBlock.Inlines.Add("  =  NO EFFECT");
                else
                   myTextBlock.Inlines.Add("  =  KILL");
@@ -4797,7 +4798,6 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue43":  // minefield attack
-       
                            if( BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase)
                            {
                               Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "TextBlock_MouseDown(): Minefield Attack e=" + myGameInstance.EventActive);
@@ -4817,7 +4817,7 @@ namespace Pattons_Best
                            action = GameAction.EveningDebriefingRatingImprovement;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
-                        case "c111Smoke1": // smoke depletion
+                        case "c108Smoke1": // smoke depletion
                            action = GameAction.BattleRoundSequenceSmokeDepletionEnd;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
@@ -4840,7 +4840,15 @@ namespace Pattons_Best
                                  break;
                               }
                            }
-                           if( true == isLoaderLoading)
+                           bool isGunnerFiring = false;
+                           foreach (IMapItem crewAction in myGameInstance.CrewActions)
+                           {
+                              if (true == crewAction.Name.Contains("Gunner_FireMainGun"))
+                                 isGunnerFiring = true;
+                              if (true == crewAction.Name.Contains("Gunner_RotateFireMainGun"))
+                                 isGunnerFiring = true;
+                           }
+                           if ( (true == isLoaderLoading) && (true == isGunnerFiring) ) // do not show ammo orders screen if gunneris not firing or loader is not loading
                               action = GameAction.BattleRoundSequenceAmmoOrders;
                            else
                               action = GameAction.BattleRoundSequenceConductCrewAction; // skip ammo orders
@@ -4938,7 +4946,10 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue53b":
-                           action = GameAction.BattleRoundSequenceShermanFiringMainGunEnd;
+                           if( 0 < myGameInstance.ShermanHits.Count )
+                              action = GameAction.BattleRoundSequenceShermanSkipRateOfFire; // If sherman misses, do same thing as skip ROF if there are previous hits
+                           else
+                              action = GameAction.BattleRoundSequenceShermanFiringMainGunEnd; // Miss target after hitting
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "BattleRoundSequenceShermanHit":
@@ -4946,7 +4957,10 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Miss":
-                           action = GameAction.BattleRoundSequenceShermanFiringMainGunEnd;
+                           if (0 < myGameInstance.ShermanHits.Count)
+                              action = GameAction.BattleRoundSequenceShermanSkipRateOfFire; // If sherman misses, do same thing as skip ROF if there are previous hits
+                           else
+                              action = GameAction.BattleRoundSequenceShermanFiringMainGunEnd; // Miss target
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "ThrownTrack":
@@ -5205,7 +5219,7 @@ namespace Pattons_Best
                break;
             case " Area ":
                myGameInstance.ShermanTypeOfFire = "Area";
-               action = GameAction.BattleRoundSequenceShermanFiringMainGun;
+               action = GameAction.BattleRoundSequenceShermanFiringMainGun; // Area Button
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "  AA MG   ":
@@ -5262,7 +5276,7 @@ namespace Pattons_Best
                break;
             case "Direct":
                myGameInstance.ShermanTypeOfFire = "Direct";
-               action = GameAction.BattleRoundSequenceShermanFiringMainGun;
+               action = GameAction.BattleRoundSequenceShermanFiringMainGun;  // Direct Buttn
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Enter":
@@ -5270,7 +5284,7 @@ namespace Pattons_Best
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Fire":
-               action = GameAction.BattleRoundSequenceShermanFiringMainGun;
+               action = GameAction.BattleRoundSequenceShermanFiringMainGun; // Fire Button
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Read Rules":
@@ -5285,15 +5299,12 @@ namespace Pattons_Best
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Skip":
-               if( 0 < myGameInstance.ShermanHits.Count )
-                  action = GameAction.BattleRoundSequenceShermanSkipRateOfFire;
-               else
-                  action = GameAction.BattleRoundSequenceShermanFiringMainGunEnd;
+               action = GameAction.BattleRoundSequenceShermanSkipRateOfFire; // Skip the Rate of Fire
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case " Skip ":
                myGameInstance.ShermanTypeOfFire = "Skip";
-               action = GameAction.BattleRoundSequenceShermanFiringMainGunEnd;
+               action = GameAction.BattleRoundSequenceShermanFiringMainGunNot;
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Strength Check":

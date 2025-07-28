@@ -27,7 +27,7 @@ namespace Pattons_Best
       public bool CtorError { get; } = false;
       static private int theWhiteDie = 0;
       static private int theBlueDie = 0;
-      static public int WhiteDie { get => theWhiteDie; }
+      static public int WhiteDie { get => theWhiteDie; set => theWhiteDie = value; }
       static public int BlueDie { get => theBlueDie; }
       //-----------------------------------------------------------
       private Canvas? myCanvas;
