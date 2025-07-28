@@ -719,16 +719,16 @@ e059	"<Bold>e059 Restock Ready Rack</Bold>
 Loader restocks the ready rack from available ammo shown on the After Action Report 
 <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Click buttons to adjust or the image when done.
 <LineBreak/><LineBreak/>
-   <InlineUIContainer><Button Name='HeMinus' Content='   -   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
-<InlineUIContainer><Button Name='HePlus'  Content='   +   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for HE Ammo<LineBreak/>
-   <InlineUIContainer><Button Name='ApMinus' Content='   -   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
-<InlineUIContainer><Button Name='ApPlus' Content='   +   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for AP Ammo<LineBreak/>
-   <InlineUIContainer><Button Name='WpMinus' Content='   -   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
-<InlineUIContainer><Button Name='WpPlus' Content='   +   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for WP Ammo<LineBreak/>
-   <InlineUIContainer><Button Name='HcbiMinus' Content='   -   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
-<InlineUIContainer><Button Name='HcbiPlus' Content='   +   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for HCBI Ammo<LineBreak/>
+   <InlineUIContainer><Button Name='HeMinus' Content='   -   '  FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Name='HePlus'  Content='   +   '  FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for HE Ammo<LineBreak/>
+   <InlineUIContainer><Button Name='ApMinus' Content='   -   '  FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Name='ApPlus' Content='   +   '  FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for AP Ammo<LineBreak/>
+   <InlineUIContainer><Button Name='WpMinus' Content='   -   '  FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Name='WpPlus' Content='   +   '  FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for WP Ammo<LineBreak/>
+   <InlineUIContainer><Button Name='HbciMinus' Content='   -   '  FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Name='HbciPlus' Content='   +   '  FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for HCBI Ammo<LineBreak/>
    <InlineUIContainer><Button Name='HvapMinus' Content='   -   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
-<InlineUIContainer><Button Name='HvapPlus' Content='   +   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for HVAP Ammo<LineBreak/>
+<InlineUIContainer><Button Name='HvapPlus' Content='   +   '  FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> for HVAP Ammo<LineBreak/>
 <LineBreak/><LineBreak/>
                                             <InlineUIContainer><Image Name='c60LRestockReadyRack' Height='100' Width='100'></Image></InlineUIContainer>  "
 e060	"<Bold>e060 Reset Round</Bold> 

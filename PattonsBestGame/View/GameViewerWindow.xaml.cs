@@ -324,6 +324,15 @@ namespace Pattons_Best
             case GameAction.BattleRoundSequenceStart:
             case GameAction.UpdateTankCard:
             case GameAction.BattleRoundSequenceShermanToHitRollNothing:
+            case GameAction.BattleRoundSequenceReadyRackHeMinus:
+            case GameAction.BattleRoundSequenceReadyRackApMinus:
+            case GameAction.BattleRoundSequenceReadyRackHbciMinus:
+            case GameAction.BattleRoundSequenceReadyRackHvapMinus:
+            case GameAction.BattleRoundSequenceReadyRackHePlus:
+            case GameAction.BattleRoundSequenceReadyRackApPlus:
+            case GameAction.BattleRoundSequenceReadyRackWpPlus:
+            case GameAction.BattleRoundSequenceReadyRackHbciPlus:
+            case GameAction.BattleRoundSequenceReadyRackHvapPlus:
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                break;

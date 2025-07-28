@@ -584,7 +584,6 @@ namespace Pattons_Best
             if (0 == this.GetReadyRackReload(ammoReloadType))
             {
                Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "FireAndReloadGun(): readyrack=0 for ammoReloadType=" + ammoReloadType + " causing swithing over to different AmmoReload Marker");
-
                foreach (IMapItem mi in this.GunLoads)
                {
                   if (true == mi.Name.Contains("ReadyRackAmmoReload"))
@@ -654,8 +653,7 @@ namespace Pattons_Best
             if (true == mi.Name.Contains(ammoType))
                return mi.Count;
          }
-         Logger.Log(LogEnum.LE_ERROR, "GetReadyRackReload(): reached default");
-         return -100;
+         return 0;
       }
       public bool SetReadyRackReload(string ammoType, int value)
       {
