@@ -3999,7 +3999,8 @@ namespace Pattons_Best
                         b.IsEnabled = false;
                      break;
                   case "HePlus":
-                     ammoAvailable = lastReport.MainGunHE;
+                     readyRackLoadCount = gi.GetReadyRackReload("He");
+                     ammoAvailable = lastReport.MainGunHE - readyRackLoadCount;
                      if ("He" == gunLoadType) // subtract one if a round is int the gun tube
                         ammoAvailable--;
                      if( (0 < ammoAvailable) && (totalReloadLoad < card.myMaxReadyRackCount) )
@@ -4008,7 +4009,8 @@ namespace Pattons_Best
                         b.IsEnabled = false;
                      break;
                   case "ApPlus":
-                     ammoAvailable = lastReport.MainGunAP;
+                     readyRackLoadCount = gi.GetReadyRackReload("Ap");
+                     ammoAvailable = lastReport.MainGunAP - readyRackLoadCount;
                      if ("Ap" == gunLoadType) // subtract one if a round is int the gun tube
                         ammoAvailable--;
                      if ((0 < ammoAvailable) && (totalReloadLoad < card.myMaxReadyRackCount))
@@ -4017,7 +4019,8 @@ namespace Pattons_Best
                         b.IsEnabled = false;
                      break;
                   case "WpPlus":
-                     ammoAvailable = lastReport.MainGunWP;
+                     readyRackLoadCount = gi.GetReadyRackReload("Wp");
+                     ammoAvailable = lastReport.MainGunWP - readyRackLoadCount;
                      if ("Wp" == gunLoadType) // subtract one if a round is int the gun tube
                         ammoAvailable--;
                      if ((0 < ammoAvailable) && (totalReloadLoad < card.myMaxReadyRackCount))
@@ -4026,7 +4029,8 @@ namespace Pattons_Best
                         b.IsEnabled = false;
                      break;
                   case "HbciPlus":
-                     ammoAvailable = lastReport.MainGunHBCI;
+                     readyRackLoadCount = gi.GetReadyRackReload("Hbci");
+                     ammoAvailable = lastReport.MainGunHBCI - readyRackLoadCount;
                      if ("Hbci" == gunLoadType) // subtract one if a round is int the gun tube
                         ammoAvailable--;
                      if ((0 < ammoAvailable) && (totalReloadLoad < card.myMaxReadyRackCount))
@@ -4035,7 +4039,8 @@ namespace Pattons_Best
                         b.IsEnabled = false;
                      break;
                   case "HvapPlus":
-                     ammoAvailable = lastReport.MainGunHVAP;
+                     readyRackLoadCount = gi.GetReadyRackReload("Hvap");
+                     ammoAvailable = lastReport.MainGunHVAP - readyRackLoadCount;
                      if ("Hvap" == gunLoadType) // subtract one if a round is int the gun tube
                         ammoAvailable--;
                      if ((0 < ammoAvailable) && (totalReloadLoad < card.myMaxReadyRackCount))
@@ -5122,7 +5127,7 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "c60LRestockReadyRack":
-                           action = GameAction.BattleRoundSequenceShermanThrowGrenade;
+                           action = GameAction.BattleRoundSequenceReadyRackEnd;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue60":
@@ -5355,7 +5360,7 @@ namespace Pattons_Best
                   case "WpPlus":
                      action = GameAction.BattleRoundSequenceReadyRackWpPlus;
                      break;
-                  case "HcbiPlus":
+                  case "HbciPlus":
                      action = GameAction.BattleRoundSequenceReadyRackHbciPlus;
                      break;
                   case "HvapPlus":

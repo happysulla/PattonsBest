@@ -326,6 +326,7 @@ namespace Pattons_Best
             case GameAction.BattleRoundSequenceShermanToHitRollNothing:
             case GameAction.BattleRoundSequenceReadyRackHeMinus:
             case GameAction.BattleRoundSequenceReadyRackApMinus:
+            case GameAction.BattleRoundSequenceReadyRackWpMinus:
             case GameAction.BattleRoundSequenceReadyRackHbciMinus:
             case GameAction.BattleRoundSequenceReadyRackHvapMinus:
             case GameAction.BattleRoundSequenceReadyRackHePlus:

@@ -576,8 +576,8 @@ e052	"<Bold>e052 Pivot Tank</Bold>
 <LineBreak/><LineBreak/>
 If you want the Sherman to face a different sector, select buttons here:
 <LineBreak/><LineBreak/>
-                                           <InlineUIContainer><Button Content='   -   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>      
-<InlineUIContainer><Button Content='   +   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+                                           <InlineUIContainer><Button Name='ButtonPivotHullLeft'  Content='   -   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>      
+<InlineUIContainer><Button Name='ButtonPivotHullRight'  Content='   +   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>"
 e052a	"<Bold>e052a Pivot Turret</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
@@ -585,8 +585,8 @@ e052a	"<Bold>e052a Pivot Turret</Bold>
 <LineBreak/><LineBreak/>
 If you want the turret to face a different sector, select buttons here: 
 <LineBreak/><LineBreak/>
-                                             <InlineUIContainer><Button Content='  -  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>           
-<InlineUIContainer><Button Content='  +  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+                                             <InlineUIContainer><Button Name='ButtonPivotTurretLeft'  Content='   -   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>           
+<InlineUIContainer><Button Name='ButtonPivotTurretRight'   Content='   +   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>"
 e053	"<Bold>e053 Main Gun Firing - Select Target</Bold> 
 <InlineUIContainer><Button Content='r4.74.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   

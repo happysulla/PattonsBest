@@ -306,6 +306,7 @@ namespace Pattons_Best
       BattleRoundSequenceReadyRackWpPlus,
       BattleRoundSequenceReadyRackHbciPlus,
       BattleRoundSequenceReadyRackHvapPlus,
+      BattleRoundSequenceReadyRackEnd,
 
       BattleRoundSequenceEnemyAction,
       BattleRoundSequenceCollateralDamageCheck,

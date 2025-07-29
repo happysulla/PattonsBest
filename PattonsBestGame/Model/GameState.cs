@@ -1221,8 +1221,8 @@ namespace Pattons_Best
          }
          lastReport.MainGunHE = (int)Math.Ceiling(unassignedCount * 0.6);
          unassignedCount -= lastReport.MainGunHE;
-         //lastReport.MainGunAP = unassignedCount;
-         //lastReport.MainGunHE = 3; // <cgs> Limit initial gun loads
+         lastReport.MainGunAP = unassignedCount;
+         lastReport.MainGunHE = 5; // <cgs> Limit initial gun loads
          //lastReport.MainGunAP = 3;
          //lastReport.MainGunWP = 0;
          //lastReport.MainGunHBCI = 3;
@@ -1281,9 +1281,9 @@ namespace Pattons_Best
             return false;
          }
          dieRoll = Utilities.RandomGenerator.Next(1, 11);
-         lastReport.SunriseHour += (int)Math.Floor(dieRoll * 0.5) + 1;
-         lastReport.MainGunHE -= dieRoll * 2;
-         lastReport.Ammo30CalibreMG -= dieRoll;
+         //lastReport.SunriseHour += (int)Math.Floor(dieRoll * 0.5) + 1;
+         //lastReport.MainGunHE -= dieRoll * 2;
+         //lastReport.Ammo30CalibreMG -= dieRoll;
          return true;
       }
       private bool PerformAutoSetupSkipPreparations(IGameInstance gi)
@@ -4153,36 +4153,44 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceReadyRackHePlus:
                   if (false == UpdateReadyRackPlus(gi, "He", lastReport.MainGunHE))
                   {
-                     returnStatus = "UpdateReadyRackMinus() returned false for He";
+                     returnStatus = "UpdateReadyRackPlus() returned false for He";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
                   }
                   break;
                case GameAction.BattleRoundSequenceReadyRackApPlus:
                   if (false == UpdateReadyRackPlus(gi, "Ap", lastReport.MainGunAP))
                   {
-                     returnStatus = "UpdateReadyRackMinus() returned false for Ap";
+                     returnStatus = "UpdateReadyRackPlus() returned false for Ap";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
                   }
                   break;
                case GameAction.BattleRoundSequenceReadyRackWpPlus:
                   if (false == UpdateReadyRackPlus(gi, "Wp", lastReport.MainGunWP))
                   {
-                     returnStatus = "UpdateReadyRackMinus() returned false for Wp";
+                     returnStatus = "UpdateReadyRackPlus() returned false for Wp";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
                   }
                   break;
                case GameAction.BattleRoundSequenceReadyRackHbciPlus:
                   if (false == UpdateReadyRackPlus(gi, "Hbci", lastReport.MainGunHBCI))
                   {
-                     returnStatus = "UpdateReadyRackMinus() returned false for Hbci";
+                     returnStatus = "UpdateReadyRackPlus() returned false for Hbci";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
                   }
                   break;
                case GameAction.BattleRoundSequenceReadyRackHvapPlus:
                   if (false == UpdateReadyRackPlus(gi, "Hvap", lastReport.MainGunHVAP))
                   {
-                     returnStatus = "UpdateReadyRackMinus() returned false for Hvap";
+                     returnStatus = "UpdateReadyRackPlus() returned false for Hvap";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceReadyRackEnd:  // no more crew actions to do
+                  gi.CrewActionPhase = CrewActionPhase.None;
+                  if (false == ConductCrewAction(gi, ref action))
+                  {
+                     returnStatus = "ConductCrewAction() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceReadyRackEnd): " + returnStatus);
                   }
                   break;
                case GameAction.BattleRoundSequenceEnemyAction:
@@ -6038,12 +6046,12 @@ namespace Pattons_Best
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
          //---------------------------------------------------
+         int readyRackLoadCount = gi.GetReadyRackReload(ammoType);
+         ammoAvailable -= readyRackLoadCount;
          string gunLoadType = gi.GetGunLoadType();
          if (ammoType == gunLoadType) // subtract one if a round is int the gun tube
             ammoAvailable--;
-         int readyRackLoadCount = gi.GetReadyRackReload(ammoType);
-         int totalReloadLoad = gi.GetReadyRackTotalLoad();
-         if ((ammoAvailable < 1) || (card.myMaxReadyRackCount <= totalReloadLoad))
+         if ((ammoAvailable < 1) || (card.myMaxReadyRackCount <= gi.GetReadyRackTotalLoad()))
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): Invalid state - maxReload reached for " + ammoType  + " ammo=" + ammoAvailable.ToString());
             return false;
