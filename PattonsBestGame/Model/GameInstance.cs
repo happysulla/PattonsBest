@@ -655,6 +655,13 @@ namespace Pattons_Best
          }
          return 0;
       }
+      public int GetReadyRackTotalLoad()
+      {
+         int total = 0;
+         foreach (IMapItem mi in this.ReadyRacks)
+            total += mi.Count;
+         return total;
+      }
       public bool SetReadyRackReload(string ammoType, int value)
       {
          IMapItem? rrMarker = null;

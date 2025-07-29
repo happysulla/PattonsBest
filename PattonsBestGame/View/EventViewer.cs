@@ -3960,8 +3960,7 @@ namespace Pattons_Best
                int readyRackLoadCount = 0;
                int ammoAvailable = 0;
                string gunLoadType = gi.GetGunLoadType();
-               int diffInReadyRack = 0;
-               int maxReloadCapability = 0;
+               int totalReloadLoad = gi.GetReadRackTotalLoad();
                switch (name)
                {
                   case "HeMinus":
@@ -4003,10 +4002,7 @@ namespace Pattons_Best
                      ammoAvailable = lastReport.MainGunHE;
                      if ("He" == gunLoadType) // subtract one if a round is int the gun tube
                         ammoAvailable--;
-                     readyRackLoadCount = gi.GetReadyRackReload("He");
-                     diffInReadyRack = card.myMaxReadyRackCount - readyRackLoadCount;
-                     maxReloadCapability = Math.Min(diffInReadyRack, ammoAvailable);
-                     if (readyRackLoadCount < maxReloadCapability)
+                     if( (0 < ammoAvailable) && (totalReloadLoad < card.myMaxReadyRackCount) )
                         b.IsEnabled = true;
                      else
                         b.IsEnabled = false;
@@ -4015,10 +4011,7 @@ namespace Pattons_Best
                      ammoAvailable = lastReport.MainGunAP;
                      if ("Ap" == gunLoadType) // subtract one if a round is int the gun tube
                         ammoAvailable--;
-                     readyRackLoadCount = gi.GetReadyRackReload("Ap");
-                     diffInReadyRack = card.myMaxReadyRackCount - readyRackLoadCount;
-                     maxReloadCapability = Math.Min(diffInReadyRack, ammoAvailable);
-                     if (readyRackLoadCount < maxReloadCapability)
+                     if ((0 < ammoAvailable) && (totalReloadLoad < card.myMaxReadyRackCount))
                         b.IsEnabled = true;
                      else
                         b.IsEnabled = false;
@@ -4027,10 +4020,7 @@ namespace Pattons_Best
                      ammoAvailable = lastReport.MainGunWP;
                      if ("Wp" == gunLoadType) // subtract one if a round is int the gun tube
                         ammoAvailable--;
-                     readyRackLoadCount = gi.GetReadyRackReload("Wp");
-                     diffInReadyRack = card.myMaxReadyRackCount - readyRackLoadCount;
-                     maxReloadCapability = Math.Min(diffInReadyRack, ammoAvailable);
-                     if (readyRackLoadCount < maxReloadCapability)
+                     if ((0 < ammoAvailable) && (totalReloadLoad < card.myMaxReadyRackCount))
                         b.IsEnabled = true;
                      else
                         b.IsEnabled = false;
@@ -4039,10 +4029,7 @@ namespace Pattons_Best
                      ammoAvailable = lastReport.MainGunHBCI;
                      if ("Hbci" == gunLoadType) // subtract one if a round is int the gun tube
                         ammoAvailable--;
-                     readyRackLoadCount = gi.GetReadyRackReload("Hbci");
-                     diffInReadyRack = card.myMaxReadyRackCount - readyRackLoadCount;
-                     maxReloadCapability = Math.Min(diffInReadyRack, ammoAvailable);
-                     if (readyRackLoadCount < maxReloadCapability)
+                     if ((0 < ammoAvailable) && (totalReloadLoad < card.myMaxReadyRackCount))
                         b.IsEnabled = true;
                      else
                         b.IsEnabled = false;
@@ -4051,10 +4038,7 @@ namespace Pattons_Best
                      ammoAvailable = lastReport.MainGunHVAP;
                      if ("Hvap" == gunLoadType) // subtract one if a round is int the gun tube
                         ammoAvailable--;
-                     readyRackLoadCount = gi.GetReadyRackReload("Hvap");
-                     diffInReadyRack = card.myMaxReadyRackCount - readyRackLoadCount;
-                     maxReloadCapability = Math.Min(diffInReadyRack, ammoAvailable);
-                     if (readyRackLoadCount < maxReloadCapability)
+                     if ((0 < ammoAvailable) && (totalReloadLoad < card.myMaxReadyRackCount))
                         b.IsEnabled = true;
                      else
                         b.IsEnabled = false;
