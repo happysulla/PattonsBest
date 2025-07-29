@@ -3960,7 +3960,7 @@ namespace Pattons_Best
                int readyRackLoadCount = 0;
                int ammoAvailable = 0;
                string gunLoadType = gi.GetGunLoadType();
-               int totalReloadLoad = gi.GetReadRackTotalLoad();
+               int totalReloadLoad = gi.GetReadyRackTotalLoad();
                switch (name)
                {
                   case "HeMinus":

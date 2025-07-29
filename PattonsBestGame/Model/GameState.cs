@@ -6042,7 +6042,7 @@ namespace Pattons_Best
          if (ammoType == gunLoadType) // subtract one if a round is int the gun tube
             ammoAvailable--;
          int readyRackLoadCount = gi.GetReadyRackReload(ammoType);
-         int totalReloadLoad = gi.GetReadRackTotalLoad();
+         int totalReloadLoad = gi.GetReadyRackTotalLoad();
          if ((ammoAvailable < 1) || (card.myMaxReadyRackCount <= totalReloadLoad))
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): Invalid state - maxReload reached for " + ammoType  + " ammo=" + ammoAvailable.ToString());

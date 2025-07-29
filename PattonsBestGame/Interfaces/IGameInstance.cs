@@ -196,7 +196,7 @@ namespace Pattons_Best
       bool FireAndReloadGun();
       bool IsReadyRackReload();
       int GetReadyRackReload(string ammoType);
-      int GetReadRackTotalLoad();
+      int GetReadyRackTotalLoad();
       bool SetReadyRackReload(string name, int value);
       //------------------------------------------------
       bool IsDaylightLeft(IAfterActionReport report);
