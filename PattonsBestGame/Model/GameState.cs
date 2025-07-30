@@ -3939,7 +3939,7 @@ namespace Pattons_Best
                      else if (true == gi.IsShermanFiringCoaxialMg)
                      {
                         gi.IsShermanFiredCoaxialMg = true;
-                        advanceMg = new MapItem(miName, 1.0, "c47AdvanceFireCoaxialMg", gi.AdvanceFire); ;
+                        advanceMg = new MapItem(miName, 1.0, "c47AdvanceFireCoaxialMg", gi.AdvanceFire); 
                      }
                      else if (true == gi.IsShermanFiringSubMg)
                      {

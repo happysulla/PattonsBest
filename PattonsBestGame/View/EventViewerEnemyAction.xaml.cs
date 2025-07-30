@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 using Windows.ApplicationModel.Activation;
 using WpfAnimatedGif;
 using static Pattons_Best.EventViewerBattleSetup;
@@ -37,6 +38,8 @@ namespace Pattons_Best
          ENEMY_ACTION_SELECT_SHOW,
          ENEMY_ACTION_MOVE,
          ENEMY_ACTION_MOVE_SHOW,
+         ENEMY_ACTION_MOVE_ADVANCE_FIRE,
+         ENEMY_ACTION_MOVE_ADVANCE_FIRE_SHOW,
          ENEMY_ACTION_FIRE,
          ENEMY_ACTION_FIRE_SHOW,
          ENEMY_ACTION_TO_HIT_YOUR_TANK,
@@ -59,6 +62,12 @@ namespace Pattons_Best
          public int myModifierEnemyAction = 0;
          public string myEnemyAction = "";
          public int myDieRollEnemyAction = Utilities.NO_RESULT;
+         //---------------------------------------------------
+         public IMapItem myAdvanceFire = new MapItem("AdvanceFire", 1.0, "c44AdvanceFire", new Territory());
+         public int myDieRollAdvanceFire = Utilities.NO_RESULT;
+         public int myAdvanceFireBaseNum = 0;
+         public int myAdvanceFireModifier = 0;
+         public string myAdvanceFireResult = "UNINT";
          //---------------------------------------------------
          public char mySector = 'E';
          public char myRange = 'E';
@@ -384,6 +393,13 @@ namespace Pattons_Best
                myTextBlockInstructions.Inlines.Add(new InlineUIContainer(bMove));
                myTextBlockInstructions.Inlines.Add(new Run(" Diagram. Roll die for vehicle facing and/or terrain."));
                break;
+            case E0475Enum.ENEMY_ACTION_MOVE_ADVANCE_FIRE:
+               myTextBlockInstructions.Inlines.Add(new Run("Roll on the "));
+               Button bAdvanceFire = new Button() { Content = "Sherman MG", FontFamily = myFontFam1, FontSize = 8 };
+               bAdvanceFire.Click += ButtonRule_Click;
+               myTextBlockInstructions.Inlines.Add(new InlineUIContainer(bAdvanceFire));
+               myTextBlockInstructions.Inlines.Add(new Run(" Table for effects of advance fire."));
+               break;
             case E0475Enum.ENEMY_ACTION_FIRE:
                myTextBlockInstructions.Inlines.Add(new Run("Roll on "));
                {
@@ -456,6 +472,7 @@ namespace Pattons_Best
          {
             case E0475Enum.ENEMY_ACTION_SELECT:
             case E0475Enum.ENEMY_ACTION_MOVE:
+            case E0475Enum.ENEMY_ACTION_MOVE_ADVANCE_FIRE:
             case E0475Enum.ENEMY_ACTION_FIRE:
             case E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK:
             case E0475Enum.ENEMY_ACTION_TO_KILL_YOUR_TANK:
@@ -514,16 +531,40 @@ namespace Pattons_Best
                }
                break;
             case E0475Enum.ENEMY_ACTION_MOVE_SHOW:
+               bool isAdvanceFire = false;
                bool isEnemyFiring1 = false;
                bool isYourTank1 = false;
                for (int j = 0; j < myMaxRowCount; ++j)
                {
+                  if (true == myGridRows[j].myEnemyAction.Contains("Move"))
+                  {
+                     ITerritory t = myGridRows[j].myMapItem.TerritoryCurrent;
+                     IStack? stack = myGameInstance.BattleStacks.Find(t);
+                     if (null == stack)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): stack=null for t=" + t.Name);
+                        return false;
+                     }
+                     foreach(IMapItem mi1 in stack.MapItems)
+                     {
+                        if( true == mi1.Name.Contains("Advance") )
+                        {
+                           isAdvanceFire = true;
+                           break;
+                        }
+                     }
+                  }
                   if ((true == myGridRows[j].myEnemyAction.Contains("Your")) || ((true == myGridRows[j].myEnemyAction.Contains("Lead")) && (true == myGameInstance.IsLeadTank)))
                      isYourTank1 = true;
                   else if (true == myGridRows[j].myEnemyAction.Contains("Fire"))
                      isEnemyFiring1 = true;
                }
-               if (true == isEnemyFiring1)
+               if (true == isAdvanceFire)
+               {
+                  System.Windows.Controls.Image imgAdv = new System.Windows.Controls.Image { Name = "AdvanceFire", Source = MapItem.theMapImages.GetBitmapImage("c44AdvanceFIre"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  myStackPanelAssignable.Children.Add(imgAdv);
+               }
+               else if (true == isEnemyFiring1)
                {
                   BitmapImage bmi4 = new BitmapImage();
                   bmi4.BeginInit();
@@ -534,6 +575,42 @@ namespace Pattons_Best
                   myStackPanelAssignable.Children.Add(img4);
                }
                else if (true == isYourTank1)
+               {
+                  BitmapImage bmi51 = new BitmapImage();
+                  bmi51.BeginInit();
+                  bmi51.UriSource = new Uri(MapImage.theImageDirectory + "TigerFiring4.gif", UriKind.Absolute);
+                  bmi51.EndInit();
+                  System.Windows.Controls.Image img51 = new System.Windows.Controls.Image { Name = "ToHitYourTank", Source = bmi51, Width = Utilities.ZOOM * Utilities.theMapItemSize * 1.75, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  ImageBehavior.SetAnimatedSource(img51, bmi51);
+                  myStackPanelAssignable.Children.Add(img51);
+               }
+               else
+               {
+                  System.Windows.Controls.Image img23 = new System.Windows.Controls.Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  myStackPanelAssignable.Children.Add(img23);
+               }
+               break;
+             case E0475Enum.ENEMY_ACTION_MOVE_ADVANCE_FIRE_SHOW:
+               bool isEnemyFiring11 = false;
+               bool isYourTank11 = false;
+               for (int j = 0; j < myMaxRowCount; ++j)
+               {
+                  if ((true == myGridRows[j].myEnemyAction.Contains("Your")) || ((true == myGridRows[j].myEnemyAction.Contains("Lead")) && (true == myGameInstance.IsLeadTank)))
+                     isYourTank1 = true;
+                  else if (true == myGridRows[j].myEnemyAction.Contains("Fire"))
+                     isEnemyFiring1 = true;
+               }
+               if (true == isEnemyFiring11)
+               {
+                  BitmapImage bmi4 = new BitmapImage();
+                  bmi4.BeginInit();
+                  bmi4.UriSource = new Uri(MapImage.theImageDirectory + "InfantryFiring.gif", UriKind.Absolute);
+                  bmi4.EndInit();
+                  System.Windows.Controls.Image img4 = new System.Windows.Controls.Image { Name = "Fire", Source = bmi4, Width = Utilities.ZOOM * Utilities.theMapItemSize * 1.75, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  ImageBehavior.SetAnimatedSource(img4, bmi4);
+                  myStackPanelAssignable.Children.Add(img4);
+               }
+               else if (true == isYourTank11)
                {
                   BitmapImage bmi51 = new BitmapImage();
                   bmi51.BeginInit();
@@ -646,6 +723,15 @@ namespace Pattons_Best
                if (false == UpdateGridRowsMove())
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): UpdateGridRowsMove() returned false");
+                  return false;
+               }
+               myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+               break;
+            case E0475Enum.ENEMY_ACTION_MOVE_ADVANCE_FIRE:
+            case E0475Enum.ENEMY_ACTION_MOVE_ADVANCE_FIRE_SHOW:
+               if (false == UpdateGridRowsAdvanceFire())
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): UpdateGridRowsAdvanceFire() returned false");
                   return false;
                }
                myGameEngine.PerformAction(ref myGameInstance, ref outAction);
@@ -804,6 +890,75 @@ namespace Pattons_Best
             myGrid.Children.Add(label5);
             Grid.SetRow(label5, rowNum);
             Grid.SetColumn(label5, 5);
+         }
+         return true;
+      }
+      private bool UpdateGridRowsAdvanceFire()
+      {
+         for (int i = 0; i < myMaxRowCount; ++i)
+         {
+            int rowNum = i + STARTING_ASSIGNED_ROW;
+            IMapItem mi = myGridRows[i].myMapItem;
+            Button b1 = CreateButton(mi);
+            myGrid.Children.Add(b1);
+            Grid.SetRow(b1, rowNum);
+            Grid.SetColumn(b1, 0);
+            //----------------------------
+            Label label1 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].mySectorRangeDisplay };
+            myGrid.Children.Add(label1);
+            Grid.SetRow(label1, rowNum);
+            Grid.SetColumn(label1, 1);
+            //----------------------------
+            if (null == myGridRows[i].myAdvanceFire)
+            {
+               Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
+               myGrid.Children.Add(label2);
+               Grid.SetRow(label2, rowNum);
+               Grid.SetColumn(label2, 2);
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
+               myGrid.Children.Add(label3);
+               Grid.SetRow(label3, rowNum);
+               Grid.SetColumn(label3, 3);
+               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
+               myGrid.Children.Add(label4);
+               Grid.SetRow(label4, rowNum);
+               Grid.SetColumn(label4, 4);
+               Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
+               myGrid.Children.Add(label5);
+               Grid.SetRow(label5, rowNum);
+               Grid.SetColumn(label5, 5);
+            }
+            else
+            {
+               Button bAdvance = CreateButton(myGridRows[i].myAdvanceFire);
+               myGrid.Children.Add(bAdvance);
+               Grid.SetRow(bAdvance, rowNum);
+               Grid.SetColumn(bAdvance, 2);
+               Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myAdvanceFireBaseNum.ToString() };
+               myGrid.Children.Add(label3);
+               Grid.SetRow(label3, rowNum);
+               Grid.SetColumn(label3, 3);
+               Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myAdvanceFireModifier.ToString() };
+               myGrid.Children.Add(label4);
+               Grid.SetRow(label4, rowNum);
+               Grid.SetColumn(label4, 4);
+               if (Utilities.NO_RESULT < myGridRows[i].myDieRollAdvanceFire)
+               {
+
+               }
+               else
+               {
+                  BitmapImage bmi = new BitmapImage();
+                  bmi.BeginInit();
+                  bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
+                  bmi.EndInit();
+                  System.Windows.Controls.Image img = new System.Windows.Controls.Image { Name = "DiceRoll", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+                  ImageBehavior.SetAnimatedSource(img, bmi);
+                  myGrid.Children.Add(img);
+                  Grid.SetRow(img, rowNum);
+                  Grid.SetColumn(img, 5);
+               }
+            }
          }
          return true;
       }
@@ -1754,7 +1909,7 @@ namespace Pattons_Best
                            {
                               if (false == CreateMapItemMove(j))
                               {
-                                 Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): CreateMapItemMove(i) returned false");
+                                 Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): CreateMapItemMove(i) returned false");
                                  return;
                               }                                
                            }
@@ -1770,6 +1925,35 @@ namespace Pattons_Best
                            myTextBlock2.Text = "Vehicle Facing";
                            myTextBlock3.Text = "Terrain";
                            myTextBlock4.Visibility = Visibility.Hidden;
+                        }
+                        if ("AdvanceFire" == img.Name)
+                        {
+                           for (int j = 0; j < myMaxRowCount; ++j)
+                           {
+                              if (true == myGridRows[j].myEnemyAction.Contains("Move"))
+                              {
+                                 ITerritory t = myGridRows[j].myMapItem.TerritoryCurrent;
+                                 IStack? stack = myGameInstance.BattleStacks.Find(t);
+                                 if (null == stack)
+                                 {
+                                    Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): stack=null for t=" + t.Name);
+                                    return;
+                                 }
+                                 foreach (IMapItem mi1 in stack.MapItems)
+                                 {
+                                    if (true == mi1.Name.Contains("Advance"))
+                                       myGridRows[j].myAdvanceFire = mi1;
+                                 }
+                              }
+                           }
+                           Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "Grid_MouseDown(): p=" + myState.ToString() + "-->ENEMY_ACTION_MOVE_ADVANCE_FIRE");
+                           myState = E0475Enum.ENEMY_ACTION_MOVE_ADVANCE_FIRE;
+                           myTextBlockHeader.Text = "r22.2 Advance Fire";
+                           myTextBlock2.Text = "MG Attack";
+                           myTextBlock3.Text = "To Kill #";
+                           myTextBlock4.Text = "Modifier";
+                           myTextBlock4.Visibility = Visibility.Visible;
+                           myTextBlock5.Text = "Result";
                         }
                         if ("Fire" == img.Name)
                         {
