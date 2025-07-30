@@ -1607,6 +1607,18 @@ namespace Pattons_Best
                }
                break;
             //------------------------------------------------------------------------------------------------
+            case E0475Enum.ENEMY_ACTION_MOVE_ADVANCE_FIRE:
+               myGridRows[i].myDieRollAdvanceFire = dieRoll;
+               myGridRows[i].myAdvanceFireResult = TableMgr.GetEnemyNewFacing(enemyUnit, dieRoll);
+
+               myState = E0475Enum.ENEMY_ACTION_MOVE_ADVANCE_FIRE_SHOW;
+               for (int j = 0; j < myMaxRowCount; ++j)
+               {
+                  if (Utilities.NO_RESULT == myGridRows[j].myDieRollAdvanceFire)
+                     myState = E0475Enum.ENEMY_ACTION_MOVE_ADVANCE_FIRE;
+               }
+               break;
+            //------------------------------------------------------------------------------------------------
             case E0475Enum.ENEMY_ACTION_FIRE:
                myGridRows[i].myDieRollFire = dieRoll;
                if( dieRoll <= myGridRows[i].myToKillNumber )
@@ -1942,7 +1954,11 @@ namespace Pattons_Best
                                  foreach (IMapItem mi1 in stack.MapItems)
                                  {
                                     if (true == mi1.Name.Contains("Advance"))
+                                    {
                                        myGridRows[j].myAdvanceFire = mi1;
+                                       myGridRows[j].myAdvanceFireBaseNum = 0;
+                                       myGridRows[j].myAdvanceFireModifier = 0;
+                                    }
                                  }
                               }
                            }
