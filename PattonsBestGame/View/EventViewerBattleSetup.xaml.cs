@@ -658,7 +658,7 @@ namespace Pattons_Best
                         case "Open":
                            terrain = new MapItem("Terrain", 1.0, "c114Open", mi5.TerritoryCurrent);
                            break;
-                        case "Moving":
+                        case "Moving in Open":
                            terrain = new MapItem("Terrain", 1.0, "c13Moving", mi5.TerritoryCurrent);
                            break;
                         default:
@@ -1151,6 +1151,11 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateTerrain(): mi=null for i=" + i.ToString());
             return false;
          }
+         mi.IsHullDown = false;
+         mi.IsWoods = false;
+         mi.IsFortification = false;
+         mi.IsBuilding = false;
+         mi.IsMovingInOpen = false;
          switch (myGridRows[i].myTerrain)
          {
             case "Hull Down":

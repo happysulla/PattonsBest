@@ -143,7 +143,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_VIEW_MIM_CLEAR);
          //SetOn(LogEnum.LE_VIEW_TIME_TRACK);
          //-------------------------------
-         //SetOn(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION);
+         SetOn(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION);
          //SetOn(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED);
          //SetOn(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED_BAILOUT);
          //SetOn(LogEnum.LE_EVENT_VIEWER_SPOTTING);

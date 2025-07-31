@@ -1648,6 +1648,34 @@ namespace Pattons_Best
             //-----------------------------------------
             die1 = Utilities.RandomGenerator.Next(1, 11);
             string enemyTerrain = TableMgr.GetEnemyTerrain(lastReport.Scenario, gi.Day, "A", enemyUnit, die1);
+            mi.IsHullDown = false;
+            mi.IsWoods = false;
+            mi.IsFortification = false;
+            mi.IsBuilding = false;
+            mi.IsMovingInOpen = false;
+            switch (enemyTerrain)
+            {
+               case "Hull Down":
+                  mi.IsHullDown = true;
+                  break;
+               case "Woods":
+                  mi.IsWoods = true;
+                  break;
+               case "Fortification":
+                  mi.IsFortification = true;
+                  break;
+               case "Building":
+                  mi.IsBuilding = true;
+                  break;
+               case "Open":
+                  break;
+               case "Moving in Open":
+                  mi.IsMovingInOpen = true;
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): reached default terrain=" + enemyTerrain);
+                  return false;
+            }
          }
          return true;
       }

@@ -462,6 +462,7 @@ namespace Pattons_Best
                myTextBlockInstructions.Inlines.Add(new InlineUIContainer(bToKill1));
                break;
             case E0475Enum.ENEMY_ACTION_MOVE_SHOW:
+            case E0475Enum.ENEMY_ACTION_MOVE_ADVANCE_FIRE_SHOW:
             case E0475Enum.ENEMY_ACTION_FIRE_SHOW:
             case E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK_SHOW:
             case E0475Enum.ENEMY_ACTION_TO_KILL_YOUR_TANK_SHOW:
@@ -1407,7 +1408,8 @@ namespace Pattons_Best
             case "Open":
                terrain = new MapItem("Terrain", 1.0, "c114Open", mi.TerritoryCurrent);
                break;
-            case "Moving":
+            case "Moving in Open":
+               mi.IsMovingInOpen = true;
                mi.IsMoving = true;
                terrain = new MapItem("Terrain", 1.0, "c13Moving", mi.TerritoryCurrent);
                break;
@@ -1825,7 +1827,7 @@ namespace Pattons_Best
          mi.IsWoods = false;
          mi.IsFortification = false;
          mi.IsBuilding = false;
-         mi.IsMoving = false;
+         mi.IsMovingInOpen = false;
          switch (myGridRows[i].myTerrain)
          {
             case "Hull Down":
@@ -1842,8 +1844,9 @@ namespace Pattons_Best
                break;
             case "Open":
                break;
-            case "Moving":
+            case "Moving in Open":
                mi.IsMoving = true;
+               mi.IsMovingInOpen = true;
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateTerrain(): reached default terrain=" + myGridRows[i].myDieRollTerrain);

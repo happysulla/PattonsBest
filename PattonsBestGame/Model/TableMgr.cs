@@ -6790,7 +6790,7 @@ namespace Pattons_Best
          }
          //------------------------------------
          int toKillModifierNum = 0;
-         bool isMovingOrPivoting = false;
+         bool isShermanMovingOrPivoting = false;
          foreach (IMapItem crewAction in gi.CrewActions)
          {
             if (("Commander_FireAaMg" == crewAction.Name) && ("Aa" == mgType))
@@ -6859,15 +6859,15 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): Assistant rating -" + assistant.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
             }
             if ("Driver_Forward" == crewAction.Name)
-               isMovingOrPivoting = true;
+               isShermanMovingOrPivoting = true;
             if ("Driver_ForwardToHullDown" == crewAction.Name)
-               isMovingOrPivoting = true;
+               isShermanMovingOrPivoting = true;
             if ("Driver_Reverse" == crewAction.Name)
-               isMovingOrPivoting = true;
+               isShermanMovingOrPivoting = true;
             if ("Driver_ReverseToHullDown" == crewAction.Name)
-               isMovingOrPivoting = true;
+               isShermanMovingOrPivoting = true;
             if ("Driver_PivotTank" == crewAction.Name)
-               isMovingOrPivoting = true;
+               isShermanMovingOrPivoting = true;
          }
          //------------------------------------
          if (true == gi.IsCommanderDirectingMgFire)
@@ -6940,7 +6940,7 @@ namespace Pattons_Best
             }
          }
          //------------------------------------
-         if (true == isMovingOrPivoting)
+         if (true == isShermanMovingOrPivoting)
          {
             toKillModifierNum += 10;
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): sherman moving +10 mod=" + toKillModifierNum.ToString());
