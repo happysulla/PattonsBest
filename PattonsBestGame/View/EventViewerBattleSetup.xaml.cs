@@ -1156,6 +1156,7 @@ namespace Pattons_Best
          mi.IsFortification = false;
          mi.IsBuilding = false;
          mi.IsMovingInOpen = false;
+         mi.IsMoving = false;
          switch (myGridRows[i].myTerrain)
          {
             case "Hull Down":

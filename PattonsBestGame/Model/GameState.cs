@@ -4669,7 +4669,7 @@ namespace Pattons_Best
                if ("Driver_Reverse" == crewAction.Name)
                   isTankMoving = true;
                if ("Driver_ReverseToHullDown" == crewAction.Name)
-
+                  isTankMoving = true;
                if ("Driver_PivotTank" == crewAction.Name)
                {
                   isTankPivoting = true;
@@ -4704,23 +4704,23 @@ namespace Pattons_Best
                //--------------------------------------------------
                if (true == isTankPivoting)
                {
-                  gi.CrewActionPhase = CrewActionPhase.Movement;
                   gi.EventDisplayed = gi.EventActive = "e052";
                   gi.DieRollAction = GameAction.DieRollActionNone;
                }
                else
                {
-                  if (true == gi.Sherman.IsBoggedDown)
+                  if (false == gi.Sherman.IsBoggedDown)
+                  {
+                     gi.EventDisplayed = gi.EventActive = "e051";
+                     gi.DieRollAction = GameAction.BattleRoundSequenceMovementRoll;
+                  }
+                  else
                   {
                      gi.Sherman.IsMoving = false;
                      gi.EventDisplayed = gi.EventActive = "e051a";
                      gi.DieRollAction = GameAction.BattleRoundSequenceBoggedDownRoll;
                   }
-                  else
-                  {
-                     gi.EventDisplayed = gi.EventActive = "e051";
-                     gi.DieRollAction = GameAction.BattleRoundSequenceMovementRoll;
-                  }
+
                }
             }
          }

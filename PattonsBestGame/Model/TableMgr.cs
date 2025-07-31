@@ -6887,22 +6887,22 @@ namespace Pattons_Best
             if ("Bow" == mgType)
             {
                toKillModifierNum -= 10;
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): moving in open -10 mod=" + toKillModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): Box moving in open -10 mod=" + toKillModifierNum.ToString());
             }
             else if ("Coaxial" == mgType)
             {
                toKillModifierNum -= 15;
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): moving in open -10 mod=" + toKillModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): Coaxial moving in open -15 mod=" + toKillModifierNum.ToString());
             }
             else if ("Aa" == mgType)
             {
                toKillModifierNum -= 15;
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): moving in open -10 mod=" + toKillModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): AA moving in open -15 mod=" + toKillModifierNum.ToString());
             }
             else if ("Sub" == mgType)
             {
                toKillModifierNum -= 5;
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): moving in open -10 mod=" + toKillModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): Sub moving in open -5 mod=" + toKillModifierNum.ToString());
             }
             else
             {

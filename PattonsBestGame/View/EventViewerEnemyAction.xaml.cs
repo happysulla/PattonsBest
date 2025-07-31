@@ -1387,6 +1387,7 @@ namespace Pattons_Best
          }
          //-------------------------------------------
          IMapItem? terrain = null;
+         mi.IsMoving = false;
          switch (myGridRows[i].myTerrain)
          {
             case "Hull Down":
@@ -1452,18 +1453,25 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): 0 > i=" + i.ToString());
             return;
          }
-         IMapItem mi = myGridRows[i].myMapItem;
-         string enemyUnit = mi.GetEnemyUnit();
-         if( "ERROR" == enemyUnit )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): mi.GetEnemyUnit() returned error");
-            return;
-         }
-         mi.IsFired = false; // set to true if unit fires
+         IMapItem mi;
+         string enemyUnit;
          //-------------------------------
          switch (myState)
          {
             case E0475Enum.ENEMY_ACTION_SELECT:
+               mi = myGridRows[i].myMapItem;
+               if (null == mi)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(ENEMY_ACTION_SELECT): mi = null for i=" + i.ToString());
+                  return;
+               }
+               enemyUnit = mi.GetEnemyUnit();
+               if ("ERROR" == enemyUnit)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(ENEMY_ACTION_SELECT): mi.GetEnemyUnit() returned error");
+                  return;
+               }
+               mi.IsFired = false; // set to true if unit fires
                dieRoll = 15; // <cgs> TEST - Move Infantry in Battle Scenario
                //dieRoll = 87; // <cgs> TEST - Fire At Your Tank
                myGridRows[i].myDieRollEnemyAction = dieRoll;
@@ -1561,7 +1569,19 @@ namespace Pattons_Best
                break;
             //------------------------------------------------------------------------------------------------
             case E0475Enum.ENEMY_ACTION_MOVE:
-               if( 2 == myRollResultColNum )
+               mi = myGridRows[i].myMapItem;
+               if (null == mi)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(ENEMY_ACTION_MOVE): mi = null for i=" + i.ToString());
+                  return;
+               }
+               enemyUnit = mi.GetEnemyUnit();
+               if ("ERROR" == enemyUnit)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(ENEMY_ACTION_MOVE): mi.GetEnemyUnit() returned error");
+                  return;
+               }
+               if ( 2 == myRollResultColNum )
                {
                   myGridRows[i].myDieRollFacing = dieRoll;
                   myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(enemyUnit, dieRoll);
@@ -1605,16 +1625,29 @@ namespace Pattons_Best
                break;
             //------------------------------------------------------------------------------------------------
             case E0475Enum.ENEMY_ACTION_MOVE_ADVANCE_FIRE:
+               mi = myAdvanceFireGridRows[i].myEnemyUnit;
+               if (null == mi)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(ENEMY_ACTION_MOVE): mi = null for i=" + i.ToString());
+                  return;
+               }
+               enemyUnit = mi.GetEnemyUnit();
+               if ("ERROR" == enemyUnit)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(ENEMY_ACTION_MOVE): mi.GetEnemyUnit() returned error");
+                  return;
+               }
                myAdvanceFireGridRows[i].myDieRollAdvanceFire = dieRoll;
-               int combo = myAdvanceFireGridRows[i].myAdvanceFireBaseNum + myAdvanceFireGridRows[i].myAdvanceFireModifier;
+               int combo = myAdvanceFireGridRows[i].myAdvanceFireBaseNum - myAdvanceFireGridRows[i].myAdvanceFireModifier;
                if (combo < dieRoll )
                {
-                  myAdvanceFireGridRows[i].myAdvanceFireResult = "KO";
-                  myAdvanceFireGridRows[i].myEnemyUnit.IsKilled = true;
+                  myAdvanceFireGridRows[i].myAdvanceFireResult = "MISS";
                }
                else
                {
-                  myAdvanceFireGridRows[i].myAdvanceFireResult = "MISS";
+                  myAdvanceFireGridRows[i].myAdvanceFireResult = "KO";
+                  myAdvanceFireGridRows[i].myEnemyUnit.IsKilled = true;
+                  myAdvanceFireGridRows[i].myEnemyUnit.SetBloodSpots();
                }
                myState = E0475Enum.ENEMY_ACTION_MOVE_ADVANCE_FIRE_SHOW;
                for (int j = 0; j < myMaxRowCountAdvanceFire; ++j)
@@ -1952,7 +1985,8 @@ namespace Pattons_Best
                               IMapItem enemyUnit = myGridRows[j].myMapItem;
                               if (true == myGridRows[j].myEnemyAction.Contains("Move"))
                               {
-                                 IMapItem enemyUnit1 = myGridRows[j].myMapItem;
+                                 if ( (true == enemyUnit.IsVehicle) && ("TRUCK" != enemyUnit.GetEnemyUnit()) ) // Trucks are attacked by MG fire - other vehicles are not
+                                    continue;
                                  ITerritory t = enemyUnit.TerritoryCurrent;
                                  IStack? stack = myGameInstance.BattleStacks.Find(t);
                                  if (null == stack)
@@ -1964,7 +1998,7 @@ namespace Pattons_Best
                                  {
                                     if (true == advanceFireMarker.Name.Contains("Advance"))
                                     {
-                                       myAdvanceFireGridRows[k].myEnemyUnit = enemyUnit1;
+                                       myAdvanceFireGridRows[k].myEnemyUnit = enemyUnit;
                                        myAdvanceFireGridRows[k].mySectorRangeDisplay = myGridRows[j].mySectorRangeDisplay;
                                        myAdvanceFireGridRows[k].myAdvanceFire = advanceFireMarker;
                                        string[] aStringArray1 = advanceFireMarker.Name.Split(new char[] { '_' });
@@ -1974,13 +2008,13 @@ namespace Pattons_Best
                                           return;
                                        }
                                        string mgType = aStringArray1[0];
-                                       myAdvanceFireGridRows[k].myAdvanceFireBaseNum = TableMgr.GetShermanMgToKillNumber(myGameInstance, enemyUnit1, mgType);
+                                       myAdvanceFireGridRows[k].myAdvanceFireBaseNum = TableMgr.GetShermanMgToKillNumber(myGameInstance, enemyUnit, mgType);
                                        if( TableMgr.FN_ERROR == myAdvanceFireGridRows[k].myAdvanceFireBaseNum)
                                        {
                                           Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): GetShermanMgToKillNumber() returned false");
                                           return;
                                        }
-                                       myAdvanceFireGridRows[k].myAdvanceFireModifier = TableMgr.GetShermanMgToKillModifier(myGameInstance, enemyUnit1, mgType, true);
+                                       myAdvanceFireGridRows[k].myAdvanceFireModifier = TableMgr.GetShermanMgToKillModifier(myGameInstance, enemyUnit, mgType, true);
                                        if (TableMgr.FN_ERROR == myAdvanceFireGridRows[k].myAdvanceFireModifier)
                                        {
                                           Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): GetShermanMgToKillModifier() returned false");
