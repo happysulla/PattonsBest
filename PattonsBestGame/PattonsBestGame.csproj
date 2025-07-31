@@ -502,6 +502,9 @@
     <None Update="Images\c46AdvanceFireSubMg.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Images\c47AdvanceFireCoaxialMg.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Images\F.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

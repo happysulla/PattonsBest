@@ -634,7 +634,7 @@ namespace Pattons_Best
                      else if (dieRoll < 9)
                         return "Building";
                      else if (dieRoll == 10)
-                        return "Moving";
+                        return "Moving in Open";
                      else
                         return "Open";
                   case "B":
@@ -645,7 +645,7 @@ namespace Pattons_Best
                      else if (dieRoll < 8)
                         return "Fortification";
                      else if (dieRoll == 10)
-                        return "Moving";
+                        return "Moving in Open";
                      else
                         return "Open";
                   case "C":
@@ -654,7 +654,7 @@ namespace Pattons_Best
                      else if (dieRoll < 9)
                         return "Building";
                      else if (dieRoll == 10)
-                        return "Moving";
+                        return "Moving in Open";
                      else
                         return "Open";
                   case "D":
@@ -665,7 +665,7 @@ namespace Pattons_Best
                      else if (dieRoll < 9)
                         return "Fortification";
                      else if (dieRoll == 10)
-                        return "Moving";
+                        return "Moving in Open";
                      else
                         return "Open";
                   default:
@@ -781,7 +781,7 @@ namespace Pattons_Best
                      else if (dieRoll < 9)
                         return "Open";
                      else
-                        return "Moving";
+                        return "Moving in Open";
                   case "B":
                      if (dieRoll < 3)
                         return "Hull Down";
@@ -790,7 +790,7 @@ namespace Pattons_Best
                      else if (dieRoll < 9)
                         return "Open";
                      else
-                        return "Moving";
+                        return "Moving in Open";
                   case "C":
                      if (dieRoll < 6)
                         return "Hull Down";
@@ -799,7 +799,7 @@ namespace Pattons_Best
                      else if (dieRoll < 9)
                         return "Open";
                      else
-                        return "Moving";
+                        return "Moving in Open";
                   case "D":
                      if (dieRoll < 3)
                         return "Hull Down";
@@ -808,7 +808,7 @@ namespace Pattons_Best
                      else if (dieRoll < 9)
                         return "Open";
                      else
-                        return "Moving";
+                        return "Moving in Open";
                   default:
                      Logger.Log(LogEnum.LE_ERROR, "GetEnemyTerrain(): Reached Default areaType=" + areaType);
                      return "ERROR";
@@ -4948,7 +4948,7 @@ namespace Pattons_Best
             }
          }
          //------------------------------------
-         if ( true == enemyUnit.IsMoving )
+         if (true == enemyUnit.IsMovingInOpen)
          {
             toKillModifierNum -= 10;
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): Moving In Open -10 mod=" + toKillModifierNum.ToString());
@@ -6767,29 +6767,8 @@ namespace Pattons_Best
          //--------------------------------------
          return toKillNum;
       }
-      public static int GetShermanMgToKillModifier(IGameInstance gi, IMapItem enemyUnit)
+      public static int GetShermanMgToKillModifier(IGameInstance gi, IMapItem enemyUnit, string mgType, bool isAdvancingFire=false)
       {
-         //------------------------------------
-         if (null == gi.TargetMg)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): gi.TargetMg=null");
-            return FN_ERROR;
-         }
-         //------------------------------------
-         string mgType = "None";
-         if (true == gi.IsShermanFiringAaMg)
-            mgType = "Aa";
-         else if (true == gi.IsShermanFiringBowMg)
-            mgType = "Bow";
-         else if (true == gi.IsShermanFiringCoaxialMg)
-            mgType = "Coaxial";
-         else if (true == gi.IsShermanFiringSubMg)
-            mgType = "Sub";
-         else
-         {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): unknown MG firing");
-            return FN_ERROR;
-         }
          //------------------------------------
          if (3 != enemyUnit.TerritoryCurrent.Name.Length)
          {
@@ -6797,7 +6776,7 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          char range = enemyUnit.TerritoryCurrent.Name[2];
-         if( ('C' != range) && ('M' != range) && ('L' != range) )
+         if (('C' != range) && ('M' != range) && ('L' != range))
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): unknown range=" + range.ToString());
             return FN_ERROR;
@@ -6814,7 +6793,7 @@ namespace Pattons_Best
          bool isMovingOrPivoting = false;
          foreach (IMapItem crewAction in gi.CrewActions)
          {
-            if (("Commander_FireAaMg" == crewAction.Name) && ("Aa" == mgType)) 
+            if (("Commander_FireAaMg" == crewAction.Name) && ("Aa" == mgType))
             {
                ICrewMember? commander = gi.GetCrewMember("Commander");
                if (null == commander)
@@ -6891,7 +6870,7 @@ namespace Pattons_Best
                isMovingOrPivoting = true;
          }
          //------------------------------------
-         if( true == gi.IsCommanderDirectingMgFire )
+         if (true == gi.IsCommanderDirectingMgFire)
          {
             ICrewMember? commander = gi.GetCrewMember("Commander");
             if (null == commander)
@@ -6903,9 +6882,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): commander directing fire rating -" + commander.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
-         if( true == gi.TargetMg.IsMoving )
+         if ((true == enemyUnit.IsMovingInOpen) && ("LW" == enemyUnit.GetEnemyUnit()) )
          {
-            if( "Bow" == mgType )
+            if ("Bow" == mgType)
             {
                toKillModifierNum -= 10;
                Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): moving in open -10 mod=" + toKillModifierNum.ToString());
@@ -6932,19 +6911,48 @@ namespace Pattons_Best
             }
          }
          //------------------------------------
+         if (true == isAdvancingFire)
+         {
+            if ("Bow" == mgType)
+            {
+               toKillModifierNum += 10;
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): advancing fire +10 mod=" + toKillModifierNum.ToString());
+            }
+            else if ("Coaxial" == mgType)
+            {
+               toKillModifierNum += 10;
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier():  advancing fire +10 mod=" + toKillModifierNum.ToString());
+            }
+            else if ("Aa" == mgType)
+            {
+               toKillModifierNum += 10;
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier():  advancing fire +10 mod=" + toKillModifierNum.ToString());
+            }
+            else if ("Sub" == mgType)
+            {
+               toKillModifierNum -= 10;
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier():  advancing fire -10 mod=" + toKillModifierNum.ToString());
+            }
+            else
+            {
+               Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): unknown mgType=" + mgType);
+               return FN_ERROR;
+            }
+         }
+         //------------------------------------
          if (true == isMovingOrPivoting)
          {
             toKillModifierNum += 10;
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): sherman moving +10 mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
-         if (true == gi.TargetMg.IsWoods)
+         if (true == enemyUnit.IsWoods) 
          {
             toKillModifierNum += 10;
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): in woods +10 mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
-         if (true == gi.TargetMg.IsBuilding) 
+         if (true == enemyUnit.IsBuilding) 
          {
             toKillModifierNum += 15;
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): in building +15 mod=" + toKillModifierNum.ToString());
@@ -6956,30 +6964,15 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): ATG +15 mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
-         if (true == gi.TargetMg.IsFortification)
+         if (true == enemyUnit.IsFortification) 
          {
             toKillModifierNum += 20;
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): in IsFortification +20 mod=" + toKillModifierNum.ToString());
          }
          return toKillModifierNum;
       }
-      public static double GetShermanMgToKillNumber(IGameInstance gi, IMapItem enemyUnit) 
+      public static int GetShermanMgToKillNumber(IGameInstance gi, IMapItem enemyUnit, string mgType) 
       {
-         //------------------------------------
-         string mgType = "None";
-         if (true == gi.IsShermanFiringAaMg)
-            mgType = "Aa";
-         else if (true == gi.IsShermanFiringBowMg)
-            mgType = "Bow";
-         else if (true == gi.IsShermanFiringCoaxialMg)
-            mgType = "Coaxial";
-         else if (true == gi.IsShermanFiringSubMg)
-            mgType = "Sub";
-         else
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillNumber(): unknown MG firing");
-            return FN_ERROR;
-         }
          //------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -7058,7 +7051,7 @@ namespace Pattons_Best
          //------------------------------------
          if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
             toKillNumber *= 0.5;
-         return toKillNumber;
+         return (int)toKillNumber;
       }
       //-------------------------------------------
       private void CreateCombatCalender()

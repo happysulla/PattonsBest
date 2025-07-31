@@ -1167,8 +1167,9 @@ namespace Pattons_Best
                break;
             case "Open":
                break;
-            case "Moving":
+            case "Moving in Open":
                mi.IsMoving = true;
+               mi.IsMovingInOpen = true;
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateTerrain(): reached default terrain=" + myGridRows[i].myDieRollTerrain);

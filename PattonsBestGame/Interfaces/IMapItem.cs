@@ -34,6 +34,7 @@ namespace Pattons_Best
       bool IsSpotted { get; set; }
       //----------------------------------------
       bool IsVehicle { get; set; }
+      bool IsMovingInOpen { get; set; }
       bool IsWoods { get; set; }
       bool IsBuilding { get; set; }
       bool IsFortification { get; set; }

@@ -2826,7 +2826,7 @@ namespace Pattons_Best
             sb51.Append("+15 for ATG Target\n");
          }
          //------------------------------------
-         if (true == gi.TargetMainGun.IsMoving)
+         if (true == gi.TargetMainGun.IsMovingInOpen)
             sb51.Append("-10 Target Moving in Open\n");
          //------------------------------------
          if (true == lastReport.Weather.Contains("Deep Snow") || true == lastReport.Weather.Contains("Mud"))         
@@ -3152,10 +3152,25 @@ namespace Pattons_Best
             return false;
          }
          //------------------------------------
+         string mgType = "None";
+         if (true == gi.IsShermanFiringAaMg)
+            mgType = "Aa";
+         else if (true == gi.IsShermanFiringBowMg)
+            mgType = "Bow";
+         else if (true == gi.IsShermanFiringCoaxialMg)
+            mgType = "Coaxial";
+         else if (true == gi.IsShermanFiringSubMg)
+            mgType = "Sub";
+         else
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill(): unknown MG firing");
+            return false;
+         }
+         //------------------------------------
          myTextBlock.Inlines.Add(new LineBreak());
          myTextBlock.Inlines.Add(new Run("Modifiers") { TextDecorations = TextDecorations.Underline });
          myTextBlock.Inlines.Add(new LineBreak());
-         string modiferMgFiring = UpdateEventContentMgToKillModifier(gi);
+         string modiferMgFiring = UpdateEventContentMgToKillModifier(gi, mgType);
          if( "ERROR" == modiferMgFiring )
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill():  UpdateEventContentMgToKillModifier() returned false");
@@ -3164,7 +3179,7 @@ namespace Pattons_Best
          myTextBlock.Inlines.Add(new Run(modiferMgFiring));
          myTextBlock.Inlines.Add(new LineBreak());
          //------------------------------------
-         double toKillNum = TableMgr.GetShermanMgToKillNumber(gi, gi.TargetMg);
+         double toKillNum = TableMgr.GetShermanMgToKillNumber(gi, gi.TargetMg, mgType);
          if (TableMgr.FN_ERROR == toKillNum)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill(): GetShermanMgToKillNumber() returned error for key=" + key);
@@ -3181,7 +3196,8 @@ namespace Pattons_Best
             myTextBlock.Inlines.Add(new InlineUIContainer(imge53e));
             return true;
          }
-         int modifier = TableMgr.GetShermanMgToKillModifier(gi, gi.TargetMg);
+         //------------------------------------
+         int modifier = TableMgr.GetShermanMgToKillModifier(gi, gi.TargetMg, mgType);
          if (TableMgr.FN_ERROR == modifier)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill(): GetShermanMgToKillModifier() returned error for key=" + key);
@@ -3237,27 +3253,12 @@ namespace Pattons_Best
          }
          return true;
       }
-      private string UpdateEventContentMgToKillModifier(IGameInstance gi)
+      private string UpdateEventContentMgToKillModifier(IGameInstance gi, string mgType)
       {
          //------------------------------------
          if (null == gi.TargetMg)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): gi.TargetMg=null");
-            return "ERROR";
-         }
-         //------------------------------------
-         string mgType = "None";
-         if (true == gi.IsShermanFiringAaMg)
-            mgType = "Aa";
-         else if (true == gi.IsShermanFiringBowMg)
-            mgType = "Bow";
-         else if (true == gi.IsShermanFiringCoaxialMg)
-            mgType = "Coaxial";
-         else if (true == gi.IsShermanFiringSubMg)
-            mgType = "Sub";
-         else
-         {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): unknown MG firing");
             return "ERROR";
          }
          //------------------------------------

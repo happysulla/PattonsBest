@@ -117,6 +117,7 @@ namespace Pattons_Best
       //--------------------------------------------------
       public bool IsSpotted { get; set; } = false;
       public bool IsVehicle { get; set; } = false;
+      public bool IsMovingInOpen { get; set; } = false;
       public bool IsWoods { get; set; } = false;
       public bool IsBuilding { get; set; } = false;
       public bool IsFortification { get; set; } = false;
