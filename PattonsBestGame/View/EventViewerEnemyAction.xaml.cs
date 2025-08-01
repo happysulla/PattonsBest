@@ -1472,7 +1472,7 @@ namespace Pattons_Best
                   return;
                }
                mi.IsFired = false; // set to true if unit fires
-               dieRoll = 15; // <cgs> TEST - Move Infantry in Battle Scenario
+               //dieRoll = 15; // <cgs> TEST - Move Infantry in Battle Scenario
                //dieRoll = 87; // <cgs> TEST - Fire At Your Tank
                myGridRows[i].myDieRollEnemyAction = dieRoll;
                string enemyAction = TableMgr.SetEnemyActionResult(myGameInstance, mi, dieRoll);

@@ -241,7 +241,7 @@ namespace Pattons_Best
                myMaxRowCount = 1;
             else
                myMaxRowCount = 2;
-            myMaxRowCount = 6;  // <cgs> TEST - genrate extra units
+            //myMaxRowCount = 6;  // <cgs> TEST - genrate extra units
          }
          //--------------------------------------------------
          string[] sectors = new string[6] {"B1M", "B2M", "B3M", "B4M", "B6M", "B9M" };
