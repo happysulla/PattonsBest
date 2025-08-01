@@ -2753,6 +2753,7 @@ namespace Pattons_Best
             return;
          }
          string tName = clickedPolygon.Name;
+         myGameInstance.EnteredAreaPrevious = myGameInstance.EnteredArea; // need to track previous area in case German exit battle board into this area
          myGameInstance.EnteredArea = Territories.theTerritories.Find(tName);
          if (null == myGameInstance.EnteredArea)
          {

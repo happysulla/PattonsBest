@@ -35,22 +35,20 @@ namespace Pattons_Best
       public string Identifer { get; set; } = "";
       public int Day { get; set; } = 0;
       public string HexName { get; set; } = "";
-      public bool IsEncounter { get; set; } = false;
+      public bool IsBattle { get; set; } = false;
       public int Position { get; set; } = 0;         // postion in the hex - if 1+ elispes exist in same hex, they are offset by position
       public ColorActionEnum ColorAction { get; set; } = ColorActionEnum.CAE_LOST;
       public List<string> EventNames { get; set; } = new List<string>();
-      public List<string> Party = new List<string>();
       //------------------------------------------------------------------------------------------------
-      public EnteredHex(string identifier, int day, string hexName, bool isEncounter, int position, ColorActionEnum action, List<string> eventNames, List<string> partyNames)
+      public EnteredHex(string identifier, int day, string hexName, bool isBattle, int position, ColorActionEnum action, List<string> eventNames)
       {
          Identifer = identifier;
          Day = day;
          HexName = hexName;
-         IsEncounter = isEncounter;
+         IsBattle = isBattle;
          Position = position;
          ColorAction = action;
          EventNames = eventNames;
-         Party = partyNames;
       }
       public EnteredHex(IGameInstance gi, ColorActionEnum colorAction)
       {

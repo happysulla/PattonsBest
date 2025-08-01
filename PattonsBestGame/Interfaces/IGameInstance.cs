@@ -106,6 +106,7 @@ namespace Pattons_Best
       ITerritory? ArtillerySupportCheck { get; set; }
       ITerritory? AirStrikeCheckTerritory { get; set; }
       ITerritory? EnteredArea { get; set; }
+      ITerritory? EnteredAreaPrevious { get; set; }
       ITerritory? AdvanceFire { get; set; }
       ITerritory? FriendlyAdvance { get; set; }
       ITerritory? EnemyAdvance { get; set; }

@@ -352,8 +352,8 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): taskForceArea adjacent=" + t.Adjacents[0]);
             return false;
          }
-         IMapItem taskForceArea = new MapItem("TaskForce", 1.3, "c35TaskForce", adjacent);
-         gi.MoveStacks.Add(taskForceArea);
+         IMapItem taskForce = new MapItem("TaskForce", 1.3, "c35TaskForce", adjacent);
+         gi.MoveStacks.Add(taskForce);
          //-----------------------------------------
          string name1 = t.Adjacents[0];
          ITerritory? controlled = Territories.theTerritories.Find(name1); // should only be one adjacent to start area
@@ -1222,7 +1222,7 @@ namespace Pattons_Best
          lastReport.MainGunHE = (int)Math.Ceiling(unassignedCount * 0.6);
          unassignedCount -= lastReport.MainGunHE;
          lastReport.MainGunAP = unassignedCount;
-         lastReport.MainGunHE = 5; // <cgs> Limit initial gun loads
+         //lastReport.MainGunHE = 5; // <cgs> Limit initial gun loads
          //lastReport.MainGunAP = 3;
          //lastReport.MainGunWP = 0;
          //lastReport.MainGunHBCI = 3;
@@ -1433,6 +1433,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): unable to find random territory after count=" + count.ToString() + " tries - choosing tName=" + tName);
             tName = "M030";
          }
+         gi.EnteredAreaPrevious = taskForce.TerritoryCurrent;
          gi.EnteredArea = Territories.theTerritories.Find(tName);
          if (null == gi.EnteredArea)
          {
@@ -2645,6 +2646,7 @@ namespace Pattons_Best
          gi.EnemyStrengthCheckTerritory = null;
          gi.ArtillerySupportCheck = null;
          gi.AirStrikeCheckTerritory = null;
+         gi.EnteredAreaPrevious = null;
          gi.EnteredArea = null;
          //--------------------------------------------------------------
          gi.IsAirStrikePending = false;
@@ -3563,9 +3565,13 @@ namespace Pattons_Best
                         foreach (IMapItem mi in stack.MapItems)
                         {
                            if (true == mi.TerritoryCurrent.Name.Contains("Off"))
+                           {
                               movementRemovals.Add(mi);
+                           }
                            else if (true == mi.IsEnemyUnit())
+                           {
                               isAnyEnemyLeft = true;
+                           }
                         }
                      }
                      foreach (IMapItem mi in movementRemovals)
@@ -5037,6 +5043,11 @@ namespace Pattons_Best
             gi.MapItemMoves.Insert(0, mim); // add at front
             //--------------------------------------------
          }
+         return true;
+      }
+      private bool MoveEnemyUnitsToMovementBoard(IGameInstance gi, IMapItem enemyUnit)
+      {
+
          return true;
       }
       private bool EnemiesFacingCheck(IGameInstance gi, ref GameAction outAction )
@@ -6620,6 +6631,7 @@ namespace Pattons_Best
          gi.EnemyStrengthCheckTerritory = null;
          gi.ArtillerySupportCheck = null;
          gi.AirStrikeCheckTerritory = null;
+         gi.EnteredAreaPrevious = null;
          gi.EnteredArea = null;
          gi.AdvanceFire = null;
          //-------------------------------------------------------

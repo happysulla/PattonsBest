@@ -55,6 +55,7 @@ namespace Pattons_Best
       public ITerritory? ArtillerySupportCheck { get; set; } = null;
       public ITerritory? AirStrikeCheckTerritory { get; set; } = null;
       public ITerritory? EnteredArea { get; set; } = null;
+      public ITerritory? EnteredAreaPrevious { get; set; } = null;
       public ITerritory? AdvanceFire { get; set; } = null;
       public ITerritory? FriendlyAdvance { get; set; } = null;
       public ITerritory? EnemyAdvance { get; set; } = null;

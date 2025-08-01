@@ -1129,7 +1129,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): sHexName=null");
                   return false;
                }
-               EnteredHex enteredHex = new EnteredHex(sIdentifier, day, sHexName, isEncounter, position, colorAction, eventNames, partyNames);
+               EnteredHex enteredHex = new EnteredHex(sIdentifier, day, sHexName, isEncounter, position, colorAction, eventNames);
                enteredHexes.Add(enteredHex);
                reader.Read(); // get past </EnteredHex> tag
             }
@@ -1240,12 +1240,6 @@ namespace Pattons_Best
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(GameTurn) returned null");
-            return null;
-         }
-         //------------------------------------------
-         if (false == CreateXmlEnteredHexes(aXmlDocument, gi.EnteredHexes))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateXmlEnteredHexes() returned false");
             return null;
          }
          return aXmlDocument;
@@ -1417,191 +1411,6 @@ namespace Pattons_Best
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(territoryNode) returned null");
                return false;
-            }
-         }
-         return true;
-      }
-      private bool CreateXmlEnteredHexes(XmlDocument aXmlDocument, List<EnteredHex> hexes)
-      {
-         XmlNode? root = aXmlDocument.DocumentElement;
-         if (null == root)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): root is null");
-            return false;
-         }
-         //--------------------------------------------------------------------
-         XmlElement? enteredHexesElem = aXmlDocument.CreateElement("EnteredHexes");
-         if (null == enteredHexesElem)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(Territories) returned null");
-            return false;
-         }
-         enteredHexesElem.SetAttribute("ID", EnteredHex.theId.ToString());
-         enteredHexesElem.SetAttribute("count", hexes.Count.ToString());
-         XmlNode? enteredHexesNode = root.AppendChild(enteredHexesElem);
-         if (null == enteredHexesNode)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(enteredHexesNode) returned null");
-            return false;
-         }
-         //--------------------------------------------------------------------
-         foreach (EnteredHex hex in hexes)
-         {
-            XmlElement? hexElem = aXmlDocument.CreateElement("EnteredHex");
-            if (null == hexElem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(hexElem) returned null");
-               return false;
-            }
-            XmlNode? hexNode = enteredHexesNode.AppendChild(hexElem);
-            if (null == hexNode)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(hexNode) returned null");
-               return false;
-            }
-            //-------------------------------------------------
-            XmlElement? elem = aXmlDocument.CreateElement("Identifier");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(Identifier) returned null");
-               return false;
-            }
-            elem.SetAttribute("value", hex.Identifer.ToString());
-            XmlNode? node = hexNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(node) returned null");
-               return false;
-            }
-            //-------------------------------------------------
-            elem = aXmlDocument.CreateElement("Day");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(Day) returned null");
-               return false;
-            }
-            elem.SetAttribute("value", hex.Day.ToString());
-            node = hexNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(node) returned null");
-               return false;
-            }
-            //-------------------------------------------------
-            elem = aXmlDocument.CreateElement("HexName");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(HexName) returned null");
-               return false;
-            }
-            elem.SetAttribute("value", hex.HexName);
-            node = hexNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(node) returned null");
-               return false;
-            }
-            //-------------------------------------------------
-            elem = aXmlDocument.CreateElement("IsEncounter");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(IsEncounter) returned null");
-               return false;
-            }
-            elem.SetAttribute("value", hex.IsEncounter.ToString());
-            node = hexNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(node) returned null");
-               return false;
-            }
-            //-------------------------------------------------
-            elem = aXmlDocument.CreateElement("Position");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(Position) returned null");
-               return false;
-            }
-            elem.SetAttribute("value", hex.Position.ToString());
-            node = hexNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(node) returned null");
-               return false;
-            }
-            //-------------------------------------------------
-            elem = aXmlDocument.CreateElement("ColorAction");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(ColorAction) returned null");
-               return false;
-            }
-            elem.SetAttribute("value", hex.ColorAction.ToString());
-            node = hexNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(node) returned null");
-               return false;
-            }
-            //-------------------------------------------------
-            XmlElement? eventNamesElem = aXmlDocument.CreateElement("EventNames");
-            if (null == eventNamesElem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(EventNames) returned null");
-               return false;
-            }
-            eventNamesElem.SetAttribute("count", hex.EventNames.Count.ToString());
-            XmlNode? eventNamesNode = hexNode.AppendChild(eventNamesElem);
-            if (null == eventNamesNode)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(eventNamesNode) returned null");
-               return false;
-            }
-            foreach (string sEventName in hex.EventNames)
-            {
-               elem = aXmlDocument.CreateElement("EventName");
-               if (null == elem)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(EventName) returned null");
-                  return false;
-               }
-               elem.SetAttribute("value", sEventName);
-               node = eventNamesNode.AppendChild(elem);
-               if (null == node)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(node) returned null");
-                  return false;
-               }
-            }
-            //-------------------------------------------------
-            XmlElement? partyNamesElem = aXmlDocument.CreateElement("PartyNames");
-            if (null == partyNamesElem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(PartyNames) returned null");
-               return false;
-            }
-            partyNamesElem.SetAttribute("count", hex.Party.Count.ToString());
-            XmlNode? partyNamesNode = hexNode.AppendChild(partyNamesElem);
-            if (null == partyNamesNode)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(partyNamesNode) returned null");
-               return false;
-            }
-            foreach (string sPartyName in hex.Party)
-            {
-               elem = aXmlDocument.CreateElement("PartyName");
-               if (null == elem)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(PartyName) returned null");
-                  return false;
-               }
-               elem.SetAttribute("value", sPartyName);
-               node = partyNamesNode.AppendChild(elem);
-               if (null == node)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(node) returned null");
-                  return false;
-               }
             }
          }
          return true;
