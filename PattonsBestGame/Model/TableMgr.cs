@@ -3184,6 +3184,7 @@ namespace Pattons_Best
       //-------------------------------------------
       public static string GetRandomEvent(EnumScenario scenario, int dieRoll)
       {
+         dieRoll = 80; // <cgs> TEST - Random Event
          switch(scenario)
          {
             case EnumScenario.Advance:

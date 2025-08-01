@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -10,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml.Linq;
 using WpfAnimatedGif;
+using static Pattons_Best.EventViewerEnemyAction;
 
 namespace Pattons_Best
 {
@@ -27,6 +29,8 @@ namespace Pattons_Best
          PLACE_FACING,
          PLACE_TERRAIN,
          SHOW_RESULTS,
+         ADVANCE_FIRE,
+         ADVANCE_FIRE_SHOW,
          END,
          ERROR
       };
@@ -34,6 +38,7 @@ namespace Pattons_Best
       private EndBattleSetupCallback? myCallback = null;
       private E046Enum myState = E046Enum.ERROR;
       private int myMaxRowCount = 0;
+      private int myMaxRowCountAdvanceFire = 0;
       private int myRollResultRowNum = 0;
       private bool myIsRollInProgress = false;
       private EnumScenario myScenario = EnumScenario.None;
@@ -41,7 +46,19 @@ namespace Pattons_Best
       private bool myIsVehicleActivated = false;
       private bool[] myIsSectorUsControlled = new bool[6] { false, false, false, false, false, false };
       private string myAreaType = "ERROR";
-      //---------------------------------------------------
+      //============================================================
+      public struct GridRowAdvanceFire
+      {
+         public IMapItem myEnemyUnit = new MapItem("Dummy", 1.0, "c44AdvanceFire", new Territory());
+         public IMapItem myAdvanceFire = new MapItem("AdvanceFire", 1.0, "c44AdvanceFire", new Territory());
+         public string mySectorRangeDisplay = "UNINT";
+         public int myDieRollAdvanceFire = Utilities.NO_RESULT;
+         public int myAdvanceFireBaseNum = 0;
+         public int myAdvanceFireModifier = 0;
+         public string myAdvanceFireResult = "UNINT";
+         public GridRowAdvanceFire() { }
+      }
+      private GridRowAdvanceFire[] myAdvanceFireGridRows = new GridRowAdvanceFire[12];
       public struct GridRow
       {
          public IMapItem? myMapItem;
@@ -70,7 +87,7 @@ namespace Pattons_Best
             myDieRollTerrain = Utilities.NO_RESULT;
          }
       };
-      private GridRow[] myGridRows = new GridRow[4]; // five possible crew members
+      private GridRow[] myGridRows = new GridRow[12]; // five possible crew members
       //---------------------------------------------------
       private IGameEngine? myGameEngine;
       private IGameInstance? myGameInstance;
@@ -177,6 +194,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          myState = E046Enum.ACTIVATION;
          myMaxRowCount = 0;
+         myMaxRowCountAdvanceFire = 0;
          myRollResultRowNum = 0;
          myIsRollInProgress = false;
          myScenario = lastReport.Scenario;
@@ -223,6 +241,7 @@ namespace Pattons_Best
                myMaxRowCount = 1;
             else
                myMaxRowCount = 2;
+            myMaxRowCount = 6;  // <cgs> TEST - genrate extra units
          }
          //--------------------------------------------------
          string[] sectors = new string[6] {"B1M", "B2M", "B3M", "B4M", "B6M", "B9M" };
@@ -304,7 +323,7 @@ namespace Pattons_Best
             {
                foreach (IMapItem mapItem in stack.MapItems)
                {
-                  if (true == mapItem.TerritoryCurrent.Name.Contains("Off")) // remove all units that left the board
+                  if ( (true == mapItem.TerritoryCurrent.Name.Contains("Off")) || (true == mapItem.IsKilled) ) // remove all units that left the board
                      removals.Add(mapItem);
                }
             }
@@ -376,6 +395,14 @@ namespace Pattons_Best
                myButtonR1233.Visibility = Visibility.Hidden;
                myButtonR1234.Visibility = Visibility.Visible;
                break;
+            case E046Enum.ADVANCE_FIRE:
+               myTextBlockInstructions.Inlines.Add(new Run("Roll on the "));
+               Button bAdvanceFire = new Button() { Content = "Sherman MG", FontFamily = myFontFam1, FontSize = 8 };
+               bAdvanceFire.Click += ButtonRule_Click;
+               myTextBlockInstructions.Inlines.Add(new InlineUIContainer(bAdvanceFire));
+               myTextBlockInstructions.Inlines.Add(new Run(" Table for effects of advance fire."));
+               break;
+            case E046Enum.ADVANCE_FIRE_SHOW:
             case E046Enum.SHOW_RESULTS:
                myTextBlockInstructions.Inlines.Add(new Run("Click image to continue."));
                break;
@@ -396,6 +423,7 @@ namespace Pattons_Best
             case E046Enum.PLACE_RANGE:
             case E046Enum.PLACE_FACING:
             case E046Enum.PLACE_TERRAIN:
+            case E046Enum.ADVANCE_FIRE:
                myStackPanelAssignable.Children.Add(r1);
                break;
             case E046Enum.SPW_OR_PSW_ROLL:
@@ -408,6 +436,48 @@ namespace Pattons_Best
                myStackPanelAssignable.Children.Add(img1);
                break;
             case E046Enum.SHOW_RESULTS:
+               if (null == myGameInstance)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): myGameInstance=null");
+                  return false;
+               }
+               bool isAdvanceFire = false;
+               for (int k = 0; k < myMaxRowCount; ++k)
+               {
+                  IMapItem? enemyUnit = myGridRows[k].myMapItem;
+                  if (null == enemyUnit)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): myGridRows[k].myMapItem=null for k=" + k.ToString());
+                     return false;
+                  }
+                  ITerritory t = enemyUnit.TerritoryCurrent;
+                  IStack? stack = myGameInstance.BattleStacks.Find(t);
+                  if (null == stack)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): stack=null for t=" + t.Name);
+                     return false;
+                  }
+                  foreach (IMapItem mi1 in stack.MapItems)
+                  {
+                     if (true == mi1.Name.Contains("Advance"))
+                     {
+                        isAdvanceFire = true;
+                        break;
+                     }
+                  }
+               }
+               if (true == isAdvanceFire)
+               {
+                  System.Windows.Controls.Image imgAdv = new System.Windows.Controls.Image { Name = "AdvanceFire", Source = MapItem.theMapImages.GetBitmapImage("c44AdvanceFIre"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  myStackPanelAssignable.Children.Add(imgAdv);
+               }
+               else
+               {
+                  System.Windows.Controls.Image img222 = new System.Windows.Controls.Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  myStackPanelAssignable.Children.Add(img222);
+               }
+               break;
+            case E046Enum.ADVANCE_FIRE_SHOW:
                System.Windows.Controls.Image img2 = new System.Windows.Controls.Image { Name = "Continue", Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                myStackPanelAssignable.Children.Add(img2);
                break;
@@ -688,12 +758,109 @@ namespace Pattons_Best
                      Grid.SetColumn(img, 5);
                   }
                   break;
+               case E046Enum.ADVANCE_FIRE:
+               case E046Enum.ADVANCE_FIRE_SHOW:
+                  if (false == UpdateGridRowsAdvanceFire())
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): UpdateGridRowsAdvanceFire() returned false");
+                     return false;
+                  }
+                  break;
                default:
                   Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): reached default s=" + myState.ToString());
                   return false;
             }
          }
          return true;
+      }
+      private bool UpdateGridRowsAdvanceFire()
+      {
+         for (int i = 0; i < myMaxRowCountAdvanceFire; ++i)
+         {
+            int rowNum = i + STARTING_ASSIGNED_ROW;
+            IMapItem mi = myAdvanceFireGridRows[i].myEnemyUnit;
+            Button b1 = CreateButton(mi);
+            myGrid.Children.Add(b1);
+            Grid.SetRow(b1, rowNum);
+            Grid.SetColumn(b1, 0);
+            //----------------------------
+            Label label1 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myAdvanceFireGridRows[i].mySectorRangeDisplay };
+            myGrid.Children.Add(label1);
+            Grid.SetRow(label1, rowNum);
+            Grid.SetColumn(label1, 1);
+            //----------------------------
+            Button bAdvance = CreateButton(myAdvanceFireGridRows[i].myAdvanceFire);
+            myGrid.Children.Add(bAdvance);
+            Grid.SetRow(bAdvance, rowNum);
+            Grid.SetColumn(bAdvance, 2);
+            Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myAdvanceFireGridRows[i].myAdvanceFireBaseNum.ToString() };
+            myGrid.Children.Add(label3);
+            Grid.SetRow(label3, rowNum);
+            Grid.SetColumn(label3, 3);
+            Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myAdvanceFireGridRows[i].myAdvanceFireModifier.ToString() };
+            myGrid.Children.Add(label4);
+            Grid.SetRow(label4, rowNum);
+            Grid.SetColumn(label4, 4);
+            if (Utilities.NO_RESULT < myAdvanceFireGridRows[i].myDieRollAdvanceFire)
+            {
+               Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myAdvanceFireGridRows[i].myAdvanceFireResult };
+               myGrid.Children.Add(label5);
+               Grid.SetRow(label5, rowNum);
+               Grid.SetColumn(label5, 5);
+            }
+            else
+            {
+               BitmapImage bmi = new BitmapImage();
+               bmi.BeginInit();
+               bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
+               bmi.EndInit();
+               System.Windows.Controls.Image img = new System.Windows.Controls.Image { Name = "DiceRoll", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+               ImageBehavior.SetAnimatedSource(img, bmi);
+               myGrid.Children.Add(img);
+               Grid.SetRow(img, rowNum);
+               Grid.SetColumn(img, 5);
+            }
+         }
+         return true;
+      }
+      private string GetSectorRangeDisplay(char sector, char range)
+      {
+         StringBuilder sb = new StringBuilder();
+         switch (sector)
+         {
+            case '1':
+               sb.Append("1 ");
+               sb.Append(range);
+               break;
+            case '2':
+               sb.Append("2 ");
+               sb.Append(range);
+               break;
+            case '3':
+               sb.Append("3 ");
+               sb.Append(range);
+               break;
+            case '4':
+               sb.Append("4-5 ");
+               sb.Append(range);
+               break;
+            case '6':
+               sb.Append("6-8 ");
+               sb.Append(range);
+               break;
+            case '9':
+               sb.Append("9-10 ");
+               sb.Append(range);
+               break;
+            case 'O':
+               sb.Append("Off");
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "EventViewerBattleSetup.GetSectorRangeDisplay(): Reached default sector=" + sector.ToString());
+               return "ERROR";
+         }
+         Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "GetSectorRangeDisplay(): loc=" + sb.ToString());
+         return sb.ToString();
       }
       //------------------------------------------------------------------------------------
       private bool CreateMapItem(Index i)
@@ -811,6 +978,11 @@ namespace Pattons_Best
       }
       public void ShowDieResults(int dieRoll)
       {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance=null");
+            return;
+         }
          int i = myRollResultRowNum - STARTING_ASSIGNED_ROW;
          if (i < 0)
          {
@@ -842,6 +1014,7 @@ namespace Pattons_Best
                      myState = E046Enum.ACTIVATION;
                }
                break;
+            //-------------------------------------------------------------------
             case E046Enum.SPW_OR_PSW_ROLL:
                if (dieRoll < 9)
                   myGridRows[i].myActivation = "SPW";
@@ -859,6 +1032,7 @@ namespace Pattons_Best
                      myState = E046Enum.ACTIVATION;
                }
                break;
+            //-------------------------------------------------------------------
             case E046Enum.PLACE_SECTOR:
                myGridRows[i].myDieRollSector = dieRoll;
                if (false == ShowDieResultUpdateSector(i))
@@ -873,6 +1047,7 @@ namespace Pattons_Best
                      myState = E046Enum.PLACE_SECTOR;
                }
                break;
+            //-------------------------------------------------------------------
             case E046Enum.PLACE_RANGE:
                myGridRows[i].myDieRollRange = dieRoll;
                myGridRows[i].myRange = TableMgr.GetEnemyRange(myAreaType, myGridRows[i].myActivation, dieRoll);
@@ -896,6 +1071,7 @@ namespace Pattons_Best
                      myState = E046Enum.PLACE_RANGE;
                }
                break;
+            //-------------------------------------------------------------------
             case E046Enum.PLACE_FACING:
                myGridRows[i].myDieRollFacing= dieRoll;
                myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGridRows[i].myActivation, dieRoll);
@@ -922,6 +1098,7 @@ namespace Pattons_Best
                      myState = E046Enum.PLACE_FACING;
                }
                break;
+            //-------------------------------------------------------------------
             case E046Enum.PLACE_TERRAIN:
                myGridRows[i].myDieRollTerrain = dieRoll;
                myGridRows[i].myTerrain = TableMgr.GetEnemyTerrain(myScenario, myDay, myAreaType, myGridRows[i].myActivation, dieRoll);
@@ -935,11 +1112,45 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResultUpdateTerrain() returned ERROR");
                   return;
                }
+               //-------------------
                myState = E046Enum.SHOW_RESULTS;
                for (int j = 0; j < myMaxRowCount; ++j)
                {
                   if (Utilities.NO_RESULT == myGridRows[j].myDieRollTerrain)
                      myState = E046Enum.PLACE_TERRAIN;
+               }
+               break;
+            //-------------------------------------------------------------------
+            case E046Enum.ADVANCE_FIRE:
+               mi = myAdvanceFireGridRows[i].myEnemyUnit;
+               if (null == mi)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): mi = null for i=" + i.ToString());
+                  return;
+               }
+               string enemyUnit = mi.GetEnemyUnit();
+               if ("ERROR" == enemyUnit)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): mi.GetEnemyUnit() returned error");
+                  return;
+               }
+               myAdvanceFireGridRows[i].myDieRollAdvanceFire = dieRoll;
+               int combo = myAdvanceFireGridRows[i].myAdvanceFireBaseNum - myAdvanceFireGridRows[i].myAdvanceFireModifier;
+               if (combo < dieRoll)
+               {
+                  myAdvanceFireGridRows[i].myAdvanceFireResult = "MISS";
+               }
+               else
+               {
+                  myAdvanceFireGridRows[i].myAdvanceFireResult = "KO";
+                  myAdvanceFireGridRows[i].myEnemyUnit.IsKilled = true;
+                  myAdvanceFireGridRows[i].myEnemyUnit.SetBloodSpots();
+               }
+               myState = E046Enum.ADVANCE_FIRE_SHOW;
+               for (int j = 0; j < myMaxRowCountAdvanceFire; ++j)
+               {
+                  if (Utilities.NO_RESULT == myAdvanceFireGridRows[j].myDieRollAdvanceFire)
+                     myState = E046Enum.ADVANCE_FIRE;
                }
                break;
             default:
@@ -1250,7 +1461,83 @@ namespace Pattons_Best
                   {
                      if (result.VisualHit == img)
                      {
-                        if ("DieRoll" == img.Name)
+                        if ("AdvanceFire" == img.Name)
+                        {
+                           int k = 0;
+                           for (int j = 0; j < myMaxRowCount; ++j)
+                           {
+                              IMapItem? enemyUnit = myGridRows[j].myMapItem;
+                              if( null == enemyUnit)
+                              {
+                                 Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): enemyUnit=null for j=" + j.ToString());
+                                 return;
+                              }
+                              //-------------------------------------------
+                              ITerritory t = enemyUnit.TerritoryCurrent;
+                              char range  = 'O';  // assume off board if not equal to three
+                              char sector = 'O'; // assume off board if not equal to three
+                              if (3 == t.Name.Length)
+                              {
+                                 range  = t.Name[t.Name.Length - 1];
+                                 sector = t.Name[t.Name.Length - 2];
+                              }
+                              string sectorRange = GetSectorRangeDisplay(sector, range);
+
+                              if ("ERROR" == sectorRange)
+                              {
+                                 Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetSectorRangeDisplay() returned ERROR");
+                                 return;
+                              }
+                              //-------------------------------------------
+                              if ((true == enemyUnit.IsVehicle) && ("TRUCK" != enemyUnit.GetEnemyUnit())) // Trucks are attacked by MG fire - other vehicles are not
+                                 continue;
+                              IStack? stack = myGameInstance.BattleStacks.Find(t);
+                              if (null == stack)
+                              {
+                                 Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): stack=null for t=" + t.Name);
+                                 return;
+                              }
+                              foreach (IMapItem advanceFireMarker in stack.MapItems)
+                              {
+                                 if (true == advanceFireMarker.Name.Contains("Advance"))
+                                 {
+                                    myAdvanceFireGridRows[k].myEnemyUnit = enemyUnit;
+                                    myAdvanceFireGridRows[k].mySectorRangeDisplay = sectorRange;
+                                    myAdvanceFireGridRows[k].myAdvanceFire = advanceFireMarker;
+                                    string[] aStringArray1 = advanceFireMarker.Name.Split(new char[] { '_' });
+                                    if (aStringArray1.Length < 2)
+                                    {
+                                       Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): underscore not found in " + advanceFireMarker.Name + " len=" + aStringArray1.Length);
+                                       return;
+                                    }
+                                    string mgType = aStringArray1[0];
+                                    myAdvanceFireGridRows[k].myAdvanceFireBaseNum = TableMgr.GetShermanMgToKillNumber(myGameInstance, enemyUnit, mgType);
+                                    if (TableMgr.FN_ERROR == myAdvanceFireGridRows[k].myAdvanceFireBaseNum)
+                                    {
+                                       Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): GetShermanMgToKillNumber() returned false");
+                                       return;
+                                    }
+                                    myAdvanceFireGridRows[k].myAdvanceFireModifier = TableMgr.GetShermanMgToKillModifier(myGameInstance, enemyUnit, mgType, true);
+                                    if (TableMgr.FN_ERROR == myAdvanceFireGridRows[k].myAdvanceFireModifier)
+                                    {
+                                       Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): GetShermanMgToKillModifier() returned false");
+                                       return;
+                                    }
+                                    myAdvanceFireGridRows[k].myDieRollAdvanceFire = Utilities.NO_RESULT;
+                                    k++;
+                                 }
+                              }
+                              myMaxRowCountAdvanceFire = k;
+                           }
+                           myState = E046Enum.ADVANCE_FIRE;
+                           myTextBlockHeader.Text = "r22.2 Advance Fire";
+                           myTextBlock2.Text = "MG Attack";
+                           myTextBlock3.Text = "To Kill #";
+                           myTextBlock4.Text = "Modifier";
+                           myTextBlock4.Visibility = Visibility.Visible;
+                           myTextBlock5.Text = "Result";
+                        }
+                        else if ("DieRoll" == img.Name)
                         {
                            if (false == myIsRollInProgress)
                            {
