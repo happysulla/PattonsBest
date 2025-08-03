@@ -323,7 +323,7 @@ namespace Pattons_Best
             {
                foreach (IMapItem mapItem in stack.MapItems)
                {
-                  if ( (true == mapItem.TerritoryCurrent.Name.Contains("Off")) || (true == mapItem.IsKilled) ) // remove all units that left the board
+                  if ( (true == mapItem.TerritoryCurrent.Name.Contains("Off")) || (true == mapItem.IsKilled)) // UpdateEndState() - remove all units that left the board during BattleSetup
                      removals.Add(mapItem);
                }
             }
@@ -450,25 +450,28 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): myGridRows[k].myMapItem=null for k=" + k.ToString());
                      return false;
                   }
-                  ITerritory t = enemyUnit.TerritoryCurrent;
-                  IStack? stack = myGameInstance.BattleStacks.Find(t);
-                  if (null == stack)
+                  if( (false  == enemyUnit.IsVehicle) || ("TRUCK" == enemyUnit.GetEnemyUnit()) )
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): stack=null for t=" + t.Name);
-                     return false;
-                  }
-                  foreach (IMapItem mi1 in stack.MapItems)
-                  {
-                     if (true == mi1.Name.Contains("Advance"))
+                     ITerritory t = enemyUnit.TerritoryCurrent;
+                     IStack? stack = myGameInstance.BattleStacks.Find(t);
+                     if (null == stack)
                      {
-                        isAdvanceFire = true;
-                        break;
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): stack=null for t=" + t.Name);
+                        return false;
+                     }
+                     foreach (IMapItem mi1 in stack.MapItems)
+                     {
+                        if (true == mi1.Name.Contains("MgAdvanceFire"))
+                        {
+                           isAdvanceFire = true;
+                           break;
+                        }
                      }
                   }
                }
                if (true == isAdvanceFire)
                {
-                  System.Windows.Controls.Image imgAdv = new System.Windows.Controls.Image { Name = "AdvanceFire", Source = MapItem.theMapImages.GetBitmapImage("c44AdvanceFIre"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  System.Windows.Controls.Image imgAdv = new System.Windows.Controls.Image { Name = "MgAdvanceFire", Source = MapItem.theMapImages.GetBitmapImage("c44AdvanceFIre"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                   myStackPanelAssignable.Children.Add(imgAdv);
                }
                else
@@ -1331,8 +1334,8 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateRange(): mi=null for i=" + i.ToString());
             return false;
          }
-         string tName = mi.TerritoryCurrent.Name;
-         if (true == tName.Contains("Off"))
+         string tName = mi.TerritoryCurrent.Name; 
+         if (true == tName.Contains("Off"))  // EventViewerBattleSetup.ShowDieResultUpdateRange() - do not update range if off board
             return true;
          //----------------------------
          string modified = tName.Remove(tName.Length - 1) + myGridRows[i].myRange; // change last character
@@ -1461,7 +1464,7 @@ namespace Pattons_Best
                   {
                      if (result.VisualHit == img)
                      {
-                        if ("AdvanceFire" == img.Name)
+                        if ("MgAdvanceFire" == img.Name) // This is for MG Advance Fire in the Battle Sequence Phase when Enemy Reinforcements show up
                         {
                            int k = 0;
                            for (int j = 0; j < myMaxRowCount; ++j)
@@ -1482,7 +1485,6 @@ namespace Pattons_Best
                                  sector = t.Name[t.Name.Length - 2];
                               }
                               string sectorRange = GetSectorRangeDisplay(sector, range);
-
                               if ("ERROR" == sectorRange)
                               {
                                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetSectorRangeDisplay() returned ERROR");

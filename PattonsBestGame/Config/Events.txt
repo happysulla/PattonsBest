@@ -125,8 +125,8 @@ e014	"<Bold>e014 Tank &amp; Turret Orientation</Bold>
 <LineBreak/><LineBreak/>
 The Sherman tank counter is placed at the center of the battle board. If you want the turret to face a different sector, select buttons here: 
 <LineBreak/><LineBreak/>
-                                             <InlineUIContainer><Button Content='  -  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>           
-<InlineUIContainer><Button Content='  +  ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+                                             <InlineUIContainer><Button Name='ButtonPivotTurretLeft' Content='   -   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>           
+<InlineUIContainer><Button Name='ButtonPivotTurretRight'  Content='   +   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>"
 e015	"<Bold>e015 Loader Spotting</Bold> 
 <InlineUIContainer><Button Content='r4.45' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    

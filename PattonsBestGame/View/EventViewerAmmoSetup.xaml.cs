@@ -66,8 +66,10 @@ namespace Pattons_Best
       private int myWpRoundCount = 0;
       private int myHbciRoundCount = 0;
       private int myHbciRoundCountOriginal = 0;
+      private int myHbciRoundCountAdded = 0;
       private int myHvapRoundCount = 0;
-      private int myHvapRoundCountOringal = 0;
+      private int myHvapRoundCountOriginal = 0;
+      private int myHvapRoundCountAdded = 0;
       private int myExtraAmmo = -1;
       private int myUnassignedReadyRack = 0;
       private int myHeReadyRackCount = 0;
@@ -186,12 +188,12 @@ namespace Pattons_Best
          myApRoundCount = 0;
          myHeRoundCount = 0;
          myWpRoundCount = 0;
-         myHbciRoundCount = 0;
-         myHvapRoundCount = 0;
          myExtraAmmo = -1;
          myDieRollResult = "";
-         myHbciRoundCountOriginal = 0;
+         myHbciRoundCountOriginal = lastReport.MainGunHBCI;
          myHbciRoundCount = 0;
+         myHvapRoundCountOriginal = lastReport.MainGunHVAP;
+         myHvapRoundCount = 0;
          //--------------------------------------------------
          if ("75" != myMainGun)
          {
@@ -269,7 +271,7 @@ namespace Pattons_Best
          }
          else
          {
-            myHvapRoundCountOringal = myHvapRoundCount = lastReport.MainGunHVAP;
+            myHvapRoundCountOriginal = myHvapRoundCount = lastReport.MainGunHVAP;
             myUnassignedCount -= myHvapRoundCount;
             t = Territories.theTerritories.Find("ReadyRackHvap0");
             if (null == t)
@@ -354,7 +356,7 @@ namespace Pattons_Best
          switch (myState)
          {
             case E162Enum.SET_HBCI_COUNT:
-               myTextBlockInstructions.Inlines.Add(new Run("Roll 1D for available HBCI Rounds."));
+               myTextBlockInstructions.Inlines.Add(new Run("Roll 1D for available HBCI Rounds for this day."));
                break;
             case E162Enum.LOAD_NORMAL:
                if( 0 < myUnassignedCount )
@@ -655,7 +657,8 @@ namespace Pattons_Best
                labelforHbci.Content = "0" + myHbciRoundCount.ToString();
             stackpanelHbci.Children.Add(labelforHbci);
             Button bPlusHbci = new Button() { Name = "bPlusHbci", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "+" };
-            if ((0 < myUnassignedCount) && (myHbciRoundCount < myHbciRoundCountOriginal) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
+            int myHbciTotalAvailable = myHbciRoundCountOriginal + myHbciRoundCountAdded;
+            if ((0 < myUnassignedCount) && (myHbciRoundCount < myHbciTotalAvailable) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
             {
                bPlusHbci.Click += ButtonAmmoChange_Click;
                bPlusHbci.IsEnabled = true;
@@ -687,7 +690,7 @@ namespace Pattons_Best
                labelforHvap.Content = "0" + myHvapRoundCount.ToString();
             stackpanelHvap.Children.Add(labelforHvap);
             Button bPlusHvap = new Button() { Name = "bPlusHvap", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "+" };
-            if ((0 < myUnassignedCount) && (myHvapRoundCount < myHvapRoundCountOringal) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
+            if ((0 < myUnassignedCount) && (myHvapRoundCount < myHvapRoundCountOriginal) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
             {
                bPlusHvap.Click += ButtonAmmoChange_Click;
                bPlusHvap.IsEnabled = true;
@@ -823,7 +826,8 @@ namespace Pattons_Best
                labelforHbci.Content = "0" + myHbciReadyRackCount.ToString();
             stackpanelHbci.Children.Add(labelforHbci);
             Button bPlusHbci = new Button() { Name = "bPlusHbci", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "+" };
-            if ((0 < myUnassignedReadyRack) && (myHbciReadyRackCount < myHbciRoundCountOriginal))
+            int myHbciTotalAvailable = myHbciRoundCountOriginal + myHbciRoundCountAdded;
+            if ((0 < myUnassignedReadyRack) && (myHbciReadyRackCount < myHbciTotalAvailable))
             {
                bPlusHbci.Click += ButtonReadyRackChange_Click;
                bPlusHbci.IsEnabled = true;
@@ -855,7 +859,7 @@ namespace Pattons_Best
                labelforHvap.Content = "0" + myHvapReadyRackCount.ToString();
             stackpanelHvap.Children.Add(labelforHvap);
             Button bPlusHvap = new Button() { Name = "bPlusHvap", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "+" };
-            if ((0 < myUnassignedReadyRack) && (myHvapReadyRackCount < myHvapRoundCountOringal))
+            if ((0 < myUnassignedReadyRack) && (myHvapReadyRackCount < myHvapRoundCountOriginal))
             {
                bPlusHvap.Click += ButtonReadyRackChange_Click;
                bPlusHvap.IsEnabled = true;
@@ -1025,7 +1029,8 @@ namespace Pattons_Best
          }
          if(E162Enum.SET_HBCI_COUNT == myState )
          {
-            myHbciRoundCountOriginal = myHbciRoundCount = dieRoll;
+            myHbciRoundCountAdded = dieRoll;
+            myHbciRoundCount = myHbciRoundCountOriginal + myHbciRoundCountAdded;
             if ( false == SetLoadNormalState())
             {
                Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResults(=null) returned false");

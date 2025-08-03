@@ -39,8 +39,8 @@ namespace Pattons_Best
          ENEMY_ACTION_SELECT_SHOW,
          ENEMY_ACTION_MOVE,
          ENEMY_ACTION_MOVE_SHOW,
-         ENEMY_ACTION_MOVE_ADVANCE_FIRE,
-         ENEMY_ACTION_MOVE_ADVANCE_FIRE_SHOW,
+         ENEMY_ACTION_ADVANCE_FIRE,
+         ENEMY_ACTION_ADVANCE_FIRE_SHOW,
          ENEMY_ACTION_FIRE,
          ENEMY_ACTION_FIRE_SHOW,
          ENEMY_ACTION_TO_HIT_YOUR_TANK,
@@ -346,7 +346,7 @@ namespace Pattons_Best
                {
                   if ( (true == mapItem.IsKilled) && (false == mapItem.Name.Contains("Sherman")) ) // remove enemy KIA units
                      removals.Add(mapItem);
-                  if( true == mapItem.TerritoryCurrent.Name.Contains("Off")) // remove all units that left the board
+                  if( true == mapItem.TerritoryCurrent.Name.Contains("Off")) // EventViewerEnemyAction.UpdateEndState() - remove all units that left the board
                      removals.Add(mapItem);
                }
             }
@@ -406,7 +406,7 @@ namespace Pattons_Best
                myTextBlockInstructions.Inlines.Add(new InlineUIContainer(bMove));
                myTextBlockInstructions.Inlines.Add(new Run(" Diagram. Roll die for vehicle facing and/or terrain."));
                break;
-            case E0475Enum.ENEMY_ACTION_MOVE_ADVANCE_FIRE:
+            case E0475Enum.ENEMY_ACTION_ADVANCE_FIRE:
                myTextBlockInstructions.Inlines.Add(new Run("Roll on the "));
                Button bAdvanceFire = new Button() { Content = "Sherman MG", FontFamily = myFontFam1, FontSize = 8 };
                bAdvanceFire.Click += ButtonRule_Click;
@@ -462,7 +462,7 @@ namespace Pattons_Best
                myTextBlockInstructions.Inlines.Add(new InlineUIContainer(bToKill1));
                break;
             case E0475Enum.ENEMY_ACTION_MOVE_SHOW:
-            case E0475Enum.ENEMY_ACTION_MOVE_ADVANCE_FIRE_SHOW:
+            case E0475Enum.ENEMY_ACTION_ADVANCE_FIRE_SHOW:
             case E0475Enum.ENEMY_ACTION_FIRE_SHOW:
             case E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK_SHOW:
             case E0475Enum.ENEMY_ACTION_TO_KILL_YOUR_TANK_SHOW:
@@ -486,7 +486,7 @@ namespace Pattons_Best
          {
             case E0475Enum.ENEMY_ACTION_SELECT:
             case E0475Enum.ENEMY_ACTION_MOVE:
-            case E0475Enum.ENEMY_ACTION_MOVE_ADVANCE_FIRE:
+            case E0475Enum.ENEMY_ACTION_ADVANCE_FIRE:
             case E0475Enum.ENEMY_ACTION_FIRE:
             case E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK:
             case E0475Enum.ENEMY_ACTION_TO_KILL_YOUR_TANK:
@@ -604,7 +604,7 @@ namespace Pattons_Best
                   myStackPanelAssignable.Children.Add(img23);
                }
                break;
-             case E0475Enum.ENEMY_ACTION_MOVE_ADVANCE_FIRE_SHOW:
+             case E0475Enum.ENEMY_ACTION_ADVANCE_FIRE_SHOW:
                bool isEnemyFiring11 = false;
                bool isYourTank11 = false;
                for (int j = 0; j < myMaxRowCount; ++j)
@@ -741,8 +741,8 @@ namespace Pattons_Best
                }
                myGameEngine.PerformAction(ref myGameInstance, ref outAction);
                break;
-            case E0475Enum.ENEMY_ACTION_MOVE_ADVANCE_FIRE:
-            case E0475Enum.ENEMY_ACTION_MOVE_ADVANCE_FIRE_SHOW:
+            case E0475Enum.ENEMY_ACTION_ADVANCE_FIRE:
+            case E0475Enum.ENEMY_ACTION_ADVANCE_FIRE_SHOW:
                if (false == UpdateGridRowsAdvanceFire())
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): UpdateGridRowsAdvanceFire() returned false");
@@ -1327,7 +1327,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetSectorRangeDisplay() returned ERROR");
             return false;
          }
-         if ("Off" == myGridRows[i].mySectorRangeDisplay)
+         if ("Off" == myGridRows[i].mySectorRangeDisplay) // EventViewerEnemyAction.CreateMapItemMove() - do not set range/facing if off board
          {
             myGridRows[i].myDieRollTerrain = KEEP_TERRAIN;
             myGridRows[i].myDieRollFacing = NO_FACING;
@@ -1377,7 +1377,7 @@ namespace Pattons_Best
       {
          int rowNum = i + STARTING_ASSIGNED_ROW;
          IMapItem mi = myGridRows[i].myMapItem;
-         if( "Off" == myGridRows[i].mySectorRangeDisplay)
+         if( "Off" == myGridRows[i].mySectorRangeDisplay) // EventViewerEnemyAction.SetTerrainCounter() - do not set terrain if off board
          {
             Label label1 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
             myGrid.Children.Add(label1);
@@ -1624,7 +1624,7 @@ namespace Pattons_Best
                }
                break;
             //------------------------------------------------------------------------------------------------
-            case E0475Enum.ENEMY_ACTION_MOVE_ADVANCE_FIRE:
+            case E0475Enum.ENEMY_ACTION_ADVANCE_FIRE:
                mi = myAdvanceFireGridRows[i].myEnemyUnit;
                if (null == mi)
                {
@@ -1649,11 +1649,11 @@ namespace Pattons_Best
                   myAdvanceFireGridRows[i].myEnemyUnit.IsKilled = true;
                   myAdvanceFireGridRows[i].myEnemyUnit.SetBloodSpots();
                }
-               myState = E0475Enum.ENEMY_ACTION_MOVE_ADVANCE_FIRE_SHOW;
+               myState = E0475Enum.ENEMY_ACTION_ADVANCE_FIRE_SHOW;
                for (int j = 0; j < myMaxRowCountAdvanceFire; ++j)
                {
                   if (Utilities.NO_RESULT == myAdvanceFireGridRows[j].myDieRollAdvanceFire)
-                     myState = E0475Enum.ENEMY_ACTION_MOVE_ADVANCE_FIRE;
+                     myState = E0475Enum.ENEMY_ACTION_ADVANCE_FIRE;
                }
                break;
             //------------------------------------------------------------------------------------------------
@@ -2027,8 +2027,8 @@ namespace Pattons_Best
                               }
                               myMaxRowCountAdvanceFire = k;
                            }
-                           Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "Grid_MouseDown(): p=" + myState.ToString() + "-->ENEMY_ACTION_MOVE_ADVANCE_FIRE");
-                           myState = E0475Enum.ENEMY_ACTION_MOVE_ADVANCE_FIRE;
+                           Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "Grid_MouseDown(): p=" + myState.ToString() + "-->ENEMY_ACTION_ADVANCE_FIRE");
+                           myState = E0475Enum.ENEMY_ACTION_ADVANCE_FIRE;
                            myTextBlockHeader.Text = "r22.2 Advance Fire";
                            myTextBlock2.Text = "MG Attack";
                            myTextBlock3.Text = "To Kill #";

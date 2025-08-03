@@ -134,6 +134,7 @@ namespace Pattons_Best
 
       ShowCombatCalendarDialog,
       ShowAfterActionReportDialog,
+      ShowTankForcePath,
       ShowMovementDiagramDialog,
       ShowInventoryDialog,
       ShowRuleListingDialog,

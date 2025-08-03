@@ -65,6 +65,7 @@ namespace Pattons_Best
                   myMenuItemTopLevel3.Visibility = Visibility.Visible;
                   myMenuItemTopLevel31.Header = "_Path";
                   myMenuItemTopLevel31.InputGestureText = "Ctrl+P";
+                  myMenuItemTopLevel31.Click += MenuItemViewPath_Click;
                   myMenuItemTopLevel31.IsCheckable = true;
                   myMenuItemTopLevel3.Items.Add(myMenuItemTopLevel31);
                   MenuItem subItem32 = new MenuItem();
@@ -272,6 +273,13 @@ namespace Pattons_Best
             e.CanExecute = true;
          else
             e.CanExecute = false;
+      }
+      public void MenuItemViewPath_Click(object sender, RoutedEventArgs e)
+      {
+         IsPathShown = !IsPathShown;
+         myMenuItemTopLevel31.IsChecked = IsPathShown;
+         GameAction action = GameAction.ShowTankForcePath;
+         myGameEngine.PerformAction(ref myGameInstance, ref action);
       }
       public void MenuItemViewCombatCalendar(object sender, RoutedEventArgs e)
       {
