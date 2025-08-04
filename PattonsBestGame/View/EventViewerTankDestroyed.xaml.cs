@@ -71,7 +71,7 @@ namespace Pattons_Best
          public string myWoundEffect = "Uninit";
          //------------------------------------
          public string myBailoutEffect = "Uninit";
-         public int myBailOutModifier =  0;
+         public int myBailOutModifier = 0;
          public int myDieRollBailout = Utilities.NO_RESULT;
          public string myBailOutResult = "Uninit";
          //------------------------------------
@@ -222,8 +222,8 @@ namespace Pattons_Best
          myDieRollBrewUp = Utilities.NO_RESULT;
          myToBrewNumber = 0;
          myBrewupResult = "Uninit";
-      //--------------------------------------------------
-      System.Windows.Point hotPoint = new System.Windows.Point(Utilities.theMapItemOffset, Utilities.theMapItemOffset); // set the center of the MapItem as the hot point for the cursor
+         //--------------------------------------------------
+         System.Windows.Point hotPoint = new System.Windows.Point(Utilities.theMapItemOffset, Utilities.theMapItemOffset); // set the center of the MapItem as the hot point for the cursor
          int i = 0;
          string[] crewmembers = new string[5] { "Commander", "Gunner", "Loader", "Driver", "Assistant" };
          foreach (string crewmember in crewmembers)
@@ -236,7 +236,17 @@ namespace Pattons_Best
             }
             myGridRowWounds[i] = new GridRowWound(cm);
             myGridRowWounds[i].myWoundModifier = TableMgr.GetWoundsModifier(myGameInstance, cm, true, false, false);
+            if (TableMgr.FN_ERROR == myGridRowWounds[i].myWoundModifier)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): GetWoundsModifier() return false for myWoundModifier");
+               return false;
+            }
             myGridRowWounds[i].myBailoutWoundModifier = TableMgr.GetWoundsModifier(myGameInstance, cm, true, true, false);
+            if (TableMgr.FN_ERROR == myGridRowWounds[i].myBailoutWoundModifier)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): GetWoundsModifier() return false for myBailoutWoundModifier");
+               return false;
+            }
             if (true == cm.IsKilled)
             {
                myGridRowWounds[i].myDieRollWound = KIA_CREWMAN;
@@ -250,7 +260,7 @@ namespace Pattons_Best
          }
          myMaxRowCountWound = i;
          //--------------------------------------------------
-         if ( null == myGameInstance.Death )
+         if (null == myGameInstance.Death)
          {
             Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): myGameInstance.Death=null");
             return false;
@@ -258,8 +268,13 @@ namespace Pattons_Best
          ShermanDeath death = myGameInstance.Death;
          myGridRowExplodes[0] = new GridRowExplode(myGameInstance.Sherman);
          myGridRowExplodes[0].myExplosionModifier = TableMgr.GetExplosionModifier(myGameInstance, death.myEnemyUnit, death.myHitLocation);
+         if (TableMgr.FN_ERROR == myGridRowExplodes[0].myExplosionModifier)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): GetExplosionModifier() returned error");
+            return false;
+         }
          myToBrewNumber = TableMgr.GetBrewUpNumber(myGameInstance);
-         if (myToBrewNumber < 0 )
+         if (myToBrewNumber < 0)
          {
             Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): myToBrewNumber=" + myToBrewNumber);
             return false;
@@ -336,7 +351,7 @@ namespace Pattons_Best
                myTextBlockInstructions.Inlines.Add(new Run(" Table."));
                break;
             case E0481Enum.TANK_EXPLOSION_ROLL_SHOW:
-               if("Explodes" == myGridRowExplodes[0].myExplosionResult)
+               if ("Explodes" == myGridRowExplodes[0].myExplosionResult)
                   myTextBlockInstructions.Inlines.Add(new Run("All crew members die. Click image to continue."));
                else
                   myTextBlockInstructions.Inlines.Add(new Run("Click image to continue."));
@@ -493,7 +508,7 @@ namespace Pattons_Best
                sb.Append(myToBrewNumber.ToString());
                sb.Append(" < ");
                Label labelBrewUp = new Label() { FontFamily = myFontFam, FontSize = 18, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = sb.ToString() };
-               myStackPanelAssignable.Children.Add(labelBrewUp); 
+               myStackPanelAssignable.Children.Add(labelBrewUp);
                //---------------------------------
                BitmapImage bmi = new BitmapImage();
                bmi.BeginInit();
@@ -645,7 +660,7 @@ namespace Pattons_Best
             Grid.SetRow(img, rowNum);
             Grid.SetColumn(img, 2);
          }
-         else 
+         else
          {
             Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRowExplodes[0].myDieRollExplosion.ToString() };
             myGrid.Children.Add(label2);
@@ -678,7 +693,7 @@ namespace Pattons_Best
          foreach (UIElement ui1 in results)
             myGrid.Children.Remove(ui1);
          //-----------------------------
-         for ( int i = 0; i<myMaxRowCountWound; ++i)
+         for (int i = 0; i < myMaxRowCountWound; ++i)
          {
             int rowNum = STARTING_ASSIGNED_ROW + i;
             ICrewMember cm = myGridRowWounds[i].myCrewMember;
@@ -751,7 +766,7 @@ namespace Pattons_Best
             Grid.SetColumn(label1, 1);
             //----------------------------
             string content = myGridRowWounds[i].myBailOutModifier.ToString();
-            if ((NO_BAILOUT == myGridRowWounds[i].myDieRollBailout) || (AUTO_BAILOUT == myGridRowWounds[i].myDieRollBailout) )
+            if ((NO_BAILOUT == myGridRowWounds[i].myDieRollBailout) || (AUTO_BAILOUT == myGridRowWounds[i].myDieRollBailout))
                content = "NA";
             Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = content };
             myGrid.Children.Add(label2);
@@ -835,7 +850,7 @@ namespace Pattons_Best
             Grid.SetRow(label1, rowNum);
             Grid.SetColumn(label1, 1);
             //----------------------------
-            if ( NO_BAILOUT == myGridRowWounds[i].myDieRollBailoutWound )
+            if (NO_BAILOUT == myGridRowWounds[i].myDieRollBailoutWound)
             {
                Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
                myGrid.Children.Add(label2);
@@ -905,7 +920,7 @@ namespace Pattons_Best
             Grid.SetRow(b1, rowNum);
             Grid.SetColumn(b1, 0);
             ICrewMember? rescuer = myGridRowRescues[i].myCrewMemberRescuing;
-            if( null != rescuer)
+            if (null != rescuer)
             {
                Button b2 = CreateButton(rescuer, false);
                myGrid.Children.Add(b2);
@@ -916,7 +931,7 @@ namespace Pattons_Best
                Grid.SetRow(label2, rowNum);
                Grid.SetColumn(label2, 2);
                //--------------------------------
-               if ( Utilities.NO_RESULT == myGridRowRescues[i].myDieRollRescue )
+               if (Utilities.NO_RESULT == myGridRowRescues[i].myDieRollRescue)
                {
                   BitmapImage bmi = new BitmapImage();
                   bmi.BeginInit();
@@ -943,7 +958,7 @@ namespace Pattons_Best
             }
             else
             {
-               Rectangle r = new Rectangle() { Visibility = Visibility.Visible, Stroke = Brushes.Black, Fill = Brushes.Transparent, StrokeThickness = 2.0, StrokeDashArray = myDashArray, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize};
+               Rectangle r = new Rectangle() { Visibility = Visibility.Visible, Stroke = Brushes.Black, Fill = Brushes.Transparent, StrokeThickness = 2.0, StrokeDashArray = myDashArray, Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                myGrid.Children.Add(r);
                Grid.SetRow(r, rowNum);
                Grid.SetColumn(r, 1);
@@ -985,7 +1000,7 @@ namespace Pattons_Best
                Grid.SetRow(label2, rowNum);
                Grid.SetColumn(label2, 2);
                //--------------------------------
-               if( NO_RESCUE == myGridRowRescues[i].myDieRollRescue )
+               if (NO_RESCUE == myGridRowRescues[i].myDieRollRescue)
                {
                   Label label3 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
                   myGrid.Children.Add(label3);
@@ -1097,7 +1112,7 @@ namespace Pattons_Best
                //dieRoll = 1; // <cgs> TEST - tank explodes
                myGridRowExplodes[0].myDieRollExplosion = dieRoll;
                int rollPlusModifier = dieRoll + myGridRowExplodes[0].myDieRollExplosion;
-               if( 99 < rollPlusModifier )
+               if (99 < rollPlusModifier)
                {
                   myGridRowExplodes[0].myExplosionResult = "Explodes";
                   lastReport.KnockedOut = "Explodes";
@@ -1135,7 +1150,7 @@ namespace Pattons_Best
                myGridRowWounds[i].myWoundEffect = TableMgr.GetWoundEffect(myGameInstance, cm, dieRoll, myGridRowWounds[i].myWoundModifier);
                myGridRowWounds[i].myBailoutEffect = TableMgr.GetBailoutEffectResult(myGameInstance, cm, dieRoll, myGridRowWounds[i].myWoundModifier);
                if (("Loader" == cm.Role) && (false == card.myIsLoaderHatch))
-                  myGridRowWounds[i].myBailOutModifier += 1; 
+                  myGridRowWounds[i].myBailOutModifier += 1;
                switch (myGridRowWounds[i].myBailoutEffect)
                {
                   case "Cannot Bail":
@@ -1145,7 +1160,7 @@ namespace Pattons_Best
                         myGridRowRescues[myMaxRowCountRescue] = new GridRowRescue(cm);
                         myMaxRowCountRescue++;
                      }
-                     myGridRowWounds[i].myDieRollBailout      = NO_BAILOUT;
+                     myGridRowWounds[i].myDieRollBailout = NO_BAILOUT;
                      myGridRowWounds[i].myDieRollBailoutWound = NO_BAILOUT;
                      break;
                   case "None":
@@ -1157,7 +1172,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): reached default bailouteffect=" + myGridRowWounds[i].myBailoutEffect);
                      return;
                }
-               if ((0 == myGridRowWounds[i].myBailOutModifier) && ( Utilities.NO_RESULT == myGridRowWounds[i].myDieRollBailout) )  // automatically succeed unless there is modifier
+               if ((0 == myGridRowWounds[i].myBailOutModifier) && (Utilities.NO_RESULT == myGridRowWounds[i].myDieRollBailout))  // automatically succeed unless there is modifier
                   myGridRowWounds[i].myDieRollBailout = AUTO_BAILOUT;
                //--------------------------------------
                if (false == myGridRowWounds[i].myWoundResult.Contains("Near Miss"))
@@ -1168,7 +1183,7 @@ namespace Pattons_Best
                   sb1.Append(cm.Name);
                   sb1.Append(" suffered ");
                   sb1.Append(myGridRowWounds[i].myWoundResult);
-                  if( false == myGridRowWounds[i].myWoundEffect.Contains("None"))
+                  if (false == myGridRowWounds[i].myWoundEffect.Contains("None"))
                   {
                      sb1.Append(" - ");
                      sb1.Append(myGridRowWounds[i].myWoundEffect);
@@ -1248,7 +1263,7 @@ namespace Pattons_Best
                break;
             case E0481Enum.BAILOUT_RESCUE_ROLL:
                ICrewMember? rescuer = myGridRowRescues[i].myCrewMemberRescuing;
-               if( null == rescuer )
+               if (null == rescuer)
                {
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGridRowRescues[i].myCrewMemberRescuing=null for i=" + i.ToString());
                   return;
@@ -1273,7 +1288,7 @@ namespace Pattons_Best
                   sb1.Append(".");
                   lastReport.Notes.Add(sb1.ToString());
                }
-               if( ("Serious Wound" == myGridRowRescues[i].myRescueWoundResult) || ("Killed" == myGridRowRescues[i].myRescueWoundResult) )
+               if (("Serious Wound" == myGridRowRescues[i].myRescueWoundResult) || ("Killed" == myGridRowRescues[i].myRescueWoundResult))
                   myGridRowRescues[i].myRescueResult = myGridRowRescues[i].myRescueWoundResult;
                else
                   myGridRowRescues[i].myRescueResult = "Crewman Out";
@@ -1281,10 +1296,10 @@ namespace Pattons_Best
                break;
             case E0481Enum.BREW_UP_ROLL:
                myDieRollBrewUp = dieRoll;
-               if( dieRoll < myToBrewNumber )
+               if (dieRoll < myToBrewNumber)
                {
                   myBrewupResult = "Tank Burns";
-                  for( int k=0; k<myMaxRowCountRescue; ++k)                   // Kill every one still left in tank
+                  for (int k = 0; k < myMaxRowCountRescue; ++k)                   // Kill every one still left in tank
                   {
                      ICrewMember cm10 = myGridRowRescues[k].myCrewMember;
                      if ("Crewman Out" != myGridRowRescues[k].myRescueResult)
@@ -1415,6 +1430,11 @@ namespace Pattons_Best
                      int i = rowNum - STARTING_ASSIGNED_ROW;
                      myGridRowRescues[i].myCrewMemberRescuing = mySelectedCrewman;
                      myGridRowRescues[i].myRescueWoundModifier = TableMgr.GetWoundsModifier(myGameInstance, mySelectedCrewman, false, true, false);
+                     if (TableMgr.FN_ERROR == myGridRowRescues[i].myRescueWoundModifier)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): GetWoundsModifier() return false");
+                        return;
+                     }
                      mySelectedCrewman = null;
                      Logger.Log(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED, "Grid_MouseDown(): Dropping selected crewman - myState=" + myState.ToString() + "-->BAILOUT_RESCUE_ROLL");
                      myState = E0481Enum.BAILOUT_RESCUE_ROLL;
@@ -1471,12 +1491,12 @@ namespace Pattons_Best
                               myTextBlock3.Text = "Roll + Modifier";
                               myTextBlock4.Text = "Bailout Result";
                               bool isRollNeeded = false;
-                              for(int k=0; k<myMaxRowCountWound; ++k)
+                              for (int k = 0; k < myMaxRowCountWound; ++k)
                               {
                                  if (Utilities.NO_RESULT == myGridRowWounds[k].myDieRollBailout)
                                     isRollNeeded = true;
                               }
-                              if( false == isRollNeeded )
+                              if (false == isRollNeeded)
                               {
                                  Logger.Log(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED, "Grid_MouseDown(): myState=" + myState.ToString() + "-->BAILOUT_ROLL_SHOW");
                                  myState = E0481Enum.BAILOUT_ROLL_SHOW;
@@ -1530,7 +1550,7 @@ namespace Pattons_Best
                                     myState = E0481Enum.BREW_UP_ROLL;
                                     myTextBlockHeader.Text = "r4.81.4e Brew Up";
                                     myButtonRule.Content = "r19.15";
-                                    for( int k1=0; k1<myMaxRowCountRescue; ++k1)
+                                    for (int k1 = 0; k1 < myMaxRowCountRescue; ++k1)
                                     {
                                        if (Utilities.NO_RESULT == myGridRowRescues[k1].myDieRollRescue)
                                           myGridRowRescues[k1].myDieRollRescue = NO_RESCUE;

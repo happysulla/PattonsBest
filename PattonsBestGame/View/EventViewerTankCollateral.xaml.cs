@@ -558,7 +558,7 @@ namespace Pattons_Best
                      else
                      {
                         myGridRows[k].myWoundsModifier = TableMgr.GetWoundsModifier(myGameInstance, cm1, false, false, true);
-                        if (myGridRows[k].myWoundsModifier < -100)
+                        if (TableMgr.FN_ERROR == myGridRows[k].myWoundsModifier)
                         {
                            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetWoundsModifier() returned error for k=" + k.ToString());
                            return;

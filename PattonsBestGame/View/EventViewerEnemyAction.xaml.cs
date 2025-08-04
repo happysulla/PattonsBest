@@ -1514,7 +1514,14 @@ namespace Pattons_Best
                         return;
                      }
                      myGridRows[i].myDieRollFire = NO_FIRE; // not firing at other tanks... only firing at your tank
-                     ShowDieResultUpdateFacingTurret(i);
+                     if( true == mi.IsTurret )
+                     {
+                        if (false == mi.SetMapItemRotationTurret(myGameInstance.Sherman))
+                        {
+                           Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): SetMapItemRotationTurret() returned false for mi=" + mi.Name + " i=" + i.ToString());
+                           return;
+                        }
+                     }
                   }
                   else
                   {
@@ -1724,14 +1731,14 @@ namespace Pattons_Best
                {
                   Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Hit Location for myState=" + myState.ToString() + " dr=" + dieRoll);
                   myGridRows[i].myDieRollHitLocationYourTank = dieRoll;
-                  myGridRows[i].myHitLocationYourTank = TableMgr.GetEnemyHitLocationYourTank(myGameInstance, dieRoll);
+                  myGridRows[i].myHitLocationYourTank = TableMgr.GetEnemyHitLocationYourTank(myGameInstance, dieRoll); // Turret or Hull
                   if ("ERROR" == myGridRows[i].myHitLocationYourTank)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.myHitLocationYourTank() returned ERROR");
                      return;
                   }
                   myGridRows[i].myToKillNumberYourTank = (int)TableMgr.GetEnemyToKillNumberYourTank(myGameInstance, myGridRows[i].myMapItem, myGridRows[i].myFacing, myGridRows[i].myRange, myGridRows[i].myHitLocationYourTank);
-                  if (myGridRows[i].myToKillNumberYourTank < -100)
+                  if (TableMgr.FN_ERROR == myGridRows[i].myToKillNumberYourTank)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyToKillNumberYourTank() returned error=" + myGridRows[i].myToKillNumberYourTank.ToString());
                      return;
@@ -1825,27 +1832,6 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): UpdateMapRotation() returned false");
             return false;
          }
-         return true;
-      }
-      private bool ShowDieResultUpdateFacingTurret(Index i)
-      {
-         if (null == myGameInstance)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance=null");
-            return false;
-         }
-         //----------------------------
-         IMapItem? mi = myGridRows[i].myMapItem;
-         if (null == mi)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): mi=null for i=" + i.ToString());
-            return false;
-         }
-         double xDiff = (mi.Location.X + mi.Zoom * Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.X; // first point the vehicle at the Sherman
-         double yDiff = (mi.Location.Y + mi.Zoom * Utilities.theMapItemOffset) - myGameInstance.Home.CenterPoint.Y;
-         mi.RotationTurret = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;
-         mi.RotationTurret -= mi.RotationHull;
-         mi.RotationTurret -= mi.RotationOffset;
          return true;
       }
       private bool ShowDieResultUpdateTerrain(Index i)

@@ -448,13 +448,13 @@ namespace Pattons_Best
       private string GetFacingDisplay(int i)
       {
          IMapItem mi = myGridRows[i].myMapItem;
-         if (150 < mi.RotationOffset && mi.RotationOffset < 210)
+         if (150 < mi.RotationOffsetHull && mi.RotationOffsetHull < 210)
             return "Rear";
-         if (( 34 < mi.RotationOffset && mi.RotationOffset < 150) || (mi.RotationOffset < 0) )
+         if (( 34 < mi.RotationOffsetHull && mi.RotationOffsetHull < 150) || (mi.RotationOffsetHull < 0) )
             return "Side";
-         if (-35 < mi.RotationOffset  && mi.RotationOffset < 35)
+         if (-35 < mi.RotationOffsetHull  && mi.RotationOffsetHull < 35)
             return "Front";
-         Logger.Log(LogEnum.LE_ERROR, "GetFacingDisplay(): reached deefault with mi.Name=" + mi.Name + " rot=" + mi.RotationOffset.ToString("F1"));
+         Logger.Log(LogEnum.LE_ERROR, "GetFacingDisplay(): reached deefault with mi.Name=" + mi.Name + " rot=" + mi.RotationOffsetHull.ToString("F1"));
          return "ERROR";
       }
       //------------------------------------------------------------------------------------

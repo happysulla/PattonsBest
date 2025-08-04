@@ -229,6 +229,7 @@ namespace Pattons_Best
       MovementBattleCheck,
       MovementBattleCheckRoll,
       MovementStartAreaRestart,
+      MovementStartAreaRestartAfterBattle,
       MovementExit,
 
       BattleStart,

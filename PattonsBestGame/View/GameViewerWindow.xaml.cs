@@ -629,7 +629,7 @@ namespace Pattons_Best
          MapItem.SetButtonContent(b, mi, true, true); // This sets the image as the button's content
          RotateTransform rotateTransform = new RotateTransform();
          b.RenderTransformOrigin = new Point(0.5, 0.5);
-         rotateTransform.Angle = mi.RotationHull + mi.RotationOffset;
+         rotateTransform.Angle = mi.RotationHull + mi.RotationOffsetHull;
          b.RenderTransform = rotateTransform;
          buttons.Add(b);
          Canvas.SetLeft(b, mi.Location.X);
@@ -724,6 +724,14 @@ namespace Pattons_Best
             if (true == mi.Name.Contains("Commander"))
                isCommanderOpenHatch = true;
          }
+         //---------------------------------
+         string sector = Territory.GetMainGunSector(gi);
+         if( "ERROR" == sector )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): GetMainGunSector() returned ERROR");
+            return false;
+         }
+         bool isTargetInCurrentMainGunSector = Territory.IsEnemyUnitInSector(gi, sector);
          bool isMainGunFiringAvailable = ((false == isTankMoving) && (false == gi.IsMalfunctionedMainGun) && (false == gi.IsBrokenMainGun) && (false == gi.IsBrokenGunSight) && (0 < totalAmmo) && ("None" != gi.GetGunLoadType()) && (false == isLoaderChangingLoad) );
          bool isShermanMoveAvailable = ((false == gi.Sherman.IsThrownTrack) && (false == gi.Sherman.IsAssistanceNeeded) && (false == gi.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch));
          //---------------------------------
@@ -865,11 +873,14 @@ namespace Pattons_Best
          myContextMenuCrewActions["Gunner"].Visibility = Visibility.Visible;
          if ( true == isMainGunFiringAvailable )
          {
-            menuItem1 = new MenuItem();
-            menuItem1.Name = "Gunner_FireMainGun";
-            menuItem1.Header = "Fire Main Gun";
-            menuItem1.Click += MenuItemCrewActionClick;
-            myContextMenuCrewActions["Gunner"].Items.Add(menuItem1);
+            if( true == isTargetInCurrentMainGunSector )
+            {
+               menuItem1 = new MenuItem();
+               menuItem1.Name = "Gunner_FireMainGun";
+               menuItem1.Header = "Fire Main Gun";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions["Gunner"].Items.Add(menuItem1);
+            }
             menuItem1 = new MenuItem();
             menuItem1.Name = "Gunner_RotateFireMainGun";
             menuItem1.Header = "Rotate & Fire Main Gun";
@@ -1788,7 +1799,7 @@ namespace Pattons_Best
                case GameAction.BattleStart:
                   if( true == gi.IsAdvancingFireChosen)
                   {
-                     if (false == UpdateCanvasMainAdvancingMarkerFirePlace())
+                     if (false == UpdateCanvasMainAdvancingMarkerFirePlace(gi))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMainAdvancingMarkerFirePlace() returned false");
                         return false;
@@ -1936,7 +1947,7 @@ namespace Pattons_Best
                      Canvas.SetZIndex(b, 1000);
                   RotateTransform rotateTransform = new RotateTransform();
                   b.RenderTransformOrigin = new Point(0.5, 0.5);
-                  rotateTransform.Angle = mi.RotationHull + mi.RotationOffset;
+                  rotateTransform.Angle = mi.RotationHull + mi.RotationOffsetHull;
                   b.RenderTransform = rotateTransform;
                }
                else
@@ -1983,7 +1994,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): mim2.NewTerritory=null");
                   return false;
                }
-               Logger.Log(LogEnum.LE_VIEW_ROTATION, "UpdateCanvasMovement(): mi=" + mim.MapItem.Name + " r=" + mim.MapItem.RotationOffset + " rb=" + mim.MapItem.RotationHull);
+               Logger.Log(LogEnum.LE_VIEW_ROTATION, "UpdateCanvasMovement(): mi=" + mim.MapItem.Name + " r=" + mim.MapItem.RotationOffsetHull + " rb=" + mim.MapItem.RotationHull);
                //------------------------------------------
                stacks.Remove(mi); // remove from existing stack
                Logger.Log(LogEnum.LE_VIEW_MIM, "UpdateCanvasMovement(): a=" + action.ToString() + " mi=" + mi.Name + " t=" + mi.TerritoryCurrent.Name + "==>" + mim.NewTerritory.Name + " X=" + mi.Location.X.ToString() + " Y=" + mi.Location.Y.ToString() + " " + stacks.ToString() );
@@ -2024,7 +2035,7 @@ namespace Pattons_Best
             double diffYOld = theOldYAfterAnimation - mim.MapItem.Location.Y;
             double xStart = mim.MapItem.Location.X; // get top left point of MapItem
             double yStart = mim.MapItem.Location.Y;
-            Logger.Log(LogEnum.LE_VIEW_ROTATION, "+++++++++++++++++MovePathAnimate(): 1 - mi.X=" + xStart.ToString("F0") + "  mi.Y=" + yStart.ToString("F0") + " r=" + mim.MapItem.RotationOffset.ToString("F0") + " dX=" + diffXOld.ToString("F0") + " dY=" + diffYOld.ToString("F0") + " rb=" + mim.MapItem.RotationHull.ToString("F0"));
+            Logger.Log(LogEnum.LE_VIEW_ROTATION, "+++++++++++++++++MovePathAnimate(): 1 - mi.X=" + xStart.ToString("F0") + "  mi.Y=" + yStart.ToString("F0") + " r=" + mim.MapItem.RotationOffsetHull.ToString("F0") + " dX=" + diffXOld.ToString("F0") + " dY=" + diffYOld.ToString("F0") + " rb=" + mim.MapItem.RotationHull.ToString("F0"));
             PathFigure aPathFigure = new PathFigure() { StartPoint = new System.Windows.Point(xStart, yStart) };
             if (null == mim.BestPath)
             {
@@ -2087,7 +2098,7 @@ namespace Pattons_Best
             }
             else
             {
-               rotateTransform.Angle = mim.MapItem.RotationOffset + mim.MapItem.RotationHull;
+               rotateTransform.Angle = mim.MapItem.RotationOffsetHull + mim.MapItem.RotationHull;
                b.RenderTransform = rotateTransform;
             }
             //----------------------------------------------------
@@ -2095,7 +2106,7 @@ namespace Pattons_Best
             b.BeginAnimation(Canvas.TopProperty, yAnimiation);
             mim.MapItem.Location.X = mp.X;
             mim.MapItem.Location.Y = mp.Y;
-            Logger.Log(LogEnum.LE_VIEW_ROTATION, "-----------------MovePathAnimate(): 2 - mi.X=" + mim.MapItem.Location.X.ToString("F0") + " mi.Y=" + mim.MapItem.Location.Y.ToString("F0") + " r=" + mim.MapItem.RotationOffset.ToString("F0") + " rb=" + mim.MapItem.RotationHull.ToString("F0"));
+            Logger.Log(LogEnum.LE_VIEW_ROTATION, "-----------------MovePathAnimate(): 2 - mi.X=" + mim.MapItem.Location.X.ToString("F0") + " mi.Y=" + mim.MapItem.Location.Y.ToString("F0") + " r=" + mim.MapItem.RotationOffsetHull.ToString("F0") + " rb=" + mim.MapItem.RotationHull.ToString("F0"));
             return true;
          }
          catch (Exception e)
@@ -2228,8 +2239,15 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool UpdateCanvasMainAdvancingMarkerFirePlace()
+      private bool UpdateCanvasMainAdvancingMarkerFirePlace(IGameInstance gi)
       {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): lastReport=null");
+            return false;
+         }
+         //-----------------------------------------------------------------
          string[] sectors = new string[8] { "B4L", "B4M", "B4C", "B6M", "B6C", "B9L", "B9M", "B9C" };
          foreach (string s in sectors)
          {
@@ -2239,6 +2257,8 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainAdvancingMarkerFirePlace(): t=null for tName=" + s);
                return false;
             }
+            if ( ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling"))) && ('C' != s[2])) // only close range allowed in Fog or Falling Snow
+               continue;
             PointCollection points = new PointCollection();
             foreach (IMapPoint mp1 in t.Points)
                points.Add(new System.Windows.Point(mp1.X, mp1.Y));

@@ -69,7 +69,7 @@ namespace Pattons_Best
       private int myHbciRoundCountAdded = 0;
       private int myHvapRoundCount = 0;
       private int myHvapRoundCountOriginal = 0;
-      private int myHvapRoundCountAdded = 0;
+      //private int myHvapRoundCountAdded = 0;
       private int myExtraAmmo = -1;
       private int myUnassignedReadyRack = 0;
       private int myHeReadyRackCount = 0;

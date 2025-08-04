@@ -9,6 +9,7 @@ using Windows.Perception.Spatial;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 using System.Windows.Controls.Primitives;
+using System.Diagnostics;
 
 namespace Pattons_Best
 {
@@ -528,6 +529,32 @@ namespace Pattons_Best
             }
          }
          return returnedTerritories;
+      }
+      public static string GetMainGunSector(IGameInstance gi)
+      {
+         double rotation = gi.Sherman.RotationHull + gi.Sherman.RotationTurret;
+         if (rotation < 0)
+            rotation += 360.0;
+         if( 359 < rotation )
+            rotation -= 360.0;
+         switch( rotation )
+         {
+            case 0.0:
+               return "6";
+            case 60.0:
+               return "9";
+            case 120.0:
+               return "1";
+            case 180.0:
+               return "2";
+            case 240.0:
+               return "3";
+            case 300.0:
+               return "4";
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetMainGunSector() reached default rotation=" + rotation.ToString() + " hr=" + gi.Sherman.RotationHull.ToString() + " tr=" + gi.Sherman.RotationTurret.ToString() );
+               return "ERROR";
+         }
       }
       public static bool IsEnemyUnitInSector(IGameInstance gi, string sector)
       {

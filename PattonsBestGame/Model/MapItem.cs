@@ -90,9 +90,10 @@ namespace Pattons_Best
       }
       public bool IsMoved { get; set; } = false;
       public int Count { get; set; } = 0;
-      public double RotationOffset { get; set; } = 0.0;
-      public double RotationTurret { get; set; } = 0.0;
-      public double RotationHull { get; set; } = 0.0;
+      public double RotationOffsetHull { get; set; } = 0.0; // extra offset to show on battle board
+      public double RotationHull { get; set; } = 0.0; // can only be 0, 60, 120, 180, 240, 300 degrees
+      public double RotationOffsetTurret { get; set; } = 0.0;  // extra offset to show on battle board
+      public double RotationTurret { get; set; } = 0.0; // can only be 0, 60, 120, 180, 240, 300 degrees
       //--------------------------------------------------
       private IMapPoint myLocation = new MapPoint();  // top left corner of MapItem
       public IMapPoint Location 
@@ -199,9 +200,10 @@ namespace Pattons_Best
       {
          this.IsMoved = mi.IsMoved;
          this.Count = mi.Count;
-         this.RotationOffset = mi.RotationOffset;
-         this.RotationTurret = mi.RotationTurret;
+         this.RotationOffsetHull = mi.RotationOffsetHull;
          this.RotationHull = mi.RotationHull;
+         this.RotationTurret = mi.RotationTurret;
+         this.RotationOffsetTurret = mi.RotationOffsetTurret;
          this.Location = mi.Location;
          this.TerritoryStarting = mi.TerritoryStarting;
          this.IsMoving = mi.IsMoving;
@@ -354,8 +356,64 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetMapItemRotation(): reached default with rotation=" + rotation.ToString() + " mi=" + this.Name + " t=" + this.TerritoryCurrent.Name);
             return false;
          }
-         this.RotationOffset = rotation - this.RotationHull;
+         this.RotationOffsetHull = rotation - this.RotationHull;
          Logger.Log(LogEnum.LE_SHOW_ROTATION, "SetMapItemRotation(): xDiff=" + xDiff.ToString("F2") + " yDiff=" + yDiff.ToString("F2") + " r=" + this.RotationHull.ToString("F2") + " t=" + this.TerritoryCurrent.Name + " X=" + this.Location.X + " Y=" + this.Location.Y);
+         return true;
+      }
+      public bool SetMapItemRotationTurret(IMapItem target)
+      {
+         string enemyUnit = GetEnemyUnit();
+         if ("ERROR" == enemyUnit)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetMapItemRotationTurret(): reached default with enemyUnit=" + this.Name);
+            return false;
+         }
+         switch (enemyUnit)
+         {
+            case "ATG":
+            case "LW":
+            case "MG":
+               return true;
+            default:
+               break;
+         }
+         double xDiff = (this.Location.X + this.Zoom * Utilities.theMapItemOffset) - target.TerritoryCurrent.CenterPoint.X;
+         double yDiff = (this.Location.Y + this.Zoom * Utilities.theMapItemOffset) - target.TerritoryCurrent.CenterPoint.Y;
+         double rotation = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;
+         rotation -= (this.RotationHull + this.RotationOffsetHull); // subtract hull rotation to get turret rotation
+         if (rotation < 0)
+            rotation += 360.0;
+         if (0.0 < rotation && rotation <= 30.0)
+         {
+            this.RotationTurret = 0.0;
+         }
+         else if (30.0 < rotation && rotation <= 90.0) //------------
+         {
+            this.RotationTurret = 60.0;
+         }
+         else if (90.0 < rotation && rotation <= 150.0)  //------------
+         {
+            this.RotationTurret = 120.0;
+         }
+         else if (150.0 < rotation && rotation <= 210.0) //------------
+         {
+            this.RotationTurret = 180.0;
+         }
+         else if (210.0 < rotation && rotation <= 270.0) //------------
+         {
+            this.RotationTurret = 240.0;
+         }
+         else if (270.0 < rotation && rotation <= 360.0) //------------
+         {
+            this.RotationTurret = 300.0;
+         }
+         else  //------------
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetMapItemRotationTurret(): reached default with rotation=" + rotation.ToString() + " mi=" + this.Name + " t=" + this.TerritoryCurrent.Name);
+            return false;
+         }
+         this.RotationOffsetTurret = rotation - this.RotationTurret;
+         Logger.Log(LogEnum.LE_SHOW_ROTATION, "SetMapItemRotationTurret(): xDiff=" + xDiff.ToString("F2") + " yDiff=" + yDiff.ToString("F2") + " r=" + this.RotationHull.ToString("F2") + " t=" + this.TerritoryCurrent.Name + " X=" + this.Location.X + " Y=" + this.Location.Y);
          return true;
       }
       public bool UpdateMapRotation(string facing)
@@ -370,18 +428,18 @@ namespace Pattons_Best
             if( 0 == randomNum )
             {
                this.RotationHull -= 60.0;
-               this.RotationOffset += -30 + Utilities.RandomGenerator.Next(0, 60);
+               this.RotationOffsetHull += -30 + Utilities.RandomGenerator.Next(0, 60);
             }
             else
             {
                this.RotationHull += 60.0;
-               this.RotationOffset += -30 + Utilities.RandomGenerator.Next(0, 60);
+               this.RotationOffsetHull += -30 + Utilities.RandomGenerator.Next(0, 60);
             }
          }
          else if ("Rear" == facing)
          {
             this.RotationHull -= 180.0;
-            this.RotationOffset += -15 + Utilities.RandomGenerator.Next(0, 30);
+            this.RotationOffsetHull += -15 + Utilities.RandomGenerator.Next(0, 30);
          }
          else 
          {
@@ -457,7 +515,7 @@ namespace Pattons_Best
                {
                   RotateTransform rotateTransform = new RotateTransform();
                   imgTurret.RenderTransformOrigin = new Point(0.5, 0.5);
-                  rotateTransform.Angle = mi.RotationTurret;
+                  rotateTransform.Angle = mi.RotationTurret + mi.RotationOffsetTurret;
                   imgTurret.RenderTransform = rotateTransform;
                   g.Children.Add(imgTurret);
                   Canvas.SetLeft(imgTurret, 0);
@@ -548,7 +606,7 @@ namespace Pattons_Best
                   Image overlay1 = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage("OHIDE") };
                   RotateTransform rotateTransform = new RotateTransform();
                   overlay1.RenderTransformOrigin = new Point(0.5, 0.5);
-                  rotateTransform.Angle = -(mi.RotationHull + mi.RotationOffset);
+                  rotateTransform.Angle = -(mi.RotationHull + mi.RotationOffsetHull);
                   overlay1.RenderTransform = rotateTransform;
                   g.Children.Add(overlay1);
                }

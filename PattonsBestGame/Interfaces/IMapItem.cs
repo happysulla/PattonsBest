@@ -19,9 +19,10 @@ namespace Pattons_Best
       bool IsMoved { get; set; }               // If Sherman moved, it cannot fire unless it has HVSS
       int Count { get; set; }
       IMapPoint Location { get; set; }       // top left corner of MapItem
-      double RotationOffset { get; set; }      
-      double RotationTurret { get; set; }
+      double RotationOffsetHull { get; set; }
       double RotationHull { get; set; }      // rotation to point at location
+      double RotationOffsetTurret { get; set; }
+      double RotationTurret { get; set; }
       //----------------------------------------
       ITerritory TerritoryCurrent { get; set; }
       ITerritory TerritoryStarting { get; set; }
@@ -51,6 +52,7 @@ namespace Pattons_Best
       string GetEnemyUnit();
       void SetBloodSpots(int percent = 40);
       bool SetMapItemRotation(IMapItem target);
+      bool SetMapItemRotationTurret(IMapItem target);
       bool UpdateMapRotation(string facing);
    }
    //==========================================

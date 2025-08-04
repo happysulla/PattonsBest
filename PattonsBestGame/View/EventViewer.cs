@@ -890,8 +890,6 @@ namespace Pattons_Best
                if (null != loaderSpot)
                {
                   Image imge015 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c18LoaderSpot"), Width = 100, Height = 100, Name = "PreparationsCommanderSpot" };
-                  myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("                                           "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge015));
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -1112,7 +1110,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.IsExitArea() returned false");
                      return false;
                   }
-                  if (true == isExitArea)
+                  if (true == isExitArea)  // This occurs when no fight happens in exit territory
                   {
                      imge032.Name = "MovementStartAreaRestart";
                      b2.Content = "r4.51";
@@ -1291,6 +1289,11 @@ namespace Pattons_Best
                   return false;
                }
                int modifiere043c = TableMgr.GetWoundsModifier(gi, driver, false, false, false);
+               if (TableMgr.FN_ERROR == modifiere043c)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): TableMgr.GetWoundsModifier() returned error for driver");
+                  return false;
+               }
                myTextBlock.Inlines.Add(new Run("Wounds Modifier: "));
                myTextBlock.Inlines.Add(new Run(modifiere043c.ToString()));
                myTextBlock.Inlines.Add(new LineBreak());
@@ -1330,6 +1333,11 @@ namespace Pattons_Best
                   return false;
                }
                int modifiere043d = TableMgr.GetWoundsModifier(gi, assistant, false, false, false);
+               if (TableMgr.FN_ERROR == modifiere043d)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): TableMgr.GetWoundsModifier() returned error for assistant");
+                  return false;
+               }
                myTextBlock.Inlines.Add(new Run("Wounds Modifier: "));
                myTextBlock.Inlines.Add(new Run(modifiere043d.ToString()));
                myTextBlock.Inlines.Add(new LineBreak());
@@ -1339,6 +1347,11 @@ namespace Pattons_Best
                   int combo = gi.DieResults[key][0] + modifiere043d;
                   assistant.Zoom = 2.0;
                   int modifier = TableMgr.GetWoundsModifier(gi, assistant, false, false, false);
+                  if (TableMgr.FN_ERROR == modifier)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): TableMgr.GetWoundsModifier() returned error for assistant");
+                     return false;
+                  }
                   string result = TableMgr.SetWounds(gi, assistant, gi.DieResults[key][0], modifier);
                   if ("ERROR" == result)
                   {
@@ -4255,13 +4268,12 @@ namespace Pattons_Best
             //--------------------------------------------------
             outAction = GameAction.BattleAmbushStart;
             int enemyCount = 0;
-            bool isEnemyUnitAvailableForAirStrike = false;
             IMapItems removals = new MapItems();
             foreach (IStack stack in myGameInstance.BattleStacks)
             {
                Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ShowBattleSetupResults(): stack=" + stack.ToString());
                bool isEnemyUnitInTerritory = false;
-               IMapItem? advanceFireMarker = null; ;
+               IMapItem? advanceFireMarker = null;
                foreach (IMapItem mi in stack.MapItems)
                {
                   Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ShowBattleSetupResults(): mi=" + mi.Name);
@@ -4269,12 +4281,7 @@ namespace Pattons_Best
                   {
                      ++enemyCount;
                      Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ShowBattleSetupResults(): c=" + enemyCount);
-                     if (((false == lastReport.Weather.Contains("Fog")) && (false == lastReport.Weather.Contains("Falling"))) || (("B6M" != stack.Territory.Name) && ("B6L" != stack.Territory.Name)))
-                     {
-                        isEnemyUnitAvailableForAirStrike = true;
-                        isEnemyUnitInTerritory = true;
-                        break;
-                     }
+                     isEnemyUnitInTerritory = true;
                   }
                   if (true == mi.Name.Contains("AdvanceFire"))
                      advanceFireMarker = mi;
@@ -4291,7 +4298,7 @@ namespace Pattons_Best
             {
                if (true == isArtilleryStrike)
                   outAction = GameAction.BattleResolveArtilleryFire;
-               else if ((true == isAirStrike) && (true == isEnemyUnitAvailableForAirStrike))
+               else if ( (true == isAirStrike) && (false == lastReport.Weather.Contains("Fog")) && (false == lastReport.Weather.Contains("Falling")) )
                   outAction = GameAction.BattleResolveAirStrike;
             }
             //--------------------------------------------------
@@ -4340,7 +4347,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "ShowBattleSetupFireResults(): AmbushRandomEvent e=" + myGameInstance.EventActive);
             outAction = GameAction.BattleRoundSequenceStart; // ShowBattleSetupFireResults() - AmbushRandomEvent 
          }
-         else if (GamePhase.Movement == myGameInstance.GamePhase)
+         else if (GamePhase.Battle == myGameInstance.GamePhase)
          {
             if (null == myGameInstance.EnteredArea)
             {
@@ -4834,7 +4841,7 @@ namespace Pattons_Best
                            action = GameAction.PreparationsFinal;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
-                        case "Continue017":
+                        case "Continue017": // Prepareations Final
                            bool isMapStartAreaExist = false;
                            foreach( IStack stack in myGameInstance.MoveStacks )
                            {
@@ -4847,10 +4854,20 @@ namespace Pattons_Best
                                  }
                               }
                            }
-                           if( false == isMapStartAreaExist)
-                              action = GameAction.MovementStartAreaSet;
+                           //--------------------------------------------------
+                           bool isExitArea;
+                           if (false == myGameInstance.IsExitArea(out isExitArea))
+                           {
+                              Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): IsExitArea() returned false");
+                              return;
+                           }
+                           //--------------------------------------------------
+                           if (true == isExitArea)
+                              action = GameAction.MovementStartAreaRestartAfterBattle;
+                           else if ( false == isMapStartAreaExist)
+                              action = GameAction.MovementStartAreaSet; // Setting the first start area
                            else
-                              action = GameAction.MovementEnemyStrengthChoice;
+                              action = GameAction.MovementEnemyStrengthChoice; 
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "MovementExitAreaSet":

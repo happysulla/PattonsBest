@@ -2493,7 +2493,7 @@ namespace Pattons_Best
          int count = enemyUnit.TerritoryCurrent.Name.Count();
          if (3 != count)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): 3 != enemyUnit.TerritoryCurrent.Name=" + enemyUnit.TerritoryCurrent.Name);
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): 3 != enemyUnit.TerritoryCurrent.Name=" + enemyUnit.TerritoryCurrent.Name + " eu=" + enemyUnit.Name);
             return "ERROR";
          }
          char enemySector = enemyUnit.TerritoryCurrent.Name[count - 2];
@@ -2507,18 +2507,19 @@ namespace Pattons_Best
             case '3': rotation = 240.0; break;
             case '4': rotation = 300.0; break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): reached default enemySector=" + enemySector);
+               Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): reached default enemySector=" + enemySector + " eu=" + enemyUnit.Name);
                return "ERROR";
          }
-         double totalRotation = rotation - gi.Sherman.RotationHull;
+         //--------------------------------------------------------------
+         double totalRotation = rotation - gi.Sherman.RotationHull + 180.0;
          double or = totalRotation;
          if ("Hull" == hitLocation)
          {
-            if (totalRotation < 0.0)
+            while (totalRotation < 0.0)
                totalRotation += 360.0;
-            if (359.9 < totalRotation)
-               totalRotation = totalRotation - 360.0;
-            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "GetEnemyFireDirection(): turret: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ")  or=" + or.ToString("F1"));
+            while (359.9 < totalRotation)
+               totalRotation -= 360.0;
+            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "GetEnemyFireDirection(): hull: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ") - (tr=" + enemyUnit.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1") + " eu=" + enemyUnit.Name);
             switch (totalRotation)
             {
                case 0.0: return "H F";
@@ -2528,28 +2529,28 @@ namespace Pattons_Best
                case 240.0: return "H BL";
                case 300.0: return "H FL";
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): reached default r=" + rotation.ToString("F1") + " hr=" + gi.Sherman.RotationHull.ToString("F1") + " tr=" + gi.Sherman.RotationTurret.ToString("F1"));
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): hull: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ") - (tr=" + enemyUnit.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1") + " eu=" + enemyUnit.Name);
                   return "ERROR";
             }
          }
          if ("Turret" == hitLocation)
          {
             totalRotation -= enemyUnit.RotationTurret;
-            if (totalRotation < 0.0)
+            while (totalRotation < 0.0)
                totalRotation += 360.0;
-            if (359.9 < totalRotation)
-               totalRotation = totalRotation - 360.0;
-            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "GetEnemyFireDirection(): turret: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ") - (tr=" + enemyUnit.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1"));
-            switch (totalRotation)
+            while (359.9 < totalRotation)
+               totalRotation -= 360.0;
+            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "GetEnemyFireDirection(): turret: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ") - (tr=" + enemyUnit.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1") + " eu=" + enemyUnit.Name);
+            switch(totalRotation)
             {
-               case 0.0: return "T F";
-               case 60.0: return "T R";
-               case 120.0: return "T R";
+               case 0.0: return "H FL";
+               case 60.0: return "T F";
+               case 120.0: return "T F";
                case 180.0: return "T B";
                case 240.0: return "T L";
                case 300.0: return "T L";
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): reached default rotation=" + rotation.ToString("F1") + " hr=" + gi.Sherman.RotationHull.ToString("F1"));
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): turret: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ") - (tr=" + enemyUnit.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1") + " eu=" + enemyUnit.Name);
                   return "ERROR";
             }
          }
@@ -2924,7 +2925,7 @@ namespace Pattons_Best
                         modifier -= 30;
                      break;
                   default:
-                     Logger.Log(LogEnum.LE_ERROR, "GetExplosionModifier(): reached default for direction=" + death.myEnemyFireDirection);
+                     Logger.Log(LogEnum.LE_ERROR, "GetWoundsModifier(): reached default for direction=" + death.myEnemyFireDirection);
                      return FN_ERROR;
                }
             }

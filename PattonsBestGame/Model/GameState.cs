@@ -591,7 +591,7 @@ namespace Pattons_Best
       {
          try
          {
-            Logger.Log(LogEnum.LE_RESET_ROLL_STATE, "MovementPhaseRestart(): resetting die rolls");
+            Logger.Log(LogEnum.LE_RESET_ROLL_STATE, "ResetDieResults(): resetting die rolls");
             foreach (KeyValuePair<string, int[]> kvp in gi.DieResults)
             {
                for (int i = 0; i < 3; ++i)
@@ -600,14 +600,14 @@ namespace Pattons_Best
          }
          catch (Exception)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MovementPhaseRestart(): reset rolls");
+            Logger.Log(LogEnum.LE_ERROR, "ResetDieResults(): reset rolls");
             return false;
          }
          return true;
       }
       protected bool ResolveEmptyBattleBoard(IGameInstance gi, IAfterActionReport report)
       {
-         gi.Sherman.RotationOffset = 0.0;
+         gi.Sherman.RotationOffsetHull = 0.0;
          gi.Sherman.RotationTurret = 0.0;
          gi.Sherman.RotationHull = 0.0;
          gi.Sherman.IsMoving = false;
@@ -638,7 +638,7 @@ namespace Pattons_Best
             return false;
          }
          bool isCounterInStack = false;
-         foreach (IMapItem mi1 in stack.MapItems)
+         foreach (IMapItem mi1 in stack.MapItems) // is there a strength counter in the area - need to remove it
          {
             if (true == mi1.Name.Contains("Strength"))
             {
@@ -660,10 +660,16 @@ namespace Pattons_Best
          usControl.Location = mp;
          gi.MoveStacks.Add(usControl);
          //-----------------------------------
-         int basePoints = 1;
-         if (EnumScenario.Advance == report.Scenario || EnumScenario.Battle == report.Scenario)
-            basePoints *= 2;
-         report.VictoryPtsCaptureArea += basePoints;
+         bool isExitArea;
+         if( false == gi.IsExitArea(out isExitArea) )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResolveEmptyBattleBoard(): IsExitArea() returned false");
+            return false;
+         }
+         if( true == isExitArea )
+            report.VictoryPtsCapturedExitArea++;
+         else
+            report.VictoryPtsCaptureArea++;
          //-----------------------------------
          gi.BattlePhase = BattlePhase.None;
          //-------------------------------------------------------
@@ -2179,13 +2185,19 @@ namespace Pattons_Best
                   theIs1stEnemyStrengthCheckTerritory = true; // do not do enemy strength check on first area which is the start area
                   gi.EventDisplayed = gi.EventActive = "e018";
                   break;
-               case GameAction.MovementStartAreaRestart:
+               case GameAction.MovementStartAreaRestart: // No fight occurs
                   if (false == MovementPhaseRestart(gi, lastReport))
                   {
                      returnStatus = "SetStartArea() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                   }
-
+                  break;
+               case GameAction.MovementStartAreaRestartAfterBattle: // Win a battle resulting in empty battle board
+                  if (false == MovementPhaseRestart(gi, lastReport))
+                  {
+                     returnStatus = "SetStartArea() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                  }
                   break;
                case GameAction.MovementStartAreaSetRoll:
                   gi.DieResults[key][0] = dieRoll;
@@ -2552,11 +2564,6 @@ namespace Pattons_Best
       }
       private bool SkipBattleBoard(IGameInstance gi, IAfterActionReport report)
       {
-         int basePoints = 1;
-         if (EnumScenario.Advance == report.Scenario || EnumScenario.Battle == report.Scenario)
-            basePoints *= 2;
-         report.VictoryPtsCaptureArea += basePoints;
-         //------------------------------------
          gi.GamePhase = GamePhase.Movement;
          gi.EventDisplayed = gi.EventActive = "e033"; // SkipBattleBoard()
          gi.DieRollAction = GameAction.DieRollActionNone;
@@ -2589,6 +2596,17 @@ namespace Pattons_Best
                break;
             }
          }
+         //------------------------------------
+         bool isExitArea;
+         if (false == gi.IsExitArea(out isExitArea))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.IsExitArea() returned false");
+            return false;
+         }
+         if (true == isExitArea)
+            report.VictoryPtsCapturedExitArea++;
+         else
+            report.VictoryPtsCaptureArea++;
          return true;
       }
       private bool MoveTaskForceToNewArea(IGameInstance gi)
@@ -2691,10 +2709,6 @@ namespace Pattons_Best
       }
       private bool MovementPhaseRestart(IGameInstance gi, IAfterActionReport report)
       {
-         int basePoints = 10;
-         if (EnumScenario.Advance == report.Scenario || EnumScenario.Battle == report.Scenario)
-            basePoints *= 2;
-         report.VictoryPtsCapturedExitArea += basePoints;
          //--------------------------------------------------------------
          theIs1stEnemyStrengthCheckTerritory = true;
          gi.EventDisplayed = gi.EventActive = "e018";
@@ -6538,7 +6552,7 @@ namespace Pattons_Best
          totalFriendlyKia -= report.VictoryPtsFriendlySquad * 3;
          report.VictoryPtsTotalFriendlyForces = totalFriendlyKia * scenarioMultiplierKOGermanUnit;
          //----------------------------------
-         report.VictoryPtsTotalTerritory = (report.VictoryPtsCaptureArea + report.VictoryPtsCapturedExitArea) * scenarioMultiplierCapturedMapArea;
+         report.VictoryPtsTotalTerritory = (report.VictoryPtsCaptureArea + 10*report.VictoryPtsCapturedExitArea) * scenarioMultiplierCapturedMapArea;
          report.VictoryPtsTotalTerritory -= (report.VictoryPtsLostArea * scenarioMultiplierLoseMapArea);
          //----------------------------------
          report.VictoryPtsTotalEngagement = report.VictoryPtsTotalYourTank + report.VictoryPtsTotalFriendlyForces + report.VictoryPtsTotalEngagement;
@@ -6769,7 +6783,7 @@ namespace Pattons_Best
          gi.EnteredHexes.Clear();
          //-------------------------------------------------------
          gi.Sherman.IsMoved = false;
-         gi.Sherman.RotationOffset = 0.0;
+         gi.Sherman.RotationOffsetHull = 0.0;
          gi.Sherman.RotationTurret = 0.0;
          gi.Sherman.RotationHull = 0.0;
          gi.Sherman.IsMoving = false;

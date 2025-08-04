@@ -28,6 +28,11 @@ namespace Pattons_Best
          myDay = gi.Day;
          myIsAmbush = ((BattlePhase.Ambush == gi.BattlePhase) || (BattlePhase.AmbushRandomEvent == gi.BattlePhase) );
          myEnemyFireDirection = TableMgr.GetEnemyFireDirection(gi, eu, myHitLocation);
+         if("ERROR" == myEnemyFireDirection)
+         {
+            myCtorError = true;
+            Logger.Log(LogEnum.LE_ERROR, "ShermanDeath(): GetEnemyFireDirection() returned ERROR");
+         }
       }
    }
    public class PanzerfaustAttack
