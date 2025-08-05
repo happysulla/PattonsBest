@@ -2456,6 +2456,7 @@ namespace Pattons_Best
          else if ((true == enemyUnit.Name.Contains("Pak40")) || (true == enemyUnit.Name.Contains("Pak38")))
             sb51.Append("+20 for firing at 50L or 75L AT Gun\n");
          //==================================
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "UpdateEventContentGetToHitModifier(): ------------>>>>>>>>>>>gi.ShermanTypeOfFire=" + gi.ShermanTypeOfFire);
          if ("Direct" == gi.ShermanTypeOfFire)   // EventViewer.UpdateEventContentGetToHitModifier()
          {
             //----------------------------

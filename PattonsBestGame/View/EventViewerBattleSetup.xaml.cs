@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,7 +20,9 @@ namespace Pattons_Best
    {
       public delegate bool EndBattleSetupCallback();
       private const int STARTING_ASSIGNED_ROW = 6;
+      private const int MAX_GRID_ROWS = 14;
       private const int NO_FACING = -1;
+      private const int EXISTING_UNIT = 10000;
       public enum E046Enum
       {
          ACTIVATION,
@@ -58,7 +61,7 @@ namespace Pattons_Best
          public string myAdvanceFireResult = "UNINT";
          public GridRowAdvanceFire() { }
       }
-      private GridRowAdvanceFire[] myAdvanceFireGridRows = new GridRowAdvanceFire[12];
+      private GridRowAdvanceFire[] myAdvanceFireGridRows = new GridRowAdvanceFire[MAX_GRID_ROWS];
       public struct GridRow
       {
          public IMapItem? myMapItem;
@@ -86,8 +89,22 @@ namespace Pattons_Best
             myDieRollFacing = Utilities.NO_RESULT;
             myDieRollTerrain = Utilities.NO_RESULT;
          }
+         public GridRow(IMapItem mi)
+         {
+            myMapItem = mi;
+            myActivation = mi.GetEnemyUnit();
+            mySector = "Unknown";
+            myRange = "Unknown";
+            myFacing = "Unknown";
+            myTerrain = "Unknown";
+            myDieRollActivation = EXISTING_UNIT;
+            myDieRollSector = Utilities.NO_RESULT;
+            myDieRollRange = Utilities.NO_RESULT;
+            myDieRollFacing = Utilities.NO_RESULT;
+            myDieRollTerrain = Utilities.NO_RESULT;
+         }
       };
-      private GridRow[] myGridRows = new GridRow[12]; // five possible crew members
+      private GridRow[] myGridRows = new GridRow[MAX_GRID_ROWS]; // five possible crew members
       //---------------------------------------------------
       private IGameEngine? myGameEngine;
       private IGameInstance? myGameInstance;
@@ -208,7 +225,8 @@ namespace Pattons_Best
          }
          myAreaType = myGameInstance.EnteredArea.Type;
          //--------------------------------------------------
-         if( GamePhase.Battle == myGameInstance.GamePhase )
+         int startingRow = 0;
+         if( GamePhase.Battle == myGameInstance.GamePhase ) // Battele Phase setsup initial forces 
          {
             IStack? stack = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
             if (null == stack)
@@ -216,26 +234,36 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): stack=null");
                return false;
             }
+            IMapItem? strengthCounter = null;
             foreach (IMapItem mi1 in stack.MapItems)  // determine how many to activiate based on enemy strength in area
             {
-               if (true == mi1.Name.Contains("Strength"))
+               if( true == mi1.IsEnemyUnit())
                {
-                  if (1 == mi1.Count)
-                     myMaxRowCount = 2;
-                  else if (2 == mi1.Count)
-                     myMaxRowCount = 3;
-                  else if (3 == mi1.Count)
-                     myMaxRowCount = 4;
-                  else
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): reached default mi1.Count =" + mi1.Count.ToString());
-                     return false;
-                  }
-                  break;
+                  myGridRows[startingRow] = new GridRow(mi1);
+                  startingRow++;
+                  myMaxRowCount++;
                }
+               if (true == mi1.Name.Contains("Strength"))
+                  strengthCounter = mi1;
+            }
+            if( null == strengthCounter )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): did not find Enemy Strength Counter in the territory=" + myGameInstance.EnteredArea.Name);
+               return false;
+            }
+            if (1 == strengthCounter.Count)
+               myMaxRowCount += 2;
+            else if (2 == strengthCounter.Count)
+               myMaxRowCount += 3;
+            else if (3 == strengthCounter.Count)
+               myMaxRowCount += 4;
+            else
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): reached default strengthCounter.Count =" + strengthCounter.Count.ToString());
+               return false;
             }
          }
-         else
+         else // Battle Sequence Round Phase adds reinforcements
          {
             if (EnumScenario.Advance == lastReport.Scenario) // activate one additional for Advance and two additional for Battle | Counterattack
                myMaxRowCount = 1;
@@ -272,7 +300,7 @@ namespace Pattons_Best
             ++i;
          }
          //--------------------------------------------------
-         for (int i1 = 0; i1 < myMaxRowCount; ++i1)
+         for (int i1 = startingRow; i1 < myMaxRowCount; ++i1)
             myGridRows[i1] = new GridRow();
          if (false == UpdateGrid())
          {
@@ -512,7 +540,10 @@ namespace Pattons_Best
                case E046Enum.ACTIVATION:
                   if( Utilities.NO_RESULT < myGridRows[i].myDieRollActivation)
                   {
-                     Label label1 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRollActivation.ToString() };
+                     string labelContent = myGridRows[i].myDieRollActivation.ToString();
+                     if(EXISTING_UNIT == myGridRows[i].myDieRollActivation)
+                        labelContent = "NA";
+                     Label label1 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = labelContent };
                      myGrid.Children.Add(label1);
                      Grid.SetRow(label1, rowNum);
                      Grid.SetColumn(label1, 0);

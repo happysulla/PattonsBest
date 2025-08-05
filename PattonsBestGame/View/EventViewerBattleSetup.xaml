@@ -34,7 +34,9 @@
          <RowDefinition Height="Auto"></RowDefinition>
          <RowDefinition Height="Auto"></RowDefinition>
          <RowDefinition Height="Auto"></RowDefinition>
-      </Grid.RowDefinitions>
+        <RowDefinition Height="Auto"></RowDefinition>
+        <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
       <StackPanel Grid.Row="0" Grid.ColumnSpan="6" Orientation="Horizontal">
          <TextBlock Name="myTextBlockHeader" Text="r4.62 Battle Setup" FontWeight="Bold" FontFamily='Georgia' FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>
          <Button Name='myButtonR462' Content='r4.62' FontFamily='Courier New' FontSize='12' Margin="5,0,0,0" Height="14" Click="ButtonRule_Click" />

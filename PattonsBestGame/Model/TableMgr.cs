@@ -4397,6 +4397,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): Pak38/40 +20 mod=" + toHitModifierNum.ToString());
          }
          //==================================
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): ------------>>>>>>>>>>>gi.ShermanTypeOfFire=" + gi.ShermanTypeOfFire);
          if ("Direct" == gi.ShermanTypeOfFire) // TableMgr.GetShermanToHitModifier()
          {
             if (true == enemyUnit.IsVehicle)

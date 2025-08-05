@@ -2623,7 +2623,7 @@ namespace Pattons_Best
                {
                   if (false == StartBattle(gi, lastReport))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattleCheckRoll(): StartBattle() returned false" + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattleCheckRoll(): StartBattle() returned false" );
                      return false;
                   }
                }
@@ -2638,7 +2638,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "ResolveBattleCheckRoll(): " + gi.MoveStacks.ToString());
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "ResolveBattleCheckRoll(): reached default with resistance=" + gi.BattleResistance.ToString(););
+               Logger.Log(LogEnum.LE_ERROR, "ResolveBattleCheckRoll(): reached default with resistance=" + gi.BattleResistance.ToString());
                return false;
          }
          return true;
@@ -5316,14 +5316,7 @@ namespace Pattons_Best
             return false;
          }
          //---------------------------------------------------------------
-         string gunLoadType = gi.GetGunLoadType();
-         if( false == gi.FireAndReloadGun()) // FireMainGunAtEnemyUnits
-         {
-            Logger.Log(LogEnum.LE_ERROR, "FireMainGunAtEnemyUnits(): FireAndReloadGun() returned false");
-            return false;
-         }
-         //---------------------------------------------------------------
-         if( true == gi.TargetMainGun.IsVehicle )
+         if (true == gi.TargetMainGun.IsVehicle)
          {
             string facingOfTarget = TableMgr.GetShermanFireDirection(gi, gi.TargetMainGun, "Hull");  // Use HULL to determine if IsShermanFiringAtFront
             if ("ERROR" == facingOfTarget)
@@ -5356,6 +5349,13 @@ namespace Pattons_Best
             return false;
          }
          double combo = toHitNumber - modifier;
+         //---------------------------------------------------------------
+         string gunLoadType = gi.GetGunLoadType();
+         if( false == gi.FireAndReloadGun()) // FireMainGunAtEnemyUnits - gi.ShermanTypeOfFire get reset in FireAndReloadGun
+         {
+            Logger.Log(LogEnum.LE_ERROR, "FireMainGunAtEnemyUnits(): FireAndReloadGun() returned false");
+            return false;
+         }
          //---------------------------------------------------------------
          bool isCriticalHit = false;
          if (dieRoll < 4)
