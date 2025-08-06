@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
-using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,9 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.Xml.Linq;
 using WpfAnimatedGif;
-using static Pattons_Best.EventViewerEnemyAction;
 
 namespace Pattons_Best
 {
@@ -22,7 +18,7 @@ namespace Pattons_Best
       private const int STARTING_ASSIGNED_ROW = 6;
       private const int MAX_GRID_ROWS = 14;
       private const int NO_FACING = -1;
-      private const int EXISTING_UNIT = 10000;
+      private const int EXISTING_UNIT = 1000;
       public enum E046Enum
       {
          ACTIVATION,
@@ -240,6 +236,24 @@ namespace Pattons_Best
                if( true == mi1.IsEnemyUnit())
                {
                   myGridRows[startingRow] = new GridRow(mi1);
+                  if ( false == mi1.IsVehicle )
+                  {
+                     myGridRows[startingRow].myDieRollFacing = NO_FACING;
+                     myGridRows[startingRow].myFacing = "NA";
+                  }
+                  switch (mi1.GetEnemyUnit())
+                  {
+                     case "ATG": case "Pak43": mi1.Zoom = Utilities.ZOOM + 0.1; break;
+                     case "Pak38": case "Pak40": mi1.Zoom = Utilities.ZOOM; break;
+                     case "LW": case "MG": mi1.Zoom = Utilities.ZOOM; break;
+                     case "PSW": case "SPW": mi1.Zoom = Utilities.ZOOM + 0.2; break;
+                     case "SPG": case "STuGIIIg": case "MARDERII": case "MARDERIII": case "JdgPzIV": case "JdgPz38t": mi1.Zoom = Utilities.ZOOM + 0.5; break;
+                     case "TANK": case "PzIV": case "PzV": case "PzVIb": case "PzVIe": mi1.Zoom = Utilities.ZOOM + 0.5; break;
+                     case "TRUCK": mi1.Zoom = Utilities.ZOOM + 0.3; break;
+                     default:
+                        Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): reached default with enemyUnit=" + mi1.GetEnemyUnit());
+                        return false;
+                  }
                   startingRow++;
                   myMaxRowCount++;
                }
@@ -532,6 +546,7 @@ namespace Pattons_Best
          foreach (UIElement ui1 in results)
             myGrid.Children.Remove(ui1);
          //------------------------------------------------------------
+         string labelContent = "";
          for (int i = 0; i < myMaxRowCount; ++i)
          {
             int rowNum = i + STARTING_ASSIGNED_ROW;
@@ -540,7 +555,7 @@ namespace Pattons_Best
                case E046Enum.ACTIVATION:
                   if( Utilities.NO_RESULT < myGridRows[i].myDieRollActivation)
                   {
-                     string labelContent = myGridRows[i].myDieRollActivation.ToString();
+                     labelContent = myGridRows[i].myDieRollActivation.ToString();
                      if(EXISTING_UNIT == myGridRows[i].myDieRollActivation)
                         labelContent = "NA";
                      Label label1 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = labelContent };
@@ -578,13 +593,19 @@ namespace Pattons_Best
                   }
                   break;
                case E046Enum.SPW_OR_PSW_ROLL:
-                  Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRollActivation.ToString() };
+                  labelContent = myGridRows[i].myDieRollActivation.ToString();
+                  if (EXISTING_UNIT == myGridRows[i].myDieRollActivation)
+                     labelContent = "NA";
+                  Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = labelContent };
                   myGrid.Children.Add(label2);
                   Grid.SetRow(label2, rowNum);
                   Grid.SetColumn(label2, 0);
                   break;
                case E046Enum.PLACE_SECTOR:
-                  Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRollActivation.ToString() };
+                  labelContent = myGridRows[i].myDieRollActivation.ToString();
+                  if (EXISTING_UNIT == myGridRows[i].myDieRollActivation)
+                     labelContent = "NA";
+                  Label label4 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = labelContent };
                   myGrid.Children.Add(label4);
                   Grid.SetRow(label4, rowNum);
                   Grid.SetColumn(label4, 0);
@@ -621,7 +642,7 @@ namespace Pattons_Best
                   }
                   break;
                case E046Enum.PLACE_RANGE:
-                  Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRollActivation.ToString() };
+                  Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = labelContent };
                   myGrid.Children.Add(label5);
                   Grid.SetRow(label5, rowNum);
                   Grid.SetColumn(label5, 0);
@@ -663,7 +684,10 @@ namespace Pattons_Best
                   }
                   break;
                case E046Enum.PLACE_FACING:
-                  label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRollActivation.ToString() };
+                  labelContent = myGridRows[i].myDieRollActivation.ToString();
+                  if (EXISTING_UNIT == myGridRows[i].myDieRollActivation)
+                     labelContent = "NA";
+                  label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = labelContent };
                   myGrid.Children.Add(label5);
                   Grid.SetRow(label5, rowNum);
                   Grid.SetColumn(label5, 0);
@@ -711,7 +735,10 @@ namespace Pattons_Best
                   break;
                case E046Enum.PLACE_TERRAIN:
                case E046Enum.SHOW_RESULTS:
-                  label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myGridRows[i].myDieRollActivation.ToString() };
+                  labelContent = myGridRows[i].myDieRollActivation.ToString();
+                  if (EXISTING_UNIT == myGridRows[i].myDieRollActivation)
+                     labelContent = "NA";
+                  label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = labelContent };
                   myGrid.Children.Add(label5);
                   Grid.SetRow(label5, rowNum);
                   Grid.SetColumn(label5, 0);

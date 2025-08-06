@@ -338,52 +338,121 @@ namespace Pattons_Best
       protected bool SetStartArea(IGameInstance gi, int dieRoll)
       {
          string name = "M" + dieRoll.ToString() + "E";
-         ITerritory? t = Territories.theTerritories.Find(name);
-         if (null == t)
+         ITerritory? tStartNum = Territories.theTerritories.Find(name);
+         if (null == tStartNum)
          {
             Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): startArea not found for " + name);
             return false;
          }
-         IMapItem startArea = new MapItem("StartArea", 1.0, "c33StartArea", t);
+         IMapItem startArea = new MapItem("StartArea", 1.0, "c33StartArea", tStartNum);
          startArea.Count = dieRoll;
          gi.MoveStacks.Add(startArea);
          //-----------------------------------------
-         if (0 == t.Adjacents.Count)
+         if (0 == tStartNum.Adjacents.Count)
          {
             Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): no adjacents for start area=" + name);
             return false;
          }
-         ITerritory? adjacent = Territories.theTerritories.Find(t.Adjacents[0]); // should only be one adjacent to start area
-         if (null == adjacent)
+         ITerritory? tStart = Territories.theTerritories.Find(tStartNum.Adjacents[0]); // should only be one adjacent to start area
+         if (null == tStart)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): taskForceArea adjacent=" + t.Adjacents[0]);
+            Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): taskForceArea tStart=" + tStartNum.Adjacents[0]);
             return false;
          }
-         IMapItem taskForce = new MapItem("TaskForce", 1.3, "c35TaskForce", adjacent);
+         IMapItem taskForce = new MapItem("TaskForce", 1.3, "c35TaskForce", tStart);
          gi.MoveStacks.Add(taskForce);
          //-----------------------------------------
-         string name1 = t.Adjacents[0];
-         ITerritory? controlled = Territories.theTerritories.Find(name1); // should only be one adjacent to start area
-         if (null == controlled)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): controlled not found name=" + t.Adjacents[0]);
-            return false;
-         }
          string miName = "UsControl" + Utilities.MapItemNum.ToString();
          Utilities.MapItemNum++;
-         IMapItem usControl = new MapItem(miName, 1.0, "c28UsControl", controlled);
+         IMapItem usControl = new MapItem(miName, 1.0, "c28UsControl", tStart);
          usControl.Count = 0; // 0=us  1=light  2=medium  3=heavy
-         IMapPoint mp = Territory.GetRandomPoint(controlled, usControl.Zoom * Utilities.theMapItemOffset);
+         IMapPoint mp = Territory.GetRandomPoint(tStart, usControl.Zoom * Utilities.theMapItemOffset);
          usControl.Location = mp;
          gi.MoveStacks.Add(usControl);
          //---------------------------------------------
-         EnteredHex newHex = new EnteredHex(gi, adjacent, ColorActionEnum.CAE_START); // SetStartArea()
+         EnteredHex newHex = new EnteredHex(gi, tStart, ColorActionEnum.CAE_START); // SetStartArea()
          if (true == newHex.CtorError)
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): newHex.Ctor=true");
             return false;
          }
          gi.EnteredHexes.Add(newHex);
+         //---------------------------------------------
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetStartArea():  lastReport=null");
+            return false;
+         }
+         foreach (string s in tStart.Adjacents) // Add Enemy Units to adjacent areas in the Move Board next to tStart.
+         {
+            if (true == s.EndsWith("E"))
+               continue;
+            ITerritory? t1 = Territories.theTerritories.Find(s);
+            if (null == t1)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): t=null for " + s);
+               return false;
+            }
+            int diceRoll = 0;
+            int die1 = Utilities.RandomGenerator.Next(0, 10);
+            int die2 = Utilities.RandomGenerator.Next(0, 10);
+            if (0 == die1 && 0 == die2)
+               diceRoll = 100;
+            else
+               diceRoll = die1 + 10 * die2;
+            string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
+            IMapItem? mi = null;
+            string nameEnemy = enemyUnit + Utilities.MapItemNum;
+            Utilities.MapItemNum++;
+            switch (enemyUnit)
+            {
+               case "ATG":
+                  mi = new MapItem(nameEnemy, 1.0, "c76UnidentifiedAtg", t1);
+                  break;
+               case "LW":
+                  mi = new MapItem(nameEnemy, 1.0, "c91Lw", t1);
+                  mi.IsSpotted = true;
+                  break;
+               case "MG":
+                  mi = new MapItem(nameEnemy, 1.0, "c92MgTeam", t1);
+                  mi.IsSpotted = true;
+                  break;
+               case "PSW/SPW":
+                  enemyUnit = "SPW";
+                  name = enemyUnit + Utilities.MapItemNum;
+                  Utilities.MapItemNum++;
+                  mi = new MapItem(nameEnemy, 1.0, "c89Psw232", t1);
+                  mi.IsVehicle = true;
+                  mi.IsSpotted = true;
+                  break;
+               case "SPG":
+                  mi = new MapItem(nameEnemy, 1.0, "c77UnidentifiedSpg", t1);
+                  mi.IsVehicle = true;
+                  break;
+               case "TANK":
+                  mi = new MapItem(nameEnemy, 1.0, "c78UnidentifiedTank", t1);
+                  mi.IsVehicle = true;
+                  mi.IsTurret = true;
+                  break;
+               case "TRUCK":
+                  mi = new MapItem(nameEnemy, 1.0, "c88Truck", t1);
+                  mi.IsVehicle = true;
+                  mi.IsSpotted = true;
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): reached default with enemyUnit=" + enemyUnit);
+                  return false;
+            }
+            if (null == mi)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): mi=null");
+               return false;
+            }
+            IMapPoint mpEnemy = Territory.GetRandomPoint(t1, mi.Zoom * Utilities.theMapItemOffset);
+            mi.Location = mpEnemy;
+            gi.MoveStacks.Add(mi);
+         }
          return true;
       }
       protected bool SetExitArea(IGameInstance gi, int dieRoll)
@@ -5212,6 +5281,7 @@ namespace Pattons_Best
             stack.MapItems.Add(strengthMarker);
          }
          //------------------------------------
+         enemyUnit.Zoom = 1.0;
          IMapPoint mp = Territory.GetRandomPoint(t, enemyUnit.Zoom * Utilities.theMapItemOffset); // add enemy unit to random location in area
          enemyUnit.Location.X = mp.X;
          enemyUnit.Location.Y = mp.Y;
@@ -6374,6 +6444,8 @@ namespace Pattons_Best
             foreach (IMapItem mi in stack.MapItems)
             {
                if (true == mi.Name.Contains("Advance"))
+                  removals.Add(mi);
+               if (true == mi.Name.Contains("Panzerfaust"))
                   removals.Add(mi);
             }
          }
