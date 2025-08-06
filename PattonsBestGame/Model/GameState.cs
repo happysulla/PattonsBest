@@ -3481,7 +3481,7 @@ namespace Pattons_Best
                                        isAdvancingFire = true;
                                  }
                               }
-                              string name = "Panzerfault" + Utilities.MapItemNum;
+                              string name = "Panzerfaust" + Utilities.MapItemNum;
                               Utilities.MapItemNum++;
                               IMapItem enemyUnit = new MapItem(name, Utilities.ZOOM, "c107Panzerfaust", tPanzerfault); // add panzerfault to battleboard
                               gi.BattleStacks.Add(enemyUnit);
