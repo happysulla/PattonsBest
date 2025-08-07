@@ -950,18 +950,17 @@ namespace Pattons_Best
                   }
                   if (0 < stack.MapItems.Count)
                   {
-                     IMapItem? mi = stack.MapItems[0];
-                     if (null == mi)
+                     if (EnumResistance.Light == gi.BattleResistance)
+                        imge021.Source = MapItem.theMapImages.GetBitmapImage("c36Light");
+                     else if (EnumResistance.Medium == gi.BattleResistance)
+                        imge021.Source = MapItem.theMapImages.GetBitmapImage("c37Medium");
+                     else if (EnumResistance.Heavy == gi.BattleResistance)
+                        imge021.Source = MapItem.theMapImages.GetBitmapImage("c38Heavy");
+                     else
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): mi=null for e021");
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default gi.Resistance=" + gi.BattleResistance.ToString());
                         return false;
                      }
-                     if (1 == mi.Count)
-                        imge021.Source = MapItem.theMapImages.GetBitmapImage("c36Light");
-                     else if (2 == mi.Count)
-                        imge021.Source = MapItem.theMapImages.GetBitmapImage("c37Medium");
-                     else
-                        imge021.Source = MapItem.theMapImages.GetBitmapImage("c38Heavy");
                   }
                   myTextBlock.Inlines.Add(new Run("                                           "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge021));
@@ -3193,7 +3192,7 @@ namespace Pattons_Best
          myTextBlock.Inlines.Add(new Run(modiferMgFiring));
          myTextBlock.Inlines.Add(new LineBreak());
          //------------------------------------
-         double toKillNum = TableMgr.GetShermanMgToKillNumber(gi, gi.TargetMg, mgType);
+         int toKillNum = TableMgr.GetShermanMgToKillNumber(gi, gi.TargetMg, mgType);
          if (TableMgr.FN_ERROR == toKillNum)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill(): GetShermanMgToKillNumber() returned error for key=" + key);
@@ -3217,7 +3216,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill(): GetShermanMgToKillModifier() returned error for key=" + key);
             return false;
          }
-         int comboMg = (int)toKillNum - modifier;
+         int comboMg = toKillNum - modifier;
          StringBuilder sb = new StringBuilder();
          sb.Append("To kill, roll ");
          sb.Append(toKillNum.ToString("F0"));

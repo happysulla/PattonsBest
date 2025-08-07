@@ -514,34 +514,33 @@ namespace Pattons_Best
             return false;
          }
          //-----------------------------------------------
-         EnumResistance resistance = EnumResistance.Heavy;
+         Logger.Log(LogEnum.LE_SHOW_RESISTANCE, "SetEnemyStrengthCounter(): report resistance=" + report.Resistance.ToString() + " dr=" + dieRoll.ToString());
          switch (report.Resistance)
          {
             case EnumResistance.Light:
                if (dieRoll < 8)
-                  resistance = EnumResistance.Light;
+                  gi.BattleResistance = EnumResistance.Light;
                else
-                  resistance = EnumResistance.Medium;
+                  gi.BattleResistance = EnumResistance.Medium;
                break;
             case EnumResistance.Medium:
                if (dieRoll < 6)
-                  resistance = EnumResistance.Light;
+                  gi.BattleResistance = EnumResistance.Light;
                else if (dieRoll < 10)
-                  resistance = EnumResistance.Medium;
+                  gi.BattleResistance = EnumResistance.Medium;
                break;
             case EnumResistance.Heavy:
                if (dieRoll < 5)
-                  resistance = EnumResistance.Light;
+                  gi.BattleResistance = EnumResistance.Light;
                else if (dieRoll < 9)
-                  resistance = EnumResistance.Medium;
+                  gi.BattleResistance = EnumResistance.Medium;
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "SetEnemyStrengthCounter(): reached default resistence=" + report.Resistance.ToString());
                return false;
          }
          //-------------------------------------
-         gi.BattleResistance = resistance;
-         if (EnumResistance.Light == resistance)
+         if (EnumResistance.Light == gi.BattleResistance)
          {
             string name = "StrengthLight" + Utilities.MapItemNum.ToString();
             ++Utilities.MapItemNum;
@@ -551,7 +550,7 @@ namespace Pattons_Best
             strengthMarker.Location = mp;
             gi.MoveStacks.Add(strengthMarker);
          }
-         else if (EnumResistance.Medium == resistance)
+         else if (EnumResistance.Medium == gi.BattleResistance)
          {
             string name = "StrengthMedium" + Utilities.MapItemNum.ToString();
             ++Utilities.MapItemNum;
@@ -561,7 +560,7 @@ namespace Pattons_Best
             strengthMarker.Location = mp;
             gi.MoveStacks.Add(strengthMarker);
          }
-         else if (EnumResistance.Heavy == resistance)
+         else if (EnumResistance.Heavy == gi.BattleResistance)
          {
             string name = "StrengthHeavy" + Utilities.MapItemNum.ToString();
             ++Utilities.MapItemNum;
@@ -573,7 +572,7 @@ namespace Pattons_Best
          }
          else
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetEnemyStrengthCounter(): reached default resistence=" + resistance.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "SetEnemyStrengthCounter(): reached default resistence=" + gi.BattleResistance.ToString());
             return false;
          }
          Utilities.MapItemNum++;
@@ -683,18 +682,6 @@ namespace Pattons_Best
          gi.Sherman.IsHullDown = false;
          gi.Sherman.IsBoggedDown = false;
          //--------------------------------
-         IMapItems removals = new MapItems();
-         foreach(IStack stackR in gi.BattleStacks) // remove everything but the sherman
-         {
-            foreach(IMapItem mi in stackR.MapItems)
-            {
-               if (false == mi.Name.Contains("Sherman"))
-                  removals.Add(mi);
-            }
-         }
-         foreach (IMapItem removal in removals)
-            gi.BattleStacks.Remove(removal);
-         //--------------------------------
          if (null == gi.EnteredArea)
          {
             Logger.Log(LogEnum.LE_ERROR, "ResolveEmptyBattleBoard(): gi.EnteredArea=null");
@@ -706,8 +693,30 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ResolveEmptyBattleBoard(): stack=null");
             return false;
          }
+         //--------------------------------
+         IMapItems removals = new MapItems();
+         foreach (IMapItem mi in stack.MapItems) // remove all enemy units that may have been here due to retreat or enemy overrun
+         {
+            if (true == mi.IsEnemyUnit())
+               removals.Add(mi);
+         }
+         foreach (IMapItem removal in removals)
+            gi.MoveStacks.Remove(removal);
+         //--------------------------------
+         removals.Clear();
+         foreach(IStack stackR in gi.BattleStacks) // remove everything but the sherman
+         {
+            foreach(IMapItem mi in stackR.MapItems)
+            {
+               if (false == mi.Name.Contains("Sherman"))
+                  removals.Add(mi);
+            }
+         }
+         foreach (IMapItem removal in removals)
+            gi.BattleStacks.Remove(removal);
+         //-----------------------------------
          bool isCounterInStack = false;
-         foreach (IMapItem mi1 in stack.MapItems) // is there a strength counter in the area - need to remove it
+         foreach (IMapItem mi1 in stack.MapItems) // Remove Enemy Strength Counter in area
          {
             if (true == mi1.Name.Contains("Strength"))
             {
@@ -721,7 +730,8 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ResolveEmptyBattleBoard(): isCounterInStack=false");
             return false;
          }
-         string miName = "UsControl" + Utilities.MapItemNum.ToString();
+         //-----------------------------------
+         string miName = "UsControl" + Utilities.MapItemNum.ToString(); // Add US Control Marker in area
          Utilities.MapItemNum++;
          IMapItem usControl = new MapItem(miName, 1.0, "c28UsControl", gi.EnteredArea);
          usControl.Count = 0; // 0=us  1=light  2=medium  3=heavy
@@ -730,7 +740,7 @@ namespace Pattons_Best
          gi.MoveStacks.Add(usControl);
          //-----------------------------------
          bool isExitArea;
-         if( false == gi.IsExitArea(out isExitArea) )
+         if( false == gi.IsExitArea(out isExitArea) ) // determine if this is exit area
          {
             Logger.Log(LogEnum.LE_ERROR, "ResolveEmptyBattleBoard(): IsExitArea() returned false");
             return false;
@@ -1321,7 +1331,7 @@ namespace Pattons_Best
          //lastReport.MainGunWP = 0;
          //lastReport.MainGunHBCI = 3;
          //--------------------------------------------------
-         int count = 2;
+         int count = 4;
          string tName = "ReadyRackHe" + count.ToString();
          ITerritory? t = Territories.theTerritories.Find(tName);
          if (null == t)
@@ -1333,7 +1343,7 @@ namespace Pattons_Best
          rr1.Count = count;
          gi.ReadyRacks.Add(rr1);
          //--------------------------------------------------
-         count = 2;
+         count = 3;
          tName = "ReadyRackAp" + count.ToString();
          t = Territories.theTerritories.Find(tName);
          if (null == t)
@@ -2165,6 +2175,13 @@ namespace Pattons_Best
                            Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
                         }
                      }
+                  }
+                  break;
+               case GameAction.BattleEmptyResolve:
+                  if (false == ResolveEmptyBattleBoard(gi, lastReport))
+                  {
+                     returnStatus = "ResolveEmptyBattleBoard() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
                   }
                   break;
                case GameAction.PreparationsFinal:
@@ -4103,8 +4120,8 @@ namespace Pattons_Best
                               }
                               else
                               {
-                                 int total = toKillNum + modifier;
-                                 Logger.Log(LogEnum.LE_SHOW_TO_KILL_MG_ATTACK, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceFireMachineGunRoll): (toKillNum=" + toKillNum.ToString() + "+ + (mod=" + modifier.ToString() + ") = (total=" + total.ToString() + ") dr=" + gi.DieResults[key][0].ToString());
+                                 int total = toKillNum - modifier;
+                                 Logger.Log(LogEnum.LE_SHOW_TO_KILL_MG_ATTACK, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceFireMachineGunRoll): (toKillNum=" + toKillNum.ToString() + ") + (mod=" + modifier.ToString() + ") = (total=" + total.ToString() + ") dr=" + gi.DieResults[key][0].ToString());
                                  if (gi.DieResults[key][0] <= total)
                                  {
                                     gi.ScoreYourVictoryPoint(lastReport, gi.TargetMg);

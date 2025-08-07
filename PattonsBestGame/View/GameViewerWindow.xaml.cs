@@ -732,7 +732,8 @@ namespace Pattons_Best
             return false;
          }
          bool isTargetInCurrentMainGunSector = Territory.IsEnemyUnitInSector(gi, sector);
-         bool isMainGunFiringAvailable = ((false == isTankMoving) && (false == gi.IsMalfunctionedMainGun) && (false == gi.IsBrokenMainGun) && (false == gi.IsBrokenGunSight) && (0 < totalAmmo) && ("None" != gi.GetGunLoadType()) && (false == isLoaderChangingLoad) );
+         bool iMainGunAbleAbleToFireDueToMoving = (false == isTankMoving) || (true == card.myIsHvss);
+         bool isMainGunFiringAvailable = ((true == iMainGunAbleAbleToFireDueToMoving) && (false == gi.IsMalfunctionedMainGun) && (false == gi.IsBrokenMainGun) && (false == gi.IsBrokenGunSight) && (0 < totalAmmo) && ("None" != gi.GetGunLoadType()) && (false == isLoaderChangingLoad) );
          bool isShermanMoveAvailable = ((false == gi.Sherman.IsThrownTrack) && (false == gi.Sherman.IsAssistanceNeeded) && (false == gi.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch));
          //---------------------------------
          myContextMenuCrewActions["Loader"].Items.Clear();
@@ -3815,6 +3816,7 @@ namespace Pattons_Best
                {
                   MenuItemCrewActionClickRemoveGunnerFire();  // Cannot fire if moving and do not have HVSS
                   MenuItemCrewActionClickRemoveGunnerRotateAndFire();
+                  MenuItemCrewActionClickRemoveCommanderDirectFire();
                }
                break;
             case "Driver_ForwardToHullDown":
@@ -3824,6 +3826,7 @@ namespace Pattons_Best
                {
                   MenuItemCrewActionClickRemoveGunnerFire();  // Cannot fire if moving and do not have HVSS
                   MenuItemCrewActionClickRemoveGunnerRotateAndFire();
+                  MenuItemCrewActionClickRemoveCommanderDirectFire();
                }
                break;
             case "Driver_Reverse":
@@ -3833,6 +3836,7 @@ namespace Pattons_Best
                {
                   MenuItemCrewActionClickRemoveGunnerFire();  // Cannot fire if moving and do not have HVSS
                   MenuItemCrewActionClickRemoveGunnerRotateAndFire();
+                  MenuItemCrewActionClickRemoveCommanderDirectFire();
                }
                break;
             case "Driver_ReverseToHullDown":
@@ -3842,6 +3846,7 @@ namespace Pattons_Best
                {
                   MenuItemCrewActionClickRemoveGunnerFire();  // Cannot fire if moving and do not have HVSS
                   MenuItemCrewActionClickRemoveGunnerRotateAndFire();
+                  MenuItemCrewActionClickRemoveCommanderDirectFire();
                }
                break;
             case "Driver_PivotTank":
@@ -3851,6 +3856,7 @@ namespace Pattons_Best
                {
                   MenuItemCrewActionClickRemoveGunnerFire();  // Cannot fire if moving and do not have HVSS
                   MenuItemCrewActionClickRemoveGunnerRotateAndFire();
+                  MenuItemCrewActionClickRemoveCommanderDirectFire();
                }
                break;
             case "Driver_RepairScope":
