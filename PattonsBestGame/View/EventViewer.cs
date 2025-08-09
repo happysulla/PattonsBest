@@ -3948,7 +3948,7 @@ namespace Pattons_Best
                      isAAFire = true;
                   if ( ("Gunner_FireCoaxialMg" == crewAction.Name) && (false == gi.IsShermanFiredCoaxialMg) )
                      isCoaxialMgFire = true;
-                  if ( ("Assistant_FireBowMg" == crewAction.Name) && (false == gi.IsShermanFiredBowMg) )
+                  if ( ("Assistant_FireBowMg" == crewAction.Name) && (false == gi.IsShermanFiredBowMg) && (false == gi.Sherman.IsHullDown) )
                      isBowMgFire = true;
                   if ( ("Commander_FireSubMg" == crewAction.Name) && (false == gi.IsShermanFiredSubMg) )
                      isSubMgFire = true;
@@ -5439,8 +5439,8 @@ namespace Pattons_Best
                action = GameAction.TestingStartMorningBriefing; // <cgs> TEST
                action = GameAction.TestingStartPreparations; // <cgs> TEST
                action = GameAction.TestingStartMovement; // <cgs> TEST
-               //action = GameAction.TestingStartBattle; // <cgs> TEST
-               //action = GameAction.TestingStartAmbush; // <cgs> TEST
+               action = GameAction.TestingStartBattle; // <cgs> TEST
+               action = GameAction.TestingStartAmbush; // <cgs> TEST
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Cancel":

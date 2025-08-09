@@ -589,7 +589,7 @@ namespace Pattons_Best
                sb1.Append(cm.Name);
                sb1.Append(" (");
                sb1.Append(cm.Role);
-               sb1.Append(" ) suffered ");
+               sb1.Append(") suffered ");
                sb1.Append(myWoundsResults);
                lastReport.Notes.Add(sb1.ToString());
                myState = E0481Enum.COLLATERAL_DAMAGE_WOUND_ROLL_SHOW;
@@ -602,7 +602,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateGrid() return false");
          myIsRollInProgress = false;
          //-------------------------------
-         Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): ---------------myState=" + myState.ToString());
+         Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "EventViewerTankCollateral.ShowDieResults(): ---------------myState=" + myState.ToString());
       }
       //---------------------Controller Function--------------------------------------------
       private void ButtonRule_Click(object sender, RoutedEventArgs e)

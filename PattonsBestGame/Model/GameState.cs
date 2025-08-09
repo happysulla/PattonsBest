@@ -359,10 +359,10 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): taskForceArea tStart=" + tStartNum.Adjacents[0]);
             return false;
          }
-         IMapItem taskForce = new MapItem("TaskForce", 1.3, "c35TaskForce", tStart);
+         IMapItem taskForce = new MapItem("TaskForce", 1.3, "c35TaskForce", tStart); // add task for to adjacent area
          gi.MoveStacks.Add(taskForce);
          //-----------------------------------------
-         string miName = "UsControl" + Utilities.MapItemNum.ToString();
+         string miName = "UsControl" + Utilities.MapItemNum.ToString(); // Add USControl marker to area adjacent to StartArea
          Utilities.MapItemNum++;
          IMapItem usControl = new MapItem(miName, 1.0, "c28UsControl", tStart);
          usControl.Count = 0; // 0=us  1=light  2=medium  3=heavy
@@ -373,17 +373,57 @@ namespace Pattons_Best
          EnteredHex newHex = new EnteredHex(gi, tStart, ColorActionEnum.CAE_START); // SetStartArea()
          if (true == newHex.CtorError)
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): newHex.Ctor=true");
+            Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): newHex.Ctor=true");
             return false;
          }
-         gi.EnteredHexes.Add(newHex);
+         gi.EnteredHexes.Add(newHex); // first one is StartArea
          //---------------------------------------------
+         //if( false == SetStartAreaExtraEnemy(gi))  // <cgs> TEST - Set extra units on move board during setup
+         //{
+         //   Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): SetStartAreaExtraEnemy() returned false");
+         //   return false;
+         //}
+         return true;
+      }
+      protected bool SetStartAreaExtraEnemy(IGameInstance gi)
+      {
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetStartArea():  lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "SetStartAreaExtraEnemy():  lastReport=null");
             return false;
          }
+         //-----------------------------------
+         IMapItem? startArea = null;
+         foreach (IStack stack in gi.MoveStacks)
+         {
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.Name.Contains("Start"))
+               {
+                  startArea = mi;
+                  break;
+               }
+            }
+         }
+         if (null == startArea)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetStartAreaExtraEnemy():  startArea=null");
+            return false;
+         }
+         //-----------------------------------
+         if (0 == startArea.TerritoryCurrent.Adjacents.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetStartAreaExtraEnemy(): no adjacents for start area=" + startArea.TerritoryCurrent.Name);
+            return false;
+         }
+         ITerritory? tStart = Territories.theTerritories.Find(startArea.TerritoryCurrent.Adjacents[0]); // should only be one adjacent to start area
+         if (null == tStart)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetStartAreaExtraEnemy(): taskForceArea tStart=" + startArea.TerritoryCurrent.Adjacents[0]);
+            return false;
+         }
+         //-----------------------------------
          foreach (string s in tStart.Adjacents) // Add Enemy Units to adjacent areas in the Move Board next to tStart.
          {
             if (true == s.EndsWith("E"))
@@ -391,7 +431,7 @@ namespace Pattons_Best
             ITerritory? t1 = Territories.theTerritories.Find(s);
             if (null == t1)
             {
-               Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): t=null for " + s);
+               Logger.Log(LogEnum.LE_ERROR, "SetStartAreaExtraEnemy(): t=null for " + s);
                return false;
             }
             int diceRoll = 0;
@@ -420,7 +460,7 @@ namespace Pattons_Best
                   break;
                case "PSW/SPW":
                   enemyUnit = "SPW";
-                  name = enemyUnit + Utilities.MapItemNum;
+                  nameEnemy = enemyUnit + Utilities.MapItemNum;
                   Utilities.MapItemNum++;
                   mi = new MapItem(nameEnemy, 1.0, "c89Psw232", t1);
                   mi.IsVehicle = true;
@@ -441,12 +481,12 @@ namespace Pattons_Best
                   mi.IsSpotted = true;
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): reached default with enemyUnit=" + enemyUnit);
+                  Logger.Log(LogEnum.LE_ERROR, "SetStartAreaExtraEnemy(): reached default with enemyUnit=" + enemyUnit);
                   return false;
             }
             if (null == mi)
             {
-               Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): mi=null");
+               Logger.Log(LogEnum.LE_ERROR, "SetStartAreaExtraEnemy(): mi=null");
                return false;
             }
             IMapPoint mpEnemy = Territory.GetRandomPoint(t1, mi.Zoom * Utilities.theMapItemOffset);
@@ -673,14 +713,122 @@ namespace Pattons_Best
          }
          return true;
       }
-      protected bool ResolveEmptyBattleBoard(IGameInstance gi, IAfterActionReport report)
+      private bool ResetPreparations(IGameInstance gi)
       {
+         gi.IsShermanFirstShot = false;
+         gi.IsShermanFiringAtFront = false;
+         gi.IsShermanDeliberateImmobilization = false;
+         gi.NumOfShermanShot = 0;
+         gi.ShermanTypeOfFire = "";
+         gi.NumSmokeAttacksThisRound = 0;
+         gi.IsMainGunRepairAttempted = false;
+         //---------------------------------
+         gi.IsShermanTurretRotated = false;
+         gi.ShermanRotationTurretOld = 0.0;
+         //---------------------------------
+         gi.IsMinefieldAttack = false;
+         gi.IsHarrassingFire = false;
+         gi.IsFlankingFire = false;
+         gi.IsEnemyAdvanceComplete = false;
+         gi.Panzerfaust = null;
+         gi.NumCollateralDamage = 0;
+         //---------------------------------
          gi.Sherman.RotationOffsetHull = 0.0;
          gi.Sherman.RotationTurret = 0.0;
          gi.Sherman.RotationHull = 0.0;
          gi.Sherman.IsMoving = false;
          gi.Sherman.IsHullDown = false;
          gi.Sherman.IsBoggedDown = false;
+         //---------------------------------
+         if( false == ResetPreparationsEnemiesMovingToMoveBoard( gi ) )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResetPreparations(): ResetPreparationsEnemiesMovingToMoveBoard() returned false");
+            return false;
+         }
+         return true;
+      }
+      private bool ResetPreparationsEnemiesMovingToMoveBoard(IGameInstance gi)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResetPreparationsEnemiesMovingToMoveBoard(): lastReport=null");
+            return false;
+         }
+         if (0 == gi.EnteredHexes.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResetPreparationsEnemiesMovingToMoveBoard(): gi.EnteredHexes.Count=0");
+            return false;
+         }
+         //-------------------------------------------
+         if (0 == gi.EnteredHexes.Count) // This is the start area so any enemy units advancing go to unknown location
+         {
+            Logger.Log(LogEnum.LE_SHOW_ENEMY_ADVANCE_TO_MOVE_BOARD, "AdvanceEnemyUnitsMovingToMoveBoard(): gi.EnteredHexes.Count=0");
+            return true;
+         }
+         EnteredHex enteredHex = gi.EnteredHexes.Last();
+         ITerritory? t = Territories.theTerritories.Find(enteredHex.TerritoryName);
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResetPreparationsEnemiesMovingToMoveBoard(): Territories.theTerritories.Find() returned null for tName=" + enteredHex.TerritoryName);
+            return false;
+         }
+         IStack? stack = gi.MoveStacks.Find(t);
+         if (null == stack)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "AdvanceEnemyUnitsMovingToMoveBoard(): gi.MoveStacks.Find(enteredHex.TerritoryName) returned null for tNmae=" + enteredHex.TerritoryName);
+            return false;
+         }
+         //------------------------------------
+         foreach (IMapItem mi in stack.MapItems) // Remove any US Control marker. If one found, ensure victory points reflect losing one area
+         {
+            if (true == mi.Name.Contains("UsControl"))
+            {
+               Logger.Log(LogEnum.LE_SHOW_ENEMY_ADVANCE_TO_MOVE_BOARD, "AdvanceEnemyUnitsMovingToMoveBoard(): Removing UsControl from t=" + t.Name);
+               stack.MapItems.Remove(mi);
+               lastReport.VictoryPtsCaptureArea--;
+               break;
+            }
+         }
+         bool isEnemyStrengthCheckFound = false;
+         foreach (IMapItem mi in stack.MapItems) // If there is no enemy strength marker found, add one
+         {
+            if (true == mi.Name.Contains("Strength"))
+            {
+               isEnemyStrengthCheckFound = true;
+               break;
+            }
+         }
+         if (false == isEnemyStrengthCheckFound)
+         {
+            Logger.Log(LogEnum.LE_SHOW_ENEMY_ADVANCE_TO_MOVE_BOARD, "AdvanceEnemyUnitsMovingToMoveBoard(): Adding Strenght Marker to t=" + t.Name);
+            string name = "StrengthLight" + Utilities.MapItemNum.ToString();
+            ++Utilities.MapItemNum;
+            IMapItem strengthMarker = new MapItem(name, 1.0, "c36Light", t);
+            stack.MapItems.Add(strengthMarker);
+         }
+         //------------------------------------
+         foreach(IMapItem enemyUnit in gi.AdvancingEnemies)
+         {
+            Logger.Log(LogEnum.LE_SHOW_ENEMY_ADVANCE_TO_MOVE_BOARD, "AdvanceEnemyUnitsMovingToMoveBoard(): Adding eu=" + enemyUnit.ToString());
+            enemyUnit.Zoom = 1.0;
+            enemyUnit.TerritoryCurrent = t;
+            IMapPoint mp = Territory.GetRandomPoint(t, enemyUnit.Zoom * Utilities.theMapItemOffset); // add enemy unit to random location in area
+            enemyUnit.Location.X = mp.X;
+            enemyUnit.Location.Y = mp.Y;
+            gi.MoveStacks.Add(enemyUnit);
+            Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "ResetPreparationsEnemiesMovingToMoveBoard(): Adding mi=" + enemyUnit.Name + " t=" + enemyUnit.TerritoryCurrent.Name + " to " + gi.MoveStacks.ToString());
+         }
+         gi.AdvancingEnemies.Clear();
+         return true;
+      }
+      protected bool ResolveEmptyBattleBoard(IGameInstance gi, IAfterActionReport report)
+      {
+         if (false == ResetPreparations(gi))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResolveEmptyBattleBoard(): ResetPreparations() = false");
+            return false;
+         }
          //--------------------------------
          if (null == gi.EnteredArea)
          {
@@ -738,6 +886,14 @@ namespace Pattons_Best
          IMapPoint mp = Territory.GetRandomPoint(gi.EnteredArea, usControl.Zoom * Utilities.theMapItemOffset);
          usControl.Location = mp;
          gi.MoveStacks.Add(usControl);
+         //---------------------------------------------
+         EnteredHex newHex = new EnteredHex(gi, gi.EnteredArea, ColorActionEnum.CAE_ENTER); // PerformAutoSetupSkipMovement()
+         if (true == newHex.CtorError)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): newHex.Ctor=true");
+            return false;
+         }
+         gi.EnteredHexes.Add(newHex); // PerformAutoSetupSkipMovement() - add hex as first entry
          //-----------------------------------
          bool isExitArea;
          if( false == gi.IsExitArea(out isExitArea) ) // determine if this is exit area
@@ -1480,6 +1636,7 @@ namespace Pattons_Best
             return false;
          }
          //------------------------------------
+         gi.GunLoads.Clear();
          IMapItem gunLoad = new MapItem("GunLoadInGun", 1.0, "c17GunLoad", new Territory());
          gi.GunLoads.Add(gunLoad);
          if (false == gi.SetGunLoadTerritory("He"))
@@ -1518,16 +1675,16 @@ namespace Pattons_Best
             return false;
          }
          //---------------------------------------------
-         IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
+         IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce"); 
          if (null == taskForce)
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): taskForce=null");
             return false;
          }
-         int index = Utilities.RandomGenerator.Next(0, taskForce.TerritoryCurrent.Adjacents.Count);
+         int index = Utilities.RandomGenerator.Next(0, taskForce.TerritoryCurrent.Adjacents.Count); 
          string tName = taskForce.TerritoryCurrent.Adjacents[index];
          int count = 10;
-         while (true == tName.EndsWith("E") && --count < 0)
+         while (true == tName.EndsWith("E") && 0 < --count )
          {
             index = Utilities.RandomGenerator.Next(0, taskForce.TerritoryCurrent.Adjacents.Count);
             tName = taskForce.TerritoryCurrent.Adjacents[index];
@@ -1537,20 +1694,12 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): unable to find random territory after count=" + count.ToString() + " tries - choosing tName=" + tName);
             tName = "M030";
          }
-         gi.EnteredArea = Territories.theTerritories.Find(tName);
+         gi.EnteredArea = Territories.theTerritories.Find(tName); // Moving to hex adjacent to TaskForce Area
          if (null == gi.EnteredArea)
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): gi.EnteredArea =null for " + tName);
             return false;
          }
-         //---------------------------------------------
-         EnteredHex newHex = new EnteredHex(gi, gi.EnteredArea, ColorActionEnum.CAE_ENTER); // PerformAutoSetupSkipMovement()
-         if ( true == newHex.CtorError)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): newHex.Ctor=true");
-            return false;
-         }
-         gi.EnteredHexes.Add(newHex);
          //---------------------------------------------
          taskForce.TerritoryCurrent = taskForce.TerritoryStarting = gi.EnteredArea;
          taskForce.Location = gi.EnteredArea.CenterPoint;
@@ -1603,11 +1752,11 @@ namespace Pattons_Best
          }
          //--------------------------------------------------------
          int numEnemyUnitsAppearing = Utilities.RandomGenerator.Next(4, 6); 
-         //numEnemyUnitsAppearing = 5; // <cgs> TEST - number of enemy units appearing
+         numEnemyUnitsAppearing = 5; // <cgs> TEST - number of enemy units appearing
          for (int k = 0; k < numEnemyUnitsAppearing; k++)
          {
             int die1 = Utilities.RandomGenerator.Next(0, 3);
-            //die1 += 3; // <cgs> TEST - create enemy in US Sectors
+            die1 += 3; // <cgs> TEST - create enemy in US Sectors
             int die2 = Utilities.RandomGenerator.Next(0, 3);
             string? tName = null;
             if (0 == die1)
@@ -2075,6 +2224,7 @@ namespace Pattons_Best
                   gi.EventDisplayed = gi.EventActive = "e012";
                   break;
                case GameAction.PreparationsGunLoad:
+                  gi.GunLoads.Clear();
                   gi.IsHatchesActive = false;
                   int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
                   if( 0 < totalAmmo )
@@ -2100,6 +2250,7 @@ namespace Pattons_Best
                         returnStatus = "gi.SetGunLoadTerritory() returned false";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsGunLoad): " + returnStatus);
                      }
+                     Logger.Log(LogEnum.LE_SHOW_GUN_LOAD_PREP, "GameStateBattlePrep.PerformAction(PreparationsGunLoad): gunLoad=" + gunLoad.Name + " t=" + gunLoad.TerritoryCurrent.Name);
                   }
                   else
                   {
@@ -2662,10 +2813,15 @@ namespace Pattons_Best
          IMapItems enemyOnMoveBoard = new MapItems(); 
          foreach (IMapItem mi in stack.MapItems)
          {
+            Logger.Log(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD, "ResolveBattleCheckRoll(): mi=" + mi.Name);
             if (true == mi.IsEnemyUnit())
+            {
+               Logger.Log(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD, "ResolveBattleCheckRoll(): ENEMY UNIT=" + mi.Name);
                enemyOnMoveBoard.Add(mi);
+            }
          }
          //-------------------------------------------------
+         Logger.Log(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD, "ResolveBattleCheckRoll(): gi.BattleResistance=" + gi.BattleResistance.ToString() + " enemyCount=" + enemyOnMoveBoard.Count.ToString() + " dr=" + dieRoll.ToString());
          switch (gi.BattleResistance)
          {
             case EnumResistance.Light:
@@ -2811,6 +2967,7 @@ namespace Pattons_Best
       }
       private bool StartBattle(IGameInstance gi, IAfterActionReport report)
       {
+         Logger.Log(LogEnum.LE_SHOW_START_BATTLE, "StartBattle(): +++++++++++++++++++++++++++++++++++");
          if (null == gi.EnteredArea)
          {
             Logger.Log(LogEnum.LE_ERROR, "StartBattle(): gi.EnteredArea=null");
@@ -2825,6 +2982,7 @@ namespace Pattons_Best
             return false;
          }
          gi.EnteredHexes.Add(newHex);
+         Logger.Log(LogEnum.LE_SHOW_START_BATTLE, "StartBattle(): -----------------------------------");
          return true;
       }
       private bool MovementPhaseRestart(IGameInstance gi, IAfterActionReport report)
@@ -2950,7 +3108,7 @@ namespace Pattons_Best
                case GameAction.BattleAmbushRoll:
                   if (true == lastReport.Weather.Contains("Rain") || true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
                      dieRoll--;
-                  dieRoll = 10; // <cgs> TEST - ambush
+                  //dieRoll = 10; // <cgs> TEST - ambush
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (dieRoll < 8)
@@ -2998,7 +3156,7 @@ namespace Pattons_Best
                case GameAction.BattleRandomEventRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     //dieRoll = 70; // <cgs> TEST - Random Event
+                     dieRoll = 01; // <cgs> TEST - Random Event - Time passes
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -3760,11 +3918,6 @@ namespace Pattons_Best
                            if (true == mi.TerritoryCurrent.Name.Contains("Off")) // BattleRoundSequenceMovementRoll -  Sherman Movement cause enemy to move off
                            {
                               movementRemovals.Add(mi);
-                              if( false == MoveEnemyUnitsToMovementBoard(gi,mi))
-                              {
-                                 returnStatus = "AddEnemyUnitsToMovementBoard() returned false for a=" + action.ToString() + " mi=" + mi.Name;
-                                 Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
-                              }
                            }
                            else if (true == mi.IsEnemyUnit())
                            {
@@ -5244,7 +5397,7 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool MoveEnemyUnitsToMovementBoard(IGameInstance gi, IMapItem enemyUnit)
+      private bool AdvanceEnemyUnitsToMoveBoard(IGameInstance gi, IMapItem enemyUnit)
       {
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -5254,21 +5407,23 @@ namespace Pattons_Best
          }
          if (0 == gi.EnteredHexes.Count)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MoveEnemyUnitsToMovementBoard(): gi.EnteredHexes.Count=0");
+            Logger.Log(LogEnum.LE_ERROR, "AdvanceEnemyUnitsToMoveBoard(): gi.EnteredHexes.Count=0");
             return false;
          }
          //-------------------------------------------
+         if( 0 == gi.EnteredHexes.Count ) // This is the start area so any enemy units advancing go to unknown location
+            return true;
          EnteredHex enteredHex = gi.EnteredHexes.Last();
          ITerritory? t = Territories.theTerritories.Find(enteredHex.TerritoryName);
          if(null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MoveEnemyUnitsToMovementBoard(): Territories.theTerritories.Find() returned null for tName=" + enteredHex.TerritoryName);
+            Logger.Log(LogEnum.LE_ERROR, "AdvanceEnemyUnitsToMoveBoard(): Territories.theTerritories.Find() returned null for tName=" + enteredHex.TerritoryName);
             return false;
          }
          IStack? stack = gi.MoveStacks.Find(enteredHex.TerritoryName);
          if( null == stack )
          {
-            Logger.Log(LogEnum.LE_ERROR, "MoveEnemyUnitsToMovementBoard(): gi.MoveStacks.Find(enteredHex.TerritoryName) returned null for tNmae=" + enteredHex.TerritoryName);
+            Logger.Log(LogEnum.LE_ERROR, "AdvanceEnemyUnitsToMoveBoard(): gi.MoveStacks.Find(enteredHex.TerritoryName) returned null for tNmae=" + enteredHex.TerritoryName);
             return false;
          }
          //------------------------------------
@@ -6471,7 +6626,6 @@ namespace Pattons_Best
          //-------------------------------------------------------
          gi.IsHatchesActive = false;
          //-------------------------------------------------------
-         gi.IsShermanFirstShot = false;
          gi.ShermanTypeOfFire = "";                    // ResetRound()
          gi.IsShermanDeliberateImmobilization = false; // ResetRound()
          gi.NumSmokeAttacksThisRound = 0;
@@ -6883,6 +7037,7 @@ namespace Pattons_Best
          gi.Hatches.Clear();
          gi.CrewActions.Clear();            // ResetDay()
          gi.GunLoads.Clear();
+         gi.AdvancingEnemies.Clear();       // ResetDay()
          gi.TargetMainGun = null;           // ResetDay()
          gi.IsShermanFiringAtFront = false; // ResetDay()
          //-------------------------------------------------------
@@ -6898,13 +7053,27 @@ namespace Pattons_Best
          gi.IsHarrassingFire = false;
          gi.IsFlankingFire = false;
          gi.IsEnemyAdvanceComplete = false;
-         //------------------------------------------------
+         //-------------------------------------------------------
          gi.IsShermanFirstShot = false;
-         gi.IsShermanFiringAtFront = false;            // ResetDay()
-         gi.IsShermanDeliberateImmobilization = false; // ResetDay()
+         gi.IsShermanFiringAtFront = false;              // ResetDay()
+         gi.IsShermanDeliberateImmobilization = false;
+         gi.NumOfShermanShot = 0;
+         gi.ShermanTypeOfFire = "";
+         gi.NumSmokeAttacksThisRound = 0;
+         gi.IsMainGunRepairAttempted = false;
+         //---------------------------------
+         gi.IsShermanTurretRotated = false;
+         gi.ShermanRotationTurretOld = 0.0;
+         //---------------------------------
+         gi.IsMinefieldAttack = false;
+         gi.IsHarrassingFire = false;
+         gi.IsFlankingFire = false;
+         gi.IsEnemyAdvanceComplete = false;
+         gi.Panzerfaust = null;
+         gi.NumCollateralDamage = 0;
+         //-------------------------------------------------------
          gi.TargetMainGun = null;                      // ResetDay()
          Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "ResetDay(): zero NumOfShermanShot=" + gi.NumOfShermanShot.ToString());
-         gi.NumOfShermanShot = 0;                      // ResetDay()
          gi.IsMalfunctionedMainGun = false;
          gi.IsBrokenMainGun = false;
          gi.IsBrokenGunSight = false;

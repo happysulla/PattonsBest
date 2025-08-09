@@ -1272,7 +1272,7 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------
-         if (3 == newT.Name.Length)
+         if (3 == newT.Name.Length) 
          {
             char sector = newT.Name[newT.Name.Length - 2];
             string tName = "B" + sector + "M";
@@ -1331,6 +1331,8 @@ namespace Pattons_Best
          {
             myGridRows[i].myDieRollTerrain = KEEP_TERRAIN;
             myGridRows[i].myDieRollFacing = NO_FACING;
+            if (true == newT.Name.Contains("OffBottom")) // BattleRoundSequenceMovementRoll -  Enemy Movement advanced past sector 1,2,3
+               myGameInstance.AdvancingEnemies.Add(mi);
          }
          return true;
       }
@@ -1472,7 +1474,8 @@ namespace Pattons_Best
                   return;
                }
                mi.IsFired = false; // set to true if unit fires
-               //dieRoll = 15; // <cgs> TEST - Move Infantry in Battle Scenario
+               //dieRoll = 15; // <cgs> TEST - Move-F for Infantry in Battle Scenario
+               dieRoll = 31; // <cgs> TEST - Move-B for Infantry in Battle Scenario
                //dieRoll = 87; // <cgs> TEST - Fire At Your Tank
                myGridRows[i].myDieRollEnemyAction = dieRoll;
                string enemyAction = TableMgr.SetEnemyActionResult(myGameInstance, mi, dieRoll);
@@ -1481,6 +1484,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): SetEnemyActionResult() returned ERROR");
                   return;
                }
+               enemyAction = "Move-B";
                Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): myState=" + myState.ToString() + " enemyAction=" + enemyAction);
                //----------------------------------------
                if (true == enemyAction.Contains("Infantry"))
@@ -1812,7 +1816,7 @@ namespace Pattons_Best
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): myGameInstance=null");
             return false;
          }
          //----------------------------
@@ -1824,12 +1828,12 @@ namespace Pattons_Best
          }
          if (false == mi.SetMapItemRotation(myGameInstance.Sherman))
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): SetMapItemRotation() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): SetMapItemRotation() returned false");
             return false;
          }
          if (false == mi.UpdateMapRotation(myGridRows[i].myFacing))
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): UpdateMapRotation() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): UpdateMapRotation() returned false");
             return false;
          }
          return true;

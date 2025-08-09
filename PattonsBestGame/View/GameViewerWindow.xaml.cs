@@ -1645,7 +1645,14 @@ namespace Pattons_Best
                   foreach (Button b in myTankButtons)
                   {
                      if (b.Name == gunLoad.Name)
+                     {
+                        if( true == gunLoad.TerritoryCurrent.Name.Contains("OffBoard"))
+                        {
+                           Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankAmmoOrders(): gunLoad.Name=" + gunLoad.Name + " is offboard");
+                           return false;
+                        }
                         b.ContextMenu = myContextMenuGunLoadActions[gunLoad.TerritoryCurrent.Name];
+                     }
                   }
                }
             }

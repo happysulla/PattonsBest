@@ -47,6 +47,7 @@ namespace Pattons_Best
       public IMapItems GunLoads { set; get; } = new MapItems();
       public IMapItem Sherman { set; get; } = new MapItem("Sherman1", 2.0, "t001", new Territory());
       public IMapItems Targets { set; get; } = new MapItems();
+      public IMapItems AdvancingEnemies { set; get; } = new MapItems();
       public IMapItem? TargetMainGun { set; get; } = null;
       public IMapItem? TargetMg { set; get; } = null;
       //------------------------------------------------
@@ -63,7 +64,6 @@ namespace Pattons_Best
       public bool IsHatchesActive { set; get; } = false;
       //---------------------------------------------------------------
       public bool IsShermanFirstShot { set; get; } = false;
-      public bool IsPullingFromReadyRack { set; get; } = false;
       public bool IsShermanFiringAtFront { set; get; } = false;
       public bool IsShermanDeliberateImmobilization { set; get; } = false;
       public int NumOfShermanShot { set; get; } = 0;
@@ -393,10 +393,12 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetGunLoad(): unable to find territory name=" + tName);
             return false;
          }
+         Logger.Log(LogEnum.LE_SHOW_GUN_LOAD_PREP, "SetGunLoadTerritory(): Setting gun load in t=" + tName);
          foreach (IMapItem mi in this.GunLoads)
          {
             if (true == mi.Name.Contains("GunLoadInGun"))
             {
+               Logger.Log(LogEnum.LE_SHOW_GUN_LOAD_PREP, "SetGunLoadTerritory(): mi=" + mi.Name + " t=" + tName + " x=" + mi.Location.X.ToString() + " y=" + mi.Location.Y.ToString());
                mi.TerritoryCurrent = newT;
                double offset = mi.Zoom * Utilities.theMapItemOffset;
                mi.Location.X = newT.CenterPoint.X - offset;
@@ -488,7 +490,6 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "FireAndReloadGun(): +++NumOfShermanShot=" + NumOfShermanShot.ToString());
          }
          //-----------------------------------------------
-         this.IsPullingFromReadyRack = false;
          string gunLoad = this.GetGunLoadType();  // This is the ammo that fired
          Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "FireAndReloadGun(): Gun Load That Was Fired is " + gunLoad);
          switch (gunLoad) // decrease on AAR the type of ammunition used
@@ -534,7 +535,6 @@ namespace Pattons_Best
             if (maxReadyRackLoad <= readyRackLoadCount) // pull ammo from ready rack if ammo count equal to ready rack
             {
                Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "FireAndReloadGun(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString() + "--> ammoCount=" + maxReadyRackLoad.ToString() );
-               this.IsPullingFromReadyRack = true;
                if (false == this.SetReadyRackReload(ammoReloadType, maxReadyRackLoad))
                {
                   Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): 2-SetReadyRackReload() returned false");
@@ -551,7 +551,6 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): GetReadyRackReload() returned 1 > load=" + readyRackLoadCount.ToString() + " for gunLoad=" + gunLoad);
                      return false;
                   }
-                  this.IsPullingFromReadyRack = true;
                   readyRackLoadCount--;
                   if (false == this.SetReadyRackReload(ammoReloadType, readyRackLoadCount))
                   {

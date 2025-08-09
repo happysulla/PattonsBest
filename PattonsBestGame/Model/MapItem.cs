@@ -383,7 +383,7 @@ namespace Pattons_Best
          rotation -= (this.RotationHull + this.RotationOffsetHull); // subtract hull rotation to get turret rotation
          if (rotation < 0)
             rotation += 360.0;
-         if (0.0 < rotation && rotation <= 30.0)
+         if (-1.0 < rotation && rotation <= 30.0)
          {
             this.RotationTurret = 0.0;
          }

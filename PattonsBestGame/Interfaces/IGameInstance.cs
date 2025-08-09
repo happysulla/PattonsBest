@@ -105,6 +105,7 @@ namespace Pattons_Best
       IMapItems Targets { set; get; }
       IMapItem? TargetMainGun { set; get; }
       IMapItem? TargetMg { set; get; }
+      IMapItems AdvancingEnemies { set; get; }
       //------------------------------------------------
       ITerritory Home { get; set; }
       ITerritory? EnemyStrengthCheckTerritory { get; set; }
@@ -119,7 +120,6 @@ namespace Pattons_Best
       bool IsHatchesActive { set; get; }
       //------------------------------------------------
       bool IsShermanFirstShot { set; get; }
-      bool IsPullingFromReadyRack { set; get; }
       bool IsShermanFiringAtFront { set; get; }
       bool IsShermanDeliberateImmobilization { set; get; }
       int NumOfShermanShot { set; get; }

@@ -50,11 +50,11 @@ namespace Pattons_Best
       {
          public IMapItem myEnemyUnit = new MapItem("Dummy", 1.0, "c44AdvanceFire", new Territory());
          public IMapItem myAdvanceFire = new MapItem("AdvanceFire", 1.0, "c44AdvanceFire", new Territory());
-         public string mySectorRangeDisplay = "UNINT";
+         public string mySectorRangeDisplay = "Unk";
          public int myDieRollAdvanceFire = Utilities.NO_RESULT;
          public int myAdvanceFireBaseNum = 0;
          public int myAdvanceFireModifier = 0;
-         public string myAdvanceFireResult = "UNINT";
+         public string myAdvanceFireResult = "Unk";
          public GridRowAdvanceFire() { }
       }
       private GridRowAdvanceFire[] myAdvanceFireGridRows = new GridRowAdvanceFire[MAX_GRID_ROWS];
@@ -89,10 +89,10 @@ namespace Pattons_Best
          {
             myMapItem = mi;
             myActivation = mi.GetEnemyUnit();
-            mySector = "Unknown";
-            myRange = "Unknown";
-            myFacing = "Unknown";
-            myTerrain = "Unknown";
+            mySector = "Unk";
+            myRange = "Unk";
+            myFacing = "Unk";
+            myTerrain = "Unk";
             myDieRollActivation = EXISTING_UNIT;
             myDieRollSector = Utilities.NO_RESULT;
             myDieRollRange = Utilities.NO_RESULT;
@@ -203,7 +203,6 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): lastReport=null");
             return false;
          }
-
          //--------------------------------------------------
          myState = E046Enum.ACTIVATION;
          myMaxRowCount = 0;
@@ -240,6 +239,11 @@ namespace Pattons_Best
                   {
                      myGridRows[startingRow].myDieRollFacing = NO_FACING;
                      myGridRows[startingRow].myFacing = "NA";
+                     Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "SetupBattle(): myGridRows[" + startingRow.ToString() + "].myFacing=" + myGridRows[startingRow].myFacing + " due to not vehicle");
+                  }
+                  else
+                  {
+                     myIsVehicleActivated = true; // need to roll for vehicle facings
                   }
                   switch (mi1.GetEnemyUnit())
                   {
@@ -265,15 +269,15 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): did not find Enemy Strength Counter in the territory=" + myGameInstance.EnteredArea.Name);
                return false;
             }
-            if (1 == strengthCounter.Count)
+            if (true == strengthCounter.Name.Contains("Light"))
                myMaxRowCount += 2;
-            else if (2 == strengthCounter.Count)
+            else if (true == strengthCounter.Name.Contains("Medium"))
                myMaxRowCount += 3;
-            else if (3 == strengthCounter.Count)
+            else if (true == strengthCounter.Name.Contains("Heavy"))
                myMaxRowCount += 4;
             else
             {
-               Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): reached default strengthCounter.Count =" + strengthCounter.Count.ToString());
+               Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): reached default strengthCounter.Count =" + strengthCounter.Count.ToString() + "strengthCounter=" + strengthCounter.Name);
                return false;
             }
             Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "SetupBattle(): strengthCounter=" + strengthCounter.Name + " strengthCounter.Count=" + strengthCounter.Count.ToString() + " myMaxRowCount=" + myMaxRowCount.ToString());
@@ -955,6 +959,7 @@ namespace Pattons_Best
                t = tLeft;
                mi = new MapItem(name, Utilities.ZOOM + 0.1, "c76UnidentifiedAtg", t);
                myGridRows[i].myDieRollFacing = NO_FACING;
+               Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "CreateMapItem(): myState=" + myState.ToString() + " myGridRows[" + i.ToString() + "].myFacing=" + myGridRows[i].myFacing + " due to ATG");
                myGridRows[i].myFacing = "NA";
                break;
             case "LW":
@@ -962,6 +967,7 @@ namespace Pattons_Best
                mi = new MapItem(name, Utilities.ZOOM, "c91Lw", t);
                mi.IsSpotted = true; 
                myGridRows[i].myDieRollFacing = NO_FACING;
+               Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "CreateMapItem(): myState=" + myState.ToString() + " myGridRows[" + i.ToString() + "].myFacing=" + myGridRows[i].myFacing + " due to LW");
                myGridRows[i].myFacing = "NA";
                break;
             case "MG":
@@ -969,6 +975,7 @@ namespace Pattons_Best
                mi = new MapItem(name, Utilities.ZOOM, "c92MgTeam", t);
                mi.IsSpotted = true;
                myGridRows[i].myDieRollFacing = NO_FACING;
+               Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "CreateMapItem(): myState=" + myState.ToString() + " myGridRows[" + i.ToString() + "].myFacing=" + myGridRows[i].myFacing + " due to MG");
                myGridRows[i].myFacing = "NA";
                break;
             case "PSW/SPW":
@@ -1040,6 +1047,7 @@ namespace Pattons_Best
       }
       public void ShowDieResults(int dieRoll)
       {
+         Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "EventViewerBattleSetup.ShowDieResults(): +++++++++++++++myState=" + myState.ToString());
          if (null == myGameInstance)
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance=null");
@@ -1142,6 +1150,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyNewFacing() returned ERROR");
                   return;
                }
+               Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "SetupBattle(): myState=" + myState.ToString() + " myGridRows[" + i.ToString() + "].myFacing=" + myGridRows[i].myFacing);
                IMapItem? mi = myGridRows[i].myMapItem;
                if (null == mi)
                {
@@ -1236,6 +1245,7 @@ namespace Pattons_Best
          }
          GameAction outAction = GameAction.UpdateBattleBoard;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+         Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "EventViewerBattleSetup.ShowDieResults(): ---------------myState=" + myState.ToString());
       }
       private bool ShowDieResultUpdateSector(Index i)
       {

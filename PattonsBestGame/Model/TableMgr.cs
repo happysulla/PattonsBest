@@ -4384,7 +4384,7 @@ namespace Pattons_Best
          int numRotations = (int)(totalAngle / 60.0);
          int turretMod = (int)(10.0 * numRotations);
          toHitModifierNum += turretMod;
-         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): t1=" + t1.ToString() + " t2=" + t2.ToString() + " #r=" + numRotations.ToString() + " turretMod= +" + turretMod.ToString() + " mod=" + toHitModifierNum.ToString());
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): tNew=" + t1.ToString() + " tOld=" + t2.ToString() + " #r=" + numRotations.ToString() + " turretMod= +" + turretMod.ToString() + " mod=" + toHitModifierNum.ToString());
          //------------------------------------
          if (true == enemyUnit.Name.Contains("Pak43"))
          {
