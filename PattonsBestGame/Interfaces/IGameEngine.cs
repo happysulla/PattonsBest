@@ -315,6 +315,7 @@ namespace Pattons_Best
       BattleRoundSequenceFriendlyAction,
       BattleRoundSequenceRandomEvent,
       BattleRoundSequenceBackToSpotting,
+      BattleRoundSequenceNextActionAfterRandomEvent,
       BattleRoundSequenceLoadMainGun,
       BattleRoundSequenceLoadMainGunEnd,
 

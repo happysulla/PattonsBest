@@ -1752,16 +1752,6 @@ namespace Pattons_Best
                   if (null != exitArea)
                      UpdateScrollbarThumbnails(exitArea.TerritoryCurrent);
                   break;
-               case GameAction.MovementEnemyStrengthChoice:
-                  IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce"); // center thumbnails around task force
-                  if (null != taskForce)
-                     UpdateScrollbarThumbnails(taskForce.TerritoryCurrent);
-                  if (false == UpdateCanvasMainEnemyStrengthCheckTerritory(gi, action))
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMainEnemyStrengthCheckTerritory() returned false");
-                     return false;
-                  }
-                  break;
                case GameAction.MovementArtillerySupportChoice:
                   if (false == UpdateCanvasMainArtillerySupportCheck(gi, action))
                   {
@@ -1792,7 +1782,11 @@ namespace Pattons_Best
                      return false;
                   }
                   break;
+               case GameAction.MovementEnemyStrengthChoice:
                case GameAction.MovementEnterAreaUsControl:
+                  IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce"); // center thumbnails around task force
+                  if (null != taskForce)
+                     UpdateScrollbarThumbnails(taskForce.TerritoryCurrent);
                   if (false == UpdateCanvasMovement(gi, action, stacks, buttons))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMovement() returned false  a=" + action.ToString());
@@ -2721,27 +2715,6 @@ namespace Pattons_Best
                break;
             case ColorActionEnum.CAE_ENTER:
                brush = mySolidColorBrushGreen;
-               break;
-            case ColorActionEnum.CAE_ARTILLERY_YES:
-               brush = mySolidColorBrushRosyBrown;
-               break;
-            case ColorActionEnum.CAE_ARTILLERY_NO:
-               brush = mySolidColorBrushBlack;
-               break;
-            case ColorActionEnum.CAE_AIR_YES:
-               brush = mySolidColorBrushLightBlue;
-               break;
-            case ColorActionEnum.CAE_AIR_NO:
-               brush = mySolidColorBrushDeepSkyBlue;
-               break;
-            case ColorActionEnum.CAE_RESUPPLY:
-               brush = mySolidColorBrushPurple;
-               break;
-            case ColorActionEnum.CAE_BATTLE:
-               brush = mySolidColorBrushRed;
-               break;
-            case ColorActionEnum.CAE_RETREAT:
-               brush = mySolidColorBrushRed;
                break;
             case ColorActionEnum.CAE_STOP:
                brush = mySolidColorBrushWhite;

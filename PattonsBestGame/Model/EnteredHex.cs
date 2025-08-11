@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -13,13 +14,6 @@ namespace Pattons_Best
    {
       CAE_START,
       CAE_ENTER,
-      CAE_ARTILLERY_YES,
-      CAE_ARTILLERY_NO,
-      CAE_AIR_YES,
-      CAE_AIR_NO,
-      CAE_RESUPPLY,
-      CAE_BATTLE,
-      CAE_RETREAT,
       CAE_STOP
    };
    [Serializable]
@@ -62,5 +56,29 @@ namespace Pattons_Best
             }
          }
       }
+      public override string ToString()
+      {
+         StringBuilder sb = new StringBuilder();
+         sb.Append("(Id=");
+         sb.Append(this.Identifer.ToString());
+         sb.Append(",Day=");
+         sb.Append(Day.ToString());
+         sb.Append(",t=");
+         sb.Append(TerritoryName);
+         sb.Append(")");
+         return sb.ToString();
+      }
    };
+   public static class EnteredHexExtensions
+   {
+      public static string toString(this IList<EnteredHex> enteredHexes)
+      {
+         StringBuilder sb = new StringBuilder();
+         sb.Append("[");
+         foreach (EnteredHex hex in enteredHexes)
+            sb.Append(hex.ToString());
+         sb.Append("]");
+         return sb.ToString();
+      }
+   }
 }

@@ -33,27 +33,6 @@ namespace Pattons_Best
             case ColorActionEnum.CAE_ENTER:
                myTextBlock.Inlines.Add(new Run("Enter area"));
                break;
-            case ColorActionEnum.CAE_ARTILLERY_YES:
-               myTextBlock.Inlines.Add(new Run("Arilltery support"));
-               break;
-            case ColorActionEnum.CAE_ARTILLERY_NO:
-               myTextBlock.Inlines.Add(new Run("Artillery denied"));
-               break;
-            case ColorActionEnum.CAE_AIR_YES:
-               myTextBlock.Inlines.Add(new Run("Air support"));
-               break;
-            case ColorActionEnum.CAE_AIR_NO:
-               myTextBlock.Inlines.Add(new Run("Air denied"));
-               break;
-            case ColorActionEnum.CAE_RESUPPLY:
-               myTextBlock.Inlines.Add(new Run("Resupply"));
-               break;
-            case ColorActionEnum.CAE_BATTLE:
-               myTextBlock.Inlines.Add(new Run("Battle"));
-               break;
-            case ColorActionEnum.CAE_RETREAT:
-               myTextBlock.Inlines.Add(new Run("Retreat from area"));
-               break;
             case ColorActionEnum.CAE_STOP:
                myTextBlock.Inlines.Add(new Run("Exit area"));
                break;

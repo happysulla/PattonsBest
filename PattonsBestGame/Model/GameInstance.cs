@@ -62,6 +62,7 @@ namespace Pattons_Best
       public ITerritories AreaTargets { get; set; } = new Territories();
       //---------------------------------------------------------------
       public bool IsHatchesActive { set; get; } = false;
+      public bool IsRetreatToStartArea { set; get; } = false;
       //---------------------------------------------------------------
       public bool IsShermanFirstShot { set; get; } = false;
       public bool IsShermanFiringAtFront { set; get; } = false;
@@ -701,6 +702,35 @@ namespace Pattons_Best
             if (report.SunsetMin <= report.SunriseMin)
                return false;
          }
+         return true;
+      }
+      public bool IsStartArea(out bool isStartArea)
+      {
+         isStartArea = false;
+         IMapItem? startArea = MoveStacks.FindMapItem("StartArea");
+         if (null == startArea)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsStartArea(): startArea=null");
+            return false;
+         }
+         if (0 == startArea.TerritoryCurrent.Adjacents.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsStartArea(): startArea.TerritoryCurrent.Adjacents.Count=0");
+            return false;
+         }
+         string adjName = startArea.TerritoryCurrent.Adjacents[0];
+         if (null == adjName)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsStartArea(): adjName=null");
+            return false;
+         }
+         if (null == EnteredArea)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsStartArea(): EnteredArea=null");
+            return false;
+         }
+         if (adjName == EnteredArea.Name)
+            isStartArea = true;
          return true;
       }
       public bool IsExitArea(out bool isExitAreaReached)

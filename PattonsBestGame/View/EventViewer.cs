@@ -4995,7 +4995,7 @@ namespace Pattons_Best
                            }
                            else
                            {
-                              action = GameAction.BattleRoundSequenceBackToSpotting; // Military Watch
+                              action = GameAction.BattleRoundSequenceNextActionAfterRandomEvent; // Military Watch
                            }
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
@@ -5439,7 +5439,7 @@ namespace Pattons_Best
                action = GameAction.TestingStartMorningBriefing; // <cgs> TEST
                action = GameAction.TestingStartPreparations; // <cgs> TEST
                action = GameAction.TestingStartMovement; // <cgs> TEST
-               action = GameAction.TestingStartBattle; // <cgs> TEST
+               //action = GameAction.TestingStartBattle; // <cgs> TEST
                action = GameAction.TestingStartAmbush; // <cgs> TEST
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;

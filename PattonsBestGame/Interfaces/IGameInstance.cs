@@ -118,6 +118,7 @@ namespace Pattons_Best
       ITerritories AreaTargets { get; set; }
       //------------------------------------------------
       bool IsHatchesActive { set; get; }
+      bool IsRetreatToStartArea { set; get; }
       //------------------------------------------------
       bool IsShermanFirstShot { set; get; }
       bool IsShermanFiringAtFront { set; get; }
@@ -205,6 +206,7 @@ namespace Pattons_Best
       bool SetReadyRackReload(string name, int value);
       //------------------------------------------------
       bool IsDaylightLeft(IAfterActionReport report);
+      bool IsStartArea(out bool isStartArea);
       bool IsExitArea(out bool isExitAreaReached);
       void KillSherman(IAfterActionReport report, string reason);
       void ScoreYourVictoryPoint(IAfterActionReport report, IMapItem enemy);
