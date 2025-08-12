@@ -1484,7 +1484,6 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): SetEnemyActionResult() returned ERROR");
                   return;
                }
-               enemyAction = "Move-B";
                Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): myState=" + myState.ToString() + " enemyAction=" + enemyAction);
                //----------------------------------------
                if (true == enemyAction.Contains("Infantry"))

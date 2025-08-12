@@ -264,7 +264,7 @@ namespace Pattons_Best
          }
          if (true == gi.IsLeadTank)
          {
-            StringBuilder sb = new StringBuilder( "At ");
+            StringBuilder sb = new StringBuilder("At ");
             sb.Append(TableMgr.GetTime(report));
             sb.Append(", you are the Lead Tank!");
             report.Notes.Add(sb.ToString());
@@ -688,6 +688,7 @@ namespace Pattons_Best
       }
       protected bool ResolveEmptyBattleBoard(IGameInstance gi, IAfterActionReport report)
       {
+
          //--------------------------------
          if (null == gi.EnteredArea)
          {
@@ -733,15 +734,6 @@ namespace Pattons_Best
          IMapPoint mp = Territory.GetRandomPoint(gi.EnteredArea, usControl.Zoom * Utilities.theMapItemOffset);
          usControl.Location = mp;
          gi.MoveStacks.Add(usControl);
-         //---------------------------------------------
-         EnteredHex newHex = new EnteredHex(gi, gi.EnteredArea, ColorActionEnum.CAE_ENTER); 
-         if (true == newHex.CtorError)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): newHex.Ctor=true");
-            return false;
-         }
-         Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "PerformAutoSetupSkipMovement(): adding newHex=" + newHex.ToString() + " to hexes=" + gi.EnteredHexes.toString());
-         gi.EnteredHexes.Add(newHex); // PerformAutoSetupSkipMovement() - add hex as first entry
          //-----------------------------------
          bool isExitArea;
          if (false == gi.IsExitArea(out isExitArea)) // determine if this is exit area
@@ -754,93 +746,105 @@ namespace Pattons_Best
          else
             report.VictoryPtsCaptureArea++;
          //---------------------------------
-         if (false == EnemiesMovingToMoveBoard(gi))
+         if (false == EnemiesOverrunToPreviousArea(gi))
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResetPreparations(): EnemiesMovingToMoveBoard() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ResetPreparations(): EnemiesOverrunToPreviousArea() returned false");
             return false;
          }
          //-----------------------------------
-         if ( false == ResetToPrepareForBattle(gi, report)) // ResolveEmptyBattleBoard()
-         { 
+         if (false == ResetToPrepareForBattle(gi, report)) // ResolveEmptyBattleBoard()
+         {
             Logger.Log(LogEnum.LE_ERROR, "ResolveEmptyBattleBoard(): ResetToPrepareForBattle() returned false");
             return false;
          }
          return true;
       }
-      protected bool EnemiesMovingToMoveBoard(IGameInstance gi)
+      protected bool EnemiesOverrunToPreviousArea(IGameInstance gi)
       {
-         IAfterActionReport? lastReport = gi.Reports.GetLast();
-         if (null == lastReport)
+         if (0 < gi.AdvancingEnemies.Count) // only do this if advancing enemy
          {
-            Logger.Log(LogEnum.LE_ERROR, "EnemiesMovingToMoveBoard(): lastReport=null");
-            return false;
-         }
-         if (0 == gi.EnteredHexes.Count)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "EnemiesMovingToMoveBoard(): gi.EnteredHexes.Count=0");
-            return false;
-         }
-         //-------------------------------------------
-         if (gi.EnteredHexes.Count < 2) // This is the start area so any enemy units advancing go to unknown location
-         {
-            Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "EnemiesMovingToMoveBoard(): gi.EnteredHexes.Count=" + gi.EnteredHexes.Count.ToString() + " from hexes=" + gi.EnteredHexes.toString());
-            Logger.Log(LogEnum.LE_SHOW_ENEMY_ADVANCE_TO_MOVE_BOARD, "EnemiesMovingToMoveBoard(): gi.EnteredHexes.Count=0");
-            return true;
-         }
-         EnteredHex enteredHex = gi.EnteredHexes[gi.EnteredHexes.Count-2];
-         ITerritory? t = Territories.theTerritories.Find(enteredHex.TerritoryName);
-         if (null == t)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "EnemiesMovingToMoveBoard(): Territories.theTerritories.Find() returned null for tName=" + enteredHex.TerritoryName);
-            return false;
-         }
-         Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "EnemiesMovingToMoveBoard(): Getting last enterHex=" + enteredHex.ToString() + " from hexes=" + gi.EnteredHexes.toString());
-         IStack? stack = gi.MoveStacks.Find(t);
-         if (null == stack)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "EnemiesMovingToMoveBoard(): gi.MoveStacks.Find(enteredHex.TerritoryName) returned null for tNmae=" + enteredHex.TerritoryName);
-            return false;
-         }
-         //------------------------------------
-         foreach (IMapItem mi in stack.MapItems) // Remove any US Control marker. If one found, ensure victory points reflect losing one area
-         {
-            if (true == mi.Name.Contains("UsControl"))
+            IAfterActionReport? lastReport = gi.Reports.GetLast();
+            if (null == lastReport)
             {
-               Logger.Log(LogEnum.LE_SHOW_ENEMY_ADVANCE_TO_MOVE_BOARD, "EnemiesMovingToMoveBoard(): Removing UsControl from t=" + t.Name);
-               stack.MapItems.Remove(mi);
-               lastReport.VictoryPtsCaptureArea--;
-               Logger.Log(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES, "EnemiesMovingToMoveBoard(): Removing UsControl from t=" + t.Name + " #=" + lastReport.VictoryPtsCaptureArea.ToString()); 
-               break;
+               Logger.Log(LogEnum.LE_ERROR, "EnemiesOverrunToPreviousArea(): lastReport=null");
+               return false;
             }
-         }
-         bool isEnemyStrengthCheckFound = false;
-         foreach (IMapItem mi in stack.MapItems) // If there is no enemy strength marker found, add one
-         {
-            if (true == mi.Name.Contains("Strength"))
+            if (0 == gi.EnteredHexes.Count)
             {
-               isEnemyStrengthCheckFound = true;
-               break;
+               Logger.Log(LogEnum.LE_ERROR, "EnemiesOverrunToPreviousArea(): gi.EnteredHexes.Count=0");
+               return false;
             }
-         }
-         if (false == isEnemyStrengthCheckFound)
-         {
-            Logger.Log(LogEnum.LE_SHOW_ENEMY_ADVANCE_TO_MOVE_BOARD, "EnemiesMovingToMoveBoard(): Adding Strenght Marker to t=" + t.Name);
-            string name = "StrengthLight" + Utilities.MapItemNum.ToString();
-            ++Utilities.MapItemNum;
-            IMapItem strengthMarker = new MapItem(name, 1.0, "c36Light", t);
-            stack.MapItems.Add(strengthMarker);
-         }
-         //------------------------------------
-         foreach (IMapItem enemyUnit in gi.AdvancingEnemies)
-         {
-            Logger.Log(LogEnum.LE_SHOW_ENEMY_ADVANCE_TO_MOVE_BOARD, "EnemiesMovingToMoveBoard(): Adding eu=" + enemyUnit.Name + " to " + t.Name);
-            enemyUnit.Zoom = 1.0;
-            enemyUnit.TerritoryCurrent = t;
-            IMapPoint mp = Territory.GetRandomPoint(t, enemyUnit.Zoom * Utilities.theMapItemOffset); // add enemy unit to random location in area
-            enemyUnit.Location.X = mp.X;
-            enemyUnit.Location.Y = mp.Y;
-            gi.MoveStacks.Add(enemyUnit);
-            Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "EnemiesMovingToMoveBoard(): Adding mi=" + enemyUnit.Name + " t=" + enemyUnit.TerritoryCurrent.Name + " to " + gi.MoveStacks.ToString());
+            //-------------------------------------------
+            if (gi.EnteredHexes.Count < 2) // This is the start area so any enemy units advancing go to unknown location
+            {
+               Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "EnemiesOverrunToPreviousArea(): gi.EnteredHexes.Count=" + gi.EnteredHexes.Count.ToString() + " from hexes=" + gi.EnteredHexes.toString());
+               Logger.Log(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA, "EnemiesOverrunToPreviousArea(): gi.EnteredHexes.Count=0");
+               return true;
+            }
+            EnteredHex enteredHex = gi.EnteredHexes[gi.EnteredHexes.Count - 2];
+            ITerritory? t = Territories.theTerritories.Find(enteredHex.TerritoryName);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "EnemiesOverrunToPreviousArea(): Territories.theTerritories.Find() returned null for tName=" + enteredHex.TerritoryName);
+               return false;
+            }
+            Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "EnemiesOverrunToPreviousArea(): Getting last enterHex=" + enteredHex.ToString() + " from hexes=" + gi.EnteredHexes.toString());
+            IStack? stack = gi.MoveStacks.Find(t);
+            if (null == stack)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "EnemiesOverrunToPreviousArea(): gi.MoveStacks.Find(enteredHex.TerritoryName) returned null for tNmae=" + enteredHex.TerritoryName);
+               return false;
+            }
+            //------------------------------------
+            foreach (IMapItem mi in stack.MapItems) // Remove any US Control marker. If one found, ensure victory points reflect losing one area
+            {
+               if (true == mi.Name.Contains("UsControl"))
+               {
+                  Logger.Log(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA, "EnemiesOverrunToPreviousArea(): Removing UsControl from t=" + t.Name);
+                  stack.MapItems.Remove(mi);
+                  lastReport.VictoryPtsCaptureArea--;
+                  Logger.Log(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES, "EnemiesOverrunToPreviousArea(): Removing UsControl from t=" + t.Name + " #=" + lastReport.VictoryPtsCaptureArea.ToString());
+                  break;
+               }
+            }
+            bool isEnemyStrengthCheckFound = false;
+            foreach (IMapItem mi in stack.MapItems) // If there is no enemy strength marker found, add one
+            {
+               if (true == mi.Name.Contains("Strength"))
+               {
+                  isEnemyStrengthCheckFound = true;
+                  break;
+               }
+            }
+            if (false == isEnemyStrengthCheckFound)
+            {
+               Logger.Log(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA, "EnemiesOverrunToPreviousArea(): Adding Strenght Marker to t=" + t.Name);
+               string name = "StrengthLight" + Utilities.MapItemNum.ToString();
+               ++Utilities.MapItemNum;
+               IMapItem strengthMarker = new MapItem(name, 1.0, "c36Light", t);
+               stack.MapItems.Add(strengthMarker);
+            }
+            //------------------------------------
+            foreach (IMapItem enemyUnit in gi.AdvancingEnemies)
+            {
+               Logger.Log(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA, "EnemiesOverrunToPreviousArea(): Adding eu=" + enemyUnit.Name + " to " + t.Name);
+               enemyUnit.IsMoving = false;
+               enemyUnit.IsHullDown = false;
+               enemyUnit.IsSpotted = false;
+               enemyUnit.IsMovingInOpen = false;
+               enemyUnit.IsWoods = false;
+               enemyUnit.IsBuilding = false;
+               enemyUnit.IsFortification = false;
+               enemyUnit.IsThrownTrack = false;
+               enemyUnit.Zoom = 1.0;
+               enemyUnit.TerritoryCurrent = t;
+               IMapPoint mp = Territory.GetRandomPoint(t, enemyUnit.Zoom * Utilities.theMapItemOffset); // add enemy unit to random location in area
+               enemyUnit.Location.X = mp.X;
+               enemyUnit.Location.Y = mp.Y;
+               gi.MoveStacks.Add(enemyUnit);
+               Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "EnemiesOverrunToPreviousArea(): Adding mi=" + enemyUnit.Name + " t=" + enemyUnit.TerritoryCurrent.Name + " to " + gi.MoveStacks.ToString());
+            }
+            gi.AdvancingEnemies.Clear();
          }
          return true;
       }
@@ -1414,7 +1418,7 @@ namespace Pattons_Best
             return false;
          }
          int randNum = Utilities.RandomGenerator.Next(3);
-         if( 0 == randNum )
+         if (0 == randNum)
             report.Scenario = EnumScenario.Advance;
          else if (1 == randNum)
             report.Scenario = EnumScenario.Battle;
@@ -1656,7 +1660,7 @@ namespace Pattons_Best
          //------------------------------------
          gi.Sherman.IsTurret = true;
          gi.Sherman.TerritoryCurrent = gi.Home;
-         int delta = (int) (gi.Sherman.Zoom * Utilities.theMapItemOffset);
+         int delta = (int)(gi.Sherman.Zoom * Utilities.theMapItemOffset);
          gi.Sherman.Location.X = gi.Home.CenterPoint.X - delta;
          gi.Sherman.Location.Y = gi.Home.CenterPoint.Y - delta;
          gi.BattleStacks.Add(gi.Sherman);
@@ -1684,16 +1688,16 @@ namespace Pattons_Best
             return false;
          }
          //---------------------------------------------
-         IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce"); 
+         IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce"); // Set Task Force into two areas in
          if (null == taskForce)
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): taskForce=null");
             return false;
          }
-         int index = Utilities.RandomGenerator.Next(0, taskForce.TerritoryCurrent.Adjacents.Count); 
+         int index = Utilities.RandomGenerator.Next(0, taskForce.TerritoryCurrent.Adjacents.Count);
          string tName = taskForce.TerritoryCurrent.Adjacents[index];
          int count = 10;
-         while (true == tName.EndsWith("E") && 0 < --count )
+         while (true == tName.EndsWith("E") && 0 < --count)
          {
             index = Utilities.RandomGenerator.Next(0, taskForce.TerritoryCurrent.Adjacents.Count);
             tName = taskForce.TerritoryCurrent.Adjacents[index];
@@ -1709,6 +1713,15 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): gi.EnteredArea =null for " + tName);
             return false;
          }
+         //---------------------------------------------
+         EnteredHex newHex = new EnteredHex(gi, gi.EnteredArea, ColorActionEnum.CAE_ENTER);
+         if (true == newHex.CtorError)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): newHex.Ctor=true");
+            return false;
+         }
+         Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "PerformAutoSetupSkipMovement(): adding newHex=" + newHex.ToString() + " to hexes=" + gi.EnteredHexes.toString());
+         gi.EnteredHexes.Add(newHex); // EnterBoardArea() - moving to new area
          //---------------------------------------------
          taskForce.TerritoryCurrent = taskForce.TerritoryStarting = gi.EnteredArea;
          taskForce.Location = gi.EnteredArea.CenterPoint;
@@ -1760,12 +1773,12 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------------------
-         int numEnemyUnitsAppearing = Utilities.RandomGenerator.Next(4, 6); 
+         int numEnemyUnitsAppearing = Utilities.RandomGenerator.Next(4, 6);
          numEnemyUnitsAppearing = 5; // <cgs> TEST - number of enemy units appearing
          for (int k = 0; k < numEnemyUnitsAppearing; k++)
          {
             int die1 = Utilities.RandomGenerator.Next(0, 3);
-            //die1 += 3; // <cgs> TEST - create enemy in US Sectors
+            die1 += 3; // <cgs> TEST - create enemy in US Sectors
             int die2 = Utilities.RandomGenerator.Next(0, 3);
             string? tName = null;
             if (0 == die1)
@@ -1898,7 +1911,7 @@ namespace Pattons_Best
             //-----------------------------------------
             if (true == mi.IsVehicle)
             {
-               if(false == mi.SetMapItemRotation(gi.Sherman))
+               if (false == mi.SetMapItemRotation(gi.Sherman))
                {
                   Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): SetMapItemRotation() returned false");
                   return false;
@@ -1910,7 +1923,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): GetEnemyNewFacing() returned error");
                   return false;
                }
-               if ( false == mi.UpdateMapRotation(facing))
+               if (false == mi.UpdateMapRotation(facing))
                {
                   Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): UpdateMapRotation() returned false");
                   return false;
@@ -2207,7 +2220,7 @@ namespace Pattons_Best
                case GameAction.ShowReportErrorDialog:
                case GameAction.ShowAboutDialog:
                case GameAction.EndGameShowFeats:
-               case GameAction.UpdateAfterActionReport:  
+               case GameAction.UpdateAfterActionReport:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
                   break;
                case GameAction.PreparationsLoaderSpotSet:
@@ -2236,7 +2249,7 @@ namespace Pattons_Best
                   gi.GunLoads.Clear();
                   gi.IsHatchesActive = false;
                   int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
-                  if( 0 < totalAmmo )
+                  if (0 < totalAmmo)
                   {
                      gi.EventDisplayed = gi.EventActive = "e013";
                      IMapItem gunLoad = new MapItem("GunLoadInGun", 1.0, "c17GunLoad", new Territory());
@@ -2468,7 +2481,7 @@ namespace Pattons_Best
                   gi.EventDisplayed = gi.EventActive = "e021";
                   gi.DieRollAction = GameAction.MovementEnemyStrengthCheckTerritoryRoll;
                   break;
-               case GameAction.MovementEnemyStrengthCheckTerritoryRoll: 
+               case GameAction.MovementEnemyStrengthCheckTerritoryRoll:
                   theIs1stEnemyStrengthCheckTerritory = false;
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
@@ -2626,7 +2639,7 @@ namespace Pattons_Best
                   // dieRoll = 10; // <cgs> TEST - enforce combat
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
-                  if( false == ResolveBattleCheckRoll(gi, dieRoll) )
+                  if (false == ResolveBattleCheckRoll(gi, dieRoll))
                   {
                      returnStatus = "ResolveBattleCheckRoll() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
@@ -2717,7 +2730,7 @@ namespace Pattons_Best
          {
 
          }
-            return true;
+         return true;
       }
       private bool EnterBoardArea(IGameInstance gi)
       {
@@ -2806,12 +2819,12 @@ namespace Pattons_Best
          }
          //-------------------------------------------------
          IStack? stack = gi.MoveStacks.Find(gi.EnteredArea);
-         if( null == stack )
+         if (null == stack)
          {
             Logger.Log(LogEnum.LE_ERROR, "ResolveBattleCheckRoll(): stack=null");
             return false;
          }
-         IMapItems enemyOnMoveBoard = new MapItems(); 
+         IMapItems enemyOnMoveBoard = new MapItems();
          foreach (IMapItem mi in stack.MapItems)
          {
             Logger.Log(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD, "ResolveBattleCheckRoll(): mi=" + mi.Name);
@@ -2866,7 +2879,7 @@ namespace Pattons_Best
                {
                   if (false == StartBattle(gi, lastReport))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattleCheckRoll(): StartBattle() returned false" );
+                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattleCheckRoll(): StartBattle() returned false");
                      return false;
                   }
                }
@@ -2912,7 +2925,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MoveTaskForceToNewArea(): newHex.Ctor=true");
             return false;
          }
-         gi.EnteredHexes.Add(newHex);
+         gi.EnteredHexes.Add(newHex);  // MoveTaskForceToNewArea()
          Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "MoveTaskForceToNewArea(): adding newHex=" + newHex.ToString() + " to hexes=" + gi.EnteredHexes.toString());
          return true;
       }
@@ -3047,7 +3060,7 @@ namespace Pattons_Best
                case GameAction.UpdateShowRegion:
                case GameAction.UpdateAfterActionReport:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
-               case GameAction.MovementEnemyStrengthChoice: 
+               case GameAction.MovementEnemyStrengthChoice:
                   break;
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
@@ -3173,7 +3186,7 @@ namespace Pattons_Best
                            gi.DieRollAction = GameAction.BattleRoundSequenceEnemyArtilleryRoll;
                            break;
                         case "Mines":
-                           if ( true == gi.Sherman.IsMoving )
+                           if (true == gi.Sherman.IsMoving)
                            {
                               gi.IsMinefieldAttack = true;
                               gi.EventDisplayed = gi.EventActive = "e043";
@@ -3194,14 +3207,14 @@ namespace Pattons_Best
                            gi.NumCollateralDamage++;
                            break;
                         case "Friendly Advance":
-                           if( false == FriendlyAdvanceCheck(gi, ref action))
+                           if (false == FriendlyAdvanceCheck(gi, ref action))
                            {
                               returnStatus = "FriendlyAdvanceCheck() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
                            }
                            break;
                         case "Enemy Reinforce":
-                           action = GameAction.BattleActivation; 
+                           action = GameAction.BattleActivation;
                            break;
                         case "Enemy Advance":
                            if (false == EnemyAdvanceCheck(gi, ref action))
@@ -3247,16 +3260,16 @@ namespace Pattons_Best
          sb12.Append("===>p=");
          sb12.Append(previousPhase.ToString());
          if (previousPhase != gi.GamePhase)
-            { sb12.Append("=>"); sb12.Append(gi.GamePhase.ToString()); }
+         { sb12.Append("=>"); sb12.Append(gi.GamePhase.ToString()); }
          sb12.Append(" a="); sb12.Append(previousAction.ToString());
          if (previousAction != action)
-            { sb12.Append("=>"); sb12.Append(action.ToString()); }
+         { sb12.Append("=>"); sb12.Append(action.ToString()); }
          sb12.Append(" dra="); sb12.Append(previousDieAction.ToString());
          if (previousDieAction != gi.DieRollAction)
-            { sb12.Append("=>"); sb12.Append(gi.DieRollAction.ToString()); }
+         { sb12.Append("=>"); sb12.Append(gi.DieRollAction.ToString()); }
          sb12.Append(" e="); sb12.Append(previousEvent);
          if (previousEvent != gi.EventActive)
-            { sb12.Append("=>"); sb12.Append(gi.EventActive); }
+         { sb12.Append("=>"); sb12.Append(gi.EventActive); }
          sb12.Append(" dr="); sb12.Append(dieRoll.ToString());
          if ("OK" == returnStatus)
             Logger.Log(LogEnum.LE_NEXT_ACTION, sb12.ToString());
@@ -3338,17 +3351,17 @@ namespace Pattons_Best
                                  IMapItem newSmoke = new MapItem(smokeName, newZoom, "c111Smoke1", mi.TerritoryCurrent);
                                  double diff = 0.5 * zoomDiff * Utilities.theMapItemOffset;
                                  newSmoke.Location.X = mi.Location.X - diff;
-                                 newSmoke.Location.Y = mi.Location.Y - diff;   
+                                 newSmoke.Location.Y = mi.Location.Y - diff;
                                  additions.Add(newSmoke);
                               }
                               isRemovalOccurredForThisTerritory = true;
                            }
-                           else if( "Home" != mi.TerritoryCurrent.Name ) // change size of existing smoke counters
+                           else if ("Home" != mi.TerritoryCurrent.Name) // change size of existing smoke counters
                            {
                               removals.Add(mi);
                               string smokeName = "SmokeWhite" + Utilities.MapItemNum;
                               string imgName = "c108Smoke1";
-                              if( true == mi.Name.Contains("Grey") )
+                              if (true == mi.Name.Contains("Grey"))
                               {
                                  smokeName = "SmokeGrey" + Utilities.MapItemNum;
                                  imgName = "c111Smoke1";
@@ -3396,7 +3409,7 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleRoundSequenceAmmoOrders:
                   gi.IsHatchesActive = false;
-                  if( false == SetDefaultCrewActions(gi))
+                  if (false == SetDefaultCrewActions(gi))
                   {
                      returnStatus = "SetDefaultCrewActions() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceAmmoOrders): " + returnStatus);
@@ -3437,7 +3450,7 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     if( false == CheckCrewMemberExposed(gi, ref action)) // calls SpottingPhaseBegin() if no collateral
+                     if (false == CheckCrewMemberExposed(gi, ref action)) // calls SpottingPhaseBegin() if no collateral
                      {
                         returnStatus = "CheckCrewMemberExposed() returned false";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceEnemyArtilleryRoll): " + returnStatus);
@@ -3450,7 +3463,7 @@ namespace Pattons_Best
                      //dieRoll = 2; // <cgs> TEST - minefield attack
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
-                   }
+                  }
                   else
                   {
                      if (gi.DieResults[key][0] < 2)
@@ -3518,7 +3531,7 @@ namespace Pattons_Best
                   else
                   {
                      ICrewMember? cm = gi.GetCrewMember("Driver");
-                     if(null == cm)
+                     if (null == cm)
                      {
                         returnStatus = "GetCrewMember(Driver) returned null";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMinefieldDriverWoundRoll): " + returnStatus);
@@ -3586,7 +3599,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequencePanzerfaustSectorRoll:
-                  if( Utilities.NO_RESULT == gi.DieResults[key][0])
+                  if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      //dieRoll = 6; // <cgs> Panzerfaust attack sector
                      gi.DieResults[key][0] = dieRoll;
@@ -3613,7 +3626,7 @@ namespace Pattons_Best
                         string tName1 = "B" + sector + "M";
                         string tName2 = "B" + sector + "C";
                         ITerritory? tPanzerfault = Territories.theTerritories.Find(tName2);
-                        if( null == tPanzerfault )
+                        if (null == tPanzerfault)
                         {
                            returnStatus = "Unable to find tName=" + tName1;
                            Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequencePanzerfaustSectorRoll): " + returnStatus);
@@ -3697,7 +3710,7 @@ namespace Pattons_Best
                            rollNeededForAttack = 4;
                         else if (EnumScenario.Battle == lastReport.Scenario)
                            rollNeededForAttack = 6;
-                        else 
+                        else
                            rollNeededForAttack = 3;
                         if (combo < rollNeededForAttack)
                         {
@@ -3737,7 +3750,7 @@ namespace Pattons_Best
                         if (true == gi.Panzerfaust.myIsAdvancingFireZone)
                            modifierToHit += 3;
                         int combo = gi.DieResults[key][0] + modifierToHit;
-                        if( combo < 8 )
+                        if (combo < 8)
                         {
                            gi.EventDisplayed = gi.EventActive = "e044c";
                            gi.DieRollAction = GameAction.BattleRoundSequencePanzerfaustToKillRoll;
@@ -3761,7 +3774,7 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     if( null == gi.Panzerfaust)
+                     if (null == gi.Panzerfaust)
                      {
                         returnStatus = "gi.Panzerfaust=null";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequencePanzerfaustToKillRoll): " + returnStatus);
@@ -3772,10 +3785,10 @@ namespace Pattons_Best
                         {
                            gi.KillSherman(lastReport, "Panzerfaust");
                            string hitLocation = "Hull";
-                           if ( 0 == Utilities.RandomGenerator.Next(2))
+                           if (0 == Utilities.RandomGenerator.Next(2))
                               hitLocation = "Turret";
                            gi.Death = new ShermanDeath(gi, gi.Panzerfaust.myEnemyUnit, hitLocation, "Panzerfault");
-                           if( true == gi.Death.myCtorError )
+                           if (true == gi.Death.myCtorError)
                            {
                               returnStatus = "gi.Death.myCtorError= true";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequencePanzerfaustToKillRoll): " + returnStatus);
@@ -3814,7 +3827,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceEnemyAdvanceEnd:
-                  if( null == gi.EnemyAdvance)
+                  if (null == gi.EnemyAdvance)
                   {
                      returnStatus = "gi.BattleStacks.Find()  gi.EnemyAdvance=null";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceEnemyAdvanceEnd): " + returnStatus);
@@ -3823,7 +3836,7 @@ namespace Pattons_Best
                   {
                      gi.IsEnemyAdvanceComplete = true;
                      IStack? stack = gi.BattleStacks.Find(gi.EnemyAdvance);
-                     if( null == stack )
+                     if (null == stack)
                      {
                         returnStatus = "gi.BattleStacks.Find() is null for " + gi.EnemyAdvance.Name;
                         Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceEnemyAdvanceEnd): " + returnStatus);
@@ -3845,7 +3858,7 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleRoundSequenceConductCrewAction:
                   gi.CrewActionPhase = CrewActionPhase.Movement;
-                  if ( false == ConductCrewAction(gi, ref action))
+                  if (false == ConductCrewAction(gi, ref action))
                   {
                      returnStatus = "ConductCrewAction() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceConductCrewAction): " + returnStatus);
@@ -3874,7 +3887,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceMovementRoll:
-                  if( false == MoveSherman(gi, ref action, dieRoll))
+                  if (false == MoveSherman(gi, ref action, dieRoll))
                   {
                      returnStatus = "MoveSherman() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
@@ -3938,7 +3951,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceChangeFacingEnd): " + returnStatus);
                   }
                   break;
-               case GameAction.BattleRoundSequenceTurretEnd: 
+               case GameAction.BattleRoundSequenceTurretEnd:
                   gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
                   if (false == ConductCrewAction(gi, ref action))
                   {
@@ -3956,7 +3969,7 @@ namespace Pattons_Best
                   if (359 < gi.Sherman.RotationTurret)
                      gi.Sherman.RotationTurret = 0;
                   break;
-               case GameAction.BattleRoundSequenceShermanFiringSelectTarget:  
+               case GameAction.BattleRoundSequenceShermanFiringSelectTarget:
                   break;
                case GameAction.BattleRoundSequenceShermanFiringMainGun:
                   Logger.Log(LogEnum.LE_SHOW_TO_HIT_ATTACK, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanFiringMainGun): Target Selected");
@@ -3990,7 +4003,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceShermanSkipRateOfFire:
-                  if( null == gi.TargetMainGun )
+                  if (null == gi.TargetMainGun)
                   {
                      returnStatus = "gi.TargetMainGun=null for a=" + action.ToString();
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanSkipRateOfFire): " + returnStatus);
@@ -4059,7 +4072,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceShermanToKillRoll:
-                  if( false == ResolveToKillEnemyUnit( gi, ref action, dieRoll) )
+                  if (false == ResolveToKillEnemyUnit(gi, ref action, dieRoll))
                   {
                      returnStatus = "ResolveToKillEnemyUnit() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanToKillRoll): " + returnStatus);
@@ -4112,7 +4125,7 @@ namespace Pattons_Best
                   gi.IsShermanFiringBowMg = false;
                   gi.IsShermanFiringCoaxialMg = true;
                   gi.IsShermanFiringSubMg = false;
-                  if ( false == GetShermanMgTargets(gi, "Coaxial"))
+                  if (false == GetShermanMgTargets(gi, "Coaxial"))
                   {
                      returnStatus = "GetShermanMgTargets() returned faulse";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceFireCoaxialMg): " + returnStatus);
@@ -4160,7 +4173,7 @@ namespace Pattons_Best
                      }
                      else
                      {
-                        if( (1==DieRoller.BlueDie) || (2 == DieRoller.BlueDie) || (3 == DieRoller.BlueDie) ) // expend ammo if blue die = 1, 2, or 3
+                        if ((1 == DieRoller.BlueDie) || (2 == DieRoller.BlueDie) || (3 == DieRoller.BlueDie)) // expend ammo if blue die = 1, 2, or 3
                         {
                            if (true == gi.IsShermanFiringAaMg) lastReport.Ammo50CalibreMG--;
                            else if (true == gi.IsShermanFiringBowMg) lastReport.Ammo30CalibreMG--;
@@ -4189,7 +4202,7 @@ namespace Pattons_Best
                            Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceFireMachineGunRoll): " + returnStatus);
                            isError = true;
                         }
-                        if( false == isError )
+                        if (false == isError)
                         {
                            int toKillNum = TableMgr.GetShermanMgToKillNumber(gi, gi.TargetMg, mgType);
                            if (TableMgr.FN_ERROR == toKillNum)
@@ -4254,7 +4267,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceFireMgSkip): " + returnStatus);
                   }
                   break;
-               case GameAction.BattleRoundSequencePlaceAdvanceFire: 
+               case GameAction.BattleRoundSequencePlaceAdvanceFire:
                   if (null == gi.AdvanceFire)
                   {
                      returnStatus = "gi.AdvanceFire=null";
@@ -4281,7 +4294,7 @@ namespace Pattons_Best
                      {
                         miName = "Coaxial_MgAdvanceFire" + Utilities.MapItemNum;
                         gi.IsShermanFiredCoaxialMg = true;
-                        advanceMg = new MapItem(miName, 1.0, "c47AdvanceFireCoaxialMg", gi.AdvanceFire); 
+                        advanceMg = new MapItem(miName, 1.0, "c47AdvanceFireCoaxialMg", gi.AdvanceFire);
                      }
                      else if (true == gi.IsShermanFiringSubMg)
                      {
@@ -4309,7 +4322,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequencePlaceAdvanceFireRoll:
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
-                  if(gi.DieResults[key][0] < 31) // Assume that sub MG do not use ammo
+                  if (gi.DieResults[key][0] < 31) // Assume that sub MG do not use ammo
                   {
                      if (true == gi.IsShermanFiringAaMg)
                         lastReport.Ammo50CalibreMG--;
@@ -4324,7 +4337,7 @@ namespace Pattons_Best
                         gi.IsMalfunctionedMgBow = true;
                      else if (true == gi.IsShermanFiringCoaxialMg)
                         gi.IsMalfunctionedMgCoaxial = true;
-                     else if (true == gi.IsShermanFiringSubMg) {  }  // do nothing
+                     else if (true == gi.IsShermanFiringSubMg) { }  // do nothing
                      else
                      {
                         returnStatus = "reached default no MG fired";
@@ -4333,7 +4346,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequencePlaceAdvanceFireRollEnd:
-                  gi.DieResults[key][0] = Utilities.NO_RESULT; 
+                  gi.DieResults[key][0] = Utilities.NO_RESULT;
                   gi.CrewActionPhase = CrewActionPhase.TankMgFire;
                   if (false == ConductCrewAction(gi, ref action))
                   {
@@ -4459,7 +4472,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceReadyRackHeMinus:
-                  if( false == UpdateReadyRackMinus(gi, "He"))
+                  if (false == UpdateReadyRackMinus(gi, "He"))
                   {
                      returnStatus = "UpdateReadyRackMinus() returned false for He";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
@@ -4594,7 +4607,7 @@ namespace Pattons_Best
                            AdvanceTime(lastReport, 15);
                            break;
                         case "Friendly Artillery":
-                           if( true == isEnemyUnitLeft)
+                           if (true == isEnemyUnitLeft)
                            {
                               action = GameAction.BattleResolveArtilleryFire;
                            }
@@ -4615,7 +4628,7 @@ namespace Pattons_Best
                               gi.EventDisplayed = gi.EventActive = "e043";
                               gi.DieRollAction = GameAction.BattleRoundSequenceMinefieldRoll;
                            }
-                           else 
+                           else
                            {
                               gi.EventDisplayed = gi.EventActive = "e043a";
                            }
@@ -4666,7 +4679,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceBackToSpotting:
-                  if ( false == ResetRound(gi, "GameStateBattleRoundSequence(BattleRoundSequenceBackToSpotting)") )    // BattleRoundSequenceBackToSpotting
+                  if (false == ResetRound(gi, "GameStateBattleRoundSequence(BattleRoundSequenceBackToSpotting)"))    // BattleRoundSequenceBackToSpotting
                   {
                      returnStatus = "ResetRound() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceBackToSpotting): " + returnStatus);
@@ -4705,7 +4718,7 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleEmptyResolve:
                   gi.CrewActions.Clear();            // GameStateBattleRoundSequence.BattleEmptyResolve
-                  if ( false == ResetRound(gi, "GameStateBattleRoundSequence(BattleEmptyResolve)") )     // GameStateBattleRoundSequence.BattleEmptyResolve
+                  if (false == ResetRound(gi, "GameStateBattleRoundSequence(BattleEmptyResolve)"))     // GameStateBattleRoundSequence.BattleEmptyResolve
                   {
                      returnStatus = "ResetRound() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleEmptyResolve): " + returnStatus);
@@ -4842,7 +4855,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "SpottingPhaseBegin(): GetSpottedTerritories() returned null");
                   return false;
                }
-               if( true == Logger.theLogLevel[(int)LogEnum.LE_EVENT_VIEWER_SPOTTING])
+               if (true == Logger.theLogLevel[(int)LogEnum.LE_EVENT_VIEWER_SPOTTING])
                {
                   StringBuilder sb = new StringBuilder("SpottingPhaseBegin(): " + caller + ": cm=");
                   sb.Append(cm.Role);
@@ -4855,7 +4868,7 @@ namespace Pattons_Best
                         sb.Append(",");
                   }
                   sb.Append(")");
-                  Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, sb.ToString() );
+                  Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, sb.ToString());
                }
                if (0 < spottedTerritories.Count)
                {
@@ -4931,7 +4944,7 @@ namespace Pattons_Best
          //---------------------------------------------------------
          Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "ConductCrewAction(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.ConductCrewAction");
          gi.BattlePhase = BattlePhase.ConductCrewAction;
-         if( CrewActionPhase.Movement == gi.CrewActionPhase )
+         if (CrewActionPhase.Movement == gi.CrewActionPhase)
          {
             gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
             bool isTankMoving = false;
@@ -5018,7 +5031,7 @@ namespace Pattons_Best
                if ("Gunner_RotateTurret" == crewAction.Name)
                   isRotateTurret = true;
             }
-            if( (true == isRotateTurret ) && (false == gi.IsShermanTurretRotated) )
+            if ((true == isRotateTurret) && (false == gi.IsShermanTurretRotated))
             {
                gi.IsShermanTurretRotated = true;
                gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
@@ -5026,14 +5039,14 @@ namespace Pattons_Best
                gi.DieRollAction = GameAction.DieRollActionNone;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 3-phase=" + gi.CrewActionPhase.ToString());
             }
-            else if ( (true == isTankFiringMainGun) && ((false == gi.Sherman.IsMoved) || (true == card.myIsHvss) ) )
+            else if ((true == isTankFiringMainGun) && ((false == gi.Sherman.IsMoved) || (true == card.myIsHvss)))
             {
                if (false == GetShermanTargets(gi, ref outAction))
                {
                   Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): GetShermanTargets() returned false");
                   return false;
                }
-               if( 0 < gi.Targets.Count )
+               if (0 < gi.Targets.Count)
                {
                   outAction = GameAction.BattleRoundSequenceShermanFiringSelectTarget;
                   gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
@@ -5058,20 +5071,20 @@ namespace Pattons_Best
             bool isMgFire = false;
             foreach (IMapItem crewAction in gi.CrewActions)
             {
-               if (("Loader_FireSubMg" == crewAction.Name) && (false == gi.IsShermanFiredSubMg) )
+               if (("Loader_FireSubMg" == crewAction.Name) && (false == gi.IsShermanFiredSubMg))
                   isMgFire = true;
-               if (("Loader_FireAaMg" == crewAction.Name) && (false == gi.IsShermanFiredAaMg) )
+               if (("Loader_FireAaMg" == crewAction.Name) && (false == gi.IsShermanFiredAaMg))
                   isMgFire = true;
-               if (("Gunner_FireCoaxialMg" == crewAction.Name) && (false == gi.IsShermanFiredCoaxialMg) )
+               if (("Gunner_FireCoaxialMg" == crewAction.Name) && (false == gi.IsShermanFiredCoaxialMg))
                   isMgFire = true;
-               if (("Assistant_FireBowMg" == crewAction.Name) && (false == gi.IsShermanFiredBowMg) )
+               if (("Assistant_FireBowMg" == crewAction.Name) && (false == gi.IsShermanFiredBowMg))
                   isMgFire = true;
-               if (("Commander_FireSubMg" == crewAction.Name) && (false == gi.IsShermanFiredSubMg) )
+               if (("Commander_FireSubMg" == crewAction.Name) && (false == gi.IsShermanFiredSubMg))
                   isMgFire = true;
-               if (("Commander_FireAaMg" == crewAction.Name) && (false == gi.IsShermanFiredAaMg) )
+               if (("Commander_FireAaMg" == crewAction.Name) && (false == gi.IsShermanFiredAaMg))
                   isMgFire = true;
             }
-            if ( true == isMgFire)
+            if (true == isMgFire)
             {
                gi.EventDisplayed = gi.EventActive = "e054";
                gi.DieRollAction = GameAction.DieRollActionNone;
@@ -5112,7 +5125,7 @@ namespace Pattons_Best
             bool isRepairMainGun = false;
             bool isRepairAaMg = false;
             bool isRepairCoaxialMg = false;
-            bool isRepairBowMg= false;
+            bool isRepairBowMg = false;
             foreach (IMapItem crewAction in gi.CrewActions)
             {
                if ("Loader_RepairMainGun" == crewAction.Name)
@@ -5126,7 +5139,7 @@ namespace Pattons_Best
                if ("Commander_RepairAaMg" == crewAction.Name)
                   isRepairAaMg = true;
             }
-            if ( (true == isRepairMainGun) && (false == gi.IsMainGunRepairAttempted) )
+            if ((true == isRepairMainGun) && (false == gi.IsMainGunRepairAttempted))
             {
                gi.IsMainGunRepairAttempted = true;
                gi.EventDisplayed = gi.EventActive = "e056";
@@ -5134,7 +5147,7 @@ namespace Pattons_Best
                gi.CrewActionPhase = CrewActionPhase.RepairGun;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 11-phase=" + gi.CrewActionPhase.ToString());
             }
-            else if ( (true == isRepairAaMg) && (false == gi.IsAaMgRepairAttempted) )
+            else if ((true == isRepairAaMg) && (false == gi.IsAaMgRepairAttempted))
             {
                gi.IsAaMgRepairAttempted = true;
                gi.EventDisplayed = gi.EventActive = "e056a";
@@ -5142,7 +5155,7 @@ namespace Pattons_Best
                gi.CrewActionPhase = CrewActionPhase.RepairGun;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 12-phase=" + gi.CrewActionPhase.ToString());
             }
-            else if ( (true == isRepairBowMg) && (false == gi.IsBowMgRepairAttempted) )
+            else if ((true == isRepairBowMg) && (false == gi.IsBowMgRepairAttempted))
             {
                gi.IsBowMgRepairAttempted = true;
                gi.EventDisplayed = gi.EventActive = "e056b";
@@ -5150,7 +5163,7 @@ namespace Pattons_Best
                gi.CrewActionPhase = CrewActionPhase.RepairGun;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 13-phase=" + gi.CrewActionPhase.ToString());
             }
-            else if ( (true == isRepairCoaxialMg) && (false == gi.IsCoaxialMgRepairAttempted) )
+            else if ((true == isRepairCoaxialMg) && (false == gi.IsCoaxialMgRepairAttempted))
             {
                gi.IsCoaxialMgRepairAttempted = true;
                gi.EventDisplayed = gi.EventActive = "e056c";
@@ -5217,7 +5230,7 @@ namespace Pattons_Best
          {
             Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "ConductCrewAction(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.RandomEvent");
             gi.BattlePhase = BattlePhase.RandomEvent;              // Skip to RandomEvent if no enemy units
-            if( EnumScenario.Advance == lastReport.Scenario)
+            if (EnumScenario.Advance == lastReport.Scenario)
                gi.EventActive = gi.EventDisplayed = "e039a";
             else if (EnumScenario.Battle == lastReport.Scenario)
                gi.EventActive = gi.EventDisplayed = "e039b";
@@ -5372,6 +5385,12 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): lastReport=null");
             return false;
          }
+         //---------------------------------
+         if (false == EnemiesOverrunToPreviousArea(gi)) //  enemy show up in previous area if they move to OffBottom
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): EnemiesOverrunToPreviousArea() returned false");
+            return false;
+         }
          //--------------------------------
          if (null == gi.EnteredArea)
          {
@@ -5385,13 +5404,15 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------
-         if ( (((270.0 < gi.Sherman.RotationHull) && (gi.Sherman.RotationHull <  90.0)) && ("B" == gi.MovementEffectOnEnemy)) ||
-              ((( 90.0 < gi.Sherman.RotationHull) && (gi.Sherman.RotationHull < 270.0)) && ("A" == gi.MovementEffectOnEnemy)) )
+         Logger.Log(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD, "MoveShermanAdvanceOrRetreat(): rh=" + gi.Sherman.RotationHull.ToString() + " gi.MovementEffectOnEnemy=" + gi.MovementEffectOnEnemy);
+         if ((((270.0 < gi.Sherman.RotationHull) || (gi.Sherman.RotationHull < 90.0)) && ("A" == gi.MovementEffectOnEnemy)) ||
+              (((90.0 < gi.Sherman.RotationHull) && (gi.Sherman.RotationHull < 270.0)) && ("B" == gi.MovementEffectOnEnemy)))
          {
-
+            // do nothing
          }
          else
          {
+            // Retreat out of area
             if (gi.EnteredHexes.Count < 2) // retreat into your start area means call for another start area
             {
                Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "MoveShermanAdvanceOrRetreat(): gi.EnteredHexes.Count=" + gi.EnteredHexes.Count.ToString() + " for hexes=" + gi.EnteredHexes.toString());
@@ -5430,11 +5451,11 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): Territories.theTerritories.Find() returned null for tName=" + enteredHex.TerritoryName);
                return false;
             }
-            gi.EnteredHexes.Add(enteredHex);
+            gi.EnteredHexes.Add(enteredHex); // MoveShermanAdvanceOrRetreat() - show retreat to previous area 
             //--------------------------------------------------------
             Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "MoveShermanAdvanceOrRetreat(): Getting last enterHex=" + enteredHex.ToString() + " from hexes=" + gi.EnteredHexes.toString());
             IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
-            if( null == taskForce)
+            if (null == taskForce)
             {
                Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): taskForce=null");
                return false;
@@ -5444,12 +5465,20 @@ namespace Pattons_Best
             taskForce.Location.X = mp.X;
             taskForce.Location.Y = mp.Y;
             gi.MoveStacks.Add(taskForce);
-            Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "EnemiesMovingToMoveBoard(): Adding mi=" + taskForce.Name + " t=" + taskForce.TerritoryCurrent.Name + " to " + gi.MoveStacks.ToString());
+            Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "EnemiesOverrunToPreviousArea(): Adding mi=" + taskForce.Name + " t=" + taskForce.TerritoryCurrent.Name + " to " + gi.MoveStacks.ToString());
          }
          //--------------------------------------------------------
          foreach (IMapItem enemyUnit in enemyUnits)// add in enemy units that were on BattleBoard when battle ended
          {
-            Logger.Log(LogEnum.LE_SHOW_ENEMY_ADVANCE_TO_MOVE_BOARD, "MoveShermanAdvanceOrRetreat(): Adding eu=" + enemyUnit.Name + " to " + gi.EnteredArea.ToString());
+            Logger.Log(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD, "MoveShermanAdvanceOrRetreat(): Adding eu=" + enemyUnit.Name + " to " + gi.EnteredArea.ToString());
+            enemyUnit.IsMoving = false;
+            enemyUnit.IsHullDown = false;
+            enemyUnit.IsSpotted = false;
+            enemyUnit.IsMovingInOpen = false;
+            enemyUnit.IsWoods = false;
+            enemyUnit.IsBuilding = false;
+            enemyUnit.IsFortification = false;
+            enemyUnit.IsThrownTrack = false;
             enemyUnit.Zoom = 1.0;
             enemyUnit.TerritoryCurrent = gi.EnteredArea;
             IMapPoint mp = Territory.GetRandomPoint(gi.EnteredArea, enemyUnit.Zoom * Utilities.theMapItemOffset); // add enemy unit to random location in area
@@ -5473,7 +5502,7 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool EnemiesFacingCheck(IGameInstance gi, ref GameAction outAction )
+      private bool EnemiesFacingCheck(IGameInstance gi, ref GameAction outAction)
       {
          if (("A" == gi.MovementEffectOnEnemy) || ("B" == gi.MovementEffectOnEnemy) || ("C" == gi.MovementEffectOnEnemy))
          {
@@ -5481,7 +5510,7 @@ namespace Pattons_Best
             {
                foreach (IMapItem mi in stack.MapItems)
                {
-                  if ((true == mi.IsEnemyUnit()) && (true == mi.IsVehicle) && (false== mi.IsThrownTrack) ) // vehicles with thrown track cannot change facing 
+                  if ((true == mi.IsEnemyUnit()) && (true == mi.IsVehicle) && (false == mi.IsThrownTrack)) // vehicles with thrown track cannot change facing 
                   {
                      outAction = GameAction.BattleRoundSequenceChangeFacing;
                      return true;
@@ -5502,7 +5531,7 @@ namespace Pattons_Best
       {
          gi.Targets.Clear(); //  GetShermanTargets()
          gi.AreaTargets.Clear();
-         List<String> tNames = new List<String>(); 
+         List<String> tNames = new List<String>();
          double rotation = gi.Sherman.RotationHull + gi.Sherman.RotationTurret;
          if (359 < rotation)
             rotation -= 360.0;
@@ -5542,14 +5571,14 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "GetShermanTargets(): reached default for rotation=" + rotation.ToString());
                return false;
          }
-         foreach(string tName in tNames)
+         foreach (string tName in tNames)
          {
             IStack? stack = gi.BattleStacks.Find(tName);
-            if( null != stack )
+            if (null != stack)
             {
                foreach (IMapItem mi in stack.MapItems)
                {
-                  if ((true == mi.IsEnemyUnit()) && (true == mi.IsSpotted) && (false == mi.IsKilled) )
+                  if ((true == mi.IsEnemyUnit()) && (true == mi.IsSpotted) && (false == mi.IsKilled))
                      gi.Targets.Add(mi);
                }
             }
@@ -5605,7 +5634,7 @@ namespace Pattons_Best
          double combo = toHitNumber - modifier;
          //---------------------------------------------------------------
          string gunLoadType = gi.GetGunLoadType();
-         if( false == gi.FireAndReloadGun()) // FireMainGunAtEnemyUnits - gi.ShermanTypeOfFire get reset in FireAndReloadGun
+         if (false == gi.FireAndReloadGun()) // FireMainGunAtEnemyUnits - gi.ShermanTypeOfFire get reset in FireAndReloadGun
          {
             Logger.Log(LogEnum.LE_ERROR, "FireMainGunAtEnemyUnits(): FireAndReloadGun() returned false");
             return false;
@@ -5613,8 +5642,8 @@ namespace Pattons_Best
          //---------------------------------------------------------------
          bool isCriticalHit = false;
          if (dieRoll < 4)
-            isCriticalHit = true; 
-         if ( 97 < dieRoll ) 
+            isCriticalHit = true;
+         if (97 < dieRoll)
             gi.IsMalfunctionedMainGun = true;
          //---------------------------------------------------------------
          if (combo < dieRoll) // Miss Target - move to next Crew Action
@@ -5688,7 +5717,7 @@ namespace Pattons_Best
             return false;
          }
          //---------------------------------------------------------------
-         if ( (dieRoll <= rateOfFireNumber) && (false == gi.IsMalfunctionedMainGun) && ("None" != gi.GetGunLoadType()) )
+         if ((dieRoll <= rateOfFireNumber) && (false == gi.IsMalfunctionedMainGun) && ("None" != gi.GetGunLoadType()))
          {
             gi.DieResults["e053c"][0] = gi.DieResults["e053b"][0];
             gi.DieResults["e053b"][0] = Utilities.NO_RESULT;
@@ -5699,13 +5728,13 @@ namespace Pattons_Best
          else
          {
             Logger.Log(LogEnum.LE_SHOW_TO_HIT_ATTACK, "FireMainGunAtEnemyUnits(): Main Gun NO ROF Follow Up rof#=" + rateOfFireNumber.ToString() + " < dr=" + dieRoll.ToString());
-            if ( 0 == gi.ShermanHits.Count )
+            if (0 == gi.ShermanHits.Count)
             {
                Logger.Log(LogEnum.LE_ERROR, "FireMainGunAtEnemyUnits(): gi.ShermanHits.Count=0");
                return false;
             }
             ShermanAttack hitToResolve = gi.ShermanHits[0];
-            if ( ("Wp" != hitToResolve.myAmmoType) && ("Hbci" != hitToResolve.myAmmoType) )
+            if (("Wp" != hitToResolve.myAmmoType) && ("Hbci" != hitToResolve.myAmmoType))
             {
                if ((true == gi.TargetMainGun.Name.Contains("LW")) || (true == gi.TargetMainGun.Name.Contains("MG")) || (true == gi.TargetMainGun.Name.Contains("Pak")) || (true == gi.TargetMainGun.Name.Contains("ATG")))
                   gi.EventDisplayed = gi.EventActive = "e053d"; // resolve attack
@@ -5715,7 +5744,7 @@ namespace Pattons_Best
             }
             else
             {
-               gi.EventDisplayed = gi.EventActive = "e053f"; 
+               gi.EventDisplayed = gi.EventActive = "e053f";
                gi.DieRollAction = GameAction.DieRollActionNone;
                gi.DieRollAction = GameAction.BattleRoundSequenceShermanToKillRoll;
             }
@@ -5745,7 +5774,7 @@ namespace Pattons_Best
          TankCard card = new TankCard(lastReport.TankCardNum);
          //-----------------------------------------------------------------------------------
          ShermanAttack hit = gi.ShermanHits[0];
-         if( ("Hbci" == hit.myAmmoType) || ("Wp" == hit.myAmmoType) )
+         if (("Hbci" == hit.myAmmoType) || ("Wp" == hit.myAmmoType))
          {
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitCleanup(): first time thru with SSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
             if (false == ResolveToKillEnemyUnitCleanup(gi, ref outAction))
@@ -5755,7 +5784,7 @@ namespace Pattons_Best
             }
          }
          //-----------------------------------------------------------------------------------
-         else if ( Utilities.NO_RESULT == gi.DieResults[key][0] ) 
+         else if (Utilities.NO_RESULT == gi.DieResults[key][0])
          {
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnit(): 1st time thru ----->hit.myAmmoType=" + hit.myAmmoType + "<--------- d1=" + dieRoll.ToString() + " v?=" + gi.TargetMainGun.IsVehicle + " hulldown?=" + gi.TargetMainGun.IsHullDown);
             gi.DieResults[key][0] = dieRoll;
@@ -5771,7 +5800,7 @@ namespace Pattons_Best
                }
                else
                {
-                  if ((9 < gi.DieResults[key][0]) || (true == gi.IsShermanDeliberateImmobilization) )
+                  if ((9 < gi.DieResults[key][0]) || (true == gi.IsShermanDeliberateImmobilization))
                   {
                      hit.myHitLocation = "Thrown Track";
                      if (true == gi.TargetMainGun.Name.Contains("Truck"))
@@ -5831,7 +5860,7 @@ namespace Pattons_Best
             foreach (IMapItem mi in shermanKills)
                gi.BattleStacks.Remove(mi);
             //--------------------------------------
-            if( false == ResolveToKillEnemyUnitCleanup(gi, ref outAction))
+            if (false == ResolveToKillEnemyUnitCleanup(gi, ref outAction))
             {
                Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnit(): ResolveToKillEnemyUnitCleanup() returned false");
                return false;
@@ -5903,7 +5932,7 @@ namespace Pattons_Best
                if ("He" == hit.myAmmoType)
                {
                   toKillNum = TableMgr.GetShermanToKill75HeVehicleBaseNumber(gi, gi.TargetMainGun, hit);
-                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): attacking 1-vehicle=" + gi.TargetMainGun.Name + " toHit=" + toKillNum.ToString() );
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): attacking 1-vehicle=" + gi.TargetMainGun.Name + " toHit=" + toKillNum.ToString());
                   if (TableMgr.NO_CHANCE == toKillNum)
                   {
                      Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): 75 HE No Chance - NC NC NC NC NC NC NC NC NC NC");
@@ -6150,7 +6179,7 @@ namespace Pattons_Best
       }
       private bool ResolveToKillEnemyUnitCleanup(IGameInstance gi, ref GameAction outAction)
       {
-         if ( null == gi.TargetMainGun )
+         if (null == gi.TargetMainGun)
          {
             Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitCleanup(): gi.TargetMainGun=null");
             return false;
@@ -6163,8 +6192,8 @@ namespace Pattons_Best
          gi.TargetMainGun.IsApHit = false;
          //-------------------------------
          gi.ShermanHits.RemoveAt(0);
-         Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitCleanup(): CCCCCCCCCCCCCCCCCCCCCCCCC ShermanHit.Count=" + gi.ShermanHits.Count );
-         if ( (0 < gi.ShermanHits.Count) && ( false == gi.TargetMainGun.IsKilled ) )
+         Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitCleanup(): CCCCCCCCCCCCCCCCCCCCCCCCC ShermanHit.Count=" + gi.ShermanHits.Count);
+         if ((0 < gi.ShermanHits.Count) && (false == gi.TargetMainGun.IsKilled))
          {
             bool isInfantryTarget = ((true == gi.TargetMainGun.Name.Contains("LW")) || (true == gi.TargetMainGun.Name.Contains("MG")) || (true == gi.TargetMainGun.Name.Contains("Pak")) || (true == gi.TargetMainGun.Name.Contains("ATG")));
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitCleanup(): Setup to roll kill against infantry?=" + isInfantryTarget.ToString());
@@ -6349,7 +6378,7 @@ namespace Pattons_Best
                isLoaderRepairing = true;
          }
          //-------------------------------------------------------
-         if( true == isLoaderRepairing )
+         if (true == isLoaderRepairing)
          {
             ICrewMember? loader = gi.GetCrewMember("Loader");
             if (null == loader)
@@ -6375,7 +6404,7 @@ namespace Pattons_Best
          {
             gi.IsMalfunctionedMgAntiAircraft = false;
          }
-         else if ( (90 < combo) || (97 < gi.DieResults[key][0]) ) // gun automatically breaks on unmodified die roll greater than 97
+         else if ((90 < combo) || (97 < gi.DieResults[key][0])) // gun automatically breaks on unmodified die roll greater than 97
          {
             gi.IsMalfunctionedMgAntiAircraft = false;
             gi.IsBrokenMgAntiAircraft = true;
@@ -6485,13 +6514,13 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "FireMortarIntoTurretFront(): reached default for rotation=" + rotation.ToString());
                return false;
          }
-         if( null == tName )
+         if (null == tName)
          {
             Logger.Log(LogEnum.LE_ERROR, "FireMortarIntoTurretFront(): tName=null");
             return false;
          }
          ITerritory? t = Territories.theTerritories.Find(tName);
-         if( null == t)
+         if (null == t)
          {
             Logger.Log(LogEnum.LE_ERROR, "FireMortarIntoTurretFront(): t=null for tName=" + tName);
             return false;
@@ -6515,7 +6544,7 @@ namespace Pattons_Best
       private bool UpdateReadyRackMinus(IGameInstance gi, string ammoType)
       {
          int readyRackLoadCount = gi.GetReadyRackReload(ammoType);
-         if( 0 == readyRackLoadCount)
+         if (0 == readyRackLoadCount)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): Invalid state - readyRackLoadCount=0 for " + ammoType);
             return false;
@@ -6546,7 +6575,7 @@ namespace Pattons_Best
             ammoAvailable--;
          if ((ammoAvailable < 1) || (card.myMaxReadyRackCount <= gi.GetReadyRackTotalLoad()))
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): Invalid state - maxReload reached for " + ammoType  + " ammo=" + ammoAvailable.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): Invalid state - maxReload reached for " + ammoType + " ammo=" + ammoAvailable.ToString());
             return false;
          }
          else
@@ -6566,7 +6595,7 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "NextStepAfterRandomEvent(): lastReport=null" );
+            Logger.Log(LogEnum.LE_ERROR, "NextStepAfterRandomEvent(): lastReport=null");
             return false;
          }
          //--------------------------------------------------
@@ -6580,7 +6609,7 @@ namespace Pattons_Best
          }
          else
          {
-            if ( false == ResetRound(gi, "NextStepAfterRandomEvent()") )    // NextStepAfterRandomEvent
+            if (false == ResetRound(gi, "NextStepAfterRandomEvent()"))    // NextStepAfterRandomEvent
             {
                Logger.Log(LogEnum.LE_ERROR, "NextStepAfterRandomEvent(): ResetRound() returned false");
                return false;
@@ -6603,7 +6632,7 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool ResetRound(IGameInstance gi, string caller, bool isAmmoReset= false)
+      private bool ResetRound(IGameInstance gi, string caller, bool isAmmoReset = false)
       {
          Logger.Log(LogEnum.LE_SHOW_RESET_ROUND, "ResetRound(): %%%%%%%%%%%%%%%%%% entering - called by " + caller);
          if (false == isAmmoReset)
@@ -6668,7 +6697,7 @@ namespace Pattons_Best
          gi.IsCoaxialMgRepairAttempted = false;
          //-------------------------------------------------------
          gi.IsShermanTurretRotated = false;
-         gi.ShermanRotationTurretOld = gi.Sherman.RotationTurret ;
+         gi.ShermanRotationTurretOld = gi.Sherman.RotationTurret;
          //-------------------------------------------------------
          gi.IsAirStrikePending = false;
          gi.IsAdvancingFireChosen = false;
@@ -6682,7 +6711,7 @@ namespace Pattons_Best
          gi.Death = null;
          gi.Panzerfaust = null;
          gi.NumCollateralDamage = 0;
-         if( null != gi.TargetMainGun ) 
+         if (null != gi.TargetMainGun)
          {
             if (true == gi.TargetMainGun.IsKilled)
             {
@@ -6783,7 +6812,7 @@ namespace Pattons_Best
                   gi.EventDisplayed = gi.EventActive = "e102";
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   //----------------------------------------------
-                  if( false == UpdatePromotion(gi, lastReport))
+                  if (false == UpdatePromotion(gi, lastReport))
                   {
                      returnStatus = "UpdatePromotion() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(): " + returnStatus);
@@ -6802,7 +6831,7 @@ namespace Pattons_Best
                case GameAction.EventDebriefDecorationSilverStar:
                case GameAction.EventDebriefDecorationCross:
                case GameAction.EventDebriefDecorationHonor:
-                  if( false == UpdateDecoration(gi, lastReport, action))
+                  if (false == UpdateDecoration(gi, lastReport, action))
                   {
                      returnStatus = "UpdateDecoration() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
@@ -6852,7 +6881,7 @@ namespace Pattons_Best
          int scenarioMultiplierKOGermanUnit = 1;
          int scenarioMultiplierCapturedMapArea = 1;
          int scenarioMultiplierLoseMapArea = 1;
-         if ( EnumScenario.Advance == report.Scenario )
+         if (EnumScenario.Advance == report.Scenario)
          {
             scenarioMultiplierKOGermanUnit = 1;
             scenarioMultiplierCapturedMapArea = 1;
@@ -6880,7 +6909,7 @@ namespace Pattons_Best
          totalYourKia += report.VictoryPtsYourKiaTruck;
          totalYourKia += report.VictoryPtsYourKiaSpwOrPsw * 2;
          totalYourKia += report.VictoryPtsYourKiaSPGun * 6;
-         totalYourKia += report.VictoryPtsYourKiaPzIV * 7; 
+         totalYourKia += report.VictoryPtsYourKiaPzIV * 7;
          totalYourKia += report.VictoryPtsYourKiaPzV * 9;
          totalYourKia += report.VictoryPtsYourKiaPzVI * 12;
          totalYourKia += report.VictoryPtsYourKiaAtGun * 4;
@@ -6891,7 +6920,7 @@ namespace Pattons_Best
          totalFriendlyKia += report.VictoryPtsFriendlyKiaTruck;
          totalFriendlyKia += report.VictoryPtsFriendlyKiaSpwOrPsw * 2;
          totalFriendlyKia += report.VictoryPtsFriendlyKiaSPGun * 6;
-         totalFriendlyKia += report.VictoryPtsFriendlyKiaPzIV * 7; 
+         totalFriendlyKia += report.VictoryPtsFriendlyKiaPzIV * 7;
          totalFriendlyKia += report.VictoryPtsFriendlyKiaPzV * 9;
          totalFriendlyKia += report.VictoryPtsFriendlyKiaPzVI * 12;
          totalFriendlyKia += report.VictoryPtsFriendlyKiaAtGun * 4;
@@ -6900,7 +6929,7 @@ namespace Pattons_Best
          totalFriendlyKia -= report.VictoryPtsFriendlySquad * 3;
          report.VictoryPtsTotalFriendlyForces = totalFriendlyKia * scenarioMultiplierKOGermanUnit;
          //----------------------------------
-         report.VictoryPtsTotalTerritory = (report.VictoryPtsCaptureArea + 10*report.VictoryPtsCapturedExitArea) * scenarioMultiplierCapturedMapArea;
+         report.VictoryPtsTotalTerritory = (report.VictoryPtsCaptureArea + 10 * report.VictoryPtsCapturedExitArea) * scenarioMultiplierCapturedMapArea;
          report.VictoryPtsTotalTerritory -= (report.VictoryPtsLostArea * scenarioMultiplierLoseMapArea);
          //----------------------------------
          report.VictoryPtsTotalEngagement = report.VictoryPtsTotalYourTank + report.VictoryPtsTotalFriendlyForces + report.VictoryPtsTotalEngagement;
@@ -6917,7 +6946,7 @@ namespace Pattons_Best
          switch (oldRank)
          {
             case "Sgt":
-               if( 99 < gi.PromotionPointNum )
+               if (99 < gi.PromotionPointNum)
                {
                   gi.PromotionDay = gi.Day;
                   report.Commander.Rank = "Ssg";
@@ -6949,14 +6978,14 @@ namespace Pattons_Best
                return false;
          }
          string promoDate = TableMgr.GetDate(gi.PromotionDay);
-         if( "Boot Camp" == promoDate )
+         if ("Boot Camp" == promoDate)
          {
             gi.PromotionDay = gi.Day;
             return true;
          }
          string currentDate = TableMgr.GetDate(gi.Day);
          int diff = Utilities.DiffInDates(promoDate, currentDate);
-         if( diff < -999 )
+         if (diff < -999)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdatePromotion(): Utilities.DiffInDates() returned error");
             return false;
@@ -7017,7 +7046,7 @@ namespace Pattons_Best
          }
          else
          {
-            if( false == ResetDay(gi, report))
+            if (false == ResetDay(gi, report))
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateDecoration(): ResetDay(=null) returned false");
                return false;
@@ -7052,7 +7081,6 @@ namespace Pattons_Best
          gi.Hatches.Clear();
          gi.CrewActions.Clear();            // ResetDay()
          gi.GunLoads.Clear();
-         gi.AdvancingEnemies.Clear();       // ResetDay()
          gi.TargetMainGun = null;           // ResetDay()
          gi.IsShermanFiringAtFront = false; // ResetDay()
          //-------------------------------------------------------
@@ -7164,7 +7192,7 @@ namespace Pattons_Best
          if (true == commander.IsKilled)
             gi.PromotionPointNum = 0;
          //-------------------------------------------------------
-         if ( false == ResetDieResults(gi))
+         if (false == ResetDieResults(gi))
          {
             Logger.Log(LogEnum.LE_ERROR, "ResetDay(): ResetDieResults() returned false");
             return false;

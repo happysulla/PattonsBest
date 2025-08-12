@@ -343,6 +343,7 @@ namespace Pattons_Best
          const int Feb1945 = 136;
          const int Mar1945 = 146;
          string month = GetMonth(day);
+         dieRoll = 20; // <cgs> TEST - LW Appear
          if (dieRoll < 6)
          {
             if (EnumScenario.Advance == situation && Feb1945 < day)
@@ -1109,6 +1110,7 @@ namespace Pattons_Best
          }
          else if (EnumScenario.Battle == lastReport.Scenario)
          {
+            dieRoll = 5; // <cgs> TEST - LW - Do Nothing
             switch (enemyUnit)
             {
                case "LW":

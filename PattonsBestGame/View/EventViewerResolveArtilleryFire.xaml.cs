@@ -505,6 +505,7 @@ namespace Pattons_Best
             return;
          }
          IMapItem mi = myGridRows[i].myMapItemEnemy;
+         dieRoll = 90; // <cgs> TEST - no artillery deaths
          myGridRows[i].myDieRoll = dieRoll;
          myGridRows[i].myResult = TableMgr.SetFriendlyActionResult(myGameInstance, mi, dieRoll, myNumUseControlled, false, true, false);
          if ( "ERROR" == myGridRows[i].myResult )
