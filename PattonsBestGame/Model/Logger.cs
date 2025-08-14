@@ -38,6 +38,7 @@ namespace Pattons_Best
       LE_SHOW_APPEARING_UNITS,
       LE_SHOW_TO_HIT_MODIFIER,
       LE_SHOW_TO_HIT_ATTACK,
+      LE_SHOW_MAIN_GUN_BREAK,
       LE_SHOW_TO_KILL_MODIFIER,
       LE_SHOW_TO_KILL_ATTACK,
       LE_SHOW_TO_KILL_MG_ATTACK,
@@ -146,6 +147,7 @@ namespace Pattons_Best
          //-------------------------------
          //SetOn(LogEnum.LE_SHOW_TO_HIT_MODIFIER);
          //SetOn(LogEnum.LE_SHOW_TO_HIT_ATTACK);
+         SetOn(LogEnum.LE_SHOW_MAIN_GUN_BREAK);
          //SetOn(LogEnum.LE_SHOW_TO_KILL_MODIFIER);
          //SetOn(LogEnum.LE_SHOW_TO_KILL_ATTACK);
          //SetOn(LogEnum.LE_SHOW_TO_KILL_MG_ATTACK);

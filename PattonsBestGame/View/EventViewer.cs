@@ -3810,11 +3810,21 @@ namespace Pattons_Best
                isCommanderOrderGiven = true;
          }
          //-----------------------------------------------
-         if( false == isGunnerOrderGiven)
+         if (false == isAssistantOrderGiven)
+         {
+            if (false == gi.IsCrewActionSelectable("Assistant", out isAssistantOrderGiven))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsOrdersGiven(): IsCrewActionSelectable(Assistant) returned false");
+               isOrdersGiven = false;
+               return false;
+            }
+         }
+         //-----------------------------------------------
+         if ( false == isGunnerOrderGiven)
          {
             if (false == gi.IsCrewActionSelectable("Gunner", out isGunnerOrderGiven))
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): lastReport=null");
+               Logger.Log(LogEnum.LE_ERROR, "IsOrdersGiven(): IsCrewActionSelectable(Gunner) returned false");
                isOrdersGiven = false;
                return false;
             }
@@ -3824,7 +3834,7 @@ namespace Pattons_Best
          {
             if (false == gi.IsCrewActionSelectable("Commander", out isCommanderOrderGiven))
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): lastReport=null");
+               Logger.Log(LogEnum.LE_ERROR, "IsOrdersGiven():  IsCrewActionSelectable(Commander) returned false");
                isOrdersGiven = false;
                return false;
             }

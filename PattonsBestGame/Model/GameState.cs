@@ -3986,7 +3986,10 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleRoundSequenceShermanFiringMainGunEnd:
                   if ((98 == gi.DieResults[key][0]) || (99 == gi.DieResults[key][0]) || (100 == gi.DieResults[key][0]))
+                  {
                      gi.IsMalfunctionedMainGun = true;
+                     Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanFiringMainGunEnd): Main Gun Malfunctioned dr=" + gi.DieResults[key][0].ToString());
+                  }
                   if (false == gi.FireAndReloadGun())  // BattleRoundSequenceShermanFiringMainGunEnd
                   {
                      returnStatus = "gi.FireAndReloadGun() returned false for a=" + action.ToString();
@@ -4062,7 +4065,10 @@ namespace Pattons_Best
                   else
                   {
                      if ((98 == gi.DieResults[key][0]) || (99 == gi.DieResults[key][0]) || (100 == gi.DieResults[key][0]))
+                     {
                         gi.IsMalfunctionedMainGun = true;
+                        Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanToHitRollNothing): Main Gun Malfunctioned dr=" + gi.DieResults[key][0].ToString());
+                     }
                      if (false == gi.FireAndReloadGun()) // BattleRoundSequenceShermanToHitRollNothing
                      {
                         returnStatus = "gi.FireAndReloadGun() returned false for a=" + action.ToString();
@@ -4895,6 +4901,7 @@ namespace Pattons_Best
       }
       private bool SetDefaultCrewActions(IGameInstance gi)
       {
+         return true;
          bool isDriverDefaultNeeded = true;
          bool isLoaderDefaultNeeded = true;
          foreach (IMapItem crewAction in gi.CrewActions)
@@ -5652,7 +5659,10 @@ namespace Pattons_Best
          if (dieRoll < 4)
             isCriticalHit = true;
          if (97 < dieRoll)
+         {
             gi.IsMalfunctionedMainGun = true;
+            Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "FireMainGunAtEnemyUnits(): Main Gun Malfunctioned dr=" + dieRoll.ToString());
+         }
          //---------------------------------------------------------------
          if (combo < dieRoll) // Miss Target - move to next Crew Action
          {
@@ -6356,11 +6366,13 @@ namespace Pattons_Best
          if (combo < 21)
          {
             gi.IsMalfunctionedMainGun = false;
+            Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "RepairMainGunAttempt(): Main Gun Repaired with combo=" + combo.ToString());
          }
          else if ((90 < combo) || (97 < gi.DieResults[key][0])) // gun automatically breaks on unmodified die roll greater than 97
          {
             gi.IsMalfunctionedMainGun = false;
             gi.IsBrokenMainGun = true;
+            Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "RepairMainGunAttempt(): Main Gun Broken with combo=" + combo.ToString());
          }
          gi.CrewActionPhase = CrewActionPhase.RepairGun;
          if (false == ConductCrewAction(gi, ref outAction))
@@ -7126,6 +7138,7 @@ namespace Pattons_Best
          gi.TargetMainGun = null;                      // ResetDay()
          Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "ResetDay(): zero NumOfShermanShot=" + gi.NumOfShermanShot.ToString());
          gi.IsMalfunctionedMainGun = false;
+         Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "ResetDay(): Main Gun Repaired");
          gi.IsBrokenMainGun = false;
          gi.IsBrokenGunSight = false;
          gi.FirstShots.Clear();

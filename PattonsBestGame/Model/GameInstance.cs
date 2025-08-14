@@ -226,6 +226,7 @@ namespace Pattons_Best
       public bool IsCrewActionSelectable(string crewRole, out bool isGiven)
       {
          isGiven = false;
+         //-----------------------------------------------
          IAfterActionReport? lastReport = this.Reports.GetLast();
          if (null == lastReport)
          {
@@ -234,6 +235,13 @@ namespace Pattons_Best
          }
          int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
          TankCard card = new TankCard(lastReport.TankCardNum);
+         //-----------------------------------------------
+         ICrewMember? crewMember = this.GetCrewMember(crewRole);
+         if( null == crewMember )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsCrewActionSelectable(): crewMember=null for crewRole=" + crewRole);
+            return false;
+         }
          //-----------------------------------------------
          bool isLoaderFireAaMg = false;
          bool isLoaderRepairAaMg = false;
@@ -285,10 +293,14 @@ namespace Pattons_Best
          bool isShermanMoveAvailable = ((false == this.Sherman.IsThrownTrack) && (false == this.Sherman.IsAssistanceNeeded) && (false == this.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch) );
          switch (crewRole)
          {
+            case "Assistant":
+               if (true == crewMember.IsIncapacitated)
+                  isGiven = true;
+               return true;
             case "Gunner":
                bool isFixBrokenGunnerPeriscopeAvailable = ((true == this.IsBrokenPeriscopeGunner) && (0 < diffPeriscopes));
                bool isCoaxialMgFiringAvailable = ((false == this.IsBrokenPeriscopeGunner) || (true == isGunnerOpenHatch));
-               if ((false == isMainGunFiringAvailable) && (false == isCoaxialMgFiringAvailable) && (false == isFixBrokenGunnerPeriscopeAvailable) )
+               if ((false == isMainGunFiringAvailable) && (false == isCoaxialMgFiringAvailable) && (false == isFixBrokenGunnerPeriscopeAvailable) || (true == crewMember.IsIncapacitated))
                   isGiven = true;
                return true;
             case "Commander":
@@ -299,7 +311,7 @@ namespace Pattons_Best
                bool isAntiAircraftMgAbleToFire = ( (true == isCommanderOpenHatch) && (false == isLoaderFireAaMg) && (true == is50CalibreMGFirePossible) );
                bool isAntiAircraftMgRepairPossible = ((true == this.IsMalfunctionedMgAntiAircraft) && (false == isLoaderRepairAaMg) && (false == this.IsBrokenMgAntiAircraft));
                bool isSubMgAbleToFire = ((true == isCommanderOpenHatch) && (false == isLoaderFireSubMg) );
-               if ((false == isMainGunFiringAvailable) && (false == isShermanMoveAvailable) && (false == isFixBrokenCmdrPeriscopeAvailable) && (false == is30CalibreMGFirePossible) && (false == is50CalibreMGFirePossible) && (false == isAntiAircraftMgAbleToFire) && (false == isAntiAircraftMgRepairPossible)  && (false == isSubMgAbleToFire))
+               if ((false == isMainGunFiringAvailable) && (false == isShermanMoveAvailable) && (false == isFixBrokenCmdrPeriscopeAvailable) && (false == is30CalibreMGFirePossible) && (false == is50CalibreMGFirePossible) && (false == isAntiAircraftMgAbleToFire) && (false == isAntiAircraftMgRepairPossible)  && (false == isSubMgAbleToFire) || (true == crewMember.IsIncapacitated))
                   isGiven = true;
                return true;
             default:
