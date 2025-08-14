@@ -252,11 +252,12 @@ Choose one of the following images for Advancing Fire option per
 <InlineUIContainer><Image Name='c44AdvanceFireDeny' Height='60' Width='60'></Image></InlineUIContainer> to skip advancing fire.  "
 e029a	"<Bold>e029a Advancing Fire Not Allowed</Bold> 
 <InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
-<InlineUIContainer><Button Content='r22.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<InlineUIContainer><Button Content='r22.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.   
 <LineBreak/><LineBreak/>
-Advancing fire is only allowed if there is an HE Gun Load per <InlineUIContainer><Button Content='r9.61' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Choose image below to continue.
+Choose image below to continue.
 <LineBreak/><LineBreak/>
-                                            <InlineUIContainer><Image Name='c44AdvanceFireDeny' Height='120' Width='120'></Image></InlineUIContainer> "
+                              <InlineUIContainer><Image Name='c44AdvanceFireDeny' Height='60' Width='60'></Image></InlineUIContainer> "
 e030	"<Bold>e030 Advancing Fire Ammo Use</Bold> 
 <InlineUIContainer><Button Content='r22.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>

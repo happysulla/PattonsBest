@@ -1474,8 +1474,12 @@ namespace Pattons_Best
                   return;
                }
                mi.IsFired = false; // set to true if unit fires
+
+               //if( ('1' == myGridRows[i].mySector) || ('2' == myGridRows[i].mySector) || ('3' == myGridRows[i].mySector) )
+               //dieRoll = 51; // <cgs> TEST - Move-B for Infantry in Battle Scenario
+               //else
+               //dieRoll = 5; // <cgs> TEST - Do Nothing for Infantry in Battle Scenario
                //dieRoll = 15; // <cgs> TEST - Move-F for Infantry in Battle Scenario
-               dieRoll = 31; // <cgs> TEST - Move-B for Infantry in Battle Scenario
                //dieRoll = 87; // <cgs> TEST - Fire At Your Tank
                myGridRows[i].myDieRollEnemyAction = dieRoll;
                string enemyAction = TableMgr.SetEnemyActionResult(myGameInstance, mi, dieRoll);

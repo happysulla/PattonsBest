@@ -65,6 +65,8 @@ namespace Pattons_Best
          sb.Append(Day.ToString());
          sb.Append(",t=");
          sb.Append(TerritoryName);
+         sb.Append(",p=");
+         sb.Append(Position.ToString());
          sb.Append(")");
          return sb.ToString();
       }

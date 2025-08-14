@@ -1424,7 +1424,7 @@ namespace Pattons_Best
             report.Scenario = EnumScenario.Battle;
          else
             report.Scenario = EnumScenario.Counterattack;
-         report.Scenario = EnumScenario.Battle; // <cgs> TEST - choose scenario
+         //report.Scenario = EnumScenario.Battle; // <cgs> TEST - choose scenario
          //-------------------------------
          gi.NewMembers.Add(report.Commander);
          gi.NewMembers.Add(report.Gunner);
@@ -1714,7 +1714,7 @@ namespace Pattons_Best
             return false;
          }
          //---------------------------------------------
-         EnteredHex newHex = new EnteredHex(gi, gi.EnteredArea, ColorActionEnum.CAE_ENTER);
+         EnteredHex newHex = new EnteredHex(gi, gi.EnteredArea, ColorActionEnum.CAE_ENTER); // formAutoSetupSkipMovement()
          if (true == newHex.CtorError)
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): newHex.Ctor=true");
@@ -1774,11 +1774,11 @@ namespace Pattons_Best
          }
          //--------------------------------------------------------
          int numEnemyUnitsAppearing = Utilities.RandomGenerator.Next(4, 6);
-         numEnemyUnitsAppearing = 5; // <cgs> TEST - number of enemy units appearing
+         //numEnemyUnitsAppearing = 5; // <cgs> TEST - number of enemy units appearing
          for (int k = 0; k < numEnemyUnitsAppearing; k++)
          {
             int die1 = Utilities.RandomGenerator.Next(0, 3);
-            die1 += 3; // <cgs> TEST - create enemy in US Sectors
+            //die1 += 3; // <cgs> TEST - create enemy in US Sectors
             int die2 = Utilities.RandomGenerator.Next(0, 3);
             string? tName = null;
             if (0 == die1)
@@ -1854,7 +1854,7 @@ namespace Pattons_Best
                diceRoll = 100;
             else
                diceRoll = die1 + 10 * die2;
-            diceRoll = 11; // <cgs> TEST -  infantry appearing
+            //diceRoll = 11; // <cgs> TEST -  infantry appearing
             //diceRoll = 45; // <cgs> TEST -  tanks appearing
             //diceRoll = 51; // <cgs> TEST -  ATGappearing
             string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
@@ -1976,7 +1976,7 @@ namespace Pattons_Best
          //--------------------------------
          //gi.IsLeadTank = true;
          //--------------------------------
-         //gi.Sherman.RotationHull = 240; // <cgs> TEST
+         //gi.Sherman.RotationHull = 180; // <cgs> TEST
          //gi.Sherman.RotationTurret = 60;
          //gi.Sherman.IsMoving = false;
          //gi.Sherman.IsHullDown = false;
@@ -2583,8 +2583,16 @@ namespace Pattons_Best
                   gi.EventDisplayed = gi.EventActive = "e028";
                   break;
                case GameAction.MovementAdvanceFireChoice:
-                  gi.EventDisplayed = gi.EventActive = "e029";
-                  gi.DieRollAction = GameAction.MovementAdvanceFireAmmoUseRoll;
+                  if( "He" ==  gi.GetGunLoadType())
+                  {
+                     gi.EventDisplayed = gi.EventActive = "e029";
+                     gi.DieRollAction = GameAction.MovementAdvanceFireAmmoUseRoll;
+                  }
+                  else
+                  {
+                     gi.EventDisplayed = gi.EventActive = "e029a";
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
                   if (false == MoveTaskForceToNewArea(gi))
                   {
                      returnStatus = "MoveTaskForceToNewArea() returned false";
@@ -3164,7 +3172,7 @@ namespace Pattons_Best
                case GameAction.BattleRandomEventRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 01; // <cgs> TEST - Random Event - Time passes
+                     //dieRoll = 01; // <cgs> TEST - Random Event - Time passes
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -4593,7 +4601,7 @@ namespace Pattons_Best
                   //-----------------------------------------------
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 01; // <cgs> TEST - Random Event - Time passes
+                     //dieRoll = 01; // <cgs> TEST - Random Event - Time passes
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -5267,8 +5275,8 @@ namespace Pattons_Best
          string key = gi.EventActive;
          if (Utilities.NO_RESULT == gi.DieResults[key][0])
          {
-            dieRoll = 01;           // <cgs> TEST - Cause Movement
-            DieRoller.WhiteDie = 1; // <cgs> TEST - Cause Movement
+            //dieRoll = 01;           // <cgs> TEST - Cause Movement
+            //DieRoller.WhiteDie = 1; // <cgs> TEST - Cause Movement
             gi.DieResults[key][0] = dieRoll;
             gi.DieRollAction = GameAction.DieRollActionNone;
             gi.MovementEffectOnSherman = TableMgr.GetMovingResultSherman(gi, dieRoll);
@@ -5412,7 +5420,6 @@ namespace Pattons_Best
          }
          else
          {
-            // Retreat out of area
             if (gi.EnteredHexes.Count < 2) // retreat into your start area means call for another start area
             {
                Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "MoveShermanAdvanceOrRetreat(): gi.EnteredHexes.Count=" + gi.EnteredHexes.Count.ToString() + " for hexes=" + gi.EnteredHexes.toString());
@@ -5451,7 +5458,8 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): Territories.theTerritories.Find() returned null for tName=" + enteredHex.TerritoryName);
                return false;
             }
-            gi.EnteredHexes.Add(enteredHex); // MoveShermanAdvanceOrRetreat() - show retreat to previous area 
+            EnteredHex newHex = new EnteredHex(gi, newT, ColorActionEnum.CAE_ENTER);
+            gi.EnteredHexes.Add(newHex); // MoveShermanAdvanceOrRetreat() - show retreat to previous area 
             //--------------------------------------------------------
             Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "MoveShermanAdvanceOrRetreat(): Getting last enterHex=" + enteredHex.ToString() + " from hexes=" + gi.EnteredHexes.toString());
             IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
