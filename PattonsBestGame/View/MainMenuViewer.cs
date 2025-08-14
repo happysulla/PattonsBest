@@ -67,6 +67,7 @@ namespace Pattons_Best
                   myMenuItemTopLevel31.InputGestureText = "Ctrl+P";
                   myMenuItemTopLevel31.Click += MenuItemViewPath_Click;
                   myMenuItemTopLevel31.IsCheckable = true;
+                  myMenuItemTopLevel31.IsChecked = true;
                   myMenuItemTopLevel3.Items.Add(myMenuItemTopLevel31);
                   MenuItem subItem32 = new MenuItem();
                   subItem32.Header = "_Combat Calendar...";

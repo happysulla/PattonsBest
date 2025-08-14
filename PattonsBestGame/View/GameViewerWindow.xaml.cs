@@ -91,7 +91,7 @@ namespace Pattons_Best
          }
       }
       //-------------------------------------------
-      private static Double theEllipseDiameter = 20.0;
+      private static Double theEllipseDiameter = 14.0;
       private static Double theEllipseOffset = theEllipseDiameter / 2.0;
       private static Double X1 = 1.0;
       private static Double X2 = 1.0;

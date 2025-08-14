@@ -22,7 +22,10 @@ namespace Pattons_Best
       {
          InitializeComponent();
          //-------------------------------------------------------------
-         myTextBlock.Inlines.Add(new Run(" Area: " + hex.TerritoryName));
+         myTextBlock.Inlines.Add(new Run(hex.Date));
+         myTextBlock.Inlines.Add(new Run(" "));
+         myTextBlock.Inlines.Add(new Run(hex.Time));
+         myTextBlock.Inlines.Add(new Run("Area: " + hex.TerritoryName));
          myTextBlock.Inlines.Add(new LineBreak());
          //-------------------------------------------------------------
          switch (hex.ColorAction)
@@ -41,15 +44,15 @@ namespace Pattons_Best
                return;
          }
          //-------------------------------------------------------------
-         if(ColorActionEnum.CAE_START != hex.ColorAction)
-         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append(" occurred at ");
-            sb.Append(hex.Date);
-            sb.Append(" ");
-            sb.Append(hex.Time);
-            myTextBlock.Inlines.Add(new Run());
-         }
+         //if(ColorActionEnum.CAE_START != hex.ColorAction)
+         //{
+         //   StringBuilder sb = new StringBuilder();
+         //   sb.Append(" occurred at ");
+         //   sb.Append(hex.Date);
+         //   sb.Append(" ");
+         //   sb.Append(hex.Time);
+         //   myTextBlock.Inlines.Add(new Run());
+         //}
          //-------------------------------------------------------------
       }
    }
