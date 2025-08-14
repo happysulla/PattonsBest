@@ -22,27 +22,25 @@ namespace Pattons_Best
       {
          InitializeComponent();
          //-------------------------------------------------------------
-         myTextBlock.Inlines.Add(new Run(hex.Date));
-         myTextBlock.Inlines.Add(new Run(" "));
-         myTextBlock.Inlines.Add(new Run(hex.Time));
-         myTextBlock.Inlines.Add(new Run("Area: " + hex.TerritoryName));
-         myTextBlock.Inlines.Add(new LineBreak());
-         //-------------------------------------------------------------
          switch (hex.ColorAction)
          {
             case ColorActionEnum.CAE_START:
-               myTextBlock.Inlines.Add(new Run("Start location"));
+               myTextBlock.Inlines.Add(new Run("Start at "));
                break;
             case ColorActionEnum.CAE_ENTER:
-               myTextBlock.Inlines.Add(new Run("Enter area"));
+               myTextBlock.Inlines.Add(new Run("Enter at "));
                break;
             case ColorActionEnum.CAE_STOP:
-               myTextBlock.Inlines.Add(new Run("Exit area"));
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "EllipseDisplayDialog(): Reached default with ColorAction=" + hex.ColorAction.ToString());
                return;
          }
+         myTextBlock.Inlines.Add(new Run(hex.Date));
+         myTextBlock.Inlines.Add(new Run(" "));
+         myTextBlock.Inlines.Add(new Run(hex.Time));
+         myTextBlock.Inlines.Add(new Run("\n Grid: " + hex.TerritoryName));
+         myTextBlock.Inlines.Add(new LineBreak());
          //-------------------------------------------------------------
          //if(ColorActionEnum.CAE_START != hex.ColorAction)
          //{

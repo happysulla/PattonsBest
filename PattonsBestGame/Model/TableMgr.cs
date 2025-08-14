@@ -4444,6 +4444,7 @@ namespace Pattons_Best
                   case "PzIV":  // average size
                   case "MARDERII":
                   case "MARDERIII":
+                  case "TRUCK":
                      break;
                   case "TANK":
                   case "PzV":  // large size

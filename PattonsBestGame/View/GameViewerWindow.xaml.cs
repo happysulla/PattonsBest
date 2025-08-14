@@ -516,8 +516,8 @@ namespace Pattons_Best
                   foreach (UIElement ui1 in elements)
                      myCanvasMain.Children.Remove(ui1);
                }
-               if (false == UpdateCanvasMain(gi, action))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
+               //if (false == UpdateCanvasMain(gi, action))
+               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
             default:
                if (false == UpdateCanvasMain(gi, action))

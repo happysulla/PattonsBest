@@ -2523,6 +2523,7 @@ namespace Pattons_Best
                   case "PzIV":  // average size
                   case "MARDERII":
                   case "MARDERIII":
+                  case "TRUCK":
                      break;
                   case "TANK":
                   case "PzV":  // large size
@@ -2554,7 +2555,7 @@ namespace Pattons_Best
                      }
                      break;
                   default:
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): Reached Default enemyUnitType=" + enemyUnitType);
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): Reached Default for vehicle=enemyUnitType=" + enemyUnitType);
                      return "ERROR";
                }
                if (true == gi.IsShermanDeliberateImmobilization)
