@@ -1107,7 +1107,7 @@ namespace Pattons_Best
                   bool isExitArea;
                   if (false == gi.IsExitArea(out isExitArea))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.IsExitArea() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): myGameInstance.IsExitArea() returned false");
                      return false;
                   }
                   if (true == isExitArea)  // This occurs when no fight happens in exit territory
@@ -4868,12 +4868,11 @@ namespace Pattons_Best
                            }
                            //--------------------------------------------------
                            bool isExitArea;
-                           if (false == myGameInstance.IsExitArea(out isExitArea))
+                           if( false == myGameInstance.IsExitArea(out isExitArea))
                            {
-                              Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): IsExitArea() returned false");
+                              Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): myGameInstance.IsExitArea() returned false");
                               return;
                            }
-                           //--------------------------------------------------
                            if (true == isExitArea)
                               action = GameAction.MovementStartAreaRestartAfterBattle;
                            else if ( false == isMapStartAreaExist)

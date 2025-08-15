@@ -39,7 +39,7 @@ namespace Pattons_Best
          myTextBlock.Inlines.Add(new Run(hex.Date));
          myTextBlock.Inlines.Add(new Run(" "));
          myTextBlock.Inlines.Add(new Run(hex.Time));
-         myTextBlock.Inlines.Add(new Run("\n Grid: " + hex.TerritoryName));
+         myTextBlock.Inlines.Add(new Run("\nGrid: " + hex.TerritoryName));
          myTextBlock.Inlines.Add(new LineBreak());
          //-------------------------------------------------------------
          //if(ColorActionEnum.CAE_START != hex.ColorAction)

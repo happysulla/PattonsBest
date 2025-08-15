@@ -750,10 +750,7 @@ namespace Pattons_Best
          isExitAreaReached = false;
          IMapItem? exitArea = MoveStacks.FindMapItem("ExitArea");
          if (null == exitArea)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "IsExitArea(): exitArea=null");
             return false;
-         }
          if (0 == exitArea.TerritoryCurrent.Adjacents.Count)
          {
             Logger.Log(LogEnum.LE_ERROR, "IsExitArea(): exitArea.TerritoryCurrent.Adjacents.Count=0");
