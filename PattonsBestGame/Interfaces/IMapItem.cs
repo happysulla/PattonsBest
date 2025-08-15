@@ -47,7 +47,7 @@ namespace Pattons_Best
       bool IsApHit { get; set; } 
       EnumSpottingResult Spotting { get; set; }
       //----------------------------------------
-      void Clone(IMapItem mi);
+      void Copy(IMapItem mi);
       bool IsEnemyUnit();
       string GetEnemyUnit();
       void SetBloodSpots(int percent = 40);
@@ -85,6 +85,6 @@ namespace Pattons_Best
       string Wound { get; set; }
       bool IsUnconscious { get; set; }
       bool IsIncapacitated { get; set; }
-      bool IsSwitched { get; set; } // Is switched with Assistant Driver due to incapacitated
+      ICrewMember Clone();
    }
 }

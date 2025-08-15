@@ -43,6 +43,7 @@ namespace Pattons_Best
       LE_SHOW_TO_KILL_ATTACK,
       LE_SHOW_TO_KILL_MG_ATTACK,
       LE_SHOW_CONDUCT_CREW_ACTION,
+      LE_SHOW_CREW_SWITCH,
       LE_SHOW_BATTLE_ROUND_START,
       LE_SHOW_RESET_ROUND,
       LE_SHOW_TANK_BUTTONS,
@@ -137,6 +138,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_SPOT_MOD);
          //SetOn(LogEnum.LE_SHOW_SPOT_RESULT);
          //SetOn(LogEnum.LE_SHOW_ORDERS_MENU);
+         SetOn(LogEnum.LE_SHOW_CREW_SWITCH);
          //SetOn(LogEnum.LE_SHOW_AMMMO_MENU);
          //SetOn(LogEnum.LE_SHOW_TANK_BUTTONS);
          //SetOn(LogEnum.LE_SHOW_GUN_RELOAD);

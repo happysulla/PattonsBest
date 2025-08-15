@@ -196,7 +196,7 @@ namespace Pattons_Best
          Location.Y = territory.CenterPoint.Y - zoom * Utilities.theMapItemOffset;
       }
       //----------------------------------------------------------------------------
-      public void Clone(IMapItem mi)
+      public void Copy(IMapItem mi)
       {
          this.IsMoved = mi.IsMoved;
          this.Count = mi.Count;
@@ -683,12 +683,24 @@ namespace Pattons_Best
       public string Wound { get; set; } = "None";
       public bool IsUnconscious { get; set; } = false;
       public bool IsIncapacitated { get; set; } = false;
-      public bool IsSwitched { get; set; } = false;
       public CrewMember(string role, string rank, string topImageName)
          : base(SurnameMgr.GetSurname(), 1.0, false, topImageName)
       {
          Role = role;
          Rank = rank;
+      }
+      public ICrewMember Clone()
+      {
+         ICrewMember cm = new CrewMember(this.Role, this.Rank, this.TopImageName);
+         cm.Rating = this.Rating;
+         cm.IsButtonedUp = this.IsButtonedUp;
+         cm.Sector = this.Sector;
+         cm.Action = this.Action;
+         cm.Wound = this.Wound;
+         cm.IsUnconscious = this.IsUnconscious;
+         cm.IsIncapacitated = this.IsIncapacitated;
+         cm.IsKilled = this.IsKilled;
+         return cm;
       }
       public static void SetButtonContent(Button b, ICrewMember cm, bool isMapItemZoom = true, bool isDecoration = true, bool isBloodSpotsShown = true)
       {

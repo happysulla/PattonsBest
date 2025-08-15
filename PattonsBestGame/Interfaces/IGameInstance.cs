@@ -106,6 +106,8 @@ namespace Pattons_Best
       IMapItem? TargetMainGun { set; get; }
       IMapItem? TargetMg { set; get; }
       IMapItems AdvancingEnemies { set; get; }
+      ICrewMember? SwitchedCrewMember { set; get; }
+      ICrewMember? AssistantOriginal { set; get; }
       //------------------------------------------------
       ITerritory Home { get; set; }
       ITerritory? EnemyStrengthCheckTerritory { get; set; }
@@ -194,6 +196,7 @@ namespace Pattons_Best
       ICrewMember? GetCrewMember(string name);
       bool IsCrewActionSelectable(string crewRole, out bool isGiven);
       bool IsCrewActionPossibleButtonUp(string crewRole, string crewAction);
+      bool SwitchCrewMember(ICrewMember incapacitated);
       //------------------------------------------------
       string GetGunLoadType();
       bool SetGunLoadTerritory(string ammoType);

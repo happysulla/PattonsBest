@@ -735,10 +735,19 @@ namespace Pattons_Best
          bool iMainGunAbleAbleToFireDueToMoving = (false == isTankMoving) || (true == card.myIsHvss);
          bool isMainGunFiringAvailable = ((true == iMainGunAbleAbleToFireDueToMoving) && (false == gi.IsMalfunctionedMainGun) && (false == gi.IsBrokenMainGun) && (false == gi.IsBrokenGunSight) && (0 < totalAmmo) && ("None" != gi.GetGunLoadType()) && (false == isLoaderChangingLoad) );
          bool isShermanMoveAvailable = ((false == gi.Sherman.IsThrownTrack) && (false == gi.Sherman.IsAssistanceNeeded) && (false == gi.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch));
-         //---------------------------------
+
          MenuItem menuItem1 = new MenuItem();
+         myContextMenuCrewActions["Driver"].Items.Clear();
+         myContextMenuCrewActions["Driver"].Visibility = Visibility.Visible;
          myContextMenuCrewActions["Loader"].Items.Clear();
          myContextMenuCrewActions["Loader"].Visibility = Visibility.Visible;
+         myContextMenuCrewActions["Assistant"].Items.Clear();
+         myContextMenuCrewActions["Assistant"].Visibility = Visibility.Visible;
+         myContextMenuCrewActions["Gunner"].Items.Clear();
+         myContextMenuCrewActions["Gunner"].Visibility = Visibility.Visible;
+         myContextMenuCrewActions["Commander"].Items.Clear();
+         myContextMenuCrewActions["Commander"].Visibility = Visibility.Visible;
+         //---------------------------------
          ICrewMember? loader = gi.GetCrewMember("Loader");
          if( null == loader )
          {
@@ -831,8 +840,6 @@ namespace Pattons_Best
             myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
          }
          //===========================================================================================================
-         myContextMenuCrewActions["Driver"].Items.Clear();
-         myContextMenuCrewActions["Driver"].Visibility = Visibility.Visible;
          ICrewMember? driver = gi.GetCrewMember("Driver");
          if (null == driver)
          {
@@ -905,8 +912,6 @@ namespace Pattons_Best
          }
          //===========================================================================================================--
          string gunload = myGameInstance.GetGunLoadType();
-         myContextMenuCrewActions["Gunner"].Items.Clear();
-         myContextMenuCrewActions["Gunner"].Visibility = Visibility.Visible;
          ICrewMember? gunner = gi.GetCrewMember("Gunner");
          if (null == gunner)
          {
@@ -981,8 +986,6 @@ namespace Pattons_Best
             myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
          }
          //===========================================================================================================
-         myContextMenuCrewActions["Assistant"].Items.Clear();
-         myContextMenuCrewActions["Assistant"].Visibility = Visibility.Visible;
          ICrewMember? assistant = gi.GetCrewMember("Assistant");
          if (null == assistant)
          {
@@ -1025,8 +1028,6 @@ namespace Pattons_Best
             }
          }
          //===========================================================================================================
-         myContextMenuCrewActions["Commander"].Items.Clear();
-         myContextMenuCrewActions["Commander"].Visibility = Visibility.Visible;
          bool is30CalibreMGFirePossible = (0 < lastReport.Ammo30CalibreMG) && (((false == gi.IsBrokenMgBow) && (false == gi.IsMalfunctionedMgBow)) || ((false == gi.IsBrokenMgCoaxial) && (false == gi.IsMalfunctionedMgCoaxial))); // bow and coaxial MGs
          bool is50CalibreMGFirePossible = (0 < lastReport.Ammo50CalibreMG) && ((false == gi.IsBrokenMgAntiAircraft) && (false == gi.IsMalfunctionedMgAntiAircraft) && (false == isLoaderFireAaMg)); // subMG can always be fired
          ICrewMember? commander = gi.GetCrewMember("Commander");

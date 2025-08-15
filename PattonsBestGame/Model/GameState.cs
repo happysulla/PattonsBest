@@ -1,34 +1,11 @@
 ﻿using System;
-using System.CodeDom;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
-using System.Numerics;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using System.Security.Policy;
 using System.Text;
-using System.Threading;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Media.Media3D;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml.Linq;
-using Windows.ApplicationModel.Activation;
-using Windows.Devices.Perception;
-using Windows.Media.Playback;
-using Windows.Services.Cortana;
-using static Pattons_Best.EventViewerResolveRandomEvent;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Windows.Forms.AxHost;
 
 namespace Pattons_Best
 {
@@ -1971,6 +1948,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingOptions(): lastReport=null");
             return false;
          }
+         lastReport.Driver.IsIncapacitated = true;
+         lastReport.Driver.SetBloodSpots(20);
+         lastReport.Driver.Wound = "Wounded Arm";
          //--------------------------------
          //gi.IsAdvancingFireChosen = false; // <cgs> TEST
          //--------------------------------
@@ -5043,7 +5023,6 @@ namespace Pattons_Best
                      gi.EventDisplayed = gi.EventActive = "e051a";
                      gi.DieRollAction = GameAction.BattleRoundSequenceBoggedDownRoll;
                   }
-
                }
             }
          }
@@ -5289,7 +5268,11 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): Loader=null");
                   return false;
                }
-               cm.IsSwitched = true;
+               if (false == gi.SwitchCrewMember(cm))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for cm=" + cm.Role);
+                  return false;
+               }
             }
             else if (true == isDriverSwitch)
             {
@@ -5302,7 +5285,11 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): Driver=null");
                   return false;
                }
-               cm.IsSwitched = true;
+               if (false == gi.SwitchCrewMember(cm))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for cm=" + cm.Role);
+                  return false;
+               }
             }
             else if (true == isGunnerSwitch)
             {
@@ -5315,7 +5302,11 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): Gunner=null");
                   return false;
                }
-               cm.IsSwitched = true;
+               if (false == gi.SwitchCrewMember(cm))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for cm=" + cm.Role);
+                  return false;
+               }
             }
             else if (true == isCommanderSwitch)
             {
@@ -5328,7 +5319,11 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): Commander=null");
                   return false;
                }
-               cm.IsSwitched = true;
+               if (false == gi.SwitchCrewMember(cm))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for cm=" + cm.Role);
+                  return false;
+               }
             }
          }
          //---------------------------------------------------------

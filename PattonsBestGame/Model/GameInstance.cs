@@ -6,6 +6,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using Windows.ApplicationModel.Appointments.AppointmentsProvider;
+using System.Data;
 
 namespace Pattons_Best
 { 
@@ -50,6 +51,8 @@ namespace Pattons_Best
       public IMapItems AdvancingEnemies { set; get; } = new MapItems();
       public IMapItem? TargetMainGun { set; get; } = null;
       public IMapItem? TargetMg { set; get; } = null;
+      public ICrewMember? SwitchedCrewMember { set; get; } = null;
+      public ICrewMember? AssistantOriginal { set; get; } = null;
       //------------------------------------------------
       public ITerritory Home { get; set; } = new Territory();
       public ITerritory? EnemyStrengthCheckTerritory { get; set; } = null;
@@ -191,7 +194,7 @@ namespace Pattons_Best
          return sb.ToString();
       }
       //---------------------------------------------------------------
-      public ICrewMember? GetCrewMember(string name)
+      public ICrewMember? GetCrewMember(string role)
       {
          IAfterActionReport? report = Reports.GetLast();
          if (null == report)
@@ -200,7 +203,7 @@ namespace Pattons_Best
             return null;
          }
          ICrewMember? crewmember = null;
-         switch (name)
+         switch (role)
          {
             case "Driver":
                crewmember = report.Driver;
@@ -218,10 +221,50 @@ namespace Pattons_Best
                crewmember = report.Commander;
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetCrewMember(): reached default name=" + name);
+               Logger.Log(LogEnum.LE_ERROR, "GetCrewMember(): reached default name=" + role);
                break;
          }
          return crewmember;
+      }
+      public bool SwitchCrewMember(ICrewMember incapacitated)
+      {
+         this.SwitchedCrewMember = incapacitated.Clone();
+         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "SwitchCrewMember(): Switched crew member to " + incapacitated.Role);
+         //--------------------------------------------
+         IAfterActionReport? report = Reports.GetLast();
+         if (null == report)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetCrewMember(): report=null");
+            return false;
+         }
+         this.AssistantOriginal = report.Assistant.Clone();
+         //--------------------------------------------
+         report.Assistant.IsButtonedUp = true;
+         report.Assistant.Rating = (int)Math.Floor((double)(report.Assistant.Rating * 0.5));
+         //--------------------------------------------
+         switch (incapacitated.Role)
+         {
+            case "Driver":
+               report.Driver = report.Assistant;
+               report.Driver.Role = "Driver";
+               break;
+            case "Loader":
+               report.Loader = report.Assistant;
+               report.Loader.Role = "Loader";
+               break;
+            case "Gunner":
+               report.Gunner = report.Assistant;
+               report.Gunner.Role = "Gunner";
+               break;
+            case "Commander":
+               report.Commander = report.Assistant;
+               report.Commander.Role = "Commander";
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetCrewMember(): reached default name=" + incapacitated.Role);
+               break;
+         }
+         return true;
       }
       public bool IsCrewActionSelectable(string crewRole, out bool isGiven)
       {
@@ -376,6 +419,7 @@ namespace Pattons_Best
          }
          return true;
       }
+
       //---------------------------------------------------------------
       public string GetGunLoadType()
       {
