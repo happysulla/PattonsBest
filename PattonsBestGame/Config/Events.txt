@@ -748,6 +748,12 @@ e060	"<Bold>e060 Reset Round</Bold>
 Since the battle did not end, reset and return back to Spotting Round. Click image to continue.
 <LineBreak/><LineBreak/>
                                             <InlineUIContainer><Image Name='Continue60' Height='100' Width='100'></Image></InlineUIContainer>"
+e061	"<Bold>e061 Crew Switch</Bold> 
+<InlineUIContainer><Button Content='r19.22' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+The assistant driver moves through the tank ro replace the incapacitated crewman. The assistant driver takes on the role but at half rating. Click image to  continue.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='CarryingMan' Height='80' Width='200'></Image></InlineUIContainer>"
 e100	"<Bold>e100 Evening Debriefing</Bold> 
 <LineBreak/><LineBreak/>
 An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 

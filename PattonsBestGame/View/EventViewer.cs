@@ -26,6 +26,7 @@ using Button = System.Windows.Controls.Button;
 using Cursors = System.Windows.Input.Cursors;
 using Point = System.Windows.Point;
 using CheckBox = System.Windows.Controls.CheckBox;
+using Windows.ApplicationModel.Background;
 
 namespace Pattons_Best
 {
@@ -5163,8 +5164,8 @@ namespace Pattons_Best
                            action = GameAction.BattleRoundSequenceStart;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
-                        case "Continue61":
-                           action = GameAction.BattleEmpty; 
+                        case "CarryingMan":
+                           action = GameAction.BattleRoundSequenceCrewSwitchEnd;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "CampaignOver":

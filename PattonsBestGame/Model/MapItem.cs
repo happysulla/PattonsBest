@@ -683,6 +683,7 @@ namespace Pattons_Best
       public string Wound { get; set; } = "None";
       public bool IsUnconscious { get; set; } = false;
       public bool IsIncapacitated { get; set; } = false;
+      public bool IsSwitched { get; set; } = false;
       public CrewMember(string role, string rank, string topImageName)
          : base(SurnameMgr.GetSurname(), 1.0, false, topImageName)
       {

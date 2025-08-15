@@ -100,6 +100,7 @@ namespace Pattons_Best
       FireMortar,
       ThrowGrenades,
       RestockReadyRack,
+      CrewSwitch,
       Error
    };
    // GameState is a subclass representing the state pattern. For each game state, there can be different
@@ -309,6 +310,7 @@ namespace Pattons_Best
       BattleRoundSequenceReadyRackHbciPlus,
       BattleRoundSequenceReadyRackHvapPlus,
       BattleRoundSequenceReadyRackEnd,
+      BattleRoundSequenceCrewSwitchEnd,
 
       BattleRoundSequenceEnemyAction,
       BattleRoundSequenceCollateralDamageCheck,

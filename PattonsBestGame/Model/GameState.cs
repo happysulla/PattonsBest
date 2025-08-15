@@ -4555,12 +4555,20 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
                   }
                   break;
-               case GameAction.BattleRoundSequenceReadyRackEnd:  // no more crew actions to do
-                  gi.CrewActionPhase = CrewActionPhase.None;
+               case GameAction.BattleRoundSequenceReadyRackEnd: 
+                  gi.CrewActionPhase = CrewActionPhase.CrewSwitch;
                   if (false == ConductCrewAction(gi, ref action))
                   {
                      returnStatus = "ConductCrewAction() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceReadyRackEnd): " + returnStatus);
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceCrewSwitchEnd:  
+                  gi.CrewActionPhase = CrewActionPhase.None;
+                  if (false == ConductCrewAction(gi, ref action))
+                  {
+                     returnStatus = "ConductCrewAction() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceCrewSwitchEnd): " + returnStatus);
                   }
                   break;
                case GameAction.BattleRoundSequenceEnemyAction:
@@ -4901,7 +4909,6 @@ namespace Pattons_Best
       }
       private bool SetDefaultCrewActions(IGameInstance gi)
       {
-         return true;
          bool isDriverDefaultNeeded = true;
          bool isLoaderDefaultNeeded = true;
          foreach (IMapItem crewAction in gi.CrewActions)
@@ -4912,7 +4919,13 @@ namespace Pattons_Best
                isLoaderDefaultNeeded = false;
          }
          //----------------------------------------------------
-         if (true == isDriverDefaultNeeded)
+         ICrewMember? driver = gi.GetCrewMember("Driver");
+         if( null == driver )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetDefaultCrewActions(): gi.GetCrewMember(Driver) returned null");
+            return false;
+         }
+         if ( (true == isDriverDefaultNeeded) && (false == driver.IsIncapacitated) )
          {
             ITerritory? t = Territories.theTerritories.Find("DriverAction");
             if (null == t)
@@ -4924,7 +4937,13 @@ namespace Pattons_Best
             gi.CrewActions.Add(mi);
          }
          //----------------------------------------------------
-         if (true == isLoaderDefaultNeeded)
+         ICrewMember? loader = gi.GetCrewMember("Loader");
+         if (null == loader)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetDefaultCrewActions(): gi.GetCrewMember(Loader) returned null");
+            return false;
+         }
+         if ( (true == isLoaderDefaultNeeded) && (false == loader.IsIncapacitated) )
          {
             ITerritory? t = Territories.theTerritories.Find("LoaderAction");
             if (null == t)
@@ -5226,7 +5245,7 @@ namespace Pattons_Best
          //---------------------------------------------------------
          if (CrewActionPhase.RestockReadyRack == gi.CrewActionPhase)
          {
-            gi.CrewActionPhase = CrewActionPhase.None;
+            gi.CrewActionPhase = CrewActionPhase.CrewSwitch;
             bool isRestockReady = false;
             foreach (IMapItem crewAction in gi.CrewActions)
             {
@@ -5238,6 +5257,78 @@ namespace Pattons_Best
                gi.EventDisplayed = gi.EventActive = "e059";
                gi.CrewActionPhase = CrewActionPhase.RestockReadyRack;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 17-phase=" + gi.CrewActionPhase.ToString());
+            }
+         }
+         //---------------------------------------------------------
+         if (CrewActionPhase.CrewSwitch == gi.CrewActionPhase)
+         {
+            gi.CrewActionPhase = CrewActionPhase.None;
+            bool isLoaderSwitch = false;
+            bool isDriverSwitch = false;
+            bool isGunnerSwitch = false;
+            bool isCommanderSwitch = false;
+            foreach (IMapItem crewAction in gi.CrewActions)
+            {
+               if ("Assistant_Switch_Ldr" == crewAction.Name)
+                  isLoaderSwitch = true;
+               if ("Assistant_Switch_Dvr" == crewAction.Name)
+                  isDriverSwitch = true;
+               if ("Assistant_Switch_Gunr" == crewAction.Name)
+                  isGunnerSwitch = true;
+               if ("Assistant_Switch_Cmdr" == crewAction.Name)
+                  isCommanderSwitch = true;
+            }
+            if (true == isLoaderSwitch)
+            {
+               gi.EventDisplayed = gi.EventActive = "e061";
+               gi.CrewActionPhase = CrewActionPhase.CrewSwitch;
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 18a-phase=" + gi.CrewActionPhase.ToString());
+               ICrewMember? cm = gi.GetCrewMember("Loader");
+               if(null == cm)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): Loader=null");
+                  return false;
+               }
+               cm.IsSwitched = true;
+            }
+            else if (true == isDriverSwitch)
+            {
+               gi.EventDisplayed = gi.EventActive = "e061";
+               gi.CrewActionPhase = CrewActionPhase.CrewSwitch;
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 18b-phase=" + gi.CrewActionPhase.ToString());
+               ICrewMember? cm = gi.GetCrewMember("Driver");
+               if (null == cm)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): Driver=null");
+                  return false;
+               }
+               cm.IsSwitched = true;
+            }
+            else if (true == isGunnerSwitch)
+            {
+               gi.EventDisplayed = gi.EventActive = "e061";
+               gi.CrewActionPhase = CrewActionPhase.CrewSwitch;
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 18c-phase=" + gi.CrewActionPhase.ToString());
+               ICrewMember? cm = gi.GetCrewMember("Gunner");
+               if (null == cm)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): Gunner=null");
+                  return false;
+               }
+               cm.IsSwitched = true;
+            }
+            else if (true == isCommanderSwitch)
+            {
+               gi.EventDisplayed = gi.EventActive = "e061";
+               gi.CrewActionPhase = CrewActionPhase.CrewSwitch;
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 18d-phase=" + gi.CrewActionPhase.ToString());
+               ICrewMember? cm = gi.GetCrewMember("Commander");
+               if (null == cm)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): Commander=null");
+                  return false;
+               }
+               cm.IsSwitched = true;
             }
          }
          //---------------------------------------------------------

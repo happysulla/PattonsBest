@@ -822,6 +822,14 @@ namespace Pattons_Best
                myContextMenuCrewActions["Loader"].Items.Add(menuItem1);
             }
          }
+         else
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Assistant_Switch_Ldr";
+            menuItem1.Header = "Switch w/ Loader";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+         }
          //===========================================================================================================
          myContextMenuCrewActions["Driver"].Items.Clear();
          myContextMenuCrewActions["Driver"].Visibility = Visibility.Visible;
@@ -886,6 +894,14 @@ namespace Pattons_Best
                menuItem1.Click += MenuItemCrewActionClick;
                myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
             }
+         }
+         else
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Assistant_Switch_Dvr";
+            menuItem1.Header = "Switch w/ Driver";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
          }
          //===========================================================================================================--
          string gunload = myGameInstance.GetGunLoadType();
@@ -955,6 +971,14 @@ namespace Pattons_Best
                menuItem1.Click += MenuItemCrewActionClick;
                myContextMenuCrewActions["Gunner"].Items.Add(menuItem1);
             }
+         }
+         else
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Assistant_Switch_Gunr";
+            menuItem1.Header = "Switch w/ Gunner";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
          }
          //===========================================================================================================
          myContextMenuCrewActions["Assistant"].Items.Clear();
@@ -1080,6 +1104,14 @@ namespace Pattons_Best
                menuItem1.Click += MenuItemCrewActionClick;
                myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
             }
+         }
+         else
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Assistant_Switch_Cmdr";
+            menuItem1.Header = "Switch w/ Commander";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
          }
          return true;
       }
@@ -3931,6 +3963,22 @@ namespace Pattons_Best
                break;
             case "Assistant_RepairScope":
                mi = new MapItem(menuitem.Name, 1.0, "c73ReplacePeriscope", t);
+               menu = myContextMenuCrewActions["Assistant"];
+               break;
+            case "Assistant_Switch_Ldr":
+               mi = new MapItem(menuitem.Name, 1.0, "c200LoaderSwitch", t);
+               menu = myContextMenuCrewActions["Assistant"];
+               break;
+            case "Assistant_Switch_Dvr":
+               mi = new MapItem(menuitem.Name, 1.0, "c199DriverSwitch", t);
+               menu = myContextMenuCrewActions["Assistant"];
+               break;
+            case "Assistant_Switch_Gunr":
+               mi = new MapItem(menuitem.Name, 1.0, "c201GunnerSwitch", t);
+               menu = myContextMenuCrewActions["Assistant"];
+               break;
+            case "Assistant_Switch_Cmdr":
+               mi = new MapItem(menuitem.Name, 1.0, "c202CommanderSwitch", t);
                menu = myContextMenuCrewActions["Assistant"];
                break;
             case "Commander_Move":
