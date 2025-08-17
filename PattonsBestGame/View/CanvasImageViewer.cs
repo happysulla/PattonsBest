@@ -83,7 +83,7 @@ namespace Pattons_Best
                break;
             case GameAction.UpdateAfterActionReport:
                if (null != myAarUserControl)
-                  myAarUserControl.UpdateReport();
+                  myAarUserControl.UpdateReport(gi);
                return;
             case GameAction.UpdateTankExplosion:
                ShowTankExploding(gi, myCanvas);
@@ -234,13 +234,12 @@ namespace Pattons_Best
       }
       private bool ShowAfterActionReportDialog(IGameInstance gi, Canvas c, bool isEditable)
       {
-         IAfterActionReport? report = gi.Reports.GetLast();
-         if (null == report)
+         myAarUserControl = new AfterActionReportUserControl(gi, isEditable);
+         if( true == myAarUserControl.CtorError )
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowAfterActionReportDialog():  gi.Reports.GetLast()=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myAarUserControl.CtorError = true");
             return false;
          }
-         myAarUserControl = new AfterActionReportUserControl(report, isEditable);
          CleanCanvas(c);
          c.Children.Add(myAarUserControl);
          c.UpdateLayout();

@@ -1416,11 +1416,13 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupCrewRatings(): cm=null");
                return false;
             }
-            else
+            if (false == gi.SetCrewMemberTerritory(cm.Role))
             {
-               int dieRoll = Utilities.RandomGenerator.Next(1, 11);
-               cm.Rating = (int)Math.Ceiling(dieRoll / 2.0);
+               Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupCrewRatings(): SetCrewMemberTerritory() returned false");
+               return false;
             }
+            int dieRoll = Utilities.RandomGenerator.Next(1, 11);
+            cm.Rating = (int)Math.Ceiling(dieRoll / 2.0);
          }
          return true;
       }
@@ -1948,9 +1950,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingOptions(): lastReport=null");
             return false;
          }
-         lastReport.Driver.IsIncapacitated = true;
          lastReport.Driver.SetBloodSpots(20);
          lastReport.Driver.Wound = "Wounded Arm";
+         gi.SetIncapacitated(lastReport.Driver);
          //--------------------------------
          //gi.IsAdvancingFireChosen = false; // <cgs> TEST
          //--------------------------------
@@ -2412,11 +2414,12 @@ namespace Pattons_Best
                case GameAction.ShowAboutDialog:
                case GameAction.EndGameShowFeats:
                case GameAction.UpdateStatusBar:
-               case GameAction.UpdateBattleBoard:
                case GameAction.UpdateTankCard:
                case GameAction.UpdateShowRegion:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
                   break;
+               case GameAction.UpdateBattleBoard: // Do not log event
+                  return returnStatus;
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
                   break;
@@ -2813,9 +2816,8 @@ namespace Pattons_Best
             return false;
          }
          IMapItems enemyOnMoveBoard = new MapItems();
-         foreach (IMapItem mi in stack.MapItems)
+         foreach (IMapItem mi in stack.MapItems) // check if any enemy units have been moved to from Battle Board to Move Board
          {
-            Logger.Log(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD, "ResolveBattleCheckRoll(): mi=" + mi.Name);
             if (true == mi.IsEnemyUnit())
             {
                Logger.Log(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD, "ResolveBattleCheckRoll(): ENEMY UNIT=" + mi.Name);
@@ -2823,7 +2825,6 @@ namespace Pattons_Best
             }
          }
          //-------------------------------------------------
-         Logger.Log(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD, "ResolveBattleCheckRoll(): gi.BattleResistance=" + gi.BattleResistance.ToString() + " enemyCount=" + enemyOnMoveBoard.Count.ToString() + " dr=" + dieRoll.ToString());
          switch (gi.BattleResistance)
          {
             case EnumResistance.Light:
@@ -3043,13 +3044,14 @@ namespace Pattons_Best
                case GameAction.ShowAboutDialog:
                case GameAction.EndGameShowFeats:
                case GameAction.UpdateStatusBar:
-               case GameAction.UpdateBattleBoard:
                case GameAction.UpdateTankCard:
                case GameAction.UpdateShowRegion:
                case GameAction.UpdateAfterActionReport:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
                case GameAction.MovementEnemyStrengthChoice:
                   break;
+               case GameAction.UpdateBattleBoard: // Do not log event
+                  return returnStatus;
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
                   break;
@@ -3223,9 +3225,11 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleShermanKilled:
+                  gi.CrewActions.Clear(); 
                   break;
                case GameAction.UpdateTankExplosion:
                case GameAction.UpdateTankBrewUp:
+                  gi.CrewActions.Clear();
                   gi.BattleStacks.Remove(gi.Sherman);
                   break;
                case GameAction.EveningDebriefingStart:
@@ -3300,7 +3304,6 @@ namespace Pattons_Best
                case GameAction.ShowAboutDialog:
                case GameAction.EndGameShowFeats:
                case GameAction.UpdateStatusBar:
-               case GameAction.UpdateBattleBoard:
                case GameAction.UpdateTankCard:
                case GameAction.UpdateShowRegion:
                case GameAction.UpdateAfterActionReport:
@@ -3309,6 +3312,8 @@ namespace Pattons_Best
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
                   break;
+               case GameAction.UpdateBattleBoard: // Do not log event
+                  return returnStatus;
                case GameAction.BattleRoundSequenceStart:
                   if (false == BattleRoundSequenceStart(gi, ref action))
                   {
@@ -3394,7 +3399,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceCrewOrders:
                   Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceCrewOrders): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.MarkCrewAction");
                   gi.BattlePhase = BattlePhase.MarkCrewAction;
-                  break;
+                  return returnStatus;
                case GameAction.BattleRoundSequenceAmmoOrders:
                   gi.IsHatchesActive = false;
                   if (false == SetDefaultCrewActions(gi))
@@ -3800,6 +3805,8 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceFriendlyAdvance:
                case GameAction.BattleRoundSequenceEnemyAdvance:
                case GameAction.BattleActivation:
+                  break;
+               case GameAction.BattleCollateralDamageCheck:
                   break;
                case GameAction.BattleRoundSequenceFriendlyAdvanceSelected:
                   if (null == gi.FriendlyAdvance)
@@ -4710,6 +4717,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleShermanKilled:
+                  gi.CrewActions.Clear();
                   break;
                case GameAction.UpdateTankExplosion:
                case GameAction.UpdateTankBrewUp:
@@ -6888,12 +6896,13 @@ namespace Pattons_Best
                case GameAction.ShowAboutDialog:
                case GameAction.EndGameShowFeats:
                case GameAction.UpdateStatusBar:
-               case GameAction.UpdateBattleBoard:
                case GameAction.UpdateTankCard:
                case GameAction.UpdateShowRegion:
                case GameAction.UpdateAfterActionReport:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
                   break;
+               case GameAction.UpdateBattleBoard: // Do not log event
+                  return returnStatus;
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
                   break;
@@ -6940,14 +6949,14 @@ namespace Pattons_Best
                   if (false == UpdateDecoration(gi, lastReport, action))
                   {
                      returnStatus = "UpdateDecoration() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(): " + returnStatus);
                   }
                   break;
                case GameAction.EventDebriefDecorationHeart:
                   if (false == ResetDay(gi, lastReport))
                   {
                      returnStatus = "ResetDay() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(): " + returnStatus);
                   }
                   break;
                case GameAction.EndGameClose:
@@ -6955,7 +6964,7 @@ namespace Pattons_Best
                   break;
                default:
                   returnStatus = "reached default with action=" + action.ToString();
-                  Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(): " + returnStatus);
                   break;
             }
          }
@@ -6993,13 +7002,13 @@ namespace Pattons_Best
             scenarioMultiplierCapturedMapArea = 1;
             scenarioMultiplierLoseMapArea = 1;
          }
-         else if (EnumScenario.Advance == report.Scenario)
+         else if (EnumScenario.Battle == report.Scenario)
          {
             scenarioMultiplierKOGermanUnit = 1;
             scenarioMultiplierCapturedMapArea = 2;
             scenarioMultiplierLoseMapArea = 3;
          }
-         else if (EnumScenario.Advance == report.Scenario)
+         else if (EnumScenario.Counterattack == report.Scenario)
          {
             scenarioMultiplierKOGermanUnit = 2;
             scenarioMultiplierCapturedMapArea = 0;
@@ -7332,12 +7341,13 @@ namespace Pattons_Best
             case GameAction.ShowAboutDialog:
             case GameAction.EndGameShowFeats:
             case GameAction.UpdateStatusBar:
-            case GameAction.UpdateBattleBoard:
             case GameAction.UpdateTankCard:
             case GameAction.UpdateShowRegion:
             case GameAction.UpdateAfterActionReport:
             case GameAction.UpdateEventViewerDisplay: // Only change active event
                break;
+            case GameAction.UpdateBattleBoard: // Do not log event
+               return returnStatus;
             case GameAction.EndGameWin:
                gi.EventDisplayed = gi.EventActive = "e501";
                gi.DieRollAction = GameAction.DieRollActionNone;
@@ -7421,12 +7431,13 @@ namespace Pattons_Best
             case GameAction.ShowAboutDialog:
             case GameAction.EndGameShowFeats:
             case GameAction.UpdateStatusBar:
-            case GameAction.UpdateBattleBoard:
             case GameAction.UpdateTankCard:
             case GameAction.UpdateShowRegion:
             case GameAction.UpdateAfterActionReport:
             case GameAction.UpdateEventViewerDisplay: // Only change active event
                break;
+            case GameAction.UpdateBattleBoard: // Do not log event
+               return returnStatus;
             case GameAction.RemoveSplashScreen:
                PrintDiagnosticInfoToLog();
                break;

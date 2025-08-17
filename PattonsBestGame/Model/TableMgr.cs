@@ -2991,6 +2991,7 @@ namespace Pattons_Best
       {
          if( 100 == dieRoll ) // unmodified die roll 100 is always a kill
          {
+            gi.SetIncapacitated(cm);
             cm.SetBloodSpots(40);
             cm.IsKilled = true;
             cm.Wound = "Killed";
@@ -3002,15 +3003,15 @@ namespace Pattons_Best
          else if (dieRoll < 48)
          {
             cm.SetBloodSpots(5);
-            if( (true == gi.IsMinefieldAttack) || (null == gi.Death) )
+            if ((true == gi.IsMinefieldAttack) || (null == gi.Death))
             {
+               gi.SetIncapacitated(cm);
                cm.IsUnconscious = true;
-               cm.IsIncapacitated = true;
                return "Unconscious";
             }
             else
             {
-               if("None" ==  cm.Wound )
+               if ("None" == cm.Wound)
                   cm.Wound = "Light Wound";
                return "Light Wound";
             }
@@ -3024,30 +3025,32 @@ namespace Pattons_Best
          }
          else if (dieRoll < 88)
          {
+            gi.SetIncapacitated(cm);
             cm.SetBloodSpots(20);
-            cm.IsIncapacitated = true;
             if ("None" == cm.Wound)
                cm.Wound = "Light Wound";
             return "Light Wound";
          }
          else if (dieRoll < 93)
          {
+            gi.SetIncapacitated(cm);
             cm.SetBloodSpots(30);
-            cm.IsIncapacitated = true;
             if ("Killed" != cm.Wound)
                cm.Wound = "Serious Wound";
             return "Serious Wound";
          }
          else if (dieRoll < 98)
          {
+            gi.SetIncapacitated(cm);
             cm.SetBloodSpots(35);
-            cm.IsIncapacitated = true;
+            gi.SetIncapacitated(cm);
             if ("Killed" != cm.Wound)
                cm.Wound = "Serious Wound";
             return "Serious Wound";
          }
          else
          {
+            gi.SetIncapacitated(cm);
             cm.SetBloodSpots(40);
             cm.IsKilled = true;
             cm.Wound = "Killed";
@@ -4438,6 +4441,7 @@ namespace Pattons_Best
                   case "STuGIIIg": // small size
                   case "JdgPzIV":
                   case "JdgPz38t":
+                  case "SPW":
                      toHitModifierNum += 10;
                      Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): small size +10 mod=" + toHitModifierNum.ToString());
                      break;
@@ -4445,6 +4449,7 @@ namespace Pattons_Best
                   case "MARDERII":
                   case "MARDERIII":
                   case "TRUCK":
+                  case "PSW":
                      break;
                   case "TANK":
                   case "PzV":  // large size

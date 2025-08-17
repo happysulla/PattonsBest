@@ -193,10 +193,12 @@ namespace Pattons_Best
       //------------------------------------------------
       List<IUnitTest> UnitTests { get; }
       //=========================================================
-      ICrewMember? GetCrewMember(string name);
       bool IsCrewActionSelectable(string crewRole, out bool isGiven);
       bool IsCrewActionPossibleButtonUp(string crewRole, string crewAction);
+      ICrewMember? GetCrewMember(string name);
+      void SetIncapacitated(ICrewMember crewmember);
       bool SwitchCrewMember(ICrewMember incapacitated);
+      bool SetCrewMemberTerritory(string role);
       //------------------------------------------------
       string GetGunLoadType();
       bool SetGunLoadTerritory(string ammoType);

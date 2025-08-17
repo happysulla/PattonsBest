@@ -164,7 +164,6 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "GameInstance(): tHome=null");
             else
                Home = tHome;
-
          }
          catch (Exception e)
          {
@@ -174,7 +173,7 @@ namespace Pattons_Best
          //------------------------------------------------------------------------------------
          if (false == SurnameMgr.SetInitial())
          {
-            Logger.Log(LogEnum.LE_ERROR, "GameEngine(): SurnameMgr.InitNames() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "GameInstance(): SurnameMgr.SetInitial() returned false");
             CtorError = true;
             return;
          }
@@ -194,6 +193,159 @@ namespace Pattons_Best
          return sb.ToString();
       }
       //---------------------------------------------------------------
+      public bool IsCrewActionSelectable(string crewRole, out bool isGiven)
+      {
+         isGiven = false;
+         //-----------------------------------------------
+         IAfterActionReport? lastReport = this.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsCrewActionSelectable(): lastReport=null");
+            return false;
+         }
+         int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         //-----------------------------------------------
+         ICrewMember? crewMember = this.GetCrewMember(crewRole);
+         if (null == crewMember)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsCrewActionSelectable(): crewMember=null for crewRole=" + crewRole);
+            return false;
+         }
+         //-----------------------------------------------
+         bool isLoaderFireAaMg = false;
+         bool isLoaderRepairAaMg = false;
+         bool isLoaderFireSubMg = false;
+         bool isLoaderChangingLoad = false;
+         bool isTankMoving = false;
+         int periscopeRepairCount = 0;
+         foreach (IMapItem mi in this.CrewActions) // This menu is created on each crew action
+         {
+            if (true == mi.Name.Contains("Loader_ChangeGunLoad"))
+               isLoaderChangingLoad = true;
+            if (true == mi.Name.Contains("Loader_FireAaMg"))
+               isLoaderFireAaMg = true;
+            if (true == mi.Name.Contains("Loader_FireAaMg"))
+               isLoaderFireAaMg = true;
+            if (true == mi.Name.Contains("Loader_RepairAaMg"))
+               isLoaderRepairAaMg = true;
+            if (true == mi.Name.Contains("Loader_FireSubMg"))
+               isLoaderFireSubMg = true;
+            if (true == mi.Name.Contains("Driver_Forward"))
+               isTankMoving = true;
+            if (true == mi.Name.Contains("Driver_ForwardToHullDown"))
+               isTankMoving = true;
+            if (true == mi.Name.Contains("Driver_Reverse"))
+               isTankMoving = true;
+            if (true == mi.Name.Contains("Driver_ReverseToHullDown"))
+               isTankMoving = true;
+            if (true == mi.Name.Contains("Driver_PivotTank"))
+               isTankMoving = true;
+            if (true == mi.Name.Contains("RepairScope"))
+               periscopeRepairCount++;
+         }
+         int diffPeriscopes = lastReport.AmmoPeriscope - periscopeRepairCount; // How many periscopes can be repaired
+         //-----------------------------------------------
+         bool isGunnerOpenHatch = false;
+         bool isDriverOpenHatch = false;
+         bool isCommanderOpenHatch = false;
+         foreach (IMapItem mi in this.Hatches) // Loader and Driver have default actions
+         {
+            if (true == mi.Name.Contains("Driver"))
+               isDriverOpenHatch = true;
+            if (true == mi.Name.Contains("Gunner"))
+               isGunnerOpenHatch = true;
+            if (true == mi.Name.Contains("Commander"))
+               isCommanderOpenHatch = true;
+         }
+         //---------------------------------
+         bool isMainGunFiringAvailable = ((false == isTankMoving) && (false == this.IsMalfunctionedMainGun) && (false == this.IsBrokenMainGun) && (false == this.IsBrokenGunSight) && (0 < totalAmmo) && ("None" != this.GetGunLoadType()) && (false == isLoaderChangingLoad));
+         bool isShermanMoveAvailable = ((false == this.Sherman.IsThrownTrack) && (false == this.Sherman.IsAssistanceNeeded) && (false == this.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch));
+         switch (crewRole)
+         {
+            case "Assistant":
+               if (true == crewMember.IsIncapacitated)
+                  isGiven = true;
+               return true;
+            case "Gunner":
+               bool isFixBrokenGunnerPeriscopeAvailable = ((true == this.IsBrokenPeriscopeGunner) && (0 < diffPeriscopes));
+               bool isCoaxialMgFiringAvailable = ((false == this.IsBrokenPeriscopeGunner) || (true == isGunnerOpenHatch));
+               if ((false == isMainGunFiringAvailable) && (false == isCoaxialMgFiringAvailable) && (false == isFixBrokenGunnerPeriscopeAvailable) || (true == crewMember.IsIncapacitated))
+                  isGiven = true;
+               return true;
+            case "Commander":
+               //-----------------------------------------------
+               bool is30CalibreMGFirePossible = (0 < lastReport.Ammo30CalibreMG) && (((false == this.IsBrokenMgBow) && (false == this.IsMalfunctionedMgBow)) || ((false == this.IsBrokenMgCoaxial) && (false == this.IsMalfunctionedMgCoaxial))); // bow and coaxial MGs
+               bool is50CalibreMGFirePossible = (0 < lastReport.Ammo50CalibreMG) && ((false == this.IsBrokenMgAntiAircraft) && (false == this.IsMalfunctionedMgAntiAircraft)); // subMG can always be fired
+               bool isFixBrokenCmdrPeriscopeAvailable = ((true == this.IsBrokenPeriscopeGunner) && (0 < diffPeriscopes));
+               bool isAntiAircraftMgAbleToFire = ((true == isCommanderOpenHatch) && (false == isLoaderFireAaMg) && (true == is50CalibreMGFirePossible));
+               bool isAntiAircraftMgRepairPossible = ((true == this.IsMalfunctionedMgAntiAircraft) && (false == isLoaderRepairAaMg) && (false == this.IsBrokenMgAntiAircraft));
+               bool isSubMgAbleToFire = ((true == isCommanderOpenHatch) && (false == isLoaderFireSubMg));
+               if ((false == isMainGunFiringAvailable) && (false == isShermanMoveAvailable) && (false == isFixBrokenCmdrPeriscopeAvailable) && (false == is30CalibreMGFirePossible) && (false == is50CalibreMGFirePossible) && (false == isAntiAircraftMgAbleToFire) && (false == isAntiAircraftMgRepairPossible) && (false == isSubMgAbleToFire) || (true == crewMember.IsIncapacitated))
+                  isGiven = true;
+               return true;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "IsCrewActionSelectable(): reached default crewRole=" + crewRole);
+               return false;
+         }
+      }
+      public bool IsCrewActionPossibleButtonUp(string crewRole, string crewAction)
+      {
+         switch (crewRole)
+         {
+            case "Loader":
+               {
+                  if (("Loader_FireAaMg" == crewAction) || ("Loader_FireSubMg" == crewAction))
+                     return false;
+               }
+               break;
+            case "Driver":
+               if (true == this.IsBrokenPeriscopeGunner)
+               {
+                  if (("Driver_ForwardToHullDown" == crewAction) || ("Driver_Forward" == crewAction) || ("Driver_Reverse" == crewAction) || ("Driver_ReverseToHullDown" == crewAction) || ("Driver_ReverseToHullDown" == crewAction))
+                     return false;
+               }
+               break;
+            case "Gunner":
+               if (true == this.IsBrokenPeriscopeGunner)
+               {
+                  if (("Gunner_FireCoaxialMg" == crewAction) || ("Gunner_RotateTurret" == crewAction))
+                     return false;
+               }
+               if ("Gunner_ThrowGrenade" == crewAction)
+               {
+                  return false;
+               }
+               break;
+            case "Assistant":
+               if (true == this.IsBrokenPeriscopeAssistant)
+               {
+                  if ("Assistant_FireBowMg" == crewAction)
+                     return false;
+               }
+               break;
+            case "Commander":
+               IAfterActionReport? lastReport = this.Reports.GetLast();
+               if (null == lastReport)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "IsCrewActionPossibleButtonUp(): lastReport=null");
+                  return false;
+               }
+               TankCard card = new TankCard(lastReport.TankCardNum);
+               if ((true == this.IsBrokenPeriscopeCommander) && (false == card.myIsVisionCupola))
+               {
+                  if (("Commander_Move" == crewAction) || ("Commander_MainGunFire" == crewAction) || ("Commander_MGFire" == crewAction))
+                     return false;
+               }
+               if (("Commander_ThrowGrenade" == crewAction) || ("Commander_FireAaMg" == crewAction) || ("Commander_FireSubMg" == crewAction))
+                  return false;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "IsCrewActionPossibleButtonUp(): reached default crew role=" + crewRole);
+               break;
+         }
+         return true;
+      }
       public ICrewMember? GetCrewMember(string role)
       {
          IAfterActionReport? report = Reports.GetLast();
@@ -226,10 +378,60 @@ namespace Pattons_Best
          }
          return crewmember;
       }
+      public bool SetCrewMemberTerritory(string role)
+      {
+         ICrewMember? crewmember = GetCrewMember(role);
+         if(null == crewmember)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetCrewMemberTerritory(): GetCrewMember() returned false for role=" + role);
+            return false;
+         }
+         ITerritory? t = Territories.theTerritories.Find(role + "Action");
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetCrewMemberTerritory(): Territories.theTerritories.Find() returned false for role=" + role);
+            return false;
+         }
+         crewmember.TerritoryCurrent = t;
+         crewmember.Location.X = t.CenterPoint.X - Utilities.theMapItemOffset;
+         crewmember.Location.Y = t.CenterPoint.Y - Utilities.theMapItemOffset;
+         return true;
+      }
+      public void SetIncapacitated(ICrewMember cm)
+      {
+         IMapItems removals = new MapItems(); // REmove any cooresponding crew actions and add the hurt crewman in the crewaction box
+         foreach (IMapItem mi in this.CrewActions)
+         {
+            if (true == mi.Name.Contains(cm.Role))
+               removals.Add(mi);
+         }
+         foreach (IMapItem mi in removals)
+            this.CrewActions.Remove(mi);
+         this.CrewActions.Add(cm);
+         cm.IsIncapacitated = true;
+      }
       public bool SwitchCrewMember(ICrewMember incapacitated)
       {
          this.SwitchedCrewMember = incapacitated.Clone();
+         ITerritory? t = Territories.theTerritories.Find("AssistantAction"); // move incapacitited to assistant position
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetCrewMemberTerritory(): Territories.theTerritories.Find() returned false for incapacititated=" + incapacitated.ToString());
+            return false;
+         }
+         incapacitated.TerritoryCurrent = t;
+         incapacitated.Location.X = t.CenterPoint.X - Utilities.theMapItemOffset;
+         incapacitated.Location.Y = t.CenterPoint.Y - Utilities.theMapItemOffset;
          Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "SwitchCrewMember(): Switched crew member to " + incapacitated.Role);
+         //--------------------------------------------
+         foreach( IMapItem mi in this.CrewActions)
+         {
+            if (true == mi.Name.Contains("Switch"))
+            {
+               this.CrewActions.Remove(mi);
+               break;
+            }
+         }
          //--------------------------------------------
          IAfterActionReport? report = Reports.GetLast();
          if (null == report)
@@ -266,160 +468,6 @@ namespace Pattons_Best
          }
          return true;
       }
-      public bool IsCrewActionSelectable(string crewRole, out bool isGiven)
-      {
-         isGiven = false;
-         //-----------------------------------------------
-         IAfterActionReport? lastReport = this.Reports.GetLast();
-         if (null == lastReport)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "IsCrewActionSelectable(): lastReport=null");
-            return false;
-         }
-         int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
-         TankCard card = new TankCard(lastReport.TankCardNum);
-         //-----------------------------------------------
-         ICrewMember? crewMember = this.GetCrewMember(crewRole);
-         if( null == crewMember )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "IsCrewActionSelectable(): crewMember=null for crewRole=" + crewRole);
-            return false;
-         }
-         //-----------------------------------------------
-         bool isLoaderFireAaMg = false;
-         bool isLoaderRepairAaMg = false;
-         bool isLoaderFireSubMg = false;
-         bool isLoaderChangingLoad = false;
-         bool isTankMoving = false;
-         int periscopeRepairCount = 0;
-         foreach (IMapItem mi in this.CrewActions) // This menu is created on each crew action
-         {
-            if (true == mi.Name.Contains("Loader_ChangeGunLoad"))
-               isLoaderChangingLoad = true;
-            if (true == mi.Name.Contains("Loader_FireAaMg"))
-               isLoaderFireAaMg = true;
-            if (true == mi.Name.Contains("Loader_FireAaMg"))
-               isLoaderFireAaMg = true;
-             if (true == mi.Name.Contains("Loader_RepairAaMg"))
-               isLoaderRepairAaMg = true;
-            if (true == mi.Name.Contains("Loader_FireSubMg"))
-               isLoaderFireSubMg = true;
-            if (true == mi.Name.Contains("Driver_Forward"))
-               isTankMoving = true;
-            if (true == mi.Name.Contains("Driver_ForwardToHullDown"))
-               isTankMoving = true;
-            if (true == mi.Name.Contains("Driver_Reverse"))
-               isTankMoving = true;
-            if (true == mi.Name.Contains("Driver_ReverseToHullDown"))
-               isTankMoving = true;
-            if (true == mi.Name.Contains("Driver_PivotTank"))
-               isTankMoving = true;
-            if (true == mi.Name.Contains("RepairScope"))
-               periscopeRepairCount++;
-         }
-         int diffPeriscopes = lastReport.AmmoPeriscope - periscopeRepairCount; // How many periscopes can be repaired
-         //-----------------------------------------------
-         bool isGunnerOpenHatch = false;
-         bool isDriverOpenHatch = false;
-         bool isCommanderOpenHatch = false;
-         foreach (IMapItem mi in this.Hatches) // Loader and Driver have default actions
-         {
-            if (true == mi.Name.Contains("Driver"))
-               isDriverOpenHatch = true;
-            if (true == mi.Name.Contains("Gunner"))
-               isGunnerOpenHatch = true;
-            if (true == mi.Name.Contains("Commander"))
-               isCommanderOpenHatch = true;
-         }
-         //---------------------------------
-         bool isMainGunFiringAvailable = ((false == isTankMoving) && (false == this.IsMalfunctionedMainGun) && (false == this.IsBrokenMainGun) && (false == this.IsBrokenGunSight) && (0 < totalAmmo) && ("None" != this.GetGunLoadType()) && (false == isLoaderChangingLoad));
-         bool isShermanMoveAvailable = ((false == this.Sherman.IsThrownTrack) && (false == this.Sherman.IsAssistanceNeeded) && (false == this.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch) );
-         switch (crewRole)
-         {
-            case "Assistant":
-               if (true == crewMember.IsIncapacitated)
-                  isGiven = true;
-               return true;
-            case "Gunner":
-               bool isFixBrokenGunnerPeriscopeAvailable = ((true == this.IsBrokenPeriscopeGunner) && (0 < diffPeriscopes));
-               bool isCoaxialMgFiringAvailable = ((false == this.IsBrokenPeriscopeGunner) || (true == isGunnerOpenHatch));
-               if ((false == isMainGunFiringAvailable) && (false == isCoaxialMgFiringAvailable) && (false == isFixBrokenGunnerPeriscopeAvailable) || (true == crewMember.IsIncapacitated))
-                  isGiven = true;
-               return true;
-            case "Commander":
-               //-----------------------------------------------
-               bool is30CalibreMGFirePossible = (0 < lastReport.Ammo30CalibreMG) && (((false == this.IsBrokenMgBow) && (false == this.IsMalfunctionedMgBow)) || ((false == this.IsBrokenMgCoaxial) && (false == this.IsMalfunctionedMgCoaxial))); // bow and coaxial MGs
-               bool is50CalibreMGFirePossible = (0 < lastReport.Ammo50CalibreMG) && ((false == this.IsBrokenMgAntiAircraft) && (false == this.IsMalfunctionedMgAntiAircraft)); // subMG can always be fired
-               bool isFixBrokenCmdrPeriscopeAvailable = ((true == this.IsBrokenPeriscopeGunner) && (0 < diffPeriscopes));
-               bool isAntiAircraftMgAbleToFire = ( (true == isCommanderOpenHatch) && (false == isLoaderFireAaMg) && (true == is50CalibreMGFirePossible) );
-               bool isAntiAircraftMgRepairPossible = ((true == this.IsMalfunctionedMgAntiAircraft) && (false == isLoaderRepairAaMg) && (false == this.IsBrokenMgAntiAircraft));
-               bool isSubMgAbleToFire = ((true == isCommanderOpenHatch) && (false == isLoaderFireSubMg) );
-               if ((false == isMainGunFiringAvailable) && (false == isShermanMoveAvailable) && (false == isFixBrokenCmdrPeriscopeAvailable) && (false == is30CalibreMGFirePossible) && (false == is50CalibreMGFirePossible) && (false == isAntiAircraftMgAbleToFire) && (false == isAntiAircraftMgRepairPossible)  && (false == isSubMgAbleToFire) || (true == crewMember.IsIncapacitated))
-                  isGiven = true;
-               return true;
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "IsCrewActionSelectable(): reached default crewRole=" + crewRole);
-               return false;
-         }
-      }
-      public bool IsCrewActionPossibleButtonUp(string crewRole, string crewAction)
-      {
-         switch (crewRole)
-         {
-            case "Loader":
-               {
-                  if (("Loader_FireAaMg" == crewAction) || ("Loader_FireSubMg" == crewAction))
-                     return false;
-               }
-               break;
-            case "Driver":
-               if (true == this.IsBrokenPeriscopeGunner)
-               {
-                  if (("Driver_ForwardToHullDown" == crewAction) || ("Driver_Forward" == crewAction) || ("Driver_Reverse" == crewAction) || ("Driver_ReverseToHullDown" == crewAction) || ("Driver_ReverseToHullDown" == crewAction) )
-                     return false;
-               }
-               break;
-            case "Gunner":
-               if (true == this.IsBrokenPeriscopeGunner)
-               {
-                  if (("Gunner_FireCoaxialMg" == crewAction) || ("Gunner_RotateTurret" == crewAction) )
-                     return false;
-               }
-               if ("Gunner_ThrowGrenade" == crewAction)
-               {
-                  return false;
-               }
-               break;
-            case "Assistant":
-               if (true == this.IsBrokenPeriscopeAssistant)
-               {
-                  if ("Assistant_FireBowMg" == crewAction) 
-                     return false;
-               }
-               break;
-            case "Commander":
-               IAfterActionReport? lastReport = this.Reports.GetLast();
-               if (null == lastReport)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "IsCrewActionPossibleButtonUp(): lastReport=null");
-                  return false;
-               }
-               TankCard card = new TankCard(lastReport.TankCardNum);
-               if ((true == this.IsBrokenPeriscopeCommander) && (false == card.myIsVisionCupola))
-               {
-                  if (("Commander_Move" == crewAction) || ("Commander_MainGunFire" == crewAction) || ("Commander_MGFire" == crewAction) )
-                     return false;
-               }
-               if (("Commander_ThrowGrenade" == crewAction) || ("Commander_FireAaMg" == crewAction) || ("Commander_FireSubMg" == crewAction))
-                  return false;
-               break;
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "IsCrewActionPossibleButtonUp(): reached default crew role=" + crewRole);
-               break;
-         }
-         return true;
-      }
-
       //---------------------------------------------------------------
       public string GetGunLoadType()
       {

@@ -187,7 +187,7 @@ namespace Pattons_Best
                break;
             case GameAction.UpdateAfterActionReport:
                if (null != myAfterActionDialog)
-                  myAfterActionDialog.UpdateReport();
+                  myAfterActionDialog.UpdateReport(gi);
                return;
             case GameAction.UpdateUndo:
                myScrollViewerTextBlock.Cursor = System.Windows.Input.Cursors.Arrow;
@@ -217,19 +217,13 @@ namespace Pattons_Best
             case GameAction.ShowAfterActionReportDialog:
                if (null == myAfterActionDialog)
                {
-                  IAfterActionReport? aar = gi.Reports.GetLast();
-                  if (null == aar)
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateView():  gi.Reports.GetLast()=null");
-                     return;
-                  }
-                  AfterActionReportUserControl aarUserControl = new AfterActionReportUserControl(aar);
+                  AfterActionReportUserControl aarUserControl = new AfterActionReportUserControl(gi);
                   if (true == aarUserControl.CtorError)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateView(): AfterActionReportUserControl CtorError=true");
                      return;
                   }
-                  myAfterActionDialog = new AfterActionDialog(aar, CloseAfterActionDialog);
+                  myAfterActionDialog = new AfterActionDialog(gi, CloseAfterActionDialog);
                   myAfterActionDialog.Show();
                }
                break;
@@ -398,7 +392,7 @@ namespace Pattons_Best
                break;
          }
          if( null != myAfterActionDialog )
-            myAfterActionDialog.UpdateReport();
+            myAfterActionDialog.UpdateReport(gi);
       }
       public bool OpenEvent(IGameInstance gi, string key)
       {
@@ -2520,10 +2514,12 @@ namespace Pattons_Best
                   case "STuGIIIg": // small size
                   case "JdgPzIV":
                   case "JdgPz38t":
+                  case "SPW":
                      sb51.Append("+10 for small target\n"); break;
                   case "PzIV":  // average size
                   case "MARDERII":
                   case "MARDERIII":
+                  case "PSW":  
                   case "TRUCK":
                      break;
                   case "TANK":
@@ -5435,13 +5431,13 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "UpdateView():  gi.Reports.GetLast()=null");
                      return false;
                   }
-                  AfterActionReportUserControl aarUserControl = new AfterActionReportUserControl(aar);
+                  AfterActionReportUserControl aarUserControl = new AfterActionReportUserControl(myGameInstance);
                   if (true == aarUserControl.CtorError)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateView(): AfterActionReportUserControl CtorError=true");
                      return false;
                   }
-                  myAfterActionDialog = new AfterActionDialog(aar, CloseAfterActionDialog);
+                  myAfterActionDialog = new AfterActionDialog(myGameInstance, CloseAfterActionDialog);
                   myAfterActionDialog.Show();
                }
                break;

@@ -212,6 +212,7 @@ namespace Pattons_Best
          myScenario = lastReport.Scenario;
          myDay = myGameInstance.Day;
          myCallback = callback;
+         int startingRow = 0;
          //--------------------------------------------------
          if (null == myGameInstance.EnteredArea)
          {
@@ -220,8 +221,7 @@ namespace Pattons_Best
          }
          myAreaType = myGameInstance.EnteredArea.Type;
          //--------------------------------------------------
-         int startingRow = 0;
-         if( GamePhase.Battle == myGameInstance.GamePhase ) // Battele Phase setsup initial forces 
+         if( GamePhase.Battle == myGameInstance.GamePhase ) // Battle Phase setup initial forces 
          {
             IStack? stack = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
             if (null == stack)
@@ -599,8 +599,15 @@ namespace Pattons_Best
                   break;
                case E046Enum.SPW_OR_PSW_ROLL:
                   labelContent = myGridRows[i].myDieRollActivation.ToString();
-                  if (EXISTING_UNIT == myGridRows[i].myDieRollActivation)
-                     labelContent = "NA";
+                  if (Utilities.NO_RESULT == myGridRows[i].myDieRollActivation)
+                  {
+                     labelContent = " ";
+                  }
+                  else
+                  {
+                     if (EXISTING_UNIT == myGridRows[i].myDieRollActivation)
+                        labelContent = " ";
+                  }
                   Label label2 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = labelContent };
                   myGrid.Children.Add(label2);
                   Grid.SetRow(label2, rowNum);
@@ -777,7 +784,7 @@ namespace Pattons_Best
                   IMapItem? terrain = null;
                   if (Utilities.NO_RESULT < myGridRows[i].myDieRollTerrain)
                   {
-                     switch(myGridRows[i].myTerrain)
+                     switch (myGridRows[i].myTerrain)
                      {
                         case "Hull Down":
                            terrain = new MapItem("Terrain", 1.0, "c14HullDownFull", mi5.TerritoryCurrent);
@@ -798,10 +805,10 @@ namespace Pattons_Best
                            terrain = new MapItem("Terrain", 1.0, "c13Moving", mi5.TerritoryCurrent);
                            break;
                         default:
-                           Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): reached default terrain=" + myGridRows[i].myDieRollTerrain);
+                           Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): reached default terrain=" + myGridRows[i].myTerrain + " dr=" + myGridRows[i].myDieRollTerrain.ToString());
                            return false;
                      }
-                     if( null == terrain)
+                     if (null == terrain)
                      {
                         Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): terrain=null");
                         return false;

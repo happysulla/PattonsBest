@@ -31,6 +31,8 @@ namespace Pattons_Best
       bool IsHullDown { get; set; }
       bool IsTurret { get; set; }
       bool IsKilled { get; set; }
+      bool IsUnconscious { get; set; }
+      bool IsIncapacitated { get; set; }
       bool IsFired { get; set; }
       bool IsSpotted { get; set; }
       //----------------------------------------
@@ -83,8 +85,6 @@ namespace Pattons_Best
       int Sector { get; set; }
       string Action { get; set; }
       string Wound { get; set; }
-      bool IsUnconscious { get; set; }
-      bool IsIncapacitated { get; set; }
       ICrewMember Clone();
    }
 }

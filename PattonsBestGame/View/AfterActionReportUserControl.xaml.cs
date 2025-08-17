@@ -38,45 +38,50 @@ namespace Pattons_Best
       private readonly FontFamily myFontFam0 = new FontFamily("Arial Rounded MT Bold");
       private readonly FontFamily myFontFam1 = new FontFamily("Courier New");
       //-----------------------------------------------------------------------------------
-      public AfterActionReportUserControl(IAfterActionReport report, bool isEditable = false)
+      public AfterActionReportUserControl(IGameInstance gi, bool isEditable = false)
       {
          InitializeComponent();
          myIsEditable = isEditable;
-         Report = report;
-         if (false == UpdateReport())
+         if (false == UpdateReport(gi))
          {
             Logger.Log(LogEnum.LE_ERROR, "AfterActionReportUserControl(): UpdateReport() returned false");
             CtorError = true;
             return;
          }
       }
-      public bool UpdateReport()
+      public bool UpdateReport(IGameInstance gi)
       {
-         String s = AddSpaces(Report.Day, HEADER_INFO_LEN);
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): lastReport=null");
+            return false;
+         }
+         String s = AddSpaces(lastReport.Day, HEADER_INFO_LEN);
          mySpanDate.Inlines.Clear();
          mySpanDate.Inlines.Add(new Run(s));
          //----------------------------------
-         s = AddSpaces(Report.Name, HEADER_INFO_LEN);
+         s = AddSpaces(lastReport.Name, HEADER_INFO_LEN);
          mySpanTankName.Inlines.Clear();
          mySpanTankName.Inlines.Add(new Run(s));
          mySpanTankName.IsEnabled = myIsEditable;
          if (true == mySpanTankName.IsEnabled)
             mySpanTankName.Background = theBrushInActive;
          //----------------------------------
-         TankCard card = new TankCard(Report.TankCardNum);
+         TankCard card = new TankCard(lastReport.TankCardNum);
          s = AddSpaces(card.myModel, HEADER_INFO_LEN);
          mySpanTankModel.Inlines.Clear();
          mySpanTankModel.Inlines.Add(new Run(s));
          //----------------------------------
-         s = AddSpaces(Report.Scenario.ToString(), HEADER_INFO_LEN);
+         s = AddSpaces(lastReport.Scenario.ToString(), HEADER_INFO_LEN);
          mySpanSituation.Inlines.Clear();
          mySpanSituation.Inlines.Add(new Run(s));
          //----------------------------------
-         s = AddSpaces(Report.Weather, HEADER_INFO_LEN);
+         s = AddSpaces(lastReport.Weather, HEADER_INFO_LEN);
          mySpanWeather.Inlines.Clear();
          mySpanWeather.Inlines.Add(new Run(s));
          //----------------------------------
-         ICrewMember? commander = Report.Commander as ICrewMember;
+         ICrewMember? commander = lastReport.Commander as ICrewMember;
          if( null == commander )
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): commander=null");
@@ -90,8 +95,13 @@ namespace Pattons_Best
          mySpanCommanderName.IsEnabled = myIsEditable;
          if (true == mySpanCommanderName.IsEnabled)
             mySpanCommanderName.Background = theBrushInActive;
+         if (false == gi.SetCrewMemberTerritory(commander.Role))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): SetCrewMemberTerritory() returned false");
+            return false;
+         }
          //----------------------------------
-         ICrewMember? gunner = Report.Gunner as ICrewMember;
+         ICrewMember? gunner = lastReport.Gunner as ICrewMember;
          if (null == gunner)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): gunner=null");
@@ -104,8 +114,13 @@ namespace Pattons_Best
          mySpanGunnerName.IsEnabled = myIsEditable;
          if (true == mySpanGunnerName.IsEnabled)
             mySpanGunnerName.Background = theBrushInActive;
+         if (false == gi.SetCrewMemberTerritory(gunner.Role))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): SetCrewMemberTerritory() returned false");
+            return false;
+         }
          //----------------------------------
-         ICrewMember? loader = Report.Loader as ICrewMember;
+         ICrewMember? loader = lastReport.Loader as ICrewMember;
          if (null == loader)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): loader=null");
@@ -118,8 +133,13 @@ namespace Pattons_Best
          mySpanLoaderName.IsEnabled = myIsEditable;
          if (true == mySpanLoaderName.IsEnabled)
             mySpanLoaderName.Background = theBrushInActive;
+         if (false == gi.SetCrewMemberTerritory(loader.Role))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): SetCrewMemberTerritory() returned false");
+            return false;
+         }
          //----------------------------------
-         ICrewMember? driver = Report.Driver as ICrewMember;
+         ICrewMember? driver = lastReport.Driver as ICrewMember;
          if (null == driver)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): loader=null");
@@ -132,8 +152,13 @@ namespace Pattons_Best
          mySpanDriverName.IsEnabled = myIsEditable;
          if (true == mySpanDriverName.IsEnabled)
             mySpanDriverName.Background = theBrushInActive;
+         if (false == gi.SetCrewMemberTerritory(driver.Role))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): SetCrewMemberTerritory() returned false");
+            return false;
+         }
          //----------------------------------
-         ICrewMember? assistant = Report.Assistant as ICrewMember;
+         ICrewMember? assistant = lastReport.Assistant as ICrewMember;
          if (null == assistant)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): assistant=null");
@@ -146,73 +171,78 @@ namespace Pattons_Best
          mySpanAssistantName.IsEnabled = myIsEditable;
          if (true == mySpanAssistantName.IsEnabled)
             mySpanAssistantName.Background = theBrushInActive;
+         if (false == gi.SetCrewMemberTerritory(assistant.Role))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): SetCrewMemberTerritory() returned false");
+            return false;
+         }
          //----------------------------------
-         if( false == UpdateReportTimeTrack( Report ))
+         if ( false == UpdateReportTimeTrack(lastReport))
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): UpdateReportTimeTrack() returned false");
             return false;
          }
          //----------------------------------
-         myRunAmmo30Calibre.Text = Report.Ammo30CalibreMG.ToString();
-         myRunAmmo50Calibre.Text = Report.Ammo50CalibreMG.ToString();
-         myRunAmmoSmokeBombs.Text = Report.AmmoSmokeBomb.ToString();
-         myRunAmmoSmokeGrenades.Text = Report.AmmoSmokeGrenade.ToString();
-         myRunAmmoPeriscopes.Text = Report.AmmoPeriscope.ToString();
+         myRunAmmo30Calibre.Text = lastReport.Ammo30CalibreMG.ToString();
+         myRunAmmo50Calibre.Text = lastReport.Ammo50CalibreMG.ToString();
+         myRunAmmoSmokeBombs.Text = lastReport.AmmoSmokeBomb.ToString();
+         myRunAmmoSmokeGrenades.Text = lastReport.AmmoSmokeGrenade.ToString();
+         myRunAmmoPeriscopes.Text = lastReport.AmmoPeriscope.ToString();
          //----------------------------------
-         myRunMainGunHE.Text = Report.MainGunHE.ToString();
-         myRunMainGunAP.Text = Report.MainGunAP.ToString();
-         myRunMainGunWP.Text = Report.MainGunWP.ToString();
-         myRunMainGunHBCI.Text = Report.MainGunHBCI.ToString();
-         myRunMainGunHVAP.Text = Report.MainGunHVAP.ToString();
+         myRunMainGunHE.Text = lastReport.MainGunHE.ToString();
+         myRunMainGunAP.Text = lastReport.MainGunAP.ToString();
+         myRunMainGunWP.Text = lastReport.MainGunWP.ToString();
+         myRunMainGunHBCI.Text = lastReport.MainGunHBCI.ToString();
+         myRunMainGunHVAP.Text = lastReport.MainGunHVAP.ToString();
          //----------------------------------
-         int pointTotal = Report.VictoryPtsYourKiaLightWeapon + Report.VictoryPtsFriendlyKiaLightWeapon;
+         int pointTotal = lastReport.VictoryPtsYourKiaLightWeapon + lastReport.VictoryPtsFriendlyKiaLightWeapon;
          myRunVictoryPointsLight.Text = pointTotal.ToString();
-         pointTotal = Report.VictoryPtsYourKiaTruck + Report.VictoryPtsFriendlyKiaTruck;
+         pointTotal = lastReport.VictoryPtsYourKiaTruck + lastReport.VictoryPtsFriendlyKiaTruck;
          myRunVictoryPointsTruck.Text = pointTotal.ToString();
-         pointTotal = Report.VictoryPtsYourKiaSpwOrPsw + Report.VictoryPtsFriendlyKiaSpwOrPsw;
+         pointTotal = lastReport.VictoryPtsYourKiaSpwOrPsw + lastReport.VictoryPtsFriendlyKiaSpwOrPsw;
          myRunVictoryPointsSPW.Text = pointTotal.ToString();
-         pointTotal = Report.VictoryPtsYourKiaSPGun + Report.VictoryPtsFriendlyKiaSPGun;
+         pointTotal = lastReport.VictoryPtsYourKiaSPGun + lastReport.VictoryPtsFriendlyKiaSPGun;
          myRunVictoryPointsSpGun.Text = pointTotal.ToString();
-         pointTotal = Report.VictoryPtsYourKiaPzIV + Report.VictoryPtsFriendlyKiaPzIV;
+         pointTotal = lastReport.VictoryPtsYourKiaPzIV + lastReport.VictoryPtsFriendlyKiaPzIV;
          myRunVictoryPointsPzIV.Text = pointTotal.ToString();
-         pointTotal = Report.VictoryPtsYourKiaPzV + Report.VictoryPtsFriendlyKiaPzV;
+         pointTotal = lastReport.VictoryPtsYourKiaPzV + lastReport.VictoryPtsFriendlyKiaPzV;
          myRunVictoryPointsPzV.Text = pointTotal.ToString();
-         pointTotal = Report.VictoryPtsYourKiaPzVI + Report.VictoryPtsFriendlyKiaPzVI;
+         pointTotal = lastReport.VictoryPtsYourKiaPzVI + lastReport.VictoryPtsFriendlyKiaPzVI;
          myRunVictoryPointsPzVI.Text = pointTotal.ToString();
-         pointTotal = Report.VictoryPtsYourKiaAtGun + Report.VictoryPtsFriendlyKiaAtGun;
+         pointTotal = lastReport.VictoryPtsYourKiaAtGun + lastReport.VictoryPtsFriendlyKiaAtGun;
          myRunVictoryPointsAtGun.Text = pointTotal.ToString();
-         pointTotal = Report.VictoryPtsYourKiaFortifiedPosition + Report.VictoryPtsFriendlyKiaFortifiedPosition;
+         pointTotal = lastReport.VictoryPtsYourKiaFortifiedPosition + lastReport.VictoryPtsFriendlyKiaFortifiedPosition;
          myRunVictoryPointsPosition.Text = pointTotal.ToString();
          //----------------------------------
-         myRunVictoryPointsCaptureArea.Text = Report.VictoryPtsCaptureArea.ToString();
-         myRunVictoryPointsCaptureExit.Text = Report.VictoryPtsCapturedExitArea.ToString();
+         myRunVictoryPointsCaptureArea.Text = lastReport.VictoryPtsCaptureArea.ToString();
+         myRunVictoryPointsCaptureExit.Text = lastReport.VictoryPtsCapturedExitArea.ToString();
          //----------------------------------
-         myRunVictoryPointsLostTank.Text = Report.VictoryPtsFriendlyTank.ToString();
-         myRunVictoryPointsLostInfantry.Text = Report.VictoryPtsFriendlySquad.ToString();
+         myRunVictoryPointsLostTank.Text = lastReport.VictoryPtsFriendlyTank.ToString();
+         myRunVictoryPointsLostInfantry.Text = lastReport.VictoryPtsFriendlySquad.ToString();
          //----------------------------------
-         myRunVictoryPointsTotalTank.Text = Report.VictoryPtsTotalYourTank.ToString();
+         myRunVictoryPointsTotalTank.Text = lastReport.VictoryPtsTotalYourTank.ToString();
          //----------------------------------
-         myRunVictoryPointsTotalFriendly.Text = Report.VictoryPtsTotalFriendlyForces.ToString();
+         myRunVictoryPointsTotalFriendly.Text = lastReport.VictoryPtsTotalFriendlyForces.ToString();
          //----------------------------------
-         myRunVictoryPointsTotalTerritory.Text = Report.VictoryPtsTotalTerritory.ToString();
+         myRunVictoryPointsTotalTerritory.Text = lastReport.VictoryPtsTotalTerritory.ToString();
          //----------------------------------
          StringBuilder sb = new StringBuilder();
-         foreach (String note in Report.Notes)
+         foreach (String note in lastReport.Notes)
          {
             sb.Append(note);
             sb.Append("\n");
          }
          myTextBlockDisplay.Text = sb.ToString();
          //----------------------------------
-         if( false == String.IsNullOrEmpty(Report.DayEndedTime))
+         if( false == String.IsNullOrEmpty(lastReport.DayEndedTime))
          {
-            s = AddSpaces(Report.DayEndedTime, END_TIME_LEN);
+            s = AddSpaces(lastReport.DayEndedTime, END_TIME_LEN);
             mySpanTimeEnded.Inlines.Clear();
             mySpanTimeEnded.Inlines.Add(new Run(s));
-            s = AddSpaces(Report.Breakdown, DISABLED_TANK_LEN);
+            s = AddSpaces(lastReport.Breakdown, DISABLED_TANK_LEN);
             mySpanBreakdown.Inlines.Clear();
             mySpanBreakdown.Inlines.Add(new Run(s));
-            s = AddSpaces(Report.KnockedOut, KO_TANK_LEN);
+            s = AddSpaces(lastReport.KnockedOut, KO_TANK_LEN);
             mySpanKnockedOut.Inlines.Clear();
             mySpanKnockedOut.Inlines.Add(new Run(s));
          }

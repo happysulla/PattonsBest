@@ -10,13 +10,20 @@ namespace Pattons_Best
       private EndAfterActionDialogCallback myCallback;
       private AfterActionReportUserControl myAfterActionReportControl;
       //-------------------------------------------------------------------------------------
-      public AfterActionDialog(IAfterActionReport report, EndAfterActionDialogCallback callback)
+      public AfterActionDialog(IGameInstance gi, EndAfterActionDialogCallback callback)
       { 
          myCallback = callback;
          InitializeComponent();
-         Title = "After Action Report for " + report.Day;
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "AfterActionDialog(): lastReport=null");
+            CtorError = true;
+            return;
+         }
+         Title = "After Action Report for " + lastReport.Day;
          //-------------------------------
-         myAfterActionReportControl = new AfterActionReportUserControl(report);
+         myAfterActionReportControl = new AfterActionReportUserControl(gi);
          if (true == CtorError)
          {
             Logger.Log(LogEnum.LE_ERROR, "AfterActionDialog(): AfterActionReportUserControl() error");
@@ -25,9 +32,9 @@ namespace Pattons_Best
          }
          myScrollViewerClient.Content = myAfterActionReportControl;
       }
-      public void UpdateReport()
+      public void UpdateReport(IGameInstance gi)
       {
-         myAfterActionReportControl.UpdateReport();
+         myAfterActionReportControl.UpdateReport(gi);
       }
       private void Window_Closed(object sender, EventArgs e)
       {

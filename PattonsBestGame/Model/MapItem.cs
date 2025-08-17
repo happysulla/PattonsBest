@@ -114,6 +114,8 @@ namespace Pattons_Best
       public bool IsHullDown { get; set; } = false;
       public bool IsTurret { get; set; } = false;
       public bool IsKilled { get; set; } = false;
+      public bool IsUnconscious { get; set; } = false;
+      public bool IsIncapacitated { get; set; } = false;
       public bool IsFired { get; set; } = false;
       //--------------------------------------------------
       public bool IsSpotted { get; set; } = false;
@@ -538,7 +540,6 @@ namespace Pattons_Best
             //----------------------------------------------------
             if (true == isDecoration)
             {
-               //----------------------------------------------------
                if (true == mi.IsMoving)
                {
                   double width = 0.4 * zoom * Utilities.theMapItemOffset;
@@ -649,8 +650,22 @@ namespace Pattons_Best
                   Canvas.SetTop(imgTerrain, -15);
                }
             }
-            //----------------------------------
-            if ("" != mi.OverlayImageName)
+            if (true == mi.IsKilled)
+            {
+               Image overlay = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage("OKIA") };
+               g.Children.Add(overlay);
+            }
+            else if (true == mi.IsUnconscious)
+            {
+               Image overlay = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage("OUNC") };
+               g.Children.Add(overlay);
+            }
+            else if (true == mi.IsIncapacitated)
+            {
+               Image overlay = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage("OINC") };
+               g.Children.Add(overlay);
+            }
+            else if ("" != mi.OverlayImageName)
             {
                Image overlay = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage(mi.OverlayImageName) };
                g.Children.Add(overlay);
@@ -681,8 +696,6 @@ namespace Pattons_Best
       public int Sector { get; set; } = 0;
       public string Action { get; set; } = "None";
       public string Wound { get; set; } = "None";
-      public bool IsUnconscious { get; set; } = false;
-      public bool IsIncapacitated { get; set; } = false;
       public CrewMember(string role, string rank, string topImageName)
          : base(SurnameMgr.GetSurname(), 1.0, false, topImageName)
       {
@@ -700,6 +713,7 @@ namespace Pattons_Best
          cm.IsUnconscious = this.IsUnconscious;
          cm.IsIncapacitated = this.IsIncapacitated;
          cm.IsKilled = this.IsKilled;
+         cm.OverlayImageName = this.OverlayImageName;
          return cm;
       }
       public static void SetButtonContent(Button b, ICrewMember cm, bool isMapItemZoom = true, bool isDecoration = true, bool isBloodSpotsShown = true)

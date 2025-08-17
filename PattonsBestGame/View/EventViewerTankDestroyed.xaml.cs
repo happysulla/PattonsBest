@@ -1125,6 +1125,7 @@ namespace Pattons_Best
                         Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance.GetCrewMember() returned null for " + crewmember);
                         return;
                      }
+                     myGameInstance.SetIncapacitated(cm0);
                      cm0.IsKilled = true;
                      cm0.SetBloodSpots();
                   }
@@ -1304,8 +1305,8 @@ namespace Pattons_Best
                      ICrewMember cm10 = myGridRowRescues[k].myCrewMember;
                      if ("Crewman Out" != myGridRowRescues[k].myRescueResult)
                      {
+                        myGameInstance.SetIncapacitated(cm10);
                         cm10.IsKilled = true;
-                        cm10.IsIncapacitated = true;
                         cm10.SetBloodSpots();
                      }
                   }

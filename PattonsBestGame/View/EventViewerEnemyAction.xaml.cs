@@ -883,7 +883,7 @@ namespace Pattons_Best
             {
                if (false == SetTerrainCounter(i))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateMapItemMove(): SetTerrainCounter() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateGridRowsMove(): SetTerrainCounter() returned false");
                   return false;
                }
             }
@@ -1329,7 +1329,7 @@ namespace Pattons_Best
          }
          if ("Off" == myGridRows[i].mySectorRangeDisplay) // EventViewerEnemyAction.CreateMapItemMove() - do not set range/facing if off board
          {
-            myGridRows[i].myDieRollTerrain = KEEP_TERRAIN;
+            myGridRows[i].myDieRollTerrain = KEEP_TERRAIN; // moving off board
             myGridRows[i].myDieRollFacing = NO_FACING;
             if (true == newT.Name.Contains("OffBottom")) // BattleRoundSequenceMovementRoll -  Enemy Movement advanced past sector 1,2,3
                myGameInstance.AdvancingEnemies.Add(mi);
@@ -1379,7 +1379,7 @@ namespace Pattons_Best
       {
          int rowNum = i + STARTING_ASSIGNED_ROW;
          IMapItem mi = myGridRows[i].myMapItem;
-         if( "Off" == myGridRows[i].mySectorRangeDisplay) // EventViewerEnemyAction.SetTerrainCounter() - do not set terrain if off board
+         if( ("Off" == myGridRows[i].mySectorRangeDisplay) || (KEEP_TERRAIN == myGridRows[i].myDieRollTerrain) ) // EventViewerEnemyAction.SetTerrainCounter() - do not set terrain if off board
          {
             Label label1 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NA" };
             myGrid.Children.Add(label1);
@@ -1417,12 +1417,12 @@ namespace Pattons_Best
                terrain = new MapItem("Terrain", 1.0, "c13Moving", mi.TerritoryCurrent);
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): reached default terrain=" + myGridRows[i].myDieRollTerrain);
+               Logger.Log(LogEnum.LE_ERROR, "SetTerrainCounter(): reached default terrain=" + myGridRows[i].myTerrain + " i=" + i.ToString());
                return false;
          }
          if (null == terrain)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): terrain=null");
+            Logger.Log(LogEnum.LE_ERROR, "SetTerrainCounter(): terrain=null");
             return false;
          }
          Button bTerrain = CreateButton(terrain);
@@ -1564,7 +1564,7 @@ namespace Pattons_Best
                else
                {
                   myGridRows[i].myDieRollFacing = NO_MOVE;
-                  myGridRows[i].myDieRollTerrain = KEEP_TERRAIN;
+                  myGridRows[i].myDieRollTerrain = KEEP_TERRAIN; // if MOve is false or thrown track
                }
                //----------------------------------------
                if (true == enemyAction.Contains("Collateral"))

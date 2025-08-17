@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Pattons_Best.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
@@ -17,13 +18,10 @@ using System.Xml.Serialization;
 using Button = System.Windows.Controls.Button;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Point = System.Windows.Point;
-using Pattons_Best.Properties;
-using System.Diagnostics;
-using System.Windows.Media.Media3D;
 
 namespace Pattons_Best
 {
-   public partial class GameViewerWindow : Window, IView
+   public partial class GameViewerWindow : System.Windows.Window, IView
    {
       private const int MAX_DAILY_ACTIONS = 16;
       private const Double MARQUEE_SCROLL_ANMINATION_TIME = 30.0;
@@ -518,6 +516,13 @@ namespace Pattons_Best
                }
                //if (false == UpdateCanvasMain(gi, action))
                //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
+               break;
+            case GameAction.UpdateTankExplosion:
+            case GameAction.UpdateTankBrewUp:
+               if (false == UpdateCanvasTank(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               if (false == UpdateCanvasMain(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
             default:
                if (false == UpdateCanvasMain(gi, action))
@@ -1642,15 +1647,29 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankOrders(): cannot find tName=" + tName);
                return false;
             }
-            PointCollection points = new PointCollection();
-            foreach (IMapPoint mp1 in t.Points)
-               points.Add(new System.Windows.Point(mp1.X, mp1.Y));
-            Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = t.ToString() };
-            aPolygon.ContextMenu = myContextMenuCrewActions[crewmember];
-            myPolygons.Add(aPolygon);
-            myCanvasTank.Children.Add(aPolygon);
-            Canvas.SetZIndex(aPolygon, 101);
-            aPolygon.MouseDown += MouseDownPolygonCrewActions;
+            //--------------------------------------
+            ICrewMember? cm = myGameInstance.GetCrewMember(crewmember);
+            if (null == cm)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankOrders(): cm=null for " + crewmember);
+               return false;
+            }
+            if( true == cm.IsIncapacitated ) // Show incapacitated crewmen counters
+            {
+               myGameInstance.CrewActions.Add(cm);
+            }
+            else
+            {
+               PointCollection points = new PointCollection();
+               foreach (IMapPoint mp1 in t.Points)
+                  points.Add(new System.Windows.Point(mp1.X, mp1.Y));
+               Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = t.ToString() };
+               aPolygon.ContextMenu = myContextMenuCrewActions[crewmember];
+               myPolygons.Add(aPolygon);
+               myCanvasTank.Children.Add(aPolygon);
+               Canvas.SetZIndex(aPolygon, 101);
+               aPolygon.MouseDown += MouseDownPolygonCrewActions;
+            }
          }
          return true;
       }
@@ -3552,7 +3571,8 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): button = null");
             return;
          }
-         Logger.Log(LogEnum.LE_SHOW_ORDERS_MENU, "ClickButtonMapItem(): adding new button=" + button.Name );
+         Logger.Log(LogEnum.LE_SHOW_ORDERS_MENU, "ClickButtonMapItem(): clicking button=" + button.Name );
+         //====================================================
          if ((true == button.Name.Contains("OpenHatch")) && ((true == myGameInstance.IsHatchesActive) || (BattlePhase.MarkCrewAction == myGameInstance.BattlePhase)))
          {
             string[] crewmembers = new string[4] { "Driver", "Assistant", "Commander", "Loader" };
@@ -3565,7 +3585,7 @@ namespace Pattons_Best
                   return;
                }
                //----------------------------------
-               if (true == button.Name.Contains(role)) //Remove the open hatch
+               if (true == button.Name.Contains(role)) // Remove the open hatch
                {
                   crewMember.IsButtonedUp = true;
                   myGameInstance.Hatches.Remove(button.Name);
@@ -3600,7 +3620,7 @@ namespace Pattons_Best
                }
             }
          }
-         //-----------------------------------------------
+         //====================================================
          else if ((true == button.Name.Contains("GunLoad")) && (BattlePhase.MarkAmmoReload == myGameInstance.BattlePhase) )
          {
             IMapItem? selectedMapItem = myGameInstance.GunLoads.Find(button.Name);
@@ -3630,7 +3650,8 @@ namespace Pattons_Best
                }
             }
          }
-         else if( BattlePhase.ConductCrewAction == myGameInstance.BattlePhase )
+         //====================================================
+         else if ( BattlePhase.ConductCrewAction == myGameInstance.BattlePhase )
          {
             IMapItem? selectedMapItem = myGameInstance.BattleStacks.FindMapItem(button.Name);
             if (null == selectedMapItem)
