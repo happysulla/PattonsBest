@@ -1,12 +1,13 @@
 ﻿
 using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Xml;
 using System.Xml.Serialization;
-using System.Collections.Generic;
 using Windows.ApplicationModel.Appointments.AppointmentsProvider;
-using System.Data;
 
 namespace Pattons_Best
 { 
@@ -52,7 +53,6 @@ namespace Pattons_Best
       public IMapItem? TargetMainGun { set; get; } = null;
       public IMapItem? TargetMg { set; get; } = null;
       public ICrewMember? SwitchedCrewMember { set; get; } = null;
-      public ICrewMember? AssistantOriginal { set; get; } = null;
       //------------------------------------------------
       public ITerritory Home { get; set; } = new Territory();
       public ITerritory? EnemyStrengthCheckTerritory { get; set; } = null;
@@ -66,6 +66,7 @@ namespace Pattons_Best
       //---------------------------------------------------------------
       public bool IsHatchesActive { set; get; } = false;
       public bool IsRetreatToStartArea { set; get; } = false;
+      public int AssistantOriginalRating { set; get; } = 0;
       //---------------------------------------------------------------
       public bool IsShermanFirstShot { set; get; } = false;
       public bool IsShermanFiringAtFront { set; get; } = false;
@@ -378,60 +379,49 @@ namespace Pattons_Best
          }
          return crewmember;
       }
-      public bool SetCrewMemberTerritory(string role)
+      public bool SetCrewActionTerritory(ICrewMember cm)
       {
-         ICrewMember? crewmember = GetCrewMember(role);
-         if(null == crewmember)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetCrewMemberTerritory(): GetCrewMember() returned false for role=" + role);
-            return false;
-         }
-         ITerritory? t = Territories.theTerritories.Find(role + "Action");
+         ITerritory? t = Territories.theTerritories.Find(cm.Role + "Action");
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetCrewMemberTerritory(): Territories.theTerritories.Find() returned false for role=" + role);
+            Logger.Log(LogEnum.LE_ERROR, "SetCrewActionTerritory(): Territories.theTerritories.Find() returned false for role=" + cm.Role);
             return false;
          }
-         crewmember.TerritoryCurrent = t;
-         crewmember.Location.X = t.CenterPoint.X - Utilities.theMapItemOffset;
-         crewmember.Location.Y = t.CenterPoint.Y - Utilities.theMapItemOffset;
+         cm.TerritoryCurrent = t;
+         cm.Location.X = t.CenterPoint.X - Utilities.theMapItemOffset;
+         cm.Location.Y = t.CenterPoint.Y - Utilities.theMapItemOffset;
          return true;
       }
       public void SetIncapacitated(ICrewMember cm)
-      {
-         IMapItems removals = new MapItems(); // REmove any cooresponding crew actions and add the hurt crewman in the crewaction box
+      { 
+         cm.IsIncapacitated = true;
+         //-------------------------------
+         IMapItems removals = new MapItems(); // Remove any coorresponding crew actions and add the hurt crewman in the crewaction box
          foreach (IMapItem mi in this.CrewActions)
          {
-            if (true == mi.Name.Contains(cm.Role))
+            if ( (true == mi.Name.Contains(cm.Role)) && (cm.Role != mi.Name ) ) // crew action is larger than role name ... i.e., Loader_Load
                removals.Add(mi);
          }
          foreach (IMapItem mi in removals)
+         {
             this.CrewActions.Remove(mi);
+            Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "SetIncapacitated(): ---------------------removing ca=" + mi.Name);
+         }
          this.CrewActions.Add(cm);
-         cm.IsIncapacitated = true;
+         Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "SetIncapacitated(): +++++++++++++++++++++++adding ca=" + cm.Name);
+         //-------------------------------
+         removals.Clear();
+         foreach (IMapItem mi in this.Hatches) // incapacitated crewmember becomes button up
+         {
+            if (true == mi.Name.Contains(cm.Role)) 
+               removals.Add(mi);
+         }
+         foreach (IMapItem mi in removals)
+            this.Hatches.Remove(mi);
+         cm.IsButtonedUp = true;
       }
-      public bool SwitchCrewMember(ICrewMember incapacitated)
+      public bool SwitchMembers(ICrewMember incapacitated)
       {
-         this.SwitchedCrewMember = incapacitated.Clone();
-         ITerritory? t = Territories.theTerritories.Find("AssistantAction"); // move incapacitited to assistant position
-         if (null == t)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetCrewMemberTerritory(): Territories.theTerritories.Find() returned false for incapacititated=" + incapacitated.ToString());
-            return false;
-         }
-         incapacitated.TerritoryCurrent = t;
-         incapacitated.Location.X = t.CenterPoint.X - Utilities.theMapItemOffset;
-         incapacitated.Location.Y = t.CenterPoint.Y - Utilities.theMapItemOffset;
-         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "SwitchCrewMember(): Switched crew member to " + incapacitated.Role);
-         //--------------------------------------------
-         foreach( IMapItem mi in this.CrewActions)
-         {
-            if (true == mi.Name.Contains("Switch"))
-            {
-               this.CrewActions.Remove(mi);
-               break;
-            }
-         }
          //--------------------------------------------
          IAfterActionReport? report = Reports.GetLast();
          if (null == report)
@@ -439,34 +429,171 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "GetCrewMember(): report=null");
             return false;
          }
-         this.AssistantOriginal = report.Assistant.Clone();
          //--------------------------------------------
+         foreach (IMapItem mi in this.CrewActions) // Remove switch counter
+         {
+            if (true == mi.Name.Contains("Switch"))
+            {
+               this.CrewActions.Remove(mi);
+               Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "SwitchMembers(): --------------------removing ca=" + mi.Name);
+               break;
+            }
+         }
+         //--------------------------------------------
+         if (null != this.SwitchedCrewMember) // Return SwitchedCrewMember and Assistant back to their original positions
+         {
+            Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "SwitchMembers(): Return Assistant to original position of crew member to " + this.SwitchedCrewMember.Role);
+            foreach (IMapItem mi in this.Hatches)
+            {
+               if (true == mi.Name.Contains(this.SwitchedCrewMember.Role))
+               {
+                  this.Hatches.Remove(mi);
+                  this.SwitchedCrewMember.IsButtonedUp = false;
+                  break;
+               }
+            }
+            switch (this.SwitchedCrewMember.Role) 
+            {
+               case "Driver":
+                  ICrewMember assistantDriver = report.Driver;
+                  report.Driver = this.SwitchedCrewMember;
+                  report.Driver.Role = "Driver";
+                  if (false == SetCrewActionTerritory(report.Driver))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(report.Driver) returned false");
+                     return false;
+                  }
+                  report.Assistant = assistantDriver;
+                  break;
+               case "Loader":
+                  ICrewMember assistantLoader = report.Loader;
+                  report.Loader = SwitchedCrewMember;
+                  report.Loader.Role = "Loader";
+                  if (false == SetCrewActionTerritory(report.Loader))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(report.Loader) returned false");
+                     return false;
+                  }
+                  report.Assistant = assistantLoader;
+                  break;
+               case "Gunner":
+                  ICrewMember assistantGunner = report.Gunner;
+                  report.Gunner = SwitchedCrewMember;
+                  report.Gunner.Role = "Gunner";
+                  if (false == SetCrewActionTerritory(report.Gunner))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(report.Gunner) returned false");
+                     return false;
+                  }
+                  report.Assistant = assistantGunner;
+                  break;
+               case "Commander":
+                  ICrewMember assistantCmdr = report.Commander;
+                  report.Commander = SwitchedCrewMember;
+                  report.Commander.Role = "Commander";
+                  if (false == SetCrewActionTerritory(report.Commander))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(report.Commander) returned false");
+                     return false;
+                  }
+                  report.Assistant = assistantCmdr;
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): reached default name=" + incapacitated.Role);
+                  return false;
+            }
+            report.Assistant.Rating = this.AssistantOriginalRating;
+            report.Assistant.Role = "Assistant";
+            if( false == SetCrewActionTerritory(report.Assistant))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(Assistant) returned false");
+               return false;
+            }
+         }
+         //=========================================================
+         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "SwitchMembers(): Switched Assistant with Crew Member=" + incapacitated.Role);
+         foreach (IMapItem mi in this.Hatches) // Assistant becomes button up
+         {
+            if (true == mi.Name.Contains("Assistant"))
+            {
+               this.Hatches.Remove(mi);
+               break;
+            }
+         }
          report.Assistant.IsButtonedUp = true;
-         report.Assistant.Rating = (int)Math.Floor((double)(report.Assistant.Rating * 0.5));
          //--------------------------------------------
-         switch (incapacitated.Role)
+         this.AssistantOriginalRating = report.Assistant.Rating;
+         report.Assistant.Rating = (int)Math.Floor((double)(report.Assistant.Rating * 0.5));
+         this.SwitchedCrewMember = incapacitated.Clone();
+         switch (SwitchedCrewMember.Role)
          {
             case "Driver":
                report.Driver = report.Assistant;
                report.Driver.Role = "Driver";
+               if (false == SetCrewActionTerritory(report.Driver)) // puts assistant in proper spot
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(Assistant) returned false");
+                  return false;
+               }
                break;
             case "Loader":
+               ICrewMember loader = report.Loader;
                report.Loader = report.Assistant;
                report.Loader.Role = "Loader";
+               if (false == SetCrewActionTerritory(report.Loader)) // puts assistant in proper spot
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(Assistant) returned false");
+                  return false;
+               }
                break;
             case "Gunner":
+               ICrewMember gunner = report.Gunner;
                report.Gunner = report.Assistant;
                report.Gunner.Role = "Gunner";
+               if (false == SetCrewActionTerritory(report.Gunner)) // puts assistant in proper spot
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(Assistant) returned false");
+                  return false;
+               }
                break;
             case "Commander":
+               ICrewMember commander = report.Commander;
                report.Commander = report.Assistant;
                report.Commander.Role = "Commander";
+               if (false == SetCrewActionTerritory(report.Commander)) // puts assistant in proper spot
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(Assistant) returned false");
+                  return false;
+               }
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetCrewMember(): reached default name=" + incapacitated.Role);
+               Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): reached default name=" + incapacitated.Role);
                break;
          }
+         //-----------------------------------------------------
+         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "SwitchMembers(): SetCrewMemberTerritory for role=" + incapacitated.Role);
+         report.Assistant = incapacitated;
+         report.Assistant.Role = "Assistant";
+         if (false == SetCrewActionTerritory(report.Assistant)) // put SwitchedCrewMember in proper spot
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(Assistant) returned false");
+            return false;
+         }
          return true;
+      }
+      public void ClearCrewActions(string caller)
+      {
+         IMapItems removals = new MapItems();
+         foreach( IMapItem mi in this.CrewActions ) // do not want to remove crewmembers that are shown as incapacitated
+         {
+            if (true == mi.Name.Contains("_"))
+               removals.Add(mi);
+         }
+         foreach (IMapItem mi in removals)
+         {
+            this.CrewActions.Remove(mi);
+            Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "ClearCrewActions(): "+ caller +  ": --------------------removing ca=" + mi.Name);
+         }
       }
       //---------------------------------------------------------------
       public string GetGunLoadType()

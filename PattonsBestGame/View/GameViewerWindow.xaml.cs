@@ -759,7 +759,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): Loader=null");
             return false;
          }
-         if (false == loader.IsIncapacitated)
+         if (false == loader.IsIncapacitated) // CreateContextMenuCrewAction()
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Loader_Load";
@@ -839,7 +839,7 @@ namespace Pattons_Best
          else
          {
             menuItem1 = new MenuItem();
-            menuItem1.Name = "Assistant_Switch_Ldr";
+            menuItem1.Name = "Assistant_SwitchLdr";
             menuItem1.Header = "Switch w/ Loader";
             menuItem1.Click += MenuItemCrewActionClick;
             myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
@@ -851,7 +851,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): Driver=null");
             return false;
          }
-         if( false == driver.IsIncapacitated )
+         if( false == driver.IsIncapacitated) // CreateContextMenuCrewAction()
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Driver_Stop";
@@ -910,7 +910,7 @@ namespace Pattons_Best
          else
          {
             menuItem1 = new MenuItem();
-            menuItem1.Name = "Assistant_Switch_Dvr";
+            menuItem1.Name = "Assistant_SwitchDvr";
             menuItem1.Header = "Switch w/ Driver";
             menuItem1.Click += MenuItemCrewActionClick;
             myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
@@ -923,7 +923,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): Gunner=null");
             return false;
          }
-         if (false == gunner.IsIncapacitated)
+         if (false == gunner.IsIncapacitated) // CreateContextMenuCrewAction()
          {
             if (true == isMainGunFiringAvailable)
             {
@@ -985,7 +985,7 @@ namespace Pattons_Best
          else
          {
             menuItem1 = new MenuItem();
-            menuItem1.Name = "Assistant_Switch_Gunr";
+            menuItem1.Name = "Assistant_SwitchGunr";
             menuItem1.Header = "Switch w/ Gunner";
             menuItem1.Click += MenuItemCrewActionClick;
             myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
@@ -997,7 +997,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): Assistant=null");
             return false;
          }
-         if (false == assistant.IsIncapacitated)
+         if (false == assistant.IsIncapacitated) // CreateContextMenuCrewAction()
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Assistant_PassAmmo";
@@ -1041,7 +1041,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): Commander=null");
             return false;
          }
-         if (false == commander.IsIncapacitated)
+         if (false == commander.IsIncapacitated) // CreateContextMenuCrewAction()
          {
             if ((true == isCommanderOpenHatch) || (false == gi.IsBrokenPeriscopeCommander) || (true == card.myIsVisionCupola)) // If broken scope and button up, cannot direct
             {
@@ -1114,7 +1114,7 @@ namespace Pattons_Best
          else
          {
             menuItem1 = new MenuItem();
-            menuItem1.Name = "Assistant_Switch_Cmdr";
+            menuItem1.Name = "Assistant_SwitchCmdr";
             menuItem1.Header = "Switch w/ Commander";
             menuItem1.Click += MenuItemCrewActionClick;
             myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
@@ -1443,6 +1443,7 @@ namespace Pattons_Best
       }
       private bool UpdateCanvasTankMapItems(IMapItems mapItems)
       {
+         Logger.Log(LogEnum.LE_SHOW_MAPITEM_TANK, "UpdateCanvasTankMapItems(): mapItems=" + mapItems.ToString());
          foreach (IMapItem mi in mapItems)
          {
             if (null == mi)
@@ -1654,11 +1655,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankOrders(): cm=null for " + crewmember);
                return false;
             }
-            if( true == cm.IsIncapacitated ) // Show incapacitated crewmen counters
-            {
-               myGameInstance.CrewActions.Add(cm);
-            }
-            else
+            if( false == cm.IsIncapacitated) // UpdateCanvasTankOrders() - show incapacitated people
             {
                PointCollection points = new PointCollection();
                foreach (IMapPoint mp1 in t.Points)
@@ -3601,6 +3598,7 @@ namespace Pattons_Best
                   foreach (IMapItem crewAction in removals)
                   {
                      myGameInstance.CrewActions.Remove(crewAction);
+                     Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "ClickButtonMapItem(): -----------------removing ca=" + crewAction.Name);
                      foreach (Button oldButton in myTankButtons)     // Remove corresponding Button
                      {
                         if (oldButton.Name == crewAction.Name)
@@ -3806,10 +3804,11 @@ namespace Pattons_Best
          //--------------------------------------
          foreach(IMapItem crewAction in myGameInstance.CrewActions) // get rid of existing crew action for this crew member
          {
-            if( true == crewAction.Name.Contains(sCrewMemberRole)) 
+            if( (true == crewAction.Name.Contains(sCrewMemberRole)) && (true == crewAction.Name.Contains("_")) )
             {
                myGameInstance.CrewActions.Remove(crewAction); // Remove existing Crew Action
-               foreach(Button oldButton in myTankButtons)     // Remove existing Button
+               Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItemCrewActionClick(): -----------------removing ca=" + crewAction.Name);
+               foreach (Button oldButton in myTankButtons)     // Remove existing Button
                {
                   if( oldButton.Name == crewAction.Name )
                   {
@@ -3987,19 +3986,19 @@ namespace Pattons_Best
                mi = new MapItem(menuitem.Name, 1.0, "c73ReplacePeriscope", t);
                menu = myContextMenuCrewActions["Assistant"];
                break;
-            case "Assistant_Switch_Ldr":
+            case "Assistant_SwitchLdr":
                mi = new MapItem(menuitem.Name, 1.0, "c200LoaderSwitch", t);
                menu = myContextMenuCrewActions["Assistant"];
                break;
-            case "Assistant_Switch_Dvr":
+            case "Assistant_SwitchDvr":
                mi = new MapItem(menuitem.Name, 1.0, "c199DriverSwitch", t);
                menu = myContextMenuCrewActions["Assistant"];
                break;
-            case "Assistant_Switch_Gunr":
+            case "Assistant_SwitchGunr":
                mi = new MapItem(menuitem.Name, 1.0, "c201GunnerSwitch", t);
                menu = myContextMenuCrewActions["Assistant"];
                break;
-            case "Assistant_Switch_Cmdr":
+            case "Assistant_SwitchCmdr":
                mi = new MapItem(menuitem.Name, 1.0, "c202CommanderSwitch", t);
                menu = myContextMenuCrewActions["Assistant"];
                break;
@@ -4045,8 +4044,9 @@ namespace Pattons_Best
             return;
          }
          myGameInstance.CrewActions.Add(mi);
+         Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItemCrewActionClick(): adding ca=" + mi.Name);
          //--------------------------------------
-         if( null == menu )
+         if ( null == menu )
          {
             Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): menu=null");
             return;
@@ -4073,6 +4073,7 @@ namespace Pattons_Best
                if (null != mi)
                {
                   myGameInstance.CrewActions.Remove(mi);
+                  Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItemCrewActionClickRemoveGunnerRepair(): -----------------removing ca=" + crewaction.Name);
                   foreach (Button oldButton in myTankButtons)     // Remove existing Button
                   {
                      if (oldButton.Name == mi.Name)
@@ -4098,6 +4099,7 @@ namespace Pattons_Best
                if (null != mi)
                {
                   myGameInstance.CrewActions.Remove(mi);
+                  Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItemCrewActionClickRemoveGunnerFire(): -----------------removing ca=" + crewaction.Name);
                   foreach (Button oldButton in myTankButtons)     // Remove existing Button
                   {
                      if (oldButton.Name == mi.Name)
@@ -4123,6 +4125,7 @@ namespace Pattons_Best
                if (null != mi)
                {
                   myGameInstance.CrewActions.Remove(mi);
+                  Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItemCrewActionClickRemoveGunnerRotateAndFire(): -----------------removing ca=" + crewaction.Name);
                   foreach (Button oldButton in myTankButtons)     // Remove existing Button
                   {
                      if (oldButton.Name == mi.Name)
@@ -4148,6 +4151,7 @@ namespace Pattons_Best
                if (null != mi)
                {
                   myGameInstance.CrewActions.Remove(mi);
+                  Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItemCrewActionClickRemoveCommanderDirectFire(): -----------------removing ca=" + crewaction.Name);
                   foreach (Button oldButton in myTankButtons)     // Remove existing Button
                   {
                      if (oldButton.Name == mi.Name)

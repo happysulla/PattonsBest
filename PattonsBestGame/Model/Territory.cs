@@ -158,7 +158,7 @@ namespace Pattons_Best
       {
          List<string> spottedTerritories = new List<string>();
          //---------------------------------------------------
-         if( (true == cm.IsIncapacitated) || (true == cm.IsKilled) )
+         if( (true == cm.IsIncapacitated) || (true == cm.IsKilled)) // GetSpottedTerritories() - return nothing if incapacitated
             return spottedTerritories;
          //---------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();

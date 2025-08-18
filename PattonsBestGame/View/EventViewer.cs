@@ -5446,7 +5446,7 @@ namespace Pattons_Best
                action = GameAction.TestingStartMorningBriefing; // <cgs> TEST
                action = GameAction.TestingStartPreparations; // <cgs> TEST
                action = GameAction.TestingStartMovement; // <cgs> TEST
-               //action = GameAction.TestingStartBattle; // <cgs> TEST
+               action = GameAction.TestingStartBattle; // <cgs> TEST
                //action = GameAction.TestingStartAmbush; // <cgs> TEST
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;

@@ -1416,7 +1416,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupCrewRatings(): cm=null");
                return false;
             }
-            if (false == gi.SetCrewMemberTerritory(cm.Role))
+            if (false == gi.SetCrewActionTerritory(cm))
             {
                Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupCrewRatings(): SetCrewMemberTerritory() returned false");
                return false;
@@ -1715,7 +1715,8 @@ namespace Pattons_Best
          gi.ArtillerySupportCheck = gi.EnteredArea;
          for (int i = 0; i < 3; ++i)
          {
-            dieRoll = Utilities.RandomGenerator.Next(1, 11);
+            dieRoll = Utilities.RandomGenerator.Next(1, 11); 
+            dieRoll = 10; // <cgs> TEST - number of artillery support counters in hext
             if (false == SetArtillerySupportCounter(gi, dieRoll)) // set strength in current territory
             {
                Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): SetArtillerySupportCounter() returned false");
@@ -1726,7 +1727,8 @@ namespace Pattons_Best
          gi.AirStrikeCheckTerritory = gi.EnteredArea;
          for (int i = 0; i < 2; ++i)
          {
-            dieRoll = Utilities.RandomGenerator.Next(1, 11);
+            dieRoll = Utilities.RandomGenerator.Next(1, 11); 
+            dieRoll = 10; // <cgs> TEST - number of air strikes counters in hext
             if (dieRoll < 5)
             {
                string nameAir = "Air" + Utilities.MapItemNum.ToString();
@@ -3058,10 +3060,9 @@ namespace Pattons_Best
                case GameAction.BattleStart:
                   gi.EventDisplayed = gi.EventActive = "e034"; // GameStateBattle.PerformAction(BattleStart)
                   break;
-               case GameAction.BattleActivation:
-                  break;
+               case GameAction.BattleActivation: 
                case GameAction.BattleResolveArtilleryFire:
-                  break;
+               case GameAction.BattleResolveAirStrike:
                case GameAction.BattleResolveAdvanceFire:
                   break;
                case GameAction.BattlePlaceAdvanceFire:
@@ -3106,7 +3107,7 @@ namespace Pattons_Best
                case GameAction.BattleAmbushRoll:
                   if (true == lastReport.Weather.Contains("Rain") || true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
                      dieRoll--;
-                  //dieRoll = 10; // <cgs> TEST - ambush
+                  dieRoll = 10; // <cgs> TEST - AMBUSH!!!!!
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (dieRoll < 8)
@@ -3225,11 +3226,11 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleShermanKilled:
-                  gi.CrewActions.Clear(); 
+                  gi.ClearCrewActions("GameStateBattle.PerformAction(BattleShermanKilled)");   // GameStateBattle.PerformAction(BattleShermanKilled)
                   break;
                case GameAction.UpdateTankExplosion:
-               case GameAction.UpdateTankBrewUp:
-                  gi.CrewActions.Clear();
+               case GameAction.UpdateTankBrewUp: 
+                  gi.ClearCrewActions("GameStateBattle.PerformAction(UpdateTankBrewUp)");  // GameStateBattle.PerformAction(UpdateTankExplosion) or GameStateBattle.PerformAction(UpdateTankBrewUp)
                   gi.BattleStacks.Remove(gi.Sherman);
                   break;
                case GameAction.EveningDebriefingStart:
@@ -3394,7 +3395,7 @@ namespace Pattons_Best
                   gi.BattlePhase = BattlePhase.MarkCrewAction;
                   gi.EventDisplayed = gi.EventActive = "e038";
                   gi.DieRollAction = GameAction.DieRollActionNone;
-                  gi.CrewActions.Clear();           // GameStateBattleRoundSequence.BattleRoundSequenceSpottingEnd
+                  gi.ClearCrewActions("GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceSpottingEnd)");           // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceSpottingEnd)
                   break;
                case GameAction.BattleRoundSequenceCrewOrders:
                   Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceCrewOrders): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.MarkCrewAction");
@@ -4717,18 +4718,19 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleShermanKilled:
-                  gi.CrewActions.Clear();
+                  gi.ClearCrewActions("GameStateBattleRoundSequence.PerformAction(BattleShermanKilled)"); // GameStateBattleRoundSequence.PerformAction(BattleShermanKilled)
                   break;
                case GameAction.UpdateTankExplosion:
                case GameAction.UpdateTankBrewUp:
+                  gi.ClearCrewActions("GameStateBattleRoundSequence.PerformAction(UpdateTankBrewUp)");
                   gi.BattleStacks.Remove(gi.Sherman);
                   break;
                case GameAction.BattleEmpty:
                   gi.EventDisplayed = gi.EventActive = "e036";
                   break;
                case GameAction.BattleEmptyResolve:
-                  gi.CrewActions.Clear();            // GameStateBattleRoundSequence.BattleEmptyResolve
-                  if (false == ResetRound(gi, "GameStateBattleRoundSequence(BattleEmptyResolve)"))     // GameStateBattleRoundSequence.BattleEmptyResolve
+                  gi.ClearCrewActions("GameStateBattleRoundSequence.PerformAction(BattleEmptyResolve)");            // GameStateBattleRoundSequence.PerkformAction(BattleEmptyResolve)
+                  if (false == ResetRound(gi, "GameStateBattleRoundSequence(BattleEmptyResolve)"))     // GameStateBattleRoundSequence.PerkformAction(BattleEmptyResolve)
                   {
                      returnStatus = "ResetRound() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleEmptyResolve): " + returnStatus);
@@ -4887,7 +4889,7 @@ namespace Pattons_Best
                }
             }
          }
-         gi.CrewActions.Clear();         // SpottingPhaseBegin() - skipping spotting b/c nobody to find
+         gi.ClearCrewActions("SpottingPhaseBegin()");         // SpottingPhaseBegin() - skipping spotting b/c nobody to find
          outAction = GameAction.BattleRoundSequenceCrewOrders;
          Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "SpottingPhaseBegin(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.MarkCrewAction");
          gi.BattlePhase = BattlePhase.MarkCrewAction;
@@ -4913,7 +4915,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetDefaultCrewActions(): gi.GetCrewMember(Driver) returned null");
             return false;
          }
-         if ( (true == isDriverDefaultNeeded) && (false == driver.IsIncapacitated) )
+         if ( (true == isDriverDefaultNeeded) && (false == driver.IsIncapacitated)) // SetDefaultCrewActions() - if not incapacitated
          {
             ITerritory? t = Territories.theTerritories.Find("DriverAction");
             if (null == t)
@@ -4923,6 +4925,7 @@ namespace Pattons_Best
             }
             IMapItem mi = new MapItem("Driver_Stop", 1.0, "c61DStop", t);
             gi.CrewActions.Add(mi);
+            Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "SetDefaultCrewActions(): ++++++++++++++++adding ca=" + mi.Name);
          }
          //----------------------------------------------------
          ICrewMember? loader = gi.GetCrewMember("Loader");
@@ -4931,7 +4934,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetDefaultCrewActions(): gi.GetCrewMember(Loader) returned null");
             return false;
          }
-         if ( (true == isLoaderDefaultNeeded) && (false == loader.IsIncapacitated) )
+         if ( (true == isLoaderDefaultNeeded) && (false == loader.IsIncapacitated)) // SetDefaultCrewActions() - if not incapacitated
          {
             ITerritory? t = Territories.theTerritories.Find("LoaderAction");
             if (null == t)
@@ -4941,6 +4944,7 @@ namespace Pattons_Best
             }
             IMapItem mi = new MapItem("Loader_Load", 1.0, "c54LLoad", t);
             gi.CrewActions.Add(mi);
+            Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "SetDefaultCrewActions(): +++++++++++++++adding ca=" + mi.Name);
          }
          return true;
       }
@@ -5256,13 +5260,13 @@ namespace Pattons_Best
             bool isCommanderSwitch = false;
             foreach (IMapItem crewAction in gi.CrewActions)
             {
-               if ("Assistant_Switch_Ldr" == crewAction.Name)
+               if ("Assistant_SwitchLdr" == crewAction.Name)
                   isLoaderSwitch = true;
-               if ("Assistant_Switch_Dvr" == crewAction.Name)
+               if ("Assistant_SwitchDvr" == crewAction.Name)
                   isDriverSwitch = true;
-               if ("Assistant_Switch_Gunr" == crewAction.Name)
+               if ("Assistant_SwitchGunr" == crewAction.Name)
                   isGunnerSwitch = true;
-               if ("Assistant_Switch_Cmdr" == crewAction.Name)
+               if ("Assistant_SwitchCmdr" == crewAction.Name)
                   isCommanderSwitch = true;
             }
             if (true == isLoaderSwitch)
@@ -5276,7 +5280,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): Loader=null");
                   return false;
                }
-               if (false == gi.SwitchCrewMember(cm))
+               if (false == gi.SwitchMembers(cm))
                {
                   Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for cm=" + cm.Role);
                   return false;
@@ -5293,7 +5297,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): Driver=null");
                   return false;
                }
-               if (false == gi.SwitchCrewMember(cm))
+               if (false == gi.SwitchMembers(cm))
                {
                   Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for cm=" + cm.Role);
                   return false;
@@ -5310,7 +5314,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): Gunner=null");
                   return false;
                }
-               if (false == gi.SwitchCrewMember(cm))
+               if (false == gi.SwitchMembers(cm))
                {
                   Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for cm=" + cm.Role);
                   return false;
@@ -5327,7 +5331,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): Commander=null");
                   return false;
                }
-               if (false == gi.SwitchCrewMember(cm))
+               if (false == gi.SwitchMembers(cm))
                {
                   Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for cm=" + cm.Role);
                   return false;
@@ -7185,7 +7189,7 @@ namespace Pattons_Best
          }
          IAfterActionReport newReport = new AfterActionReport(newEntry, report);
          gi.Reports.Add(newReport);
-         Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "ResetDay: phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
+         Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "ResetDay(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
          gi.BattlePhase = BattlePhase.Ambush;
          gi.CrewActionPhase = CrewActionPhase.Movement;
          gi.MovementEffectOnSherman = "unit";
@@ -7195,6 +7199,7 @@ namespace Pattons_Best
          gi.ReadyRacks.Clear();
          gi.Hatches.Clear();
          gi.CrewActions.Clear();            // ResetDay()
+         Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "ResetDay(): clear all crewactions");
          gi.GunLoads.Clear();
          gi.TargetMainGun = null;           // ResetDay()
          gi.IsShermanFiringAtFront = false; // ResetDay()
@@ -7232,8 +7237,9 @@ namespace Pattons_Best
          //-------------------------------------------------------
          gi.TargetMainGun = null;                      // ResetDay()
          Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "ResetDay(): zero NumOfShermanShot=" + gi.NumOfShermanShot.ToString());
+         if( (true == gi.IsMalfunctionedMainGun) || (true == gi.IsBrokenMainGun) )
+            Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "ResetDay(): Main Gun Repaired");
          gi.IsMalfunctionedMainGun = false;
-         Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "ResetDay(): Main Gun Repaired");
          gi.IsBrokenMainGun = false;
          gi.IsBrokenGunSight = false;
          gi.FirstShots.Clear();

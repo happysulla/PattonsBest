@@ -95,7 +95,7 @@ namespace Pattons_Best
          mySpanCommanderName.IsEnabled = myIsEditable;
          if (true == mySpanCommanderName.IsEnabled)
             mySpanCommanderName.Background = theBrushInActive;
-         if (false == gi.SetCrewMemberTerritory(commander.Role))
+         if (false == gi.SetCrewActionTerritory(commander))
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): SetCrewMemberTerritory() returned false");
             return false;
@@ -114,7 +114,7 @@ namespace Pattons_Best
          mySpanGunnerName.IsEnabled = myIsEditable;
          if (true == mySpanGunnerName.IsEnabled)
             mySpanGunnerName.Background = theBrushInActive;
-         if (false == gi.SetCrewMemberTerritory(gunner.Role))
+         if (false == gi.SetCrewActionTerritory(gunner))
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): SetCrewMemberTerritory() returned false");
             return false;
@@ -133,7 +133,7 @@ namespace Pattons_Best
          mySpanLoaderName.IsEnabled = myIsEditable;
          if (true == mySpanLoaderName.IsEnabled)
             mySpanLoaderName.Background = theBrushInActive;
-         if (false == gi.SetCrewMemberTerritory(loader.Role))
+         if (false == gi.SetCrewActionTerritory(loader))
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): SetCrewMemberTerritory() returned false");
             return false;
@@ -152,7 +152,7 @@ namespace Pattons_Best
          mySpanDriverName.IsEnabled = myIsEditable;
          if (true == mySpanDriverName.IsEnabled)
             mySpanDriverName.Background = theBrushInActive;
-         if (false == gi.SetCrewMemberTerritory(driver.Role))
+         if (false == gi.SetCrewActionTerritory(driver))
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): SetCrewMemberTerritory() returned false");
             return false;
@@ -171,7 +171,7 @@ namespace Pattons_Best
          mySpanAssistantName.IsEnabled = myIsEditable;
          if (true == mySpanAssistantName.IsEnabled)
             mySpanAssistantName.Background = theBrushInActive;
-         if (false == gi.SetCrewMemberTerritory(assistant.Role))
+         if (false == gi.SetCrewActionTerritory(assistant))
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): SetCrewMemberTerritory() returned false");
             return false;
