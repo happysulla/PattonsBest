@@ -198,7 +198,7 @@ namespace Pattons_Best
       ICrewMember? GetCrewMember(string name);
       void SetIncapacitated(ICrewMember crewmember);
       bool SetCrewActionTerritory(ICrewMember mi);
-      bool SwitchMembers(ICrewMember incapacitated);
+      bool SwitchMembers(ICrewMember? switchingMember);
       void ClearCrewActions(string caller);
       //------------------------------------------------
       string GetGunLoadType();

@@ -5258,6 +5258,7 @@ namespace Pattons_Best
             bool isDriverSwitch = false;
             bool isGunnerSwitch = false;
             bool isCommanderSwitch = false;
+            bool isAssistantSwitch = false;
             foreach (IMapItem crewAction in gi.CrewActions)
             {
                if ("Assistant_SwitchLdr" == crewAction.Name)
@@ -5268,6 +5269,8 @@ namespace Pattons_Best
                   isGunnerSwitch = true;
                if ("Assistant_SwitchCmdr" == crewAction.Name)
                   isCommanderSwitch = true;
+               if ("Assistant_SwitchCmdr" == crewAction.Name)
+                  isAssistantSwitch = true;
             }
             if (true == isLoaderSwitch)
             {
@@ -5334,6 +5337,17 @@ namespace Pattons_Best
                if (false == gi.SwitchMembers(cm))
                {
                   Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for cm=" + cm.Role);
+                  return false;
+               }
+            }
+            else if (true == isAssistantSwitch)
+            {
+               gi.EventDisplayed = gi.EventActive = "e061a";
+               gi.CrewActionPhase = CrewActionPhase.CrewSwitch;
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 18d-phase=" + gi.CrewActionPhase.ToString());
+               if (false == gi.SwitchMembers(null))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for switching back assistant");
                   return false;
                }
             }

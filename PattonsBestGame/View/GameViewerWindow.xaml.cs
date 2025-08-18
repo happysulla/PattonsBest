@@ -836,14 +836,6 @@ namespace Pattons_Best
                myContextMenuCrewActions["Loader"].Items.Add(menuItem1);
             }
          }
-         else
-         {
-            menuItem1 = new MenuItem();
-            menuItem1.Name = "Assistant_SwitchLdr";
-            menuItem1.Header = "Switch w/ Loader";
-            menuItem1.Click += MenuItemCrewActionClick;
-            myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
-         }
          //===========================================================================================================
          ICrewMember? driver = gi.GetCrewMember("Driver");
          if (null == driver)
@@ -906,14 +898,6 @@ namespace Pattons_Best
                menuItem1.Click += MenuItemCrewActionClick;
                myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
             }
-         }
-         else
-         {
-            menuItem1 = new MenuItem();
-            menuItem1.Name = "Assistant_SwitchDvr";
-            menuItem1.Header = "Switch w/ Driver";
-            menuItem1.Click += MenuItemCrewActionClick;
-            myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
          }
          //===========================================================================================================--
          string gunload = myGameInstance.GetGunLoadType();
@@ -980,56 +964,6 @@ namespace Pattons_Best
                menuItem1.Header = "Replace Periscope";
                menuItem1.Click += MenuItemCrewActionClick;
                myContextMenuCrewActions["Gunner"].Items.Add(menuItem1);
-            }
-         }
-         else
-         {
-            menuItem1 = new MenuItem();
-            menuItem1.Name = "Assistant_SwitchGunr";
-            menuItem1.Header = "Switch w/ Gunner";
-            menuItem1.Click += MenuItemCrewActionClick;
-            myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
-         }
-         //===========================================================================================================
-         ICrewMember? assistant = gi.GetCrewMember("Assistant");
-         if (null == assistant)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): Assistant=null");
-            return false;
-         }
-         if (false == assistant.IsIncapacitated) // CreateContextMenuCrewAction()
-         {
-            menuItem1 = new MenuItem();
-            menuItem1.Name = "Assistant_PassAmmo";
-            menuItem1.Header = "Pass Ammo";
-            menuItem1.Click += MenuItemCrewActionClick;
-            myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
-            if ((true == isAssistantOpenHatch) || (false == gi.IsBrokenPeriscopeAssistant)) // If broken scope and button up, cannot drive
-            {
-               if ((0 < lastReport.Ammo30CalibreMG) && (false == gi.IsMalfunctionedMgBow) && (false == gi.IsBrokenMgBow) && (false == gi.Sherman.IsHullDown))
-               {
-                  menuItem1 = new MenuItem();
-                  menuItem1.Name = "Assistant_FireBowMg";
-                  menuItem1.Header = "Fire Bow MG";
-                  menuItem1.Click += MenuItemCrewActionClick;
-                  myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
-               }
-            }
-            if (true == gi.IsMalfunctionedMgBow)
-            {
-               menuItem1 = new MenuItem();
-               menuItem1.Name = "Assistant_RepairBowMg";
-               menuItem1.Header = "Repair Bow MG";
-               menuItem1.Click += MenuItemCrewActionClick;
-               myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
-            }
-            if ((true == gi.IsBrokenPeriscopeAssistant) && (0 < diffPeriscopes))
-            {
-               menuItem1 = new MenuItem();
-               menuItem1.Name = "Assistant_RepairScope";
-               menuItem1.Header = "Replace Periscope";
-               menuItem1.Click += MenuItemCrewActionClick;
-               myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
             }
          }
          //===========================================================================================================
@@ -1111,13 +1045,131 @@ namespace Pattons_Best
                myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
             }
          }
+         //===========================================================================================================
+         ICrewMember? assistant = gi.GetCrewMember("Assistant");
+         if (null == assistant)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): Assistant=null");
+            return false;
+         }
+         if (false == assistant.IsIncapacitated) // CreateContextMenuCrewAction()
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Assistant_PassAmmo";
+            menuItem1.Header = "Pass Ammo";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+            if ((true == isAssistantOpenHatch) || (false == gi.IsBrokenPeriscopeAssistant)) // If broken scope and button up, cannot drive
+            {
+               if ((0 < lastReport.Ammo30CalibreMG) && (false == gi.IsMalfunctionedMgBow) && (false == gi.IsBrokenMgBow) && (false == gi.Sherman.IsHullDown))
+               {
+                  menuItem1 = new MenuItem();
+                  menuItem1.Name = "Assistant_FireBowMg";
+                  menuItem1.Header = "Fire Bow MG";
+                  menuItem1.Click += MenuItemCrewActionClick;
+                  myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+               }
+            }
+            if (true == gi.IsMalfunctionedMgBow)
+            {
+               menuItem1 = new MenuItem();
+               menuItem1.Name = "Assistant_RepairBowMg";
+               menuItem1.Header = "Repair Bow MG";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+            }
+            if ((true == gi.IsBrokenPeriscopeAssistant) && (0 < diffPeriscopes))
+            {
+               menuItem1 = new MenuItem();
+               menuItem1.Name = "Assistant_RepairScope";
+               menuItem1.Header = "Replace Periscope";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+            }
+         }
+         //===========================================================================================================
+         if( null == gi.SwitchedCrewMember)
+         {
+            if (true == driver.IsIncapacitated)
+            {
+               menuItem1 = new MenuItem();
+               menuItem1.Name = "Assistant_SwitchDvr";
+               menuItem1.Header = "Switch w/ Driver";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+            }
+            if (true == loader.IsIncapacitated)
+            {
+               menuItem1 = new MenuItem();
+               menuItem1.Name = "Assistant_SwitchLdr";
+               menuItem1.Header = "Switch w/ Loader";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+            }
+            if (true == gunner.IsIncapacitated)
+            {
+               menuItem1 = new MenuItem();
+               menuItem1.Name = "Assistant_SwitchGunr";
+               menuItem1.Header = "Switch w/ Gunner";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+            }
+            if (true == commander.IsIncapacitated)
+            {
+               menuItem1 = new MenuItem();
+               menuItem1.Name = "Assistant_SwitchCmdr";
+               menuItem1.Header = "Switch w/ Commander";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+            }
+            if (null != gi.SwitchedCrewMember)
+            {
+               menuItem1 = new MenuItem();
+               menuItem1.Name = "Assistant_SwitchAsst";
+               menuItem1.Header = "Switch w/ Assistant";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+            }
+         }
          else
          {
             menuItem1 = new MenuItem();
-            menuItem1.Name = "Assistant_SwitchCmdr";
-            menuItem1.Header = "Switch w/ Commander";
+            menuItem1.Name = "Assistant_SwitchAsst";
+            menuItem1.Header = "Return to Assistant";
             menuItem1.Click += MenuItemCrewActionClick;
-            myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+            myContextMenuCrewActions[gi.SwitchedCrewMember.Role].Items.Add(menuItem1);
+            if (true == driver.IsIncapacitated)
+            {
+               menuItem1 = new MenuItem();
+               menuItem1.Name = "Assistant_SwitchDvr";
+               menuItem1.Header = "Switch w/ Driver";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions[gi.SwitchedCrewMember.Role].Items.Add(menuItem1);
+            }
+            if (true == loader.IsIncapacitated)
+            {
+               menuItem1 = new MenuItem();
+               menuItem1.Name = "Assistant_SwitchLdr";
+               menuItem1.Header = "Switch w/ Loader";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions[gi.SwitchedCrewMember.Role].Items.Add(menuItem1);
+            }
+            if (true == gunner.IsIncapacitated)
+            {
+               menuItem1 = new MenuItem();
+               menuItem1.Name = "Assistant_SwitchGunr";
+               menuItem1.Header = "Switch w/ Gunner";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions[gi.SwitchedCrewMember.Role].Items.Add(menuItem1);
+            }
+            if (true == commander.IsIncapacitated)
+            {
+               menuItem1 = new MenuItem();
+               menuItem1.Name = "Assistant_SwitchCmdr";
+               menuItem1.Header = "Switch w/ Commander";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions[gi.SwitchedCrewMember.Role].Items.Add(menuItem1);
+            }
          }
          return true;
       }
@@ -3821,7 +3873,14 @@ namespace Pattons_Best
             }
          }
          //--------------------------------------
-         string tName = aStringArray1[0] + "Action";
+         string action = aStringArray1[1];
+         if ( true == action.Contains("Switch")) // need to find where the Assistant is located
+         {
+            if( null != myGameInstance.SwitchedCrewMember )
+               sCrewMemberRole = myGameInstance.SwitchedCrewMember.Role;
+         }
+         //--------------------------------------
+         string tName = sCrewMemberRole + "Action";
          ITerritory? t = Territories.theTerritories.Find(tName);
          if (null == t)
          {
@@ -3829,31 +3888,26 @@ namespace Pattons_Best
             return;
          }
          //--------------------------------------
-         ContextMenu? menu = null;  // Add in new button
+         ContextMenu menu = myContextMenuCrewActions[sCrewMemberRole]; 
          switch (menuitem.Name)
          {
             case "Loader_Load":
                mi = new MapItem(menuitem.Name, 1.0, "c54LLoad", t);
-               menu = myContextMenuCrewActions["Loader"];
                MenuItemCrewActionClickRemoveGunnerRepair();
                break;
             case "Loader_RepairMainGun":
                mi = new MapItem(menuitem.Name, 1.0, "c55LRepairMainGun", t);
-               menu = myContextMenuCrewActions["Loader"];
                break;
             case "Loader_RepairCoaxialMg":
                mi = new MapItem(menuitem.Name, 1.0, "c56LRepairCoaxialMg", t);
-               menu = myContextMenuCrewActions["Loader"];
                MenuItemCrewActionClickRemoveGunnerRepair();
                break;
             case "Loader_FireMortar":
                mi = new MapItem(menuitem.Name, 1.0, "c58LFireMortar", t);
-               menu = myContextMenuCrewActions["Loader"];
                MenuItemCrewActionClickRemoveGunnerRepair();
                break;
             case "Loader_ChangeGunLoad":
                mi = new MapItem(menuitem.Name, 1.0, "c59LChangeGunLoad", t);
-               menu = myContextMenuCrewActions["Loader"];
                MenuItemCrewActionClickRemoveGunnerRepair();
                MenuItemCrewActionClickRemoveGunnerFire();
                MenuItemCrewActionClickRemoveGunnerRotateAndFire();
@@ -3861,36 +3915,29 @@ namespace Pattons_Best
                break;
             case "Loader_RestockReadyRack":
                mi = new MapItem(menuitem.Name, 1.0, "c60LRestockReadyRack", t);
-               menu = myContextMenuCrewActions["Loader"];
                MenuItemCrewActionClickRemoveGunnerRepair();
                break;
             case "Loader_RepairScope":
                mi = new MapItem(menuitem.Name, 1.0, "c73ReplacePeriscope", t);
-               menu = myContextMenuCrewActions["Loader"];
                MenuItemCrewActionClickRemoveGunnerRepair();
                break;
             case "Loader_FireAaMg":
                mi = new MapItem(menuitem.Name, 1.0, "c71FireAaMg", t);
-               menu = myContextMenuCrewActions["Loader"];
                MenuItemCrewActionClickRemoveGunnerRepair();
                break;
             case "Loader_RepairAaMg":
                mi = new MapItem(menuitem.Name, 1.0, "c72RepairAaMg", t);
-               menu = myContextMenuCrewActions["Loader"];
                MenuItemCrewActionClickRemoveGunnerRepair();
                break;
             case "Loader_FireSubMg":
                mi = new MapItem(menuitem.Name, 1.0, "c74FireSubMg", t);
-               menu = myContextMenuCrewActions["Loader"];
                MenuItemCrewActionClickRemoveGunnerRepair();
                break;
             case "Driver_Stop":
                mi = new MapItem(menuitem.Name, 1.0, "c61DStop", t);
-               menu = myContextMenuCrewActions["Driver"];
                break;
             case "Driver_Forward":
                mi = new MapItem(menuitem.Name, 1.0, "c62DForward", t);
-               menu = myContextMenuCrewActions["Driver"];
                if (false == card.myIsHvss)
                {
                   MenuItemCrewActionClickRemoveGunnerFire();  // Cannot fire if moving and do not have HVSS
@@ -3900,7 +3947,6 @@ namespace Pattons_Best
                break;
             case "Driver_ForwardToHullDown":
                mi = new MapItem(menuitem.Name, 1.0, "c63DForwardToHullDown", t);
-               menu = myContextMenuCrewActions["Driver"];
                if (false == card.myIsHvss)
                {
                   MenuItemCrewActionClickRemoveGunnerFire();  // Cannot fire if moving and do not have HVSS
@@ -3910,7 +3956,6 @@ namespace Pattons_Best
                break;
             case "Driver_Reverse":
                mi = new MapItem(menuitem.Name, 1.0, "c64DReverse", t);
-               menu = myContextMenuCrewActions["Driver"];
                if (false == card.myIsHvss)
                {
                   MenuItemCrewActionClickRemoveGunnerFire();  // Cannot fire if moving and do not have HVSS
@@ -3920,7 +3965,6 @@ namespace Pattons_Best
                break;
             case "Driver_ReverseToHullDown":
                mi = new MapItem(menuitem.Name, 1.0, "c65DReverseToHullDown", t);
-               menu = myContextMenuCrewActions["Driver"];
                if (false == card.myIsHvss)
                {
                   MenuItemCrewActionClickRemoveGunnerFire();  // Cannot fire if moving and do not have HVSS
@@ -3930,7 +3974,6 @@ namespace Pattons_Best
                break;
             case "Driver_PivotTank":
                mi = new MapItem(menuitem.Name, 1.0, "c66DPivotTank", t);
-               menu = myContextMenuCrewActions["Driver"];
                if (false == card.myIsHvss)
                {
                   MenuItemCrewActionClickRemoveGunnerFire();  // Cannot fire if moving and do not have HVSS
@@ -3940,99 +3983,78 @@ namespace Pattons_Best
                break;
             case "Driver_RepairScope":
                mi = new MapItem(menuitem.Name, 1.0, "c73ReplacePeriscope", t);
-               menu = myContextMenuCrewActions["Driver"];
                break;
             case "Gunner_FireMainGun":
                mi = new MapItem(menuitem.Name, 1.0, "c50GFireMainGun", t);
-               menu = myContextMenuCrewActions["Gunner"];
                break;
             case "Gunner_FireCoaxialMg":
                mi = new MapItem(menuitem.Name, 1.0, "c51GFireCoaxialMg", t);
-               menu = myContextMenuCrewActions["Gunner"];
                break;
             case "Gunner_RotateTurret":
                mi = new MapItem(menuitem.Name, 1.0, "c52GRotateTurret", t);
-               menu = myContextMenuCrewActions["Gunner"];
                break;
             case "Gunner_RotateFireMainGun":
                mi = new MapItem(menuitem.Name, 1.0, "c53GRotateTurretFireMainGun", t);
-               menu = myContextMenuCrewActions["Gunner"];
                break;
             case "Gunner_RepairMainGun":
                mi = new MapItem(menuitem.Name, 1.0, "c57GRepairMainGun", t);
-               menu = myContextMenuCrewActions["Gunner"];
                break;
             case "Gunner_RepairScope":
                mi = new MapItem(menuitem.Name, 1.0, "c73ReplacePeriscope", t);
-               menu = myContextMenuCrewActions["Gunner"];
                break;
             case "Gunner_ThrowGrenade":
                mi = new MapItem(menuitem.Name, 1.0, "c70ThrowSmokeGrenade", t);
-               menu = myContextMenuCrewActions["Gunner"];
                break;
             case "Assistant_FireBowMg":
                mi = new MapItem(menuitem.Name, 1.0, "c67AFireBowMg", t);
-               menu = myContextMenuCrewActions["Assistant"];
                break;
             case "Assistant_RepairBowMg":
                mi = new MapItem(menuitem.Name, 1.0, "c68ARepairBowMg", t);
-               menu = myContextMenuCrewActions["Assistant"];
                break;
             case "Assistant_PassAmmo":
                mi = new MapItem(menuitem.Name, 1.0, "c69APassAmmo", t);
-               menu = myContextMenuCrewActions["Assistant"];
                break;
             case "Assistant_RepairScope":
                mi = new MapItem(menuitem.Name, 1.0, "c73ReplacePeriscope", t);
-               menu = myContextMenuCrewActions["Assistant"];
                break;
             case "Assistant_SwitchLdr":
                mi = new MapItem(menuitem.Name, 1.0, "c200LoaderSwitch", t);
-               menu = myContextMenuCrewActions["Assistant"];
                break;
             case "Assistant_SwitchDvr":
                mi = new MapItem(menuitem.Name, 1.0, "c199DriverSwitch", t);
-               menu = myContextMenuCrewActions["Assistant"];
                break;
             case "Assistant_SwitchGunr":
                mi = new MapItem(menuitem.Name, 1.0, "c201GunnerSwitch", t);
-               menu = myContextMenuCrewActions["Assistant"];
                break;
             case "Assistant_SwitchCmdr":
                mi = new MapItem(menuitem.Name, 1.0, "c202CommanderSwitch", t);
-               menu = myContextMenuCrewActions["Assistant"];
+               break;
+            case "Assistant_SwitchAsst":
+               mi = new MapItem(menuitem.Name, 1.0, "c202CommanderSwitch", t);
                break;
             case "Commander_Move":
                mi = new MapItem(menuitem.Name, 1.0, "c48CDirectMove", t);
-               menu = myContextMenuCrewActions["Commander"];
                break;
             case "Commander_MainGunFire":
                mi = new MapItem(menuitem.Name, 1.0, "c49CDirectMainGunFire", t);
-               menu = myContextMenuCrewActions["Commander"];
                break;
             case "Commander_MGFire":
                mi = new MapItem(menuitem.Name, 1.0, "c49CDirectMGFire", t);
-               menu = myContextMenuCrewActions["Commander"];
                break;
             case "Commander_RepairScope":
                mi = new MapItem(menuitem.Name, 1.0, "c73ReplacePeriscope", t);
-               menu = myContextMenuCrewActions["Commander"];
                break;
             case "Commander_FireAaMg":
                mi = new MapItem(menuitem.Name, 1.0, "c71FireAaMg", t);
-               menu = myContextMenuCrewActions["Commander"];
                break;
             case "Commander_RepairAaMg":
                mi = new MapItem(menuitem.Name, 1.0, "c72RepairAaMg", t);
-               menu = myContextMenuCrewActions["Commander"];
                break;
             case "Commander_FireSubMg":
                mi = new MapItem(menuitem.Name, 1.0, "c74FireSubMg", t);
-               menu = myContextMenuCrewActions["Commander"];
                break;
             case "Commander_ThrowGrenade":
                mi = new MapItem(menuitem.Name, 1.0, "c70ThrowSmokeGrenade", t);
-               menu = myContextMenuCrewActions["Commander"];
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): reached default name=" + menuitem.Name);
@@ -4046,11 +4068,6 @@ namespace Pattons_Best
          myGameInstance.CrewActions.Add(mi);
          Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItemCrewActionClick(): adding ca=" + mi.Name);
          //--------------------------------------
-         if ( null == menu )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): menu=null");
-            return;
-         }
          Logger.Log(LogEnum.LE_SHOW_ORDERS_MENU, "MenuItemCrewActionClick(): adding new button=" + menuitem.Name + " for sCrewMemberRole=" + sCrewMemberRole);
          System.Windows.Controls.Button newButton = new Button { ContextMenu = menu, Name = menuitem.Name, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
          MapItem.SetButtonContent(newButton, mi, true, false); // This sets the image as the button's content

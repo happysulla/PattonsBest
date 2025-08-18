@@ -420,9 +420,8 @@ namespace Pattons_Best
             this.Hatches.Remove(mi);
          cm.IsButtonedUp = true;
       }
-      public bool SwitchMembers(ICrewMember incapacitated)
+      public bool SwitchMembers(ICrewMember? switchingMember)
       {
-         //--------------------------------------------
          IAfterActionReport? report = Reports.GetLast();
          if (null == report)
          {
@@ -464,6 +463,7 @@ namespace Pattons_Best
                      return false;
                   }
                   report.Assistant = assistantDriver;
+                  this.CrewActions.Add(report.Driver);
                   break;
                case "Loader":
                   ICrewMember assistantLoader = report.Loader;
@@ -475,6 +475,7 @@ namespace Pattons_Best
                      return false;
                   }
                   report.Assistant = assistantLoader;
+                  this.CrewActions.Add(report.Loader);
                   break;
                case "Gunner":
                   ICrewMember assistantGunner = report.Gunner;
@@ -486,6 +487,7 @@ namespace Pattons_Best
                      return false;
                   }
                   report.Assistant = assistantGunner;
+                  this.CrewActions.Add(report.Gunner);
                   break;
                case "Commander":
                   ICrewMember assistantCmdr = report.Commander;
@@ -497,9 +499,10 @@ namespace Pattons_Best
                      return false;
                   }
                   report.Assistant = assistantCmdr;
+                  this.CrewActions.Add(report.Commander);
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): reached default name=" + incapacitated.Role);
+                  Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): reached default name=" + this.SwitchedCrewMember.Role);
                   return false;
             }
             report.Assistant.Rating = this.AssistantOriginalRating;
@@ -509,9 +512,17 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(Assistant) returned false");
                return false;
             }
+            this.SwitchedCrewMember = null;
+            if (null == switchingMember) // assistant returns back to original position
+               return true;
          }
          //=========================================================
-         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "SwitchMembers(): Switched Assistant with Crew Member=" + incapacitated.Role);
+         if( null == switchingMember)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): switchingMember=null");
+            return false;
+         }
+         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "SwitchMembers(): Switched Assistant with Crew Member=" + switchingMember.Role);
          foreach (IMapItem mi in this.Hatches) // Assistant becomes button up
          {
             if (true == mi.Name.Contains("Assistant"))
@@ -524,7 +535,7 @@ namespace Pattons_Best
          //--------------------------------------------
          this.AssistantOriginalRating = report.Assistant.Rating;
          report.Assistant.Rating = (int)Math.Floor((double)(report.Assistant.Rating * 0.5));
-         this.SwitchedCrewMember = incapacitated.Clone();
+         this.SwitchedCrewMember = switchingMember.Clone();
          switch (SwitchedCrewMember.Role)
          {
             case "Driver":
@@ -567,12 +578,12 @@ namespace Pattons_Best
                }
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): reached default name=" + incapacitated.Role);
+               Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): reached default name=" + switchingMember.Role);
                break;
          }
          //-----------------------------------------------------
-         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "SwitchMembers(): SetCrewMemberTerritory for role=" + incapacitated.Role);
-         report.Assistant = incapacitated;
+         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "SwitchMembers(): SetCrewMemberTerritory for role=" + switchingMember.Role);
+         report.Assistant = switchingMember;
          report.Assistant.Role = "Assistant";
          if (false == SetCrewActionTerritory(report.Assistant)) // put SwitchedCrewMember in proper spot
          {
