@@ -5269,7 +5269,7 @@ namespace Pattons_Best
                   isGunnerSwitch = true;
                if ("Assistant_SwitchCmdr" == crewAction.Name)
                   isCommanderSwitch = true;
-               if ("Assistant_SwitchCmdr" == crewAction.Name)
+               if ("Assistant_SwitchAsst" == crewAction.Name)
                   isAssistantSwitch = true;
             }
             if (true == isLoaderSwitch)

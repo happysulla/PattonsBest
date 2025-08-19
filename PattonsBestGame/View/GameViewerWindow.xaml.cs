@@ -1547,7 +1547,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): cm=null for " + crewmember);
                   return false;
                }
-               if (true == cm.IsButtonedUp)
+               if ( (true == cm.IsButtonedUp) && (false == cm.IsIncapacitated) )
                {
                   string tName = crewmember + "Hatch";
                   ITerritory? t = Territories.theTerritories.Find(tName);
