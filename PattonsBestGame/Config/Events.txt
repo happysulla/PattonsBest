@@ -760,6 +760,16 @@ e061a	"<Bold>e061a Return Assistant</Bold>
 The assistant driver moves through the tank to return back to his original position. The assistant driver returns back to his original rating. Click image to  continue.
 <LineBreak/><LineBreak/>
                                                  <InlineUIContainer><Image Name='CarryingMan' Height='200' Width='80'></Image></InlineUIContainer>"
+e062	"<Bold>e062 Crew Replacement - Battle Ends</Bold> 
+<InlineUIContainer><Button Content='r7.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<InlineUIContainer><Button Content='r19.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Wounded crewmen are replaced when battle ends or the tank withdraws. Replacing crewmen takes 30 minutes and is marked off the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+ <LineBreak/><LineBreak/>
+Click image to assign replacement crew ratings.
+<LineBreak/><LineBreak/>
+                                                 <InlineUIContainer><Image Name='CarryingMan' Height='200' Width='80'></Image></InlineUIContainer>"
 e100	"<Bold>e100 Evening Debriefing</Bold> 
 <LineBreak/><LineBreak/>
 An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
@@ -811,6 +821,12 @@ The purple heart is awarded for receiving a wound in combat. You have acumulated
                                               <InlineUIContainer><Image Name='DecorationPurpleHeart' Height='210' Width='100'></Image></InlineUIContainer>
 <LineBreak/><LineBreak/>
 Click image to continue."
+e105	"<Bold>e105 Crew Replacement - Knocked Out Tank</Bold> 
+<InlineUIContainer><Button Content='r7.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<InlineUIContainer><Button Content='r19.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>     
+<LineBreak/><LineBreak/>
+Wounded crewmen are replaced at beginning of day when the tank is knocked out. Click image to  continue to assign new crew ratings.
+<LineBreak/><LineBreak/>"
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"
 e502	"<Bold>e502 Game Lost</Bold>

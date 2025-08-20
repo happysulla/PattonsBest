@@ -1387,7 +1387,7 @@ namespace Pattons_Best
       }
       private bool PerformAutoSetupSkipCrewAssignments(IGameInstance gi)
       {
-         gi.NewMembers.Clear();
+         gi.NewMembers.Clear();    //PerformAutoSetupSkipCrewAssignments()
          IAfterActionReport? report = gi.Reports.GetLast();
          if (null == report)
          {
@@ -1403,12 +1403,12 @@ namespace Pattons_Best
             report.Scenario = EnumScenario.Counterattack;
          report.Scenario = EnumScenario.Battle; // <cgs> TEST - choose scenario
          //-------------------------------
-         gi.NewMembers.Add(report.Commander);
-         gi.NewMembers.Add(report.Gunner);
-         gi.NewMembers.Add(report.Loader);
-         gi.NewMembers.Add(report.Driver);
-         gi.NewMembers.Add(report.Assistant);
-         foreach (IMapItem mi in gi.NewMembers) // assign crew ratings randomly
+         gi.NewMembers.Add(report.Commander);   // PerformAutoSetupSkipCrewAssignments()
+         gi.NewMembers.Add(report.Gunner);      // PerformAutoSetupSkipCrewAssignments()
+         gi.NewMembers.Add(report.Loader);      // PerformAutoSetupSkipCrewAssignments()
+         gi.NewMembers.Add(report.Driver);      // PerformAutoSetupSkipCrewAssignments()
+         gi.NewMembers.Add(report.Assistant);   // PerformAutoSetupSkipCrewAssignments()
+         foreach (IMapItem mi in gi.NewMembers) // PerformAutoSetupSkipCrewAssignments() - assign crew ratings randomly
          {
             ICrewMember? cm = mi as ICrewMember;
             if (null == cm)

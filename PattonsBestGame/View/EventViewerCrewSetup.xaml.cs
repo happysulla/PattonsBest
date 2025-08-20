@@ -154,7 +154,7 @@ namespace Pattons_Best
          System.Windows.Point hotPoint = new System.Windows.Point(Utilities.theMapItemOffset, Utilities.theMapItemOffset); // set the center of the MapItem as the hot point for the cursor
          myCursors.Clear();
          int i = 0;
-         foreach (ICrewMember cm in myGameInstance.NewMembers)
+         foreach (ICrewMember cm in myGameInstance.NewMembers) // AssignNewCrewRatings()
          {
             myAssignables.Add(cm);
             myGridRows[i] = new GridRow();
