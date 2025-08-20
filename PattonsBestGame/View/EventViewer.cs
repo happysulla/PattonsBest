@@ -1276,7 +1276,7 @@ namespace Pattons_Best
                }
                break;
             case "e043c":
-               ICrewMember? driver = gi.GetCrewMember("Driver");
+               ICrewMember? driver = gi.GetCrewMemberByRole("Driver");
                if (null == driver)
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): driver=null for key=" + key);
@@ -1320,7 +1320,7 @@ namespace Pattons_Best
                }
                break;
             case "e043d":
-               ICrewMember? assistant = gi.GetCrewMember("Assistant");
+               ICrewMember? assistant = gi.GetCrewMemberByRole("Assistant");
                if (null == assistant)
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): assistant=null for key=" + key);
@@ -1888,7 +1888,7 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new Run("Modifiers") { TextDecorations = TextDecorations.Underline });
                myTextBlock.Inlines.Add(new LineBreak());
                StringBuilder sbe056b = new StringBuilder();
-               ICrewMember? assistante56b = gi.GetCrewMember("Assistant");
+               ICrewMember? assistante56b = gi.GetCrewMemberByRole("Assistant");
                if (null == assistante56b)
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): assistant=null");
@@ -1935,7 +1935,7 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new Run("Modifiers") { TextDecorations = TextDecorations.Underline });
                myTextBlock.Inlines.Add(new LineBreak());
                StringBuilder sbe056c = new StringBuilder();
-               ICrewMember? loader56c = gi.GetCrewMember("Loader");
+               ICrewMember? loader56c = gi.GetCrewMemberByRole("Loader");
                if (null == loader56c)
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): assistant=null");
@@ -2080,14 +2080,14 @@ namespace Pattons_Best
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
          //-------------------------------------------------
-         ICrewMember? commander = gi.GetCrewMember("Commander");
+         ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
          if (null == commander)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetMovingModifier(): commander=null");
             return "ERROR";
          }
          //-------------------------------------------------
-         ICrewMember? driver = gi.GetCrewMember("Driver");
+         ICrewMember? driver = gi.GetCrewMemberByRole("Driver");
          if (null == driver)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetMovingModifier(): driver=null");
@@ -2147,14 +2147,14 @@ namespace Pattons_Best
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
          //-------------------------------------------------
-         ICrewMember? commander = gi.GetCrewMember("Commander");
+         ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
          if (null == commander)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetMovingModifier(): commander=null");
             return "ERROR";
          }
          //-------------------------------------------------
-         ICrewMember? driver = gi.GetCrewMember("Driver");
+         ICrewMember? driver = gi.GetCrewMemberByRole("Driver");
          if (null == driver)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetMovingModifier(): driver=null");
@@ -2353,13 +2353,13 @@ namespace Pattons_Best
                isShermanMoving = true;
          }
          //------------------------------------
-         ICrewMember? commander = gi.GetCrewMember("Commander");
+         ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
          if (null == commander)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): commander=null");
             return "ERROR";
          }
-         ICrewMember? gunner = gi.GetCrewMember("Gunner");
+         ICrewMember? gunner = gi.GetCrewMemberByRole("Gunner");
          if (null == gunner)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): gunner=null");
@@ -2628,14 +2628,14 @@ namespace Pattons_Best
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
          //-------------------------------------------------
-         ICrewMember? gunner = gi.GetCrewMember("Gunner");
+         ICrewMember? gunner = gi.GetCrewMemberByRole("Gunner");
          if (null == gunner)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanRateOfFireModifier(): gunner=null");
             return "ERROR";
          }
          //-------------------------------------------------
-         ICrewMember? loader = gi.GetCrewMember("Loader");
+         ICrewMember? loader = gi.GetCrewMemberByRole("Loader");
          if (null == loader)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanRateOfFireModifier(): loader=null");
@@ -2673,7 +2673,7 @@ namespace Pattons_Best
             }
             if (true == isAssistantPassesAmmo)
             {
-               ICrewMember? assistant = gi.GetCrewMember("Assistant");
+               ICrewMember? assistant = gi.GetCrewMemberByRole("Assistant");
                if (null == assistant)
                {
                   Logger.Log(LogEnum.LE_ERROR, "GetShermanRateOfFireModifier(): assistant=null");
@@ -3327,7 +3327,7 @@ namespace Pattons_Best
          //------------------------------------
          if (true == gi.IsCommanderDirectingMgFire)
          {
-            ICrewMember? commander = gi.GetCrewMember("Commander");
+            ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
             if (null == commander)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): commander=null");
@@ -3340,7 +3340,7 @@ namespace Pattons_Best
          //------------------------------------
          if (true == isCommanderFiring)
          {
-            ICrewMember? commander = gi.GetCrewMember("Commander");
+            ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
             if (null == commander)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): commander=null");
@@ -3353,7 +3353,7 @@ namespace Pattons_Best
          //------------------------------------
          if (true == isLoaderFiring)
          {
-            ICrewMember? loader = gi.GetCrewMember("Loader");
+            ICrewMember? loader = gi.GetCrewMemberByRole("Loader");
             if (null == loader)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): loader=null");
@@ -3366,7 +3366,7 @@ namespace Pattons_Best
          //------------------------------------
          if (true == isGunnerFiring)
          {
-            ICrewMember? gunner = gi.GetCrewMember("Gunner");
+            ICrewMember? gunner = gi.GetCrewMemberByRole("Gunner");
             if (null == gunner)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): gunner=null");
@@ -3379,7 +3379,7 @@ namespace Pattons_Best
          //------------------------------------
          if (true == isAssistantFiring)
          {
-            ICrewMember? assistant = gi.GetCrewMember("Assistant");
+            ICrewMember? assistant = gi.GetCrewMemberByRole("Assistant");
             if (null == assistant)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): assistant=null");
@@ -3513,7 +3513,7 @@ namespace Pattons_Best
             return false;
          }
          //----------------------------------------
-         ICrewMember? commander = gi.GetCrewMember("Commander");
+         ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
          if (null == commander)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentDecoration(): commander=null for key=" + key);
@@ -3673,7 +3673,7 @@ namespace Pattons_Best
             return false;
          }
          //----------------------------------------
-         ICrewMember? cmdr = gi.GetCrewMember("Commander");
+         ICrewMember? cmdr = gi.GetCrewMemberByRole("Commander");
          if (null == cmdr)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentEndOfRound(): cmdr=null for key=" + key);
@@ -3722,7 +3722,7 @@ namespace Pattons_Best
          }
          string key = gi.EventActive;
          StringBuilder sbe056 = new StringBuilder();
-         ICrewMember? loader = gi.GetCrewMember("Loader");
+         ICrewMember? loader = gi.GetCrewMemberByRole("Loader");
          if (null == loader)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): loader=null");
@@ -3734,7 +3734,7 @@ namespace Pattons_Best
          sbe056.Append(" for loader rating\n");
          if (true == isGunnerHelpingRepair)
          {
-            ICrewMember? gunner = gi.GetCrewMember("Gunner");
+            ICrewMember? gunner = gi.GetCrewMemberByRole("Gunner");
             if (null == gunner)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gunner=null");
@@ -3764,7 +3764,7 @@ namespace Pattons_Best
          StringBuilder sbe056 = new StringBuilder();
          if (true == isLoaderRepairing)
          {
-            ICrewMember? loader = gi.GetCrewMember("Loader");
+            ICrewMember? loader = gi.GetCrewMemberByRole("Loader");
             if (null == loader)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): loader=null");
@@ -3777,7 +3777,7 @@ namespace Pattons_Best
          }
          if (true == isCommanderRepairing)
          {
-            ICrewMember? commander = gi.GetCrewMember("Commander");
+            ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
             if (null == commander)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): commander=null");

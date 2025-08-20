@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 using Windows.ApplicationModel.Appointments.AppointmentsProvider;
 
@@ -52,7 +53,6 @@ namespace Pattons_Best
       public IMapItems AdvancingEnemies { set; get; } = new MapItems();
       public IMapItem? TargetMainGun { set; get; } = null;
       public IMapItem? TargetMg { set; get; } = null;
-      public ICrewMember? SwitchedCrewMember { set; get; } = null;
       //------------------------------------------------
       public ITerritory Home { get; set; } = new Territory();
       public ITerritory? EnemyStrengthCheckTerritory { get; set; } = null;
@@ -66,6 +66,8 @@ namespace Pattons_Best
       //---------------------------------------------------------------
       public bool IsHatchesActive { set; get; } = false;
       public bool IsRetreatToStartArea { set; get; } = false;
+      //---------------------------------------------------------------
+      public string SwitchedCrewMember { set; get; } = "";
       public int AssistantOriginalRating { set; get; } = 0;
       //---------------------------------------------------------------
       public bool IsShermanFirstShot { set; get; } = false;
@@ -207,7 +209,7 @@ namespace Pattons_Best
          int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
          TankCard card = new TankCard(lastReport.TankCardNum);
          //-----------------------------------------------
-         ICrewMember? crewMember = this.GetCrewMember(crewRole);
+         ICrewMember? crewMember = this.GetCrewMemberByRole(crewRole);
          if (null == crewMember)
          {
             Logger.Log(LogEnum.LE_ERROR, "IsCrewActionSelectable(): crewMember=null for crewRole=" + crewRole);
@@ -347,37 +349,47 @@ namespace Pattons_Best
          }
          return true;
       }
-      public ICrewMember? GetCrewMember(string role)
+      public ICrewMember? GetCrewMemberByRole(string role)
       {
          IAfterActionReport? report = Reports.GetLast();
          if (null == report)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetCrewMember(): report=null");
+            Logger.Log(LogEnum.LE_ERROR, "GetCrewMemberByRole(): report=null");
             return null;
          }
-         ICrewMember? crewmember = null;
-         switch (role)
+         if (role == "Driver")
+            return report.Driver;
+         if (role == "Assistant")
+            return report.Assistant;
+         if  (role == "Loader")
+            return report.Loader;
+         if  (role == "Gunner")
+            return report.Gunner;
+         if (role == "Commander")
+            return report.Commander;
+         Logger.Log(LogEnum.LE_ERROR, "GetCrewMemberByRole(): reached default name=" + role.ToString());
+         return null;
+      }
+      public ICrewMember? GetCrewMemberByName(string name)
+      {
+         IAfterActionReport? report = Reports.GetLast();
+         if (null == report)
          {
-            case "Driver":
-               crewmember = report.Driver;
-               break;
-            case "Assistant":
-               crewmember = report.Assistant;
-               break;
-            case "Loader":
-               crewmember = report.Loader;
-               break;
-            case "Gunner":
-               crewmember = report.Gunner;
-               break;
-            case "Commander":
-               crewmember = report.Commander;
-               break;
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "GetCrewMember(): reached default name=" + role);
-               break;
+            Logger.Log(LogEnum.LE_ERROR, "GetCrewMemberByName(): report=null");
+            return null;
          }
-         return crewmember;
+         if (name == report.Driver.Name) 
+            return report.Driver;
+         if (name == report.Assistant.Name) 
+            return report.Assistant;
+         if (name == report.Loader.Name) 
+            return report.Loader;
+         if (name == report.Gunner.Name) 
+            return report.Gunner;
+         if (name == report.Commander.Name) 
+            return report.Commander;
+         Logger.Log(LogEnum.LE_ERROR, "GetCrewMemberByName(): reached default name=" + name.ToString());
+         return null;
       }
       public bool SetCrewActionTerritory(ICrewMember cm)
       {
@@ -420,12 +432,13 @@ namespace Pattons_Best
             this.Hatches.Remove(mi);
          cm.IsButtonedUp = true;
       }
-      public bool SwitchMembers(ICrewMember? switchingMember)
+      public bool SwitchMembers(string switchingMemberRole)
       {
+         //--------------------------------------------
          IAfterActionReport? report = Reports.GetLast();
          if (null == report)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetCrewMember(): report=null");
+            Logger.Log(LogEnum.LE_ERROR, "GetCrewMemberByRole(): report=null");
             return false;
          }
          //--------------------------------------------
@@ -438,91 +451,84 @@ namespace Pattons_Best
                break;
             }
          }
-         //--------------------------------------------
-         if (null != this.SwitchedCrewMember) // Return SwitchedCrewMember and Assistant back to their original positions
+         //=========================================================
+         if (false == String.IsNullOrEmpty(this.SwitchedCrewMember)) // Return SwitchedCrewMember and Assistant back to their original positions
          {
-            Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "SwitchMembers(): Return Assistant to original position of crew member to " + this.SwitchedCrewMember.Role);
+            ICrewMember? switchedMember = GetCrewMemberByRole("Assistant"); // assistant is in role of switched member
+            if (null == switchedMember)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): switchedMember=null for role" + this.SwitchedCrewMember);
+               return false;
+            }
+            switchedMember.IsButtonedUp = true;
+            Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "SwitchMembers(): Return Assistant to original position of crew member to " + this.SwitchedCrewMember);
             foreach (IMapItem mi in this.Hatches)
             {
-               if (true == mi.Name.Contains(this.SwitchedCrewMember.Role))
+               if (true == mi.Name.Contains(this.SwitchedCrewMember))
                {
                   this.Hatches.Remove(mi);
-                  this.SwitchedCrewMember.IsButtonedUp = false;
                   break;
                }
             }
-            switch (this.SwitchedCrewMember.Role) 
+            switch (this.SwitchedCrewMember)
             {
                case "Driver":
-                  ICrewMember assistantDriver = report.Driver;
-                  report.Driver = this.SwitchedCrewMember;
+                  report.Assistant = report.Driver;
+                  report.Driver = switchedMember;
                   report.Driver.Role = "Driver";
                   if (false == SetCrewActionTerritory(report.Driver))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(report.Driver) returned false");
                      return false;
                   }
-                  report.Assistant = assistantDriver;
-                  this.CrewActions.Add(report.Driver);
                   break;
                case "Loader":
-                  ICrewMember assistantLoader = report.Loader;
-                  report.Loader = SwitchedCrewMember;
+                  report.Assistant = report.Loader;
+                  report.Loader = switchedMember;
                   report.Loader.Role = "Loader";
                   if (false == SetCrewActionTerritory(report.Loader))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(report.Loader) returned false");
                      return false;
                   }
-                  report.Assistant = assistantLoader;
-                  this.CrewActions.Add(report.Loader);
                   break;
                case "Gunner":
-                  ICrewMember assistantGunner = report.Gunner;
-                  report.Gunner = SwitchedCrewMember;
+                  report.Assistant = report.Gunner;
+                  report.Gunner = switchedMember;
                   report.Gunner.Role = "Gunner";
                   if (false == SetCrewActionTerritory(report.Gunner))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(report.Gunner) returned false");
                      return false;
                   }
-                  report.Assistant = assistantGunner;
-                  this.CrewActions.Add(report.Gunner);
                   break;
                case "Commander":
-                  ICrewMember assistantCmdr = report.Commander;
-                  report.Commander = SwitchedCrewMember;
+                  report.Assistant = report.Commander;
+                  report.Commander = switchedMember;
                   report.Commander.Role = "Commander";
                   if (false == SetCrewActionTerritory(report.Commander))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(report.Commander) returned false");
                      return false;
                   }
-                  report.Assistant = assistantCmdr;
-                  this.CrewActions.Add(report.Commander);
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): reached default name=" + this.SwitchedCrewMember.Role);
+                  Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): reached default name=" + switchedMember.Role);
                   return false;
             }
             report.Assistant.Rating = this.AssistantOriginalRating;
             report.Assistant.Role = "Assistant";
-            if( false == SetCrewActionTerritory(report.Assistant))
+            if (false == SetCrewActionTerritory(report.Assistant))
             {
                Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(Assistant) returned false");
                return false;
             }
-            this.SwitchedCrewMember = null;
-            if (null == switchingMember) // assistant returns back to original position
+            this.SwitchedCrewMember = "";
+            if ("Assistant" == switchingMemberRole)
                return true;
          }
          //=========================================================
-         if( null == switchingMember)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): switchingMember=null");
-            return false;
-         }
-         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "SwitchMembers(): Switched Assistant with Crew Member=" + switchingMember.Role);
+         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "SwitchMembers(): Switched Assistant with Crew Member=" + switchingMemberRole);
          foreach (IMapItem mi in this.Hatches) // Assistant becomes button up
          {
             if (true == mi.Name.Contains("Assistant"))
@@ -535,8 +541,14 @@ namespace Pattons_Best
          //--------------------------------------------
          this.AssistantOriginalRating = report.Assistant.Rating;
          report.Assistant.Rating = (int)Math.Floor((double)(report.Assistant.Rating * 0.5));
-         this.SwitchedCrewMember = switchingMember.Clone();
-         switch (SwitchedCrewMember.Role)
+         ICrewMember? switchingMember = GetCrewMemberByRole(switchingMemberRole); // assistant is in role of switched member
+         if (null == switchingMember)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): switchedMember=null for role=" + switchingMemberRole);
+            return false;
+         }
+         this.SwitchedCrewMember = switchingMember.Role;
+         switch (this.SwitchedCrewMember)
          {
             case "Driver":
                report.Driver = report.Assistant;

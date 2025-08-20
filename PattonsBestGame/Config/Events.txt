@@ -754,6 +754,12 @@ e061	"<Bold>e061 Crew Switch</Bold>
 The assistant driver moves through the tank to replace the incapacitated crewman. The assistant driver takes on the role but at half rating. Click image to  continue.
 <LineBreak/><LineBreak/>
                                                  <InlineUIContainer><Image Name='CarryingMan' Height='200' Width='80'></Image></InlineUIContainer>"
+e061a	"<Bold>e061a Return Assistant</Bold> 
+<InlineUIContainer><Button Content='r19.22' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+The assistant driver moves through the tank to return back to his original position. The assistant driver returns back to his original rating. Click image to  continue.
+<LineBreak/><LineBreak/>
+                                                 <InlineUIContainer><Image Name='CarryingMan' Height='200' Width='80'></Image></InlineUIContainer>"
 e100	"<Bold>e100 Evening Debriefing</Bold> 
 <LineBreak/><LineBreak/>
 An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 

@@ -228,7 +228,7 @@ namespace Pattons_Best
          string[] crewmembers = new string[5] { "Commander", "Gunner", "Loader", "Driver", "Assistant" };
          foreach (string crewmember in crewmembers)
          {
-            ICrewMember? cm = myGameInstance.GetCrewMember(crewmember);
+            ICrewMember? cm = myGameInstance.GetCrewMemberByRole(crewmember);
             if (null == cm)
             {
                Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): cm=null for name=" + crewmember);
@@ -1119,10 +1119,10 @@ namespace Pattons_Best
                   string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Gunner" };
                   foreach (string crewmember in crewmembers)
                   {
-                     ICrewMember? cm0 = myGameInstance.GetCrewMember(crewmember);
+                     ICrewMember? cm0 = myGameInstance.GetCrewMemberByRole(crewmember);
                      if (null == cm0)
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance.GetCrewMember() returned null for " + crewmember);
+                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance.GetCrewMemberByRole() returned null for " + crewmember);
                         return;
                      }
                      myGameInstance.SetIncapacitated(cm0);
@@ -1371,10 +1371,10 @@ namespace Pattons_Best
          }
          if (null != mySelectedCrewman)
             return;
-         mySelectedCrewman = myGameInstance.GetCrewMember(b.Name);
+         mySelectedCrewman = myGameInstance.GetCrewMemberByRole(b.Name);
          if (null == mySelectedCrewman)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Button_Click(): myGameInstance.GetCrewMember() returned null for cm=" + b.Name);
+            Logger.Log(LogEnum.LE_ERROR, "Button_Click(): myGameInstance.GetCrewMemberByRole() returned null for cm=" + b.Name);
             return;
          }
          myAssignables.Remove(mySelectedCrewman.Name);
@@ -1524,7 +1524,7 @@ namespace Pattons_Best
                                  string[] crewmembers = new string[5] { "Commander", "Gunner", "Loader", "Driver", "Assistant" };
                                  foreach (string crewmember in crewmembers)
                                  {
-                                    ICrewMember? cm = myGameInstance.GetCrewMember(crewmember);
+                                    ICrewMember? cm = myGameInstance.GetCrewMemberByRole(crewmember);
                                     if (null == cm)
                                     {
                                        Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): cm=null for name=" + crewmember);

@@ -1401,7 +1401,7 @@ namespace Pattons_Best
             report.Scenario = EnumScenario.Battle;
          else
             report.Scenario = EnumScenario.Counterattack;
-         //report.Scenario = EnumScenario.Battle; // <cgs> TEST - choose scenario
+         report.Scenario = EnumScenario.Battle; // <cgs> TEST - choose scenario
          //-------------------------------
          gi.NewMembers.Add(report.Commander);
          gi.NewMembers.Add(report.Gunner);
@@ -1557,7 +1557,7 @@ namespace Pattons_Best
             return false;
          }
          //------------------------------------
-         ICrewMember? cm = gi.GetCrewMember("Commander");
+         ICrewMember? cm = gi.GetCrewMemberByRole("Commander");
          if (null == cm)
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Commander");
@@ -1576,7 +1576,7 @@ namespace Pattons_Best
             gi.Hatches.Add(mi);
          }
          //------------------------------------
-         cm = gi.GetCrewMember("Driver");
+         cm = gi.GetCrewMemberByRole("Driver");
          if (null == cm)
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Driver");
@@ -1595,7 +1595,7 @@ namespace Pattons_Best
             gi.Hatches.Add(mi);
          }
          //------------------------------------
-         cm = gi.GetCrewMember("Assistant");
+         cm = gi.GetCrewMemberByRole("Assistant");
          if (null == cm)
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): cm is null for Assistant");
@@ -2031,6 +2031,7 @@ namespace Pattons_Best
          }
          else
          {
+            Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "GameStateMorningBriefing.PerformAction(): crew=" + lastReport.Commander.Name);
             switch (action)
             {
                case GameAction.ShowTankForcePath:
@@ -2189,6 +2190,7 @@ namespace Pattons_Best
          }
          else
          {
+            Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "GameStateBattlePrep.PerformAction(): crew=" + lastReport.Commander.Name);
             TankCard card = new TankCard(lastReport.TankCardNum);
             switch (action)
             {
@@ -2400,6 +2402,7 @@ namespace Pattons_Best
          }
          else
          {
+            Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "GameStateMovement.PerformAction(): crew=" + lastReport.Commander.Name);
             string key = gi.EventActive;
             switch (action)
             {
@@ -3030,6 +3033,7 @@ namespace Pattons_Best
          }
          else
          {
+            Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "GameStateBattle.PerformAction(): crew=" + lastReport.Commander.Name);
             string key = gi.EventActive;
             switch (action)
             {
@@ -3289,6 +3293,7 @@ namespace Pattons_Best
          }
          else
          {
+            Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "GameStateBattleRoundSequence.PerformAction(): crew=" + lastReport.Commander.Name);
             string key = gi.EventActive;
             switch (action)
             {
@@ -3524,10 +3529,10 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     ICrewMember? cm = gi.GetCrewMember("Driver");
+                     ICrewMember? cm = gi.GetCrewMemberByRole("Driver");
                      if (null == cm)
                      {
-                        returnStatus = "GetCrewMember(Driver) returned null";
+                        returnStatus = "GetCrewMemberByRole(Driver) returned null";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMinefieldDriverWoundRoll): " + returnStatus);
                      }
                      else
@@ -3562,10 +3567,10 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     ICrewMember? cm = gi.GetCrewMember("Assistant");
+                     ICrewMember? cm = gi.GetCrewMemberByRole("Assistant");
                      if (null == cm)
                      {
-                        returnStatus = "GetCrewMember(Assistant) returned null";
+                        returnStatus = "GetCrewMemberByRole(Assistant) returned null";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMinefieldAssistantWoundRoll): " + returnStatus);
                      }
                      else
@@ -4819,10 +4824,10 @@ namespace Pattons_Best
          string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Gunner" };
          foreach (string crewmember in crewmembers)
          {
-            ICrewMember? cm = gi.GetCrewMember(crewmember);
+            ICrewMember? cm = gi.GetCrewMemberByRole(crewmember);
             if (null == cm)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CheckCrewMemberExposed(): gi.GetCrewMember() returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CheckCrewMemberExposed(): gi.GetCrewMemberByRole() returned null");
                return false;
             }
             foreach (IMapItem hatch in gi.Hatches)
@@ -4853,10 +4858,10 @@ namespace Pattons_Best
          string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Gunner" };
          foreach (string crewmember in crewmembers)
          {
-            ICrewMember? cm = gi.GetCrewMember(crewmember);
+            ICrewMember? cm = gi.GetCrewMemberByRole(crewmember);
             if (null == cm)
             {
-               Logger.Log(LogEnum.LE_ERROR, "SpottingPhaseBegin(): gi.GetCrewMember() returned null");
+               Logger.Log(LogEnum.LE_ERROR, "SpottingPhaseBegin(): gi.GetCrewMemberByRole() returned null");
                return false;
             }
             else
@@ -4909,10 +4914,10 @@ namespace Pattons_Best
                isLoaderDefaultNeeded = false;
          }
          //----------------------------------------------------
-         ICrewMember? driver = gi.GetCrewMember("Driver");
+         ICrewMember? driver = gi.GetCrewMemberByRole("Driver");
          if( null == driver )
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetDefaultCrewActions(): gi.GetCrewMember(Driver) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "SetDefaultCrewActions(): gi.GetCrewMemberByRole(Driver) returned null");
             return false;
          }
          if ( (true == isDriverDefaultNeeded) && (false == driver.IsIncapacitated)) // SetDefaultCrewActions() - if not incapacitated
@@ -4928,10 +4933,10 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "SetDefaultCrewActions(): ++++++++++++++++adding ca=" + mi.Name);
          }
          //----------------------------------------------------
-         ICrewMember? loader = gi.GetCrewMember("Loader");
+         ICrewMember? loader = gi.GetCrewMemberByRole("Loader");
          if (null == loader)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetDefaultCrewActions(): gi.GetCrewMember(Loader) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "SetDefaultCrewActions(): gi.GetCrewMemberByRole(Loader) returned null");
             return false;
          }
          if ( (true == isLoaderDefaultNeeded) && (false == loader.IsIncapacitated)) // SetDefaultCrewActions() - if not incapacitated
@@ -5277,15 +5282,9 @@ namespace Pattons_Best
                gi.EventDisplayed = gi.EventActive = "e061";
                gi.CrewActionPhase = CrewActionPhase.CrewSwitch;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 18a-phase=" + gi.CrewActionPhase.ToString());
-               ICrewMember? cm = gi.GetCrewMember("Loader");
-               if(null == cm)
+               if (false == gi.SwitchMembers("Loader"))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): Loader=null");
-                  return false;
-               }
-               if (false == gi.SwitchMembers(cm))
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for cm=" + cm.Role);
+                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for cm=Loader");
                   return false;
                }
             }
@@ -5294,15 +5293,9 @@ namespace Pattons_Best
                gi.EventDisplayed = gi.EventActive = "e061";
                gi.CrewActionPhase = CrewActionPhase.CrewSwitch;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 18b-phase=" + gi.CrewActionPhase.ToString());
-               ICrewMember? cm = gi.GetCrewMember("Driver");
-               if (null == cm)
+               if (false == gi.SwitchMembers("Driver"))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): Driver=null");
-                  return false;
-               }
-               if (false == gi.SwitchMembers(cm))
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for cm=" + cm.Role);
+                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for cm=Driver");
                   return false;
                }
             }
@@ -5311,15 +5304,9 @@ namespace Pattons_Best
                gi.EventDisplayed = gi.EventActive = "e061";
                gi.CrewActionPhase = CrewActionPhase.CrewSwitch;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 18c-phase=" + gi.CrewActionPhase.ToString());
-               ICrewMember? cm = gi.GetCrewMember("Gunner");
-               if (null == cm)
+               if (false == gi.SwitchMembers("Gunner"))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): Gunner=null");
-                  return false;
-               }
-               if (false == gi.SwitchMembers(cm))
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for cm=" + cm.Role);
+                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for cm=Gunner");
                   return false;
                }
             }
@@ -5328,15 +5315,9 @@ namespace Pattons_Best
                gi.EventDisplayed = gi.EventActive = "e061";
                gi.CrewActionPhase = CrewActionPhase.CrewSwitch;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 18d-phase=" + gi.CrewActionPhase.ToString());
-               ICrewMember? cm = gi.GetCrewMember("Commander");
-               if (null == cm)
+               if (false == gi.SwitchMembers("Commander"))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): Commander=null");
-                  return false;
-               }
-               if (false == gi.SwitchMembers(cm))
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for cm=" + cm.Role);
+                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for cm=Commander");
                   return false;
                }
             }
@@ -5345,7 +5326,7 @@ namespace Pattons_Best
                gi.EventDisplayed = gi.EventActive = "e061a";
                gi.CrewActionPhase = CrewActionPhase.CrewSwitch;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 18d-phase=" + gi.CrewActionPhase.ToString());
-               if (false == gi.SwitchMembers(null))
+               if (false == gi.SwitchMembers("Assistant"))
                {
                   Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for switching back assistant");
                   return false;
@@ -6450,7 +6431,7 @@ namespace Pattons_Best
          string key = gi.EventActive;
          int combo = gi.DieResults[key][0];
          //-------------------------------------------------------
-         ICrewMember? loader = gi.GetCrewMember("Loader");
+         ICrewMember? loader = gi.GetCrewMemberByRole("Loader");
          if (null == loader)
          {
             Logger.Log(LogEnum.LE_ERROR, "RepairMainGunAttempt(): loader=null");
@@ -6466,7 +6447,7 @@ namespace Pattons_Best
          }
          if (true == isGunnerHelpingRepair)
          {
-            ICrewMember? gunner = gi.GetCrewMember("Gunner");
+            ICrewMember? gunner = gi.GetCrewMemberByRole("Gunner");
             if (null == gunner)
             {
                Logger.Log(LogEnum.LE_ERROR, "RepairMainGunAttempt(): gunner=null");
@@ -6512,7 +6493,7 @@ namespace Pattons_Best
          //-------------------------------------------------------
          if (true == isLoaderRepairing)
          {
-            ICrewMember? loader = gi.GetCrewMember("Loader");
+            ICrewMember? loader = gi.GetCrewMemberByRole("Loader");
             if (null == loader)
             {
                Logger.Log(LogEnum.LE_ERROR, "RepairAntiAircraftMgAttempt(): loader=null");
@@ -6523,7 +6504,7 @@ namespace Pattons_Best
          //-------------------------------------------------------
          if (true == isCommanderRepairing)
          {
-            ICrewMember? commander = gi.GetCrewMember("Commander");
+            ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
             if (null == commander)
             {
                Logger.Log(LogEnum.LE_ERROR, "RepairAntiAircraftMgAttempt(): commander=null");
@@ -6556,7 +6537,7 @@ namespace Pattons_Best
          string key = gi.EventActive;
          int combo = gi.DieResults[key][0];
          //-------------------------------------------------------
-         ICrewMember? assistant = gi.GetCrewMember("Assistant");
+         ICrewMember? assistant = gi.GetCrewMemberByRole("Assistant");
          if (null == assistant)
          {
             Logger.Log(LogEnum.LE_ERROR, "RepairBowMgAttempt(): assistant=null");
@@ -6588,7 +6569,7 @@ namespace Pattons_Best
          string key = gi.EventActive;
          int combo = gi.DieResults[key][0];
          //-------------------------------------------------------
-         ICrewMember? loader = gi.GetCrewMember("Loader");
+         ICrewMember? loader = gi.GetCrewMemberByRole("Loader");
          if (null == loader)
          {
             Logger.Log(LogEnum.LE_ERROR, "RepairBowCoaxialAttempt(): loader=null");
@@ -7136,7 +7117,7 @@ namespace Pattons_Best
       }
       public bool UpdateDecoration(IGameInstance gi, IAfterActionReport report, GameAction action)
       {
-         ICrewMember? commander = gi.GetCrewMember("Commander");
+         ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
          if (null == commander)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateDecoration(): commander=null");
@@ -7319,7 +7300,7 @@ namespace Pattons_Best
          gi.Sherman.IsBoggedDown = false;
          gi.Sherman.IsAssistanceNeeded = false;
          //-------------------------------------------------------
-         ICrewMember? commander = gi.GetCrewMember("Commander");
+         ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
          if (null == commander)
          {
             Logger.Log(LogEnum.LE_ERROR, "ResetDay(): commander=null");

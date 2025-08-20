@@ -148,7 +148,7 @@ namespace Pattons_Best
          string[] crewmembers = new string[5] { "Commander", "Gunner", "Loader", "Driver", "Assistant" };
          foreach (string crewmember in crewmembers)
          {
-            ICrewMember? cm = myGameInstance.GetCrewMember(crewmember);
+            ICrewMember? cm = myGameInstance.GetCrewMemberByRole(crewmember);
             if( null == cm )
             {
                Logger.Log(LogEnum.LE_ERROR, "ImproveCrewRatings(): cm=null for name=" + crewmember);

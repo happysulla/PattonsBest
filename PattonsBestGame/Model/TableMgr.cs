@@ -3703,14 +3703,14 @@ namespace Pattons_Best
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
          //-------------------------------------------------
-         ICrewMember? commander = gi.GetCrewMember("Commander");
+         ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
          if(null == commander)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetMovingModifier(): commander=null");
             return FN_ERROR;
          }
          //-------------------------------------------------
-         ICrewMember? driver = gi.GetCrewMember("Driver");
+         ICrewMember? driver = gi.GetCrewMemberByRole("Driver");
          if (null == driver)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetMovingModifier(): driver=null");
@@ -3896,14 +3896,14 @@ namespace Pattons_Best
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
          //-------------------------------------------------
-         ICrewMember? commander = gi.GetCrewMember("Commander");
+         ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
          if (null == commander)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetMovingModifier(): commander=null");
             return FN_ERROR;
          }
          //-------------------------------------------------
-         ICrewMember? driver = gi.GetCrewMember("Driver");
+         ICrewMember? driver = gi.GetCrewMemberByRole("Driver");
          if (null == driver)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetMovingModifier(): driver=null");
@@ -4273,13 +4273,13 @@ namespace Pattons_Best
                isShermanMoving = true;
          }
          //------------------------------------
-         ICrewMember? commander = gi.GetCrewMember("Commander");
+         ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
          if (null == commander)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): commander=null");
             return FN_ERROR;
          }
-         ICrewMember? gunner = gi.GetCrewMember("Gunner");
+         ICrewMember? gunner = gi.GetCrewMemberByRole("Gunner");
          if (null == gunner)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): gunner=null");
@@ -4814,7 +4814,7 @@ namespace Pattons_Best
       {
          int rateOfFireModifier = 0;
          //-------------------------------------------------
-         ICrewMember? gunner = gi.GetCrewMember("Gunner");
+         ICrewMember? gunner = gi.GetCrewMemberByRole("Gunner");
          if (null == gunner)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanRateOfFireModifier(): gunner=null");
@@ -4822,7 +4822,7 @@ namespace Pattons_Best
          }
          rateOfFireModifier -= gunner.Rating;
          //-------------------------------------------------
-         ICrewMember? loader = gi.GetCrewMember("Loader");
+         ICrewMember? loader = gi.GetCrewMemberByRole("Loader");
          if (null == loader)
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanRateOfFireModifier(): loader=null");
@@ -4844,7 +4844,7 @@ namespace Pattons_Best
             }
             if (true == isAssistantPassesAmmo)
             {
-               ICrewMember? assistant = gi.GetCrewMember("Assistant");
+               ICrewMember? assistant = gi.GetCrewMemberByRole("Assistant");
                if (null == assistant)
                {
                   Logger.Log(LogEnum.LE_ERROR, "GetShermanRateOfFireModifier(): assistant=null");
@@ -5258,7 +5258,7 @@ namespace Pattons_Best
                   }
                }
                break;
-            case "STG":
+            case "SPG":
             case "STuGIIIg":
                if ("Front" == facing)
                {
@@ -6804,7 +6804,7 @@ namespace Pattons_Best
          {
             if (("Commander_FireAaMg" == crewAction.Name) && ("Aa" == mgType))
             {
-               ICrewMember? commander = gi.GetCrewMember("Commander");
+               ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
                if (null == commander)
                {
                   Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): commander=null");
@@ -6815,7 +6815,7 @@ namespace Pattons_Best
             }
             if (("Commander_FireSubMg" == crewAction.Name) && ("Sub" == mgType))
             {
-               ICrewMember? commander = gi.GetCrewMember("Commander");
+               ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
                if (null == commander)
                {
                   Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): commander=null");
@@ -6825,7 +6825,7 @@ namespace Pattons_Best
             }
             if (("Loader_FireSubMg" == crewAction.Name) && ("Sub" == mgType))
             {
-               ICrewMember? loader = gi.GetCrewMember("Loader");
+               ICrewMember? loader = gi.GetCrewMemberByRole("Loader");
                if (null == loader)
                {
                   Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): loader=null");
@@ -6836,7 +6836,7 @@ namespace Pattons_Best
             }
             if (("Loader_FireAaMg" == crewAction.Name) && ("Aa" == mgType))
             {
-               ICrewMember? loader = gi.GetCrewMember("Loader");
+               ICrewMember? loader = gi.GetCrewMemberByRole("Loader");
                if (null == loader)
                {
                   Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): loader=null");
@@ -6847,7 +6847,7 @@ namespace Pattons_Best
             }
             if (("Gunner_FireCoaxialMg" == crewAction.Name) && ("Coaxial" == mgType))
             {
-               ICrewMember? gunner = gi.GetCrewMember("Gunner");
+               ICrewMember? gunner = gi.GetCrewMemberByRole("Gunner");
                if (null == gunner)
                {
                   Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): gunner=null");
@@ -6858,7 +6858,7 @@ namespace Pattons_Best
             }
             if (("Assistant_FireBowMg" == crewAction.Name) && ("Bow" == mgType))
             {
-               ICrewMember? assistant = gi.GetCrewMember("Assistant");
+               ICrewMember? assistant = gi.GetCrewMemberByRole("Assistant");
                if (null == assistant)
                {
                   Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): assistant=null");
@@ -6881,7 +6881,7 @@ namespace Pattons_Best
          //------------------------------------
          if (true == gi.IsCommanderDirectingMgFire)
          {
-            ICrewMember? commander = gi.GetCrewMember("Commander");
+            ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
             if (null == commander)
             {
                Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): commander=null");

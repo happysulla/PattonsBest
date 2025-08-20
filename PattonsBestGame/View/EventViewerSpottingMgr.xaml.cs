@@ -164,6 +164,7 @@ namespace Pattons_Best
             return false;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
+         Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "PerformSpotting(): crew=" + lastReport.Commander.Name);
          //--------------------------------------------------
          bool isMainGunBeingFired = false;
          foreach (IMapItem crewaction in myGameInstance.CrewActions) // Loader may not spot if main gun is being fired
@@ -185,13 +186,12 @@ namespace Pattons_Best
          string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Gunner" };
          foreach (string crewmember in crewmembers)
          {
-            ICrewMember? cm = myGameInstance.GetCrewMember(crewmember);
+            ICrewMember? cm = myGameInstance.GetCrewMemberByRole(crewmember);
             if (null == cm)
             {
                Logger.Log(LogEnum.LE_ERROR, "PerformSpotting(): cm=null for name=" + crewmember);
                return false;
             }
-            cm.Name = cm.Role;
             //---------------------------------------
             bool isButtonUp = true;
             foreach (IMapItem mi in myGameInstance.Hatches) // Loader and Driver have default actions
@@ -575,7 +575,7 @@ namespace Pattons_Best
       private Button CreateButton(ICrewMember cm)
       {
          System.Windows.Controls.Button b = new Button { };
-         b.Name = cm.Role;
+         b.Name = cm.Name;
          b.Width = Utilities.ZOOM * Utilities.theMapItemSize;
          b.Height = Utilities.ZOOM * Utilities.theMapItemSize;
          b.BorderThickness = new Thickness(0);
@@ -761,10 +761,10 @@ namespace Pattons_Best
          }
          if (null != mySelectedCrewman)
             return;
-         mySelectedCrewman = myGameInstance.GetCrewMember(b.Name);
+         mySelectedCrewman = myGameInstance.GetCrewMemberByName(b.Name);
          if (null == mySelectedCrewman)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Button_Click(): myGameInstance.GetCrewMember() returned null for cm=" + b.Name);
+            Logger.Log(LogEnum.LE_ERROR, "Button_Click(): myGameInstance.GetCrewMemberByRole() returned null for cm=" + b.Name);
             return;
          }
          myAssignables.Remove(b.Name);

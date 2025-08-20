@@ -753,7 +753,7 @@ namespace Pattons_Best
          myContextMenuCrewActions["Commander"].Items.Clear();
          myContextMenuCrewActions["Commander"].Visibility = Visibility.Visible;
          //---------------------------------
-         ICrewMember? loader = gi.GetCrewMember("Loader");
+         ICrewMember? loader = gi.GetCrewMemberByRole("Loader");
          if( null == loader )
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): Loader=null");
@@ -837,7 +837,7 @@ namespace Pattons_Best
             }
          }
          //===========================================================================================================
-         ICrewMember? driver = gi.GetCrewMember("Driver");
+         ICrewMember? driver = gi.GetCrewMemberByRole("Driver");
          if (null == driver)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): Driver=null");
@@ -901,7 +901,7 @@ namespace Pattons_Best
          }
          //===========================================================================================================--
          string gunload = myGameInstance.GetGunLoadType();
-         ICrewMember? gunner = gi.GetCrewMember("Gunner");
+         ICrewMember? gunner = gi.GetCrewMemberByRole("Gunner");
          if (null == gunner)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): Gunner=null");
@@ -969,7 +969,7 @@ namespace Pattons_Best
          //===========================================================================================================
          bool is30CalibreMGFirePossible = (0 < lastReport.Ammo30CalibreMG) && (((false == gi.IsBrokenMgBow) && (false == gi.IsMalfunctionedMgBow)) || ((false == gi.IsBrokenMgCoaxial) && (false == gi.IsMalfunctionedMgCoaxial))); // bow and coaxial MGs
          bool is50CalibreMGFirePossible = (0 < lastReport.Ammo50CalibreMG) && ((false == gi.IsBrokenMgAntiAircraft) && (false == gi.IsMalfunctionedMgAntiAircraft) && (false == isLoaderFireAaMg)); // subMG can always be fired
-         ICrewMember? commander = gi.GetCrewMember("Commander");
+         ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
          if (null == commander)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): Commander=null");
@@ -1046,7 +1046,7 @@ namespace Pattons_Best
             }
          }
          //===========================================================================================================
-         ICrewMember? assistant = gi.GetCrewMember("Assistant");
+         ICrewMember? assistant = gi.GetCrewMemberByRole("Assistant");
          if (null == assistant)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): Assistant=null");
@@ -1088,7 +1088,7 @@ namespace Pattons_Best
             }
          }
          //===========================================================================================================
-         if( null == gi.SwitchedCrewMember)
+         if( true == string.IsNullOrEmpty(gi.SwitchedCrewMember) )
          {
             if (true == driver.IsIncapacitated)
             {
@@ -1122,29 +1122,21 @@ namespace Pattons_Best
                menuItem1.Click += MenuItemCrewActionClick;
                myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
             }
-            if (null != gi.SwitchedCrewMember)
-            {
-               menuItem1 = new MenuItem();
-               menuItem1.Name = "Assistant_SwitchAsst";
-               menuItem1.Header = "Switch w/ Assistant";
-               menuItem1.Click += MenuItemCrewActionClick;
-               myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
-            }
          }
-         else
+         else 
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Assistant_SwitchAsst";
             menuItem1.Header = "Return to Assistant";
             menuItem1.Click += MenuItemCrewActionClick;
-            myContextMenuCrewActions[gi.SwitchedCrewMember.Role].Items.Add(menuItem1);
+            myContextMenuCrewActions[gi.SwitchedCrewMember].Items.Add(menuItem1);
             if (true == driver.IsIncapacitated)
             {
                menuItem1 = new MenuItem();
                menuItem1.Name = "Assistant_SwitchDvr";
                menuItem1.Header = "Switch w/ Driver";
                menuItem1.Click += MenuItemCrewActionClick;
-               myContextMenuCrewActions[gi.SwitchedCrewMember.Role].Items.Add(menuItem1);
+               myContextMenuCrewActions[gi.SwitchedCrewMember].Items.Add(menuItem1);
             }
             if (true == loader.IsIncapacitated)
             {
@@ -1152,7 +1144,7 @@ namespace Pattons_Best
                menuItem1.Name = "Assistant_SwitchLdr";
                menuItem1.Header = "Switch w/ Loader";
                menuItem1.Click += MenuItemCrewActionClick;
-               myContextMenuCrewActions[gi.SwitchedCrewMember.Role].Items.Add(menuItem1);
+               myContextMenuCrewActions[gi.SwitchedCrewMember].Items.Add(menuItem1);
             }
             if (true == gunner.IsIncapacitated)
             {
@@ -1160,7 +1152,7 @@ namespace Pattons_Best
                menuItem1.Name = "Assistant_SwitchGunr";
                menuItem1.Header = "Switch w/ Gunner";
                menuItem1.Click += MenuItemCrewActionClick;
-               myContextMenuCrewActions[gi.SwitchedCrewMember.Role].Items.Add(menuItem1);
+               myContextMenuCrewActions[gi.SwitchedCrewMember].Items.Add(menuItem1);
             }
             if (true == commander.IsIncapacitated)
             {
@@ -1168,7 +1160,7 @@ namespace Pattons_Best
                menuItem1.Name = "Assistant_SwitchCmdr";
                menuItem1.Header = "Switch w/ Commander";
                menuItem1.Click += MenuItemCrewActionClick;
-               myContextMenuCrewActions[gi.SwitchedCrewMember.Role].Items.Add(menuItem1);
+               myContextMenuCrewActions[gi.SwitchedCrewMember].Items.Add(menuItem1);
             }
          }
          return true;
@@ -1541,7 +1533,7 @@ namespace Pattons_Best
             {
                if ((crewmember == "Loader") && (false == tankCard.myIsLoaderHatch))
                   continue;
-               ICrewMember? cm = myGameInstance.GetCrewMember(crewmember);
+               ICrewMember? cm = myGameInstance.GetCrewMemberByRole(crewmember);
                if (null == cm)
                {
                   Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): cm=null for " + crewmember);
@@ -1666,13 +1658,13 @@ namespace Pattons_Best
                continue;
             if ((crewmember == "Loader") && (false == tankCard.myIsLoaderHatch)) // some loaders have no hatches
                continue;
-            ICrewMember? cm = myGameInstance.GetCrewMember(crewmember);
+            ICrewMember? cm = myGameInstance.GetCrewMemberByRole(crewmember);
             if (null == cm)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankOrders(): cm=null for " + crewmember);
                return false;
             }
-            if (true == cm.IsButtonedUp)
+            if ((true == cm.IsButtonedUp) && (false == cm.IsIncapacitated) )
             {
                string tName = crewmember + "Hatch";
                ITerritory? t = Territories.theTerritories.Find(tName);
@@ -1701,7 +1693,7 @@ namespace Pattons_Best
                return false;
             }
             //--------------------------------------
-            ICrewMember? cm = myGameInstance.GetCrewMember(crewmember);
+            ICrewMember? cm = myGameInstance.GetCrewMemberByRole(crewmember);
             if (null == cm)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankOrders(): cm=null for " + crewmember);
@@ -3368,7 +3360,7 @@ namespace Pattons_Best
          {
             if (true == t.Name.Contains(crewmember))
             {
-               ICrewMember? cm = myGameInstance.GetCrewMember(crewmember);
+               ICrewMember? cm = myGameInstance.GetCrewMemberByRole(crewmember);
                if (null == cm)
                {
                   Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): myGameInstance.Driver=null for " + clickedPolygon.Name.ToString());
@@ -3627,7 +3619,7 @@ namespace Pattons_Best
             string[] crewmembers = new string[4] { "Driver", "Assistant", "Commander", "Loader" };
             foreach (string role in crewmembers)
             {
-               ICrewMember? crewMember = myGameInstance.GetCrewMember(role);
+               ICrewMember? crewMember = myGameInstance.GetCrewMemberByRole(role);
                if (null == crewMember)
                {
                   Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): role=" + role);
@@ -3876,8 +3868,8 @@ namespace Pattons_Best
          string action = aStringArray1[1];
          if ( true == action.Contains("Switch")) // need to find where the Assistant is located
          {
-            if( null != myGameInstance.SwitchedCrewMember )
-               sCrewMemberRole = myGameInstance.SwitchedCrewMember.Role;
+            if (false == string.IsNullOrEmpty(myGameInstance.SwitchedCrewMember))
+               sCrewMemberRole = myGameInstance.SwitchedCrewMember;
          }
          //--------------------------------------
          string tName = sCrewMemberRole + "Action";

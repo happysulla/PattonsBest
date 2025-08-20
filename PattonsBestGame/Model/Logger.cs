@@ -19,6 +19,8 @@ namespace Pattons_Best
       LE_SHOW_STACK_DEL,
       LE_SHOW_STACK_VIEW,
       LE_SHOW_ENTERED_HEX,
+      //-------------
+      LE_SHOW_CREW_NAME,
       LE_SHOW_ENEMY_STRENGTH,
       LE_SHOW_OVERRUN_TO_PREVIOUS_AREA,
       LE_SHOW_ENEMY_ON_MOVE_BOARD,
@@ -123,6 +125,8 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_STACK_DEL);
          //SetOn(LogEnum.LE_SHOW_STACK_VIEW);
          //SetOn(LogEnum.LE_SHOW_ENTERED_HEX);
+         //-------------------------------
+         SetOn(LogEnum.LE_SHOW_CREW_NAME);
          //SetOn(LogEnum.LE_SHOW_ENEMY_STRENGTH);
          //SetOn(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA);
          //SetOn(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD);
