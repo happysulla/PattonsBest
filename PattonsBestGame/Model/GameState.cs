@@ -665,7 +665,6 @@ namespace Pattons_Best
       }
       protected bool ResolveEmptyBattleBoard(IGameInstance gi, IAfterActionReport report)
       {
-
          //--------------------------------
          if (null == gi.EnteredArea)
          {
@@ -729,7 +728,7 @@ namespace Pattons_Best
             return false;
          }
          //-----------------------------------
-         if (false == ResetToPrepareForBattle(gi, report)) // ResolveEmptyBattleBoard()
+         if (false == ResetToPrepareForBattle(gi, report)) // Resolve_EmptyBattleBoard()
          {
             Logger.Log(LogEnum.LE_ERROR, "ResolveEmptyBattleBoard(): ResetToPrepareForBattle() returned false");
             return false;
@@ -1333,11 +1332,11 @@ namespace Pattons_Best
                }
                else
                {
-                  gi.NewMembers.Add(report.Commander);
-                  gi.NewMembers.Add(report.Gunner);
-                  gi.NewMembers.Add(report.Loader);
-                  gi.NewMembers.Add(report.Driver);
-                  gi.NewMembers.Add(report.Assistant);
+                  gi.NewMembers.Add(report.Commander); // GameStateSetup.PerformAction(SetupAssignCrewRating)
+                  gi.NewMembers.Add(report.Gunner);    // GameStateSetup.PerformAction(SetupAssignCrewRating)
+                  gi.NewMembers.Add(report.Loader);    // GameStateSetup.PerformAction(SetupAssignCrewRating)
+                  gi.NewMembers.Add(report.Driver);    // GameStateSetup.PerformAction(SetupAssignCrewRating)
+                  gi.NewMembers.Add(report.Assistant); // GameStateSetup.PerformAction(SetupAssignCrewRating)
                }
                break;
             case GameAction.SetupShowCombatCalendarCheck:
@@ -2337,7 +2336,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleEmptyResolve:
-                  if (false == ResolveEmptyBattleBoard(gi, lastReport))
+                  if (false == ResolveEmptyBattleBoard(gi, lastReport)) // GameStateBattlePrep.PerformAction(BattleEmptyResolve)
                   {
                      returnStatus = "ResolveEmptyBattleBoard() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
@@ -3131,7 +3130,7 @@ namespace Pattons_Best
                   gi.EventDisplayed = gi.EventActive = "e036";
                   break;
                case GameAction.BattleEmptyResolve:
-                  if (false == ResolveEmptyBattleBoard(gi, lastReport))
+                  if (false == ResolveEmptyBattleBoard(gi, lastReport)) // GameStateBattle.PerformAction(BattleEmptyResolve)
                   {
                      returnStatus = "ResolveEmptyBattleBoard() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
@@ -4740,7 +4739,7 @@ namespace Pattons_Best
                      returnStatus = "ResetRound() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleEmptyResolve): " + returnStatus);
                   }
-                  if (false == ResolveEmptyBattleBoard(gi, lastReport))
+                  if (false == ResolveEmptyBattleBoard(gi, lastReport)) // GameStateBattleRoundSequence.PerformAction(BattleEmptyResolve)
                   {
                      returnStatus = "ResolveEmptyBattleBoard() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
@@ -5419,7 +5418,7 @@ namespace Pattons_Best
             //----------------------------------------------
             if (false == isAnyEnemyLeft)
             {
-               if (false == MoveShermanAdvanceOrRetreat(gi, removals))
+               if (false == MoveShermanAdvanceOrRetreat(gi, removals)) // MoveSherman() - no enemy left when Sherman moves
                {
                   Logger.Log(LogEnum.LE_ERROR, "MoveSherman(): MoveShermanAdvanceOrRetreat() returned false");
                   return false;
@@ -5595,6 +5594,53 @@ namespace Pattons_Best
             gi.MoveStacks.Add(enemyUnit);
             Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "MoveShermanAdvanceOrRetreat(): Adding mi=" + enemyUnit.Name + " t=" + enemyUnit.TerritoryCurrent.Name + " to " + gi.MoveStacks.ToString());
             gi.MoveStacks.Add(enemyUnit);
+         }
+         //--------------------------------------------------------
+         if( false == gi.SwitchMembers("Assistant")) // return assistant back to original position if moved
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): SwitchMembers() returned false");
+            return false;
+         }
+         //--------------------------------------------------------
+         string[] crewmembers = new string[5] { "Commander", "Gunner", "Loader", "Driver", "Assistant" }; // switch incapacitated members with new crew members
+         foreach (string crewmember in crewmembers)
+         {
+            ICrewMember? cm = gi.GetCrewMemberByRole(crewmember);
+            if (null == cm)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): cm=null for name=" + crewmember);
+               return false;
+            }
+            if( true == cm.IsIncapacitated )
+            {
+               gi.InjuriedCrewMembers.Add(cm);
+               switch (cm.Role)
+               {
+                  case "Driver":
+                     lastReport.Driver = new CrewMember("Driver", "Pvt", "c08Driver");
+                     gi.NewMembers.Add(lastReport.Driver);
+                     break;
+                  case "Loader":
+                     lastReport.Loader = new CrewMember("Loader", "Cpl", "c09Loader");
+                     gi.NewMembers.Add(lastReport.Loader);
+                     break;
+                  case "Assistant":
+                     lastReport.Assistant = new CrewMember("Assistant", "Pvt", "c10Assistant");
+                     gi.NewMembers.Add(lastReport.Assistant);
+                     break;
+                  case "Gunner":
+                     lastReport.Gunner = new CrewMember("Gunner", "Cpl", "c11Gunner");
+                     gi.NewMembers.Add(lastReport.Gunner);
+                     break;
+                  case "Commander":
+                     lastReport.Commander = new CrewMember("Commander", "Sgt", "c07Commander");
+                     gi.NewMembers.Add(lastReport.Commander);
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): cm=null for name=" + crewmember);
+                     return false;
+               }
+            }
          }
          //--------------------------------------------------------
          if (false == ResetRound(gi, "MoveShermanAdvanceOrRetreat()"))

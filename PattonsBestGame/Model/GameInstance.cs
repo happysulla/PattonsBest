@@ -53,6 +53,7 @@ namespace Pattons_Best
       public IMapItems AdvancingEnemies { set; get; } = new MapItems();
       public IMapItem? TargetMainGun { set; get; } = null;
       public IMapItem? TargetMg { set; get; } = null;
+      public IMapItems InjuriedCrewMembers { set; get; } = new MapItems();
       //------------------------------------------------
       public ITerritory Home { get; set; } = new Territory();
       public ITerritory? EnemyStrengthCheckTerritory { get; set; } = null;
@@ -523,10 +524,10 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(Assistant) returned false");
                return false;
             }
-            this.SwitchedCrewMember = "";
-            if ("Assistant" == switchingMemberRole)
-               return true;
          }
+         this.SwitchedCrewMember = "";
+         if ("Assistant" == switchingMemberRole)
+            return true;
          //=========================================================
          Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "SwitchMembers(): Switched Assistant with Crew Member=" + switchingMemberRole);
          foreach (IMapItem mi in this.Hatches) // Assistant becomes button up
@@ -540,7 +541,8 @@ namespace Pattons_Best
          report.Assistant.IsButtonedUp = true;
          //--------------------------------------------
          this.AssistantOriginalRating = report.Assistant.Rating;
-         report.Assistant.Rating = (int)Math.Floor((double)(report.Assistant.Rating * 0.5));
+         if("Driver" != switchingMemberRole)  // any member being switched other than driver reduces rating by half
+             report.Assistant.Rating = (int)Math.Floor((double)(report.Assistant.Rating * 0.5));
          ICrewMember? switchingMember = GetCrewMemberByRole(switchingMemberRole); // assistant is in role of switched member
          if (null == switchingMember)
          {

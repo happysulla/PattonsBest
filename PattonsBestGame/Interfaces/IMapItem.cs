@@ -85,6 +85,7 @@ namespace Pattons_Best
       int Sector { get; set; }
       string Action { get; set; }
       string Wound { get; set; }
+      int WoundDaysUntilReturn { get; set; }
       ICrewMember Clone();
    }
 }

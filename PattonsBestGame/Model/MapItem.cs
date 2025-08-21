@@ -696,6 +696,7 @@ namespace Pattons_Best
       public int Sector { get; set; } = 0;
       public string Action { get; set; } = "None";
       public string Wound { get; set; } = "None";
+      public int WoundDaysUntilReturn { get; set; } = 0;
       public CrewMember(string role, string rank, string topImageName)
          : base(SurnameMgr.GetSurname(), 1.0, false, topImageName)
       {

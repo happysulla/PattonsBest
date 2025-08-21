@@ -106,6 +106,7 @@ namespace Pattons_Best
       IMapItem? TargetMainGun { set; get; }
       IMapItem? TargetMg { set; get; }
       IMapItems AdvancingEnemies { set; get; }
+      IMapItems InjuriedCrewMembers { set; get; }
       //------------------------------------------------
       ITerritory Home { get; set; }
       ITerritory? EnemyStrengthCheckTerritory { get; set; }

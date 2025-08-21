@@ -1148,7 +1148,7 @@ namespace Pattons_Best
                   return;
                }
                //--------------------------------------
-               myGridRowWounds[i].myWoundEffect = TableMgr.GetWoundEffect(myGameInstance, cm, dieRoll, myGridRowWounds[i].myWoundModifier);
+               myGridRowWounds[i].myWoundEffect = TableMgr.SetWoundEffect(myGameInstance, cm, dieRoll, myGridRowWounds[i].myWoundModifier);
                myGridRowWounds[i].myBailoutEffect = TableMgr.GetBailoutEffectResult(myGameInstance, cm, dieRoll, myGridRowWounds[i].myWoundModifier);
                if (("Loader" == cm.Role) && (false == card.myIsLoaderHatch))
                   myGridRowWounds[i].myBailOutModifier += 1;
@@ -1234,7 +1234,7 @@ namespace Pattons_Best
                ICrewMember cm1 = myGridRowWounds[i].myCrewMember;
                myGridRowWounds[i].myDieRollBailoutWound = dieRoll;
                myGridRowWounds[i].myBailoutWoundResult = TableMgr.SetWounds(myGameInstance, cm1, dieRoll, myGridRowWounds[i].myBailoutWoundModifier);
-               myGridRowWounds[i].myBailoutWoundEffect = TableMgr.GetWoundEffect(myGameInstance, cm1, dieRoll, myGridRowWounds[i].myBailoutWoundModifier);
+               myGridRowWounds[i].myBailoutWoundEffect = TableMgr.SetWoundEffect(myGameInstance, cm1, dieRoll, myGridRowWounds[i].myBailoutWoundModifier);
                if (false == myGridRowWounds[i].myBailoutWoundResult.Contains("Near Miss"))
                {
                   StringBuilder sb1 = new StringBuilder("At ");
@@ -1272,7 +1272,7 @@ namespace Pattons_Best
                myGridRowRescues[i].myDieRollRescue = dieRoll;
                int combo = dieRoll + myGridRowRescues[i].myRescueWoundModifier;
                myGridRowRescues[i].myRescueWoundResult = TableMgr.SetWounds(myGameInstance, rescuer, dieRoll, myGridRowRescues[i].myRescueWoundModifier);
-               myGridRowRescues[i].myRescueWoundEffect = TableMgr.GetWoundEffect(myGameInstance, rescuer, dieRoll, myGridRowRescues[i].myRescueWoundModifier);
+               myGridRowRescues[i].myRescueWoundEffect = TableMgr.SetWoundEffect(myGameInstance, rescuer, dieRoll, myGridRowRescues[i].myRescueWoundModifier);
                if (false == myGridRowRescues[i].myRescueWoundResult.Contains("Near Miss"))
                {
                   StringBuilder sb1 = new StringBuilder("At ");

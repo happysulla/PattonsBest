@@ -8,7 +8,8 @@ namespace Pattons_Best
    public class TableMgr
    {
       public const int NO_CHANCE = -100;
-      public const int KIA = 1000;
+      public const int KIA = 10000;
+      public const int MIA = 10001;
       public const int FN_ERROR = -1000;
       public const int THROWN_TRACK = 1001;
       public static ICombatCalanderEntries theCombatCalendarEntries = new CombatCalendarEntries();
@@ -3057,19 +3058,29 @@ namespace Pattons_Best
             return "Killed";
          }
       }
-      public static string GetWoundEffect(IGameInstance gi, ICrewMember cm, int dieRoll, int modifier)
+      public static string SetWoundEffect(IGameInstance gi, ICrewMember cm, int dieRoll, int modifier)
       {
          if (100 == dieRoll) // unmodified die roll 100 is always a kill
+         {
+            cm.WoundDaysUntilReturn = KIA;
             return "Incapacitated";
+         }
          dieRoll += modifier;
          if (dieRoll < 42)
+         {
             return "None";
+         }
          else if (dieRoll < 48)
          {
             if ((true == gi.IsMinefieldAttack) || (null == gi.Death))
+            {
+               cm.WoundDaysUntilReturn = 0; // may return the next day
                return "Incapacitated";
+            }
             else
+            {
                return "None";
+            }
          }
          else if (dieRoll < 73)
          {
@@ -3077,18 +3088,22 @@ namespace Pattons_Best
          }
          else if (dieRoll < 88)
          {
+            cm.WoundDaysUntilReturn = 7;
             return "Out 1 week";
          }
          else if (dieRoll < 93)
          {
+            cm.WoundDaysUntilReturn = 70;
             return "Out 10 weeks";
          }
          else if (dieRoll < 98)
          {
+            cm.WoundDaysUntilReturn = MIA;
             return "Sent Home";
          }
          else
          {
+            cm.WoundDaysUntilReturn = KIA;
             return "Incapacitated";
          }
       }
