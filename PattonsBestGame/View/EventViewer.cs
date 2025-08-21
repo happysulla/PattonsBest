@@ -3801,9 +3801,9 @@ namespace Pattons_Best
          {
             if (true == mi.Name.Contains("Assistant")) // assistant can always pass ammo
                isAssistantOrderGiven = true;
-            if (true == mi.Name.Contains("Gunner"))
+            if ((true == mi.Name.Contains("Gunner")) || (("Gunner" == gi.SwitchedCrewMember) && (true == mi.Name.Contains("Switch"))) )
                isGunnerOrderGiven = true;
-            if (true == mi.Name.Contains("Commander"))
+            if ( (true == mi.Name.Contains("Commander")) || (("Commander" == gi.SwitchedCrewMember) && (true == mi.Name.Contains("Switch")) ) )
                isCommanderOrderGiven = true;
          }
          //-----------------------------------------------

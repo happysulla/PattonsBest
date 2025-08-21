@@ -1834,7 +1834,7 @@ namespace Pattons_Best
                diceRoll = 100;
             else
                diceRoll = die1 + 10 * die2;
-            //diceRoll = 11; // <cgs> TEST -  infantry appearing
+            diceRoll = 11; // <cgs> TEST -  infantry appearing
             //diceRoll = 45; // <cgs> TEST -  tanks appearing
             //diceRoll = 51; // <cgs> TEST -  ATGappearing
             string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
@@ -1952,8 +1952,14 @@ namespace Pattons_Best
             return false;
          }
          lastReport.Driver.SetBloodSpots(20);
-         lastReport.Driver.Wound = "Wounded Arm";
+         lastReport.Driver.Wound = "Light Wound";
+         lastReport.Driver.WoundDaysUntilReturn = 7;
          gi.SetIncapacitated(lastReport.Driver);
+         //--------------------------------
+         lastReport.Commander.SetBloodSpots(10);
+         lastReport.Commander.Wound = "Light Wound";
+         lastReport.Commander.WoundDaysUntilReturn = 0;
+         gi.SetIncapacitated(lastReport.Commander);
          //--------------------------------
          //gi.IsAdvancingFireChosen = false; // <cgs> TEST
          //--------------------------------
@@ -3158,7 +3164,7 @@ namespace Pattons_Best
                case GameAction.BattleRandomEventRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     //dieRoll = 01; // <cgs> TEST - Random Event - Time passes
+                     dieRoll = 01; // <cgs> TEST - Random Event - Time passes
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -4607,7 +4613,7 @@ namespace Pattons_Best
                   //-----------------------------------------------
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     //dieRoll = 01; // <cgs> TEST - Random Event - Time passes
+                     dieRoll = 01; // <cgs> TEST - Random Event - Time passes
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -5602,6 +5608,7 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------------------
+         bool isCrewmanReplaced = false;
          string[] crewmembers = new string[5] { "Commander", "Gunner", "Loader", "Driver", "Assistant" }; // switch incapacitated members with new crew members
          foreach (string crewmember in crewmembers)
          {
@@ -5613,6 +5620,7 @@ namespace Pattons_Best
             }
             if( true == cm.IsIncapacitated )
             {
+               isCrewmanReplaced = true;
                gi.InjuriedCrewMembers.Add(cm);
                switch (cm.Role)
                {
@@ -5642,6 +5650,8 @@ namespace Pattons_Best
                }
             }
          }
+         if (true == isCrewmanReplaced) // replacing crewmen takes 30 minutes
+            AdvanceTime(lastReport, 30);
          //--------------------------------------------------------
          if (false == ResetRound(gi, "MoveShermanAdvanceOrRetreat()"))
          {

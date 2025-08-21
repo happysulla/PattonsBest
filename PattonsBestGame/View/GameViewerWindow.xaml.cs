@@ -4022,7 +4022,7 @@ namespace Pattons_Best
                mi = new MapItem(menuitem.Name, 1.0, "c202CommanderSwitch", t);
                break;
             case "Assistant_SwitchAsst":
-               mi = new MapItem(menuitem.Name, 1.0, "c202CommanderSwitch", t);
+               mi = new MapItem(menuitem.Name, 1.0, "c203AssistantReturn", t);
                break;
             case "Commander_Move":
                mi = new MapItem(menuitem.Name, 1.0, "c48CDirectMove", t);
