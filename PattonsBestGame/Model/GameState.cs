@@ -2013,15 +2013,15 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingOptions(): lastReport=null");
             return false;
          }
-         lastReport.Driver.SetBloodSpots(20);
-         lastReport.Driver.Wound = "Light Wound";
-         lastReport.Driver.WoundDaysUntilReturn = 7;
-         gi.SetIncapacitated(lastReport.Driver);
+         lastReport.Driver.SetBloodSpots(20);            // <cgs> TEST - Create Wounded Crew Member
+         lastReport.Driver.Wound = "Light Wound";        // <cgs> TEST - Create Wounded Crew Member
+         lastReport.Driver.WoundDaysUntilReturn = 7;     // <cgs> TEST - Create Wounded Crew Member
+         gi.SetIncapacitated(lastReport.Driver);         // <cgs> TEST - Create Wounded Crew Member
          //--------------------------------
-         lastReport.Commander.SetBloodSpots(10);
-         lastReport.Commander.Wound = "Light Wound";
-         lastReport.Commander.WoundDaysUntilReturn = 0;
-         gi.SetIncapacitated(lastReport.Commander);
+         lastReport.Commander.SetBloodSpots(10);         // <cgs> TEST - Create Wounded Crew Member
+         lastReport.Commander.Wound = "Light Wound";     // <cgs> TEST - Create Wounded Crew Member
+         lastReport.Commander.WoundDaysUntilReturn = 0;  // <cgs> TEST - Create Wounded Crew Member
+         gi.SetIncapacitated(lastReport.Commander);      // <cgs> TEST - Create Wounded Crew Member
          //--------------------------------
          //gi.IsAdvancingFireChosen = false; // <cgs> TEST
          //--------------------------------
@@ -2075,7 +2075,7 @@ namespace Pattons_Best
          //   gi.BattleStacks.Add(smokeGrenade);
          //}
          //--------------------------------
-         gi.PromotionPointNum = 400;
+         gi.PromotionPointNum = 400;   // <cgs> TEST - Get our man promoted on first day
          return true;
       }
    }
