@@ -53,7 +53,7 @@ namespace Pattons_Best
       public IMapItems AdvancingEnemies { set; get; } = new MapItems();
       public IMapItem? TargetMainGun { set; get; } = null;
       public IMapItem? TargetMg { set; get; } = null;
-      public IMapItems InjuriedCrewMembers { set; get; } = new MapItems();
+      public IMapItems InjuredCrewMembers { set; get; } = new MapItems();
       //------------------------------------------------
       public ITerritory Home { get; set; } = new Territory();
       public ITerritory? EnemyStrengthCheckTerritory { get; set; } = null;

@@ -310,6 +310,7 @@ namespace Pattons_Best
       BattleRoundSequenceReadyRackHvapPlus,
       BattleRoundSequenceReadyRackEnd,
       BattleRoundSequenceCrewSwitchEnd,
+      BattleRoundSequenceCrewReplaced,
 
       BattleRoundSequenceEnemyAction,
       BattleRoundSequenceCollateralDamageCheck,
