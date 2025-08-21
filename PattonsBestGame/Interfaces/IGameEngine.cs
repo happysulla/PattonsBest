@@ -340,6 +340,7 @@ namespace Pattons_Best
       EveningDebriefingStart,
       EveningDebriefingRatingImprovement,
       EveningDebriefingRatingImprovementEnd,
+      EveningDebriefingCrewReplacedEnd,
       EveningDebriefingVictoryPointsCalculated,
       EventDebriefPromotion,
       EventDebriefDecorationStart,

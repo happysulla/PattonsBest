@@ -827,7 +827,7 @@ e105	"<Bold>e105 Crew Replacement - Knocked Out Tank</Bold>
 <LineBreak/><LineBreak/>
 Wounded crewmen are replaced at beginning of day when the tank is knocked out. Click image to  continue to assign new crew ratings.
 <LineBreak/><LineBreak/>
-                          <InlineUIContainer><Image Name='Ambulance' Height='160' Width='300'></Image></InlineUIContainer>"
+                          <InlineUIContainer><Image Name='AmbulanceEvening' Height='160' Width='300'></Image></InlineUIContainer>"
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"
 e502	"<Bold>e502 Game Lost</Bold>

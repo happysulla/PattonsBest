@@ -5183,6 +5183,10 @@ namespace Pattons_Best
                            action = GameAction.EventDebriefDecorationContinue;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
+                        case "AmbulanceEvening":
+                           action = GameAction.EveningDebriefingCrewReplacedEnd;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
                         case "DecorationBronzeStar":
                            action = GameAction.EventDebriefDecorationBronzeStar;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);

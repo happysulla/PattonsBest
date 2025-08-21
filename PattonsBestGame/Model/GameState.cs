@@ -668,13 +668,13 @@ namespace Pattons_Best
          //--------------------------------
          if (null == gi.EnteredArea)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveEmptyBattleBoard(): gi.EnteredArea=null");
+            Logger.Log(LogEnum.LE_ERROR, "Resolve_EmptyBattleBoard(): gi.EnteredArea=null");
             return false;
          }
          IStack? stack = gi.MoveStacks.Find(gi.EnteredArea);
          if (null == stack)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveEmptyBattleBoard(): stack=null");
+            Logger.Log(LogEnum.LE_ERROR, "Resolve_EmptyBattleBoard(): stack=null");
             return false;
          }
          //--------------------------------
@@ -699,7 +699,7 @@ namespace Pattons_Best
          }
          if (false == isCounterInStack)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveEmptyBattleBoard(): isCounterInStack=false");
+            Logger.Log(LogEnum.LE_ERROR, "Resolve_EmptyBattleBoard(): isCounterInStack=false");
             return false;
          }
          //-----------------------------------
@@ -714,7 +714,7 @@ namespace Pattons_Best
          bool isExitArea;
          if (false == gi.IsExitArea(out isExitArea)) // determine if this is exit area
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveEmptyBattleBoard(): IsExitArea() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Resolve_EmptyBattleBoard(): IsExitArea() returned false");
             return false;
          }
          if (true == isExitArea)
@@ -722,15 +722,15 @@ namespace Pattons_Best
          else
             report.VictoryPtsCaptureArea++;
          //---------------------------------
-         if (false == EnemiesOverrunToPreviousArea(gi))
+         if (false == EnemiesOverrunToPreviousArea(gi))  // Resolve_EmptyBattleBoard()
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResetPreparations(): EnemiesOverrunToPreviousArea() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Resolve_EmptyBattleBoard(): EnemiesOverrun_ToPreviousArea() returned false");
             return false;
          }
          //-----------------------------------
          if (false == ResetToPrepareForBattle(gi, report)) // Resolve_EmptyBattleBoard()
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveEmptyBattleBoard(): ResetToPrepareForBattle() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Resolve_EmptyBattleBoard(): ResetToPrepareForBattle() returned false");
             return false;
          }
          return true;
@@ -742,33 +742,33 @@ namespace Pattons_Best
             IAfterActionReport? lastReport = gi.Reports.GetLast();
             if (null == lastReport)
             {
-               Logger.Log(LogEnum.LE_ERROR, "EnemiesOverrunToPreviousArea(): lastReport=null");
+               Logger.Log(LogEnum.LE_ERROR, "EnemiesOverrun_ToPreviousArea(): lastReport=null");
                return false;
             }
             if (0 == gi.EnteredHexes.Count)
             {
-               Logger.Log(LogEnum.LE_ERROR, "EnemiesOverrunToPreviousArea(): gi.EnteredHexes.Count=0");
+               Logger.Log(LogEnum.LE_ERROR, "EnemiesOverrun_ToPreviousArea(): gi.EnteredHexes.Count=0");
                return false;
             }
             //-------------------------------------------
             if (gi.EnteredHexes.Count < 2) // This is the start area so any enemy units advancing go to unknown location
             {
-               Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "EnemiesOverrunToPreviousArea(): gi.EnteredHexes.Count=" + gi.EnteredHexes.Count.ToString() + " from hexes=" + gi.EnteredHexes.toString());
-               Logger.Log(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA, "EnemiesOverrunToPreviousArea(): gi.EnteredHexes.Count=0");
+               Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "EnemiesOverrun_ToPreviousArea(): gi.EnteredHexes.Count=" + gi.EnteredHexes.Count.ToString() + " from hexes=" + gi.EnteredHexes.toString());
+               Logger.Log(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA, "EnemiesOverrun_ToPreviousArea(): gi.EnteredHexes.Count=0");
                return true;
             }
             EnteredHex enteredHex = gi.EnteredHexes[gi.EnteredHexes.Count - 2];
             ITerritory? t = Territories.theTerritories.Find(enteredHex.TerritoryName);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "EnemiesOverrunToPreviousArea(): Territories.theTerritories.Find() returned null for tName=" + enteredHex.TerritoryName);
+               Logger.Log(LogEnum.LE_ERROR, "EnemiesOverrun_ToPreviousArea(): Territories.theTerritories.Find() returned null for tName=" + enteredHex.TerritoryName);
                return false;
             }
-            Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "EnemiesOverrunToPreviousArea(): Getting last enterHex=" + enteredHex.ToString() + " from hexes=" + gi.EnteredHexes.toString());
+            Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "EnemiesOverrun_ToPreviousArea(): Getting last enterHex=" + enteredHex.ToString() + " from hexes=" + gi.EnteredHexes.toString());
             IStack? stack = gi.MoveStacks.Find(t);
             if (null == stack)
             {
-               Logger.Log(LogEnum.LE_ERROR, "EnemiesOverrunToPreviousArea(): gi.MoveStacks.Find(enteredHex.TerritoryName) returned null for tNmae=" + enteredHex.TerritoryName);
+               Logger.Log(LogEnum.LE_ERROR, "EnemiesOverrun_ToPreviousArea(): gi.MoveStacks.Find(enteredHex.TerritoryName) returned null for tNmae=" + enteredHex.TerritoryName);
                return false;
             }
             //------------------------------------
@@ -776,10 +776,10 @@ namespace Pattons_Best
             {
                if (true == mi.Name.Contains("UsControl"))
                {
-                  Logger.Log(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA, "EnemiesOverrunToPreviousArea(): Removing UsControl from t=" + t.Name);
+                  Logger.Log(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA, "EnemiesOverrun_ToPreviousArea(): Removing UsControl from t=" + t.Name);
                   stack.MapItems.Remove(mi);
                   lastReport.VictoryPtsCaptureArea--;
-                  Logger.Log(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES, "EnemiesOverrunToPreviousArea(): Removing UsControl from t=" + t.Name + " #=" + lastReport.VictoryPtsCaptureArea.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES, "EnemiesOverrun_ToPreviousArea(): Removing UsControl from t=" + t.Name + " #=" + lastReport.VictoryPtsCaptureArea.ToString());
                   break;
                }
             }
@@ -794,7 +794,7 @@ namespace Pattons_Best
             }
             if (false == isEnemyStrengthCheckFound)
             {
-               Logger.Log(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA, "EnemiesOverrunToPreviousArea(): Adding Strenght Marker to t=" + t.Name);
+               Logger.Log(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA, "EnemiesOverrun_ToPreviousArea(): Adding Strenght Marker to t=" + t.Name);
                string name = "StrengthLight" + Utilities.MapItemNum.ToString();
                ++Utilities.MapItemNum;
                IMapItem strengthMarker = new MapItem(name, 1.0, "c36Light", t);
@@ -803,7 +803,7 @@ namespace Pattons_Best
             //------------------------------------
             foreach (IMapItem enemyUnit in gi.AdvancingEnemies)
             {
-               Logger.Log(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA, "EnemiesOverrunToPreviousArea(): Adding eu=" + enemyUnit.Name + " to " + t.Name);
+               Logger.Log(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA, "EnemiesOverrun_ToPreviousArea(): Adding eu=" + enemyUnit.Name + " to " + t.Name);
                enemyUnit.IsMoving = false;
                enemyUnit.IsHullDown = false;
                enemyUnit.IsSpotted = false;
@@ -818,7 +818,7 @@ namespace Pattons_Best
                enemyUnit.Location.X = mp.X;
                enemyUnit.Location.Y = mp.Y;
                gi.MoveStacks.Add(enemyUnit);
-               Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "EnemiesOverrunToPreviousArea(): Adding mi=" + enemyUnit.Name + " t=" + enemyUnit.TerritoryCurrent.Name + " to " + gi.MoveStacks.ToString());
+               Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "EnemiesOverrun_ToPreviousArea(): Adding mi=" + enemyUnit.Name + " t=" + enemyUnit.TerritoryCurrent.Name + " to " + gi.MoveStacks.ToString());
             }
             gi.AdvancingEnemies.Clear();
          }
@@ -1152,34 +1152,39 @@ namespace Pattons_Best
          gi.MapItemMoves.Insert(0, mim); // add at front
          return true;
       }
-      protected bool ReplaceInjuriedCrewmen(IGameInstance gi)
+      protected bool ReplaceInjuredCrewmen(IGameInstance gi, out bool isCrewmanReplaced)
       {
+         isCrewmanReplaced = false;
          //--------------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReplaceInjuriedCrewmen(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): lastReport=null");
             return false;
          }
          //--------------------------------------------------------
          if (false == gi.SwitchMembers("Assistant")) // return assistant back to original position if moved
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReplaceInjuriedCrewmen(): SwitchMembers() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): SwitchMembers() returned false");
             return false;
          }
          //--------------------------------------------------------
-         bool isCrewmanReplaced = false;
          string[] crewmembers = new string[5] { "Commander", "Gunner", "Loader", "Driver", "Assistant" }; // switch incapacitated members with new crew members
          foreach (string crewmember in crewmembers)
          {
             ICrewMember? cm = gi.GetCrewMemberByRole(crewmember);
             if (null == cm)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReplaceInjuriedCrewmen(): cm=null for name=" + crewmember);
+               Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): cm=null for name=" + crewmember);
                return false;
             }
             if (true == cm.IsIncapacitated)
             {
+               if( (GamePhase.EveningDebriefing == gi.GamePhase) && (0 == cm.WoundDaysUntilReturn) ) // crewmen are not replaced if light wound and evening debrief
+               {
+                  cm.IsIncapacitated = false;
+                  continue;
+               }
                isCrewmanReplaced = true;
                gi.InjuredCrewMembers.Add(cm);
                switch (cm.Role)
@@ -1205,12 +1210,12 @@ namespace Pattons_Best
                      gi.NewMembers.Add(lastReport.Commander);
                      break;
                   default:
-                     Logger.Log(LogEnum.LE_ERROR, "ReplaceInjuriedCrewmen(): cm=null for name=" + crewmember);
+                     Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): cm=null for name=" + crewmember);
                      return false;
                }
             }
          }
-         if (true == isCrewmanReplaced) // replacing crewmen takes 30 minutes
+         if ( (true == isCrewmanReplaced) && (GamePhase.EveningDebriefing == gi.GamePhase) ) // replacing crewmen takes 30 minutes
             AdvanceTime(lastReport, 30);
          return true;
       }
@@ -4631,6 +4636,13 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceCrewSwitchEnd): " + returnStatus);
                   }
                   break;
+               case GameAction.BattleRoundSequenceCrewReplaced:
+                  if (false == MoveShermanAdvanceOrRetreat(gi)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceCrewReplaced) 
+                  {
+                     returnStatus = "MoveSherman_AdvanceOrRetreat() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceCrewReplaced): " + returnStatus);
+                  }
+                  break;
                case GameAction.BattleRoundSequenceEnemyAction:
                   Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceEnemyAction): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.EnemyAction");
                   gi.BattlePhase = BattlePhase.EnemyAction;
@@ -5470,26 +5482,40 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "MoveSherman(): gi.MapItemMoves.Clear()");
             gi.MapItemMoves.Clear();
             bool isAnyEnemyLeft = false;
-            IMapItems removals = new MapItems();
+            gi.AdvancingEnemies.Clear();
             foreach (IStack stack in gi.BattleStacks)
             {
                foreach (IMapItem mi in stack.MapItems)
                {
                   if (true == mi.TerritoryCurrent.Name.Contains("Off")) // BattleRoundSequenceMovementRoll -  Sherman Movement cause enemy to move off
-                     removals.Add(mi);
+                     gi.AdvancingEnemies.Add(mi);
                   else if (true == mi.IsEnemyUnit())
                      isAnyEnemyLeft = true;
                }
             }
-            foreach (IMapItem mi in removals)
+            foreach (IMapItem mi in gi.AdvancingEnemies)
                gi.BattleStacks.Remove(mi);
             //----------------------------------------------
             if (false == isAnyEnemyLeft)
             {
-               if (false == MoveShermanAdvanceOrRetreat(gi, removals)) // MoveSherman() - no enemy left when Sherman moves
+               bool isInjuredCrewmanReplaced;
+               if(false == ReplaceInjuredCrewmen(gi, out isInjuredCrewmanReplaced))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "MoveSherman(): MoveShermanAdvanceOrRetreat() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "MoveSherman(): Replace_InjuredCrewmen() returned false");
                   return false;
+               }
+               if (true == isInjuredCrewmanReplaced)
+               {
+                  gi.EventDisplayed = gi.EventActive = "e062";
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+               }
+               else
+               {
+                  if (false == MoveShermanAdvanceOrRetreat(gi)) // Move_Sherman() - no enemy left when Sherman moves
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "MoveSherman(): MoveSherman_AdvanceOrRetreat() returned false");
+                     return false;
+                  }
                }
             }
             else
@@ -5521,7 +5547,7 @@ namespace Pattons_Best
             ITerritory? newT = TableMgr.SetNewTerritoryShermanMove(gi.Sherman, mi, gi.MovementEffectOnEnemy);
             if (null == newT)
             {
-               Logger.Log(LogEnum.LE_ERROR, "MoveShermanMoveEnemyUnits(): SetNewTerritoryShermanMove() returned null");
+               Logger.Log(LogEnum.LE_ERROR, "MoveSherman_MoveEnemyUnits(): SetNewTerritoryShermanMove() returned null");
                return false;
             }
             //--------------------------------------------
@@ -5544,42 +5570,42 @@ namespace Pattons_Best
             }
             if (false == CreateMapItemMove(gi, mi, newT))
             {
-               Logger.Log(LogEnum.LE_ERROR, "MoveShermanMoveEnemyUnits(): CreateMapItemMove() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "MoveSherman_MoveEnemyUnits(): CreateMapItemMove() returned false");
                return false;
             }
             //--------------------------------------------
          }
          return true;
       }
-      private bool MoveShermanAdvanceOrRetreat(IGameInstance gi, IMapItems enemyUnits)
+      private bool MoveShermanAdvanceOrRetreat(IGameInstance gi)
       {
          //--------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): lastReport=null");
             return false;
          }
          //---------------------------------
-         if (false == EnemiesOverrunToPreviousArea(gi)) //  enemy show up in previous area if they move to OffBottom
+         if (false == EnemiesOverrunToPreviousArea(gi)) // MoveShermanAdvanceOrRetreat() - enemy show up in previous area if they move to OffBottom
          {
-            Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): EnemiesOverrunToPreviousArea() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): EnemiesOverrun_ToPreviousArea() returned false");
             return false;
          }
          //--------------------------------
          if (null == gi.EnteredArea)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): gi.EnteredArea=null");
+            Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): gi.EnteredArea=null");
             return false;
          }
          IStack? stack = gi.MoveStacks.Find(gi.EnteredArea);
          if (null == stack)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): stack=null");
+            Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): stack=null");
             return false;
          }
          //--------------------------------
-         Logger.Log(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD, "MoveShermanAdvanceOrRetreat(): rh=" + gi.Sherman.RotationHull.ToString() + " gi.MovementEffectOnEnemy=" + gi.MovementEffectOnEnemy);
+         Logger.Log(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD, "MoveSherman_AdvanceOrRetreat(): rh=" + gi.Sherman.RotationHull.ToString() + " gi.MovementEffectOnEnemy=" + gi.MovementEffectOnEnemy);
          if ((((270.0 < gi.Sherman.RotationHull) || (gi.Sherman.RotationHull < 90.0)) && ("A" == gi.MovementEffectOnEnemy)) ||
               (((90.0 < gi.Sherman.RotationHull) && (gi.Sherman.RotationHull < 270.0)) && ("B" == gi.MovementEffectOnEnemy)))
          {
@@ -5589,17 +5615,17 @@ namespace Pattons_Best
          {
             if (gi.EnteredHexes.Count < 2) // retreat into your start area means call for another start area
             {
-               Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "MoveShermanAdvanceOrRetreat(): gi.EnteredHexes.Count=" + gi.EnteredHexes.Count.ToString() + " for hexes=" + gi.EnteredHexes.toString());
+               Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "MoveSherman_AdvanceOrRetreat(): gi.EnteredHexes.Count=" + gi.EnteredHexes.Count.ToString() + " for hexes=" + gi.EnteredHexes.toString());
                //-----------------------------------
-               if (false == ResetRound(gi, "MoveShermanAdvanceOrRetreat() gi.EnteredHexes.Count < 2")) // MoveShermanAdvanceOrRetreat() - Retreating
+               if (false == ResetRound(gi, "MoveSherman_AdvanceOrRetreat() gi.EnteredHexes.Count < 2")) // MoveSherman_AdvanceOrRetreat() - Retreating
                {
-                  Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): ResetRound() = false");
+                  Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): ResetRound() = false");
                   return false;
                }
                //-----------------------------------
-               if (false == ResetToPrepareForBattle(gi, lastReport)) // MoveShermanAdvanceOrRetreat()
+               if (false == ResetToPrepareForBattle(gi, lastReport)) // MoveSherman_AdvanceOrRetreat()
                {
-                  Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): ResetToPrepareForBattle() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): ResetToPrepareForBattle() returned false");
                   return false;
                }
                //-----------------------------------
@@ -5614,7 +5640,7 @@ namespace Pattons_Best
                      }
                   }
                }
-               Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): unable to find start area in MoveStacks=" + gi.MoveStacks.ToString());
+               Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): unable to find start area in MoveStacks=" + gi.MoveStacks.ToString());
                return false;
             }
             //--------------------------------------------------------
@@ -5622,17 +5648,17 @@ namespace Pattons_Best
             ITerritory? newT = Territories.theTerritories.Find(enteredHex.TerritoryName);
             if (null == newT)
             {
-               Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): Territories.theTerritories.Find() returned null for tName=" + enteredHex.TerritoryName);
+               Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): Territories.theTerritories.Find() returned null for tName=" + enteredHex.TerritoryName);
                return false;
             }
             EnteredHex newHex = new EnteredHex(gi, newT, ColorActionEnum.CAE_ENTER);
-            gi.EnteredHexes.Add(newHex); // MoveShermanAdvanceOrRetreat() - show retreat to previous area 
+            gi.EnteredHexes.Add(newHex); // MoveSherman_AdvanceOrRetreat() - show retreat to previous area 
             //--------------------------------------------------------
-            Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "MoveShermanAdvanceOrRetreat(): Getting last enterHex=" + enteredHex.ToString() + " from hexes=" + gi.EnteredHexes.toString());
+            Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "MoveSherman_AdvanceOrRetreat(): Getting last enterHex=" + enteredHex.ToString() + " from hexes=" + gi.EnteredHexes.toString());
             IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
             if (null == taskForce)
             {
-               Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): taskForce=null");
+               Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): taskForce=null");
                return false;
             }
             taskForce.TerritoryCurrent = newT;
@@ -5640,12 +5666,12 @@ namespace Pattons_Best
             taskForce.Location.X = mp.X;
             taskForce.Location.Y = mp.Y;
             gi.MoveStacks.Add(taskForce);
-            Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "EnemiesOverrunToPreviousArea(): Adding mi=" + taskForce.Name + " t=" + taskForce.TerritoryCurrent.Name + " to " + gi.MoveStacks.ToString());
+            Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "MoveSherman_AdvanceOrRetreat(): Adding mi=" + taskForce.Name + " t=" + taskForce.TerritoryCurrent.Name + " to " + gi.MoveStacks.ToString());
          }
          //--------------------------------------------------------
-         foreach (IMapItem enemyUnit in enemyUnits)// add in enemy units that were on BattleBoard when battle ended
+         foreach (IMapItem enemyUnit in gi.AdvancingEnemies)// add in enemy units that were on BattleBoard when battle ended
          {
-            Logger.Log(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD, "MoveShermanAdvanceOrRetreat(): Adding eu=" + enemyUnit.Name + " to " + gi.EnteredArea.ToString());
+            Logger.Log(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD, "MoveSherman_AdvanceOrRetreat(): Adding eu=" + enemyUnit.Name + " to " + gi.EnteredArea.ToString());
             enemyUnit.IsMoving = false;
             enemyUnit.IsHullDown = false;
             enemyUnit.IsSpotted = false;
@@ -5660,25 +5686,20 @@ namespace Pattons_Best
             enemyUnit.Location.X = mp.X;
             enemyUnit.Location.Y = mp.Y;
             gi.MoveStacks.Add(enemyUnit);
-            Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "MoveShermanAdvanceOrRetreat(): Adding mi=" + enemyUnit.Name + " t=" + enemyUnit.TerritoryCurrent.Name + " to " + gi.MoveStacks.ToString());
+            Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "MoveSherman_AdvanceOrRetreat(): Adding mi=" + enemyUnit.Name + " t=" + enemyUnit.TerritoryCurrent.Name + " to " + gi.MoveStacks.ToString());
             gi.MoveStacks.Add(enemyUnit);
          }
+         gi.AdvancingEnemies.Clear();
          //--------------------------------------------------------
-         if (false == ReplaceInjuriedCrewmen(gi))
+         if (false == ResetRound(gi, "MoveSherman_AdvanceOrRetreat()"))
          {
-            Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): ReplaceInjuriedCrewmen() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): ResetRound() = false");
             return false;
          }
          //--------------------------------------------------------
-         if (false == ResetRound(gi, "MoveShermanAdvanceOrRetreat()"))
+         if (false == ResetToPrepareForBattle(gi, lastReport)) // MoveSherman_AdvanceOrRetreat()
          {
-            Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): ResetRound() = false");
-            return false;
-         }
-         //--------------------------------------------------------
-         if (false == ResetToPrepareForBattle(gi, lastReport)) // MoveShermanAdvanceOrRetreat()
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): ResetToPrepareForBattle() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): ResetToPrepareForBattle() returned false");
             return false;
          }
          return true;
@@ -6984,15 +7005,38 @@ namespace Pattons_Best
                   break;
                case GameAction.EveningDebriefingRatingImprovement: // Only change active event
                   gi.BattleStacks.Clear();
+                  if( false == gi.SwitchMembers("Assistant")) // return assistant back to original position prior to improvement checks
+                  {
+                     returnStatus = "SwitchMembers() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(EveningDebriefingRatingImprovement): " + returnStatus);
+                  }
                   break;
                case GameAction.EveningDebriefingRatingImprovementEnd:
-                  gi.EventDisplayed = gi.EventActive = "e101";
-                  gi.DieRollAction = GameAction.DieRollActionNone;
-                  if (false == ReplaceInjuriedCrewmen(gi))
+                          bool isCrewmanReplaced;
+                  if (false == ReplaceInjuredCrewmen(gi, out isCrewmanReplaced))
                   {
-                     returnStatus = "ReplaceInjuriedCrewmen() returned false";
+                     returnStatus = "ReplaceInjuredCrewmen() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(): " + returnStatus);
                   }
+                  if (true == isCrewmanReplaced)
+                  {
+                     gi.EventDisplayed = gi.EventActive = "e105";
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else
+                  {
+                     gi.EventDisplayed = gi.EventActive = "e101";
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                     if (false == UpdateForEveningDebriefing(gi, lastReport))
+                     {
+                        returnStatus = "UpdateForEveningDebriefing() returned false";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(): " + returnStatus);
+                     }
+                  }
+                  break;
+               case GameAction.EveningDebriefingCrewReplacedEnd:
+                  gi.EventDisplayed = gi.EventActive = "e101";
+                  gi.DieRollAction = GameAction.DieRollActionNone;
                   if (false == UpdateForEveningDebriefing(gi, lastReport))
                   {
                      returnStatus = "UpdateForEveningDebriefing() returned false";
