@@ -1152,6 +1152,68 @@ namespace Pattons_Best
          gi.MapItemMoves.Insert(0, mim); // add at front
          return true;
       }
+      protected bool ReplaceInjuriedCrewmen(IGameInstance gi)
+      {
+         //--------------------------------------------------------
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReplaceInjuriedCrewmen(): lastReport=null");
+            return false;
+         }
+         //--------------------------------------------------------
+         if (false == gi.SwitchMembers("Assistant")) // return assistant back to original position if moved
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReplaceInjuriedCrewmen(): SwitchMembers() returned false");
+            return false;
+         }
+         //--------------------------------------------------------
+         bool isCrewmanReplaced = false;
+         string[] crewmembers = new string[5] { "Commander", "Gunner", "Loader", "Driver", "Assistant" }; // switch incapacitated members with new crew members
+         foreach (string crewmember in crewmembers)
+         {
+            ICrewMember? cm = gi.GetCrewMemberByRole(crewmember);
+            if (null == cm)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReplaceInjuriedCrewmen(): cm=null for name=" + crewmember);
+               return false;
+            }
+            if (true == cm.IsIncapacitated)
+            {
+               isCrewmanReplaced = true;
+               gi.InjuriedCrewMembers.Add(cm);
+               switch (cm.Role)
+               {
+                  case "Driver":
+                     lastReport.Driver = new CrewMember("Driver", "Pvt", "c08Driver");
+                     gi.NewMembers.Add(lastReport.Driver);
+                     break;
+                  case "Loader":
+                     lastReport.Loader = new CrewMember("Loader", "Cpl", "c09Loader");
+                     gi.NewMembers.Add(lastReport.Loader);
+                     break;
+                  case "Assistant":
+                     lastReport.Assistant = new CrewMember("Assistant", "Pvt", "c10Assistant");
+                     gi.NewMembers.Add(lastReport.Assistant);
+                     break;
+                  case "Gunner":
+                     lastReport.Gunner = new CrewMember("Gunner", "Cpl", "c11Gunner");
+                     gi.NewMembers.Add(lastReport.Gunner);
+                     break;
+                  case "Commander":
+                     lastReport.Commander = new CrewMember("Commander", "Sgt", "c07Commander");
+                     gi.NewMembers.Add(lastReport.Commander);
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "ReplaceInjuriedCrewmen(): cm=null for name=" + crewmember);
+                     return false;
+               }
+            }
+         }
+         if (true == isCrewmanReplaced) // replacing crewmen takes 30 minutes
+            AdvanceTime(lastReport, 30);
+         return true;
+      }
    }
    //-----------------------------------------------------
    class GameStateSetup : GameState
@@ -5602,56 +5664,11 @@ namespace Pattons_Best
             gi.MoveStacks.Add(enemyUnit);
          }
          //--------------------------------------------------------
-         if( false == gi.SwitchMembers("Assistant")) // return assistant back to original position if moved
+         if (false == ReplaceInjuriedCrewmen(gi))
          {
-            Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): SwitchMembers() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): ReplaceInjuriedCrewmen() returned false");
             return false;
          }
-         //--------------------------------------------------------
-         bool isCrewmanReplaced = false;
-         string[] crewmembers = new string[5] { "Commander", "Gunner", "Loader", "Driver", "Assistant" }; // switch incapacitated members with new crew members
-         foreach (string crewmember in crewmembers)
-         {
-            ICrewMember? cm = gi.GetCrewMemberByRole(crewmember);
-            if (null == cm)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): cm=null for name=" + crewmember);
-               return false;
-            }
-            if( true == cm.IsIncapacitated )
-            {
-               isCrewmanReplaced = true;
-               gi.InjuriedCrewMembers.Add(cm);
-               switch (cm.Role)
-               {
-                  case "Driver":
-                     lastReport.Driver = new CrewMember("Driver", "Pvt", "c08Driver");
-                     gi.NewMembers.Add(lastReport.Driver);
-                     break;
-                  case "Loader":
-                     lastReport.Loader = new CrewMember("Loader", "Cpl", "c09Loader");
-                     gi.NewMembers.Add(lastReport.Loader);
-                     break;
-                  case "Assistant":
-                     lastReport.Assistant = new CrewMember("Assistant", "Pvt", "c10Assistant");
-                     gi.NewMembers.Add(lastReport.Assistant);
-                     break;
-                  case "Gunner":
-                     lastReport.Gunner = new CrewMember("Gunner", "Cpl", "c11Gunner");
-                     gi.NewMembers.Add(lastReport.Gunner);
-                     break;
-                  case "Commander":
-                     lastReport.Commander = new CrewMember("Commander", "Sgt", "c07Commander");
-                     gi.NewMembers.Add(lastReport.Commander);
-                     break;
-                  default:
-                     Logger.Log(LogEnum.LE_ERROR, "MoveShermanAdvanceOrRetreat(): cm=null for name=" + crewmember);
-                     return false;
-               }
-            }
-         }
-         if (true == isCrewmanReplaced) // replacing crewmen takes 30 minutes
-            AdvanceTime(lastReport, 30);
          //--------------------------------------------------------
          if (false == ResetRound(gi, "MoveShermanAdvanceOrRetreat()"))
          {
@@ -6964,7 +6981,6 @@ namespace Pattons_Best
                case GameAction.EveningDebriefingStart: // Only change active event
                   gi.EventDisplayed = gi.EventActive = "e100";
                   gi.DieRollAction = GameAction.DieRollActionNone;
-
                   break;
                case GameAction.EveningDebriefingRatingImprovement: // Only change active event
                   gi.BattleStacks.Clear();
@@ -6972,6 +6988,11 @@ namespace Pattons_Best
                case GameAction.EveningDebriefingRatingImprovementEnd:
                   gi.EventDisplayed = gi.EventActive = "e101";
                   gi.DieRollAction = GameAction.DieRollActionNone;
+                  if (false == ReplaceInjuriedCrewmen(gi))
+                  {
+                     returnStatus = "ReplaceInjuriedCrewmen() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(): " + returnStatus);
+                  }
                   if (false == UpdateForEveningDebriefing(gi, lastReport))
                   {
                      returnStatus = "UpdateForEveningDebriefing() returned false";
@@ -7226,6 +7247,7 @@ namespace Pattons_Best
       }
       public bool ResetDay(IGameInstance gi, IAfterActionReport report)
       {
+         //-------------------------------------------------------
          ++gi.Day;
          gi.GameTurn++;
          gi.GamePhase = GamePhase.MorningBriefing;
