@@ -7,7 +7,7 @@ namespace Pattons_Best
 {
    public class TableMgr
    {
-      public const int NO_CHANCE = -100;
+      public const int NO_CHANCE = 55555;
       public const int KIA = 10000;
       public const int MIA = 10001;
       public const int FN_ERROR = -1000;
@@ -167,7 +167,6 @@ namespace Pattons_Best
             sb.Append("0");
          sb.Append(aar.SunriseMin);
          return sb.ToString();
-
       }
       public static bool SetTimeTrack(IAfterActionReport lastReport, int day)
       {
@@ -2865,65 +2864,128 @@ namespace Pattons_Best
                {
                   case "T F":
                      if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                     {
                         modifier -= 20;
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-20 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                     }
                      break;
                   case "T R":
                      if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                     {
                         modifier -= 20;
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-20 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                     }
                      if ("Gunner" == cm.Role)
+                     {
                         modifier += 10;
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod+10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                     }
                      if ("Loader" == cm.Role)
+                     {
                         modifier -= 10;
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                     }
                      break;
                   case "T L":
                      if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                     {
                         modifier -= 20;
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-20 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                     }
                      if ("Gunner" == cm.Role)
+                     {
                         modifier -= 10;
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                     }
                      if ("Loader" == cm.Role)
+                     {
                         modifier += 10;
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod+10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                     }
                      break;
                   case "T B":
                      if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                     {
                         modifier -= 20;
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-20 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                     }
                      if ("Commander" == cm.Role)
+                     {
                         modifier += 10;
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod+10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                     }
                      break;
                   case "H F":
                      if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                     {
                         modifier += 10;
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod+10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                     }
                      if ("Commander" == cm.Role)
+                     {
                         modifier -= 10;
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                     }
                      break;
                   case "H FR":
                      if (("Driver" == cm.Role) || ("Loader" == cm.Role))
-                        modifier -= 10;
-                     if (("Assistant" == cm.Role) || ("Gunner" == cm.Role))
+                     {
                         modifier += 10;
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod+10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                     }
+                     if (("Assistant" == cm.Role) || ("Gunner" == cm.Role))
+                     {
+                        modifier += 10;
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod+10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                     }
                      break;
                   case "H BR":
                      if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                     {
                         modifier -= 40;
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-40 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                     }
                      else
+                     {
                         modifier -= 30;
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-30 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                     }
                      break;
                   case "H FL":
                      if (("Driver" == cm.Role) || ("Loader" == cm.Role))
+                     {
                         modifier += 10;
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod+10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                     }
                      if (("Assistant" == cm.Role) || ("Gunner" == cm.Role))
+                     {
                         modifier -= 10;
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                     }
                      break;
                   case "H BL":
                      if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                     {
                         modifier -= 40;
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-40 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                     }
                      else
+                     {
                         modifier -= 30;
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-30 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                     }
                      break;
                   case "H B":
                      if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
+                     {
                         modifier -= 40;
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-40 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                     }
                      else
+                     {
                         modifier -= 30;
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-30 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                     }
                      break;
                   default:
                      Logger.Log(LogEnum.LE_ERROR, "GetWoundsModifier(): reached default for direction=" + death.myEnemyFireDirection);
@@ -2934,16 +2996,28 @@ namespace Pattons_Best
 
          //----------------------------------
          if( true == isBailout)
+         {
             modifier -= cm.Rating;
+            Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-rating=" + cm.Rating.ToString() + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+         }
          if (true == gi.IsMinefieldAttack)
+         {
             modifier -= 20;
+            Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-20 IsMinefieldAttack mod=" + modifier.ToString() + " for cm=" + cm.Role);
+         }
          if (true == gi.IsHarrassingFire)
+         {
             modifier -= 20;
+            Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-20 IsHarrassingFire mod=" + modifier.ToString() + " for cm=" + cm.Role);
+         }
          //----------------------------------
          if( true == isCollateralDamage )
          {
             if ((true == cm.Action.Contains("FireSubMg")) || (true == cm.Action.Contains("FireAaMg")))
+            {
                modifier += 5;
+               Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod+5 MG and isCollateralDamage=true mod=" + modifier.ToString() + " for cm=" + cm.Role);
+            }
          }
          return modifier;
       }
@@ -3088,12 +3162,12 @@ namespace Pattons_Best
          }
          else if (dieRoll < 88)
          {
-            cm.WoundDaysUntilReturn = 7;
+            cm.WoundDaysUntilReturn = 7; 
             return "Out 1 week";
          }
          else if (dieRoll < 93)
          {
-            cm.WoundDaysUntilReturn = 70;
+            cm.WoundDaysUntilReturn = 70; 
             return "Out 10 weeks";
          }
          else if (dieRoll < 98)
@@ -7001,7 +7075,7 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillNumber(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Get_ShermanMgToKillNumber(): lastReport=null");
             return FN_ERROR;
          }
          //------------------------------------
@@ -7060,11 +7134,11 @@ namespace Pattons_Best
             }
          }
          //------------------------------------
-         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanMgToKillNumber(): 1-base#=" + toKillNumber.ToString());
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanMgToKillNumber(): 1-base#=" + toKillNumber.ToString());
          int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
          if (numSmokeMarkers < 0)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillNumber(): GetSmokeCount() returned error");
+            Logger.Log(LogEnum.LE_ERROR, "Get_ShermanMgToKillNumber(): GetSmokeCount() returned error");
             return FN_ERROR;
          }
          if (0 < numSmokeMarkers)

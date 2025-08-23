@@ -107,7 +107,7 @@ namespace Pattons_Best
                ShowMovementMap(myCanvas);
                break;
             case GameAction.SetupShowBattleBoard:
-            case GameAction.PreparationsDeployment:
+            case GameAction.MorningBriefingDeployment:
             case GameAction.TestingStartPreparations:
             case GameAction.TestingStartBattle:
             case GameAction.TestingStartAmbush:

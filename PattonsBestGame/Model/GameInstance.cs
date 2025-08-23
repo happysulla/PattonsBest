@@ -50,10 +50,12 @@ namespace Pattons_Best
       public IMapItems GunLoads { set; get; } = new MapItems();
       public IMapItem Sherman { set; get; } = new MapItem("Sherman1", 2.0, "t001", new Territory());
       public IMapItems Targets { set; get; } = new MapItems();
-      public IMapItems AdvancingEnemies { set; get; } = new MapItems();
+      public IMapItems AdvancingEnemies { set; get; } = new MapItems();   // enemies that appear on Move board for advancing to lower edge of board
+      public IMapItems ShermanAdvanceOrRetreatEnemies { set; get; } = new MapItems(); // enemies that appear on Move board if Sherman Advances or Retreats
       public IMapItem? TargetMainGun { set; get; } = null;
       public IMapItem? TargetMg { set; get; } = null;
       public IMapItems InjuredCrewMembers { set; get; } = new MapItems();
+      public ICrewMember? ReturningCrewman { set; get; } = null;
       //------------------------------------------------
       public ITerritory Home { get; set; } = new Territory();
       public ITerritory? EnemyStrengthCheckTerritory { get; set; } = null;
@@ -408,20 +410,26 @@ namespace Pattons_Best
       public void SetIncapacitated(ICrewMember cm)
       { 
          cm.IsIncapacitated = true;
+         bool isAlreadyIncapacitated = false;
          //-------------------------------
          IMapItems removals = new MapItems(); // Remove any coorresponding crew actions and add the hurt crewman in the crewaction box
-         foreach (IMapItem mi in this.CrewActions)
+         foreach (IMapItem ca in this.CrewActions)
          {
-            if ( (true == mi.Name.Contains(cm.Role)) && (cm.Role != mi.Name ) ) // crew action is larger than role name ... i.e., Loader_Load
-               removals.Add(mi);
+            if ( true == ca.Name.Contains(cm.Role) || (cm.Name == ca.Name) ) // crew action contains role or it is already incapacitated and added
+               removals.Add(ca);
+            if (cm.Name == ca.Name) // crew action contains role or it is already incapacitated and added
+               isAlreadyIncapacitated = true;
          }
-         foreach (IMapItem mi in removals)
+         foreach (IMapItem ca in removals)
          {
-            this.CrewActions.Remove(mi);
-            Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "SetIncapacitated(): ---------------------removing ca=" + mi.Name);
+            this.CrewActions.Remove(ca);
+            Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "Set_Incapacitated(): ---------------------removing ca=" + ca.Name);
          }
-         this.CrewActions.Add(cm);
-         Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "SetIncapacitated(): +++++++++++++++++++++++adding ca=" + cm.Name);
+         if( false == isAlreadyIncapacitated)
+         {
+            this.CrewActions.Add(cm);
+            Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "Set_Incapacitated(): +++++++++++++++++++++++adding cm=" + cm.Name + " cm.Role=" + cm.Role);
+         }
          //-------------------------------
          removals.Clear();
          foreach (IMapItem mi in this.Hatches) // incapacitated crewmember becomes button up

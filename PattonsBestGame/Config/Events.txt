@@ -55,18 +55,34 @@ Roll for possible combat today. If die &lt;= probability, start morning briefing
 Otherwise continue with next day check.
 <LineBreak/><LineBreak/>
 Date from Combat Calendar: DATE<LineBreak/>
+Scenario Type: SCENARIO<LineBreak/>
 Expected Resistance: RESISTANCE<LineBreak/>
 Probablility of Combat: PROBABILITY &gt;= 
 <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/>"
-e007	"<Bold>e007 Morning Briefing - Weather Roll</Bold> <InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+e007a	"<Bold>e007a Crew Replacement</Bold> 
+<InlineUIContainer><Button Content='r7.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<InlineUIContainer><Button Content='r19.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>     
+<LineBreak/><LineBreak/>
+Wounded crewmen are replaced at beginning of day when the tank is knocked out. Click image to  continue to assign new crew ratings.
+<LineBreak/><LineBreak/>
+                          <InlineUIContainer><Image Name='Ambulance3' Height='160' Width='300'></Image></InlineUIContainer>"
+e007b	"<Bold>e007b Returning Crewmen</Bold> 
+<InlineUIContainer><Button Content='r19.33' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>     
+<LineBreak/><LineBreak/>
+Convalenced crewmen return to your crew or leave to work another crew base on your choice. If returning to your crew, they replace the existing man. If you do not bring back the crewman, he may not rejoin later. Choose one of the options below:
+<LineBreak/><LineBreak/>"
+e007c	"<Bold>e007c Tank Replacement</Bold> 
+<InlineUIContainer><Button Content='r19.33' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>     
+<LineBreak/><LineBreak/>"
+e008	"<Bold>e007 Morning Briefing - Weather Roll</Bold> <InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
 The 
 <InlineUIContainer><Button Content='Weather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
  Table determines weather for today:  
 <InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/><LineBreak/>"
-e008	"<Bold>e008 Type of Snow</Bold> 
+e008a	"<Bold>e008 Type of Snow</Bold> 
 <LineBreak/><LineBreak/>
 Snow is in the forecast. Roll for type of snow on the 
 <InlineUIContainer><Button Content='Weather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
@@ -769,7 +785,17 @@ Wounded crewmen are replaced when battle ends or the tank withdraws. Replacing c
  <LineBreak/><LineBreak/>
 Click image to assign replacement crew ratings.
 <LineBreak/><LineBreak/>
-                          <InlineUIContainer><Image Name='Ambulance' Height='160' Width='300'></Image></InlineUIContainer>"
+                          <InlineUIContainer><Image Name='Ambulance1' Height='160' Width='300'></Image></InlineUIContainer>"
+e062a	"<Bold>e062a Crew Replacement - Advance or Retreat</Bold> 
+<InlineUIContainer><Button Content='r7.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<InlineUIContainer><Button Content='r19.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Wounded crewmen are replaced when your Sherman Advances or Retreats. Replacing crewmen takes 30 minutes and is marked off the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
+ <LineBreak/><LineBreak/>
+Click image to assign replacement crew ratings.
+<LineBreak/><LineBreak/>
+                          <InlineUIContainer><Image Name='Ambulance2' Height='160' Width='300'></Image></InlineUIContainer>"
 e100	"<Bold>e100 Evening Debriefing</Bold> 
 <LineBreak/><LineBreak/>
 An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
@@ -821,13 +847,6 @@ The purple heart is awarded for receiving a wound in combat. You have acumulated
                                               <InlineUIContainer><Image Name='DecorationPurpleHeart' Height='210' Width='100'></Image></InlineUIContainer>
 <LineBreak/><LineBreak/>
 Click image to continue."
-e105	"<Bold>e105 Crew Replacement - Knocked Out Tank</Bold> 
-<InlineUIContainer><Button Content='r7.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-<InlineUIContainer><Button Content='r19.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>     
-<LineBreak/><LineBreak/>
-Wounded crewmen are replaced at beginning of day when the tank is knocked out. Click image to  continue to assign new crew ratings.
-<LineBreak/><LineBreak/>
-                          <InlineUIContainer><Image Name='AmbulanceEvening' Height='160' Width='300'></Image></InlineUIContainer>"
 e501	"<Bold>e501 Game Won!!!</Bold>
 <LineBreak/><LineBreak/>"
 e502	"<Bold>e502 Game Lost</Bold>

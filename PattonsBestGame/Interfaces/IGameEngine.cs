@@ -172,6 +172,8 @@ namespace Pattons_Best
 
       MorningBriefingBegin,
       MorningBriefingAssignCrewRating,
+      MorningBriefingExistingCrewman,
+      MorningBriefingReturningCrewman,
       MorningBriefingAssignCrewRatingEnd,
       MorningBriefingCalendarRoll,
       MorningBriefingWeatherRoll,
@@ -184,7 +186,7 @@ namespace Pattons_Best
       MorningBriefingTimeCheckRoll,
       MorningBriefingEnd,
 
-      PreparationsDeployment,
+      MorningBriefingDeployment,
       PreparationsDeploymentRoll,
       PreparationsHatches,
       PreparationsShowHatchAction,
@@ -245,7 +247,8 @@ namespace Pattons_Best
       BattleRandomEvent,
       BattleRandomEventRoll,
       BattleCollateralDamageCheck,
-      
+      BattleCrewReplaced,
+
       BattleEmpty,
       BattleEmptyResolve,
       BattleShermanKilled,

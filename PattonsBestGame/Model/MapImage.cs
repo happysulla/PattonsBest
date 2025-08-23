@@ -118,6 +118,20 @@ namespace Pattons_Best
             return;
          }
       }
+      public static string GetImageByRole(string role)
+      {
+         switch(role)
+         {
+            case "Driver": return "c08Driver";
+            case "Loader": return "c09Loader";
+            case "Assistant": return "c10Assistant";
+            case "Gunner": return "c11Gunner";
+            case "Commander": return "c07Commander";
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetImageByRole(): unknown role=" + role);
+               return "ERROR";
+         }
+      }
    }
    //--------------------------------------------------------------------------
    [Serializable]

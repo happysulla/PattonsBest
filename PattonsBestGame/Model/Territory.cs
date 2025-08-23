@@ -184,9 +184,9 @@ namespace Pattons_Best
                         if (true == mi.Name.Contains("CommanderSpot"))
                         {
                            string tName = mi.TerritoryCurrent.Name;
-                           if (5 != tName.Length)
+                           if (6 != tName.Length)
                            {
-                              Logger.Log(LogEnum.LE_ERROR, "GetSpottedTerritories(): tName != 4 for " + mi.TerritoryCurrent.Name);
+                              Logger.Log(LogEnum.LE_ERROR, "GetSpottedTerritories(): tName != 6 for " + mi.TerritoryCurrent.Name);
                               return null;
                            }
                            char sector = tName[tName.Length - 1];
@@ -196,7 +196,6 @@ namespace Pattons_Best
                               spottedTerritories.Add("B" + sector + "M");
                               spottedTerritories.Add("B" + sector + "L");
                            }
-
                         }
                      }
                   }
@@ -295,16 +294,16 @@ namespace Pattons_Best
                         string tName = mi.TerritoryCurrent.Name;
                         if (5 != tName.Length)
                         {
-                           Logger.Log(LogEnum.LE_ERROR, "GetSpottedTerritories(): tName != 4 for " + mi.TerritoryCurrent.Name);
+                           Logger.Log(LogEnum.LE_ERROR, "GetSpottedTerritories(): tName != 5 for " + mi.TerritoryCurrent.Name);
                            return null;
                         }
                         char sector = tName[tName.Length - 1];
                         spottedTerritories.Add("B" + sector + "C");
                         if (false == isCloseRangeOnly)
                         {
-                        }
                            spottedTerritories.Add("B" + sector + "M");
-                        spottedTerritories.Add("B" + sector + "L");
+                           spottedTerritories.Add("B" + sector + "L");
+                        }
                      }
                   }
                }

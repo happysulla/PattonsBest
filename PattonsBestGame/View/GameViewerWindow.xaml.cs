@@ -288,8 +288,14 @@ namespace Pattons_Best
             myBattleButtons.Clear();
             myTankButtons.Clear();
             myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas); // UploadNewGame - Return to previous saved zoom level
-            this.Title = UpdateViewTitle(gi.Options);
          }
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateView(): lastReport=null");
+            return;
+         }
+         this.Title = UpdateViewTitle(gi, lastReport);
          switch (action)
          {
             case GameAction.UnitTestStart:
@@ -343,6 +349,12 @@ namespace Pattons_Best
             case GameAction.BattleRoundSequenceReadyRackHvapPlus:
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               break;
+            case GameAction.MorningBriefingDeployment:
+               if (false == UpdateCanvasTank(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               if (false == UpdateCanvasMain(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
             case GameAction.BattleRoundSequenceSpotting:
                if (false == UpdateCanvasMain(gi, action)) // update smoke depletion
@@ -458,19 +470,16 @@ namespace Pattons_Best
                SaveDefaultsToSettings();
                break;
             case GameAction.RemoveSplashScreen:
-               this.Title = UpdateViewTitle(gi.Options);
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                mySplashScreen.Close();
                myScrollViewerMap.UpdateLayout();
                break;
             case GameAction.UpdateGameOptions:
-               this.Title = UpdateViewTitle(gi.Options);
                SaveDefaultsToSettings();
                break;
             case GameAction.SetupChooseFunOptions:
             case GameAction.SetupFinalize:
-               this.Title = UpdateViewTitle(gi.Options);
                myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
@@ -531,94 +540,15 @@ namespace Pattons_Best
          }
          //UpdateScrollbarThumbnails(gi.Prince.Territory);
       }
-      private string UpdateViewTitle(Options options)
+      private string UpdateViewTitle(IGameInstance gi, IAfterActionReport report)
       {
          StringBuilder sb = new StringBuilder();
-         sb.Append("Patton's Best - ");
-         //--------------------------------
-         string name = "CustomGame";
-         Option? option = options.Find(name);
-         if (null == option)
-            option = new Option(name, false);
-         if (true == option.IsEnabled)
-         {
-            sb.Append("Custom Game");
-         }
-         else
-         {
-            name = "MaxFunGame";
-            option = options.Find(name);
-            if (null == option)
-               option = new Option(name, false);
-            if (true == option.IsEnabled)
-            {
-               sb.Append("Fun Game");
-            }
-            else
-            {
-               name = "RandomGame";
-               option = options.Find(name);
-               if (null == option)
-                  option = new Option(name, false);
-               if (true == option.IsEnabled)
-               {
-                  sb.Append(" All Random Options Game - ");
-               }
-               else
-               {
-                  name = "RandomHexGame";
-                  option = options.Find(name);
-                  if (null == option)
-                     option = new Option(name, false);
-                  if (true == option.IsEnabled)
-                  {
-                     sb.Append("Random Starting Hex Game - ");
-                  }
-                  else
-                  {
-                     name = "RandomPartyGame";
-                     option = options.Find(name);
-                     if (null == option)
-                        option = new Option(name, false);
-                     if (true == option.IsEnabled)
-                        sb.Append("Random Starting Party Game");
-                     else
-                        sb.Append("Orginal Game");
-                  }
-               }
-            }
-         }
-         //----------------------------------
-         name = "EasiestMonsters";
-         option = options.Find(name);
-         if (null == option)
-            option = new Option(name, false);
-         if (true == option.IsEnabled)
-         {
-            sb.Append(" - Easiest");
-         }
-         else
-         {
-            name = "EasyMonsters";
-            option = options.Find(name);
-            if (null == option)
-               option = new Option(name, false);
-            if (true == option.IsEnabled)
-            {
-               sb.Append("");
-            }
-            else
-            {
-               name = "LessHardMonsters";
-               option = options.Find(name);
-               if (null == option)
-                  option = new Option(name, false);
-               if (true == option.IsEnabled)
-                  sb.Append(" - Difficult Monsters");
-               else
-                  sb.Append(" - Brutally Difficult");
-            }
-         }
+         sb.Append("Patton's Best  -  ");
+         sb.Append(report.Scenario.ToString());
+         sb.Append("  -  ");
+         sb.Append(TableMgr.GetDate(gi.Day));
+         sb.Append(" ");
+         sb.Append(TableMgr.GetTime(report));
          return sb.ToString();
       }
       //-----------------------SUPPORTING FUNCTIONS--------------------

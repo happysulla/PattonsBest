@@ -500,6 +500,8 @@ namespace Pattons_Best
                      string imageName = img.Name;
                      if (true == img.Name.Contains("Continue"))
                         imageName = "Continue";
+                     else if (true == img.Name.Contains("Ambulance"))
+                        imageName = "Ambulance";
                      else if( true == img.Name.Contains("DieRollWhite"))
                         imageName = "DieRollWhite";
                      else if (true == img.Name.Contains("DieRollBlue"))
@@ -668,6 +670,21 @@ namespace Pattons_Best
          {
             case "e006":
                ReplaceText("DATE", report.Day);
+               switch (report.Scenario)
+               {
+                  case EnumScenario.Advance:
+                     ReplaceText("SCENARIO", "Advance");
+                     break;
+                  case EnumScenario.Battle:
+                     ReplaceText("SCENARIO", "Battle");
+                     break;
+                  case EnumScenario.Counterattack:
+                     ReplaceText("SCENARIO", "Counterattack");
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default scenario=" + report.Scenario.ToString());
+                     return false;
+               }
                switch (report.Resistance)
                {
                   case EnumResistance.Light:
@@ -710,14 +727,51 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Possible contact. Click image to continue."));
                }
                break;
-            case "e007":
+            case "e007b":
+               if (null == gi.ReturningCrewman)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): ReturningCrewman=null for key=" + key);
+                  return false;
+               }
+               ICrewMember? existing = gi.GetCrewMemberByRole(gi.ReturningCrewman.Role);
+               if (null == existing)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): existing=null for role=" + gi.ReturningCrewman.Role);
+                  return false;
+               }
+               string imageName = MapImage.GetImageByRole(gi.ReturningCrewman.Role);
+               myTextBlock.Inlines.Add(new Run("                                            "));
+               Image imge106a = new Image { Name = "ExistingCrewman", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage(imageName) };
+               myTextBlock.Inlines.Add(new InlineUIContainer(imge106a));
+               myTextBlock.Inlines.Add("Replacement: ");
+               myTextBlock.Inlines.Add(existing.Rank);
+               myTextBlock.Inlines.Add(" ");
+               myTextBlock.Inlines.Add(existing.Name);
+               myTextBlock.Inlines.Add(" rating=");
+               myTextBlock.Inlines.Add(existing.Rating.ToString());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("                                            "));
+               Image imge106b = new Image { Name = "ReturningCrewman", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage(imageName) };
+               myTextBlock.Inlines.Add(new InlineUIContainer(imge106b));
+               myTextBlock.Inlines.Add("Returning: ");
+               myTextBlock.Inlines.Add(gi.ReturningCrewman.Rank);
+               myTextBlock.Inlines.Add(" ");
+               myTextBlock.Inlines.Add(gi.ReturningCrewman.Name);
+               myTextBlock.Inlines.Add(" rating=");
+               myTextBlock.Inlines.Add(gi.ReturningCrewman.Rating.ToString());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("Click one of the images to continue."));
+               break;
+            case "e008":
                if (false == UpdateEventContentWeather(gi))
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): UpdateEventContentWeather() returned false for key=" + key);
                   return false;
                }
                break;
-            case "e008":
+            case "e008a":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
                   Image? imgWeather = null;
@@ -797,7 +851,7 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("                                   "));
-                  Image imgClock = new Image { Source = MapItem.theMapImages.GetBitmapImage("MilitaryWatch"), Width = 200, Height = 100, Name = "PreparationsDeployment" };
+                  Image imgClock = new Image { Source = MapItem.theMapImages.GetBitmapImage("MilitaryWatch"), Width = 200, Height = 100, Name = "MorningBriefingDeployment" };
                   myTextBlock.Inlines.Add(new InlineUIContainer(imgClock));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -817,7 +871,7 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run(sbE011.ToString()));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
-                  Image imge011 = new Image { Name = "PreparationsDeploymentEnd" };
+                  Image imge011 = new Image { Name = "MorningBriefingDeploymentEnd" };
                   if (true == gi.Sherman.IsHullDown)
                   {
                      imge011.Source = MapItem.theMapImages.GetBitmapImage("c14HullDown");
@@ -3193,10 +3247,10 @@ namespace Pattons_Best
          int toKillNum = TableMgr.GetShermanMgToKillNumber(gi, gi.TargetMg, mgType);
          if (TableMgr.FN_ERROR == toKillNum)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill(): GetShermanMgToKillNumber() returned error for key=" + key);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill(): Get_ShermanMgToKillNumber() returned error for key=" + key);
             return false;
          }
-         if (TableMgr.NO_CHANCE == toKillNum)
+         else if (TableMgr.NO_CHANCE == toKillNum)
          {
             myTextBlock.Inlines.Add(new Run("No chance to kill. "));
             myTextBlock.Inlines.Add(new Run("Click image to continue."));
@@ -3240,15 +3294,17 @@ namespace Pattons_Best
          else
          {
             myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
-            if (comboMg < gi.DieResults[key][0])
-               myTextBlock.Inlines.Add("  =  NO EFFECT");
+            if(gi.DieResults[key][0] < 4)
+               myTextBlock.Inlines.Add(new Run("  =  Automatic Kill!"));
+            else if (97 < gi.DieResults[key][0])
+               myTextBlock.Inlines.Add(new Run("  =  Gun Malfunctions!"));
+            else if (comboMg < gi.DieResults[key][0])
+               myTextBlock.Inlines.Add(new Run("  =  NO EFFECT"));
             else
-               myTextBlock.Inlines.Add("  =  KILL");
+               myTextBlock.Inlines.Add(new Run("  =  KILL"));
             StringBuilder sbe53e = new StringBuilder();
             if ((1 == DieRoller.BlueDie) || (2 == DieRoller.BlueDie) || (3 == DieRoller.BlueDie) || (97 < gi.DieResults[key][0]))
                sbe53e.Append("\n\n");
-            if (97 < gi.DieResults[key][0])
-               sbe53e.Append("MG Malfunction! ");
             if (( 1 == DieRoller.BlueDie) || (2 == DieRoller.BlueDie) || (3 == DieRoller.BlueDie) )
                sbe53e.Append("One MG Ammo Expended! ");
             if( 0 < sbe53e.Length)
@@ -4187,8 +4243,12 @@ namespace Pattons_Best
          GameAction outAction = GameAction.Error;
          if( GamePhase.GameSetup == myGameInstance.GamePhase ) 
             outAction = GameAction.SetupShowCombatCalendarCheck;
+         else if( GamePhase.MorningBriefing == myGameInstance.GamePhase )
+            outAction = GameAction.MorningBriefingEnd;
+         else if( 0 < myGameInstance.ShermanAdvanceOrRetreatEnemies.Count) 
+            outAction = GameAction.BattleRoundSequenceCrewReplaced; // enemies transfer to Move board due to advancing or retreating Sherman
          else
-            outAction = GameAction.MorningBriefingAssignCrewRatingEnd;
+            outAction = GameAction.BattleCrewReplaced; // due to ResolveEmptyBattleBoard() call in GameState class
          StringBuilder sb11 = new StringBuilder("     ######ShowCrewRatingResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
@@ -4801,6 +4861,14 @@ namespace Pattons_Best
                            action = GameAction.MorningBriefingBegin;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
+                        case "ExistingCrewman":
+                           action = GameAction.MorningBriefingExistingCrewman;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "ReturningCrewman":
+                           action = GameAction.MorningBriefingReturningCrewman;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
                         case "WeatherRollEnd":
                            action = GameAction.MorningBriefingWeatherRollEnd;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
@@ -4817,11 +4885,11 @@ namespace Pattons_Best
                            action = GameAction.MorningBriefingEnd;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
-                        case "PreparationsDeployment":
-                           action = GameAction.PreparationsDeployment;
+                        case "MorningBriefingDeployment":
+                           action = GameAction.MorningBriefingDeployment;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
-                        case "PreparationsDeploymentEnd":
+                        case "MorningBriefingDeploymentEnd":
                            action = GameAction.PreparationsHatches;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
@@ -4849,13 +4917,13 @@ namespace Pattons_Best
                            action = GameAction.PreparationsFinal;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
-                        case "Continue017": // Prepareations Final
+                        case "Continue017": // Preparations Final
                            bool isMapStartAreaExist = false;
-                           foreach( IStack stack in myGameInstance.MoveStacks )
+                           foreach (IStack stack in myGameInstance.MoveStacks)
                            {
-                              foreach(IMapItem mi in stack.MapItems )
-                              { 
-                                 if( true == mi.Name.Contains("StartArea"))
+                              foreach (IMapItem mi in stack.MapItems)
+                              {
+                                 if (true == mi.Name.Contains("StartArea"))
                                  {
                                     isMapStartAreaExist = true;
                                     break;
@@ -4863,15 +4931,11 @@ namespace Pattons_Best
                               }
                            }
                            //--------------------------------------------------
-                           bool isExitArea;
-                           if( false == myGameInstance.IsExitArea(out isExitArea))
-                           {
-                              Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): myGameInstance.IsExitArea() returned false");
-                              return;
-                           }
-                           if (true == isExitArea)
+                           bool isMapEndAreaExist = false;
+                           myGameInstance.IsExitArea(out isMapEndAreaExist);  // if returns false - no exit area assigned yet which is OK here
+                           if (true == isMapEndAreaExist)
                               action = GameAction.MovementStartAreaRestartAfterBattle;
-                           else if ( false == isMapStartAreaExist)
+                           else if ( false == isMapStartAreaExist )
                               action = GameAction.MovementStartAreaSet; // Setting the first start area
                            else
                               action = GameAction.MovementEnemyStrengthChoice; 
@@ -5163,8 +5227,16 @@ namespace Pattons_Best
                            action = GameAction.BattleRoundSequenceCrewSwitchEnd;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
-                        case "Ambulance":
-                           action = GameAction.BattleRoundSequenceCrewReplaced;
+                        case "Ambulance1":  // ResolveEmptyBattleBoard() - Battle Ends
+                           action = GameAction.MorningBriefingAssignCrewRating;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Ambulance2":  // MoveShermanAdvanceOrRetreat() - Advance or Retreat
+                           action = GameAction.MorningBriefingAssignCrewRating;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Ambulance3": // Evening Debriefing
+                           action = GameAction.EveningDebriefingCrewReplacedEnd;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "CampaignOver":
@@ -5181,10 +5253,6 @@ namespace Pattons_Best
                            break;
                         case "Continue103":
                            action = GameAction.EventDebriefDecorationContinue;
-                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                           break;
-                        case "AmbulanceEvening":
-                           action = GameAction.EveningDebriefingCrewReplacedEnd;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "DecorationBronzeStar":
@@ -5450,12 +5518,12 @@ namespace Pattons_Best
                }
                break;
             case "Begin Game":
-               //action = GameAction.SetupShowMapHistorical;
+               action = GameAction.SetupShowMapHistorical;
                //action = GameAction.TestingStartMorningBriefing;  // <cgs> TEST - skip the ammo setup
                //action = GameAction.TestingStartPreparations;     // <cgs> TEST - skip morning briefing and crew/ammo setup
                //action = GameAction.TestingStartMovement;         // <cgs> TEST - start with movement - skip battle prep phase
                //action = GameAction.TestingStartBattle;           // <cgs> TEST - skip the movement portion - beging with battle setup
-               action = GameAction.TestingStartAmbush;           // <cgs> TEST - skip battle setup
+               //action = GameAction.TestingStartAmbush;           // <cgs> TEST - skip battle setup
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Cancel":

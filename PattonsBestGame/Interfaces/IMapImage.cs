@@ -24,6 +24,5 @@ namespace Pattons_Best
       IMapImage? this[int index] { get; set; }
       IMapImage? Find(string pathToMatch);
       BitmapImage? GetBitmapImage(string name);
-
    }
 }

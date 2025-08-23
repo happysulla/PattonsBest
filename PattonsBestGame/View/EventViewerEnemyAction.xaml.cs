@@ -935,7 +935,14 @@ namespace Pattons_Best
             myGrid.Children.Add(label4);
             Grid.SetRow(label4, rowNum);
             Grid.SetColumn(label4, 4);
-            if (Utilities.NO_RESULT < myAdvanceFireGridRows[i].myDieRollAdvanceFire)
+            if (TableMgr.NO_CHANCE == myAdvanceFireGridRows[i].myDieRollAdvanceFire)
+            {
+               Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = "NC" };
+               myGrid.Children.Add(label5);
+               Grid.SetRow(label5, rowNum);
+               Grid.SetColumn(label5, 5);
+            }
+            else if (Utilities.NO_RESULT < myAdvanceFireGridRows[i].myDieRollAdvanceFire)
             {
                Label label5 = new Label() { FontFamily = myFontFam, FontSize = 24, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = myAdvanceFireGridRows[i].myAdvanceFireResult };
                myGrid.Children.Add(label5);
@@ -1653,6 +1660,13 @@ namespace Pattons_Best
                }
                myAdvanceFireGridRows[i].myDieRollAdvanceFire = dieRoll;
                int combo = myAdvanceFireGridRows[i].myAdvanceFireBaseNum - myAdvanceFireGridRows[i].myAdvanceFireModifier;
+               if (dieRoll < 4) // gun malfunction already checked before enemy unit arrives
+               {
+                  myAdvanceFireGridRows[i].myAdvanceFireResult = "KO";
+                  myAdvanceFireGridRows[i].myEnemyUnit.IsKilled = true;
+                  myAdvanceFireGridRows[i].myEnemyUnit.IsMoving = false;
+                  myAdvanceFireGridRows[i].myEnemyUnit.SetBloodSpots();
+               }
                if (combo < dieRoll )
                {
                   myAdvanceFireGridRows[i].myAdvanceFireResult = "MISS";
@@ -1661,6 +1675,7 @@ namespace Pattons_Best
                {
                   myAdvanceFireGridRows[i].myAdvanceFireResult = "KO";
                   myAdvanceFireGridRows[i].myEnemyUnit.IsKilled = true;
+                  myAdvanceFireGridRows[i].myEnemyUnit.IsMoving = false;
                   myAdvanceFireGridRows[i].myEnemyUnit.SetBloodSpots();
                }
                myState = E0475Enum.ENEMY_ACTION_ADVANCE_FIRE_SHOW;
@@ -2004,7 +2019,7 @@ namespace Pattons_Best
                                        myAdvanceFireGridRows[k].myAdvanceFireBaseNum = TableMgr.GetShermanMgToKillNumber(myGameInstance, enemyUnit, mgType);
                                        if( TableMgr.FN_ERROR == myAdvanceFireGridRows[k].myAdvanceFireBaseNum)
                                        {
-                                          Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): GetShermanMgToKillNumber() returned false");
+                                          Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): Get_ShermanMgToKillNumber() returned false");
                                           return;
                                        }
                                        myAdvanceFireGridRows[k].myAdvanceFireModifier = TableMgr.GetShermanMgToKillModifier(myGameInstance, enemyUnit, mgType, true);
