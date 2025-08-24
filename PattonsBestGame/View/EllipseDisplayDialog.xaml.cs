@@ -30,6 +30,9 @@ namespace Pattons_Best
             case ColorActionEnum.CAE_ENTER:
                myTextBlock.Inlines.Add(new Run("Enter at "));
                break;
+            case ColorActionEnum.CAE_RETREAT:
+               myTextBlock.Inlines.Add(new Run("Retreat to "));
+               break;
             case ColorActionEnum.CAE_STOP:
                break;
             default:

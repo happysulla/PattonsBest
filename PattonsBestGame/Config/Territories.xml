@@ -1195,7 +1195,7 @@
     </Points>
     <Adjacents count="0" />
   </Territory>
-  <Territory value="DriverHatch">
+  <Territory value="Driver_Hatch">
     <Parent value="Tank" />
     <Type value="1" />
     <CenterPoint X="0123.79" Y="0202.26" />
@@ -1207,7 +1207,7 @@
     </Points>
     <Adjacents count="0" />
   </Territory>
-  <Territory value="AssistantHatch">
+  <Territory value="Assistant_Hatch">
     <Parent value="Tank" />
     <Type value="1" />
     <CenterPoint X="0192.62" Y="0202.26" />
@@ -1219,7 +1219,7 @@
     </Points>
     <Adjacents count="0" />
   </Territory>
-  <Territory value="CommanderHatch">
+  <Territory value="Commander_Hatch">
     <Parent value="Tank" />
     <Type value="1" />
     <CenterPoint X="0189.91" Y="0308.22" />

@@ -177,7 +177,7 @@ namespace Pattons_Best
       EnumResistance BattleResistance { set; get; }
       //------------------------------------------------
       bool IsMinefieldAttack { set; get; }
-      bool IsHarrassingFire { set; get; }
+      bool IsHarrassingFireBonus { set; get; }
       bool IsFlankingFire { set; get; }
       bool IsEnemyAdvanceComplete { set; get; }
       PanzerfaustAttack? Panzerfaust { set; get; }

@@ -123,7 +123,7 @@ namespace Pattons_Best
       public EnumResistance BattleResistance { set; get; } = EnumResistance.None;
       //---------------------------------------------------------------
       public bool IsMinefieldAttack { set; get; } = false;
-      public bool IsHarrassingFire { set; get; } = false;
+      public bool IsHarrassingFireBonus { set; get; } = false;
       public bool IsFlankingFire { set; get; } = false;
       public bool IsEnemyAdvanceComplete { set; get; } = false;
       public PanzerfaustAttack? Panzerfaust { set; get; } = null;

@@ -177,6 +177,8 @@ namespace Pattons_Best
                elements.Add(ui);
             if (ui is Polyline polyline)
                elements.Add(ui);
+            if (ui is Rectangle rectangle)
+                 elements.Add(ui);
             if (ui is Ellipse ellipse)
             {
                if ("CenterPoint" != ellipse.Name) // CenterPoint is a unit test ellipse

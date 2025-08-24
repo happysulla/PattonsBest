@@ -14,6 +14,7 @@ namespace Pattons_Best
    {
       CAE_START,
       CAE_ENTER,
+      CAE_RETREAT,
       CAE_STOP
    };
    [Serializable]
@@ -26,10 +27,10 @@ namespace Pattons_Best
       public string Date { get; set; } = "";
       public string Time { get; set; } = "";
       public string TerritoryName { get; set; } = "";
-      public int Position { get; set; } = 0;         // postion in the hex - if 1+ elispes exist in same hex, they are offset by position
+      public IMapPoint MapPoint { get; set; }
       public ColorActionEnum ColorAction { get; set; } = ColorActionEnum.CAE_START;
       //------------------------------------------------------------------------------------------------
-      public EnteredHex(IGameInstance gi, ITerritory t, ColorActionEnum colorAction)
+      public EnteredHex(IGameInstance gi, ITerritory t, ColorActionEnum colorAction, IMapPoint mp)
       {
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -44,17 +45,8 @@ namespace Pattons_Best
          Date = TableMgr.GetDate(gi.Day);
          Time = TableMgr.GetTime(lastReport);
          TerritoryName = t.Name;
+         MapPoint = mp;
          ColorAction = colorAction;
-         //-----------------------------------------------
-         Position = 0;
-         foreach (EnteredHex hex in gi.EnteredHexes.AsEnumerable().Reverse())
-         {
-            if (hex.TerritoryName == t.Name)
-            {
-               Position = hex.Position + 1;
-               break;
-            }
-         }
       }
       public override string ToString()
       {
@@ -65,8 +57,8 @@ namespace Pattons_Best
          sb.Append(Day.ToString());
          sb.Append(",t=");
          sb.Append(TerritoryName);
-         sb.Append(",p=");
-         sb.Append(Position.ToString());
+         sb.Append(",mp=");
+         sb.Append(MapPoint.ToString());
          sb.Append(")");
          return sb.ToString();
       }

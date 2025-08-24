@@ -2455,7 +2455,7 @@ namespace Pattons_Best
          }
          if (dieRoll < 76)
          {
-            IMapItem? hatch = gi.Hatches.Find("DriverOpenHatch");
+            IMapItem? hatch = gi.Hatches.Find("Driver_OpenHatch");
             if (null != hatch)
                return "Driver Wounds";
             else
@@ -2463,7 +2463,7 @@ namespace Pattons_Best
          }
          if (dieRoll < 81)
          {
-            IMapItem? hatch = gi.Hatches.Find("AsssistantOpenHatch");
+            IMapItem? hatch = gi.Hatches.Find("Asssistant_OpenHatch");
             if (null != hatch)
                return "Asssistant Wounds";
             else
@@ -2471,7 +2471,7 @@ namespace Pattons_Best
          }
          if (dieRoll < 91)
          {
-            IMapItem? hatch = gi.Hatches.Find("LoaderOpenHatch");
+            IMapItem? hatch = gi.Hatches.Find("Loader_OpenHatch");
             if (null != hatch)
                return "Loader Wounds";
             else
@@ -2479,7 +2479,7 @@ namespace Pattons_Best
          }
          if (dieRoll < 101)
          {
-            IMapItem? hatch = gi.Hatches.Find("CommanderOpenHatch");
+            IMapItem? hatch = gi.Hatches.Find("Commander_OpenHatch");
             if (null != hatch)
                return "Commander Wounds";
             else
@@ -3005,10 +3005,10 @@ namespace Pattons_Best
             modifier -= 20;
             Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-20 IsMinefieldAttack mod=" + modifier.ToString() + " for cm=" + cm.Role);
          }
-         if (true == gi.IsHarrassingFire)
+         if (true == gi.IsHarrassingFireBonus)
          {
-            modifier -= 20;
-            Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-20 IsHarrassingFire mod=" + modifier.ToString() + " for cm=" + cm.Role);
+            modifier -= 10;
+            Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-10 IsHarrassingFire_Bonus mod=" + modifier.ToString() + " for cm=" + cm.Role);
          }
          //----------------------------------
          if( true == isCollateralDamage )
