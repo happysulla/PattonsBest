@@ -185,6 +185,8 @@ namespace Pattons_Best
             case GameAction.UpdateTankBrewUp:
             case GameAction.UpdateGameOptions:
                break;
+            case GameAction.MorningBriefingBegin:
+            case GameAction.MorningBriefingReturningCrewman:
             case GameAction.UpdateAfterActionReport:
                if (null != myAfterActionDialog)
                   myAfterActionDialog.UpdateReport(gi);
@@ -727,7 +729,42 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Possible contact. Click image to continue."));
                }
                break;
-            case "e007b":
+            case "e007a":
+               if ( 0 == gi.InjuredCrewMembers.Count )
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.InjuredCrewMembers.Count=0 for key=" + key);
+                  return false;
+               }
+               StringBuilder sbe007a = new StringBuilder();
+               foreach(IMapItem mi in gi.InjuredCrewMembers)
+               {
+                  ICrewMember? cm = mi as ICrewMember;
+                  if( null == cm )
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): invalid mi=" + mi.Name + " for key=" + key);
+                     return false;
+                  }
+                  if ((TableMgr.MIA == cm.WoundDaysUntilReturn) || (TableMgr.KIA == cm.WoundDaysUntilReturn))
+                     continue;
+                  sbe007a.Append(" -- ");
+                  sbe007a.Append(cm.Rank);
+                  sbe007a.Append(". ");
+                  sbe007a.Append(cm.Name);
+                  sbe007a.Append(" as ");
+                  sbe007a.Append(cm.Role);
+                  sbe007a.Append(" returns in ");
+                  sbe007a.Append(cm.WoundDaysUntilReturn);
+                  sbe007a.Append(" days\n");
+                }
+               myTextBlock.Inlines.Add(new Run(sbe007a.ToString()));
+               myTextBlock.Inlines.Add(new LineBreak());
+               Image imge007a = new Image { Source = MapItem.theMapImages.GetBitmapImage("Hospital"), Width = 300, Height = 200, Name = "HealCrewman" };
+               myTextBlock.Inlines.Add(new Run("                          "));
+               myTextBlock.Inlines.Add(new InlineUIContainer(imge007a));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               break;
+            case "e007c":
                if (null == gi.ReturningCrewman)
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): ReturningCrewman=null for key=" + key);
@@ -740,29 +777,27 @@ namespace Pattons_Best
                   return false;
                }
                string imageName = MapImage.GetImageByRole(gi.ReturningCrewman.Role);
-               myTextBlock.Inlines.Add(new Run("                                            "));
-               Image imge106a = new Image { Name = "ExistingCrewman", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage(imageName) };
+               Image imge106a = new Image { Name = "ExistingCrewman", Width = 50, Height = 50, Source = MapItem.theMapImages.GetBitmapImage(imageName) };
                myTextBlock.Inlines.Add(new InlineUIContainer(imge106a));
-               myTextBlock.Inlines.Add("Replacement: ");
+               myTextBlock.Inlines.Add("  Keep existing: ");
                myTextBlock.Inlines.Add(existing.Rank);
-               myTextBlock.Inlines.Add(" ");
+               myTextBlock.Inlines.Add(". ");
                myTextBlock.Inlines.Add(existing.Name);
                myTextBlock.Inlines.Add(" rating=");
                myTextBlock.Inlines.Add(existing.Rating.ToString());
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new Run("                                            "));
-               Image imge106b = new Image { Name = "ReturningCrewman", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage(imageName) };
+               Image imge106b = new Image { Name = "ReturningCrewman", Width = 50, Height = 50, Source = MapItem.theMapImages.GetBitmapImage(imageName) };
                myTextBlock.Inlines.Add(new InlineUIContainer(imge106b));
-               myTextBlock.Inlines.Add("Returning: ");
+               myTextBlock.Inlines.Add("  Keep returning: ");
                myTextBlock.Inlines.Add(gi.ReturningCrewman.Rank);
-               myTextBlock.Inlines.Add(" ");
+               myTextBlock.Inlines.Add(". ");
                myTextBlock.Inlines.Add(gi.ReturningCrewman.Name);
                myTextBlock.Inlines.Add(" rating=");
                myTextBlock.Inlines.Add(gi.ReturningCrewman.Rating.ToString());
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new Run("Click one of the images to continue."));
+               myTextBlock.Inlines.Add(new Run("Click one of images to continue."));
                break;
             case "e008":
                if (false == UpdateEventContentWeather(gi))
@@ -2033,16 +2068,16 @@ namespace Pattons_Best
                }
                break;
             case "e101":
-               if (false == UpdateEventContentPromotion(gi))
+               if (false == UpdateEventContentVictoryPointTotal(gi))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): UpdateEventContentPromotion() returned error for key=" + key);
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): UpdateEventContentVictoryPointTotal() returned error for key=" + key);
                   return false;
                }
                break;
             case "e102":
-               if (false == UpdateEventContentEndOfRound(gi))
+               if (false == UpdateEventContentPromotion(gi))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): UpdateEventContentEndOfRound() returned error for key=" + key);
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): UpdateEventContentPromotion() returned error for key=" + key);
                   return false;
                }
                break;
@@ -3494,6 +3529,55 @@ namespace Pattons_Best
          }
          return sb.ToString() ;
       }
+      private bool UpdateEventContentVictoryPointTotal(IGameInstance gi)
+      {
+         //----------------------------------------
+         if (null == myTextBlock)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentVictoryPointTotal(): myTextBlock=null");
+            return false;
+         }
+         string key = gi.EventActive;
+         //----------------------------------------
+         IAfterActionReport? report = gi.Reports.GetLast();
+         if (null == report)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentVictoryPointTotal():  gi.Reports.GetLast()");
+            return false;
+         }
+         //----------------------------------------
+         StringBuilder sbe101 = new StringBuilder();
+         sbe101.Append("Engagement Victory Points: ");
+         sbe101.Append(report.VictoryPtsTotalEngagement.ToString());
+         sbe101.Append("\nCampaign Victory Points: ");
+         sbe101.Append(gi.VictoryPtsTotalCampaign.ToString());
+         //----------------------------------------
+         Image? imge101 = null;
+         if (true == gi.IsCommanderKilled)
+         {
+            sbe101.Append("\n\nYou as the commander are killed. Engagement Lost!");
+            imge101 = new Image { Name = "CampaignOver", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("CommanderDead") };
+         }
+         else if ( 0 >= report.VictoryPtsTotalEngagement )
+         {
+            sbe101.Append("\n\nTotal Victory Points is not positive. Engagement Lost!");
+            imge101 = new Image { Name = "EventDebriefVictoryPts", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("Deny") };
+         }
+         else
+         {
+            sbe101.Append("\n\nTotal Victory Points is greater than zero. Engagement Won!");
+            imge101 = new Image { Name = "EventDebriefVictoryPts", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("Star") };
+         }
+         myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
+         myTextBlock.Inlines.Add(new LineBreak());
+         myTextBlock.Inlines.Add(new LineBreak());
+         myTextBlock.Inlines.Add(new Run("                                    "));
+         myTextBlock.Inlines.Add(new InlineUIContainer(imge101));
+         myTextBlock.Inlines.Add(new LineBreak());
+         myTextBlock.Inlines.Add(new LineBreak());
+         myTextBlock.Inlines.Add(new Run("Click image to continue."));
+         return true;
+      }
       private bool UpdateEventContentPromotion(IGameInstance gi)
       {
          //----------------------------------------
@@ -3710,61 +3794,6 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new InlineUIContainer(imge103));
             }
          }
-         return true;
-      }
-      private bool UpdateEventContentEndOfRound(IGameInstance gi)
-      {
-         //----------------------------------------
-         if (null == myTextBlock)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentEndOfRound(): myTextBlock=null");
-            return false;
-         }
-         string key = gi.EventActive;
-         //----------------------------------------
-         IAfterActionReport? report = gi.Reports.GetLast();
-         if (null == report)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentEndOfRound():  gi.Reports.GetLast()");
-            return false;
-         }
-         //----------------------------------------
-         ICrewMember? cmdr = gi.GetCrewMemberByRole("Commander");
-         if (null == cmdr)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentEndOfRound(): cmdr=null for key=" + key);
-            return false;
-         }
-         StringBuilder sbe101 = new StringBuilder();
-         sbe101.Append("Total Engagement Victory Points: ");
-         sbe101.Append(report.VictoryPtsTotalEngagement.ToString());
-         sbe101.Append("\nTotal Campaign Victory Points: ");
-         sbe101.Append(gi.VictoryPtsTotalCampaign.ToString());
-         //----------------------------------------
-         Image? imge101 = null;
-         if (true == cmdr.IsKilled)
-         {
-            sbe101.Append("\n\nYou as the commander are killed. Engagement Lost!");
-            imge101 = new Image { Name = "CampaignOver", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("CommanderDead") };
-         }
-         else if (report.VictoryPtsTotalEngagement < 0)
-         {
-            sbe101.Append("\n\nTotal Victory Points is less than zero. Engagement Lost!");
-            imge101 = new Image { Name = "EventDebriefVictoryPts", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("Deny") };
-         }
-         else
-         {
-            sbe101.Append("\n\nTotal Victory Points is greater than zero. Engagement Won!");
-            imge101 = new Image { Name = "EventDebriefVictoryPts", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("Star") };
-         }
-         myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
-         myTextBlock.Inlines.Add(new LineBreak());
-         myTextBlock.Inlines.Add(new LineBreak());
-         myTextBlock.Inlines.Add(new Run("                                    "));
-         myTextBlock.Inlines.Add(new InlineUIContainer(imge101));
-         myTextBlock.Inlines.Add(new LineBreak());
-         myTextBlock.Inlines.Add(new LineBreak());
-         myTextBlock.Inlines.Add(new Run("Click image to continue."));
          return true;
       }
       private string UpdateEventContentMainGunRepair(IGameInstance gi, out int modifier)
@@ -4861,6 +4890,11 @@ namespace Pattons_Best
                            action = GameAction.MorningBriefingBegin;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
+                        case "HealCrewman":
+                        case "Ambulance3": // Morning Briefing
+                           action = GameAction.MorningBriefingCrewmanHealing;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
                         case "ExistingCrewman":
                            action = GameAction.MorningBriefingExistingCrewman;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
@@ -5235,10 +5269,6 @@ namespace Pattons_Best
                            action = GameAction.MorningBriefingAssignCrewRating;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
-                        case "Ambulance3": // Evening Debriefing
-                           action = GameAction.EveningDebriefingCrewReplacedEnd;
-                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-                           break;
                         case "CampaignOver":
                            action = GameAction.EveningDebriefingVictoryPointsCalculated;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
@@ -5521,9 +5551,9 @@ namespace Pattons_Best
                action = GameAction.SetupShowMapHistorical;
                action = GameAction.TestingStartMorningBriefing;  // <cgs> TEST - skip the ammo setup
                action = GameAction.TestingStartPreparations;     // <cgs> TEST - skip morning briefing and crew/ammo setup
-               //action = GameAction.TestingStartMovement;         // <cgs> TEST - start with movement - skip battle prep phase
-               //action = GameAction.TestingStartBattle;           // <cgs> TEST - skip the movement portion - beging with battle setup
-               //action = GameAction.TestingStartAmbush;           // <cgs> TEST - skip battle setup
+               action = GameAction.TestingStartMovement;         // <cgs> TEST - start with movement - skip battle prep phase
+               action = GameAction.TestingStartBattle;           // <cgs> TEST - skip the movement portion - beging with battle setup
+               action = GameAction.TestingStartAmbush;           // <cgs> TEST - skip battle setup
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Cancel":

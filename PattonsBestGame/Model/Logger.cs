@@ -55,7 +55,10 @@ namespace Pattons_Best
       LE_SHOW_NUM_SHERMAN_SHOTS,
       LE_SHOW_GUN_RELOAD,
       LE_SHOW_FIRE_DIRECTION,
+      //-------------
       LE_SHOW_VP_FRIENDLY_FORCES,
+      LE_SHOW_VP_CAPTURED_AREA,
+      LE_SHOW_VP_TOTAL,
       //-------------
       LE_VIEW_ADV_FIRE_RESOLVE,
       LE_VIEW_ART_FIRE_RESOLVE,
@@ -126,7 +129,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_STACK_ADD);
          //SetOn(LogEnum.LE_SHOW_STACK_DEL);
          //SetOn(LogEnum.LE_SHOW_STACK_VIEW);
-         SetOn(LogEnum.LE_SHOW_ENTERED_HEX);
+         //SetOn(LogEnum.LE_SHOW_ENTERED_HEX);
          //-------------------------------
          //SetOn(LogEnum.LE_SHOW_CREW_NAME);
          //SetOn(LogEnum.LE_SHOW_ENEMY_STRENGTH);
@@ -167,6 +170,8 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_FIRE_DIRECTION);
          //-------------------------------
          SetOn(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES);
+         SetOn(LogEnum.LE_SHOW_VP_CAPTURED_AREA);
+         SetOn(LogEnum.LE_SHOW_VP_TOTAL);
          //-------------------------------
          //SetOn(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE);
          //SetOn(LogEnum.LE_VIEW_ART_FIRE_RESOLVE);

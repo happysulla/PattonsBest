@@ -134,6 +134,7 @@ namespace Pattons_Best
       public int PromotionDay { get; set; } = -1;
       public int NumPurpleHeart { get; set; } = 0;
       public bool IsCommanderRescuePerformed { set; get; } = false;
+      public bool IsCommanderKilled { set; get; } = false;
       public bool IsPromoted { set; get; } = false;
       //---------------------------------------------------------------
       public IMapItemMoves MapItemMoves { get; set; } = new MapItemMoves();
@@ -417,7 +418,7 @@ namespace Pattons_Best
          {
             if ( true == ca.Name.Contains(cm.Role) || (cm.Name == ca.Name) ) // crew action contains role or it is already incapacitated and added
                removals.Add(ca);
-            if (cm.Name == ca.Name) // crew action contains role or it is already incapacitated and added
+            if (cm.Name == ca.Name) // if crew action matches cm.Name -- it is already incapacitated and added
                isAlreadyIncapacitated = true;
          }
          foreach (IMapItem ca in removals)

@@ -1076,7 +1076,7 @@ namespace Pattons_Best
          switch(myState)
          {
             case E046Enum.ACTIVATION:
-               dieRoll = 11; // <cgs> TEST - AdvanceRetreat - infantry appearing
+               //dieRoll = 11; // <cgs> TEST - AdvanceRetreat - infantry appearing
                myGridRows[i].myDieRollActivation = dieRoll;
                myGridRows[i].myActivation = TableMgr.SetEnemyUnit(myScenario, myDay, dieRoll);
                if (false == CreateMapItem(i))
@@ -1134,7 +1134,7 @@ namespace Pattons_Best
                break;
             //-------------------------------------------------------------------
             case E046Enum.PLACE_RANGE:
-               dieRoll = 10; // <cgs> TEST - AdvanceRetreat - Start at long range
+               //dieRoll = 10; // <cgs> TEST - AdvanceRetreat - Start at long range
                myGridRows[i].myDieRollRange = dieRoll;
                myGridRows[i].myRange = TableMgr.GetEnemyRange(myAreaType, myGridRows[i].myActivation, dieRoll);
                if ( "ERROR" == myGridRows[i].myRange )

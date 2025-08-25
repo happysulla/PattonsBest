@@ -14,6 +14,15 @@ namespace Pattons_Best
       { 
          myCallback = callback;
          InitializeComponent();
+         //-------------------------------
+         myAfterActionReportControl = new AfterActionReportUserControl(gi);
+         if (true == CtorError)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "AfterActionDialog(): AfterActionReportUserControl() error");
+            CtorError = true;
+            return;
+         }
+         //-------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
@@ -23,13 +32,6 @@ namespace Pattons_Best
          }
          Title = "After Action Report for " + lastReport.Day;
          //-------------------------------
-         myAfterActionReportControl = new AfterActionReportUserControl(gi);
-         if (true == CtorError)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "AfterActionDialog(): AfterActionReportUserControl() error");
-            CtorError = true;
-            return;
-         }
          myScrollViewerClient.Content = myAfterActionReportControl;
       }
       public void UpdateReport(IGameInstance gi)

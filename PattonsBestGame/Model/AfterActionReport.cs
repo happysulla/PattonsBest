@@ -79,6 +79,7 @@ namespace Pattons_Best
       public string Breakdown { get; set; } = "No";
       public string KnockedOut { get; set; } = "No";
       //---------------------------------------------------------------------------------
+      public AfterActionReport() { }
       public AfterActionReport(ICombatCalendarEntry entry)
       {
          Day = entry.Date;

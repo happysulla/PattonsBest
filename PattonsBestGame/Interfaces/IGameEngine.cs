@@ -171,6 +171,7 @@ namespace Pattons_Best
       SetupFinalize,
 
       MorningBriefingBegin,
+      MorningBriefingCrewmanHealing,
       MorningBriefingAssignCrewRating,
       MorningBriefingExistingCrewman,
       MorningBriefingReturningCrewman,

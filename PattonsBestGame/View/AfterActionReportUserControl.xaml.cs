@@ -25,7 +25,7 @@ namespace Pattons_Best
       public static int DISABLED_TANK_LEN = 15;
       public static int KO_TANK_LEN = 15;
       public bool CtorError { get; } = false;
-      public IAfterActionReport Report { get; set; }
+      public IAfterActionReport Report { get; set; } = new AfterActionReport();
       public bool myIsEditable = false;
       private bool myIsEditableTankName = false;
       private bool myIsEditableCommanderName = false;

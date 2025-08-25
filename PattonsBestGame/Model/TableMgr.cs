@@ -3069,6 +3069,8 @@ namespace Pattons_Best
             gi.SetIncapacitated(cm);
             cm.SetBloodSpots(40);
             cm.IsKilled = true;
+            if ("Commander" == cm.Role)
+               gi.IsCommanderKilled = true; // SetWounds()
             cm.Wound = "Killed";
             return "Killed";
          }
@@ -3129,6 +3131,8 @@ namespace Pattons_Best
             cm.SetBloodSpots(40);
             cm.IsKilled = true;
             cm.Wound = "Killed";
+            if ("Commander" == cm.Role)
+               gi.IsCommanderKilled = true; // SetWounds()
             return "Killed";
          }
       }

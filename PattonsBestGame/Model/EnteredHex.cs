@@ -32,6 +32,13 @@ namespace Pattons_Best
       //------------------------------------------------------------------------------------------------
       public EnteredHex(IGameInstance gi, ITerritory t, ColorActionEnum colorAction, IMapPoint mp)
       {
+         ++theId;
+         Identifer = "Hex#" + theId.ToString();
+         Day = gi.Day + 1; ;
+         Date = TableMgr.GetDate(gi.Day);
+         TerritoryName = t.Name;
+         MapPoint = mp;
+         ColorAction = colorAction;
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
@@ -39,14 +46,7 @@ namespace Pattons_Best
             CtorError = true;
             return;
          }
-         ++theId;
-         Identifer = "Hex#" + theId.ToString();
-         Day = gi.Day + 1; ;
-         Date = TableMgr.GetDate(gi.Day);
          Time = TableMgr.GetTime(lastReport);
-         TerritoryName = t.Name;
-         MapPoint = mp;
-         ColorAction = colorAction;
       }
       public override string ToString()
       {

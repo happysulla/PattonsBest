@@ -1109,7 +1109,7 @@ namespace Pattons_Best
          switch (myState)
          {
             case E0481Enum.TANK_EXPLOSION_ROLL:
-               //dieRoll = 1; // <cgs> TEST - tank explodes
+               dieRoll = 1; // <cgs> TEST - - KillYourTank - tank explodes
                myGridRowExplodes[0].myDieRollExplosion = dieRoll;
                int rollPlusModifier = dieRoll + myGridRowExplodes[0].myDieRollExplosion;
                if (99 < rollPlusModifier)
@@ -1128,6 +1128,8 @@ namespace Pattons_Best
                      myGameInstance.SetIncapacitated(cm0);
                      cm0.IsKilled = true;
                      cm0.SetBloodSpots();
+                     if ("Commander" == cm0.Role)
+                        myGameInstance.IsCommanderKilled = true; // Tank Explodes
                   }
                   outAction = GameAction.UpdateTankExplosion;
                   myGameEngine.PerformAction(ref myGameInstance, ref outAction);
@@ -1308,6 +1310,8 @@ namespace Pattons_Best
                         myGameInstance.SetIncapacitated(cm10);
                         cm10.IsKilled = true;
                         cm10.SetBloodSpots();
+                        if ("Commander" == cm10.Role)
+                           myGameInstance.IsCommanderKilled = true; // Tank Burns and not rescued or bailed
                      }
                   }
                   outAction = GameAction.UpdateTankBrewUp;

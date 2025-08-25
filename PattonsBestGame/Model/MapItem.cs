@@ -367,7 +367,7 @@ namespace Pattons_Best
          string enemyUnit = GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetMapItemRotationTurret(): reached default with enemyUnit=" + this.Name);
+            Logger.Log(LogEnum.LE_ERROR, "Set_MapItemRotationTurret(): reached default with enemyUnit=" + this.Name);
             return false;
          }
          switch (enemyUnit)
@@ -381,9 +381,10 @@ namespace Pattons_Best
          }
          double xDiff = (this.Location.X + this.Zoom * Utilities.theMapItemOffset) - target.TerritoryCurrent.CenterPoint.X;
          double yDiff = (this.Location.Y + this.Zoom * Utilities.theMapItemOffset) - target.TerritoryCurrent.CenterPoint.Y;
-         double rotation = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;
-         rotation -= (this.RotationHull + this.RotationOffsetHull); // subtract hull rotation to get turret rotation
-         if (rotation < 0)
+         double rotationOriginal = (Math.Atan2(yDiff, xDiff) * 180 / Math.PI) - 90;
+         double rotationDelta = rotationOriginal - this.RotationHull - this.RotationOffsetHull; // subtract hull rotation to get turret rotation
+         double rotation = rotationDelta;
+         while (rotation < 0)
             rotation += 360.0;
          if (-1.0 < rotation && rotation <= 30.0)
          {
@@ -411,7 +412,7 @@ namespace Pattons_Best
          }
          else  //------------
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetMapItemRotationTurret(): reached default with rotation=" + rotation.ToString() + " mi=" + this.Name + " t=" + this.TerritoryCurrent.Name);
+            Logger.Log(LogEnum.LE_ERROR, "Set_MapItemRotationTurret(): xDiff=" + xDiff.ToString("F2") + " yDiff=" + yDiff.ToString("F2") + " (rotation=" + rotation.ToString("F2") + ")->(rotdelta=" + rotationDelta.ToString("F2") + ")=(rotOrig=" + rotationOriginal.ToString("F2") + ")-(rh=" + this.RotationHull.ToString("F2") + ")-(ro=" + this.RotationOffsetHull.ToString("F2") + ") for mi=" + this.Name + " in " + this.TerritoryCurrent.Name + " X=" + this.Location.X + " Y=" + this.Location.Y);
             return false;
          }
          this.RotationOffsetTurret = rotation - this.RotationTurret;

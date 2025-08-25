@@ -313,6 +313,9 @@ namespace Pattons_Best
             case GameAction.SetupCombatCalendarRoll:
                break;
             case GameAction.MorningBriefingBegin:
+            case GameAction.MorningBriefingCrewmanHealing:
+            case GameAction.MorningBriefingExistingCrewman:
+            case GameAction.MorningBriefingReturningCrewman:
             case GameAction.MorningBriefingCalendarRoll:
             case GameAction.MorningBriefingEnd:
                break;

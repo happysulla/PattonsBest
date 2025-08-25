@@ -60,19 +60,23 @@ Expected Resistance: RESISTANCE<LineBreak/>
 Probablility of Combat: PROBABILITY &gt;= 
 <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/>"
-e007a	"<Bold>e007a Crew Replacement</Bold> 
-<InlineUIContainer><Button Content='r7.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+e007a	"<Bold>e007a Crew Healing</Bold> 
+<InlineUIContainer><Button Content='r19.33' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>     
+<LineBreak/><LineBreak/>
+The following crewmen are convalesing in a medical hosptial and may rejoin your crew when they are better:
+<LineBreak/><LineBreak/>"
+e007b	"<Bold>e007b Crew Replacement</Bold> 
 <InlineUIContainer><Button Content='r19.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>     
 <LineBreak/><LineBreak/>
 Wounded crewmen are replaced at beginning of day when the tank is knocked out. Click image to  continue to assign new crew ratings.
 <LineBreak/><LineBreak/>
                           <InlineUIContainer><Image Name='Ambulance3' Height='160' Width='300'></Image></InlineUIContainer>"
-e007b	"<Bold>e007b Returning Crewmen</Bold> 
+e007c	"<Bold>e007c Returning Crewmen</Bold> 
 <InlineUIContainer><Button Content='r19.33' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>     
 <LineBreak/><LineBreak/>
-Convalenced crewmen return to your crew or leave to work another crew base on your choice. If returning to your crew, they replace the existing man. If you do not bring back the crewman, he may not rejoin later. Choose one of the options below:
+Convalenced crewmen return to your crew or leave to work another crew base on your choice. If returning to your crew, they replace the existing man. If you do not bring back the crewman, he may not rejoin later. 
 <LineBreak/><LineBreak/>"
-e007c	"<Bold>e007c Tank Replacement</Bold> 
+e007d	"<Bold>e007d Tank Replacement</Bold> 
 <InlineUIContainer><Button Content='r19.33' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>     
 <LineBreak/><LineBreak/>"
 e008	"<Bold>e007 Morning Briefing - Weather Roll</Bold> <InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
