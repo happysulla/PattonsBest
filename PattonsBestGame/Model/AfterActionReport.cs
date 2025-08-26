@@ -95,11 +95,13 @@ namespace Pattons_Best
          Resistance = entry.Resistance;
          //------------------------------
          Name = aar.Name;
+         TankCardNum = aar.TankCardNum;
          Commander = aar.Commander;
          Gunner = aar.Gunner;
          Loader = aar.Loader;
          Driver = aar.Driver;
          Assistant = aar.Assistant;
+         //------------------------------
          Decorations = aar.Decorations;
       }
    }

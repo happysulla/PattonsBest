@@ -104,6 +104,8 @@ namespace Pattons_Best
       private double myPreviousScrollWidth = 0.0;
       private EllipseDisplayDialog? myEllipseDisplayDialog = null;
       //---------------------------------------------------------------------
+      private Image myTankMatImage = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("m001M4") };
+      //---------------------------------------------------------------------
       private readonly SolidColorBrush mySolidColorBrushClear = new SolidColorBrush() { Color = Color.FromArgb(0, 0, 1, 0) };
       private readonly SolidColorBrush mySolidColorBrushBlack = new SolidColorBrush() { Color = Colors.Black };
       private readonly SolidColorBrush mySolidColorBrushIvory = new SolidColorBrush() { Color = Colors.Ivory };
@@ -151,10 +153,9 @@ namespace Pattons_Best
          mySplashScreen.Show();
          InitializeComponent();
          //---------------------------------------------------------------
-         Image imageTank = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("m001M4") };
-         myCanvasTank.Children.Add(imageTank);
-         Canvas.SetLeft(imageTank, 0);
-         Canvas.SetTop(imageTank, 0);
+         myCanvasTank.Children.Add(myTankMatImage); // TankMat changes as get new tanks
+         Canvas.SetLeft(myTankMatImage, 0);
+         Canvas.SetTop(myTankMatImage, 0);
          //---------------------------------------------------------------
          myGameEngine = ge;
          myGameInstance = gi;
@@ -317,7 +318,11 @@ namespace Pattons_Best
             case GameAction.MorningBriefingExistingCrewman:
             case GameAction.MorningBriefingReturningCrewman:
             case GameAction.MorningBriefingCalendarRoll:
-            case GameAction.MorningBriefingEnd:
+            case GameAction.MorningBriefingDayOfRest:
+               break;
+            case GameAction.MorningBriefingTankReplacementRoll:
+               if (false == UpdateCanvasTank(gi, action))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                break;
             case GameAction.BattleRandomEventRoll:
                break;

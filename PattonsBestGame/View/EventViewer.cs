@@ -712,7 +712,7 @@ namespace Pattons_Best
                }
                else if (report.Probability < firstDieResult) // skip today action
                {
-                  Image imgSkip = new Image { Source = MapItem.theMapImages.GetBitmapImage("Sherman4"), Width = 300, Height = 190, Name = "GotoMorningBriefingEnd" };
+                  Image imgSkip = new Image { Source = MapItem.theMapImages.GetBitmapImage("Sherman4"), Width = 300, Height = 190, Name = "GotoMorningBriefingDayOfRest" };
                   myTextBlock.Inlines.Add(new Run("                               "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imgSkip));
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -4273,7 +4273,7 @@ namespace Pattons_Best
          if( GamePhase.GameSetup == myGameInstance.GamePhase ) 
             outAction = GameAction.SetupShowCombatCalendarCheck;
          else if( GamePhase.MorningBriefing == myGameInstance.GamePhase )
-            outAction = GameAction.MorningBriefingEnd;
+            outAction = GameAction.MorningBriefingDayOfRest;
          else if( 0 < myGameInstance.ShermanAdvanceOrRetreatEnemies.Count) 
             outAction = GameAction.BattleRoundSequenceCrewReplaced; // enemies transfer to Move board due to advancing or retreating Sherman
          else
@@ -4915,8 +4915,8 @@ namespace Pattons_Best
                            action = GameAction.MorningBriefingAmmoLoad;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
-                        case "GotoMorningBriefingEnd":
-                           action = GameAction.MorningBriefingEnd;
+                        case "GotoMorningBriefingDayOfRest":
+                           action = GameAction.MorningBriefingDayOfRest;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "MorningBriefingDeployment":

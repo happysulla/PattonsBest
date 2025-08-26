@@ -176,6 +176,7 @@ namespace Pattons_Best
       MorningBriefingExistingCrewman,
       MorningBriefingReturningCrewman,
       MorningBriefingAssignCrewRatingEnd,
+      MorningBriefingTankReplacementRoll,
       MorningBriefingCalendarRoll,
       MorningBriefingWeatherRoll,
       MorningBriefingWeatherRollEnd,
@@ -185,7 +186,7 @@ namespace Pattons_Best
       MorningBriefingAmmoReadyRackLoad,
       MorningBriefingTimeCheck,
       MorningBriefingTimeCheckRoll,
-      MorningBriefingEnd,
+      MorningBriefingDayOfRest,
 
       MorningBriefingDeployment,
       PreparationsDeploymentRoll,
