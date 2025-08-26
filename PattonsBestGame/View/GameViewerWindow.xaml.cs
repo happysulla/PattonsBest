@@ -104,7 +104,7 @@ namespace Pattons_Best
       private double myPreviousScrollWidth = 0.0;
       private EllipseDisplayDialog? myEllipseDisplayDialog = null;
       //---------------------------------------------------------------------
-      private Image myTankMatImage = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("m001M4") };
+      private Image myTankMatImage = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("m01") };
       //---------------------------------------------------------------------
       private readonly SolidColorBrush mySolidColorBrushClear = new SolidColorBrush() { Color = Color.FromArgb(0, 0, 1, 0) };
       private readonly SolidColorBrush mySolidColorBrushBlack = new SolidColorBrush() { Color = Colors.Black };

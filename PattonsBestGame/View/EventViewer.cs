@@ -4878,7 +4878,7 @@ namespace Pattons_Best
                            action = GameAction.SetupShowTankCard;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
-                        case "m001M4":
+                        case "m01":
                            action = GameAction.SetupShowAfterActionReport;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;

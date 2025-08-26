@@ -48,7 +48,7 @@ namespace Pattons_Best
       public IMapItems Hatches { set; get; } = new MapItems();
       public IMapItems CrewActions { set; get; } = new MapItems();
       public IMapItems GunLoads { set; get; } = new MapItems();
-      public IMapItem Sherman { set; get; } = new MapItem("Sherman1", 2.0, "t001", new Territory());
+      public IMapItem Sherman { set; get; } = new MapItem("Sherman1", 2.0, "t01", new Territory());
       public IMapItems Targets { set; get; } = new MapItems();
       public IMapItems AdvancingEnemies { set; get; } = new MapItems();   // enemies that appear on Move board for advancing to lower edge of board
       public IMapItems ShermanAdvanceOrRetreatEnemies { set; get; } = new MapItems(); // enemies that appear on Move board if Sherman Advances or Retreats

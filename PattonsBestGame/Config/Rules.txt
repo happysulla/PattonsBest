@@ -57,7 +57,7 @@ The upper right image is the Tank Card. The game starts with the basic M4 Sherma
 There are 16 additional Sherman tank variations that you may command plus an optional card with the British Firefly Sherman variant. The use of the Tank Card is described in 
 <InlineUIContainer><Button Content='r5.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
-                      <InlineUIContainer><Image Name='m001M4'  Height='300' Width='300'></Image></InlineUIContainer>"
+                      <InlineUIContainer><Image Name='m01'  Height='300' Width='300'></Image></InlineUIContainer>"
 r2.2	"<Bold>r2.2 Tables</Bold> 
 <LineBreak/><LineBreak/>Due to the solitaire play system, extensive use of various tables is necessary to generate the many possible events that could occur in a tank battle. 
 Tables can be viewed by select the <Bold>Help | Show Tables...""</Bold>  menu."

@@ -2286,6 +2286,7 @@ namespace Pattons_Best
    //-----------------------------------------------------
    class GameStateMorningBriefing : GameState
    {
+      private static bool theIsHealedPerformed = false;
       public override string PerformAction(ref IGameInstance gi, ref GameAction action, int dieRoll)
       {
          GamePhase previousPhase = gi.GamePhase;
@@ -2328,8 +2329,9 @@ namespace Pattons_Best
                case GameAction.MorningBriefingAssignCrewRating: // handled in EventViewer by showing dialog
                   break;
                case GameAction.MorningBriefingBegin:
-                  if(0 < gi.InjuredCrewMembers.Count)
+                  if((0 < gi.InjuredCrewMembers.Count) && (false == theIsHealedPerformed))
                   {
+                     theIsHealedPerformed = true;
                      gi.EventDisplayed = gi.EventActive = "e007a"; // Healing Crewmen
                      gi.DieRollAction = GameAction.DieRollActionNone;
                      if (false == HealedCrewmanDayDecrease(gi))
@@ -2391,7 +2393,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MorningBriefingTankReplacementRoll:
-                  if( Utilities.NO_RESULT == gi.DieResults[key][0])
+                  if ( Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      gi.DieResults[key][0] = dieRoll;
                      if( false == TableMgr.GetNewTank(gi, dieRoll))
@@ -2411,6 +2413,7 @@ namespace Pattons_Best
                   gi.DieResults[key][0] = dieRoll; // clicking on image either restarts next day or continues with MorningBriefingBegin
                   break;
                case GameAction.MorningBriefingWeatherRoll:
+                  theIsHealedPerformed = false;
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   lastReport.Weather = TableMgr.GetWeather(gi.Day, dieRoll);
@@ -7791,7 +7794,7 @@ namespace Pattons_Best
          gi.IsShermanFirstShot = false;
          gi.IsShermanFiringAtFront = false;              // Reset_Day()
          gi.IsShermanDeliberateImmobilization = false;
-         gi.NumOfShermanShot = 0;                        // Reset_Day()
+         gi.NumOfShermanShot = 0; // Reset_Day()
          gi.ShermanTypeOfFire = "";
          gi.NumSmokeAttacksThisRound = 0;
          gi.IsMainGunRepairAttempted = false;

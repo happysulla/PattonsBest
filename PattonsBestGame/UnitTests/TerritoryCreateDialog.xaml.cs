@@ -140,24 +140,24 @@ namespace Pattons_Best
                Image imageTank = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill };
                switch (tankNum)
                {
-                  case 1: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m001M4"); break;
-                  case 2: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m001M4"); break;
-                  case 3: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m001M4"); break;
-                  case 4: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m001M4"); break;
-                  case 5: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m001M4"); break;
-                  case 6: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m001M4"); break;
-                  case 7: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m001M4"); break;
-                  case 8: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m001M4"); break;
-                  case 9: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m001M4"); break;
-                  case 10: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m001M4"); break;
-                  case 11: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m001M4"); break;
-                  case 12: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m001M4"); break;
-                  case 13: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m001M4"); break;
-                  case 14: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m001M4"); break;
-                  case 15: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m001M4"); break;
-                  case 16: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m001M4"); break;
-                  case 17: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m001M4"); break;
-                  case 18: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m001M4"); break;
+                  case 1: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m01"); break;
+                  case 2: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m02"); break;
+                  case 3: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m03"); break;
+                  case 4: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m04"); break;
+                  case 5: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m05"); break;
+                  case 6: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m06"); break;
+                  case 7: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m07"); break;
+                  case 8: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m08"); break;
+                  case 9: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m09"); break;
+                  case 10: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m10"); break;
+                  case 11: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m11"); break;
+                  case 12: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m12"); break;
+                  case 13: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m13"); break;
+                  case 14: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m14"); break;
+                  case 15: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m15"); break;
+                  case 16: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m16"); break;
+                  case 17: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m17"); break;
+                  case 18: imageTank.Source = MapItem.theMapImages.GetBitmapImage("m18"); break;
                   default: Logger.Log(LogEnum.LE_ERROR, "RadioButtonType_Checked(): reached default tankNum=" + tankNum.ToString()); return;
                }
                myCanvasTank.Children.Add(imageTank);
