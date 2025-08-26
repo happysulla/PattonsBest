@@ -117,8 +117,10 @@ namespace Pattons_Best
       public bool IsUnconscious { get; set; } = false;
       public bool IsIncapacitated { get; set; } = false;
       public bool IsFired { get; set; } = false;
-      //--------------------------------------------------
       public bool IsSpotted { get; set; } = false;
+      public bool IsAcquired1 { get; set; } = false;
+      public bool IsAcquired2 { get; set; } = false;
+      //--------------------------------------------------
       public bool IsVehicle { get; set; } = false;
       public bool IsMovingInOpen { get; set; } = false;
       public bool IsWoods { get; set; } = false;

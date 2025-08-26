@@ -1011,16 +1011,16 @@ namespace Pattons_Best
          gi.IsShermanFirstShot = false;
          gi.IsShermanFiringAtFront = false;
          gi.IsShermanDeliberateImmobilization = false;
-         gi.NumOfShermanShot = 0;
+         gi.NumOfShermanShot = 0;  // Reset_ToPrepareForBattle() - reset at beginning of battle
          gi.ShermanTypeOfFire = "";
          gi.NumSmokeAttacksThisRound = 0;
          gi.IsMainGunRepairAttempted = false;
          //---------------------------------
-         gi.IsShermanTurretRotated = false;
+         gi.IsShermanTurretRotated = false; // Reset_ToPrepareForBattle()
          gi.ShermanRotationTurretOld = 0.0;
          //---------------------------------
          gi.IsMinefieldAttack = false;
-         gi.IsHarrassingFireBonus = false;
+         gi.IsHarrassingFireBonus = false; 
          gi.IsFlankingFire = false;
          gi.IsEnemyAdvanceComplete = false;
          gi.Panzerfaust = null;
@@ -5476,11 +5476,11 @@ namespace Pattons_Best
       }
       private bool ConductCrewAction(IGameInstance gi, ref GameAction outAction)
       {
-         Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): Entering++++++++++++ bp=" + gi.BattlePhase.ToString() + " cp=" + gi.CrewActionPhase.ToString());
+         Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): Entering++++++++++++ bp=" + gi.BattlePhase.ToString() + " cp=" + gi.CrewActionPhase.ToString());
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Conduct_CrewAction(): lastReport=null");
             return false;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
@@ -5494,7 +5494,7 @@ namespace Pattons_Best
             }
          }
          //---------------------------------------------------------
-         Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "ConductCrewAction(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.ConductCrewAction");
+         Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "Conduct_CrewAction(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.ConductCrewAction");
          gi.BattlePhase = BattlePhase.ConductCrewAction;
          if (CrewActionPhase.Movement == gi.CrewActionPhase)
          {
@@ -5524,14 +5524,14 @@ namespace Pattons_Best
             else
             {
                gi.CrewActionPhase = CrewActionPhase.Movement;
-               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 1-phase=" + gi.CrewActionPhase.ToString() + "  isMove=" + isTankMoving.ToString() + " isPivot=" + isTankPivoting.ToString());
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 1-phase=" + gi.CrewActionPhase.ToString() + "  isMove=" + isTankMoving.ToString() + " isPivot=" + isTankPivoting.ToString());
                gi.Sherman.IsMoving = true;
                gi.Sherman.IsMoved = true;
                //--------------------------------------------------
-               if (false == card.myIsHvss) // if tank moves, acquired modifer drops to zero
+               if (false == card.myIsHvss) // if tank moves or pivots, acquired modifer drops to zero
                {
-                  Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "ConductCrewAction(): zero NumOfShermanShot=" + gi.NumOfShermanShot.ToString());
-                  gi.NumOfShermanShot = 0;
+                  Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Conduct_CrewAction(): zero NumOfShermanShot=" + gi.NumOfShermanShot.ToString());
+                  gi.NumOfShermanShot = 0; // Conduct_CrewAction() - Tank moves wihtout HVSS
                }
                //--------------------------------------------------
                foreach (IStack stack in gi.BattleStacks)
@@ -5585,16 +5585,18 @@ namespace Pattons_Best
             if ((true == isRotateTurret) && (false == gi.IsShermanTurretRotated))
             {
                gi.IsShermanTurretRotated = true;
+               if (false == isTankFiringMainGun)
+                  gi.NumOfShermanShot = 0;  // Conduct_CrewAction() - Turret rotated without firing main gun causes target acquisition = 0
                gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
                gi.EventDisplayed = gi.EventActive = "e052a";
                gi.DieRollAction = GameAction.DieRollActionNone;
-               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 3-phase=" + gi.CrewActionPhase.ToString());
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 3-phase=" + gi.CrewActionPhase.ToString());
             }
             else if ((true == isTankFiringMainGun) && ((false == gi.Sherman.IsMoved) || (true == card.myIsHvss)))
             {
                if (false == GetShermanTargets(gi, ref outAction))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): GetShermanTargets() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "Conduct_CrewAction(): GetShermanTargets() returned false");
                   return false;
                }
                if (0 < gi.Targets.Count)
@@ -5603,15 +5605,15 @@ namespace Pattons_Best
                   gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
                   gi.EventDisplayed = gi.EventActive = "e053";
                   gi.DieRollAction = GameAction.DieRollActionNone;
-                  Logger.Log(LogEnum.LE_SHOW_TO_HIT_ATTACK, "ConductCrewAction(): Select Target");
-                  Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 4-phase=" + gi.CrewActionPhase.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_TO_HIT_ATTACK, "Conduct_CrewAction(): Select Target");
+                  Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 4-phase=" + gi.CrewActionPhase.ToString());
                }
                else
                {
                   gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
                   gi.EventDisplayed = gi.EventActive = "e053a";
                   gi.DieRollAction = GameAction.BattleRoundSequenceShermanToHitRollNothing;
-                  Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 5-phase=" + gi.CrewActionPhase.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 5-phase=" + gi.CrewActionPhase.ToString());
                }
             }
          }
@@ -5640,7 +5642,7 @@ namespace Pattons_Best
                gi.EventDisplayed = gi.EventActive = "e054";
                gi.DieRollAction = GameAction.DieRollActionNone;
                gi.CrewActionPhase = CrewActionPhase.TankMgFire;
-               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 6-phase=" + gi.CrewActionPhase.ToString());
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 6-phase=" + gi.CrewActionPhase.ToString());
             }
          }
          //---------------------------------------------------------
@@ -5666,7 +5668,7 @@ namespace Pattons_Best
                gi.CrewActionPhase = CrewActionPhase.ReplacePeriscope;
                gi.EventDisplayed = gi.EventActive = "e055";
                gi.DieRollAction = GameAction.DieRollActionNone;
-               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 10-phase=" + gi.CrewActionPhase.ToString());
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 10-phase=" + gi.CrewActionPhase.ToString());
             }
          }
          //---------------------------------------------------------
@@ -5696,7 +5698,7 @@ namespace Pattons_Best
                gi.EventDisplayed = gi.EventActive = "e056";
                gi.DieRollAction = GameAction.BattleRoundSequenceRepairMainGunRoll;
                gi.CrewActionPhase = CrewActionPhase.RepairGun;
-               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 11-phase=" + gi.CrewActionPhase.ToString());
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 11-phase=" + gi.CrewActionPhase.ToString());
             }
             else if ((true == isRepairAaMg) && (false == gi.IsAaMgRepairAttempted))
             {
@@ -5704,7 +5706,7 @@ namespace Pattons_Best
                gi.EventDisplayed = gi.EventActive = "e056a";
                gi.DieRollAction = GameAction.BattleRoundSequenceRepairAaMgRoll;
                gi.CrewActionPhase = CrewActionPhase.RepairGun;
-               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 12-phase=" + gi.CrewActionPhase.ToString());
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 12-phase=" + gi.CrewActionPhase.ToString());
             }
             else if ((true == isRepairBowMg) && (false == gi.IsBowMgRepairAttempted))
             {
@@ -5712,7 +5714,7 @@ namespace Pattons_Best
                gi.EventDisplayed = gi.EventActive = "e056b";
                gi.DieRollAction = GameAction.BattleRoundSequenceRepairCoaxialMgRoll;
                gi.CrewActionPhase = CrewActionPhase.RepairGun;
-               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 13-phase=" + gi.CrewActionPhase.ToString());
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 13-phase=" + gi.CrewActionPhase.ToString());
             }
             else if ((true == isRepairCoaxialMg) && (false == gi.IsCoaxialMgRepairAttempted))
             {
@@ -5720,7 +5722,7 @@ namespace Pattons_Best
                gi.EventDisplayed = gi.EventActive = "e056c";
                gi.DieRollAction = GameAction.BattleRoundSequenceRepairBowMgRoll;
                gi.CrewActionPhase = CrewActionPhase.RepairGun;
-               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 14-phase=" + gi.CrewActionPhase.ToString());
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 14-phase=" + gi.CrewActionPhase.ToString());
             }
          }
          //---------------------------------------------------------
@@ -5737,7 +5739,7 @@ namespace Pattons_Best
             {
                gi.EventDisplayed = gi.EventActive = "e057";
                gi.CrewActionPhase = CrewActionPhase.FireMortar;
-               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 15-phase=" + gi.CrewActionPhase.ToString());
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 15-phase=" + gi.CrewActionPhase.ToString());
             }
          }
          //---------------------------------------------------------
@@ -5756,7 +5758,7 @@ namespace Pattons_Best
             {
                gi.EventDisplayed = gi.EventActive = "e058";
                gi.CrewActionPhase = CrewActionPhase.ThrowGrenades;
-               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 16-phase=" + gi.CrewActionPhase.ToString());
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 16-phase=" + gi.CrewActionPhase.ToString());
             }
          }
          //---------------------------------------------------------
@@ -5773,7 +5775,7 @@ namespace Pattons_Best
             {
                gi.EventDisplayed = gi.EventActive = "e059";
                gi.CrewActionPhase = CrewActionPhase.RestockReadyRack;
-               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 17-phase=" + gi.CrewActionPhase.ToString());
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 17-phase=" + gi.CrewActionPhase.ToString());
             }
          }
          //---------------------------------------------------------
@@ -5802,10 +5804,10 @@ namespace Pattons_Best
             {
                gi.EventDisplayed = gi.EventActive = "e061";
                gi.CrewActionPhase = CrewActionPhase.CrewSwitch;
-               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 18a-phase=" + gi.CrewActionPhase.ToString());
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 18a-phase=" + gi.CrewActionPhase.ToString());
                if (false == gi.SwitchMembers("Loader"))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for cm=Loader");
+                  Logger.Log(LogEnum.LE_ERROR, "Conduct_CrewAction(): SwitchedCrewMember() returned false for cm=Loader");
                   return false;
                }
             }
@@ -5813,10 +5815,10 @@ namespace Pattons_Best
             {
                gi.EventDisplayed = gi.EventActive = "e061";
                gi.CrewActionPhase = CrewActionPhase.CrewSwitch;
-               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 18b-phase=" + gi.CrewActionPhase.ToString());
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 18b-phase=" + gi.CrewActionPhase.ToString());
                if (false == gi.SwitchMembers("Driver"))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for cm=Driver");
+                  Logger.Log(LogEnum.LE_ERROR, "Conduct_CrewAction(): SwitchedCrewMember() returned false for cm=Driver");
                   return false;
                }
             }
@@ -5824,10 +5826,10 @@ namespace Pattons_Best
             {
                gi.EventDisplayed = gi.EventActive = "e061";
                gi.CrewActionPhase = CrewActionPhase.CrewSwitch;
-               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 18c-phase=" + gi.CrewActionPhase.ToString());
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 18c-phase=" + gi.CrewActionPhase.ToString());
                if (false == gi.SwitchMembers("Gunner"))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for cm=Gunner");
+                  Logger.Log(LogEnum.LE_ERROR, "Conduct_CrewAction(): SwitchedCrewMember() returned false for cm=Gunner");
                   return false;
                }
             }
@@ -5835,10 +5837,10 @@ namespace Pattons_Best
             {
                gi.EventDisplayed = gi.EventActive = "e061";
                gi.CrewActionPhase = CrewActionPhase.CrewSwitch;
-               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 18d-phase=" + gi.CrewActionPhase.ToString());
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 18d-phase=" + gi.CrewActionPhase.ToString());
                if (false == gi.SwitchMembers("Commander"))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for cm=Commander");
+                  Logger.Log(LogEnum.LE_ERROR, "Conduct_CrewAction(): SwitchedCrewMember() returned false for cm=Commander");
                   return false;
                }
             }
@@ -5846,10 +5848,10 @@ namespace Pattons_Best
             {
                gi.EventDisplayed = gi.EventActive = "e061a";
                gi.CrewActionPhase = CrewActionPhase.CrewSwitch;
-               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): 18d-phase=" + gi.CrewActionPhase.ToString());
+               Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 18d-phase=" + gi.CrewActionPhase.ToString());
                if (false == gi.SwitchMembers("Assistant"))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): SwitchedCrewMember() returned false for switching back assistant");
+                  Logger.Log(LogEnum.LE_ERROR, "Conduct_CrewAction(): SwitchedCrewMember() returned false for switching back assistant");
                   return false;
                }
             }
@@ -5857,7 +5859,7 @@ namespace Pattons_Best
          //---------------------------------------------------------
          if (CrewActionPhase.None == gi.CrewActionPhase)
          {
-            Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "ConductCrewAction(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.RandomEvent");
+            Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "Conduct_CrewAction(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.RandomEvent");
             gi.BattlePhase = BattlePhase.RandomEvent;              // Skip to RandomEvent if no enemy units
             if (EnumScenario.Advance == lastReport.Scenario)
                gi.EventActive = gi.EventDisplayed = "e039a";
@@ -5867,7 +5869,7 @@ namespace Pattons_Best
                gi.EventActive = gi.EventDisplayed = "e039c";
             else
             {
-               Logger.Log(LogEnum.LE_ERROR, "ConductCrewAction(): unknown scenario=" + lastReport.Scenario);
+               Logger.Log(LogEnum.LE_ERROR, "Conduct_CrewAction(): unknown scenario=" + lastReport.Scenario);
                return false;
             }
             gi.DieResults["e039b"][0] = Utilities.NO_RESULT;
@@ -5879,7 +5881,7 @@ namespace Pattons_Best
                {
                   if (true == mi.IsEnemyUnit())
                   {
-                     Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "ConductCrewAction(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.EnemyAction");
+                     Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "Conduct_CrewAction(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.EnemyAction");
                      gi.BattlePhase = BattlePhase.EnemyAction;
                      outAction = GameAction.BattleRoundSequenceEnemyAction;
                      break;
@@ -5889,7 +5891,7 @@ namespace Pattons_Best
                   break;
             }
          }
-         Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "ConductCrewAction(): Exiting------------ bp=" + gi.BattlePhase.ToString() + " cp=" + gi.CrewActionPhase.ToString());
+         Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): Exiting------------ bp=" + gi.BattlePhase.ToString() + " cp=" + gi.CrewActionPhase.ToString());
          return true;
       }
       private bool MoveSherman(IGameInstance gi, ref GameAction outAction, int dieRoll)
@@ -7373,7 +7375,7 @@ namespace Pattons_Best
          gi.IsBowMgRepairAttempted = false;
          gi.IsCoaxialMgRepairAttempted = false;
          //-------------------------------------------------------
-         gi.IsShermanTurretRotated = false;
+         gi.IsShermanTurretRotated = false;       // Reset Round()
          gi.ShermanRotationTurretOld = gi.Sherman.RotationTurret;
          //-------------------------------------------------------
          gi.IsAirStrikePending = false;
@@ -7756,10 +7758,10 @@ namespace Pattons_Best
          gi.GameTurn++;
          gi.GamePhase = GamePhase.MorningBriefing;
          //-------------------------------------------------------
-         gi.EventDisplayed = gi.EventActive = "e006";   // ResetDay()
+         gi.EventDisplayed = gi.EventActive = "e006";   // Reset_Day()
          gi.DieRollAction = GameAction.MorningBriefingCalendarRoll;
          //-------------------------------------------------------
-         Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "ResetDay(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
+         Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "Reset_Day(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
          gi.BattlePhase = BattlePhase.Ambush;
          gi.CrewActionPhase = CrewActionPhase.Movement;
          gi.MovementEffectOnSherman = "unit";
@@ -7767,11 +7769,11 @@ namespace Pattons_Best
          //-------------------------------------------------------
          gi.ReadyRacks.Clear();
          gi.Hatches.Clear();
-         gi.CrewActions.Clear();            // ResetDay()
-         Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "ResetDay(): clear all crewactions");
+         gi.CrewActions.Clear();            // Reset_Day()
+         Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "Reset_Day(): clear all crewactions");
          gi.GunLoads.Clear();
-         gi.TargetMainGun = null;           // ResetDay()
-         gi.IsShermanFiringAtFront = false; // ResetDay()
+         gi.TargetMainGun = null;           // Reset_Day()
+         gi.IsShermanFiringAtFront = false; // Reset_Day()
          //-------------------------------------------------------
          gi.EnemyStrengthCheckTerritory = null;
          gi.ArtillerySupportCheck = null;
@@ -7781,21 +7783,18 @@ namespace Pattons_Best
          //-------------------------------------------------------
          gi.IsHatchesActive = false;
          //-------------------------------------------------------
-         gi.IsMinefieldAttack = false; // ResetDay()
+         gi.IsMinefieldAttack = false;                    // Reset_Day()
          gi.IsHarrassingFireBonus = false;
          gi.IsFlankingFire = false;
          gi.IsEnemyAdvanceComplete = false;
          //-------------------------------------------------------
          gi.IsShermanFirstShot = false;
-         gi.IsShermanFiringAtFront = false;              // ResetDay()
+         gi.IsShermanFiringAtFront = false;              // Reset_Day()
          gi.IsShermanDeliberateImmobilization = false;
-         gi.NumOfShermanShot = 0;
+         gi.NumOfShermanShot = 0;                        // Reset_Day()
          gi.ShermanTypeOfFire = "";
          gi.NumSmokeAttacksThisRound = 0;
          gi.IsMainGunRepairAttempted = false;
-         //---------------------------------
-         gi.IsShermanTurretRotated = false;
-         gi.ShermanRotationTurretOld = 0.0;
          //---------------------------------
          gi.IsMinefieldAttack = false;
          gi.IsHarrassingFireBonus = false;
@@ -7804,15 +7803,15 @@ namespace Pattons_Best
          gi.Panzerfaust = null;
          gi.NumCollateralDamage = 0;
          //-------------------------------------------------------
-         gi.TargetMainGun = null;                      // ResetDay()
+         gi.TargetMainGun = null;                      // Reset_Day()
          Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "ResetDay(): zero NumOfShermanShot=" + gi.NumOfShermanShot.ToString());
          if( (true == gi.IsMalfunctionedMainGun) || (true == gi.IsBrokenMainGun) )
             Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "ResetDay(): Main Gun Repaired");
          gi.IsMalfunctionedMainGun = false;
          gi.IsBrokenMainGun = false;
          gi.IsBrokenGunSight = false;
-         gi.FirstShots.Clear();
-         gi.AcquiredShots.Clear();
+         gi.FirstShots.Clear();                     // Reset_Day()
+         gi.AcquiredShots.Clear();                  // Reset_Day()
          gi.ShermanHits.Clear();
          //-------------------------------------------------------
          gi.IsCommanderDirectingMgFire = false;
@@ -7837,7 +7836,7 @@ namespace Pattons_Best
          gi.IsBrokenPeriscopeGunner = false;
          gi.IsBrokenPeriscopeCommander = false;
          //-------------------------------------------------------
-         gi.IsShermanTurretRotated = false;
+         gi.IsShermanTurretRotated = false;  // Reset_Day()
          gi.ShermanRotationTurretOld = 0.0;
          //-------------------------------------------------------
          gi.IsLeadTank = false;
@@ -7853,7 +7852,7 @@ namespace Pattons_Best
          gi.IsCommanderRescuePerformed = false;
          gi.IsPromoted = false;
          //-------------------------------------------------------
-         gi.BattleResistance = EnumResistance.None;                      // ResetDay()
+         gi.BattleResistance = EnumResistance.None;                      // Reset_Day()
          gi.Death = null;
          gi.Panzerfaust = null;
          gi.NumCollateralDamage = 0;

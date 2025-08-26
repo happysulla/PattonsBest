@@ -746,18 +746,18 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = this.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Fire_AndReloadGun(): lastReport=null");
             return false;
          }
          //-----------------------------------------------
          if (null != TargetMainGun)
          {
-            NumOfShermanShot++;
-            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "FireAndReloadGun(): +++NumOfShermanShot=" + NumOfShermanShot.ToString());
+            NumOfShermanShot++;  // Fire_AndReloadGun() - Increase when firing at a target
+            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Fire_AndReloadGun(): +++NumOfShermanShot=" + NumOfShermanShot.ToString());
          }
          //-----------------------------------------------
          string gunLoad = this.GetGunLoadType();  // This is the ammo that fired
-         Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "FireAndReloadGun(): Gun Load That Was Fired is " + gunLoad);
+         Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "Fire_AndReloadGun(): Gun Load That Was Fired is " + gunLoad);
          switch (gunLoad) // decrease on AAR the type of ammunition used
          {
             case "He": --lastReport.MainGunHE; break;
@@ -766,12 +766,12 @@ namespace Pattons_Best
             case "Hbci": --lastReport.MainGunHBCI; break;
             case "Wp": --lastReport.MainGunWP; break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "FireMainGunAtEnemyUnits(): 1-ReloadGun() reached default gunload=" + gunLoad );
+               Logger.Log(LogEnum.LE_ERROR, "Fire_AndReloadGun(): 1-ReloadGun() reached default gunload=" + gunLoad );
                return false;
          }
          //-----------------------------------------------
          string ammoReloadType = this.GetAmmoReloadType(); // This is the ammo loaded into gun after firing
-         Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "FireAndReloadGun(): Loading Gun with this Ammo  ----->" + ammoReloadType + "<-------------");
+         Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "Fire_AndReloadGun(): Loading Gun with this Ammo  ----->" + ammoReloadType + "<-------------");
          int ammoCount = 0;
          switch (ammoReloadType) // get count of what is still available
          {
@@ -781,29 +781,29 @@ namespace Pattons_Best
             case "Hbci": ammoCount = lastReport.MainGunHBCI; break;
             case "Wp": ammoCount = lastReport.MainGunWP;   break;
             case "None": ammoCount = 0; break;
-            default: Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): 2-Reached default ammoReloadType=" + ammoReloadType ); return false;
+            default: Logger.Log(LogEnum.LE_ERROR, "Fire_AndReloadGun(): 2-Reached default ammoReloadType=" + ammoReloadType ); return false;
          }
          //-----------------------------------------------
          if (0 == ammoCount) // if count is zero, the Gun Ammo just fired is same as Reload Counter - shoudl be no ammo markers of any kind
          {
             this.GunLoads.Clear(); // Ready Rack should already be at zero
-            Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "FireAndReloadGun(): Clearing all Gun Load Markers ammoCount=" + ammoCount.ToString());
+            Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "Fire_AndReloadGun(): Clearing all Gun Load Markers ammoCount=" + ammoCount.ToString());
          }
          else if (0 < ammoCount) // if count is one, there are no reloads left
          {
             if (false == this.SetGunLoadTerritory(ammoReloadType)) // The Gun Load becomes the Ammo Reload after firing
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): SetGunLoadTerritory() returned error for ammoReload=" + ammoReloadType);
+               Logger.Log(LogEnum.LE_ERROR, "Fire_AndReloadGun(): SetGunLoadTerritory() returned error for ammoReload=" + ammoReloadType);
                return false;
             }
             int readyRackLoadCount = this.GetReadyRackReload(ammoReloadType);
             int maxReadyRackLoad = ammoCount - 1;
             if (maxReadyRackLoad <= readyRackLoadCount) // pull ammo from ready rack if ammo count equal to ready rack
             {
-               Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "FireAndReloadGun(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString() + "--> ammoCount=" + maxReadyRackLoad.ToString() );
+               Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "Fire_AndReloadGun(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString() + "--> ammoCount=" + maxReadyRackLoad.ToString() );
                if (false == this.SetReadyRackReload(ammoReloadType, maxReadyRackLoad))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): 2-SetReadyRackReload() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "Fire_AndReloadGun(): 2-SetReadyRackReload() returned false");
                   return false;
                }
             }
@@ -811,16 +811,16 @@ namespace Pattons_Best
             {
                if (true == this.IsReadyRackReload()) // decrease the ready rack by the type of ammunition used
                {
-                  Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "FireAndReloadGun(): Loading from Ready Rack  readyRackLoadCount=" + readyRackLoadCount.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "Fire_AndReloadGun(): Loading from Ready Rack  readyRackLoadCount=" + readyRackLoadCount.ToString());
                   if (readyRackLoadCount < 1)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): GetReadyRackReload() returned 1 > load=" + readyRackLoadCount.ToString() + " for gunLoad=" + gunLoad);
+                     Logger.Log(LogEnum.LE_ERROR, "Fire_AndReloadGun(): GetReadyRackReload() returned 1 > load=" + readyRackLoadCount.ToString() + " for gunLoad=" + gunLoad);
                      return false;
                   }
                   readyRackLoadCount--;
                   if (false == this.SetReadyRackReload(ammoReloadType, readyRackLoadCount))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): SetReadyRackReload() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "Fire_AndReloadGun(): SetReadyRackReload() returned false");
                      return false;
                   }
                }
@@ -829,7 +829,7 @@ namespace Pattons_Best
          //---------------------------------------
          if (1 == ammoCount) // there is one ammo in the gun tube - there is no reload markers
          {
-            Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "FireAndReloadGun(): ammoCount=1 Removing AmmoReload Marker");
+            Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "Fire_AndReloadGun(): ammoCount=1 Removing AmmoReload Marker");
             foreach (IMapItem mi in this.GunLoads) // Remove the ammo reload marker
             {
                if (true == mi.Name.Contains("AmmoReload"))
@@ -840,7 +840,7 @@ namespace Pattons_Best
             }
             if (false == this.SetReadyRackReload(ammoReloadType, 0))
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): 3-SetReadyRackReload() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "Fire_AndReloadGun(): 3-SetReadyRackReload() returned false");
                return false;
             }
          }
@@ -848,7 +848,7 @@ namespace Pattons_Best
          {
             if (0 == this.GetReadyRackReload(ammoReloadType))
             {
-               Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "FireAndReloadGun(): readyrack=0 for ammoReloadType=" + ammoReloadType + " causing swithing over to different AmmoReload Marker");
+               Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "Fire_AndReloadGun(): readyrack=0 for ammoReloadType=" + ammoReloadType + " causing swithing over to different AmmoReload Marker");
                foreach (IMapItem mi in this.GunLoads)
                {
                   if (true == mi.Name.Contains("ReadyRackAmmoReload"))

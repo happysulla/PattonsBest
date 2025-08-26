@@ -3174,12 +3174,12 @@ namespace Pattons_Best
                      if (null == myGameInstance.TargetMainGun)
                      {
                         Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "ClickButtonMapItem(): no previous target zeroize NumOfShermanShot=" + myGameInstance.NumOfShermanShot.ToString());
-                        myGameInstance.NumOfShermanShot = 0;
+                        myGameInstance.NumOfShermanShot = 0; // ClickButtonMapItem() - new target
                      }
                      else if( selectedMapItem.Name != myGameInstance.TargetMainGun.Name )
                      {
                         Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "ClickButtonMapItem(): differt target zeroize NumOfShermanShot=" + myGameInstance.NumOfShermanShot.ToString());
-                        myGameInstance.NumOfShermanShot = 0;
+                        myGameInstance.NumOfShermanShot = 0; // ClickButtonMapItem() - change target
                      }
                      myGameInstance.TargetMainGun = selectedMapItem;
                      outAction = GameAction.BattleRoundSequenceShermanFiringMainGun;

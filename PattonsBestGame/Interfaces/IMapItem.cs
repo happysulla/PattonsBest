@@ -35,6 +35,8 @@ namespace Pattons_Best
       bool IsIncapacitated { get; set; }
       bool IsFired { get; set; }
       bool IsSpotted { get; set; }
+      bool IsAcquired1 { get; set; }
+      bool IsAcquired2 { get; set; }
       //----------------------------------------
       bool IsVehicle { get; set; }
       bool IsMovingInOpen { get; set; }

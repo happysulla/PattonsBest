@@ -2876,37 +2876,37 @@ namespace Pattons_Best
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): unknown enemyUnit=" + mi.Name);
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): unknown enemyUnit=" + mi.Name);
             return FN_ERROR;
          }
          if( false == gi.FirstShots.ContainsKey(mi.Name))
          {
             toHitModifierNum += 10; // add 10 if first shot
-            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemyToHitNumberYourTank(): eu=" + mi.Name + " +10 mod=" + toHitModifierNum.ToString() + " firstShot");
+            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): eu=" + mi.Name + " +10 mod=" + toHitModifierNum.ToString() + " firstShot");
          }
          //-----------------------------------------------
-         if (true == gi.AcquiredShots.ContainsKey(mi.Name))
+         if (true == gi.AcquiredShots.ContainsKey(mi.Name))  // GetEnemy_ToHitNumberYourTank()
          {
-            if (1 < gi.AcquiredShots[mi.Name])
+            if (1 < gi.AcquiredShots[mi.Name]) // GetEnemy_ToHitNumberYourTank()
             {
                if ('C' == range)
                {
                   toHitModifierNum -= 10;
-                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemyToHitNumberYourTank(): eu=" + mi.Name + " -10 mod=" + toHitModifierNum.ToString() + " acquire-2 close");
+                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): eu=" + mi.Name + " -10 mod=" + toHitModifierNum.ToString() + " acquire-2 close");
                }
                else if ('M' == range)
                {
                   toHitModifierNum -= 10;
-                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemyToHitNumberYourTank(): eu=" + mi.Name + " -20 mod=" + toHitModifierNum.ToString() + " acquire-2 medium");
+                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): eu=" + mi.Name + " -20 mod=" + toHitModifierNum.ToString() + " acquire-2 medium");
                }
                else if ('L' == range)
                {
                   toHitModifierNum -= 30;
-                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemyToHitNumberYourTank(): eu=" + mi.Name + " -30 mod=" + toHitModifierNum.ToString() + " acquire-2 long");
+                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): eu=" + mi.Name + " -30 mod=" + toHitModifierNum.ToString() + " acquire-2 long");
                }
                else
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): 1-unknown range=" + range);
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): 1-unknown range=" + range);
                   return FN_ERROR;
                }
             }
@@ -2915,21 +2915,21 @@ namespace Pattons_Best
                if ('C' == range)
                {
                   toHitModifierNum -= 5;
-                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemyToHitNumberYourTank(): eu=" + mi.Name + " -5 mod=" + toHitModifierNum.ToString() + " acquire-1 close");
+                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): eu=" + mi.Name + " -5 mod=" + toHitModifierNum.ToString() + " acquire-1 close");
                }
                else if ('M' == range)
                {
                   toHitModifierNum -= 10;
-                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemyToHitNumberYourTank(): eu=" + mi.Name + " -10 mod=" + toHitModifierNum.ToString() + " acquire-1 medium");
+                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): eu=" + mi.Name + " -10 mod=" + toHitModifierNum.ToString() + " acquire-1 medium");
                }
                else if ('L' == range)
                {
                   toHitModifierNum -= 15;
-                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemyToHitNumberYourTank(): eu=" + mi.Name + " -15 mod=" + toHitModifierNum.ToString() + " acquire-1 long");
+                  Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): eu=" + mi.Name + " -15 mod=" + toHitModifierNum.ToString() + " acquire-1 long");
                }
                else
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): 2-unknown range=" + range);
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): 2-unknown range=" + range);
                   return FN_ERROR;
                }
             }
@@ -2938,7 +2938,7 @@ namespace Pattons_Best
          if( true == gi.Sherman.IsMoving )
          {
             toHitModifierNum += 20;
-            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemyToHitNumberYourTank(): eu=" + mi.Name + " +20 mod=" + toHitModifierNum.ToString() + " moving");
+            Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): eu=" + mi.Name + " +20 mod=" + toHitModifierNum.ToString() + " moving");
          }
          return toHitModifierNum;
       }
