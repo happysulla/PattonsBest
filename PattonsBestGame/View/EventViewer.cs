@@ -185,7 +185,6 @@ namespace Pattons_Best
             case GameAction.UpdateTankBrewUp:
             case GameAction.UpdateGameOptions:
                break;
-            case GameAction.MorningBriefingBegin:
             case GameAction.MorningBriefingReturningCrewman:
             case GameAction.UpdateAfterActionReport:
                if (null != myAfterActionDialog)
@@ -380,6 +379,7 @@ namespace Pattons_Best
                else if (false == tankDestroyed.ResolveTankDestroyed(ShowTankDestroyedResults))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ResolveTankDestroyed() returned false");
                break;
+            case GameAction.MorningBriefingBegin:
             case GameAction.UpdateEventViewerDisplay:
                gi.IsGridActive = false;
                if (false == OpenEvent(gi, gi.EventDisplayed))
@@ -4890,8 +4890,13 @@ namespace Pattons_Best
                            action = GameAction.MorningBriefingBegin;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
-                        case "HealCrewman":
                         case "Ambulance3": // Morning Briefing
+                           myGameInstance.EventDisplayed = myGameInstance.EventActive = "e006";   
+                           myGameInstance.DieRollAction = GameAction.MorningBriefingCalendarRoll;
+                           action = GameAction.UpdateEventViewerActive;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "HealCrewman":
                            action = GameAction.MorningBriefingCrewmanHealing;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;

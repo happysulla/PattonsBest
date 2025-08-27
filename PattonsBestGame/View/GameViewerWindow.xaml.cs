@@ -321,6 +321,16 @@ namespace Pattons_Best
             case GameAction.MorningBriefingDayOfRest:
                break;
             case GameAction.MorningBriefingTankReplacementRoll:
+               myCanvasTank.Children.Remove(myTankMatImage); // Remove the old image
+               string tankMatName = "m";
+               if (9 < lastReport.TankCardNum)
+                  tankMatName += lastReport.TankCardNum.ToString();
+               else
+                  tankMatName += ("0" + lastReport.TankCardNum.ToString());
+               myTankMatImage = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage(tankMatName) };
+               myCanvasTank.Children.Add(myTankMatImage); // TankMat changes as get new tanks
+               Canvas.SetLeft(myTankMatImage, 0);
+               Canvas.SetTop(myTankMatImage, 0);
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                break;

@@ -2185,6 +2185,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingOptions(): lastReport=null");
             return false;
          }
+         //--------------------------------
+         gi.Day = 100;
+         //--------------------------------
          //lastReport.Driver.SetBloodSpots(20);              // <cgs> TEST - wounded crewmen
          //lastReport.Driver.Wound = "Light Wound";          // <cgs> TEST - wounded crewmen
          //lastReport.Driver.WoundDaysUntilReturn = 7;       // <cgs> TEST - wounded crewmen
@@ -2285,7 +2288,6 @@ namespace Pattons_Best
    //-----------------------------------------------------
    class GameStateMorningBriefing : GameState
    {
-      private static bool theIsHealedPerformed = false;
       public override string PerformAction(ref IGameInstance gi, ref GameAction action, int dieRoll)
       {
          GamePhase previousPhase = gi.GamePhase;
@@ -2328,16 +2330,10 @@ namespace Pattons_Best
                case GameAction.MorningBriefingAssignCrewRating: // handled in EventViewer by showing dialog
                   break;
                case GameAction.MorningBriefingBegin:
-                  if((0 < gi.InjuredCrewMembers.Count) && (false == theIsHealedPerformed))
+                  if(0 < gi.InjuredCrewMembers.Count)
                   {
-                     theIsHealedPerformed = true;
                      gi.EventDisplayed = gi.EventActive = "e007a"; // Healing Crewmen
                      gi.DieRollAction = GameAction.DieRollActionNone;
-                     if (false == HealedCrewmanDayDecrease(gi))
-                     {
-                        returnStatus = "Healed_CrewmanDayDecrease() returned false";
-                        Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(MorningBriefingBegin): " + returnStatus);
-                     }
                   }
                   else
                   {
@@ -2400,6 +2396,16 @@ namespace Pattons_Best
                         returnStatus = "GetNewTank() returned false";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(MorningBriefingTankReplacementRoll): " + returnStatus);
                      }
+                     //----------------------------------
+                     gi.BattleStacks.Remove(gi.Sherman);
+                     string tankImageName = "t";
+                     if (9 < lastReport.TankCardNum)
+                        tankImageName += lastReport.TankCardNum.ToString();
+                     else
+                        tankImageName += ("0" + lastReport.TankCardNum.ToString());
+                     string shermanName = "Sherman" + lastReport.TankCardNum.ToString();
+                     gi.Sherman = new MapItem(shermanName, 2.0, tankImageName, gi.Home);
+                     gi.BattleStacks.Add(gi.Sherman);
                   }
                   else
                   {
@@ -2409,10 +2415,14 @@ namespace Pattons_Best
                   break;
                case GameAction.SetupCombatCalendarRoll: // only applies when coming from Setup GamePhase
                case GameAction.MorningBriefingCalendarRoll:
+                  if (false == HealedCrewmanDayDecrease(gi))
+                  {
+                     returnStatus = "Healed_CrewmanDayDecrease() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(MorningBriefingCalendarRoll): " + returnStatus);
+                  }
                   gi.DieResults[key][0] = dieRoll; // clicking on image either restarts next day or continues with MorningBriefingBegin
                   break;
                case GameAction.MorningBriefingWeatherRoll:
-                  theIsHealedPerformed = false;
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   lastReport.Weather = TableMgr.GetWeather(gi.Day, dieRoll);
@@ -2536,20 +2546,6 @@ namespace Pattons_Best
       }
       protected bool CheckCrewReturning(IGameInstance gi, IAfterActionReport lastReport)
       {
-         //-----------------------------------------
-         bool isCrewmanReplaced;
-         if (false == ReplaceInjuredCrewmen(gi, out isCrewmanReplaced))  // CheckCrewReturning()
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CheckCrewReturning(): ReplaceInjuredCrewmen() returned false");
-            return false;
-         }
-         if (true == isCrewmanReplaced)
-         {
-            gi.EventDisplayed = gi.EventActive = "e007b"; // Crew Replacement
-            gi.DieRollAction = GameAction.DieRollActionNone;
-            return true;
-         }
-         //-----------------------------------------
          gi.ReturningCrewman = null;
          foreach (IMapItem mi in gi.InjuredCrewMembers)
          {
@@ -7760,8 +7756,22 @@ namespace Pattons_Best
          gi.GameTurn++;
          gi.GamePhase = GamePhase.MorningBriefing;
          //-------------------------------------------------------
-         gi.EventDisplayed = gi.EventActive = "e006";   // Reset_Day()
-         gi.DieRollAction = GameAction.MorningBriefingCalendarRoll;
+         bool isCrewmanReplaced;
+         if (false == ReplaceInjuredCrewmen(gi, out isCrewmanReplaced))  // ResetDay()
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResetDay(): ReplaceInjuredCrewmen() returned false");
+            return false;
+         }
+         if (true == isCrewmanReplaced)
+         {
+            gi.EventDisplayed = gi.EventActive = "e007b"; // Crew Replacement
+            gi.DieRollAction = GameAction.DieRollActionNone;
+         }
+         else
+         {
+            gi.EventDisplayed = gi.EventActive = "e006";   // Reset_Day()
+            gi.DieRollAction = GameAction.MorningBriefingCalendarRoll;
+         }
          //-------------------------------------------------------
          Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "Reset_Day(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
          gi.BattlePhase = BattlePhase.Ambush;

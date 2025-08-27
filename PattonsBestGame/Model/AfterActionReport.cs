@@ -181,7 +181,6 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = RemoveAt(myList.Count - 1);
          return lastReport;
       }
-
       public IAfterActionReport? this[int index]
       {
          get

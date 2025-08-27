@@ -652,7 +652,7 @@ namespace Pattons_Best
                   Canvas.SetTop(imgTerrain, -15);
                }
             }
-            if (true == mi.IsKilled)
+            if ( (true == mi.IsKilled) && (false == mi.Name.Contains("Sherman")) )
             {
                Image overlay = new Image() { Stretch = Stretch.Fill, Source = theMapImages.GetBitmapImage("OKIA") };
                g.Children.Add(overlay);
