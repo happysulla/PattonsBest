@@ -76,7 +76,6 @@ namespace Pattons_Best
       public bool IsShermanFirstShot { set; get; } = false;
       public bool IsShermanFiringAtFront { set; get; } = false;
       public bool IsShermanDeliberateImmobilization { set; get; } = false;
-      public int NumOfShermanShot { set; get; } = 0;
       public int NumSmokeAttacksThisRound { set; get; } = 0;
       public bool IsMalfunctionedMainGun { set; get; } = false;
       public bool IsMainGunRepairAttempted { set; get; } = false;
@@ -752,8 +751,8 @@ namespace Pattons_Best
          //-----------------------------------------------
          if (null != TargetMainGun)
          {
-            NumOfShermanShot++;  // Fire_AndReloadGun() - Increase when firing at a target
-            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Fire_AndReloadGun(): +++NumOfShermanShot=" + NumOfShermanShot.ToString());
+            this.TargetMainGun.NumOfAcquiredMarker++;  // Fire_AndReloadGun() - Increase when firing at a target
+            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Fire_AndReloadGun(): +++NumOfAcquiredMarker=" + this.TargetMainGun.NumOfAcquiredMarker.ToString());
          }
          //-----------------------------------------------
          string gunLoad = this.GetGunLoadType();  // This is the ammo that fired

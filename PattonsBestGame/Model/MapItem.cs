@@ -118,8 +118,7 @@ namespace Pattons_Best
       public bool IsIncapacitated { get; set; } = false;
       public bool IsFired { get; set; } = false;
       public bool IsSpotted { get; set; } = false;
-      public bool IsAcquired1 { get; set; } = false;
-      public bool IsAcquired2 { get; set; } = false;
+      public int NumOfAcquiredMarker { get; set; } = 0;
       //--------------------------------------------------
       public bool IsVehicle { get; set; } = false;
       public bool IsMovingInOpen { get; set; } = false;

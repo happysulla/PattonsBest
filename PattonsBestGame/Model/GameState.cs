@@ -1011,7 +1011,6 @@ namespace Pattons_Best
          gi.IsShermanFirstShot = false;
          gi.IsShermanFiringAtFront = false;
          gi.IsShermanDeliberateImmobilization = false;
-         gi.NumOfShermanShot = 0;  // Reset_ToPrepareForBattle() - reset at beginning of battle
          gi.ShermanTypeOfFire = "";
          gi.NumSmokeAttacksThisRound = 0;
          gi.IsMainGunRepairAttempted = false;
@@ -5531,10 +5530,10 @@ namespace Pattons_Best
                gi.Sherman.IsMoving = true;
                gi.Sherman.IsMoved = true;
                //--------------------------------------------------
-               if (false == card.myIsHvss) // if tank moves or pivots, acquired modifer drops to zero
+               if ((false == card.myIsHvss) && (null != gi.TargetMainGun) ) // if tank moves or pivots, acquired modifer drops to zero
                {
-                  Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Conduct_CrewAction(): zero NumOfShermanShot=" + gi.NumOfShermanShot.ToString());
-                  gi.NumOfShermanShot = 0; // Conduct_CrewAction() - Tank moves wihtout HVSS
+                  Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Conduct_CrewAction(): zero NumOfAcquiredMarker=" + gi.TargetMainGun.NumOfAcquiredMarker.ToString());
+                  gi.TargetMainGun.NumOfAcquiredMarker = 0; // Conduct_CrewAction() - Tank moves wihtout HVSS
                }
                //--------------------------------------------------
                foreach (IStack stack in gi.BattleStacks)
@@ -5588,8 +5587,8 @@ namespace Pattons_Best
             if ((true == isRotateTurret) && (false == gi.IsShermanTurretRotated))
             {
                gi.IsShermanTurretRotated = true;
-               if (false == isTankFiringMainGun)
-                  gi.NumOfShermanShot = 0;  // Conduct_CrewAction() - Turret rotated without firing main gun causes target acquisition = 0
+               if ((false == isTankFiringMainGun) && (null != gi.TargetMainGun) )
+                  gi.TargetMainGun.NumOfAcquiredMarker = 0;  // Conduct_CrewAction() - Turret rotated without firing main gun causes target acquisition = 0
                gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
                gi.EventDisplayed = gi.EventActive = "e052a";
                gi.DieRollAction = GameAction.DieRollActionNone;
@@ -7794,7 +7793,6 @@ namespace Pattons_Best
          gi.IsShermanFirstShot = false;
          gi.IsShermanFiringAtFront = false;              // Reset_Day()
          gi.IsShermanDeliberateImmobilization = false;
-         gi.NumOfShermanShot = 0; // Reset_Day()
          gi.ShermanTypeOfFire = "";
          gi.NumSmokeAttacksThisRound = 0;
          gi.IsMainGunRepairAttempted = false;
@@ -7807,7 +7805,6 @@ namespace Pattons_Best
          gi.NumCollateralDamage = 0;
          //-------------------------------------------------------
          gi.TargetMainGun = null;                      // Reset_Day()
-         Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "ResetDay(): zero NumOfShermanShot=" + gi.NumOfShermanShot.ToString());
          if( (true == gi.IsMalfunctionedMainGun) || (true == gi.IsBrokenMainGun) )
             Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "ResetDay(): Main Gun Repaired");
          gi.IsMalfunctionedMainGun = false;

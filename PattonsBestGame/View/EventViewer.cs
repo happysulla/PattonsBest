@@ -2456,15 +2456,15 @@ namespace Pattons_Best
          }
          StringBuilder sb51 = new StringBuilder();
          //------------------------------------
-         if (0 == gi.NumOfShermanShot)
+         if (0 == enemyUnit.NumOfAcquiredMarker)
          {
-            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "UpdateEventContentGetToHitModifier(): NumOfShermanShot=" + gi.NumOfShermanShot.ToString() + "isCommanderDirectingFire=" + isCommanderDirectingFire.ToString() + "commander.IsButtonedUp=" + commander.IsButtonedUp.ToString());
+            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "UpdateEventContentGetToHitModifier(): acq=" + enemyUnit.NumOfAcquiredMarker.ToString() + "isCommanderDirectingFire=" + isCommanderDirectingFire.ToString() + "commander.IsButtonedUp=" + commander.IsButtonedUp.ToString());
             if ( (false == isCommanderDirectingFire) || (true == commander.IsButtonedUp) )
                sb51.Append("+10 for first shot\n");
          }
-         else if (1 == gi.NumOfShermanShot)
+         else if (1 == enemyUnit.NumOfAcquiredMarker)
          {
-            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "UpdateEventContentGetToHitModifier(): SHOW +1 acq NumOfShermanShot=" + gi.NumOfShermanShot.ToString());
+            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "UpdateEventContentGetToHitModifier(): SHOW +1 acq=" + enemyUnit.NumOfAcquiredMarker.ToString());
             if ('C' == range)
                sb51.Append("-5 for 2nd shot at close range\n");
             else if ('M' == range)
@@ -2477,9 +2477,9 @@ namespace Pattons_Best
                return "ERROR";
             }
          }
-         else if (1 < gi.NumOfShermanShot)
+         else if (1 < enemyUnit.NumOfAcquiredMarker)
          {
-            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "UpdateEventContentGetToHitModifier(): SHOW +2 acq NumOfShermanShot=" + gi.NumOfShermanShot.ToString());
+            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "UpdateEventContentGetToHitModifier(): SHOW +2 acq=" + enemyUnit.NumOfAcquiredMarker.ToString());
             if ('C' == range)
                sb51.Append("-10 for 3rd shot at close range\n");
             else if ('M' == range)

@@ -4692,19 +4692,19 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          //------------------------------------
-         if (0 == gi.NumOfShermanShot)
+         if (0 == gi.TargetMainGun.NumOfAcquiredMarker)
          {
-            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "GetShermanToHitModifier(): NumOfShermanShot=" + gi.NumOfShermanShot.ToString());
+            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "GetShermanToHitModifier(): NumOfAcquiredMarker=" + gi.TargetMainGun.NumOfAcquiredMarker.ToString());
             if ((false == isCommanderDirectingFire) || (true == commander.IsButtonedUp))
             {
-               Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "GetShermanToHitModifier(): NumOfShermanShot=" + gi.NumOfShermanShot.ToString() + "isCommanderDirectingFire=" + isCommanderDirectingFire.ToString() + "commander.IsButtonedUp=" + commander.IsButtonedUp.ToString());
+               Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "GetShermanToHitModifier(): NumOfAcquiredMarker=" + gi.TargetMainGun.NumOfAcquiredMarker.ToString() + "isCommanderDirectingFire=" + isCommanderDirectingFire.ToString() + "commander.IsButtonedUp=" + commander.IsButtonedUp.ToString());
                toHitModifierNum += 10;
                Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): first shot at close range +10 mod=" + toHitModifierNum.ToString());
             }
          }
-         else if (1 == gi.NumOfShermanShot)
+         else if (1 == gi.TargetMainGun.NumOfAcquiredMarker)
          {
-            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "GetShermanToHitModifier(): +1 acq NumOfShermanShot=" + gi.NumOfShermanShot.ToString());
+            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "GetShermanToHitModifier(): +1 acq NumOfAcquiredMarker=" + gi.TargetMainGun.NumOfAcquiredMarker.ToString());
             if ( 'C' == range )
             {
                toHitModifierNum -= 5;
@@ -4726,9 +4726,9 @@ namespace Pattons_Best
                return FN_ERROR;
             }
          }
-         else if (1 < gi.NumOfShermanShot)
+         else if (1 < gi.TargetMainGun.NumOfAcquiredMarker)
          {
-            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "GetShermanToHitModifier(): +2 acq NumOfShermanShot=" + gi.NumOfShermanShot.ToString());
+            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "GetShermanToHitModifier(): +2 acq NumOfAcquiredMarker=" + gi.TargetMainGun.NumOfAcquiredMarker.ToString());
             if ('C' == range)
             {
                toHitModifierNum -= 10;
