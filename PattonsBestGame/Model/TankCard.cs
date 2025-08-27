@@ -10,7 +10,6 @@ namespace Pattons_Best
 {
    public struct TankCard
    {
-      public string myModel = "M4-A";
       public string myChasis = "M4";
       public string myTurret = "A";
       public string myMainGun = "75";

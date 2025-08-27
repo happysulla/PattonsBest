@@ -234,319 +234,6 @@ namespace Pattons_Best
 
          return true;
       }
-      public static bool GetNewTank(IGameInstance gi, int dieRoll)
-      {
-         IAfterActionReport? lastReport = gi.Reports.GetLast();
-         if (null == lastReport)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetNewTank(): lastReport=null");
-            return false;
-         }
-         lastReport.Name = Utilities.GetNickName(); // Get a new nickname
-         //--------------------------------
-         string month = GetMonth(gi.Day);
-         if ("ERROR" == month)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetNextTank(): GetMonth() returned ERROR");
-            return false;
-         }
-         //--------------------------------
-         switch (month)
-         {
-            case "Jun":
-            case "Jul":
-               lastReport.TankCardNum = 1;
-               break;
-            case "Aug":
-               if( dieRoll < 7 )
-                  lastReport.TankCardNum = 1;
-               else if (dieRoll < 21)
-                  lastReport.TankCardNum = 2;
-               else if (dieRoll < 28)
-                  lastReport.TankCardNum = 4;
-               else if (dieRoll < 46)
-                  lastReport.TankCardNum = 5;
-               else if (dieRoll < 51)
-                  lastReport.TankCardNum = 7;
-               else if (dieRoll < 71)
-                  lastReport.TankCardNum = 8;
-               else if (dieRoll < 81)
-                  lastReport.TankCardNum = 14;
-               else
-                  lastReport.TankCardNum = 16;
-               break;
-            case "Sep":
-               if (dieRoll < 6)
-                  lastReport.TankCardNum = 1;
-               else if (dieRoll < 16)
-                  lastReport.TankCardNum = 2;
-               else if (dieRoll < 22)
-                  lastReport.TankCardNum = 4;
-               else if (dieRoll < 36)
-                  lastReport.TankCardNum = 5;
-               else if (dieRoll < 38)
-                  lastReport.TankCardNum = 7;
-               else if (dieRoll < 41)
-                  lastReport.TankCardNum = 8;
-               else if (dieRoll < 59)
-                  lastReport.TankCardNum = 10;
-               else if (dieRoll < 61)
-                  lastReport.TankCardNum = 11;
-               else if (dieRoll < 66)
-                  lastReport.TankCardNum = 12;
-               else if (dieRoll < 76)
-                  lastReport.TankCardNum = 14;
-               else
-                  lastReport.TankCardNum = 16;
-               break;
-            case "Oct":
-               if (dieRoll < 4)
-                  lastReport.TankCardNum = 1;
-               else if (dieRoll < 11)
-                  lastReport.TankCardNum = 2;
-               else if (dieRoll < 16)
-                  lastReport.TankCardNum = 4;
-               else if (dieRoll < 26)
-                  lastReport.TankCardNum = 5;
-               else if (dieRoll < 28)
-                  lastReport.TankCardNum = 7;
-               else if (dieRoll < 31)
-                  lastReport.TankCardNum = 8;
-               else if (dieRoll < 50)
-                  lastReport.TankCardNum = 10;
-               else if (dieRoll < 55)
-                  lastReport.TankCardNum = 11;
-               else if (dieRoll < 60)
-                  lastReport.TankCardNum = 12;
-               else if (dieRoll < 61)
-                  lastReport.TankCardNum = 13;
-               else if (dieRoll < 76)
-                  lastReport.TankCardNum = 14;
-               else
-                  lastReport.TankCardNum = 16;
-               break;
-            case "Nov":
-               if (dieRoll < 2)
-                  lastReport.TankCardNum = 1;
-               else if (dieRoll < 5)
-                  lastReport.TankCardNum = 2;
-               else if (dieRoll < 6)
-                  lastReport.TankCardNum = 3;
-               else if (dieRoll < 9)
-                  lastReport.TankCardNum = 4;
-               else if (dieRoll < 16)
-                  lastReport.TankCardNum = 5;
-               else if (dieRoll < 17)
-                  lastReport.TankCardNum = 6;
-               else if (dieRoll < 18)
-                  lastReport.TankCardNum = 7;
-               else if (dieRoll < 21)
-                  lastReport.TankCardNum = 8;
-               else if (dieRoll < 22)
-                  lastReport.TankCardNum = 9;
-               else if (dieRoll < 43)
-                  lastReport.TankCardNum = 10;
-               else if (dieRoll < 52)
-                  lastReport.TankCardNum = 11;
-               else if (dieRoll < 57)
-                  lastReport.TankCardNum = 12;
-               else if (dieRoll < 58)
-                  lastReport.TankCardNum = 13;
-               else if (dieRoll < 72)
-                  lastReport.TankCardNum = 14;
-               else if (dieRoll < 73)
-                  lastReport.TankCardNum = 15;
-               else if (dieRoll < 98)
-                  lastReport.TankCardNum = 16;
-               else
-                  lastReport.TankCardNum = 17;
-               break;
-            case "Dec":
-               if (dieRoll < 2)
-                  lastReport.TankCardNum = 1;
-               else if (dieRoll < 5)
-                  lastReport.TankCardNum = 2;
-               else if (dieRoll < 6)
-                  lastReport.TankCardNum = 3;
-               else if (dieRoll < 7)
-                  lastReport.TankCardNum = 4;
-               else if (dieRoll < 10)
-                  lastReport.TankCardNum = 5;
-               else if (dieRoll < 11)
-                  lastReport.TankCardNum = 6;
-               else if (dieRoll < 12)
-                  lastReport.TankCardNum = 7;
-               else if (dieRoll < 15)
-                  lastReport.TankCardNum = 8;
-               else if (dieRoll < 16)
-                  lastReport.TankCardNum = 9;
-               else if (dieRoll < 35)
-                  lastReport.TankCardNum = 10;
-               else if (dieRoll < 48)
-                  lastReport.TankCardNum = 11;
-               else if (dieRoll < 53)
-                  lastReport.TankCardNum = 12;
-               else if (dieRoll < 54)
-                  lastReport.TankCardNum = 13;
-               else if (dieRoll < 66)
-                  lastReport.TankCardNum = 14;
-               else if (dieRoll < 69)
-                  lastReport.TankCardNum = 15;
-               else if (dieRoll < 95)
-                  lastReport.TankCardNum = 16;
-               else
-                  lastReport.TankCardNum = 17;
-               break;
-            case "Jan":
-               if (dieRoll < 2)
-                  lastReport.TankCardNum = 1;
-               else if (dieRoll < 4)
-                  lastReport.TankCardNum = 2;
-               else if (dieRoll < 5)
-                  lastReport.TankCardNum = 3;
-               else if (dieRoll < 6)
-                  lastReport.TankCardNum = 4;
-               else if (dieRoll < 9)
-                  lastReport.TankCardNum = 5;
-               else if (dieRoll < 10)
-                  lastReport.TankCardNum = 6;
-               else if (dieRoll < 11)
-                  lastReport.TankCardNum = 7;
-               else if (dieRoll < 14)
-                  lastReport.TankCardNum = 8;
-               else if (dieRoll < 15)
-                  lastReport.TankCardNum = 9;
-               else if (dieRoll < 31)
-                  lastReport.TankCardNum = 10;
-               else if (dieRoll < 47)
-                  lastReport.TankCardNum = 11;
-               else if (dieRoll < 52)
-                  lastReport.TankCardNum = 12;
-               else if (dieRoll < 53)
-                  lastReport.TankCardNum = 13;
-               else if (dieRoll < 63)
-                  lastReport.TankCardNum = 14;
-               else if (dieRoll < 68)
-                  lastReport.TankCardNum = 15;
-               else if (dieRoll < 91)
-                  lastReport.TankCardNum = 16;
-               else
-                  lastReport.TankCardNum = 17;
-               break;
-            case "Feb":
-               if (dieRoll < 2)
-                  lastReport.TankCardNum = 1;
-               else if (dieRoll < 3)
-                  lastReport.TankCardNum = 2;
-               else if (dieRoll < 4)
-                  lastReport.TankCardNum = 3;
-               else if (dieRoll < 5)
-                  lastReport.TankCardNum = 4;
-               else if (dieRoll < 7)
-                  lastReport.TankCardNum = 5;
-               else if (dieRoll < 8)
-                  lastReport.TankCardNum = 6;
-               else if (dieRoll < 9)
-                  lastReport.TankCardNum = 7;
-               else if (dieRoll < 12)
-                  lastReport.TankCardNum = 8;
-               else if (dieRoll < 13)
-                  lastReport.TankCardNum = 9;
-               else if (dieRoll < 25)
-                  lastReport.TankCardNum = 10;
-               else if (dieRoll < 45)
-                  lastReport.TankCardNum = 11;
-               else if (dieRoll < 50)
-                  lastReport.TankCardNum = 12;
-               else if (dieRoll < 51)
-                  lastReport.TankCardNum = 13;
-               else if (dieRoll < 60)
-                  lastReport.TankCardNum = 14;
-               else if (dieRoll < 66)
-                  lastReport.TankCardNum = 15;
-               else if (dieRoll < 87)
-                  lastReport.TankCardNum = 16;
-               else
-                  lastReport.TankCardNum = 17;
-               break;
-            case "Mar":
-               if (dieRoll < 2)
-                  lastReport.TankCardNum = 1;
-               else if (dieRoll < 3)
-                  lastReport.TankCardNum = 2;
-               else if (dieRoll < 4)
-                  lastReport.TankCardNum = 3;
-               else if (dieRoll < 5)
-                  lastReport.TankCardNum = 4;
-               else if (dieRoll < 6)
-                  lastReport.TankCardNum = 5;
-               else if (dieRoll < 7)
-                  lastReport.TankCardNum = 6;
-               else if (dieRoll < 8)
-                  lastReport.TankCardNum = 7;
-               else if (dieRoll < 10)
-                  lastReport.TankCardNum = 8;
-               else if (dieRoll < 11)
-                  lastReport.TankCardNum = 9;
-               else if (dieRoll < 21)
-                  lastReport.TankCardNum = 10;
-               else if (dieRoll < 45)
-                  lastReport.TankCardNum = 11;
-               else if (dieRoll < 50)
-                  lastReport.TankCardNum = 12;
-               else if (dieRoll < 51)
-                  lastReport.TankCardNum = 13;
-               else if (dieRoll < 58)
-                  lastReport.TankCardNum = 14;
-               else if (dieRoll < 65)
-                  lastReport.TankCardNum = 15;
-               else if (dieRoll < 83)
-                  lastReport.TankCardNum = 16;
-               else
-                  lastReport.TankCardNum = 17;
-               break;
-            case "Apr":
-               if (dieRoll < 2)
-                  lastReport.TankCardNum = 1;
-               else if (dieRoll < 3)
-                  lastReport.TankCardNum = 2;
-               else if (dieRoll < 4)
-                  lastReport.TankCardNum = 3;
-               else if (dieRoll < 5)
-                  lastReport.TankCardNum = 4;
-               else if (dieRoll < 6)
-                  lastReport.TankCardNum = 5;
-               else if (dieRoll < 7)
-                  lastReport.TankCardNum = 6;
-               else if (dieRoll < 8)
-                  lastReport.TankCardNum = 7;
-               else if (dieRoll < 9)
-                  lastReport.TankCardNum = 8;
-               else if (dieRoll < 10)
-                  lastReport.TankCardNum = 9;
-               else if (dieRoll < 16)
-                  lastReport.TankCardNum = 10;
-               else if (dieRoll < 44)
-                  lastReport.TankCardNum = 11;
-               else if (dieRoll < 49)
-                  lastReport.TankCardNum = 12;
-               else if (dieRoll < 50)
-                  lastReport.TankCardNum = 13;
-               else if (dieRoll < 55)
-                  lastReport.TankCardNum = 14;
-               else if (dieRoll < 64)
-                  lastReport.TankCardNum = 15;
-               else if (dieRoll < 79)
-                  lastReport.TankCardNum = 16;
-               else
-                  lastReport.TankCardNum = 17;
-               break;
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "GetNextTank(): reached default month=" + month);
-               return false;
-         }
-         return true;
-      }
       //-------------------------------------------
       public static string GetWeather(int day, int dieRoll)
       {
@@ -4580,6 +4267,319 @@ namespace Pattons_Best
          return "None";
       }
       //-------------------------------------------
+      public static bool GetNewSherman(IGameInstance gi, int dieRoll)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetNewSherman(): lastReport=null");
+            return false;
+         }
+         lastReport.Name = Utilities.GetNickName(); // Get a new nickname
+         //--------------------------------
+         string month = GetMonth(gi.Day);
+         if ("ERROR" == month)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetNextTank(): GetMonth() returned ERROR");
+            return false;
+         }
+         //--------------------------------
+         switch (month)
+         {
+            case "Jun":
+            case "Jul":
+               lastReport.TankCardNum = 1;
+               break;
+            case "Aug":
+               if (dieRoll < 7)
+                  lastReport.TankCardNum = 1;
+               else if (dieRoll < 21)
+                  lastReport.TankCardNum = 2;
+               else if (dieRoll < 28)
+                  lastReport.TankCardNum = 4;
+               else if (dieRoll < 46)
+                  lastReport.TankCardNum = 5;
+               else if (dieRoll < 51)
+                  lastReport.TankCardNum = 7;
+               else if (dieRoll < 71)
+                  lastReport.TankCardNum = 8;
+               else if (dieRoll < 81)
+                  lastReport.TankCardNum = 14;
+               else
+                  lastReport.TankCardNum = 16;
+               break;
+            case "Sep":
+               if (dieRoll < 6)
+                  lastReport.TankCardNum = 1;
+               else if (dieRoll < 16)
+                  lastReport.TankCardNum = 2;
+               else if (dieRoll < 22)
+                  lastReport.TankCardNum = 4;
+               else if (dieRoll < 36)
+                  lastReport.TankCardNum = 5;
+               else if (dieRoll < 38)
+                  lastReport.TankCardNum = 7;
+               else if (dieRoll < 41)
+                  lastReport.TankCardNum = 8;
+               else if (dieRoll < 59)
+                  lastReport.TankCardNum = 10;
+               else if (dieRoll < 61)
+                  lastReport.TankCardNum = 11;
+               else if (dieRoll < 66)
+                  lastReport.TankCardNum = 12;
+               else if (dieRoll < 76)
+                  lastReport.TankCardNum = 14;
+               else
+                  lastReport.TankCardNum = 16;
+               break;
+            case "Oct":
+               if (dieRoll < 4)
+                  lastReport.TankCardNum = 1;
+               else if (dieRoll < 11)
+                  lastReport.TankCardNum = 2;
+               else if (dieRoll < 16)
+                  lastReport.TankCardNum = 4;
+               else if (dieRoll < 26)
+                  lastReport.TankCardNum = 5;
+               else if (dieRoll < 28)
+                  lastReport.TankCardNum = 7;
+               else if (dieRoll < 31)
+                  lastReport.TankCardNum = 8;
+               else if (dieRoll < 50)
+                  lastReport.TankCardNum = 10;
+               else if (dieRoll < 55)
+                  lastReport.TankCardNum = 11;
+               else if (dieRoll < 60)
+                  lastReport.TankCardNum = 12;
+               else if (dieRoll < 61)
+                  lastReport.TankCardNum = 13;
+               else if (dieRoll < 76)
+                  lastReport.TankCardNum = 14;
+               else
+                  lastReport.TankCardNum = 16;
+               break;
+            case "Nov":
+               if (dieRoll < 2)
+                  lastReport.TankCardNum = 1;
+               else if (dieRoll < 5)
+                  lastReport.TankCardNum = 2;
+               else if (dieRoll < 6)
+                  lastReport.TankCardNum = 3;
+               else if (dieRoll < 9)
+                  lastReport.TankCardNum = 4;
+               else if (dieRoll < 16)
+                  lastReport.TankCardNum = 5;
+               else if (dieRoll < 17)
+                  lastReport.TankCardNum = 6;
+               else if (dieRoll < 18)
+                  lastReport.TankCardNum = 7;
+               else if (dieRoll < 21)
+                  lastReport.TankCardNum = 8;
+               else if (dieRoll < 22)
+                  lastReport.TankCardNum = 9;
+               else if (dieRoll < 43)
+                  lastReport.TankCardNum = 10;
+               else if (dieRoll < 52)
+                  lastReport.TankCardNum = 11;
+               else if (dieRoll < 57)
+                  lastReport.TankCardNum = 12;
+               else if (dieRoll < 58)
+                  lastReport.TankCardNum = 13;
+               else if (dieRoll < 72)
+                  lastReport.TankCardNum = 14;
+               else if (dieRoll < 73)
+                  lastReport.TankCardNum = 15;
+               else if (dieRoll < 98)
+                  lastReport.TankCardNum = 16;
+               else
+                  lastReport.TankCardNum = 17;
+               break;
+            case "Dec":
+               if (dieRoll < 2)
+                  lastReport.TankCardNum = 1;
+               else if (dieRoll < 5)
+                  lastReport.TankCardNum = 2;
+               else if (dieRoll < 6)
+                  lastReport.TankCardNum = 3;
+               else if (dieRoll < 7)
+                  lastReport.TankCardNum = 4;
+               else if (dieRoll < 10)
+                  lastReport.TankCardNum = 5;
+               else if (dieRoll < 11)
+                  lastReport.TankCardNum = 6;
+               else if (dieRoll < 12)
+                  lastReport.TankCardNum = 7;
+               else if (dieRoll < 15)
+                  lastReport.TankCardNum = 8;
+               else if (dieRoll < 16)
+                  lastReport.TankCardNum = 9;
+               else if (dieRoll < 35)
+                  lastReport.TankCardNum = 10;
+               else if (dieRoll < 48)
+                  lastReport.TankCardNum = 11;
+               else if (dieRoll < 53)
+                  lastReport.TankCardNum = 12;
+               else if (dieRoll < 54)
+                  lastReport.TankCardNum = 13;
+               else if (dieRoll < 66)
+                  lastReport.TankCardNum = 14;
+               else if (dieRoll < 69)
+                  lastReport.TankCardNum = 15;
+               else if (dieRoll < 95)
+                  lastReport.TankCardNum = 16;
+               else
+                  lastReport.TankCardNum = 17;
+               break;
+            case "Jan":
+               if (dieRoll < 2)
+                  lastReport.TankCardNum = 1;
+               else if (dieRoll < 4)
+                  lastReport.TankCardNum = 2;
+               else if (dieRoll < 5)
+                  lastReport.TankCardNum = 3;
+               else if (dieRoll < 6)
+                  lastReport.TankCardNum = 4;
+               else if (dieRoll < 9)
+                  lastReport.TankCardNum = 5;
+               else if (dieRoll < 10)
+                  lastReport.TankCardNum = 6;
+               else if (dieRoll < 11)
+                  lastReport.TankCardNum = 7;
+               else if (dieRoll < 14)
+                  lastReport.TankCardNum = 8;
+               else if (dieRoll < 15)
+                  lastReport.TankCardNum = 9;
+               else if (dieRoll < 31)
+                  lastReport.TankCardNum = 10;
+               else if (dieRoll < 47)
+                  lastReport.TankCardNum = 11;
+               else if (dieRoll < 52)
+                  lastReport.TankCardNum = 12;
+               else if (dieRoll < 53)
+                  lastReport.TankCardNum = 13;
+               else if (dieRoll < 63)
+                  lastReport.TankCardNum = 14;
+               else if (dieRoll < 68)
+                  lastReport.TankCardNum = 15;
+               else if (dieRoll < 91)
+                  lastReport.TankCardNum = 16;
+               else
+                  lastReport.TankCardNum = 17;
+               break;
+            case "Feb":
+               if (dieRoll < 2)
+                  lastReport.TankCardNum = 1;
+               else if (dieRoll < 3)
+                  lastReport.TankCardNum = 2;
+               else if (dieRoll < 4)
+                  lastReport.TankCardNum = 3;
+               else if (dieRoll < 5)
+                  lastReport.TankCardNum = 4;
+               else if (dieRoll < 7)
+                  lastReport.TankCardNum = 5;
+               else if (dieRoll < 8)
+                  lastReport.TankCardNum = 6;
+               else if (dieRoll < 9)
+                  lastReport.TankCardNum = 7;
+               else if (dieRoll < 12)
+                  lastReport.TankCardNum = 8;
+               else if (dieRoll < 13)
+                  lastReport.TankCardNum = 9;
+               else if (dieRoll < 25)
+                  lastReport.TankCardNum = 10;
+               else if (dieRoll < 45)
+                  lastReport.TankCardNum = 11;
+               else if (dieRoll < 50)
+                  lastReport.TankCardNum = 12;
+               else if (dieRoll < 51)
+                  lastReport.TankCardNum = 13;
+               else if (dieRoll < 60)
+                  lastReport.TankCardNum = 14;
+               else if (dieRoll < 66)
+                  lastReport.TankCardNum = 15;
+               else if (dieRoll < 87)
+                  lastReport.TankCardNum = 16;
+               else
+                  lastReport.TankCardNum = 17;
+               break;
+            case "Mar":
+               if (dieRoll < 2)
+                  lastReport.TankCardNum = 1;
+               else if (dieRoll < 3)
+                  lastReport.TankCardNum = 2;
+               else if (dieRoll < 4)
+                  lastReport.TankCardNum = 3;
+               else if (dieRoll < 5)
+                  lastReport.TankCardNum = 4;
+               else if (dieRoll < 6)
+                  lastReport.TankCardNum = 5;
+               else if (dieRoll < 7)
+                  lastReport.TankCardNum = 6;
+               else if (dieRoll < 8)
+                  lastReport.TankCardNum = 7;
+               else if (dieRoll < 10)
+                  lastReport.TankCardNum = 8;
+               else if (dieRoll < 11)
+                  lastReport.TankCardNum = 9;
+               else if (dieRoll < 21)
+                  lastReport.TankCardNum = 10;
+               else if (dieRoll < 45)
+                  lastReport.TankCardNum = 11;
+               else if (dieRoll < 50)
+                  lastReport.TankCardNum = 12;
+               else if (dieRoll < 51)
+                  lastReport.TankCardNum = 13;
+               else if (dieRoll < 58)
+                  lastReport.TankCardNum = 14;
+               else if (dieRoll < 65)
+                  lastReport.TankCardNum = 15;
+               else if (dieRoll < 83)
+                  lastReport.TankCardNum = 16;
+               else
+                  lastReport.TankCardNum = 17;
+               break;
+            case "Apr":
+               if (dieRoll < 2)
+                  lastReport.TankCardNum = 1;
+               else if (dieRoll < 3)
+                  lastReport.TankCardNum = 2;
+               else if (dieRoll < 4)
+                  lastReport.TankCardNum = 3;
+               else if (dieRoll < 5)
+                  lastReport.TankCardNum = 4;
+               else if (dieRoll < 6)
+                  lastReport.TankCardNum = 5;
+               else if (dieRoll < 7)
+                  lastReport.TankCardNum = 6;
+               else if (dieRoll < 8)
+                  lastReport.TankCardNum = 7;
+               else if (dieRoll < 9)
+                  lastReport.TankCardNum = 8;
+               else if (dieRoll < 10)
+                  lastReport.TankCardNum = 9;
+               else if (dieRoll < 16)
+                  lastReport.TankCardNum = 10;
+               else if (dieRoll < 44)
+                  lastReport.TankCardNum = 11;
+               else if (dieRoll < 49)
+                  lastReport.TankCardNum = 12;
+               else if (dieRoll < 50)
+                  lastReport.TankCardNum = 13;
+               else if (dieRoll < 55)
+                  lastReport.TankCardNum = 14;
+               else if (dieRoll < 64)
+                  lastReport.TankCardNum = 15;
+               else if (dieRoll < 79)
+                  lastReport.TankCardNum = 16;
+               else
+                  lastReport.TankCardNum = 17;
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetNextTank(): reached default month=" + month);
+               return false;
+         }
+         return true;
+      }
       public static string GetShermanFireDirection(IGameInstance gi, IMapItem enemyUnit, string hitLocation)
       {
          if ("Thrown Track" == hitLocation)
@@ -4692,6 +4692,11 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          //------------------------------------
+         if( null == gi.TargetMainGun)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): gi.TargetMainGun=null");
+            return FN_ERROR;
+         }
          if (0 == gi.TargetMainGun.NumOfAcquiredMarker)
          {
             Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "GetShermanToHitModifier(): NumOfAcquiredMarker=" + gi.TargetMainGun.NumOfAcquiredMarker.ToString());

@@ -753,8 +753,15 @@ namespace Pattons_Best
                   sbe007a.Append(" as ");
                   sbe007a.Append(cm.Role);
                   sbe007a.Append(" returns in ");
-                  sbe007a.Append(cm.WoundDaysUntilReturn);
-                  sbe007a.Append(" days\n");
+                  if( cm.WoundDaysUntilReturn < 1 )
+                  {
+                     sbe007a.Append("now\n");
+                  }
+                  else
+                  {
+                     sbe007a.Append(cm.WoundDaysUntilReturn);
+                     sbe007a.Append(" days\n");
+                  }
                 }
                myTextBlock.Inlines.Add(new Run(sbe007a.ToString()));
                myTextBlock.Inlines.Add(new LineBreak());
@@ -798,6 +805,23 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new Run("Click one of images to continue."));
+               break;
+            case "e007d":
+               if( 0 < gi.DieResults[key][0])
+               {
+                  string imageTankName = "t";
+                  if (report.TankCardNum < 10)
+                     imageTankName += "0";
+                  imageTankName += report.TankCardNum.ToString();
+                  Image imgTank = new Image { Source = MapItem.theMapImages.GetBitmapImage(imageTankName), Width = 120, Height = 120, Name = "TankReplacement" };
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                          "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgTank));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
                break;
             case "e008":
                if (false == UpdateEventContentWeather(gi))
@@ -4906,6 +4930,10 @@ namespace Pattons_Best
                            break;
                         case "ReturningCrewman":
                            action = GameAction.MorningBriefingReturningCrewman;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "TankReplacement":
+                           action = GameAction.MorningBriefingTankReplacementRoll;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "WeatherRollEnd":

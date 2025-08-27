@@ -63,12 +63,14 @@ Probablility of Combat: PROBABILITY &gt;=
 e007a	"<Bold>e007a Crew Healing</Bold> 
 <InlineUIContainer><Button Content='r19.33' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>     
 <LineBreak/><LineBreak/>
-The following crewmen are convalesing in a medical hosptial and may rejoin your crew when they are better:
+The following crewmen are convalesing in a medical hosptial and may rejoin your crew when they are better. Crew members join at the beginning of the day if Combat Calendar Check indicates possible combat per 
+<InlineUIContainer><Button Content='e006' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>"
 e007b	"<Bold>e007b Crew Replacement</Bold> 
 <InlineUIContainer><Button Content='r19.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>     
 <LineBreak/><LineBreak/>
-Wounded crewmen are replaced at beginning of day when the tank is knocked out. Click image to  continue to assign new crew ratings.
+When you tank is knocked out, wounded crewmen are replaced in morning briefing if combat may occur this day  per 
+<InlineUIContainer><Button Content='e006' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  Click image to  continue to assign new crew ratings.
 <LineBreak/><LineBreak/>
                           <InlineUIContainer><Image Name='Ambulance3' Height='160' Width='300'></Image></InlineUIContainer>"
 e007c	"<Bold>e007c Returning Crewmen</Bold> 
@@ -79,9 +81,9 @@ Convalenced crewmen return to your crew or leave to work another crew base on yo
 e007d	"<Bold>e007d Tank Replacement</Bold> 
 <InlineUIContainer><Button Content='r24.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>     
 <LineBreak/><LineBreak/>
-You have a choice of tank replacement during a refit period or when your tank was knocked out.
+You have a choice of tank replacement during a refit period. You must replace your tank when it is knocked out.
 <LineBreak/><LineBreak/>
-Consult the Tank 
+ In either case, consult the Tank 
 <InlineUIContainer><Button Content='Replacement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table after rolling two die: 
 <InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer>"
 e008	"<Bold>e007 Morning Briefing - Weather Roll</Bold> <InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
