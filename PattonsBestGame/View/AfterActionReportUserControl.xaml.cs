@@ -69,7 +69,8 @@ namespace Pattons_Best
             mySpanTankName.Background = theBrushInActive;
          //----------------------------------
          TankCard card = new TankCard(lastReport.TankCardNum);
-         s = AddSpaces(card.myModel, HEADER_INFO_LEN);
+         string model = card.myChasis + "-" + card.myTurret;
+         s = AddSpaces(model, HEADER_INFO_LEN);
          mySpanTankModel.Inlines.Clear();
          mySpanTankModel.Inlines.Add(new Run(s));
          //----------------------------------

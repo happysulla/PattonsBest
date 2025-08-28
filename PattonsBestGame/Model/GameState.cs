@@ -163,8 +163,9 @@ namespace Pattons_Best
          }
          return true;
       }
-      protected bool ReplaceInjuredCrewmen(IGameInstance gi, out bool isCrewmanReplaced)
+      protected bool ReplaceInjuredCrewmen(IGameInstance gi, out bool isCrewmanReplaced, string caller)
       {
+         Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): ++++++++++called by " + caller); 
          isCrewmanReplaced = false;
          //--------------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
@@ -260,8 +261,11 @@ namespace Pattons_Best
                }
             }
          }
-         if ((true == isCrewmanReplaced) && (GamePhase.EveningDebriefing == gi.GamePhase)) // replacing crewmen takes 30 minutes
+         if ((true == isCrewmanReplaced) && (GamePhase.EveningDebriefing != gi.GamePhase)) // replacing crewmen takes 30 minutes
+         {
             AdvanceTime(lastReport, 30);
+            Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): advancing time by 30 min gp=" + gi.GamePhase.ToString());
+         }
          return true;
       }
       protected bool SetWeatherCounters(IGameInstance gi)
@@ -878,9 +882,8 @@ namespace Pattons_Best
             return false;
          }
          //---------------------------------
-         Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "ResolveEmptyBattleBoard(): calling ReplaceInjuredCrewmen()");
          bool isInjuredCrewmanReplaced;
-         if (false == ReplaceInjuredCrewmen(gi, out isInjuredCrewmanReplaced)) // Resolve_EmptyBattleBoard
+         if (false == ReplaceInjuredCrewmen(gi, out isInjuredCrewmanReplaced, "ResolveEmptyBattleBoard()")) // Resolve_EmptyBattleBoard
          {
             Logger.Log(LogEnum.LE_ERROR, "ResolveEmptyBattleBoard(): Replace_InjuredCrewmen() returned false");
             return false;
@@ -2255,19 +2258,19 @@ namespace Pattons_Best
          //lastReport.SunriseHour = 18;  // <cgs> TEST - EndOfDay - start at end of day
          //lastReport.SunriseMin = 30;   // <cgs> TEST - EndOfDay - start at end of day
          //--------------------------------
-         ICrewMember loader = new CrewMember("Loader", "Cpl", "c09Loader");
-         loader.Rating = 7;
-         loader.SetBloodSpots(35);              // <cgs> TEST - healing crewmen
-         loader.Wound = "Serious Wound";        // <cgs> TEST - healing crewmen
-         loader.WoundDaysUntilReturn = 3;       // <cgs> TEST - healing crewmen
-         gi.InjuredCrewMembers.Add(loader);     // <cgs> TEST - healing crewmen
-         //--------------------------------
-         ICrewMember driver = new CrewMember("Driver", "Pvt", "c08Driver");
-         driver.Rating = 8;
-         driver.SetBloodSpots(10);              // <cgs> TEST - healing crewmen
-         driver.Wound = "Light Wound";          // <cgs> TEST - healing crewmen
-         driver.WoundDaysUntilReturn = 1;       // <cgs> TEST - healing crewmen
-         gi.InjuredCrewMembers.Add(driver);     // <cgs> TEST - healing crewmen
+         //ICrewMember loader = new CrewMember("Loader", "Cpl", "c09Loader");
+         //loader.Rating = 7;
+         //loader.SetBloodSpots(35);              // <cgs> TEST - healing crewmen
+         //loader.Wound = "Serious Wound";        // <cgs> TEST - healing crewmen
+         //loader.WoundDaysUntilReturn = 3;       // <cgs> TEST - healing crewmen
+         //gi.InjuredCrewMembers.Add(loader);     // <cgs> TEST - healing crewmen
+         ////--------------------------------
+         //ICrewMember driver = new CrewMember("Driver", "Pvt", "c08Driver");
+         //driver.Rating = 8;
+         //driver.SetBloodSpots(10);              // <cgs> TEST - healing crewmen
+         //driver.Wound = "Light Wound";          // <cgs> TEST - healing crewmen
+         //driver.WoundDaysUntilReturn = 1;       // <cgs> TEST - healing crewmen
+         //gi.InjuredCrewMembers.Add(driver);     // <cgs> TEST - healing crewmen
          //--------------------------------
          //loader = new CrewMember("Loader", "Cpl", "c09Loader");
          //loader.Rating = 3;
@@ -2391,9 +2394,9 @@ namespace Pattons_Best
                   if ( Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      gi.DieResults[key][0] = dieRoll;
-                     if( false == TableMgr.GetNewTank(gi, dieRoll))
+                     if( false == TableMgr.GetNewSherman(gi, dieRoll))
                      {
-                        returnStatus = "GetNewTank() returned false";
+                        returnStatus = "GetNewSherman() returned false";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(MorningBriefingTankReplacementRoll): " + returnStatus);
                      }
                      //----------------------------------
@@ -2536,7 +2539,7 @@ namespace Pattons_Best
             ICrewMember? cm = mi as ICrewMember;
             if (null == cm)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ResetDay(): cm=null for mi.Name=" + mi.Name);
+               Logger.Log(LogEnum.LE_ERROR, "Healed_CrewmanDayDecrease(): cm=null for mi.Name=" + mi.Name);
                return false;
             }
             if( (TableMgr.MIA != cm.WoundDaysUntilReturn) && (TableMgr.KIA != cm.WoundDaysUntilReturn) )
@@ -2571,7 +2574,7 @@ namespace Pattons_Best
          ICombatCalendarEntry? newEntry = TableMgr.theCombatCalendarEntries[gi.Day]; // add new report for today activities after replacing crewmen
          if (null == newEntry)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResetDay(): newEntry=null");
+            Logger.Log(LogEnum.LE_ERROR, "Check_CrewReturning(): newEntry=null");
             return false;
          }
          IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport);
@@ -5941,9 +5944,8 @@ namespace Pattons_Best
             //----------------------------------------------
             if (false == isAnyEnemyLeft)
             {
-               Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "MoveSherman(): Replace_InjuredCrewmen() called");
                bool isInjuredCrewmanReplaced;
-               if(false == ReplaceInjuredCrewmen(gi, out isInjuredCrewmanReplaced))
+               if(false == ReplaceInjuredCrewmen(gi, out isInjuredCrewmanReplaced, "MoveSherman()")) // Move_Sherman() - instead of AdvanceRetreat
                {
                   Logger.Log(LogEnum.LE_ERROR, "MoveSherman(): Replace_InjuredCrewmen() returned false");
                   return false;
@@ -7529,10 +7531,10 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.EventDebriefDecorationHeart:
-                  if (false == ResetDay(gi, lastReport))
+                  if (false == EveningDebriefingResetDay(gi, lastReport))
                   {
-                     returnStatus = "ResetDay() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(): " + returnStatus);
+                     returnStatus = "EveningDebriefing_ResetDay() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(EventDebriefDecorationHeart): " + returnStatus);
                   }
                   break;
                case GameAction.EndGameClose:
@@ -7741,25 +7743,21 @@ namespace Pattons_Best
          }
          else
          {
-            if (false == ResetDay(gi, report))
+            if (false == EveningDebriefingResetDay(gi, report))
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateDecoration(): ResetDay(=null) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "UpdateDecoration(): EveningDebriefing_ResetDay(=null) returned false");
                return false;
             }
          }
          return true;
       }
-      public bool ResetDay(IGameInstance gi, IAfterActionReport report)
+      public bool EveningDebriefingResetDay(IGameInstance gi, IAfterActionReport report)
       {
          //-------------------------------------------------------
-         ++gi.Day;
-         gi.GameTurn++;
-         gi.GamePhase = GamePhase.MorningBriefing;
-         //-------------------------------------------------------
          bool isCrewmanReplaced;
-         if (false == ReplaceInjuredCrewmen(gi, out isCrewmanReplaced))  // ResetDay()
+         if (false == ReplaceInjuredCrewmen(gi, out isCrewmanReplaced, "EveningDebriefingResetDay()"))  // Reset_Day()
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResetDay(): ReplaceInjuredCrewmen() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): Replace_InjuredCrewmen() returned false");
             return false;
          }
          if (true == isCrewmanReplaced)
@@ -7773,7 +7771,7 @@ namespace Pattons_Best
             gi.DieRollAction = GameAction.MorningBriefingCalendarRoll;
          }
          //-------------------------------------------------------
-         Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "Reset_Day(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
+         Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "EveningDebriefing_ResetDay(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
          gi.BattlePhase = BattlePhase.Ambush;
          gi.CrewActionPhase = CrewActionPhase.Movement;
          gi.MovementEffectOnSherman = "unit";
@@ -7782,7 +7780,7 @@ namespace Pattons_Best
          gi.ReadyRacks.Clear();
          gi.Hatches.Clear();
          gi.CrewActions.Clear();            // Reset_Day()
-         Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "Reset_Day(): clear all crewactions");
+         Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "EveningDebriefing_ResetDay(): clear all crewactions");
          gi.GunLoads.Clear();
          gi.TargetMainGun = null;           // Reset_Day()
          gi.IsShermanFiringAtFront = false; // Reset_Day()
@@ -7816,7 +7814,7 @@ namespace Pattons_Best
          //-------------------------------------------------------
          gi.TargetMainGun = null;                      // Reset_Day()
          if( (true == gi.IsMalfunctionedMainGun) || (true == gi.IsBrokenMainGun) )
-            Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "ResetDay(): Main Gun Repaired");
+            Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "EveningDebriefing_ResetDay(): Main Gun Repaired");
          gi.IsMalfunctionedMainGun = false;
          gi.IsBrokenMainGun = false;
          gi.IsBrokenGunSight = false;
@@ -7867,7 +7865,7 @@ namespace Pattons_Best
          gi.Panzerfaust = null;
          gi.NumCollateralDamage = 0;
          //-------------------------------------------------------
-         Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "ResetDay(): gi.MapItemMoves.Clear()");
+         Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "EveningDebriefing_ResetDay(): gi.MapItemMoves.Clear()");
          gi.MapItemMoves.Clear();
          gi.MoveStacks.Clear();
          gi.BattleStacks.Clear();
@@ -7885,7 +7883,7 @@ namespace Pattons_Best
          ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
          if (null == commander)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResetDay(): commander=null");
+            Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): commander=null");
             return false;
          }
          if (true == commander.IsKilled)
@@ -7893,9 +7891,13 @@ namespace Pattons_Best
          //-------------------------------------------------------
          if (false == ResetDieResults(gi))
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResetDay(): ResetDieResults() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): ResetDieResults() returned false");
             return false;
          }
+         //-------------------------------------------------------
+         ++gi.Day;
+         gi.GameTurn++;
+         gi.GamePhase = GamePhase.MorningBriefing;
          return true;
       }
    }
