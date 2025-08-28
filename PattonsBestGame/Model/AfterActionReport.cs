@@ -89,18 +89,22 @@ namespace Pattons_Best
       }
       public AfterActionReport(ICombatCalendarEntry entry, IAfterActionReport aar)
       {
+         TankCardNum = aar.TankCardNum;
+         //------------------------------
          Day = entry.Date;
          Scenario = entry.Scenario;
          Probability = entry.Probability;
          Resistance = entry.Resistance;
          //------------------------------
          Name = aar.Name;
-         TankCardNum = aar.TankCardNum;
          Commander = aar.Commander;
          Gunner = aar.Gunner;
          Loader = aar.Loader;
          Driver = aar.Driver;
          Assistant = aar.Assistant;
+         //------------------------------
+         MainGunHBCI = aar.MainGunHBCI;
+         MainGunHVAP = aar.MainGunHVAP;
          //------------------------------
          Decorations = aar.Decorations;
       }

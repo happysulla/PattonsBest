@@ -4276,6 +4276,8 @@ namespace Pattons_Best
             return false;
          }
          lastReport.Name = Utilities.GetNickName(); // Get a new nickname
+         lastReport.MainGunHBCI = 0;
+         lastReport.MainGunHVAP = 0;   
          //--------------------------------
          string month = GetMonth(gi.Day);
          if ("ERROR" == month)
