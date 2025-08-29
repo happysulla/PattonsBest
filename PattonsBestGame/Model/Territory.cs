@@ -647,6 +647,18 @@ namespace Pattons_Best
          }
          return null;
       }
+      public ITerritory? Find(string tName, string tType)
+      {
+         foreach (object o in myList)
+         {
+            ITerritory t = (ITerritory)o;
+            string territoryName = Utilities.RemoveSpaces(t.Name);
+            string territoryType = Utilities.RemoveSpaces(t.Type);
+            if ((tName == territoryName) && (tType == territoryType) )
+               return t;
+         }
+         return null;
+      }
       public ITerritory? RemoveAt(int index)
       {
          ITerritory? t = myList[index] as ITerritory;
@@ -702,7 +714,21 @@ namespace Pattons_Best
          }
          catch (Exception e)
          {
-            Console.WriteLine("MyTerritoryExtensions.Find(list, nameAndSector): nameAndSector={0} causes e.Message={1}", name, e.Message);
+            Logger.Log(LogEnum.LE_ERROR, "MyTerritoryExtensions.Find(list, name): name=" + name + " e.Message=\n" + e.ToString()); ;
+         }
+         return null;
+      }
+      public static ITerritory? Find(this IList<ITerritory> territories, string name, string type)
+      {
+         try
+         {
+            IEnumerable<ITerritory> results = from territory in territories where (territory.Name == name && territory.Type == type) select territory;
+            if (0 < results.Count())
+               return results.First();
+         }
+         catch (Exception e)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MyTerritoryExtensions.Find(list, name): name=" + name + " type=" + type + " e.Message=\n" + e.ToString()); ;
          }
          return null;
       }
