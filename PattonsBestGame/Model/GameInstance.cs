@@ -396,7 +396,15 @@ namespace Pattons_Best
       }
       public bool SetCrewActionTerritory(ICrewMember cm)
       {
-         ITerritory? t = Territories.theTerritories.Find(cm.Role + "Action");
+         IAfterActionReport? lastReport = this.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetCrewActionTerritory(): lastReport=null");
+            return false;
+         }
+         string tName = cm.Role + "Action";
+         string tType = lastReport.TankCardNum.ToString();
+         ITerritory? t = Territories.theTerritories.Find(tName, tType);
          if (null == t)
          {
             Logger.Log(LogEnum.LE_ERROR, "SetCrewActionTerritory(): Territories.theTerritories.Find() returned false for role=" + cm.Role);
@@ -651,14 +659,21 @@ namespace Pattons_Best
       }
       public bool SetGunLoadTerritory(string ammoType)
       {
-         string tName = "GunLoad" + ammoType;
-         ITerritory? newT = Territories.theTerritories.Find(tName);
-         if( null == newT)
+         IAfterActionReport? lastReport = this.Reports.GetLast();
+         if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetGunLoad(): unable to find territory name=" + tName);
+            Logger.Log(LogEnum.LE_ERROR, "SetGunLoadTerritory(): lastReport=null");
             return false;
          }
-         Logger.Log(LogEnum.LE_SHOW_GUN_LOAD_PREP, "SetGunLoadTerritory(): Setting gun load in t=" + tName);
+         string tName = "GunLoad" + ammoType;
+         string tType = lastReport.TankCardNum.ToString();
+         ITerritory? newT = Territories.theTerritories.Find(tName, tType);
+         if( null == newT)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetGunLoad(): unable to find territory name=" + tName + " tType=" + tType);
+            return false;
+         }
+         Logger.Log(LogEnum.LE_SHOW_GUN_LOAD_PREP, "SetGunLoadTerritory(): Setting gun load in t=" + tName + " tType=" + tType);
          foreach (IMapItem mi in this.GunLoads)
          {
             if (true == mi.Name.Contains("GunLoadInGun"))
@@ -928,6 +943,12 @@ namespace Pattons_Best
       }
       public bool SetReadyRackReload(string ammoType, int value)
       {
+         IAfterActionReport? lastReport = this.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetReadyRackReload(): lastReport=null");
+            return false;
+         }
          IMapItem? rrMarker = null;
          foreach ( IMapItem mi in this.ReadyRacks )
          {
@@ -943,8 +964,10 @@ namespace Pattons_Best
             return false;
          }
          rrMarker.Count = value;
+         //-------------------------------------------------
          string tName = rrMarker.Name + rrMarker.Count.ToString();
-         ITerritory? newT = Territories.theTerritories.Find(tName);
+         string tType = lastReport.TankCardNum.ToString();
+         ITerritory? newT = Territories.theTerritories.Find(tName, tType);
          if (null == newT)
          {
             Logger.Log(LogEnum.LE_ERROR, "SetReadyRackReload(): newT=null for " + tName);

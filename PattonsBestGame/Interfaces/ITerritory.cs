@@ -22,6 +22,7 @@ namespace Pattons_Best
       int IndexOf(ITerritory t);
       void Remove(ITerritory tName);
       ITerritory? Find(string tName);
+      ITerritory? Find(string tName, string tType);
       ITerritory? Remove(string tName);
       ITerritory? RemoveAt(int index);
       ITerritory? this[int index] { get; set; }
