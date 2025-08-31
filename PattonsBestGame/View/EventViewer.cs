@@ -641,7 +641,7 @@ namespace Pattons_Best
          PointCollection points = new PointCollection();
          foreach (IMapPoint mp1 in t.Points)
             points.Add(new System.Windows.Point(mp1.X, mp1.Y));
-         Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Tag = t.ToString() };
+         Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = t.Name };
          myCanvasMain.Children.Add(aPolygon);
          return true;
       }
@@ -3509,7 +3509,7 @@ namespace Pattons_Best
          {
             if ("Bow" == mgType)
             {
-               sb.Append("+10 if target moving with bow MG\n");
+               sb.Append("-10 if target moving with bow MG\n");
             }
             else if ("Coaxial" == mgType)
             {
@@ -3527,7 +3527,7 @@ namespace Pattons_Best
          //------------------------------------
          if (true == isMovingOrPivoting)
          {
-            sb.Append("+10 for moving or pivoting\n");
+            sb.Append("+10 for Sherman moving or pivoting\n");
          }
          //------------------------------------
          if (true == gi.TargetMg.IsWoods)

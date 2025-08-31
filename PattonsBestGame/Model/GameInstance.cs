@@ -1151,7 +1151,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES, "ScoreFriendlyVictoryPoint(): " + enemyUnit + " #=" + report.VictoryPtsFriendlyKiaSPGun.ToString());
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "ScoreYourVictoryPoint(): reached default with enemyUnit=" + enemyUnit);
+               Logger.Log(LogEnum.LE_ERROR, "ScoreFriendlyVictoryPoint(): reached default with enemyUnit=" + enemyUnit);
                break;
          }
          if (true == enemy.IsFortification)

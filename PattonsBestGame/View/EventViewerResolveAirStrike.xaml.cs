@@ -295,7 +295,8 @@ namespace Pattons_Best
                   if (true == mapItem.IsKilled)
                   {
                      removals.Add(mapItem);
-                     myGameInstance.ScoreFriendlyVictoryPoint(lastReport, mapItem);
+                     if (false == mapItem.Name.Contains("Sherman")) 
+                        myGameInstance.ScoreFriendlyVictoryPoint(lastReport, mapItem);
                   }
                }
             }

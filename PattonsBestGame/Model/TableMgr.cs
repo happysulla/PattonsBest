@@ -2511,7 +2511,7 @@ namespace Pattons_Best
                return "ERROR";
          }
          //--------------------------------------------------------------
-         double totalRotation = rotation - gi.Sherman.RotationHull + 180.0;
+         double totalRotation = rotation - gi.Sherman.RotationHull;
          double or = totalRotation;
          if ("Hull" == hitLocation)
          {
@@ -2519,33 +2519,33 @@ namespace Pattons_Best
                totalRotation += 360.0;
             while (359.9 < totalRotation)
                totalRotation -= 360.0;
-            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "GetEnemyFireDirection(): hull: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ") - (tr=" + enemyUnit.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1") + " eu=" + enemyUnit.Name);
+            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "GetEnemyFireDirection(): hull: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + gi.Sherman.RotationHull.ToString("F1") + ") - (tr=" + gi.Sherman.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1") + " eu=" + enemyUnit.Name);
             switch (totalRotation)
             {
                case 0.0: return "H F";
                case 60.0: return "H FR";
-               case 120.0: return "H FB";
+               case 120.0: return "H BR";
                case 180.0: return "H B";
                case 240.0: return "H BL";
                case 300.0: return "H FL";
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): hull: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ") - (tr=" + enemyUnit.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1") + " eu=" + enemyUnit.Name);
+                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyFireDirection(): hull: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + gi.Sherman.RotationHull.ToString("F1") + ") - (tr=" + gi.Sherman.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1") + " eu=" + enemyUnit.Name);
                   return "ERROR";
             }
          }
          if ("Turret" == hitLocation)
          {
-            totalRotation -= enemyUnit.RotationTurret;
+            totalRotation -= gi.Sherman.RotationTurret;
             while (totalRotation < 0.0)
                totalRotation += 360.0;
             while (359.9 < totalRotation)
                totalRotation -= 360.0;
-            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "GetEnemyFireDirection(): turret: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + enemyUnit.RotationHull.ToString("F1") + ") - (tr=" + enemyUnit.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1") + " eu=" + enemyUnit.Name);
+            Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "GetEnemyFireDirection(): turret: (total=" + totalRotation.ToString("F1") + ") = (r=" + rotation.ToString("F1") + ") - (hr=" + gi.Sherman.RotationHull.ToString("F1") + ") - (tr=" + gi.Sherman.RotationTurret.ToString("F1") + ")  or=" + or.ToString("F1") + " eu=" + enemyUnit.Name);
             switch(totalRotation)
             {
-               case 0.0: return "H FL";
-               case 60.0: return "T F";
-               case 120.0: return "T F";
+               case 0.0: return "T F";
+               case 60.0: return "T R";
+               case 120.0: return "T R";
                case 180.0: return "T B";
                case 240.0: return "T L";
                case 300.0: return "T L";

@@ -298,6 +298,11 @@ namespace Pattons_Best
             {
                if (ui is Image img)
                {
+                  if (true == img.Name.Contains("Sherman"))
+                  {
+                     myCanvasTank.Children.Remove(img); // Remove the old image
+                     break;
+                  }
                   if (true == img.Name.Contains("TankMat"))
                   {
                      myCanvasTank.Children.Remove(img); // Remove the old image
@@ -305,15 +310,23 @@ namespace Pattons_Best
                   }
                }
             }
+            //-------------------------------------------------------
             string tankMatName = "m";
             if (9 < lastReport.TankCardNum)
                tankMatName += lastReport.TankCardNum.ToString();
             else
                tankMatName += ("0" + lastReport.TankCardNum.ToString());
-            Image image = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage(tankMatName) };
-            myCanvasTank.Children.Add(image); // TankMat changes as get new tanks
-            Canvas.SetLeft(image, 0);
-            Canvas.SetTop(image, 0);
+            Image imageMat = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage(tankMatName) };
+            myCanvasTank.Children.Add(imageMat); // TankMat changes as get new tanks
+            Canvas.SetLeft(imageMat, 0);
+            Canvas.SetTop(imageMat, 0);
+            //-------------------------------------------------------
+            string appendText = "";
+            if (9 < lastReport.TankCardNum)
+               appendText += lastReport.TankCardNum.ToString();
+            else
+               appendText += ("0" + lastReport.TankCardNum.ToString());
+            gi.Sherman = new MapItem("Sherman" + appendText, 2.0, "t" + appendText, gi.Home);
          }
          //-------------------------------------------------------
          switch (action)
@@ -1643,7 +1656,7 @@ namespace Pattons_Best
                PointCollection points = new PointCollection();
                foreach (IMapPoint mp1 in t.Points)
                   points.Add(new System.Windows.Point(mp1.X, mp1.Y));
-               Polygon aPolygon = new Polygon {Fill = Utilities.theBrushRegion, Points = points, Name = t.ToString() };
+               Polygon aPolygon = new Polygon {Fill = Utilities.theBrushRegion, Points = points, Name = tName };
                myPolygons.Add(aPolygon);
                myCanvasTank.Children.Add(aPolygon);
                Canvas.SetZIndex(aPolygon, 101);
@@ -2780,7 +2793,7 @@ namespace Pattons_Best
             {
                Ellipse aEllipse = new Ellipse
                {
-                  Tag = hex.Identifer,
+                  Name = hex.Identifer,
                   Fill = mySolidColorBrushClear,
                   StrokeThickness = 2,
                   Stroke = mySolidColorBrushBlack,
@@ -2879,16 +2892,24 @@ namespace Pattons_Best
       }
       private void MouseDownPolygonGunLoad(object sender, MouseButtonEventArgs e)
       {
+         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): lastReport=null");
+            return;
+         }
+         string tType = lastReport.TankCardNum.ToString();
+         //--------------------------------------------
          Polygon? clickedPolygon = sender as Polygon;
          if (null == clickedPolygon)
          {
             Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonGunLoad(): clickedPolygon=null");
             return;
          }
-         ITerritory? newT = Territories.theTerritories.Find(clickedPolygon.Name);
+         ITerritory? newT = Territories.theTerritories.Find(clickedPolygon.Name, tType);
          if (null == newT)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonGunLoad(): t=null for " + clickedPolygon.Name.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonGunLoad(): t=null for " + clickedPolygon.Name.ToString() + " tType=" + tType);
             return;
          }
          IMapItem? gunLoad = null;
@@ -3260,7 +3281,7 @@ namespace Pattons_Best
          myTerritorySelected = Territories.theTerritories.Find(Utilities.RemoveSpaces(clickedPolygon.Name));
          if (null == myTerritorySelected)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonTravel(): selectedTerritory=null for " + clickedPolygon.Tag.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonTravel(): selectedTerritory=null for " + clickedPolygon.Name);
             return;
          }
          GameAction outAction = GameAction.Error;
@@ -3295,7 +3316,7 @@ namespace Pattons_Best
             return;
          foreach (EnteredHex hex in myGameInstance.EnteredHexes)
          {
-            string name = (string)mousedEllipse.Tag;
+            string name = (string)mousedEllipse.Name;
             if (hex.Identifer == name)
             {
                myEllipseDisplayDialog = new EllipseDisplayDialog(hex);
@@ -3330,6 +3351,7 @@ namespace Pattons_Best
             return;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
+         string tType = lastReport.TankCardNum.ToString();
          //--------------------------------------
          MenuItem? menuitem = sender as MenuItem;
          if( null == menuitem)
@@ -3374,10 +3396,10 @@ namespace Pattons_Best
          }
          //--------------------------------------
          string tName = sCrewMemberRole + "Action";
-         ITerritory? t = Territories.theTerritories.Find(tName);
+         ITerritory? t = Territories.theTerritories.Find(tName, tType);
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): t=null for " + tName);
+            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): t=null for " + tName + " tType=" + tType);
             return;
          }
          //--------------------------------------

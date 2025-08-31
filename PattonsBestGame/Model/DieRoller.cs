@@ -552,7 +552,7 @@ namespace Pattons_Best
          SolidColorBrush brushBlack = new SolidColorBrush();
          Ellipse aEllipse = new Ellipse
          {
-            Tag = Utilities.RemoveSpaces("CenterPoint"),
+            Name = Utilities.RemoveSpaces("CenterPoint"),
             Fill = Brushes.Black,
             StrokeThickness = 1,
             Stroke = Brushes.Black,

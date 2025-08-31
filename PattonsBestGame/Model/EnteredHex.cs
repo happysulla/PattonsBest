@@ -33,7 +33,7 @@ namespace Pattons_Best
       public EnteredHex(IGameInstance gi, ITerritory t, ColorActionEnum colorAction, IMapPoint mp)
       {
          ++theId;
-         Identifer = "Hex#" + theId.ToString();
+         Identifer = "Hex" + theId.ToString();
          Day = gi.Day + 1; ;
          Date = TableMgr.GetDate(gi.Day);
          TerritoryName = t.Name;

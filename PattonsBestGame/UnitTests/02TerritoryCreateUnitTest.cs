@@ -115,8 +115,41 @@ namespace Pattons_Best
             CtorError = true;
             return;
          }
+         //-------------------------------------
+         foreach (UIElement ui in myCanvasMain.Children) // Clean the Canvas of all marks
+         {
+            if (ui is Image img)
+            {
+               if (true == img.Name.Contains("TankMat"))
+               {
+                  myCanvasTank.Children.Remove(img); // Remove the old image
+                  break;
+               }
+            }
+         }
+         //-------------------------------------
+         IAfterActionReport? report = gi.Reports.GetLast();
+         if (null == report)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): gi.Reports.GetLast() returned null");
+            CtorError = true;
+            return;
+         }
+         //-------------------------------------
+         myTankNum = report.TankCardNum;
+         if (18 < myTankNum)
+            myTankNum = 0;
+         string tankMatName = "m";
+         if (9 < myTankNum)
+            tankMatName += myTankNum.ToString();
+         else
+            tankMatName += ("0" + myTankNum.ToString());
+         Image image = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage(tankMatName) };
+         myCanvasTank.Children.Add(image); // TankMat changes as get new tanks
+         Canvas.SetLeft(image, 0);
+         Canvas.SetTop(image, 0);
          //----------------------------------
-         if( false == SetFileName())
+         if ( false == SetFileName())
          {
             Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): SetFileName() returned false");
             CtorError = true;

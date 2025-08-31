@@ -98,7 +98,7 @@ namespace Pattons_Best
                paths.Add(path);
                adjPaths.Add(path);
                // If the adjacent territory is the end territory, no need to continue.  It is the best path.
-               if (adjTerritory == endT.ToString())
+               if (adjTerritory == endT.Name)
                {
                   Logger.Log(LogEnum.LE_VIEW_MIM, "GetBestPath(): Adjacent Move of " + MapItem.Name + " moving from " + startT.Name + " to " + endT.Name);
                   return path;
@@ -159,7 +159,7 @@ namespace Pattons_Best
                      // Exclude alternative paths that fold back to start territory
                      if (adj2.Name == startT.Name)
                      {
-                        //Console.WriteLine("     ==> ==>{0} is start territory", adj2.ToString());
+                        //Console.WriteLine("     ==> ==>{0} is start territory", adj2.Name);
                         continue;
                      }
                      // Exclude alternative paths that fold back to other adjacent territories

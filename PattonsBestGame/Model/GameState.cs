@@ -1621,6 +1621,8 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipCrewAssignments(): gi.Reports.GetLast() returned null");
             return false;
          }
+         report.TankCardNum = 4; // <cgs> TEST - Set the TankCardNum
+         //-------------------------------
          int randNum = Utilities.RandomGenerator.Next(3);
          if (0 == randNum)
             report.Scenario = EnumScenario.Advance;
@@ -2688,9 +2690,6 @@ namespace Pattons_Best
                case GameAction.UpdateAfterActionReport:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
                   break;
-               case GameAction.PreparationsLoaderSpotSet:
-               case GameAction.PreparationsCommanderSpotSet:
-                  break;
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
                   break;
@@ -2782,12 +2781,28 @@ namespace Pattons_Best
                         else
                         {
                            if (true == lastReport.Commander.IsButtonedUp && false == card.myIsVisionCupola)
+                           {
+                              action = GameAction.PreparationsCommanderSpot;
                               gi.EventDisplayed = gi.EventActive = "e016";
+                           }
                            else
+                           {
+                              action = GameAction.PreparationsFinal;
+                              gi.GamePhase = GamePhase.Movement;
                               gi.EventDisplayed = gi.EventActive = "e017";
+                              gi.DieRollAction = GameAction.MovementStartAreaSetRoll;
+                              if (false == SetUsControlOnBattleMap(gi))
+                              {
+                                 returnStatus = "SetUsControlOnBattleMap() returned false";
+                                 Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsLoaderSpot): " + returnStatus);
+                              }
+                           }
                         }
                      }
                   }
+                  break;
+               case GameAction.PreparationsLoaderSpotSet:
+               case GameAction.PreparationsCommanderSpotSet:
                   break;
                case GameAction.PreparationsCommanderSpot:
                   if (null == lastReport.Commander)
@@ -3589,7 +3604,7 @@ namespace Pattons_Best
                case GameAction.BattleAmbushRoll:
                   if (true == lastReport.Weather.Contains("Rain") || true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
                      dieRoll--;
-                  dieRoll = 1; // <cgs> TEST - NO AMBUSH!!!!!
+                  dieRoll = 10; // <cgs> TEST - NO AMBUSH!!!!!
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (dieRoll < 8)
@@ -5435,6 +5450,15 @@ namespace Pattons_Best
       }
       private bool SetDefaultCrewActions(IGameInstance gi)
       {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Conduct_CrewAction(): lastReport=null");
+            return false;
+         }
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         string tType = lastReport.TankCardNum.ToString();
+         //----------------------------------------------------
          bool isDriverDefaultNeeded = true;
          bool isLoaderDefaultNeeded = true;
          foreach (IMapItem crewAction in gi.CrewActions)
@@ -5453,7 +5477,7 @@ namespace Pattons_Best
          }
          if ( (true == isDriverDefaultNeeded) && (false == driver.IsIncapacitated)) // SetDefaultCrewActions() - if not incapacitated
          {
-            ITerritory? t = Territories.theTerritories.Find("DriverAction");
+            ITerritory? t = Territories.theTerritories.Find("DriverAction", tType);
             if (null == t)
             {
                Logger.Log(LogEnum.LE_ERROR, "SetDefaultCrewActions(): t=null for tName=DriverAction");
@@ -5472,7 +5496,7 @@ namespace Pattons_Best
          }
          if ( (true == isLoaderDefaultNeeded) && (false == loader.IsIncapacitated)) // SetDefaultCrewActions() - if not incapacitated
          {
-            ITerritory? t = Territories.theTerritories.Find("LoaderAction");
+            ITerritory? t = Territories.theTerritories.Find("LoaderAction", tType);
             if (null == t)
             {
                Logger.Log(LogEnum.LE_ERROR, "SetDefaultCrewActions(): t=null for tName=LoaderAction");

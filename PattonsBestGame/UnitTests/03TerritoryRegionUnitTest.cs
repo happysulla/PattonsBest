@@ -59,7 +59,7 @@ namespace Pattons_Best
          //------------------------------------
          if (null == gi)
          {
-            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): gi=null");
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryRegionUnitTest(): gi=null");
             CtorError = true;
             return;
          }
@@ -67,7 +67,7 @@ namespace Pattons_Best
          //------------------------------------
          if (null == civ)
          {
-            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): civ=null");
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryRegionUnitTest(): civ=null");
             CtorError = true;
             return;
          }
@@ -95,22 +95,56 @@ namespace Pattons_Best
                }
             }
          }
+         //-------------------------------------
          if (null == myCanvasTank)
          {
-            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): myCanvasTank=null");
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryRegionUnitTest(): myCanvasTank=null");
             CtorError = true;
             return;
          }
          if (null == myCanvasMain)
          {
-            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): myCanvasMain=null");
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryRegionUnitTest(): myCanvasMain=null");
             CtorError = true;
             return;
          }
+         //-------------------------------------
+         foreach (UIElement ui in myCanvasMain.Children) // Clean the Canvas of all marks
+         {
+            if (ui is Image img)
+            {
+               if (true == img.Name.Contains("TankMat"))
+               {
+                  myCanvasTank.Children.Remove(img); // Remove the old image
+                  break;
+               }
+            }
+         }
+         //-------------------------------------
+         IAfterActionReport? report = gi.Reports.GetLast();
+         if (null == report)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryRegionUnitTest(): gi.Reports.GetLast() returned null");
+            CtorError = true;
+            return;
+         }
+         //-------------------------------------
+         myTankNum = report.TankCardNum;
+         if (18 < myTankNum)
+            myTankNum = 0;
+         string tankMatName = "m";
+         if (9 < myTankNum)
+            tankMatName += myTankNum.ToString();
+         else
+            tankMatName += ("0" + myTankNum.ToString());
+         Image image = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage(tankMatName) };
+         myCanvasTank.Children.Add(image); // TankMat changes as get new tanks
+         Canvas.SetLeft(image, 0);
+         Canvas.SetTop(image, 0);
          //----------------------------------
          if (false == SetFileName())
          {
-            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): SetFileName() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryRegionUnitTest(): SetFileName() returned false");
             CtorError = true;
             return;
          }
@@ -304,16 +338,11 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------------
-         List<UIElement> results = new List<UIElement>();
-         foreach (UIElement ui in myCanvasMain.Children) // Remove any existing UI elements from the Canvas
+         if( false == DeleteEllipsesAndPolygons())
          {
-            if (ui is Ellipse)
-               results.Add(ui);
-            if (ui is Polygon p)
-               p.Fill = Utilities.theBrushRegionClear;
+            Logger.Log(LogEnum.LE_ERROR, "Cleanup(): DeleteEllipsesAndPolygons() returned false");
+            return false;
          }
-         foreach (UIElement ui1 in results)
-            myCanvasMain.Children.Remove(ui1);
          //--------------------------------------------------
          if (false == CreateXml(Territories.theTerritories))
          {
@@ -399,6 +428,7 @@ namespace Pattons_Best
       {
          if (null != myAnchorTerritory) // Add points to the anchor territy that define the region
          {
+            string tType = myTankNum.ToString();
             // Do an intersection with any other points that
             // are part of any other region.  If a point is found
             // that is very close, assume that is the correct
@@ -407,15 +437,7 @@ namespace Pattons_Best
             IMapPoint selectedMp = mp;
             foreach (String s in myAnchorTerritory.Adjacents)
             {
-               Territory? adjacentTerritory = null;
-               foreach (Territory t in Territories.theTerritories)
-               {
-                  if (s == Utilities.RemoveSpaces(t.ToString()))
-                  {
-                     adjacentTerritory = t;
-                     break;
-                  }
-               }
+               ITerritory? adjacentTerritory = Territories.theTerritories.Find(s, tType);
                if (null == adjacentTerritory) // Check for error
                {
                   MessageBox.Show("Unable to find " + s);
@@ -444,7 +466,7 @@ namespace Pattons_Best
       {
          if (null == myCanvasTank)
          {
-            Logger.Log(LogEnum.LE_ERROR, "DeleteEllipses(): myCanvasTank=null");
+            Logger.Log(LogEnum.LE_ERROR, "DeleteEllipsesAndPolygons(): myCanvasTank=null");
             return false;
          }
          //-------------------------------------------
@@ -461,7 +483,7 @@ namespace Pattons_Best
          //-------------------------------------------
          if (null == myCanvasMain)
          {
-            Logger.Log(LogEnum.LE_ERROR, "DeleteEllipses(): myCanvasMain=null");
+            Logger.Log(LogEnum.LE_ERROR, "DeleteEllipsesAndPolygons(): myCanvasMain=null");
             return false;
          }
          //-------------------------------------------
@@ -469,6 +491,8 @@ namespace Pattons_Best
          foreach (UIElement ui in myCanvasMain.Children)
          {
             if (ui is Ellipse)
+               results1.Add(ui);
+            if (ui is Polygon)
                results1.Add(ui);
          }
          foreach (UIElement ui1 in results1)
@@ -760,19 +784,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse(): myCanvasMain=null");
             return;
          }
-         if (null == myGameInstance)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse(): myGameInstance=null");
-            return;
-         }
-         //------------------------------------------------
-         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast(); // remove it from list
-         if (null == lastReport)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ButtonReadyRackChange_Click(): myGameInstance=null");
-            return;
-         }
-         string tType = lastReport.TankCardNum.ToString();
+         string tType = myTankNum.ToString();
          //------------------------------------------------
          System.Windows.Point p = e.GetPosition(myCanvasMain);
          bool isMainCanvas = true;
@@ -837,19 +849,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse2(): myCanvasMain=null");
             return;
          }
-         if (null == myGameInstance)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse(): myGameInstance=null");
-            return;
-         }
-         //------------------------------------------------
-         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast(); // remove it from list
-         if (null == lastReport)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ButtonReadyRackChange_Click(): myGameInstance=null");
-            return;
-         }
-         string tType = lastReport.TankCardNum.ToString();
+         string tType = myTankNum.ToString();
          //------------------------------------------------
          Ellipse mousedEllipse = (Ellipse)sender;
          ITerritory? matchingTerritory = Territories.theTerritories.Find(mousedEllipse.Name, tType);
@@ -889,19 +889,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygon(): myCanvasMain=null");
             return;
          }
-         if (null == myGameInstance)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse(): myGameInstance=null");
-            return;
-         }
-         //------------------------------------------------
-         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast(); // remove it from list
-         if (null == lastReport)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ButtonReadyRackChange_Click(): myGameInstance=null");
-            return;
-         }
-         string tType = lastReport.TankCardNum.ToString();
+         string tType = myTankNum.ToString();
          //------------------------------------------------
          System.Windows.Point p = e.GetPosition(myCanvasMain);
          bool isMainCanvas = true;
