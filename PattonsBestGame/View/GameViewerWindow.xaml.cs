@@ -1516,7 +1516,7 @@ namespace Pattons_Best
                   PointCollection points = new PointCollection();
                   foreach (IMapPoint mp1 in t.Points)
                      points.Add(new System.Windows.Point(mp1.X, mp1.Y));
-                  Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = t.ToString() };
+                  Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = tName };
                   myPolygons.Add(aPolygon);
                   myCanvasTank.Children.Add(aPolygon);
                   aPolygon.MouseDown += MouseDownPolygonHatches;
@@ -1540,6 +1540,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankGunLoad(): report=null");
             return false;
          }
+         string tType = report.TankCardNum.ToString();
          //--------------------------------
          string[] gunLoads = new string[5] { "He", "Ap", "Wp", "Hbci", "Hvap" };
          try
@@ -1573,16 +1574,16 @@ namespace Pattons_Best
                      return false;
                }
                string tName = "GunLoad" + gunload;
-               ITerritory? t = Territories.theTerritories.Find(tName);
+               ITerritory? t = Territories.theTerritories.Find(tName, tType);
                if (null == t)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankHatches(): cannot find tName=" + tName);
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankHatches(): cannot find tName=" + tName + " tType=" + tType);
                   return false;
                }
                PointCollection points = new PointCollection();
                foreach (IMapPoint mp1 in t.Points)
                   points.Add(new System.Windows.Point(mp1.X, mp1.Y));
-               Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = t.ToString() };
+               Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = tName };
                myPolygons.Add(aPolygon);
                myCanvasTank.Children.Add(aPolygon);
                Canvas.SetZIndex(aPolygon, 101);
@@ -1670,7 +1671,7 @@ namespace Pattons_Best
                PointCollection points = new PointCollection();
                foreach (IMapPoint mp1 in t.Points)
                   points.Add(new System.Windows.Point(mp1.X, mp1.Y));
-               Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = t.ToString() };
+               Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = tName };
                aPolygon.ContextMenu = myContextMenuCrewActions[crewmember];
                myPolygons.Add(aPolygon);
                myCanvasTank.Children.Add(aPolygon);
@@ -1690,6 +1691,7 @@ namespace Pattons_Best
             return false;
          }
          TankCard tankCard = new TankCard(report.TankCardNum);
+         string tType = report.TankCardNum.ToString();
          //--------------------------------
          string[] gunLoads = new string[5] { "He", "Ap", "Wp", "Hbci", "Hvap" };
          foreach (string gunload in gunLoads)
@@ -1721,16 +1723,16 @@ namespace Pattons_Best
                   return false;
             }
             string tName = "GunLoad" + gunload;
-            ITerritory? t = Territories.theTerritories.Find(tName);
+            ITerritory? t = Territories.theTerritories.Find(tName, tType);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankAmmoOrders(): cannot find tName=" + tName);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankAmmoOrders(): cannot find tName=" + tName + " tType=" + tType);
                return false;
             }
             PointCollection points = new PointCollection();
             foreach (IMapPoint mp1 in t.Points)
                points.Add(new System.Windows.Point(mp1.X, mp1.Y));
-            Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = t.ToString() };
+            Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = tName };
             myPolygons.Add(aPolygon);
             myCanvasTank.Children.Add(aPolygon);
             Canvas.SetZIndex(aPolygon, 101);

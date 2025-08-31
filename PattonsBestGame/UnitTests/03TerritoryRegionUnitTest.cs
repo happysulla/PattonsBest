@@ -509,7 +509,6 @@ namespace Pattons_Best
                   continue;
             }
             Ellipse aEllipse = new Ellipse() { Name = t.Name };
-
             aEllipse.StrokeThickness = 1;
             aEllipse.Stroke = Brushes.Red;
             aEllipse.Width = theEllipseDiameter;
@@ -590,7 +589,7 @@ namespace Pattons_Best
                PointCollection points = new PointCollection();
                foreach (IMapPoint mp1 in t.Points)
                   points.Add(new System.Windows.Point(mp1.X, mp1.Y));
-               Polygon aPolygon = new Polygon { Fill= Utilities.theBrushRegion, Points = points, Tag = t.ToString(), Visibility= Visibility.Visible };
+               Polygon aPolygon = new Polygon { Fill= Utilities.theBrushRegion, Points = points, Name = t.Name, Visibility= Visibility.Visible };
                aPolygon.MouseDown += this.MouseDownPolygon;
                Canvas.SetZIndex(aPolygon, 0);
                if ("Main" == t.CanvasName)
@@ -761,6 +760,20 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse(): myCanvasMain=null");
             return;
          }
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse(): myGameInstance=null");
+            return;
+         }
+         //------------------------------------------------
+         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast(); // remove it from list
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ButtonReadyRackChange_Click(): myGameInstance=null");
+            return;
+         }
+         string tType = lastReport.TankCardNum.ToString();
+         //------------------------------------------------
          System.Windows.Point p = e.GetPosition(myCanvasMain);
          bool isMainCanvas = true;
          if (p.X < 0.0)
@@ -770,35 +783,16 @@ namespace Pattons_Best
          }
          IMapPoint mp = new MapPoint(p.X, p.Y);
          System.Diagnostics.Debug.WriteLine("MouseDownEllipse(): {0}", mp.ToString());
-         ITerritory? matchingTerritory = null; // Find the corresponding Territory
          Ellipse mousedEllipse = (Ellipse)sender;
-         foreach (ITerritory? t in Territories.theTerritories)
-         {
-            if (null == t)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse(): t=null");
-               return;
-            }
-            string? tName = t.ToString();
-            if (null == tName)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse(): tName=null");
-               return;
-            }
-            if (mousedEllipse.Tag.ToString() == Utilities.RemoveSpaces(tName))
-            {
-               matchingTerritory = t;
-               break;
-            }
-         }
+         ITerritory? matchingTerritory = Territories.theTerritories.Find(mousedEllipse.Name, tType);
          if (null == matchingTerritory) // Check for error
          {
-            MessageBox.Show("Unable to find " + mousedEllipse.Tag.ToString());
+            MessageBox.Show("Unable to find " + mousedEllipse.Name);
             return;
          }
          if (null == myAnchorTerritory)
          {
-            MessageBox.Show("Anchoring " + mousedEllipse.Tag.ToString());
+            MessageBox.Show("Anchoring " + mousedEllipse.Name);
             myAnchorTerritory = matchingTerritory; // If there is no anchor territory. Set it.
             mousedEllipse.Fill = Brushes.Red;
             if (true == isMainCanvas)
@@ -807,16 +801,16 @@ namespace Pattons_Best
                myCanvasTank.MouseDown += MouseDownCanvas;
             return;
          }
-         if (matchingTerritory.ToString() == myAnchorTerritory.ToString())
+         if (matchingTerritory.Name == myAnchorTerritory.Name)
          {
             // If the matching territory is the anchor territory, the user
             // is requesting that they are done adding points for
             // defining the Region.  The Region is used set as part of the Territory. 
-            MessageBox.Show("Saving " + mousedEllipse.Tag.ToString());
+            MessageBox.Show("Saving " + mousedEllipse.Name);
             PointCollection points = new PointCollection();
             foreach (IMapPoint mp1 in myPoints)
                points.Add(new System.Windows.Point(mp1.X, mp1.Y));
-            Polygon aPolygon = new Polygon { Fill = Brushes.Red, Points = points, Tag = matchingTerritory.ToString() };
+            Polygon aPolygon = new Polygon { Fill = Brushes.Red, Points = points, Name = matchingTerritory.Name };
             aPolygon.MouseDown += this.MouseDownPolygon;
             aPolygon.Fill = Brushes.Black;
             mousedEllipse.Fill = Brushes.Black;
@@ -843,19 +837,25 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse2(): myCanvasMain=null");
             return;
          }
-         ITerritory? matchingTerritory = null; // Find the corresponding Territory
-         Ellipse mousedEllipse = (Ellipse)sender;
-         foreach (ITerritory t in Territories.theTerritories)
+         if (null == myGameInstance)
          {
-            if (mousedEllipse.Name == t.Name)
-            {
-               matchingTerritory = t;
-               break;
-            }
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse(): myGameInstance=null");
+            return;
          }
+         //------------------------------------------------
+         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast(); // remove it from list
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ButtonReadyRackChange_Click(): myGameInstance=null");
+            return;
+         }
+         string tType = lastReport.TankCardNum.ToString();
+         //------------------------------------------------
+         Ellipse mousedEllipse = (Ellipse)sender;
+         ITerritory? matchingTerritory = Territories.theTerritories.Find(mousedEllipse.Name, tType);
          if (null == matchingTerritory) // Check for error
          {
-            MessageBox.Show("Unable to find " + mousedEllipse.Tag.ToString());
+            MessageBox.Show("Unable to find " + mousedEllipse.Name);
             return;
          }
          if( false == SetRandomPoint(matchingTerritory))
@@ -889,6 +889,20 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygon(): myCanvasMain=null");
             return;
          }
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse(): myGameInstance=null");
+            return;
+         }
+         //------------------------------------------------
+         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast(); // remove it from list
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ButtonReadyRackChange_Click(): myGameInstance=null");
+            return;
+         }
+         string tType = lastReport.TankCardNum.ToString();
+         //------------------------------------------------
          System.Windows.Point p = e.GetPosition(myCanvasMain);
          bool isMainCanvas = true;
          if (p.X < 0.0)
@@ -902,26 +916,12 @@ namespace Pattons_Best
          {
             // This function removes an existing polygon when it is clicked if no achor territory exists
             Polygon aPolygon = (Polygon)sender;
-            ITerritory? matchingTerritory = null;
-            foreach (ITerritory t in Territories.theTerritories)
-            {
-               string? tName = t.ToString();
-               if( null == tName )
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygon(): tName=null");
-                  continue;
-               }
-               if (aPolygon.Tag.ToString() == Utilities.RemoveSpaces(tName))
-               {
-                  matchingTerritory = t;
-                  break;
-               }
-            }
+            ITerritory? matchingTerritory = Territories.theTerritories.Find(aPolygon.Name, tType);
             if (null == matchingTerritory) // Check for error
             {
-               MessageBox.Show("Unable to find " + aPolygon.Tag.ToString());
+               MessageBox.Show("Unable to find " + aPolygon.Name);
             }
-            else if ((null == myAnchorTerritory) || matchingTerritory.ToString() == myAnchorTerritory.ToString())
+            else if ((null == myAnchorTerritory) || matchingTerritory.Name == myAnchorTerritory.Name)
             {
                matchingTerritory.Points.Clear();
                if (true == isMainCanvas)
