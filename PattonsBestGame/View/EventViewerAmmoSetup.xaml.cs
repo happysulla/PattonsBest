@@ -227,8 +227,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): myGameInstance=null");
             return false;
          }
+         string tType = lastReport.TankCardNum.ToString();
          //--------------------------------------------------
-         ITerritory? t = Territories.theTerritories.Find("ReadyRackHe0");
+         ITerritory? t = Territories.theTerritories.Find("ReadyRackHe0", tType);
          if (null == t)
          {
             Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackHe0");
@@ -237,7 +238,7 @@ namespace Pattons_Best
          IMapItem rr1 = new MapItem("ReadyRackHe", 0.9, "c12RoundsLeft", t);
          //--------------------------------------------------
          myGameInstance.ReadyRacks.Add(rr1);
-         t = Territories.theTerritories.Find("ReadyRackAp0");
+         t = Territories.theTerritories.Find("ReadyRackAp0", tType);
          if (null == t)
          {
             Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackAp0");
@@ -251,7 +252,7 @@ namespace Pattons_Best
             myUnassignedCount -= myHbciRoundCount;
             myWpRoundCount = 5;
             myUnassignedCount -= myWpRoundCount;
-            t = Territories.theTerritories.Find("ReadyRackWp0");
+            t = Territories.theTerritories.Find("ReadyRackWp0", tType);
             if (null == t)
             {
                Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackWp0");
@@ -260,7 +261,7 @@ namespace Pattons_Best
             IMapItem rr3 = new MapItem("ReadyRackWp", 0.9, "c12RoundsLeft", t);
             //--------------------------------------------------
             myGameInstance.ReadyRacks.Add(rr3);
-            t = Territories.theTerritories.Find("ReadyRackHbci0");
+            t = Territories.theTerritories.Find("ReadyRackHbci0", tType);
             if (null == t)
             {
                Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackHbci0");
@@ -273,7 +274,7 @@ namespace Pattons_Best
          {
             myHvapRoundCountOriginal = myHvapRoundCount = lastReport.MainGunHVAP;
             myUnassignedCount -= myHvapRoundCount;
-            t = Territories.theTerritories.Find("ReadyRackHvap0");
+            t = Territories.theTerritories.Find("ReadyRackHvap0", tType);
             if (null == t)
             {
                Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackHvap0");
@@ -902,6 +903,15 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): myGameInstance=null");
             return false;
          }
+         //--------------------------------------------------
+         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast(); // remove it from list
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): myGameInstance=null");
+            return false;
+         }
+         string tType = lastReport.TankCardNum.ToString();
+         //--------------------------------------------------
          IMapItem? rrHe = myGameInstance.ReadyRacks[0];
          if( null == rrHe )
          {
@@ -910,7 +920,7 @@ namespace Pattons_Best
          }
          rrHe.Count = myHeReadyRackCount;
          string tName = rrHe.Name + rrHe.Count.ToString();
-         ITerritory? newT = Territories.theTerritories.Find(tName);
+         ITerritory? newT = Territories.theTerritories.Find(tName, tType);
          if (null == newT)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): newT=null for " + tName);
@@ -930,7 +940,7 @@ namespace Pattons_Best
          }
          rrAp.Count = myApReadyRackCount;
          tName = rrAp.Name + rrAp.Count.ToString();
-         newT = Territories.theTerritories.Find(tName);
+         newT = Territories.theTerritories.Find(tName, tType);
          if (null == newT)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): newT=null for " + tName);
@@ -952,7 +962,7 @@ namespace Pattons_Best
             }
             rrWp.Count = myWpReadyRackCount;
             tName = rrWp.Name + rrWp.Count.ToString();
-            newT = Territories.theTerritories.Find(tName);
+            newT = Territories.theTerritories.Find(tName, tType);
             if (null == newT)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): newT=null for " + tName);
@@ -972,7 +982,7 @@ namespace Pattons_Best
             }
             rrHbci.Count = myHbciReadyRackCount;
             tName = rrHbci.Name + rrHbci.Count.ToString();
-            newT = Territories.theTerritories.Find(tName);
+            newT = Territories.theTerritories.Find(tName, tType);
             if (null == newT)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): newT=null for " + tName);
@@ -994,7 +1004,7 @@ namespace Pattons_Best
             }
             rrHvap.Count = myHvapReadyRackCount;
             tName = rrHvap.Name + rrHvap.Count.ToString();
-            newT = Territories.theTerritories.Find(tName);
+            newT = Territories.theTerritories.Find(tName, tType);
             if (null == newT)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): newT=null for " + tName);
@@ -1318,6 +1328,15 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ButtonReadyRackChange_Click(): myGameInstance=null");
             return;
          }
+         //--------------------------------------------------
+         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast(); // remove it from list
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ButtonReadyRackChange_Click(): myGameInstance=null");
+            return;
+         }
+         string tType = lastReport.TankCardNum.ToString();
+         //--------------------------------------------------
          IMapItem? rr = null;
          bool isCountIncrease = false;
          Button b = (Button)sender;
@@ -1392,7 +1411,7 @@ namespace Pattons_Best
          else
             rr.Count--;
          string tName = rr.Name + rr.Count.ToString();
-         ITerritory? newT = Territories.theTerritories.Find(tName);
+         ITerritory? newT = Territories.theTerritories.Find(tName, tType);
          if (null == newT)
          {
             Logger.Log(LogEnum.LE_ERROR, "ButtonReadyRackChange_Click(): newT=null for " + tName);

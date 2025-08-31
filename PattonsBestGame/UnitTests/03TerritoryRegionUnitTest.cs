@@ -15,18 +15,21 @@ namespace Pattons_Best
 {
    public class TerritoryRegionUnitTest : IUnitTest
    {
-      private static Double theEllipseOffset = 8;
+      private static Double theEllipseDiameter = 20;
+      private static Double theEllipseOffset = theEllipseDiameter / 2.0;
       //--------------------------------------------------------
       private IGameInstance? myGameInstance = null;
       private string? myFileName = null;
       private DockPanel? myDockPanel = null;
       private Canvas? myCanvasTank = null;
       private Canvas? myCanvasMain = null;
+      private int myTankNum = 1;
       private CanvasImageViewer? myCanvasImageViewer = null;
       private bool myIsBattleMapShown = false;
       ITerritory? myAnchorTerritory = null;
       private List<Ellipse> myEllipses = new List<Ellipse>();
       private List<IMapPoint> myPoints = new List<IMapPoint>();
+      private readonly FontFamily myFontFam = new FontFamily("Tahoma");
       //--------------------------------------------------------
       public bool CtorError { get; } = false;
       private int myIndexName = 0;
@@ -39,14 +42,18 @@ namespace Pattons_Best
       {
          myIndexName = 0;
          myHeaderNames.Add("03-Delete Regions");
+         myHeaderNames.Add("03-Switch Map");
+         myHeaderNames.Add("03-Switch Tank");
          myHeaderNames.Add("03-Add Regions");
          myHeaderNames.Add("03-Select Random Pt");
          myHeaderNames.Add("03-Finish");
          //------------------------------------
          myCommandNames.Add("00-Regions");
          myCommandNames.Add("01-Switch Map");
-         myCommandNames.Add("02-Random Pt");
-         myCommandNames.Add("03-Cleanup");
+         myCommandNames.Add("02-Switch Tank");
+         myCommandNames.Add("03-Add Regions");
+         myCommandNames.Add("04-Random Pt");
+         myCommandNames.Add("05-Cleanup");
          //------------------------------------
          myDockPanel = dp;
          //------------------------------------
@@ -134,16 +141,11 @@ namespace Pattons_Best
          {
             //--------------------------------------------
             // Remove all Ellipse and Polygons
-            List<UIElement> results = new List<UIElement>();
-            foreach (UIElement ui in myCanvasMain.Children)
+            if( false == DeleteEllipsesAndPolygons())
             {
-               if (ui is Ellipse)
-                  results.Add(ui);
-               if (ui is Polygon)
-                  results.Add(ui);
+               Logger.Log(LogEnum.LE_ERROR, "TerritoryRegionUnitTest.Command(): DeleteEllipsesAndPolygons() returned false");
+               return false;
             }
-            foreach (UIElement ui1 in results)
-               myCanvasMain.Children.Remove(ui1);
             foreach (ITerritory t in Territories.theTerritories)
                t.Points.Clear();
             if (false == NextTest(ref gi)) // automatically move next test
@@ -164,11 +166,67 @@ namespace Pattons_Best
                myIsBattleMapShown = true;
                myCanvasImageViewer.ShowBattleMap(myCanvasMain);
             }
-            CreateEllipses(Territories.theTerritories);
-            CreatePolygons(Territories.theTerritories);
+            if (false == CreateEllipses(true))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest.Command(): CreateEllipses() returned false");
+               return false;
+            }
+            if (false == CreatePolygons())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest.Command(): CreatePolygons() returned false");
+               return false;
+            }
          }
          else if (CommandName == myCommandNames[2])
-         { 
+         {
+            if (false == DeleteEllipsesAndPolygons())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest.Command(): DeleteEllipsesAndPolygons() returned false");
+               return false;
+            }
+            //-------------------------------------
+            foreach (UIElement ui in myCanvasMain.Children) // Clean the Canvas of all marks
+            {
+               if (ui is Image img)
+               {
+                  if (true == img.Name.Contains("TankMat"))
+                  {
+                     myCanvasTank.Children.Remove(img); // Remove the old image
+                     break;
+                  }
+               }
+            }
+            //-------------------------------------
+            myTankNum++;
+            if (18 < myTankNum)
+               myTankNum = 0;
+            string tankMatName = "m";
+            if (9 < myTankNum)
+               tankMatName += myTankNum.ToString();
+            else
+               tankMatName += ("0" + myTankNum.ToString());
+            Image image = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage(tankMatName) };
+            myCanvasTank.Children.Add(image); // TankMat changes as get new tanks
+            Canvas.SetLeft(image, 0);
+            Canvas.SetTop(image, 0);
+            //-------------------------------------
+            if (false == CreateEllipses(true))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest.Command(): CreateEllipses() returned false");
+               return false;
+            }
+            if (false == CreatePolygons())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest.Command(): CreatePolygons() returned false");
+               return false;
+            }
+         }
+         else if (CommandName == myCommandNames[3])
+         {
+
+         }
+         else if (CommandName == myCommandNames[4])
+         {
 
          }
          else
@@ -191,25 +249,40 @@ namespace Pattons_Best
          if (HeaderName == myHeaderNames[0])
          {
             ++myIndexName;
-            CreateEllipses(Territories.theTerritories);
-            CreatePolygons(Territories.theTerritories);
+            if (false == CreateEllipses(true))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "NextTest(): CreateEllipses() returned false");
+               return false;
+            }
+            if (false == CreatePolygons())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "NextTest(): CreatePolygons() returned false");
+               return false;
+            }
          }
          else if (HeaderName == myHeaderNames[1])
          {
             ++myIndexName;
-            List<UIElement> results = new List<UIElement>();
-            foreach (UIElement ui in myCanvasMain.Children)
-            {
-               if (ui is Ellipse)
-                  results.Add(ui);
-               if (ui is Polygon)
-                  results.Add(ui);
-            }
-            foreach (UIElement ui1 in results)
-               myCanvasMain.Children.Remove(ui1);
-            CreateEllipses2(Territories.theTerritories);
          }
          else if (HeaderName == myHeaderNames[2])
+         {
+            ++myIndexName;
+         }
+         else if (HeaderName == myHeaderNames[3])
+         {
+            ++myIndexName;
+            if (false == DeleteEllipsesAndPolygons())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest.Command(): DeleteEllipsesAndPolygons() returned false");
+               return false;
+            }
+            if (false == CreateEllipses(false))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "NextTest(): CreateEllipses() returned false");
+               return false;
+            }
+         }
+         else if (HeaderName == myHeaderNames[4])
          {
             ++myIndexName;
          }
@@ -367,29 +440,62 @@ namespace Pattons_Best
          }
          return true;
       }
-      private void CreateEllipses(ITerritories territories)
+      private bool DeleteEllipsesAndPolygons()
+      {
+         if (null == myCanvasTank)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "DeleteEllipses(): myCanvasTank=null");
+            return false;
+         }
+         //-------------------------------------------
+         List<UIElement> results = new List<UIElement>();
+         foreach (UIElement ui in myCanvasTank.Children)
+         {
+            if (ui is Ellipse)
+               results.Add(ui);
+            if (ui is Polygon)
+               results.Add(ui);
+         }
+         foreach (UIElement ui1 in results)
+            myCanvasTank.Children.Remove(ui1);
+         //-------------------------------------------
+         if (null == myCanvasMain)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "DeleteEllipses(): myCanvasMain=null");
+            return false;
+         }
+         //-------------------------------------------
+         List<UIElement> results1 = new List<UIElement>();
+         foreach (UIElement ui in myCanvasMain.Children)
+         {
+            if (ui is Ellipse)
+               results1.Add(ui);
+         }
+         foreach (UIElement ui1 in results1)
+            myCanvasMain.Children.Remove(ui1);
+         //-------------------------------------------
+         myEllipses.Clear();
+         return true;
+      }
+      private bool CreateEllipses(bool isFirst)
       {
          myEllipses.Clear();
          if (null == myCanvasTank)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateEllipses(): myCanvasTank=null");
-            return;
+            return false;
          }
          if (null == myCanvasMain)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateEllipses(): myCanvasMain=null");
-            return;
+            return false;
          }
-         if (null == myCanvasMain)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateEllipses(): myCanvasMain=null");
-            return;
-         }
-         foreach (Territory t in territories)
+         SolidColorBrush aSolidColorBrush0 = new SolidColorBrush { Color = Color.FromArgb(100, 100, 100, 0) }; // nearly transparent but slightly colored
+         foreach (Territory t in Territories.theTerritories)
          {
             if (true == myIsBattleMapShown)
             {
-               if (("A" == t.Type) || ("B" == t.Type) || ("C" == t.Type) || ("D" == t.Type) || ("E" == t.Type) )
+               if (("A" == t.Type) || ("B" == t.Type) || ("C" == t.Type) || ("D" == t.Type) || ("E" == t.Type))
                   continue;
             }
             else
@@ -397,74 +503,72 @@ namespace Pattons_Best
                if ("Battle" == t.Type)
                   continue;
             }
-            Ellipse aEllipse = new Ellipse { Tag = t.ToString() };
-            aEllipse.Fill = Brushes.Pink;
+            if (("1" == t.Type) || ("2" == t.Type) || ("3" == t.Type) || ("4" == t.Type) || ("5" == t.Type) || ("6" == t.Type) || ("7" == t.Type) || ("8" == t.Type) || ("9" == t.Type) || ("10" == t.Type) || ("11" == t.Type) || ("12" == t.Type) || ("13" == t.Type) || ("14" == t.Type) || ("15" == t.Type) || ("16" == t.Type) || ("17" == t.Type) || ("18" == t.Type))
+            {
+               if (myTankNum.ToString() != t.Type)
+                  continue;
+            }
+            Ellipse aEllipse = new Ellipse() { Name = t.Name };
+
             aEllipse.StrokeThickness = 1;
             aEllipse.Stroke = Brushes.Red;
-            aEllipse.Width = 15;
-            aEllipse.Height = 15;
+            aEllipse.Width = theEllipseDiameter;
+            aEllipse.Height = theEllipseDiameter;
             System.Windows.Point p = new System.Windows.Point(t.CenterPoint.X, t.CenterPoint.Y);
             p.X -= theEllipseOffset;
             p.Y -= theEllipseOffset;
             Canvas.SetLeft(aEllipse, p.X);
             Canvas.SetTop(aEllipse, p.Y);
-            if ("Main" == t.CanvasName)
-               myCanvasMain.Children.Add(aEllipse);
+            myEllipses.Add(aEllipse);
+            if( true == isFirst)
+            {
+               aEllipse.Fill = aSolidColorBrush0;
+               aEllipse.MouseDown += this.MouseDownEllipse;
+            }
             else
-               myCanvasTank.Children.Add(aEllipse);
-            myEllipses.Add(aEllipse);
-            aEllipse.MouseDown += this.MouseDownEllipse;
-         }
-      }
-      private void CreateEllipses2(ITerritories territories)
-      {
-         myEllipses.Clear();
-         if (null == myCanvasMain)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateEllipses(): myCanvasMain=null");
-            return;
-         }
-         foreach (Territory t in territories)
-         {
-            if ("Main" != t.CanvasName)
-               continue;
-            if ("Battle" == t.Type)
-               continue;
-            Ellipse aEllipse = new Ellipse { Name = t.ToString() };
-            aEllipse.Fill = Brushes.Pink;
-            aEllipse.StrokeThickness = 1;
-            aEllipse.Stroke = Brushes.Red;
-            aEllipse.Width = 10;
-            aEllipse.Height = 10;
-            System.Windows.Point p = new System.Windows.Point(t.CenterPoint.X, t.CenterPoint.Y);
+            {
+               aEllipse.Fill = Brushes.Pink;
+               aEllipse.MouseDown += this.MouseDownEllipse2;
+            }
+            //-------------------------
+            Label aLabel = new Label() { Foreground = Brushes.Red, FontFamily = myFontFam, FontWeight = FontWeights.Bold, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Content = t.Name };
             p.X -= theEllipseOffset;
-            p.Y -= theEllipseOffset;
-            Canvas.SetLeft(aEllipse, p.X);
-            Canvas.SetTop(aEllipse, p.Y);
-            myCanvasMain.Children.Add(aEllipse);
-            myEllipses.Add(aEllipse);
-            aEllipse.MouseDown += this.MouseDownEllipse2;
+            p.Y -= 2 * theEllipseOffset;
+            Canvas.SetLeft(aLabel, p.X);
+            Canvas.SetTop(aLabel, p.Y);
+            //-------------------------
+            if ("Main" == t.CanvasName)
+            {
+               myCanvasMain.Children.Add(aEllipse);
+               //myCanvasMain.Children.Add(aLabel);
+            }
+            else
+            {
+               myCanvasTank.Children.Add(aEllipse);
+               //myCanvasTank.Children.Add(aLabel);
+            }
          }
+         return true;
       }
-      private void CreatePolygons(ITerritories territories)
+      private bool CreatePolygons()
       {
          myPoints.Clear();
          if (null == myCanvasTank)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateEllipses(): myCanvasTank=null");
-            return;
+            return false;
          }
          if (null == myCanvasMain)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateEllipses(): myCanvasMain=null");
-            return;
+            return false;
          }
          if (null == myCanvasMain)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateEllipses(): myCanvasMain=null");
-            return;
+            return false;
          }
-         foreach (Territory t in territories)
+         foreach (Territory t in Territories.theTerritories)
          {
             if (true == myIsBattleMapShown)
             {
@@ -474,6 +578,11 @@ namespace Pattons_Best
             else
             {
                if ("Battle" == t.Type)
+                  continue;
+            }
+            if (("1" == t.Type) || ("2" == t.Type) || ("3" == t.Type) || ("4" == t.Type) || ("5" == t.Type) || ("6" == t.Type) || ("7" == t.Type) || ("8" == t.Type) || ("9" == t.Type) || ("10" == t.Type) || ("11" == t.Type) || ("12" == t.Type) || ("13" == t.Type) || ("14" == t.Type) || ("15" == t.Type) || ("16" == t.Type) || ("17" == t.Type) || ("18" == t.Type))
+            {
+               if (myTankNum.ToString() != t.Type)
                   continue;
             }
             if (1 < t.Points.Count)
@@ -490,6 +599,7 @@ namespace Pattons_Best
                   myCanvasTank.Children.Add(aPolygon);
             }
          }
+         return true;
       }
       private bool CreateXml(ITerritories territories)
       {

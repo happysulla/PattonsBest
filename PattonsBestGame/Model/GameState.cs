@@ -1669,6 +1669,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): lastReport=null");
             return false;
          }
+         string tType = lastReport.TankCardNum.ToString();
          //---------------------------------
          dieRoll = Utilities.RandomGenerator.Next(1, 11);             // assign weather randomly
          lastReport.Weather = TableMgr.GetWeather(gi.Day, dieRoll);
@@ -1709,7 +1710,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          int count = 4;
          string tName = "ReadyRackHe" + count.ToString();
-         ITerritory? t = Territories.theTerritories.Find(tName);
+         ITerritory? t = Territories.theTerritories.Find(tName, tType);
          if (null == t)
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): t=null for " + tName);
@@ -1721,7 +1722,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          count = 3;
          tName = "ReadyRackAp" + count.ToString();
-         t = Territories.theTerritories.Find(tName);
+         t = Territories.theTerritories.Find(tName, tType);
          if (null == t)
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): t=null for " + tName);
@@ -1733,7 +1734,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          count = 0;
          tName = "ReadyRackWp" + count.ToString();
-         t = Territories.theTerritories.Find(tName);
+         t = Territories.theTerritories.Find(tName, tType);
          if (null == t)
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): t=null for " + tName);
@@ -1745,7 +1746,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          count = 1;
          tName = "ReadyRackHbci" + count.ToString();
-         t = Territories.theTerritories.Find(tName);
+         t = Territories.theTerritories.Find(tName, tType);
          if (null == t)
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): t=null for " + tName);
