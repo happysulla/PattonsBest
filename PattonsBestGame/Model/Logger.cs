@@ -167,7 +167,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_TO_KILL_ATTACK);
          //SetOn(LogEnum.LE_SHOW_TO_KILL_MG_ATTACK);
          //SetOn(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS);
-         //SetOn(LogEnum.LE_SHOW_FIRE_DIRECTION);
+         SetOn(LogEnum.LE_SHOW_FIRE_DIRECTION);
          //-------------------------------
          SetOn(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES);
          SetOn(LogEnum.LE_SHOW_VP_CAPTURED_AREA);

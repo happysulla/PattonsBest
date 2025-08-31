@@ -14,7 +14,7 @@ namespace Pattons_Best
       public int Probability { get; set; } = 3;
       public EnumResistance Resistance { get; set; }
       public string Name { get; set; } = Utilities.GetNickName();
-      public int TankCardNum { get; set; } = 1;
+      public int TankCardNum { get; set; } = 2;  // <cgs> TEST - changed to two
       public string Weather { get; set; } = "Clear";
       public ICrewMember Commander { get; set; } = new CrewMember("Commander", "Sgt", "c07Commander");
       public ICrewMember Gunner { get; set; } = new CrewMember("Gunner", "Cpl", "c11Gunner");

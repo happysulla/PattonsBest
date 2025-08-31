@@ -1658,7 +1658,7 @@ namespace Pattons_Best
       {
          if (false == PerformAutoSetupSkipCrewAssignments(gi))
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): PerformAutoSetupSkipCrewAssignments() return false");
             return false;
          }
          //---------------------------------
@@ -1773,6 +1773,14 @@ namespace Pattons_Best
       }
       private bool PerformAutoSetupSkipPreparations(IGameInstance gi)
       {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): lastReport=null");
+            return false;
+         }
+         string tType = lastReport.TankCardNum.ToString();
+         //------------------------------------
          bool isCommanderButtonUp = false;
          bool isDriverButtonUp = false;
          bool isAssistantButtonUp = false;
@@ -1799,7 +1807,7 @@ namespace Pattons_Best
          cm.IsButtonedUp = isCommanderButtonUp;
          if (false == cm.IsButtonedUp)
          {
-            ITerritory? t = Territories.theTerritories.Find("Commander_Hatch");
+            ITerritory? t = Territories.theTerritories.Find("Commander_Hatch", tType);
             if (null == t)
             {
                Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for Commander_Hatch");
@@ -1818,7 +1826,7 @@ namespace Pattons_Best
          cm.IsButtonedUp = isDriverButtonUp;
          if (false == cm.IsButtonedUp)
          {
-            ITerritory? t = Territories.theTerritories.Find("Driver_Hatch");
+            ITerritory? t = Territories.theTerritories.Find("Driver_Hatch", tType);
             if (null == t)
             {
                Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for Driver_Hatch");
@@ -1837,7 +1845,7 @@ namespace Pattons_Best
          cm.IsButtonedUp = isAssistantButtonUp;
          if (false == cm.IsButtonedUp)
          {
-            ITerritory? t = Territories.theTerritories.Find("Assistant_Hatch");
+            ITerritory? t = Territories.theTerritories.Find("Assistant_Hatch", tType);
             if (null == t)
             {
                Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for Assistant_Hatch");

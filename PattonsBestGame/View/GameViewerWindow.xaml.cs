@@ -104,8 +104,6 @@ namespace Pattons_Best
       private double myPreviousScrollWidth = 0.0;
       private EllipseDisplayDialog? myEllipseDisplayDialog = null;
       //---------------------------------------------------------------------
-      private Image myTankMatImage = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("m01") };
-      //---------------------------------------------------------------------
       private readonly SolidColorBrush mySolidColorBrushClear = new SolidColorBrush() { Color = Color.FromArgb(0, 0, 1, 0) };
       private readonly SolidColorBrush mySolidColorBrushBlack = new SolidColorBrush() { Color = Colors.Black };
       private readonly SolidColorBrush mySolidColorBrushIvory = new SolidColorBrush() { Color = Colors.Ivory };
@@ -125,6 +123,7 @@ namespace Pattons_Best
       private readonly List<Button> myMoveButtons = new List<Button>();
       private readonly List<Button> myBattleButtons = new List<Button>();
       private readonly List<Button> myTankButtons = new List<Button>();
+      private int myTankCardNum = 1;
       private readonly SplashDialog mySplashScreen;
       private Dictionary<string, ContextMenu> myContextMenuCrewActions = new Dictionary<string, ContextMenu>();
       private Dictionary<string, ContextMenu> myContextMenuGunLoadActions = new Dictionary<string, ContextMenu>();
@@ -153,9 +152,10 @@ namespace Pattons_Best
          mySplashScreen.Show();
          InitializeComponent();
          //---------------------------------------------------------------
-         myCanvasTank.Children.Add(myTankMatImage); // TankMat changes as get new tanks
-         Canvas.SetLeft(myTankMatImage, 0);
-         Canvas.SetTop(myTankMatImage, 0);
+         Image image = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("m01") };
+         myCanvasTank.Children.Add(image); // TankMat changes as get new tanks
+         Canvas.SetLeft(image, 0);
+         Canvas.SetTop(image, 0);
          //---------------------------------------------------------------
          myGameEngine = ge;
          myGameInstance = gi;
@@ -290,6 +290,32 @@ namespace Pattons_Best
             return;
          }
          this.Title = UpdateViewTitle(gi, lastReport);
+         //-------------------------------------------------------
+         if( myTankCardNum != lastReport.TankCardNum) // switch out tank mat if do not match
+         {
+            myTankCardNum = lastReport.TankCardNum;
+            foreach (UIElement ui in myCanvasMain.Children) // Clean the Canvas of all marks
+            {
+               if (ui is Image img)
+               {
+                  if (true == img.Name.Contains("TankMat"))
+                  {
+                     myCanvasTank.Children.Remove(img); // Remove the old image
+                     break;
+                  }
+               }
+            }
+            string tankMatName = "m";
+            if (9 < lastReport.TankCardNum)
+               tankMatName += lastReport.TankCardNum.ToString();
+            else
+               tankMatName += ("0" + lastReport.TankCardNum.ToString());
+            Image image = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage(tankMatName) };
+            myCanvasTank.Children.Add(image); // TankMat changes as get new tanks
+            Canvas.SetLeft(image, 0);
+            Canvas.SetTop(image, 0);
+         }
+         //-------------------------------------------------------
          switch (action)
          {
             case GameAction.UnitTestStart:
@@ -321,16 +347,6 @@ namespace Pattons_Best
             case GameAction.MorningBriefingDayOfRest:
                break;
             case GameAction.MorningBriefingTankReplacementRoll:
-               myCanvasTank.Children.Remove(myTankMatImage); // Remove the old image
-               string tankMatName = "m";
-               if (9 < lastReport.TankCardNum)
-                  tankMatName += lastReport.TankCardNum.ToString();
-               else
-                  tankMatName += ("0" + lastReport.TankCardNum.ToString());
-               myTankMatImage = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage(tankMatName) };
-               myCanvasTank.Children.Add(myTankMatImage); // TankMat changes as get new tanks
-               Canvas.SetLeft(myTankMatImage, 0);
-               Canvas.SetTop(myTankMatImage, 0);
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                break;
@@ -681,7 +697,7 @@ namespace Pattons_Best
          bool iMainGunAbleAbleToFireDueToMoving = (false == isTankMoving) || (true == card.myIsHvss);
          bool isMainGunFiringAvailable = ((true == iMainGunAbleAbleToFireDueToMoving) && (false == gi.IsMalfunctionedMainGun) && (false == gi.IsBrokenMainGun) && (false == gi.IsBrokenGunSight) && (0 < totalAmmo) && ("None" != gi.GetGunLoadType()) && (false == isLoaderChangingLoad) );
          bool isShermanMoveAvailable = ((false == gi.Sherman.IsThrownTrack) && (false == gi.Sherman.IsAssistanceNeeded) && (false == gi.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch));
-
+         //---------------------------------
          MenuItem menuItem1 = new MenuItem();
          myContextMenuCrewActions["Driver"].Items.Clear();
          myContextMenuCrewActions["Driver"].Visibility = Visibility.Visible;
@@ -1458,6 +1474,14 @@ namespace Pattons_Best
       }
       private bool UpdateCanvasTankHatches(IGameInstance gi, GameAction action)
       {
+         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankHatches(): lastReport=null");
+            return false;
+         }
+         string tType = lastReport.TankCardNum.ToString();
+         //--------------------------------------------
          myPolygons.Clear();
          IAfterActionReport? report = gi.Reports.GetLast();
          if (null == report)
@@ -1483,10 +1507,10 @@ namespace Pattons_Best
                if ( (true == cm.IsButtonedUp) && (false == cm.IsIncapacitated) )
                {
                   string tName = crewmember + "_Hatch";
-                  ITerritory? t = Territories.theTerritories.Find(tName);
+                  ITerritory? t = Territories.theTerritories.Find(tName, tType);
                   if (null == t)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas_TankHatches(): cannot find tName=" + tName);
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas_TankHatches(): cannot find tName=" + tName + " tType=" + tType);
                      return false;
                   }
                   PointCollection points = new PointCollection();
@@ -1591,6 +1615,7 @@ namespace Pattons_Best
             return false;
          }
          TankCard tankCard = new TankCard(report.TankCardNum);
+         string tType = report.TankCardNum.ToString();
          //--------------------------------
          string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Gunner" };
          foreach (string crewmember in crewmembers)
@@ -1608,10 +1633,10 @@ namespace Pattons_Best
             if ((true == cm.IsButtonedUp) && (false == cm.IsIncapacitated) )
             {
                string tName = crewmember + "_Hatch";
-               ITerritory? t = Territories.theTerritories.Find(tName);
+               ITerritory? t = Territories.theTerritories.Find(tName, tType);
                if (null == t)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankOrders(): cannot find tName=" + tName);
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankOrders(): cannot find tName=" + tName + " tType=" + tType);
                   return false;
                }
                PointCollection points = new PointCollection();
@@ -1627,10 +1652,10 @@ namespace Pattons_Best
          foreach (string crewmember in crewmembers)
          {
             string tName = crewmember + "Action";
-            ITerritory? t = Territories.theTerritories.Find(tName);
+            ITerritory? t = Territories.theTerritories.Find(tName, tType);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankOrders(): cannot find tName=" + tName);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankOrders(): cannot find tName=" + tName + " tType=" + tType);
                return false;
             }
             //--------------------------------------
@@ -2808,16 +2833,24 @@ namespace Pattons_Best
       //-------------CONTROLLER FUNCTIONS---------------------------------
       private void MouseDownPolygonHatches(object sender, MouseButtonEventArgs e)
       {
+         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): lastReport=null");
+            return;
+         }
+         string tType = lastReport.TankCardNum.ToString();
+         //--------------------------------------------
          Polygon? clickedPolygon = sender as Polygon;
          if (null == clickedPolygon)
          {
             Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): clickedPolygon=null");
             return;
          }
-         ITerritory? t = Territories.theTerritories.Find(clickedPolygon.Name);
+         ITerritory? t = Territories.theTerritories.Find(clickedPolygon.Name, tType);
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): t=null for " + clickedPolygon.Name.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonHatches(): t=null for " + clickedPolygon.Name.ToString() + " tType=" + tType);
             return;
          }
          string[] crewmembers = new string[4] { "Driver", "Assistant", "Commander", "Loader" };

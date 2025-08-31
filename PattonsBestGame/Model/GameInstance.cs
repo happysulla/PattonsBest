@@ -407,7 +407,7 @@ namespace Pattons_Best
          ITerritory? t = Territories.theTerritories.Find(tName, tType);
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetCrewActionTerritory(): Territories.theTerritories.Find() returned false for role=" + cm.Role);
+            Logger.Log(LogEnum.LE_ERROR, "SetCrewActionTerritory(): Territories.theTerritories.Find() returned false for tName=" + tName + " type=" + tType);
             return false;
          }
          cm.TerritoryCurrent = t;

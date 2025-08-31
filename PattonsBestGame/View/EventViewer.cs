@@ -5582,11 +5582,11 @@ namespace Pattons_Best
                break;
             case "Begin Game":
                action = GameAction.SetupShowMapHistorical;
-               action = GameAction.TestingStartMorningBriefing;  // <cgs> TEST - skip the ammo setup
-               action = GameAction.TestingStartPreparations;     // <cgs> TEST - skip morning briefing and crew/ammo setup
-               action = GameAction.TestingStartMovement;         // <cgs> TEST - start with movement - skip battle prep phase
-               action = GameAction.TestingStartBattle;           // <cgs> TEST - skip the movement portion - beging with battle setup
-               action = GameAction.TestingStartAmbush;           // <cgs> TEST - skip battle setup
+               //action = GameAction.TestingStartMorningBriefing;  // <cgs> TEST - skip the ammo setup
+               //action = GameAction.TestingStartPreparations;     // <cgs> TEST - skip morning briefing and crew/ammo setup
+               //action = GameAction.TestingStartMovement;         // <cgs> TEST - start with movement - skip battle prep phase
+               //action = GameAction.TestingStartBattle;           // <cgs> TEST - skip the movement portion - beging with battle setup
+               //action = GameAction.TestingStartAmbush;           // <cgs> TEST - skip battle setup
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Cancel":

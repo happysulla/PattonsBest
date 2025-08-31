@@ -531,7 +531,8 @@ namespace Pattons_Best
       }
       public static string GetMainGunSector(IGameInstance gi)
       {
-         double rotation = gi.Sherman.RotationHull + gi.Sherman.RotationTurret;
+         double originalRotation = gi.Sherman.RotationHull + gi.Sherman.RotationTurret;
+         double rotation = originalRotation;
          if (rotation < 0)
             rotation += 360.0;
          if( 359 < rotation )
@@ -551,7 +552,7 @@ namespace Pattons_Best
             case 300.0:
                return "4";
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetMainGunSector() reached default rotation=" + rotation.ToString() + " hr=" + gi.Sherman.RotationHull.ToString() + " tr=" + gi.Sherman.RotationTurret.ToString() );
+               Logger.Log(LogEnum.LE_ERROR, "GetMainGunSector() reached default rotation=" + rotation.ToString() + " or=" + originalRotation.ToString() + " hr=" + gi.Sherman.RotationHull.ToString() + " tr=" + gi.Sherman.RotationTurret.ToString());
                return "ERROR";
          }
       }
@@ -599,7 +600,7 @@ namespace Pattons_Best
       public Territory(string name) { Name = name; }
       public override string ToString()
       {
-         return Name;
+         return Name + ":" + Type;
       }
       public ITerritory Find(List<ITerritory> territories, string name)
       {
