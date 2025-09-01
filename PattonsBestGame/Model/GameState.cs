@@ -301,7 +301,7 @@ namespace Pattons_Best
             case "Ground Snow": gi.BattleStacks.Add(new MapItem("GroundSnow", zoom, "c27SnowGround", w1)); break;
             case "Deep Snow": gi.BattleStacks.Add(new MapItem("DeepSnow", zoom, "c25SnowDeep", w1)); break;
             case "Falling and Ground Snow": gi.BattleStacks.Add(new MapItem("GroundSnow", zoom, "c27SnowGround", w1)); gi.BattleStacks.Add(new MapItem("FallingSnow", zoom, "c26SnowFalling", w2)); break;
-            case "Falling and Deep Snow": gi.BattleStacks.Add(new MapItem("Dee Snow", zoom, "c25SnowDeep", w1)); gi.BattleStacks.Add(new MapItem("FallingSnow", zoom, "c26SnowFalling", w2)); break;
+            case "Falling and Deep Snow": gi.BattleStacks.Add(new MapItem("Deep Snow", zoom, "c25SnowDeep", w1)); gi.BattleStacks.Add(new MapItem("FallingSnow", zoom, "c26SnowFalling", w2)); break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "SetWeatherCounters(): reached default weatherRoll=" + weatherRolled);
                return false;
@@ -1621,7 +1621,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipCrewAssignments(): gi.Reports.GetLast() returned null");
             return false;
          }
-         report.TankCardNum = 4; // <cgs> TEST - Set the TankCardNum
+         report.TankCardNum = 6; // <cgs> TEST - Set the TankCardNum
          //-------------------------------
          int randNum = Utilities.RandomGenerator.Next(3);
          if (0 == randNum)
@@ -4592,6 +4592,13 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanToKillRoll): " + returnStatus);
                   }
                   break;
+               case GameAction.BattleRoundSequenceShermanToKillRollMiss: 
+                  if( false == ResolveToKillEnemyUnitCleanup(gi, ref action))
+                  {
+                     returnStatus = "ResolveToKillEnemyUnit() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanToKillRollMiss): " + returnStatus);
+                  }
+                  break;
                case GameAction.BattleRoundSequenceFireAaMg:
                   action = GameAction.BattleRoundSequenceShermanFiringSelectTargetMg;
                   gi.EventDisplayed = gi.EventActive = "e054"; // resolve attack
@@ -6468,7 +6475,7 @@ namespace Pattons_Best
          ShermanAttack hit = gi.ShermanHits[0];
          if (("Hbci" == hit.myAmmoType) || ("Wp" == hit.myAmmoType))
          {
-            Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitCleanup(): first time thru with SSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnit(): first time thru with SSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
             if (false == ResolveToKillEnemyUnitCleanup(gi, ref outAction))
             {
                Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnit(): ResolveToKillEnemyUnitCleanup() returned false");
@@ -8084,7 +8091,7 @@ namespace Pattons_Best
                }
                break;
             default:
-               returnStatus = "Reached Default ERROR";
+               returnStatus = "Reached Default ERROR action=" + action.ToString();
                Logger.Log(LogEnum.LE_ERROR, "GameStateUnitTest.PerformAction(): " + returnStatus);
                break;
          }

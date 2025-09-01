@@ -127,27 +127,6 @@ namespace Pattons_Best
                }
             }
          }
-         //-------------------------------------
-         IAfterActionReport? report = gi.Reports.GetLast();
-         if (null == report)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest(): gi.Reports.GetLast() returned null");
-            CtorError = true;
-            return;
-         }
-         //-------------------------------------
-         myTankNum = report.TankCardNum;
-         if (18 < myTankNum)
-            myTankNum = 0;
-         string tankMatName = "m";
-         if (9 < myTankNum)
-            tankMatName += myTankNum.ToString();
-         else
-            tankMatName += ("0" + myTankNum.ToString());
-         Image image = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage(tankMatName) };
-         myCanvasTank.Children.Add(image); // TankMat changes as get new tanks
-         Canvas.SetLeft(image, 0);
-         Canvas.SetTop(image, 0);
          //----------------------------------
          if ( false == SetFileName())
          {
@@ -305,6 +284,28 @@ namespace Pattons_Best
          //---------------------------------
          if (HeaderName == myHeaderNames[0])
          {
+            //-------------------------------------
+            IAfterActionReport? report = gi.Reports.GetLast();
+            if (null == report)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "NextTest(): gi.Reports.GetLast() returned null");
+               return false;
+            }
+            //-------------------------------------
+            myTankNum = report.TankCardNum;
+            if (18 < myTankNum)
+               myTankNum = 0;
+            string tankMatName = "m";
+            if (9 < myTankNum)
+               tankMatName += myTankNum.ToString();
+            else
+               tankMatName += ("0" + myTankNum.ToString());
+            Image image = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage(tankMatName) };
+            myCanvasTank.Children.Add(image); // TankMat changes as get new tanks
+            Canvas.SetLeft(image, 0);
+            Canvas.SetTop(image, 0);
+            //-------------------------------------
+            myTankNum = report.TankCardNum;
             ++myIndexName;
             if (false == CreateEllipses())
             {

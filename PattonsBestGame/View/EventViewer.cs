@@ -5225,7 +5225,7 @@ namespace Pattons_Best
                            break;
                         case "Miss":
                            if (0 < myGameInstance.ShermanHits.Count)
-                              action = GameAction.BattleRoundSequenceShermanSkipRateOfFire; // If sherman misses, do same thing as skip ROF if there are previous hits
+                              action = GameAction.BattleRoundSequenceShermanToKillRollMiss; // If sherman misses, still need to clean up from firing main gun
                            else
                               action = GameAction.BattleRoundSequenceShermanFiringMainGunEnd; // Miss target
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
