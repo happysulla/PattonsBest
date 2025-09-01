@@ -326,7 +326,10 @@ namespace Pattons_Best
                appendText += lastReport.TankCardNum.ToString();
             else
                appendText += ("0" + lastReport.TankCardNum.ToString());
-            gi.Sherman = new MapItem("Sherman" + appendText, 2.0, "t" + appendText, gi.Home);
+            string shermanName = "Sherman75";
+            if( 12 < lastReport.TankCardNum )
+               shermanName = "Sherman76";
+            gi.Sherman = new MapItem(shermanName, 2.0, "t" + appendText, gi.Home);
          }
          //-------------------------------------------------------
          switch (action)

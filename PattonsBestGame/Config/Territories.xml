@@ -1,4 +1,4 @@
-﻿<Territories count="603">
+﻿<Territories count="636">
   <Territory value="M000">
     <Parent value="Main" />
     <Type value="B" />
@@ -6245,6 +6245,302 @@
     <Parent value="Tank" />
     <Type value="11" />
     <CenterPoint X="0547.00" Y="0371.00" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="GunLoadHe">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0375.00" Y="0212.04" />
+    <Points count="4">
+      <regionPoint X="0357.00" Y="0195.04" />
+      <regionPoint X="0394.00" Y="0195.04" />
+      <regionPoint X="0394.00" Y="0229.04" />
+      <regionPoint X="0356.00" Y="0228.04" />
+    </Points>
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="GunLoadAp">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0438.00" Y="0212.04" />
+    <Points count="4">
+      <regionPoint X="0419.00" Y="0195.04" />
+      <regionPoint X="0457.00" Y="0195.04" />
+      <regionPoint X="0457.00" Y="0229.04" />
+      <regionPoint X="0419.00" Y="0230.04" />
+    </Points>
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="GunLoadWp">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0500.00" Y="0212.04" />
+    <Points count="4">
+      <regionPoint X="0481.00" Y="0194.04" />
+      <regionPoint X="0518.00" Y="0195.04" />
+      <regionPoint X="0518.00" Y="0229.04" />
+      <regionPoint X="0480.00" Y="0228.04" />
+    </Points>
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="GunLoadHbci">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0562.00" Y="0212.04" />
+    <Points count="4">
+      <regionPoint X="0543.00" Y="0194.04" />
+      <regionPoint X="0580.00" Y="0194.04" />
+      <regionPoint X="0580.00" Y="0228.04" />
+      <regionPoint X="0543.00" Y="0230.04" />
+    </Points>
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="DriverAction">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0036.00" Y="0171.04" />
+    <Points count="4">
+      <regionPoint X="0017.00" Y="0153.04" />
+      <regionPoint X="0054.00" Y="0154.04" />
+      <regionPoint X="0054.00" Y="0189.04" />
+      <regionPoint X="0017.00" Y="0189.04" />
+    </Points>
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="AssistantAction">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0297.00" Y="0170.04" />
+    <Points count="4">
+      <regionPoint X="0280.00" Y="0154.04" />
+      <regionPoint X="0318.00" Y="0154.04" />
+      <regionPoint X="0317.00" Y="0189.04" />
+      <regionPoint X="0279.00" Y="0188.04" />
+    </Points>
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="LoaderAction">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0037.00" Y="0319.04" />
+    <Points count="4">
+      <regionPoint X="0018.00" Y="0301.04" />
+      <regionPoint X="0056.00" Y="0302.04" />
+      <regionPoint X="0056.00" Y="0336.04" />
+      <regionPoint X="0018.00" Y="0336.04" />
+    </Points>
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="CommanderAction">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0297.00" Y="0319.04" />
+    <Points count="4">
+      <regionPoint X="0279.00" Y="0301.04" />
+      <regionPoint X="0317.00" Y="0302.04" />
+      <regionPoint X="0317.00" Y="0337.04" />
+      <regionPoint X="0279.00" Y="0337.04" />
+    </Points>
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="GunnerAction">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0297.00" Y="0247.04" />
+    <Points count="4">
+      <regionPoint X="0279.00" Y="0229.04" />
+      <regionPoint X="0317.00" Y="0229.04" />
+      <regionPoint X="0317.00" Y="0263.04" />
+      <regionPoint X="0279.00" Y="0263.04" />
+    </Points>
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="Driver_Hatch">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0129.00" Y="0202.04" />
+    <Points count="4">
+      <regionPoint X="0110.00" Y="0183.04" />
+      <regionPoint X="0148.00" Y="0184.04" />
+      <regionPoint X="0148.00" Y="0219.04" />
+      <regionPoint X="0111.00" Y="0219.04" />
+    </Points>
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="Assistant_Hatch">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0205.00" Y="0201.04" />
+    <Points count="4">
+      <regionPoint X="0186.00" Y="0182.04" />
+      <regionPoint X="0224.00" Y="0181.04" />
+      <regionPoint X="0223.00" Y="0219.04" />
+      <regionPoint X="0185.00" Y="0218.04" />
+    </Points>
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="Loader_Hatch">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0137.00" Y="0301.04" />
+    <Points count="4">
+      <regionPoint X="0118.00" Y="0283.04" />
+      <regionPoint X="0156.00" Y="0284.04" />
+      <regionPoint X="0156.00" Y="0319.04" />
+      <regionPoint X="0117.00" Y="0319.04" />
+    </Points>
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="Commander_Hatch">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0198.00" Y="0302.04" />
+    <Points count="4">
+      <regionPoint X="0179.00" Y="0282.04" />
+      <regionPoint X="0217.00" Y="0283.04" />
+      <regionPoint X="0217.00" Y="0319.04" />
+      <regionPoint X="0179.00" Y="0319.04" />
+    </Points>
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="ReadyRackHe0">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0466.00" Y="0269.00" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="ReadyRackHe1">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0487.00" Y="0269.00" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="ReadyRackHe2">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0507.00" Y="0269.00" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="ReadyRackHe3">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0524.00" Y="0269.00" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="ReadyRackHe4">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0544.00" Y="0269.00" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="ReadyRackAp0">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0466.00" Y="0305.00" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="ReadyRackAp1">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0487.00" Y="0305.00" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="ReadyRackAp2">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0507.00" Y="0305.00" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="ReadyRackAp3">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0524.00" Y="0305.00" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="ReadyRackAp4">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0544.00" Y="0305.00" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="ReadyRackWp0">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0466.00" Y="0340.00" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="ReadyRackWp1">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0487.00" Y="0340.00" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="ReadyRackWp2">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0507.00" Y="0340.00" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="ReadyRackWp3">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0524.00" Y="0340.00" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="ReadyRackWp4">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0544.00" Y="0340.00" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="ReadyRackHbci0">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0466.00" Y="0377.00" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="ReadyRackHbci1">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0487.00" Y="0377.00" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="ReadyRackHbci2">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0507.00" Y="0377.00" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="ReadyRackHbci3">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0524.00" Y="0377.00" />
+    <Points count="0" />
+    <Adjacents count="0" />
+  </Territory>
+  <Territory value="ReadyRackHbci4">
+    <Parent value="Tank" />
+    <Type value="12" />
+    <CenterPoint X="0544.00" Y="0377.00" />
     <Points count="0" />
     <Adjacents count="0" />
   </Territory>

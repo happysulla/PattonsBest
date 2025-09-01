@@ -49,6 +49,7 @@ namespace Pattons_Best
       [NonSerialized] protected static BitmapImage? theHeHit = theMapImages.GetBitmapImage("OHeHit");
       [NonSerialized] protected static BitmapImage? theApHit = theMapImages.GetBitmapImage("OApHit");
       [NonSerialized] protected static BitmapImage? theSherman75Turret = theMapImages.GetBitmapImage("c16TurretSherman75");
+      [NonSerialized] protected static BitmapImage? theSherman76Turret = theMapImages.GetBitmapImage("c16TurretSherman76");
       [NonSerialized] protected static BitmapImage? thePzIVTurret = theMapImages.GetBitmapImage("c79PzIVTurret");
       [NonSerialized] protected static BitmapImage? thePzVTurret = theMapImages.GetBitmapImage("c80PzVTurret");
       [NonSerialized] protected static BitmapImage? thePzVIbTurret = theMapImages.GetBitmapImage("c82PzVIbTurret");
@@ -501,8 +502,10 @@ namespace Pattons_Best
                double width = zoom * Utilities.theMapItemSize;
                double height = width;
                Image? imgTurret = null;
-               if (true == mi.Name.Contains("Sherman"))
+               if (true == mi.Name.Contains("Sherman75"))
                   imgTurret = new Image() { Height = height, Width = width, Source = theSherman75Turret };
+               else if (true == mi.Name.Contains("Sherman76"))
+                  imgTurret = new Image() { Height = height, Width = width, Source = theSherman76Turret };
                else if (true == mi.Name.Contains("TANK") || true == mi.Name.Contains("PzVIe"))
                   imgTurret = new Image() { Height = height, Width = width, Source = thePzVIbTurret };
                else if (true == mi.Name.Contains("PzIV"))
