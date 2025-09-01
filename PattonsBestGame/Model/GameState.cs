@@ -7,8 +7,11 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace Pattons_Best
 {
@@ -316,6 +319,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SetDeployment(): gi.Reports.GetLast() returned null");
             return false;
          }
+         string tType = report.TankCardNum.ToString();
+         TankCard card = new TankCard(report.TankCardNum);
+         //-------------------------------------------
          if (12 == report.TankCardNum || 13 == report.TankCardNum)
          {
             if (dieRoll < 9)
@@ -381,6 +387,41 @@ namespace Pattons_Best
                return false;
             }
          }
+         //-------------------------------------------
+         string[] crewmembers = new string[4] { "Driver", "Assistant", "Commander", "Loader"};
+         foreach (string crewmember in crewmembers)
+         {
+            if ((crewmember == "Loader") && (false == card.myIsLoaderHatch))
+               continue;
+            ICrewMember? cm = gi.GetCrewMemberByRole(crewmember);
+            if (null == cm)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SetDeployment(): cm=null for " + crewmember);
+               return false;
+            }
+            if (false == cm.IsButtonedUp) 
+            {
+               bool isHatchFound = false;
+               foreach(IMapItem hatch in gi.Hatches)
+               {
+                  if (true == hatch.Name.Contains(cm.Role))
+                     isHatchFound = true;
+               }
+               if( false == isHatchFound) // if no hatch found and not button up, then add the open hatch counter
+               {
+                  string tName = crewmember + "_Hatch";
+                  ITerritory? t = Territories.theTerritories.Find(tName, tType);
+                  if (null == t)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "SetDeployment(): cannot find tName=" + tName + " tType=" + tType);
+                     return false;
+                  }
+                  IMapItem mi = new MapItem(cm.Role + "_OpenHatch", 1.0, "c15OpenHatch", t);
+                  gi.Hatches.Add(mi);
+               }
+            }
+         }
+         //-------------------------------------------
          if (true == gi.IsLeadTank)
          {
             StringBuilder sb = new StringBuilder("At ");
@@ -1621,7 +1662,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipCrewAssignments(): gi.Reports.GetLast() returned null");
             return false;
          }
-         report.TankCardNum = 6; // <cgs> TEST - Set the TankCardNum
+         report.TankCardNum = 9; // <cgs> TEST - Set the TankCardNum
          //-------------------------------
          int randNum = Utilities.RandomGenerator.Next(3);
          if (0 == randNum)

@@ -239,7 +239,7 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(Parent)=false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(Parent)=false count=" + count.ToString() + " i=" + i.ToString() );
                return false;
             }
             if (reader.Name != "Territory")
@@ -258,7 +258,7 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(Parent)=false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(Parent)=false tName=" + tName);
                return false;
             }
             if (reader.Name != "Parent")
