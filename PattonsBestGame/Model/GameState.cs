@@ -1662,7 +1662,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipCrewAssignments(): gi.Reports.GetLast() returned null");
             return false;
          }
-         report.TankCardNum = 12; // <cgs> TEST - Set the TankCardNum
+         report.TankCardNum = 13; // <cgs> TEST - Set the TankCardNum
          //-------------------------------
          int randNum = Utilities.RandomGenerator.Next(3);
          if (0 == randNum)
