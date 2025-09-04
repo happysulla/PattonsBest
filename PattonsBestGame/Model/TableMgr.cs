@@ -3828,7 +3828,7 @@ namespace Pattons_Best
                movingModifier -= (int) Math.Floor(commander.Rating/2.0);
          }
          //-------------------------------------------------
-         if( true == card.myIsHvss )
+         if( true == gi.IsShermanHvss)
             movingModifier -= 2;
          //-------------------------------------------------
          if( true == driver.IsButtonedUp )
@@ -4019,7 +4019,7 @@ namespace Pattons_Best
                movingModifier -= commander.Rating;
          }
          //-------------------------------------------------
-         if (true == card.myIsHvss)
+         if (true == gi.IsShermanHvss)
             movingModifier -= 5;
          //-------------------------------------------------
          if (true == driver.IsButtonedUp)

@@ -715,7 +715,7 @@ namespace Pattons_Best
             return false;
          }
          bool isTargetInCurrentMainGunSector = Territory.IsEnemyUnitInSector(gi, sector);
-         bool iMainGunAbleAbleToFireDueToMoving = (false == isTankMoving) || (true == card.myIsHvss);
+         bool iMainGunAbleAbleToFireDueToMoving = (false == isTankMoving) || (true == gi.IsShermanHvss);
          bool isMainGunFiringAvailable = ((true == iMainGunAbleAbleToFireDueToMoving) && (false == gi.IsMalfunctionedMainGun) && (false == gi.IsBrokenMainGun) && (false == gi.IsBrokenGunSight) && (0 < totalAmmo) && ("None" != gi.GetGunLoadType()) && (false == isLoaderChangingLoad) );
          bool isShermanMoveAvailable = ((false == gi.Sherman.IsThrownTrack) && (false == gi.Sherman.IsAssistanceNeeded) && (false == gi.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch));
          //---------------------------------
@@ -3358,7 +3358,6 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): lastReport=null");
             return;
          }
-         TankCard card = new TankCard(lastReport.TankCardNum);
          string tType = lastReport.TankCardNum.ToString();
          //--------------------------------------
          MenuItem? menuitem = sender as MenuItem;
@@ -3461,7 +3460,7 @@ namespace Pattons_Best
                break;
             case "Driver_Forward":
                mi = new MapItem(menuitem.Name, 1.0, "c62DForward", t);
-               if (false == card.myIsHvss)
+               if (false == myGameInstance.IsShermanHvss)
                {
                   MenuItemCrewActionClickRemoveGunnerFire();  // Cannot fire if moving and do not have HVSS
                   MenuItemCrewActionClickRemoveGunnerRotateAndFire();
@@ -3470,7 +3469,7 @@ namespace Pattons_Best
                break;
             case "Driver_ForwardToHullDown":
                mi = new MapItem(menuitem.Name, 1.0, "c63DForwardToHullDown", t);
-               if (false == card.myIsHvss)
+               if (false == myGameInstance.IsShermanHvss)
                {
                   MenuItemCrewActionClickRemoveGunnerFire();  // Cannot fire if moving and do not have HVSS
                   MenuItemCrewActionClickRemoveGunnerRotateAndFire();
@@ -3479,7 +3478,7 @@ namespace Pattons_Best
                break;
             case "Driver_Reverse":
                mi = new MapItem(menuitem.Name, 1.0, "c64DReverse", t);
-               if (false == card.myIsHvss)
+               if (false == myGameInstance.IsShermanHvss)
                {
                   MenuItemCrewActionClickRemoveGunnerFire();  // Cannot fire if moving and do not have HVSS
                   MenuItemCrewActionClickRemoveGunnerRotateAndFire();
@@ -3488,7 +3487,7 @@ namespace Pattons_Best
                break;
             case "Driver_ReverseToHullDown":
                mi = new MapItem(menuitem.Name, 1.0, "c65DReverseToHullDown", t);
-               if (false == card.myIsHvss)
+               if (false == myGameInstance.IsShermanHvss)
                {
                   MenuItemCrewActionClickRemoveGunnerFire();  // Cannot fire if moving and do not have HVSS
                   MenuItemCrewActionClickRemoveGunnerRotateAndFire();
@@ -3497,7 +3496,7 @@ namespace Pattons_Best
                break;
             case "Driver_PivotTank":
                mi = new MapItem(menuitem.Name, 1.0, "c66DPivotTank", t);
-               if (false == card.myIsHvss)
+               if (false == myGameInstance.IsShermanHvss)
                {
                   MenuItemCrewActionClickRemoveGunnerFire();  // Cannot fire if moving and do not have HVSS
                   MenuItemCrewActionClickRemoveGunnerRotateAndFire();

@@ -177,6 +177,7 @@ namespace Pattons_Best
       MorningBriefingReturningCrewman,
       MorningBriefingAssignCrewRatingEnd,
       MorningBriefingTankReplacementRoll,
+      MorningBriefingTankReplacementHvssRoll,
       MorningBriefingCalendarRoll,
       MorningBriefingWeatherRoll,
       MorningBriefingWeatherRollEnd,

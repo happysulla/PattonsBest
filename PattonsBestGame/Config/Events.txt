@@ -86,6 +86,13 @@ You have a choice of tank replacement during a refit period. You must replace yo
  In either case, consult the Tank 
 <InlineUIContainer><Button Content='Replacement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table after rolling two die: 
 <InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer>"
+e007e	"<Bold>e007e Horizontal Volute Spring Suspension (HVSS)</Bold> 
+<InlineUIContainer><Button Content='r5.25' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='r27.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>     
+<LineBreak/><LineBreak/>
+A gyrostabilizer was attached to the main gun of the Sherman tank is to keep the gun stabilized, or steady, in the vertical axis (up-down). Even if your tank has a gyrostabilizer, it requires the crew to be trained during a refit period before it can be used. A 1D die roll is necessary to determine if you tank has HVSS installed.
+<LineBreak/><LineBreak/>
+Die Roll = <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>"
 e008	"<Bold>e007 Morning Briefing - Weather Roll</Bold> <InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
 The 

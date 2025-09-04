@@ -2280,7 +2280,7 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------
-         gi.Day = 100;
+         gi.Day = 100; // Afetr Nov 1944
          //--------------------------------
          //lastReport.Driver.SetBloodSpots(20);              // <cgs> TEST - wounded crewmen
          //lastReport.Driver.Wound = "Light Wound";          // <cgs> TEST - wounded crewmen
@@ -2500,6 +2500,44 @@ namespace Pattons_Best
                      string shermanName = "Sherman" + lastReport.TankCardNum.ToString();
                      gi.Sherman = new MapItem(shermanName, 2.0, tankImageName, gi.Home);
                      gi.BattleStacks.Add(gi.Sherman);
+                  }
+                  else
+                  {
+                     if( (10 < lastReport.TankCardNum) && (18 != lastReport.TankCardNum) && (69 < gi.Day) ) // must be Nov 44 before tanks have HVSS
+                     {
+                        gi.EventDisplayed = gi.EventActive = "e007e";  // HVSS Roll
+                        gi.DieRollAction = GameAction.MorningBriefingTankReplacementHvssRoll;
+                     }
+                     else
+                     {
+                        gi.EventDisplayed = gi.EventActive = "e008";
+                        gi.DieRollAction = GameAction.MorningBriefingWeatherRoll;
+                     }
+                  }
+                  break;
+               case GameAction.MorningBriefingTankReplacementHvssRoll:
+                  if(Utilities.NO_RESULT == gi.DieResults[key][0])
+                  {
+                     gi.DieResults[key][0] = dieRoll;
+                     gi.IsShermanHvss = false;
+                     if ( (dieRoll < 4) || ((11 < lastReport.TankCardNum) && (dieRoll < 6)) )
+                     {
+                        string tType = lastReport.TankCardNum.ToString();
+                        ITerritory? t = Territories.theTerritories.Find("Hvss", tType);
+                        if(null == t )
+                        {
+                           returnStatus = "Territories.theTerritories.Find() returned null for tName=Hvss and tType=" + tType;
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(MorningBriefingTankReplacementHvssRoll): " + returnStatus);
+                        }
+                        else
+                        {
+                           string mapItemName = "Hvss" + Utilities.MapItemNum.ToString();
+                           Utilities.MapItemNum++;
+                           IMapItem hvssMapItem = new MapItem(mapItemName, 1.0, "c75Hvss", t);
+                           gi.BattleStacks.Add(hvssMapItem);
+                           gi.IsShermanHvss = false; // <cgs> TEST - set to true without crew training
+                        }
+                     }
                   }
                   else
                   {
@@ -5649,7 +5687,7 @@ namespace Pattons_Best
                gi.Sherman.IsMoving = true;
                gi.Sherman.IsMoved = true;
                //--------------------------------------------------
-               if ((false == card.myIsHvss) && (null != gi.TargetMainGun) ) // if tank moves or pivots, acquired modifer drops to zero
+               if ((false == gi.IsShermanHvss) && (null != gi.TargetMainGun) ) // if tank moves or pivots, acquired modifer drops to zero
                {
                   Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Conduct_CrewAction(): zero NumOfAcquiredMarker=" + gi.TargetMainGun.NumOfAcquiredMarker.ToString());
                   gi.TargetMainGun.NumOfAcquiredMarker = 0; // Conduct_CrewAction() - Tank moves wihtout HVSS
@@ -5713,7 +5751,7 @@ namespace Pattons_Best
                gi.DieRollAction = GameAction.DieRollActionNone;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 3-phase=" + gi.CrewActionPhase.ToString());
             }
-            else if ((true == isTankFiringMainGun) && ((false == gi.Sherman.IsMoved) || (true == card.myIsHvss)))
+            else if ((true == isTankFiringMainGun) && ((false == gi.Sherman.IsMoved) || (true == gi.IsShermanHvss)))
             {
                if (false == GetShermanTargets(gi, ref outAction))
                {

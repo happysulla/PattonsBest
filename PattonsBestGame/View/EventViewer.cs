@@ -823,6 +823,21 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
+            case "e007e":
+               if (0 < gi.DieResults[key][0])
+               {
+                  Image? imge007e = null;
+                  if ((gi.DieResults[key][0] < 4) || ((11 < report.TankCardNum) && (gi.DieResults[key][0] < 6)))
+                     imge007e = new Image { Source = MapItem.theMapImages.GetBitmapImage("c75Hvss"), Width = 100, Height = 100, Name = "MorningBriefingHvssSet" };
+                  else
+                     imge007e = new Image { Source = MapItem.theMapImages.GetBitmapImage("c75HvssDeny"), Width = 100, Height = 100, Name = "MorningBriefingHvssSet" };
+                  myTextBlock.Inlines.Add(new Run("                                          "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge007e));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
             case "e008":
                if (false == UpdateEventContentWeather(gi))
                {
@@ -2239,7 +2254,7 @@ namespace Pattons_Best
                sb51.Append(" for cmdr rating directing move using cupola\n");
             }
          }
-         if( true == card.myIsHvss )
+         if( true == gi.IsShermanHvss)
             sb51.Append("-2 for HVSS suspension\n");
          if (true == driver.IsButtonedUp)
             sb51.Append("+5 Driver buttoned up\n");
@@ -2300,7 +2315,7 @@ namespace Pattons_Best
                sb51.Append(" for cmdr rating directing move\n");
             }
          }
-         if (true == card.myIsHvss)
+         if (true == gi.IsShermanHvss)
             sb51.Append("-5 for HVSS suspension\n");
          if (true == driver.IsButtonedUp)
             sb51.Append("+10 Driver buttoned up\n");
@@ -4960,6 +4975,10 @@ namespace Pattons_Best
                            return;
                         case "MorningBriefingDeployment":
                            action = GameAction.MorningBriefingDeployment;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "MorningBriefingHvssSet":
+                           action = GameAction.MorningBriefingTankReplacementHvssRoll;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "MorningBriefingDeploymentEnd":
