@@ -26,6 +26,7 @@ namespace Pattons_Best
       public enum E162Enum
       {
          SET_HBCI_COUNT,
+         SET_HVAP_COUNT,
          LOAD_NORMAL,
          LOAD_EXTRA_CHECK,
          LOAD_EXTRA_CHECK_SHOW,
@@ -69,7 +70,7 @@ namespace Pattons_Best
       private int myHbciRoundCountAdded = 0;
       private int myHvapRoundCount = 0;
       private int myHvapRoundCountOriginal = 0;
-      //private int myHvapRoundCountAdded = 0;
+      private int myHvapRoundCountAdded = 0;
       private int myExtraAmmo = -1;
       private int myUnassignedReadyRack = 0;
       private int myHeReadyRackCount = 0;
@@ -171,7 +172,6 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------------
-         myState = E162Enum.SET_HBCI_COUNT;
          myIsRollInProgress = false;
          myCallback = callback;
          IAfterActionReport? lastReport = myGameInstance.Reports.GetLast(); // remove it from list
@@ -180,29 +180,40 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): myGameInstance=null");
             return false;
          }
+         if( 12 < lastReport.TankCardNum )
+            myState = E162Enum.SET_HVAP_COUNT;
+         else
+            myState = E162Enum.SET_HBCI_COUNT;
          //--------------------------------------------------
          TankCard card = new TankCard(lastReport.TankCardNum);
          myMainGun = card.myMainGun;
-         myUnassignedReadyRack = card.myMaxReadyRackCount;
          myUnassignedCount = card.myNumMainGunRound;
          myApRoundCount = 0;
          myHeRoundCount = 0;
          myWpRoundCount = 0;
+         myHbciRoundCount = 0;
+         myHbciRoundCountOriginal = lastReport.MainGunHBCI;
+         myHbciRoundCountAdded = 0;
+         myHvapRoundCount = 0;
+         myHvapRoundCountOriginal = lastReport.MainGunHVAP;
+         myHvapRoundCountAdded = 0;
          myExtraAmmo = -1;
          myDieRollResult = "";
-         myHbciRoundCountOriginal = lastReport.MainGunHBCI;
-         myHbciRoundCount = 0;
-         myHvapRoundCountOriginal = lastReport.MainGunHVAP;
-         myHvapRoundCount = 0;
-         //--------------------------------------------------
-         if ("75" != myMainGun)
-         {
-            if( false == SetLoadNormalState())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): SetLoadNormalState() return false");
-               return false;
-            }
-         }
+         myUnassignedReadyRack = card.myMaxReadyRackCount;
+         myHeReadyRackCount = 0;
+         myApReadyRackCount = 0;
+         myWpReadyRackCount = 0;
+         myHbciReadyRackCount = 0;
+         myHvapReadyRackCount = 0;
+         ////--------------------------------------------------
+         //if ("75" != myMainGun)
+         //{
+         //   if( false == SetLoadNormalState())
+         //   {
+         //      Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): SetLoadNormalState() return false");
+         //      return false;
+         //   }
+         //}
          //--------------------------------------------------
          if (false == UpdateGrid())
          {
@@ -249,7 +260,6 @@ namespace Pattons_Best
          myGameInstance.ReadyRacks.Add(rr2);
          if ("75" == myMainGun)
          {
-            myUnassignedCount -= myHbciRoundCount;
             myWpRoundCount = 5;
             myUnassignedCount -= myWpRoundCount;
             t = Territories.theTerritories.Find("ReadyRackWp0", tType);
@@ -259,8 +269,9 @@ namespace Pattons_Best
                return false;
             }
             IMapItem rr3 = new MapItem("ReadyRackWp", 0.9, "c12RoundsLeft", t);
-            //--------------------------------------------------
             myGameInstance.ReadyRacks.Add(rr3);
+            //--------------------------------------------------
+            myUnassignedCount -= myHbciRoundCount;
             t = Territories.theTerritories.Find("ReadyRackHbci0", tType);
             if (null == t)
             {
@@ -272,7 +283,6 @@ namespace Pattons_Best
          }
          else
          {
-            myHvapRoundCountOriginal = myHvapRoundCount = lastReport.MainGunHVAP;
             myUnassignedCount -= myHvapRoundCount;
             t = Territories.theTerritories.Find("ReadyRackHvap0", tType);
             if (null == t)
@@ -359,6 +369,9 @@ namespace Pattons_Best
             case E162Enum.SET_HBCI_COUNT:
                myTextBlockInstructions.Inlines.Add(new Run("Roll 1D for available HBCI Rounds for this day."));
                break;
+            case E162Enum.SET_HVAP_COUNT:
+               myTextBlockInstructions.Inlines.Add(new Run("Roll 1D for available HVAP Rounds for this day."));
+               break;
             case E162Enum.LOAD_NORMAL:
                if( 0 < myUnassignedCount )
                   myTextBlockInstructions.Inlines.Add(new Run("Adjust normal ammo type."));
@@ -420,6 +433,7 @@ namespace Pattons_Best
                myStackPanelAssignable.Children.Add(label);
                break;
             case E162Enum.SET_HBCI_COUNT:
+            case E162Enum.SET_HVAP_COUNT:
             case E162Enum.LOAD_EXTRA_CHECK:
                BitmapImage bitMapDieRoll = new BitmapImage();
                bitMapDieRoll.BeginInit();
@@ -471,7 +485,7 @@ namespace Pattons_Best
                return false;
             }
          }
-         else if (E162Enum.SET_HBCI_COUNT == myState)
+         else if ((E162Enum.SET_HBCI_COUNT == myState) || (E162Enum.SET_HVAP_COUNT == myState) )
          {
             List<UIElement> results = new List<UIElement>();
             foreach (UIElement ui in myGrid.Children)
@@ -658,8 +672,8 @@ namespace Pattons_Best
                labelforHbci.Content = "0" + myHbciRoundCount.ToString();
             stackpanelHbci.Children.Add(labelforHbci);
             Button bPlusHbci = new Button() { Name = "bPlusHbci", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "+" };
-            int myHbciTotalAvailable = myHbciRoundCountOriginal + myHbciRoundCountAdded;
-            if ((0 < myUnassignedCount) && (myHbciRoundCount < myHbciTotalAvailable) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
+            int hbciTotalAvailable = myHbciRoundCountOriginal + myHbciRoundCountAdded;
+            if ((0 < myUnassignedCount) && (myHbciRoundCount < hbciTotalAvailable) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
             {
                bPlusHbci.Click += ButtonAmmoChange_Click;
                bPlusHbci.IsEnabled = true;
@@ -691,7 +705,8 @@ namespace Pattons_Best
                labelforHvap.Content = "0" + myHvapRoundCount.ToString();
             stackpanelHvap.Children.Add(labelforHvap);
             Button bPlusHvap = new Button() { Name = "bPlusHvap", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "+" };
-            if ((0 < myUnassignedCount) && (myHvapRoundCount < myHvapRoundCountOriginal) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
+            int hvapTotalAvailable = myHvapRoundCountOriginal + myHvapRoundCountAdded;
+            if ((0 < myUnassignedCount) && (myHvapRoundCount < hvapTotalAvailable) && ((E162Enum.LOAD_EXTRA_CHECK != myState) && (E162Enum.LOAD_EXTRA_CHECK_SHOW != myState)))
             {
                bPlusHvap.Click += ButtonAmmoChange_Click;
                bPlusHvap.IsEnabled = true;
@@ -1043,9 +1058,24 @@ namespace Pattons_Best
             myHbciRoundCount = myHbciRoundCountOriginal + myHbciRoundCountAdded;
             if ( false == SetLoadNormalState())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResults(=null) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): SetLoadNormalState() returned false");
                return;
             } 
+         }
+         else if (E162Enum.SET_HVAP_COUNT == myState)
+         {
+            if (dieRoll < 4)
+               myHvapRoundCountAdded = 1;
+            else if( dieRoll < 8 )
+               myHvapRoundCountAdded = 2;
+            else
+               myHvapRoundCountAdded = 3;
+            myHvapRoundCount = myHvapRoundCountOriginal + myHvapRoundCountAdded;
+            if (false == SetLoadNormalState())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): SetLoadNormalState() returned false");
+               return;
+            }
          }
          else
          {

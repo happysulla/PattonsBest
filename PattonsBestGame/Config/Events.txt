@@ -268,7 +268,7 @@ e028	"<Bold>e028 Enter Adjacent Area</Bold>
 <LineBreak/><LineBreak/>
 Click on one of the adjacent highlighted areas. Artillery Support or Air Strike Counters are moved to the battle board as a reminder. 
 <LineBreak/><LineBreak/>
-                        <InlineUIContainer><Image Name='Sherman75' Height='200' Width='325'></Image></InlineUIContainer>"
+                        <InlineUIContainer><Image Name='Sherman1' Height='200' Width='325'></Image></InlineUIContainer>"
 e029	"<Bold>e029 Advancing Fire Choice</Bold> 
 <InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>

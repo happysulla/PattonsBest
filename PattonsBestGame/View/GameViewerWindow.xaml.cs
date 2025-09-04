@@ -152,10 +152,15 @@ namespace Pattons_Best
          mySplashScreen.Show();
          InitializeComponent();
          //---------------------------------------------------------------
-         Image image = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("m01") };
-         myCanvasTank.Children.Add(image); // TankMat changes as get new tanks
-         Canvas.SetLeft(image, 0);
-         Canvas.SetTop(image, 0);
+         string appendText = "";
+         if (9 < myTankCardNum)
+            appendText = myTankCardNum.ToString();
+         else
+            appendText = "0" + myTankCardNum.ToString();
+         Image imageMat = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("m" + appendText) };
+         myCanvasTank.Children.Add(imageMat); // TankMat changes as get new tanks
+         Canvas.SetLeft(imageMat, 0);
+         Canvas.SetTop(imageMat, 0);
          //---------------------------------------------------------------
          myGameEngine = ge;
          myGameInstance = gi;
@@ -294,42 +299,42 @@ namespace Pattons_Best
          if( myTankCardNum != lastReport.TankCardNum) // switch out tank mat if do not match
          {
             myTankCardNum = lastReport.TankCardNum;
+            List<UIElement> elements = new List<UIElement>();
             foreach (UIElement ui in myCanvasMain.Children) // Clean the Canvas of all marks
             {
+               if (ui is Button b)
+               {
+                  if (true == b.Name.Contains("Sherman"))
+                     elements.Add(b); // Remove the old button
+               }
                if (ui is Image img)
                {
-                  if (true == img.Name.Contains("Sherman"))
-                  {
-                     myCanvasTank.Children.Remove(img); // Remove the old image
-                     break;
-                  }
                   if (true == img.Name.Contains("TankMat"))
-                  {
-                     myCanvasTank.Children.Remove(img); // Remove the old image
-                     break;
-                  }
+                     elements.Add(img);
                }
             }
+            foreach( UIElement ui in elements )
+               myCanvasTank.Children.Remove(ui);
             //-------------------------------------------------------
-            string tankMatName = "m";
-            if (9 < lastReport.TankCardNum)
-               tankMatName += lastReport.TankCardNum.ToString();
+            string appendText = "";
+            if (9 < myTankCardNum)
+               appendText = myTankCardNum.ToString();
             else
-               tankMatName += ("0" + lastReport.TankCardNum.ToString());
-            Image imageMat = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage(tankMatName) };
+               appendText = "0" + myTankCardNum.ToString();
+            Image imageMat = new Image() { Name = "TankMat", Width = 600, Height = 500, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("m" + appendText) };
             myCanvasTank.Children.Add(imageMat); // TankMat changes as get new tanks
             Canvas.SetLeft(imageMat, 0);
             Canvas.SetTop(imageMat, 0);
             //-------------------------------------------------------
-            string appendText = "";
-            if (9 < lastReport.TankCardNum)
-               appendText += lastReport.TankCardNum.ToString();
-            else
-               appendText += ("0" + lastReport.TankCardNum.ToString());
-            string shermanName = "Sherman75";
-            if( 12 < lastReport.TankCardNum )
+            gi.BattleStacks.Remove(gi.Sherman);
+            string shermanName = "Sherman75";     // UpdateView()
+            if ( 12 < lastReport.TankCardNum )
                shermanName = "Sherman76";
+            shermanName += Utilities.MapItemNum.ToString();
+            ++Utilities.MapItemNum;
             gi.Sherman = new MapItem(shermanName, 2.0, "t" + appendText, gi.Home);
+            gi.Sherman.IsTurret = true;
+            gi.BattleStacks.Add(gi.Sherman);
          }
          //-------------------------------------------------------
          switch (action)
@@ -603,7 +608,7 @@ namespace Pattons_Best
       private Button CreateButtonMapItem(List<Button> buttons, IMapItem mi)
       {
          Logger.Log(LogEnum.LE_SHOW_ORDERS_MENU, "CreateButtonMapItem(): creating new button=" + mi.Name);
-         System.Windows.Controls.Button b = new Button { Name = mi.Name, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
+         System.Windows.Controls.Button b = new Button { Name = Utilities.RemoveSpaces(mi.Name), Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
          MapItem.SetButtonContent(b, mi, true, true); // This sets the image as the button's content
          RotateTransform rotateTransform = new RotateTransform();
          b.RenderTransformOrigin = new Point(0.5, 0.5);

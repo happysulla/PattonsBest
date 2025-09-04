@@ -1662,7 +1662,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipCrewAssignments(): gi.Reports.GetLast() returned null");
             return false;
          }
-         report.TankCardNum = 16; // <cgs> TEST - Set the TankCardNum
+         report.TankCardNum = 2; // <cgs> TEST - Set the TankCardNum
          //-------------------------------
          int randNum = Utilities.RandomGenerator.Next(3);
          if (0 == randNum)
@@ -1713,6 +1713,7 @@ namespace Pattons_Best
             return false;
          }
          string tType = lastReport.TankCardNum.ToString();
+         TankCard card = new TankCard(lastReport.TankCardNum);
          //---------------------------------
          dieRoll = Utilities.RandomGenerator.Next(1, 11);             // assign weather randomly
          lastReport.Weather = TableMgr.GetWeather(gi.Day, dieRoll);
@@ -1727,11 +1728,23 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------------
-         lastReport.MainGunWP = Utilities.RandomGenerator.Next(5, 15); // assign gun loads and ready rack randomly
-         //lastReport.MainGunWP = 2; // <cgs> TEST - set to 2 for testing
-         int unassignedCount = 97 - lastReport.MainGunWP;
-         lastReport.MainGunHBCI = Utilities.RandomGenerator.Next(1, 11);
-         unassignedCount -= lastReport.MainGunHBCI;
+         int unassignedCount = card.myNumMainGunRound;
+         if( true == gi.Sherman.Name.Contains("Sherman75"))
+         {
+            lastReport.MainGunHVAP = 0;
+            lastReport.MainGunWP = Utilities.RandomGenerator.Next(5, 15); // assign gun loads and ready rack randomly
+            unassignedCount -= lastReport.MainGunWP;
+            lastReport.MainGunHBCI = Utilities.RandomGenerator.Next(1, 11);
+            unassignedCount -= (lastReport.MainGunWP + lastReport.MainGunHBCI);
+         }
+         else
+         {
+            lastReport.MainGunWP = 0;
+            lastReport.MainGunHBCI = 0;
+            lastReport.MainGunHVAP = Utilities.RandomGenerator.Next(2, 4);
+            unassignedCount -= lastReport.MainGunHVAP;
+         }
+         //--------------------------------------------------
          int extraAmmoDieRoll = Utilities.RandomGenerator.Next(1, 11);
          if (6 < extraAmmoDieRoll)
          {
@@ -1751,51 +1764,68 @@ namespace Pattons_Best
          //lastReport.MainGunWP = 0;    // <cgs> Limit initial gun loads
          //lastReport.MainGunHBCI = 3;  // <cgs> Limit initial gun loads
          //--------------------------------------------------
-         int count = 4;
-         string tName = "ReadyRackHe" + count.ToString();
+         int count = 2;
+         string tName = "ReadyRackAp" + count.ToString();
          ITerritory? t = Territories.theTerritories.Find(tName, tType);
          if (null == t)
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): t=null for " + tName);
             return false;
          }
-         IMapItem rr1 = new MapItem("ReadyRackHe", 0.9, "c12RoundsLeft", t);
+         IMapItem rr1 = new MapItem("ReadyRackAp", 0.9, "c12RoundsLeft", t);
          rr1.Count = count;
          gi.ReadyRacks.Add(rr1);
          //--------------------------------------------------
-         count = 3;
-         tName = "ReadyRackAp" + count.ToString();
+         if (true == gi.Sherman.Name.Contains("Sherman75"))
+         {
+            count = 1;
+            tName = "ReadyRackWp" + count.ToString();
+            t = Territories.theTerritories.Find(tName, tType);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): t=null for " + tName);
+               return false;
+            }
+            rr1 = new MapItem("ReadyRackWp", 0.9, "c12RoundsLeft", t);
+            rr1.Count = count;
+            gi.ReadyRacks.Add(rr1);
+            //--------------------------------------------------
+            count = 1;
+            tName = "ReadyRackHbci" + count.ToString();
+            t = Territories.theTerritories.Find(tName, tType);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): t=null for " + tName);
+               return false;
+            }
+            rr1 = new MapItem("ReadyRackHbci", 0.9, "c12RoundsLeft", t);
+            rr1.Count = count;
+            gi.ReadyRacks.Add(rr1);
+         }
+         else
+         {
+            count = 2;
+            tName = "ReadyRackHvap" + count.ToString();
+            t = Territories.theTerritories.Find(tName, tType);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): t=null for " + tName);
+               return false;
+            }
+            rr1 = new MapItem("ReadyRackHvap", 0.9, "c12RoundsLeft", t);
+            rr1.Count = count;
+            gi.ReadyRacks.Add(rr1);
+         }
+         //--------------------------------------------------
+         count = card.myMaxReadyRackCount - 2;
+         tName = "ReadyRackHe" + count.ToString();
          t = Territories.theTerritories.Find(tName, tType);
          if (null == t)
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): t=null for " + tName);
             return false;
          }
-         rr1 = new MapItem("ReadyRackAp", 0.9, "c12RoundsLeft", t);
-         rr1.Count = count;
-         gi.ReadyRacks.Add(rr1);
-         //--------------------------------------------------
-         count = 0;
-         tName = "ReadyRackWp" + count.ToString();
-         t = Territories.theTerritories.Find(tName, tType);
-         if (null == t)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): t=null for " + tName);
-            return false;
-         }
-         rr1 = new MapItem("ReadyRackWp", 0.9, "c12RoundsLeft", t);
-         rr1.Count = count;
-         gi.ReadyRacks.Add(rr1);
-         //--------------------------------------------------
-         count = 1;
-         tName = "ReadyRackHbci" + count.ToString();
-         t = Territories.theTerritories.Find(tName, tType);
-         if (null == t)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): t=null for " + tName);
-            return false;
-         }
-         rr1 = new MapItem("ReadyRackHbci", 0.9, "c12RoundsLeft", t);
+         rr1 = new MapItem("ReadyRackHe", 0.9, "c12RoundsLeft", t);
          rr1.Count = count;
          gi.ReadyRacks.Add(rr1);
          //--------------------------------------------------
@@ -1858,6 +1888,9 @@ namespace Pattons_Best
                return false;
             }
             IMapItem mi = new MapItem(cm.Role + "_OpenHatch", 1.0, "c15OpenHatch", t);
+            int delta0 = (int)(mi.Zoom * Utilities.theMapItemOffset);
+            mi.Location.X = t.CenterPoint.X - delta0;
+            mi.Location.Y = t.CenterPoint.Y - delta0;
             gi.Hatches.Add(mi);
          }
          //------------------------------------
@@ -1877,6 +1910,9 @@ namespace Pattons_Best
                return false;
             }
             IMapItem mi = new MapItem(cm.Role + "_OpenHatch", 1.0, "c15OpenHatch", t);
+            int delta1 = (int)(mi.Zoom * Utilities.theMapItemOffset);
+            mi.Location.X = t.CenterPoint.X - delta1;
+            mi.Location.Y = t.CenterPoint.Y - delta1;
             gi.Hatches.Add(mi);
          }
          //------------------------------------
@@ -1896,6 +1932,9 @@ namespace Pattons_Best
                return false;
             }
             IMapItem mi = new MapItem(cm.Role + "_OpenHatch", 1.0, "c15OpenHatch", t);
+            int delta3 = (int)(mi.Zoom * Utilities.theMapItemOffset);
+            mi.Location.X = t.CenterPoint.X - delta3;
+            mi.Location.Y = t.CenterPoint.Y - delta3;
             gi.Hatches.Add(mi);
          }
          //------------------------------------
@@ -2000,7 +2039,7 @@ namespace Pattons_Best
          }
          //---------------------------------------------
          gi.ArtillerySupportCheck = gi.EnteredArea;
-         for (int i = 0; i < 3; ++i)
+         for (int i = 0; i < 0; ++i)
          {
             dieRoll = Utilities.RandomGenerator.Next(1, 11); 
             //dieRoll = 10; // <cgs> TEST - number of artillery support counters in hext
@@ -2012,7 +2051,7 @@ namespace Pattons_Best
          }
          //---------------------------------------------
          gi.AirStrikeCheckTerritory = gi.EnteredArea;
-         for (int i = 0; i < 2; ++i)
+         for (int i = 0; i < 0; ++i)
          {
             dieRoll = Utilities.RandomGenerator.Next(1, 11); 
             //dieRoll = 10; // <cgs> TEST - number of air strikes counters in hex

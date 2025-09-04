@@ -882,6 +882,12 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("-- HBCI:") { FontWeight = FontWeights.Bold });
                   myTextBlock.Inlines.Add(new Run(" 1D Roll "));
                }
+               else
+               {
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("-- HVAP:") { FontWeight = FontWeights.Bold });
+                  myTextBlock.Inlines.Add(new Run(" 1D: (1->3)=1 (4->7)=2 (8->10)=3"));
+               }
                //-----------------------------------------------
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
@@ -5582,10 +5588,10 @@ namespace Pattons_Best
                break;
             case "Begin Game":
                action = GameAction.SetupShowMapHistorical;
-               action = GameAction.TestingStartMorningBriefing;  // <cgs> TEST - skip the ammo setup
+               //action = GameAction.TestingStartMorningBriefing;  // <cgs> TEST - skip the ammo setup
                //action = GameAction.TestingStartPreparations;     // <cgs> TEST - skip morning briefing and crew/ammo setup
                //action = GameAction.TestingStartMovement;         // <cgs> TEST - start with movement - skip battle prep phase
-               //action = GameAction.TestingStartBattle;           // <cgs> TEST - skip the movement portion - beging with battle setup
+               action = GameAction.TestingStartBattle;           // <cgs> TEST - skip the movement portion - beging with battle setup
                //action = GameAction.TestingStartAmbush;           // <cgs> TEST - skip battle setup
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
