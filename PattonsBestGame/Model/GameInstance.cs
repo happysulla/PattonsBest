@@ -76,6 +76,7 @@ namespace Pattons_Best
       public bool IsShermanFirstShot { set; get; } = false;
       public bool IsShermanFiringAtFront { set; get; } = false;
       public bool IsShermanDeliberateImmobilization { set; get; } = false;
+      public bool IsShermanHvss { set; get; } = false;
       public int NumSmokeAttacksThisRound { set; get; } = 0;
       public bool IsMalfunctionedMainGun { set; get; } = false;
       public bool IsMainGunRepairAttempted { set; get; } = false;
