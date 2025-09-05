@@ -1662,7 +1662,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipCrewAssignments(): gi.Reports.GetLast() returned null");
             return false;
          }
-         report.TankCardNum = 1; // <cgs> TEST - Set the TankCardNum
+         //report.TankCardNum = 8; // <cgs> TEST - Set the TankCardNum
          //-------------------------------
          int randNum = Utilities.RandomGenerator.Next(3);
          if (0 == randNum)
@@ -2163,7 +2163,7 @@ namespace Pattons_Best
             else
                diceRoll = die1 + 10 * die2;
             //diceRoll = 11; // <cgs> TEST - AdvanceRetreat - infantry appearing
-            diceRoll = 45; // <cgs> TEST -  KillYourTank - tanks appearing
+            //diceRoll = 45; // <cgs> TEST -  KillYourTank - tanks appearing
             //diceRoll = 51; // <cgs> TEST -  ATG appearing
             string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
             IMapItem? mi = null;
@@ -2518,7 +2518,7 @@ namespace Pattons_Best
                case GameAction.MorningBriefingTankReplacementHvssRoll:
                   if(Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 1; // <cgs> - TEST - Show HVSS
+                     //dieRoll = 1; // <cgs> - TEST - Show HVSS
                      gi.DieResults[key][0] = dieRoll;
                      gi.IsShermanHvss = false;
                      gi.ShermanHvss = null;
@@ -3722,7 +3722,7 @@ namespace Pattons_Best
                case GameAction.BattleAmbushRoll:
                   if (true == lastReport.Weather.Contains("Rain") || true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
                      dieRoll--;
-                  dieRoll = 10; // <cgs> TEST - NO AMBUSH!!!!!
+                  //dieRoll = 10; // <cgs> TEST - NO AMBUSH!!!!!
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (dieRoll < 8)
