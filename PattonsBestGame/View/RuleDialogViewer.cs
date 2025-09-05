@@ -118,8 +118,6 @@ namespace Pattons_Best
                if( false == dialog.IsVisible )
                   dialog.Show();
                dialog.Activate(); // bring to top
-               dialog.Topmost = true;
-               dialog.Topmost = false;
                dialog.Focus();
                return true;
             }
@@ -176,6 +174,9 @@ namespace Pattons_Best
             TableDialog? dialog = myTableDialogs[key];
             if (null != dialog)
             {
+               if (false == dialog.IsVisible)
+                  dialog.Show();
+               dialog.WindowState = WindowState.Normal;
                dialog.Activate(); // bring to top
                dialog.Focus();
                return true;

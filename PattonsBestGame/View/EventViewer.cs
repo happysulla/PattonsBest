@@ -40,8 +40,14 @@ namespace Pattons_Best
       private IDieRoller? myDieRoller = null;
       public int DieRoll { set; get; } = 0;
       //--------------------------------------------------------------------
-      public RuleDialogViewer? myRulesMgr;
-      public AfterActionDialog? myAfterActionDialog = null;
+      public RuleDialogViewer? myRulesMgr = null;
+      private AfterActionDialog? myAfterActionDialog = null;
+      private ShowReportErrorDialog? myReportErrorDialog = null;
+      private ShowAboutDialog? myDialogAbout = null;
+      private RuleListingDialog? myDialogRuleListing = null;
+      private RuleListingDialog? myDialogEventListing = null;
+      private TableListingDialog? myDialogTableListing = null;
+      private ShowMovementDiagramDialog? myDialogMovementDiagram = null;
       //--------------------------------------------------------------------
       private ScrollViewer? myScrollViewerTextBlock;
       private Canvas? myCanvasMain = null;
@@ -227,6 +233,11 @@ namespace Pattons_Best
                   myAfterActionDialog = new AfterActionDialog(gi, CloseAfterActionDialog);
                   myAfterActionDialog.Show();
                }
+               else
+               {
+                  myAfterActionDialog.WindowState = WindowState.Normal;
+                  myAfterActionDialog.Activate();
+               }
                break;
             case GameAction.ShowCombatCalendarDialog:
                if( false == myRulesMgr.ShowTable("Calendar"))
@@ -236,43 +247,96 @@ namespace Pattons_Best
                }
                break;
             case GameAction.ShowReportErrorDialog:
-               ShowReportErrorDialog dialogReportError = new ShowReportErrorDialog();
-               dialogReportError.Show();
+               if (null == myReportErrorDialog)
+               {
+                  myReportErrorDialog = new ShowReportErrorDialog();
+                  myReportErrorDialog.Show();
+               }
+               else
+               {
+                  myReportErrorDialog.WindowState = WindowState.Normal;
+                  myReportErrorDialog.Activate();
+               }
                break;
             case GameAction.ShowAboutDialog:
-               ShowAboutDialog dialogAbout = new ShowAboutDialog();
-               dialogAbout.Show();
+               if (null == myDialogAbout)
+               {
+                  myDialogAbout = new ShowAboutDialog();
+                  if (true == myDialogAbout.CtorError)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myDialogAbout CtorError=true");
+                     return;
+                  }
+                  myDialogAbout.Show();
+               }
+               else
+               {
+                  myDialogAbout.WindowState = WindowState.Normal;
+                  myDialogAbout.Activate();
+               }
                break;
             case GameAction.ShowRuleListingDialog:
-               RuleListingDialog dialogRuleListing = new RuleListingDialog(myRulesMgr, false);
-               if (true == dialogRuleListing.CtorError)
+               if (null == myDialogRuleListing)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): RuleListingDialog CtorError=true");
-                  return;
+                  myDialogRuleListing = new RuleListingDialog(myRulesMgr, false);
+                  if (true == myDialogRuleListing.CtorError)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateView(): RuleListingDialog CtorError=true");
+                     return;
+                  }
+                  myDialogRuleListing.Show();
                }
-               dialogRuleListing.Show();
+               else
+               {
+                  myDialogRuleListing.WindowState = WindowState.Normal;
+                  myDialogRuleListing.Activate();
+               }
                break;
             case GameAction.ShowEventListingDialog:
-               RuleListingDialog dialogEventListing = new RuleListingDialog(myRulesMgr, true);
-               if (true == dialogEventListing.CtorError)
+               if (null == myDialogEventListing)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): RuleListingDialog CtorError=true");
-                  return;
+                  myDialogEventListing = new RuleListingDialog(myRulesMgr, false);
+                  if (true == myDialogEventListing.CtorError)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myDialogEventListing CtorError=true");
+                     return;
+                  }
+                  myDialogEventListing.Show();
                }
-               dialogEventListing.Show();
+               else
+               {
+                  myDialogEventListing.WindowState = WindowState.Normal;
+                  myDialogEventListing.Activate();
+               }
                break;
             case GameAction.ShowTableListing:
-               TableListingDialog dialogTableListing = new TableListingDialog(myRulesMgr);
-               if (true == dialogTableListing.CtorError)
+               if (null == myDialogTableListing)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): TableListingDialog CtorError=true");
-                  return;
+                  myDialogTableListing = new TableListingDialog(myRulesMgr);
+                  if (true == myDialogTableListing.CtorError)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myDialogTableListing CtorError=true");
+                     return;
+                  }
+                  myDialogTableListing.Show();
                }
-               dialogTableListing.Show();
+               else
+               {
+                  myDialogTableListing.WindowState = WindowState.Normal;
+                  myDialogTableListing.Activate();
+               }
                break;
             case GameAction.ShowMovementDiagramDialog:
-               ShowMovementDiagramDialog dialogMovementDiagram = new ShowMovementDiagramDialog();
-               dialogMovementDiagram.Show();
+               if (null == myDialogMovementDiagram)
+               {
+                  myDialogMovementDiagram = new ShowMovementDiagramDialog();
+                  myDialogMovementDiagram.Show();
+               }
+               else
+               {
+                  myDialogMovementDiagram.WindowState = WindowState.Normal;
+                  myDialogMovementDiagram.Activate();
+               }
                break;
             case GameAction.SetupAssignCrewRating:
             case GameAction.MorningBriefingAssignCrewRating:
