@@ -108,6 +108,7 @@ namespace Pattons_Best
       IMapItems AdvancingEnemies { set; get; }
       IMapItems ShermanAdvanceOrRetreatEnemies { set; get; }
       IMapItems InjuredCrewMembers { set; get; }
+      IMapItem? ShermanHvss { set; get; }
       ICrewMember? ReturningCrewman { set; get; }
       //------------------------------------------------
       ITerritory Home { get; set; }

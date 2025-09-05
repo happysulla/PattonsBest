@@ -875,7 +875,8 @@ namespace Pattons_Best
                labelforHvap.Content = "0" + myHvapReadyRackCount.ToString();
             stackpanelHvap.Children.Add(labelforHvap);
             Button bPlusHvap = new Button() { Name = "bPlusHvap", IsEnabled = false, Height = Utilities.theMapItemOffset, Width = Utilities.theMapItemOffset, FontFamily = myFontFam1, Content = "+" };
-            if ((0 < myUnassignedReadyRack) && (myHvapReadyRackCount < myHvapRoundCountOriginal))
+            int hvapTotalAvailable = myHvapRoundCountOriginal + myHvapRoundCountAdded;
+            if ((0 < myUnassignedReadyRack) && (myHvapReadyRackCount < hvapTotalAvailable))
             {
                bPlusHvap.Click += ButtonReadyRackChange_Click;
                bPlusHvap.IsEnabled = true;

@@ -69,8 +69,8 @@ The following crewmen are convalesing in a medical hosptial and may rejoin your 
 e007b	"<Bold>e007b Crew Replacement</Bold> 
 <InlineUIContainer><Button Content='r19.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>     
 <LineBreak/><LineBreak/>
-When you tank is knocked out, wounded crewmen are replaced in morning briefing if combat may occur this day  per 
-<InlineUIContainer><Button Content='e006' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  Click image to  continue to assign new crew ratings.
+When you tank is knocked out, wounded crewmen are replaced in morning briefing if combat may occur this day per 
+<InlineUIContainer><Button Content='e006' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  Click image to continue to assign new replacement crew.
 <LineBreak/><LineBreak/>
                           <InlineUIContainer><Image Name='Ambulance3' Height='160' Width='300'></Image></InlineUIContainer>"
 e007c	"<Bold>e007c Returning Crewmen</Bold> 
@@ -90,7 +90,9 @@ e007e	"<Bold>e007e Horizontal Volute Spring Suspension (HVSS)</Bold>
 <InlineUIContainer><Button Content='r5.25' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <InlineUIContainer><Button Content='r27.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>     
 <LineBreak/><LineBreak/>
-A gyrostabilizer was attached to the main gun of the Sherman tank is to keep the gun stabilized, or steady, in the vertical axis (up-down). Even if your tank has a gyrostabilizer, it requires the crew to be trained during a refit period before it can be used. A 1D die roll is necessary to determine if you tank has HVSS installed.
+A gyrostabilizer was attached to the main gun of the Sherman tank to keep the gun stabilized, or steady, in the vertical axis (up-down). 
+<LineBreak/><LineBreak/>
+Even if your tank has a gyrostabilizer, it requires the crew to be trained during a refit period before it can be used. Roll 1D to determine if you tank has HVSS installed per tank card.
 <LineBreak/><LineBreak/>
 Die Roll = <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>"
 e008	"<Bold>e007 Morning Briefing - Weather Roll</Bold> <InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>

@@ -1662,7 +1662,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipCrewAssignments(): gi.Reports.GetLast() returned null");
             return false;
          }
-         report.TankCardNum = 2; // <cgs> TEST - Set the TankCardNum
+         report.TankCardNum = 1; // <cgs> TEST - Set the TankCardNum
          //-------------------------------
          int randNum = Utilities.RandomGenerator.Next(3);
          if (0 == randNum)
@@ -2163,7 +2163,7 @@ namespace Pattons_Best
             else
                diceRoll = die1 + 10 * die2;
             //diceRoll = 11; // <cgs> TEST - AdvanceRetreat - infantry appearing
-            diceRoll = 45; // <cgs> TEST -  tanks appearing
+            diceRoll = 45; // <cgs> TEST -  KillYourTank - tanks appearing
             //diceRoll = 51; // <cgs> TEST -  ATG appearing
             string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
             IMapItem? mi = null;
@@ -2518,8 +2518,10 @@ namespace Pattons_Best
                case GameAction.MorningBriefingTankReplacementHvssRoll:
                   if(Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
+                     dieRoll = 1; // <cgs> - TEST - Show HVSS
                      gi.DieResults[key][0] = dieRoll;
                      gi.IsShermanHvss = false;
+                     gi.ShermanHvss = null;
                      if ( (dieRoll < 4) || ((11 < lastReport.TankCardNum) && (dieRoll < 6)) )
                      {
                         string tType = lastReport.TankCardNum.ToString();
@@ -2533,9 +2535,7 @@ namespace Pattons_Best
                         {
                            string mapItemName = "Hvss" + Utilities.MapItemNum.ToString();
                            Utilities.MapItemNum++;
-                           IMapItem hvssMapItem = new MapItem(mapItemName, 1.0, "c75Hvss", t);
-                           gi.BattleStacks.Add(hvssMapItem);
-                           gi.IsShermanHvss = false; // <cgs> TEST - set to true without crew training
+                           gi.ShermanHvss = new MapItem(mapItemName, 1.0, "c75Hvss", t);
                         }
                      }
                   }

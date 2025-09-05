@@ -55,6 +55,7 @@ namespace Pattons_Best
       public IMapItem? TargetMainGun { set; get; } = null;
       public IMapItem? TargetMg { set; get; } = null;
       public IMapItems InjuredCrewMembers { set; get; } = new MapItems();
+      public IMapItem? ShermanHvss { set; get; } = null;
       public ICrewMember? ReturningCrewman { set; get; } = null;
       //------------------------------------------------
       public ITerritory Home { get; set; } = new Territory();

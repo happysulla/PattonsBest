@@ -367,6 +367,7 @@ namespace Pattons_Best
             case GameAction.MorningBriefingCalendarRoll:
             case GameAction.MorningBriefingDayOfRest:
                break;
+            case GameAction.MorningBriefingTankReplacementHvssRoll:
             case GameAction.MorningBriefingTankReplacementRoll:
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
@@ -1349,6 +1350,8 @@ namespace Pattons_Best
             if (ui is Button b)
             {
                IMapItem? mi = gi.Hatches.Find(b.Name);
+               if ((null != gi.ShermanHvss) && (true == b.Name.Contains("Hvss")) )
+                  mi = gi.ShermanHvss;
                if (null == mi)
                   mi = gi.CrewActions.Find(b.Name);
                if ( null == mi )
@@ -1383,6 +1386,24 @@ namespace Pattons_Best
          //-------------------------------------------------------
          if (GamePhase.UnitTest == gi.GamePhase)
             return true;
+         //-------------------------------------------------------
+         if( null != gi.ShermanHvss )
+         {
+            Button? b = myTankButtons.Find(gi.ShermanHvss.Name);
+            if (null != b)
+            {
+               Logger.Log(LogEnum.LE_SHOW_MAPITEM_TANK, "UpdateCanvasTank(): 1-mi=" + gi.ShermanHvss.Name + " loc=" + gi.ShermanHvss.Location.ToString() + " t=" + gi.ShermanHvss.TerritoryCurrent.Name + " tLoc=" + gi.ShermanHvss.TerritoryCurrent.CenterPoint.ToString());
+               Canvas.SetLeft(b, gi.ShermanHvss.Location.X);
+               Canvas.SetTop(b, gi.ShermanHvss.Location.Y);
+               Canvas.SetZIndex(b, 900);
+            }
+            else
+            {
+               Button newButton = CreateButtonMapItem(myTankButtons, gi.ShermanHvss);
+               myCanvasTank.Children.Add(newButton);
+               Logger.Log(LogEnum.LE_SHOW_MAPITEM_TANK, "UpdateCanvasTank(): 2-mi=" + gi.ShermanHvss.Name + " loc=" + gi.ShermanHvss.Location.ToString() + " t=" + gi.ShermanHvss.TerritoryCurrent.Name + " tLoc=" + gi.ShermanHvss.TerritoryCurrent.CenterPoint.ToString());
+            }
+         }
          //-------------------------------------------------------
          if (false == UpdateCanvasTankMapItems(gi.Hatches))
          {
