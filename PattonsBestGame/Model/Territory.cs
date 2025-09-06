@@ -22,6 +22,8 @@ namespace Pattons_Best
       public IMapPoint CenterPoint { get; set; } = new MapPoint();
       public List<IMapPoint> Points { get; set; } = new List<IMapPoint>();
       public List<string> Adjacents { get; set; } = new List<string>();
+      public List<string> PavedRoads { get; set; } = new List<string>();
+      public List<string> UnpavedRoads { get; set; } = new List<string>();
       //---------------------------------------------------------------
       public static IMapPoint GetRandomPoint(ITerritory t, double offset) // return the top left location of a MapItem, not the center point
       {

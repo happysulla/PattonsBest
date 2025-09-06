@@ -412,6 +412,90 @@ namespace Pattons_Best
             if (0 < count3)
                reader.Read(); // get past </Adjacents> tag
             //--------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(PavedRoads)=false");
+               return false;
+            }
+            if (reader.Name != "PavedRoads")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): PavedRoads != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sCount4 = reader.GetAttribute("count");
+            if (null == sCount4)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(sCount4)=null");
+               return false;
+            }
+            int count4 = int.Parse(sCount4);
+            for (int i4 = 0; i4 < count4; ++i4)
+            {
+               reader.Read();
+               if (false == reader.IsStartElement())
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(paved)=false");
+                  return false;
+               }
+               if (reader.Name != "paved")
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): paved != (node=" + reader.Name + ")");
+                  return false;
+               }
+               string? sPaved= reader.GetAttribute("value");
+               if (null == sPaved)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(sPaved)=null");
+                  return false;
+               }
+               territory.PavedRoads.Add(sPaved);
+            }
+            if (0 < count4)
+               reader.Read(); // get past </PavedRoads> tag
+            //--------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(UnpavedRoads)=false");
+               return false;
+            }
+            if (reader.Name != "UnpavedRoads")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): UnpavedRoads != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sCount5 = reader.GetAttribute("count");
+            if (null == sCount5)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(sCount5)=null");
+               return false;
+            }
+            int count5 = int.Parse(sCount5);
+            for (int i5 = 0; i5 < count5; ++i5)
+            {
+               reader.Read();
+               if (false == reader.IsStartElement())
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(unpaved)=false");
+                  return false;
+               }
+               if (reader.Name != "unpaved")
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): unpaved != (node=" + reader.Name + ")");
+                  return false;
+               }
+               string? sUnpaved = reader.GetAttribute("value");
+               if (null == sUnpaved)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(sUnpaved)=null");
+                  return false;
+               }
+               territory.UnpavedRoads.Add(sUnpaved);
+            }
+            if (0 < count5)
+               reader.Read(); // get past </UnpavedRoads> tag
+            //--------------------------------------
             territories.Add(territory);
             reader.Read(); // get past </Territory> tag
          }
@@ -530,7 +614,7 @@ namespace Pattons_Best
             XmlElement? elemAdjacents = aXmlDocument.CreateElement("Adjacents");
             if (null == elemAdjacents)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(elemPoints) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(elemAdjacents) returned null");
                return false;
             }
             elemAdjacents.SetAttribute("count", t.Adjacents.Count.ToString());
@@ -546,14 +630,76 @@ namespace Pattons_Best
                elem = aXmlDocument.CreateElement("adjacent");
                if (null == elem)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(terrElem) returned null");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(adjacent) returned null");
                   return false;
                }
                elem.SetAttribute("value", s);
                node = nodeAdjacents.AppendChild(elem);
                if (null == node)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(node) returned null");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(nodeAdjacents) returned null");
+                  return false;
+               }
+            }
+            //-----------------------------------------------------------
+            XmlElement? elemPavedRoads = aXmlDocument.CreateElement("PavedRoads");
+            if (null == elemPavedRoads)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(elemPavedRoads) returned null");
+               return false;
+            }
+            elemPavedRoads.SetAttribute("count", t.PavedRoads.Count.ToString());
+            XmlNode? nodePavedRoads = territoryNode.AppendChild(elemPavedRoads);
+            if (null == nodePavedRoads)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(nodePavedRoads) returned null");
+               return false;
+            }
+            //---------------------------------
+            foreach (string s in t.PavedRoads)
+            {
+               elem = aXmlDocument.CreateElement("paved");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(paved) returned null");
+                  return false;
+               }
+               elem.SetAttribute("value", s);
+               node = nodePavedRoads.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(paved) returned null");
+                  return false;
+               }
+            }
+            //-----------------------------------------------------------
+            XmlElement? elemUnpavedRoads = aXmlDocument.CreateElement("UnpavedRoads");
+            if (null == elemUnpavedRoads)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(elemUnpavedRoads) returned null");
+               return false;
+            }
+            elemUnpavedRoads.SetAttribute("count", t.PavedRoads.Count.ToString());
+            XmlNode? nodeUnpavedRoads = territoryNode.AppendChild(elemUnpavedRoads);
+            if (null == nodeUnpavedRoads)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(nodeUnpavedRoads) returned null");
+               return false;
+            }
+            //---------------------------------
+            foreach (string s in t.PavedRoads)
+            {
+               elem = aXmlDocument.CreateElement("unpaved");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(unpaved) returned null");
+                  return false;
+               }
+               elem.SetAttribute("value", s);
+               node = nodeUnpavedRoads.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(unpaved) returned null");
                   return false;
                }
             }

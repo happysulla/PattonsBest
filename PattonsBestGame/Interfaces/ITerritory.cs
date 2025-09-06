@@ -10,6 +10,8 @@ namespace Pattons_Best
       IMapPoint CenterPoint { get; set; }
       List<IMapPoint> Points { set; get; }
       List<String> Adjacents { get; }
+      List<String> PavedRoads { get; }
+      List<String> UnpavedRoads { get; }
    }
    //--------------------------------------------------------
    public interface ITerritories : System.Collections.IEnumerable
