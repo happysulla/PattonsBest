@@ -61,6 +61,7 @@ namespace Pattons_Best
          {
             case GameAction.UpdateBattleBoard:
             case GameAction.ShowTankForcePath:
+            case GameAction.ShowRoads:
                break;
             case GameAction.UpdateStatusBar:
                if (null != myTargetCursor) // increase/decrease size of cursor when zoom in or out

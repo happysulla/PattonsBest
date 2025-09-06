@@ -55,6 +55,7 @@ namespace Pattons_Best
       LE_SHOW_NUM_SHERMAN_SHOTS,
       LE_SHOW_GUN_RELOAD,
       LE_SHOW_FIRE_DIRECTION,
+      LE_SHOW_POINT,
       //-------------
       LE_SHOW_VP_FRIENDLY_FORCES,
       LE_SHOW_VP_CAPTURED_AREA,
@@ -172,6 +173,7 @@ namespace Pattons_Best
          SetOn(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES);
          SetOn(LogEnum.LE_SHOW_VP_CAPTURED_AREA);
          SetOn(LogEnum.LE_SHOW_VP_TOTAL);
+         SetOn(LogEnum.LE_SHOW_POINT);
          //-------------------------------
          //SetOn(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE);
          //SetOn(LogEnum.LE_VIEW_ART_FIRE_RESOLVE);

@@ -21,9 +21,11 @@ namespace Pattons_Best
       private readonly MenuItem myMenuItemTopLevel21 = new MenuItem();
       private readonly MenuItem myMenuItemTopLevel22 = new MenuItem();
       private readonly MenuItem myMenuItemTopLevel31 = new MenuItem();
+      private readonly MenuItem myMenuItemTopLevel36 = new MenuItem();
       private readonly IGameEngine myGameEngine;
       private IGameInstance myGameInstance;
       public bool IsPathShown { get; set; } = true;
+      public bool IsRoadsShown { get; set; } = false;
       public Options? NewGameOptions { get; set; } = null;
       //-----------------------------------------------------------------------
       public MainMenuViewer(Menu mi, IGameEngine ge, IGameInstance gi) // Constructor creates default top level menus that get changed with UpdateView() based on GamePhase and GameAction
@@ -89,6 +91,12 @@ namespace Pattons_Best
                   subItem35.InputGestureText = "Ctrl+G";
                   subItem35.Click += MenuItemViewFeats_Click;
                   myMenuItemTopLevel3.Items.Add(subItem35);
+                  myMenuItemTopLevel36.Header = "_Roads";
+                  myMenuItemTopLevel36.InputGestureText = "Ctrl+Shift+R";
+                  myMenuItemTopLevel36.Click += MenuItemViewRoads_Click;
+                  myMenuItemTopLevel36.IsCheckable = true;
+                  myMenuItemTopLevel36.IsChecked = false;
+                  myMenuItemTopLevel3.Items.Add(myMenuItemTopLevel36);
                }
                //------------------------------------------------
                if (menuItem.Name == "myMenuItemTopLevel4")
@@ -300,6 +308,13 @@ namespace Pattons_Best
       public void MenuItemViewFeats_Click(object sender, RoutedEventArgs e)
       {
          GameAction action = GameAction.ShowGameFeats;
+         myGameEngine.PerformAction(ref myGameInstance, ref action);
+      }
+      public void MenuItemViewRoads_Click(object sender, RoutedEventArgs e)
+      {
+         IsRoadsShown = !IsRoadsShown;
+         myMenuItemTopLevel36.IsChecked = IsRoadsShown;
+         GameAction action = GameAction.ShowRoads;
          myGameEngine.PerformAction(ref myGameInstance, ref action);
       }
       public void MenuItemHelpRules_Click(object sender, RoutedEventArgs e)

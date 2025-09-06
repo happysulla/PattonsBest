@@ -136,7 +136,7 @@ namespace Pattons_Best
       ShowAfterActionReportDialog,
       ShowTankForcePath,
       ShowMovementDiagramDialog,
-      ShowInventoryDialog,
+      ShowRoads,
       ShowRuleListingDialog,
       ShowEventListingDialog,
       ShowTableListing,

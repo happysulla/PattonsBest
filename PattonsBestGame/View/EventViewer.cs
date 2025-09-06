@@ -190,6 +190,8 @@ namespace Pattons_Best
             case GameAction.UpdateTankExplosion:
             case GameAction.UpdateTankBrewUp:
             case GameAction.UpdateGameOptions:
+            case GameAction.ShowTankForcePath:
+            case GameAction.ShowRoads:
                break;
             case GameAction.MorningBriefingReturningCrewman:
             case GameAction.UpdateAfterActionReport:
@@ -5675,9 +5677,9 @@ namespace Pattons_Best
                action = GameAction.SetupShowMapHistorical;
                //action = GameAction.TestingStartMorningBriefing;  // <cgs> TEST - skip the ammo setup
                //action = GameAction.TestingStartPreparations;     // <cgs> TEST - skip morning briefing and crew/ammo setup
-               //action = GameAction.TestingStartMovement;         // <cgs> TEST - start with movement - skip battle prep phase
+               action = GameAction.TestingStartMovement;         // <cgs> TEST - start with movement - skip battle prep phase
                //action = GameAction.TestingStartBattle;           // <cgs> TEST - skip the movement portion - begin with battle setup
-               action = GameAction.TestingStartAmbush;           // <cgs> TEST - skip battle setup
+               //action = GameAction.TestingStartAmbush;           // <cgs> TEST - skip battle setup
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Cancel":

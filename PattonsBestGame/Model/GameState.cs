@@ -1435,9 +1435,9 @@ namespace Pattons_Best
          switch (action)
          {
             case GameAction.ShowTankForcePath:
+            case GameAction.ShowRoads:
             case GameAction.ShowCombatCalendarDialog:
             case GameAction.ShowAfterActionReportDialog:
-            case GameAction.ShowInventoryDialog:
             case GameAction.ShowGameFeats:
             case GameAction.ShowRuleListingDialog:
             case GameAction.ShowEventListingDialog:
@@ -2402,9 +2402,9 @@ namespace Pattons_Best
             switch (action)
             {
                case GameAction.ShowTankForcePath:
+               case GameAction.ShowRoads:
                case GameAction.ShowCombatCalendarDialog:
                case GameAction.ShowAfterActionReportDialog:
-               case GameAction.ShowInventoryDialog:
                case GameAction.ShowGameFeats:
                case GameAction.ShowRuleListingDialog:
                case GameAction.ShowEventListingDialog:
@@ -2794,9 +2794,9 @@ namespace Pattons_Best
             switch (action)
             {
                case GameAction.ShowTankForcePath:
+               case GameAction.ShowRoads:
                case GameAction.ShowCombatCalendarDialog:
                case GameAction.ShowAfterActionReportDialog:
-               case GameAction.ShowInventoryDialog:
                case GameAction.ShowGameFeats:
                case GameAction.ShowRuleListingDialog:
                case GameAction.ShowEventListingDialog:
@@ -3019,9 +3019,9 @@ namespace Pattons_Best
             switch (action)
             {
                case GameAction.ShowTankForcePath:
+               case GameAction.ShowRoads:
                case GameAction.ShowCombatCalendarDialog:
                case GameAction.ShowAfterActionReportDialog:
-               case GameAction.ShowInventoryDialog:
                case GameAction.ShowGameFeats:
                case GameAction.ShowRuleListingDialog:
                case GameAction.ShowEventListingDialog:
@@ -3037,7 +3037,7 @@ namespace Pattons_Best
                case GameAction.MorningBriefingAssignCrewRating: // handled in EventViewer by showing dialog
                   break;
                case GameAction.UpdateBattleBoard: // Do not log event
-                  return returnStatus;
+                  break;
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
                   break;
@@ -3648,9 +3648,9 @@ namespace Pattons_Best
             switch (action)
             {
                case GameAction.ShowTankForcePath:
+               case GameAction.ShowRoads:
                case GameAction.ShowCombatCalendarDialog:
                case GameAction.ShowAfterActionReportDialog:
-               case GameAction.ShowInventoryDialog:
                case GameAction.ShowGameFeats:
                case GameAction.ShowRuleListingDialog:
                case GameAction.ShowEventListingDialog:
@@ -3668,7 +3668,7 @@ namespace Pattons_Best
                case GameAction.MorningBriefingAssignCrewRating: // handled in EventViewer by showing dialog
                   break;
                case GameAction.UpdateBattleBoard: // Do not log event
-                  return returnStatus;
+                  break;
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
                   break;
@@ -3922,9 +3922,9 @@ namespace Pattons_Best
             switch (action)
             {
                case GameAction.ShowTankForcePath:
+               case GameAction.ShowRoads:
                case GameAction.ShowCombatCalendarDialog:
                case GameAction.ShowAfterActionReportDialog:
-               case GameAction.ShowInventoryDialog:
                case GameAction.ShowGameFeats:
                case GameAction.ShowRuleListingDialog:
                case GameAction.ShowEventListingDialog:
@@ -3944,7 +3944,7 @@ namespace Pattons_Best
                   gi.EventDisplayed = gi.EventActive; // next screen to show
                   break;
                case GameAction.UpdateBattleBoard: // Do not log event
-                  return returnStatus;
+                  break;
                case GameAction.BattleRoundSequenceStart:
                   if (false == BattleRoundSequenceStart(gi, ref action))
                   {
@@ -7609,7 +7609,7 @@ namespace Pattons_Best
             {
                case GameAction.ShowCombatCalendarDialog:
                case GameAction.ShowAfterActionReportDialog:
-               case GameAction.ShowInventoryDialog:
+               case GameAction.ShowRoads:
                case GameAction.ShowGameFeats:
                case GameAction.ShowRuleListingDialog:
                case GameAction.ShowEventListingDialog:
@@ -7625,7 +7625,7 @@ namespace Pattons_Best
                case GameAction.UpdateEventViewerDisplay: // Only change active event
                   break;
                case GameAction.UpdateBattleBoard: // Do not log event
-                  return returnStatus;
+                  break;
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
                   break;
@@ -8072,9 +8072,9 @@ namespace Pattons_Best
          switch (action)
          {
             case GameAction.ShowTankForcePath:
+            case GameAction.ShowRoads:
             case GameAction.ShowCombatCalendarDialog:
             case GameAction.ShowAfterActionReportDialog:
-            case GameAction.ShowInventoryDialog:
             case GameAction.ShowGameFeats:
             case GameAction.ShowRuleListingDialog:
             case GameAction.ShowEventListingDialog:
@@ -8090,7 +8090,7 @@ namespace Pattons_Best
             case GameAction.UpdateEventViewerDisplay: // Only change active event
                break;
             case GameAction.UpdateBattleBoard: // Do not log event
-               return returnStatus;
+               break;
             case GameAction.EndGameWin:
                gi.EventDisplayed = gi.EventActive = "e501";
                gi.DieRollAction = GameAction.DieRollActionNone;
@@ -8162,9 +8162,9 @@ namespace Pattons_Best
          switch (action)
          {
             case GameAction.ShowTankForcePath:
+            case GameAction.ShowRoads:
             case GameAction.ShowCombatCalendarDialog:
             case GameAction.ShowAfterActionReportDialog:
-            case GameAction.ShowInventoryDialog:
             case GameAction.ShowGameFeats:
             case GameAction.ShowRuleListingDialog:
             case GameAction.ShowEventListingDialog:
@@ -8180,7 +8180,7 @@ namespace Pattons_Best
             case GameAction.UpdateEventViewerDisplay: // Only change active event
                break;
             case GameAction.UpdateBattleBoard: // Do not log event
-               return returnStatus;
+               break;
             case GameAction.RemoveSplashScreen:
                PrintDiagnosticInfoToLog();
                break;

@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
-using System.Net.NetworkInformation;
+using System.Transactions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Xml;
+using System.Xml.Linq;
 namespace Pattons_Best
 {
    public class PolylineCreateUnitTest : IUnitTest
@@ -16,13 +17,19 @@ namespace Pattons_Best
       public static Double theEllipseOffset = 8;
       //--------------------------------------------------------
       private DockPanel? myDockPanel = null;
-      private Canvas? myCanvas = null;
-      private IGameInstance? myGameInstance = null;
+      private Canvas? myCanvasTank = null;
+      private Canvas? myCanvasMain = null;
+      private CanvasImageViewer? myCanvasImageViewer = null;
+      private bool myIsBattleMapShown = false;
+      private int myIndexRoad = 0;
+      private bool myIsPavedRoad = false;
       private List<Ellipse> myEllipses = new List<Ellipse>();
       private List<IMapPoint> myPoints = new List<IMapPoint>();
       private Dictionary<string, Polyline> myPolyLines = new Dictionary<string, Polyline>();
       //--------------------------------------------------------
-      private SolidColorBrush mySolidColorBrush3 = new SolidColorBrush { Color = Colors.DeepSkyBlue };
+      private SolidColorBrush mySolidColorBrushPaved = new SolidColorBrush { Color = Colors.Blue };
+      private SolidColorBrush mySolidColorBrushUnpaved = new SolidColorBrush { Color = Colors.LawnGreen };
+      private readonly DoubleCollection myDashArray = new DoubleCollection();
       //--------------------------------------------------------
       public bool CtorError { get; } = false;
       private int myIndexName = 0;
@@ -31,14 +38,31 @@ namespace Pattons_Best
       public string HeaderName { get { return myHeaderNames[myIndexName]; } }
       public string CommandName { get { return myCommandNames[myIndexName]; } }
       //--------------------------------------------------------
-      public PolylineCreateUnitTest(DockPanel dp, IGameInstance gi)
+      public PolylineCreateUnitTest(DockPanel dp, IGameInstance gi, CanvasImageViewer civ)
       {
          myIndexName = 0;
-         myHeaderNames.Add("04-Start Polyline Test");
+         myHeaderNames.Add("04-Switch Map");
+         myHeaderNames.Add("04-Make Road");
          myHeaderNames.Add("04-Finish");
          //------------------------------------
-         myCommandNames.Add("00-Start");
+         myCommandNames.Add("00-Switch Map");
+         myCommandNames.Add("01-Make Road");
          myCommandNames.Add("Cleanup");
+         //------------------------------------
+         if (null == gi)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "PolylineCreateUnitTest(): gi=null");
+            CtorError = true;
+            return;
+         }
+         //------------------------------------
+         if (null == civ)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryRegionUnitTest(): civ=null");
+            CtorError = true;
+            return;
+         }
+         myCanvasImageViewer = civ;
          //------------------------------------
          myDockPanel = dp;
          foreach (UIElement ui0 in myDockPanel.Children)
@@ -47,44 +71,87 @@ namespace Pattons_Best
             {
                foreach (UIElement ui1 in dockPanelInside.Children)
                {
+                  if (ui1 is DockPanel dockpanelControl)
+                  {
+                     foreach (UIElement ui2 in dockpanelControl.Children)
+                     {
+                        if (ui2 is Canvas canvas)
+                           myCanvasTank = canvas;  // Find the Canvas in the visual tree
+                     }
+                  }
                   if (ui1 is ScrollViewer sv)
                   {
                      if (sv.Content is Canvas canvas)
-                        myCanvas = canvas;  // Find the Canvas in the visual tree
+                        myCanvasMain = canvas;  // Find the Canvas in the visual tree
                   }
                }
             }
          }
-         if (null == myCanvas) // log error and return if canvas not found
+         //-------------------------------------
+         if (null == myCanvasTank)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GameViewerCreateUnitTest() myCanvas=null");
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryRegionUnitTest(): myCanvasTank=null");
             CtorError = true;
             return;
          }
-         //------------------------------------
-         this.myGameInstance = gi;
-      }
-      public bool Command(ref IGameInstance gi) // Performs function based on CommandName string
-      {
-         if (null == myCanvas)
+         if (null == myCanvasMain)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Command(): myCanvas=null");
-            return false;
+            Logger.Log(LogEnum.LE_ERROR, "TerritoryRegionUnitTest(): myCanvasMain=null");
+            CtorError = true;
+            return;
          }
-         if (CommandName == myCommandNames[0])
+         //-------------------------------------
+         if (true == myIsBattleMapShown)
          {
-            myCanvas.MouseDown += MouseDownCanvas;
-            CreateEllipses();
-            CreateTriangles();
-            if( false == NextTest(ref gi))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Command() NextTest() returned false");
-               return false;
-            }
+            myIsBattleMapShown = false;
+            myCanvasImageViewer.ShowMovementMap(myCanvasMain);
          }
          else
          {
-            myCanvas.MouseDown -= MouseDownCanvas;
+            myIsBattleMapShown = true;
+            myCanvasImageViewer.ShowBattleMap(myCanvasMain);
+         }
+         //-------------------------------------
+         myDashArray.Add(5);  // used for dotted lines
+         myDashArray.Add(2);  // used for dotted lines
+      }
+      public bool Command(ref IGameInstance gi) // Performs function based on CommandName string
+      {
+         if (null == myCanvasTank)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Command(): myCanvasTank=null");
+            return false;
+         }
+         if (null == myCanvasMain)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Command(): myCanvasMain=null");
+            return false;
+         }
+         if (null == myCanvasImageViewer)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Command(): myCanvasImageViewer=null");
+            return false;
+         }
+         //-----------------------------------
+         if (CommandName == myCommandNames[0])
+         {
+            if (true == myIsBattleMapShown)
+            {
+               myIsBattleMapShown = false;
+               myCanvasImageViewer.ShowMovementMap(myCanvasMain);
+            }
+            else
+            {
+               myIsBattleMapShown = true;
+               myCanvasImageViewer.ShowBattleMap(myCanvasMain);
+            }
+         }
+         else if (CommandName == myCommandNames[1])
+         {
+         }
+         else
+         {
+            myCanvasMain.MouseDown -= MouseDownCanvas;
             if (false == Cleanup(ref gi))
             {
                Logger.Log(LogEnum.LE_ERROR, "Command(): Cleanup() returned false");
@@ -95,7 +162,23 @@ namespace Pattons_Best
       }
       public bool NextTest(ref IGameInstance gi) // Move to the next test in this class's unit tests
       {
+         if (null == myCanvasMain)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "NextTest(): myCanvasMain=null");
+            return false;
+         }
          if (HeaderName == myHeaderNames[0])
+         {
+            ++myIndexName;
+            CreateEllipses();
+            if (false == ReadRoadsXml())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Command(): ReadRoadsXml() returned false");
+               return false;
+            }
+            myCanvasMain.MouseDown += MouseDownCanvas;
+         }
+         if (HeaderName == myHeaderNames[1])
          {
             ++myIndexName;
          }
@@ -111,14 +194,33 @@ namespace Pattons_Best
       }
       public bool Cleanup(ref IGameInstance gi) 
       {
-         if (null == myCanvas)
+         if (null == myCanvasMain)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Cleanup(): myCanvas=null");
+            Logger.Log(LogEnum.LE_ERROR, "Cleanup(): myCanvasMain=null");
+            return false;
+         }
+         try
+         {
+            string filename = "..\\..\\..\\Config\\Roads.xml";
+            System.IO.File.Delete(filename);  // delete old file
+            XmlDocument aXmlDocument = CreateRoadsXml(); // create a new XML document based on Territories
+            using (FileStream writer = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write))
+            {
+               XmlWriterSettings settings = new XmlWriterSettings { Indent = true, OmitXmlDeclaration = true, NewLineOnAttributes = false };
+               using (XmlWriter xmlWriter = XmlWriter.Create(writer, settings)) // For XmlWriter, it uses the stream that was created: writer.
+               {
+                  aXmlDocument.Save(xmlWriter);
+               }
+            }
+         }
+         catch (Exception e)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Cleanup(): e=\n" + e.ToString());
             return false;
          }
          // Remove any existing UI elements from the Canvas
          List<UIElement> results = new List<UIElement>();
-         foreach (UIElement ui in myCanvas.Children)
+         foreach (UIElement ui in myCanvasMain.Children)
          {
             if (ui is Ellipse)
                results.Add(ui);
@@ -128,224 +230,245 @@ namespace Pattons_Best
                p.Fill = Utilities.theBrushRegionClear;
          }
          foreach (UIElement ui1 in results)
-            myCanvas.Children.Remove(ui1);
-         myCanvas.MouseDown -= MouseDownCanvas;
+            myCanvasMain.Children.Remove(ui1);
+         myCanvasMain.MouseDown -= MouseDownCanvas;
          ++gi.GameTurn;
          return true;
       }
       //--------------------------------------------------------
-      private bool CreatePoint(IMapPoint mp)
-      {
-         double minDistance = 10;
-         IMapPoint selectedMp = mp;
-         foreach (Territory t in Territories.theTerritories)
-         {
-            foreach (IMapPoint mp1 in t.Points)
-            {
-               double d1 = Math.Abs(mp.X - mp1.X);
-               double d2 = Math.Abs(mp.Y - mp1.Y);
-               double distance = Math.Sqrt(Math.Pow(d1, 2.0) + Math.Pow(d2, 2.0));
-               if (distance < minDistance)
-               {
-                  minDistance = distance;
-                  selectedMp.X = mp1.X;
-                  selectedMp.Y = mp1.Y;
-                  Console.WriteLine("\t\t==> {0} from {1} with d={2}", selectedMp.ToString(), t.Name, distance);
-                  myPoints.Add(selectedMp);
-                  return true;
-               }
-            }
-         }  // end foreach()
-         Console.WriteLine("\t\t++>{0}", selectedMp.ToString()); // An territory point was not found.  Add the mouse click point as a new point.
-         myPoints.Add(selectedMp);
-         return true;
-      }
-      private void CreateTriangles()
-      {
-         if (null == myCanvas)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateTriangles(): myCanvas=null");
-            return;
-         }
-         const double SIZE = 6.0;
-         foreach (KeyValuePair<string, Polyline> kvp in myPolyLines)
-         {
-            int i = 0;
-            double X1 = 0.0;
-            double Y1 = 0.0;
-            foreach (System.Windows.Point p in kvp.Value.Points)
-            {
-               if (0 == i)
-               {
-                  X1 = p.X;
-                  Y1 = p.Y;
-               }
-               else
-               {
-                  double Xcenter = X1 + (p.X - X1) / 2.0;
-                  double Ycenter = Y1 + (p.Y - Y1) / 2.0;
-                  PointCollection points = new PointCollection();
-                  System.Windows.Point one = new System.Windows.Point(Xcenter - SIZE, Ycenter - SIZE);
-                  System.Windows.Point two = new System.Windows.Point(Xcenter + SIZE, Ycenter);
-                  System.Windows.Point three = new System.Windows.Point(Xcenter - SIZE, Ycenter + SIZE);
-                  points.Add(one);
-                  points.Add(two);
-                  points.Add(three);
-                  Polygon triangle = new Polygon() { Name = "River", Points = points, Stroke = mySolidColorBrush3, Fill = mySolidColorBrush3, Visibility = Visibility.Visible };
-                  double rotateAngle = GetRotateAngle(X1, Y1, p.X, p.Y);
-                  triangle.RenderTransform = new RotateTransform(rotateAngle, Xcenter, Ycenter);
-                  myCanvas.Children.Add(triangle);
-                  X1 = p.X;
-                  Y1 = p.Y;
-               }
-               ++i;
-            }
-         }
-      }
-      private double GetRotateAngle(double X1, double Y1, double X2, double Y2)
-      {
-         double rotateAngle = 0.0;
-         if (Math.Abs(X2 - X1) < 10.0)
-            X2 = X1;
-         if (Math.Abs(Y2 - Y1) < 10.0)
-            Y2 = Y1;
-         if (Math.Abs(Y2 - Y1) < 10.0)
-         {
-            if (X2 < X1)
-               rotateAngle = 180.0;
-         }
-         else if( X1 < X2 )
-         {
-            if (Y1 < Y2)
-               rotateAngle = 60.0;
-            else
-               rotateAngle = -60.0;
-         }
-         else 
-         {
-            if (Y1 < Y2)
-               rotateAngle = 120;
-            else
-               rotateAngle = -120.0;
-         }
-         return rotateAngle;
-      }
       private void CreateEllipses()
       {
-         if (null == myCanvas)
+         if (null == myCanvasMain)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateEllipses(): myCanvas=null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateEllipses(): myCanvasMain=null");
             return;
          }
-         Ellipse aEllipseStart = new Ellipse();
+         Ellipse aEllipseStart = new Ellipse();  // create ellipse only as UI to start making road - located on top right
          aEllipseStart.Name = "Start";
-         aEllipseStart.Fill = Brushes.AliceBlue;
+         aEllipseStart.Fill = mySolidColorBrushUnpaved;
          aEllipseStart.StrokeThickness = 1;
-         aEllipseStart.Stroke = Brushes.Red;
+         aEllipseStart.Stroke = System.Windows.Media.Brushes.Red;
          aEllipseStart.Width = 50;
          aEllipseStart.Height = 50;
-         System.Windows.Point pStart = new System.Windows.Point(50, 50);
+         System.Windows.Point pStart = new System.Windows.Point(350, -10);
          pStart.X -= theEllipseOffset;
          pStart.Y -= theEllipseOffset;
          Canvas.SetLeft(aEllipseStart, pStart.X);
          Canvas.SetTop(aEllipseStart, pStart.Y);
-         myCanvas.Children.Add(aEllipseStart);
+         myCanvasMain.Children.Add(aEllipseStart);
          myEllipses.Add(aEllipseStart);
          aEllipseStart.MouseDown += this.MouseDownEllipse;
          //-----------------------------------------------------------------------
+         Ellipse aEllipseStartPaved = new Ellipse();  // create ellipse only as UI to start making road - located on top right
+         aEllipseStartPaved.Name = "StartPaved";
+         aEllipseStartPaved.Fill = mySolidColorBrushPaved;
+         aEllipseStartPaved.StrokeThickness = 1;
+         aEllipseStartPaved.Stroke = System.Windows.Media.Brushes.Red;
+         aEllipseStartPaved.Width = 50;
+         aEllipseStartPaved.Height = 50;
+         System.Windows.Point pStartPaved = new System.Windows.Point(380, -10);
+         pStartPaved.X -= theEllipseOffset;
+         pStartPaved.Y -= theEllipseOffset;
+         Canvas.SetLeft(aEllipseStartPaved, pStartPaved.X);
+         Canvas.SetTop(aEllipseStartPaved, pStartPaved.Y);
+         myCanvasMain.Children.Add(aEllipseStartPaved);
+         myEllipses.Add(aEllipseStartPaved);
+         aEllipseStartPaved.MouseDown += this.MouseDownEllipse;
+         //-----------------------------------------------------------------------
          Ellipse aEllipseEnd = new Ellipse ();
          aEllipseEnd.Name = "End";
-         aEllipseEnd.Fill = Brushes.Orchid;
+         aEllipseEnd.Fill = System.Windows.Media.Brushes.Orchid;
          aEllipseEnd.StrokeThickness = 1;
-         aEllipseEnd.Stroke = Brushes.Red;
+         aEllipseEnd.Stroke = System.Windows.Media.Brushes.Red;
          aEllipseEnd.Width = 50;
          aEllipseEnd.Height = 50;
-         System.Windows.Point pEnd = new System.Windows.Point(50, 150);
+         System.Windows.Point pEnd = new System.Windows.Point(410, -10);
          pEnd.X -= theEllipseOffset;
          pEnd.Y -= theEllipseOffset;
          Canvas.SetLeft(aEllipseEnd, pEnd.X);
          Canvas.SetTop(aEllipseEnd, pEnd.Y);
-         myCanvas.Children.Add(aEllipseEnd);
+         myCanvasMain.Children.Add(aEllipseEnd);
          myEllipses.Add(aEllipseEnd);
          aEllipseEnd.MouseDown += this.MouseDownEllipse;
       }
-      private XmlDocument CreateXml()
+      private XmlDocument CreateRoadsXml()
       {
          XmlDocument aXmlDocument = new XmlDocument();
-         aXmlDocument.LoadXml("<Rivers></Rivers>");
+         aXmlDocument.LoadXml("<Roads></Roads>");
          if( null == aXmlDocument.DocumentElement )
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): aXmlDocument.DocumentElement=null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateRoadsXml(): aXmlDocument.DocumentElement=null");
             return aXmlDocument;
          }
          foreach (KeyValuePair<string, Polyline> kvp in myPolyLines)
          {
-            XmlElement nameElem = aXmlDocument.CreateElement("River");  // name of river
+            XmlElement nameElem = aXmlDocument.CreateElement("Road");  // name of road
             nameElem.SetAttribute("value", kvp.Key);
+            if( true == myIsPavedRoad )
+               nameElem.SetAttribute("color", "Paved");
+            else
+               nameElem.SetAttribute("color", "Unpaved");
             aXmlDocument.DocumentElement.AppendChild(nameElem);
             foreach(System.Windows.Point p in kvp.Value.Points)
             {
                XmlElement pointElem = aXmlDocument.CreateElement("point");
-               pointElem.SetAttribute("X", p.X.ToString());
-               pointElem.SetAttribute("Y", p.Y.ToString());
+               pointElem.SetAttribute("X", p.X.ToString("F3"));
+               pointElem.SetAttribute("Y", p.Y.ToString("F3"));
                XmlNode? lastChild = aXmlDocument.DocumentElement.LastChild;
                if (null == lastChild)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): lastChild=null");
+                  Logger.Log(LogEnum.LE_ERROR, "CreateRoadsXml(): lastChild=null");
                   return aXmlDocument;
                }
                else
                {
                   lastChild.AppendChild(pointElem);
                }
-
             }
          }
          return aXmlDocument;
       }
+      private bool ReadRoadsXml()
+      {
+         if( null == myCanvasMain)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadRoadsXml(): myCanvasMain = null");
+            return false;
+         }
+         //---------------------------------------------
+         XmlTextReader? reader = null;
+         PointCollection? points = null;
+         string? name = null;
+         string? color = null;
+         try
+         {
+            string filename = "..\\..\\..\\Config\\Roads.xml";
+            reader = new XmlTextReader(filename) { WhitespaceHandling = WhitespaceHandling.None }; // Load the reader with the data file and ignore all white space nodes.    
+            while (reader.Read())
+            {
+               if (reader.Name == "Road")
+               {
+                  points = new PointCollection();
+                  if (reader.IsStartElement())
+                  {
+                     name = reader.GetAttribute("value");
+                     if( null == name )
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "ReadRoadsXml(): GetAttribute(value) returned null");
+                        return false;
+                     }
+                     color = reader.GetAttribute("color");
+                     if (null == color)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "ReadRoadsXml(): GetAttribute(color) returned null");
+                        return false;
+                     }
+                     while (reader.Read())
+                     {
+                        if ((reader.Name == "point" && (reader.IsStartElement())))
+                        {
+                           string? value = reader.GetAttribute("X");
+                           if( null == value )
+                           {
+                              Logger.Log(LogEnum.LE_ERROR, "ReadRoadsXml(): GetAttribute(X) returned null");
+                              return false;
+                           }
+                           Double X1 = Double.Parse(value);
+                           value = reader.GetAttribute("Y");
+                           if (null == value)
+                           {
+                              Logger.Log(LogEnum.LE_ERROR, "ReadRoadsXml(): GetAttribute(Y) returned null");
+                              return false;
+                           }
+                           Double Y1 = Double.Parse(value);
+                           points.Add(new System.Windows.Point(X1, Y1));
+                        }
+                        else
+                        {
+                           break;
+                        }
+                     }  // end while
+                  } // end if
+                  if (null == name)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "ReadRoadsXml(): GetAttribute(value) returned null");
+                     return false;
+                  }
+                  System.Windows.Media.Brush? brush = null;
+                  double roadThickness = 8.0;
+                  if ("Paved" == color)
+                  {
+                     brush = mySolidColorBrushPaved;
+                  }
+                  else
+                  {
+                     brush = mySolidColorBrushUnpaved;
+                     roadThickness = 5.0;
+                  }
+                  Polyline polyline = new Polyline { Points = points, Stroke = brush, StrokeThickness = roadThickness, StrokeDashArray = myDashArray, Visibility = Visibility.Visible };
+                  myPolyLines[name] = polyline;
+                  Canvas.SetZIndex(polyline, 0);
+                  myCanvasMain.Children.Add(polyline);
+                  myIndexRoad++;
+               } // end if
+            } // end while
+         } // try
+         catch (Exception e)
+         {
+            System.Diagnostics.Debug.WriteLine("ReadTerritoriesXml(): Exception:  e.Message={0}", e.Message);
+         }
+         finally
+         {
+            if (reader != null)
+               reader.Close();
+         }
+         return true;
+      }
       //----------------------------------------------------------
       void MouseDownEllipse(object sender, MouseButtonEventArgs e)
       {
-         if (null == myCanvas)
+         if (null == myCanvasMain)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse(): myCanvas=null");
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse(): myCanvasMain=null");
             return;
          }
-         System.Windows.Point canvasPoint = e.GetPosition(myCanvas);
+         System.Windows.Point canvasPoint = e.GetPosition(myCanvasMain);
          IMapPoint mp = new MapPoint(canvasPoint.X, canvasPoint.Y);
          Ellipse mousedEllipse = (Ellipse)sender;
          //----------------------------------------
-         string? name = null;
-         switch (myIndexName-1)
-         {
-            case 0: name = "Dienstal Branch"; break;
-            case 1: name = "Largos River"; break;
-            case 2: name = "Nesser River"; break;
-            case 3: name = "Greater Nesser River"; break;
-            case 4: name = "Lesser Nesser River"; break;
-            case 5: name = "Trogoth River"; break;
-            default: Logger.Log(LogEnum.LE_ERROR, "MouseDownEllipse(): reached default with invalid ellipse index=" + myIndexName.ToString()); return;
-         }
-         //----------------------------------------
          if ("Start" == mousedEllipse.Name)
          {
-            if( true == myPolyLines.ContainsKey(name))
-            {
-               Polyline polyline = myPolyLines[name];
-               myCanvas.Children.Remove(polyline);
-               myPolyLines.Remove(name);
-            }
+            myIndexRoad++;
+            myIsPavedRoad = false;
+            myPoints.Clear();
+         }
+         else if ("StartPaved" == mousedEllipse.Name)
+         {
+            myIndexRoad++;
+            myIsPavedRoad = true;
             myPoints.Clear();
          }
          else if ("End" == mousedEllipse.Name)
          {
+            string name = myIndexRoad.ToString();
             PointCollection points = new PointCollection();
             foreach (IMapPoint mp1 in myPoints)
                points.Add(new System.Windows.Point(mp1.X, mp1.Y));
-            Polyline polyline = new Polyline { Points = points, Stroke = mySolidColorBrush3, StrokeThickness = 4, Visibility = Visibility.Visible };
+            System.Windows.Media.Brush? brush = null;
+            double roadThickness = 8.0;
+            if (true == myIsPavedRoad)
+            {
+               brush = mySolidColorBrushPaved;
+            }
+            else
+            {
+               brush = mySolidColorBrushUnpaved;
+               roadThickness = 5.0;
+            }
+            Polyline polyline = new Polyline { Points = points, Stroke = brush, StrokeThickness = roadThickness, StrokeDashArray = myDashArray, Visibility = Visibility.Visible };
             myPolyLines[name] = polyline;
             Canvas.SetZIndex(polyline, 0);
-            myCanvas.Children.Add(polyline);
+            myCanvasMain.Children.Add(polyline);
          }
          else
          {
@@ -356,10 +479,9 @@ namespace Pattons_Best
       }
       void MouseDownCanvas(object sender, MouseButtonEventArgs e)
       {
-         System.Windows.Point canvasPoint = e.GetPosition(myCanvas);
+         System.Windows.Point canvasPoint = e.GetPosition(myCanvasMain);
          IMapPoint mp = new MapPoint(canvasPoint.X, canvasPoint.Y);
-         if (false == CreatePoint(mp))
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownCanvas->CreatePoint()");
+         myPoints.Add(mp);
          e.Handled = true;
       }
    }

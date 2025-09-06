@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -99,10 +100,11 @@ namespace Pattons_Best
       private EventViewer? myEventViewer = null;
       private MainMenuViewer? myMainMenuViewer = null;
       private System.Windows.Input.Cursor? myTargetCursor = null;
-      private readonly FontFamily myFontFam = new FontFamily("Tahoma");
+      private readonly FontFamily myFontFam = new FontFamily("Tahofma");
       private double myPreviousScrollHeight = 0.0;
       private double myPreviousScrollWidth = 0.0;
       private EllipseDisplayDialog? myEllipseDisplayDialog = null;
+      private Dictionary<string, Polyline> myRoads = new Dictionary<string, Polyline>();
       //---------------------------------------------------------------------
       private readonly SolidColorBrush mySolidColorBrushClear = new SolidColorBrush() { Color = Color.FromArgb(0, 0, 1, 0) };
       private readonly SolidColorBrush mySolidColorBrushBlack = new SolidColorBrush() { Color = Colors.Black };
@@ -119,6 +121,7 @@ namespace Pattons_Best
       private readonly SolidColorBrush mySolidColorBrushSteelBlue = new SolidColorBrush { Color = Colors.SteelBlue };
       private readonly SolidColorBrush mySolidColorBrushHotPink = new SolidColorBrush { Color = Colors.HotPink };
       private readonly SolidColorBrush mySolidColorBrushWhite = new SolidColorBrush { Color = Colors.White };
+      private readonly SolidColorBrush mySolidColorBrushLawnGreen = new SolidColorBrush { Color = Colors.LawnGreen };
       //---------------------------------------------------------------------
       private readonly List<Button> myMoveButtons = new List<Button>();
       private readonly List<Button> myBattleButtons = new List<Button>();
@@ -249,6 +252,13 @@ namespace Pattons_Best
             return;
          }
          //---------------------------------------------------------------
+         if (false == CreateRoadsFromXml())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): CreateRoadsFromXml() returned false");
+            CtorError = true;
+            return;
+         }
+         //---------------------------------------------------------------
          // Implement the Model View Controller (MVC) pattern by registering views with
          // the game engine such that when the model data is changed, the views are updated.
          ge.RegisterForUpdates(civ);
@@ -346,7 +356,6 @@ namespace Pattons_Best
                break;
             case GameAction.ShowCombatCalendarDialog:
             case GameAction.ShowAfterActionReportDialog:
-            case GameAction.ShowInventoryDialog:
             case GameAction.ShowRuleListingDialog:
             case GameAction.ShowEventListingDialog:
             case GameAction.ShowReportErrorDialog:
@@ -359,6 +368,62 @@ namespace Pattons_Best
             case GameAction.SetupShowAfterActionReport:
             case GameAction.SetupShowCombatCalendarCheck:
             case GameAction.SetupCombatCalendarRoll:
+               break;
+            case GameAction.ShowTankForcePath:
+               if (null == myMainMenuViewer)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myMainMenuViewer=null");
+                  return;
+               }
+               if ((true == myMainMenuViewer.IsPathShown) && (EnumMainImage.MI_Move == CanvasImageViewer.theMainImage))
+               {
+                  if (false == UpdateCanvasPath(gi))
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasPath() returned false");
+               }
+               else
+               {
+                  myMainMenuViewer.IsPathShown = false;
+                  List<UIElement> elements = new List<UIElement>();
+                  foreach (UIElement ui in myCanvasMain.Children)
+                  {
+                     if (ui is Polyline polyline) // remove all polylines 
+                     {
+                        if (false == polyline.Name.Contains("Road"))
+                              elements.Add(ui);
+                     }
+                     if (ui is Ellipse ellipse) // remove all ellipse 
+                        elements.Add(ui);
+                  }
+                  foreach (UIElement ui1 in elements)
+                     myCanvasMain.Children.Remove(ui1);
+               }
+               break;
+            case GameAction.ShowRoads:
+               if (null == myMainMenuViewer)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myMainMenuViewer=null");
+                  return;
+               }
+               if ((true == myMainMenuViewer.IsRoadsShown)  && (EnumMainImage.MI_Move == CanvasImageViewer.theMainImage))
+               {
+                  foreach (KeyValuePair<string, Polyline> kvp in myRoads)
+                     myCanvasMain.Children.Add(kvp.Value);
+               }
+               else
+               {
+                  myMainMenuViewer.IsRoadsShown = false;
+                  List<UIElement> roadElements = new List<UIElement>();
+                  foreach (UIElement ui in myCanvasMain.Children)
+                  {
+                     if (ui is Polyline polyline) // remove all polylines 
+                     {
+                        if (true == polyline.Name.Contains("Road"))
+                           roadElements.Add(ui);
+                     }
+                  }
+                  foreach (UIElement ui1 in roadElements)
+                     myCanvasMain.Children.Remove(ui1);
+               }
                break;
             case GameAction.MorningBriefingBegin:
             case GameAction.MorningBriefingCrewmanHealing:
@@ -537,43 +602,6 @@ namespace Pattons_Best
                myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);  // EndGameFinal - show map for last time
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
-               break;
-            case GameAction.ShowTankForcePath:
-               if( null == myMainMenuViewer)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myMainMenuViewer=null");
-                  return;
-               }
-               if (true == myMainMenuViewer.IsPathShown)
-               {
-                  if (false == UpdateCanvasPath(gi))
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasPath() returned false");
-               }
-               else
-               {
-                  List<UIElement> elements = new List<UIElement>();
-                  foreach (UIElement ui in myCanvasMain.Children)
-                  {
-                     if (ui is Polyline polyline) // remove all polylines 
-                        elements.Add(ui);
-                     if (ui is Ellipse ellipse) // remove all polylines 
-                        elements.Add(ui);
-                     if (ui is Image img)
-                     {
-                        if (true == img.Name.Contains("Canvas"))
-                           continue;
-                        if (true == img.Name.Contains("ShermanExploding"))
-                           continue;
-                        if (true == img.Name.Contains("ShermanBrewUp"))
-                           continue;
-                        elements.Add(ui);
-                     }
-                  }
-                  foreach (UIElement ui1 in elements)
-                     myCanvasMain.Children.Remove(ui1);
-               }
-               //if (false == UpdateCanvasMain(gi, action))
-               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
             case GameAction.UpdateTankExplosion:
             case GameAction.UpdateTankBrewUp:
@@ -1295,6 +1323,99 @@ namespace Pattons_Best
          }
          return true;
       }
+      private bool CreateRoadsFromXml()
+      {
+         CultureInfo culture1 = CultureInfo.CurrentCulture;
+         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
+         XmlTextReader? reader = null;
+         PointCollection? points = null;
+         string? name = null;
+         try
+         {
+            string filename = ConfigFileReader.theConfigDirectory + "Roads.xml";
+            reader = new XmlTextReader(filename) { WhitespaceHandling = WhitespaceHandling.None }; // Load the reader with the data file and ignore all white space nodes.    
+            if (null == reader)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateRoadsFromXml(): reader=null");
+               return false;
+            }
+            while (reader.Read())
+            {
+               if (reader.Name == "Road")
+               {
+                  points = new PointCollection();
+                  if (reader.IsStartElement())
+                  {
+                     name = reader.GetAttribute("value");
+                     if( null == name )
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "CreateRoadsFromXml(): value=null for name");
+                        return false;
+                     }
+                     string[] aStringArray1 = name.Split('_');
+                     if (2 != aStringArray1.Length)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "CreateRoadsFromXml(): aStringArray1.Length=" + aStringArray1.Length);
+                        return false;
+                     }
+                     int indexOfRoad = Int32.Parse(aStringArray1[1]);
+                     while (reader.Read())
+                     {
+                        if ((reader.Name == "point" && (reader.IsStartElement())))
+                        {
+                           string? value = reader.GetAttribute("X");
+                           if( null == value )
+                           {
+                              Logger.Log(LogEnum.LE_ERROR, "CreateRoadsFromXml(): X=null");
+                              return false;
+                           }
+                           Double X1 = Double.Parse(value);
+                           value = reader.GetAttribute("Y");
+                           if (null == value)
+                           {
+                              Logger.Log(LogEnum.LE_ERROR, "CreateRoadsFromXml(): Y=null");
+                              return false;
+                           }
+                           Double Y1 = Double.Parse(value);
+                           points.Add(new System.Windows.Point(X1, Y1));
+                        }
+                        else
+                        {
+                           break;
+                        }
+                     }  // end while
+                     //-----------------------------------------
+                     System.Windows.Media.Brush? brush = null;
+                     double roadThickness = 8.0;
+                     if (indexOfRoad < 4)
+                     {
+                        brush = mySolidColorBrushSteelBlue;
+                     }
+                     else
+                     {
+                        brush = mySolidColorBrushLawnGreen;
+                        roadThickness = 5.0;
+                     }
+                     Polyline polyline = new Polyline { Name=name, Points = points, Stroke = brush, StrokeThickness = roadThickness, StrokeDashArray = myDashArray, Visibility = Visibility.Visible };
+                     myRoads[name] = polyline;
+                  } // end if
+               } // end if
+            } // end while
+         } // try
+         catch (Exception e)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateRoadsFromXml(): Exception=\n" + e.Message);
+            System.Threading.Thread.CurrentThread.CurrentCulture = culture1;
+            return false;
+         }
+         finally
+         {
+            if (reader != null)
+               reader.Close();
+         }
+         System.Threading.Thread.CurrentThread.CurrentCulture = culture1;
+         return true;
+      }
       //---------------------------------------
       private Options Deserialize(String s_xml)
       {
@@ -1865,6 +1986,11 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas(): UpdateCanvasPath() returned false");
                return false;
             }
+         }
+         if ((true == myMainMenuViewer.IsRoadsShown) && (EnumMainImage.MI_Move == CanvasImageViewer.theMainImage))
+         {
+            foreach (KeyValuePair<string, Polyline> kvp in myRoads)
+               myCanvasMain.Children.Add(kvp.Value);
          }
          //-------------------------------------------------------
          if (false == UpdateCanvasAnimateBattlePhase(gi))
@@ -4019,6 +4145,11 @@ namespace Pattons_Best
             keyGesture = new KeyGesture(Key.G, ModifierKeys.Control);
             InputBindings.Add(new KeyBinding(command, keyGesture));
             CommandBindings.Add(new CommandBinding(command, mmv.MenuItemViewFeats_Click));
+            //------------------------------------------------
+            command = new RoutedCommand();
+            keyGesture = new KeyGesture(Key.R, ModifierKeys.Control | ModifierKeys.Shift);
+            InputBindings.Add(new KeyBinding(command, keyGesture));
+            CommandBindings.Add(new CommandBinding(command, mmv.MenuItemViewRoads_Click));
             //------------------------------------------------
             command = new RoutedCommand();
             keyGesture = new KeyGesture(Key.F1, ModifierKeys.None);
