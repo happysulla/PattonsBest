@@ -3244,7 +3244,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "GameStateMovement.PerformAction(MovementBattleCheckRoll): " + gi.MoveStacks.ToString());
                   Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "GameStateMovement.PerformAction(MovementBattleCheckRoll): gi.MapItemMoves.Clear()");
                   gi.MapItemMoves.Clear();
-                  //dieRoll = 10; // <cgs> TEST - enforce combat
+                  dieRoll = 1; // <cgs> TEST - deny combat
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (false == ResolveBattleCheckRoll(gi, dieRoll))
@@ -3513,6 +3513,8 @@ namespace Pattons_Best
       }
       private bool MoveTaskForceToNewArea(IGameInstance gi)
       {
+
+         //---------------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
@@ -3532,7 +3534,10 @@ namespace Pattons_Best
             return false;
          }
          //---------------------------------------------------------
-         if( true ==  taskForce.TerritoryCurrent.PavedRoads.Contains(gi.EnteredArea.Name) )
+         Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "Move_TaskForceToNewArea(): gi.MapItemMoves.Clear()");
+         gi.MapItemMoves.Clear();
+         //---------------------------------------------------------
+         if ( true ==  taskForce.TerritoryCurrent.PavedRoads.Contains(gi.EnteredArea.Name) )
             AdvanceTime(lastReport, 15);                  // Move_TaskForceToNewArea()
          else if (true == taskForce.TerritoryCurrent.UnpavedRoads.Contains(gi.EnteredArea.Name))
             AdvanceTime(lastReport, 30);                  // Move_TaskForceToNewArea()

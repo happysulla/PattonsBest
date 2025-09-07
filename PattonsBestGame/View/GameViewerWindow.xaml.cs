@@ -2044,7 +2044,7 @@ namespace Pattons_Best
                case GameAction.MovementEnterArea:
                   if (false == UpdateCanvasMainEnterArea(gi, action))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMainEnterArea() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvas_MainEnterArea() returned false");
                      return false;
                   }
                   break;
@@ -2914,7 +2914,7 @@ namespace Pattons_Best
          IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
          if (null == taskForce)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainEnterArea(): taskForce=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas_MainEnterArea(): taskForce=null");
             return false;
          }
          //--------------------------------
@@ -2924,7 +2924,7 @@ namespace Pattons_Best
             ITerritory? t = Territories.theTerritories.Find(s);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainEnterArea(): 1 t=null for " + s);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas_MainEnterArea(): 1 t=null for " + s);
                return false;
             }
             PointCollection points = new PointCollection();

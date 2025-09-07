@@ -455,10 +455,11 @@ namespace Pattons_Best
       }
       public override string ToString()
       {
-         StringBuilder sb = new StringBuilder("Name=<");
+         StringBuilder sb = new StringBuilder();
+         //sb.Append("Name=<");
          sb.Append(Name);
-         sb.Append(">T=<");
-         sb.Append(TerritoryCurrent.Name);
+         //sb.Append(">T=<");
+         //sb.Append(TerritoryCurrent.Name);
          return sb.ToString();
       }
       //---------------------------------------------------------------------------- static functions
