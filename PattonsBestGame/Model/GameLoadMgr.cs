@@ -679,7 +679,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(elemUnpavedRoads) returned null");
                return false;
             }
-            elemUnpavedRoads.SetAttribute("count", t.PavedRoads.Count.ToString());
+            elemUnpavedRoads.SetAttribute("count", t.UnpavedRoads.Count.ToString());
             XmlNode? nodeUnpavedRoads = territoryNode.AppendChild(elemUnpavedRoads);
             if (null == nodeUnpavedRoads)
             {
@@ -687,7 +687,7 @@ namespace Pattons_Best
                return false;
             }
             //---------------------------------
-            foreach (string s in t.PavedRoads)
+            foreach (string s in t.UnpavedRoads)
             {
                elem = aXmlDocument.CreateElement("unpaved");
                if (null == elem)

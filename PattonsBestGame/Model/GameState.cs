@@ -266,7 +266,7 @@ namespace Pattons_Best
          }
          if ((true == isCrewmanReplaced) && (GamePhase.EveningDebriefing != gi.GamePhase)) // replacing crewmen takes 30 minutes
          {
-            AdvanceTime(lastReport, 30);
+            AdvanceTime(lastReport, 30);  // Replace_InjuredCrewmen() - replacing crewmen takes 30 minutes
             Logger.Log(LogEnum.LE_SHOW_CREW_REPLACE, "Replace_InjuredCrewmen(): advancing time by 30 min gp=" + gi.GamePhase.ToString());
          }
          return true;
@@ -3077,7 +3077,7 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   break;
                case GameAction.MovementEnemyStrengthCheckTerritory:
-                  if (false == theIs1stEnemyStrengthCheckTerritory)
+                  if (false == theIs1stEnemyStrengthCheckTerritory) // MovementEnemyStrengthCheckTerritory
                      AdvanceTime(lastReport, 15);
                   gi.EventDisplayed = gi.EventActive = "e021";
                   gi.DieRollAction = GameAction.MovementEnemyStrengthCheckTerritoryRoll;
@@ -3133,7 +3133,7 @@ namespace Pattons_Best
                   break;
                case GameAction.MovementArtillerySupportCheck:
                   gi.EventDisplayed = gi.EventActive = "e024";
-                  AdvanceTime(lastReport, 15);
+                  AdvanceTime(lastReport, 15);                   // MovementArtillerySupportCheck
                   gi.DieRollAction = GameAction.MovementArtillerySupportCheckRoll;
                   break;
                case GameAction.MovementArtillerySupportCheckRoll:
@@ -3150,7 +3150,7 @@ namespace Pattons_Best
                   break;
                case GameAction.MovementAirStrikeCheckTerritory:
                   gi.EventDisplayed = gi.EventActive = "e026";
-                  AdvanceTime(lastReport, 30);
+                  AdvanceTime(lastReport, 30); // GameStateMovement.PerformAction(MovementAirStrikeCheckTerritory) 
                   gi.DieRollAction = GameAction.MovementAirStrikeCheckTerritoryRoll;
                   break;
                case GameAction.MovementAirStrikeCheckTerritoryRoll:
@@ -3171,7 +3171,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MovementResupplyCheck:
-                  AdvanceTime(lastReport, 60);
+                  AdvanceTime(lastReport, 60); // GameStateMovement.PerformAction(MovementResupplyCheck) 
                   gi.EventDisplayed = gi.EventActive = "e027";
                   gi.DieRollAction = GameAction.MovementResupplyCheckRoll;
                   break;
@@ -3180,7 +3180,6 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   break;
                case GameAction.MovementEnterArea:
-                  AdvanceTime(lastReport, 60);
                   gi.EventDisplayed = gi.EventActive = "e028";
                   break;
                case GameAction.MovementAdvanceFireChoice:
@@ -3514,21 +3513,36 @@ namespace Pattons_Best
       }
       private bool MoveTaskForceToNewArea(IGameInstance gi)
       {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Move_TaskForceToNewArea(): lastReport=null");
+            return false;
+         }
+         //---------------------------------------------------------
          if (null == gi.EnteredArea)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MoveTaskForceToNewArea(): gi.EnteredArea=null");
+            Logger.Log(LogEnum.LE_ERROR, "Move_TaskForceToNewArea(): gi.EnteredArea=null");
             return false;
          }
          IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
          if (null == taskForce)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MoveTaskForceToNewArea(): taskForce=null");
+            Logger.Log(LogEnum.LE_ERROR, "Move_TaskForceToNewArea(): taskForce=null");
             return false;
          }
-         Logger.Log(LogEnum.LE_VIEW_MIM_ADD, "MoveTaskForceToNewArea(): TF Entering t=" + gi.EnteredArea.Name);
+         //---------------------------------------------------------
+         if( true ==  taskForce.TerritoryCurrent.PavedRoads.Contains(gi.EnteredArea.Name) )
+            AdvanceTime(lastReport, 15);                  // Move_TaskForceToNewArea()
+         else if (true == taskForce.TerritoryCurrent.UnpavedRoads.Contains(gi.EnteredArea.Name))
+            AdvanceTime(lastReport, 30);                  // Move_TaskForceToNewArea()
+         else
+            AdvanceTime(lastReport, 45);                  // Move_TaskForceToNewArea()
+         //---------------------------------------------------------
+         Logger.Log(LogEnum.LE_VIEW_MIM_ADD, "Move_TaskForceToNewArea(): TF Entering t=" + gi.EnteredArea.Name);
          if (false == CreateMapItemMove(gi, taskForce, gi.EnteredArea))
          {
-            Logger.Log(LogEnum.LE_ERROR, "MoveTaskForceToNewArea(): AddMapItemMove() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Move_TaskForceToNewArea(): AddMapItemMove() returned false");
             return false;
          }
          return true;
@@ -3592,7 +3606,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "StartBattle(): gi.EnteredArea=null");
             return false;
          }
-         AdvanceTime(report, 15);
+         AdvanceTime(report, 15);  // StartBattle() 
          gi.GamePhase = GamePhase.Battle;
          Logger.Log(LogEnum.LE_SHOW_START_BATTLE, "StartBattle(): -----------------------------------");
          return true;
@@ -3790,7 +3804,7 @@ namespace Pattons_Best
                      {
                         case "Time Passes":
                            gi.EventDisplayed = gi.EventActive = "e040";
-                           AdvanceTime(lastReport, 15);
+                           AdvanceTime(lastReport, 15);  // BattleRandomEventRoll - Time Passes
                            break;
                         case "Friendly Artillery":
                            action = GameAction.BattleResolveArtilleryFire;
@@ -5285,7 +5299,7 @@ namespace Pattons_Best
                      {
                         case "Time Passes":
                            gi.EventDisplayed = gi.EventActive = "e040";
-                           AdvanceTime(lastReport, 15);
+                           AdvanceTime(lastReport, 15);   // GameStateBattleRoundSequence.PerformAction(BattleRandomEventRoll) - Time Passes
                            break;
                         case "Friendly Artillery":
                            if (true == isEnemyUnitLeft)
@@ -6275,10 +6289,10 @@ namespace Pattons_Best
             EnteredHex newHex = new EnteredHex(gi, taskForce.TerritoryCurrent, ColorActionEnum.CAE_RETREAT, mpTaskForce);
             if (true == newHex.CtorError)
             {
-               Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): newHex.Ctor=true");
+               Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): newHex.Ctor=true");
                return false;
             }
-            gi.EnteredHexes.Add(newHex);  // MoveTaskForceToNewArea()
+            gi.EnteredHexes.Add(newHex);  // MoveSherman_AdvanceOrRetreat()
          }
          //--------------------------------------------------------
          foreach (IMapItem enemyUnit in gi.ShermanAdvanceOrRetreatEnemies)// add in enemy units that were on BattleBoard when battle ended

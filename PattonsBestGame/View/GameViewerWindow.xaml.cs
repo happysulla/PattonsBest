@@ -2393,7 +2393,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): newHex.Ctor=true");
                   return false;
                }
-               gi.EnteredHexes.Add(newHex);  // MoveTaskForceToNewArea()
+               gi.EnteredHexes.Add(newHex);  // Move_PathAnimate()
             }
             Logger.Log(LogEnum.LE_VIEW_ROTATION, "-----------------MovePathAnimate(): 2 - mi.X=" + mim.MapItem.Location.X.ToString("F0") + " mi.Y=" + mim.MapItem.Location.Y.ToString("F0") + " r=" + mim.MapItem.RotationOffsetHull.ToString("F0") + " rb=" + mim.MapItem.RotationHull.ToString("F0"));
             return true;
@@ -3423,24 +3423,6 @@ namespace Pattons_Best
       }
       private void MouseLeaveMapItem(object sender, System.Windows.Input.MouseEventArgs e)
       {
-      }
-      private void MouseDownPolygonTravel(object sender, MouseButtonEventArgs e)
-      {
-         System.Windows.Point canvasPoint = e.GetPosition(myCanvasMain);
-         Polygon? clickedPolygon = sender as Polygon;
-         if (null == clickedPolygon)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonTravel(): clickedPolygon=null");
-            return;
-         }
-         myTerritorySelected = Territories.theTerritories.Find(Utilities.RemoveSpaces(clickedPolygon.Name));
-         if (null == myTerritorySelected)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonTravel(): selectedTerritory=null for " + clickedPolygon.Name);
-            return;
-         }
-         GameAction outAction = GameAction.Error;
-         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
       private void MouseLeftButtonDownMarquee(object sender, MouseEventArgs e)
       {

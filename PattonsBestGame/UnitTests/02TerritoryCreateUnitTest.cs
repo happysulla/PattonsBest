@@ -51,6 +51,8 @@ namespace Pattons_Best
          myHeaderNames.Add("02-Set CenterPoints");
          myHeaderNames.Add("02-Verify Territories");
          myHeaderNames.Add("02-Set Adjacents");
+         myHeaderNames.Add("02-Set Paved Roads");
+         myHeaderNames.Add("02-Set Unpaved Roads");
          myHeaderNames.Add("02-Final");
          //------------------------------------
          myCommandNames.Add("00-Delete File");
@@ -61,7 +63,9 @@ namespace Pattons_Best
          myCommandNames.Add("05-Click Elispse to Move");
          myCommandNames.Add("06-Click Ellispe to Verify");
          myCommandNames.Add("07-Verify Adjacents");
-         myCommandNames.Add("08-Cleanup");
+         myCommandNames.Add("08-Verify Paved");
+         myCommandNames.Add("09-Verify Unpaved");
+         myCommandNames.Add("10-Cleanup");
          //------------------------------------
          myDockPanelTop = dp;
          //------------------------------------
@@ -254,6 +258,22 @@ namespace Pattons_Best
                return false;
             }
          }
+         else if (CommandName == myCommandNames[8]) // set paved
+         {
+            if (false == ShowPavedRoads(Territories.theTerritories))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest.Command(): ShowPavedRoads() returned false");
+               return false;
+            }
+         }
+         else if (CommandName == myCommandNames[9]) // set unpaved
+         {
+            if (false == ShowUnpavedRoads(Territories.theTerritories))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "TerritoryCreateUnitTest.Command(): ShowUnpavedRoads() returned false");
+               return false;
+            }
+         }
          else 
          {
             if (false == Cleanup(ref gi))
@@ -327,10 +347,10 @@ namespace Pattons_Best
          {
             myCanvasTank.MouseLeftButtonDown -= this.MouseLeftButtonDownDeleteTerritory;
             myCanvasTank.MouseLeftButtonDown += this.MouseLeftButtonDownCreateTerritory;
-            //----------------------------
+            //-------------------------------
             myCanvasMain.MouseLeftButtonDown -= this.MouseLeftButtonDownDeleteTerritory;
             myCanvasMain.MouseLeftButtonDown += this.MouseLeftButtonDownCreateTerritory;
-            //----------------------------
+            //-------------------------------
             ++myIndexName;
          }
          else if (HeaderName == myHeaderNames[4]) // Click Elispse to Move
@@ -339,12 +359,12 @@ namespace Pattons_Best
             myCanvasTank.MouseLeftButtonDown += this.MouseDownEllipseSetCenterPoint;
             myCanvasTank.MouseMove += MouseMove;
             myCanvasTank.MouseUp += MouseUp;
-            //----------------------------
+            //-------------------------------
             myCanvasMain.MouseLeftButtonDown -= this.MouseLeftButtonDownCreateTerritory;
             myCanvasMain.MouseLeftButtonDown += this.MouseDownEllipseSetCenterPoint;
             myCanvasMain.MouseMove += MouseMove;
             myCanvasMain.MouseUp += MouseUp;
-            //----------------------------
+            //-------------------------------
             ++myIndexName;
          }
          else if (HeaderName == myHeaderNames[5]) // Click Elispse to Verify
@@ -353,29 +373,44 @@ namespace Pattons_Best
             myCanvasTank.MouseUp -= MouseUp;
             myCanvasTank.MouseLeftButtonDown -= this.MouseDownEllipseSetCenterPoint;
             myCanvasTank.MouseLeftButtonDown += this.MouseDownEllipseVerify;
-            //----------------------------
+            //-------------------------------
             myCanvasMain.MouseMove -= MouseMove;
             myCanvasMain.MouseUp -= MouseUp;
             myCanvasMain.MouseLeftButtonDown -= this.MouseDownEllipseSetCenterPoint;
             myCanvasMain.MouseLeftButtonDown += this.MouseDownEllipseVerify;
+            //-------------------------------
             myAnchorTerritory = null;
-            //----------------------------
             ++myIndexName;
          }
          else if (HeaderName == myHeaderNames[6]) // Click Ellispe to Set Adjacents
          {
             myCanvasTank.MouseLeftButtonDown -= this.MouseDownEllipseVerify;
-            myCanvasTank.MouseLeftButtonDown += this.MouseLeftButtonDownSetAdjacents;
-            //----------------------------
+            //-------------------------------
             myCanvasMain.MouseLeftButtonDown -= this.MouseDownEllipseVerify;
             myCanvasMain.MouseLeftButtonDown += this.MouseLeftButtonDownSetAdjacents;
+            //-------------------------------
+            myAnchorTerritory = null;
+            ++myIndexName;
+         }
+         else if (HeaderName == myHeaderNames[7]) // Click Ellispe to Set PavedRoads
+         {
+            myCanvasMain.MouseLeftButtonDown -= this.MouseLeftButtonDownSetAdjacents;
+            myCanvasMain.MouseLeftButtonDown += this.MouseLeftButtonDownSetPaved;
+            //-------------------------------
+            myAnchorTerritory = null;
+            ++myIndexName;
+         }
+         else if (HeaderName == myHeaderNames[8]) // Click Ellispe to Set UnpavedRoads
+         {
+            myCanvasMain.MouseLeftButtonDown -= this.MouseLeftButtonDownSetPaved;
+            myCanvasMain.MouseLeftButtonDown += this.MouseLeftButtonDownSetUnpaved;
+            //-------------------------------
             myAnchorTerritory = null;
             ++myIndexName;
          }
          else  // Verify Adjacents
          {
-            myCanvasTank.MouseLeftButtonDown -= this.MouseLeftButtonDownSetAdjacents;
-            myCanvasMain.MouseLeftButtonDown -= this.MouseLeftButtonDownSetAdjacents;
+            myCanvasMain.MouseLeftButtonDown -= this.MouseLeftButtonDownSetUnpaved;
             if (false == Cleanup(ref gi))
             {
                Console.WriteLine("TerritoryCreateUnitTest.Command(): Cleanup() returned false");
@@ -798,6 +833,220 @@ namespace Pattons_Best
          }
          return true;
       }
+      private bool ShowPavedRoads(ITerritories territories)
+      {
+         if (null == myCanvasTank)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowPavedRoads(): myCanvasTank=null");
+            return false;
+         }
+         if (null == myCanvasMain)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowPavedRoads(): myCanvasMain=null");
+            return false;
+         }
+         myAnchorTerritory = null;
+         SolidColorBrush aSolidColorBrush0 = new SolidColorBrush { Color = Color.FromArgb(100, 100, 100, 0) }; // completely clear
+         SolidColorBrush aSolidColorBrush1 = new SolidColorBrush { Color = Color.FromArgb(010, 255, 100, 0) }; // almost clear
+         SolidColorBrush aSolidColorBrush2 = new SolidColorBrush { Color = Color.FromArgb(255, 0, 0, 0) };     // black
+         SolidColorBrush aSolidColorBrush3 = new SolidColorBrush { Color = Colors.Red };
+         SolidColorBrush aSolidColorBrush4 = new SolidColorBrush { Color = Colors.Yellow };
+         foreach (Territory anchorTerritory in territories)
+         {
+            if (("A" != anchorTerritory.Type) && ("B" != anchorTerritory.Type) && ("C" != anchorTerritory.Type) && ("D" != anchorTerritory.Type) )
+               continue;
+            Ellipse? anchorEllipse = null; // Find the corresponding ellipse for this anchor territory
+            foreach (UIElement ui in myCanvasMain.Children)
+            {
+               if (ui is Ellipse)
+               {
+                  Ellipse ellipse = (Ellipse)ui;
+                  if (anchorTerritory.Name == ellipse.Name)
+                  {
+                     anchorEllipse = ellipse;
+                     break;
+                  }
+               }
+            }
+            if (null == anchorEllipse)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ShowPavedRoads(): anchorEllipse=null for " + anchorTerritory.Name);
+               return false;
+            }
+            if (0 < anchorTerritory.PavedRoads.Count)
+               anchorEllipse.Fill = aSolidColorBrush4;
+            // At this point, the anchorEllipse and the anchorTerritory are found.
+            foreach (string s in anchorTerritory.PavedRoads)
+            {
+               ITerritory? pavedRoadTerritory = null;
+               foreach (ITerritory t in territories) // Find the River Territory corresponding to this name
+               {
+                  if (t.Name == s)
+                  {
+                     pavedRoadTerritory = t;
+                     break;
+                  }
+               }
+               if (null == pavedRoadTerritory)
+               {
+                  MessageBox.Show("ShowPavedRoads(): Not Found s=" + s);
+                  return false;
+               }
+               string pavedName = Utilities.RemoveSpaces(pavedRoadTerritory.Name);
+               Ellipse? pavedEllipse = null; // Find the corresponding ellipse for this territory
+               foreach (UIElement ui in myCanvasMain.Children)
+               {
+                  if (ui is Ellipse)
+                  {
+                     Ellipse ellipse = (Ellipse)ui;
+                     if (pavedName == ellipse.Name)
+                     {
+                        pavedEllipse = ellipse;
+                        break;
+                     }
+                  }
+               }
+               if (null == pavedEllipse)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, pavedName);
+                  MessageBox.Show(anchorTerritory.ToString());
+                  return false;
+               }
+               // Search the Adjacent Territory  List to make sure the 
+               // anchor territory is in that list. It should be bi directional.
+               bool isReturnFound = false;
+               foreach (String s1 in pavedRoadTerritory.PavedRoads)
+               {
+                  string returnName = s1;
+                  if (returnName == anchorTerritory.Name)
+                  {
+                     isReturnFound = true; // Yes the adjacent River has a entry to return the River back to the anchor territory
+                     break;
+                  }
+               }
+               // Anchor Property not found in the adjacent property territory.  This is an error condition.
+               if (false == isReturnFound)
+               {
+                  anchorEllipse.Fill = aSolidColorBrush3; // change color of two ellipses to signify error
+                  pavedEllipse.Fill = aSolidColorBrush2;
+                  StringBuilder sb = new StringBuilder("anchor=");
+                  sb.Append(anchorTerritory.Name);
+                  sb.Append(" NOT in list for adjacent=");
+                  sb.Append(pavedName);
+                  MessageBox.Show(sb.ToString());
+                  return false;
+               }
+            }
+         }
+         return true;
+      }
+      private bool ShowUnpavedRoads(ITerritories territories)
+      {
+         if (null == myCanvasTank)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowUnpavedRoads(): myCanvasTank=null");
+            return false;
+         }
+         if (null == myCanvasMain)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowUnpavedRoads(): myCanvasMain=null");
+            return false;
+         }
+         myAnchorTerritory = null;
+         SolidColorBrush aSolidColorBrush0 = new SolidColorBrush { Color = Color.FromArgb(100, 100, 100, 0) }; // completely clear
+         SolidColorBrush aSolidColorBrush1 = new SolidColorBrush { Color = Color.FromArgb(010, 255, 100, 0) }; // almost clear
+         SolidColorBrush aSolidColorBrush2 = new SolidColorBrush { Color = Color.FromArgb(255, 0, 0, 0) };     // black
+         SolidColorBrush aSolidColorBrush3 = new SolidColorBrush { Color = Colors.Red };
+         SolidColorBrush aSolidColorBrush4 = new SolidColorBrush { Color = Colors.Yellow };
+         foreach (Territory anchorTerritory in territories)
+         {
+            if (("A" != anchorTerritory.Type) && ("B" != anchorTerritory.Type) && ("C" != anchorTerritory.Type) && ("D" != anchorTerritory.Type) )
+               continue;
+            Ellipse? anchorEllipse = null; // Find the corresponding ellipse for this anchor territory
+            foreach (UIElement ui in myCanvasMain.Children)
+            {
+               if (ui is Ellipse)
+               {
+                  Ellipse ellipse = (Ellipse)ui;
+                  if (anchorTerritory.Name == ellipse.Name)
+                  {
+                     anchorEllipse = ellipse;
+                     break;
+                  }
+               }
+            }
+            if (null == anchorEllipse)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ShowUnpavedRoads(): anchorEllipse=null for " + anchorTerritory.Name);
+               return false;
+            }
+            if (0 < anchorTerritory.UnpavedRoads.Count)
+               anchorEllipse.Fill = aSolidColorBrush4;
+            // At this point, the anchorEllipse and the anchorTerritory are found.
+            foreach (string s in anchorTerritory.UnpavedRoads)
+            {
+               ITerritory? unpavedTerritory = null;
+               foreach (ITerritory t in territories) // Find the River Territory corresponding to this name
+               {
+                  if (t.Name == s)
+                  {
+                     unpavedTerritory = t;
+                     break;
+                  }
+               }
+               if (null == unpavedTerritory)
+               {
+                  MessageBox.Show("ShowUnpavedRoads(): Not Found s=" + s);
+                  return false;
+               }
+               string unpavedName = Utilities.RemoveSpaces(unpavedTerritory.Name);
+               Ellipse? unpavedEllipse = null; // Find the corresponding ellipse for this territory
+               foreach (UIElement ui in myCanvasMain.Children)
+               {
+                  if (ui is Ellipse)
+                  {
+                     Ellipse ellipse = (Ellipse)ui;
+                     if (unpavedName == ellipse.Name)
+                     {
+                        unpavedEllipse = ellipse;
+                        break;
+                     }
+                  }
+               }
+               if (null == unpavedEllipse)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, unpavedName);
+                  MessageBox.Show(anchorTerritory.ToString());
+                  return false;
+               }
+               // Search the Adjacent Territory  List to make sure the 
+               // anchor territory is in that list. It should be bi directional.
+               bool isReturnFound = false;
+               foreach (String s1 in unpavedTerritory.UnpavedRoads)
+               {
+                  string returnName = s1;
+                  if (returnName == anchorTerritory.Name)
+                  {
+                     isReturnFound = true; // Yes the adjacent River has a entry to return the River back to the anchor territory
+                     break;
+                  }
+               }
+               // Anchor Property not found in the adjacent property territory.  This is an error condition.
+               if (false == isReturnFound)
+               {
+                  anchorEllipse.Fill = aSolidColorBrush3; // change color of two ellipses to signify error
+                  unpavedEllipse.Fill = aSolidColorBrush2;
+                  StringBuilder sb = new StringBuilder("anchor=");
+                  sb.Append(anchorTerritory.Name);
+                  sb.Append(" NOT in list for unpaved=");
+                  sb.Append(unpavedName);
+                  MessageBox.Show(sb.ToString());
+                  return false;
+               }
+            }
+         }
+         return true;
+      }
       //--------------------------------------------------------------------
       void MouseLeftButtonDownDeleteTerritory(object sender, MouseButtonEventArgs e)
       {
@@ -1107,25 +1356,25 @@ namespace Pattons_Best
                      StringBuilder sb = new StringBuilder("Anchoring: ");
                      sb.Append(selectedEllipse.Name);
                      sb.Append(" ");
-                     sb.Append(selectedTerritory.ToString());
+                     sb.Append(selectedTerritory.Name);
                      sb.Append(" ");
-                     Console.WriteLine("Anchoring {0} ", selectedTerritory.ToString());
+                     Console.WriteLine("Anchoring {0} ", selectedTerritory.Name);
                      MessageBox.Show(sb.ToString());
                      myAnchorTerritory = selectedTerritory;
                      myAnchorTerritory.Adjacents.Clear();
                      selectedEllipse.Fill = aSolidColorBrush3;
                      return;
                   }
-                  if (selectedTerritory.ToString() != myAnchorTerritory.ToString())
+                  if (selectedTerritory.Name != myAnchorTerritory.Name)
                   {
                      // If the matching territory is not the anchor territory, change its color.
                      selectedEllipse.Fill = aSolidColorBrush2;
                      // Find if the territory is already in the list. Only add it if it is not already added.
-                     IEnumerable<string> results = from s in myAnchorTerritory.Adjacents where s == selectedTerritory.ToString() select s;
+                     IEnumerable<string> results = from s in myAnchorTerritory.Adjacents where s == selectedTerritory.Name select s;
                      if (0 == results.Count())
                      {
-                        Console.WriteLine("Adding {0} ", selectedTerritory.ToString());
-                        myAnchorTerritory.Adjacents.Add(selectedTerritory.ToString());
+                        Console.WriteLine("Adding {0} ", selectedTerritory.Name);
+                        myAnchorTerritory.Adjacents.Add(selectedTerritory.Name);
                      }
                   }
                   else
@@ -1134,10 +1383,10 @@ namespace Pattons_Best
                      // to the adjacents ellipse. Clear the data so another one can be selected.
                      StringBuilder sb = new StringBuilder("Saving"); 
                      sb.Append(selectedEllipse.Name); 
-                     sb.Append(" "); sb.Append(myAnchorTerritory.ToString());
-                     sb.Append(" "); sb.Append(selectedTerritory.ToString()); 
+                     sb.Append(" "); sb.Append(myAnchorTerritory.Name);
+                     sb.Append(" "); sb.Append(selectedTerritory.Name); 
                      sb.Append(" ");
-                     Console.WriteLine("Saving {0} ", selectedTerritory.ToString());
+                     Console.WriteLine("Saving {0} ", selectedTerritory.Name);
                      MessageBox.Show(sb.ToString());
                      myAnchorTerritory = null;
                      foreach (UIElement ui1 in myCanvasMain.Children)
@@ -1150,6 +1399,194 @@ namespace Pattons_Best
                               if ( (ellipse1.Name == t.Name) && (t.Type == myTankNum.ToString()) )
                               {
                                  if (0 == t.Adjacents.Count)
+                                    ellipse1.Fill = aSolidColorBrush0;
+                                 else
+                                    ellipse1.Fill = aSolidColorBrush1;
+                                 break;
+                              }
+                           }
+                        }
+                     }
+                  } // else (selectedTerritory.ToString() != myAnchorTerritory.ToString())
+               } // if (true == ui.IsMouseOver)
+            } // if (ui is Ellipse)
+         }  // foreach (UIElement ui in myCanvasMain.Children)
+      }
+      void MouseLeftButtonDownSetPaved(object sender, MouseButtonEventArgs e)
+      {
+         if (null == myCanvasMain)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseLeftButtonDownSetPaved(): myCanvasMain=null");
+            return;
+         }
+         SolidColorBrush aSolidColorBrush0 = new SolidColorBrush { Color = Color.FromArgb(100, 100, 100, 0) };
+         SolidColorBrush aSolidColorBrush1 = new SolidColorBrush { Color = Color.FromArgb(010, 255, 100, 0) };
+         SolidColorBrush aSolidColorBrush2 = new SolidColorBrush { Color = Color.FromArgb(255, 0, 0, 0) };
+         SolidColorBrush aSolidColorBrush3 = new SolidColorBrush { Color = Colors.Red };
+         System.Windows.Point p = e.GetPosition(myCanvasMain);
+         foreach (UIElement ui in myCanvasMain.Children)
+         {
+            if (ui is Ellipse)
+            {
+               Ellipse selectedEllipse = (Ellipse)ui;
+               if (true == ui.IsMouseOver)
+               {
+                  Territory? selectedTerritory = null;  // Find the corresponding Territory that user selected
+                  foreach (Territory t in Territories.theTerritories)
+                  {
+                     if (selectedEllipse.Name == t.Name)
+                     {
+                        selectedTerritory = t;
+                        break;
+                     }
+                  }
+                  if (selectedTerritory == null) // Check for error
+                  {
+                     MessageBox.Show("Unable to find " + selectedEllipse.Name);
+                     return;
+                  }
+                  if (null == myAnchorTerritory)  // If there is no anchor territory. Set it.
+                  {
+                     StringBuilder sb = new StringBuilder("Anchoring: ");
+                     sb.Append(selectedEllipse.Name);
+                     sb.Append(" ");
+                     sb.Append(selectedTerritory.Name);
+                     sb.Append(" ");
+                     Console.WriteLine("Anchoring {0} ", selectedTerritory.Name);
+                     MessageBox.Show(sb.ToString());
+                     myAnchorTerritory = selectedTerritory;
+                     myAnchorTerritory.PavedRoads.Clear();
+                     selectedEllipse.Fill = aSolidColorBrush3;
+                     return;
+                  }
+                  if (selectedTerritory.Name != myAnchorTerritory.Name)
+                  {
+                     // If the matching territory is not the anchor territory, change its color.
+                     selectedEllipse.Fill = aSolidColorBrush2;
+                     // Find if the territory is already in the list. Only add it if it is not already added.
+                     IEnumerable<string> results = from s in myAnchorTerritory.PavedRoads where s == selectedTerritory.Name select s;
+                     if (0 == results.Count())
+                     {
+                        Console.WriteLine("Adding {0} ", selectedTerritory.Name);
+                        myAnchorTerritory.PavedRoads.Add(selectedTerritory.Name);
+                     }
+                  }
+                  else
+                  {
+                     // If this is the matching territory is the anchor territory, the user is requesting that it they are done adding 
+                     // to the PavedRoad ellipse. Clear the data so another one can be selected.
+                     StringBuilder sb = new StringBuilder("Saving");
+                     sb.Append(selectedEllipse.Name);
+                     sb.Append(" "); sb.Append(myAnchorTerritory.Name);
+                     sb.Append(" "); sb.Append(selectedTerritory.Name);
+                     sb.Append(" ");
+                     Console.WriteLine("Saving {0} ", selectedTerritory.Name);
+                     MessageBox.Show(sb.ToString());
+                     myAnchorTerritory = null;
+                     foreach (UIElement ui1 in myCanvasMain.Children)
+                     {
+                        if (ui1 is Ellipse)
+                        {
+                           Ellipse ellipse1 = (Ellipse)ui1;
+                           foreach (Territory t in Territories.theTerritories)
+                           {
+                              if (ellipse1.Name == t.Name)
+                              {
+                                 if (0 == t.PavedRoads.Count)
+                                    ellipse1.Fill = aSolidColorBrush0;
+                                 else
+                                    ellipse1.Fill = aSolidColorBrush1;
+                                 break;
+                              }
+                           }
+                        }
+                     }
+                  } // else (selectedTerritory.ToString() != myAnchorTerritory.ToString())
+               } // if (true == ui.IsMouseOver)
+            } // if (ui is Ellipse)
+         }  // foreach (UIElement ui in myCanvasMain.Children)
+      }
+      void MouseLeftButtonDownSetUnpaved(object sender, MouseButtonEventArgs e)
+      {
+         if (null == myCanvasMain)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseLeftButtonDownSetUnpaved(): myCanvasMain=null");
+            return;
+         }
+         SolidColorBrush aSolidColorBrush0 = new SolidColorBrush { Color = Color.FromArgb(100, 100, 100, 0) };
+         SolidColorBrush aSolidColorBrush1 = new SolidColorBrush { Color = Color.FromArgb(010, 255, 100, 0) };
+         SolidColorBrush aSolidColorBrush2 = new SolidColorBrush { Color = Color.FromArgb(255, 0, 0, 0) };
+         SolidColorBrush aSolidColorBrush3 = new SolidColorBrush { Color = Colors.Red };
+         System.Windows.Point p = e.GetPosition(myCanvasMain);
+         foreach (UIElement ui in myCanvasMain.Children)
+         {
+            if (ui is Ellipse)
+            {
+               Ellipse selectedEllipse = (Ellipse)ui;
+               if (true == ui.IsMouseOver)
+               {
+                  Territory? selectedTerritory = null;  // Find the corresponding Territory that user selected
+                  foreach (Territory t in Territories.theTerritories)
+                  {
+                     if (selectedEllipse.Name == t.Name)
+                     {
+                        selectedTerritory = t;
+                        break;
+                     }
+                  }
+                  if (selectedTerritory == null) // Check for error
+                  {
+                     MessageBox.Show("Unable to find " + selectedEllipse.Name);
+                     return;
+                  }
+                  if (null == myAnchorTerritory)  // If there is no anchor territory. Set it.
+                  {
+                     StringBuilder sb = new StringBuilder("Anchoring: ");
+                     sb.Append(selectedEllipse.Name);
+                     sb.Append(" ");
+                     sb.Append(selectedTerritory.Name);
+                     sb.Append(" ");
+                     Console.WriteLine("Anchoring {0} ", selectedTerritory.Name);
+                     MessageBox.Show(sb.ToString());
+                     myAnchorTerritory = selectedTerritory;
+                     myAnchorTerritory.UnpavedRoads.Clear();
+                     selectedEllipse.Fill = aSolidColorBrush3; // red
+                     return;
+                  }
+                  if (selectedTerritory.Name != myAnchorTerritory.Name)
+                  {
+                     // If the matching territory is not the anchor territory, change its color.
+                     selectedEllipse.Fill = aSolidColorBrush2; // black
+                     // Find if the territory is already in the list. Only add it if it is not already added.
+                     IEnumerable<string> results = from s in myAnchorTerritory.UnpavedRoads where s == selectedTerritory.Name select s;
+                     if (0 == results.Count())
+                     {
+                        Console.WriteLine("Adding {0} ", selectedTerritory.Name);
+                        myAnchorTerritory.UnpavedRoads.Add(selectedTerritory.Name);
+                     }
+                  }
+                  else
+                  {
+                     // If this is the matching territory is the anchor territory, the user is requesting that it they are done adding 
+                     // to the adjacents ellipse. Clear the data so another one can be selected.
+                     StringBuilder sb = new StringBuilder("Saving");
+                     sb.Append(selectedEllipse.Name);
+                     sb.Append(" "); sb.Append(myAnchorTerritory.Name);
+                     sb.Append(" "); sb.Append(selectedTerritory.Name);
+                     sb.Append(" ");
+                     Console.WriteLine("Saving {0} ", selectedTerritory.Name);
+                     MessageBox.Show(sb.ToString());
+                     myAnchorTerritory = null;
+                     foreach (UIElement ui1 in myCanvasMain.Children)
+                     {
+                        if (ui1 is Ellipse)
+                        {
+                           Ellipse ellipse1 = (Ellipse)ui1;
+                           foreach (Territory t in Territories.theTerritories)
+                           {
+                              if (ellipse1.Name == t.Name)
+                              {
+                                 if (0 == t.UnpavedRoads.Count)
                                     ellipse1.Fill = aSolidColorBrush0;
                                  else
                                     ellipse1.Fill = aSolidColorBrush1;
