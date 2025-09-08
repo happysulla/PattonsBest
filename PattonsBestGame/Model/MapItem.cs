@@ -302,8 +302,10 @@ namespace Pattons_Best
             enemyUnit = "JdgPzIV";
          else if (true == this.Name.Contains("JdgPz38t") )
             enemyUnit = "JdgPz38t";
+         else if (true == this.Name.Contains("Panzerfaust"))
+            enemyUnit = "Panzerfaust";
          else
-            Logger.Log(LogEnum.LE_ERROR, "GetEnemyUnit() no assigned unit for mi.Name=" + this.Name);
+            Logger.Log(LogEnum.LE_ERROR, "GetEnemyUnit() unknown unit for mi.Name=" + this.Name);
          return enemyUnit;
       }
       public void SetBloodSpots(int percent=30)

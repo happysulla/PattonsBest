@@ -2836,6 +2836,11 @@ namespace Pattons_Best
             modifier += 5;
          //----------------------------------
          string enemyUnit = mi.GetEnemyUnit();
+         if ("ERROR" == enemyUnit)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "HarrassingFireCheck(): GetEnemyUnit() returned error for mi=" + mi.Name);
+            return FN_ERROR;
+         }
          if (("ATG" == enemyUnit) || ("Pak43" == enemyUnit) || ("PzVIb" == enemyUnit) || ("TANK" == enemyUnit) || ("PzVIe" == enemyUnit) )
             modifier += 5;
          //----------------------------------
@@ -3226,13 +3231,13 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetBrewUpNumber(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Get_BrewUpNumber(): lastReport=null");
             return FN_ERROR;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
          if (null == gi.Death)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetBrewUpNumber(): gi.Death=null");
+            Logger.Log(LogEnum.LE_ERROR, "Get_BrewUpNumber(): gi.Death=null");
             return FN_ERROR;
          }
          //-----------------------------------------------
@@ -3246,19 +3251,19 @@ namespace Pattons_Best
          }
          //-----------------------------------------------
          ShermanDeath death = gi.Death;
-         if( true == death.myCause.Contains("Panzerfault"))
+         if( true == death.myCause.Contains("Panzerfaust"))
          {
             if (true == isWetStorage)
                return 19;
-            else if( "M4" == card.myChasis )
-               return 84;
-            else if ("M4A1" == card.myChasis)
+            else if (true == card.myChasis.Contains("M4A1"))
                return 79;
-            else if ("M4A3" == card.myChasis)
+            else if (true == card.myChasis.Contains("M4A3"))
                return 74;
+            else if (true == card.myChasis.Contains("M4"))
+               return 84;
             else
             {
-               Logger.Log(LogEnum.LE_ERROR, "GetBrewUpNumber(): reached default for Panzerfaut myChassis=" + card.myChasis);
+               Logger.Log(LogEnum.LE_ERROR, "Get_BrewUpNumber(): reached default for Panzerfaust myChassis=" + card.myChasis);
                return FN_ERROR;
             }
          }
@@ -3266,15 +3271,15 @@ namespace Pattons_Best
          {
             if (true == isWetStorage)
                return 15;
-            else if ("M4" == card.myChasis)
-               return 79;
-            else if ("M4A1" == card.myChasis)
+            else if (true == card.myChasis.Contains("M4A1"))
                return 75;
-            else if ("M4A3" == card.myChasis)
+            else if (true == card.myChasis.Contains("M4A3"))
                return 69;
+            else if (true == card.myChasis.Contains("M4"))
+               return 79;
             else
             {
-               Logger.Log(LogEnum.LE_ERROR, "GetBrewUpNumber(): reached default for Panzerfaut myChassis=" + card.myChasis);
+               Logger.Log(LogEnum.LE_ERROR, "Get_BrewUpNumber(): reached default for Panzerfaut myChassis=" + card.myChasis);
                return FN_ERROR;
             }
          }
@@ -6440,7 +6445,6 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          //----------------------------------------------------
-
          string enemyUnitType = enemyUnit.GetEnemyUnit();
          if ("ERROR" == enemyUnitType)
          {
@@ -6829,7 +6833,6 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          //----------------------------------------------------
-
          string enemyUnitType = enemyUnit.GetEnemyUnit();
          if ("ERROR" == enemyUnitType)
          {
@@ -7209,6 +7212,11 @@ namespace Pattons_Best
          }
          //------------------------------------
          string enemyUnitType = enemyUnit.GetEnemyUnit();
+         if ("ERROR" == enemyUnitType)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "HarrassingFireCheck(): GetEnemyUnit() returned error for enemyUnit=" + enemyUnit.Name);
+            return FN_ERROR;
+         }
          if (("LW" != enemyUnitType) && ("MG" != enemyUnitType) && ("ATG" != enemyUnitType) && ("Pak38" != enemyUnitType) && ("Pak40" != enemyUnitType) && ("Pak43" != enemyUnitType) && ("TRUCK" != enemyUnitType))
          {
             Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): unknown enemyType=" + enemyUnitType);

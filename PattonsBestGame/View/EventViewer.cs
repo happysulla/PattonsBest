@@ -3497,6 +3497,11 @@ namespace Pattons_Best
          }
          //------------------------------------
          string enemyUnitType = gi.TargetMg.GetEnemyUnit();
+         if ("ERROR" == enemyUnitType)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): unknown gi.TargetMg=" + gi.TargetMg.Name);
+            return "ERROR";
+         }
          if (("LW" != enemyUnitType) && ("MG" != enemyUnitType) && ("ATG" != enemyUnitType) && ("Pak38" != enemyUnitType) && ("Pak40" != enemyUnitType) && ("Pak43" != enemyUnitType) && ("TRUCK" != enemyUnitType))
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): MG fire not appropriate for enemyType=" + enemyUnitType);

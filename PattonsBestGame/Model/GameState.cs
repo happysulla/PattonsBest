@@ -1232,6 +1232,11 @@ namespace Pattons_Best
                if( true == mi.IsEnemyUnit() )
                {
                   string enemyUnit = mi.GetEnemyUnit();
+                  if( "ERROR" == enemyUnit)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "HarrassingFireCheck(): GetEnemyUnit() returned error for mi=" + mi.Name);
+                     return false;
+                  }
                   if ((("LW" == enemyUnit) || ("MG" == enemyUnit)) && (('C' == range) || ('M' == range)))
                   {
                      isEnemyLwOrMgAtMediumOrCloseRange = true;

@@ -276,7 +276,7 @@ namespace Pattons_Best
          myToBrewNumber = TableMgr.GetBrewUpNumber(myGameInstance);
          if (myToBrewNumber < 0)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): myToBrewNumber=" + myToBrewNumber);
+            Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): 0 > myToBrewNumber=" + myToBrewNumber);
             return false;
          }
          //--------------------------------------------------
