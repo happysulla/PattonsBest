@@ -2119,7 +2119,7 @@ namespace Pattons_Best
             }
             if (ui is Button button)
             {
-               if (true == button.Name.Contains("Die"))
+               if (true == button.Name.Contains("Die"))  // die buttons never disappear - only one copy of them
                   continue;
                IMapItem? mi = stacks.FindMapItem(button.Name);
                if (null == mi) // If Button does not have corresponding MapItem, remove button.
@@ -2226,6 +2226,7 @@ namespace Pattons_Best
                   b.RenderTransformOrigin = new Point(0.5, 0.5);
                   rotateTransform.Angle = mi.RotationHull + mi.RotationOffsetHull;
                   b.RenderTransform = rotateTransform;
+
                }
                else
                {
@@ -3371,7 +3372,7 @@ namespace Pattons_Best
          //====================================================
          else if ( BattlePhase.ConductCrewAction == myGameInstance.BattlePhase )
          {
-            IMapItem? selectedMapItem = myGameInstance.BattleStacks.FindMapItem(button.Name);
+            IMapItem? selectedMapItem = myGameInstance.BattleStacks.FindMapItem(button.Name); // selectedMapItem is the new target
             if (null == selectedMapItem)
             {
                Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): selectedMapItem=null for button.Name=" + button.Name);
@@ -3392,16 +3393,16 @@ namespace Pattons_Best
                   GameAction outAction = GameAction.Error;
                   if (CrewActionPhase.TankMainGunFire == myGameInstance.CrewActionPhase)
                   {
-                     if (null == myGameInstance.TargetMainGun)
+                     if (null == myGameInstance.TargetMainGun) // no previous target
                      {
-                        Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "ClickButtonMapItem(): no previous target zeroize NumOfAcquiredMarker=0" );
-                        selectedMapItem.NumOfAcquiredMarker = 0; // ClickButtonMapItem() - new target
+                        Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "ClickButtonMapItem(): no previous target zeroize selectedMapItem.EnemyAcquiredShots.Clear()");
+                        selectedMapItem.EnemyAcquiredShots.Clear();  // the only thing in this list is the Sherman attacks
                      }
-                     else if( selectedMapItem.Name != myGameInstance.TargetMainGun.Name )
+                     else if( selectedMapItem.Name != myGameInstance.TargetMainGun.Name ) // previous target is no longer the target. selectedMapItem is the target. Changed targets.
                      {
-                        Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "ClickButtonMapItem(): differt target zeroize NumOfAcquiredMarker=0");
-                        selectedMapItem.NumOfAcquiredMarker = 0; // ClickButtonMapItem() - change target
-                        myGameInstance.TargetMainGun.NumOfAcquiredMarker = 0;
+                        Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "ClickButtonMapItem(): differt target zeroize selectedMapItem.EnemyAcquiredShots.Clear() and myGameInstance.TargetMainGun.EnemyAcquiredShots.Clear()");
+                        selectedMapItem.EnemyAcquiredShots.Clear();
+                        myGameInstance.TargetMainGun.EnemyAcquiredShots.Clear();
                      }
                      myGameInstance.TargetMainGun = selectedMapItem;
                      outAction = GameAction.BattleRoundSequenceShermanFiringMainGun;

@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 using System.Xml;
 using WpfAnimatedGif;
@@ -31,7 +32,7 @@ namespace Pattons_Best
       static public int BlueDie { get => theBlueDie; }
       //-----------------------------------------------------------
       private Canvas? myCanvas;
-      public List<Button> theDice = new List<Button>();
+      private List<Button> theDice = new List<Button>();
       private int myLoadedCount = 0;
       private Mutex myMutex = new Mutex();
       public Mutex DieMutex { get => myMutex; }

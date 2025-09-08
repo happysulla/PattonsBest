@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -10,6 +11,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
+using System.Windows.Shapes;
 using System.Xml.Linq;
 using Windows.Graphics.Printing3D;
 using WpfAnimatedGif;
@@ -54,6 +56,8 @@ namespace Pattons_Best
       [NonSerialized] protected static BitmapImage? thePzVTurret = theMapImages.GetBitmapImage("c80PzVTurret");
       [NonSerialized] protected static BitmapImage? thePzVIbTurret = theMapImages.GetBitmapImage("c82PzVIbTurret");
       [NonSerialized] protected static BitmapImage? thePzVIeTurret = theMapImages.GetBitmapImage("c82PzVIeTurret");
+      [NonSerialized] protected static BitmapImage?[] theAcquiredOne = new BitmapImage?[7] { theMapImages.GetBitmapImage("c103Acquired1_0"), theMapImages.GetBitmapImage("c103Acquired1_1"), theMapImages.GetBitmapImage("c103Acquired1_2"), theMapImages.GetBitmapImage("c103Acquired1_3"), theMapImages.GetBitmapImage("c103Acquired1_4"), theMapImages.GetBitmapImage("c103Acquired1_5"), theMapImages.GetBitmapImage("c103Acquired1_6") };
+      [NonSerialized] protected static BitmapImage?[] theAcquiredTwo = new BitmapImage?[7] { theMapImages.GetBitmapImage("c104Acquired2_0"), theMapImages.GetBitmapImage("c104Acquired2_1"), theMapImages.GetBitmapImage("c104Acquired2_2"), theMapImages.GetBitmapImage("c104Acquired2_3"), theMapImages.GetBitmapImage("c104Acquired2_4"), theMapImages.GetBitmapImage("c104Acquired2_5"), theMapImages.GetBitmapImage("c104Acquired2_6") };
       //--------------------------------------------------
       public string Name { get; set; } = string.Empty;
       public string TopImageName { get; set; } = string.Empty;
@@ -119,7 +123,7 @@ namespace Pattons_Best
       public bool IsIncapacitated { get; set; } = false;
       public bool IsFired { get; set; } = false;
       public bool IsSpotted { get; set; } = false;
-      public int NumOfAcquiredMarker { get; set; } = 0;
+      public Dictionary<string, int> EnemyAcquiredShots { set; get; } = new Dictionary<string, int>();
       //--------------------------------------------------
       public bool IsVehicle { get; set; } = false;
       public bool IsMovingInOpen { get; set; } = false;
@@ -219,7 +223,9 @@ namespace Pattons_Best
          this.IsWoods = mi.IsWoods;
          this.IsBuilding = mi.IsBuilding;
          this.IsFortification = mi.IsFortification;
-         this.Spotting = mi.Spotting;  
+         this.Spotting = mi.Spotting;
+         foreach (KeyValuePair<string, int> kvp in mi.EnemyAcquiredShots)
+            this.EnemyAcquiredShots.Add(kvp.Key, kvp.Value);
       }
       public bool IsEnemyUnit()
       {
@@ -654,6 +660,39 @@ namespace Pattons_Best
                   c.Children.Add(imgTerrain);
                   Canvas.SetLeft(imgTerrain, -15);
                   Canvas.SetTop(imgTerrain, -15);
+               }
+               //-------------------------------
+               int i = 0;
+               int k = 0;
+               foreach (KeyValuePair<string, int> kvp in mi.EnemyAcquiredShots)
+               {
+                  BitmapImage? acquireMarker = null;
+                  if (1 == kvp.Value)
+                     acquireMarker = theAcquiredOne[i];
+                  else
+                     acquireMarker = theAcquiredTwo[i];
+                  if( null == acquireMarker )
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "SetButtonContent(): acquireMarker=null for i=" + i.ToString());
+                     continue;
+                  }
+                  double width = 0.33 * zoom * Utilities.theMapItemSize;
+                  double height = width;
+                  Image imgTerrain = new Image() { Height = height, Width = width, Source = acquireMarker };
+                  c.Children.Add(imgTerrain);
+                  double x = -width / 2.0;
+                  if (0 != i % 2)
+                     x += mi.Zoom * Utilities.theMapItemSize;
+                  Canvas.SetLeft(imgTerrain, x); // i*width +  k*3
+                  double y = Math.Floor(i * 0.5)*height + k * 3;
+                  Canvas.SetTop(imgTerrain, y);
+                  //--------------------------
+                  i++;
+                  if (3 < i)
+                  {
+                     i = 0;
+                     k++;
+                  }
                }
             }
             if ( (true == mi.IsKilled) && (false == mi.Name.Contains("Sherman")) )

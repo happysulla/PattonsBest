@@ -768,8 +768,11 @@ namespace Pattons_Best
          //-----------------------------------------------
          if (null != TargetMainGun)
          {
-            this.TargetMainGun.NumOfAcquiredMarker++;  // Fire_AndReloadGun() - Increase when firing at a target
-            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Fire_AndReloadGun(): +++NumOfAcquiredMarker=" + this.TargetMainGun.NumOfAcquiredMarker.ToString());
+            if (true == this.TargetMainGun.EnemyAcquiredShots.ContainsKey("Sherman")) // Fire_AndReloadGun() - Increase when firing at a target
+               this.TargetMainGun.EnemyAcquiredShots["Sherman"]++;
+            else
+               this.TargetMainGun.EnemyAcquiredShots["Sherman"] = 1;
+            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Fire_AndReloadGun(): +++numOfShots=" + this.TargetMainGun.EnemyAcquiredShots["Sherman"].ToString());
          }
          //-----------------------------------------------
          string gunLoad = this.GetGunLoadType();  // This is the ammo that fired

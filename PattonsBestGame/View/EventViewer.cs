@@ -1208,7 +1208,7 @@ namespace Pattons_Best
             case "e027":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  Image imge027 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c29AmmoReload"), Width = 100, Height = 100, Name = "MovementChooseOption" };
+                  Image imge027 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c29AmmoReload"), Width = 100, Height = 100, Name = "Resupply" };
                   myTextBlock.Inlines.Add(new Run("                                           "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge027));
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -1903,7 +1903,7 @@ namespace Pattons_Best
             case "e053b": 
                if( false == UpdateEventContentToGetToHit(gi))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): UpdateEventContentToGetToHit() returned false for key=" + key);
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): UpdateEvent_ContentToGetToHit() returned false for key=" + key);
                   return false;
                }
                break;
@@ -2398,13 +2398,13 @@ namespace Pattons_Best
          myNumSmokeAttacksThisRound = 0;
          if ( null == myTextBlock )
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToGetToHit(): myTextBlock=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentToGetToHit(): myTextBlock=null");
             return false;
          }
          string key = gi.EventActive;
          if (null == gi.TargetMainGun)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToGetToHit(): gi.TargetMainGun=null for key=" + key);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentToGetToHit(): gi.TargetMainGun=null for key=" + key);
             return false;
          }
          double size = gi.TargetMainGun.Zoom * Utilities.theMapItemSize;
@@ -2434,7 +2434,7 @@ namespace Pattons_Best
          //----------------------------------------------
          if (false == UpdateEventContentGetToHitModifierImmobilization(gi, gi.TargetMainGun))
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToGetToHit(): UpdateEventContentGetToHitModifierImmobilization() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentToGetToHit(): UpdateEventContentGetToHitModifierImmobilization() returned false");
             return false;
          }
          //----------------------------------------------
@@ -2450,13 +2450,13 @@ namespace Pattons_Best
             double toHitNum = TableMgr.GetShermanToHitBaseNumber(gi, gi.TargetMainGun);
             if (TableMgr.FN_ERROR == toHitNum)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToGetToHit(): GetShermanToHitBaseNumber() returned error for key=" + key);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentToGetToHit(): GetShermanToHitBaseNumber() returned error for key=" + key);
                return false;
             }
             double modifier = TableMgr.GetShermanToHitModifier(gi, gi.TargetMainGun);
             if (TableMgr.FN_ERROR == toHitNum)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToGetToHit(): GetShermanToHitModifier() returned error for key=" + key);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentToGetToHit(): GetShermanToHitModifier() returned error for key=" + key);
                return false;
             }
             double combo = toHitNum - modifier;
@@ -2532,7 +2532,7 @@ namespace Pattons_Best
          //------------------------------------
          if (3 != enemyUnit.TerritoryCurrent.Name.Length)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
             return "ERROR";
          }
          char range = enemyUnit.TerritoryCurrent.Name[2];
@@ -2558,26 +2558,33 @@ namespace Pattons_Best
          ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
          if (null == commander)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): commander=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): commander=null");
             return "ERROR";
          }
          ICrewMember? gunner = gi.GetCrewMemberByRole("Gunner");
          if (null == gunner)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): gunner=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): gunner=null");
             return "ERROR";
          }
+         //------------------------------------
+         int numShots = 0;
+         if (true == enemyUnit.EnemyAcquiredShots.ContainsKey(enemyUnit.Name)) // Fire_AndReloadGun() - Increase when firing at a target
+         {
+            numShots = enemyUnit.EnemyAcquiredShots[enemyUnit.Name];
+         }
+         //------------------------------------
          StringBuilder sb51 = new StringBuilder();
          //------------------------------------
-         if (0 == enemyUnit.NumOfAcquiredMarker)
+         if (0 == numShots)
          {
-            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "UpdateEventContentGetToHitModifier(): acq=" + enemyUnit.NumOfAcquiredMarker.ToString() + "isCommanderDirectingFire=" + isCommanderDirectingFire.ToString() + "commander.IsButtonedUp=" + commander.IsButtonedUp.ToString());
+            Logger.Log(LogEnum.LE_SHOW_NUM_ENEMY_SHOTS, "UpdateEventContent_GetToHitModifier(): acq=" + numShots.ToString() + " isCommanderDirectingFire=" + isCommanderDirectingFire.ToString() + " commander.IsButtonedUp=" + commander.IsButtonedUp.ToString() + " for enemyUnit=" + enemyUnit.Name);
             if ( (false == isCommanderDirectingFire) || (true == commander.IsButtonedUp) )
                sb51.Append("+10 for first shot\n");
          }
-         else if (1 == enemyUnit.NumOfAcquiredMarker)
+         else if (1 == numShots)
          {
-            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "UpdateEventContentGetToHitModifier(): SHOW +1 acq=" + enemyUnit.NumOfAcquiredMarker.ToString());
+            Logger.Log(LogEnum.LE_SHOW_NUM_ENEMY_SHOTS, "UpdateEventContent_GetToHitModifier(): SHOW +1 acq=" + numShots.ToString() + " for enemyUnit=" + enemyUnit.Name);
             if ('C' == range)
                sb51.Append("-5 for 2nd shot at close range\n");
             else if ('M' == range)
@@ -2586,13 +2593,13 @@ namespace Pattons_Best
                sb51.Append("-15 for 2nd shot at long range\n");
             else
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): reached default range=" + range);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): reached default range=" + range);
                return "ERROR";
             }
          }
-         else if (1 < enemyUnit.NumOfAcquiredMarker)
+         else if (1 < numShots)
          {
-            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "UpdateEventContentGetToHitModifier(): SHOW +2 acq=" + enemyUnit.NumOfAcquiredMarker.ToString());
+            Logger.Log(LogEnum.LE_SHOW_NUM_ENEMY_SHOTS, "UpdateEventContent_GetToHitModifier(): SHOW +2 acq=" + numShots.ToString() + " for enemyUnit=" + enemyUnit.Name);
             if ('C' == range)
                sb51.Append("-10 for 3rd shot at close range\n");
             else if ('M' == range)
@@ -2601,7 +2608,7 @@ namespace Pattons_Best
                sb51.Append("-30 for 3rd shot at long range\n");
             else
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): reached default range=" + range);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): reached default range=" + range);
                return "ERROR";
             }
          }
@@ -2616,7 +2623,7 @@ namespace Pattons_Best
                sb51.Append("+25 for moving target at long range\n");
             else
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): reached default range=" + range);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): reached default range=" + range);
                return "ERROR";
             }
          }
@@ -2652,62 +2659,16 @@ namespace Pattons_Best
          else if ((true == enemyUnit.Name.Contains("Pak40")) || (true == enemyUnit.Name.Contains("Pak38")))
             sb51.Append("+20 for firing at 50L or 75L AT Gun\n");
          //==================================
-         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "UpdateEventContentGetToHitModifier(): ------------>>>>>>>>>>>gi.ShermanTypeOfFire=" + gi.ShermanTypeOfFire);
-         if ("Direct" == gi.ShermanTypeOfFire)   // EventViewer.UpdateEventContentGetToHitModifier()
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "UpdateEventContent_GetToHitModifier(): ------------>>>>>>>>>>>gi.ShermanTypeOfFire=" + gi.ShermanTypeOfFire + " range=" + range.ToString());
+         if ("Direct" == gi.ShermanTypeOfFire)   // EventViewer.UpdateEventContent_GetToHitModifier()
          {
-            //----------------------------
-            if (true == isShermanMoving)
-               sb51.Append("+25 for moving or pivoting Sherman\n");
-            //----------------------------
-            if (true == enemyUnit.IsWoods)
-            {
-               if ('C' == range)
-                  sb51.Append("+5 for target in woods at close range\n");
-               else if ('M' == range)
-                  sb51.Append("+10 for target in woods at medium range\n");
-               else if ('L' == range)
-                  sb51.Append("+15 for target in woods at large range\n");
-               else
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): reached default range=" + range);
-                  return "ERROR";
-               }
-            }
-            if ((true == enemyUnit.IsBuilding) && (false == enemyUnit.IsVehicle))
-            {
-               if ('C' == range)
-                  sb51.Append("+10 for target in building at close range\n");
-               else if ('M' == range)
-                  sb51.Append("+15 for target in building at medium range\n");
-               else if ('L' == range)
-                  sb51.Append("+25 for target in building at large range\n");
-               else
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): reached default range=" + range);
-                  return "ERROR";
-               }
-            }
-            if ((true == enemyUnit.IsFortification) && (false == enemyUnit.IsVehicle))
-            {
-               if ('C' == range)
-                  sb51.Append("+15 for target in fortification at close range\n");
-               else if ('M' == range)
-                  sb51.Append("+25 for target in fortification at medium range\n");
-               else if ('L' == range)
-                  sb51.Append("+35 for target in fortification at large range\n");
-               else
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): reached default range=" + range);
-                  return "ERROR";
-               }
-            }
             //----------------------------
             if (true == enemyUnit.IsVehicle)
             {
                string enemyUnitType = enemyUnit.GetEnemyUnit();
                if ("ERROR" == enemyUnitType)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): unknown enemyUnit=" + enemyUnit.Name);
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): unknown enemyUnit=" + enemyUnit.Name);
                   return "ERROR";
                }
                switch (enemyUnitType)
@@ -2736,7 +2697,7 @@ namespace Pattons_Best
 
                      else
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): reached default range=" + range);
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): reached default range=" + range);
                         return "ERROR";
                      }
                      break;
@@ -2749,13 +2710,59 @@ namespace Pattons_Best
                         sb51.Append("-30 for very large target at large range\n");
                      else
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): reached default range=" + range);
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): reached default range=" + range);
                         return "ERROR";
                      }
                      break;
                   default:
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): Reached Default for vehicle=enemyUnitType=" + enemyUnitType);
                      return "ERROR";
+               }
+               //----------------------------
+               if (true == isShermanMoving)
+                  sb51.Append("+25 for moving or pivoting Sherman\n");
+               //----------------------------
+               if (true == enemyUnit.IsWoods)
+               {
+                  if ('C' == range)
+                     sb51.Append("+5 for target in woods at close range\n");
+                  else if ('M' == range)
+                     sb51.Append("+10 for target in woods at medium range\n");
+                  else if ('L' == range)
+                     sb51.Append("+15 for target in woods at large range\n");
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): reached default range=" + range);
+                     return "ERROR";
+                  }
+               }
+               if ((true == enemyUnit.IsBuilding) && (false == enemyUnit.IsVehicle))
+               {
+                  if ('C' == range)
+                     sb51.Append("+10 for target in building at close range\n");
+                  else if ('M' == range)
+                     sb51.Append("+15 for target in building at medium range\n");
+                  else if ('L' == range)
+                     sb51.Append("+25 for target in building at large range\n");
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): reached default range=" + range);
+                     return "ERROR";
+                  }
+               }
+               if ((true == enemyUnit.IsFortification) && (false == enemyUnit.IsVehicle))
+               {
+                  if ('C' == range)
+                     sb51.Append("+15 for target in fortification at close range\n");
+                  else if ('M' == range)
+                     sb51.Append("+25 for target in fortification at medium range\n");
+                  else if ('L' == range)
+                     sb51.Append("+35 for target in fortification at large range\n");
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): reached default range=" + range);
+                     return "ERROR";
+                  }
                }
                if (true == gi.IsShermanDeliberateImmobilization)
                {
@@ -2767,7 +2774,7 @@ namespace Pattons_Best
                      sb51.Append("+45 for deliberate immobilization\n");
                   else
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifier(): reached default range=" + range);
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): reached default range=" + range);
                      return "ERROR";
                   }
                }
@@ -5121,6 +5128,10 @@ namespace Pattons_Best
                            action = GameAction.MovementChooseOption;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
+                        case "Resupply":
+                           action = GameAction.MovementResupplyCheckRoll;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
                         case "c44AdvanceFire":
                            action = GameAction.MovementAdvanceFireAmmoUseCheck;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
@@ -5677,8 +5688,8 @@ namespace Pattons_Best
                action = GameAction.SetupShowMapHistorical;
                //action = GameAction.TestingStartMorningBriefing;  // <cgs> TEST - skip the ammo setup
                //action = GameAction.TestingStartPreparations;     // <cgs> TEST - skip morning briefing and crew/ammo setup
-               action = GameAction.TestingStartMovement;         // <cgs> TEST - start with movement - skip battle prep phase
-               //action = GameAction.TestingStartBattle;           // <cgs> TEST - skip the movement portion - begin with battle setup
+               //action = GameAction.TestingStartMovement;         // <cgs> TEST - start with movement - skip battle prep phase
+               action = GameAction.TestingStartBattle;           // <cgs> TEST - skip the movement portion - begin with battle setup
                //action = GameAction.TestingStartAmbush;           // <cgs> TEST - skip battle setup
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;

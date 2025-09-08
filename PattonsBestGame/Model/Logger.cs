@@ -53,6 +53,7 @@ namespace Pattons_Best
       LE_SHOW_RESET_ROUND,
       LE_SHOW_TANK_BUTTONS,
       LE_SHOW_NUM_SHERMAN_SHOTS,
+      LE_SHOW_NUM_ENEMY_SHOTS,
       LE_SHOW_GUN_RELOAD,
       LE_SHOW_FIRE_DIRECTION,
       //-------------
@@ -160,13 +161,14 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_SHERMAN_MOVE); 
          //SetOn(LogEnum.LE_SHOW_APPEARING_UNITS);
          //-------------------------------
-         //SetOn(LogEnum.LE_SHOW_TO_HIT_MODIFIER);
-         //SetOn(LogEnum.LE_SHOW_TO_HIT_ATTACK);
+         SetOn(LogEnum.LE_SHOW_TO_HIT_MODIFIER);
+         SetOn(LogEnum.LE_SHOW_TO_HIT_ATTACK);
          SetOn(LogEnum.LE_SHOW_MAIN_GUN_BREAK);
          //SetOn(LogEnum.LE_SHOW_TO_KILL_MODIFIER);
          //SetOn(LogEnum.LE_SHOW_TO_KILL_ATTACK);
          //SetOn(LogEnum.LE_SHOW_TO_KILL_MG_ATTACK);
-         //SetOn(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS);
+         SetOn(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS);
+         SetOn(LogEnum.LE_SHOW_NUM_ENEMY_SHOTS);
          SetOn(LogEnum.LE_SHOW_FIRE_DIRECTION);
          //-------------------------------
          SetOn(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES);

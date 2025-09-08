@@ -1075,6 +1075,7 @@ namespace Pattons_Best
          gi.Sherman.IsMoving = false;
          gi.Sherman.IsHullDown = false;
          gi.Sherman.IsBoggedDown = false;
+         gi.Sherman.EnemyAcquiredShots.Clear();
          //---------------------------------
          gi.BattlePhase = BattlePhase.None;
          //---------------------------------
@@ -3176,8 +3177,27 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.MovementResupplyCheckRoll;
                   break;
                case GameAction.MovementResupplyCheckRoll:
-                  gi.DieResults[key][0] = dieRoll;
-                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  if( Utilities.NO_RESULT == gi.DieResults[key][0])
+                  {
+                     gi.DieResults[key][0] = dieRoll;
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else
+                  {
+                     if(gi.DieResults[key][0]<8)
+                     {
+                        action = GameAction.MovementAmmoLoad;
+                     }
+                     else
+                     {
+                        if (false == SetChoicesForOperations(gi))
+                        {
+                           returnStatus = "SetChoicesForOperations() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementResupplyCheckRoll): " + returnStatus);
+                        }
+                     }
+                     gi.DieResults[key][0] = Utilities.NO_RESULT;
+                  }
                   break;
                case GameAction.MovementEnterArea:
                   gi.EventDisplayed = gi.EventActive = "e028";
@@ -3244,7 +3264,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "GameStateMovement.PerformAction(MovementBattleCheckRoll): " + gi.MoveStacks.ToString());
                   Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "GameStateMovement.PerformAction(MovementBattleCheckRoll): gi.MapItemMoves.Clear()");
                   gi.MapItemMoves.Clear();
-                  dieRoll = 1; // <cgs> TEST - deny combat
+                  //dieRoll = 10; // <cgs> TEST - do combat
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (false == ResolveBattleCheckRoll(gi, dieRoll))
@@ -5708,8 +5728,8 @@ namespace Pattons_Best
                //--------------------------------------------------
                if ((false == gi.IsShermanHvss) && (null != gi.TargetMainGun) ) // if tank moves or pivots, acquired modifer drops to zero
                {
-                  Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Conduct_CrewAction(): zero NumOfAcquiredMarker=" + gi.TargetMainGun.NumOfAcquiredMarker.ToString());
-                  gi.TargetMainGun.NumOfAcquiredMarker = 0; // Conduct_CrewAction() - Tank moves wihtout HVSS
+                  Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Conduct_CrewAction(): gi.TargetMainGun.EnemyAcquiredShots.Clear()"); // Tank moved without HVSS losing acq
+                  gi.TargetMainGun.EnemyAcquiredShots.Clear(); 
                }
                //--------------------------------------------------
                foreach (IStack stack in gi.BattleStacks)
@@ -5764,7 +5784,10 @@ namespace Pattons_Best
             {
                gi.IsShermanTurretRotated = true;
                if ((false == isTankFiringMainGun) && (null != gi.TargetMainGun) )
-                  gi.TargetMainGun.NumOfAcquiredMarker = 0;  // Conduct_CrewAction() - Turret rotated without firing main gun causes target acquisition = 0
+               {
+                  Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Conduct_CrewAction(): gi.TargetMainGun.EnemyAcquiredShots.Clear() when turret rotated");
+                  gi.TargetMainGun.EnemyAcquiredShots.Clear(); // Conduct_CrewAction() - Turret rotated without firing main gun causes target acquisition = 0
+               }
                gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
                gi.EventDisplayed = gi.EventActive = "e052a";
                gi.DieRollAction = GameAction.DieRollActionNone;
@@ -6422,13 +6445,13 @@ namespace Pattons_Best
       {
          if (null == gi.TargetMainGun)
          {
-            Logger.Log(LogEnum.LE_ERROR, "FireMainGunAtEnemyUnitson(): Target=null");
+            Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnits(): Target=null");
             return false;
          }
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "FireMainGunAtEnemyUnits(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnits(): lastReport=null");
             return false;
          }
          //---------------------------------------------------------------
@@ -6437,17 +6460,17 @@ namespace Pattons_Best
             string facingOfTarget = TableMgr.GetShermanFireDirection(gi, gi.TargetMainGun, "Hull");  // Use HULL to determine if IsShermanFiringAtFront
             if ("ERROR" == facingOfTarget)
             {
-               Logger.Log(LogEnum.LE_ERROR, "FireMainGunAtEnemyUnits(): GetEnemyFireDirection() returned error");
+               Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnits(): GetEnemyFireDirection() returned error");
                return false;
             }
             if ("Front" == facingOfTarget)
             {
-               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "GetShermanFireDirection(): SETTTING gi.IsShermanFiringAtFront=TRUE");
+               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "Fire_MainGunAtEnemyUnits(): SETTTING gi.IsShermanFiringAtFront=TRUE");
                gi.IsShermanFiringAtFront = true; // Sherman is firing at front of target
             }
             else
             {
-               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "GetShermanFireDirection(): SETTTING gi.IsShermanFiringAtFront=FALSE");
+               Logger.Log(LogEnum.LE_SHOW_FIRE_DIRECTION, "Fire_MainGunAtEnemyUnits(): SETTTING gi.IsShermanFiringAtFront=FALSE");
                gi.IsShermanFiringAtFront = false; // Sherman is firing at front of target
             }
          }
@@ -6455,7 +6478,7 @@ namespace Pattons_Best
          double toHitNumber = TableMgr.GetShermanToHitBaseNumber(gi, gi.TargetMainGun);  // determine the To Hit number
          if (TableMgr.FN_ERROR == toHitNumber)
          {
-            Logger.Log(LogEnum.LE_ERROR, "FireMainGunAtEnemyUnits(): GetShermanToHitBaseNumber() returned error");
+            Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnits(): GetShermanToHitBaseNumber() returned error");
             return false;
          }
          double modifier = TableMgr.GetShermanToHitModifier(gi, gi.TargetMainGun);  // determine the To Hit number
@@ -6469,7 +6492,7 @@ namespace Pattons_Best
          string gunLoadType = gi.GetGunLoadType();
          if (false == gi.FireAndReloadGun()) // FireMainGunAtEnemyUnits - gi.ShermanTypeOfFire get reset in FireAndReloadGun
          {
-            Logger.Log(LogEnum.LE_ERROR, "FireMainGunAtEnemyUnits(): FireAndReloadGun() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnits(): FireAndReloadGun() returned false");
             return false;
          }
          //---------------------------------------------------------------
@@ -6479,18 +6502,18 @@ namespace Pattons_Best
          if (97 < dieRoll)
          {
             gi.IsMalfunctionedMainGun = true;
-            Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "FireMainGunAtEnemyUnits(): Main Gun Malfunctioned dr=" + dieRoll.ToString());
+            Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "Fire_MainGunAtEnemyUnits(): Main Gun Malfunctioned dr=" + dieRoll.ToString());
          }
          //---------------------------------------------------------------
          if (combo < dieRoll) // Miss Target - move to next Crew Action
          {
-            Logger.Log(LogEnum.LE_SHOW_TO_HIT_ATTACK, "FireMainGunAtEnemyUnits(): Miss Target - Main Gun NO ROF Follow Up for (base=" + toHitNumber.ToString() + ") + (mod=" + modifier.ToString() + ") = (total=" + combo.ToString() + ") dr=" + dieRoll.ToString());
+            Logger.Log(LogEnum.LE_SHOW_TO_HIT_ATTACK, "Fire_MainGunAtEnemyUnits(): Miss Target - Main Gun NO ROF Follow Up for (base=" + toHitNumber.ToString() + ") + (mod=" + modifier.ToString() + ") = (total=" + combo.ToString() + ") dr=" + dieRoll.ToString());
             if (0 == gi.ShermanHits.Count)
             {
                gi.CrewActionPhase = CrewActionPhase.TankMgFire;
                if (false == ConductCrewAction(gi, ref outAction))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "FireMainGunAtEnemyUnits(): ConductCrewAction() returned error");
+                  Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnits(): ConductCrewAction() returned error");
                   return false;
                }
             }
@@ -6505,7 +6528,7 @@ namespace Pattons_Best
             return true;
          }
          //---------------------------------------------------------------
-         Logger.Log(LogEnum.LE_SHOW_TO_HIT_ATTACK, "FireMainGunAtEnemyUnits(): Hit Target (base=" + toHitNumber.ToString() + ") +  (mod=" + modifier.ToString() + ") = (total=" + combo.ToString() + ") dr=" + dieRoll.ToString());
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_ATTACK, "Fire_MainGunAtEnemyUnits(): Hit Target (base=" + toHitNumber.ToString() + ") +  (mod=" + modifier.ToString() + ") = (total=" + combo.ToString() + ") dr=" + dieRoll.ToString());
          ShermanAttack hit = new ShermanAttack(gi.ShermanTypeOfFire, gunLoadType, isCriticalHit);
          gi.ShermanHits.Add(hit);
          switch (gunLoadType) // mark off hit
@@ -6541,15 +6564,15 @@ namespace Pattons_Best
                gi.BattleStacks.Add(smoke);
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): GetShermanToHitBaseNumber() reached default gunload=" + gunLoadType + " for a=" + outAction.ToString());
+               Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnits(): GetShermanToHitBaseNumber() reached default gunload=" + gunLoadType + " for a=" + outAction.ToString());
                return false;
          }
          //---------------------------------------------------------------
-         gi.ShermanTypeOfFire = "";                                 // FireMainGunAtEnemyUnits()
+         gi.ShermanTypeOfFire = "";                                 // Fire_MainGunAtEnemyUnits()
          int rateOfFireNumber = TableMgr.GetShermanRateOfFire(gi);  // Hit target - determine if reach rate of fire
          if (TableMgr.FN_ERROR == rateOfFireNumber)
          {
-            Logger.Log(LogEnum.LE_ERROR, "FireMainGunAtEnemyUnits(): GetShermanRateOfFire() returned error");
+            Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnits(): GetShermanRateOfFire() returned error");
             return false;
          }
          //---------------------------------------------------------------
@@ -6559,14 +6582,14 @@ namespace Pattons_Best
             gi.DieResults["e053b"][0] = Utilities.NO_RESULT;
             gi.EventDisplayed = gi.EventActive = "e053c";  // achieve rate of fire - show event
             gi.DieRollAction = GameAction.DieRollActionNone;
-            Logger.Log(LogEnum.LE_SHOW_TO_HIT_ATTACK, "FireMainGunAtEnemyUnits(): Main Gun Maintains ROF");
+            Logger.Log(LogEnum.LE_SHOW_TO_HIT_ATTACK, "Fire_MainGunAtEnemyUnits(): Main Gun Maintains ROF");
          }
          else
          {
-            Logger.Log(LogEnum.LE_SHOW_TO_HIT_ATTACK, "FireMainGunAtEnemyUnits(): Main Gun NO ROF Follow Up rof#=" + rateOfFireNumber.ToString() + " < dr=" + dieRoll.ToString());
+            Logger.Log(LogEnum.LE_SHOW_TO_HIT_ATTACK, "Fire_MainGunAtEnemyUnits(): Main Gun NO ROF Follow Up rof#=" + rateOfFireNumber.ToString() + " < dr=" + dieRoll.ToString());
             if (0 == gi.ShermanHits.Count)
             {
-               Logger.Log(LogEnum.LE_ERROR, "FireMainGunAtEnemyUnits(): gi.ShermanHits.Count=0");
+               Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnits(): gi.ShermanHits.Count=0");
                return false;
             }
             ShermanAttack hitToResolve = gi.ShermanHits[0];
@@ -6746,6 +6769,8 @@ namespace Pattons_Best
                gi.TargetMainGun.IsKilled = true;
                gi.TargetMainGun.IsMoving = false;
                gi.TargetMainGun.SetBloodSpots();
+               if (true == gi.Sherman.EnemyAcquiredShots.ContainsKey(gi.TargetMainGun.Name)) // reset to zero if target is killed
+                  gi.Sherman.EnemyAcquiredShots[gi.TargetMainGun.Name] = 0;
                return true;
             }
             if (TableMgr.NO_CHANCE == modifier)
@@ -6803,6 +6828,8 @@ namespace Pattons_Best
                      gi.TargetMainGun.IsKilled = true;
                      gi.TargetMainGun.IsMoving = false;
                      gi.TargetMainGun.SetBloodSpots();
+                     if (true == gi.Sherman.EnemyAcquiredShots.ContainsKey(gi.TargetMainGun.Name)) // reset to zero if target is killed
+                        gi.Sherman.EnemyAcquiredShots[gi.TargetMainGun.Name] = 0;
                      return true;
                   }
                   else if (TableMgr.NO_CHANCE == toKillNum)
@@ -6872,6 +6899,8 @@ namespace Pattons_Best
                      gi.TargetMainGun.IsKilled = true;
                      gi.TargetMainGun.IsMoving = false;
                      gi.TargetMainGun.SetBloodSpots();
+                     if (true == gi.Sherman.EnemyAcquiredShots.ContainsKey(gi.TargetMainGun.Name)) // reset to zero if target is killed
+                        gi.Sherman.EnemyAcquiredShots[gi.TargetMainGun.Name] = 0;
                      return true;
                   }
                   else if (TableMgr.NO_CHANCE == toKillNum)
@@ -6908,6 +6937,8 @@ namespace Pattons_Best
                      gi.TargetMainGun.IsKilled = true;
                      gi.TargetMainGun.IsMoving = false;
                      gi.TargetMainGun.SetBloodSpots();
+                     if (true == gi.Sherman.EnemyAcquiredShots.ContainsKey(gi.TargetMainGun.Name)) // reset to zero if target is killed
+                        gi.Sherman.EnemyAcquiredShots[gi.TargetMainGun.Name] = 0;
                      return true;
                   }
                   else if (TableMgr.NO_CHANCE == toKillNum)
@@ -7019,6 +7050,11 @@ namespace Pattons_Best
          {
             Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitCleanup(): gi.TargetMainGun=null");
             return false;
+         }
+         if (true == gi.TargetMainGun.IsKilled)
+         {
+            if (true == gi.Sherman.EnemyAcquiredShots.ContainsKey(gi.TargetMainGun.Name)) // reset to zero if target is killed
+               gi.Sherman.EnemyAcquiredShots[gi.TargetMainGun.Name] = 0;
          }
          //-------------------------------
          string key = gi.EventActive;
@@ -7536,6 +7572,7 @@ namespace Pattons_Best
          gi.IsShermanDeliberateImmobilization = false; // Reset Round()
          gi.NumSmokeAttacksThisRound = 0;
          gi.ShermanHits.Clear();
+         
          //-------------------------------------------------------
          gi.IsCommanderDirectingMgFire = false;
          gi.IsShermanFiringAaMg = false;

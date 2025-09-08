@@ -35,7 +35,7 @@ namespace Pattons_Best
       bool IsIncapacitated { get; set; }
       bool IsFired { get; set; }
       bool IsSpotted { get; set; }
-      int NumOfAcquiredMarker { get; set; }
+      Dictionary<string, int> EnemyAcquiredShots { set; get; }
       //----------------------------------------
       bool IsVehicle { get; set; }
       bool IsMovingInOpen { get; set; }

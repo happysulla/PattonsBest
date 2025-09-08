@@ -205,15 +205,6 @@ namespace Pattons_Best
          myWpReadyRackCount = 0;
          myHbciReadyRackCount = 0;
          myHvapReadyRackCount = 0;
-         ////--------------------------------------------------
-         //if ("75" != myMainGun)
-         //{
-         //   if( false == SetLoadNormalState())
-         //   {
-         //      Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): SetLoadNormalState() return false");
-         //      return false;
-         //   }
-         //}
          //--------------------------------------------------
          if (false == UpdateGrid())
          {
@@ -239,6 +230,8 @@ namespace Pattons_Best
             return false;
          }
          string tType = lastReport.TankCardNum.ToString();
+         //--------------------------------------------------
+         myGameInstance.ReadyRacks.Clear();
          //--------------------------------------------------
          ITerritory? t = Territories.theTerritories.Find("ReadyRackHe0", tType);
          if (null == t)
@@ -293,13 +286,11 @@ namespace Pattons_Best
             IMapItem rr3 = new MapItem("ReadyRackHvap", 0.9, "c12RoundsLeft", t);
             myGameInstance.ReadyRacks.Add(rr3);
          }
-         // Assign 60% or rounds to HE
-         myHeRoundCount = (int)Math.Ceiling((double)myUnassignedCount * 0.6);
+         myHeRoundCount = (int)Math.Ceiling((double)myUnassignedCount * 0.6);                   // Assign 60% or rounds to HE
          myUnassignedCount -= myHeRoundCount;
          myApRoundCount = myUnassignedCount; // assign remaining rounds to AP
          myUnassignedCount = 0;
-         // Assign default rack with 60% HE
-         myHeReadyRackCount = (int)Math.Ceiling((double)myUnassignedReadyRack * 0.6);
+         myHeReadyRackCount = (int)Math.Ceiling((double)myUnassignedReadyRack * 0.6);          // Assign default rack with 60% HE
          myUnassignedReadyRack -= myHeReadyRackCount;
          myApReadyRackCount = myUnassignedReadyRack;
          myUnassignedReadyRack = 0;
