@@ -1077,7 +1077,7 @@ namespace Pattons_Best
          {
             case E046Enum.ACTIVATION:
                //dieRoll = 11; // <cgs> TEST - AdvanceRetreat - infantry appearing
-               //dieRoll = 45; // <cgs> TEST - KillYourTank - tanks appearing in battle scenario
+               dieRoll = 45; // <cgs> TEST - KillYourTank - TANKS APPEARING in battle scenario
                myGridRows[i].myDieRollActivation = dieRoll;
                myGridRows[i].myActivation = TableMgr.SetEnemyUnit(myScenario, myDay, dieRoll);
                if (false == CreateMapItem(i))

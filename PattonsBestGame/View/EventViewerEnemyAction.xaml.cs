@@ -1782,7 +1782,7 @@ namespace Pattons_Best
                }
                else if (4 == myRollResultColNum)
                {
-                  dieRoll = 100; // <cgs> TEST - KillYourTank - To Kill your Tank
+                  //dieRoll = 100; // <cgs> TEST - KillYourTank - To Kill your Tank
                   Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Killing Your Tank for myState=" + myState.ToString() + " dr=" + dieRoll);
                   myGridRows[i].myDieRollToKillYourTank = dieRoll;
                   if( dieRoll <= myGridRows[i].myToKillNumberYourTank )

@@ -4832,17 +4832,17 @@ namespace Pattons_Best
                   if ('C' == range)
                   {
                      toHitModifierNum += 65;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): IsShermanDeliberateImmobilization close range +65 mod=" + toHitModifierNum.ToString());
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): Is_ShermanDeliberateImmobilization close range +65 mod=" + toHitModifierNum.ToString());
                   }
                   else if ('M' == range)
                   {
                      toHitModifierNum += 55;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): IsShermanDeliberateImmobilization medium rating +55 mod=" + toHitModifierNum.ToString());
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): Is_ShermanDeliberateImmobilization medium rating +55 mod=" + toHitModifierNum.ToString());
                   }
                   else if ('L' == range)
                   {
                      toHitModifierNum += 45;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): IsShermanDeliberateImmobilization Long Range +45 mod=" + toHitModifierNum.ToString());
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): Is_ShermanDeliberateImmobilization Long Range +45 mod=" + toHitModifierNum.ToString());
                   }
                   else
                   {

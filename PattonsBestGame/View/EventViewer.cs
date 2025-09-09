@@ -2498,23 +2498,31 @@ namespace Pattons_Best
                }
                else
                {
-                  myTextBlock.Inlines.Add("  =  HIT");
-                  switch (gi.FiredAmmoType)
+                  if( true == gi.IsShermanDeliberateImmobilization)
                   {
-                     case "Ap":
-                     case "Hvap":
-                        imge53b = new Image { Name = "BattleRoundSequenceShermanHit", Width = 80, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("c100ApHit") };
-                        break;
-                     case "He":
-                        imge53b = new Image { Name = "BattleRoundSequenceShermanHit", Width = 80, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("c101HeHit") };
-                        break;
-                     case "Wp":
-                     case "Hbci":
-                        imge53b = new Image { Name = "BattleRoundSequenceShermanHit", Width = 80, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("c102SmokeHit") };
-                        break;
-                     default:
-                        Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToGetToHit(): reached default gunLoad=" + gi.ShermanTypeOfFire + " for key=" + key);
-                        return false;
+                     myTextBlock.Inlines.Add("  =  IMMOBILIZED");
+                     imge53b = new Image { Name = "BattleRoundSequenceShermanHit", Width = 80, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("c106ThrownTrack") };
+                  }
+                  else
+                  {
+                     myTextBlock.Inlines.Add("  =  HIT");
+                     switch (gi.FiredAmmoType)
+                     {
+                        case "Ap":
+                        case "Hvap":
+                           imge53b = new Image { Name = "BattleRoundSequenceShermanHit", Width = 80, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("c100ApHit") };
+                           break;
+                        case "He":
+                           imge53b = new Image { Name = "BattleRoundSequenceShermanHit", Width = 80, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("c101HeHit") };
+                           break;
+                        case "Wp":
+                        case "Hbci":
+                           imge53b = new Image { Name = "BattleRoundSequenceShermanHit", Width = 80, Height = 80, Source = MapItem.theMapImages.GetBitmapImage("c102SmokeHit") };
+                           break;
+                        default:
+                           Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToGetToHit(): reached default gunLoad=" + gi.ShermanTypeOfFire + " for key=" + key);
+                           return false;
+                     }
                   }
                }
                myTextBlock.Inlines.Add(new LineBreak());
@@ -2797,27 +2805,27 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifierImmobilization(): gi.TargetMainGun=null");
             return false;
          }
-         if ((true == gi.TargetMainGun.IsVehicle) && ("Direct" ==  gi.ShermanTypeOfFire)) // EventViewer.UpdateEventContentGetToHitModifierImmobilization()
+         if ((true == gi.TargetMainGun.IsVehicle) && ("Direct" ==  gi.ShermanTypeOfFire) && (false == gi.TargetMainGun.IsHullDown)) // EventViewer.UpdateEventContent_GetToHitModifierImmobilization()
          {
             if (3 != enemyUnit.TerritoryCurrent.Name.Length)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentGetToHitModifierImmobilization(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
                return false;
             }
-            CheckBox cbe053 = new CheckBox() { FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = System.Windows.VerticalAlignment.Center };
-            if( Utilities.NO_RESULT == gi.DieResults["e053b"][0])
+            CheckBox cbe053 = new CheckBox() { IsEnabled=false, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = System.Windows.VerticalAlignment.Center };
+            if ( Utilities.NO_RESULT == gi.DieResults["e053b"][0])
+            {
                cbe053.IsEnabled = true;
-            else
-               cbe053.IsEnabled = false;
-            if (true == gi.IsShermanDeliberateImmobilization)
-            {
-               cbe053.IsChecked = true;
-               cbe053.Unchecked += CheckBoxImmobilization_Unchecked;
-            }
-            else
-            {
-               cbe053.IsChecked = false;
-               cbe053.Checked += CheckBoxImmobilization_Checked;
+               if (true == gi.IsShermanDeliberateImmobilization)
+               {
+                  cbe053.IsChecked = true;
+                  cbe053.Unchecked += CheckBoxImmobilization_Unchecked;
+               }
+               else
+               {
+                  cbe053.IsChecked = false;
+                  cbe053.Checked += CheckBoxImmobilization_Checked;
+               }
             }
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new LineBreak());
@@ -3120,6 +3128,18 @@ namespace Pattons_Best
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new Run("                                            "));
             Image imge53e = new Image { Name = "Continue53f", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+            myTextBlock.Inlines.Add(new InlineUIContainer(imge53e));
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new Run("Click image to continue."));
+         }
+         else if (true == hit.myIsImmobilization)
+         {
+            myTextBlock.Inlines.Add(new Run("Ammo hit the tracks resulting in immobilization."));
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new Run("                                            "));
+            Image imge53e = new Image { Name = "ThrownTrack", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c106ThrownTrack") };
             myTextBlock.Inlines.Add(new InlineUIContainer(imge53e));
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new LineBreak());
@@ -5544,12 +5564,13 @@ namespace Pattons_Best
          cb.IsChecked = true;
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CheckBoxCmdFire_Checked(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "CheckBox_Immobilization_Checked(): myGameInstance=null");
             return;
          }
          myGameInstance.IsShermanDeliberateImmobilization = true;
+         Logger.Log(LogEnum.LE_SHOW_IMMOBILIZATION, "CheckBoxImmobilization_Checked(): gi.IsShermanDeliberateImmobilization=" + myGameInstance.IsShermanDeliberateImmobilization.ToString());
          if (false == OpenEvent(myGameInstance, myGameInstance.EventActive))
-            Logger.Log(LogEnum.LE_ERROR, "CheckBoxImmobilization_Checked(): OpenEvent() returned false ae=" + myGameInstance.EventActive );
+            Logger.Log(LogEnum.LE_ERROR, "CheckBox_Immobilization_Checked(): OpenEvent() returned false ae=" + myGameInstance.EventActive );
       }
       private void CheckBoxImmobilization_Unchecked(object sender, RoutedEventArgs e)
       {
@@ -5561,6 +5582,7 @@ namespace Pattons_Best
             return;
          }
          myGameInstance.IsShermanDeliberateImmobilization = false;
+         Logger.Log(LogEnum.LE_SHOW_IMMOBILIZATION, "CheckBoxCmdFire_Unchecked(): gi.IsShermanDeliberateImmobilization=" + myGameInstance.IsShermanDeliberateImmobilization.ToString());
          if (false == OpenEvent(myGameInstance, myGameInstance.EventActive))
             Logger.Log(LogEnum.LE_ERROR, "CheckBoxImmobilization_Checked(): OpenEvent() returned false ae=" + myGameInstance.EventActive );
       }

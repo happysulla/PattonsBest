@@ -60,11 +60,13 @@ namespace Pattons_Best
       public bool myIsCriticalHit;
       public string myHitLocation = ""; // Turret, Hull, Thrown Track
       public bool myIsNoChance = false;
-      public ShermanAttack( string attack, string ammo, bool critical )
+      public bool myIsImmobilization = false;
+      public ShermanAttack( string attack, string ammo, bool critical, bool immobilization )
       {
          myAttackType = attack;
          myAmmoType = ammo;
          myIsCriticalHit = critical;
+         myIsImmobilization = true;
       }
    }
    //-------------------------------------------------

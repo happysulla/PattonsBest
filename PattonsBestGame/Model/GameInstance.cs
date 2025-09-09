@@ -772,7 +772,7 @@ namespace Pattons_Best
                this.TargetMainGun.EnemyAcquiredShots["Sherman"]++;
             else
                this.TargetMainGun.EnemyAcquiredShots["Sherman"] = 1;
-            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Fire_AndReloadGun(): +++numOfShots=" + this.TargetMainGun.EnemyAcquiredShots["Sherman"].ToString());
+            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Fire_AndReloadGun(): +++++> numOfShots=" + this.TargetMainGun.EnemyAcquiredShots["Sherman"].ToString());
          }
          //-----------------------------------------------
          string gunLoad = this.GetGunLoadType();  // This is the ammo that fired
