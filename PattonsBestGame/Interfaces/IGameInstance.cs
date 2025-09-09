@@ -66,7 +66,7 @@ namespace Pattons_Best
          myAttackType = attack;
          myAmmoType = ammo;
          myIsCriticalHit = critical;
-         myIsImmobilization = true;
+         myIsImmobilization = immobilization;
       }
    }
    //-------------------------------------------------
