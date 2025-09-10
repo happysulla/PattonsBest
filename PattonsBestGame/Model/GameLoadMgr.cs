@@ -1030,101 +1030,101 @@ namespace Pattons_Best
          aXmlDocument.LoadXml("<GameInstance></GameInstance>");
          if (null == aXmlDocument.DocumentElement)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): aXmlDocument.DocumentElement=null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): aXmlDocument.DocumentElement=null");
             return null;
          }
          XmlNode? root = aXmlDocument.DocumentElement;
          if (null == root)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): root is null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): root is null");
             return null;
          }
          //------------------------------------------
          XmlElement? versionElem = aXmlDocument.CreateElement("Version");
          if (null == versionElem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): aXmlDocument.DocumentElement.LastChild=null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): aXmlDocument.DocumentElement.LastChild=null");
             return null;
          }
          int majorVersion = GetMajorVersion();
          if (majorVersion < 0)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml():  0 > majorVersion=" + majorVersion.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml():  0 > majorVersion=" + majorVersion.ToString());
             return null;
          }
          versionElem.SetAttribute("value", majorVersion.ToString());
          XmlNode? versionNode = root.AppendChild(versionElem);
          if (null == versionNode)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(versionNode) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(versionNode) returned null");
             return null;
          }
          //------------------------------------------
          if (false == CreateXmlGameOptions(aXmlDocument, gi.Options))
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateXmlOptions() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlOptions() returned false");
             return null;
          }
          //------------------------------------------
          if (false == CreateXmlGameStat(aXmlDocument, gi.Statistic))
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateXmlGameStat() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlGameStat() returned false");
             return null;
          }
          //------------------------------------------
          XmlElement? elem = aXmlDocument.CreateElement("EventActive");
          if (null == elem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(EventActive) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(EventActive) returned null");
             return null;
          }
          elem.SetAttribute("value", gi.EventActive);
          XmlNode? node = root.AppendChild(elem);
          if (null == node)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(EventActive) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(EventActive) returned null");
             return null;
          }
          //------------------------------------------
          elem = aXmlDocument.CreateElement("EventDisplayed");
          if (null == elem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(EventDisplayed) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(EventDisplayed) returned null");
             return null;
          }
          elem.SetAttribute("value", gi.EventDisplayed);
          node = root.AppendChild(elem);
          if (null == node)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(EventDisplayed) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(EventDisplayed) returned null");
             return null;
          }
          //------------------------------------------
          elem = aXmlDocument.CreateElement("EventStart");
          if (null == elem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(EventStart) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(EventStart) returned null");
             return null;
          }
          elem.SetAttribute("value", gi.EventStart);
          node = root.AppendChild(elem);
          if (null == node)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(EventStart) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(EventStart) returned null");
             return null;
          }
          //------------------------------------------
          elem = aXmlDocument.CreateElement("GameTurn");
          if (null == elem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(GameTurn) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(GameTurn) returned null");
             return null;
          }
          elem.SetAttribute("value", gi.GameTurn.ToString());
          node = root.AppendChild(elem);
          if (null == node)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(GameTurn) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(GameTurn) returned null");
             return null;
          }
          return aXmlDocument;

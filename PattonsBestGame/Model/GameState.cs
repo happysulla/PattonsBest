@@ -1466,7 +1466,11 @@ namespace Pattons_Best
                   gi.GamePhase = GamePhase.MorningBriefing;
                   gi.EventDisplayed = gi.EventActive = "e008";
                   gi.DieRollAction = GameAction.MorningBriefingWeatherRoll;
-                  AddStartingTestingOptions(gi);
+                  if( false == AddStartingTestingState(gi))
+                  {
+                     returnStatus = "AddStartingTestingState(TestingStartMorningBriefing) returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
+                  }
                }
                break;
             case GameAction.TestingStartPreparations:
@@ -1482,7 +1486,11 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
                   gi.Sherman.TerritoryCurrent = gi.Home;
                   gi.BattleStacks.Add(gi.Sherman);
-                  AddStartingTestingOptions(gi);
+                  if (false == AddStartingTestingState(gi))
+                  {
+                     returnStatus = "AddStartingTestingState(TestingStartPreparations) returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
+                  }
                }
                break;
             case GameAction.TestingStartMovement:
@@ -1496,7 +1504,11 @@ namespace Pattons_Best
                   gi.GamePhase = GamePhase.Movement;
                   gi.EventDisplayed = gi.EventActive = "e018";
                   gi.DieRollAction = GameAction.MovementStartAreaSetRoll;
-                  AddStartingTestingOptions(gi);
+                  if (false == AddStartingTestingState(gi))
+                  {
+                     returnStatus = "AddStartingTestingState(TestingStartMovement) returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
+                  }
                }
                break;
             case GameAction.TestingStartBattle:
@@ -1509,16 +1521,24 @@ namespace Pattons_Best
                {
                   gi.GamePhase = GamePhase.Battle;
                   gi.DieRollAction = GameAction.DieRollActionNone;
-                  AddStartingTestingOptions(gi);
-                  if (true == gi.IsAdvancingFireChosen)
+                  if (false == AddStartingTestingState(gi))
                   {
-                     gi.AdvancingFireMarkerCount = 6;
-                     gi.EventDisplayed = gi.EventActive = "e034"; // TestingStartBattle
-                     action = GameAction.BattleStart;
+                     returnStatus = "AddStartingTestingState(TestingStartBattle) returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
                   }
                   else
                   {
-                     action = GameAction.BattleActivation;
+
+                     if (true == gi.IsAdvancingFireChosen)
+                     {
+                        gi.AdvancingFireMarkerCount = 6;
+                        gi.EventDisplayed = gi.EventActive = "e034"; // TestingStartBattle
+                        action = GameAction.BattleStart;
+                     }
+                     else
+                     {
+                        action = GameAction.BattleActivation;
+                     }
                   }
                }
                break;
@@ -1533,7 +1553,11 @@ namespace Pattons_Best
                   gi.GamePhase = GamePhase.Battle;
                   gi.EventDisplayed = gi.EventActive = "e035";
                   gi.DieRollAction = GameAction.BattleAmbushRoll;
-                  AddStartingTestingOptions(gi);
+                  if (false == AddStartingTestingState(gi))
+                  {
+                     returnStatus = "AddStartingTestingState(TestingStartAmbush) returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
+                  }
                }
                break;
             case GameAction.UpdateEventViewerActive: // Only change active event
@@ -1677,7 +1701,7 @@ namespace Pattons_Best
             report.Scenario = EnumScenario.Battle;
          else
             report.Scenario = EnumScenario.Counterattack;
-         report.Scenario = EnumScenario.Battle; // <cgs> TEST - KillYourTank - choose scenario
+         report.Scenario = EnumScenario.Advance; // <cgs> TEST - KillYourTank - choose scenario
          //-------------------------------
          gi.NewMembers.Add(report.Commander);   // PerformAutoSetupSkipCrewAssignments()
          gi.NewMembers.Add(report.Gunner);      // PerformAutoSetupSkipCrewAssignments()
@@ -2277,14 +2301,23 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool AddStartingTestingOptions(IGameInstance gi)
+      private bool AddStartingTestingState(IGameInstance gi)
       {
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingOptions(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Add_StartingTestingState(): lastReport=null");
             return false;
          }
+         //--------------------------------
+         Option? option = gi.Options.Find("AutoEnemyActivation");
+         if (null == option)
+         {
+            option = new Option("AutoEnemyActivation", false);
+            gi.Options.Add(option);
+         }
+         option.IsEnabled = true;
+         gi.Options.Add(option);
          //--------------------------------
          gi.Day = 100; // Afetr Nov 1944
          //--------------------------------
@@ -2325,7 +2358,7 @@ namespace Pattons_Best
          //ITerritory? t = Territories.theTerritories.Find("B6M");
          //if( null == t )
          //{
-         //   Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingOptions(): t=null");
+         //   Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingState(): t=null");
          //   return false;
          //}
          //for (int i = 0; i < 3; i++)
@@ -7600,7 +7633,7 @@ namespace Pattons_Best
          gi.ShermanHits.Clear();
          
          //-------------------------------------------------------
-         gi.IsCommanderDirectingMgFire = false;
+         gi.IsCommanderDirectingMgFire = false;       // Reset Round()
          gi.IsShermanFiringAaMg = false;
          gi.IsShermanFiringBowMg = false;
          gi.IsShermanFiringCoaxialMg = false;
@@ -8062,7 +8095,7 @@ namespace Pattons_Best
          gi.AcquiredShots.Clear();                  // Reset_Day()
          gi.ShermanHits.Clear();
          //-------------------------------------------------------
-         gi.IsCommanderDirectingMgFire = false;
+         gi.IsCommanderDirectingMgFire = false;     // Reset_Day()
          gi.IsShermanFiringAaMg = false;
          gi.IsShermanFiringBowMg = false;
          gi.IsShermanFiringCoaxialMg = false;

@@ -7304,7 +7304,7 @@ namespace Pattons_Best
                isShermanMovingOrPivoting = true;
          }
          //------------------------------------
-         if (true == gi.IsCommanderDirectingMgFire)
+         if (true == gi.IsCommanderDirectingMgFire) // Get_ShermanMgToKillModifier()
          {
             ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
             if (null == commander)
@@ -7313,7 +7313,7 @@ namespace Pattons_Best
                return FN_ERROR;
             }
             toKillModifierNum -= commander.Rating;
-            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): commander directing fire rating -" + commander.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): commander directing fire rating -" + commander.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
          if ((true == enemyUnit.IsMovingInOpen) && ("LW" == enemyUnit.GetEnemyUnit()) )

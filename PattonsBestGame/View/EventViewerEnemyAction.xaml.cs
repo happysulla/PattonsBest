@@ -575,7 +575,7 @@ namespace Pattons_Best
                }
                if (true == isAdvanceFire)
                {
-                  System.Windows.Controls.Image imgAdv = new System.Windows.Controls.Image { Name = "AdvanceFire", Source = MapItem.theMapImages.GetBitmapImage("c44AdvanceFIre"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  System.Windows.Controls.Image imgAdv = new System.Windows.Controls.Image { Name = "AdvanceFire", Source = MapItem.theMapImages.GetBitmapImage("c44AdvanceFire"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                   myStackPanelAssignable.Children.Add(imgAdv);
                }
                else if (true == isEnemyFiring1)

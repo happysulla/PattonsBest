@@ -1948,7 +1948,7 @@ namespace Pattons_Best
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak()); 
                      myTextBlock.Inlines.Add(new InlineUIContainer(cbe054));
-                     myTextBlock.Inlines.Add(new Run(" Check if Commander directs fire - only allowed once"));
+                     myTextBlock.Inlines.Add(new Run(" Check if Commander directs fire - only allowed once per round"));
                   }
                }
                break;
@@ -3561,7 +3561,7 @@ namespace Pattons_Best
          //------------------------------------
          StringBuilder sb = new StringBuilder();
          //------------------------------------
-         if (true == gi.IsCommanderDirectingMgFire)
+         if (true == gi.IsCommanderDirectingMgFire) // Commander directs MG fire for all Advancing Fire in Battle Round - maybe not same as rules, but not a major game changer
          {
             ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
             if (null == commander)

@@ -518,7 +518,7 @@ namespace Pattons_Best
                }
                if (true == isAdvanceFire)
                {
-                  System.Windows.Controls.Image imgAdv = new System.Windows.Controls.Image { Name = "MgAdvanceFire", Source = MapItem.theMapImages.GetBitmapImage("c44AdvanceFIre"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
+                  System.Windows.Controls.Image imgAdv = new System.Windows.Controls.Image { Name = "MgAdvanceFire", Source = MapItem.theMapImages.GetBitmapImage("c44AdvanceFire"), Width = Utilities.ZOOM * Utilities.theMapItemSize, Height = Utilities.ZOOM * Utilities.theMapItemSize };
                   myStackPanelAssignable.Children.Add(imgAdv);
                }
                else
@@ -1073,11 +1073,20 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): 0 > i=" + i.ToString());
             return;
          }
-         switch(myState)
+         //------------------------------------------------------
+         Option? optionAutoActivation = myGameInstance.Options.Find("AutoEnemyActivation");
+         if (null == optionAutoActivation)
+         {
+            optionAutoActivation = new Option("AutoEnemyActivation", false);
+            myGameInstance.Options.Add(optionAutoActivation);
+         }
+         //------------------------------------------------------
+         switch (myState)
          {
             case E046Enum.ACTIVATION:
-               //dieRoll = 11; // <cgs> TEST - AdvanceRetreat - infantry appearing
-               dieRoll = 45; // <cgs> TEST - KillYourTank - TANKS APPEARING in battle scenario
+               dieRoll = 11; // <cgs> TEST - AdvanceRetreat - infantry appearing
+               //dieRoll = 45; // <cgs> TEST - KillYourTank - TANKS APPEARING in battle scenario
+               //dieRoll = 91; // <cgs> TEST - PSW/SPW APPEARING in Advance scenario
                myGridRows[i].myDieRollActivation = dieRoll;
                myGridRows[i].myActivation = TableMgr.SetEnemyUnit(myScenario, myDay, dieRoll);
                if (false == CreateMapItem(i))
@@ -1093,11 +1102,28 @@ namespace Pattons_Best
                   myIsRollInProgress = false;
                   return;
                }
+               if( true == optionAutoActivation.IsEnabled) // Skip die rolls for 
+               {
+                  if( false == ShowDieResultsAutoRolls(i))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResultsAutoRolls() return false for i=" + i.ToString());
+                     return;
+                  }
+               }
                myState = E046Enum.PLACE_SECTOR;
                for (int j = 0; j < myMaxRowCount; ++j)
                {
                   if (Utilities.NO_RESULT == myGridRows[j].myDieRollActivation)
                      myState = E046Enum.ACTIVATION;
+               }
+               if ( (E046Enum.PLACE_SECTOR == myState) && (true == optionAutoActivation.IsEnabled) )
+               {
+                  myState = E046Enum.SHOW_RESULTS;
+                  for (int j = 0; j < myMaxRowCount; ++j)
+                  {
+                     if (Utilities.NO_RESULT == myGridRows[j].myDieRollTerrain)
+                        myState = E046Enum.PLACE_TERRAIN;
+                  }
                }
                break;
             //-------------------------------------------------------------------
@@ -1111,11 +1137,28 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): CreateMapItem() returned false");
                   return;
                }
+               if (true == optionAutoActivation.IsEnabled)
+               {
+                  if (false == ShowDieResultsAutoRolls(i))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResultsAutoRolls() return false for i=" + i.ToString());
+                     return;
+                  }
+               }
                myState = E046Enum.PLACE_SECTOR;
                for (int j = 0; j < myMaxRowCount; ++j)
                {
                   if (Utilities.NO_RESULT == myGridRows[j].myDieRollActivation)
                      myState = E046Enum.ACTIVATION;
+               }
+               if ((E046Enum.PLACE_SECTOR == myState) && (true == optionAutoActivation.IsEnabled))
+               {
+                  myState = E046Enum.SHOW_RESULTS;
+                  for (int j = 0; j < myMaxRowCount; ++j)
+                  {
+                     if (Utilities.NO_RESULT == myGridRows[j].myDieRollTerrain)
+                        myState = E046Enum.PLACE_TERRAIN;
+                  }
                }
                break;
             //-------------------------------------------------------------------
@@ -1167,11 +1210,11 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyNewFacing() returned ERROR");
                   return;
                }
-               Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "SetupBattle(): myState=" + myState.ToString() + " myGridRows[" + i.ToString() + "].myFacing=" + myGridRows[i].myFacing);
+               Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "ShowDieResults(): myState=" + myState.ToString() + " myGridRows[" + i.ToString() + "].myFacing=" + myGridRows[i].myFacing);
                IMapItem? mi = myGridRows[i].myMapItem;
                if (null == mi)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): mi=null for i=" + i.ToString());
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): mi=null for i=" + i.ToString());
                   return;
                }
                if (false == mi.UpdateMapRotation(myGridRows[i].myFacing))
@@ -1224,7 +1267,7 @@ namespace Pattons_Best
                }
                myAdvanceFireGridRows[i].myDieRollAdvanceFire = dieRoll;
                int combo = myAdvanceFireGridRows[i].myAdvanceFireBaseNum - myAdvanceFireGridRows[i].myAdvanceFireModifier;
-               if (dieRoll < 4) // gun malfunction already checked before enemy unit arrives
+               if (dieRoll < 4) // crticial hit automatically hits - gun malfunction already checked before enemy unit arrives
                {
                   myAdvanceFireGridRows[i].myAdvanceFireResult = "KO";
                   myAdvanceFireGridRows[i].myEnemyUnit.IsKilled = true;
@@ -1271,6 +1314,72 @@ namespace Pattons_Best
          GameAction outAction = GameAction.UpdateBattleBoard;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
          Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "EventViewerBattleSetup.ShowDieResults(): ---------------myState=" + myState.ToString());
+      }
+      private bool ShowDieResultsAutoRolls(Index i)
+      {
+         myGridRows[i].myDieRollSector = Utilities.RandomGenerator.Next(1, 11);
+         if (false == ShowDieResultUpdateSector(i))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): ShowDieResultUpdateSector() returned false");
+            return false;
+         }
+         //------------------------------------------------------------
+         myGridRows[i].myDieRollRange = Utilities.RandomGenerator.Next(1, 11);
+         myGridRows[i].myRange = TableMgr.GetEnemyRange(myAreaType, myGridRows[i].myActivation, myGridRows[i].myDieRollRange);
+         if ("ERROR" == myGridRows[i].myRange)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): TableMgr.GetEnemyRange() returned ERROR");
+            return false;
+         }
+         if (false == ShowDieResultUpdateRange(i))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): ShowDieResultUpdateRange() returned false");
+            return false;
+         }
+         //------------------------------------------------------------
+         if (true == myIsVehicleActivated)
+         {
+            myGridRows[i].myDieRollFacing = Utilities.RandomGenerator.Next(1, 11);
+            myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGridRows[i].myActivation, myGridRows[i].myDieRollFacing);
+            if ("ERROR" == myGridRows[i].myFacing)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): TableMgr.GetEnemyNewFacing() returned ERROR");
+               return false;
+            }
+            Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "SetupBattle(): myState=" + myState.ToString() + " myGridRows[" + i.ToString() + "].myFacing=" + myGridRows[i].myFacing);
+            IMapItem? miVehicle = myGridRows[i].myMapItem;
+            if (null == miVehicle)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): mi=null for i=" + i.ToString());
+               return false;
+            }
+            if (false == miVehicle.UpdateMapRotation(myGridRows[i].myFacing))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): UpdateMapRotation() returned false");
+               return false;
+            }
+         }
+         //------------------------------------------------------------
+         myGridRows[i].myDieRollTerrain = Utilities.RandomGenerator.Next(1, 11);
+         myGridRows[i].myTerrain = TableMgr.GetEnemyTerrain(myScenario, myDay, myAreaType, myGridRows[i].myActivation, myGridRows[i].myDieRollTerrain);
+         if ("ERROR" == myGridRows[i].myTerrain)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): TableMgr.GetEnemyTerrain() returned ERROR");
+            return false;
+         }
+         if (false == ShowDieResultUpdateTerrain(i))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): ShowDieResultUpdateTerrain() returned ERROR");
+            return false;
+         }
+         //------------------------------------------------------------
+         myState = E046Enum.SHOW_RESULTS;
+         for (int j = 0; j < myMaxRowCount; ++j)
+         {
+            if (Utilities.NO_RESULT == myGridRows[j].myDieRollTerrain)
+               myState = E046Enum.PLACE_TERRAIN;
+         }
+         return true;
       }
       private bool ShowDieResultUpdateSector(Index i)
       {
