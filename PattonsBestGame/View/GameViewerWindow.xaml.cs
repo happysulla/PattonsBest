@@ -137,7 +137,6 @@ namespace Pattons_Best
       private readonly List<Polygon> myPolygons = new List<Polygon>();
       private readonly List<Ellipse> myEllipses = new List<Ellipse>();
       private Rectangle? myRectangleMoving = null;               // Not used - Rectangle that is moving with button
-      private ITerritory? myTerritorySelected = null;
       private Storyboard myStoryboard = new Storyboard();    // Show Statistics Marquee at end of game 
       private TextBlock myTextBoxMarquee; // Displayed at end to show Statistics of games
       private Double mySpeedRatioMarquee = 1.0;

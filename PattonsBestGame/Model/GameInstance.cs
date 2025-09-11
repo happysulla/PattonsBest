@@ -88,6 +88,10 @@ namespace Pattons_Best
       public List<ShermanAttack> ShermanHits { set; get; } = new List<ShermanAttack>();
       public ShermanDeath? Death { set; get; } = null;
       //---------------------------------------------------------------
+      public string IdentifiedTank { set; get; } = "";
+      public string IdentifiedAtg { set; get; } = "";
+      public string IdentifiedSpg { set; get; } = "";
+      //---------------------------------------------------------------
       public bool IsShermanFiringAaMg { set; get; } = false;
       public bool IsShermanFiringBowMg { set; get; } = false;
       public bool IsShermanFiringCoaxialMg { set; get; } = false;

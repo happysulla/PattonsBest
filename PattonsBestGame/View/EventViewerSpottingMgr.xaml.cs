@@ -173,6 +173,10 @@ namespace Pattons_Best
                isMainGunBeingFired = true;
          }
          //--------------------------------------------------
+         myGameInstance.IdentifiedAtg = "";
+         myGameInstance.IdentifiedTank= "";
+         myGameInstance.IdentifiedSpg = "";
+         //--------------------------------------------------
          myCallback = callback;
          myState = E0472Enum.SELECT_CREWMAN;
          myIsRollInProgress = false;

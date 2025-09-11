@@ -144,6 +144,10 @@ namespace Pattons_Best
       List<ShermanAttack> ShermanHits { set; get; }
       ShermanDeath? Death { set; get; }
       //------------------------------------------------
+      string IdentifiedTank { set; get; }
+      string IdentifiedAtg { set; get; }
+      string IdentifiedSpg { set; get; }
+      //------------------------------------------------
       bool IsShermanFiringAaMg { set; get; }
       bool IsShermanFiringBowMg { set; get; }
       bool IsShermanFiringCoaxialMg { set; get; }
