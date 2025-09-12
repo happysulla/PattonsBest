@@ -538,8 +538,10 @@ namespace Pattons_Best
             case "LW":
                if (dieRoll < 7)
                   return "C";
-               else
+               else if (dieRoll < 11)
                   return "M";
+               else
+                  return "L";  // test purposes only
             case "MG":
                if (dieRoll < 4)
                   return "C";

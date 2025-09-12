@@ -1326,7 +1326,7 @@ namespace Pattons_Best
          }
          //------------------------------------------------------------
          int dieRoll = Utilities.RandomGenerator.Next(1, 11);
-         dieRoll = 10; // <cgs> TEST - long range
+         dieRoll = 11; // <cgs> TEST - long range
          myGridRows[i].myDieRollRange = dieRoll;
          myGridRows[i].myRange = TableMgr.GetEnemyRange(myAreaType, myGridRows[i].myActivation, dieRoll);
          if ("ERROR" == myGridRows[i].myRange)
