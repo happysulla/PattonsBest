@@ -530,12 +530,9 @@ Since there was a hit, roll again to see if your tank is knocked out (KO):
 e045	"<Bold>e045 Harrassing Fire</Bold> 
 <InlineUIContainer><Button Content='r15.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
-Your tank is sprayed with small weapons fire. Roll on the 
-<InlineUIContainer><Button Content='Collateral' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Damage Table. 
-<LineBreak/><LineBreak/>
-Click image to continue.
-<LineBreak/><LineBreak/>
-                        <InlineUIContainer><Image Name='CollateralDamage' Height='200' Width='325'></Image></InlineUIContainer>"
+Your tank is sprayed with small weapons fire.
+<LineBreak/><LineBreak/>Roll on the 
+<InlineUIContainer><Button Content='Collateral' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Damage Table. "
 e046	"<Bold>e046 Friendly Advance</Bold> 
 <InlineUIContainer><Button Content='r15.7' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>

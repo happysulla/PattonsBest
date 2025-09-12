@@ -1231,6 +1231,7 @@ namespace Pattons_Best
                break;
             //-------------------------------------------------------------------
             case E046Enum.PLACE_TERRAIN:
+               //dieRoll = 1; // <cgs> TEST - Set Terrain to hull down
                myGridRows[i].myDieRollTerrain = dieRoll;
                myGridRows[i].myTerrain = TableMgr.GetEnemyTerrain(myScenario, myDay, myAreaType, myGridRows[i].myActivation, dieRoll);
                if ("ERROR" == myGridRows[i].myTerrain)
@@ -1324,8 +1325,10 @@ namespace Pattons_Best
             return false;
          }
          //------------------------------------------------------------
-         myGridRows[i].myDieRollRange = Utilities.RandomGenerator.Next(1, 11);
-         myGridRows[i].myRange = TableMgr.GetEnemyRange(myAreaType, myGridRows[i].myActivation, myGridRows[i].myDieRollRange);
+         int dieRoll = Utilities.RandomGenerator.Next(1, 11);
+         dieRoll = 10; // <cgs> TEST - long range
+         myGridRows[i].myDieRollRange = dieRoll;
+         myGridRows[i].myRange = TableMgr.GetEnemyRange(myAreaType, myGridRows[i].myActivation, dieRoll);
          if ("ERROR" == myGridRows[i].myRange)
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): TableMgr.GetEnemyRange() returned ERROR");
@@ -1360,8 +1363,10 @@ namespace Pattons_Best
             }
          }
          //------------------------------------------------------------
-         myGridRows[i].myDieRollTerrain = Utilities.RandomGenerator.Next(1, 11);
-         myGridRows[i].myTerrain = TableMgr.GetEnemyTerrain(myScenario, myDay, myAreaType, myGridRows[i].myActivation, myGridRows[i].myDieRollTerrain);
+         dieRoll = Utilities.RandomGenerator.Next(1, 11);
+         //dieRoll = 1; // <cgs> TEST - force hull down for auto rolls.
+         myGridRows[i].myDieRollTerrain = dieRoll;
+         myGridRows[i].myTerrain = TableMgr.GetEnemyTerrain(myScenario, myDay, myAreaType, myGridRows[i].myActivation, dieRoll);
          if ("ERROR" == myGridRows[i].myTerrain)
          {
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): TableMgr.GetEnemyTerrain() returned ERROR");

@@ -2825,7 +2825,7 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetExplosionModifier(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Get_ExplosionModifier(): lastReport=null");
             return FN_ERROR;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
@@ -2838,7 +2838,7 @@ namespace Pattons_Best
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
-            Logger.Log(LogEnum.LE_ERROR, "HarrassingFireCheck(): GetEnemyUnit() returned error for mi=" + mi.Name);
+            Logger.Log(LogEnum.LE_ERROR, "Get_ExplosionModifier(): GetEnemyUnit() returned error for mi=" + mi.Name);
             return FN_ERROR;
          }
          if (("ATG" == enemyUnit) || ("Pak43" == enemyUnit) || ("PzVIb" == enemyUnit) || ("TANK" == enemyUnit) || ("PzVIe" == enemyUnit) )
@@ -2872,129 +2872,129 @@ namespace Pattons_Best
                      if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
                      {
                         modifier -= 20;
-                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-20 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod-20 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
                      }
                      break;
                   case "T R":
                      if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
                      {
                         modifier -= 20;
-                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-20 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod-20 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
                      }
                      if ("Gunner" == cm.Role)
                      {
                         modifier += 10;
-                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod+10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod+10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
                      }
                      if ("Loader" == cm.Role)
                      {
                         modifier -= 10;
-                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod-10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
                      }
                      break;
                   case "T L":
                      if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
                      {
                         modifier -= 20;
-                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-20 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod-20 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
                      }
                      if ("Gunner" == cm.Role)
                      {
                         modifier -= 10;
-                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod-10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
                      }
                      if ("Loader" == cm.Role)
                      {
                         modifier += 10;
-                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod+10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod+10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
                      }
                      break;
                   case "T B":
                      if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
                      {
                         modifier -= 20;
-                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-20 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod-20 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
                      }
                      if ("Commander" == cm.Role)
                      {
                         modifier += 10;
-                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod+10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod+10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
                      }
                      break;
                   case "H F":
                      if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
                      {
                         modifier += 10;
-                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod+10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod+10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
                      }
                      if ("Commander" == cm.Role)
                      {
                         modifier -= 10;
-                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod-10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
                      }
                      break;
                   case "H FR":
                      if (("Driver" == cm.Role) || ("Loader" == cm.Role))
                      {
                         modifier += 10;
-                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod+10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod+10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
                      }
                      if (("Assistant" == cm.Role) || ("Gunner" == cm.Role))
                      {
                         modifier += 10;
-                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod+10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod+10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
                      }
                      break;
                   case "H BR":
                      if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
                      {
                         modifier -= 40;
-                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-40 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod-40 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
                      }
                      else
                      {
                         modifier -= 30;
-                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-30 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod-30 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
                      }
                      break;
                   case "H FL":
                      if (("Driver" == cm.Role) || ("Loader" == cm.Role))
                      {
                         modifier += 10;
-                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod+10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod+10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
                      }
                      if (("Assistant" == cm.Role) || ("Gunner" == cm.Role))
                      {
                         modifier -= 10;
-                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod-10 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
                      }
                      break;
                   case "H BL":
                      if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
                      {
                         modifier -= 40;
-                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-40 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod-40 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
                      }
                      else
                      {
                         modifier -= 30;
-                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-30 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod-30 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
                      }
                      break;
                   case "H B":
                      if (("Driver" == cm.Role) || ("Assistant" == cm.Role))
                      {
                         modifier -= 40;
-                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-40 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod-40 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
                      }
                      else
                      {
                         modifier -= 30;
-                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-30 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+                        Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod-30 direction=" + death.myEnemyFireDirection + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
                      }
                      break;
                   default:
-                     Logger.Log(LogEnum.LE_ERROR, "GetWoundsModifier(): reached default for direction=" + death.myEnemyFireDirection);
+                     Logger.Log(LogEnum.LE_ERROR, "Get_ExplosionModifier(): reached default for direction=" + death.myEnemyFireDirection);
                      return FN_ERROR;
                }
             }
@@ -3004,17 +3004,17 @@ namespace Pattons_Best
          if( true == isBailout)
          {
             modifier -= cm.Rating;
-            Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-rating=" + cm.Rating.ToString() + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
+            Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod-rating=" + cm.Rating.ToString() + " mod=" + modifier.ToString() + " for cm=" + cm.Role);
          }
          if (true == gi.IsMinefieldAttack)
          {
             modifier -= 20;
-            Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-20 IsMinefieldAttack mod=" + modifier.ToString() + " for cm=" + cm.Role);
+            Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod-20 IsMinefieldAttack mod=" + modifier.ToString() + " for cm=" + cm.Role);
          }
          if (true == gi.IsHarrassingFireBonus)
          {
             modifier -= 10;
-            Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod-10 IsHarrassingFire_Bonus mod=" + modifier.ToString() + " for cm=" + cm.Role);
+            Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod-10 IsHarrassingFire_Bonus mod=" + modifier.ToString() + " for cm=" + cm.Role);
          }
          //----------------------------------
          if( true == isCollateralDamage )
@@ -3022,7 +3022,7 @@ namespace Pattons_Best
             if ((true == cm.Action.Contains("FireSubMg")) || (true == cm.Action.Contains("FireAaMg")))
             {
                modifier += 5;
-               Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "GetWoundsModifier(): mod+5 MG and isCollateralDamage=true mod=" + modifier.ToString() + " for cm=" + cm.Role);
+               Logger.Log(LogEnum.LE_SHOW_WOUND_MOD, "Get_ExplosionModifier(): mod+5 MG and isCollateralDamage=true mod=" + modifier.ToString() + " for cm=" + cm.Role);
             }
          }
          return modifier;
@@ -7196,25 +7196,25 @@ namespace Pattons_Best
          //------------------------------------
          if (3 != enemyUnit.TerritoryCurrent.Name.Length)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
+            Logger.Log(LogEnum.LE_ERROR, "Get_ShermanMgToKillModifier(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
             return FN_ERROR;
          }
          char range = enemyUnit.TerritoryCurrent.Name[2];
          if (('C' != range) && ('M' != range) && ('L' != range))
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): unknown range=" + range.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Get_ShermanMgToKillModifier(): unknown range=" + range.ToString());
             return FN_ERROR;
          }
          //------------------------------------
          string enemyUnitType = enemyUnit.GetEnemyUnit();
          if ("ERROR" == enemyUnitType)
          {
-            Logger.Log(LogEnum.LE_ERROR, "HarrassingFireCheck(): GetEnemyUnit() returned error for enemyUnit=" + enemyUnit.Name);
+            Logger.Log(LogEnum.LE_ERROR, "Get_ShermanMgToKillModifier(): GetEnemyUnit() returned error for enemyUnit=" + enemyUnit.Name);
             return FN_ERROR;
          }
          if (("LW" != enemyUnitType) && ("MG" != enemyUnitType) && ("ATG" != enemyUnitType) && ("Pak38" != enemyUnitType) && ("Pak40" != enemyUnitType) && ("Pak43" != enemyUnitType) && ("TRUCK" != enemyUnitType))
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): unknown enemyType=" + enemyUnitType);
+            Logger.Log(LogEnum.LE_ERROR, "Get_ShermanMgToKillModifier(): unknown enemyType=" + enemyUnitType);
             return FN_ERROR;
          }
          //------------------------------------
@@ -7227,18 +7227,18 @@ namespace Pattons_Best
                ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
                if (null == commander)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): commander=null");
+                  Logger.Log(LogEnum.LE_ERROR, "Get_ShermanMgToKillModifier(): commander=null");
                   return FN_ERROR;
                }
                toKillModifierNum -= commander.Rating;
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): commander rating -" + commander.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): commander rating -" + commander.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
             }
             if (("Commander_FireSubMg" == crewAction.Name) && ("Sub" == mgType))
             {
                ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
                if (null == commander)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): commander=null");
+                  Logger.Log(LogEnum.LE_ERROR, "Get_ShermanMgToKillModifier(): commander=null");
                   return FN_ERROR;
                }
                toKillModifierNum -= commander.Rating;
@@ -7248,44 +7248,44 @@ namespace Pattons_Best
                ICrewMember? loader = gi.GetCrewMemberByRole("Loader");
                if (null == loader)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): loader=null");
+                  Logger.Log(LogEnum.LE_ERROR, "Get_ShermanMgToKillModifier(): loader=null");
                   return FN_ERROR;
                }
                toKillModifierNum -= loader.Rating;
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): gunner rating -" + loader.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): gunner rating -" + loader.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
             }
             if (("Loader_FireAaMg" == crewAction.Name) && ("Aa" == mgType))
             {
                ICrewMember? loader = gi.GetCrewMemberByRole("Loader");
                if (null == loader)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): loader=null");
+                  Logger.Log(LogEnum.LE_ERROR, "Get_ShermanMgToKillModifier(): loader=null");
                   return FN_ERROR;
                }
                toKillModifierNum -= loader.Rating;
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): gunner rating -" + loader.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): gunner rating -" + loader.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
             }
             if (("Gunner_FireCoaxialMg" == crewAction.Name) && ("Coaxial" == mgType))
             {
                ICrewMember? gunner = gi.GetCrewMemberByRole("Gunner");
                if (null == gunner)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): gunner=null");
+                  Logger.Log(LogEnum.LE_ERROR, "Get_ShermanMgToKillModifier(): gunner=null");
                   return FN_ERROR;
                }
                toKillModifierNum -= gunner.Rating;
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): gunner rating -" + gunner.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): gunner rating -" + gunner.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
             }
             if (("Assistant_FireBowMg" == crewAction.Name) && ("Bow" == mgType))
             {
                ICrewMember? assistant = gi.GetCrewMemberByRole("Assistant");
                if (null == assistant)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): assistant=null");
+                  Logger.Log(LogEnum.LE_ERROR, "Get_ShermanMgToKillModifier(): assistant=null");
                   return FN_ERROR;
                }
                toKillModifierNum -= assistant.Rating;
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): Assistant rating -" + assistant.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): Assistant rating -" + assistant.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
             }
             if ("Driver_Forward" == crewAction.Name)
                isShermanMovingOrPivoting = true;
@@ -7304,7 +7304,7 @@ namespace Pattons_Best
             ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
             if (null == commander)
             {
-               Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): commander=null");
+               Logger.Log(LogEnum.LE_ERROR, "Get_ShermanMgToKillModifier(): commander=null");
                return FN_ERROR;
             }
             toKillModifierNum -= commander.Rating;
@@ -7316,26 +7316,26 @@ namespace Pattons_Best
             if ("Bow" == mgType)
             {
                toKillModifierNum -= 10;
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): Box moving in open -10 mod=" + toKillModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): Box moving in open -10 mod=" + toKillModifierNum.ToString());
             }
             else if ("Coaxial" == mgType)
             {
                toKillModifierNum -= 15;
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): Coaxial moving in open -15 mod=" + toKillModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): Coaxial moving in open -15 mod=" + toKillModifierNum.ToString());
             }
             else if ("Aa" == mgType)
             {
                toKillModifierNum -= 15;
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): AA moving in open -15 mod=" + toKillModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): AA moving in open -15 mod=" + toKillModifierNum.ToString());
             }
             else if ("Sub" == mgType)
             {
                toKillModifierNum -= 5;
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): Sub moving in open -5 mod=" + toKillModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): Sub moving in open -5 mod=" + toKillModifierNum.ToString());
             }
             else
             {
-               Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): unknown mgType=" + mgType);
+               Logger.Log(LogEnum.LE_ERROR, "Get_ShermanMgToKillModifier(): unknown mgType=" + mgType);
                return FN_ERROR;
             }
          }
@@ -7345,26 +7345,26 @@ namespace Pattons_Best
             if ("Bow" == mgType)
             {
                toKillModifierNum += 10;
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): advancing fire +10 mod=" + toKillModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): advancing fire +10 mod=" + toKillModifierNum.ToString());
             }
             else if ("Coaxial" == mgType)
             {
                toKillModifierNum += 10;
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier():  advancing fire +10 mod=" + toKillModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier():  advancing fire +10 mod=" + toKillModifierNum.ToString());
             }
             else if ("Aa" == mgType)
             {
                toKillModifierNum += 10;
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier():  advancing fire +10 mod=" + toKillModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier():  advancing fire +10 mod=" + toKillModifierNum.ToString());
             }
             else if ("Sub" == mgType)
             {
                toKillModifierNum -= 10;
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier():  advancing fire -10 mod=" + toKillModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier():  advancing fire -10 mod=" + toKillModifierNum.ToString());
             }
             else
             {
-               Logger.Log(LogEnum.LE_ERROR, "GetShermanMgToKillModifier(): unknown mgType=" + mgType);
+               Logger.Log(LogEnum.LE_ERROR, "Get_ShermanMgToKillModifier(): unknown mgType=" + mgType);
                return FN_ERROR;
             }
          }
@@ -7372,31 +7372,31 @@ namespace Pattons_Best
          if (true == isShermanMovingOrPivoting)
          {
             toKillModifierNum += 10;
-            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): sherman moving +10 mod=" + toKillModifierNum.ToString());
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): sherman moving +10 mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
          if (true == enemyUnit.IsWoods) 
          {
             toKillModifierNum += 10;
-            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): in woods +10 mod=" + toKillModifierNum.ToString());
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): in woods +10 mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
          if (true == enemyUnit.IsBuilding) 
          {
             toKillModifierNum += 15;
-            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): in building +15 mod=" + toKillModifierNum.ToString());
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): in building +15 mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
          if (("ATG" == enemyUnitType) || ("Pak38" == enemyUnitType) || ("Pak40" == enemyUnitType) || ("Pak43" == enemyUnitType))
          {
             toKillModifierNum += 15;
-            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): ATG +15 mod=" + toKillModifierNum.ToString());
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): ATG +15 mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
          if (true == enemyUnit.IsFortification) 
          {
             toKillModifierNum += 20;
-            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanMgToKillModifier(): in IsFortification +20 mod=" + toKillModifierNum.ToString());
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): in IsFortification +20 mod=" + toKillModifierNum.ToString());
          }
          return toKillModifierNum;
       }

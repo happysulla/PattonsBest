@@ -476,11 +476,10 @@ namespace Pattons_Best
          for (int j = 0; j < 10; ++j)
          {
             List<IMapItem> newOrder = new List<IMapItem>();
-            // Random select card in myCards list and remove it.  Then add it to new list. 
             int count = mapItems.Count;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < count; i++) 
             {
-               int index = Utilities.RandomGenerator.Next(mapItems.Count);
+               int index = Utilities.RandomGenerator.Next(mapItems.Count); // Random select mapitem in list and remove it.  Then add it to new list. 
                if (index < mapItems.Count)
                {
                   IMapItem randomIndex = mapItems[index];

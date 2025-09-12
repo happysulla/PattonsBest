@@ -834,6 +834,72 @@ namespace Pattons_Best
          }
          return true;
       }
+      protected bool HarrassingFireCheck(IGameInstance gi)
+      {
+         bool isEnemyLwOrMgAtMediumOrCloseRange = false;
+         foreach (IStack stack in gi.BattleStacks)
+         {
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.IsEnemyUnit())
+               {
+                  string enemyUnit = mi.GetEnemyUnit();
+                  if ("ERROR" == enemyUnit)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Harrassing_FireCheck(): GetEnemyUnit() returned error for mi=" + mi.Name);
+                     return false;
+                  }
+                  if (("LW" == enemyUnit) || ("MG" == enemyUnit))
+                  {
+                     ITerritory t = stack.Territory;
+                     if ("Home" == t.Name)
+                        continue;
+                     if (3 != t.Name.Length)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "Harrassing_FireCheck(): t.Name.Length=" + t.Name.Length.ToString() + " for t=" + t.Name);
+                        return false;
+                     }
+                     char range = t.Name[t.Name.Length - 1];
+                     if (('C' == range) || ('M' == range))
+                        isEnemyLwOrMgAtMediumOrCloseRange = true;
+                     break;
+                  }
+               }
+            }
+         }
+         if (false == isEnemyLwOrMgAtMediumOrCloseRange)
+         {
+            gi.IsHarrassingFireBonus = true;
+            return true;
+         }
+         //-------------------------------------------
+         gi.IsHarrassingFireBonus = true;
+         string[] closeTerritories = new string[6] { "B1C", "B2C", "B3C", "B4C", "B6C", "B9C" };
+         foreach (string territory in closeTerritories)
+         {
+            IStack? stack = gi.BattleStacks.Find(territory);
+            if (null == stack)
+            {
+               gi.IsHarrassingFireBonus = false;
+               return true;
+            }
+            bool isControlled = false;
+            foreach (IMapItem mapItem in stack.MapItems)
+            {
+               if ((true == mapItem.Name.Contains("UsControl")) || (true == mapItem.Name.Contains("AdvanceFire")))
+               {
+                  isControlled = true;
+                  break;
+               }
+            }
+            if (false == isControlled)
+            {
+               gi.IsHarrassingFireBonus = false;
+               return true;
+            }
+         }
+         return true;
+      }
       protected bool ResetDieResults(IGameInstance gi)
       {
          try
@@ -1211,71 +1277,6 @@ namespace Pattons_Best
             }
          }
          gi.EventDisplayed = gi.EventActive = "e046a";
-         return true;
-      }
-      protected bool HarrassingFireCheck(IGameInstance gi)
-      {
-         bool isEnemyLwOrMgAtMediumOrCloseRange = false;
-         foreach (IStack stack in gi.BattleStacks)
-         {
-            ITerritory t = stack.Territory;
-            if ("Home" == t.Name)
-               continue;
-            if (3 != t.Name.Length)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "HarrassingFireCheck(): t.Name.Length=" + t.Name.Length.ToString() + " for t=" + t.Name);
-               return false;
-            }
-            char range = t.Name[t.Name.Length - 1];
-            foreach (IMapItem mi in stack.MapItems)
-            {
-               if( true == mi.IsEnemyUnit() )
-               {
-                  string enemyUnit = mi.GetEnemyUnit();
-                  if( "ERROR" == enemyUnit)
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "HarrassingFireCheck(): GetEnemyUnit() returned error for mi=" + mi.Name);
-                     return false;
-                  }
-                  if ((("LW" == enemyUnit) || ("MG" == enemyUnit)) && (('C' == range) || ('M' == range)))
-                  {
-                     isEnemyLwOrMgAtMediumOrCloseRange = true;
-                     break;
-                  }
-               }
-            }
-         }
-         if (false == isEnemyLwOrMgAtMediumOrCloseRange)
-         {
-            gi.IsHarrassingFireBonus = true;
-            return true;
-         }
-         //-------------------------------------------
-         gi.IsHarrassingFireBonus = true;
-         string[] closeTerritories = new string[6] { "B1C", "B2C", "B3C", "B4C", "B6C", "B9C" };
-         foreach(string territory in closeTerritories)
-         {
-            IStack? stack = gi.BattleStacks.Find(territory);
-            if( null == stack )
-            {
-               gi.IsHarrassingFireBonus = false;
-               return true;
-            }
-            bool isControlled = false;
-            foreach(IMapItem mapItem in stack.MapItems)
-            {
-               if ((true == mapItem.Name.Contains("UsControl")) || (true == mapItem.Name.Contains("AdvanceFire")))
-               {
-                  isControlled = true;
-                  break;
-               }
-            }
-            if( false == isControlled )
-            {
-               gi.IsHarrassingFireBonus = false;
-               return true;
-            }
-         }
          return true;
       }
       protected bool EnemyAdvanceCheck(IGameInstance gi, ref GameAction outAction)
@@ -2193,7 +2194,7 @@ namespace Pattons_Best
             else
                diceRoll = die1 + 10 * die2;
             //diceRoll = 11; // <cgs> TEST - AdvanceRetreat - infantry appearing
-            diceRoll = 45; // <cgs> TEST -  KillYourTank - TANKS APPEARING in battle scenario
+            //diceRoll = 45; // <cgs> TEST -  KillYourTank - TANKS APPEARING in battle scenario
             //diceRoll = 51; // <cgs> TEST -  ATG appearing
             string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
             IMapItem? mi = null;
@@ -2269,6 +2270,7 @@ namespace Pattons_Best
             }
             //-----------------------------------------
             die1 = Utilities.RandomGenerator.Next(1, 11);
+            //die1 = 1; // <cgs> Hull Down Tank
             string enemyTerrain = TableMgr.GetEnemyTerrain(lastReport.Scenario, gi.Day, "A", enemyUnit, die1);
             mi.IsHullDown = false;
             mi.IsWoods = false;
@@ -3799,7 +3801,7 @@ namespace Pattons_Best
                case GameAction.BattleAmbushRoll:
                   if (true == lastReport.Weather.Contains("Rain") || true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
                      dieRoll--;
-                  dieRoll = 10; // <cgs> TEST - NO AMBUSH!!!!!
+                  dieRoll = 1; // <cgs> TEST - AMBUSH!!!!!
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (dieRoll < 8)
@@ -3856,6 +3858,7 @@ namespace Pattons_Best
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      //dieRoll = 01; // <cgs> TEST - AdvanceRetreat - Random Event - Time passes
+                     dieRoll = 35; // <cgs> TEST - Harrassing fire in Advance Scenario - Random Event 
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -3898,7 +3901,7 @@ namespace Pattons_Best
                            gi.NumCollateralDamage++;
                            if (false == HarrassingFireCheck(gi))
                            {
-                              returnStatus = "HarrassingFireCheck() returned false";
+                              returnStatus = "Harrassing_FireCheck() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
                            }
                            break;
@@ -4726,7 +4729,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceShermanToHitRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     //dieRoll = -50; // <cgs> TEST - SHERMAN TO HIT Roll
+                     //dieRoll = -20; // <cgs> TEST - SHERMAN TO HIT Roll
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                      gi.FiredAmmoType = gi.GetGunLoadType();  // used in EventViewer.UpdateEventContentToGetToHit()
@@ -5401,7 +5404,7 @@ namespace Pattons_Best
                            gi.NumCollateralDamage++;
                            if( false == HarrassingFireCheck(gi))
                            {
-                              returnStatus = "HarrassingFireCheck() returned false";
+                              returnStatus = "Harrassing_FireCheck() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRandomEventRoll): " + returnStatus);
                            }
                            break;
@@ -6705,6 +6708,7 @@ namespace Pattons_Best
          else if (Utilities.NO_RESULT == gi.DieResults[key][0])
          {
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "Resolve_ToKillEnemyUnit(): 1st time thru ----->hit.myAmmoType=" + hit.myAmmoType + "<--------- d1=" + dieRoll.ToString() + " v?=" + gi.TargetMainGun.IsVehicle + " hulldown?=" + gi.TargetMainGun.IsHullDown);
+            //dieRoll = 10; // <cgs> TEST - Force miss on hull down vehicles
             gi.DieResults[key][0] = dieRoll;
             if (true == gi.TargetMainGun.IsVehicle) // first die is hit location - even no chance hits could hit could cause thrown track
             {

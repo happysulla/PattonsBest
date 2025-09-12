@@ -1678,6 +1678,18 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
+            case "e045":
+               if( true == gi.IsHarrassingFireBonus )
+                  myTextBlock.Inlines.Add(new Run("If wounds occurs, use -10 modifier since either no LW/MG at medium/close range --or-- all close regions with advancing fire or US controlled markers."));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               Image imge045 = new Image { Name = "CollateralDamage", Width = 325, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("CollateralDamage") };
+               myTextBlock.Inlines.Add(new Run("                        "));
+               myTextBlock.Inlines.Add(new InlineUIContainer(imge045));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               break;
             case "e046":
                if (null != gi.FriendlyAdvance)
                {
