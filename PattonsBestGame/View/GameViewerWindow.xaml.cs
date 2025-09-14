@@ -334,16 +334,6 @@ namespace Pattons_Best
             myCanvasTank.Children.Add(imageMat); // TankMat changes as get new tanks
             Canvas.SetLeft(imageMat, 0);
             Canvas.SetTop(imageMat, 0);
-            //-------------------------------------------------------
-            gi.BattleStacks.Remove(gi.Sherman);
-            string shermanName = "Sherman75";     // UpdateView()
-            if ( 12 < lastReport.TankCardNum )
-               shermanName = "Sherman76";
-            shermanName += Utilities.MapItemNum.ToString();
-            ++Utilities.MapItemNum;
-            gi.Sherman = new MapItem(shermanName, 2.0, "t" + appendText, gi.Home);
-            gi.Sherman.IsTurret = true;
-            gi.BattleStacks.Add(gi.Sherman);
          }
          //-------------------------------------------------------
          switch (action)
@@ -604,6 +594,7 @@ namespace Pattons_Best
                break;
             case GameAction.UpdateTankExplosion:
             case GameAction.UpdateTankBrewUp:
+            case GameAction.BattleShermanKilled:
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                if (false == UpdateCanvasMain(gi, action))
@@ -1465,6 +1456,8 @@ namespace Pattons_Best
             {
                if (true == img.Name.Contains("TankMat"))
                   continue;
+               if ((true == gi.Sherman.IsKilled) && (true == img.Name.Contains("TankKilled")))
+                  continue;
                elements.Add(ui);
             }
             if (ui is Button b)
@@ -1488,7 +1481,18 @@ namespace Pattons_Best
          foreach (UIElement ui1 in elements)
             myCanvasTank.Children.Remove(ui1);
          //-------------------------------------------------------
-         if( true == Logger.theLogLevel[(int)LogEnum.LE_SHOW_TANK_BUTTONS])
+         if (true == gi.Sherman.IsKilled)
+         {
+            double offsetHeight = myCanvasTank.ActualHeight / 2.0 - 125;
+            double offsetWidth = myCanvasTank.ActualWidth / 2.0 - 125;
+            Image imgDeny = new Image { Name = "TankKilled", Source = MapItem.theMapImages.GetBitmapImage("Deny"), Height = 250, Width = 250 };
+            myCanvasTank.Children.Add(imgDeny);
+            Canvas.SetLeft(imgDeny, offsetWidth);
+            Canvas.SetTop(imgDeny, offsetHeight);
+            Canvas.SetZIndex(imgDeny, 99999);
+         }
+         //-------------------------------------------------------
+         if ( true == Logger.theLogLevel[(int)LogEnum.LE_SHOW_TANK_BUTTONS])
          {
             StringBuilder sbbuttons = new StringBuilder();
             int lastParen = myTankButtons.Count - 1;

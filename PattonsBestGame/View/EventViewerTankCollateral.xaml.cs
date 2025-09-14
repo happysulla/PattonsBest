@@ -542,7 +542,7 @@ namespace Pattons_Best
                   sb.Append(TableMgr.GetTime(lastReport));
                   sb.Append(", Tank suffered ");
                   sb.Append(myCollateralDamage);
-                  lastReport.Notes.Add(sb.ToString());
+                  lastReport.Notes.Add(sb.ToString());  // ShowDieResults(): COLLATERAL_DAMAGE_ROLL
                   for (int k = 0; k < myMaxRowCount; ++k)
                   {
                      ICrewMember cm1 = myGridRows[k].myCrewMember;
@@ -591,7 +591,7 @@ namespace Pattons_Best
                sb1.Append(cm.Role);
                sb1.Append(") suffered ");
                sb1.Append(myWoundsResults);
-               lastReport.Notes.Add(sb1.ToString());
+               lastReport.Notes.Add(sb1.ToString());  // ShowDieResults(): COLLATERAL_DAMAGE_WOUND_ROLL
                myState = E0481Enum.COLLATERAL_DAMAGE_WOUND_ROLL_SHOW;
                break;
             default:

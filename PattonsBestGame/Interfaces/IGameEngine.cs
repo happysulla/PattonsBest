@@ -188,8 +188,8 @@ namespace Pattons_Best
       MorningBriefingTimeCheck,
       MorningBriefingTimeCheckRoll,
       MorningBriefingDayOfRest,
-
       MorningBriefingDeployment,
+
       PreparationsDeploymentRoll,
       PreparationsHatches,
       PreparationsShowHatchAction,
@@ -251,7 +251,6 @@ namespace Pattons_Best
       BattleRandomEventRoll,
       BattleCollateralDamageCheck,
       BattleCrewReplaced,
-
       BattleEmpty,
       BattleEmptyResolve,
       BattleShermanKilled,

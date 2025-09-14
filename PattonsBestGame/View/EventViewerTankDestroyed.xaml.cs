@@ -1109,7 +1109,7 @@ namespace Pattons_Best
          switch (myState)
          {
             case E0481Enum.TANK_EXPLOSION_ROLL:
-               //dieRoll = 1; // <cgs> TEST - KillYourTank - tank penetration
+               dieRoll = 1; // <cgs> TEST - KillYourTank - tank penetration
                myGridRowExplodes[0].myDieRollExplosion = dieRoll;
                int rollPlusModifier = dieRoll + myGridRowExplodes[0].myDieRollExplosion;
                if (99 < rollPlusModifier)
@@ -1192,7 +1192,7 @@ namespace Pattons_Best
                      sb1.Append(myGridRowWounds[i].myWoundEffect);
                   }
                   sb1.Append(".");
-                  lastReport.Notes.Add(sb1.ToString());
+                  lastReport.Notes.Add(sb1.ToString());  // ShowDieResults(): WOUNDS_ROLL
                }
                //--------------------------------------
                myState = E0481Enum.WOUNDS_ROLL_SHOW;
@@ -1251,7 +1251,7 @@ namespace Pattons_Best
                      sb1.Append(myGridRowWounds[i].myBailoutWoundEffect);
                   }
                   sb1.Append(".");
-                  lastReport.Notes.Add(sb1.ToString());
+                  lastReport.Notes.Add(sb1.ToString()); // ShowDieResults(): BAILOUT_WOUNDS_ROLL
                }
                //--------------------------------------
                myState = E0481Enum.BAILOUT_WOUNDS_ROLL_SHOW;
@@ -1289,7 +1289,7 @@ namespace Pattons_Best
                      sb1.Append(myGridRowWounds[i].myWoundEffect);
                   }
                   sb1.Append(".");
-                  lastReport.Notes.Add(sb1.ToString());
+                  lastReport.Notes.Add(sb1.ToString());  // ShowDieResults(): BAILOUT_RESCUE_ROLL
                }
                if (("Serious Wound" == myGridRowRescues[i].myRescueWoundResult) || ("Killed" == myGridRowRescues[i].myRescueWoundResult))
                   myGridRowRescues[i].myRescueResult = myGridRowRescues[i].myRescueWoundResult;

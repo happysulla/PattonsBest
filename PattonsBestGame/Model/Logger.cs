@@ -21,6 +21,7 @@ namespace Pattons_Best
       LE_SHOW_ENTERED_HEX,
       //-------------
       LE_SHOW_CREW_NAME,
+      LE_SHOW_ACTION_REPORT_NEW,
       LE_SHOW_ENEMY_STRENGTH,
       LE_SHOW_OVERRUN_TO_PREVIOUS_AREA,
       LE_SHOW_ENEMY_ON_MOVE_BOARD,
@@ -49,6 +50,7 @@ namespace Pattons_Best
       LE_SHOW_CONDUCT_CREW_ACTION,
       LE_SHOW_CREW_SWITCH,
       LE_SHOW_CREW_REPLACE,
+      LE_SHOW_CREW_RETURN,
       LE_SHOW_BATTLE_ROUND_START,
       LE_SHOW_RESET_ROUND,
       LE_SHOW_TANK_BUTTONS,
@@ -134,6 +136,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_ENTERED_HEX);
          //-------------------------------
          //SetOn(LogEnum.LE_SHOW_CREW_NAME);
+         SetOn(LogEnum.LE_SHOW_ACTION_REPORT_NEW);
          //SetOn(LogEnum.LE_SHOW_ENEMY_STRENGTH);
          //SetOn(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA);
          //SetOn(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD);
@@ -154,6 +157,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_ORDERS_MENU);
          //SetOn(LogEnum.LE_SHOW_CREW_SWITCH);
          //SetOn(LogEnum.LE_SHOW_CREW_REPLACE);
+         SetOn(LogEnum.LE_SHOW_CREW_RETURN);
          //SetOn(LogEnum.LE_SHOW_AMMMO_MENU);
          //SetOn(LogEnum.LE_SHOW_TANK_BUTTONS);
          //SetOn(LogEnum.LE_SHOW_GUN_RELOAD);
