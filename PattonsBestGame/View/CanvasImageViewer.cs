@@ -83,6 +83,8 @@ namespace Pattons_Best
                this.myCanvas.Cursor = System.Windows.Input.Cursors.Arrow; // get rid of the canvas cursor
                break;
             case GameAction.UpdateAfterActionReport:
+            case GameAction.MorningBriefingTankReplacementRoll:
+            case GameAction.EveningDebriefingResetDay:
                if (null != myAarUserControl)
                   myAarUserControl.UpdateReport(gi);
                return;

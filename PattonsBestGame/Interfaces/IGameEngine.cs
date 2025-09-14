@@ -356,6 +356,7 @@ namespace Pattons_Best
       EventDebriefDecorationCross,
       EventDebriefDecorationHonor,
       EventDebriefDecorationHeart,
+      EveningDebriefingResetDay,
       Error
    };
    public interface IGameEngine

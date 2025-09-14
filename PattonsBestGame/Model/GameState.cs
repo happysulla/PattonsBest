@@ -2463,6 +2463,7 @@ namespace Pattons_Best
                case GameAction.EndGameShowFeats:
                case GameAction.UpdateAfterActionReport:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
+               case GameAction.EveningDebriefingResetDay:
                   break;
                case GameAction.MorningBriefingAmmoLoad:
                   break;
@@ -7822,6 +7823,7 @@ namespace Pattons_Best
                      returnStatus = "EveningDebriefing_ResetDay() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(EventDebriefDecorationHeart): " + returnStatus);
                   }
+                  action = GameAction.EveningDebriefingResetDay;
                   break;
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;
@@ -8034,6 +8036,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateDecoration(): EveningDebriefing_ResetDay(=null) returned false");
                return false;
             }
+            action = GameAction.EveningDebriefingResetDay;
          }
          return true;
       }
@@ -8165,7 +8168,6 @@ namespace Pattons_Best
          }
          //-------------------------------------------------------
          ++gi.Day;
-         Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "EveningDebriefing_ResetDay(): increasing day to " + gi.Day.ToString() + " date=" + TableMgr.GetDate(gi.Day));
          gi.GameTurn++;
          gi.GamePhase = GamePhase.MorningBriefing;
          IAfterActionReport? lastReport = gi.Reports.GetLast();
@@ -8188,7 +8190,7 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "EveningDebriefing_ResetDay(): newReport=" + gi.Day + " date=" + TableMgr.GetDate(gi.Day));
          //-------------------------------------------------------
          bool isCrewmanReplaced;
-         if (false == ReplaceInjuredCrewmen(gi, out isCrewmanReplaced, "EveningDebriefingResetDay()"))  // Reset_Day()
+         if (false == ReplaceInjuredCrewmen(gi, out isCrewmanReplaced, "EveningDebriefing_ResetDay()"))  // Reset_Day()
          {
             Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): Replace_InjuredCrewmen() returned false");
             return false;
@@ -8203,6 +8205,7 @@ namespace Pattons_Best
             gi.EventDisplayed = gi.EventActive = "e006";                 // Reset_Day()
             gi.DieRollAction = GameAction.MorningBriefingCalendarRoll;   // Reset_Day()
          }
+         
          return true;
       }
    }

@@ -357,6 +357,7 @@ namespace Pattons_Best
             case GameAction.SetupShowAfterActionReport:
             case GameAction.SetupShowCombatCalendarCheck:
             case GameAction.SetupCombatCalendarRoll:
+            case GameAction.EveningDebriefingResetDay:
                break;
             case GameAction.ShowTankForcePath:
                if (null == myMainMenuViewer)
