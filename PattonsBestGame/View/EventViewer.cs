@@ -832,13 +832,14 @@ namespace Pattons_Best
                   sbe007a.Append(cm.Name);
                   sbe007a.Append(" as ");
                   sbe007a.Append(cm.Role);
-                  sbe007a.Append(" returns in ");
+                  sbe007a.Append(" returns ");
                   if( cm.WoundDaysUntilReturn < 1 )
                   {
                      sbe007a.Append("now\n");
                   }
                   else
                   {
+                     sbe007a.Append("in ");
                      sbe007a.Append(cm.WoundDaysUntilReturn);
                      sbe007a.Append(" days\n");
                   }

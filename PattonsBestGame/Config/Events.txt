@@ -67,7 +67,7 @@ During the periods on the Combat <InlineUIContainer><Button Content='Calendar' F
  marked Refitting, the Division is building itself back up to strength, replacing tanks, and retraining crews. 
 <LineBreak/><LineBreak/>
 During a refit period, you have the option of replacing your current tank per 
-<InlineUIContainer><Button Content='r24.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Select one of the following images to continue.
+<InlineUIContainer><Button Content='r24.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
 <LineBreak/><LineBreak/>"
 e006b	"<Bold>e006b Retrofit Period - Crew Training</Bold> 
 <InlineUIContainer><Button Content='r27.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 

@@ -197,13 +197,13 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): cm=null for name=" + crewmember);
                return false;
             }
+            cm.Wound = "";
+            cm.SetBloodSpots(0);
             if (true == cm.IsIncapacitated)
             {
                if ((GamePhase.EveningDebriefing == gi.GamePhase) && (0 == cm.WoundDaysUntilReturn)) // crewmen are not replaced if light wound and evening debrief
                {
                   cm.IsIncapacitated = false;
-                  cm.Wound = "";
-                  cm.SetBloodSpots(0);
                   continue;
                }
                isCrewmanReplaced = true;
@@ -2495,12 +2495,12 @@ namespace Pattons_Best
                case GameAction.MorningBriefingTankKeepChoice:
                   if ((EnumScenario.Retrofit == lastReport.Scenario) && (gi.Day < 140))  // retrofits must be greater than 7 days for training which only occurs before day 140
                   {
-                     gi.EventDisplayed = gi.EventActive = "e006b";
+                     gi.EventDisplayed = gi.EventActive = "e006b";  // after user chooses to keep tank in a retrofit
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
                   else
                   {
-                     if (false == FinishRetrofitTraining(gi))
+                     if (false == AdvancePastRetrofit(gi))
                      {
                         returnStatus = "Finish_RetrofitTraining(): returned false";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTankKeepChoice): " + returnStatus);
@@ -2517,7 +2517,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MorningBriefingTrainCrewHvssEnd:
-                  if (false == FinishRetrofitTraining(gi))
+                  if (false == AdvancePastRetrofit(gi))
                   {
                      returnStatus = "Finish_RetrofitTraining(): returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTrainCrewHvssEnd): " + returnStatus);
@@ -2592,16 +2592,16 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     if( (10 < lastReport.TankCardNum) && (18 != lastReport.TankCardNum) && (69 < gi.Day) ) // must be Nov 44 before tanks have HVSS
+                     if ( (10 < lastReport.TankCardNum) && (18 != lastReport.TankCardNum) && (69 < gi.Day) ) // must be Nov 44 before tanks have HVSS
                      {
-                        gi.EventDisplayed = gi.EventActive = "e006b";  // HVSS Roll
+                        gi.EventDisplayed = gi.EventActive = "e007e";  // HVSS Roll
                         gi.DieRollAction = GameAction.MorningBriefingTankReplacementHvssRoll;
                      }
                      else
                      {
-                        if ( (EnumScenario.Retrofit == lastReport.Scenario) && ( gi.Day < 140 ) )  // retrofits must be greater than 7 days for training which only occurs before day 140
+                        if ((EnumScenario.Retrofit == lastReport.Scenario) && (gi.Day < 140))  // retrofits must be greater than 7 days for training which only occurs before day 140
                         {
-                           gi.EventDisplayed = gi.EventActive = "e006b";
+                           gi.EventDisplayed = gi.EventActive = "e006b"; // after tank replacement which means should be Retrofit - crew training
                            gi.DieRollAction = GameAction.DieRollActionNone;
                         }
                         else
@@ -2639,12 +2639,12 @@ namespace Pattons_Best
                   {
                      if ((EnumScenario.Retrofit == lastReport.Scenario) && (gi.Day < 140))  // retrofits must be greater than 7 days for training which only occurs before day 140
                      {
-                        gi.EventDisplayed = gi.EventActive = "e006b";
+                        gi.EventDisplayed = gi.EventActive = "e006b"; // after tank replacement which means should be Retrofit - crew training
                         gi.DieRollAction = GameAction.DieRollActionNone;
                      }
                      else
                      {
-                        gi.EventDisplayed = gi.EventActive = "e008";
+                        gi.EventDisplayed = gi.EventActive = "e008"; // battle already roll for so weather roll has to be performed after replacing tank
                         gi.DieRollAction = GameAction.MorningBriefingWeatherRoll;
                      }
                   }
@@ -2910,7 +2910,7 @@ namespace Pattons_Best
          }
          else
          {
-            if( false == FinishRetrofitTraining(gi))
+            if( false == AdvancePastRetrofit(gi))
             {
                Logger.Log(LogEnum.LE_ERROR, "Check_GyrostablizerTraining(): lastReport=null");
                return false;
@@ -2918,12 +2918,12 @@ namespace Pattons_Best
          }
          return true;
       }
-      bool FinishRetrofitTraining(IGameInstance gi)
+      protected bool AdvancePastRetrofit(IGameInstance gi)
       {
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Finish_RetrofitTraining(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Advance_PastRetrofit(): lastReport=null");
             return false;
          }
          //-------------------------------------------------------
@@ -2931,7 +2931,7 @@ namespace Pattons_Best
          ICombatCalendarEntry? newEntry = TableMgr.theCombatCalendarEntries[gi.Day]; // add new report for tomorrow activities
          if (null == newEntry)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Finish_RetrofitTraining(): newEntry=null");
+            Logger.Log(LogEnum.LE_ERROR, "Advance_PastRetrofit(): newEntry=null");
             return false;
          }
          IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport);
