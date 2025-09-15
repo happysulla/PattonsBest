@@ -2328,7 +2328,8 @@ namespace Pattons_Best
          option.IsEnabled = true;
          gi.Options.Add(option);
          //--------------------------------
-         //gi.Day = 100; // Afetr Nov 1944                   // <cgs> TEST - choose day
+         gi.Day = 36;                                        // <cgs> TEST - Day before first Retrofitting - day 37 is retrofitting
+         //gi.Day = 100;                                     // <cgs> TEST - After Nov 1944 for HVSS   
          //--------------------------------
          //lastReport.Driver.SetBloodSpots(20);              // <cgs> TEST - wounded crewmen
          //lastReport.Driver.Wound = "Light Wound";          // <cgs> TEST - wounded crewmen
@@ -2487,11 +2488,46 @@ namespace Pattons_Best
                      }
                   }
                   break;
+               case GameAction.MorningBriefingTankReplaceChoice:
+                  gi.EventDisplayed = gi.EventActive = "e007d";  // Tank Replacement
+                  gi.DieRollAction = GameAction.MorningBriefingTankReplacementRoll;
+                  break;
+               case GameAction.MorningBriefingTankKeepChoice:
+                  if ((EnumScenario.Retrofit == lastReport.Scenario) && (gi.Day < 140))  // retrofits must be greater than 7 days for training which only occurs before day 140
+                  {
+                     gi.EventDisplayed = gi.EventActive = "e006b";
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else
+                  {
+                     if (false == FinishRetrofitTraining(gi))
+                     {
+                        returnStatus = "Finish_RetrofitTraining(): returned false";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTankKeepChoice): " + returnStatus);
+                     }
+                  }
+                  break;
+               case GameAction.MorningBriefingTrainCrew:
+                  break;
+               case GameAction.EveningDebriefingRatingTrainingEnd:
+                  if( false == CheckGyrostablizerTraining(gi, ref action))
+                  {
+                     returnStatus = "Check_GyrostablizerTraining() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(EveningDebriefingRatingTrainingEnd): " + returnStatus);
+                  }
+                  break;
+               case GameAction.MorningBriefingTrainCrewHvssEnd:
+                  if (false == FinishRetrofitTraining(gi))
+                  {
+                     returnStatus = "Finish_RetrofitTraining(): returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTrainCrewHvssEnd): " + returnStatus);
+                  }
+                  break;
                case GameAction.MorningBriefingCrewmanHealing:
                   if (false == CheckCrewReturning(gi, lastReport, ref action))
                   {
                      returnStatus = "Check_HealedCrewman() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(MorningBriefingCrewmanHealing): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingCrewmanHealing): " + returnStatus);
                   }
                   break;
                case GameAction.MorningBriefingExistingCrewman:
@@ -2558,13 +2594,21 @@ namespace Pattons_Best
                   {
                      if( (10 < lastReport.TankCardNum) && (18 != lastReport.TankCardNum) && (69 < gi.Day) ) // must be Nov 44 before tanks have HVSS
                      {
-                        gi.EventDisplayed = gi.EventActive = "e007e";  // HVSS Roll
+                        gi.EventDisplayed = gi.EventActive = "e006b";  // HVSS Roll
                         gi.DieRollAction = GameAction.MorningBriefingTankReplacementHvssRoll;
                      }
                      else
                      {
-                        gi.EventDisplayed = gi.EventActive = "e008";
-                        gi.DieRollAction = GameAction.MorningBriefingWeatherRoll;
+                        if ( (EnumScenario.Retrofit == lastReport.Scenario) && ( gi.Day < 140 ) )  // retrofits must be greater than 7 days for training which only occurs before day 140
+                        {
+                           gi.EventDisplayed = gi.EventActive = "e006b";
+                           gi.DieRollAction = GameAction.DieRollActionNone;
+                        }
+                        else
+                        {
+                           gi.EventDisplayed = gi.EventActive = "e008";
+                           gi.DieRollAction = GameAction.MorningBriefingWeatherRoll;
+                        }
                      }
                   }
                   break;
@@ -2573,7 +2617,6 @@ namespace Pattons_Best
                   {
                      //dieRoll = 1; // <cgs> - TEST - Show HVSS
                      gi.DieResults[key][0] = dieRoll;
-                     gi.IsShermanHvss = false;
                      gi.ShermanHvss = null;
                      if ( (dieRoll < 4) || ((11 < lastReport.TankCardNum) && (dieRoll < 6)) )
                      {
@@ -2594,8 +2637,16 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     gi.EventDisplayed = gi.EventActive = "e008";
-                     gi.DieRollAction = GameAction.MorningBriefingWeatherRoll;
+                     if ((EnumScenario.Retrofit == lastReport.Scenario) && (gi.Day < 140))  // retrofits must be greater than 7 days for training which only occurs before day 140
+                     {
+                        gi.EventDisplayed = gi.EventActive = "e006b";
+                        gi.DieRollAction = GameAction.DieRollActionNone;
+                     }
+                     else
+                     {
+                        gi.EventDisplayed = gi.EventActive = "e008";
+                        gi.DieRollAction = GameAction.MorningBriefingWeatherRoll;
+                     }
                   }
                   break;
                case GameAction.SetupCombatCalendarRoll: // only applies when coming from Setup GamePhase
@@ -2676,12 +2727,20 @@ namespace Pattons_Best
                   }
                   else
                   {
+                     gi.DieResults[gi.EventActive][0] = Utilities.NO_RESULT;
                      IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport);
                      gi.Reports.Add(newReport);
                      Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "GameStateMorningBriefing.PerformAction(): newReport=" + gi.Day + " !!!!!!!!date=" + TableMgr.GetDate(gi.Day) + "!!!!!!!!!");
-                     gi.EventDisplayed = gi.EventActive = "e006"; // MorningBriefing_DayOfRest
-                     gi.DieResults[gi.EventActive][0] = Utilities.NO_RESULT;
-                     gi.DieRollAction = GameAction.MorningBriefingCalendarRoll;  // MorningBriefing_DayOfRest
+                     if (EnumScenario.Retrofit == lastReport.Scenario)
+                     {
+                        gi.EventDisplayed = gi.EventActive = "e006a";
+                        gi.DieRollAction = GameAction.DieRollActionNone;
+                     }
+                     else
+                     {
+                        gi.EventDisplayed = gi.EventActive = "e006";
+                        gi.DieRollAction = GameAction.MorningBriefingCalendarRoll; // MorningBriefing_DayOfRest
+                     }
                   }
                   break;
                case GameAction.EndGameClose:
@@ -2818,6 +2877,69 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Return_HealedCrewman(): SetCrewActionTerritory() returned false");
             return false;
          }
+         return true;
+      }
+      protected bool CheckGyrostablizerTraining(IGameInstance gi, ref GameAction action)
+      {
+
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Check_GyrostablizerTraining(): lastReport=null");
+            return false;
+         }
+         //-----------------------------------------
+         int totalRating = 0;
+         string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Driver" };
+         foreach (string crewmember in crewmembers)
+         {
+            ICrewMember? cm = gi.GetCrewMemberByRole(crewmember);
+            if (null == cm)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Check_GyrostablizerTraining(): cm=null for " + crewmember);
+               return false;
+            }
+            totalRating += cm.Rating;
+         }
+         //-----------------------------------------
+         if( (null != gi.ShermanHvss) && (29 < totalRating) &&  (gi.Day < 140)) // retrofits must be greater than 7 days for training which only occurs before day 140
+         {
+            gi.IsGunnerTrainedInHvss = true;
+            gi.EventDisplayed = gi.EventActive = "e006c";
+            gi.DieRollAction = GameAction.DieRollActionNone;
+         }
+         else
+         {
+            if( false == FinishRetrofitTraining(gi))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Check_GyrostablizerTraining(): lastReport=null");
+               return false;
+            }
+         }
+         return true;
+      }
+      bool FinishRetrofitTraining(IGameInstance gi)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Finish_RetrofitTraining(): lastReport=null");
+            return false;
+         }
+         //-------------------------------------------------------
+         ++gi.Day;
+         ICombatCalendarEntry? newEntry = TableMgr.theCombatCalendarEntries[gi.Day]; // add new report for tomorrow activities
+         if (null == newEntry)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Finish_RetrofitTraining(): newEntry=null");
+            return false;
+         }
+         IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport);
+         gi.Reports.Add(newReport);
+         Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "Finish_RetrofitTraining(): newReport=" + gi.Day + " date=" + TableMgr.GetDate(gi.Day));
+         //-------------------------------------------------------
+         gi.EventDisplayed = gi.EventActive = "e006";
+         gi.DieRollAction = GameAction.MorningBriefingCalendarRoll; // MorningBriefing_DayOfRest
          return true;
       }
    }
@@ -5777,7 +5899,7 @@ namespace Pattons_Best
                gi.Sherman.IsMoving = true;
                gi.Sherman.IsMoved = true;
                //--------------------------------------------------
-               if ((false == gi.IsShermanHvss) && (null != gi.TargetMainGun) ) // if tank moves or pivots, acquired modifer drops to zero
+               if ((false == gi.IsGunnerTrainedInHvss) && (null != gi.TargetMainGun) ) // if tank moves or pivots, acquired modifer drops to zero
                {
                   Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Conduct_CrewAction(): gi.TargetMainGun.EnemyAcquiredShots.Clear()"); // Tank moved without HVSS losing acq
                   gi.TargetMainGun.EnemyAcquiredShots.Clear(); 
@@ -5844,7 +5966,7 @@ namespace Pattons_Best
                gi.DieRollAction = GameAction.DieRollActionNone;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 3-phase=" + gi.CrewActionPhase.ToString());
             }
-            else if ((true == isTankFiringMainGun) && ((false == gi.Sherman.IsMoved) || (true == gi.IsShermanHvss)))
+            else if ((true == isTankFiringMainGun) && ((false == gi.Sherman.IsMoved) || (true == gi.IsGunnerTrainedInHvss)))
             {
                if (false == GetShermanTargets(gi, ref outAction))
                {
@@ -7769,6 +7891,7 @@ namespace Pattons_Best
                      returnStatus = "SwitchMembers() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(EveningDebriefingRatingImprovement): " + returnStatus);
                   }
+                  lastReport.DayEndedTime = TableMgr.GetTime(lastReport);
                   break;
                case GameAction.EveningDebriefingRatingImprovementEnd:
                   gi.EventDisplayed = gi.EventActive = "e101";
@@ -7920,8 +8043,6 @@ namespace Pattons_Best
          report.VictoryPtsTotalEngagement = report.VictoryPtsTotalYourTank + report.VictoryPtsTotalFriendlyForces + report.VictoryPtsTotalTerritory;
          gi.VictoryPtsTotalCampaign += report.VictoryPtsTotalEngagement;
          gi.PromotionPointNum += report.VictoryPtsTotalYourTank;
-         //----------------------------------
-         report.DayEndedTime = TableMgr.GetTime(report);
          //----------------------------------
          return true;
       }
@@ -8202,10 +8323,17 @@ namespace Pattons_Best
          }
          else
          {
-            gi.EventDisplayed = gi.EventActive = "e006";                 // Reset_Day()
-            gi.DieRollAction = GameAction.MorningBriefingCalendarRoll;   // Reset_Day()
+            if( EnumScenario.Retrofit == newReport.Scenario )
+            {
+               gi.EventDisplayed = gi.EventActive = "e006a";      // Reset_Day()
+               gi.DieRollAction = GameAction.DieRollActionNone;   // Reset_Day()
+            }
+            else
+            {
+               gi.EventDisplayed = gi.EventActive = "e006";                 // Reset_Day()
+               gi.DieRollAction = GameAction.MorningBriefingCalendarRoll;   // Reset_Day()
+            }
          }
-         
          return true;
       }
    }

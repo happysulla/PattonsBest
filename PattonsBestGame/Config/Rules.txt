@@ -2347,21 +2347,17 @@ When turned on, it would keep the gun in a level position while the tank moved. 
 <LineBreak/><LineBreak/>
 In practice, most crews found the Stabilizer dangerous (the gun would move up and down on its own) and difficult to use. However, others thought the Stabilizer was a great asset if properly used.
 <LineBreak/><LineBreak/>
-<InlineUIContainer><Button Content='r25.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Training Crew<LineBreak/>
-<InlineUIContainer><Button Content='r25.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Trained Crew<LineBreak/>
-<InlineUIContainer><Button Content='r25.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Stabilizer Use"
+<InlineUIContainer><Button Content='r27.21' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Training Crew<LineBreak/>
+<InlineUIContainer><Button Content='r27.22' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Stabilizer Use"
 r27.21	"<Bold>r27.21 Training Crew</Bold>
 <LineBreak/><LineBreak/>
 During a refit of at least 7 days, you may have your crew trained in the use of the gyrostabalizier if the combined rating of the crew is 30 or higher. 
 <LineBreak/><LineBreak/>
-Mark the After Action Report 
-<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> that the crew is gyroStabilizer trained."
-r27.22	"<Bold>r27.22 Trained Crew</Bold>
-<LineBreak/><LineBreak/>
 Once trained, your crew stays so unless your gunner is lost. Other crew casulaties have no effect. 
 <LineBreak/><LineBreak/>
-Loss of your gunner loses your training. No replaement gunners have this training."
-r27.23	"<Bold>r27.23 Stabilizer Use</Bold>
+Mark the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> that the crew is gyroStabilizer trained."
+r27.22	"<Bold>r27.22 Stabilizer Use</Bold>
 <LineBreak/><LineBreak/>
 In order to use the stabilizer, your crew must be trained in its use. If not trained, you may not fire the main gun during rounds when the tank is moved or pivoted. 
 <LineBreak/><LineBreak/>

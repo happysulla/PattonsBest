@@ -64,22 +64,21 @@ e006a	"<Bold>e006a Retrofit Period</Bold>
 <InlineUIContainer><Button Content='r27.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
 During the periods on the Combat <InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
- marked Refitting, the Division is building itself back up to strength, replacing tanks, and retraining new crews. 
+ marked Refitting, the Division is building itself back up to strength, replacing tanks, and retraining crews. 
 <LineBreak/><LineBreak/>
 During a refit period, you have the option of replacing your current tank per 
-<InlineUIContainer><Button Content='r24.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+<InlineUIContainer><Button Content='r24.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Select one of the following images to continue.
 <LineBreak/><LineBreak/>"
 e006b	"<Bold>e006b Retrofit Period - Crew Training</Bold> 
 <InlineUIContainer><Button Content='r27.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-<InlineUIContainer><Button Content='r27.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-Since the refit takes at least 7 days, you may attempt to improve your crew ratings per 
-<InlineUIContainer><Button Content='r27.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-and train your crew to use the gyrostablilizer per 
-<InlineUIContainer><Button Content='r27.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+<LineBreak/><LineBreak/>
+Since the refit takes at least 7 days, you may attempt to improve your crew ratings. Click image to continue.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='Continue06b' Height='100' Width='100'></Image></InlineUIContainer>"
 e006c	"<Bold>e006c Retrofit Period - Gyrostabilizer</Bold> 
 <InlineUIContainer><Button Content='r27.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-When the refit takes at least 7 days, and your crew has a combined rating of 30, your crew is trained in the use of the gyrostablilizer per 
-<InlineUIContainer><Button Content='r27.21' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Loss of the gunner losses the Horizontal Volute Spring Suspension (HVSS) capability. Click image to continue.
+Since the refit takes at least 7 days, and your crew has a combined rating of 30, your crew is trained in the use of the gyrostablilizer per 
+<InlineUIContainer><Button Content='r27.22' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Loss of the gunner losses the Horizontal Volute Spring Suspension (HVSS) capability. Click image to continue.
 <LineBreak/><LineBreak/>
                                                   <InlineUIContainer><Image Name='c75Hvss'  Height='80' Width='80'></Image></InlineUIContainer>"
 e007a	"<Bold>e007a Crew Healing</Bold> 

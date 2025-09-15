@@ -431,6 +431,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): PerformFacingChange() returned false");
                break;
             case GameAction.EveningDebriefingRatingImprovement:
+            case GameAction.MorningBriefingTrainCrew:
                EventViewerRatingImprove crewRatingImprove = new EventViewerRatingImprove(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == crewRatingImprove.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): crewRatingImprove.CtorError=true");
@@ -750,7 +751,7 @@ namespace Pattons_Best
                      ReplaceText("SCENARIO", "Counterattack");
                      break;
                   default:
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default scenario=" + report.Scenario.ToString());
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default key=" + key + " for scenario=" + report.Scenario.ToString());
                      return false;
                }
                switch (report.Resistance)
@@ -794,6 +795,19 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Possible contact. Click image to continue."));
                }
+               break;
+            case "e006a":
+               Image imge006a = new Image { Name = "MorningBriefingTankReplaceChoice", Width = 50, Height = 50, Source = MapItem.theMapImages.GetBitmapImage("t01Deny") };
+               myTextBlock.Inlines.Add(new InlineUIContainer(imge006a));
+               myTextBlock.Inlines.Add("  Replace existing tank ");
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               Image imge006b = new Image { Name = "MorningBriefingTankKeepChoice", Width = 50, Height = 50, Source = MapItem.theMapImages.GetBitmapImage("t01") };
+               myTextBlock.Inlines.Add(new InlineUIContainer(imge006b));
+               myTextBlock.Inlines.Add("  Keep existing tank");
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("Click one of images to continue."));
                break;
             case "e007a":
                if ( 0 == gi.InjuredCrewMembers.Count )
@@ -2334,7 +2348,7 @@ namespace Pattons_Best
                sb51.Append(" for cmdr rating directing move using cupola\n");
             }
          }
-         if( true == gi.IsShermanHvss)
+         if( null != gi.ShermanHvss )
             sb51.Append("-2 for HVSS suspension\n");
          if (true == driver.IsButtonedUp)
             sb51.Append("+5 Driver buttoned up\n");
@@ -2395,7 +2409,7 @@ namespace Pattons_Best
                sb51.Append(" for cmdr rating directing move\n");
             }
          }
-         if (true == gi.IsShermanHvss)
+         if (null != gi.ShermanHvss )
             sb51.Append("-5 for HVSS suspension\n");
          if (true == driver.IsButtonedUp)
             sb51.Append("+10 Driver buttoned up\n");
@@ -4841,6 +4855,8 @@ namespace Pattons_Best
             return false;
          }
          GameAction outAction = GameAction.EveningDebriefingRatingImprovementEnd;
+         if( GamePhase.MorningBriefing == myGameInstance.GamePhase )
+            outAction = GameAction.EveningDebriefingRatingTrainingEnd;
          StringBuilder sb11 = new StringBuilder("     ######ShowRatingImproveResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
@@ -4988,6 +5004,13 @@ namespace Pattons_Best
             return;
          }
          //------------------------------------------------------------------------
+         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentPromotion():  myGameInstance.Reports.GetLast()");
+            return;
+         }
+         //------------------------------------------------------------------------
          GameAction action = GameAction.Error;
          if (myGameInstance.EventActive != myGameInstance.EventDisplayed) // if an image is clicked, only take action if on active screen
          {
@@ -5048,8 +5071,16 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "Ambulance3": // Morning Briefing
-                           myGameInstance.EventDisplayed = myGameInstance.EventActive = "e006";   
-                           myGameInstance.DieRollAction = GameAction.MorningBriefingCalendarRoll;
+                           if (EnumScenario.Retrofit == lastReport.Scenario)
+                           {
+                              myGameInstance.EventDisplayed = myGameInstance.EventActive = "e006a";       
+                              myGameInstance.DieRollAction = GameAction.DieRollActionNone;   
+                           }
+                           else
+                           {
+                              myGameInstance.EventDisplayed = myGameInstance.EventActive = "e006";                  
+                              myGameInstance.DieRollAction = GameAction.MorningBriefingCalendarRoll;    
+                           }
                            action = GameAction.UpdateEventViewerActive;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
@@ -5065,10 +5096,26 @@ namespace Pattons_Best
                            action = GameAction.MorningBriefingReturningCrewman;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
+                        case "MorningBriefingTankReplaceChoice":
+                           action = GameAction.MorningBriefingTankReplaceChoice;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "MorningBriefingTankKeepChoice":
+                           action = GameAction.MorningBriefingTankKeepChoice;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "c75Hvss": // trained on HVSS
+                           action = GameAction.MorningBriefingTrainCrewHvssEnd;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
                         case "TankReplacement":
                            action = GameAction.MorningBriefingTankReplacementRoll;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
+                        case "Continue06b":
+                           action = GameAction.MorningBriefingTrainCrew;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
                         case "WeatherRollEnd":
                            action = GameAction.MorningBriefingWeatherRollEnd;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
@@ -5707,12 +5754,6 @@ namespace Pattons_Best
             case "AAR":
                if (null == myAfterActionDialog)
                {
-                  IAfterActionReport? aar = myGameInstance.Reports.GetLast();
-                  if (null == aar)
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateView():  gi.Reports.GetLast()=null");
-                     return false;
-                  }
                   AfterActionReportUserControl aarUserControl = new AfterActionReportUserControl(myGameInstance);
                   if (true == aarUserControl.CtorError)
                   {
