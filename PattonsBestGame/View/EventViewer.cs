@@ -802,12 +802,19 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add("  Replace existing tank ");
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
-               Image imge006b = new Image { Name = "MorningBriefingTankKeepChoice", Width = 50, Height = 50, Source = MapItem.theMapImages.GetBitmapImage("t01") };
-               myTextBlock.Inlines.Add(new InlineUIContainer(imge006b));
-               myTextBlock.Inlines.Add("  Keep existing tank");
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new Run("Click one of images to continue."));
+               if( false == gi.Sherman.IsKilled )
+               {
+                  Image imge006b = new Image { Name = "MorningBriefingTankKeepChoice", Width = 50, Height = 50, Source = MapItem.theMapImages.GetBitmapImage("t01") };
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge006b));
+                  myTextBlock.Inlines.Add("  Keep existing tank");
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click one of images to continue."));
+               }
+               else
+               {
+                  myTextBlock.Inlines.Add(new Run("Since your tank is destroyed, you must click replace tank image to continue."));
+               }
                break;
             case "e007a":
                if ( 0 == gi.InjuredCrewMembers.Count )
