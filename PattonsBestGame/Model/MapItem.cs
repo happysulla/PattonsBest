@@ -310,6 +310,11 @@ namespace Pattons_Best
       }
       public void SetBloodSpots(int percent=30)
       {
+         if( 0 == percent ) // heal if set to zero
+         {
+            myWoundSpots.Clear();
+            return;
+         }
          for (int spots = 0; spots < percent; ++spots) // splatter the MapItem with random blood spots
          {
             int range = (int)(Utilities.theMapItemSize);

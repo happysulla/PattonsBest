@@ -1903,7 +1903,7 @@ namespace Pattons_Best
          }
          //------------------------------------
          int dieRoll = Utilities.RandomGenerator.Next(1, 11);
-         dieRoll = 38; // <cgs> TEST - no hull down
+         //dieRoll = 38; // <cgs> TEST - no hull down
          if (false == SetDeployment(gi, dieRoll))
          {
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): SetDeployment() returned false");
@@ -2201,7 +2201,7 @@ namespace Pattons_Best
             else
                diceRoll = die1 + 10 * die2;
             //diceRoll = 11; // <cgs> TEST - AdvanceRetreat - infantry appearing
-            diceRoll = 45; // <cgs> TEST -  KillYourTank - TANKS APPEARING in battle scenario
+            //diceRoll = 45; // <cgs> TEST -  KillYourTank - TANKS APPEARING in battle scenario
             //diceRoll = 51; // <cgs> TEST -  ATG appearing
             string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
             IMapItem? mi = null;
@@ -2328,8 +2328,9 @@ namespace Pattons_Best
          option.IsEnabled = true;
          gi.Options.Add(option);
          //--------------------------------
-         gi.Day = 36;                                        // <cgs> TEST - Day before first Retrofitting - day 37 is retrofitting
-         //gi.Day = 100;                                     // <cgs> TEST - After Nov 1944 for HVSS   
+         //gi.Day = 36;                                        // <cgs> TEST - Day before first Retrofitting - day 37 is retrofitting
+         //gi.Day = 100;                                       // <cgs> TEST - After Nov 1944 for HVSS   
+         gi.Day = 111;                                      // <cgs> TEST - After Nov 1944 - day 111 is retrofit period 
          //--------------------------------
          //lastReport.Driver.SetBloodSpots(20);              // <cgs> TEST - wounded crewmen
          //lastReport.Driver.Wound = "Light Wound";          // <cgs> TEST - wounded crewmen
@@ -2395,8 +2396,8 @@ namespace Pattons_Best
          //--------------------------------
          //gi.PromotionPointNum = 400; // <cgs> TEST - EndOfDay - Force Promo at end of day
          //--------------------------------
-         //lastReport.SunriseHour = 18;  // <cgs> TEST - EndOfDay - start at end of day
-         //lastReport.SunriseMin = 30;   // <cgs> TEST - EndOfDay - start at end of day
+         lastReport.SunriseHour = 18;  // <cgs> TEST - EndOfDay - start at end of day
+         lastReport.SunriseMin = 30;   // <cgs> TEST - EndOfDay - start at end of day
          //--------------------------------
          //ICrewMember loader = new CrewMember("Loader", "Cpl", "c09Loader");
          //loader.Rating = 7;
@@ -2689,6 +2690,7 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.MorningBriefingTimeCheckRoll;
                   break;
                case GameAction.MorningBriefingTimeCheckRoll:
+                  dieRoll = 1; // <cgs> TEST - no COMBAT CHANCE
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (false == TableMgr.SetTimeTrack(lastReport, gi.Day))
@@ -3933,7 +3935,7 @@ namespace Pattons_Best
                case GameAction.BattleAmbushRoll:
                   if (true == lastReport.Weather.Contains("Rain") || true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
                      dieRoll--;
-                  dieRoll = 1; // <cgs> TEST - KillYourTank - AMBUSH!!!!!
+                  dieRoll = 10; // <cgs> TEST - KillYourTank - no AMBUSH!!!!!
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (dieRoll < 8)
@@ -4861,7 +4863,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceShermanToHitRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     //dieRoll = -20; // <cgs> TEST - SHERMAN TO HIT Roll
+                     //dieRoll = -20; // <cgs> TEST - KillEnemy - SHERMAN TO HIT Roll
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                      gi.FiredAmmoType = gi.GetGunLoadType();  // used in EventViewer.UpdateEventContentToGetToHit()
@@ -6889,7 +6891,7 @@ namespace Pattons_Best
          else if ((Utilities.NO_RESULT == gi.DieResults[key][1]) && (true == gi.TargetMainGun.IsVehicle)) // 2nd time through for vehicles hits this branch
          {
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "Resolve_ToKillEnemyUnit(): 2nd time through to kill ------V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V ");
-            //dieRoll = 100; // <cgs> TEST - SHERMAN TO KILL Roll
+            //dieRoll = 1; // <cgs> TEST - KillEnemyUnit - SHERMAN TO KILL Roll
             gi.DieResults[key][1] = dieRoll;
             gi.DieRollAction = GameAction.DieRollActionNone;
             if (false == ResolveToKillEnemyUnitKill(gi, ref outAction, gi.DieResults[key][1]))
@@ -6963,9 +6965,8 @@ namespace Pattons_Best
                gi.TargetMainGun.IsApHit = false;
                gi.TargetMainGun.IsKilled = true;
                gi.TargetMainGun.IsMoving = false;
+               gi.Sherman.EnemyAcquiredShots.Remove(gi.TargetMainGun.Name);
                gi.TargetMainGun.SetBloodSpots();
-               if (true == gi.Sherman.EnemyAcquiredShots.ContainsKey(gi.TargetMainGun.Name)) // reset to zero if target is killed
-                  gi.Sherman.EnemyAcquiredShots[gi.TargetMainGun.Name] = 0;
                return true;
             }
             if (TableMgr.NO_CHANCE == modifier)
@@ -7022,9 +7023,8 @@ namespace Pattons_Best
                      gi.TargetMainGun.IsApHit = false;
                      gi.TargetMainGun.IsKilled = true;
                      gi.TargetMainGun.IsMoving = false;
+                     gi.Sherman.EnemyAcquiredShots.Remove(gi.TargetMainGun.Name);
                      gi.TargetMainGun.SetBloodSpots();
-                     if (true == gi.Sherman.EnemyAcquiredShots.ContainsKey(gi.TargetMainGun.Name)) // reset to zero if target is killed
-                        gi.Sherman.EnemyAcquiredShots[gi.TargetMainGun.Name] = 0;
                      return true;
                   }
                   else if (TableMgr.NO_CHANCE == toKillNum)
@@ -7094,8 +7094,7 @@ namespace Pattons_Best
                      gi.TargetMainGun.IsKilled = true;
                      gi.TargetMainGun.IsMoving = false;
                      gi.TargetMainGun.SetBloodSpots();
-                     if (true == gi.Sherman.EnemyAcquiredShots.ContainsKey(gi.TargetMainGun.Name)) // reset to zero if target is killed
-                        gi.Sherman.EnemyAcquiredShots[gi.TargetMainGun.Name] = 0;
+                     gi.Sherman.EnemyAcquiredShots.Remove(gi.TargetMainGun.Name);
                      return true;
                   }
                   else if (TableMgr.NO_CHANCE == toKillNum)
@@ -7132,8 +7131,7 @@ namespace Pattons_Best
                      gi.TargetMainGun.IsKilled = true;
                      gi.TargetMainGun.IsMoving = false;
                      gi.TargetMainGun.SetBloodSpots();
-                     if (true == gi.Sherman.EnemyAcquiredShots.ContainsKey(gi.TargetMainGun.Name)) // reset to zero if target is killed
-                        gi.Sherman.EnemyAcquiredShots[gi.TargetMainGun.Name] = 0;
+                     gi.Sherman.EnemyAcquiredShots.Remove(gi.TargetMainGun.Name);
                      return true;
                   }
                   else if (TableMgr.NO_CHANCE == toKillNum)
@@ -7247,10 +7245,7 @@ namespace Pattons_Best
             return false;
          }
          if (true == gi.TargetMainGun.IsKilled)
-         {
-            if (true == gi.Sherman.EnemyAcquiredShots.ContainsKey(gi.TargetMainGun.Name)) // reset to zero if target is killed
-               gi.Sherman.EnemyAcquiredShots[gi.TargetMainGun.Name] = 0;
-         }
+            gi.Sherman.EnemyAcquiredShots.Remove(gi.TargetMainGun.Name);
          //-------------------------------
          string key = gi.EventActive;
          gi.DieResults[key][0] = Utilities.NO_RESULT;

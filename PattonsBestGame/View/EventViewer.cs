@@ -2610,14 +2610,11 @@ namespace Pattons_Best
             return "ERROR";
          }
          //------------------------------------
-         int numShots = 0;
-         if (true == enemyUnit.EnemyAcquiredShots.ContainsKey(enemyUnit.Name)) // Fire_AndReloadGun() - Increase when firing at a target
-         {
-            numShots = enemyUnit.EnemyAcquiredShots[enemyUnit.Name];
-         }
-         //------------------------------------
          StringBuilder sb51 = new StringBuilder();
          //------------------------------------
+         int numShots = 0;
+         if (true == enemyUnit.EnemyAcquiredShots.ContainsKey("Sherman")) // Fire_AndReloadGun() - Increase when firing at a target
+            numShots = enemyUnit.EnemyAcquiredShots["Sherman"];
          if (0 == numShots)
          {
             Logger.Log(LogEnum.LE_SHOW_NUM_ENEMY_SHOTS, "UpdateEventContent_GetToHitModifier(): acq=" + numShots.ToString() + " isCommanderDirectingFire=" + isCommanderDirectingFire.ToString() + " commander.IsButtonedUp=" + commander.IsButtonedUp.ToString() + " for enemyUnit=" + enemyUnit.Name);
@@ -5776,8 +5773,8 @@ namespace Pattons_Best
                action = GameAction.SetupShowMapHistorical;
                //action = GameAction.TestingStartMorningBriefing;  // <cgs> TEST - skip the ammo setup
                //action = GameAction.TestingStartPreparations;     // <cgs> TEST - skip morning briefing and crew/ammo setup
-               //action = GameAction.TestingStartMovement;         // <cgs> TEST - start with movement - skip battle prep phase
-               action = GameAction.TestingStartBattle;           // <cgs> TEST - skip the movement portion - begin with battle setup
+               action = GameAction.TestingStartMovement;         // <cgs> TEST - start with movement - skip battle prep phase
+               //action = GameAction.TestingStartBattle;           // <cgs> TEST - skip the movement portion - begin with battle setup
                //action = GameAction.TestingStartAmbush;           // <cgs> TEST - skip battle setup
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
