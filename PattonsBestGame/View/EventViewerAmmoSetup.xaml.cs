@@ -1093,7 +1093,7 @@ namespace Pattons_Best
                      sb.Append("May voluntarily take extra ammo");
                      break;
                   default:
-                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): reached default=" + entry.ToString());
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): reached default scenaro=" + entry.Scenario.ToString() + " for day=" + myGameInstance.Day + " date=" + TableMgr.GetDate(myGameInstance.Day));
                      return;
                }
             }
@@ -1111,7 +1111,7 @@ namespace Pattons_Best
                      myExtraAmmo = 0;
                      break;
                   default:
-                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): reached default=" + entry.ToString());
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): reached default scenaro=" + entry.Scenario.ToString() + " for day=" + myGameInstance.Day + " date=" + TableMgr.GetDate(myGameInstance.Day));
                      return;
                }
             }

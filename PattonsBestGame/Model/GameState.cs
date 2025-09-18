@@ -197,7 +197,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): cm=null for name=" + crewmember);
                return false;
             }
-            cm.Wound = "";
+            cm.Wound = "None";
             cm.SetBloodSpots(0);
             if (true == cm.IsIncapacitated)
             {
@@ -2330,7 +2330,7 @@ namespace Pattons_Best
          //--------------------------------
          //gi.Day = 36;                                        // <cgs> TEST - Day before first Retrofitting - day 37 is retrofitting
          //gi.Day = 100;                                       // <cgs> TEST - After Nov 1944 for HVSS   
-         gi.Day = 111;                                      // <cgs> TEST - After Nov 1944 - day 111 is retrofit period 
+         gi.Day = 110;                                      // <cgs> TEST - After Nov 1944 - day 111 is retrofit period 
          //--------------------------------
          //lastReport.Driver.SetBloodSpots(20);              // <cgs> TEST - wounded crewmen
          //lastReport.Driver.Wound = "Light Wound";          // <cgs> TEST - wounded crewmen
@@ -2657,6 +2657,7 @@ namespace Pattons_Best
                      returnStatus = "Healed_CrewmanDayDecrease() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(Morning_BriefingCalendarRoll): " + returnStatus);
                   }
+                  dieRoll = 10; // <cgs> TEST - NO COMBAT - stay on move board
                   gi.DieResults[key][0] = dieRoll; // clicking on image either restarts next day or continues with MorningBriefingBegin
                   break;
                case GameAction.MorningBriefingWeatherRoll:
@@ -2733,7 +2734,7 @@ namespace Pattons_Best
                      IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport);
                      gi.Reports.Add(newReport);
                      Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "GameStateMorningBriefing.PerformAction(): newReport=" + gi.Day + " !!!!!!!!date=" + TableMgr.GetDate(gi.Day) + "!!!!!!!!!");
-                     if (EnumScenario.Retrofit == lastReport.Scenario)
+                     if (EnumScenario.Retrofit == newReport.Scenario)
                      {
                         gi.EventDisplayed = gi.EventActive = "e006a";
                         gi.DieRollAction = GameAction.DieRollActionNone;
