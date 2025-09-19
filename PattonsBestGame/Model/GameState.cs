@@ -2490,13 +2490,14 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MorningBriefingTankReplaceChoice:
+                  gi.DieResults["e007d"][0] = Utilities.NO_RESULT;
                   gi.EventDisplayed = gi.EventActive = "e007d";  // Tank Replacement
                   gi.DieRollAction = GameAction.MorningBriefingTankReplacementRoll;
                   break;
                case GameAction.MorningBriefingTankKeepChoice:
-                  if ((EnumScenario.Retrofit == lastReport.Scenario) && (gi.Day < 140))  // retrofits must be greater than 7 days for training which only occurs before day 140
+                  if ((EnumScenario.Retrofit == lastReport.Scenario) && (gi.Day < 140))  // retrofits must be greater than 7 days for crew training which only occurs before day 140
                   {
-                     gi.EventDisplayed = gi.EventActive = "e006b";  // after user chooses to keep tank in a retrofit
+                     gi.EventDisplayed = gi.EventActive = "e006b";  
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
                   else
@@ -2595,6 +2596,7 @@ namespace Pattons_Best
                   {
                      if ( (10 < lastReport.TankCardNum) && (18 != lastReport.TankCardNum) && (69 < gi.Day) ) // must be Nov 44 before tanks have HVSS
                      {
+                        gi.DieResults["e007e"][0] = Utilities.NO_RESULT;
                         gi.EventDisplayed = gi.EventActive = "e007e";  // HVSS Roll
                         gi.DieRollAction = GameAction.MorningBriefingTankReplacementHvssRoll;
                      }
@@ -2616,7 +2618,7 @@ namespace Pattons_Best
                case GameAction.MorningBriefingTankReplacementHvssRoll:
                   if(Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     //dieRoll = 1; // <cgs> - TEST - Show HVSS
+                     dieRoll = 1; // <cgs> - TEST - Get HVSS
                      gi.DieResults[key][0] = dieRoll;
                      gi.ShermanHvss = null;
                      if ( (dieRoll < 4) || ((11 < lastReport.TankCardNum) && (dieRoll < 6)) )
@@ -2704,6 +2706,7 @@ namespace Pattons_Best
                   lastReport.Ammo30CalibreMG -= dieRoll;
                   break;
                case GameAction.MorningBriefingDeployment:
+                  gi.DieResults["e007e"][0] = Utilities.NO_RESULT;
                   gi.GamePhase = GamePhase.Preparations;
                   gi.EventDisplayed = gi.EventActive = "e011";
                   gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
@@ -2904,8 +2907,9 @@ namespace Pattons_Best
             }
             totalRating += cm.Rating;
          }
+         totalRating = 30; // <cgs> TESTING - enforce HVSS training
          //-----------------------------------------
-         if( (null != gi.ShermanHvss) && (29 < totalRating) &&  (gi.Day < 140)) // retrofits must be greater than 7 days for training which only occurs before day 140
+         if ( (null != gi.ShermanHvss) && (29 < totalRating) &&  (gi.Day < 140)) // retrofits must be greater than 7 days for training which only occurs before day 140
          {
             gi.IsGunnerTrainedInHvss = true;
             gi.EventDisplayed = gi.EventActive = "e006c";
@@ -3439,7 +3443,8 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "GameStateMovement.PerformAction(MovementBattleCheckRoll): " + gi.MoveStacks.ToString());
                   Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "GameStateMovement.PerformAction(MovementBattleCheckRoll): gi.MapItemMoves.Clear()");
                   gi.MapItemMoves.Clear();
-                  //dieRoll = 10; // <cgs> TEST - do combat
+                  //dieRoll = 10; // <cgs> TEST - YES COMBAT ON MOVE BOARD
+                  dieRoll = 1; // <cgs> TEST - NO COMBAT ON MOVE BOARD
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (false == ResolveBattleCheckRoll(gi, dieRoll))
@@ -5902,7 +5907,7 @@ namespace Pattons_Best
                gi.Sherman.IsMoving = true;
                gi.Sherman.IsMoved = true;
                //--------------------------------------------------
-               if ((false == gi.IsGunnerTrainedInHvss) && (null != gi.TargetMainGun) ) // if tank moves or pivots, acquired modifer drops to zero
+               if ( ((false == gi.IsGunnerTrainedInHvss) || (null == gi.ShermanHvss)) && (null != gi.TargetMainGun) ) // if tank moves or pivots, acquired modifer drops to zero
                {
                   Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Conduct_CrewAction(): gi.TargetMainGun.EnemyAcquiredShots.Clear()"); // Tank moved without HVSS losing acq
                   gi.TargetMainGun.EnemyAcquiredShots.Clear(); 
@@ -5969,7 +5974,7 @@ namespace Pattons_Best
                gi.DieRollAction = GameAction.DieRollActionNone;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 3-phase=" + gi.CrewActionPhase.ToString());
             }
-            else if ((true == isTankFiringMainGun) && ((false == gi.Sherman.IsMoved) || (true == gi.IsGunnerTrainedInHvss)))
+            else if ((true == isTankFiringMainGun) && ((false == gi.Sherman.IsMoved) || ((true == gi.IsGunnerTrainedInHvss) && (null != gi.ShermanHvss)) ))
             {
                if (false == GetShermanTargets(gi, ref outAction))
                {

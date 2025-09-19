@@ -77,8 +77,11 @@ Since the refit takes at least 7 days, you may attempt to improve your crew rati
                                             <InlineUIContainer><Image Name='Continue06b' Height='100' Width='100'></Image></InlineUIContainer>"
 e006c	"<Bold>e006c Retrofit Period - Gyrostabilizer</Bold> 
 <InlineUIContainer><Button Content='r27.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<LineBreak/><LineBreak/>
 Since the refit takes at least 7 days, and your crew has a combined rating of 30, your crew is trained in the use of the gyrostablilizer per 
-<InlineUIContainer><Button Content='r27.22' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. Loss of the gunner losses the Horizontal Volute Spring Suspension (HVSS) capability. Click image to continue.
+<InlineUIContainer><Button Content='r27.22' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+<LineBreak/><LineBreak/>
+Loss of the gunner loses the Horizontal Volute Spring Suspension (HVSS) capability. Click image to continue.
 <LineBreak/><LineBreak/>
                                                   <InlineUIContainer><Image Name='c75Hvss'  Height='80' Width='80'></Image></InlineUIContainer>"
 e007a	"<Bold>e007a Crew Healing</Bold> 

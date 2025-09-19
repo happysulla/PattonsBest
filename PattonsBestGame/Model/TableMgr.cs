@@ -111,12 +111,10 @@ namespace Pattons_Best
          }
          else if (day < 145)
          {
-            if (111 == day)
+            if (137 == day)
                return "02/03-02/21 1944";
             sb.Append("02/");
-            int dayOfMonth = day - 134;
-            if (139 < day)
-               dayOfMonth = day - 116;
+            int dayOfMonth = day - 116;
             if (dayOfMonth < 10)
                sb.Append("0");
             sb.Append(dayOfMonth.ToString());
