@@ -132,7 +132,6 @@ namespace Pattons_Best
       bool IsShermanFirstShot { set; get; }
       bool IsShermanFiringAtFront { set; get; }
       bool IsShermanDeliberateImmobilization { set; get; }
-      bool IsGunnerTrainedInHvss { set; get; }
       string ShermanTypeOfFire { set; get; }
       int NumSmokeAttacksThisRound { set; get; }
       bool IsMalfunctionedMainGun { set; get; }
@@ -141,6 +140,7 @@ namespace Pattons_Best
       bool IsBrokenGunSight { set; get; }
       Dictionary<string, bool> FirstShots { set; get; }
       Dictionary<string, int> AcquiredShots { set; get; }
+      List<string> TrainedGunners { get; } // trained in use of HVSS 
       List<ShermanAttack> ShermanHits { set; get; }
       ShermanDeath? Death { set; get; }
       //------------------------------------------------

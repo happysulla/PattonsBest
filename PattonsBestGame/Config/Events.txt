@@ -51,7 +51,7 @@ e006	"<Bold>e006 Combat Calendar Check</Bold>
 <InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
 Roll for possible combat today. If die &lt;= probability, start morning briefing per 
-<InlineUIContainer><Button Content='e007' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  
+<InlineUIContainer><Button Content='e008' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  
 Otherwise continue with next day check.
 <LineBreak/><LineBreak/>
 Date from Combat Calendar: DATE<LineBreak/>
@@ -119,7 +119,7 @@ A gyrostabilizer was attached to the main gun of the Sherman tank to keep the gu
 Even if your tank has a gyrostabilizer, it requires the crew to be trained during a refit period before it can be used. Roll 1D to determine if you tank has HVSS installed per tank card.
 <LineBreak/><LineBreak/>
 Die Roll = <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>"
-e008	"<Bold>e007 Morning Briefing - Weather Roll</Bold> <InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+e008	"<Bold>e008 Morning Briefing - Weather Roll</Bold> <InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
 The 
 <InlineUIContainer><Button Content='Weather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 

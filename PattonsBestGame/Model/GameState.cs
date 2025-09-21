@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
+using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -2328,7 +2329,7 @@ namespace Pattons_Best
          option.IsEnabled = true;
          gi.Options.Add(option);
          //--------------------------------
-         //gi.Day = 36;                                        // <cgs> TEST - Day before first Retrofitting - day 37 is retrofitting
+         gi.Day = 67;                                        // <cgs> TEST - Day before first Retrofitting - day 37 is retrofitting
          //gi.Day = 100;                                       // <cgs> TEST - After Nov 1944 for HVSS   
          //gi.Day = 110;                                      // <cgs> TEST - After Nov 1944 - day 111 is retrofit period 
          //--------------------------------
@@ -2336,6 +2337,12 @@ namespace Pattons_Best
          //lastReport.Driver.Wound = "Light Wound";          // <cgs> TEST - wounded crewmen
          //lastReport.Driver.WoundDaysUntilReturn = 7;       // <cgs> TEST - wounded crewmen
          //gi.SetIncapacitated(lastReport.Driver);           // <cgs> TEST - wounded crewmen
+         //--------------------------------
+         lastReport.Gunner.SetBloodSpots(20);              // <cgs> TEST - wounded crewmen
+         lastReport.Gunner.Wound = "Light Wound";          // <cgs> TEST - wounded crewmen
+         lastReport.Gunner.WoundDaysUntilReturn = 14;      // <cgs> TEST - wounded crewmen
+         gi.SetIncapacitated(lastReport.Gunner);           // <cgs> TEST - wounded crewmen
+         gi.TrainedGunners.Add(lastReport.Gunner.Name);    // <cgs> TEST - wounded crewmen
          //--------------------------------
          //lastReport.Commander.SetBloodSpots(10);           // <cgs> TEST - wounded crewmen
          //lastReport.Commander.Wound = "Light Wound";       // <cgs> TEST - wounded crewmen
@@ -2495,7 +2502,7 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.MorningBriefingTankReplacementRoll;
                   break;
                case GameAction.MorningBriefingTankKeepChoice:
-                  if ((EnumScenario.Retrofit == lastReport.Scenario) && (50 != gi.Day) && (gi.Day < 140) )  // retrofits must be greater than 7 days for crew training which only occurs before day 140
+                  if ((EnumScenario.Retrofit == lastReport.Scenario) && ((37 == gi.Day) || (68 == gi.Day) || (97 == gi.Day) || (137 == gi.Day) || (144 == gi.Day)) )  // retrofits must be greater than 7 days for crew training 
                   {
                      gi.EventDisplayed = gi.EventActive = "e006b";  
                      gi.DieRollAction = GameAction.DieRollActionNone;
@@ -2504,7 +2511,7 @@ namespace Pattons_Best
                   {
                      if (false == AdvancePastRetrofit(gi))
                      {
-                        returnStatus = "Finish_RetrofitTraining(): returned false";
+                        returnStatus = "Advance_PastRetrofit(): returned false";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTankKeepChoice): " + returnStatus);
                      }
                   }
@@ -2521,7 +2528,7 @@ namespace Pattons_Best
                case GameAction.MorningBriefingTrainCrewHvssEnd:
                   if (false == AdvancePastRetrofit(gi))
                   {
-                     returnStatus = "Finish_RetrofitTraining(): returned false";
+                     returnStatus = "Advance_PastRetrofit(): returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTrainCrewHvssEnd): " + returnStatus);
                   }
                   break;
@@ -2604,7 +2611,7 @@ namespace Pattons_Best
                      {
                         if (EnumScenario.Retrofit == lastReport.Scenario)   
                         {
-                           if ( (37 == gi.Day) && (68 == gi.Day) && (97 == gi.Day) && (111 == gi.Day) && (137 == gi.Day) && (144 == gi.Day) ) // retrofits must be greater than 7 days for training 
+                           if ((37 == gi.Day) || (68 == gi.Day) || (97 == gi.Day) || (137 == gi.Day) || (144 == gi.Day)) // retrofits must be greater than 7 days for training 
                            {
                               gi.EventDisplayed = gi.EventActive = "e006b"; // after tank replacement which means should be Retrofit - crew training
                               gi.DieRollAction = GameAction.DieRollActionNone;
@@ -2653,7 +2660,7 @@ namespace Pattons_Best
                   {
                      if (EnumScenario.Retrofit == lastReport.Scenario)
                      {
-                        if ((37 == gi.Day) && (68 == gi.Day) && (97 == gi.Day) && (111 == gi.Day) && (137 == gi.Day) && (144 == gi.Day)) // retrofits must be greater than 7 days for training 
+                        if ((37 == gi.Day) || (68 == gi.Day) || (97 == gi.Day) || (137 == gi.Day) || (144 == gi.Day)) // retrofits must be greater than 7 days for training 
                         {
                            gi.EventDisplayed = gi.EventActive = "e006b"; // after tank replacement which means should be Retrofit - crew training
                            gi.DieRollAction = GameAction.DieRollActionNone;
@@ -2681,7 +2688,7 @@ namespace Pattons_Best
                      returnStatus = "Healed_CrewmanDayDecrease() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(Morning_BriefingCalendarRoll): " + returnStatus);
                   }
-                  dieRoll = 10; // <cgs> TEST - NO COMBAT - stay on move board
+                  //dieRoll = 6; // <cgs> TEST - NO COMBAT - stay on move board
                   gi.DieResults[key][0] = dieRoll; // clicking on image either restarts next day or continues with MorningBriefingBegin
                   break;
                case GameAction.MorningBriefingWeatherRoll:
@@ -2715,7 +2722,7 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.MorningBriefingTimeCheckRoll;
                   break;
                case GameAction.MorningBriefingTimeCheckRoll:
-                  dieRoll = 1; // <cgs> TEST - no COMBAT CHANCE
+                  //dieRoll = 1; // <cgs> TEST - no COMBAT CHANCE
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (false == TableMgr.SetTimeTrack(lastReport, gi.Day))
@@ -2745,7 +2752,7 @@ namespace Pattons_Best
                   break;
                case GameAction.MorningBriefingDayOfRest:
                   ++gi.Day;
-                  Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "GameStateMorningBriefing.PerformAction(MorningBriefingDayOfRest): increasing day to " + gi.Day.ToString() + " date=" + TableMgr.GetDate(gi.Day));
+                  Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "GameStateMorningBriefing.PerformAction(MorningBriefingDayOfRest): increasing day to " + gi.Day.ToString() + " date=" + TableMgr.GetDate(gi.Day) + " scenario=" + lastReport.Scenario.ToString());
                   gi.NewMembers.Clear();
                   ICombatCalendarEntry? newEntry = TableMgr.theCombatCalendarEntries[gi.Day];
                   if (null == newEntry)
@@ -2758,7 +2765,7 @@ namespace Pattons_Best
                      gi.DieResults[gi.EventActive][0] = Utilities.NO_RESULT;
                      IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport);
                      gi.Reports.Add(newReport);
-                     Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "GameStateMorningBriefing.PerformAction(): newReport=" + gi.Day + " !!!!!!!!date=" + TableMgr.GetDate(gi.Day) + "!!!!!!!!!");
+                     Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "GameStateMorningBriefing.PerformAction(): newReport=" + gi.Day + " !!!!!!!!date=" + TableMgr.GetDate(gi.Day) + "!!!!!!!!! scenario = " + newReport.Scenario.ToString() + "-->" + newReport.Scenario.ToString());
                      if (EnumScenario.Retrofit == newReport.Scenario)
                      {
                         gi.EventDisplayed = gi.EventActive = "e006a";
@@ -2822,11 +2829,30 @@ namespace Pattons_Best
             if( (TableMgr.MIA != cm.WoundDaysUntilReturn) && (TableMgr.KIA != cm.WoundDaysUntilReturn) )
             {
                if (EnumScenario.Retrofit == lastReport.Scenario)
-                  cm.WoundDaysUntilReturn -= 1;
+               {
+                  switch (gi.Day)
+                  {
+                     case 37: cm.WoundDaysUntilReturn -= 9; break;
+                     case 50: cm.WoundDaysUntilReturn -= 1; break;
+                     case 68: cm.WoundDaysUntilReturn -= 27; break;
+                     case 97: cm.WoundDaysUntilReturn -= 13; break;
+                     case 111: cm.WoundDaysUntilReturn -= 5; break;
+                     case 137: cm.WoundDaysUntilReturn -= 18; break;
+                     case 144: cm.WoundDaysUntilReturn -= 1; break;
+                     case 147: cm.WoundDaysUntilReturn -= 1; break;
+                     case 155: cm.WoundDaysUntilReturn -= 1; break;
+                     case 163: cm.WoundDaysUntilReturn -= 2; break;
+                     default:
+                        Logger.Log(LogEnum.LE_ERROR, "Healed_CrewmanDayDecrease(): reach default gi.Day=" + gi.Day.ToString());
+                        return false;
+                  }
+               }
                else
+               {
                   cm.WoundDaysUntilReturn--;
+               }
+
             }
-;
          }
          return true;
       }
@@ -2943,9 +2969,9 @@ namespace Pattons_Best
          }
          totalRating = 30; // <cgs> TESTING - enforce HVSS training
          //-----------------------------------------
-         if ( (null != gi.ShermanHvss) && (29 < totalRating) && (50 != gi.Day) && (gi.Day < 140)) // retrofits must be greater than 7 days for training which only occurs before day 140
+         if ( (null != gi.ShermanHvss) && (29 < totalRating) && ( (37 == gi.Day) || (68 == gi.Day) || (97 == gi.Day) || (137 == gi.Day) || (144 == gi.Day) ) ) // retrofits must be greater than 7 days for training 
          {
-            gi.IsGunnerTrainedInHvss = true;
+            gi.TrainedGunners.Add(lastReport.Gunner.Name);
             gi.EventDisplayed = gi.EventActive = "e006c";
             gi.DieRollAction = GameAction.DieRollActionNone;
          }
@@ -2961,6 +2987,12 @@ namespace Pattons_Best
       }
       protected bool AdvancePastRetrofit(IGameInstance gi)
       {
+         if (false == HealedCrewmanDayDecrease(gi))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Advance_PastRetrofit(): Healed_CrewmanDayDecrease() returned false");
+            return false;
+         }
+         //-------------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
@@ -2977,7 +3009,7 @@ namespace Pattons_Best
          }
          IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport);
          gi.Reports.Add(newReport);
-         Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "Finish_RetrofitTraining(): newReport=" + gi.Day + " date=" + TableMgr.GetDate(gi.Day));
+         Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "Advance_PastRetrofit(): newReport=" + gi.Day + " date=" + TableMgr.GetDate(gi.Day) + " scenario=" + newReport.Scenario.ToString() + "-->" + newReport.Scenario.ToString());
          //-------------------------------------------------------
          gi.EventDisplayed = gi.EventActive = "e006";
          gi.DieRollAction = GameAction.MorningBriefingCalendarRoll; // MorningBriefing_DayOfRest
@@ -5897,6 +5929,7 @@ namespace Pattons_Best
             return false;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
+         bool isGunnerTrainedInHvss = ( (true == gi.TrainedGunners.Contains(lastReport.Gunner.Name)) && (false == lastReport.Gunner.IsIncapacitated) );
          //---------------------------------------------------------
          foreach (IMapItem crewAction in gi.CrewActions)
          {
@@ -5941,7 +5974,7 @@ namespace Pattons_Best
                gi.Sherman.IsMoving = true;
                gi.Sherman.IsMoved = true;
                //--------------------------------------------------
-               if ( ((false == gi.IsGunnerTrainedInHvss) || (null == gi.ShermanHvss)) && (null != gi.TargetMainGun) ) // if tank moves or pivots, acquired modifer drops to zero
+               if ( ((false == isGunnerTrainedInHvss) || (null == gi.ShermanHvss)) && (null != gi.TargetMainGun) ) // if tank moves or pivots, acquired modifer drops to zero
                {
                   Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Conduct_CrewAction(): gi.TargetMainGun.EnemyAcquiredShots.Clear()"); // Tank moved without HVSS losing acq
                   gi.TargetMainGun.EnemyAcquiredShots.Clear(); 
@@ -6008,7 +6041,7 @@ namespace Pattons_Best
                gi.DieRollAction = GameAction.DieRollActionNone;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 3-phase=" + gi.CrewActionPhase.ToString());
             }
-            else if ((true == isTankFiringMainGun) && ((false == gi.Sherman.IsMoved) || ((true == gi.IsGunnerTrainedInHvss) && (null != gi.ShermanHvss)) ))
+            else if ((true == isTankFiringMainGun) && ((false == gi.Sherman.IsMoved) || ( (true== isGunnerTrainedInHvss) && (null != gi.ShermanHvss)) ))
             {
                if (false == GetShermanTargets(gi, ref outAction))
                {
@@ -8343,7 +8376,7 @@ namespace Pattons_Best
          if (true == gi.Sherman.IsKilled)
             newReport.Name = "To be determined";
          gi.Reports.Add(newReport);
-         Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "EveningDebriefing_ResetDay(): newReport=" + gi.Day + " date=" + TableMgr.GetDate(gi.Day));
+         Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "EveningDebriefing_ResetDay(): newReport=" + gi.Day + " date=" + TableMgr.GetDate(gi.Day) + " scenario=" + newReport.Scenario.ToString() + "-->" + newReport.Scenario.ToString());
          //-------------------------------------------------------
          bool isCrewmanReplaced;
          if (false == ReplaceInjuredCrewmen(gi, out isCrewmanReplaced, "EveningDebriefing_ResetDay()"))  // Reset_Day()

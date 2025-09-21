@@ -77,7 +77,6 @@ namespace Pattons_Best
       public bool IsShermanFirstShot { set; get; } = false;
       public bool IsShermanFiringAtFront { set; get; } = false;
       public bool IsShermanDeliberateImmobilization { set; get; } = false;
-      public bool IsGunnerTrainedInHvss { set; get; } = false;
       public int NumSmokeAttacksThisRound { set; get; } = 0;
       public bool IsMalfunctionedMainGun { set; get; } = false;
       public bool IsMainGunRepairAttempted { set; get; } = false;
@@ -85,6 +84,7 @@ namespace Pattons_Best
       public bool IsBrokenGunSight { set; get; } = false;
       public Dictionary<string, bool> FirstShots { set; get; } = new Dictionary<string, bool>();
       public Dictionary<string, int> AcquiredShots { set; get; } = new Dictionary<string, int>();
+      public List<string> TrainedGunners { get; } = new List<string>();
       public List<ShermanAttack> ShermanHits { set; get; } = new List<ShermanAttack>();
       public ShermanDeath? Death { set; get; } = null;
       //---------------------------------------------------------------
@@ -454,8 +454,6 @@ namespace Pattons_Best
          foreach (IMapItem mi in removals)
             this.Hatches.Remove(mi);
          cm.IsButtonedUp = true;
-         if ("Gunner" == cm.Role)
-            this.IsGunnerTrainedInHvss = false;
       }
       public bool SwitchMembers(string switchingMemberRole)
       {
