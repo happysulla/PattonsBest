@@ -2330,7 +2330,7 @@ namespace Pattons_Best
          //--------------------------------
          //gi.Day = 36;                                        // <cgs> TEST - Day before first Retrofitting - day 37 is retrofitting
          //gi.Day = 100;                                       // <cgs> TEST - After Nov 1944 for HVSS   
-         gi.Day = 110;                                      // <cgs> TEST - After Nov 1944 - day 111 is retrofit period 
+         //gi.Day = 110;                                      // <cgs> TEST - After Nov 1944 - day 111 is retrofit period 
          //--------------------------------
          //lastReport.Driver.SetBloodSpots(20);              // <cgs> TEST - wounded crewmen
          //lastReport.Driver.Wound = "Light Wound";          // <cgs> TEST - wounded crewmen
@@ -2495,7 +2495,7 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.MorningBriefingTankReplacementRoll;
                   break;
                case GameAction.MorningBriefingTankKeepChoice:
-                  if ((EnumScenario.Retrofit == lastReport.Scenario) && (gi.Day < 140))  // retrofits must be greater than 7 days for crew training which only occurs before day 140
+                  if ((EnumScenario.Retrofit == lastReport.Scenario) && (50 != gi.Day) && (gi.Day < 140) )  // retrofits must be greater than 7 days for crew training which only occurs before day 140
                   {
                      gi.EventDisplayed = gi.EventActive = "e006b";  
                      gi.DieRollAction = GameAction.DieRollActionNone;
@@ -2602,10 +2602,21 @@ namespace Pattons_Best
                      }
                      else
                      {
-                        if ((EnumScenario.Retrofit == lastReport.Scenario) && (gi.Day < 140))  // retrofits must be greater than 7 days for training which only occurs before day 140
+                        if (EnumScenario.Retrofit == lastReport.Scenario)   
                         {
-                           gi.EventDisplayed = gi.EventActive = "e006b"; // after tank replacement which means should be Retrofit - crew training
-                           gi.DieRollAction = GameAction.DieRollActionNone;
+                           if ( (37 == gi.Day) && (68 == gi.Day) && (97 == gi.Day) && (111 == gi.Day) && (137 == gi.Day) && (144 == gi.Day) ) // retrofits must be greater than 7 days for training 
+                           {
+                              gi.EventDisplayed = gi.EventActive = "e006b"; // after tank replacement which means should be Retrofit - crew training
+                              gi.DieRollAction = GameAction.DieRollActionNone;
+                           }
+                           else
+                           {
+                              if (false == AdvancePastRetrofit(gi))
+                              {
+                                 returnStatus = "AdvancePast_Retrofit(): returned false";
+                                 Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementRoll): " + returnStatus);
+                              }
+                           }                          
                         }
                         else
                         {
@@ -2640,10 +2651,21 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     if ((EnumScenario.Retrofit == lastReport.Scenario) && (gi.Day < 140))  // retrofits must be greater than 7 days for training which only occurs before day 140
+                     if (EnumScenario.Retrofit == lastReport.Scenario)
                      {
-                        gi.EventDisplayed = gi.EventActive = "e006b"; // after tank replacement which means should be Retrofit - crew training
-                        gi.DieRollAction = GameAction.DieRollActionNone;
+                        if ((37 == gi.Day) && (68 == gi.Day) && (97 == gi.Day) && (111 == gi.Day) && (137 == gi.Day) && (144 == gi.Day)) // retrofits must be greater than 7 days for training 
+                        {
+                           gi.EventDisplayed = gi.EventActive = "e006b"; // after tank replacement which means should be Retrofit - crew training
+                           gi.DieRollAction = GameAction.DieRollActionNone;
+                        }
+                        else
+                        {
+                           if (false == AdvancePastRetrofit(gi))
+                           {
+                              returnStatus = "AdvancePast_Retrofit(): returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementHvssRoll): " + returnStatus);
+                           }
+                        }
                      }
                      else
                      {
@@ -2783,6 +2805,12 @@ namespace Pattons_Best
       }
       protected bool HealedCrewmanDayDecrease(IGameInstance gi)
       {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Healed_CrewmanDayDecrease(): lastReport=null");
+            return false;
+         }
          foreach (IMapItem mi in gi.InjuredCrewMembers)
          {
             ICrewMember? cm = mi as ICrewMember;
@@ -2792,7 +2820,13 @@ namespace Pattons_Best
                return false;
             }
             if( (TableMgr.MIA != cm.WoundDaysUntilReturn) && (TableMgr.KIA != cm.WoundDaysUntilReturn) )
-               cm.WoundDaysUntilReturn--;
+            {
+               if (EnumScenario.Retrofit == lastReport.Scenario)
+                  cm.WoundDaysUntilReturn -= 1;
+               else
+                  cm.WoundDaysUntilReturn--;
+            }
+;
          }
          return true;
       }
@@ -2909,7 +2943,7 @@ namespace Pattons_Best
          }
          totalRating = 30; // <cgs> TESTING - enforce HVSS training
          //-----------------------------------------
-         if ( (null != gi.ShermanHvss) && (29 < totalRating) &&  (gi.Day < 140)) // retrofits must be greater than 7 days for training which only occurs before day 140
+         if ( (null != gi.ShermanHvss) && (29 < totalRating) && (50 != gi.Day) && (gi.Day < 140)) // retrofits must be greater than 7 days for training which only occurs before day 140
          {
             gi.IsGunnerTrainedInHvss = true;
             gi.EventDisplayed = gi.EventActive = "e006c";

@@ -129,11 +129,13 @@ namespace Pattons_Best
             if (163 == day)
                return "03/21-03/23 1944";
             sb.Append("03/");
-            int dayOfMonth = day - 147;
+            int dayOfMonth = day - 144;
             if (149 < day)
                dayOfMonth = day - 143;
-            if (157 < day)
+            if (155 < day)
                dayOfMonth = day - 139;
+            if (163 < day)
+               dayOfMonth = day - 140;
             if (dayOfMonth < 10)
                sb.Append("0");
             sb.Append(dayOfMonth.ToString());
@@ -7557,7 +7559,7 @@ namespace Pattons_Best
          theCombatCalendarEntries.Add(new CombatCalendarEntry("09/20/44", EnumScenario.Advance, 3, EnumResistance.Light, "Arracourt"));
          theCombatCalendarEntries.Add(new CombatCalendarEntry("09/21/44", EnumScenario.Battle, 9, EnumResistance.Medium, "Arracourt"));
          theCombatCalendarEntries.Add(new CombatCalendarEntry("09/22/44", EnumScenario.Battle, 9, EnumResistance.Medium, "Arracourt"));
-         theCombatCalendarEntries.Add(new CombatCalendarEntry("09/23-09/24 1943", EnumScenario.Retrofit, 10, EnumResistance.None));                // +++++++++++++++++++++++++++++++++Day=50
+         theCombatCalendarEntries.Add(new CombatCalendarEntry("09/23-09/24 1943", EnumScenario.Retrofit, 10, EnumResistance.None));                // +++++++++++++++++++++++++++++++++Day=50 -- 3 days
          //---------------------------------------------------------------------------------------------------------------------
          theCombatCalendarEntries.Add(new CombatCalendarEntry("09/25/44", EnumScenario.Counterattack, 9, EnumResistance.Heavy, "Counter Attack"));
          theCombatCalendarEntries.Add(new CombatCalendarEntry("09/26/44", EnumScenario.Counterattack, 9, EnumResistance.Heavy, "Counter Attack"));
