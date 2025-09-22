@@ -2329,7 +2329,7 @@ namespace Pattons_Best
          option.IsEnabled = true;
          gi.Options.Add(option);
          //--------------------------------
-         gi.Day = 67;                                        // <cgs> TEST - Day before first Retrofitting - day 37 is retrofitting
+         //gi.Day = 67;                                        // <cgs> TEST - Day before first Retrofitting - day 37 is retrofitting
          //gi.Day = 100;                                       // <cgs> TEST - After Nov 1944 for HVSS   
          //gi.Day = 110;                                      // <cgs> TEST - After Nov 1944 - day 111 is retrofit period 
          //--------------------------------
@@ -2338,11 +2338,11 @@ namespace Pattons_Best
          //lastReport.Driver.WoundDaysUntilReturn = 7;       // <cgs> TEST - wounded crewmen
          //gi.SetIncapacitated(lastReport.Driver);           // <cgs> TEST - wounded crewmen
          //--------------------------------
-         lastReport.Gunner.SetBloodSpots(20);              // <cgs> TEST - wounded crewmen
-         lastReport.Gunner.Wound = "Light Wound";          // <cgs> TEST - wounded crewmen
-         lastReport.Gunner.WoundDaysUntilReturn = 14;      // <cgs> TEST - wounded crewmen
-         gi.SetIncapacitated(lastReport.Gunner);           // <cgs> TEST - wounded crewmen
-         gi.TrainedGunners.Add(lastReport.Gunner.Name);    // <cgs> TEST - wounded crewmen
+         //lastReport.Gunner.SetBloodSpots(20);              // <cgs> TEST - wounded crewmen
+         //lastReport.Gunner.Wound = "Light Wound";          // <cgs> TEST - wounded crewmen
+         //lastReport.Gunner.WoundDaysUntilReturn = 14;      // <cgs> TEST - wounded crewmen
+         //gi.SetIncapacitated(lastReport.Gunner);           // <cgs> TEST - wounded crewmen
+         //gi.TrainedGunners.Add(lastReport.Gunner.Name);    // <cgs> TEST - wounded crewmen
          //--------------------------------
          //lastReport.Commander.SetBloodSpots(10);           // <cgs> TEST - wounded crewmen
          //lastReport.Commander.Wound = "Light Wound";       // <cgs> TEST - wounded crewmen
@@ -2636,7 +2636,7 @@ namespace Pattons_Best
                case GameAction.MorningBriefingTankReplacementHvssRoll:
                   if(Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 1; // <cgs> - TEST - Get HVSS
+                     //dieRoll = 1; // <cgs> - TEST - Get HVSS
                      gi.DieResults[key][0] = dieRoll;
                      gi.ShermanHvss = null;
                      if ( (dieRoll < 4) || ((11 < lastReport.TankCardNum) && (dieRoll < 6)) )
@@ -3510,7 +3510,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "GameStateMovement.PerformAction(MovementBattleCheckRoll): gi.MapItemMoves.Clear()");
                   gi.MapItemMoves.Clear();
                   //dieRoll = 10; // <cgs> TEST - YES COMBAT ON MOVE BOARD
-                  dieRoll = 1; // <cgs> TEST - NO COMBAT ON MOVE BOARD
+                  //dieRoll = 1; // <cgs> TEST - NO COMBAT ON MOVE BOARD
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (false == ResolveBattleCheckRoll(gi, dieRoll))
@@ -4007,7 +4007,7 @@ namespace Pattons_Best
                case GameAction.BattleAmbushRoll:
                   if (true == lastReport.Weather.Contains("Rain") || true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
                      dieRoll--;
-                  dieRoll = 10; // <cgs> TEST - KillYourTank - no AMBUSH!!!!!
+                  //dieRoll = 10; // <cgs> TEST - KillYourTank - no AMBUSH!!!!!
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (dieRoll < 8)
