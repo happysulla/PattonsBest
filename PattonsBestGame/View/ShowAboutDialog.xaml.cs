@@ -20,9 +20,12 @@ namespace Pattons_Best
 {
    public partial class ShowAboutDialog : Window
    {
+      public delegate void EndShowAboutDialogCallback();
+      private EndShowAboutDialogCallback myCallback;
       public bool CtorError { get; } = false;
-      public ShowAboutDialog()
+      public ShowAboutDialog(EndShowAboutDialogCallback callback)
       {
+         myCallback = callback;
          InitializeComponent();
          //--------------------------------------
          StringBuilder sb = new StringBuilder();
@@ -73,6 +76,10 @@ namespace Pattons_Best
       private void ButtonOk_Click(object sender, RoutedEventArgs e)
       {
          Close();
+      }
+      private void Window_Closed(object sender, EventArgs e)
+      {
+         myCallback();
       }
    }
 }

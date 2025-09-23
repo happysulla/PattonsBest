@@ -241,46 +241,10 @@ namespace Pattons_Best
                   myAfterActionDialog.Activate();
                }
                break;
-            case GameAction.ShowCombatCalendarDialog:
-               if( false == myRulesMgr.ShowTable("Calendar"))
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): SmyRulesMgr.ShowTable(Calendar)=false");
-                  return;
-               }
-               break;
-            case GameAction.ShowReportErrorDialog:
-               if (null == myReportErrorDialog)
-               {
-                  myReportErrorDialog = new ShowReportErrorDialog();
-                  myReportErrorDialog.Show();
-               }
-               else
-               {
-                  myReportErrorDialog.WindowState = WindowState.Normal;
-                  myReportErrorDialog.Activate();
-               }
-               break;
-            case GameAction.ShowAboutDialog:
-               if (null == myDialogAbout)
-               {
-                  myDialogAbout = new ShowAboutDialog();
-                  if (true == myDialogAbout.CtorError)
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myDialogAbout CtorError=true");
-                     return;
-                  }
-                  myDialogAbout.Show();
-               }
-               else
-               {
-                  myDialogAbout.WindowState = WindowState.Normal;
-                  myDialogAbout.Activate();
-               }
-               break;
             case GameAction.ShowRuleListingDialog:
                if (null == myDialogRuleListing)
                {
-                  myDialogRuleListing = new RuleListingDialog(myRulesMgr, false);
+                  myDialogRuleListing = new RuleListingDialog(myRulesMgr, false, CloseRuleListingDialog);
                   if (true == myDialogRuleListing.CtorError)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateView(): RuleListingDialog CtorError=true");
@@ -297,7 +261,7 @@ namespace Pattons_Best
             case GameAction.ShowEventListingDialog:
                if (null == myDialogEventListing)
                {
-                  myDialogEventListing = new RuleListingDialog(myRulesMgr, false);
+                  myDialogEventListing = new RuleListingDialog(myRulesMgr, false, CloseEventListingDialog);
                   if (true == myDialogEventListing.CtorError)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myDialogEventListing CtorError=true");
@@ -314,7 +278,7 @@ namespace Pattons_Best
             case GameAction.ShowTableListing:
                if (null == myDialogTableListing)
                {
-                  myDialogTableListing = new TableListingDialog(myRulesMgr);
+                  myDialogTableListing = new TableListingDialog(myRulesMgr, CloseTableListingDialog);
                   if (true == myDialogTableListing.CtorError)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myDialogTableListing CtorError=true");
@@ -328,10 +292,46 @@ namespace Pattons_Best
                   myDialogTableListing.Activate();
                }
                break;
+            case GameAction.ShowCombatCalendarDialog:
+               if( false == myRulesMgr.ShowTable("Calendar"))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): SmyRulesMgr.ShowTable(Calendar)=false");
+                  return;
+               }
+               break;
+            case GameAction.ShowReportErrorDialog:
+               if (null == myReportErrorDialog)
+               {
+                  myReportErrorDialog = new ShowReportErrorDialog(CloseReportErrorDialog);
+                  myReportErrorDialog.Show();
+               }
+               else
+               {
+                  myReportErrorDialog.WindowState = WindowState.Normal;
+                  myReportErrorDialog.Activate();
+               }
+               break;
+            case GameAction.ShowAboutDialog:
+               if (null == myDialogAbout)
+               {
+                  myDialogAbout = new ShowAboutDialog(CloseShowAboutDialog);
+                  if (true == myDialogAbout.CtorError)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myDialogAbout CtorError=true");
+                     return;
+                  }
+                  myDialogAbout.Show();
+               }
+               else
+               {
+                  myDialogAbout.WindowState = WindowState.Normal;
+                  myDialogAbout.Activate();
+               }
+               break;
             case GameAction.ShowMovementDiagramDialog:
                if (null == myDialogMovementDiagram)
                {
-                  myDialogMovementDiagram = new ShowMovementDiagramDialog();
+                  myDialogMovementDiagram = new ShowMovementDiagramDialog(CloseMovementDialog);
                   myDialogMovementDiagram.Show();
                }
                else
@@ -1029,6 +1029,7 @@ namespace Pattons_Best
                }
                break;
             case "e011":
+            case "e011a":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
                   StringBuilder sbE011 = new StringBuilder();
@@ -4411,6 +4412,30 @@ namespace Pattons_Best
       {
          myAfterActionDialog = null;
       }
+      public void CloseMovementDialog()
+      {
+         myDialogMovementDiagram = null;
+      }
+      public void CloseEventListingDialog()
+      {
+         myDialogEventListing = null;
+      }
+      public void CloseTableListingDialog()
+      {
+         myDialogTableListing = null;
+      }
+      public void CloseRuleListingDialog()
+      {
+         myDialogRuleListing = null;
+      }
+      public void CloseReportErrorDialog()
+      {
+         myReportErrorDialog = null;
+      }
+      public void CloseShowAboutDialog()
+      {
+         myDialogAbout = null;
+      }
       public void ShowDieResult(int dieRoll)
       {
          if (null == myGameInstance)
@@ -5771,7 +5796,7 @@ namespace Pattons_Best
                break;
             case "Begin Game":
                action = GameAction.SetupShowMapHistorical;
-               //action = GameAction.TestingStartMorningBriefing;  // <cgs> TEST - skip the ammo setup
+               action = GameAction.TestingStartMorningBriefing;  // <cgs> TEST - skip the ammo setup
                //action = GameAction.TestingStartPreparations;     // <cgs> TEST - skip morning briefing and crew/ammo setup
                //action = GameAction.TestingStartMovement;         // <cgs> TEST - start with movement - skip battle prep phase
                //action = GameAction.TestingStartBattle;           // <cgs> TEST - skip the movement portion - begin with battle setup

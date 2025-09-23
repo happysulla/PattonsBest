@@ -17,13 +17,20 @@ namespace Pattons_Best
 {
    public partial class ShowMovementDiagramDialog : Window
    {
-      public ShowMovementDiagramDialog()
+      public delegate void EndMovementDialogCallback();
+      private EndMovementDialogCallback myCallback;
+      public ShowMovementDiagramDialog(EndMovementDialogCallback callback)
       {
+         myCallback = callback;
          InitializeComponent();
          Image img = new Image() { Name = "MapBattleMove", HorizontalAlignment = HorizontalAlignment.Center, Source = MapItem.theMapImages.GetBitmapImage("MapBattleMove") };
          myViewBox.Child = img;  
          Grid.SetRow(img, 1);
          Grid.SetColumn(img, 0);
+      }
+      private void Window_Closed(object sender, EventArgs e)
+      {
+         myCallback();
       }
    }
 }

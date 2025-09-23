@@ -6,11 +6,14 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using static Pattons_Best.TableListingDialog;
 
 namespace Pattons_Best
 {
    public partial class RuleListingDialog : Window
    {
+      public delegate void EndRuleListingDialogCallback();
+      private EndRuleListingDialogCallback myCallback;
       private const int STARTING_RULE_ROW = 0;
       private const int STARTING_EVENT_ROW = 0;
       public bool CtorError = false;
@@ -18,8 +21,9 @@ namespace Pattons_Best
       private Thickness myThickness = new Thickness(5, 2, 5, 2);
       private readonly FontFamily myFontFam = new FontFamily("Courier New");
       //----------------------------------------------------------------
-      public RuleListingDialog(RuleDialogViewer rm, bool isEventDialog)
+      public RuleListingDialog(RuleDialogViewer rm, bool isEventDialog, EndRuleListingDialogCallback callback)
       {
+         myCallback = callback;
          InitializeComponent();
          if (null == rm)
          {
@@ -170,6 +174,10 @@ namespace Pattons_Best
                return;
             }
          }
+      }
+      private void Window_Closed(object sender, EventArgs e)
+      {
+         myCallback();
       }
    }
 }

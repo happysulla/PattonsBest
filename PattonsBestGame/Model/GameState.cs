@@ -338,7 +338,6 @@ namespace Pattons_Best
                gi.Sherman.IsHullDown = true;
                gi.Sherman.IsMoving = false;
                gi.IsLeadTank = false; // SetDeployment()
-               gi.Sherman.IsHullDown = true;
             }
             else if (dieRoll < 37)
             {
@@ -395,6 +394,12 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "SetDeployment(): 12-13 reached default dieRoll=" + dieRoll.ToString());
                return false;
             }
+         }
+         //-------------------------------------------
+         if (EnumScenario.Counterattack == report.Scenario) // Counterattack always starts as hull down and stopped
+         {
+            gi.Sherman.IsHullDown = true;
+            gi.Sherman.IsMoving = false;
          }
          //-------------------------------------------
          string[] crewmembers = new string[4] { "Driver", "Assistant", "Commander", "Loader"};
@@ -1163,7 +1168,10 @@ namespace Pattons_Best
          else if (true == gi.IsDaylightLeft(report))
          {
             gi.GamePhase = GamePhase.Preparations;
-            gi.EventDisplayed = gi.EventActive = "e011";
+            if(EnumScenario.Counterattack == report.Scenario )
+               gi.EventDisplayed = gi.EventActive = "e011";
+            else
+               gi.EventDisplayed = gi.EventActive = "e011";
             gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
          }
          else
@@ -1491,15 +1499,27 @@ namespace Pattons_Best
                }
                else
                {
-                  gi.GamePhase = GamePhase.Preparations;
-                  gi.EventDisplayed = gi.EventActive = "e011";
-                  gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
-                  gi.Sherman.TerritoryCurrent = gi.Home;
-                  gi.BattleStacks.Add(gi.Sherman);
-                  if (false == AddStartingTestingState(gi))
+                  IAfterActionReport? lastReport = gi.Reports.GetLast();
+                  if (null == lastReport)
                   {
-                     returnStatus = "AddStartingTestingState(TestingStartPreparations) returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
+                     returnStatus = "lastReport=null";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(TestingStartPreparations): " + returnStatus);
+                  }
+                  else
+                  {
+                     gi.GamePhase = GamePhase.Preparations;
+                     if (EnumScenario.Counterattack == lastReport.Scenario)
+                        gi.EventDisplayed = gi.EventActive = "e011a";
+                     else
+                        gi.EventDisplayed = gi.EventActive = "e011";
+                     gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
+                     gi.Sherman.TerritoryCurrent = gi.Home;
+                     gi.BattleStacks.Add(gi.Sherman);
+                     if (false == AddStartingTestingState(gi))
+                     {
+                        returnStatus = "AddStartingTestingState(TestingStartPreparations) returned false";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
+                     }
                   }
                }
                break;
@@ -1710,7 +1730,7 @@ namespace Pattons_Best
             report.Scenario = EnumScenario.Battle;
          else
             report.Scenario = EnumScenario.Counterattack;
-         report.Scenario = EnumScenario.Battle; // <cgs> TEST - KillYourTank - choose scenario
+         report.Scenario = EnumScenario.Counterattack; // <cgs> TEST - KillYourTank - choose scenario
          //-------------------------------
          gi.NewMembers.Add(report.Commander);   // PerformAutoSetupSkipCrewAssignments()
          gi.NewMembers.Add(report.Gunner);      // PerformAutoSetupSkipCrewAssignments()
@@ -2403,8 +2423,8 @@ namespace Pattons_Best
          //--------------------------------
          //gi.PromotionPointNum = 400; // <cgs> TEST - EndOfDay - Force Promo at end of day
          //--------------------------------
-         lastReport.SunriseHour = 18;  // <cgs> TEST - EndOfDay - start at end of day
-         lastReport.SunriseMin = 30;   // <cgs> TEST - EndOfDay - start at end of day
+         //lastReport.SunriseHour = 18;  // <cgs> TEST - EndOfDay - start at end of day
+         //lastReport.SunriseMin = 30;   // <cgs> TEST - EndOfDay - start at end of day
          //--------------------------------
          //ICrewMember loader = new CrewMember("Loader", "Cpl", "c09Loader");
          //loader.Rating = 7;
@@ -2737,7 +2757,10 @@ namespace Pattons_Best
                case GameAction.MorningBriefingDeployment:
                   gi.DieResults["e007e"][0] = Utilities.NO_RESULT;
                   gi.GamePhase = GamePhase.Preparations;
-                  gi.EventDisplayed = gi.EventActive = "e011";
+                  if (EnumScenario.Counterattack == lastReport.Scenario)
+                     gi.EventDisplayed = gi.EventActive = "e011a";
+                  else
+                     gi.EventDisplayed = gi.EventActive = "e011";
                   gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
                   gi.Sherman.TerritoryCurrent = gi.Home;
                   int delta = (int)(gi.Sherman.Zoom * Utilities.theMapItemOffset);

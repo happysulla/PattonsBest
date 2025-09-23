@@ -20,9 +20,12 @@ namespace Pattons_Best
 {
    public partial class ShowReportErrorDialog : Window
    {
+      public delegate void EndReportErrorDialogCallback();
+      private EndReportErrorDialogCallback myCallback;
       public bool CtorError { get; } = false;
-      public ShowReportErrorDialog()
+      public ShowReportErrorDialog(EndReportErrorDialogCallback callback)
       {
+         myCallback = callback;
          InitializeComponent();
          StringBuilder sb = new StringBuilder();
          sb.Append("Verson: ");   
@@ -71,6 +74,10 @@ namespace Pattons_Best
       private void ButtonOk_Click(object sender, RoutedEventArgs e)
       {
          Close();
+      }
+      private void Window_Closed(object sender, EventArgs e)
+      {
+         myCallback();
       }
    }
 }

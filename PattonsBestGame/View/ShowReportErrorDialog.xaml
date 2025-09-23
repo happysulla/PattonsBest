@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Pattons_Best"
         mc:Ignorable="d"
         Name="myReportErrorDialog"
-        Title="Reporting Errors" MinHeight="300" MinWidth="300" MaxHeight="400" MaxWidth="400" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" ResizeMode="NoResize" Topmost="True">
+        Title="Reporting Errors" MinHeight="300" MinWidth="300" MaxHeight="400" MaxWidth="400" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" ResizeMode="NoResize" Topmost="True"
+        Closed="Window_Closed">
    <Grid>
       <Grid.RowDefinitions>
          <RowDefinition Height="Auto"></RowDefinition>

@@ -16,10 +16,13 @@ namespace Pattons_Best
 {
    public partial class TableListingDialog : Window
    {
+      public delegate void EndTableListingDialogCallback();
+      private EndTableListingDialogCallback myCallback;
       public bool CtorError = false;
       private RuleDialogViewer? myRulesManager = null;
-      public TableListingDialog(RuleDialogViewer rm)
+      public TableListingDialog(RuleDialogViewer rm, EndTableListingDialogCallback callback)
       {
+         myCallback = callback;
          InitializeComponent();
          if (null == rm)
          {
@@ -45,6 +48,10 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Button_Click():  ShowTable() returned false");
             return;
          }
+      }
+      private void Window_Closed(object sender, EventArgs e)
+      {
+         myCallback();
       }
    }
 }
