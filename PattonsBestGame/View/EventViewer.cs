@@ -1340,7 +1340,7 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     imge032.Name = "MovementEnemyStrengthChoice";
+                     imge032.Name = "MovementEnemyStrengthChoice"; // UpdateEventContent(): e033 - No Combat
                      b2.Content = "r4.53";
                      b2.Click += Button_Click;
                      myTextBlock.Inlines.Add(new Run("Since not in exit area and daylight remains, go to Enemy Strength Check "));
@@ -5211,15 +5211,22 @@ namespace Pattons_Best
                                  }
                               }
                            }
-                           //--------------------------------------------------
                            bool isMapEndAreaExist = false;
                            myGameInstance.IsExitArea(out isMapEndAreaExist);  // if returns false - no exit area assigned yet which is OK here
-                           if (true == isMapEndAreaExist)
-                              action = GameAction.MovementStartAreaRestartAfterBattle;
-                           else if ( false == isMapStartAreaExist )
-                              action = GameAction.MovementStartAreaSet; // Setting the first start area
+                           //-----------------------------------------------------
+                           if ( EnumScenario.Counterattack == lastReport.Scenario)
+                           {
+                              action = GameAction.MovementEnemyCheckCounterattack;
+                           }
                            else
-                              action = GameAction.MovementEnemyStrengthChoice; 
+                           {
+                              if (true == isMapEndAreaExist)
+                                 action = GameAction.MovementStartAreaRestartAfterBattle;
+                              else if (false == isMapStartAreaExist)
+                                 action = GameAction.MovementStartAreaSet; // Setting the first start area
+                              else
+                                 action = GameAction.MovementEnemyStrengthChoice;  // TextBlock_MouseDown(): "Continue017" - Preparations Final
+                           }
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "MovementExitAreaSet":
@@ -5235,7 +5242,7 @@ namespace Pattons_Best
                               return;
                            }
                            if( true == isStrengthCheckNeeded )
-                              action = GameAction.MovementEnemyStrengthChoice;
+                              action = GameAction.MovementEnemyStrengthChoice;   // TextBlock_MouseDown(): "MovementEnemyStrengthChoice"
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "MovementChooseOption":
@@ -5841,7 +5848,7 @@ namespace Pattons_Best
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Strength Check":
-               action = GameAction.MovementEnemyStrengthChoice;
+               action = GameAction.MovementEnemyStrengthChoice;   // Button_ClickShowOther(): "Strength Check"
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Strike":

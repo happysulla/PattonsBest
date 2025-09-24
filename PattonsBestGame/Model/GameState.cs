@@ -3341,7 +3341,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                   }
                   break;
-               case GameAction.MovementEnemyStrengthChoice:
+               case GameAction.MovementEnemyStrengthChoice:  // GameStateMovement.PerformAction()
                   gi.EventDisplayed = gi.EventActive = "e020";
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   break;
@@ -3972,7 +3972,7 @@ namespace Pattons_Best
                case GameAction.UpdateShowRegion:
                case GameAction.UpdateAfterActionReport:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
-               case GameAction.MovementEnemyStrengthChoice:
+               case GameAction.MovementEnemyStrengthChoice: // GameStateBattle.PerformAction()
                case GameAction.MorningBriefingAssignCrewRating: // handled in EventViewer by showing dialog
                   break;
                case GameAction.UpdateBattleBoard: // Do not log event

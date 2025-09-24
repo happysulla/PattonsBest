@@ -157,14 +157,14 @@ e011	"<Bold>e011 Deployment</Bold>
 <InlineUIContainer><Button Content='r4.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
 Determine your tank&apos;s deployment from the 
-<InlineUIContainer><Button Content='Deployment' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table:  Die Roll =
+<InlineUIContainer><Button Content='Deployment' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table:  Die Roll = 
 <InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/><LineBreak/>"
 e011a	"<Bold>e011a Deployment - Counterattack Scenario</Bold> 
 <InlineUIContainer><Button Content='r20.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
 Since this is a Counterattack scenario, your tank&apos;s deployment is automatically stopped and hull down.  You must still roll for if your tank is the lead tank per the 
-<InlineUIContainer><Button Content='Deployment' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table. Die Roll =
+<InlineUIContainer><Button Content='Deployment' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table. Die Roll = 
 <InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/><LineBreak/>"
 e012	"<Bold>e012 Hatches</Bold> 
