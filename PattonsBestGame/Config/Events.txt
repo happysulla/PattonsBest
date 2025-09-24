@@ -150,21 +150,26 @@ e010	"<Bold>e010 Time Check</Bold>
 Determine sunrise and sunset for current month using the <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. 
 Roll 1D on the 
 <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table. 
+<LineBreak/><LineBreak/>
 The Time Table also provides the timed used for each action take. Additionally, the same die roll is used to determine the ammo expended:  
+<LineBreak/><LineBreak/>
+Die Roll = 
 <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/><LineBreak/>"
 e011	"<Bold>e011 Deployment</Bold> 
 <InlineUIContainer><Button Content='r4.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
 Determine your tank&apos;s deployment from the 
-<InlineUIContainer><Button Content='Deployment' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table:  Die Roll = 
+<InlineUIContainer><Button Content='Deployment' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table:  Die Roll =
 <InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/><LineBreak/>"
 e011a	"<Bold>e011a Deployment - Counterattack Scenario</Bold> 
 <InlineUIContainer><Button Content='r20.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
 Since this is a Counterattack scenario, your tank&apos;s deployment is automatically stopped and hull down.  You must still roll for if your tank is the lead tank per the 
-<InlineUIContainer><Button Content='Deployment' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table. Die Roll = 
+<InlineUIContainer><Button Content='Deployment' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table. 
+<LineBreak/><LineBreak/>
+Die Roll =
 <InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/><LineBreak/>"
 e012	"<Bold>e012 Hatches</Bold> 
@@ -348,7 +353,7 @@ e032a	"<Bold>e032a Battle Check - Counterattack</Bold>
 <LineBreak/><LineBreak/>
 Time: TIME_OF_DAY   
 <LineBreak/><LineBreak/>
-Each 15 minutes during a counterattach scenario, battle may occur or you may choose resupply.
+Each 15 minutes during a counterattack scenario, battle may occur or you may choose resupply.
  <LineBreak/><LineBreak/>
 Choose 
 <InlineUIContainer><Button Content='Resupply' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> or 

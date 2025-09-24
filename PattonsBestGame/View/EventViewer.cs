@@ -1145,7 +1145,11 @@ namespace Pattons_Best
             case "e019":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  Image imge019 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c34ExitArea"), Width = 100, Height = 100, Name = "MovementEnemyStrengthChoice" };
+                  Image imge019 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c34ExitArea"), Width = 100, Height = 100};
+                  if (EnumScenario.Counterattack == report.Scenario)
+                     imge019.Name = "MovementEnemyCheckCounterattack"; // UpdateEventContent(): e019 - No Combat
+                  else
+                     imge019.Name = "MovementEnemyStrengthChoice"; // UpdateEventContent(): e019 - No Combat
                   myTextBlock.Inlines.Add(new Run("                                           "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge019));
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -1293,7 +1297,22 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
-            case "e032": // This event is only shown if battle check resulted in combat
+            case "e032": // This event is only shown if battle check resulted in possible combat for the day
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  Image imge031 = new Image { Width = 150, Height = 150, Name = "BattleStart", Source = MapItem.theMapImages.GetBitmapImage("Combat") };
+                  myTextBlock.Inlines.Add(new Run("Combat! Enter Battle Board."));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                     "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge031));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
+            case "e032a":
+               ReplaceText("TIME_OF_DAY", TableMgr.GetTime(report));
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
                   Image imge031 = new Image { Width = 150, Height = 150, Name = "BattleStart", Source = MapItem.theMapImages.GetBitmapImage("Combat") };
@@ -1340,12 +1359,24 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     imge032.Name = "MovementEnemyStrengthChoice"; // UpdateEventContent(): e033 - No Combat
-                     b2.Content = "r4.53";
-                     b2.Click += Button_Click;
-                     myTextBlock.Inlines.Add(new Run("Since not in exit area and daylight remains, go to Enemy Strength Check "));
-                     myTextBlock.Inlines.Add(new InlineUIContainer(b2));
-                     myTextBlock.Inlines.Add(new Run("."));
+                     if( EnumScenario.Counterattack == report.Scenario )
+                     {
+                        imge032.Name = "MovementEnemyCheckCounterattack"; // UpdateEventContent(): e033 - No Combat
+                        b2.Content = "r20.42";
+                        b2.Click += Button_Click;
+                        myTextBlock.Inlines.Add(new Run("Since not in exit area and daylight remains, continue with time check "));
+                        myTextBlock.Inlines.Add(new InlineUIContainer(b2));
+                        myTextBlock.Inlines.Add(new Run("."));
+                     }
+                     else
+                     {
+                        imge032.Name = "MovementEnemyStrengthChoice"; // UpdateEventContent(): e033 - No Combat
+                        b2.Content = "r4.53";
+                        b2.Click += Button_Click;
+                        myTextBlock.Inlines.Add(new Run("Since not in exit area and daylight remains, go to Enemy Strength Check "));
+                        myTextBlock.Inlines.Add(new InlineUIContainer(b2));
+                        myTextBlock.Inlines.Add(new Run("."));
+                     }
                   }
                }
                myTextBlock.Inlines.Add(new LineBreak());
@@ -4198,7 +4229,7 @@ namespace Pattons_Best
                }
                else if ("Strike" == content)
                {
-                  if ((false == SetButtonAirStrike(gi, b)))
+                  if ((false == SetButtonAirStrike(gi, lastReport, b)))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): SetButtonStateEnemyStrength() returned false");
                      return false;
@@ -4342,9 +4373,9 @@ namespace Pattons_Best
          b.Click += Button_Click;
          return true;
       }
-      private bool SetButtonAirStrike(IGameInstance gi, Button b)
+      private bool SetButtonAirStrike(IGameInstance gi, IAfterActionReport lastReport, Button b)
       {
-         if (true == gi.IsAirStrikePending)
+         if( (true == lastReport.Weather.Contains("Overcast")) || (true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling Snow")) || (true == gi.IsAirStrikePending))
             b.IsEnabled = false;
          else
             b.IsEnabled = true;
@@ -5214,23 +5245,22 @@ namespace Pattons_Best
                            bool isMapEndAreaExist = false;
                            myGameInstance.IsExitArea(out isMapEndAreaExist);  // if returns false - no exit area assigned yet which is OK here
                            //-----------------------------------------------------
-                           if ( EnumScenario.Counterattack == lastReport.Scenario)
-                           {
+                           if (true == isMapEndAreaExist)
+                              action = GameAction.MovementStartAreaRestartAfterBattle;
+                           else if (false == isMapStartAreaExist)
+                              action = GameAction.MovementStartAreaSet; // Setting the first start area
+                           else if ( EnumScenario.Counterattack == lastReport.Scenario)
                               action = GameAction.MovementEnemyCheckCounterattack;
-                           }
                            else
-                           {
-                              if (true == isMapEndAreaExist)
-                                 action = GameAction.MovementStartAreaRestartAfterBattle;
-                              else if (false == isMapStartAreaExist)
-                                 action = GameAction.MovementStartAreaSet; // Setting the first start area
-                              else
-                                 action = GameAction.MovementEnemyStrengthChoice;  // TextBlock_MouseDown(): "Continue017" - Preparations Final
-                           }
+                              action = GameAction.MovementEnemyStrengthChoice;  // TextBlock_MouseDown(): "Continue017" - Preparations Final
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "MovementExitAreaSet":
                            action = GameAction.MovementExitAreaSet;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "MovementEnemyCheckCounterattack":
+                           action = GameAction.MovementEnemyCheckCounterattack;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "MovementEnemyStrengthChoice":

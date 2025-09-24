@@ -1730,7 +1730,7 @@ namespace Pattons_Best
             report.Scenario = EnumScenario.Battle;
          else
             report.Scenario = EnumScenario.Counterattack;
-         report.Scenario = EnumScenario.Counterattack; // <cgs> TEST - KillYourTank - choose scenario
+         report.Scenario = EnumScenario.Counterattack; // <cgs> TEST - PerformAutoSetupSkipCrewAssignments() - KillYourTank - choose scenario
          //-------------------------------
          gi.NewMembers.Add(report.Commander);   // PerformAutoSetupSkipCrewAssignments()
          gi.NewMembers.Add(report.Gunner);      // PerformAutoSetupSkipCrewAssignments()
@@ -3341,6 +3341,10 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                   }
                   break;
+               case GameAction.MovementEnemyCheckCounterattack:
+                  gi.EventDisplayed = gi.EventActive = "e032a";
+                  gi.DieRollAction = GameAction.MovementEnemyCheckCounterattackRoll;
+                  break;
                case GameAction.MovementEnemyStrengthChoice:  // GameStateMovement.PerformAction()
                   gi.EventDisplayed = gi.EventActive = "e020";
                   gi.DieRollAction = GameAction.DieRollActionNone;
@@ -3538,7 +3542,7 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (false == ResolveBattleCheckRoll(gi, dieRoll))
                   {
-                     returnStatus = "ResolveBattleCheckRoll() returned false";
+                     returnStatus = "Resolve_BattleCheckRoll() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                   }
                   break;
@@ -3832,6 +3836,8 @@ namespace Pattons_Best
             AdvanceTime(lastReport, 30);                  // Move_TaskForceToNewArea()
          else
             AdvanceTime(lastReport, 45);                  // Move_TaskForceToNewArea()
+         if ((true == lastReport.Weather.Contains("Mud")) || (true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Rain")) || (true == lastReport.Weather.Contains("Ground Snow")) || (true == lastReport.Weather.Contains("Deep Snow")))
+            AdvanceTime(lastReport, 15);
          //---------------------------------------------------------
          Logger.Log(LogEnum.LE_VIEW_MIM_ADD, "Move_TaskForceToNewArea(): TF Entering t=" + gi.EnteredArea.Name);
          if (false == CreateMapItemMove(gi, taskForce, gi.EnteredArea))
