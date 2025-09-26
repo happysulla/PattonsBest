@@ -2066,7 +2066,7 @@ r20.42	"<Bold>r20.42 Counterattack - Movement</Bold>
 <LineBreak/><LineBreak/>
 Delete step <InlineUIContainer><Button Content='r4.53' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> and all operations of step <InlineUIContainer><Button Content='r4.54' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> except for Ammo Resupply. 
 <LineBreak/><LineBreak/>
-Instead each 15 minutes, roll 1D on the 
+Roll 1D on the 
 <InlineUIContainer><Button Content='Resistance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table to determine if a battle occurs. If not, mark off 15 minutes and roll again. 
 <LineBreak/><LineBreak/>
 When daylight runs out, the day is over. Go to the Evening DeBriefing. If a battle does occur, mark off 15 minutes and go to Battle 

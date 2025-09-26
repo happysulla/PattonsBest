@@ -1147,9 +1147,9 @@ namespace Pattons_Best
                {
                   Image imge019 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c34ExitArea"), Width = 100, Height = 100};
                   if (EnumScenario.Counterattack == report.Scenario)
-                     imge019.Name = "MovementEnemyCheckCounterattack"; // UpdateEventContent(): e019 - No Combat
+                     imge019.Name = "MovementEnemyCheckCounterattack"; // UpdateEventContent(): e019 
                   else
-                     imge019.Name = "MovementEnemyStrengthChoice"; // UpdateEventContent(): e019 - No Combat
+                     imge019.Name = "MovementEnemyStrengthChoice"; // UpdateEventContent(): e019 
                   myTextBlock.Inlines.Add(new Run("                                           "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge019));
                   myTextBlock.Inlines.Add(new LineBreak());

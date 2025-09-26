@@ -160,7 +160,9 @@ e011	"<Bold>e011 Deployment</Bold>
 <InlineUIContainer><Button Content='r4.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
 Determine your tank&apos;s deployment from the 
-<InlineUIContainer><Button Content='Deployment' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table:  Die Roll =
+<InlineUIContainer><Button Content='Deployment' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table.
+<LineBreak/><LineBreak/>
+Die Roll =
 <InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/><LineBreak/>"
 e011a	"<Bold>e011a Deployment - Counterattack Scenario</Bold> 
@@ -352,8 +354,6 @@ e032a	"<Bold>e032a Battle Check - Counterattack</Bold>
 <InlineUIContainer><Button Content='r20.42' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
 Time: TIME_OF_DAY   
-<LineBreak/><LineBreak/>
-Each 15 minutes during a counterattack scenario, battle may occur or you may choose resupply.
  <LineBreak/><LineBreak/>
 Choose 
 <InlineUIContainer><Button Content='Resupply' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> or 
@@ -365,6 +365,13 @@ e033	"<Bold>e033 No Combat</Bold>
 <LineBreak/><LineBreak/>
 If converting territory to US Control, Victory points are added to the After Action Report 
 <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+e033a	"<Bold>e033a No Combat - Counterattack</Bold> 
+<InlineUIContainer><Button Content='r20.42' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+<LineBreak/><LineBreak/>
+Mark off 15 minutes on the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> and roll again. Click image to continue.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='Continue33a' Height='100' Width='100'></Image></InlineUIContainer>"
 e034	"<Bold>e034 Placing Advancing Fire Markers</Bold> 
 <InlineUIContainer><Button Content='r4.61' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>

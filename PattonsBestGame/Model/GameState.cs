@@ -3342,8 +3342,9 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MovementEnemyCheckCounterattack:
+                  AdvanceTime(lastReport, 15);
                   gi.EventDisplayed = gi.EventActive = "e032a";
-                  gi.DieRollAction = GameAction.MovementEnemyCheckCounterattackRoll;
+                  gi.DieRollAction = GameAction.MovementBattleCheckRollCounterattack;
                   break;
                case GameAction.MovementEnemyStrengthChoice:  // GameStateMovement.PerformAction()
                   gi.EventDisplayed = gi.EventActive = "e020";
@@ -3543,7 +3544,18 @@ namespace Pattons_Best
                   if (false == ResolveBattleCheckRoll(gi, dieRoll))
                   {
                      returnStatus = "Resolve_BattleCheckRoll() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementBattleCheckRoll): " + returnStatus);
+                  }
+                  break;
+               case GameAction.MovementBattleCheckRollCounterattack:
+                  //dieRoll = 10; // <cgs> TEST - YES COMBAT ON MOVE BOARD
+                  dieRoll = 1; // <cgs> TEST - NO COMBAT ON MOVE BOARD
+                  gi.DieResults[key][0] = dieRoll;
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  if (false == ResolveBattleCheckRoll(gi, dieRoll))
+                  {
+                     returnStatus = "Resolve_BattleCheckRoll() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementBattleCheckRollCounterattack): " + returnStatus);
                   }
                   break;
                case GameAction.EveningDebriefingStart:
@@ -3660,8 +3672,14 @@ namespace Pattons_Best
       private bool SkipBattleBoard(IGameInstance gi, IAfterActionReport report)
       {
          gi.GamePhase = GamePhase.Movement;
-         gi.EventDisplayed = gi.EventActive = "e033"; // SkipBattleBoard()
          gi.DieRollAction = GameAction.DieRollActionNone;
+         if ( EnumScenario.Counterattack == report.Scenario)
+         {
+            gi.EventDisplayed = gi.EventActive = "e033a"; // SkipBattleBoard()
+            return true;
+         }
+         gi.EventDisplayed = gi.EventActive = "e033"; // SkipBattleBoard()
+         //------------------------------------------------
          IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
          if (null == taskForce)
          {
@@ -3715,29 +3733,28 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveBattleCheckRoll(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckRoll(): lastReport=null");
             return false;
          }
          //-------------------------------------------------
-         if (null == gi.EnteredArea)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveBattleCheckRoll(): gi.EnteredArea=null");
-            return false;
-         }
-         //-------------------------------------------------
-         IStack? stack = gi.MoveStacks.Find(gi.EnteredArea);
-         if (null == stack)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveBattleCheckRoll(): stack=null");
-            return false;
-         }
          IMapItems enemyOnMoveBoard = new MapItems();
-         foreach (IMapItem mi in stack.MapItems) // check if any enemy units have been moved to from Battle Board to Move Board
+         if (null != gi.EnteredArea)
          {
-            if (true == mi.IsEnemyUnit())
+            //-------------------------------------------------
+            IStack? stack = gi.MoveStacks.Find(gi.EnteredArea);
+            if (null == stack)
             {
-               Logger.Log(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD, "ResolveBattleCheckRoll(): ENEMY UNIT=" + mi.Name);
-               enemyOnMoveBoard.Add(mi);
+               Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckRoll(): stack=null");
+               return false;
+            }
+
+            foreach (IMapItem mi in stack.MapItems) // check if any enemy units have been moved to from Battle Board to Move Board
+            {
+               if (true == mi.IsEnemyUnit())
+               {
+                  Logger.Log(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD, "ResolveBattle_CheckRoll(): ENEMY UNIT=" + mi.Name);
+                  enemyOnMoveBoard.Add(mi);
+               }
             }
          }
          //-------------------------------------------------
@@ -3748,7 +3765,7 @@ namespace Pattons_Best
                {
                   if (false == StartBattle(gi, lastReport))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattleCheckRoll(): StartBattle() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckRoll(): StartBattle() returned false");
                      return false;
                   }
                }
@@ -3756,7 +3773,7 @@ namespace Pattons_Best
                {
                   if (false == SkipBattleBoard(gi, lastReport))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattleCheckRoll(): SkipBattleBoard() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckRoll(): SkipBattleBoard() returned false");
                      return false;
                   }
                }
@@ -3766,7 +3783,7 @@ namespace Pattons_Best
                {
                   if (false == StartBattle(gi, lastReport))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattleCheckRoll(): StartBattle() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckRoll(): StartBattle() returned false");
                      return false;
                   }
                }
@@ -3774,7 +3791,7 @@ namespace Pattons_Best
                {
                   if (false == SkipBattleBoard(gi, lastReport))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattleCheckRoll(): SkipBattleBoard() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckRoll(): SkipBattleBoard() returned false");
                      return false;
                   }
                }
@@ -3784,7 +3801,7 @@ namespace Pattons_Best
                {
                   if (false == StartBattle(gi, lastReport))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattleCheckRoll(): StartBattle() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckRoll(): StartBattle() returned false");
                      return false;
                   }
                }
@@ -3792,14 +3809,14 @@ namespace Pattons_Best
                {
                   if (false == SkipBattleBoard(gi, lastReport))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattleCheckRoll(): SkipBattleBoard() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckRoll(): SkipBattleBoard() returned false");
                      return false;
                   }
                }
-               Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "ResolveBattleCheckRoll(): " + gi.MoveStacks.ToString());
+               Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "ResolveBattle_CheckRoll(): " + gi.MoveStacks.ToString());
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "ResolveBattleCheckRoll(): reached default with resistance=" + gi.BattleResistance.ToString());
+               Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckRoll(): reached default with resistance=" + gi.BattleResistance.ToString());
                return false;
          }
          return true;
