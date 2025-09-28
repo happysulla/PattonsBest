@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Eventing.Reader;
 using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
@@ -483,49 +484,6 @@ namespace Pattons_Best
       }
       protected bool SetStartArea(IGameInstance gi, int dieRoll)
       {
-         string name = "M" + dieRoll.ToString() + "E";
-         ITerritory? tStartNum = Territories.theTerritories.Find(name);
-         if (null == tStartNum)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): startArea not found for " + name);
-            return false;
-         }
-         IMapItem startArea = new MapItem("StartArea", 1.0, "c33StartArea", tStartNum);
-         startArea.Count = dieRoll;
-         gi.MoveStacks.Add(startArea);
-         //-----------------------------------------
-         if (0 == tStartNum.Adjacents.Count)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): no adjacents for start area=" + name);
-            return false;
-         }
-         ITerritory? tStart = Territories.theTerritories.Find(tStartNum.Adjacents[0]); // should only be one adjacent to start area
-         if (null == tStart)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): taskForceArea tStart=" + tStartNum.Adjacents[0]);
-            return false;
-         }
-         IMapItem taskForce = new MapItem("TaskForce", 1.3, "c35TaskForce", tStart); // add task for to adjacent area
-         gi.MoveStacks.Add(taskForce);
-         //---------------------------------------------
-         double offset = taskForce.Zoom * Utilities.theMapItemOffset;
-         IMapPoint mp = new MapPoint(taskForce.Location.X + offset, taskForce.Location.Y + offset);
-         EnteredHex firstHex = new EnteredHex(gi, tStart, ColorActionEnum.CAE_START, mp); // SetStartArea()
-         if (true == firstHex.CtorError)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): newHex.Ctor=true");
-            return false;
-         }
-         Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "SetStartArea(): adding firstHex=" + firstHex.ToString());
-         gi.EnteredHexes.Add(firstHex); // first one is StartArea
-         //-----------------------------------------
-         string miName = "UsControl" + Utilities.MapItemNum.ToString(); // Add USControl marker to area adjacent to StartArea
-         Utilities.MapItemNum++;
-         IMapItem usControl = new MapItem(miName, 1.0, "c28UsControl", tStart);
-         usControl.Count = 0; // 0=us  1=light  2=medium  3=heavy
-         IMapPoint mpUsControl = Territory.GetRandomPoint(tStart, usControl.Zoom * Utilities.theMapItemOffset);
-         usControl.Location = mpUsControl;
-         gi.MoveStacks.Add(usControl);
          //---------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -533,14 +491,62 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Set_StartArea(): lastReport=null");
             return false;
          }
-         lastReport.VictoryPtsCaptureArea++;
-         Logger.Log(LogEnum.LE_SHOW_VP_CAPTURED_AREA, "Set_StartArea(): Get VPs for Start Area t=" + tStart.Name + " #=" + lastReport.VictoryPtsCaptureArea.ToString());
-         //---------------------------------------------
-         //if( false == SetStartAreaExtraEnemy(gi))  // <cgs> TEST - Set extra units on move board during setup
-         //{
-         //   Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): SetStartAreaExtraEnemy() returned false");
-         //   return false;
-         //}
+         //-----------------------------------------
+         string name = "M" + dieRoll.ToString() + "E";
+         ITerritory? tStartEdge= Territories.theTerritories.Find(name);
+         if (null == tStartEdge)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): startArea not found for " + name);
+            return false;
+         }
+         IMapItem startArea = new MapItem("StartArea", 1.0, "c33StartArea", tStartEdge);
+         startArea.Count = dieRoll;
+         gi.MoveStacks.Add(startArea);
+         //-----------------------------------------
+         if (EnumScenario.Counterattack != lastReport.Scenario)
+         {
+            if (0 == tStartEdge.Adjacents.Count)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): no adjacents for start area=" + name);
+               return false;
+            }
+            ITerritory? tStart = Territories.theTerritories.Find(tStartEdge.Adjacents[0]); // should only be one adjacent to start area
+            if (null == tStart)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): taskForceArea tStart=" + tStartEdge.Adjacents[0]);
+               return false;
+            }
+            IMapItem taskForce = new MapItem("TaskForce", 1.3, "c35TaskForce", tStart); // add task for to adjacent area
+            gi.MoveStacks.Add(taskForce);
+            //---------------------------------------------
+            double offset = taskForce.Zoom * Utilities.theMapItemOffset;
+            IMapPoint mp = new MapPoint(taskForce.Location.X + offset, taskForce.Location.Y + offset);
+            EnteredHex firstHex = new EnteredHex(gi, tStart, ColorActionEnum.CAE_START, mp); // SetStartArea()
+            if (true == firstHex.CtorError)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): newHex.Ctor=true");
+               return false;
+            }
+            Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "SetStartArea(): adding firstHex=" + firstHex.ToString());
+            gi.EnteredHexes.Add(firstHex); // first one is StartArea
+            //-----------------------------------------
+            string miName = "UsControl" + Utilities.MapItemNum.ToString(); // Add USControl marker to area adjacent to StartArea
+            Utilities.MapItemNum++;
+            IMapItem usControl = new MapItem(miName, 1.0, "c28UsControl", tStart);
+            usControl.Count = 0; // 0=us  1=light  2=medium  3=heavy
+            IMapPoint mpUsControl = Territory.GetRandomPoint(tStart, usControl.Zoom * Utilities.theMapItemOffset);
+            usControl.Location = mpUsControl;
+            gi.MoveStacks.Add(usControl);
+            //---------------------------------------------
+            lastReport.VictoryPtsCaptureArea++;
+            Logger.Log(LogEnum.LE_SHOW_VP_CAPTURED_AREA, "Set_StartArea(): Get VPs for Start Area t=" + tStart.Name + " #=" + lastReport.VictoryPtsCaptureArea.ToString());
+            //---------------------------------------------
+            //if( false == SetStartAreaExtraEnemy(gi))  // <cgs> TEST - Set extra units on move board during setup
+            //{
+            //   Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): SetStartAreaExtraEnemy() returned false");
+            //   return false;
+            //}
+         }
          return true;
       }
       protected bool SetStartAreaExtraEnemy(IGameInstance gi)
@@ -655,6 +661,13 @@ namespace Pattons_Best
       }
       protected bool SetExitArea(IGameInstance gi, int dieRoll)
       {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Set_StartArea(): lastReport=null");
+            return false;
+         }
+         //-------------------------------------
          --dieRoll;
          if (dieRoll < 0 || 9 < dieRoll)
          {
@@ -677,15 +690,43 @@ namespace Pattons_Best
          //-------------------------------------
          int exitArea = TableMgr.theExits[dieRoll, sa];
          string name = "M" + exitArea.ToString() + "E";
-         ITerritory? t = Territories.theTerritories.Find(name);
-         if (null == t)
+         ITerritory? tExitEdge = Territories.theTerritories.Find(name);
+         if (null == tExitEdge)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetExitArea(): tState=" + name);
+            Logger.Log(LogEnum.LE_ERROR, "SetExitArea(): tExitEdge=null for name=" + name);
             return false;
          }
-         IMapItem miExit = new MapItem("ExitArea", 1.0, "c34ExitArea", t);
+         IMapItem miExit = new MapItem("ExitArea", 1.0, "c34ExitArea", tExitEdge);
          miExit.Count = exitArea;
          gi.MoveStacks.Add(miExit);
+         //---------------------------------------------
+         if( EnumScenario.Counterattack == lastReport.Scenario )
+         {
+            if (0 == tExitEdge.Adjacents.Count)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SetExitArea(): no adjacents for start area=" + name);
+               return false;
+            }
+            ITerritory? tExit = Territories.theTerritories.Find(tExitEdge.Adjacents[0]); // should only be one adjacent to start area
+            if (null == tExit)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SetExitArea(): taskForceArea tStart=" + tExitEdge.Adjacents[0]);
+               return false;
+            }
+            IMapItem taskForce = new MapItem("TaskForce", 1.3, "c35TaskForce", tExit); // add task for to adjacent area
+            gi.MoveStacks.Add(taskForce);
+            //---------------------------------------------
+            double offset = taskForce.Zoom * Utilities.theMapItemOffset;
+            IMapPoint mp = new MapPoint(taskForce.Location.X + offset, taskForce.Location.Y + offset);
+            EnteredHex firstHex = new EnteredHex(gi, tExitEdge, ColorActionEnum.CAE_START, mp); // SetStartArea()
+            if (true == firstHex.CtorError)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SetExitArea(): newHex.Ctor=true");
+               return false;
+            }
+            Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "SetExitArea(): adding firstHex=" + firstHex.ToString());
+            gi.EnteredHexes.Add(firstHex); // first one is StartArea
+         }
          return true;
       }
       protected bool SetEnemyStrengthCounter(IGameInstance gi, int dieRoll)
@@ -695,7 +736,7 @@ namespace Pattons_Best
             IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
             if (null == taskForce)
             {
-               Logger.Log(LogEnum.LE_ERROR, "SetEnemyStrengthCounter(): taskForce=null");
+               Logger.Log(LogEnum.LE_ERROR, "Set_EnemyStrengthCounter(): taskForce=null");
                return false;
             }
             gi.EnemyStrengthCheckTerritory = taskForce.TerritoryCurrent;
@@ -708,11 +749,11 @@ namespace Pattons_Best
          IAfterActionReport? report = gi.Reports.GetLast();
          if (null == report)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetEnemyStrengthCounter(): report=null");
+            Logger.Log(LogEnum.LE_ERROR, "Set_EnemyStrengthCounter(): report=null");
             return false;
          }
          //-----------------------------------------------
-         Logger.Log(LogEnum.LE_SHOW_RESISTANCE, "SetEnemyStrengthCounter(): report resistance=" + report.Resistance.ToString() + " dr=" + dieRoll.ToString());
+         Logger.Log(LogEnum.LE_SHOW_RESISTANCE, "Set_EnemyStrengthCounter(): report resistance=" + report.Resistance.ToString() + " dr=" + dieRoll.ToString());
          switch (report.Resistance)
          {
             case EnumResistance.Light:
@@ -738,7 +779,7 @@ namespace Pattons_Best
                   gi.BattleResistance = EnumResistance.Heavy;
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "SetEnemyStrengthCounter(): reached default report.resistence=" + report.Resistance.ToString());
+               Logger.Log(LogEnum.LE_ERROR, "Set_EnemyStrengthCounter(): reached default report.resistence=" + report.Resistance.ToString());
                return false;
          }
          //-------------------------------------
@@ -774,7 +815,7 @@ namespace Pattons_Best
          }
          else
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetEnemyStrengthCounter(): reached default gi.BattleResistance=" + gi.BattleResistance.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Set_EnemyStrengthCounter(): reached default gi.BattleResistance=" + gi.BattleResistance.ToString());
             return false;
          }
          Utilities.MapItemNum++;
@@ -782,7 +823,7 @@ namespace Pattons_Best
          {
             if (null == gi.AirStrikeCheckTerritory)
             {
-               Logger.Log(LogEnum.LE_ERROR, "SetArtillerySupportCounter(): gi.AirStrikeCheckTerritory=null");
+               Logger.Log(LogEnum.LE_ERROR, "Set_EnemyStrengthCounter(): gi.AirStrikeCheckTerritory=null");
                return false;
             }
             gi.IsAirStrikePending = false;
@@ -2088,12 +2129,12 @@ namespace Pattons_Best
             return false;
          }
          Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "PerformAutoSetupSkipMovement(): adding newHex=" + newHex.ToString() + " to hexes=" + gi.EnteredHexes.toString());
-         gi.EnteredHexes.Add(newHex); // EnterBoardArea() - moving to new area
+         gi.EnteredHexes.Add(newHex); // Enter_MoveBoardArea() - moving to new area
          //---------------------------------------------
          dieRoll = Utilities.RandomGenerator.Next(1, 11);
-         if (false == SetEnemyStrengthCounter(gi, dieRoll)) // set strength in current territory
+         if (false == SetEnemyStrengthCounter(gi, dieRoll)) // PerformAutoSetupSkipMovement() - set strength in current territory
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): SetEnemyStrengthCounter() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMovement(): Set_EnemyStrengthCounter() returned false");
             return false;
          }
          //---------------------------------------------
@@ -3342,7 +3383,6 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MovementEnemyCheckCounterattack:
-                  AdvanceTime(lastReport, 15);
                   gi.EventDisplayed = gi.EventActive = "e032a";
                   gi.DieRollAction = GameAction.MovementBattleCheckRollCounterattack;
                   break;
@@ -3360,9 +3400,9 @@ namespace Pattons_Best
                   theIs1stEnemyStrengthCheckTerritory = false;
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
-                  if (false == SetEnemyStrengthCounter(gi, dieRoll))
+                  if (false == SetEnemyStrengthCounter(gi, dieRoll)) // GameStateMovement.PerformAction(MovementEnemyStrengthCheckTerritoryRoll)
                   {
-                     returnStatus = "SetEnemyStrengthCounter() returned false";
+                     returnStatus = "Set_EnemyStrengthCounter() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                   }
                   break;
@@ -3507,25 +3547,25 @@ namespace Pattons_Best
                   lastReport.Ammo30CalibreMG -= Math.Min(mgRoundsUsed, lastReport.Ammo30CalibreMG);
                   break;
                case GameAction.MovementAdvanceFire:
-                  if (false == EnterBoardArea(gi))
+                  if (false == EnterMoveBoardArea(gi))
                   {
-                     returnStatus = "EnterBoardArea() returned false";
+                     returnStatus = "Enter_MoveBoardArea() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                   }
                   break;
                case GameAction.MovementAdvanceFireSkip:
-                  if (false == EnterBoardArea(gi))
+                  if (false == EnterMoveBoardArea(gi))
                   {
-                     returnStatus = "EnterBoardArea() returned false";
+                     returnStatus = "Enter_MoveBoardArea() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                   }
                   break;
                case GameAction.MovementStrengthRollBattleBoard:
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.MovementBattleCheckRoll;
-                  if (false == SetEnemyStrengthCounter(gi, dieRoll))
+                  if (false == SetEnemyStrengthCounter(gi, dieRoll))  // GameStateMovement.PerformAction(MovementStrengthRollBattleBoard)
                   {
-                     returnStatus = "SetEnemyStrengthCounter() returned false";
+                     returnStatus = "Set_EnemyStrengthCounter() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                   }
                   break;
@@ -3534,28 +3574,32 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.MovementBattleCheckRoll;
                   break;
                case GameAction.MovementBattleCheckRoll:
-                  Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "GameStateMovement.PerformAction(MovementBattleCheckRoll): " + gi.MoveStacks.ToString());
-                  Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "GameStateMovement.PerformAction(MovementBattleCheckRoll): gi.MapItemMoves.Clear()");
-                  gi.MapItemMoves.Clear();
                   //dieRoll = 10; // <cgs> TEST - YES COMBAT ON MOVE BOARD
                   //dieRoll = 1; // <cgs> TEST - NO COMBAT ON MOVE BOARD
-                  gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
-                  if (false == ResolveBattleCheckRoll(gi, dieRoll))
+                  gi.DieResults[key][0] = dieRoll;
+                  if (false == ResolveBattleCheckRoll(gi, gi.DieResults[key][0]))
                   {
                      returnStatus = "Resolve_BattleCheckRoll() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementBattleCheckRoll): " + returnStatus);
                   }
                   break;
                case GameAction.MovementBattleCheckRollCounterattack:
-                  //dieRoll = 10; // <cgs> TEST - YES COMBAT ON MOVE BOARD
-                  dieRoll = 1; // <cgs> TEST - NO COMBAT ON MOVE BOARD
-                  gi.DieResults[key][0] = dieRoll;
-                  gi.DieRollAction = GameAction.DieRollActionNone;
-                  if (false == ResolveBattleCheckRoll(gi, dieRoll))
+                  if( Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     returnStatus = "Resolve_BattleCheckRoll() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementBattleCheckRollCounterattack): " + returnStatus);
+                     //dieRoll = 10; // <cgs> TEST - YES COMBAT ON MOVE BOARD
+                     dieRoll = 1; // <cgs> TEST - NO COMBAT ON MOVE BOARD
+                     gi.DieResults[key][0] = dieRoll;
+                  }
+                  else
+                  {
+                     gi.DieResults[key][0] = Utilities.NO_RESULT;
+                     gi.DieRollAction = GameAction.MovementBattleCheckRollCounterattack;
+                     if (false == ResolveBattleCheckCounterattackRoll(gi, gi.DieResults[key][0]))
+                     {
+                        returnStatus = "Resolve+BattleCheckCounterattackRoll() returned false";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementBattleCheckRollCounterattack): " + returnStatus);
+                     }
                   }
                   break;
                case GameAction.EveningDebriefingStart:
@@ -3645,11 +3689,11 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool EnterBoardArea(IGameInstance gi)
+      private bool EnterMoveBoardArea(IGameInstance gi)
       {
          if (null == gi.EnteredArea)
          {
-            Logger.Log(LogEnum.LE_ERROR, "EnterBoardArea(): gi.EnteredArea=null");
+            Logger.Log(LogEnum.LE_ERROR, "Enter_MoveBoardArea(): gi.EnteredArea=null");
             return false;
          }
          IStack? stack = gi.MoveStacks.Find(gi.EnteredArea);
@@ -3673,11 +3717,6 @@ namespace Pattons_Best
       {
          gi.GamePhase = GamePhase.Movement;
          gi.DieRollAction = GameAction.DieRollActionNone;
-         if ( EnumScenario.Counterattack == report.Scenario)
-         {
-            gi.EventDisplayed = gi.EventActive = "e033a"; // SkipBattleBoard()
-            return true;
-         }
          gi.EventDisplayed = gi.EventActive = "e033"; // SkipBattleBoard()
          //------------------------------------------------
          IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
@@ -3737,24 +3776,29 @@ namespace Pattons_Best
             return false;
          }
          //-------------------------------------------------
-         IMapItems enemyOnMoveBoard = new MapItems();
-         if (null != gi.EnteredArea)
+         if (null == gi.EnteredArea)
          {
-            //-------------------------------------------------
-            IStack? stack = gi.MoveStacks.Find(gi.EnteredArea);
-            if (null == stack)
+            Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckRoll(): EnteredArea=null");
+            return false;
+         }
+         if ("A" == gi.EnteredArea.Type)
+            dieRoll += 1;
+         if ("C" == gi.EnteredArea.Type)
+            dieRoll += 2;
+         //-------------------------------------------------
+         IStack? stack = gi.MoveStacks.Find(gi.EnteredArea);
+         if (null == stack)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckRoll(): stack=null");
+            return false;
+         }
+         IMapItems enemyOnMoveBoard = new MapItems();
+         foreach (IMapItem mi in stack.MapItems) // check if any enemy units have been moved to from Battle Board to Move Board
+         {
+            if (true == mi.IsEnemyUnit())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckRoll(): stack=null");
-               return false;
-            }
-
-            foreach (IMapItem mi in stack.MapItems) // check if any enemy units have been moved to from Battle Board to Move Board
-            {
-               if (true == mi.IsEnemyUnit())
-               {
-                  Logger.Log(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD, "ResolveBattle_CheckRoll(): ENEMY UNIT=" + mi.Name);
-                  enemyOnMoveBoard.Add(mi);
-               }
+               Logger.Log(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD, "ResolveBattle_CheckRoll(): ENEMY UNIT=" + mi.Name);
+               enemyOnMoveBoard.Add(mi);
             }
          }
          //-------------------------------------------------
@@ -3821,9 +3865,78 @@ namespace Pattons_Best
          }
          return true;
       }
+      private bool ResolveBattleCheckCounterattackRoll(IGameInstance gi, int dieRoll)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckCounterattackRoll(): lastReport=null");
+            return false;
+         }
+         //-------------------------------------------------
+         IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
+         if (null == taskForce)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckCounterattackRoll(): taskForce=null");
+            return false;
+         }
+         if ("A" == taskForce.TerritoryCurrent.Type)
+            dieRoll += 1;
+         if ("C" == taskForce.TerritoryCurrent.Type)
+            dieRoll += 2;
+         //-------------------------------------------------
+         switch (lastReport.Resistance)
+         {
+            case EnumResistance.Light:
+               if (7 < dieRoll) // battle
+               {
+                  if (false == StartBattle(gi, lastReport))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckCounterattackRoll(): StartBattle() returned false");
+                     return false;
+                  }
+               }
+               else
+               {
+                  AdvanceTime(lastReport, 15);  // no battle 
+               }
+               break;
+            case EnumResistance.Medium:
+               if (5 < dieRoll)  // battle
+               {
+                  if (false == StartBattle(gi, lastReport))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckCounterattackRoll(): StartBattle() returned false");
+                     return false;
+                  }
+               }
+               else
+               {
+                  AdvanceTime(lastReport, 15);  // no battle  
+               }
+               break;
+            case EnumResistance.Heavy:
+               if (3 < dieRoll)  // battle
+               {
+                  if (false == StartBattle(gi, lastReport))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckCounterattackRoll(): StartBattle() returned false");
+                     return false;
+                  }
+               }
+               else
+               {
+                  AdvanceTime(lastReport, 15); // no battle  
+               }
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckCounterattackRoll(): reached default with resistance=" + lastReport.Resistance.ToString());
+               return false;
+         }
+         return true;
+      }
       private bool MoveTaskForceToNewArea(IGameInstance gi)
       {
-
          //---------------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)

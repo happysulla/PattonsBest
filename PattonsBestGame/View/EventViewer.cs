@@ -1312,28 +1312,80 @@ namespace Pattons_Best
                }
                break;
             case "e032a":
+               IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
+               if (null == taskForce)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckCounterattackRoll(): taskForce=null");
+                  return false;
+               }
+               //-------------------------------------------------
                ReplaceText("TIME_OF_DAY", TableMgr.GetTime(report));
+               ReplaceText("RESISTANCE_OF_DAY", report.Resistance.ToString());
+               ReplaceText("AREA_TYPE", taskForce.TerritoryCurrent.Type);
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  Image imge031 = new Image { Width = 150, Height = 150, Name = "BattleStart", Source = MapItem.theMapImages.GetBitmapImage("Combat") };
-                  myTextBlock.Inlines.Add(new Run("Combat! Enter Battle Board."));
+                  int dieRoll = gi.DieResults[key][0];
+                  if ("A" == taskForce.TerritoryCurrent.Type)
+                     dieRoll += 1;
+                  if ("C" == taskForce.TerritoryCurrent.Type)
+                     dieRoll += 2;
+                  //-------------------------------------------------
+                  bool isCombat = false;
+                  switch (report.Resistance)
+                  {
+                     case EnumResistance.Light:
+                        if (7 < dieRoll) // battle
+                           isCombat = true;
+                        break;
+                     case EnumResistance.Medium:
+                        if (5 < dieRoll)  // battle
+                           isCombat = true;
+                        break;
+                     case EnumResistance.Heavy:
+                        if (3 < dieRoll)  // battle
+                           isCombat = true;
+                        break;
+                     default:
+                        Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckCounterattackRoll(): reached default with resistance=" + report.Resistance.ToString());
+                        return false;
+                  }
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("                                     "));
-                  myTextBlock.Inlines.Add(new InlineUIContainer(imge031));
+                  Image imge032a = new Image { Width = 130, Height = 130, Name = "Continue32a"};
+                  if ( true == isCombat )
+                  {
+                     myTextBlock.Inlines.Add(new Run("Combat! Enter Battle Board."));
+                     imge032a.Source = MapItem.theMapImages.GetBitmapImage("Combat");
+                  }
+                  else
+                  {
+                     if (true == gi.IsDaylightLeft(report))
+                     {
+                        myTextBlock.Inlines.Add(new Run("No combat! End of Day"));
+                        imge032a.Source = MapItem.theMapImages.GetBitmapImage("Continue");
+                     }
+                     else
+                     {
+                        imge032a.Name = "DebriefStart";
+                        myTextBlock.Inlines.Add(new Run("Since there is no daylight left, go to Evening Debriefing "));
+                        imge032a.Source = MapItem.theMapImages.GetBitmapImage("c28UsControl");
+                     }
+                  }
+                  myTextBlock.Inlines.Add(new Run(" Click image to continue."));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge032a));
                }
                break;
             case "e033":
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
-               Image imge032 = new Image { Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c28UsControl") };
+               Image imge033 = new Image { Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c28UsControl") };
                Button b2 = new Button() { FontFamily = myFontFam1, FontSize = 12 };
                if (false == gi.IsDaylightLeft(report))
                {
-                  imge032.Name = "DebriefStart";
+                  imge033.Name = "DebriefStart";
                   b2.Content = "r4.9";
                   b2.Click += Button_Click;
                   myTextBlock.Inlines.Add(new Run("Since there is no daylight left, go to Evening Debriefing "));
@@ -1350,7 +1402,7 @@ namespace Pattons_Best
                   }
                   if (true == isExitArea)  // This occurs when no fight happens in exit territory
                   {
-                     imge032.Name = "MovementStartAreaRestart";
+                     imge033.Name = "MovementStartAreaRestart";
                      b2.Content = "r4.51";
                      b2.Click += Button_Click;
                      myTextBlock.Inlines.Add(new Run("Since in exit area and daylight remains, determine a new start area per "));
@@ -1359,30 +1411,18 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     if( EnumScenario.Counterattack == report.Scenario )
-                     {
-                        imge032.Name = "MovementEnemyCheckCounterattack"; // UpdateEventContent(): e033 - No Combat
-                        b2.Content = "r20.42";
-                        b2.Click += Button_Click;
-                        myTextBlock.Inlines.Add(new Run("Since not in exit area and daylight remains, continue with time check "));
-                        myTextBlock.Inlines.Add(new InlineUIContainer(b2));
-                        myTextBlock.Inlines.Add(new Run("."));
-                     }
-                     else
-                     {
-                        imge032.Name = "MovementEnemyStrengthChoice"; // UpdateEventContent(): e033 - No Combat
-                        b2.Content = "r4.53";
-                        b2.Click += Button_Click;
-                        myTextBlock.Inlines.Add(new Run("Since not in exit area and daylight remains, go to Enemy Strength Check "));
-                        myTextBlock.Inlines.Add(new InlineUIContainer(b2));
-                        myTextBlock.Inlines.Add(new Run("."));
-                     }
+                     imge033.Name = "MovementEnemyStrengthChoice"; // UpdateEventContent(): e033 - No Combat
+                     b2.Content = "r4.53";
+                     b2.Click += Button_Click;
+                     myTextBlock.Inlines.Add(new Run("Since not in exit area and daylight remains, go to Enemy Strength Check "));
+                     myTextBlock.Inlines.Add(new InlineUIContainer(b2));
+                     myTextBlock.Inlines.Add(new Run("."));
                   }
                }
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new Run("                                           "));
-               myTextBlock.Inlines.Add(new InlineUIContainer(imge032));
+               myTextBlock.Inlines.Add(new InlineUIContainer(imge033));
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new Run("Click image to continue."));
@@ -4236,6 +4276,15 @@ namespace Pattons_Best
                   }
                }
                break;
+            case "e032a":
+               if ("Resupply" == content)
+               {
+                  if( Utilities.NO_RESULT == gi.DieResults[key][0])
+                     b.IsEnabled = true;
+                  else
+                     b.IsEnabled = false;
+               }
+               break;
             case "e054":
                bool isSubMgFire = false;
                bool isAAFire = false;
@@ -5308,6 +5357,10 @@ namespace Pattons_Best
                               action = GameAction.BattleStart;
                            else
                               action = GameAction.BattleActivation;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "Continue32a":  // Counterattack Check
+                           action = GameAction.MovementBattleCheckRollCounterattack;  
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Ambush":
