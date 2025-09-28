@@ -3345,6 +3345,7 @@ namespace Pattons_Best
                case GameAction.UpdateShowRegion:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
                case GameAction.MorningBriefingAssignCrewRating: // handled in EventViewer by showing dialog
+               case GameAction.MorningBriefingAmmoReadyRackLoad:
                   break;
                case GameAction.UpdateBattleBoard: // Do not log event
                   break;
@@ -3384,7 +3385,7 @@ namespace Pattons_Best
                   break;
                case GameAction.MovementEnemyCheckCounterattack:
                   gi.EventDisplayed = gi.EventActive = "e032a";
-                  gi.DieRollAction = GameAction.MovementBattleCheckRollCounterattack;
+                  gi.DieRollAction = GameAction.MovementBattleCheckCounterattackRoll;
                   break;
                case GameAction.MovementEnemyStrengthChoice:  // GameStateMovement.PerformAction()
                   gi.EventDisplayed = gi.EventActive = "e020";
@@ -3584,7 +3585,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementBattleCheckRoll): " + returnStatus);
                   }
                   break;
-               case GameAction.MovementBattleCheckRollCounterattack:
+               case GameAction.MovementBattleCheckCounterattackRoll:
                   if( Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      //dieRoll = 10; // <cgs> TEST - YES COMBAT ON MOVE BOARD
@@ -3594,11 +3595,11 @@ namespace Pattons_Best
                   else
                   {
                      gi.DieResults[key][0] = Utilities.NO_RESULT;
-                     gi.DieRollAction = GameAction.MovementBattleCheckRollCounterattack;
+                     gi.DieRollAction = GameAction.MovementBattleCheckCounterattackRoll;
                      if (false == ResolveBattleCheckCounterattackRoll(gi, gi.DieResults[key][0]))
                      {
                         returnStatus = "Resolve+BattleCheckCounterattackRoll() returned false";
-                        Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementBattleCheckRollCounterattack): " + returnStatus);
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementBattleCheckCounterattackRoll): " + returnStatus);
                      }
                   }
                   break;

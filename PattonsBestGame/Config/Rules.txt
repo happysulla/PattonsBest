@@ -2070,7 +2070,7 @@ Roll 1D on the
 <InlineUIContainer><Button Content='Resistance' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table to determine if a battle occurs. If not, mark off 15 minutes and roll again. 
 <LineBreak/><LineBreak/>
 When daylight runs out, the day is over. Go to the Evening DeBriefing. If a battle does occur, mark off 15 minutes and go to Battle 
-<InlineUIContainer><Button Content='r4.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
+<InlineUIContainer><Button Content='r20.43' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r20.43	"<Bold>r20.43 CounterAttack - Battle</Bold>
 <LineBreak/><LineBreak/>
 When performing the Battle portion of a Counterattack sceanrio, delete steps <InlineUIContainer><Button Content='r4.61' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> and 

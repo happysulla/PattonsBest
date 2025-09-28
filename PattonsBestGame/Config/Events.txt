@@ -353,9 +353,9 @@ Die Roll =  <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21'
 e032a	"<Bold>e032a Battle Check - Counterattack</Bold> 
 <InlineUIContainer><Button Content='r20.42' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>
-Time: TIME_OF_DAY   
+Time: TIME_OF_DAY   <LineBreak/>
 Resistance: RESISTANCE_OF_DAY<LineBreak/>
-Area Type: AREA_TYPE<LineBreak/>
+Area Type: AREA_TYPE
  <LineBreak/><LineBreak/>
 Choose 
 <InlineUIContainer><Button Content='Resupply' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> or 

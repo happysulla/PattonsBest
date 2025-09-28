@@ -205,7 +205,7 @@
 					<LineBreak/>
 					<Run Text='(1) Fires at your tank instead if you are firing at its front. If you are firing at its side or rear, it moves back (MOVE-B).'></Run>
 					<LineBreak/>
-					<Run Text='(5) MG and LW fire versus your tank is resolved on the '></Run>
+					<Run Text='(2) MG and LW fire versus your tank is resolved on the '></Run>
 					<InlineUIContainer>
 						<Button Content='Collateral' FontFamily='Courier New'  FontSize='8'></Button>
 					</InlineUIContainer>

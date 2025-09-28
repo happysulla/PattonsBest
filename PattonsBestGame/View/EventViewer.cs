@@ -1351,7 +1351,7 @@ namespace Pattons_Best
                   }
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
-                  Image imge032a = new Image { Width = 130, Height = 130, Name = "Continue32a"};
+                  Image imge032a = new Image { Width = 100, Height = 100, Name = "Continue32a"};
                   if ( true == isCombat )
                   {
                      myTextBlock.Inlines.Add(new Run("Combat! Enter Battle Board."));
@@ -1361,7 +1361,7 @@ namespace Pattons_Best
                   {
                      if (true == gi.IsDaylightLeft(report))
                      {
-                        myTextBlock.Inlines.Add(new Run("No combat! End of Day"));
+                        myTextBlock.Inlines.Add(new Run("No combat!"));
                         imge032a.Source = MapItem.theMapImages.GetBitmapImage("Continue");
                      }
                      else
@@ -1374,7 +1374,7 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run(" Click image to continue."));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  myTextBlock.Inlines.Add(new Run("                                                 "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge032a));
                }
                break;
@@ -4581,9 +4581,23 @@ namespace Pattons_Best
          }
          GameAction outAction = GameAction.Error;
          if ( GamePhase.MorningBriefing == myGameInstance.GamePhase)
+         {
             outAction = GameAction.MorningBriefingTimeCheck;
+         }
          else
-            outAction = GameAction.MovementChooseOption;
+         {
+            IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
+            if (null == lastReport)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): lastReport=null");
+               return false;
+            }
+            if( EnumScenario.Counterattack == lastReport.Scenario )
+               outAction = GameAction.MovementEnemyCheckCounterattack;
+            else
+               outAction = GameAction.MovementChooseOption;
+         }
+
          StringBuilder sb11 = new StringBuilder("     ######ShowAmmoLoadResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
@@ -5360,7 +5374,7 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue32a":  // Counterattack Check
-                           action = GameAction.MovementBattleCheckRollCounterattack;  
+                           action = GameAction.MovementBattleCheckCounterattackRoll;  
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Ambush":
