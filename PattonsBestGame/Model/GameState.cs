@@ -4075,6 +4075,7 @@ namespace Pattons_Best
                   {
                      gi.EventDisplayed = gi.EventActive = "e036a"; // GameStateBattle.PerformAction(Battle_Empty)
                      gi.DieRollAction = GameAction.MovementCounterattackEllapsedTimeRoll;
+                     gi.GamePhase = GamePhase.Movement;
                   }
                   else
                   {
@@ -5747,6 +5748,7 @@ namespace Pattons_Best
                   {
                      gi.EventDisplayed = gi.EventActive = "e036a"; // GameStateBattleRoundSequence.PerformAction(Battle_Empty)
                      gi.DieRollAction = GameAction.MovementCounterattackEllapsedTimeRoll;
+                     gi.GamePhase = GamePhase.Movement;
                   }
                   else
                   {
@@ -7974,6 +7976,7 @@ namespace Pattons_Best
             {
                gi.EventDisplayed = gi.EventActive = "e036a";  // ResetRound()
                gi.DieRollAction = GameAction.MovementCounterattackEllapsedTimeRoll;
+               gi.GamePhase = GamePhase.Movement;
             }
             else
             {
