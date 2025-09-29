@@ -219,6 +219,8 @@ namespace Pattons_Best
       MovementEnemyStrengthCheckTerritoryRoll,
       MovementEnemyCheckCounterattack,
       MovementBattleCheckCounterattackRoll,
+      MovementCounterattackEllapsedTimeRoll,
+      MovementBattleActivation,
       MovementChooseOption,
       MovementArtillerySupportChoice,
       MovementArtillerySupportCheck,

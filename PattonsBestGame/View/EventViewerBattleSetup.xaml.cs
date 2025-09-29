@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -223,64 +224,82 @@ namespace Pattons_Best
          //--------------------------------------------------
          if( GamePhase.Battle == myGameInstance.GamePhase ) // Battle Phase setup initial forces 
          {
-            IStack? stack = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
-            if (null == stack)
+            if (EnumScenario.Counterattack == lastReport.Scenario)
             {
-               Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): stack=null");
-               return false;
-            }
-            IMapItem? strengthCounter = null;
-            foreach (IMapItem mi1 in stack.MapItems)  // determine how many to activiate based on enemy strength in area
-            {
-               if( true == mi1.IsEnemyUnit())
+               if (EnumResistance.Light == lastReport.Resistance)
+                  myMaxRowCount += 2;
+               else if (EnumResistance.Medium == lastReport.Resistance)
+                  myMaxRowCount += 3;
+               else if (EnumResistance.Heavy == lastReport.Resistance)
+                  myMaxRowCount += 4;
+               else
                {
-                  myGridRows[startingRow] = new GridRow(mi1);
-                  if ( false == mi1.IsVehicle )
-                  {
-                     myGridRows[startingRow].myDieRollFacing = NO_FACING;
-                     myGridRows[startingRow].myFacing = "NA";
-                     Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "SetupBattle(): myGridRows[" + startingRow.ToString() + "].myFacing=" + myGridRows[startingRow].myFacing + " due to not vehicle");
-                  }
-                  else
-                  {
-                     myIsVehicleActivated = true; // need to roll for vehicle facings
-                  }
-                  switch (mi1.GetEnemyUnit())
-                  {
-                     case "ATG": case "Pak43": mi1.Zoom = Utilities.ZOOM + 0.1; break;
-                     case "Pak38": case "Pak40": mi1.Zoom = Utilities.ZOOM; break;
-                     case "LW": case "MG": mi1.Zoom = Utilities.ZOOM; break;
-                     case "PSW": case "SPW": mi1.Zoom = Utilities.ZOOM + 0.2; break;
-                     case "SPG": case "STuGIIIg": case "MARDERII": case "MARDERIII": case "JdgPzIV": case "JdgPz38t": mi1.Zoom = Utilities.ZOOM + 0.5; break;
-                     case "TANK": case "PzIV": case "PzV": case "PzVIb": case "PzVIe": mi1.Zoom = Utilities.ZOOM + 0.5; break;
-                     case "TRUCK": mi1.Zoom = Utilities.ZOOM + 0.3; break;
-                     default:
-                        Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): reached default with enemyUnit=" + mi1.GetEnemyUnit());
-                        return false;
-                  }
-                  startingRow++;
-                  myMaxRowCount++;
+                  Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): reached default with resistance=" + lastReport.Scenario.ToString());
+                  return false;
                }
-               if (true == mi1.Name.Contains("Strength"))
-                  strengthCounter = mi1;
+               Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "SetupBattle(): lastReport.Scenario=" + lastReport.Scenario.ToString());
             }
-            if( null == strengthCounter )
-            {
-               Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): did not find Enemy Strength Counter in the territory=" + myGameInstance.EnteredArea.Name);
-               return false;
-            }
-            if (true == strengthCounter.Name.Contains("Light"))
-               myMaxRowCount += 2;
-            else if (true == strengthCounter.Name.Contains("Medium"))
-               myMaxRowCount += 3;
-            else if (true == strengthCounter.Name.Contains("Heavy"))
-               myMaxRowCount += 4;
             else
             {
-               Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): reached default strengthCounter.Count =" + strengthCounter.Count.ToString() + "strengthCounter=" + strengthCounter.Name);
-               return false;
+               IStack? stack = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
+               if (null == stack)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): stack=null");
+                  return false;
+               }
+               IMapItem? strengthCounter = null;
+               foreach (IMapItem mi1 in stack.MapItems)  // determine how many to activiate based on enemy strength in area
+               {
+                  if (true == mi1.IsEnemyUnit())
+                  {
+                     myGridRows[startingRow] = new GridRow(mi1);
+                     if (false == mi1.IsVehicle)
+                     {
+                        myGridRows[startingRow].myDieRollFacing = NO_FACING;
+                        myGridRows[startingRow].myFacing = "NA";
+                        Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "SetupBattle(): myGridRows[" + startingRow.ToString() + "].myFacing=" + myGridRows[startingRow].myFacing + " due to not vehicle");
+                     }
+                     else
+                     {
+                        myIsVehicleActivated = true; // need to roll for vehicle facings
+                     }
+                     switch (mi1.GetEnemyUnit())
+                     {
+                        case "ATG": case "Pak43": mi1.Zoom = Utilities.ZOOM + 0.1; break;
+                        case "Pak38": case "Pak40": mi1.Zoom = Utilities.ZOOM; break;
+                        case "LW": case "MG": mi1.Zoom = Utilities.ZOOM; break;
+                        case "PSW": case "SPW": mi1.Zoom = Utilities.ZOOM + 0.2; break;
+                        case "SPG": case "STuGIIIg": case "MARDERII": case "MARDERIII": case "JdgPzIV": case "JdgPz38t": mi1.Zoom = Utilities.ZOOM + 0.5; break;
+                        case "TANK": case "PzIV": case "PzV": case "PzVIb": case "PzVIe": mi1.Zoom = Utilities.ZOOM + 0.5; break;
+                        case "TRUCK": mi1.Zoom = Utilities.ZOOM + 0.3; break;
+                        default:
+                           Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): reached default with enemyUnit=" + mi1.GetEnemyUnit());
+                           return false;
+                     }
+                     startingRow++;
+                     myMaxRowCount++;
+                  }
+                  if (true == mi1.Name.Contains("Strength"))
+                     strengthCounter = mi1;
+               }
+               if (null == strengthCounter) 
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): did not find Enemy Strength Counter in the territory=" + myGameInstance.EnteredArea.Name);
+                  return false;
+               }
+               if (true == strengthCounter.Name.Contains("Light"))
+                  myMaxRowCount += 2;
+               else if (true == strengthCounter.Name.Contains("Medium"))
+                  myMaxRowCount += 3;
+               else if (true == strengthCounter.Name.Contains("Heavy"))
+                  myMaxRowCount += 4;
+               else
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): reached default strengthCounter.Count =" + strengthCounter.Count.ToString() + "strengthCounter=" + strengthCounter.Name);
+                  return false;
+               }
+               Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "SetupBattle(): strengthCounter=" + strengthCounter.Name + " strengthCounter.Count=" + strengthCounter.Count.ToString() + " myMaxRowCount=" + myMaxRowCount.ToString());
             }
-            Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "SetupBattle(): strengthCounter=" + strengthCounter.Name + " strengthCounter.Count=" + strengthCounter.Count.ToString() + " myMaxRowCount=" + myMaxRowCount.ToString());
          }
          else // Battle Sequence Round Phase adds reinforcements
          {
@@ -1141,7 +1160,7 @@ namespace Pattons_Best
                {
                   if (false == ShowDieResultsAutoRolls(i))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResultsAutoRolls() return false for i=" + i.ToString());
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): ShowDieResults_AutoRolls() return false for i=" + i.ToString());
                      return;
                   }
                }
@@ -1340,7 +1359,14 @@ namespace Pattons_Best
             return false;
          }
          //------------------------------------------------------------
-         if (true == myIsVehicleActivated)
+         IMapItem? miEnemyUnit = myGridRows[i].myMapItem;
+         if (null == miEnemyUnit)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): miEnemyUnit=null for i=" + i.ToString());
+            return false;
+         }
+         string eu = miEnemyUnit.GetEnemyUnit();
+         if ( ("PSW" == eu) || ("SPW" == eu) || ("SPG" == eu) || ("STuGIIIg" == eu) || ("MARDERII" == eu) || ("MARDERIII" == eu) || ("JdgPzIV" == eu) || ("JdgPz38t" == eu) || ("TANK" == eu) || ("PzIV" == eu) || ("PzV" == eu) || ("PzVIb" == eu) || ("PzVIe" == eu) || ("TRUCK" == eu) )
          {
             myGridRows[i].myDieRollFacing = Utilities.RandomGenerator.Next(1, 11);
             myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGridRows[i].myActivation, myGridRows[i].myDieRollFacing);
@@ -1350,13 +1376,7 @@ namespace Pattons_Best
                return false;
             }
             Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "SetupBattle(): myState=" + myState.ToString() + " myGridRows[" + i.ToString() + "].myFacing=" + myGridRows[i].myFacing);
-            IMapItem? miVehicle = myGridRows[i].myMapItem;
-            if (null == miVehicle)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): mi=null for i=" + i.ToString());
-               return false;
-            }
-            if (false == miVehicle.UpdateMapRotation(myGridRows[i].myFacing))
+            if (false == miEnemyUnit.UpdateMapRotation(myGridRows[i].myFacing))
             {
                Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): UpdateMapRotation() returned false");
                return false;

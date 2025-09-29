@@ -889,7 +889,7 @@ namespace Pattons_Best
                   }
                }
             }
-            if ((true == gi.IsBrokenPeriscopeGunner) && (0 < diffPeriscopes))
+            if ((true == gi.IsBrokenPeriscopeDriver) && (0 < diffPeriscopes))
             {
                menuItem1 = new MenuItem();
                menuItem1.Name = "Driver_RepairScope";

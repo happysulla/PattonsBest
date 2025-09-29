@@ -716,6 +716,8 @@ namespace Pattons_Best
             IMapItem taskForce = new MapItem("TaskForce", 1.3, "c35TaskForce", tExit); // add task for to adjacent area
             gi.MoveStacks.Add(taskForce);
             //---------------------------------------------
+            gi.EnteredArea = tExit;
+            //---------------------------------------------
             double offset = taskForce.Zoom * Utilities.theMapItemOffset;
             IMapPoint mp = new MapPoint(taskForce.Location.X + offset, taskForce.Location.Y + offset);
             EnteredHex firstHex = new EnteredHex(gi, tExitEdge, ColorActionEnum.CAE_START, mp); // SetStartArea()
@@ -975,82 +977,35 @@ namespace Pattons_Best
       }
       protected bool ResolveEmptyBattleBoard(IGameInstance gi, IAfterActionReport report)
       {
-         //--------------------------------
-         if (null == gi.EnteredArea)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Resolve_EmptyBattleBoard(): gi.EnteredArea=null");
-            return false;
-         }
-         IStack? stack = gi.MoveStacks.Find(gi.EnteredArea);
-         if (null == stack)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Resolve_EmptyBattleBoard(): stack=null");
-            return false;
-         }
-         //--------------------------------
-         IMapItems removals = new MapItems();
-         foreach (IMapItem mi in stack.MapItems) // remove all enemy units that may have been here due to retreat or enemy overrun
-         {
-            if (true == mi.IsEnemyUnit())
-               removals.Add(mi);
-         }
-         foreach (IMapItem removal in removals)
-            gi.MoveStacks.Remove(removal);
-         //-----------------------------------
-         bool isCounterInStack = false;
-         foreach (IMapItem mi1 in stack.MapItems) // Remove Enemy Strength Counter in area
-         {
-            if (true == mi1.Name.Contains("Strength"))
+         if (EnumScenario.Counterattack != report.Scenario)
+         { 
+            if (null == gi.EnteredArea)
             {
-               stack.MapItems.Remove(mi1);
-               isCounterInStack = true;
-               break;
+               Logger.Log(LogEnum.LE_ERROR, "Resolve_EmptyBattleBoard(): gi.EnteredArea=null");
+               return false;
+            }
+            IStack? stack = gi.MoveStacks.Find(gi.EnteredArea);
+            if (null == stack)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Resolve_EmptyBattleBoard(): stack=null");
+               return false;
+            }
+            //---------------------------------
+            if (false == EnemiesOverrunToPreviousArea(gi))  // Resolve_EmptyBattleBoard()
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Resolve_EmptyBattleBoard(): EnemiesOverrun_ToPreviousArea() returned false");
+               return false;
             }
          }
-         if (false == isCounterInStack)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Resolve_EmptyBattleBoard(): isCounterInStack=false");
-            return false;
-         }
-         //-----------------------------------
-         string miName = "UsControl" + Utilities.MapItemNum.ToString(); // Add US Control Marker in area
-         Utilities.MapItemNum++;
-         IMapItem usControl = new MapItem(miName, 1.0, "c28UsControl", gi.EnteredArea);
-         usControl.Count = 0; // 0=us  1=light  2=medium  3=heavy
-         IMapPoint mp = Territory.GetRandomPoint(gi.EnteredArea, usControl.Zoom * Utilities.theMapItemOffset);
-         usControl.Location = mp;
-         gi.MoveStacks.Add(usControl);
-         //-----------------------------------
-         bool isExitArea;
-         if (false == gi.IsExitArea(out isExitArea)) // determine if this is exit area
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Resolve_EmptyBattleBoard(): IsExitArea() returned false");
-            return false;
-         }
-         if (true == isExitArea)
-         {
-            report.VictoryPtsCapturedExitArea++;
-            Logger.Log(LogEnum.LE_SHOW_VP_CAPTURED_AREA, "Resolve_EmptyBattleBoard(): captured exit area t=" + gi.EnteredArea.Name + " #=" + report.VictoryPtsCapturedExitArea.ToString());
-         }
-         else
-         {
-            report.VictoryPtsCaptureArea++;
-            Logger.Log(LogEnum.LE_SHOW_VP_CAPTURED_AREA, "Resolve_EmptyBattleBoard(): captured area t=" + gi.EnteredArea.Name + " #=" + report.VictoryPtsCaptureArea.ToString());
-         }
          //---------------------------------
-         if (false == EnemiesOverrunToPreviousArea(gi))  // Resolve_EmptyBattleBoard()
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Resolve_EmptyBattleBoard(): EnemiesOverrun_ToPreviousArea() returned false");
-            return false;
-         }
-         //---------------------------------
+         bool isDayLightLeft = gi.IsDaylightLeft(report);
          bool isInjuredCrewmanReplaced;
-         if (false == ReplaceInjuredCrewmen(gi, out isInjuredCrewmanReplaced, "ResolveEmptyBattleBoard()")) // Resolve_EmptyBattleBoard
+         if (false == ReplaceInjuredCrewmen(gi, out isInjuredCrewmanReplaced, "Resolve_EmptyBattleBoard()")) // Resolve_EmptyBattleBoard
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveEmptyBattleBoard(): Replace_InjuredCrewmen() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Resolve_EmptyBattleBoard(): Replace_InjuredCrewmen() returned false");
             return false;
          }
-         if (true == isInjuredCrewmanReplaced)
+         if ( (true == isInjuredCrewmanReplaced) && (true == isDayLightLeft) )
          {
             gi.EventDisplayed = gi.EventActive = "e062";
             gi.DieRollAction = GameAction.DieRollActionNone;
@@ -1210,7 +1165,7 @@ namespace Pattons_Best
          {
             gi.GamePhase = GamePhase.Preparations;
             if(EnumScenario.Counterattack == report.Scenario )
-               gi.EventDisplayed = gi.EventActive = "e011";
+               gi.EventDisplayed = gi.EventActive = "e011a";
             else
                gi.EventDisplayed = gi.EventActive = "e011";
             gi.DieRollAction = GameAction.PreparationsDeploymentRoll;
@@ -3259,7 +3214,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleEmptyResolve:
-                  if (false == ResolveEmptyBattleBoard(gi, lastReport)) // GameStateBattlePrep.PerformAction(BattleEmptyResolve)
+                  if (false == ResolveEmptyBattleBoard(gi, lastReport)) // GameStateBattlePrep.PerformAction(Battle_EmptyResolve)
                   {
                      returnStatus = "Resolve_EmptyBattleBoard() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
@@ -3585,22 +3540,24 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementBattleCheckRoll): " + returnStatus);
                   }
                   break;
+               case GameAction.MovementBattleActivation:
+                  AdvanceTime(lastReport, 15); // Battle for counterattack
+                  gi.GamePhase = GamePhase.Battle;
+                  gi.EventDisplayed = gi.EventActive = "e035";
+                  gi.DieRollAction = GameAction.BattleAmbushRoll;
+                  break;
                case GameAction.MovementBattleCheckCounterattackRoll:
                   if( Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     //dieRoll = 10; // <cgs> TEST - YES COMBAT ON MOVE BOARD
-                     dieRoll = 1; // <cgs> TEST - NO COMBAT ON MOVE BOARD
+                     dieRoll = 10; // <cgs> TEST - YES COMBAT ON MOVE BOARD
+                     //dieRoll = 1; // <cgs> TEST - NO COMBAT ON MOVE BOARD
                      gi.DieResults[key][0] = dieRoll;
                   }
                   else
                   {
+                     AdvanceTime(lastReport, 15); // no battle  - if a battle occurs, it will be MovementBattleActivation event
                      gi.DieResults[key][0] = Utilities.NO_RESULT;
                      gi.DieRollAction = GameAction.MovementBattleCheckCounterattackRoll;
-                     if (false == ResolveBattleCheckCounterattackRoll(gi, gi.DieResults[key][0]))
-                     {
-                        returnStatus = "Resolve+BattleCheckCounterattackRoll() returned false";
-                        Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementBattleCheckCounterattackRoll): " + returnStatus);
-                     }
                   }
                   break;
                case GameAction.EveningDebriefingStart:
@@ -3866,76 +3823,6 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool ResolveBattleCheckCounterattackRoll(IGameInstance gi, int dieRoll)
-      {
-         IAfterActionReport? lastReport = gi.Reports.GetLast();
-         if (null == lastReport)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckCounterattackRoll(): lastReport=null");
-            return false;
-         }
-         //-------------------------------------------------
-         IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce");
-         if (null == taskForce)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckCounterattackRoll(): taskForce=null");
-            return false;
-         }
-         if ("A" == taskForce.TerritoryCurrent.Type)
-            dieRoll += 1;
-         if ("C" == taskForce.TerritoryCurrent.Type)
-            dieRoll += 2;
-         //-------------------------------------------------
-         switch (lastReport.Resistance)
-         {
-            case EnumResistance.Light:
-               if (7 < dieRoll) // battle
-               {
-                  if (false == StartBattle(gi, lastReport))
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckCounterattackRoll(): StartBattle() returned false");
-                     return false;
-                  }
-               }
-               else
-               {
-                  AdvanceTime(lastReport, 15);  // no battle 
-               }
-               break;
-            case EnumResistance.Medium:
-               if (5 < dieRoll)  // battle
-               {
-                  if (false == StartBattle(gi, lastReport))
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckCounterattackRoll(): StartBattle() returned false");
-                     return false;
-                  }
-               }
-               else
-               {
-                  AdvanceTime(lastReport, 15);  // no battle  
-               }
-               break;
-            case EnumResistance.Heavy:
-               if (3 < dieRoll)  // battle
-               {
-                  if (false == StartBattle(gi, lastReport))
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckCounterattackRoll(): StartBattle() returned false");
-                     return false;
-                  }
-               }
-               else
-               {
-                  AdvanceTime(lastReport, 15); // no battle  
-               }
-               break;
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckCounterattackRoll(): reached default with resistance=" + lastReport.Resistance.ToString());
-               return false;
-         }
-         return true;
-      }
       private bool MoveTaskForceToNewArea(IGameInstance gi)
       {
          //---------------------------------------------------------
@@ -4184,10 +4071,18 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleEmpty:
                   gi.GamePhase = GamePhase.Preparations;
-                  gi.EventDisplayed = gi.EventActive = "e036";
+                  if (EnumScenario.Counterattack == lastReport.Scenario)
+                  {
+                     gi.EventDisplayed = gi.EventActive = "e036a"; // GameStateBattle.PerformAction(Battle_Empty)
+                     gi.DieRollAction = GameAction.MovementCounterattackEllapsedTimeRoll;
+                  }
+                  else
+                  {
+                     gi.EventDisplayed = gi.EventActive = "e036"; // GameStateBattle.PerformAction(Battle_Empty)
+                  }
                   break;
                case GameAction.BattleEmptyResolve:
-                  if (false == ResolveEmptyBattleBoard(gi, lastReport)) // GameStateBattle.PerformAction(BattleEmptyResolve)
+                  if (false == ResolveEmptyBattleBoard(gi, lastReport)) // GameStateBattle.PerformAction(Battle_EmptyResolve)
                   {
                      returnStatus = "Resolve_EmptyBattleBoard() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
@@ -5848,16 +5743,24 @@ namespace Pattons_Best
                   gi.BattleStacks.Remove(gi.Sherman);
                   break;
                case GameAction.BattleEmpty:
-                  gi.EventDisplayed = gi.EventActive = "e036";
+                  if (EnumScenario.Counterattack == lastReport.Scenario)
+                  {
+                     gi.EventDisplayed = gi.EventActive = "e036a"; // GameStateBattleRoundSequence.PerformAction(Battle_Empty)
+                     gi.DieRollAction = GameAction.MovementCounterattackEllapsedTimeRoll;
+                  }
+                  else
+                  {
+                     gi.EventDisplayed = gi.EventActive = "e036"; // GameStateBattleRoundSequence.PerformAction(Battle_Empty)
+                  }
                   break;
                case GameAction.BattleEmptyResolve:
-                  gi.ClearCrewActions("GameStateBattleRoundSequence.PerformAction(BattleEmptyResolve)");            // GameStateBattleRoundSequence.PerkformAction(BattleEmptyResolve)
-                  if (false == ResetRound(gi, "GameStateBattleRoundSequence(BattleEmptyResolve)"))     // GameStateBattleRoundSequence.PerkformAction(BattleEmptyResolve)
+                  gi.ClearCrewActions("GameStateBattleRoundSequence.PerformAction(Battle_EmptyResolve)"); // GameStateBattleRoundSequence.PerkformAction(Battle__EmptyResolve)
+                  if (false == ResetRound(gi, "GameStateBattleRoundSequence(Battle_EmptyResolve)"))     // GameStateBattleRoundSequence.PerkformAction(Battle_EmptyResolve)
                   {
                      returnStatus = "ResetRound() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleEmptyResolve): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(Battle_EmptyResolve): " + returnStatus);
                   }
-                  if (false == ResolveEmptyBattleBoard(gi, lastReport)) // GameStateBattleRoundSequence.PerformAction(BattleEmptyResolve)
+                  if (false == ResolveEmptyBattleBoard(gi, lastReport)) // GameStateBattleRoundSequence.PerformAction(Battle_EmptyResolve)
                   {
                      returnStatus = "Resolve_EmptyBattleBoard() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
@@ -7932,6 +7835,13 @@ namespace Pattons_Best
       private bool ResetRound(IGameInstance gi, string caller, bool isAmmoReset = false)
       {
          Logger.Log(LogEnum.LE_SHOW_RESET_ROUND, "ResetRound(): %%%%%%%%%%%%%%%%%% entering - called by " + caller);
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResetRound(): lastReport=null");
+            return false;
+         }
+         //-------------------------------------------------------
          if (false == isAmmoReset)
          {
             IMapItems ammoRemovals = new MapItems();
@@ -8060,7 +7970,15 @@ namespace Pattons_Best
          }
          else
          {
-            gi.EventDisplayed = gi.EventActive = "e036";
+            if( EnumScenario.Counterattack == lastReport.Scenario)
+            {
+               gi.EventDisplayed = gi.EventActive = "e036a";  // ResetRound()
+               gi.DieRollAction = GameAction.MovementCounterattackEllapsedTimeRoll;
+            }
+            else
+            {
+               gi.EventDisplayed = gi.EventActive = "e036";
+            }
          }
          return true;
       }

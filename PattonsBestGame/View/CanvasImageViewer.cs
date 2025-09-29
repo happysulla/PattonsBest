@@ -116,6 +116,7 @@ namespace Pattons_Best
             case GameAction.TestingStartAmbush:
             case GameAction.BattleStart:
             case GameAction.BattleActivation:
+            case GameAction.MovementBattleActivation:
                myDieRoller.HideDie();
                theMainImage = EnumMainImage.MI_Battle;
                ShowBattleMap(myCanvas);

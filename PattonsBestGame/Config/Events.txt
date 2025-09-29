@@ -402,6 +402,16 @@ Since the Battle Board is now empty of enemy units, the battle for this area is 
 5.) Click image to continue.
 <LineBreak/><LineBreak/>
                                             <InlineUIContainer><Image Name='Continue36' Height='100' Width='100'></Image></InlineUIContainer>"
+e036a	"<Bold>e036a Battle Board Empty - Counterattack</Bold> 
+<InlineUIContainer><Button Content='r4.77' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+<LineBreak/><LineBreak/>
+Since the Battle Board is now empty of enemy units, the battle for this area is over. 
+<LineBreak/><LineBreak/>
+1.) Victory points for enemy control of the area added to the After Action Report 
+<InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> if you retreated.
+<LineBreak/>
+2.) Roll 1D/2 (rounded down) + 1 hour for elaped time.  Die Roll = 
+<InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>"
 e037	"<Bold>e037 Smoke Depletion Phase</Bold> 
 <InlineUIContainer><Button Content='r4.71' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>

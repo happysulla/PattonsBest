@@ -358,6 +358,7 @@ namespace Pattons_Best
                break;
             case GameAction.MorningBriefingAmmoReadyRackLoad:
                break;
+            case GameAction.MovementBattleActivation:
             case GameAction.BattleActivation:
                EventViewerBattleSetup battleSetupMgr = new EventViewerBattleSetup(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == battleSetupMgr.CtorError)
@@ -1351,9 +1352,10 @@ namespace Pattons_Best
                   }
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
-                  Image imge032a = new Image { Width = 100, Height = 100, Name = "Continue32a"};
+                  Image imge032a = new Image { Width = 100, Height = 100 };
                   if ( true == isCombat )
                   {
+                     imge032a.Name = "MovementBattleActivation";
                      myTextBlock.Inlines.Add(new Run("Combat! Enter Battle Board."));
                      imge032a.Source = MapItem.theMapImages.GetBitmapImage("Combat");
                   }
@@ -1361,6 +1363,7 @@ namespace Pattons_Best
                   {
                      if (true == gi.IsDaylightLeft(report))
                      {
+                        imge032a.Name = "Continue32a";
                         myTextBlock.Inlines.Add(new Run("No combat!"));
                         imge032a.Source = MapItem.theMapImages.GetBitmapImage("Continue");
                      }
@@ -4558,7 +4561,7 @@ namespace Pattons_Best
          else if( 0 < myGameInstance.ShermanAdvanceOrRetreatEnemies.Count) 
             outAction = GameAction.BattleRoundSequenceCrewReplaced; // enemies transfer to Move board due to advancing or retreating Sherman
          else
-            outAction = GameAction.BattleCrewReplaced; // due to ResolveEmptyBattleBoard() call in GameState class
+            outAction = GameAction.BattleCrewReplaced; // due to Resolve_EmptyBattleBoard() call in GameState class
          StringBuilder sb11 = new StringBuilder("     ######ShowCrewRatingResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
@@ -4610,42 +4613,42 @@ namespace Pattons_Best
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupResults(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "Show_BattleSetupResults(): myGameInstance=null");
             return false;
          }
          if (null == myGameEngine)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupResults(): myGameEngine=null");
+            Logger.Log(LogEnum.LE_ERROR, "Show_BattleSetupResults(): myGameEngine=null");
             return false;
          }
          //--------------------------------------------------
          GameAction outAction = GameAction.Error;
          if ( BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase ) // Friendly Action Result during Ambush phase
          {
-            Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "ShowBattleSetupResults(): AmbushRandomEvent e=" + myGameInstance.EventActive);
-            outAction = GameAction.BattleRoundSequenceStart; // ShowBattleSetupResults() - AmbushRandomEvent
+            Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "Show_BattleSetupResults(): AmbushRandomEvent e=" + myGameInstance.EventActive);
+            outAction = GameAction.BattleRoundSequenceStart; // Show_BattleSetupResults() - AmbushRandomEvent
          }
          else if (BattlePhase.RandomEvent == myGameInstance.BattlePhase) // Friendly Action Result in BattleRoundSequence phase
          {
-            outAction = GameAction.BattleRoundSequenceBackToSpotting; // ShowBattleSetupResults - FriendlyAction
+            outAction = GameAction.BattleRoundSequenceBackToSpotting; // Show_BattleSetupResults - FriendlyAction
          }
          else                                                               // Battle Setup phase
          {
             IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
             if (null == lastReport)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupResults(): lastReport=null");
+               Logger.Log(LogEnum.LE_ERROR, "Show_BattleSetupResults(): lastReport=null");
                return false;
             }
             if (null == myGameInstance.EnteredArea)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupResults(): myGameInstance.EnteredArea=null");
+               Logger.Log(LogEnum.LE_ERROR, "Show_BattleSetupResults(): myGameInstance.EnteredArea=null");
                return false;
             }
             IStack? stackEnteredArea = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
             if (null == stackEnteredArea)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupResults(): stackEnteredArea=null");
+               Logger.Log(LogEnum.LE_ERROR, "Show_BattleSetupResults(): stackEnteredArea=null");
                return false;
             }
             bool isAirStrike = false;
@@ -4663,16 +4666,16 @@ namespace Pattons_Best
             IMapItems removals = new MapItems();
             foreach (IStack stack in myGameInstance.BattleStacks)
             {
-               Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ShowBattleSetupResults(): stack=" + stack.ToString());
+               Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "Show_BattleSetupResults(): stack=" + stack.ToString());
                bool isEnemyUnitInTerritory = false;
                IMapItem? advanceFireMarker = null;
                foreach (IMapItem mi in stack.MapItems)
                {
-                  Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ShowBattleSetupResults(): mi=" + mi.Name);
+                  Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "Show_BattleSetupResults(): mi=" + mi.Name);
                   if (true == mi.IsEnemyUnit())
                   {
                      ++enemyCount;
-                     Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "ShowBattleSetupResults(): c=" + enemyCount);
+                     Logger.Log(LogEnum.LE_VIEW_ADV_FIRE_RESOLVE, "Show_BattleSetupResults(): c=" + enemyCount);
                      isEnemyUnitInTerritory = true;
                   }
                   if (true == mi.Name.Contains("AdvanceFire"))
@@ -4695,12 +4698,12 @@ namespace Pattons_Best
             }
             //--------------------------------------------------
             if (0 == enemyCount)
-               outAction = GameAction.BattleEmpty;    // ShowBattleSetupResults()
+               outAction = GameAction.BattleEmpty;   // Show_BattleSetupResults()
             foreach (IMapItem mi in removals)
                myGameInstance.BattleStacks.Remove(mi);
          }
          //--------------------------------------------------
-         StringBuilder sb11 = new StringBuilder("     ######ShowBattleSetupResults() :");
+         StringBuilder sb11 = new StringBuilder("     ######Show_BattleSetupResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
          sb11.Append(" a="); sb11.Append(outAction.ToString());
@@ -4840,7 +4843,7 @@ namespace Pattons_Best
          }
          else
          {
-            outAction = GameAction.BattleEmpty;  // ShowAmbushResults()
+            outAction = GameAction.BattleEmpty;  // Show_AmbushResults()
             foreach (IStack stack in myGameInstance.BattleStacks)
             {
                foreach (IMapItem mi in stack.MapItems)
@@ -4866,12 +4869,12 @@ namespace Pattons_Best
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowCollateralDamageResults(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "Show_CollateralDamageResults(): myGameInstance=null");
             return false;
          }
          if (null == myGameEngine)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowCollateralDamageResults(): myGameEngine=null");
+            Logger.Log(LogEnum.LE_ERROR, "Show_CollateralDamageResults(): myGameEngine=null");
             return false;
          }
          //-----------------------------------------
@@ -4882,16 +4885,16 @@ namespace Pattons_Best
          }
          else if (BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase)
          {
-            Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "ShowCollateralDamageResults(): AmbushRandomEvent e=" + myGameInstance.EventActive);
-            outAction = GameAction.BattleRoundSequenceStart; // ShowCollateralDamageResults - BattlePhase.AmbushRandomEvent
+            Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "Show_CollateralDamageResults(): AmbushRandomEvent e=" + myGameInstance.EventActive);
+            outAction = GameAction.BattleRoundSequenceStart; // Show_CollateralDamageResults() - BattlePhase.AmbushRandomEvent
          }
          else if (BattlePhase.EnemyAction == myGameInstance.BattlePhase)
          {
-            outAction = GameAction.BattleRoundSequenceFriendlyAction; // ShowCollateralDamageResults - BattlePhase.BattleRoundSequenceFriendlyAction
+            outAction = GameAction.BattleRoundSequenceFriendlyAction; // Show_CollateralDamageResults()- BattlePhase.BattleRoundSequenceFriendlyAction
          }
          else if (BattlePhase.RandomEvent == myGameInstance.BattlePhase)
          {
-            outAction = GameAction.BattleRoundSequenceBackToSpotting; // ShowCollateralDamageResults - BattlePhase.AmbushRandomEvent
+            outAction = GameAction.BattleRoundSequenceBackToSpotting; // Show_CollateralDamageResults() - BattlePhase.AmbushRandomEvent
          }
          else
          {
@@ -4912,9 +4915,9 @@ namespace Pattons_Best
             }
          }
          if (true == isBattleBoardEmpty)
-            outAction = GameAction.BattleEmpty;
+            outAction = GameAction.BattleEmpty;  // Show_CollateralDamageResults()
          //--------------------------------------------------
-         StringBuilder sb11 = new StringBuilder("     ######ShowCollateralDamageResults() :");
+         StringBuilder sb11 = new StringBuilder("     ######Show_CollateralDamageResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
          sb11.Append(" a="); sb11.Append(outAction.ToString());
@@ -5367,10 +5370,14 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "BattleStart":
-                           if( true == myGameInstance.IsAdvancingFireChosen )
+                           if( true == myGameInstance.IsAdvancingFireChosen) 
                               action = GameAction.BattleStart;
                            else
                               action = GameAction.BattleActivation;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "MovementBattleActivation":
+                           action = GameAction.MovementBattleActivation;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue32a":  // Counterattack Check
@@ -5616,7 +5623,7 @@ namespace Pattons_Best
                            action = GameAction.BattleRoundSequenceCrewSwitchEnd;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
-                        case "Ambulance1":  // ResolveEmptyBattleBoard() - Battle Ends
+                        case "Ambulance1":  // Resolve_EmptyBattleBoard() - Battle Ends
                            action = GameAction.MorningBriefingAssignCrewRating;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
