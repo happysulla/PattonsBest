@@ -5336,7 +5336,7 @@ namespace Pattons_Best
                         gi.IsMalfunctionedMgBow = true;               // GameStateBattleRoundSequence.PerformAction(BattleRoundSequencePlaceAdvanceFireRoll)
                      else if (true == gi.IsShermanFiringCoaxialMg)
                         gi.IsMalfunctionedMgCoaxial = true;           // GameStateBattleRoundSequence.PerformAction(BattleRoundSequencePlaceAdvanceFireRoll)
-                     else if (true == gi.IsShermanFiringSubMg) { }  // do nothing
+                     else if (true == gi.IsShermanFiringSubMg) { }    // do nothing
                      else
                      {
                         returnStatus = "reached default no MG fired";

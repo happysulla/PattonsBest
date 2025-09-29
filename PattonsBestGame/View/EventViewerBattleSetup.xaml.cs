@@ -1365,8 +1365,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): miEnemyUnit=null for i=" + i.ToString());
             return false;
          }
-         string eu = miEnemyUnit.GetEnemyUnit();
-         if ( ("PSW" == eu) || ("SPW" == eu) || ("SPG" == eu) || ("STuGIIIg" == eu) || ("MARDERII" == eu) || ("MARDERIII" == eu) || ("JdgPzIV" == eu) || ("JdgPz38t" == eu) || ("TANK" == eu) || ("PzIV" == eu) || ("PzV" == eu) || ("PzVIb" == eu) || ("PzVIe" == eu) || ("TRUCK" == eu) )
+         if( true == miEnemyUnit.IsVehicle  )
          {
             myGridRows[i].myDieRollFacing = Utilities.RandomGenerator.Next(1, 11);
             myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGridRows[i].myActivation, myGridRows[i].myDieRollFacing);

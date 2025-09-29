@@ -550,18 +550,19 @@ namespace Pattons_Best
                bool isYourTank1 = false;
                for (int j = 0; j < myMaxRowCount; ++j)
                {
-                  if (true == myGridRows[j].myEnemyAction.Contains("Move"))
+                  IMapItem enemyMapItem = myGridRows[j].myMapItem;
+                  if ( (true == myGridRows[j].myEnemyAction.Contains("Move")) && ((false == enemyMapItem.IsVehicle) || ("TRUCK" == enemyMapItem.GetEnemyUnit())) )
                   {
-                     ITerritory t = myGridRows[j].myMapItem.TerritoryCurrent;
+                     ITerritory t = enemyMapItem.TerritoryCurrent;
                      IStack? stack = myGameInstance.BattleStacks.Find(t);
                      if (null == stack)
                      {
                         Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): stack=null for t=" + t.Name);
                         return false;
                      }
-                     foreach(IMapItem mi1 in stack.MapItems)
+                     foreach (IMapItem mi1 in stack.MapItems)
                      {
-                        if( true == mi1.Name.Contains("Advance") )
+                        if (true == mi1.Name.Contains("Advance"))
                         {
                            isAdvanceFire = true;
                            break;
