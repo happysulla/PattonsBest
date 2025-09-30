@@ -1352,7 +1352,7 @@ namespace Pattons_Best
                   }
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
-                  Image imge032a = new Image { Width = 100, Height = 100 };
+                  Image imge032a = new Image { Width = 150, Height = 150 };
                   if ( true == isCombat )
                   {
                      imge032a.Name = "MovementBattleActivation";
@@ -1377,7 +1377,7 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run(" Click image to continue."));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("                                                 "));
+                  myTextBlock.Inlines.Add(new Run("                                         "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge032a));
                }
                break;
@@ -1456,6 +1456,19 @@ namespace Pattons_Best
                {
                   if ((true == report.Weather.Contains("Rain")) || (true == report.Weather.Contains("Fog")) || (true == report.Weather.Contains("Falling")))
                      myTextBlock.Inlines.Add(new Run("Subtracting one for Rain, Fog, or Falling Snow."));
+               }
+               break;
+            case "e036a":
+               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               {
+                  Image imgClock = new Image { Source = MapItem.theMapImages.GetBitmapImage("MilitaryWatch"), Width = 200, Height = 100, Name = "MovementCounterattackEllapsedTimeRoll" };
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                   "));
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgClock));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
             case "e038":
@@ -5391,6 +5404,10 @@ namespace Pattons_Best
                         case "Continue35":  // Ambush Check
                            Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "TextBlock_MouseDown(): Ambush Check e=" + myGameInstance.EventActive);
                            action = GameAction.BattleRoundSequenceStart;  // Ambush Check 
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
+                        case "MovementCounterattackEllapsedTimeRoll":
+                           action = GameAction.MovementCounterattackEllapsedTimeRoll;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue43":  // minefield attack

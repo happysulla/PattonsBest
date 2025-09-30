@@ -3967,30 +3967,31 @@ namespace Pattons_Best
          {
             if (true == crewAction.Name.Contains("Driver"))
             {
+               Logger.Log(LogEnum.LE_SHOW_SHERMAN_MOVE, "GetMovingResultEnemy():  white die=" + dieRoll.ToString() + " ca=" + crewAction.Name);
                switch (crewAction.Name)
                {
                   case "Driver_Forward":
-                     if (dieRoll < 5)
-                        return "A";
                      if (dieRoll < 6)
+                        return "A";
+                     if (dieRoll < 7)
                         return "C";
                      return "None";
                   case "Driver_Reverse":
-                     if (dieRoll < 3)
+                     if (dieRoll < 4)
                         return "B";
-                     if (dieRoll < 5)
+                     if (dieRoll < 6)
                         return "C";
                      return "None";
                   case "Driver_ForwardToHullDown":
-                     if (dieRoll < 3)
-                        return "A";
                      if (dieRoll < 4)
+                        return "A";
+                     if (dieRoll < 5)
                         return "C";
                      return "None";
                   case "Driver_ReverseToHullDown":
-                     if (dieRoll < 2)
-                        return "B";
                      if (dieRoll < 3)
+                        return "B";
+                     if (dieRoll < 4)
                         return "C";
                      return "None";
                   default:

@@ -13,8 +13,10 @@ e001	"<Bold>e001 Fourth Armor Division Campaign</Bold>
 The campaign game of <Bold>Patton' Best</Bold> recreates the actions of the 4th Armored Division from late July 1944 through April 1945. 
 <LineBreak/><LineBreak/>
 Each day begins with a check of the Combat 
-<InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> to see what the Division was doing on that day. The four possibilities are Refitting 
-<InlineUIContainer><Button Content='r27.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, an Advance scenario <InlineUIContainer><Button Content='r20.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, a Battle scenario 
+<InlineUIContainer><Button Content='Calendar' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+to see what the Division was doing on that day. The four possibilities are Refitting 
+<InlineUIContainer><Button Content='r27.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, 
+an Advance scenario <InlineUIContainer><Button Content='r20.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, a Battle scenario 
 <InlineUIContainer><Button Content='r20.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>, or a Counterattack scenario 
 <InlineUIContainer><Button Content='r20.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.  Click image to continue.
 <LineBreak/><LineBreak/>
@@ -168,11 +170,7 @@ Die Roll =
 e011a	"<Bold>e011a Deployment - Counterattack Scenario</Bold> 
 <InlineUIContainer><Button Content='r20.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
 <LineBreak/><LineBreak/>
-Since this is a Counterattack scenario, your tank&apos;s deployment is automatically stopped and hull down.  You must still roll for if your tank is the lead tank per the 
-<InlineUIContainer><Button Content='Deployment' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table. 
-<LineBreak/><LineBreak/>
-Die Roll = 
-<InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer>
+Since this is a Counterattack scenario, your tank&apos;s deployment is automatically stopped and hull down.  
 <LineBreak/><LineBreak/>"
 e012	"<Bold>e012 Hatches</Bold> 
 <InlineUIContainer><Button Content='r4.42' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
