@@ -1000,36 +1000,36 @@ namespace Pattons_Best
          }
          return true;
       }
-      public bool IsStartArea(out bool isStartArea)
+      public bool IsTaskForceInStartArea(out bool isStartArea)
       {
          isStartArea = false;
          IMapItem? startArea = MoveStacks.FindMapItem("StartArea");
          if (null == startArea)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsStartArea(): startArea=null");
+            Logger.Log(LogEnum.LE_ERROR, "IsTaskForce_InStartArea(): startArea=null");
             return false;
          }
          if (0 == startArea.TerritoryCurrent.Adjacents.Count)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsStartArea(): startArea.TerritoryCurrent.Adjacents.Count=0");
+            Logger.Log(LogEnum.LE_ERROR, "IsTaskForce_InStartArea(): startArea.TerritoryCurrent.Adjacents.Count=0");
             return false;
          }
          string adjName = startArea.TerritoryCurrent.Adjacents[0];
          if (null == adjName)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsStartArea(): adjName=null");
+            Logger.Log(LogEnum.LE_ERROR, "IsTaskForce_InStartArea(): adjName=null");
             return false;
          }
          if (null == EnteredArea)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsStartArea(): EnteredArea=null");
+            Logger.Log(LogEnum.LE_ERROR, "IsTaskForce_InStartArea(): EnteredArea=null");
             return false;
          }
          if (adjName == EnteredArea.Name)
             isStartArea = true;
          return true;
       }
-      public bool IsExitArea(out bool isExitAreaReached)
+      public bool IsTaskForceInExitArea(out bool isExitAreaReached)
       {
          isExitAreaReached = false;
          IMapItem? exitArea = MoveStacks.FindMapItem("ExitArea");
@@ -1037,18 +1037,18 @@ namespace Pattons_Best
             return false;
          if (0 == exitArea.TerritoryCurrent.Adjacents.Count)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsExitArea(): exitArea.TerritoryCurrent.Adjacents.Count=0");
+            Logger.Log(LogEnum.LE_ERROR, "IsTaskForce_InExitArea(): exitArea.TerritoryCurrent.Adjacents.Count=0");
             return false;
          }
          string adjName = exitArea.TerritoryCurrent.Adjacents[0];
          if (null == adjName)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsExitArea(): adjName=null");
+            Logger.Log(LogEnum.LE_ERROR, "IsTaskForce_InExitArea(): adjName=null");
             return false;
          }
          if (null == EnteredArea)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsExitArea(): EnteredArea=null");
+            Logger.Log(LogEnum.LE_ERROR, "IsTaskForce_InExitArea(): EnteredArea=null");
             return false;
          }
          if (adjName == EnteredArea.Name)

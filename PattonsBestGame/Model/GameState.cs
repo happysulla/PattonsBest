@@ -3017,7 +3017,7 @@ namespace Pattons_Best
             }
             totalRating += cm.Rating;
          }
-         totalRating = 30; // <cgs> TESTING - enforce HVSS training
+         //totalRating = 30; // <cgs> TESTING - enforce HVSS training
          //-----------------------------------------
          if ( (null != gi.ShermanHvss) && (29 < totalRating) && ( (37 == gi.Day) || (68 == gi.Day) || (97 == gi.Day) || (137 == gi.Day) || (144 == gi.Day) ) ) // retrofits must be greater than 7 days for training 
          {
@@ -3595,13 +3595,15 @@ namespace Pattons_Best
                   if( Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
                      gi.DieResults[key][0] = dieRoll;
+                     gi.DieRollAction = GameAction.DieRollActionNone;
                   }
                   else
                   {
+                     gi.GamePhase = GamePhase.Preparations;
                      lastReport.SunriseHour += (int)Math.Floor(dieRoll * 0.5) + 1;
                      gi.DieResults[key][0] = Utilities.NO_RESULT;
-                     gi.DieRollAction = GameAction.MovementBattleCheckCounterattackRoll;
-                     gi.EventDisplayed = gi.EventActive = "e032a";
+                     gi.EventDisplayed = gi.EventActive = "e011a";
+
                   }
                   break;
                case GameAction.EveningDebriefingStart:
@@ -3752,9 +3754,9 @@ namespace Pattons_Best
          }
          //------------------------------------
          bool isExitArea;
-         if (false == gi.IsExitArea(out isExitArea))
+         if (false == gi.IsTaskForceInExitArea(out isExitArea))
          {
-            Logger.Log(LogEnum.LE_ERROR, "Skip_BattleBoard(): gi.IsExitArea() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Skip_BattleBoard(): gi.IsTaskForce_InExitArea() returned false");
             return false;
          }
          if (true == isExitArea)
@@ -4098,7 +4100,7 @@ namespace Pattons_Best
                case GameAction.BattleAmbushRoll:
                   if (true == lastReport.Weather.Contains("Rain") || true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
                      dieRoll--;
-                  //dieRoll = 10; // <cgs> TEST - KillYourTank - no AMBUSH!!!!!
+                  dieRoll = 10; // <cgs> TEST - KillYourTank - no AMBUSH!!!!!
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (dieRoll < 8)

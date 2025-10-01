@@ -1030,7 +1030,6 @@ namespace Pattons_Best
                }
                break;
             case "e011":
-            case "e011a":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
                   StringBuilder sbE011 = new StringBuilder();
@@ -1070,6 +1069,24 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
+               break;
+            case "e011a":
+               StringBuilder sbE011a = new StringBuilder();
+               sbE011a.Append(" Is Hulled Down =  TRUE");
+               sbE011a.Append("\n Is Moving  = FALSE");
+               sbE011a.Append("\n Is Lead Tank  = FALSE");
+               myTextBlock.Inlines.Add(new Run(sbE011a.ToString()));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               Image imge011a = new Image { Name = "MorningBriefingDeploymentEnd" };
+               imge011a.Source = MapItem.theMapImages.GetBitmapImage("c14HullDown");
+               imge011a.Width = 300;
+               imge011a.Height = 150;
+               myTextBlock.Inlines.Add(new Run("                            "));
+               myTextBlock.Inlines.Add(new InlineUIContainer(imge011a));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("Click image to continue."));
                break;
             case "e014":
                myTextBlock.Inlines.Add(new Run("                                               "));
@@ -1398,9 +1415,9 @@ namespace Pattons_Best
                else
                {
                   bool isExitArea;
-                  if (false == gi.IsExitArea(out isExitArea))
+                  if (false == gi.IsTaskForceInExitArea(out isExitArea))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): myGameInstance.IsExitArea() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): myGameInstance.IsTaskForce_InExitArea() returned false");
                      return false;
                   }
                   if (true == isExitArea)  // This occurs when no fight happens in exit territory
@@ -5321,17 +5338,59 @@ namespace Pattons_Best
                                  }
                               }
                            }
-                           bool isMapEndAreaExist = false;
-                           myGameInstance.IsExitArea(out isMapEndAreaExist);  // if returns false - no exit area assigned yet which is OK here
                            //-----------------------------------------------------
-                           if (true == isMapEndAreaExist)
-                              action = GameAction.MovementStartAreaRestartAfterBattle;
-                           else if (false == isMapStartAreaExist)
-                              action = GameAction.MovementStartAreaSet; // Setting the first start area
-                           else if ( EnumScenario.Counterattack == lastReport.Scenario)
-                              action = GameAction.MovementEnemyCheckCounterattack;
+                           bool isMapExitAreaExist = false;
+                           foreach (IStack stack in myGameInstance.MoveStacks)
+                           {
+                              foreach (IMapItem mi in stack.MapItems)
+                              {
+                                 if (true == mi.Name.Contains("ExitArea"))
+                                 {
+                                    isMapExitAreaExist = true;
+                                    break;
+                                 }
+                              }
+                           }
+                           //-----------------------------------------------------
+                           if (EnumScenario.Counterattack == lastReport.Scenario)
+                           {
+                              bool isStartAreaReached = false;
+                              if (true == isMapStartAreaExist)
+                              {
+                                 if (false == myGameInstance.IsTaskForceInStartArea(out isStartAreaReached))
+                                 {
+                                    Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): IsTaskForceInStartArea() returned false");
+                                    return;
+                                 }
+                                 if (true == isStartAreaReached)
+                                    action = GameAction.MovementStartAreaRestartAfterBattle;
+                                 else
+                                    action = GameAction.MovementEnemyCheckCounterattack;
+                              }
+                              else
+                              {
+                                 action = GameAction.MovementStartAreaSet; // Setting the first start area
+                              }
+                           }
                            else
-                              action = GameAction.MovementEnemyStrengthChoice;  // TextBlock_MouseDown(): "Continue017" - Preparations Final
+                           {
+                              bool isExitAreaReached = false;
+                              if (true == isMapExitAreaExist)
+                              {
+                                 if( false == myGameInstance.IsTaskForceInExitArea(out isExitAreaReached))
+                                 {
+                                    Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): IsTaskForceInExitArea() returned false");
+                                    return;
+                                 }
+                              }
+                              if( true == isExitAreaReached )
+                                 action = GameAction.MovementStartAreaRestartAfterBattle;
+                              else if (false == isMapStartAreaExist)
+                                 action = GameAction.MovementStartAreaSet; // Setting the first start area
+                              else
+                                 action = GameAction.MovementEnemyStrengthChoice;  // TextBlock_MouseDown(): "Continue017" - Preparations Final
+                           }
+                           //-----------------------------------------------------
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "MovementExitAreaSet":
