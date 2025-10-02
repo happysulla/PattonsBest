@@ -265,6 +265,7 @@ namespace Pattons_Best
       BattleShermanKilled,
 
       BattleRoundSequenceStart,
+      BattleRoundSequenceAmbushCounterattack,
       BattleRoundSequenceSmokeDepletionEnd,
       BattleRoundSequenceSpotting,
       BattleRoundSequenceSpottingEnd,

@@ -976,6 +976,62 @@ namespace Pattons_Best
          }
          return true;
       }
+      protected bool SpottingPhaseBegin(IGameInstance gi, ref GameAction outAction, string caller)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SpottingPhase_Begin(): lastReport=null");
+            return false;
+         }
+         //-------------------------------------
+         string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Gunner" };
+         foreach (string crewmember in crewmembers)
+         {
+            ICrewMember? cm = gi.GetCrewMemberByRole(crewmember);
+            if (null == cm)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SpottingPhase_Begin(): gi.GetCrewMemberByRole() returned null");
+               return false;
+            }
+            else
+            {
+               List<string>? spottedTerritories = Territory.GetSpottedTerritories(gi, cm);
+               if (null == spottedTerritories)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "SpottingPhase_Begin(): GetSpottedTerritories() returned null");
+                  return false;
+               }
+               if (true == Logger.theLogLevel[(int)LogEnum.LE_EVENT_VIEWER_SPOTTING])
+               {
+                  StringBuilder sb = new StringBuilder("SpottingPhase_Begin(): " + caller + ": cm=");
+                  sb.Append(cm.Role);
+                  sb.Append(" spotting for territories=(");
+                  int i = 0;
+                  foreach (string s in spottedTerritories)
+                  {
+                     sb.Append(s);
+                     if (++i != spottedTerritories.Count)
+                        sb.Append(",");
+                  }
+                  sb.Append(")");
+                  Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, sb.ToString());
+               }
+               if (0 < spottedTerritories.Count)
+               {
+                  outAction = GameAction.BattleRoundSequenceSpotting;
+                  return true;
+               }
+            }
+         }
+         gi.ClearCrewActions("SpottingPhase_Begin()");         // SpottingPhaseBegin() - skipping spotting b/c nobody to find since sottedTerritories.Count = 0
+         outAction = GameAction.BattleRoundSequenceCrewOrders;
+         Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "SpottingPhase_Begin(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.MarkCrewAction");
+         gi.BattlePhase = BattlePhase.MarkCrewAction;
+         gi.EventDisplayed = gi.EventActive = "e038";
+         gi.DieRollAction = GameAction.DieRollActionNone;
+         return true;
+      }
       protected bool ResolveEmptyBattleBoard(IGameInstance gi, IAfterActionReport report)
       {
          if (EnumScenario.Counterattack != report.Scenario)
@@ -1108,6 +1164,39 @@ namespace Pattons_Best
             }
             gi.AdvancingEnemies.Clear();
          }
+         return true;
+      }
+      protected bool EnemiesCounterattackCausingRetreat(IGameInstance gi)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "EnemiesCounterattack_CausingRetreat(): lastReport=null");
+            return false;
+         }
+         //-------------------------------------------
+         if (null == gi.EnteredArea)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "EnemiesCounterattack_CausingRetreat(): gi.EnteredArea=null");
+            return false;
+         }
+         //-------------------------------------------
+         IStack? stack = gi.MoveStacks.Find(gi.EnteredArea);
+         if (null == stack)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "EnemiesCounterattack_CausingRetreat(): gi.MoveStacks.Find(enteredHex.TerritoryName) returned null for tNmae=" + gi.EnteredArea.Name);
+            return false;
+         }
+         //-------------------------------------------
+         Logger.Log(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA, "EnemiesCounterattack_CausingRetreat(): Adding Strenght Marker to gi.EnteredArea=" + gi.EnteredArea.Name);
+         string name = "StrengthLight" + Utilities.MapItemNum.ToString();
+         ++Utilities.MapItemNum;
+         IMapItem strengthMarker = new MapItem(name, 1.0, "c36Light", gi.EnteredArea);
+         stack.MapItems.Add(strengthMarker);
+         //-------------------------------------------
+         lastReport.VictoryPtsLostArea++;
+         Logger.Log(LogEnum.LE_SHOW_VP_CAPTURED_AREA, "EnemiesCounterattack_CausingRetreat(): Removing UsControl from gi.EnteredArea=" + gi.EnteredArea.Name + " #=" + lastReport.VictoryPtsLostArea.ToString());
+         //-------------------------------------------
          return true;
       }
       protected bool ResetToPrepareForBattle(IGameInstance gi, IAfterActionReport report)
@@ -3572,7 +3661,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MovementBattleActivation:
-                  AdvanceTime(lastReport, 15); // Battle for counterattack
+                  AdvanceTime(lastReport, 15); 
                   gi.GamePhase = GamePhase.Battle;
                   gi.EventDisplayed = gi.EventActive = "e035";
                   gi.DieRollAction = GameAction.BattleAmbushRoll;
@@ -4100,7 +4189,7 @@ namespace Pattons_Best
                case GameAction.BattleAmbushRoll:
                   if (true == lastReport.Weather.Contains("Rain") || true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
                      dieRoll--;
-                  dieRoll = 10; // <cgs> TEST - KillYourTank - no AMBUSH!!!!!
+                  dieRoll = 1; // <cgs> TEST - KillYourTank -  AMBUSH!!!!!
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (dieRoll < 8)
@@ -4110,8 +4199,8 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattle.PerformAction(BattleAmbushRoll): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Spotting");
                      gi.GamePhase = GamePhase.BattleRoundSequence;
+                     Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattle.PerformAction(BattleAmbushRoll): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Spotting");
                      gi.BattlePhase = BattlePhase.Spotting;
                   }
                   break;
@@ -4142,7 +4231,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
                   }
                   break;
-               case GameAction.BattleAmbush: // Handled with EventViewerBattleAmbush class
+               case GameAction.BattleAmbush: // Handled with EventViewerEnemyAction class
                case GameAction.BattleCollateralDamageCheck: // Handled with EventViewerTankCollateral class
                   break;
                case GameAction.BattleRandomEvent:
@@ -4332,6 +4421,18 @@ namespace Pattons_Best
                   gi.EventDisplayed = gi.EventActive; // next screen to show
                   break;
                case GameAction.UpdateBattleBoard: // Do not log event
+                  break;
+               case GameAction.BattleRoundSequenceAmbushCounterattack:
+                  if (false == ResetRound(gi, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceAmbushCounterattack)", false))
+                  {
+                     returnStatus = "ResetRound() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceAmbushCounterattack): " + returnStatus);
+                  }
+                  if (false == SpottingPhaseBegin(gi, ref action, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceAmbushCounterattack)"))
+                  {
+                     returnStatus = "SpottingPhaseBegin() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceAmbushCounterattack): " + returnStatus);
+                  }
                   break;
                case GameAction.BattleRoundSequenceStart:
                   if (false == BattleRoundSequenceStart(gi, ref action))
@@ -5753,10 +5854,10 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceBackToSpotting:
-                  if (false == ResetRound(gi, "GameStateBattleRoundSequence(BattleRoundSequenceBackToSpotting)"))    // BattleRoundSequenceBackToSpotting
+                  if (false == ResetRound(gi, "GameStateBattleRoundSequence(BattleRoundSequence_BackToSpotting)"))    // BattleRoundSequence_BackToSpotting
                   {
                      returnStatus = "ResetRound() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceBackToSpotting): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_BackToSpotting): " + returnStatus);
                   }
                   else if (("None" == gi.GetGunLoadType()) && (BattlePhase.BackToSpotting == gi.BattlePhase))
                   {
@@ -5919,55 +6020,6 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CheckCrewMemberExposed(): SpottingPhaseBegin() returned false");
             return false;
          }
-         return true;
-      }
-      private bool SpottingPhaseBegin(IGameInstance gi, ref GameAction outAction, string caller)
-      {
-         string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Gunner" };
-         foreach (string crewmember in crewmembers)
-         {
-            ICrewMember? cm = gi.GetCrewMemberByRole(crewmember);
-            if (null == cm)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "SpottingPhaseBegin(): gi.GetCrewMemberByRole() returned null");
-               return false;
-            }
-            else
-            {
-               List<string>? spottedTerritories = Territory.GetSpottedTerritories(gi, cm);
-               if (null == spottedTerritories)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "SpottingPhaseBegin(): GetSpottedTerritories() returned null");
-                  return false;
-               }
-               if (true == Logger.theLogLevel[(int)LogEnum.LE_EVENT_VIEWER_SPOTTING])
-               {
-                  StringBuilder sb = new StringBuilder("SpottingPhaseBegin(): " + caller + ": cm=");
-                  sb.Append(cm.Role);
-                  sb.Append(" spotting for territories=(");
-                  int i = 0;
-                  foreach (string s in spottedTerritories)
-                  {
-                     sb.Append(s);
-                     if (++i != spottedTerritories.Count)
-                        sb.Append(",");
-                  }
-                  sb.Append(")");
-                  Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, sb.ToString());
-               }
-               if (0 < spottedTerritories.Count)
-               {
-                  outAction = GameAction.BattleRoundSequenceSpotting;
-                  return true;
-               }
-            }
-         }
-         gi.ClearCrewActions("SpottingPhaseBegin()");         // SpottingPhaseBegin() - skipping spotting b/c nobody to find
-         outAction = GameAction.BattleRoundSequenceCrewOrders;
-         Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "SpottingPhaseBegin(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.MarkCrewAction");
-         gi.BattlePhase = BattlePhase.MarkCrewAction;
-         gi.EventDisplayed = gi.EventActive = "e038";
-         gi.DieRollAction = GameAction.DieRollActionNone;
          return true;
       }
       private bool SetDefaultCrewActions(IGameInstance gi)

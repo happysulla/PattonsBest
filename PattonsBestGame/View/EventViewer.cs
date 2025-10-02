@@ -4967,7 +4967,16 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowSpottingResults(): myGameEngine=null");
             return false;
          }
-         GameAction outAction = GameAction.BattleRoundSequenceSpottingEnd;
+
+         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowSpottingResults():  myGameInstance.Reports.GetLast()");
+            return false;
+         }
+         //------------------------------------------------------------------------
+         GameAction outAction = GameAction.Error;
+         outAction = GameAction.BattleRoundSequenceSpottingEnd;
          //--------------------------------------------------
          StringBuilder sb11 = new StringBuilder("     ######ShowSpottingResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
@@ -5457,7 +5466,15 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Ambush":
-                           action = GameAction.BattleAmbush;
+                           if( EnumScenario.Counterattack == lastReport.Scenario )
+                           {
+                              myGameInstance.GamePhase = GamePhase.BattleRoundSequence; // perform one round of attack before enemy does anything
+                              action = GameAction.BattleRoundSequenceAmbushCounterattack;
+                           }
+                           else
+                           {
+                              action = GameAction.BattleAmbush; // results in Enemy Activation
+                           }
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue35":  // Ambush Check
@@ -5579,11 +5596,11 @@ namespace Pattons_Best
                            if( BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase)
                            {
                               Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "TextBlock_MouseDown(): Frendly Advance Ignored | Enemy Reinforcements e=" + myGameInstance.EventActive);
-                              action = GameAction.BattleRoundSequenceStart;           // Frendly Advance Ignored | Enemy Reinforcements 
+                              action = GameAction.BattleRoundSequenceStart;           // Friendly Advance Ignored | Enemy Reinforcements 
                            }
                            else
                            {
-                              action = GameAction.BattleRoundSequenceBackToSpotting; // Frendly Advance Ignored | Enemy Reinforcements 
+                              action = GameAction.BattleRoundSequenceBackToSpotting; // Friendly Advance Ignored | Enemy Reinforcements 
                            }
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;

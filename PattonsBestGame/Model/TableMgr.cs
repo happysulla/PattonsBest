@@ -862,20 +862,20 @@ namespace Pattons_Best
          {
             case "LW":
             case "MG":
-               if (BattlePhase.Ambush == gi.BattlePhase)
+               if (BattlePhase.Ambush == gi.BattlePhase) // Get_EnemyActionModifier()
                   modifier += 20;
                break;
             case "ATG":
             case "Pak43":
             case "Pak38":
             case "Pak40":
-               if (BattlePhase.Ambush == gi.BattlePhase)
+               if (BattlePhase.Ambush == gi.BattlePhase) // Get_EnemyActionModifier()
                   modifier += 20;
                break;
             case "TRUCK":
             case "PSW":
             case "SPW":
-               if (BattlePhase.Ambush == gi.BattlePhase)
+               if (BattlePhase.Ambush == gi.BattlePhase) // Get_EnemyActionModifier()
                   modifier += 10;
                break;
             case "TANK":
