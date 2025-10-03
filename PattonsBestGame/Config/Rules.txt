@@ -751,7 +751,7 @@ for the main gun fire or the To Kill roll for the
 <InlineUIContainer><Button Content='Sherman MG' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. You may continue to spot per 
 <InlineUIContainer><Button Content='r17.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> .
 <LineBreak/><LineBreak/>
-                                      <InlineUIContainer><Image Name='c49CDirectFire'  Height='100' Width='100'></Image></InlineUIContainer>"
+                                      <InlineUIContainer><Image Name='c49CDirectMainGunFire'  Height='100' Width='100'></Image></InlineUIContainer>"
 r8.2	"<Bold>r8.2 Gunner (G)</Bold> 
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r8.21' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Fire Main Gun<LineBreak/>

@@ -422,10 +422,10 @@ e038	"<Bold>e038 Orders Phase</Bold>
 <InlineUIContainer><Button Content='r4.73' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <InlineUIContainer><Button Content='r8.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>
-Click on blue squares to open hatches. Click on Open Hatch marker to close.
- <LineBreak/><LineBreak/>
-Right click crew member action boxes to select from a pull down to assign crew actions for each crew member.
-<LineBreak/><LineBreak/>"
+CREW ACTIONS: Right click crew member action boxes to select from a pull down to assign crew actions for each crew member.
+<LineBreak/><LineBreak/>
+HATCHES: Click on blue squares to open hatches, or click on Open Hatch marker to close.
+ <LineBreak/><LineBreak/>"
 e039a	"<Bold>e039a Advance Scenario - Random Events</Bold> 
 <InlineUIContainer><Button Content='r4.65' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/>

@@ -1103,8 +1103,8 @@ namespace Pattons_Best
          switch (myState)
          {
             case E046Enum.ACTIVATION:
-               dieRoll = 11; // <cgs> TEST - AdvanceRetreat - infantry appearing
-               dieRoll = 10; // <cgs> TEST - AdvanceRetreat - MG Appearing
+               //dieRoll = 11; // <cgs> TEST - AdvanceRetreat - infantry appearing
+               //dieRoll = 10; // <cgs> TEST - AdvanceRetreat - MG Appearing
                //dieRoll = 45; // <cgs> TEST - KillYourTank - TANKS APPEARING in battle scenario
                //dieRoll = 91; // <cgs> TEST - PSW/SPW APPEARING in Advance scenario
                myGridRows[i].myDieRollActivation = dieRoll;
@@ -1346,7 +1346,7 @@ namespace Pattons_Best
          }
          //------------------------------------------------------------
          int dieRoll = Utilities.RandomGenerator.Next(1, 11);
-         dieRoll = 13; // <cgs> TEST - long range
+         //dieRoll = 13; // <cgs> TEST - long range
          myGridRows[i].myDieRollRange = dieRoll;
          myGridRows[i].myRange = TableMgr.GetEnemyRange(myAreaType, myGridRows[i].myActivation, dieRoll);
          if ("ERROR" == myGridRows[i].myRange)

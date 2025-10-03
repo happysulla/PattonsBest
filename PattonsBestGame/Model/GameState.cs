@@ -1836,7 +1836,7 @@ namespace Pattons_Best
             report.Scenario = EnumScenario.Battle;
          else
             report.Scenario = EnumScenario.Counterattack;
-         report.Scenario = EnumScenario.Battle; // <cgs> TEST - PerformAutoSetupSkipCrewAssignments() - KillYourTank - choose scenario
+         //report.Scenario = EnumScenario.Advance; // <cgs> TEST - PerformAutoSetupSkipCrewAssignments() - KillYourTank - =======================================>> choose scenario
          //-------------------------------
          gi.NewMembers.Add(report.Commander);   // PerformAutoSetupSkipCrewAssignments()
          gi.NewMembers.Add(report.Gunner);      // PerformAutoSetupSkipCrewAssignments()
@@ -2248,7 +2248,7 @@ namespace Pattons_Best
          }
          //--------------------------------------------------------
          int numEnemyUnitsAppearing = Utilities.RandomGenerator.Next(1, 3);
-         numEnemyUnitsAppearing = 2; // <cgs> TEST - number of enemy units appearing
+         //numEnemyUnitsAppearing = 2; // <cgs> TEST - number of enemy units appearing
          for (int k = 0; k < numEnemyUnitsAppearing; k++)
          {
             int die1 = Utilities.RandomGenerator.Next(0, 3);
@@ -2329,7 +2329,7 @@ namespace Pattons_Best
                diceRoll = 100;
             else
                diceRoll = die1 + 10 * die2;
-            diceRoll = 11; // <cgs> TEST - AdvanceRetreat - MG appearing
+            //diceRoll = 11; // <cgs> TEST - AdvanceRetreat - MG appearing
             //diceRoll = 45; // <cgs> TEST -  KillYourTank - TANKS APPEARING in battle scenario
             //diceRoll = 51; // <cgs> TEST -  ATG appearing
             string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
@@ -3652,7 +3652,7 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.MovementBattleCheckRoll;
                   break;
                case GameAction.MovementBattleCheckRoll:
-                  dieRoll = 10; // <cgs> TEST - YES COMBAT ON MOVE BOARD
+                  //dieRoll = 10; // <cgs> TEST - YES COMBAT ON MOVE BOARD
                   //dieRoll = 1; // <cgs> TEST - NO COMBAT ON MOVE BOARD
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   gi.DieResults[key][0] = dieRoll;
@@ -3671,7 +3671,7 @@ namespace Pattons_Best
                case GameAction.MovementBattleCheckCounterattackRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 10; // <cgs> TEST - YES COMBAT ON MOVE BOARD
+                     //dieRoll = 10; // <cgs> TEST - YES COMBAT ON MOVE BOARD - MovementBattleCheckCounterattackRoll
                      //dieRoll = 1; // <cgs> TEST - NO COMBAT ON MOVE BOARD
                      gi.DieResults[key][0] = dieRoll;
                   }
@@ -4191,7 +4191,7 @@ namespace Pattons_Best
                case GameAction.BattleAmbushRoll:
                   if (true == lastReport.Weather.Contains("Rain") || true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
                      dieRoll--;
-                  dieRoll = 1; // <cgs> TEST - KillYourTank -  AMBUSH!!!!!
+                  //dieRoll = 1; // <cgs> TEST - KillYourTank -  AMBUSH!!!!!
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (dieRoll < 8)
@@ -4285,7 +4285,7 @@ namespace Pattons_Best
                case GameAction.BattleRandomEventRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 32; // <cgs> TEST - AdvanceRetreat - *********************RANDOM*************** Event - Time passes
+                     //dieRoll = 10; // <cgs> TEST - AdvanceRetreat - *********************RANDOM*************** 
                      //dieRoll = 35; // <cgs> TEST - Harrassing fire in Advance Scenario - Random Event 
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
@@ -4683,7 +4683,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceMinefieldRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 2; // <cgs> TEST - minefield attack
+                     //dieRoll = 2; // <cgs> TEST - minefield attack
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }

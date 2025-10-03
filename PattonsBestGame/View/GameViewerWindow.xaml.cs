@@ -614,6 +614,8 @@ namespace Pattons_Best
          sb.Append("Patton's Best  -  ");
          sb.Append(report.Scenario.ToString());
          sb.Append("  -  ");
+         sb.Append(report.Resistance.ToString());
+         sb.Append("  -  ");
          sb.Append(TableMgr.GetDate(gi.Day));
          sb.Append(" ");
          sb.Append(TableMgr.GetTime(report));
