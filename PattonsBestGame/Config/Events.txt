@@ -164,7 +164,7 @@ e011	"<Bold>e011 Deployment</Bold>
 Determine your tank&apos;s deployment from the 
 <InlineUIContainer><Button Content='Deployment' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table.
 <LineBreak/><LineBreak/>
-Die Roll =
+Die Roll = 
 <InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/><LineBreak/>"
 e011a	"<Bold>e011a Deployment - Counterattack Scenario</Bold> 
@@ -306,7 +306,7 @@ Consult the
 <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 to see if resupply occurs. If successful, you may relead your tank with ammo. 
 <LineBreak/><LineBreak/>
-Die Roll =  <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer> 
+Die Roll =  <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>  
 <LineBreak/><LineBreak/>"
 e028	"<Bold>e028 Enter Adjacent Area</Bold> 
 <InlineUIContainer><Button Content='r4.54.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    

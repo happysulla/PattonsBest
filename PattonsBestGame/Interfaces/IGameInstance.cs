@@ -177,6 +177,7 @@ namespace Pattons_Best
       bool IsShermanTurretRotated { set; get; }
       double ShermanRotationTurretOld { set; get; }
       //------------------------------------------------
+      bool IsCounterattackAmbush { set; get; }
       bool IsLeadTank { set; get; }
       bool IsAirStrikePending { set; get; }
       bool IsAdvancingFireChosen { set; get; }

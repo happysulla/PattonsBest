@@ -1836,7 +1836,7 @@ namespace Pattons_Best
             report.Scenario = EnumScenario.Battle;
          else
             report.Scenario = EnumScenario.Counterattack;
-         report.Scenario = EnumScenario.Counterattack; // <cgs> TEST - PerformAutoSetupSkipCrewAssignments() - KillYourTank - choose scenario
+         report.Scenario = EnumScenario.Battle; // <cgs> TEST - PerformAutoSetupSkipCrewAssignments() - KillYourTank - choose scenario
          //-------------------------------
          gi.NewMembers.Add(report.Commander);   // PerformAutoSetupSkipCrewAssignments()
          gi.NewMembers.Add(report.Gunner);      // PerformAutoSetupSkipCrewAssignments()
@@ -2036,6 +2036,8 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): SetDeployment() returned false");
             return false;
          }
+         //gi.Sherman.IsHullDown = false;  // <cgs> TEST
+         //gi.Sherman.IsMoving = true;     // <cgs> TEST
          //------------------------------------
          ICrewMember? cm = gi.GetCrewMemberByRole("Commander");
          if (null == cm)
@@ -2246,7 +2248,7 @@ namespace Pattons_Best
          }
          //--------------------------------------------------------
          int numEnemyUnitsAppearing = Utilities.RandomGenerator.Next(1, 3);
-         //numEnemyUnitsAppearing = 5; // <cgs> TEST - number of enemy units appearing
+         numEnemyUnitsAppearing = 2; // <cgs> TEST - number of enemy units appearing
          for (int k = 0; k < numEnemyUnitsAppearing; k++)
          {
             int die1 = Utilities.RandomGenerator.Next(0, 3);
@@ -2327,7 +2329,7 @@ namespace Pattons_Best
                diceRoll = 100;
             else
                diceRoll = die1 + 10 * die2;
-            //diceRoll = 11; // <cgs> TEST - AdvanceRetreat - infantry appearing
+            diceRoll = 11; // <cgs> TEST - AdvanceRetreat - MG appearing
             //diceRoll = 45; // <cgs> TEST -  KillYourTank - TANKS APPEARING in battle scenario
             //diceRoll = 51; // <cgs> TEST -  ATG appearing
             string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
@@ -3650,7 +3652,7 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.MovementBattleCheckRoll;
                   break;
                case GameAction.MovementBattleCheckRoll:
-                  //dieRoll = 10; // <cgs> TEST - YES COMBAT ON MOVE BOARD
+                  dieRoll = 10; // <cgs> TEST - YES COMBAT ON MOVE BOARD
                   //dieRoll = 1; // <cgs> TEST - NO COMBAT ON MOVE BOARD
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   gi.DieResults[key][0] = dieRoll;
@@ -4196,6 +4198,8 @@ namespace Pattons_Best
                   {
                      Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattle.PerformAction(BattleAmbushRoll): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
                      gi.BattlePhase = BattlePhase.Ambush;
+                     if( EnumScenario.Counterattack == lastReport.Scenario )
+                        gi.IsCounterattackAmbush = true;
                   }
                   else
                   {
@@ -4205,16 +4209,40 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleEmpty:
-                  gi.GamePhase = GamePhase.Preparations;
-                  if (EnumScenario.Counterattack == lastReport.Scenario)
+                  if( (BattlePhase.Ambush == gi.BattlePhase) || (true == gi.IsCounterattackAmbush) )
                   {
-                     gi.EventDisplayed = gi.EventActive = "e036a"; // GameStateBattle.PerformAction(Battle_Empty)
-                     gi.DieRollAction = GameAction.MovementCounterattackEllapsedTimeRoll; // GameStateBattle.PerformAction(Battle_Empty)
-                     gi.GamePhase = GamePhase.Movement;
+                     Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattle.PerformAction(BattleEmpty): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.AmbushRandomEvent");
+                     gi.BattlePhase = BattlePhase.AmbushRandomEvent;
+                     if (EnumScenario.Advance == lastReport.Scenario)
+                        gi.EventActive = gi.EventDisplayed = "e039a";
+                     else if (EnumScenario.Battle == lastReport.Scenario)
+                        gi.EventActive = gi.EventDisplayed = "e039b";              // GameStateBattle.PerformAction(BattleRandomEvent)
+                     else if (EnumScenario.Counterattack == lastReport.Scenario)
+                        gi.EventActive = gi.EventDisplayed = "e039c";
+                     else
+                     {
+                        returnStatus = "unkonwn sceanrio=" + lastReport.Scenario;
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
+                     }
+                     gi.DieResults["e039a"][0] = Utilities.NO_RESULT;
+                     gi.DieResults["e039b"][0] = Utilities.NO_RESULT;
+                     gi.DieResults["e039c"][0] = Utilities.NO_RESULT;
+                     gi.DieRollAction = GameAction.BattleRandomEventRoll;
+                     gi.IsCounterattackAmbush = false; // done with counterattack ambush
                   }
                   else
                   {
-                     gi.EventDisplayed = gi.EventActive = "e036"; // GameStateBattle.PerformAction(Battle_Empty)
+                     gi.GamePhase = GamePhase.Preparations;
+                     if (EnumScenario.Counterattack == lastReport.Scenario)
+                     {
+                        gi.EventDisplayed = gi.EventActive = "e036a"; // GameStateBattle.PerformAction(Battle_Empty)
+                        gi.DieRollAction = GameAction.MovementCounterattackEllapsedTimeRoll; // GameStateBattle.PerformAction(Battle_Empty)
+                        gi.GamePhase = GamePhase.Movement;
+                     }
+                     else
+                     {
+                        gi.EventDisplayed = gi.EventActive = "e036"; // GameStateBattle.PerformAction(Battle_Empty)
+                     }
                   }
                   break;
                case GameAction.BattleEmptyResolve:
@@ -4248,29 +4276,57 @@ namespace Pattons_Best
                      returnStatus = "unkonwn sceanrio=" + lastReport.Scenario;
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
                   }
+                  gi.DieResults["e039a"][0] = Utilities.NO_RESULT;
                   gi.DieResults["e039b"][0] = Utilities.NO_RESULT;
+                  gi.DieResults["e039c"][0] = Utilities.NO_RESULT;
                   gi.DieRollAction = GameAction.BattleRandomEventRoll;
+                  gi.IsCounterattackAmbush = false; // done with counterattack ambush
                   break;
                case GameAction.BattleRandomEventRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     //dieRoll = 01; // <cgs> TEST - AdvanceRetreat - Random Event - Time passes
+                     dieRoll = 32; // <cgs> TEST - AdvanceRetreat - *********************RANDOM*************** Event - Time passes
                      //dieRoll = 35; // <cgs> TEST - Harrassing fire in Advance Scenario - Random Event 
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
                   else
                   {
+                     bool isEnemyUnitLeft = false;
+                     foreach (IStack stack in gi.BattleStacks)
+                     {
+                        foreach (IMapItem mi in stack.MapItems)
+                        {
+                           if (true == mi.IsEnemyUnit())
+                           {
+                              isEnemyUnitLeft = true;
+                              break;
+                           }
+                        }
+                     }
                      gi.GamePhase = GamePhase.BattleRoundSequence;                              // <<<<<<<<<<<<< Change to BattleRoundSequence
                      string randomEvent = TableMgr.GetRandomEvent(lastReport.Scenario, gi.DieResults[key][0]);
                      switch (randomEvent)
                      {
                         case "Time Passes":
                            gi.EventDisplayed = gi.EventActive = "e040";
-                           AdvanceTime(lastReport, 15);  // BattleRandomEventRoll - Time Passes
+                           AdvanceTime(lastReport, 15);  // BattleRandomEventRoll - Time
+                           if (false == NextStepAfterRandomEvent(gi, ref action))
+                           {
+                              returnStatus = "NextStepAfterRandomEvent() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(BattleRandomEventRoll): random event=" + randomEvent + " " + returnStatus);
+                           }
                            break;
                         case "Friendly Artillery":
-                           action = GameAction.BattleResolveArtilleryFire;
+                           if (true == isEnemyUnitLeft)
+                           {
+                              action = GameAction.BattleResolveArtilleryFire;
+                           }
+                           else if (false == NextStepAfterRandomEvent(gi, ref action))
+                           {
+                              returnStatus = "NextStepAfterRandomEvent() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(BattleRandomEventRoll): random event=" + randomEvent + " " + returnStatus);
+                           }
                            break;
                         case "Enemy Artillery":
                            gi.EventDisplayed = gi.EventActive = "e042";
@@ -4320,8 +4376,16 @@ namespace Pattons_Best
                            }
                            break;
                         case "Flanking Fire":
-                           action = GameAction.BattleResolveArtilleryFire;
-                           gi.IsFlankingFire = true;
+                           if (true == isEnemyUnitLeft)
+                           {
+                              action = GameAction.BattleResolveArtilleryFire;
+                              gi.IsFlankingFire = true;
+                           }
+                           else if (false == NextStepAfterRandomEvent(gi, ref action))
+                           {
+                              returnStatus = "NextStepAfterRandomEvent() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(BattleRandomEventRoll): Flanking Fire - " + returnStatus);
+                           }
                            break;
                         default:
                            returnStatus = "reached default with randomEvent=" + randomEvent;
@@ -4374,6 +4438,52 @@ namespace Pattons_Best
          else
             Logger.Log(LogEnum.LE_ERROR, sb12.ToString());
          return returnStatus;
+      }
+      private bool NextStepAfterRandomEvent(IGameInstance gi, ref GameAction outAction)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "NextStepAfterRandomEvent(): lastReport=null");
+            return false;
+         }
+         //----------------------------------------
+         bool isBattleBoardEmpty = true;
+         foreach (IStack stack in gi.BattleStacks)
+         {
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.IsEnemyUnit())
+               {
+                  isBattleBoardEmpty = false;
+                  break;
+               }
+            }
+         }
+         //----------------------------------------
+         if (false == isBattleBoardEmpty)
+         {
+            gi.GamePhase = GamePhase.BattleRoundSequence;
+            if (false == SpottingPhaseBegin(gi, ref outAction, "NextStepAfterRandomEvent()"))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "NextStepAfterRandomEvent(): SpottingPhaseBegin() returned false");
+               return false;
+            }
+         }
+         else
+         {
+            if (EnumScenario.Counterattack == lastReport.Scenario)
+            {
+               gi.EventDisplayed = gi.EventActive = "e036a";  
+               gi.DieRollAction = GameAction.MovementCounterattackEllapsedTimeRoll; 
+               gi.GamePhase = GamePhase.Movement;
+            }
+            else
+            {
+               gi.EventDisplayed = gi.EventActive = "e036";
+            }
+         }
+         return true;
       }
    }
    //-----------------------------------------------------
@@ -4573,7 +4683,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceMinefieldRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     //dieRoll = 2; // <cgs> TEST - minefield attack
+                     dieRoll = 2; // <cgs> TEST - minefield attack
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -5748,18 +5858,6 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.BattleRandomEventRoll;
                   break;
                case GameAction.BattleRandomEventRoll:
-                  bool isEnemyUnitLeft = false;
-                  foreach (IStack stack in gi.BattleStacks)
-                  {
-                     foreach (IMapItem mi in stack.MapItems)
-                     {
-                        if (true == mi.IsEnemyUnit())
-                        {
-                           isEnemyUnitLeft = true;
-                           break;
-                        }
-                     }
-                  }
                   //-----------------------------------------------
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
@@ -5769,12 +5867,29 @@ namespace Pattons_Best
                   }
                   else
                   {
+                     bool isEnemyUnitLeft = false;
+                     foreach (IStack stack in gi.BattleStacks)
+                     {
+                        foreach (IMapItem mi in stack.MapItems)
+                        {
+                           if (true == mi.IsEnemyUnit())
+                           {
+                              isEnemyUnitLeft = true;
+                              break;
+                           }
+                        }
+                     }
                      string randomEvent = TableMgr.GetRandomEvent(lastReport.Scenario, gi.DieResults[key][0]);
                      switch (randomEvent)
                      {
                         case "Time Passes":
                            gi.EventDisplayed = gi.EventActive = "e040";
                            AdvanceTime(lastReport, 15);   // GameStateBattleRoundSequence.PerformAction(BattleRandomEventRoll) - Time Passes
+                           if (false == NextStepAfterRandomEvent(gi, ref action))
+                           {
+                              returnStatus = "NextStepAfterRandomEvent() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRandomEventRoll): random event=" + randomEvent + " " + returnStatus);
+                           }
                            break;
                         case "Friendly Artillery":
                            if (true == isEnemyUnitLeft)
@@ -5784,7 +5899,7 @@ namespace Pattons_Best
                            else if (false == NextStepAfterRandomEvent(gi, ref action))
                            {
                               returnStatus = "NextStepAfterRandomEvent() returned false";
-                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRandomEventRoll): Friendly Artillery" + returnStatus);
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRandomEventRoll): random event=" + randomEvent + " " + returnStatus);
                            }
                            break;
                         case "Enemy Artillery":
@@ -5960,6 +6075,21 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "BattleRoundSequenceStart(): ResetRound() returned false");
             return false;
          }
+         //-------------------------------------------------------
+         bool isBattleBoardEmpty = true;
+         foreach (IStack stack in gi.BattleStacks)
+         {
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.IsEnemyUnit())
+               {
+                  isBattleBoardEmpty = false;
+                  break;
+               }
+            }
+         }
+         if (true == isBattleBoardEmpty)
+            return true;
          //-------------------------------------------------------
          Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "BattleRoundSequenceStart(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Spotting");
          gi.BattlePhase = BattlePhase.Spotting;
@@ -6471,36 +6601,54 @@ namespace Pattons_Best
          //---------------------------------------------------------
          if (CrewActionPhase.None == gi.CrewActionPhase)
          {
-            Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "Conduct_CrewAction(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.RandomEvent");
-            gi.BattlePhase = BattlePhase.RandomEvent;              // Goto RandomEvent if no crew actions
-            if (EnumScenario.Advance == lastReport.Scenario)
-               gi.EventActive = gi.EventDisplayed = "e039a";
-            else if (EnumScenario.Battle == lastReport.Scenario)
-               gi.EventActive = gi.EventDisplayed = "e039b";            //ConductCrewAction()
-            else if (EnumScenario.Counterattack == lastReport.Scenario)
-               gi.EventActive = gi.EventDisplayed = "e039c";
-            else
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Conduct_CrewAction(): unknown scenario=" + lastReport.Scenario);
-               return false;
-            }
-            gi.DieResults["e039b"][0] = Utilities.NO_RESULT;
-            gi.DieRollAction = GameAction.BattleRandomEventRoll;
-            outAction = GameAction.BattleRoundSequenceRandomEvent; // random event if no more enemy units
+            bool isEnemyUnits = false;
             foreach (IStack stack in gi.BattleStacks)
             {
                foreach (IMapItem mi in stack.MapItems)
                {
                   if (true == mi.IsEnemyUnit())
                   {
-                     Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "Conduct_CrewAction(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.EnemyAction");
-                     gi.BattlePhase = BattlePhase.EnemyAction;
-                     outAction = GameAction.BattleRoundSequenceEnemyAction;
+                     isEnemyUnits = true;
                      break;
                   }
                }
-               if (BattlePhase.EnemyAction == gi.BattlePhase)  // if enemys exist, next phase is enemy action
-                  break;
+            }
+            //-----------------------------------------------------
+            if (true == isEnemyUnits )  
+            {
+               if (true == gi.IsCounterattackAmbush)
+               {
+                  Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "Conduct_CrewAction(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.FriendlyAction");
+                  gi.BattlePhase = BattlePhase.FriendlyAction;
+                  outAction = GameAction.BattleResolveArtilleryFire;
+               }
+               else
+               {
+                  Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "Conduct_CrewAction(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.EnemyAction");
+                  gi.BattlePhase = BattlePhase.EnemyAction;
+                  outAction = GameAction.BattleRoundSequenceEnemyAction;
+               }
+            }
+            else
+            {
+               Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "Conduct_CrewAction(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.RandomEvent");
+               gi.BattlePhase = BattlePhase.RandomEvent;              // Skip Enemy Action and Friendly Action if no more Enemy Units - skip to Random Events Phase
+               gi.DieRollAction = GameAction.BattleRandomEventRoll;
+               outAction = GameAction.BattleRoundSequenceRandomEvent; // random event if no more enemy units
+               if (EnumScenario.Advance == lastReport.Scenario)
+                  gi.EventActive = gi.EventDisplayed = "e039a";
+               else if (EnumScenario.Battle == lastReport.Scenario)
+                  gi.EventActive = gi.EventDisplayed = "e039b";            //ConductCrewAction()
+               else if (EnumScenario.Counterattack == lastReport.Scenario)
+                  gi.EventActive = gi.EventDisplayed = "e039c";
+               else
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Conduct_CrewAction(): unknown scenario=" + lastReport.Scenario);
+                  return false;
+               }
+               gi.DieResults["e039a"][0] = Utilities.NO_RESULT;
+               gi.DieResults["e039b"][0] = Utilities.NO_RESULT;
+               gi.DieResults["e039c"][0] = Utilities.NO_RESULT;
             }
          }
          Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): Exiting------------ bp=" + gi.BattlePhase.ToString() + " cp=" + gi.CrewActionPhase.ToString());
@@ -7898,8 +8046,20 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "NextStepAfterRandomEvent(): lastReport=null");
             return false;
          }
+         bool isBattleBoardEmpty = true;
+         foreach (IStack stack in gi.BattleStacks)
+         {
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.IsEnemyUnit())
+               {
+                  isBattleBoardEmpty = false;
+                  break;
+               }
+            }
+         }
          //--------------------------------------------------
-         if (BattlePhase.AmbushRandomEvent == gi.BattlePhase)
+         if ( (BattlePhase.AmbushRandomEvent == gi.BattlePhase) && (false == isBattleBoardEmpty) )
          {
             if (false == SpottingPhaseBegin(gi, ref outAction, "NextStepAfterRandomEvent()"))
             {

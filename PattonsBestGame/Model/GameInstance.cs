@@ -121,6 +121,7 @@ namespace Pattons_Best
       public bool IsShermanTurretRotated { set; get; } = false;
       public double ShermanRotationTurretOld { set; get; } = 0.0;
       //---------------------------------------------------------------
+      public bool IsCounterattackAmbush { set; get; } = false;
       public bool IsLeadTank { set; get; } = false;
       public bool IsAirStrikePending { set; get; } = false;
       public bool IsAdvancingFireChosen { set; get; } = false;

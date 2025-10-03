@@ -2578,10 +2578,13 @@ namespace Pattons_Best
          //-------------------------------------
          if ( (BattlePhase.None == gi.BattlePhase) || (EnumMainImage.MI_Battle != CanvasImageViewer.theMainImage) )
             return true;
-         ITerritory? t = Territories.theTerritories.Find( gi.BattlePhase.ToString() );
+         string tName = gi.BattlePhase.ToString();
+         if (true == gi.IsCounterattackAmbush)
+            tName = "Ambush";
+         ITerritory? t = Territories.theTerritories.Find(tName);
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasAnimateBattlePhase(): t=null for name=" + gi.BattlePhase.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasAnimateBattlePhase(): t=null for name=" + tName);
             return false;
          }
          ColorAnimation colorAnimation = new ColorAnimation

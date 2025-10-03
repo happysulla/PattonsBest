@@ -1072,9 +1072,9 @@ namespace Pattons_Best
                break;
             case "e011a":
                StringBuilder sbE011a = new StringBuilder();
-               sbE011a.Append(" Is Hulled Down =  TRUE");
-               sbE011a.Append("\n Is Moving  = FALSE");
-               sbE011a.Append("\n Is Lead Tank  = FALSE");
+               sbE011a.Append(" Is Hulled Down = True");
+               sbE011a.Append("\n Is Moving  = False");
+               sbE011a.Append("\n Is Lead Tank  = False");
                myTextBlock.Inlines.Add(new Run(sbE011a.ToString()));
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
@@ -4745,18 +4745,18 @@ namespace Pattons_Best
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetup_FireResults(): myGameInstance=null");
             return false;
          }
          if (null == myGameEngine)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): myGameEngine=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetup_FireResults(): myGameEngine=null");
             return false;
          }
          IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetup_FireResults(): lastReport=null");
             return false;
          }
          //--------------------------------------------------
@@ -4765,24 +4765,29 @@ namespace Pattons_Best
          GameAction outAction = GameAction.Error;
          if( BattlePhase.RandomEvent == myGameInstance.BattlePhase )
          {
-            outAction = GameAction.BattleRoundSequenceBackToSpotting; // ShowBattleSetupFireResults() - AmbushRandomEvent 
+            outAction = GameAction.BattleRoundSequenceBackToSpotting; // ShowBattleSetup_FireResults() - AmbushRandomEvent 
+         }
+         else if (BattlePhase.FriendlyAction == myGameInstance.BattlePhase)  // Friendly action during counterattack ambush 
+         {
+            myGameInstance.GamePhase = GamePhase.Battle;
+            outAction = GameAction.BattleRandomEvent; // ShowBattleSetup_FireResults() - AmbushRandomEvent 
          }
          else if (BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase)  // Friendly action during ambush as part of Random Events
          {
-            Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "ShowBattleSetupFireResults(): AmbushRandomEvent e=" + myGameInstance.EventActive);
-            outAction = GameAction.BattleRoundSequenceStart; // ShowBattleSetupFireResults() - AmbushRandomEvent 
+            Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "ShowBattleSetup_FireResults(): AmbushRandomEvent e=" + myGameInstance.EventActive);
+            outAction = GameAction.BattleRoundSequenceStart; // ShowBattleSetup_FireResults() - AmbushRandomEvent 
          }
          else if (GamePhase.Battle == myGameInstance.GamePhase)
          {
             if (null == myGameInstance.EnteredArea)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): myGameInstance.EnteredArea=null");
+               Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetup_FireResults(): myGameInstance.EnteredArea=null");
                return false;
             }
             IStack? stackEnteredArea = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
             if (null == stackEnteredArea)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): stackEnteredArea=null");
+               Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetup_FireResults(): stackEnteredArea=null");
                return false;
             }
             foreach (IMapItem mi in stackEnteredArea.MapItems)
@@ -4821,7 +4826,7 @@ namespace Pattons_Best
          }
          else
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): Reached default GP=" + myGameInstance.GamePhase.ToString() + " BP=" + myGameInstance.BattlePhase.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetup_FireResults(): Reached default GP=" + myGameInstance.GamePhase.ToString() + " BP=" + myGameInstance.BattlePhase.ToString());
             return false;
          }
          //--------------------------------------------------
@@ -4838,9 +4843,9 @@ namespace Pattons_Best
             }
          }
          if ( true == isBattleBoardEmpty)
-            outAction = GameAction.BattleEmpty;  // ShowBattleSetupFireResults()
+            outAction = GameAction.BattleEmpty;  // ShowBattleSetup_FireResults()
          //--------------------------------------------------
-         StringBuilder sb11 = new StringBuilder("     ######ShowBattleSetupFireResults() :");
+         StringBuilder sb11 = new StringBuilder("     ######ShowBattleSetup_FireResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
          sb11.Append(" a="); sb11.Append(outAction.ToString());
@@ -4967,7 +4972,6 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowSpottingResults(): myGameEngine=null");
             return false;
          }
-
          IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
          if (null == lastReport)
          {
@@ -6000,11 +6004,11 @@ namespace Pattons_Best
                break;
             case "Begin Game":
                action = GameAction.SetupShowMapHistorical;
-               action = GameAction.TestingStartMorningBriefing;  // <cgs> TEST - skip the ammo setup
+               //action = GameAction.TestingStartMorningBriefing;  // <cgs> TEST - skip the ammo setup
                //action = GameAction.TestingStartPreparations;     // <cgs> TEST - skip morning briefing and crew/ammo setup
                //action = GameAction.TestingStartMovement;         // <cgs> TEST - start with movement - skip battle prep phase
                //action = GameAction.TestingStartBattle;           // <cgs> TEST - skip the movement portion - begin with battle setup
-               //action = GameAction.TestingStartAmbush;           // <cgs> TEST - skip battle setup
+               action = GameAction.TestingStartAmbush;           // <cgs> TEST - skip battle setup
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Cancel":
