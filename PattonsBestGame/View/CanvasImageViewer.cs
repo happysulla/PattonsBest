@@ -107,6 +107,7 @@ namespace Pattons_Best
             case GameAction.TestingStartMovement:
             case GameAction.MovementEnemyStrengthChoice:
             case GameAction.MovementEnemyCheckCounterattack:
+            case GameAction.BattleRoundSequenceShermanAdvanceOrRetreat:
                theMainImage = EnumMainImage.MI_Move;
                ShowMovementMap(myCanvas);
                break;
@@ -118,6 +119,7 @@ namespace Pattons_Best
             case GameAction.BattleStart:
             case GameAction.BattleActivation:
             case GameAction.MovementBattleActivation:
+            case GameAction.BattleRoundSequenceShermanAdvanceOrRetreatEnd:
                myDieRoller.HideDie();
                theMainImage = EnumMainImage.MI_Battle;
                ShowBattleMap(myCanvas);

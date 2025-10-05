@@ -1103,8 +1103,8 @@ namespace Pattons_Best
          switch (myState)
          {
             case E046Enum.ACTIVATION:
-               //dieRoll = 11; // <cgs> TEST - AdvanceRetreat - infantry appearing
-               //dieRoll = 10; // <cgs> TEST - AdvanceRetreat - MG Appearing
+               //dieRoll = 11; // <cgs> TEST - infantry appearing
+               dieRoll = 10; // <cgs> TEST - AdvanceRetreat - MG Appearing
                //dieRoll = 45; // <cgs> TEST - KillYourTank - TANKS APPEARING in battle scenario
                //dieRoll = 91; // <cgs> TEST - PSW/SPW APPEARING in Advance scenario
                myGridRows[i].myDieRollActivation = dieRoll;
@@ -1198,7 +1198,7 @@ namespace Pattons_Best
                break;
             //-------------------------------------------------------------------
             case E046Enum.PLACE_RANGE:
-               //dieRoll = 10; // <cgs> TEST - AdvanceRetreat - Start at long range
+               dieRoll = 10; // <cgs> TEST - AdvanceRetreat - Start at long range
                myGridRows[i].myDieRollRange = dieRoll;
                myGridRows[i].myRange = TableMgr.GetEnemyRange(myAreaType, myGridRows[i].myActivation, dieRoll);
                if ( "ERROR" == myGridRows[i].myRange )
@@ -1346,7 +1346,7 @@ namespace Pattons_Best
          }
          //------------------------------------------------------------
          int dieRoll = Utilities.RandomGenerator.Next(1, 11);
-         //dieRoll = 13; // <cgs> TEST - long range
+         dieRoll = 13; // <cgs> TEST - AdvanceRetreat - long range
          myGridRows[i].myDieRollRange = dieRoll;
          myGridRows[i].myRange = TableMgr.GetEnemyRange(myAreaType, myGridRows[i].myActivation, dieRoll);
          if ("ERROR" == myGridRows[i].myRange)
@@ -1366,7 +1366,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults_AutoRolls(): miEnemyUnit=null for i=" + i.ToString());
             return false;
          }
-         if( true == miEnemyUnit.IsVehicle  )
+         if( true == miEnemyUnit.IsVehicle )
          {
             myGridRows[i].myDieRollFacing = Utilities.RandomGenerator.Next(1, 11);
             myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(myGridRows[i].myActivation, myGridRows[i].myDieRollFacing);

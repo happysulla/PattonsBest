@@ -27,7 +27,7 @@ namespace Pattons_Best
          NewTerritory = mim.NewTerritory;
          BestPath = mim.BestPath;
       }
-      public MapItemMove(ITerritories territories, IMapItem movingMapItem, ITerritory newTerritory) // Do not move into overstacked region
+      public MapItemMove(ITerritories territories, IMapItem movingMapItem, ITerritory newTerritory) 
       {
          MapItem = movingMapItem;
          OldTerritory = movingMapItem.TerritoryCurrent;
@@ -43,7 +43,7 @@ namespace Pattons_Best
             CtorError = true;
             return;
          }
-         BestPath = GetBestPath(territories, OldTerritory, newTerritory, 100);
+         BestPath = Territory.GetBestPath(territories, OldTerritory, newTerritory, 100);
          if (null == BestPath)
          {
             string msg = "MapItemMove():BestPath=null for";
@@ -57,189 +57,6 @@ namespace Pattons_Best
          // Remove last territory if exceeds stacking limit.
          int countOfTerritories = BestPath.Territories.Count;
          NewTerritory = BestPath.Territories[countOfTerritories - 1];
-      }
-      //------------------------------------------------------------------------------
-      static public double GetDistance(ITerritory startT, ITerritory endT)
-      {
-         Point startPoint = new Point(startT.CenterPoint.X, startT.CenterPoint.Y);
-         Point endPoint = new Point(endT.CenterPoint.X, endT.CenterPoint.Y);
-         double xDelta = endPoint.X - startPoint.X;
-         double yDelta = endPoint.Y - startPoint.Y;
-         double distance = Math.Sqrt(xDelta * xDelta + yDelta * yDelta);
-         return distance;
-      }
-      public IMapPath? GetBestPath(ITerritories territories, ITerritory startT, ITerritory endT, int moveFactor)
-      {
-         IMapPaths paths = new MapPaths();
-         if (moveFactor < 1)
-            return new MapPath(endT.Name);
-         IMapPaths adjPaths = new MapPaths();
-         if (startT.Name == endT.Name)
-         {
-            IMapPath path = new MapPath(endT.Name);
-            path.Territories.Add(endT);
-            paths.Add(path);
-            return path;
-         }
-         else
-         {
-            // Setup a path map for each adjacent territory
-            foreach (string adjTerritory in startT.Adjacents)
-            {
-               IMapPath path = new MapPath(adjTerritory);
-               ITerritory? adj = territories.Find(adjTerritory);
-               if (adj == null)
-               {
-                  Logger.Log(LogEnum.LE_VIEW_MIM, "GetBestPath(): adj=null");
-                  return null;
-               }
-               path.Territories.Add(adj);
-               path.Metric = GetDistance(adj, endT);
-               paths.Add(path);
-               adjPaths.Add(path);
-               // If the adjacent territory is the end territory, no need to continue.  It is the best path.
-               if (adjTerritory == endT.Name)
-               {
-                  Logger.Log(LogEnum.LE_VIEW_MIM, "GetBestPath(): Adjacent Move of " + MapItem.Name + " moving from " + startT.Name + " to " + endT.Name);
-                  return path;
-               }
-            }
-            // For each IMapPath object, determine the next Territory that  moves the object closer to the end goal.
-            bool isEndTerritoryReached = false;
-            for (int i = 1; i < moveFactor; ++i)
-            {
-               //Console.WriteLine("---------------->>MF={0}<<-------------------------", i.ToString());
-               // Perform no more movement if end territory is reached by one of the paths.
-               if (true == isEndTerritoryReached)
-                  break;
-               // Iterate through the IMapPath objects trying to find the lowest metric score for each adjacent territory.
-               foreach (IMapPath path in paths)
-               {
-                  //Console.WriteLine("==> Adding to {0} ", path.ToString());
-                  if (path.Metric == double.MaxValue)
-                     continue;
-                  // Set a threshold for the lowest metric score.
-                  // Set it to a very high number because the first interation of 
-                  // the following loop determines what metric score to bcontinue.
-                  // If a metric score is less than this number, it is set as
-                  // the new threshold, i.e. trying to find the minimum metric score.
-                  double lowestMetricScore = double.MaxValue; // Set to high number
-                  ITerritory? lowestTerritory = null;
-                  // A Territory is better if the distance between the center
-                  // point of the territory and all other alternatives is 
-                  // the smallest.
-                  ITerritory adj1 = path.Territories[path.Territories.Count - 1];
-                  foreach (string alternative in adj1.Adjacents)
-                  {
-                     //Console.WriteLine("     ==> Trying {0}", alternative);
-                     ITerritory? adj2 = territories.Find(alternative);
-                     if (adj2 == null)
-                     {
-                        Logger.Log(LogEnum.LE_ERROR, "GetBestPath(): adj2=null for alternative=" + alternative);
-                        continue;
-                     }
-                     // If the end territory is reached, no need to continue
-                     // looking at alternates.
-                     if (adj2.Name == endT.Name)
-                     {
-                        //Console.WriteLine("     ==> ==>Reached End Territory {0} for PATH={1}", adj2.ToString(), path.ToString());
-                        // Calculate the metric between this adjacent territory and
-                        // the end territory.  If it results in a lower path metric,
-                        // set it at the low water mark.
-                        double altDistanceMetric = GetDistance(adj2, endT);
-                        altDistanceMetric += path.Metric;
-                        if (altDistanceMetric <= lowestMetricScore)
-                        {
-                           lowestMetricScore = altDistanceMetric;
-                           lowestTerritory = adj2;
-                        }
-                        isEndTerritoryReached = true;
-                        break; // end reached so break out of loop
-                     }
-                     // Exclude alternative paths that fold back to start territory
-                     if (adj2.Name == startT.Name)
-                     {
-                        //Console.WriteLine("     ==> ==>{0} is start territory", adj2.Name);
-                        continue;
-                     }
-                     // Exclude alternative paths that fold back to other adjacent territories
-                     bool isMatchFound = false;
-                     foreach (IMapPath aPath in adjPaths)
-                     {
-                        if (alternative == aPath.Name)
-                        {
-                           isMatchFound = true;
-                           break;
-                        }
-                     }
-                     if (true == isMatchFound)
-                     {
-                        //Console.WriteLine("     ==> ==> {0} is already adjacent {1}", adj2.ToString(), path.ToString());
-                        continue;
-                     }
-                     // Exclude alternative paths that fold back on themselves, i.e.
-                     // do not choose a Territory that is already on this MapPath.
-                     IEnumerable<ITerritory> results1 = from territory in path.Territories where territory.Name == adj2.Name select territory;
-                     if (0 < results1.Count())
-                     {
-                        //Console.WriteLine("     ==> ==> {0} is already in {1}", adj2.ToString(), path.ToString());
-                        continue;
-                     }
-                     // Calculate the metric between this adjacent territory and
-                     // the end territory.  If it results in a lower path metric,
-                     // set it at the low water mark.
-                     double altDistanceMetric2 = GetDistance(adj2, endT);
-                     altDistanceMetric2 += path.Metric;
-                     if (altDistanceMetric2 <= lowestMetricScore)
-                     {
-                        lowestMetricScore = altDistanceMetric2;
-                        lowestTerritory = adj2;
-                     }
-                  } // end foreach (String alternative in adj1.Adjacents)
-                    // Check if a territory was added to Map Path for this instance.
-                    // If not, then this map path needs to be deleted.
-                  if (double.MaxValue == lowestMetricScore)
-                  {
-                     //Console.WriteLine("     ==> Skipping {0} at Max Value", path.ToString());
-                     path.Metric = double.MaxValue;
-                     continue;
-                  }
-                  else // Add the Territory with the lowest Metric to the path
-                  {
-                     if (null != lowestTerritory)
-                     {
-                        path.Territories.Add(lowestTerritory);
-                        path.Metric = lowestMetricScore;
-                     }
-                     //Console.WriteLine("     ==> Appending to {0}", path.ToString());
-                  }
-               } // end foreach (IMapPath path in paths)
-            } // end for (int i = 0; i < moveFactor; ++i)
-         } // end else startT is not equal to endT
-         //--------------------------------------------
-         // Determine from all paths which is the lowest metric
-         int i1 = 1;
-         int count = paths.Count;
-         if (count < 1)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetBestPath(): did not reach " + startT.Name + " from " + endT.Name);
-            return null;
-         }
-         IMapPath? bestPath = paths[0];
-         if (bestPath == null)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetBestPath(): bestpath= null & did not reach " + startT.Name + " from " + endT.Name);
-            return null;
-         }
-         foreach (IMapPath path in paths)
-         {
-            //Console.WriteLine("{0}.) {1}", i1.ToString(), path.ToString());
-            if (path.Metric < bestPath.Metric)
-               bestPath = path;
-            ++i1;
-         }
-         Logger.Log(LogEnum.LE_VIEW_MIM, "GetBestPath(): " + MapItem.Name + " moving from " + startT.Name + " to " + endT.Name + " using " + bestPath.ToString());
-         return bestPath;
       }
       public override string ToString()
       {

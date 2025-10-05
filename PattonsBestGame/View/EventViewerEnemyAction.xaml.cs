@@ -1251,6 +1251,13 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateMapItemMove(): myGameInstance=null");
             return false;
          }
+         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateMapItemMove(): lastReport=null");
+            return false;
+         }
+         //---------------------------------------
          int rowNum = i + STARTING_ASSIGNED_ROW;
          IMapItem mi = myGridRows[i].myMapItem;
          //---------------------------------------
@@ -1339,7 +1346,7 @@ namespace Pattons_Best
          {
             myGridRows[i].myDieRollTerrain = KEEP_TERRAIN; // moving off board
             myGridRows[i].myDieRollFacing = NO_FACING;
-            if (true == newT.Name.Contains("OffBottom")) // BattleRoundSequenceMovementRoll -  Enemy Movement advanced past sector 1,2,3
+            if ( (true == newT.Name.Contains("OffBottom")) && (EnumScenario.Counterattack != lastReport.Scenario) ) // BattleRoundSequenceMovementRoll -  Enemy Movement advanced past sector 1,2,3
                myGameInstance.AdvancingEnemies.Add(mi);
          }
          return true;
@@ -1486,7 +1493,7 @@ namespace Pattons_Best
                //dieRoll = 31; // <cgs> TEST - Move-B for Infantry in Battle Scenario - ambush
                //dieRoll = 51; // <cgs> TEST - Move-B for Infantry in Battle Scenario - no ambush
                //else
-               //dieRoll = 5; // <cgs> TEST - AdvanceRetreat - Do Nothing for Infantry in Battle Scenario
+               dieRoll = 5; // <cgs> TEST - AdvanceRetreat - Do Nothing for Infantry in Battle Scenario
                //dieRoll = 15; // <cgs> TEST - Move-F for Infantry in Battle Scenario
                //dieRoll = 77; // <cgs> TEST - KillYourTank - Fire At Your Tank when stationary in Battle Scenario
                myGridRows[i].myDieRollEnemyAction = dieRoll;

@@ -249,6 +249,7 @@ namespace Pattons_Best
       MovementStartAreaRestartAfterBattle,
       MovementExit,
 
+
       BattleStart,
       BattleActivation,
       BattlePlaceAdvanceFire,
@@ -355,6 +356,8 @@ namespace Pattons_Best
       BattleRoundSequenceFriendlyAdvanceSelected,
       BattleRoundSequenceEnemyAdvance,
       BattleRoundSequenceEnemyAdvanceEnd,
+      BattleRoundSequenceShermanAdvanceOrRetreat,
+      BattleRoundSequenceShermanAdvanceOrRetreatEnd,
 
       EveningDebriefingStart,
       EveningDebriefingRatingImprovement,

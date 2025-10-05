@@ -4588,12 +4588,12 @@ namespace Pattons_Best
       {
          if( null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowCrewRatingResults(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "Show_CrewRatingResults(): myGameInstance=null");
             return false;
          }
          if (null == myGameEngine)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowCrewRatingResults(): myGameEngine=null");
+            Logger.Log(LogEnum.LE_ERROR, "Show_CrewRatingResults(): myGameEngine=null");
             return false;
          }
          GameAction outAction = GameAction.Error;
@@ -4605,7 +4605,7 @@ namespace Pattons_Best
             outAction = GameAction.BattleRoundSequenceCrewReplaced; // enemies transfer to Move board due to advancing or retreating Sherman
          else
             outAction = GameAction.BattleCrewReplaced; // due to Resolve_EmptyBattleBoard() call in GameState class
-         StringBuilder sb11 = new StringBuilder("     ######ShowCrewRatingResults() :");
+         StringBuilder sb11 = new StringBuilder("     ######Show_CrewRatingResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
          sb11.Append(" a="); sb11.Append(outAction.ToString());
@@ -5423,6 +5423,13 @@ namespace Pattons_Best
                            //-----------------------------------------------------
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
+                        case "Sherman1":
+                           if( "e099" == myGameInstance.EventDisplayed)
+                           {
+                              action = GameAction.BattleRoundSequenceShermanAdvanceOrRetreatEnd;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           }
+                           break;
                         case "MovementExitAreaSet":
                            action = GameAction.MovementExitAreaSet;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);

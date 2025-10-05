@@ -2070,6 +2070,7 @@ namespace Pattons_Best
                case GameAction.MovementAdvanceFireChoice:
                case GameAction.UpdateBattleBoard:
                case GameAction.BattleRoundSequenceMovementRoll:
+               case GameAction.BattleRoundSequenceShermanAdvanceOrRetreat:
                   if (false == UpdateCanvasMovement(gi, action, stacks, buttons))
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMovement() returned false for a=" + action.ToString());

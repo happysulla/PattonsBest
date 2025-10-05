@@ -21,6 +21,7 @@ namespace Pattons_Best
       LE_SHOW_ENTERED_HEX,
       //-------------
       LE_SHOW_CREW_NAME,
+      LE_SHOW_START_AREA,
       LE_SHOW_ACTION_REPORT_NEW,
       LE_SHOW_ENEMY_STRENGTH,
       LE_SHOW_OVERRUN_TO_PREVIOUS_AREA,
@@ -137,6 +138,7 @@ namespace Pattons_Best
          //-------------------------------
          //SetOn(LogEnum.LE_SHOW_CREW_NAME);
          SetOn(LogEnum.LE_SHOW_ACTION_REPORT_NEW);
+         SetOn(LogEnum.LE_SHOW_START_AREA);
          //SetOn(LogEnum.LE_SHOW_ENEMY_STRENGTH);
          //SetOn(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA);
          //SetOn(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD);
