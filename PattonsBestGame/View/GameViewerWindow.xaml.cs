@@ -309,13 +309,8 @@ namespace Pattons_Best
          {
             myTankCardNum = lastReport.TankCardNum;
             List<UIElement> elements = new List<UIElement>();
-            foreach (UIElement ui in myCanvasMain.Children) // Clean the Canvas of all marks
+            foreach (UIElement ui in myCanvasTank.Children) // Clean the Canvas of all marks
             {
-               if (ui is Button b)
-               {
-                  if (true == b.Name.Contains("Sherman"))
-                     elements.Add(b); // Remove the old button
-               }
                if (ui is Image img)
                {
                   if (true == img.Name.Contains("TankMat"))
@@ -324,6 +319,18 @@ namespace Pattons_Best
             }
             foreach( UIElement ui in elements )
                myCanvasTank.Children.Remove(ui);
+            //-------------------------------------------------------
+            elements.Clear();
+            foreach (UIElement ui in myCanvasMain.Children) // Clean the Canvas of Sherman
+            {
+               if (ui is Button b)
+               {
+                  if (true == b.Name.Contains("Sherman"))
+                     elements.Add(b); // Remove the old buttons
+               }
+            }
+            foreach (UIElement ui in elements)
+               myCanvasMain.Children.Remove(ui);
             //-------------------------------------------------------
             string appendText = "";
             if (9 < myTankCardNum)
@@ -424,6 +431,9 @@ namespace Pattons_Best
                break;
             case GameAction.MorningBriefingTankReplacementHvssRoll:
             case GameAction.MorningBriefingTankReplacementRoll:
+            case GameAction.MorningBriefingDecreaseTankNum:
+            case GameAction.MorningBriefingIncreaseTankNum:
+            case GameAction.MorningBriefingTankReplacementEnd:
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                break;
@@ -1466,9 +1476,11 @@ namespace Pattons_Best
             }
             if (ui is Button b)
             {
-               IMapItem? mi = gi.Hatches.Find(b.Name);
-               if ((null != gi.ShermanHvss) && (true == b.Name.Contains("Hvss")) )
+               IMapItem? mi = null;
+               if ((null != gi.ShermanHvss) && (true == b.Name.Contains("Hvss")))
                   mi = gi.ShermanHvss;
+               if (null == mi)
+                  mi = gi.Hatches.Find(b.Name);
                if (null == mi)
                   mi = gi.CrewActions.Find(b.Name);
                if ( null == mi )

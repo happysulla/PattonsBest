@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -2459,7 +2460,10 @@ namespace Pattons_Best
          //--------------------------------
          //gi.Day = 67;                                        // <cgs> TEST - Day before first Retrofitting - day 37 is retrofitting
          //gi.Day = 100;                                       // <cgs> TEST - After Nov 1944 for HVSS   
-         //gi.Day = 110;                                      // <cgs> TEST - After Nov 1944 - day 111 is retrofit period 
+         gi.Day = 110;                                      // <cgs> TEST - After Nov 1944 - day 111 is retrofit period 
+         //--------------------------------
+         lastReport.SunriseHour = 19;  // <cgs> TEST - EndOfDay - start at end of day
+         lastReport.SunriseMin = 00;   // <cgs> TEST - EndOfDay - start at end of day
          //--------------------------------
          //lastReport.Driver.SetBloodSpots(20);              // <cgs> TEST - wounded crewmen
          //lastReport.Driver.Wound = "Light Wound";          // <cgs> TEST - wounded crewmen
@@ -2530,9 +2534,6 @@ namespace Pattons_Best
          //}
          //--------------------------------
          //gi.PromotionPointNum = 400; // <cgs> TEST - EndOfDay - Force Promo at end of day
-         //--------------------------------
-         //lastReport.SunriseHour = 18;  // <cgs> TEST - EndOfDay - start at end of day
-         //lastReport.SunriseMin = 30;   // <cgs> TEST - EndOfDay - start at end of day
          //--------------------------------
          //ICrewMember loader = new CrewMember("Loader", "Cpl", "c09Loader");
          //loader.Rating = 7;
@@ -2626,8 +2627,40 @@ namespace Pattons_Best
                   break;
                case GameAction.MorningBriefingTankReplaceChoice:
                   gi.DieResults["e007d"][0] = Utilities.NO_RESULT;
-                  gi.EventDisplayed = gi.EventActive = "e007d";  // Tank Replacement
-                  gi.DieRollAction = GameAction.MorningBriefingTankReplacementRoll;
+                  //-----------------------------------------
+                  int totalRating = 0;
+                  string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Driver" };
+                  foreach (string crewmember in crewmembers)
+                  {
+                     ICrewMember? cm = gi.GetCrewMemberByRole(crewmember);
+                     if (null == cm)
+                     {
+                        returnStatus = "GetCrewMemberByRole(): returned null for role=" + crewmember;
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(MorningBriefingTankReplaceChoice): " + returnStatus);
+                     }
+                     else
+                     {
+                        totalRating += cm.Rating;
+                        cm.IsButtonedUp = true; // all crewmembers become buttoned up.
+                     }
+                  }
+                  gi.ShermanHvss = null;
+                  gi.ClearCrewActions("GameStateEveningDebriefing.PerformAction(MorningBriefingTankReplaceChoice)");
+                  gi.Hatches.Clear();
+                  gi.GunLoads.Clear();
+                  gi.ReadyRacks.Clear();
+                  //-----------------------------------------
+                  totalRating = 40; // <cgs> TEST - Force Tank Choice
+                  if( 34 < totalRating )
+                  {
+                     gi.TankReplacementNumber = 0;
+                     gi.EventDisplayed = gi.EventActive = "e007f";  // Tank Replacement
+                  }
+                  else
+                  {
+                     gi.EventDisplayed = gi.EventActive = "e007d";  // Tank Replacement
+                     gi.DieRollAction = GameAction.MorningBriefingTankReplacementRoll;
+                  }
                   break;
                case GameAction.MorningBriefingTankKeepChoice:
                   if ((EnumScenario.Retrofit == lastReport.Scenario) && ((37 == gi.Day) || (68 == gi.Day) || (97 == gi.Day) || (137 == gi.Day) || (144 == gi.Day)) )  // retrofits must be greater than 7 days for crew training 
@@ -2737,26 +2770,10 @@ namespace Pattons_Best
                      }
                      else
                      {
-                        if (EnumScenario.Retrofit == lastReport.Scenario)   
+                        if (false == TankReplacementEnd(gi))
                         {
-                           if ((37 == gi.Day) || (68 == gi.Day) || (97 == gi.Day) || (137 == gi.Day) || (144 == gi.Day)) // retrofits must be greater than 7 days for training 
-                           {
-                              gi.EventDisplayed = gi.EventActive = "e006b"; // after tank replacement which means should be Retrofit - crew training
-                              gi.DieRollAction = GameAction.DieRollActionNone;
-                           }
-                           else
-                           {
-                              if (false == AdvancePastRetrofit(gi))
-                              {
-                                 returnStatus = "AdvancePast_Retrofit(): returned false";
-                                 Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementRoll): " + returnStatus);
-                              }
-                           }                          
-                        }
-                        else
-                        {
-                           gi.EventDisplayed = gi.EventActive = "e008";
-                           gi.DieRollAction = GameAction.MorningBriefingWeatherRoll;
+                           returnStatus = "TankReplacement_End() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementHvssRoll): " + returnStatus);
                         }
                      }
                   }
@@ -2774,7 +2791,7 @@ namespace Pattons_Best
                         if(null == t )
                         {
                            returnStatus = "Territories.theTerritories.Find() returned null for tName=Hvss and tType=" + tType;
-                           Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(MorningBriefingTankReplacementHvssRoll): " + returnStatus);
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementHvssRoll): " + returnStatus);
                         }
                         else
                         {
@@ -2786,27 +2803,49 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     if (EnumScenario.Retrofit == lastReport.Scenario)
+                     if( false == TankReplacementEnd(gi))
                      {
-                        if ((37 == gi.Day) || (68 == gi.Day) || (97 == gi.Day) || (137 == gi.Day) || (144 == gi.Day)) // retrofits must be greater than 7 days for training 
-                        {
-                           gi.EventDisplayed = gi.EventActive = "e006b"; // after tank replacement which means should be Retrofit - crew training
-                           gi.DieRollAction = GameAction.DieRollActionNone;
-                        }
-                        else
-                        {
-                           if (false == AdvancePastRetrofit(gi))
-                           {
-                              returnStatus = "AdvancePast_Retrofit(): returned false";
-                              Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementHvssRoll): " + returnStatus);
-                           }
-                        }
+                        returnStatus = "TankReplacement_End() returned false";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementHvssRoll): " + returnStatus);
                      }
-                     else
-                     {
-                        gi.EventDisplayed = gi.EventActive = "e008"; // battle already roll for so weather roll has to be performed after replacing tank
-                        gi.DieRollAction = GameAction.MorningBriefingWeatherRoll;
-                     }
+                  }
+                  break;
+               case GameAction.MorningBriefingDecreaseTankNum:
+                  gi.TankReplacementNumber--;
+                  if ( false == TableMgr.GetNextTankNum(gi))
+                  {
+                     returnStatus = "GetNextTankNum() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingDecreaseTankNum): " + returnStatus);
+                  }
+                  break;
+               case GameAction.MorningBriefingIncreaseTankNum:
+                  gi.TankReplacementNumber++;
+                  if (false == TableMgr.GetNextTankNum(gi))
+                  {
+                     returnStatus = "GetNextTankNum() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingIncreaseTankNum): " + returnStatus);
+                  }
+                  break;
+               case GameAction.MorningBriefingTankReplacementEnd:
+                  gi.BattleStacks.Remove(gi.Sherman);
+                  string tankImageName1 = "t";
+                  if (9 < lastReport.TankCardNum)
+                     tankImageName1 += lastReport.TankCardNum.ToString();
+                  else
+                     tankImageName1 += ("0" + lastReport.TankCardNum.ToString());
+                  lastReport.Name = Utilities.GetNickName(); // Get a new nickname
+                  lastReport.MainGunHBCI = 0;
+                  lastReport.MainGunHVAP = 0;
+                  string shermanName1 = "Sherman75";
+                  if (12 < lastReport.TankCardNum)
+                     shermanName1 = "Sherman76";
+                  gi.Sherman = new MapItem(shermanName1, 2.0, tankImageName1, gi.Home);
+                  gi.BattleStacks.Add(gi.Sherman);
+                  //---------------------------------
+                  if (false == TankReplacementEnd(gi))
+                  {
+                     returnStatus = "TankReplacement_End() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTankReplacementHvssRoll): " + returnStatus);
                   }
                   break;
                case GameAction.SetupCombatCalendarRoll: // only applies when coming from Setup GamePhase
@@ -3088,7 +3127,6 @@ namespace Pattons_Best
       }
       protected bool CheckGyrostablizerTraining(IGameInstance gi, ref GameAction action)
       {
-
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
@@ -3123,6 +3161,37 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Check_GyrostablizerTraining(): lastReport=null");
                return false;
             }
+         }
+         return true;
+      }
+      protected bool TankReplacementEnd(IGameInstance gi)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "TankReplacement_End(): lastReport=null");
+            return false;
+         }
+         if (EnumScenario.Retrofit == lastReport.Scenario)
+         {
+            if ((37 == gi.Day) || (68 == gi.Day) || (97 == gi.Day) || (137 == gi.Day) || (144 == gi.Day)) // retrofits must be greater than 7 days for training 
+            {
+               gi.EventDisplayed = gi.EventActive = "e006b"; // after tank replacement which means should be Retrofit - crew training
+               gi.DieRollAction = GameAction.DieRollActionNone;
+            }
+            else
+            {
+               if (false == AdvancePastRetrofit(gi))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "TankReplacement_End(): AdvancePastRetrofit() returned error");
+                  return false;
+               }
+            }
+         }
+         else
+         {
+            gi.EventDisplayed = gi.EventActive = "e008"; // battle already roll for so weather roll has to be performed after replacing tank
+            gi.DieRollAction = GameAction.MorningBriefingWeatherRoll;
          }
          return true;
       }
@@ -4285,7 +4354,7 @@ namespace Pattons_Best
                case GameAction.BattleRandomEventRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     //dieRoll = 10; // <cgs> TEST - AdvanceRetreat - *********************RANDOM*************** 
+                     dieRoll = 01; // <cgs> TEST - AdvanceRetreat - *********************RANDOM*************** 
                      //dieRoll = 35; // <cgs> TEST - Harrassing fire in Advance Scenario - Random Event 
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
@@ -5854,7 +5923,9 @@ namespace Pattons_Best
                      returnStatus = "unkonwn sceanrio=" + lastReport.Scenario;
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRandomEvent): " + returnStatus);
                   }
+                  gi.DieResults["e039a"][0] = Utilities.NO_RESULT;
                   gi.DieResults["e039b"][0] = Utilities.NO_RESULT;
+                  gi.DieResults["e039c"][0] = Utilities.NO_RESULT;
                   gi.DieRollAction = GameAction.BattleRandomEventRoll;
                   break;
                case GameAction.BattleRandomEventRoll:

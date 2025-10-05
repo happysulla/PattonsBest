@@ -121,6 +121,15 @@ A gyrostabilizer was attached to the main gun of the Sherman tank to keep the gu
 Even if your tank has a gyrostabilizer, it requires the crew to be trained during a refit period before it can be used. Roll 1D to determine if you tank has HVSS installed per tank card.
 <LineBreak/><LineBreak/>
 Die Roll = <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>"
+e007f	"<Bold>e007f Tank Selection</Bold> 
+<InlineUIContainer><Button Content='r24.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>     
+<LineBreak/><LineBreak/>
+Since the combined crew rating is over 35 points, you may select what tank you would like to use. The selection is limited by 
+<InlineUIContainer><Button Content='Replacement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. Click buttons to find the tank you want. Click image when done with selection.
+<LineBreak/><LineBreak/>
+                                           <InlineUIContainer><Button Name='ButtonDecreaseTankNum'  Content='   -   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>      
+<InlineUIContainer><Button Name='ButtonIncreaseTankNum'  Content='   +   ' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/>"
 e008	"<Bold>e008 Morning Briefing - Weather Roll</Bold> <InlineUIContainer><Button Content='r4.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/>
 The 

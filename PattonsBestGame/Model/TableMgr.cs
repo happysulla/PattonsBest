@@ -51,9 +51,9 @@ namespace Pattons_Best
          else if (day < 57)
          {
             if (37 == day)
-               return "09/02-09/10 1943";
+               return "09/02-09/10 1944";
             if (50 == day)
-               return "09/23-09/24 1943";
+               return "09/23-09/24 1944";
             sb.Append("09/");
             int dayOfMonth = day - 35;
             if ( 37 < day )
@@ -68,7 +68,7 @@ namespace Pattons_Best
          else if (day < 69)
          {
             if (68 == day)
-               return "10/12-11/08 1943";
+               return "10/12-11/08 1944";
             sb.Append("10/");
             int dayOfMonth = day - 56;
             sb.Append(dayOfMonth.ToString());
@@ -86,7 +86,7 @@ namespace Pattons_Best
          else if (day < 109)
          {
             if (97 == day)
-               return "12/07-12/20 1943";
+               return "12/07-12/20 1944";
             sb.Append("12/");
             int dayOfMonth = day - 90;
             if (97 < day)
@@ -99,7 +99,7 @@ namespace Pattons_Best
          else if (day < 135)
          {
             if (111 == day)
-               return "01/03-01/08 1944";
+               return "01/03-01/08 1945";
             sb.Append("01/");
             int dayOfMonth = day - 108;
             if (111 < day)
@@ -112,7 +112,7 @@ namespace Pattons_Best
          else if (day < 145)
          {
             if (137 == day)
-               return "02/03-02/21 1944";
+               return "02/03-02/21 1945";
             sb.Append("02/");
             int dayOfMonth = day - 116;
             if (dayOfMonth < 10)
@@ -123,11 +123,11 @@ namespace Pattons_Best
          else if (day < 172)
          {
             if (147 == day)
-               return "03/03-03/04 1944";
+               return "03/03-03/04 1945";
             if (155 == day)
-               return "03/12-03/13 1944";
+               return "03/12-03/13 1945";
             if (163 == day)
-               return "03/21-03/23 1944";
+               return "03/21-03/23 1945";
             sb.Append("03/");
             int dayOfMonth = day - 144;
             if (149 < day)
@@ -4602,6 +4602,125 @@ namespace Pattons_Best
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "GetNextTank(): reached default month=" + month);
+               return false;
+         }
+         return true;
+      }
+      public static bool GetNextTankNum(IGameInstance gi)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetNewSherman(): lastReport=null");
+            return false;
+         }
+         //--------------------------------
+         string month = GetMonth(gi.Day);
+         if ("ERROR" == month)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SelectNewSherman(): GetMonth() returned ERROR");
+            return false;
+         }
+         //--------------------------------
+         switch (month)
+         {
+            case "Jun":
+            case "Jul":
+               lastReport.TankCardNum = 1; break;
+            case "Aug":
+               if (gi.TankReplacementNumber < 0)
+                  gi.TankReplacementNumber = 6;
+               if (6 < gi.TankReplacementNumber)
+                  gi.TankReplacementNumber = 0;
+               switch (gi.TankReplacementNumber)
+               {
+                  case 0: lastReport.TankCardNum = 1; break;
+                  case 1: lastReport.TankCardNum = 2; break; 
+                  case 2: lastReport.TankCardNum = 4; break; 
+                  case 3: lastReport.TankCardNum = 5; break; 
+                  case 4: lastReport.TankCardNum = 7; break;
+                  case 5: lastReport.TankCardNum = 8; break; 
+                  case 6: lastReport.TankCardNum = 14; break;
+                  default: Logger.Log(LogEnum.LE_ERROR, "SelectNewSherman(): reached default month=" + month + " selection=" + gi.TankReplacementNumber.ToString()); return false;
+               }
+               break;
+            case "Sep":
+               if (gi.TankReplacementNumber < 0)
+                  gi.TankReplacementNumber = 10;
+               if (10 < gi.TankReplacementNumber)
+                  gi.TankReplacementNumber = 0;
+               switch (gi.TankReplacementNumber)
+               {
+                  case 0: lastReport.TankCardNum = 1; break;
+                  case 1: lastReport.TankCardNum = 2; break;
+                  case 2: lastReport.TankCardNum = 4; break;
+                  case 3: lastReport.TankCardNum = 5; break;
+                  case 4: lastReport.TankCardNum = 7; break;
+                  case 5: lastReport.TankCardNum = 8; break;
+                  case 6: lastReport.TankCardNum = 10; break;
+                  case 7: lastReport.TankCardNum = 11; break;
+                  case 8: lastReport.TankCardNum = 12; break;
+                  case 9: lastReport.TankCardNum = 14; break;
+                  case 10: lastReport.TankCardNum = 16; break;
+                  default: Logger.Log(LogEnum.LE_ERROR, "SelectNewSherman(): reached default month=" + month + " selection=" + gi.TankReplacementNumber.ToString()); return false;
+               }
+               break;
+            case "Oct":
+               if (gi.TankReplacementNumber < 0)
+                  gi.TankReplacementNumber = 11;
+               if (11 < gi.TankReplacementNumber)
+                  gi.TankReplacementNumber = 0;
+               switch (gi.TankReplacementNumber)
+               {
+                  case 0: lastReport.TankCardNum = 1; break;
+                  case 1: lastReport.TankCardNum = 2; break;
+                  case 2: lastReport.TankCardNum = 4; break;
+                  case 3: lastReport.TankCardNum = 5; break;
+                  case 4: lastReport.TankCardNum = 7; break;
+                  case 5: lastReport.TankCardNum = 8; break;
+                  case 6: lastReport.TankCardNum = 10; break;
+                  case 7: lastReport.TankCardNum = 11; break;
+                  case 8: lastReport.TankCardNum = 12; break;
+                  case 9: lastReport.TankCardNum = 13; break;
+                  case 10: lastReport.TankCardNum = 14; break;
+                  case 11: lastReport.TankCardNum = 16; break;
+                  default: Logger.Log(LogEnum.LE_ERROR, "SelectNewSherman(): reached default month=" + month + " selection=" + gi.TankReplacementNumber.ToString()); return false;
+               }
+               break;
+            case "Nov":
+            case "Dec":
+            case "Jan":
+            case "Feb":
+            case "Mar":
+            case "Apr":
+               if (gi.TankReplacementNumber < 0)
+                  gi.TankReplacementNumber = 16;
+               if (16 < gi.TankReplacementNumber)
+                  gi.TankReplacementNumber = 0;
+               switch (gi.TankReplacementNumber)
+               {
+                  case 0: lastReport.TankCardNum = 1; break;
+                  case 1: lastReport.TankCardNum = 2; break;
+                  case 2: lastReport.TankCardNum = 3; break;
+                  case 3: lastReport.TankCardNum = 4; break;
+                  case 4: lastReport.TankCardNum = 5; break;
+                  case 5: lastReport.TankCardNum = 6; break;
+                  case 6: lastReport.TankCardNum = 7; break;
+                  case 7: lastReport.TankCardNum = 8; break;
+                  case 8: lastReport.TankCardNum = 9; break;
+                  case 9: lastReport.TankCardNum = 10; break;
+                  case 10: lastReport.TankCardNum = 11; break;
+                  case 11: lastReport.TankCardNum = 12; break;
+                  case 12: lastReport.TankCardNum = 13; break;
+                  case 13: lastReport.TankCardNum = 14; break;
+                  case 14: lastReport.TankCardNum = 16; break;
+                  case 15: lastReport.TankCardNum = 14; break;
+                  case 16: lastReport.TankCardNum = 17; break;
+                  default: Logger.Log(LogEnum.LE_ERROR, "SelectNewSherman(): reached default month=" + month + " selection=" + gi.TankReplacementNumber.ToString()); return false;
+               }
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "SelectNewSherman(): reached default month=" + month);
                return false;
          }
          return true;

@@ -929,6 +929,19 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
+            case "e007f":
+               string tankImageName = "t";
+               if (9 < report.TankCardNum)
+                  tankImageName += report.TankCardNum.ToString();
+               else
+                  tankImageName += ("0" + report.TankCardNum.ToString());
+               Image imge007f = new Image { Width = 100, Height = 100, Name = "MorningBriefingTankReplacementEnd", Source = MapItem.theMapImages.GetBitmapImage(tankImageName) };          
+               myTextBlock.Inlines.Add(new Run("                                               "));
+               myTextBlock.Inlines.Add(new InlineUIContainer(imge007f));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               break;
             case "e008":
                if (false == UpdateEventContentWeather(gi))
                {
@@ -5282,6 +5295,10 @@ namespace Pattons_Best
                            action = GameAction.MorningBriefingTankReplacementRoll;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
+                        case "MorningBriefingTankReplacementEnd":
+                           action = GameAction.MorningBriefingTankReplacementEnd;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           break;
                         case "Continue06b":
                            action = GameAction.MorningBriefingTrainCrew;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
@@ -5901,6 +5918,9 @@ namespace Pattons_Best
             case "   -   ":
                switch( name )
                {
+                  case "ButtonDecreaseTankNum":
+                     action = GameAction.MorningBriefingDecreaseTankNum;
+                     break;
                   case "ButtonPivotHullLeft":
                      action = GameAction.BattleRoundSequencePivotLeft;
                      break;
@@ -5934,6 +5954,9 @@ namespace Pattons_Best
             case "   +   ":
                switch (name)
                {
+                  case "ButtonIncreaseTankNum":
+                     action = GameAction.MorningBriefingIncreaseTankNum;
+                     break;
                   case "ButtonPivotHullRight":
                      action = GameAction.BattleRoundSequencePivotRight;
                      break;
