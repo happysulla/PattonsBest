@@ -247,6 +247,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): stack=null");
                   return false;
                }
+               Logger.Log(LogEnum.LE_SHOW_RETREAT_TO_PREVIOUS_AREA, "SetupBattle(): stack=" + stack.MapItems.ToString());
                IMapItem? strengthCounter = null;
                foreach (IMapItem mi1 in stack.MapItems)  // determine how many to activiate based on enemy strength in area
                {

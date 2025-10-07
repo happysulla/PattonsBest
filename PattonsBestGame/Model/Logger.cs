@@ -25,6 +25,7 @@ namespace Pattons_Best
       LE_SHOW_ACTION_REPORT_NEW,
       LE_SHOW_ENEMY_STRENGTH,
       LE_SHOW_OVERRUN_TO_PREVIOUS_AREA,
+      LE_SHOW_RETREAT_TO_PREVIOUS_AREA,
       LE_SHOW_ENEMY_ON_MOVE_BOARD,
       LE_SHOW_RESISTANCE,
       LE_SHOW_GUN_LOAD_PREP,
@@ -140,7 +141,8 @@ namespace Pattons_Best
          SetOn(LogEnum.LE_SHOW_ACTION_REPORT_NEW);
          SetOn(LogEnum.LE_SHOW_START_AREA);
          //SetOn(LogEnum.LE_SHOW_ENEMY_STRENGTH);
-         //SetOn(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA);
+         SetOn(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA);
+         SetOn(LogEnum.LE_SHOW_RETREAT_TO_PREVIOUS_AREA);
          //SetOn(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD);
          //SetOn(LogEnum.LE_SHOW_RESISTANCE);
          //SetOn(LogEnum.LE_SHOW_RANDOM_PT);

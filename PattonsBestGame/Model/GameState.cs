@@ -1083,6 +1083,7 @@ namespace Pattons_Best
       {
          if (0 < gi.AdvancingEnemies.Count) // only do this if advancing enemy
          {
+            Logger.Log(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA, "EnemiesOverrun_ToPreviousArea(): gi.AdvancingEnemies.Count=" + gi.AdvancingEnemies.ToString());
             IAfterActionReport? lastReport = gi.Reports.GetLast();
             if (null == lastReport)
             {
@@ -1805,7 +1806,7 @@ namespace Pattons_Best
             report.Scenario = EnumScenario.Battle;
          else
             report.Scenario = EnumScenario.Counterattack;
-         report.Scenario = EnumScenario.Counterattack; // <cgs> TEST - PerformAutoSetupSkipCrewAssignments() - KillYourTank - =======================================>> choose scenario
+         report.Scenario = EnumScenario.Advance; // <cgs> TEST - PerformAutoSetupSkipCrewAssignments() - KillYourTank - =======================================>> choose scenario
          //-------------------------------
          gi.NewMembers.Add(report.Commander);   // PerformAutoSetupSkipCrewAssignments()
          gi.NewMembers.Add(report.Gunner);      // PerformAutoSetupSkipCrewAssignments()
@@ -6757,6 +6758,7 @@ namespace Pattons_Best
          {
             Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "MoveSherman(): gi.MapItemMoves.Clear()");
             gi.MapItemMoves.Clear();
+            gi.ShermanAdvanceOrRetreatEnemies.Clear(); // any previous round units moved off board are not saved
             bool isAnyEnemyLeft = false;
             foreach (IStack stack in gi.BattleStacks)
             {
@@ -6858,6 +6860,7 @@ namespace Pattons_Best
       }
       private bool MoveShermanAdvanceOrRetreat(IGameInstance gi)
       {
+         Logger.Log(LogEnum.LE_SHOW_RETREAT_TO_PREVIOUS_AREA, "MoveSherman_AdvanceOrRetreat(): gi.ShermanAdvanceOrRetreatEnemies=" + gi.ShermanAdvanceOrRetreatEnemies.ToString());
          //--------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -6929,10 +6932,6 @@ namespace Pattons_Best
                }
                gi.MoveStacks.Remove(startArea);
                return true;
-            }
-            else if (EnumScenario.Counterattack == lastReport.Scenario)
-            {
-               //TBD
             }
             //--------------------------------------
             if (EnumScenario.Counterattack != lastReport.Scenario)
@@ -7007,7 +7006,6 @@ namespace Pattons_Best
             enemyUnit.Location.Y = mp1.Y;
             gi.MoveStacks.Add(enemyUnit);
             Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "MoveSherman_AdvanceOrRetreat(): Adding mi=" + enemyUnit.Name + " t=" + enemyUnit.TerritoryCurrent.Name + " to " + gi.MoveStacks.ToString());
-            gi.MoveStacks.Add(enemyUnit);
          }
          gi.ShermanAdvanceOrRetreatEnemies.Clear();
          gi.EnteredArea = newT;

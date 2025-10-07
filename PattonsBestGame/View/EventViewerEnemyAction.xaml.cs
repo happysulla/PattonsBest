@@ -354,6 +354,9 @@ namespace Pattons_Best
                myGameInstance.BattleStacks.Remove(mi);
             Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "EventViewerEnemyAction.UpdateEndState(): ------------------------------ battlestacks=" + myGameInstance.BattleStacks.ToString());
             //-----------------------------------------
+            if (0 < myGameInstance.AdvancingEnemies.Count)
+               Logger.Log(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA, "UpdateEndState(): gi.AdvancingEnemies=" + myGameInstance.AdvancingEnemies.ToString());
+            //-----------------------------------------
             if (null == myCallback)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myCallback=null");
@@ -1346,8 +1349,11 @@ namespace Pattons_Best
          {
             myGridRows[i].myDieRollTerrain = KEEP_TERRAIN; // moving off board
             myGridRows[i].myDieRollFacing = NO_FACING;
-            if ( (true == newT.Name.Contains("OffBottom")) && (EnumScenario.Counterattack != lastReport.Scenario) ) // BattleRoundSequenceMovementRoll -  Enemy Movement advanced past sector 1,2,3
+            if ((true == newT.Name.Contains("OffBottom")) && (EnumScenario.Counterattack != lastReport.Scenario)) // BattleRoundSequenceMovementRoll -  Enemy Movement advanced past sector 1,2,3
+            {
+               Logger.Log(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA, "UpdateEndState(): gi.AdvancingEnemies.Add(mi=" + mi.Name + ")");
                myGameInstance.AdvancingEnemies.Add(mi);
+            }
          }
          return true;
       }
