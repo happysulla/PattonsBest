@@ -1351,7 +1351,10 @@ namespace Pattons_Best
             myGridRows[i].myDieRollFacing = NO_FACING;
             if ((true == newT.Name.Contains("OffBottom")) && (EnumScenario.Counterattack != lastReport.Scenario)) // BattleRoundSequenceMovementRoll -  Enemy Movement advanced past sector 1,2,3
             {
-               Logger.Log(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA, "UpdateEndState(): gi.AdvancingEnemies.Add(mi=" + mi.Name + ")");
+               string name = mi.GetEnemyUnit() + Utilities.MapItemNum.ToString();
+               Utilities.MapItemNum++;
+               Logger.Log(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA, "UpdateEndState(): gi.AdvancingEnemies.Add(mi=" + mi.Name + ") ==>" + name);
+               mi.Name = name;
                myGameInstance.AdvancingEnemies.Add(mi);
             }
          }

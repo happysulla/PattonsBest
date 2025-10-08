@@ -1148,6 +1148,9 @@ namespace Pattons_Best
             //------------------------------------
             foreach (IMapItem enemyUnit in gi.AdvancingEnemies)
             {
+               string enemyType = enemyUnit.GetEnemyUnit();
+               enemyUnit.Name = enemyType + Utilities.MapItemNum.ToString(); // need to rename b/c this buttons move from battle board to move board
+               Utilities.MapItemNum++;
                Logger.Log(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA, "EnemiesOverrun_ToPreviousArea(): Adding eu=" + enemyUnit.Name + " to " + t.Name);
                enemyUnit.IsMoving = false;
                enemyUnit.IsHullDown = false;
@@ -6968,23 +6971,6 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------------------------------
-         //taskForce.TerritoryCurrent = newT;
-         //IMapPoint mp = Territory.GetRandomPoint(newT, taskForce.Zoom * Utilities.theMapItemOffset); // add enemy unit to random location in area
-         //taskForce.Location.X = mp.X;
-         //taskForce.Location.Y = mp.Y;
-         //gi.MoveStacks.Add(taskForce);
-         //Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "MoveSherman_AdvanceOrRetreat(): Adding mi=" + taskForce.Name + " t=" + taskForce.TerritoryCurrent.Name + " to " + gi.MoveStacks.ToString());
-         ////--------------------------------------------------------
-         //double offset = taskForce.Zoom * Utilities.theMapItemOffset;
-         //IMapPoint mpTaskForce = new MapPoint(taskForce.Location.X + offset, taskForce.Location.Y + offset);
-         //EnteredHex newHex = new EnteredHex(gi, taskForce.TerritoryCurrent, ColorActionEnum.CAE_RETREAT, mpTaskForce);
-         //if (true == newHex.CtorError)
-         //{
-         //   Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): newHex.Ctor=true");
-         //   return false;
-         //}
-         //gi.EnteredHexes.Add(newHex);  // MoveSherman_AdvanceOrRetreat()
-         //--------------------------------------------------------
          foreach (IMapItem enemyUnit in gi.ShermanAdvanceOrRetreatEnemies)// add in enemy units that were on BattleBoard when battle ended
          {
             string enemyType = enemyUnit.GetEnemyUnit();
@@ -7010,10 +6996,10 @@ namespace Pattons_Best
          gi.ShermanAdvanceOrRetreatEnemies.Clear();
          gi.EnteredArea = newT;
          //--------------------------------------------------------
-         Logger.Log(LogEnum.LE_VIEW_MIM_ADD, "Move_TaskForceToNewArea(): TF Entering t=" + gi.EnteredArea.Name);
+         Logger.Log(LogEnum.LE_VIEW_MIM_ADD, "MoveSherman_AdvanceOrRetreat(): TF Entering t=" + gi.EnteredArea.Name);
          if (false == CreateMapItemMove(gi, taskForce, gi.EnteredArea))
          {
-            Logger.Log(LogEnum.LE_ERROR, "Move_TaskForceToNewArea(): AddMapItemMove() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): CreateMapItemMove() returned false");
             return false;
          }
          return true;

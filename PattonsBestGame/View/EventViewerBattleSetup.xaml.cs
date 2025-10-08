@@ -201,8 +201,15 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): lastReport=null");
             return false;
+         }
+         //------------------------------------------------------
+         Option? optionAutoActivation = myGameInstance.Options.Find("AutoEnemyActivation");
+         if (null == optionAutoActivation)
+         {
+            optionAutoActivation = new Option("AutoEnemyActivation", false);
+            myGameInstance.Options.Add(optionAutoActivation);
          }
          //--------------------------------------------------
          myState = E046Enum.ACTIVATION;
@@ -222,7 +229,35 @@ namespace Pattons_Best
          }
          myAreaType = myGameInstance.EnteredArea.Type;
          //--------------------------------------------------
-         if( GamePhase.Battle == myGameInstance.GamePhase ) // Battle Phase setup initial forces 
+         string[] sectors = new string[6] { "B1M", "B2M", "B3M", "B4M", "B6M", "B9M" };
+         int i = 0;
+         foreach (string sector in sectors)
+         {
+            myIsSectorUsControlled[i] = false;
+            ITerritory? t = Territories.theTerritories.Find(sector);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): t=null for s=" + sector);
+               return false;
+            }
+            IStack? stack1 = myGameInstance.BattleStacks.Find(t);
+            if (null == stack1)
+            {
+               ++i;
+               continue;
+            }
+            foreach (IMapItem mi in stack1.MapItems)
+            {
+               if (true == mi.Name.Contains("UsControl"))
+               {
+                  myIsSectorUsControlled[i] = true;
+                  break;
+               }
+            }
+            ++i;
+         }
+         //--------------------------------------------------
+         if ( GamePhase.Battle == myGameInstance.GamePhase ) // Battle Phase setup initial forces 
          {
             if (EnumScenario.Counterattack == lastReport.Scenario)
             {
@@ -253,6 +288,9 @@ namespace Pattons_Best
                {
                   if (true == mi1.IsEnemyUnit())
                   {
+                     string enemyType = mi1.GetEnemyUnit();
+                     mi1.Name = enemyType + Utilities.MapItemNum.ToString(); // need to rename b/c this buttons move from battle board to move board
+                     Utilities.MapItemNum++;
                      myGridRows[startingRow] = new GridRow(mi1);
                      if (false == mi1.IsVehicle)
                      {
@@ -264,7 +302,9 @@ namespace Pattons_Best
                      {
                         myIsVehicleActivated = true; // need to roll for vehicle facings
                      }
-                     switch (mi1.GetEnemyUnit())
+                     //--------------------------------------------
+                     string activation = mi1.GetEnemyUnit();
+                     switch (activation)
                      {
                         case "ATG": case "Pak43": mi1.Zoom = Utilities.ZOOM + 0.1; break;
                         case "Pak38": case "Pak40": mi1.Zoom = Utilities.ZOOM; break;
@@ -277,6 +317,61 @@ namespace Pattons_Best
                            Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): reached default with enemyUnit=" + mi1.GetEnemyUnit());
                            return false;
                      }
+                     //--------------------------------------------
+                     if (true == optionAutoActivation.IsEnabled ) // auto update rows for sector, range, vehicle facing, terrain
+                     {
+                        int dieRoll = Utilities.RandomGenerator.Next(1, 11);
+                        myGridRows[startingRow].myDieRollSector = dieRoll;
+                        if (false == ShowDieResultUpdateSector(startingRow))
+                        {
+                           Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): ShowDieResultUpdateSector() returned false");
+                           return false;
+                        }
+                        dieRoll = Utilities.RandomGenerator.Next(1, 11);
+                        myGridRows[startingRow].myDieRollRange = dieRoll;
+                        myGridRows[startingRow].myRange = TableMgr.GetEnemyRange(myAreaType, activation, dieRoll);
+                        if ("ERROR" == myGridRows[startingRow].myRange)
+                        {
+                           Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): TableMgr.GetEnemyRange() returned ERROR");
+                           return false;
+                        }
+                        if (false == ShowDieResultUpdateRange(startingRow))
+                        {
+                           Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): ShowDieResultUpdateRange() returned false");
+                           return false;
+                        }
+                        dieRoll = Utilities.RandomGenerator.Next(1, 11);
+                        myGridRows[startingRow].myDieRollTerrain = dieRoll;
+                        myGridRows[startingRow].myTerrain = TableMgr.GetEnemyTerrain(myScenario, myDay, myAreaType, activation, dieRoll);
+                        if ("ERROR" == myGridRows[startingRow].myTerrain)
+                        {
+                           Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): TableMgr.GetEnemyTerrain() returned ERROR");
+                           return false;
+                        }
+                        if (false == ShowDieResultUpdateTerrain(startingRow))
+                        {
+                           Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): ShowDieResultUpdateTerrain() returned ERROR");
+                           return false;
+                        }
+                        if (true == mi1.IsVehicle)
+                        {
+                           dieRoll = Utilities.RandomGenerator.Next(1, 11);
+                           myGridRows[startingRow].myDieRollFacing = dieRoll;
+                           myGridRows[startingRow].myFacing = TableMgr.GetEnemyNewFacing(activation, dieRoll);
+                           if ("ERROR" == myGridRows[startingRow].myFacing)
+                           {
+                              Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): TableMgr.GetEnemyNewFacing() returned ERROR");
+                              return false;
+                           }
+                           if (false == mi1.UpdateMapRotation(myGridRows[startingRow].myFacing))
+                           {
+                              Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): UpdateMapRotation() returned false");
+                              return false;
+                           }
+                        }
+
+                     }
+                     //--------------------------------------------
                      startingRow++;
                      myMaxRowCount++;
                   }
@@ -309,34 +404,6 @@ namespace Pattons_Best
             else
                myMaxRowCount = 2;
             //myMaxRowCount = 6;  // <cgs> TEST - generate extra units
-         }
-         //--------------------------------------------------
-         string[] sectors = new string[6] {"B1M", "B2M", "B3M", "B4M", "B6M", "B9M" };
-         int i = 0;
-         foreach (string sector in sectors )
-         {
-            myIsSectorUsControlled[i] = false;
-            ITerritory? t = Territories.theTerritories.Find(sector);
-            if( null == t )
-            {
-               Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): t=null for s=" + sector);
-               return false;
-            }
-            IStack? stack1 = myGameInstance.BattleStacks.Find(t);
-            if (null == stack1)
-            {
-               ++i;
-               continue;
-            }
-            foreach(IMapItem mi in stack1.MapItems)
-            {
-               if( true == mi.Name.Contains("UsControl"))
-               {
-                  myIsSectorUsControlled[i] = true;
-                  break;
-               }
-            }
-            ++i;
          }
          //--------------------------------------------------
          for (int i1 = startingRow; i1 < myMaxRowCount; ++i1)
