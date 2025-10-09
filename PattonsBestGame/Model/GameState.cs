@@ -510,13 +510,13 @@ namespace Pattons_Best
          {
             if (0 == tStartEdge.Adjacents.Count)
             {
-               Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): no adjacents for start area=" + name);
+               Logger.Log(LogEnum.LE_ERROR, "Set_StartArea(): no adjacents for start area=" + name);
                return false;
             }
             ITerritory? tStart = Territories.theTerritories.Find(tStartEdge.Adjacents[0]); // should only be one adjacent to start area
             if (null == tStart)
             {
-               Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): taskForceArea tStart=" + tStartEdge.Adjacents[0]);
+               Logger.Log(LogEnum.LE_ERROR, "Set_StartArea(): taskForceArea tStart=" + tStartEdge.Adjacents[0]);
                return false;
             }
             IMapItem taskForce = new MapItem("TaskForce", 1.3, "c35TaskForce", tStart); // add task for to adjacent area
@@ -527,7 +527,7 @@ namespace Pattons_Best
             EnteredHex firstHex = new EnteredHex(gi, tStart, ColorActionEnum.CAE_START, mp); // SetStartArea()
             if (true == firstHex.CtorError)
             {
-               Logger.Log(LogEnum.LE_ERROR, "SetStartArea(): newHex.Ctor=true");
+               Logger.Log(LogEnum.LE_ERROR, "Set_StartArea(): newHex.Ctor=true");
                return false;
             }
             Logger.Log(LogEnum.LE_SHOW_ENTERED_HEX, "SetStartArea(): adding firstHex=" + firstHex.ToString());
@@ -541,7 +541,7 @@ namespace Pattons_Best
             usControl.Location = mpUsControl;
             gi.MoveStacks.Add(usControl);
             //---------------------------------------------
-            lastReport.VictoryPtsCaptureArea++;
+            lastReport.VictoryPtsCaptureArea++;   // Set_StartArea()
             Logger.Log(LogEnum.LE_SHOW_VP_CAPTURED_AREA, "Set_StartArea(): Get VPs for Start Area t=" + tStart.Name + " #=" + lastReport.VictoryPtsCaptureArea.ToString());
             //---------------------------------------------
             //if( false == SetStartAreaExtraEnemy(gi))  // <cgs> TEST - Set extra units on move board during setup
@@ -1054,6 +1054,41 @@ namespace Pattons_Best
             {
                Logger.Log(LogEnum.LE_ERROR, "Resolve_EmptyBattleBoard(): EnemiesOverrun_ToPreviousArea() returned false");
                return false;
+            }
+            //---------------------------------
+            string name = "UsControl" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            IMapItem usControl = new MapItem(name, 1.0, "c28UsControl", gi.EnteredArea);
+            usControl.Count = 0; // 0=us  1=light  2=medium  3=heavy
+            IMapPoint mp = Territory.GetRandomPoint(gi.EnteredArea, usControl.Zoom * Utilities.theMapItemOffset);
+            usControl.Location = mp;
+            stack.MapItems.Add(usControl);
+            Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "Resolve_EmptyBattleBoard(): Added mi=" + usControl.Name + " t=" + gi.EnteredArea.Name + " to " + gi.MoveStacks.ToString());
+            //---------------------------------
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.Name.Contains("Strength"))
+               {
+                  stack.MapItems.Remove(mi);
+                  break;
+               }
+            }
+            //------------------------------------
+            bool isExitArea;
+            if (false == gi.IsTaskForceInExitArea(out isExitArea))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Skip_BattleBoard(): gi.IsTaskForce_InExitArea() returned false");
+               return false;
+            }
+            if (true == isExitArea)
+            {
+               report.VictoryPtsCapturedExitArea++;
+               Logger.Log(LogEnum.LE_SHOW_VP_CAPTURED_AREA, "Skip_BattleBoard(): captured area t=" + gi.EnteredArea.Name + " #=" + report.VictoryPtsCapturedExitArea.ToString());
+            }
+            else
+            {
+               report.VictoryPtsCaptureArea++; // Resolve_EmptyBattleBoard()
+               Logger.Log(LogEnum.LE_SHOW_VP_CAPTURED_AREA, "Skip_BattleBoard(): captured area t=" + gi.EnteredArea.Name + " #=" + report.VictoryPtsCaptureArea.ToString());
             }
          }
          //---------------------------------
@@ -3909,7 +3944,7 @@ namespace Pattons_Best
          }
          else
          {
-            report.VictoryPtsCaptureArea++;
+            report.VictoryPtsCaptureArea++; // Skip_BattleBoard()
             Logger.Log(LogEnum.LE_SHOW_VP_CAPTURED_AREA, "Skip_BattleBoard(): captured area t=" + taskForce.TerritoryCurrent.Name + " #=" + report.VictoryPtsCaptureArea.ToString());
          }
          return true;
@@ -7422,13 +7457,13 @@ namespace Pattons_Best
          {
             toKillNum = TableMgr.GetShermanToKillInfantryBaseNumber(gi, gi.TargetMainGun, hit);
             int modifier = TableMgr.GetShermanToKillInfantryModifier(gi, gi.TargetMainGun, hit);
-            Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): vs Infantry target tokill=" + toKillNum.ToString() + " mod=" + modifier.ToString() + " IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK_INF, "ResolveToKillEnemyUnitKill(): vs Infantry target tokill=" + toKillNum.ToString() + " mod=" + modifier.ToString() + " IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
             if (TableMgr.FN_ERROR == modifier)
             {
                Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitKill(): GetShermanToKillInfantryModifier() returned error");
                return false;
             }
-            Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): attacking infantry=" + gi.TargetMainGun.Name + " toHit=" + toKillNum.ToString() + " modifier=" + modifier.ToString());
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK_INF, "ResolveToKillEnemyUnitKill(): attacking infantry=" + gi.TargetMainGun.Name + " toHit=" + toKillNum.ToString() + " modifier=" + modifier.ToString());
             if (TableMgr.KIA == modifier)  // automatic KILL
             {
                gi.ScoreYourVictoryPoint(lastReport, gi.TargetMainGun);
@@ -7442,7 +7477,7 @@ namespace Pattons_Best
             }
             if (TableMgr.NO_CHANCE == modifier)
             {
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): vs Infantry target -- No Chance - NC NC NC NC NC NC NC NC NC NC");
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK_INF, "ResolveToKillEnemyUnitKill(): vs Infantry target -- No Chance - NC NC NC NC NC NC NC NC NC NC");
                if (false == ResolveToKillEnemyUnitCleanup(gi, ref outAction))
                {
                   Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnit(): ResolveToKillEnemyUnitCleanup() returned false");

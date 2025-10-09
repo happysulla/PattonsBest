@@ -1498,13 +1498,16 @@ namespace Pattons_Best
                   return;
                }
                mi.IsFired = false; // set to true if unit fires
-               //if( ('1' == myGridRows[i].mySector) || ('2' == myGridRows[i].mySector) || ('3' == myGridRows[i].mySector) )
-               //dieRoll = 31; // <cgs> TEST - Move-B for Infantry in Battle Scenario - ambush
-               //dieRoll = 51; // <cgs> TEST - Move-B for Infantry in Battle Scenario - no ambush
-               //else
-               dieRoll = 5; // <cgs> TEST - AdvanceRetreat - Do Nothing for Infantry in Battle Scenario
-               //dieRoll = 15; // <cgs> TEST - Move-F for Infantry in Battle Scenario
+                                   //if( ('1' == myGridRows[i].mySector) || ('2' == myGridRows[i].mySector) || ('3' == myGridRows[i].mySector) )
+                                   //dieRoll = 31; // <cgs> TEST - Move-B for Infantry in Battle Scenario - ambush
+                                   //dieRoll = 51; // <cgs> TEST - Move-B for Infantry in Battle Scenario - no ambush
+                                   //else
+                                   //dieRoll = 5; // <cgs> TEST - AdvanceRetreat - Do Nothing for Infantry in Battle Scenario
+
                //dieRoll = 77; // <cgs> TEST - KillYourTank - Fire At Your Tank when stationary in Battle Scenario
+               dieRoll = 15; // <cgs> TEST - Move-F for Infantry in Battle Scenario
+               if ( (true == mi.TerritoryCurrent.Name.Contains("1")) || (true == mi.TerritoryCurrent.Name.Contains("2")) || (true == mi.TerritoryCurrent.Name.Contains("3")) )
+                dieRoll = 51; // <cgs> TEST - Move-B for Infantry in Battle Scenario - no ambush
                myGridRows[i].myDieRollEnemyAction = dieRoll;
                string enemyAction = TableMgr.SetEnemyActionResult(myGameInstance, mi, dieRoll);
                if ("ERROR" == enemyAction)
