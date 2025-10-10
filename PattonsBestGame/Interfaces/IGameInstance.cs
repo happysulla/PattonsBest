@@ -229,6 +229,7 @@ namespace Pattons_Best
       bool IsDaylightLeft(IAfterActionReport report);
       bool IsTaskForceInStartArea(out bool isStartArea);
       bool IsTaskForceInExitArea(out bool isExitAreaReached);
+      bool IsTaskForceInEnemyArea(out bool isEnemyAreaReached);
       void KillSherman(IAfterActionReport report, string reason);
       void ScoreYourVictoryPoint(IAfterActionReport report, IMapItem enemy);
       void ScoreFriendlyVictoryPoint(IAfterActionReport report, IMapItem enemy);

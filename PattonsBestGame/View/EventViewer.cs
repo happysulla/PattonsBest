@@ -5418,7 +5418,18 @@ namespace Pattons_Best
                               else if (false == isMapStartAreaExist)
                                  action = GameAction.MovementStartAreaSet; // Setting the first start area
                               else
-                                 action = GameAction.MovementEnemyStrengthChoice;  // TextBlock_MouseDown(): "Continue017" - Preparations Final
+                              {
+                                 bool isEnemyInMoveArea;
+                                 if( false == myGameInstance.IsTaskForceInEnemyArea(out isEnemyInMoveArea))
+                                 {
+                                    Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): IsTaskForceInEnemyArea() returned false");
+                                    return;
+                                 }
+                                 if( true == isEnemyInMoveArea )
+                                    action = GameAction.BattleActivation;  // TextBlock_MouseDown(): 
+                                 else
+                                    action = GameAction.MovementEnemyStrengthChoice;  // TextBlock_MouseDown(): "Continue017" - Preparations Final
+                              }
                            }
                            //-----------------------------------------------------
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
@@ -5427,6 +5438,11 @@ namespace Pattons_Best
                            if( "e099" == myGameInstance.EventDisplayed)
                            {
                               action = GameAction.BattleRoundSequenceShermanAdvanceOrRetreatEnd;
+                              myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           }
+                           if ("e099a" == myGameInstance.EventDisplayed)
+                           {
+                              action = GameAction.BattleActivation;
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            }
                            break;

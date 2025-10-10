@@ -1057,6 +1057,39 @@ namespace Pattons_Best
             isExitAreaReached = true;
          return true;
       }
+      public bool IsTaskForceInEnemyArea(out bool isEnemyAreaReached)
+      {
+         isEnemyAreaReached = false;
+         if (null == this.EnteredArea)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsTaskForceInEnemyArea(): gi.EnteredArea=null");
+            return false;
+         }
+         //-------------------------------------------------
+         IStack? stack = this.MoveStacks.Find(this.EnteredArea);
+         if (null == stack)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsTaskForceInEnemyArea(): stack=null");
+            return false;
+         }
+         bool isEnemyStrengthMoveBoard = false;
+         foreach (IMapItem mi in stack.MapItems) // check if any enemy units have been moved to from Battle Board to Move Board
+         {
+            if (true == mi.IsEnemyUnit())
+            {
+               Logger.Log(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD, "IsTaskForceInEnemyArea(): ENEMY UNIT=" + mi.Name);
+               isEnemyAreaReached = true;
+            }
+            if (true == mi.Name.Contains("Strength"))
+               isEnemyStrengthMoveBoard = true;
+         }
+         if( (true == isEnemyAreaReached) && (false == isEnemyStrengthMoveBoard) )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsTaskForceInEnemyArea(): invalid state - no Strength Marker");
+            return false;
+         }
+         return true;
+      }
       public void KillSherman(IAfterActionReport report, string reason)
       {
          this.Sherman.IsKilled = true;

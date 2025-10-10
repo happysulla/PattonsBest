@@ -1286,7 +1286,7 @@ namespace Pattons_Best
          }
          return true;
       }
-      protected bool FriendlyAdvanceCheck(IGameInstance gi, ref GameAction outAction)
+      protected bool FriendlyAdvanceCheckOnBattleBoard(IGameInstance gi, ref GameAction outAction)
       {
          gi.DieRollAction = GameAction.DieRollActionNone;
          //--------------------------------------------
@@ -1304,7 +1304,7 @@ namespace Pattons_Best
          {
             if (3 != t.Name.Length)
             {
-               Logger.Log(LogEnum.LE_ERROR, "FriendlyAdvanceCheck(): 3 != t.Name.Length for t=" + t.Name);
+               Logger.Log(LogEnum.LE_ERROR, "FriendlyAdvanceCheckOnBattleBoard(): 3 != t.Name.Length for t=" + t.Name);
                return false;
             }
             string sector = t.Name[1].ToString();
@@ -1387,7 +1387,7 @@ namespace Pattons_Best
                      isEmptySectorAdjacentToUsControl = true;
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "FriendlyAdvanceCheck(): reached default sector=" + sector.ToString());
+                  Logger.Log(LogEnum.LE_ERROR, "FriendlyAdvanceCheckOnBattleBoard(): reached default sector=" + sector.ToString());
                   return false;
             }
             if (true == isEmptySectorAdjacentToUsControl)
@@ -1400,7 +1400,7 @@ namespace Pattons_Best
          gi.EventDisplayed = gi.EventActive = "e046a";
          return true;
       }
-      protected bool EnemyAdvanceCheck(IGameInstance gi, ref GameAction outAction)
+      protected bool EnemyAdvanceCheckOnBattleBoard(IGameInstance gi, ref GameAction outAction)
       {
          gi.DieRollAction = GameAction.DieRollActionNone;
          //--------------------------------------------
@@ -1419,7 +1419,7 @@ namespace Pattons_Best
          {
             if (3 != t.Name.Length)
             {
-               Logger.Log(LogEnum.LE_ERROR, "EnemyAdvanceCheck(): 3 != t.Name.Length for t=" + t.Name);
+               Logger.Log(LogEnum.LE_ERROR, "EnemyAdvanceCheckOnBattleBoard(): 3 != t.Name.Length for t=" + t.Name);
                return false;
             }
             string sector = t.Name[1].ToString();
@@ -1488,7 +1488,7 @@ namespace Pattons_Best
                      possibleEnemyCapture.Add(t.Name);
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "EnemyAdvanceCheck(): reached default sector=" + sector.ToString());
+                  Logger.Log(LogEnum.LE_ERROR, "EnemyAdvanceCheckOnBattleBoard(): reached default sector=" + sector.ToString());
                   return false;
             }
          }
@@ -1506,7 +1506,7 @@ namespace Pattons_Best
             IStack? stack = gi.BattleStacks.Find(tName);
             if (null == stack)
             {
-               Logger.Log(LogEnum.LE_ERROR, "EnemyAdvanceCheck(): stack=null for tName=" + tName);
+               Logger.Log(LogEnum.LE_ERROR, "EnemyAdvanceCheckOnBattleBoard(): stack=null for tName=" + tName);
                return false;
             }
             foreach (IMapItem mi in stack.MapItems)
@@ -1518,7 +1518,7 @@ namespace Pattons_Best
                }
             }
          }
-         Logger.Log(LogEnum.LE_ERROR, "EnemyAdvanceCheck(): reached default");
+         Logger.Log(LogEnum.LE_ERROR, "EnemyAdvanceCheckOnBattleBoard(): reached default");
          return false;
       }
       protected bool CreateMapItemMove(IGameInstance gi, IMapItem mi, ITerritory newT)
@@ -2580,6 +2580,38 @@ namespace Pattons_Best
          //loader.Wound = "Serious Wound";             // <cgs> TEST - healing crewmen
          //loader.WoundDaysUntilReturn = TableMgr.KIA; // <cgs> TEST - healing crewmen
          //gi.InjuredCrewMembers.Add(loader);          // <cgs> TEST - healing crewmen
+         //--------------------------------
+         IMapItem? startEdge = gi.MoveStacks.FindMapItem("StartArea"); // Set Task Force into one area outside of start area
+         if (null == startEdge)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Add_StartingTestingState(): startEdge=null");
+            return false;
+         }
+         if( 0 == startEdge.TerritoryCurrent.Adjacents.Count )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Add_StartingTestingState(): startEdge.TerritoryCurrent.Adjacents.Count=0");
+            return false;
+         }
+         string tName = startEdge.TerritoryCurrent.Adjacents[0];
+         ITerritory? t = Territories.theTerritories.Find(tName);
+         if( null == t )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Add_StartingTestingState(): t=null");
+            return false;
+         }
+         string enemyName = "LW" + Utilities.MapItemNum.ToString();
+         Utilities.MapItemNum++;
+         IMapItem enemyOne = new MapItem(enemyName, Utilities.ZOOM, "c91Lw", t);
+         IMapPoint mp = Territory.GetRandomPoint(t, enemyOne.Zoom * Utilities.theMapItemOffset);
+         enemyOne.Location = mp;
+         gi.BattleStacks.Add(enemyOne);
+         //------------------------
+         enemyName = "LW" + Utilities.MapItemNum.ToString();
+         Utilities.MapItemNum++;
+         enemyOne = new MapItem(enemyName, Utilities.ZOOM, "c91Lw", t);
+         mp = Territory.GetRandomPoint(t, enemyOne.Zoom * Utilities.theMapItemOffset);
+         enemyOne.Location = mp;
+         gi.BattleStacks.Add(enemyOne);
          return true;
       }
    }
@@ -3680,6 +3712,15 @@ namespace Pattons_Best
                case GameAction.MovementEnterArea:
                   gi.EventDisplayed = gi.EventActive = "e028";
                   break;
+               case GameAction.MovementRetreatStartBattle:
+                  if( false == StartBattle(gi, lastReport))
+                  {
+                     returnStatus = "StartBattle() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementRetreatStartBattle): " + returnStatus);
+                  }
+                  gi.EventDisplayed = gi.EventActive = "e099a";
+                  gi.DieRollAction = GameAction.DieRollActionNone;
+                  break;
                case GameAction.MovementAdvanceFireChoice:
                   if ( "He" ==  gi.GetGunLoadType())
                   {
@@ -3712,23 +3753,23 @@ namespace Pattons_Best
                   lastReport.Ammo30CalibreMG -= Math.Min(mgRoundsUsed, lastReport.Ammo30CalibreMG);
                   break;
                case GameAction.MovementAdvanceFire:
+                  if (false == EnterMoveBoardArea(gi))  // GameStateMovement.PerformAction(Movement_AdvanceFire)
+                  {
+                     returnStatus = "Enter_MoveBoardArea() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.MovementAdvanceFireSkip: // GameStateMovement.PerformAction(Movement_AdvanceFireSkip)
                   if (false == EnterMoveBoardArea(gi))
                   {
                      returnStatus = "Enter_MoveBoardArea() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                   }
                   break;
-               case GameAction.MovementAdvanceFireSkip:
-                  if (false == EnterMoveBoardArea(gi))
-                  {
-                     returnStatus = "Enter_MoveBoardArea() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
-                  }
-                  break;
-               case GameAction.MovementStrengthRollBattleBoard:
+               case GameAction.MovementStrengthBattleBoardRoll:
                   gi.DieResults[key][0] = dieRoll;
-                  gi.DieRollAction = GameAction.MovementBattleCheckRoll;
-                  if (false == SetEnemyStrengthCounter(gi, dieRoll))  // GameStateMovement.PerformAction(MovementStrengthRollBattleBoard)
+                  gi.DieRollAction = GameAction.MovementBattleCheckRoll; // GameStateMovement.PerformAction(MovementStrength_BattleBoardRoll)
+                  if (false == SetEnemyStrengthCounter(gi, dieRoll))     // GameStateMovement.PerformAction(MovementStrength_BattleBoardRoll)
                   {
                      returnStatus = "Set_EnemyStrengthCounter() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
@@ -3736,7 +3777,7 @@ namespace Pattons_Best
                   break;
                case GameAction.MovementBattleCheck:
                   gi.EventDisplayed = gi.EventActive = "e032";
-                  gi.DieRollAction = GameAction.MovementBattleCheckRoll;
+                  gi.DieRollAction = GameAction.MovementBattleCheckRoll; // GameStateMovement.PerformAction(MovementBattleCheck)
                   break;
                case GameAction.MovementBattleCheckRoll:
                   //dieRoll = 10; // <cgs> TEST - YES COMBAT ON MOVE BOARD
@@ -3878,7 +3919,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Enter_MoveBoardArea(): gi.EnteredArea=null");
             return false;
          }
-         IStack? stack = gi.MoveStacks.Find(gi.EnteredArea);
+         IStack? stack = gi.MoveStacks.Find(gi.EnteredArea); // if there is a Strength Marker in this area, next roll checks if battle occurs
          if (null != stack)
          {
             foreach (IMapItem mi1 in stack.MapItems)
@@ -3886,13 +3927,13 @@ namespace Pattons_Best
                if (true == mi1.Name.Contains("Strength"))
                {
                   gi.EventDisplayed = gi.EventActive = "e032";
-                  gi.DieRollAction = GameAction.MovementBattleCheckRoll;
+                  gi.DieRollAction = GameAction.MovementBattleCheckRoll; // EnterMoveBoardArea()
                   return true;
                }
             }
          }
-         gi.EventDisplayed = gi.EventActive = "e031";
-         gi.DieRollAction = GameAction.MovementStrengthRollBattleBoard;
+         gi.EventDisplayed = gi.EventActive = "e031";        // if there is NO Strength Marker in this area, next roll checks for strength check
+         gi.DieRollAction = GameAction.MovementStrengthBattleBoardRoll;
          return true;
       }
       private bool SkipBattleBoard(IGameInstance gi, IAfterActionReport report)
@@ -3974,20 +4015,20 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ResolveBattle_CheckRoll(): stack=null");
             return false;
          }
-         IMapItems enemyOnMoveBoard = new MapItems();
+         bool isEnemyOnMoveBoard = false;
          foreach (IMapItem mi in stack.MapItems) // check if any enemy units have been moved to from Battle Board to Move Board
          {
             if (true == mi.IsEnemyUnit())
             {
                Logger.Log(LogEnum.LE_SHOW_ENEMY_ON_MOVE_BOARD, "ResolveBattle_CheckRoll(): ENEMY UNIT=" + mi.Name);
-               enemyOnMoveBoard.Add(mi);
+               isEnemyOnMoveBoard = true;
             }
          }
          //-------------------------------------------------
          switch (gi.BattleResistance)
          {
             case EnumResistance.Light:
-               if ((7 < dieRoll) || (0 < enemyOnMoveBoard.Count)) // battle
+               if ((7 < dieRoll) || (true == isEnemyOnMoveBoard)) // battle
                {
                   if (false == StartBattle(gi, lastReport))
                   {
@@ -4005,7 +4046,7 @@ namespace Pattons_Best
                }
                break;
             case EnumResistance.Medium:
-               if ((5 < dieRoll) || (0 < enemyOnMoveBoard.Count)) // battle
+               if ((5 < dieRoll) || (true == isEnemyOnMoveBoard)) // battle
                {
                   if (false == StartBattle(gi, lastReport))
                   {
@@ -4023,7 +4064,7 @@ namespace Pattons_Best
                }
                break;
             case EnumResistance.Heavy:
-               if ((3 < dieRoll) || (0 < enemyOnMoveBoard.Count)) // battle
+               if ((3 < dieRoll) || (true == isEnemyOnMoveBoard)) // battle
                {
                   if (false == StartBattle(gi, lastReport))
                   {
@@ -4446,9 +4487,9 @@ namespace Pattons_Best
                            }
                            break;
                         case "Friendly Advance":
-                           if (false == FriendlyAdvanceCheck(gi, ref action))
+                           if (false == FriendlyAdvanceCheckOnBattleBoard(gi, ref action))
                            {
-                              returnStatus = "FriendlyAdvanceCheck() returned false";
+                              returnStatus = "FriendlyAdvanceCheckOnBattleBoard() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
                            }
                            break;
@@ -4456,9 +4497,9 @@ namespace Pattons_Best
                            action = GameAction.BattleActivation;
                            break;
                         case "Enemy Advance":
-                           if (false == EnemyAdvanceCheck(gi, ref action))
+                           if (false == EnemyAdvanceCheckOnBattleBoard(gi, ref action))
                            {
-                              returnStatus = "EnemyAdvanceCheck() returned false";
+                              returnStatus = "EnemyAdvanceCheckOnBattleBoard() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
                            }
                            break;
@@ -6036,9 +6077,9 @@ namespace Pattons_Best
                            }
                            break;
                         case "Friendly Advance":
-                           if (false == FriendlyAdvanceCheck(gi, ref action))
+                           if (false == FriendlyAdvanceCheckOnBattleBoard(gi, ref action))
                            {
-                              returnStatus = "FriendlyAdvanceCheck() returned false";
+                              returnStatus = "FriendlyAdvanceCheckOnBattleBoard() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRandomEventRoll): " + returnStatus);
                            }
                            break;
@@ -6046,9 +6087,9 @@ namespace Pattons_Best
                            action = GameAction.BattleActivation;
                            break;
                         case "Enemy Advance":
-                           if (false == EnemyAdvanceCheck(gi, ref action))
+                           if (false == EnemyAdvanceCheckOnBattleBoard(gi, ref action))
                            {
-                              returnStatus = "EnemyAdvanceCheck() returned false";
+                              returnStatus = "EnemyAdvanceCheckOnBattleBoard() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRandomEventRoll): " + returnStatus);
                            }
                            break;

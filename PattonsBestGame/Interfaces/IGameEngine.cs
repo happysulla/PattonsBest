@@ -242,13 +242,13 @@ namespace Pattons_Best
       MovementAdvanceFire,
       MovementAdvanceFireSkip,
       MovementEnterAreaUsControl,
-      MovementStrengthRollBattleBoard,
+      MovementStrengthBattleBoardRoll,
       MovementBattleCheck,
       MovementBattleCheckRoll,
       MovementStartAreaRestart,
       MovementStartAreaRestartAfterBattle,
       MovementExit,
-
+      MovementRetreatStartBattle,
 
       BattleStart,
       BattleActivation,
@@ -358,6 +358,7 @@ namespace Pattons_Best
       BattleRoundSequenceEnemyAdvanceEnd,
       BattleRoundSequenceShermanAdvanceOrRetreat,
       BattleRoundSequenceShermanAdvanceOrRetreatEnd,
+
 
       EveningDebriefingStart,
       EveningDebriefingRatingImprovement,
