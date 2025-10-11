@@ -125,6 +125,7 @@ namespace Pattons_Best
       //------------------------------------------------
       bool IsHatchesActive { set; get; }
       bool IsRetreatToStartArea { set; get; }
+      bool IsShermanAdvancingOnMoveBoard { set; get; }
       //------------------------------------------------
       string SwitchedCrewMember { set; get; }
       int AssistantOriginalRating { set; get; }

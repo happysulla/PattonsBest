@@ -276,6 +276,7 @@ namespace Pattons_Best
             }
             else
             {
+               IMapItems removals = new MapItems();
                IStack? stack = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
                if (null == stack)
                {
@@ -288,6 +289,7 @@ namespace Pattons_Best
                {
                   if (true == mi1.IsEnemyUnit())
                   {
+                     removals.Add(mi1);
                      string enemyType = mi1.GetEnemyUnit();
                      mi1.Name = enemyType + Utilities.MapItemNum.ToString(); // need to rename b/c this buttons move from battle board to move board
                      Utilities.MapItemNum++;
@@ -378,6 +380,9 @@ namespace Pattons_Best
                   if (true == mi1.Name.Contains("Strength"))
                      strengthCounter = mi1;
                }
+               foreach (IMapItem removal in removals) // remove from movement board
+                  myGameInstance.MoveStacks.Remove(removal);
+               //-------------------------------------------
                if (null == strengthCounter) 
                {
                   Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): did not find Enemy Strength Counter in the territory=" + myGameInstance.EnteredArea.Name);

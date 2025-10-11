@@ -1141,7 +1141,7 @@ namespace Pattons_Best
                if (null != loaderSpot)
                {
                   Image imge015 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c18LoaderSpot"), Width = 100, Height = 100, Name = "PreparationsCommanderSpot" };
-                  myTextBlock.Inlines.Add(new Run("                                           "));
+                  myTextBlock.Inlines.Add(new Run("                                              "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge015));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -5419,16 +5419,22 @@ namespace Pattons_Best
                                  action = GameAction.MovementStartAreaSet; // Setting the first start area
                               else
                               {
-                                 bool isEnemyInMoveArea;
-                                 if( false == myGameInstance.IsTaskForceInEnemyArea(out isEnemyInMoveArea))
+                                 if( false == myGameInstance.IsShermanAdvancingOnMoveBoard ) // If sherman advancing on BattleBoard, there will be enemy units in same area of move board until Sherman moves out
                                  {
-                                    Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): IsTaskForceInEnemyArea() returned false");
-                                    return;
+                                    bool isEnemyInMoveArea;
+                                    if (false == myGameInstance.IsTaskForceInEnemyArea(out isEnemyInMoveArea))
+                                    {
+                                       Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): IsTaskForceInEnemyArea() returned false");
+                                       return;
+                                    }
+                                    if (true == isEnemyInMoveArea)
+                                       action = GameAction.BattleActivation;  // TextBlock_MouseDown(Continue017): 
                                  }
-                                 if( true == isEnemyInMoveArea )
-                                    action = GameAction.BattleActivation;  // TextBlock_MouseDown(): 
                                  else
+                                 {
                                     action = GameAction.MovementEnemyStrengthChoice;  // TextBlock_MouseDown(): "Continue017" - Preparations Final
+                                 }
+
                               }
                            }
                            //-----------------------------------------------------

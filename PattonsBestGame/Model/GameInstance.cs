@@ -70,6 +70,7 @@ namespace Pattons_Best
       //---------------------------------------------------------------
       public bool IsHatchesActive { set; get; } = false;
       public bool IsRetreatToStartArea { set; get; } = false;
+      public bool IsShermanAdvancingOnMoveBoard { set; get; } = false;
       //---------------------------------------------------------------
       public string SwitchedCrewMember { set; get; } = "";
       public int AssistantOriginalRating { set; get; } = 0;

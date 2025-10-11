@@ -1681,7 +1681,7 @@ namespace Pattons_Best
                      }
                      else
                      {
-                        action = GameAction.BattleActivation;
+                        action = GameAction.BattleActivation; // TestingStartBattle
                      }
                   }
                }
@@ -1844,7 +1844,7 @@ namespace Pattons_Best
             report.Scenario = EnumScenario.Battle;
          else
             report.Scenario = EnumScenario.Counterattack;
-         report.Scenario = EnumScenario.Advance; // <cgs> TEST - PerformAutoSetupSkipCrewAssignments() - KillYourTank - =======================================>> choose scenario
+         report.Scenario = EnumScenario.Counterattack; // <cgs> TEST - PerformAutoSetupSkipCrewAssignments() - KillYourTank - =======================================>> choose scenario
          //-------------------------------
          gi.NewMembers.Add(report.Commander);   // PerformAutoSetupSkipCrewAssignments()
          gi.NewMembers.Add(report.Gunner);      // PerformAutoSetupSkipCrewAssignments()
@@ -2580,38 +2580,70 @@ namespace Pattons_Best
          //loader.Wound = "Serious Wound";             // <cgs> TEST - healing crewmen
          //loader.WoundDaysUntilReturn = TableMgr.KIA; // <cgs> TEST - healing crewmen
          //gi.InjuredCrewMembers.Add(loader);          // <cgs> TEST - healing crewmen
-         //--------------------------------
+         //===========================================================================
+         //if( false == AddStartingTestingStateEnemyRetreatAreas(gi))
+         //{
+         //   Logger.Log(LogEnum.LE_ERROR, "Add_StartingTestingState(): AddStartingTestingStateEnemyRetreatAreas() returned false");
+         //   return false;
+         //}
+         return true;
+      }
+      private bool AddStartingTestingStateEnemyRetreatAreas(IGameInstance gi)
+      {
          IMapItem? startEdge = gi.MoveStacks.FindMapItem("StartArea"); // Set Task Force into one area outside of start area
          if (null == startEdge)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Add_StartingTestingState(): startEdge=null");
+            Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingStateEnemyRetreatAreas(): startEdge=null");
             return false;
          }
-         if( 0 == startEdge.TerritoryCurrent.Adjacents.Count )
+         if (0 == startEdge.TerritoryCurrent.Adjacents.Count)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Add_StartingTestingState(): startEdge.TerritoryCurrent.Adjacents.Count=0");
+            Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingStateEnemyRetreatAreas(): startEdge.TerritoryCurrent.Adjacents.Count=0");
             return false;
          }
          string tName = startEdge.TerritoryCurrent.Adjacents[0];
          ITerritory? t = Territories.theTerritories.Find(tName);
-         if( null == t )
+         if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Add_StartingTestingState(): t=null");
+            Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingStateEnemyRetreatAreas(): t=null");
             return false;
          }
+         //------------------------
+         IStack? stack = gi.MoveStacks.Find(t);
+         if (null == stack)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingStateEnemyRetreatAreas(): stack=null for t=" + t.Name);
+            return false;
+         }
+         foreach (IMapItem mi in stack.MapItems)
+         {
+            if (true == mi.Name.Contains("UsControl"))
+            {
+               stack.MapItems.Remove(mi);
+               break;
+            }
+         }
+         //------------------------
          string enemyName = "LW" + Utilities.MapItemNum.ToString();
          Utilities.MapItemNum++;
          IMapItem enemyOne = new MapItem(enemyName, Utilities.ZOOM, "c91Lw", t);
          IMapPoint mp = Territory.GetRandomPoint(t, enemyOne.Zoom * Utilities.theMapItemOffset);
          enemyOne.Location = mp;
-         gi.BattleStacks.Add(enemyOne);
+         gi.MoveStacks.Add(enemyOne);
          //------------------------
          enemyName = "LW" + Utilities.MapItemNum.ToString();
          Utilities.MapItemNum++;
          enemyOne = new MapItem(enemyName, Utilities.ZOOM, "c91Lw", t);
          mp = Territory.GetRandomPoint(t, enemyOne.Zoom * Utilities.theMapItemOffset);
          enemyOne.Location = mp;
-         gi.BattleStacks.Add(enemyOne);
+         gi.MoveStacks.Add(enemyOne);
+         //------------------------
+         string name = "StrengthLight" + Utilities.MapItemNum.ToString();
+         ++Utilities.MapItemNum;
+         IMapItem strengthMarker = new MapItem(name, 1.0, "c36Light", t);
+         strengthMarker.Count = 1;
+         strengthMarker.Location = Territory.GetRandomPoint(t, strengthMarker.Zoom * Utilities.theMapItemOffset);
+         gi.MoveStacks.Add(strengthMarker);
          return true;
       }
    }
@@ -3796,6 +3828,10 @@ namespace Pattons_Best
                   gi.EventDisplayed = gi.EventActive = "e035";
                   gi.DieRollAction = GameAction.BattleAmbushRoll;
                   break;
+               case GameAction.BattleActivation:   // GameStateMovement.PerformAction(BattleActivation)
+                  AdvanceTime(lastReport, 15);
+                  gi.GamePhase = GamePhase.Battle;
+                  break;
                case GameAction.MovementBattleCheckCounterattackRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
@@ -3914,6 +3950,7 @@ namespace Pattons_Best
       }
       private bool EnterMoveBoardArea(IGameInstance gi)
       {
+         gi.IsShermanAdvancingOnMoveBoard = false;
          if (null == gi.EnteredArea)
          {
             Logger.Log(LogEnum.LE_ERROR, "Enter_MoveBoardArea(): gi.EnteredArea=null");
@@ -4271,8 +4308,8 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleStart:
                   gi.EventDisplayed = gi.EventActive = "e034"; // GameStateBattle.PerformAction(BattleStart)
-                  break;
-               case GameAction.BattleActivation: 
+                  break; 
+               case GameAction.BattleActivation:               // GameStateBattle.PerformAction(BattleActivation)
                case GameAction.BattleResolveArtilleryFire:
                case GameAction.BattleResolveAirStrike:
                case GameAction.BattleResolveAdvanceFire:
@@ -4306,7 +4343,7 @@ namespace Pattons_Best
                      else
                      {
                         gi.IsAdvancingFireChosen = false;
-                        action = GameAction.BattleActivation;
+                        action = GameAction.BattleActivation;  // BattlePlaceAdvanceFire
                      }
                      //----------------------------------
                      gi.AdvanceFire = null;
@@ -4494,7 +4531,7 @@ namespace Pattons_Best
                            }
                            break;
                         case "Enemy Reinforce":
-                           action = GameAction.BattleActivation;
+                           action = GameAction.BattleActivation;  // BattleRandomEventRoll - Enemy Reinforce
                            break;
                         case "Enemy Advance":
                            if (false == EnemyAdvanceCheckOnBattleBoard(gi, ref action))
@@ -5162,7 +5199,7 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleRoundSequenceFriendlyAdvance:
                case GameAction.BattleRoundSequenceEnemyAdvance:
-               case GameAction.BattleActivation:
+               case GameAction.BattleActivation:  // GameStateBattleRoundSequence.PerformAction(BattleActivation)
                   break;
                case GameAction.BattleCollateralDamageCheck:
                   break;
@@ -6084,7 +6121,7 @@ namespace Pattons_Best
                            }
                            break;
                         case "Enemy Reinforce":
-                           action = GameAction.BattleActivation;
+                           action = GameAction.BattleActivation;  // BattleRandomEventRoll - Enemy Reinforce
                            break;
                         case "Enemy Advance":
                            if (false == EnemyAdvanceCheckOnBattleBoard(gi, ref action))
@@ -6838,6 +6875,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "MoveSherman(): gi.MapItemMoves.Clear()");
             gi.MapItemMoves.Clear();
             gi.ShermanAdvanceOrRetreatEnemies.Clear(); // any previous round units moved off board are not saved
+            gi.IsShermanAdvancingOnMoveBoard = false;
             bool isAnyEnemyLeft = false;
             foreach (IStack stack in gi.BattleStacks)
             {
@@ -6985,6 +7023,7 @@ namespace Pattons_Best
               (((90.0 < gi.Sherman.RotationHull) && (gi.Sherman.RotationHull < 270.0)) && ("B" == gi.MovementEffectOnEnemy)))
          {
             newT = taskForce.TerritoryCurrent; // Advancing is done by selecting a new hex in the movement phase
+            gi.IsShermanAdvancingOnMoveBoard = true;
          }
          else
          {
