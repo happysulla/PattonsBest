@@ -5987,13 +5987,11 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleRoundSequenceCrewReplaced:
-                  if (false == MoveShermanAdvanceOrRetreat(gi)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_CrewReplaced) 
+                  if (false == MoveShermanAdvanceOrRetreat(gi, ref action)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_CrewReplaced) 
                   {
                      returnStatus = "MoveSherman_AdvanceOrRetreat() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(Battle_CrewReplaced): " + returnStatus);
                   }
-                  action = GameAction.BattleRoundSequenceShermanAdvanceOrRetreat;
-                  gi.EventDisplayed = gi.EventActive = "e099";
                   break;
                case GameAction.BattleRoundSequenceShermanAdvanceOrRetreatEnd:
                   if (false == ResetRound(gi, "MoveSherman_AdvanceOrRetreat()"))
@@ -6907,13 +6905,11 @@ namespace Pattons_Best
                }
                else
                {
-                  if (false == MoveShermanAdvanceOrRetreat(gi)) // Move_Sherman() - no enemy left when Sherman moves
+                  if (false == MoveShermanAdvanceOrRetreat(gi, ref outAction)) // Move_Sherman() - no enemy left when Sherman moves
                   {
                      Logger.Log(LogEnum.LE_ERROR, "MoveSherman(): MoveSherman_AdvanceOrRetreat() returned false");
                      return false;
                   }
-                  outAction = GameAction.BattleRoundSequenceShermanAdvanceOrRetreat;
-                  gi.EventDisplayed = gi.EventActive = "e099";
                }
             }
             else
@@ -6975,8 +6971,11 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool MoveShermanAdvanceOrRetreat(IGameInstance gi)
+      private bool MoveShermanAdvanceOrRetreat(IGameInstance gi, ref GameAction outAction)
       {
+         outAction = GameAction.BattleRoundSequenceShermanAdvanceOrRetreat;
+         gi.EventDisplayed = gi.EventActive = "e099";
+         //--------------------------------
          Logger.Log(LogEnum.LE_SHOW_RETREAT_TO_PREVIOUS_AREA, "MoveSherman_AdvanceOrRetreat(): gi.ShermanAdvanceOrRetreatEnemies=" + gi.ShermanAdvanceOrRetreatEnemies.ToString());
          //--------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
@@ -7060,30 +7059,15 @@ namespace Pattons_Best
             }
             else
             {
-               if (null == startArea)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): unable to find start area in MoveStacks=" + gi.MoveStacks.ToString());
-                  return false;
-               }
-               IMapPath? bestPath = Territory.GetBestPath(Territories.theTerritories, taskForce.TerritoryCurrent, startArea.TerritoryCurrent, 30);
-               if (null == bestPath)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): bestPath=null for MoveStacks=" + gi.MoveStacks.ToString());
-                  return false;
-               }
-               if (0 == bestPath.Territories.Count)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): bestPath.Territories.Count=0 for MoveStacks=" + gi.MoveStacks.ToString());
-                  return false;
-               }
-               newT = bestPath.Territories[0];
                lastReport.VictoryPtsLostArea++;
+               if( false == MoveShermanCounterattackRetreatChoices( gi, startArea, taskForce) )
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): MoveShermanAdvanceOrRetreatCounterattack() returned false");
+                  return false;
+               }
+               if( 1 == gi.CounterattachRetreats.Count )
+                  newT = gi.CounterattachRetreats[0];
             }
-         }
-         if (null == newT)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): Territories.theTerritories.Find() returned null");
-            return false;
          }
          //--------------------------------------------------------
          foreach (IMapItem enemyUnit in gi.ShermanAdvanceOrRetreatEnemies)// add in enemy units that were on BattleBoard when battle ended
@@ -7109,14 +7093,50 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "MoveSherman_AdvanceOrRetreat(): Adding mi=" + enemyUnit.Name + " t=" + enemyUnit.TerritoryCurrent.Name + " to " + gi.MoveStacks.ToString());
          }
          gi.ShermanAdvanceOrRetreatEnemies.Clear();
-         gi.EnteredArea = newT;
+
          //--------------------------------------------------------
-         Logger.Log(LogEnum.LE_VIEW_MIM_ADD, "MoveSherman_AdvanceOrRetreat(): TF Entering t=" + gi.EnteredArea.Name);
-         if (false == CreateMapItemMove(gi, taskForce, gi.EnteredArea))
+         if (null == newT)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): CreateMapItemMove() returned false");
+            if( EnumScenario.Counterattack != lastReport.Scenario )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): newT=null and not counterattack scenario");
+               return false;
+            }
+            outAction = GameAction.BattleRoundSequenceShermanRetreatChoice;
+            gi.EventDisplayed = gi.EventActive = "e099b";
+         }
+         else
+         {
+            gi.EnteredArea = newT;
+            Logger.Log(LogEnum.LE_VIEW_MIM_ADD, "MoveSherman_AdvanceOrRetreat(): TF Entering t=" + gi.EnteredArea.Name);
+            if (false == CreateMapItemMove(gi, taskForce, gi.EnteredArea))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): CreateMapItemMove() returned false");
+               return false;
+            }
+         }
+         return true;
+      }
+      private bool MoveShermanCounterattackRetreatChoices(IGameInstance gi, IMapItem? startArea, IMapItem taskForce)
+      {
+         gi.CounterattachRetreats.Clear();
+         if (null == startArea)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): unable to find start area in MoveStacks=" + gi.MoveStacks.ToString());
             return false;
          }
+         IMapPath? bestPath = Territory.GetBestPath(Territories.theTerritories, taskForce.TerritoryCurrent, startArea.TerritoryCurrent, 30);
+         if (null == bestPath)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): bestPath=null for MoveStacks=" + gi.MoveStacks.ToString());
+            return false;
+         }
+         if (0 == bestPath.Territories.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): bestPath.Territories.Count=0 for MoveStacks=" + gi.MoveStacks.ToString());
+            return false;
+         }
+         gi.CounterattachRetreats.Add(bestPath.Territories[0]);
          return true;
       }
       private bool EnemiesFacingCheck(IGameInstance gi, ref GameAction outAction)

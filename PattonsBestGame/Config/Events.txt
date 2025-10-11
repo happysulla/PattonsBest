@@ -898,6 +898,13 @@ You retreated into a battle.
                         <InlineUIContainer><Image Name='Sherman1' Height='200' Width='325'></Image></InlineUIContainer>
 <LineBreak/><LineBreak/>
 Click image to continue.  "
+e099b	"<Bold>e099b Retreat Choice in Counterattack Retreat</Bold> 
+<InlineUIContainer><Button Content='r11.33' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<InlineUIContainer><Button Content='r20.45' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>     
+<LineBreak/><LineBreak/>
+Must retreat to an adjacent hex toward the start area. Since two or more choices exist, choose one of the highlighted areas on the movement board to continue.
+<LineBreak/><LineBreak/>
+                        <InlineUIContainer><Image Name='Sherman1' Height='200' Width='325'></Image></InlineUIContainer>  "
 e100	"<Bold>e100 Evening Debriefing</Bold> 
 <LineBreak/><LineBreak/>
 An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 

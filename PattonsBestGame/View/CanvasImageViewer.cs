@@ -108,6 +108,7 @@ namespace Pattons_Best
             case GameAction.MovementEnemyStrengthChoice:
             case GameAction.MovementEnemyCheckCounterattack:
             case GameAction.BattleRoundSequenceShermanAdvanceOrRetreat:
+            case GameAction.BattleRoundSequenceShermanRetreatChoice:
                theMainImage = EnumMainImage.MI_Move;
                ShowMovementMap(myCanvas);
                break;

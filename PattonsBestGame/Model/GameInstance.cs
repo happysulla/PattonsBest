@@ -67,6 +67,7 @@ namespace Pattons_Best
       public ITerritory? FriendlyAdvance { get; set; } = null;
       public ITerritory? EnemyAdvance { get; set; } = null;
       public ITerritories AreaTargets { get; set; } = new Territories();
+      public ITerritories CounterattachRetreats { get; set; } = new Territories();
       //---------------------------------------------------------------
       public bool IsHatchesActive { set; get; } = false;
       public bool IsRetreatToStartArea { set; get; } = false;

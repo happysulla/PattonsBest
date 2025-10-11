@@ -2063,7 +2063,14 @@ namespace Pattons_Best
                case GameAction.MovementEnterArea:
                   if (false == UpdateCanvasMainEnterArea(gi, action))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvas_MainEnterArea() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMain_EnterArea() returned false");
+                     return false;
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceShermanRetreatChoice:
+                  if (false == UpdateCanvasMainCounterattackChoice(gi, action))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMain_CounterattackChoice() returned false");
                      return false;
                   }
                   break;
@@ -2951,6 +2958,22 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas_MainEnterArea(): 1 t=null for " + s);
                return false;
             }
+            PointCollection points = new PointCollection();
+            foreach (IMapPoint mp1 in t.Points)
+               points.Add(new System.Windows.Point(mp1.X, mp1.Y));
+            Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = t.Name };
+            aPolygon.MouseDown += MouseDownPolygonEnterArea;
+            myPolygons.Add(aPolygon);
+            myCanvasMain.Children.Add(aPolygon);
+            Canvas.SetZIndex(aPolygon, 101);
+         }
+         return true;
+      }
+      private bool UpdateCanvasMainCounterattackChoice(IGameInstance gi, GameAction action)
+      {
+         myPolygons.Clear();
+         foreach (ITerritory t in gi.CounterattachRetreats)
+         {
             PointCollection points = new PointCollection();
             foreach (IMapPoint mp1 in t.Points)
                points.Add(new System.Windows.Point(mp1.X, mp1.Y));

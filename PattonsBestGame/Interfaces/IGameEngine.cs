@@ -358,7 +358,7 @@ namespace Pattons_Best
       BattleRoundSequenceEnemyAdvanceEnd,
       BattleRoundSequenceShermanAdvanceOrRetreat,
       BattleRoundSequenceShermanAdvanceOrRetreatEnd,
-
+      BattleRoundSequenceShermanRetreatChoice,
 
       EveningDebriefingStart,
       EveningDebriefingRatingImprovement,

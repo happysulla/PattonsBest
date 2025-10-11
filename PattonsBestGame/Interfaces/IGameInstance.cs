@@ -122,6 +122,7 @@ namespace Pattons_Best
       ITerritory? FriendlyAdvance { get; set; }
       ITerritory? EnemyAdvance { get; set; }
       ITerritories AreaTargets { get; set; }
+      ITerritories CounterattachRetreats { get; set; }
       //------------------------------------------------
       bool IsHatchesActive { set; get; }
       bool IsRetreatToStartArea { set; get; }
