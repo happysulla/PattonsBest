@@ -176,18 +176,21 @@ namespace Pattons_Best
          }
          else // initial artillery firing entering area
          {
-            IMapItems removals = new MapItems();
             foreach (IMapItem mi in stack1.MapItems)
             {
                if (true == mi.Name.Contains("Artillery"))
-               {
                   myArtilleryCount++;
-                  removals.Add(mi);
-               }
             }
-            foreach (IMapItem mi in removals)
-               myGameInstance.MoveStacks.Remove(mi);
          }
+         //--------------------------------------------------
+         IMapItems removals = new MapItems();
+         foreach (IMapItem mi in stack1.MapItems)
+         {
+            if (true == mi.Name.Contains("Artillery"))
+               removals.Add(mi);
+         }
+         foreach (IMapItem mi in removals)
+            myGameInstance.MoveStacks.Remove(mi);
          //--------------------------------------------------
          string[] sectors = new string[6] { "B1M", "B2M", "B3M", "B4M", "B6M", "B9M" };
          foreach (string sector in sectors)
@@ -506,7 +509,7 @@ namespace Pattons_Best
             return;
          }
          IMapItem mi = myGridRows[i].myMapItemEnemy;
-         dieRoll = 50; // <cgs> TEST - AdvanceRetreat - AAAAAAAAAAAAAAAAAAAAAAA no artillery deaths
+         //dieRoll = 50; // <cgs> TEST - AdvanceRetreat - AAAAAAAAAAAAAAAAAAAAAAA no artillery deaths
          //dieRoll = 1;  // <cgs> TEST -                  AAAAAAAAAAAAAAAAAAAAAAA ensure artillery deaths to end battle quickly
          myGridRows[i].myDieRoll = dieRoll;
          myGridRows[i].myResult = TableMgr.SetFriendlyActionResult(myGameInstance, mi, dieRoll, myNumUseControlled, false, true, false);

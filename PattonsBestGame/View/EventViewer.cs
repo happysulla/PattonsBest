@@ -3851,21 +3851,29 @@ namespace Pattons_Best
          {
             sbe101.Append("\n\nYou as the commander are killed. Engagement Lost!");
             imge101 = new Image { Name = "CampaignOver", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("CommanderDead") };
+            myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new Run("                                    "));
          }
          else if ( 0 >= report.VictoryPtsTotalEngagement )
          {
             sbe101.Append("\n\nTotal Victory Points is not positive. Engagement Lost!");
             imge101 = new Image { Name = "EventDebriefVictoryPts", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("Deny") };
+            myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new Run("                                    "));
          }
          else
          {
             sbe101.Append("\n\nTotal Victory Points is greater than zero. Engagement Won!");
-            imge101 = new Image { Name = "EventDebriefVictoryPts", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("Star") };
+            imge101 = new Image { Name = "EventDebriefVictoryPts", Width = 125, Height = 250, Source = MapItem.theMapImages.GetBitmapImage("Victory") };
+            myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new Run("                                                 "));
          }
-         myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
-         myTextBlock.Inlines.Add(new LineBreak());
-         myTextBlock.Inlines.Add(new LineBreak());
-         myTextBlock.Inlines.Add(new Run("                                    "));
          myTextBlock.Inlines.Add(new InlineUIContainer(imge101));
          myTextBlock.Inlines.Add(new LineBreak());
          myTextBlock.Inlines.Add(new LineBreak());
@@ -5419,7 +5427,8 @@ namespace Pattons_Best
                                  action = GameAction.MovementStartAreaSet; // Setting the first start area
                               else
                               {
-                                 if( false == myGameInstance.IsShermanAdvancingOnMoveBoard ) // If sherman advancing on BattleBoard, there will be enemy units in same area of move board until Sherman moves out
+                                 action = GameAction.MovementEnemyStrengthChoice;  // TextBlock_MouseDown(): "Continue017" - Preparations Final
+                                 if ( false == myGameInstance.IsShermanAdvancingOnMoveBoard ) // If sherman advancing on BattleBoard, there will be enemy units in same area of move board until Sherman moves out
                                  {
                                     bool isEnemyInMoveArea;
                                     if (false == myGameInstance.IsTaskForceInEnemyArea(out isEnemyInMoveArea))
@@ -5430,11 +5439,6 @@ namespace Pattons_Best
                                     if (true == isEnemyInMoveArea)
                                        action = GameAction.BattleActivation;  // TextBlock_MouseDown(Continue017): 
                                  }
-                                 else
-                                 {
-                                    action = GameAction.MovementEnemyStrengthChoice;  // TextBlock_MouseDown(): "Continue017" - Preparations Final
-                                 }
-
                               }
                            }
                            //-----------------------------------------------------
@@ -6060,7 +6064,7 @@ namespace Pattons_Best
                //action = GameAction.TestingStartPreparations;     // <cgs> TEST - skip morning briefing and crew/ammo setup
                //action = GameAction.TestingStartMovement;         // <cgs> TEST - start with movement - skip battle prep phase
                //action = GameAction.TestingStartBattle;           // <cgs> TEST - skip the movement portion - begin with battle setup
-               action = GameAction.TestingStartAmbush;           // <cgs> TEST - skip battle setup
+               //action = GameAction.TestingStartAmbush;           // <cgs> TEST - skip battle setup
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Cancel":

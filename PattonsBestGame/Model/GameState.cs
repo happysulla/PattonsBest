@@ -1844,7 +1844,7 @@ namespace Pattons_Best
             report.Scenario = EnumScenario.Battle;
          else
             report.Scenario = EnumScenario.Counterattack;
-         report.Scenario = EnumScenario.Counterattack; // <cgs> TEST - PerformAutoSetupSkipCrewAssignments() - KillYourTank - =======================================>> choose scenario
+         //report.Scenario = EnumScenario.Counterattack; // <cgs> TEST - PerformAutoSetupSkipCrewAssignments() - KillYourTank - =======================================>> choose scenario
          //-------------------------------
          gi.NewMembers.Add(report.Commander);   // PerformAutoSetupSkipCrewAssignments()
          gi.NewMembers.Add(report.Gunner);      // PerformAutoSetupSkipCrewAssignments()
@@ -2273,7 +2273,7 @@ namespace Pattons_Best
             int die1 = Utilities.RandomGenerator.Next(0, 3);
             //die1 += 3; // <cgs> TEST - create enemy in US Sectors
             int die2 = Utilities.RandomGenerator.Next(0, 3);
-            die2 = 2; // <cgs> TEST - AdvanceRetreat - Start at long range
+            //die2 = 2; // <cgs> TEST - AdvanceRetreat - Start at long range
             string? tName = null;
             if (0 == die1)
             {
@@ -2348,7 +2348,7 @@ namespace Pattons_Best
                diceRoll = 100;
             else
                diceRoll = die1 + 10 * die2;
-            diceRoll = 11; // <cgs> TEST - AdvanceRetreat - MG appearing
+            //diceRoll = 11; // <cgs> TEST - AdvanceRetreat - MG appearing
             //diceRoll = 45; // <cgs> TEST -  KillYourTank - TANKS APPEARING in battle scenario
             //diceRoll = 51; // <cgs> TEST -  ATG appearing
             string enemyUnit = TableMgr.SetEnemyUnit(lastReport.Scenario, gi.Day, diceRoll);
@@ -2467,14 +2467,14 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------
-         Option? option = gi.Options.Find("AutoEnemyActivation");
-         if (null == option)
-         {
-            option = new Option("AutoEnemyActivation", false);
-            gi.Options.Add(option);
-         }
-         option.IsEnabled = true;
-         gi.Options.Add(option);
+         //Option? option = gi.Options.Find("AutoEnemyActivation");
+         //if (null == option)
+         //{
+         //   option = new Option("AutoEnemyActivation", false);
+         //   gi.Options.Add(option);
+         //}
+         //option.IsEnabled = true;
+         //gi.Options.Add(option);
          //--------------------------------
          //gi.Day = 67;                                        // <cgs> TEST - Day before first Retrofitting - day 37 is retrofitting
          //gi.Day = 100;                                       // <cgs> TEST - After Nov 1944 for HVSS   
@@ -3950,7 +3950,10 @@ namespace Pattons_Best
       }
       private bool EnterMoveBoardArea(IGameInstance gi)
       {
+         Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "EnterMoveBoardArea(): gi.MapItemMoves.Clear()");
+         gi.MapItemMoves.Clear();
          gi.IsShermanAdvancingOnMoveBoard = false;
+         //--------------------------------------
          if (null == gi.EnteredArea)
          {
             Logger.Log(LogEnum.LE_ERROR, "Enter_MoveBoardArea(): gi.EnteredArea=null");
@@ -4450,7 +4453,7 @@ namespace Pattons_Best
                case GameAction.BattleRandomEventRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 01; // <cgs> TEST - AdvanceRetreat - *********************RANDOM*************** 
+                     //dieRoll = 01; // <cgs> TEST - AdvanceRetreat - *********************RANDOM*************** 
                      //dieRoll = 35; // <cgs> TEST - Harrassing fire in Advance Scenario - Random Event 
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
@@ -6005,6 +6008,44 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanAdvanceOrRetreatEnd): " + returnStatus);
                   }
                   break;
+               case GameAction.BattleRoundSequenceShermanRetreatChoiceEnd:
+                  if( null == gi.EnteredArea)
+                  {
+                     returnStatus = "gi.EnteredArea=null";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanRetreatChoiceEnd): " + returnStatus);
+                  }
+                  else
+                  {
+                     IMapItem? taskForce = null;
+                     foreach(IStack stack in gi.MoveStacks)
+                     {
+                        foreach(IMapItem mi in stack.MapItems)
+                        {
+                           if( true == mi.Name.Contains("TaskForce"))
+                           {
+                              taskForce = mi;
+                              break;
+                           }
+                        }
+                     }
+                     if( null == taskForce )
+                     {
+                        returnStatus = "taskForce=null";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanRetreatChoiceEnd): " + returnStatus);
+                     }
+                     else
+                     {
+                        Logger.Log(LogEnum.LE_VIEW_MIM_ADD, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanRetreatChoiceEnd): TF Entering t=" + gi.EnteredArea.Name);
+                        if (false == CreateMapItemMove(gi, taskForce, gi.EnteredArea))
+                        {
+                           returnStatus = "CreateMapItemMove() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanRetreatChoiceEnd): " + returnStatus);
+                        }
+                        action = GameAction.BattleRoundSequenceShermanAdvanceOrRetreat;
+                        gi.EventDisplayed = gi.EventActive = "e099";
+                     }
+                  }
+                  break;
                case GameAction.BattleRoundSequenceEnemyAction:
                   Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceEnemyAction): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.EnemyAction");
                   gi.BattlePhase = BattlePhase.EnemyAction;
@@ -6040,7 +6081,7 @@ namespace Pattons_Best
                   //-----------------------------------------------
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     dieRoll = 01; // <cgs> TEST - AdvanceRetreat - Random Event - Time passes
+                     //dieRoll = 01; // <cgs> TEST - AdvanceRetreat - Random Event - Time passes
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -6845,8 +6886,8 @@ namespace Pattons_Best
          string key = gi.EventActive;
          if (Utilities.NO_RESULT == gi.DieResults[key][0])
          {
-            dieRoll = 01;           // <cgs> TEST - AdvanceRetreat - Cause Movement
-            DieRoller.WhiteDie = 1; // <cgs> TEST - AdvanceRetreat - Cause Movement
+            //dieRoll = 01;           // <cgs> TEST - AdvanceRetreat - Cause Movement
+            //DieRoller.WhiteDie = 1; // <cgs> TEST - AdvanceRetreat - Cause Movement
             gi.DieResults[key][0] = dieRoll;
             gi.DieRollAction = GameAction.DieRollActionNone;
             gi.MovementEffectOnSherman = TableMgr.GetMovingResultSherman(gi, dieRoll);
@@ -7119,24 +7160,45 @@ namespace Pattons_Best
       }
       private bool MoveShermanCounterattackRetreatChoices(IGameInstance gi, IMapItem? startArea, IMapItem taskForce)
       {
-         gi.CounterattachRetreats.Clear();
          if (null == startArea)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): unable to find start area in MoveStacks=" + gi.MoveStacks.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "MoveSherman_CounterattackRetreatChoices(): unable to find start area in MoveStacks=" + gi.MoveStacks.ToString());
             return false;
          }
-         IMapPath? bestPath = Territory.GetBestPath(Territories.theTerritories, taskForce.TerritoryCurrent, startArea.TerritoryCurrent, 30);
-         if (null == bestPath)
+         //---------------------------------------------
+         gi.CounterattachRetreats.Clear();
+         int minCount = 1000;
+         List<MapPathCount> mapPathCounts = new List<MapPathCount>();
+         foreach(string tName in taskForce.TerritoryCurrent.Adjacents)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): bestPath=null for MoveStacks=" + gi.MoveStacks.ToString());
-            return false;
+            ITerritory? adjacent = Territories.theTerritories.Find(tName);
+            if( null == adjacent )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MoveSherman_CounterattackRetreatChoices(): adjacent=null for tName=" + tName);
+               return false;
+            }
+            IMapPath? mapPath = Territory.GetBestPath(Territories.theTerritories, adjacent, startArea.TerritoryCurrent, 30);
+            if (null == mapPath)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MoveSherman_CounterattackRetreatChoices(): mapPath=null for MoveStacks=" + gi.MoveStacks.ToString());
+               return false;
+            }
+            if (0 == mapPath.Territories.Count)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MoveSherman_CounterattackRetreatChoices(): mapPath.Territories.Count=0 for MoveStacks=" + gi.MoveStacks.ToString());
+               return false;
+            }
+            MapPathCount mpc = new MapPathCount(mapPath.Territories.Count, adjacent);
+            mapPathCounts.Add(mpc);
+            if (mapPath.Territories.Count <= minCount )
+               minCount = mapPath.Territories.Count;
          }
-         if (0 == bestPath.Territories.Count)
+         //---------------------------------------------
+         foreach(MapPathCount mpc in mapPathCounts) // add the first territory of the map path that has min count of territories
          {
-            Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): bestPath.Territories.Count=0 for MoveStacks=" + gi.MoveStacks.ToString());
-            return false;
+            if (mpc.myCount == minCount)
+               gi.CounterattachRetreats.Add(mpc.myTerritory);
          }
-         gi.CounterattachRetreats.Add(bestPath.Territories[0]);
          return true;
       }
       private bool EnemiesFacingCheck(IGameInstance gi, ref GameAction outAction)
@@ -7585,7 +7647,7 @@ namespace Pattons_Best
                }
                return true;
             }
-            toKillNum += modifier;
+            toKillNum -= modifier;
          }
          else // attack vehicle
          {
@@ -8713,11 +8775,6 @@ namespace Pattons_Best
                return false;
          }
          string promoDate = TableMgr.GetDate(gi.PromotionDay);
-         if ("Boot Camp" == promoDate)
-         {
-            gi.PromotionDay = gi.Day;
-            return true;
-         }
          string currentDate = TableMgr.GetDate(gi.Day);
          int diff = Utilities.DiffInDates(promoDate, currentDate);
          if (diff < -999)

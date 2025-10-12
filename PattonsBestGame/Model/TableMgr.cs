@@ -28,7 +28,7 @@ namespace Pattons_Best
       public static string GetDate(int day)
       {
          if (day < 0)
-            return "Boot Camp";
+            return "07/27/1944";
          StringBuilder sb = new StringBuilder();
          if (day < 5)
          {

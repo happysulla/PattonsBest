@@ -2,6 +2,16 @@
 
 namespace Pattons_Best
 {
+   struct MapPathCount
+   {
+      public int myCount;
+      public ITerritory myTerritory;
+      public MapPathCount(int count, ITerritory territory)
+      {
+         myCount = count;
+         myTerritory = territory;   
+      }
+   }
    public interface IMapPath
    {
       string Name { get; set; }

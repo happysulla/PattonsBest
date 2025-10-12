@@ -104,6 +104,7 @@ namespace Pattons_Best
                break;
             case GameAction.SetupShowMovementBoard:
             case GameAction.MovementStartAreaSet:
+            case GameAction.MovementStartAreaSetRoll:
             case GameAction.TestingStartMovement:
             case GameAction.MovementEnemyStrengthChoice:
             case GameAction.MovementEnemyCheckCounterattack:

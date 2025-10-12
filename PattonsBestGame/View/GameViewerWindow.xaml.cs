@@ -24,6 +24,14 @@ namespace Pattons_Best
 {
    public partial class GameViewerWindow : System.Windows.Window, IView
    {
+      #region Win32 API declarations to set and get window placement
+      [DllImport("user32.dll")]
+      private static extern bool SetWindowPlacement(IntPtr hWnd, [In] ref WindowPlacement lpwndpl);
+      [DllImport("user32.dll")]
+      private static extern bool GetWindowPlacement(IntPtr hWnd, out WindowPlacement lpwndpl);
+      private const int SwShownormal = 1;
+      private const int SwShowminimized = 2;
+      #endregion
       private const int MAX_DAILY_ACTIONS = 16;
       private const Double MARQUEE_SCROLL_ANMINATION_TIME = 30.0;
       private const Double ELLIPSE_DIAMETER = 40.0;
@@ -108,18 +116,10 @@ namespace Pattons_Best
       //---------------------------------------------------------------------
       private readonly SolidColorBrush mySolidColorBrushClear = new SolidColorBrush() { Color = Color.FromArgb(0, 0, 1, 0) };
       private readonly SolidColorBrush mySolidColorBrushBlack = new SolidColorBrush() { Color = Colors.Black };
-      private readonly SolidColorBrush mySolidColorBrushIvory = new SolidColorBrush() { Color = Colors.Ivory };
       private readonly SolidColorBrush mySolidColorBrushGreen = new SolidColorBrush() { Color = Colors.Green };
       private readonly SolidColorBrush mySolidColorBrushRed = new SolidColorBrush() { Color = Colors.Red };
-      private readonly SolidColorBrush mySolidColorBrushPurple = new SolidColorBrush() { Color = Colors.Purple };
-      private readonly SolidColorBrush mySolidColorBrushRosyBrown = new SolidColorBrush() { Color = Colors.RosyBrown };
-      private readonly SolidColorBrush mySolidColorBrushOrange = new SolidColorBrush() { Color = Colors.Orange };
       private readonly SolidColorBrush mySolidColorBrushGold = new SolidColorBrush() { Color = Colors.Gold };
-      private readonly SolidColorBrush mySolidColorBrushYellow = new SolidColorBrush { Color = Colors.Yellow };
-      private readonly SolidColorBrush mySolidColorBrushLightBlue = new SolidColorBrush { Color = Colors.LightBlue };
-      private readonly SolidColorBrush mySolidColorBrushDeepSkyBlue = new SolidColorBrush { Color = Colors.DeepSkyBlue };
       private readonly SolidColorBrush mySolidColorBrushSteelBlue = new SolidColorBrush { Color = Colors.SteelBlue };
-      private readonly SolidColorBrush mySolidColorBrushHotPink = new SolidColorBrush { Color = Colors.HotPink };
       private readonly SolidColorBrush mySolidColorBrushWhite = new SolidColorBrush { Color = Colors.White };
       private readonly SolidColorBrush mySolidColorBrushLawnGreen = new SolidColorBrush { Color = Colors.LawnGreen };
       //---------------------------------------------------------------------
@@ -2411,11 +2411,11 @@ namespace Pattons_Best
             b.BeginAnimation(Canvas.TopProperty, yAnimiation);
             mim.MapItem.Location.X = mp.X;
             mim.MapItem.Location.Y = mp.Y;
-            if( true == mim.MapItem.Name.Contains("TaskForce"))
+            if (true == mim.MapItem.Name.Contains("TaskForce"))
             {
                double offset = mim.MapItem.Zoom * Utilities.theMapItemOffset;
                IMapPoint mpTaskForce = new MapPoint(mim.MapItem.Location.X + offset, mim.MapItem.Location.Y + offset);
-               EnteredHex newHex = new EnteredHex(gi, mim.NewTerritory, ColorActionEnum.CAE_ENTER, mpTaskForce); 
+               EnteredHex newHex = new EnteredHex(gi, mim.NewTerritory, ColorActionEnum.CAE_ENTER, mpTaskForce);
                if (true == newHex.CtorError)
                {
                   Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): newHex.Ctor=true");
@@ -2972,13 +2972,14 @@ namespace Pattons_Best
       private bool UpdateCanvasMainCounterattackChoice(IGameInstance gi, GameAction action)
       {
          myPolygons.Clear();
+
          foreach (ITerritory t in gi.CounterattachRetreats)
          {
             PointCollection points = new PointCollection();
             foreach (IMapPoint mp1 in t.Points)
                points.Add(new System.Windows.Point(mp1.X, mp1.Y));
             Polygon aPolygon = new Polygon { Fill = Utilities.theBrushRegion, Points = points, Name = t.Name };
-            aPolygon.MouseDown += MouseDownPolygonEnterArea;
+            aPolygon.MouseDown += MouseDownPolygonCounterattackChoice;
             myPolygons.Add(aPolygon);
             myCanvasMain.Children.Add(aPolygon);
             Canvas.SetZIndex(aPolygon, 101);
@@ -3271,6 +3272,25 @@ namespace Pattons_Best
                }
             }
          }
+         myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+      }
+      private void MouseDownPolygonCounterattackChoice(object sender, MouseButtonEventArgs e)
+      {
+         Polygon? clickedPolygon = sender as Polygon;
+         if (null == clickedPolygon)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonEnterArea(): clickedPolygon=null");
+            return;
+         }
+         string tName = clickedPolygon.Name;
+         myGameInstance.EnteredArea = Territories.theTerritories.Find(tName);
+         if (null == myGameInstance.EnteredArea)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonEnterArea(): t=null for " + clickedPolygon.Name.ToString());
+            return;
+         }
+         //-------------------------------------------------
+         GameAction outAction = GameAction.BattleRoundSequenceShermanRetreatChoiceEnd;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
       private void MouseDownPolygonPlaceAdvanceFire(object sender, MouseButtonEventArgs e)
@@ -4229,14 +4249,6 @@ namespace Pattons_Best
          return mp;
       }
       //-----------------------------------------------------------------------
-      #region Win32 API declarations to set and get window placement
-      [DllImport("user32.dll")]
-      private static extern bool SetWindowPlacement(IntPtr hWnd, [In] ref WindowPlacement lpwndpl);
-      [DllImport("user32.dll")]
-      private static extern bool GetWindowPlacement(IntPtr hWnd, out WindowPlacement lpwndpl);
-      private const int SwShownormal = 1;
-      private const int SwShowminimized = 2;
-      #endregion
    }
    public static class MyGameViewerWindowExtensions
    {
