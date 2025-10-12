@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace Pattons_Best
 {
@@ -327,6 +330,11 @@ namespace Pattons_Best
             return;
          ResetTextBoxes();
          myIsEditableTankName = true;
+         myIsEditableCommanderName = false;
+         myIsEditableGunnerName = false;
+         myIsEditableLoaderName = false;
+         myIsEditableDriverName = false;
+         myIsEditableAssistantName = false;
          mySpanTankName.Inlines.Clear();
          mySpanTankName.Background = theBrushActive;
          string text = AddSpaces(" ", HEADER_INFO_LEN);
@@ -334,6 +342,7 @@ namespace Pattons_Best
          mySpanTankName.Inlines.Add(new InlineUIContainer(textbox));
          textbox.PreviewTextInput += OverwriteTextBox_PreviewTextInput;
          textbox.Loaded += OverwriteTextBox_Loaded;
+         textbox.LostFocus += TextBox_LostFocus;
          e.Handled = true;
       }
       private void SpanCommanderName_MouseDown(object sender, MouseButtonEventArgs e)
@@ -341,7 +350,12 @@ namespace Pattons_Best
          if (false == myIsEditable)
             return;
          ResetTextBoxes();
+         myIsEditableTankName = false;
          myIsEditableCommanderName = true;
+         myIsEditableGunnerName = false;
+         myIsEditableLoaderName = false;
+         myIsEditableDriverName = false;
+         myIsEditableAssistantName = false;
          mySpanCommanderName.Inlines.Clear();
          mySpanCommanderName.Background = theBrushActive;
          string text = AddSpaces(" ", CREW_NAME_LEN);
@@ -349,6 +363,7 @@ namespace Pattons_Best
          mySpanCommanderName.Inlines.Add(new InlineUIContainer(textbox));
          textbox.PreviewTextInput += OverwriteTextBox_PreviewTextInput;
          textbox.Loaded += OverwriteTextBox_Loaded;
+         textbox.LostFocus += TextBox_LostFocus;
          e.Handled = true;
       }
       private void SpanGunnerName_MouseDown(object sender, MouseButtonEventArgs e)
@@ -356,7 +371,12 @@ namespace Pattons_Best
          if (false == myIsEditable)
             return;
          ResetTextBoxes();
+         myIsEditableTankName = false;
+         myIsEditableCommanderName = false;
          myIsEditableGunnerName = true;
+         myIsEditableLoaderName = false;
+         myIsEditableDriverName = false;
+         myIsEditableAssistantName = false;
          mySpanGunnerName.Inlines.Clear();
          mySpanGunnerName.Background = theBrushActive;
          string text = AddSpaces(" ", CREW_NAME_LEN);
@@ -371,7 +391,12 @@ namespace Pattons_Best
          if (false == myIsEditable)
             return;
          ResetTextBoxes();
+         myIsEditableTankName = false;
+         myIsEditableCommanderName = false;
+         myIsEditableGunnerName = false;
          myIsEditableLoaderName = true;
+         myIsEditableDriverName = false;
+         myIsEditableAssistantName = false;
          mySpanLoaderName.Inlines.Clear();
          mySpanLoaderName.Background = theBrushActive;
          string text = AddSpaces(" ", CREW_NAME_LEN);
@@ -386,7 +411,12 @@ namespace Pattons_Best
          if (false == myIsEditable)
             return;
          ResetTextBoxes();
+         myIsEditableTankName = false;
+         myIsEditableCommanderName = false;
+         myIsEditableGunnerName = false;
+         myIsEditableLoaderName = false;
          myIsEditableDriverName = true;
+         myIsEditableAssistantName = false;
          mySpanDriverName.Inlines.Clear();
          mySpanDriverName.Background = theBrushActive;
          string text = AddSpaces(" ", CREW_NAME_LEN);
@@ -401,6 +431,11 @@ namespace Pattons_Best
          if (false == myIsEditable)
             return;
          ResetTextBoxes();
+         myIsEditableTankName = false;
+         myIsEditableCommanderName = false;
+         myIsEditableGunnerName = false;
+         myIsEditableLoaderName = false;
+         myIsEditableDriverName = false;
          myIsEditableAssistantName = true;
          mySpanAssistantName.Inlines.Clear();
          mySpanAssistantName.Background = theBrushActive;
@@ -414,6 +449,12 @@ namespace Pattons_Best
       private void Window_MouseDown(object sender, MouseButtonEventArgs e)
       {
          ResetTextBoxes();
+         myIsEditableTankName = false;
+         myIsEditableCommanderName = false;
+         myIsEditableGunnerName = false;
+         myIsEditableLoaderName = false;
+         myIsEditableDriverName = false;
+         myIsEditableAssistantName = false;
          e.Handled = true;
       }
       private void OverwriteTextBox_Loaded(object sender, RoutedEventArgs e)
@@ -445,6 +486,16 @@ namespace Pattons_Best
          textBox.CaretIndex = caretIndex + 1;
          e.Handled = true;
       }
+      private void TextBox_LostFocus(object sender, RoutedEventArgs e) 
+      {
+         if( null == sender )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): lastReport=null");
+            return;
+         }
+         ResetTextBoxes();
+         e.Handled = true;
+      }
       private void ResetTextBoxes()
       {
          if (true == myIsEditableTankName)
@@ -455,8 +506,15 @@ namespace Pattons_Best
                Inline inline = mySpanTankName.Inlines.FirstInline;
                if (inline is InlineUIContainer uiContainer)
                {
-                  if (uiContainer.Child is TextBox textbox)
-                     Report.Name = textbox.Text;
+                  if (uiContainer.Child is System.Windows.Controls.TextBox textbox)
+                  {
+                     string name = Utilities.RemoveSpaces(textbox.Text);
+                     string trimString = name.Trim(new char[] { ' ', '*', '_' });
+                     if ( false == String.IsNullOrEmpty(trimString) )
+                        Report.Name = trimString;
+                     else
+                        textbox.Text = Report.Name;
+                  }
                }
             }
             mySpanTankName.Background = theBrushInActive;
@@ -465,6 +523,7 @@ namespace Pattons_Best
             mySpanTankName.Inlines.Clear();
             mySpanTankName.Inlines.Add(new Run(s));
          }
+         //-------------------------------------------
          if (true == myIsEditableCommanderName)
          {
             myIsEditableCommanderName = false;
@@ -474,8 +533,15 @@ namespace Pattons_Best
                Inline inline = mySpanCommanderName.Inlines.FirstInline;
                if (inline is InlineUIContainer uiContainer)
                {
-                  if (uiContainer.Child is TextBox textbox)
-                     commander.Name = textbox.Text;
+                  if (uiContainer.Child is System.Windows.Controls.TextBox textbox)
+                  {
+                     string name = Utilities.RemoveSpaces(textbox.Text);
+                     string trimString = name.Trim(new char[] { ' ', '*', '_' });
+                     if (false == String.IsNullOrEmpty(trimString))
+                        commander.Name = trimString;
+                     else
+                        textbox.Text = commander.Name;
+                  }
                }
             }
             mySpanCommanderName.Background = theBrushInActive;
@@ -484,6 +550,7 @@ namespace Pattons_Best
             mySpanCommanderName.Inlines.Clear();
             mySpanCommanderName.Inlines.Add(new Run(s));
          }
+         //-------------------------------------------
          if (true == myIsEditableGunnerName)
          {
             myIsEditableGunnerName = false;
@@ -493,8 +560,15 @@ namespace Pattons_Best
                Inline inline = mySpanGunnerName.Inlines.FirstInline;
                if (inline is InlineUIContainer uiContainer)
                {
-                  if (uiContainer.Child is TextBox textbox)
-                     gunner.Name = textbox.Text;
+                  if (uiContainer.Child is System.Windows.Controls.TextBox textbox)
+                  {
+                     string name = Utilities.RemoveSpaces(textbox.Text);
+                     string trimString = name.Trim(new char[] { ' ', '*', '_' });
+                     if (false == String.IsNullOrEmpty(trimString))
+                        gunner.Name = trimString;
+                     else
+                        textbox.Text = gunner.Name;
+                  }
                }
             }
             mySpanGunnerName.Background = theBrushInActive;
@@ -503,6 +577,7 @@ namespace Pattons_Best
             mySpanGunnerName.Inlines.Clear();
             mySpanGunnerName.Inlines.Add(new Run(s));
          }
+         //-------------------------------------------
          if (true == myIsEditableLoaderName)
          {
             myIsEditableLoaderName = false;
@@ -512,8 +587,15 @@ namespace Pattons_Best
                Inline inline = mySpanLoaderName.Inlines.FirstInline;
                if (inline is InlineUIContainer uiContainer)
                {
-                  if (uiContainer.Child is TextBox textbox)
-                     loader.Name = textbox.Text;
+                  if (uiContainer.Child is System.Windows.Controls.TextBox textbox)
+                  {
+                     string name = Utilities.RemoveSpaces(textbox.Text);
+                     string trimString = name.Trim(new char[] { ' ', '*', '_' });
+                     if (false == String.IsNullOrEmpty(trimString))
+                        loader.Name = trimString;
+                     else
+                        textbox.Text = loader.Name;
+                  }
                }
             }
             mySpanLoaderName.Background = theBrushInActive;
@@ -522,6 +604,7 @@ namespace Pattons_Best
             mySpanLoaderName.Inlines.Clear();
             mySpanLoaderName.Inlines.Add(new Run(s));
          }
+         //-------------------------------------------
          if (true == myIsEditableDriverName)
          {
             myIsEditableDriverName = false;
@@ -531,8 +614,16 @@ namespace Pattons_Best
                Inline inline = mySpanDriverName.Inlines.FirstInline;
                if (inline is InlineUIContainer uiContainer)
                {
-                  if (uiContainer.Child is TextBox textbox)
-                     driver.Name = textbox.Text;
+                  if (uiContainer.Child is System.Windows.Controls.TextBox textbox)
+                  {
+                     string name = Utilities.RemoveSpaces(textbox.Text);
+                     string trimString = name.Trim(new char[] { ' ', '*', '_' });
+                     if (false == String.IsNullOrEmpty(trimString))
+                        driver.Name = trimString;
+                     else
+                        textbox.Text = driver.Name;
+                  }
+
                }
             }
             mySpanDriverName.Background = theBrushInActive;
@@ -541,6 +632,7 @@ namespace Pattons_Best
             mySpanDriverName.Inlines.Clear();
             mySpanDriverName.Inlines.Add(new Run(s));
          }
+         //-------------------------------------------
          if (true == myIsEditableAssistantName)
          {
             myIsEditableAssistantName = false;
@@ -550,8 +642,13 @@ namespace Pattons_Best
                Inline inline = mySpanAssistantName.Inlines.FirstInline;
                if (inline is InlineUIContainer uiContainer)
                {
-                  if (uiContainer.Child is TextBox textbox)
-                     assistant.Name = textbox.Text;
+                  if (uiContainer.Child is System.Windows.Controls.TextBox textbox)
+                  {
+                     if (false == String.IsNullOrEmpty(textbox.Text))
+                        assistant.Name = textbox.Text;
+                     else
+                        textbox.Text = assistant.Name;
+                  }
                }
             }
             mySpanAssistantName.Background = theBrushInActive;

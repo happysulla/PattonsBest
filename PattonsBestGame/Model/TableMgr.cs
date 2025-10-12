@@ -28,7 +28,7 @@ namespace Pattons_Best
       public static string GetDate(int day)
       {
          if (day < 0)
-            return "07/27/1944";
+            return "06/20/1944";  // promoted to Sgt in boot camp 
          StringBuilder sb = new StringBuilder();
          if (day < 5)
          {
@@ -2595,9 +2595,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): eu=" + mi.Name + " +10 mod=" + toHitModifierNum.ToString() + " firstShot");
          }
          //-----------------------------------------------
-         if (true == gi.AcquiredShots.ContainsKey(mi.Name))  // GetEnemy_ToHitNumberYourTank()
+         if (true == gi.Sherman.EnemyAcquiredShots.ContainsKey(mi.Name))  // GetEnemy_ToHitNumberYourTank()
          {
-            if (1 < gi.AcquiredShots[mi.Name]) // GetEnemy_ToHitNumberYourTank()
+            if (1 < gi.Sherman.EnemyAcquiredShots[mi.Name]) // GetEnemy_ToHitNumberYourTank()
             {
                if ('C' == range)
                {
@@ -4164,7 +4164,11 @@ namespace Pattons_Best
          //----------------------------------------------------
          if (dieRoll < 4) // always a kill if below 4 regardless of modifiers
          {
+            gi.ScoreYourVictoryPoint(lastReport, mi);
             mi.IsKilled = true;
+            mi.IsMoving = false;
+            mi.EnemyAcquiredShots.Remove("Sherman");
+            gi.Sherman.EnemyAcquiredShots.Remove(mi.Name);
             mi.SetBloodSpots();
             return "KO";
          }
@@ -4285,6 +4289,11 @@ namespace Pattons_Best
          }
          if (true == mi.IsKilled)
          {
+            gi.ScoreYourVictoryPoint(lastReport, mi);
+            mi.IsKilled = true;
+            mi.IsMoving = false;
+            mi.EnemyAcquiredShots.Remove("Sherman");
+            gi.Sherman.EnemyAcquiredShots.Remove(mi.Name);
             mi.SetBloodSpots();
             return "KO";
          }

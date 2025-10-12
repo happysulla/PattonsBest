@@ -141,7 +141,6 @@ namespace Pattons_Best
       bool IsBrokenMainGun { set; get; }
       bool IsBrokenGunSight { set; get; }
       Dictionary<string, bool> FirstShots { set; get; }
-      Dictionary<string, int> AcquiredShots { set; get; }
       List<string> TrainedGunners { get; } // trained in use of HVSS 
       List<ShermanAttack> ShermanHits { set; get; }
       ShermanDeath? Death { set; get; }

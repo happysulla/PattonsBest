@@ -1366,6 +1366,8 @@ namespace Pattons_Best
                   myAdvanceFireGridRows[i].myAdvanceFireResult = "KO";
                   myAdvanceFireGridRows[i].myEnemyUnit.IsKilled = true;
                   myAdvanceFireGridRows[i].myEnemyUnit.IsMoving = false;
+                  myAdvanceFireGridRows[i].myEnemyUnit.EnemyAcquiredShots.Remove("Sherman");
+                  myGameInstance.Sherman.EnemyAcquiredShots.Remove(myAdvanceFireGridRows[i].myEnemyUnit.Name);
                   myAdvanceFireGridRows[i].myEnemyUnit.SetBloodSpots();
                }
                else if (combo < dieRoll)
@@ -1377,6 +1379,8 @@ namespace Pattons_Best
                   myAdvanceFireGridRows[i].myAdvanceFireResult = "KO";
                   myAdvanceFireGridRows[i].myEnemyUnit.IsKilled = true;
                   myAdvanceFireGridRows[i].myEnemyUnit.IsMoving = false;
+                  myAdvanceFireGridRows[i].myEnemyUnit.EnemyAcquiredShots.Remove("Sherman");
+                  myGameInstance.Sherman.EnemyAcquiredShots.Remove(myAdvanceFireGridRows[i].myEnemyUnit.Name);
                   myAdvanceFireGridRows[i].myEnemyUnit.SetBloodSpots();
                }
                myState = E046Enum.ADVANCE_FIRE_SHOW;

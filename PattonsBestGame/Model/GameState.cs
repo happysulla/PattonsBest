@@ -3636,7 +3636,13 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MovementChooseOption:
-                  if (false == SetChoicesForOperations(gi))
+                  if( false == gi.IsDaylightLeft(lastReport))
+                  {
+                     gi.GamePhase = GamePhase.EveningDebriefing;
+                     gi.EventDisplayed = gi.EventActive = "e100";
+                     gi.DieRollAction = GameAction.DieRollActionNone;
+                  }
+                  else if (false == SetChoicesForOperations(gi))
                   {
                      returnStatus = "SetChoicesForOperations() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementChooseOption): " + returnStatus);
@@ -5637,6 +5643,8 @@ namespace Pattons_Best
                                     gi.ScoreYourVictoryPoint(lastReport, gi.TargetMg);
                                     gi.TargetMg.IsKilled = true;
                                     gi.TargetMg.IsMoving = false;
+                                    gi.TargetMg.EnemyAcquiredShots.Remove("Sherman");
+                                    gi.Sherman.EnemyAcquiredShots.Remove(gi.TargetMg.Name);
                                     gi.TargetMg.SetBloodSpots();
                                  }
                                  else if (97 < gi.DieResults[key][0])
@@ -7633,6 +7641,7 @@ namespace Pattons_Best
                gi.TargetMainGun.IsApHit = false;
                gi.TargetMainGun.IsKilled = true;
                gi.TargetMainGun.IsMoving = false;
+               gi.TargetMainGun.EnemyAcquiredShots.Remove("Sherman");
                gi.Sherman.EnemyAcquiredShots.Remove(gi.TargetMainGun.Name);
                gi.TargetMainGun.SetBloodSpots();
                return true;
@@ -7658,19 +7667,12 @@ namespace Pattons_Best
                {
                   toKillNum = TableMgr.GetShermanToKill75HeVehicleBaseNumber(gi, gi.TargetMainGun, hit);
                   Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): attacking 1-vehicle=" + gi.TargetMainGun.Name + " toHit=" + toKillNum.ToString());
-                  if (TableMgr.NO_CHANCE == toKillNum)
+                  if ( (TableMgr.NO_CHANCE == toKillNum) || (TableMgr.THROWN_TRACK == toKillNum) )
                   {
-                     Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): 75 HE No Chance - NC NC NC NC NC NC NC NC NC NC");
-                     if (false == ResolveToKillEnemyUnitCleanup(gi, ref outAction))
-                     {
-                        Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnit(): ResolveToKillEnemyUnitCleanup() returned false");
-                        return false;
-                     }
-                     return true;
-                  }
-                  else if (TableMgr.THROWN_TRACK == toKillNum)
-                  {
-                     Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): 75 HE No Chance - TT TT TT TT TT TT TT TT TT TT TT TT TT TT ");
+                     if (TableMgr.NO_CHANCE == toKillNum)
+                        Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): 75 HE No Chance - NC NC NC NC NC NC NC NC NC NC");
+                     else
+                        Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): 75 HE No Chance - TT TT TT TT TT TT TT TT TT TT TT TT TT TT ");
                      if (false == ResolveToKillEnemyUnitCleanup(gi, ref outAction))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnit(): ResolveToKillEnemyUnitCleanup() returned false");
@@ -7691,6 +7693,7 @@ namespace Pattons_Best
                      gi.TargetMainGun.IsApHit = false;
                      gi.TargetMainGun.IsKilled = true;
                      gi.TargetMainGun.IsMoving = false;
+                     gi.TargetMainGun.EnemyAcquiredShots.Remove("Sherman");
                      gi.Sherman.EnemyAcquiredShots.Remove(gi.TargetMainGun.Name);
                      gi.TargetMainGun.SetBloodSpots();
                      return true;
@@ -7762,6 +7765,7 @@ namespace Pattons_Best
                      gi.TargetMainGun.IsKilled = true;
                      gi.TargetMainGun.IsMoving = false;
                      gi.TargetMainGun.SetBloodSpots();
+                     gi.TargetMainGun.EnemyAcquiredShots.Remove("Sherman");
                      gi.Sherman.EnemyAcquiredShots.Remove(gi.TargetMainGun.Name);
                      return true;
                   }
@@ -7799,22 +7803,16 @@ namespace Pattons_Best
                      gi.TargetMainGun.IsKilled = true;
                      gi.TargetMainGun.IsMoving = false;
                      gi.TargetMainGun.SetBloodSpots();
+                     gi.TargetMainGun.EnemyAcquiredShots.Remove("Sherman");
                      gi.Sherman.EnemyAcquiredShots.Remove(gi.TargetMainGun.Name);
                      return true;
                   }
-                  else if (TableMgr.NO_CHANCE == toKillNum)
+                  else if ( (TableMgr.NO_CHANCE == toKillNum) || (TableMgr.THROWN_TRACK == toKillNum) )
                   {
-                     Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill():76L  Hvap No Chance - NC NC NC NC NC NC NC NC NC NC");
-                     if (false == ResolveToKillEnemyUnitCleanup(gi, ref outAction))
-                     {
-                        Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnit(): ResolveToKillEnemyUnitCleanup() returned false");
-                        return false;
-                     }
-                     return true;
-                  }
-                  else if (TableMgr.THROWN_TRACK == toKillNum)
-                  {
-                     Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): 75 AP No Chance - TT TT TT TT TT TT TT TT TT TT TT TT TT TT ");
+                     if (TableMgr.NO_CHANCE == toKillNum)
+                        Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill():76L  Hvap No Chance - NC NC NC NC NC NC NC NC NC NC");
+                     else
+                        Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): 75 AP No Chance - TT TT TT TT TT TT TT TT TT TT TT TT TT TT ");
                      if (false == ResolveToKillEnemyUnitCleanup(gi, ref outAction))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnit(): ResolveToKillEnemyUnitCleanup() returned false");
@@ -7835,19 +7833,12 @@ namespace Pattons_Best
                {
                   toKillNum = TableMgr.GetShermanToKill76HeVehicleBaseNumber(gi, gi.TargetMainGun, hit);
                   Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): attacking 6-vehicle=" + gi.TargetMainGun.Name + " toHit=" + toKillNum.ToString());
-                  if (TableMgr.NO_CHANCE == toKillNum)
+                  if ( (TableMgr.NO_CHANCE == toKillNum) || (TableMgr.THROWN_TRACK == toKillNum) )
                   {
-                     Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill():76L  Hvap No Chance - NC NC NC NC NC NC NC NC NC NC");
-                     if (false == ResolveToKillEnemyUnitCleanup(gi, ref outAction))
-                     {
-                        Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnit(): ResolveToKillEnemyUnitCleanup() returned false");
-                        return false;
-                     }
-                     return true;
-                  }
-                  else if (TableMgr.THROWN_TRACK == toKillNum)
-                  {
-                     Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): 75 AP No Chance - TT TT TT TT TT TT TT TT TT TT TT TT TT TT ");
+                     if (TableMgr.NO_CHANCE == toKillNum)
+                        Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill():76L  Hvap No Chance - NC NC NC NC NC NC NC NC NC NC");
+                     else
+                        Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): 75 AP No Chance - TT TT TT TT TT TT TT TT TT TT TT TT TT TT ");
                      if (false == ResolveToKillEnemyUnitCleanup(gi, ref outAction))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnit(): ResolveToKillEnemyUnitCleanup() returned false");
@@ -7898,6 +7889,8 @@ namespace Pattons_Best
                gi.TargetMainGun.IsApHit = false;
                gi.TargetMainGun.IsKilled = true;
                gi.TargetMainGun.IsMoving = false;
+               gi.TargetMainGun.EnemyAcquiredShots.Remove("Sherman");
+               gi.Sherman.EnemyAcquiredShots.Remove(gi.TargetMainGun.Name);
                gi.TargetMainGun.SetBloodSpots();
                break;
             default:
@@ -8740,57 +8733,57 @@ namespace Pattons_Best
       public bool UpdatePromotion(IGameInstance gi, IAfterActionReport report)
       {
          string oldRank = report.Commander.Rank;
-         switch (oldRank)
-         {
-            case "Sgt":
-               if (99 < gi.PromotionPointNum)
-               {
-                  gi.PromotionDay = gi.Day;
-                  report.Commander.Rank = "Ssg";
-               }
-               break;
-            case "2Lt":
-               if (199 < gi.PromotionPointNum)
-               {
-                  gi.PromotionDay = gi.Day;
-                  report.Commander.Rank = "2Lt";
-               }
-               break;
-            case "1Lt":
-               if (299 < gi.PromotionPointNum)
-               {
-                  gi.PromotionDay = gi.Day;
-                  report.Commander.Rank = "1Lt";
-               }
-               break;
-            case "Cpt":
-               if (399 < gi.PromotionPointNum)
-               {
-                  gi.PromotionDay = gi.Day;
-                  report.Commander.Rank = "Cpt";
-               }
-               break;
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "UpdatePromotion(): reached default cmdrRank=" + oldRank);
-               return false;
-         }
-         string promoDate = TableMgr.GetDate(gi.PromotionDay);
+         string lastPromoDate = TableMgr.GetDate(gi.PromotionDay);
          string currentDate = TableMgr.GetDate(gi.Day);
-         int diff = Utilities.DiffInDates(promoDate, currentDate);
+         int diff = Utilities.DiffInDates(lastPromoDate, currentDate);
          if (diff < -999)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdatePromotion(): Utilities.DiffInDates() returned error");
             return false;
          }
-         if (("07/27/1944" == promoDate) || (29 < diff))  // cannot get promoted until 30 days past since last promotion
+         if (29 < diff)  // cannot get promoted until 30 days past since last promotion
          {
-            gi.PromotionDay = gi.Day;
-            gi.IsPromoted = true;
+            switch (oldRank)
+            {
+               case "Sgt":
+                  if (99 < gi.PromotionPointNum)
+                  {
+                     gi.IsPromoted = true;
+                     gi.PromotionDay = gi.Day;
+                     report.Commander.Rank = "Ssg";
+                  }
+                  break;
+               case "2Lt":
+                  if (199 < gi.PromotionPointNum)
+                  {
+                     gi.IsPromoted = true;
+                     gi.PromotionDay = gi.Day;
+                     report.Commander.Rank = "2Lt";
+                  }
+                  break;
+               case "1Lt":
+                  if (299 < gi.PromotionPointNum)
+                  {
+                     gi.IsPromoted = true;
+                     gi.PromotionDay = gi.Day;
+                     report.Commander.Rank = "1Lt";
+                  }
+                  break;
+               case "Cpt":
+                  if (399 < gi.PromotionPointNum)
+                  {
+                     gi.IsPromoted = true;
+                     gi.PromotionDay = gi.Day;
+                     report.Commander.Rank = "Cpt";
+                  }
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "UpdatePromotion(): reached default cmdrRank=" + oldRank);
+                  return false;
+            }
          }
-         else
-         {
-            report.Commander.Rank = oldRank;
-         }
+         //--------------------------------------------
+         Logger.Log(LogEnum.LE_SHOW_PROMOTION, "UpdatePromotion(): oldRank=" + oldRank + " promoDate=" + lastPromoDate.ToString() + " diff=" + diff.ToString() + " isPromoted=" + gi.IsPromoted);
          return true;
       }
       public bool UpdateDecoration(IGameInstance gi, IAfterActionReport report, GameAction action)
@@ -8898,7 +8891,6 @@ namespace Pattons_Best
          gi.IsBrokenMainGun = false;
          gi.IsBrokenGunSight = false;
          gi.FirstShots.Clear();                     // Reset_Day()
-         gi.AcquiredShots.Clear();                  // Reset_Day()
          gi.ShermanHits.Clear();
          //-------------------------------------------------------
          gi.IsCommanderDirectingMgFire = false;     // Reset_Day()

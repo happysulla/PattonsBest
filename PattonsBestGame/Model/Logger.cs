@@ -62,6 +62,7 @@ namespace Pattons_Best
       LE_SHOW_GUN_RELOAD,
       LE_SHOW_FIRE_DIRECTION,
       LE_SHOW_IMMOBILIZATION,
+      LE_SHOW_PROMOTION,
       //-------------
       LE_SHOW_VP_FRIENDLY_FORCES,
       LE_SHOW_VP_CAPTURED_AREA,
@@ -166,6 +167,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_AMMMO_MENU);
          //SetOn(LogEnum.LE_SHOW_TANK_BUTTONS);
          //SetOn(LogEnum.LE_SHOW_GUN_RELOAD);
+         SetOn(LogEnum.LE_SHOW_PROMOTION);
          //-------------------------------
          //SetOn(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION);
          //SetOn(LogEnum.LE_SHOW_SHERMAN_MOVE); 
