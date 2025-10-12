@@ -193,6 +193,30 @@ namespace Pattons_Best
             case GameAction.ShowTankForcePath:
             case GameAction.ShowRoads:
                break;
+            case GameAction.MorningBriefingCalendarRoll:
+            case GameAction.MorningBriefingDayOfRest:
+            case GameAction.EventDebriefDecorationHeart:
+            case GameAction.EventDebriefDecorationContinue:
+            case GameAction.EventDebriefDecorationBronzeStar:
+            case GameAction.EventDebriefDecorationSilverStar:
+            case GameAction.EventDebriefDecorationCross:
+            case GameAction.EventDebriefDecorationHonor:
+               if ( null != myAfterActionDialog )
+               {
+                  myAfterActionDialog.Close();
+                  AfterActionReportUserControl aarUserControl = new AfterActionReportUserControl(gi);
+                  if (true == aarUserControl.CtorError)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateView(): AfterActionReportUserControl CtorError=true");
+                     return;
+                  }
+                  myAfterActionDialog = new AfterActionDialog(gi, CloseAfterActionDialog);
+                  myAfterActionDialog.Show();
+               }
+               gi.IsGridActive = false;
+               if (false == OpenEvent(gi, gi.EventActive))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): OpenEvent() returned false ae=" + myGameInstance.EventActive + " a=" + action.ToString());
+               break;
             case GameAction.MorningBriefingReturningCrewman:
             case GameAction.UpdateAfterActionReport:
                if (null != myAfterActionDialog)
@@ -1538,7 +1562,7 @@ namespace Pattons_Best
             case "e042":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  myTextBlock.Inlines.Add(new Run("Num of Friendly Tanks Knocked Out: "));
+                  myTextBlock.Inlines.Add(new Run("Num of Friendly Squads Knocked Out: "));
                   if (gi.DieResults[key][0] < 7)
                      myTextBlock.Inlines.Add(new Run("1 Tank"));
                   else if (gi.DieResults[key][0] < 10)
@@ -1546,7 +1570,7 @@ namespace Pattons_Best
                   else
                      myTextBlock.Inlines.Add(new Run("3 Tank"));
                   myTextBlock.Inlines.Add(new LineBreak());
-                  Image imge042 = new Image { Name = "EnemyArtilleryEnd", Width = 200, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("ShermanKia") };
+                  Image imge042 = new Image { Name = "EnemyArtilleryEnd", Width = 200, Height = 115, Source = MapItem.theMapImages.GetBitmapImage("SquadKia") };
                   myTextBlock.Inlines.Add(new Run("                                  "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge042));
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -3868,7 +3892,7 @@ namespace Pattons_Best
          else
          {
             sbe101.Append("\n\nTotal Victory Points is greater than zero. Engagement Won!");
-            imge101 = new Image { Name = "EventDebriefVictoryPts", Width = 125, Height = 250, Source = MapItem.theMapImages.GetBitmapImage("Victory") };
+            imge101 = new Image { Name = "EventDebriefVictoryPts", Width = 100, Height = 200, Source = MapItem.theMapImages.GetBitmapImage("Victory") };
             myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new LineBreak());
@@ -3901,7 +3925,7 @@ namespace Pattons_Best
          StringBuilder sbPromo = new StringBuilder();
          sbPromo.Append("Promotion Points: ");
          sbPromo.Append(gi.PromotionPointNum.ToString());
-         sbPromo.Append("\nPromotion Date:     ");
+         sbPromo.Append("\nLast Promotion Date: ");
          sbPromo.Append(promoDate);
          myTextBlock.Inlines.Add(sbPromo.ToString());
          myTextBlock.Inlines.Add(new LineBreak());
@@ -4009,7 +4033,6 @@ namespace Pattons_Best
          if (modifierDecoration < 100)
          {
             myTextBlock.Inlines.Add(new LineBreak());
-            myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add("Do not qualify for decoration. Click image to continue.");
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new LineBreak());
@@ -4019,7 +4042,6 @@ namespace Pattons_Best
          }
          else if (Utilities.NO_RESULT == gi.DieResults[key][0])
          {
-            myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add("Roll for Decoration: ");
             BitmapImage bmi = new BitmapImage();

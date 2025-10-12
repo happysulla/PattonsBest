@@ -176,7 +176,7 @@ namespace Pattons_Best
             CtorError = true;
             return;
          }
-         IAfterActionReport report1 = new AfterActionReport(entry);
+         IAfterActionReport report1 = new AfterActionReport(entry); // initial created GameViewerWindow()
          gi.Reports.Add(report1);
          //---------------------------------------------------------------
          if (false == AddHotKeys(myMainMenuViewer))

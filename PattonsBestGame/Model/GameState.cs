@@ -1720,9 +1720,6 @@ namespace Pattons_Best
                }
                else
                {
-                  IAfterActionReport report1 = new AfterActionReport(entry); // original report created at setup
-                  gi.Reports.Add(report1);
-                  //----------------------------------------------------
                   Option? option = gi.Options.Find("AutoSetup");
                   if (null == option)
                   {
@@ -3025,7 +3022,7 @@ namespace Pattons_Best
                   else
                   {
                      gi.DieResults[gi.EventActive][0] = Utilities.NO_RESULT;
-                     IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport);
+                     IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport); // MorningBriefingDayOfRest
                      gi.Reports.Add(newReport);
                      Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "GameStateMorningBriefing.PerformAction(): newReport=" + gi.Day + " !!!!!!!!date=" + TableMgr.GetDate(gi.Day) + "!!!!!!!!! scenario = " + newReport.Scenario.ToString() + "-->" + newReport.Scenario.ToString());
                      if (EnumScenario.Retrofit == newReport.Scenario)
@@ -3299,7 +3296,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Advance_PastRetrofit(): newEntry=null");
             return false;
          }
-         IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport);
+         IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport);  // AdvancePastRetrofit()
          gi.Reports.Add(newReport);
          Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "Advance_PastRetrofit(): newReport=" + gi.Day + " date=" + TableMgr.GetDate(gi.Day) + " scenario=" + newReport.Scenario.ToString() + "-->" + newReport.Scenario.ToString());
          //-------------------------------------------------------
@@ -8982,7 +8979,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): newEntry=null");
             return false;
          }
-         IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport);
+         IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport); // EveningDebriefingResetDay()
          if (true == gi.Sherman.IsKilled)
             newReport.Name = "To be determined";
          gi.Reports.Add(newReport);

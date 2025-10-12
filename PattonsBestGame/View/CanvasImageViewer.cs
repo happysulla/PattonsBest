@@ -84,6 +84,8 @@ namespace Pattons_Best
                break;
             case GameAction.UpdateAfterActionReport:
             case GameAction.MorningBriefingTankReplacementRoll:
+            case GameAction.MorningBriefingCalendarRoll:
+            case GameAction.MorningBriefingDayOfRest:
             case GameAction.EveningDebriefingResetDay:
                if (null != myAarUserControl)
                   myAarUserControl.UpdateReport(gi);
