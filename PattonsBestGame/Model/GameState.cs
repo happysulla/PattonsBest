@@ -2464,14 +2464,14 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------
-         //Option? option = gi.Options.Find("AutoEnemyActivation");
-         //if (null == option)
-         //{
-         //   option = new Option("AutoEnemyActivation", false);
-         //   gi.Options.Add(option);
-         //}
-         //option.IsEnabled = true;
-         //gi.Options.Add(option);
+         Option? option = gi.Options.Find("AutoEnemyActivation");
+         if (null == option)
+         {
+            option = new Option("AutoEnemyActivation", false);
+            gi.Options.Add(option);
+         }
+         option.IsEnabled = true;
+         gi.Options.Add(option);
          //--------------------------------
          //gi.Day = 67;                                        // <cgs> TEST - Day before first Retrofitting - day 37 is retrofitting
          //gi.Day = 100;                                       // <cgs> TEST - After Nov 1944 for HVSS   

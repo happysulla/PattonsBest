@@ -107,7 +107,71 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_ERROR, "GetRandomPoint(): Cannot find a random point in t.Name=" + t.Name + " rect=" + rect.ToString());
          return new MapPoint(t.CenterPoint.X - offset, t.CenterPoint.Y - offset);
       }
-      public static bool IsPointInPolygon(ITerritory t, Point point )
+      public static IMapPoint GetClosestPointInTerritory(ITerritory t, Point pCenter, double offset )
+      {
+         if (0 == t.Points.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetRandomPoint(): t.Points.Count=0 for t.Name=" + t.Name);
+            return t.CenterPoint;
+         }
+         //---------------------------------
+         int count = 20;
+         while (0 < --count) // offset is the difference between MapItem location on screen and the center of the  MapItem.
+         {
+            double XCenter = pCenter.X + offset; // Get a random point in the bounding box
+            double YCenter = pCenter.Y + offset;
+            if (true == IsPointInPolygon(t, pCenter))
+            {
+               System.Windows.Point p1 = new System.Windows.Point(XCenter - offset, YCenter - offset);
+               System.Windows.Point p2 = new System.Windows.Point(XCenter + offset, YCenter - offset);
+               System.Windows.Point p3 = new System.Windows.Point(XCenter - offset, YCenter + offset);
+               System.Windows.Point p4 = new System.Windows.Point(XCenter + offset, YCenter + offset);
+               bool isP1In = IsPointInPolygon(t, p1);
+               bool isP2In = IsPointInPolygon(t, p2);
+               bool isP3In = IsPointInPolygon(t, p3);
+               bool isP4In = IsPointInPolygon(t, p4);
+               if (false == isP1In && false == isP2In)  // try to adjust location so that four corners are inside the region
+               {
+                  YCenter += offset;
+               }
+               else if (false == isP3In && false == isP4In)
+               {
+                  YCenter -= offset;
+               }
+               else if (false == isP1In && false == isP3In)
+               {
+                  XCenter += offset;
+               }
+               else if (false == isP2In && false == isP4In)
+               {
+                  XCenter -= offset;
+               }
+               else if (false == isP1In && true == isP2In)
+               {
+                  XCenter += offset;
+               }
+               else if (true == isP1In && false == isP2In)
+               {
+                  XCenter -= offset;
+               }
+               else if (true == isP3In && false == isP4In)
+               {
+                  YCenter -= offset;
+               }
+               else if (false == isP3In && true == isP4In)
+               {
+                  YCenter -= offset;
+               }
+               System.Windows.Point p5 = new System.Windows.Point(XCenter - offset, YCenter - offset); // do a final check to make sure point is in region
+               if (true == IsPointInPolygon(t, p5))
+                  return new MapPoint(p5.X, p5.Y);
+            }
+         }
+         Logger.Log(LogEnum.LE_ERROR, "GetRandomPoint(): Cannot find a random point in t.Name=" + t.Name );
+         return new MapPoint(t.CenterPoint.X - offset, t.CenterPoint.Y - offset);
+
+      }
+      public static bool IsPointInPolygon(ITerritory t, Point point)
       {
          if (0 == t.Points.Count)
          {
