@@ -87,6 +87,13 @@ namespace Pattons_Best
             case GameAction.MorningBriefingCalendarRoll:
             case GameAction.MorningBriefingDayOfRest:
             case GameAction.EveningDebriefingResetDay:
+            case GameAction.EventDebriefDecorationHeart:
+            case GameAction.EventDebriefDecorationContinue:
+            case GameAction.EventDebriefDecorationBronzeStar:
+            case GameAction.EventDebriefDecorationSilverStar:
+            case GameAction.EventDebriefDecorationCross:
+            case GameAction.EventDebriefDecorationHonor:
+            case GameAction.SetupAssignCrewRating:
                if (null != myAarUserControl)
                   myAarUserControl.UpdateReport(gi);
                return;

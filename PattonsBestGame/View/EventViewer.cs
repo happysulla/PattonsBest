@@ -1562,13 +1562,13 @@ namespace Pattons_Best
             case "e042":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  myTextBlock.Inlines.Add(new Run("Num of Friendly Squads Knocked Out: "));
+                  myTextBlock.Inlines.Add(new Run("Num of Friendlies Knocked Out:  "));
                   if (gi.DieResults[key][0] < 7)
-                     myTextBlock.Inlines.Add(new Run("1 Tank"));
+                     myTextBlock.Inlines.Add(new Run("1 Squad"));
                   else if (gi.DieResults[key][0] < 10)
-                     myTextBlock.Inlines.Add(new Run("2 Tank"));
+                     myTextBlock.Inlines.Add(new Run("2 Squads"));
                   else
-                     myTextBlock.Inlines.Add(new Run("3 Tank"));
+                     myTextBlock.Inlines.Add(new Run("3 Squads"));
                   myTextBlock.Inlines.Add(new LineBreak());
                   Image imge042 = new Image { Name = "EnemyArtilleryEnd", Width = 200, Height = 115, Source = MapItem.theMapImages.GetBitmapImage("SquadKia") };
                   myTextBlock.Inlines.Add(new Run("                                  "));

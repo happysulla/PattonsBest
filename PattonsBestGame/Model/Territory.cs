@@ -57,16 +57,16 @@ namespace Pattons_Best
             double XCenter = Utilities.RandomGenerator.Next((int)rect.Left, (int)rect.Right) + offset; // Get a random point in the bounding box
             double YCenter = Utilities.RandomGenerator.Next((int)rect.Top, (int)rect.Bottom) + offset;
             System.Windows.Point pCenter = new System.Windows.Point(XCenter, YCenter);
-            if (true == geometry.FillContains(pCenter))
+            if (true == IsPointInPolygon(t, pCenter))
             {
                System.Windows.Point p1 = new System.Windows.Point(XCenter - offset, YCenter - offset);
                System.Windows.Point p2 = new System.Windows.Point(XCenter + offset, YCenter - offset);
                System.Windows.Point p3 = new System.Windows.Point(XCenter - offset, YCenter + offset);
                System.Windows.Point p4 = new System.Windows.Point(XCenter + offset, YCenter + offset);
-               bool isP1In = geometry.FillContains(p1);
-               bool isP2In = geometry.FillContains(p2);
-               bool isP3In = geometry.FillContains(p3);
-               bool isP4In = geometry.FillContains(p4);
+               bool isP1In = IsPointInPolygon(t, p1);
+               bool isP2In = IsPointInPolygon(t, p2);
+               bool isP3In = IsPointInPolygon(t, p3);
+               bool isP4In = IsPointInPolygon(t, p4);
                if (false == isP1In && false == isP2In)  // try to adjust location so that four corners are inside the region
                {
                   YCenter += offset;
@@ -100,12 +100,74 @@ namespace Pattons_Best
                   YCenter -= offset;
                }
                System.Windows.Point p5 = new System.Windows.Point(XCenter - offset, YCenter - offset); // do a final check to make sure point is in region
-               if (true == geometry.FillContains(p5))
+               if (true == IsPointInPolygon(t, p5))
                   return new MapPoint(p5.X, p5.Y);
             }
          }
          Logger.Log(LogEnum.LE_ERROR, "GetRandomPoint(): Cannot find a random point in t.Name=" + t.Name + " rect=" + rect.ToString());
          return new MapPoint(t.CenterPoint.X - offset, t.CenterPoint.Y - offset);
+      }
+      public static bool IsPointInPolygon(ITerritory t, Point point )
+      {
+         if (0 == t.Points.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetClosestPoint(): t.Points.Count=0 for t.Name=" + t.Name);
+            return false;
+         }
+         int intersections = 0;
+         int count = t.Points.Count;
+         for (int i = 0; i < count; i++)
+         {
+            Point vertex1 = new Point(t.Points[i].X, t.Points[i].Y);
+            Point vertex2 = new Point(t.Points[(i + 1) % count].X, t.Points[(i + 1) % count].Y);
+            if ((point.Y > vertex1.Y) != (point.Y > vertex2.Y)) // Check if the ray intersects the edge
+            {
+               double slope = (vertex2.X - vertex1.X) / (vertex2.Y - vertex1.Y);
+               double intersectX = vertex1.X + slope * (point.Y - vertex1.Y);
+               if (point.X < intersectX)
+                  intersections++;
+            }
+         }
+         return (intersections % 2) != 0; // Odd number of intersections means the point is inside
+      }
+      public static IMapPoint GetClosestPoint(ITerritory t, Point p, double offset)
+      {
+         if (0 == t.Points.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GetClosestPoint(): t.Points.Count=0 for t.Name=" + t.Name);
+            return new MapPoint(t.CenterPoint.X - offset, t.CenterPoint.Y - offset);
+         }
+         //-----------------------------------
+         PointCollection points = new PointCollection();
+         foreach (IMapPoint mp1 in t.Points)
+            points.Add(new System.Windows.Point(mp1.X, mp1.Y));
+         //-----------------------------------
+         double minDistance = double.MaxValue;
+         Point minClosestPoint = new Point(0, 0);
+         for (int i = 0; i < t.Points.Count; i++)
+         {
+            Point start = points[i];
+            Point end = points[(i + 1) % points.Count];           // Loop back to the first point
+            Point closestPoint;
+            double distance = DistanceToSegment(p, start, end, out closestPoint);   // Calculate distance to the edge
+            if( distance < minDistance )
+            {
+               minDistance = distance;
+               minClosestPoint = closestPoint;
+            }
+         }
+         return new MapPoint(minClosestPoint.X - offset, minClosestPoint.Y - offset);
+      }
+      private static double DistanceToSegment(Point p, Point a, Point b, out Point closestPoint)
+      {
+         double dx = b.X - a.X;
+         double dy = b.Y - a.Y;
+         if (dx == 0 && dy == 0) // a and b are the same point
+            return Math.Sqrt(Math.Pow(p.X - a.X, 2) + Math.Pow(p.Y - a.Y, 2));        
+         double t = ((p.X - a.X) * dx + (p.Y - a.Y) * dy) / (dx * dx + dy * dy); // Project point p onto the line segment [a, b], clamping to the segment
+         t = Math.Max(0, Math.Min(1, t));
+         Point closest = new Point(a.X + t * dx, a.Y + t * dy); // Find the closest point on the segment                                 
+         return Math.Sqrt(Math.Pow(p.X - closest.X, 2) + Math.Pow(p.Y - closest.Y, 2)); // Return the distance from p to the closest point
       }
       public static int GetSmokeCount(IGameInstance gi, char sector, char range)
       {
