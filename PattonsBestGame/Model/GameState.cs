@@ -307,16 +307,16 @@ namespace Pattons_Best
          const double zoom = 1.3;
          switch (weatherRolled)
          {
-            case "Clear": gi.BattleStacks.Add(new MapItem("Clear", zoom, "c20Clear", w1)); break;
-            case "Overcast": gi.BattleStacks.Add(new MapItem("Overcast", zoom, "c21Overcast", w1)); break;
-            case "Fog": gi.BattleStacks.Add(new MapItem("Fog", zoom, "c22Fog", w1)); break;
-            case "Mud": gi.BattleStacks.Add(new MapItem("Mud", zoom, "c23Mud", w1)); break;
-            case "Mud/Overcast": gi.BattleStacks.Add(new MapItem("Mud", zoom, "c23Mud", w1)); gi.BattleStacks.Add(new MapItem("Overcast", 1.0, "c21Overcast", w2)); break;
-            case "Falling Snow": gi.BattleStacks.Add(new MapItem("FallingSnow", zoom, "c26SnowFalling", w1)); break;
-            case "Ground Snow": gi.BattleStacks.Add(new MapItem("GroundSnow", zoom, "c27SnowGround", w1)); break;
-            case "Deep Snow": gi.BattleStacks.Add(new MapItem("DeepSnow", zoom, "c25SnowDeep", w1)); break;
-            case "Falling and Ground Snow": gi.BattleStacks.Add(new MapItem("GroundSnow", zoom, "c27SnowGround", w1)); gi.BattleStacks.Add(new MapItem("FallingSnow", zoom, "c26SnowFalling", w2)); break;
-            case "Falling and Deep Snow": gi.BattleStacks.Add(new MapItem("Deep Snow", zoom, "c25SnowDeep", w1)); gi.BattleStacks.Add(new MapItem("FallingSnow", zoom, "c26SnowFalling", w2)); break;
+            case "Clear": gi.BattleStacks.Add(new MapItem("WeatherClear", zoom, "c20Clear", w1)); break;
+            case "Overcast": gi.BattleStacks.Add(new MapItem("WeatherOvercast", zoom, "c21Overcast", w1)); break;
+            case "Fog": gi.BattleStacks.Add(new MapItem("WeatherFog", zoom, "c22Fog", w1)); break;
+            case "Mud": gi.BattleStacks.Add(new MapItem("WeatherMud", zoom, "c23Mud", w1)); break;
+            case "Mud/Overcast": gi.BattleStacks.Add(new MapItem("WeatherMud", zoom, "c23Mud", w1)); gi.BattleStacks.Add(new MapItem("Overcast", 1.0, "c21Overcast", w2)); break;
+            case "Falling Snow": gi.BattleStacks.Add(new MapItem("WeatherFallingSnow", zoom, "c26SnowFalling", w1)); break;
+            case "Ground Snow": gi.BattleStacks.Add(new MapItem("WeatherGroundSnow", zoom, "c27SnowGround", w1)); break;
+            case "Deep Snow": gi.BattleStacks.Add(new MapItem("WeatherDeepSnow", zoom, "c25SnowDeep", w1)); break;
+            case "Falling and Ground Snow": gi.BattleStacks.Add(new MapItem("WeatherGroundSnow", zoom, "c27SnowGround", w1)); gi.BattleStacks.Add(new MapItem("WeatherFallingSnow", zoom, "c26SnowFalling", w2)); break;
+            case "Falling and Deep Snow": gi.BattleStacks.Add(new MapItem("WeatherDeep Snow", zoom, "c25SnowDeep", w1)); gi.BattleStacks.Add(new MapItem("WeatherFallingSnow", zoom, "c26SnowFalling", w2)); break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "SetWeatherCounters(): reached default weatherRoll=" + weatherRolled);
                return false;
