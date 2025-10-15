@@ -375,8 +375,8 @@ namespace Pattons_Best
                }
                if ((true == myMainMenuViewer.IsPathShown) && (EnumMainImage.MI_Move == CanvasImageViewer.theMainImage))
                {
-                  if (false == UpdateCanvasPath(gi))
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasPath() returned false");
+                  if (false == UpdateCanvasMainPathMoveMap(gi))
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMainPathMoveMap() returned false");
                }
                else
                {
@@ -490,8 +490,8 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): CreateContextMenuGunLoadAction() returned false");
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
-               if (false == UpdateCanvasAnimateBattlePhase(gi))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
+               if (false == UpdateCanvasMainAnimateBattlePhase(gi))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMainAnimateBattlePhase() returned error ");
                break;
             case GameAction.PreparationsTurret:
             case GameAction.BattleRoundSequenceTurretEnd:
@@ -501,8 +501,8 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
             case GameAction.BattleEmptyResolve:
-               if (false == UpdateCanvasAnimateBattlePhase(gi))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
+               if (false == UpdateCanvasMainAnimateBattlePhase(gi))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMainAnimateBattlePhase() returned error ");
                break;
             case GameAction.PreparationsTurretRotateLeft:
             case GameAction.PreparationsTurretRotateRight:
@@ -526,8 +526,8 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
             case GameAction.BattleRoundSequenceFriendlyAdvance:
-               if (false == UpdateCanvasFriendlyAdvance(gi))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasFriendlyAdvance() returned error ");
+               if (false == UpdateCanvasMainFriendlyAdvance(gi))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMainFriendlyAdvance() returned error ");
                break;
             case GameAction.BattleRoundSequenceEnemyAdvance:
                if (false == UpdateCanvasMain(gi, action))
@@ -561,8 +561,8 @@ namespace Pattons_Best
             case GameAction.BattleRoundSequenceLoadMainGun:
             case GameAction.BattleRoundSequenceLoadMainGunEnd:
             case GameAction.BattleRoundSequenceBackToSpotting:
-               if (false == UpdateCanvasAnimateBattlePhase(gi))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
+               if (false == UpdateCanvasMainAnimateBattlePhase(gi))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMainAnimateBattlePhase() returned error ");
                if (false == UpdateCanvasTank(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                break;
@@ -580,8 +580,8 @@ namespace Pattons_Best
                break;
             case GameAction.EndGameWin:
             case GameAction.EndGameLost:
-               if (false == UpdateCanvasAnimateBattlePhase(gi))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
+               if (false == UpdateCanvasMainAnimateBattlePhase(gi))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMainAnimateBattlePhase() returned error ");
                SaveDefaultsToSettings();
                break;
             case GameAction.RemoveSplashScreen:
@@ -656,10 +656,10 @@ namespace Pattons_Best
             Canvas.SetZIndex(b, 9999);
          else
             Canvas.SetZIndex(b, 1000);
-         b.Click += ClickButtonMapItem;
+         b.Click += MapItemClick;
          this.PreviewMouseMove += MouseMoveGameViewerWindow;
-         b.PreviewMouseLeftButtonDown += PreviewMouseLeftButtonDownMapItem;
-         b.PreviewMouseLeftButtonUp += PreviewMouseLeftButtonUpMapItem;
+         b.PreviewMouseLeftButtonDown += MapItemPreviewMouseLeftButtonDown;
+         b.PreviewMouseLeftButtonUp += MapItemPreviewMouseLeftButtonUp;
          return b;
       }
       private bool CreateContextMenuCrewAction(IGameInstance gi)
@@ -1459,6 +1459,215 @@ namespace Pattons_Best
             options.SetOriginalGameOptions();
          return options;
       }
+      private bool MovePathAnimate(IGameInstance gi, IMapItemMove mim, List<Button> buttons)
+      {
+         const int ANIMATE_TIME_SEC = 4;
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): myGameInstance=null for n=" + mim.MapItem.Name);
+            return false;
+         }
+         if (null == mim.NewTerritory)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): mim.NewTerritory=null n=" + mim.MapItem.Name);
+            return false;
+         }
+         Button? b = buttons.Find(mim.MapItem.Name);
+         if (null == b)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): b=null for mi=" + mim.MapItem.Name + " mim=" + mim.ToString());
+            return false;
+         }
+         try
+         {
+            Canvas.SetZIndex(b, 10000); // Move the button to the top of the Canvas
+            double diffXOld = theOldXAfterAnimation - mim.MapItem.Location.X;
+            double diffYOld = theOldYAfterAnimation - mim.MapItem.Location.Y;
+            double xStart = mim.MapItem.Location.X; // get top left point of MapItem
+            double yStart = mim.MapItem.Location.Y;
+            Logger.Log(LogEnum.LE_VIEW_ROTATION, "+++++++++++++++++MovePathAnimate(): 1 - mi.X=" + xStart.ToString("F0") + "  mi.Y=" + yStart.ToString("F0") + " r=" + mim.MapItem.RotationOffsetHull.ToString("F0") + " dX=" + diffXOld.ToString("F0") + " dY=" + diffYOld.ToString("F0") + " rb=" + mim.MapItem.RotationHull.ToString("F0"));
+            PathFigure aPathFigure = new PathFigure() { StartPoint = new System.Windows.Point(xStart, yStart) };
+            if (null == mim.BestPath)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): mim.BestPath=null for mi=" + mim.MapItem.Name);
+               return false;
+            }
+            int lastItemIndex = mim.BestPath.Territories.Count - 1;
+            for (int i = 0; i < lastItemIndex; i++) // add intermediate movement points - not really used in Barbarian Prince as only move one hex at a time
+            {
+               ITerritory t = mim.BestPath.Territories[i];
+               double x = t.CenterPoint.X - Utilities.theMapItemOffset;
+               double y = t.CenterPoint.Y - Utilities.theMapItemOffset;
+               System.Windows.Point newPoint = new System.Windows.Point(x, y);
+               LineSegment lineSegment = new LineSegment(newPoint, false);
+               aPathFigure.Segments.Add(lineSegment);
+            }
+            // Add the last line segment
+            IMapPoint mp;
+            if (BattlePhase.EnemyAction == myGameInstance.BattlePhase)
+            {
+               mp = Territory.GetRandomPoint(mim.NewTerritory, mim.MapItem.Zoom * Utilities.theMapItemOffset);
+            }
+            else
+            {
+               mp = Territory.GetRandomPoint(mim.NewTerritory, mim.MapItem.Zoom * Utilities.theMapItemOffset);
+               //double diffY = Math.Abs(myGameInstance.Home.CenterPoint.Y - yStart);
+               //mp = new MapPoint(xStart, yStart + diffY);
+            }
+            if ((Math.Abs(mp.X - xStart) < 2) && (Math.Abs(mp.Y - yStart) < 2)) // if already at final location, skip animation or get runtime exception
+               return true;
+            theOldXAfterAnimation = mp.X;
+            theOldYAfterAnimation = mp.Y;
+            //----------------------------------------------------
+            System.Windows.Point newPoint2 = new System.Windows.Point(mp.X, mp.Y);
+            LineSegment lineSegment2 = new LineSegment(newPoint2, false);
+            aPathFigure.Segments.Add(lineSegment2);
+            // Animiate the map item along the line segment
+            PathGeometry aPathGeo = new PathGeometry();
+            aPathGeo.Figures.Add(aPathFigure);
+            aPathGeo.Freeze();
+            DoubleAnimationUsingPath xAnimiation = new DoubleAnimationUsingPath();
+            xAnimiation.PathGeometry = aPathGeo;
+            xAnimiation.Duration = TimeSpan.FromSeconds(ANIMATE_TIME_SEC);
+            xAnimiation.Source = PathAnimationSource.X;
+            DoubleAnimationUsingPath yAnimiation = new DoubleAnimationUsingPath();
+            yAnimiation.PathGeometry = aPathGeo;
+            yAnimiation.Duration = TimeSpan.FromSeconds(ANIMATE_TIME_SEC);
+            yAnimiation.Source = PathAnimationSource.Y;
+            b.RenderTransform = new TranslateTransform();
+            b.RenderTransformOrigin = new Point(0.5, 0.5);
+            RotateTransform rotateTransform = new RotateTransform();
+            //----------------------------------------------------
+            if ((true == mim.MapItem.IsVehicle) && (BattlePhase.ConductCrewAction != myGameInstance.BattlePhase))
+            {
+               double xDiff = xStart - mp.X;
+               double yDiff = yStart - mp.Y;
+               double angleRotation = Math.Atan2(yDiff, xDiff) * 180 / Math.PI - 90;
+               rotateTransform.Angle = angleRotation;
+               b.RenderTransform = rotateTransform;
+            }
+            else
+            {
+               rotateTransform.Angle = mim.MapItem.RotationOffsetHull + mim.MapItem.RotationHull;
+               b.RenderTransform = rotateTransform;
+            }
+            //----------------------------------------------------
+            b.BeginAnimation(Canvas.LeftProperty, xAnimiation);
+            b.BeginAnimation(Canvas.TopProperty, yAnimiation);
+            mim.MapItem.Location.X = mp.X;
+            mim.MapItem.Location.Y = mp.Y;
+            if (true == mim.MapItem.Name.Contains("TaskForce"))
+            {
+               double offset = mim.MapItem.Zoom * Utilities.theMapItemOffset;
+               IMapPoint mpTaskForce = new MapPoint(mim.MapItem.Location.X + offset, mim.MapItem.Location.Y + offset);
+               EnteredHex newHex = new EnteredHex(gi, mim.NewTerritory, ColorActionEnum.CAE_ENTER, mpTaskForce);
+               if (true == newHex.CtorError)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): newHex.Ctor=true");
+                  return false;
+               }
+               gi.EnteredHexes.Add(newHex);  // Move_PathAnimate()
+            }
+            Logger.Log(LogEnum.LE_VIEW_ROTATION, "-----------------MovePathAnimate(): 2 - mi.X=" + mim.MapItem.Location.X.ToString("F0") + " mi.Y=" + mim.MapItem.Location.Y.ToString("F0") + " r=" + mim.MapItem.RotationOffsetHull.ToString("F0") + " rb=" + mim.MapItem.RotationHull.ToString("F0"));
+            return true;
+         }
+         catch (Exception e)
+         {
+            b.BeginAnimation(Canvas.LeftProperty, null); // end animation offset
+            b.BeginAnimation(Canvas.TopProperty, null);  // end animation offset
+            Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate():  EXCEPTION THROWN e=\n" + e.ToString());
+            return false;
+         }
+      }
+      private bool MovePathDisplay(IMapItemMove mim, int mapItemCount)
+      {
+         if (null == mim.OldTerritory)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MovePathDisplay(): mim.OldTerritory=null");
+            return false;
+         }
+         if (null == mim.NewTerritory)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MovePathDisplay(): mim.NewTerritory=null");
+            return false;
+         }
+         if (null == mim.BestPath)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MovePathDisplay(): mim.BestPath=null");
+            return false;
+         }
+         //-----------------------------------------
+         PointCollection aPointCollection = new PointCollection();
+         double offset = 0.0;
+         if (0 < mapItemCount)
+         {
+            if (0 == mapItemCount % 2)
+               offset = mapItemCount - 1;
+            else
+               offset = -mapItemCount;
+         }
+         offset *= 3.0;
+         double xPostion = mim.OldTerritory.CenterPoint.X + offset;
+         double yPostion = mim.OldTerritory.CenterPoint.Y + offset;
+         System.Windows.Point newPoint = new System.Windows.Point(xPostion, yPostion);
+         aPointCollection.Add(newPoint);
+         foreach (ITerritory t in mim.BestPath.Territories)
+         {
+            xPostion = t.CenterPoint.X + offset;
+            yPostion = t.CenterPoint.Y + offset;
+            newPoint = new System.Windows.Point(xPostion, yPostion);
+            aPointCollection.Add(newPoint);
+         }
+         //-----------------------------------------
+         Polyline aPolyline = new Polyline();
+         aPolyline.Stroke = myBrushes[myBrushIndex];
+         aPolyline.StrokeThickness = 3;
+         aPolyline.StrokeEndLineCap = PenLineCap.Triangle;
+         aPolyline.Points = aPointCollection;
+         aPolyline.StrokeDashArray = myDashArray;
+         myCanvasMain.Children.Add(aPolyline);
+         //-----------------------------------------
+         myRectangleMoving = myRectangles[myBrushIndex];
+         if (myRectangles.Count <= ++myBrushIndex)
+            myBrushIndex = 0;
+         Canvas.SetLeft(myRectangleMoving, mim.MapItem.Location.X);
+         Canvas.SetTop(myRectangleMoving, mim.MapItem.Location.Y);
+         Canvas.SetZIndex(myRectangleMoving, 1000);
+         myRectangleMoving.Visibility = Visibility.Visible;
+         return true;
+      }
+      private void UpdateScrollbarThumbnails(ITerritory t)
+      {
+         double percentHeight = (t.CenterPoint.Y / myCanvasMain.ActualHeight);
+         double percentToScroll = 0.0;
+         if (percentHeight < 0.25)
+            percentToScroll = 0.0;
+         else if (0.75 < percentHeight)
+            percentToScroll = 1.0;
+         else
+            percentToScroll = percentHeight / 0.5 - 0.5;
+         double scrollHeight = myScrollViewerMap.ScrollableHeight;
+         if (0.0 == scrollHeight)
+            scrollHeight = myPreviousScrollHeight;
+         else
+            myPreviousScrollHeight = myScrollViewerMap.ScrollableHeight;
+         double amountToScrollV = percentToScroll * scrollHeight;
+         myScrollViewerMap.ScrollToVerticalOffset(amountToScrollV);
+         double percentWidth = (t.CenterPoint.X / myCanvasMain.ActualWidth);
+         if (percentWidth < 0.25)
+            percentToScroll = 0.0;
+         else if (0.75 < percentWidth)
+            percentToScroll = 1.0;
+         else
+            percentToScroll = percentWidth / 0.5 - 0.5;
+         double scrollWidth = myScrollViewerMap.ScrollableWidth;
+         if (0.0 == scrollWidth)
+            scrollWidth = myPreviousScrollWidth;
+         else
+            myPreviousScrollWidth = myScrollViewerMap.ScrollableWidth;
+         double amountToScrollH = percentToScroll * scrollWidth;
+         myScrollViewerMap.ScrollToHorizontalOffset(amountToScrollH);
+      }
       //---------------------------------------
       private bool UpdateCanvasTank(IGameInstance gi, GameAction action)
       {
@@ -1955,6 +2164,70 @@ namespace Pattons_Best
          return true;
       }
       //---------------------------------------
+      private void UpdateCanvasMainClear(List<Button> buttons, IStacks stacks)
+      {
+         Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "UpdateCanvasMainClear(): " + stacks.ToString());
+         List<UIElement> elements = new List<UIElement>();
+         foreach (UIElement ui in myCanvasMain.Children) // Clean the Canvas of all marks
+         {
+            if (ui is Polygon polygon)
+            {
+               elements.Add(ui);
+            }
+            if (ui is Polyline polyline)
+            {
+               elements.Add(ui);
+            }
+            if (ui is Ellipse ellipse)
+            {
+               if ("CenterPoint" != ellipse.Name) // CenterPoint is a unit test ellipse
+                  elements.Add(ui);
+            }
+            if (ui is Button button)
+            {
+               if (true == button.Name.Contains("Die"))  // die buttons never disappear - only one copy of them
+                  continue;
+               IMapItem? mi = stacks.FindMapItem(button.Name);
+               if (null == mi) // If Button does not have corresponding MapItem, remove button.
+               {
+                  elements.Add(ui);
+                  buttons.Remove(button);
+                  IStack? stack = stacks.Find(button.Name);
+                  if (null == stack)
+                  {
+                     Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "UpdateCanvasMainClear(): mi=" + button.Name + " does not belong to " + stacks.ToString());
+                  }
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "UpdateCanvasMainClear(): Remove mi=" + button.Name + " from stack=" + stack.ToString());
+                     stack.MapItems.Remove(button.Name);
+                  }
+               }
+               else
+               {
+                  MapItem.SetButtonContent(button, mi, true, true);
+               }
+            }
+            if (ui is Label label)  // A Game Feat Label
+               elements.Add(ui);
+            if (ui is Rectangle rect)
+               elements.Add(ui);
+            if (ui is Image img)
+            {
+               if (true == img.Name.Contains("Canvas"))
+                  continue;
+               if (true == img.Name.Contains("ShermanExploding"))
+                  continue;
+               if (true == img.Name.Contains("ShermanBrewUp"))
+                  continue;
+               elements.Add(ui);
+            }
+            if (ui is TextBlock tb)
+               elements.Add(ui);
+         }
+         foreach (UIElement ui1 in elements)
+            myCanvasMain.Children.Remove(ui1);
+      }
       private bool UpdateCanvasMain(IGameInstance gi, GameAction action)
       {
          IStacks? stacks = null;
@@ -2002,9 +2275,9 @@ namespace Pattons_Best
          }  
          if ((true == myMainMenuViewer.IsPathShown) && (EnumMainImage.MI_Move == CanvasImageViewer.theMainImage) )
          {
-            if (false == UpdateCanvasPath(gi))
+            if (false == UpdateCanvasMainPathMoveMap(gi))
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas(): UpdateCanvasPath() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas(): UpdateCanvasMainPathMoveMap() returned false");
                return false;
             }
          }
@@ -2014,9 +2287,9 @@ namespace Pattons_Best
                myCanvasMain.Children.Add(kvp.Value);
          }
          //-------------------------------------------------------
-         if (false == UpdateCanvasAnimateBattlePhase(gi))
+         if (false == UpdateCanvasMainAnimateBattlePhase(gi))
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasAnimateBattlePhase() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMainAnimateBattlePhase() returned false");
             return false;
          }
          //-------------------------------------------------------
@@ -2080,9 +2353,9 @@ namespace Pattons_Best
                case GameAction.UpdateBattleBoard:
                case GameAction.BattleRoundSequenceMovementRoll:
                case GameAction.BattleRoundSequenceShermanAdvanceOrRetreat:
-                  if (false == UpdateCanvasMovement(gi, action, stacks, buttons))
+                  if (false == UpdateCanvasMainMovement(gi, action, stacks, buttons))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMovement() returned false for a=" + action.ToString());
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMainMovement() returned false for a=" + action.ToString());
                      return false;
                   }
                   break;
@@ -2091,9 +2364,9 @@ namespace Pattons_Best
                   IMapItem? taskForce = gi.MoveStacks.FindMapItem("TaskForce"); // center thumbnails around task force
                   if (null != taskForce)
                      UpdateScrollbarThumbnails(taskForce.TerritoryCurrent);
-                  if (false == UpdateCanvasMovement(gi, action, stacks, buttons))
+                  if (false == UpdateCanvasMainMovement(gi, action, stacks, buttons))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMovement() returned false  a=" + action.ToString());
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMain(): UpdateCanvasMainMovement() returned false  a=" + action.ToString());
                      return false;
                   }
                   if (false == UpdateCanvasMainEnemyStrengthCheckTerritory(gi, action))
@@ -2126,102 +2399,6 @@ namespace Pattons_Best
             return false;
          }
          return true;
-      }
-      private void UpdateCanvasMainClear(List<Button> buttons, IStacks stacks)
-      {
-         Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "UpdateCanvasMainClear(): " + stacks.ToString());
-         List<UIElement> elements = new List<UIElement>();
-         foreach (UIElement ui in myCanvasMain.Children) // Clean the Canvas of all marks
-         {
-            if (ui is Polygon polygon)
-            {
-               elements.Add(ui);
-            }
-            if (ui is Polyline polyline)
-            {
-               elements.Add(ui);
-            }
-            if (ui is Ellipse ellipse)
-            {
-               if ("CenterPoint" != ellipse.Name) // CenterPoint is a unit test ellipse
-                  elements.Add(ui);
-            }
-            if (ui is Button button)
-            {
-               if (true == button.Name.Contains("Die"))  // die buttons never disappear - only one copy of them
-                  continue;
-               IMapItem? mi = stacks.FindMapItem(button.Name);
-               if (null == mi) // If Button does not have corresponding MapItem, remove button.
-               {
-                  elements.Add(ui);
-                  buttons.Remove(button);
-                  IStack? stack = stacks.Find(button.Name);
-                  if (null == stack)
-                  {
-                     Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "UpdateCanvasMainClear(): mi=" + button.Name + " does not belong to " + stacks.ToString());
-                  }
-                  else
-                  {
-                     Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "UpdateCanvasMainClear(): Remove mi=" + button.Name + " from stack=" + stack.ToString());
-                     stack.MapItems.Remove(button.Name);
-                  }
-               }
-               else
-               {
-                  MapItem.SetButtonContent(button, mi, true, true);
-               }
-            }
-            if (ui is Label label)  // A Game Feat Label
-               elements.Add(ui);
-            if (ui is Rectangle rect)  
-               elements.Add(ui);
-            if (ui is Image img)
-            {
-               if (true == img.Name.Contains("Canvas"))
-                  continue;
-               if (true == img.Name.Contains("ShermanExploding"))
-                  continue;
-               if (true == img.Name.Contains("ShermanBrewUp"))
-                  continue;
-               elements.Add(ui);
-            }
-            if (ui is TextBlock tb)
-               elements.Add(ui);
-         }
-         foreach (UIElement ui1 in elements)
-            myCanvasMain.Children.Remove(ui1);
-      }
-      private void UpdateScrollbarThumbnails(ITerritory t)
-      {
-         double percentHeight = (t.CenterPoint.Y / myCanvasMain.ActualHeight);
-         double percentToScroll = 0.0;
-         if (percentHeight < 0.25)
-            percentToScroll = 0.0;
-         else if (0.75 < percentHeight)
-            percentToScroll = 1.0;
-         else
-            percentToScroll = percentHeight / 0.5 - 0.5;
-         double scrollHeight = myScrollViewerMap.ScrollableHeight;
-         if (0.0 == scrollHeight)
-            scrollHeight = myPreviousScrollHeight;
-         else
-            myPreviousScrollHeight = myScrollViewerMap.ScrollableHeight;
-         double amountToScrollV = percentToScroll * scrollHeight;
-         myScrollViewerMap.ScrollToVerticalOffset(amountToScrollV);
-         double percentWidth = (t.CenterPoint.X / myCanvasMain.ActualWidth);
-         if (percentWidth < 0.25)
-            percentToScroll = 0.0;
-         else if (0.75 < percentWidth)
-            percentToScroll = 1.0;
-         else
-            percentToScroll = percentWidth / 0.5 - 0.5;
-         double scrollWidth = myScrollViewerMap.ScrollableWidth;
-         if (0.0 == scrollWidth)
-            scrollWidth = myPreviousScrollWidth;
-         else
-            myPreviousScrollWidth = myScrollViewerMap.ScrollableWidth;
-         double amountToScrollH = percentToScroll * scrollWidth;
-         myScrollViewerMap.ScrollToHorizontalOffset(amountToScrollH);
       }
       private bool UpdateCanvasMainMapItems(List<Button> buttons, IStacks stacks)
       {
@@ -2268,7 +2445,7 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool UpdateCanvasMovement(IGameInstance gi, GameAction action, IStacks stacks, List<Button> buttons)
+      private bool UpdateCanvasMainMovement(IGameInstance gi, GameAction action, IStacks stacks, List<Button> buttons)
       {
          try
          {
@@ -2276,221 +2453,44 @@ namespace Pattons_Best
             {
                if (null == mim)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): mim=null");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainMovement(): mim=null");
                   return false;
                }
                if (null == mim.OldTerritory)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): mim.OldTerritory=null");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainMovement(): mim.OldTerritory=null");
                   return false;
                }
                IMapItem mi = mim.MapItem;
                if (false == MovePathAnimate(gi, mim, buttons))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): MovePathAnimate() returned false t=" + mim.OldTerritory.ToString());
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainMovement(): MovePathAnimate() returned false t=" + mim.OldTerritory.ToString());
                   gi.MapItemMoves.Clear();
                   return false;
                }
                if (null == mim)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): mim2=null");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainMovement(): mim2=null");
                   return false;
                }
                if (null == mim.NewTerritory)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement(): mim2.NewTerritory=null");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainMovement(): mim2.NewTerritory=null");
                   return false;
                }
-               Logger.Log(LogEnum.LE_VIEW_ROTATION, "UpdateCanvasMovement(): mi=" + mim.MapItem.Name + " r=" + mim.MapItem.RotationOffsetHull + " rb=" + mim.MapItem.RotationHull);
+               Logger.Log(LogEnum.LE_VIEW_ROTATION, "UpdateCanvasMainMovement(): mi=" + mim.MapItem.Name + " r=" + mim.MapItem.RotationOffsetHull + " rb=" + mim.MapItem.RotationHull);
                //------------------------------------------
                stacks.Remove(mi); // remove from existing stack
-               Logger.Log(LogEnum.LE_VIEW_MIM, "UpdateCanvasMovement(): a=" + action.ToString() + " mi=" + mi.Name + " t=" + mi.TerritoryCurrent.Name + "==>" + mim.NewTerritory.Name + " X=" + mi.Location.X.ToString() + " Y=" + mi.Location.Y.ToString() + " " + stacks.ToString() );
+               Logger.Log(LogEnum.LE_VIEW_MIM, "UpdateCanvasMainMovement(): a=" + action.ToString() + " mi=" + mi.Name + " t=" + mi.TerritoryCurrent.Name + "==>" + mim.NewTerritory.Name + " X=" + mi.Location.X.ToString() + " Y=" + mi.Location.Y.ToString() + " " + stacks.ToString() );
                mi.TerritoryCurrent = mi.TerritoryStarting = mim.NewTerritory;
                stacks.Add(mi); // add to new stack
             }
          }
          catch (Exception e)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMovement():  EXCEPTION THROWN e=\n" + e.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainMovement():  EXCEPTION THROWN e=\n" + e.ToString());
             return false;
          }
-         return true;
-      }
-      private bool MovePathAnimate(IGameInstance gi, IMapItemMove mim, List<Button> buttons)
-      {
-         const int ANIMATE_TIME_SEC = 4;
-         if (null == myGameInstance)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): myGameInstance=null for n=" + mim.MapItem.Name);
-            return false;
-         }
-         if (null == mim.NewTerritory)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): mim.NewTerritory=null n=" + mim.MapItem.Name);
-            return false;
-         }
-         Button? b = buttons.Find(mim.MapItem.Name);
-         if (null == b)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): b=null for mi=" + mim.MapItem.Name + " mim=" + mim.ToString());
-            return false;
-         }
-         try
-         {
-            Canvas.SetZIndex(b, 10000); // Move the button to the top of the Canvas
-            double diffXOld = theOldXAfterAnimation - mim.MapItem.Location.X;
-            double diffYOld = theOldYAfterAnimation - mim.MapItem.Location.Y;
-            double xStart = mim.MapItem.Location.X; // get top left point of MapItem
-            double yStart = mim.MapItem.Location.Y;
-            Logger.Log(LogEnum.LE_VIEW_ROTATION, "+++++++++++++++++MovePathAnimate(): 1 - mi.X=" + xStart.ToString("F0") + "  mi.Y=" + yStart.ToString("F0") + " r=" + mim.MapItem.RotationOffsetHull.ToString("F0") + " dX=" + diffXOld.ToString("F0") + " dY=" + diffYOld.ToString("F0") + " rb=" + mim.MapItem.RotationHull.ToString("F0"));
-            PathFigure aPathFigure = new PathFigure() { StartPoint = new System.Windows.Point(xStart, yStart) };
-            if (null == mim.BestPath)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): mim.BestPath=null for mi=" + mim.MapItem.Name);
-               return false;
-            }
-            int lastItemIndex = mim.BestPath.Territories.Count - 1;
-            for (int i = 0; i < lastItemIndex; i++) // add intermediate movement points - not really used in Barbarian Prince as only move one hex at a time
-            {
-               ITerritory t = mim.BestPath.Territories[i];
-               double x = t.CenterPoint.X - Utilities.theMapItemOffset;
-               double y = t.CenterPoint.Y - Utilities.theMapItemOffset;
-               System.Windows.Point newPoint = new System.Windows.Point(x, y);
-               LineSegment lineSegment = new LineSegment(newPoint, false);
-               aPathFigure.Segments.Add(lineSegment);
-            }
-            // Add the last line segment
-            IMapPoint mp;
-            if (BattlePhase.EnemyAction == myGameInstance.BattlePhase)
-            {
-               mp = Territory.GetRandomPoint(mim.NewTerritory, mim.MapItem.Zoom * Utilities.theMapItemOffset);
-            }
-            else
-            {
-               mp = Territory.GetRandomPoint(mim.NewTerritory, mim.MapItem.Zoom * Utilities.theMapItemOffset);
-               //double diffY = Math.Abs(myGameInstance.Home.CenterPoint.Y - yStart);
-               //mp = new MapPoint(xStart, yStart + diffY);
-            }
-            if ((Math.Abs(mp.X - xStart) < 2) && (Math.Abs(mp.Y - yStart) < 2)) // if already at final location, skip animation or get runtime exception
-               return true;
-            theOldXAfterAnimation = mp.X;
-            theOldYAfterAnimation = mp.Y;
-            //----------------------------------------------------
-            System.Windows.Point newPoint2 = new System.Windows.Point(mp.X, mp.Y);
-            LineSegment lineSegment2 = new LineSegment(newPoint2, false);
-            aPathFigure.Segments.Add(lineSegment2);
-            // Animiate the map item along the line segment
-            PathGeometry aPathGeo = new PathGeometry();
-            aPathGeo.Figures.Add(aPathFigure);
-            aPathGeo.Freeze();
-            DoubleAnimationUsingPath xAnimiation = new DoubleAnimationUsingPath();
-            xAnimiation.PathGeometry = aPathGeo;
-            xAnimiation.Duration = TimeSpan.FromSeconds(ANIMATE_TIME_SEC);
-            xAnimiation.Source = PathAnimationSource.X;
-            DoubleAnimationUsingPath yAnimiation = new DoubleAnimationUsingPath();
-            yAnimiation.PathGeometry = aPathGeo;
-            yAnimiation.Duration = TimeSpan.FromSeconds(ANIMATE_TIME_SEC);
-            yAnimiation.Source = PathAnimationSource.Y;
-            b.RenderTransform = new TranslateTransform();
-            b.RenderTransformOrigin = new Point(0.5, 0.5);
-            RotateTransform rotateTransform = new RotateTransform();
-            //----------------------------------------------------
-            if ((true == mim.MapItem.IsVehicle) && (BattlePhase.ConductCrewAction != myGameInstance.BattlePhase))
-            {
-               double xDiff = xStart - mp.X;
-               double yDiff = yStart - mp.Y;
-               double angleRotation = Math.Atan2(yDiff, xDiff) * 180 / Math.PI - 90;
-               rotateTransform.Angle = angleRotation;
-               b.RenderTransform = rotateTransform;
-            }
-            else
-            {
-               rotateTransform.Angle = mim.MapItem.RotationOffsetHull + mim.MapItem.RotationHull;
-               b.RenderTransform = rotateTransform;
-            }
-            //----------------------------------------------------
-            b.BeginAnimation(Canvas.LeftProperty, xAnimiation);
-            b.BeginAnimation(Canvas.TopProperty, yAnimiation);
-            mim.MapItem.Location.X = mp.X;
-            mim.MapItem.Location.Y = mp.Y;
-            if (true == mim.MapItem.Name.Contains("TaskForce"))
-            {
-               double offset = mim.MapItem.Zoom * Utilities.theMapItemOffset;
-               IMapPoint mpTaskForce = new MapPoint(mim.MapItem.Location.X + offset, mim.MapItem.Location.Y + offset);
-               EnteredHex newHex = new EnteredHex(gi, mim.NewTerritory, ColorActionEnum.CAE_ENTER, mpTaskForce);
-               if (true == newHex.CtorError)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate(): newHex.Ctor=true");
-                  return false;
-               }
-               gi.EnteredHexes.Add(newHex);  // Move_PathAnimate()
-            }
-            Logger.Log(LogEnum.LE_VIEW_ROTATION, "-----------------MovePathAnimate(): 2 - mi.X=" + mim.MapItem.Location.X.ToString("F0") + " mi.Y=" + mim.MapItem.Location.Y.ToString("F0") + " r=" + mim.MapItem.RotationOffsetHull.ToString("F0") + " rb=" + mim.MapItem.RotationHull.ToString("F0"));
-            return true;
-         }
-         catch (Exception e)
-         {
-            b.BeginAnimation(Canvas.LeftProperty, null); // end animation offset
-            b.BeginAnimation(Canvas.TopProperty, null);  // end animation offset
-            Logger.Log(LogEnum.LE_ERROR, "MovePathAnimate():  EXCEPTION THROWN e=\n" + e.ToString());
-            return false;
-         }
-      }
-      private bool MovePathDisplay(IMapItemMove mim, int mapItemCount)
-      {
-         if (null == mim.OldTerritory)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MovePathDisplay(): mim.OldTerritory=null");
-            return false;
-         }
-         if (null == mim.NewTerritory)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MovePathDisplay(): mim.NewTerritory=null");
-            return false;
-         }
-         if (null == mim.BestPath)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MovePathDisplay(): mim.BestPath=null");
-            return false;
-         }
-         //-----------------------------------------
-         PointCollection aPointCollection = new PointCollection();
-         double offset = 0.0;
-         if (0 < mapItemCount)
-         {
-            if (0 == mapItemCount % 2)
-               offset = mapItemCount - 1;
-            else
-               offset = -mapItemCount;
-         }
-         offset *= 3.0;
-         double xPostion = mim.OldTerritory.CenterPoint.X + offset;
-         double yPostion = mim.OldTerritory.CenterPoint.Y + offset;
-         System.Windows.Point newPoint = new System.Windows.Point(xPostion, yPostion);
-         aPointCollection.Add(newPoint);
-         foreach (ITerritory t in mim.BestPath.Territories)
-         {
-            xPostion = t.CenterPoint.X + offset;
-            yPostion = t.CenterPoint.Y + offset;
-            newPoint = new System.Windows.Point(xPostion, yPostion);
-            aPointCollection.Add(newPoint);
-         }
-         //-----------------------------------------
-         Polyline aPolyline = new Polyline();
-         aPolyline.Stroke = myBrushes[myBrushIndex];
-         aPolyline.StrokeThickness = 3;
-         aPolyline.StrokeEndLineCap = PenLineCap.Triangle;
-         aPolyline.Points = aPointCollection;
-         aPolyline.StrokeDashArray = myDashArray;
-         myCanvasMain.Children.Add(aPolyline);
-         //-----------------------------------------
-         myRectangleMoving = myRectangles[myBrushIndex];
-         if (myRectangles.Count <= ++myBrushIndex)
-            myBrushIndex = 0;
-         Canvas.SetLeft(myRectangleMoving, mim.MapItem.Location.X);
-         Canvas.SetTop(myRectangleMoving, mim.MapItem.Location.Y);
-         Canvas.SetZIndex(myRectangleMoving, 1000);
-         myRectangleMoving.Visibility = Visibility.Visible;
          return true;
       }
       //---------------------------------------
@@ -2589,7 +2589,7 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool UpdateCanvasAnimateBattlePhase(IGameInstance gi)
+      private bool UpdateCanvasMainAnimateBattlePhase(IGameInstance gi)
       {
          List<UIElement> elements = new List<UIElement>();
          foreach (UIElement ui in myCanvasMain.Children) // Clean the Canvas of rectangles
@@ -2608,7 +2608,7 @@ namespace Pattons_Best
          ITerritory? t = Territories.theTerritories.Find(tName);
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasAnimateBattlePhase(): t=null for name=" + tName);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainAnimateBattlePhase(): t=null for name=" + tName);
             return false;
          }
          ColorAnimation colorAnimation = new ColorAnimation
@@ -2621,12 +2621,12 @@ namespace Pattons_Best
          };
          if( 4 != t.Points.Count )
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasAnimateBattlePhase(): t=" + t.Name + " has points=" + t.Points.Count.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainAnimateBattlePhase(): t=" + t.Name + " has points=" + t.Points.Count.ToString());
             return false;
          }
          IMapPoint p1 = t.Points[0];
          IMapPoint p2 = t.Points[2];
-         Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "UpdateCanvasAnimateBattlePhase(): phase=" + gi.BattlePhase.ToString() + " pt=" + p1.ToString());
+         Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "UpdateCanvasMainAnimateBattlePhase(): phase=" + gi.BattlePhase.ToString() + " pt=" + p1.ToString());
          Rectangle r = new Rectangle();
          r.Fill = new SolidColorBrush(Colors.Blue);
          SolidColorBrush brush = (SolidColorBrush)r.Fill;
@@ -2638,7 +2638,7 @@ namespace Pattons_Best
          Canvas.SetTop(r, p1.Y);
          return true;
       }
-      private bool UpdateCanvasFriendlyAdvance(IGameInstance gi)
+      private bool UpdateCanvasMainFriendlyAdvance(IGameInstance gi)
       {
          //--------------------------------------------
          List<ITerritory> usControlledTerritory = new List<ITerritory>();
@@ -2655,7 +2655,7 @@ namespace Pattons_Best
          {
             if (3 != t.Name.Length)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasFriendlyAdvance(): 3 != t.Name.Length for t=" + t.Name);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainFriendlyAdvance(): 3 != t.Name.Length for t=" + t.Name);
                return false;
             }
             string sector = t.Name[1].ToString();
@@ -2738,7 +2738,7 @@ namespace Pattons_Best
                      highlightedTerritoryNames.Add(adjName);
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasFriendlyAdvance(): reached default sector=" + sector.ToString());
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainFriendlyAdvance(): reached default sector=" + sector.ToString());
                   return false;
             }
             foreach( string s in highlightedTerritoryNames )
@@ -2746,7 +2746,7 @@ namespace Pattons_Best
                ITerritory? highlighted = Territories.theTerritories.Find(s);
                if( null == highlighted )
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasFriendlyAdvance(): highlighted=null for s=" + s);
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainFriendlyAdvance(): highlighted=null for s=" + s);
                   return false;
                }
                PointCollection points = new PointCollection();
@@ -2988,8 +2988,7 @@ namespace Pattons_Best
          }
          return true;
       }
-      //---------------------------------------
-      private bool UpdateCanvasPath(IGameInstance gi)
+      private bool UpdateCanvasMainPathMoveMap(IGameInstance gi)
       {
          try
          {
@@ -3045,7 +3044,7 @@ namespace Pattons_Best
          }
          catch (Exception e)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasPath(): EXCEPTION THROWN e=" + e.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainPathMoveMap(): EXCEPTION THROWN e=" + e.ToString());
             return false;
          }
          return true;
@@ -3344,149 +3343,6 @@ namespace Pattons_Best
          GameAction outAction = GameAction.BattleRoundSequenceEnemyAdvanceEnd;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
-      private void ClickButtonMapItem(object sender, RoutedEventArgs e)
-      {
-         if( null == myGameInstance )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): myGameInstance=null");
-            return;
-         }
-         Button? button = sender as Button;
-         if (null == button)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): button = null");
-            return;
-         }
-         Logger.Log(LogEnum.LE_SHOW_ORDERS_MENU, "ClickButtonMapItem(): clicking button=" + button.Name );
-         //====================================================
-         if ((true == button.Name.Contains("OpenHatch")) && ((true == myGameInstance.IsHatchesActive) || (BattlePhase.MarkCrewAction == myGameInstance.BattlePhase)))
-         {
-            string[] crewmembers = new string[4] { "Driver", "Assistant", "Commander", "Loader" };
-            foreach (string role in crewmembers)
-            {
-               ICrewMember? crewMember = myGameInstance.GetCrewMemberByRole(role);
-               if (null == crewMember)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): role=" + role);
-                  return;
-               }
-               //----------------------------------
-               if (true == button.Name.Contains(role)) // Remove the open hatch
-               {
-                  crewMember.IsButtonedUp = true;
-                  myGameInstance.Hatches.Remove(button.Name);
-                  this.myTankButtons.Remove(button);
-                  myCanvasTank.Children.Remove(button);
-                  //----------------------------------
-                  IMapItems removals = new MapItems();  // Remove Loader, Gunner, and Commander actions that require open hatch - remove Gunner_RepairGun if Loader not repairing
-                  foreach (IMapItem crewAction in myGameInstance.CrewActions)
-                  {
-                     if( false == myGameInstance.IsCrewActionPossibleButtonUp(role, crewAction.Name))
-                        removals.Add(crewAction);
-                  }
-                  foreach (IMapItem crewAction in removals)
-                  {
-                     myGameInstance.CrewActions.Remove(crewAction);
-                     Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "ClickButtonMapItem(): -----------------removing ca=" + crewAction.Name);
-                     foreach (Button oldButton in myTankButtons)     // Remove corresponding Button
-                     {
-                        if (oldButton.Name == crewAction.Name)
-                        {
-                           myTankButtons.Remove(oldButton);
-                           myCanvasTank.Children.Remove(oldButton);
-                           break;
-                        }
-                     }
-                  }
-                  //----------------------------------
-                  GameAction outAction = GameAction.BattleRoundSequenceCrewOrders;
-                  if (GamePhase.Preparations == myGameInstance.GamePhase)
-                     outAction = GameAction.PreparationsHatches;
-                  myGameEngine.PerformAction(ref myGameInstance, ref outAction);
-                  return;
-               }
-            }
-         }
-         //====================================================
-         else if ((true == button.Name.Contains("GunLoad")) && (BattlePhase.MarkAmmoReload == myGameInstance.BattlePhase) )
-         {
-            IMapItem? selectedMapItem = myGameInstance.GunLoads.Find(button.Name);
-            if ( null == selectedMapItem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): GunLoad selectedMapItem=null for button.Name=" + button.Name);
-               return;
-            }
-            myGameInstance.GunLoads.Rotate(1);
-            int count = 0;
-            foreach (IMapItem mi in myGameInstance.GunLoads) 
-            {
-               if( mi.TerritoryCurrent.Name == selectedMapItem.TerritoryCurrent.Name )
-               {
-                  mi.Location.X = selectedMapItem.TerritoryCurrent.CenterPoint.X + count * 3 - mi.Zoom * Utilities.theMapItemOffset;
-                  mi.Location.Y = selectedMapItem.TerritoryCurrent.CenterPoint.Y + count * 3 - mi.Zoom * Utilities.theMapItemOffset;
-                  foreach(Button b in myTankButtons )
-                  {
-                     if (b.Name == mi.Name)
-                     {
-                        Canvas.SetLeft(b, mi.Location.X);
-                        Canvas.SetTop(b, mi.Location.Y);
-                        Canvas.SetZIndex(b, count);
-                     }
-                  }
-                  count++;
-               }
-            }
-         }
-         //====================================================
-         else if ( BattlePhase.ConductCrewAction == myGameInstance.BattlePhase )
-         {
-            IMapItem? selectedMapItem = myGameInstance.BattleStacks.FindMapItem(button.Name); // selectedMapItem is the new target
-            if (null == selectedMapItem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ClickButtonMapItem(): selectedMapItem=null for button.Name=" + button.Name);
-               return;
-            }
-            if( (CrewActionPhase.TankMainGunFire == myGameInstance.CrewActionPhase) || (CrewActionPhase.TankMgFire == myGameInstance.CrewActionPhase) )
-            {
-               if (true == myGameInstance.Targets.Contains(selectedMapItem))
-               {
-                  foreach (IMapItem mi in myGameInstance.Targets) // All buttons in the target view are selected
-                  {
-                     foreach (Button b in myBattleButtons)
-                     {
-                        if (mi.Name == b.Name)
-                           b.BorderThickness = new Thickness(0);
-                     }
-                  }
-                  GameAction outAction = GameAction.Error;
-                  if (CrewActionPhase.TankMainGunFire == myGameInstance.CrewActionPhase)
-                  {
-                     if (null == myGameInstance.TargetMainGun) // no previous target
-                     {
-                        Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "ClickButtonMapItem(): no previous target zeroize selectedMapItem.EnemyAcquiredShots.Clear()");
-                        selectedMapItem.EnemyAcquiredShots.Clear();  // the only thing in this list is the Sherman attacks
-                     }
-                     else if( selectedMapItem.Name != myGameInstance.TargetMainGun.Name ) // previous target is no longer the target. selectedMapItem is the target. Changed targets.
-                     {
-                        Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "ClickButtonMapItem(): differt target zeroize selectedMapItem.EnemyAcquiredShots.Clear() and myGameInstance.TargetMainGun.EnemyAcquiredShots.Clear()");
-                        selectedMapItem.EnemyAcquiredShots.Clear();
-                        myGameInstance.TargetMainGun.EnemyAcquiredShots.Clear();
-                     }
-                     myGameInstance.TargetMainGun = selectedMapItem;
-                     outAction = GameAction.BattleRoundSequenceShermanFiringMainGun;
-                  }
-                  else
-                  {
-                     myGameInstance.TargetMg = selectedMapItem;
-                     outAction = GameAction.BattleRoundSequenceShermanFiringMachineGun;
-                  }
-                  selectedMapItem = null;
-                  myGameEngine.PerformAction(ref myGameInstance, ref outAction);
-               }
-            }
-         }
-         e.Handled = true;
-      }
       private void MouseLeftButtonDownMarquee(object sender, MouseEventArgs e)
       {
          myStoryboard.Pause(this);
@@ -3536,6 +3392,7 @@ namespace Pattons_Best
          myEllipseDisplayDialog = null;
          e.Handled = true;
       }
+      //-------------MapItem Controller Functions---------------------------------
       private void MenuItemCrewActionClick(object sender, RoutedEventArgs e)
       {
          //--------------------------------------
@@ -3972,7 +3829,7 @@ namespace Pattons_Best
             myGameInstance.GunLoads.Add(readyRackReLoad);
             Logger.Log(LogEnum.LE_SHOW_AMMMO_MENU, "MenuItemAmmoReloadClick(): adding new button=" + menuitem.Name);
             newButton = new Button { ContextMenu = menu, Name = menuitem.Name, Width = size, Height = size, BorderThickness = thickness, Background = brush, Foreground = brush };
-            newButton.Click += ClickButtonMapItem;
+            newButton.Click += MapItemClick;
             MapItem.SetButtonContent(newButton, readyRackReLoad, true, false); // This sets the image as the button's content
             myTankButtons.Add(newButton);
             myCanvasTank.Children.Add(newButton);
@@ -3993,7 +3850,7 @@ namespace Pattons_Best
             ammoLoad.Location.X = t.CenterPoint.X + ammoLoadLocationOffset;
             ammoLoad.Location.Y = t.CenterPoint.Y + ammoLoadLocationOffset;
             newButton = new Button { ContextMenu = menu, Name = ammoLoad.Name, Width = size, Height = size, BorderThickness = thickness, Background = brush, Foreground = brush };
-            newButton.Click += ClickButtonMapItem;
+            newButton.Click += MapItemClick;
             MapItem.SetButtonContent(newButton, ammoLoad, true, false); // This sets the image as the button's content
             myTankButtons.Add(newButton);
             myCanvasTank.Children.Add(newButton);
@@ -4017,7 +3874,7 @@ namespace Pattons_Best
             gunLoad.Location.Y = gunLoad.TerritoryCurrent.CenterPoint.Y + gunLoadLocationOffset;
             Logger.Log(LogEnum.LE_SHOW_AMMMO_MENU, "MenuItemAmmoReloadClick(): adding new button=" + gunLoad.Name);
             newButton = new Button { ContextMenu = myContextMenuGunLoadActions[gunLoad.TerritoryCurrent.Name], Name = gunLoad.Name, Width = size, Height = size, BorderThickness = thickness, Background = brush, Foreground = brush };
-            newButton.Click += ClickButtonMapItem;
+            newButton.Click += MapItemClick;
             MapItem.SetButtonContent(newButton, gunLoad, true, false); // This sets the image as the button's content
             myTankButtons.Add(newButton);
             myCanvasTank.Children.Add(newButton);
@@ -4028,32 +3885,170 @@ namespace Pattons_Best
          GameAction outaction = GameAction.BattleRoundSequenceAmmoOrders;  // MenuItemAmmoReloadClick()
          myGameEngine.PerformAction(ref myGameInstance, ref outaction, 0);
       }
-      private void PreviewMouseLeftButtonDownMapItem(object sender, System.Windows.Input.MouseEventArgs e)
+      private void MapItemPreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseEventArgs e)
       {
          if (e.LeftButton == MouseButtonState.Pressed)
          {
             Button? button = sender as Button;
             if (null == button)
             {
-               Logger.Log(LogEnum.LE_ERROR, "MouseDownMapItem(): button = null");
+               Logger.Log(LogEnum.LE_ERROR, "MapItemPreviewMouseLeftButtonDown(): button = null");
                return;
             }
-            if ((BattlePhase.ConductCrewAction != myGameInstance.BattlePhase) && (false == button.Name.Contains("Sherman")) && (false == button.Name.Contains("TaskForce")) && (false == button.Name.Contains("Weather")))
-            {
-               Logger.Log(LogEnum.LE_SHOW_BUTTON_MOVE, "MouseDownMapItem(): selected button.Name=" + button.Name);
-               myDraggedButton = button;
-            }
+            if ((BattlePhase.ConductCrewAction == myGameInstance.BattlePhase) || (true == button.Name.Contains("Sherman")) || (true == button.Name.Contains("TaskForce")) || (true == button.Name.Contains("Weather")) || (true == button.Name.Contains("StartArea")) || (true == button.Name.Contains("ExitArea")))
+               return;
+            Logger.Log(LogEnum.LE_SHOW_BUTTON_MOVE, "MapItemPreviewMouseLeftButtonDown(): selected button.Name=" + button.Name);
+            myDraggedButton = button;
          }
       }
-      private void PreviewMouseLeftButtonUpMapItem(object sender, System.Windows.Input.MouseEventArgs e)
+      private void MapItemPreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseEventArgs e)
       {
-         if (null == myDraggedButton)
-            Logger.Log(LogEnum.LE_SHOW_BUTTON_MOVE, "MouseUpMapItem(): myDraggedButton=null");
-         else
-            Logger.Log(LogEnum.LE_SHOW_BUTTON_MOVE, "MouseUpMapItem(): unselecting button.Name=" + myDraggedButton.Name);
          myDraggedButton = null;
       }
-      //-------------GameViewerWindow---------------------------------
+      private void MapItemClick(object sender, RoutedEventArgs e)
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MapItemClick(): myGameInstance=null");
+            return;
+         }
+         Button? button = sender as Button;
+         if (null == button)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MapItemClick(): button = null");
+            return;
+         }
+         Logger.Log(LogEnum.LE_SHOW_ORDERS_MENU, "MapItemClick(): clicking button=" + button.Name);
+         //====================================================
+         if ((true == button.Name.Contains("OpenHatch")) && ((true == myGameInstance.IsHatchesActive) || (BattlePhase.MarkCrewAction == myGameInstance.BattlePhase)))
+         {
+            string[] crewmembers = new string[4] { "Driver", "Assistant", "Commander", "Loader" };
+            foreach (string role in crewmembers)
+            {
+               ICrewMember? crewMember = myGameInstance.GetCrewMemberByRole(role);
+               if (null == crewMember)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "MapItemClick(): role=" + role);
+                  return;
+               }
+               //----------------------------------
+               if (true == button.Name.Contains(role)) // Remove the open hatch
+               {
+                  crewMember.IsButtonedUp = true;
+                  myGameInstance.Hatches.Remove(button.Name);
+                  this.myTankButtons.Remove(button);
+                  myCanvasTank.Children.Remove(button);
+                  //----------------------------------
+                  IMapItems removals = new MapItems();  // Remove Loader, Gunner, and Commander actions that require open hatch - remove Gunner_RepairGun if Loader not repairing
+                  foreach (IMapItem crewAction in myGameInstance.CrewActions)
+                  {
+                     if (false == myGameInstance.IsCrewActionPossibleButtonUp(role, crewAction.Name))
+                        removals.Add(crewAction);
+                  }
+                  foreach (IMapItem crewAction in removals)
+                  {
+                     myGameInstance.CrewActions.Remove(crewAction);
+                     Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MapItemClick(): -----------------removing ca=" + crewAction.Name);
+                     foreach (Button oldButton in myTankButtons)     // Remove corresponding Button
+                     {
+                        if (oldButton.Name == crewAction.Name)
+                        {
+                           myTankButtons.Remove(oldButton);
+                           myCanvasTank.Children.Remove(oldButton);
+                           break;
+                        }
+                     }
+                  }
+                  //----------------------------------
+                  GameAction outAction = GameAction.BattleRoundSequenceCrewOrders;
+                  if (GamePhase.Preparations == myGameInstance.GamePhase)
+                     outAction = GameAction.PreparationsHatches;
+                  myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+                  return;
+               }
+            }
+         }
+         //====================================================
+         else if ((true == button.Name.Contains("GunLoad")) && (BattlePhase.MarkAmmoReload == myGameInstance.BattlePhase))
+         {
+            IMapItem? selectedMapItem = myGameInstance.GunLoads.Find(button.Name);
+            if (null == selectedMapItem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MapItemClick(): GunLoad selectedMapItem=null for button.Name=" + button.Name);
+               return;
+            }
+            myGameInstance.GunLoads.Rotate(1);
+            int count = 0;
+            foreach (IMapItem mi in myGameInstance.GunLoads)
+            {
+               if (mi.TerritoryCurrent.Name == selectedMapItem.TerritoryCurrent.Name)
+               {
+                  mi.Location.X = selectedMapItem.TerritoryCurrent.CenterPoint.X + count * 3 - mi.Zoom * Utilities.theMapItemOffset;
+                  mi.Location.Y = selectedMapItem.TerritoryCurrent.CenterPoint.Y + count * 3 - mi.Zoom * Utilities.theMapItemOffset;
+                  foreach (Button b in myTankButtons)
+                  {
+                     if (b.Name == mi.Name)
+                     {
+                        Canvas.SetLeft(b, mi.Location.X);
+                        Canvas.SetTop(b, mi.Location.Y);
+                        Canvas.SetZIndex(b, count);
+                     }
+                  }
+                  count++;
+               }
+            }
+         }
+         //====================================================
+         else if (BattlePhase.ConductCrewAction == myGameInstance.BattlePhase)
+         {
+            IMapItem? selectedMapItem = myGameInstance.BattleStacks.FindMapItem(button.Name); // selectedMapItem is the new target
+            if (null == selectedMapItem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MapItemClick(): selectedMapItem=null for button.Name=" + button.Name);
+               return;
+            }
+            if ((CrewActionPhase.TankMainGunFire == myGameInstance.CrewActionPhase) || (CrewActionPhase.TankMgFire == myGameInstance.CrewActionPhase))
+            {
+               if (true == myGameInstance.Targets.Contains(selectedMapItem))
+               {
+                  foreach (IMapItem mi in myGameInstance.Targets) // All buttons in the target view are selected
+                  {
+                     foreach (Button b in myBattleButtons)
+                     {
+                        if (mi.Name == b.Name)
+                           b.BorderThickness = new Thickness(0);
+                     }
+                  }
+                  GameAction outAction = GameAction.Error;
+                  if (CrewActionPhase.TankMainGunFire == myGameInstance.CrewActionPhase)
+                  {
+                     if (null == myGameInstance.TargetMainGun) // no previous target
+                     {
+                        Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "MapItemClick(): no previous target zeroize selectedMapItem.EnemyAcquiredShots.Clear()");
+                        selectedMapItem.EnemyAcquiredShots.Clear();  // the only thing in this list is the Sherman attacks
+                     }
+                     else if (selectedMapItem.Name != myGameInstance.TargetMainGun.Name) // previous target is no longer the target. selectedMapItem is the target. Changed targets.
+                     {
+                        Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "MapItemClick(): differt target zeroize selectedMapItem.EnemyAcquiredShots.Clear() and myGameInstance.TargetMainGun.EnemyAcquiredShots.Clear()");
+                        selectedMapItem.EnemyAcquiredShots.Clear();
+                        myGameInstance.TargetMainGun.EnemyAcquiredShots.Clear();
+                     }
+                     myGameInstance.TargetMainGun = selectedMapItem;
+                     outAction = GameAction.BattleRoundSequenceShermanFiringMainGun;
+                  }
+                  else
+                  {
+                     myGameInstance.TargetMg = selectedMapItem;
+                     outAction = GameAction.BattleRoundSequenceShermanFiringMachineGun;
+                  }
+                  selectedMapItem = null;
+                  myGameEngine.PerformAction(ref myGameInstance, ref outAction);
+               }
+            }
+         }
+         e.Handled = true;
+      }
+      //-------------GameViewerWindow Controller Functions---------------------------------
       private void MouseMoveGameViewerWindow(object sender, MouseEventArgs e)
       {
          if (null == myDraggedButton)
@@ -4086,7 +4081,6 @@ namespace Pattons_Best
             Canvas.SetLeft(myDraggedButton, newPoint.X - offset);
             Canvas.SetTop(myDraggedButton, newPoint.Y - offset);
          }
-
          e.Handled = true;
       }
       private void ContentRenderedGameViewerWindow(object sender, EventArgs e)
