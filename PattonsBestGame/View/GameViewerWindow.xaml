@@ -12,7 +12,6 @@
         ResizeMode="CanResizeWithGrip" 
         MinHeight="700" MinWidth="800"
         WindowState="Maximized" 
-        MouseMove="Window_MouseMove"
         SizeChanged="SizeChangedGameViewerWindow" 
         ContentRendered="ContentRenderedGameViewerWindow"
         Closed="ClosedGameViewerWindow" >

@@ -657,11 +657,63 @@ namespace Pattons_Best
          else
             Canvas.SetZIndex(b, 1000);
          b.Click += ClickButtonMapItem;
-         b.PreviewMouseDown += MouseDownMapItem;
-         b.MouseEnter += MouseEnterMapItem;
-         b.MouseLeave += MouseLeaveMapItem;
-         b.PreviewMouseUp += MouseUpMapItem;
+         this.PreviewMouseMove += MyCanvasMain_MouseMove;
+         b.PreviewMouseLeftButtonDown += PreviewMouseLeftButtonDownMapItem;
+         b.PreviewMouseLeftButtonUp += PreviewMouseLeftButtonUpMapItem;
          return b;
+      }
+      private void MyCanvasMain_MouseMove(object sender, MouseEventArgs e)
+      {
+         if (null == myDraggedButton)
+         {
+            base.OnMouseMove(e);
+            return;
+         }
+         //-----------------------------------
+         IMapItem? selectedMapItem = myGameInstance.BattleStacks.FindMapItem(myDraggedButton.Name); // selectedMapItem is the new target
+         if (null == selectedMapItem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MyCanvasMain_MouseMove(): selectedMapItem=null for button.Name=" + myDraggedButton.Name);
+            return;
+         }
+         //-----------------------------------
+         System.Windows.Point newPoint = e.GetPosition(myCanvasMain);
+         if( true == Territory.IsPointInPolygon( selectedMapItem.TerritoryCurrent, newPoint))
+         {
+            Logger.Log(LogEnum.LE_SHOW_BUTTON_MOVE, "MyCanvasMain_MouseMove(): button.Name=" + myDraggedButton.Name + " moving to p=(" + newPoint.X.ToString("###") + "," + newPoint.Y.ToString("###") + ")");
+            double offset = selectedMapItem.Zoom * Utilities.theMapItemOffset;
+            selectedMapItem.Location.X = newPoint.X - offset;
+            selectedMapItem.Location.Y = newPoint.Y - offset;
+            Canvas.SetLeft(myDraggedButton, newPoint.X - offset);
+            Canvas.SetTop(myDraggedButton, newPoint.Y - offset);
+         }
+
+         e.Handled = true;
+      }
+      private void PreviewMouseLeftButtonDownMapItem(object sender, System.Windows.Input.MouseEventArgs e)
+      {
+         if (e.LeftButton == MouseButtonState.Pressed)
+         {
+            Button? button = sender as Button;
+            if (null == button)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MouseDownMapItem(): button = null");
+               return;
+            }
+            if ((false == button.Name.Contains("Sherman")) && (false == button.Name.Contains("TaskForce")) && (false == button.Name.Contains("Weather")))
+            {
+               Logger.Log(LogEnum.LE_SHOW_BUTTON_MOVE, "MouseDownMapItem(): selected button.Name=" + button.Name);
+               myDraggedButton = button;
+            }
+         }
+      }
+      private void PreviewMouseLeftButtonUpMapItem(object sender, System.Windows.Input.MouseEventArgs e)
+      {
+         if (null == myDraggedButton)
+            Logger.Log(LogEnum.LE_SHOW_BUTTON_MOVE, "MouseUpMapItem(): myDraggedButton=null");
+         else
+            Logger.Log(LogEnum.LE_SHOW_BUTTON_MOVE, "MouseUpMapItem(): unselecting button.Name=" + myDraggedButton.Name);
+         myDraggedButton = null;
       }
       private bool CreateContextMenuCrewAction(IGameInstance gi)
       {
@@ -3487,57 +3539,6 @@ namespace Pattons_Best
             }
          }
          e.Handled = true;
-      }
-      private void Window_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
-      {
-         if (null == myDraggedButton)
-         {
-            base.OnMouseMove(e);
-            return;
-         }
-         //-----------------------------------
-         IMapItem? selectedMapItem = myGameInstance.BattleStacks.FindMapItem(myDraggedButton.Name); // selectedMapItem is the new target
-         if (null == selectedMapItem)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Window_MouseMove(): selectedMapItem=null for button.Name=" + myDraggedButton.Name);
-            return;
-         }
-         //-----------------------------------
-         System.Windows.Point newPoint = this.PointToScreen(e.GetPosition(this));
-         if( true == Territory.IsPointInPolygon(selectedMapItem.TerritoryCurrent, newPoint))
-         {
-            selectedMapItem.Location.X = newPoint.X;
-            selectedMapItem.Location.Y = newPoint.Y;
-            Canvas.SetLeft(myDraggedButton, newPoint.X);
-            Canvas.SetTop(myDraggedButton, newPoint.Y);
-         }
-         e.Handled = true;
-      }
-      private void MouseDownMapItem(object sender, System.Windows.Input.MouseEventArgs e)
-      {
-         if (null == myGameInstance)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownMapItem(): myGameInstance=null");
-            return;
-         }
-         Button? button = sender as Button;
-         if (null == button)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownMapItem(): button = null");
-            return;
-         }
-         if ((false == button.Name.Contains("Sherman")) && (false == button.Name.Contains("TaskForce")) && (false == button.Name.Contains("Weather")))
-            myDraggedButton = button;
-      }
-      private void MouseUpMapItem(object sender, System.Windows.Input.MouseEventArgs e)
-      {
-         myDraggedButton = null;
-      }
-      private void MouseEnterMapItem(object sender, System.Windows.Input.MouseEventArgs e)
-      {
-      }
-      private void MouseLeaveMapItem(object sender, System.Windows.Input.MouseEventArgs e)
-      {
       }
       private void MouseLeftButtonDownMarquee(object sender, MouseEventArgs e)
       {
