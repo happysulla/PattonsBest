@@ -22,10 +22,10 @@ namespace Pattons_Best
             if (false == Directory.Exists(theGamesDirectory)) // create directory if does not exists
                Directory.CreateDirectory(theGamesDirectory);
             string filename = theGamesDirectory + "Checkpoint.bpg";
-            IGameInstance? gi = ReadGameInstanceXml(filename);
+            IGameInstance? gi = ReadXml(filename);
             if (null == gi)
             {
-               Logger.Log(LogEnum.LE_ERROR, "OpenGame(): ReadGameInstanceXml() returned null for " + filename);
+               Logger.Log(LogEnum.LE_ERROR, "OpenGame(): ReadXml() returned null for " + filename);
                return null;
             }
             Logger.Log(LogEnum.LE_GAME_INIT, "OpenGame(): gi=" + gi.ToString());
@@ -99,11 +99,11 @@ namespace Pattons_Best
             dlg.Filter = "Barbarin Prince Games|*.bpg";
             if (true == dlg.ShowDialog())
             {
-               IGameInstance? gi = ReadGameInstanceXml(dlg.FileName);
+               IGameInstance? gi = ReadXml(dlg.FileName);
                if (null == gi)
                {
                   Directory.SetCurrentDirectory(MainWindow.theAssemblyDirectory);
-                  Logger.Log(LogEnum.LE_ERROR, "OpenGame(): ReadGameInstanceXml(=) returned null for " + dlg.FileName);
+                  Logger.Log(LogEnum.LE_ERROR, "OpenGame(): ReadXml(=) returned null for " + dlg.FileName);
                   return null;
                }
                Logger.Log(LogEnum.LE_GAME_INIT, "OpenGameFromFile(): gi=" + gi.ToString());
@@ -707,7 +707,7 @@ namespace Pattons_Best
          return true;
       }
       //--------------------------------------------------
-      private IGameInstance? ReadGameInstanceXml(string filename)
+      private IGameInstance? ReadXml(string filename)
       {
          IGameInstance gi = new GameInstance();
          IMapItems mapItems1 = new MapItems();
@@ -722,7 +722,7 @@ namespace Pattons_Best
             {
                if (reader.Name != "GameInstance")
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadGameInstanceXml(): first node is not GameInstance");
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXml(): first node is not GameInstance");
                   return null;
                }
             }
@@ -732,7 +732,7 @@ namespace Pattons_Best
             {
                if (reader.Name != "Version")
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadGameInstanceXml(): node=" + reader.Name);
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXml(): node=" + reader.Name);
                   return null;
                }
                else
@@ -740,7 +740,7 @@ namespace Pattons_Best
                   string? sVersion = reader.GetAttribute("value");
                   if (null == sVersion)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ReadGameInstanceXml(): version=null");
+                     Logger.Log(LogEnum.LE_ERROR, "ReadXml(): version=null");
                      return null;
                   }
                   int version = int.Parse(sVersion);
@@ -754,19 +754,19 @@ namespace Pattons_Best
             //----------------------------------------------
             if (false == ReadXmlOptions(reader, gi.Options))
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadGameInstanceXml(): ReadXmlOptions() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlOptions() returned false");
                return null;
             }
             //----------------------------------------------
             if (false == ReadXmlGameStat(reader, gi.Statistic))
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadGameInstanceXml(): ReadXmlGameStat() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlGameStat() returned false");
                return null;
             }
             //----------------------------------------------
             if (false == ReadXmlGameMapItems(reader, gi))
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadGameInstanceXml(): ReadXmlGameMapItems() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlGameMapItems() returned false");
                return null;
             }
             //----------------------------------------------
@@ -775,7 +775,7 @@ namespace Pattons_Best
             {
                if (reader.Name != "EventActive")
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadGameInstanceXml(): node=" + reader.Name);
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXml(): node=" + reader.Name);
                   return null;
                }
                else
@@ -783,7 +783,7 @@ namespace Pattons_Best
                   string? eventActive = reader.GetAttribute("value");
                   if (null == eventActive)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ReadGameInstanceXml(): GetAttribute(EventActive)=null");
+                     Logger.Log(LogEnum.LE_ERROR, "ReadXml(): GetAttribute(EventActive)=null");
                      return null;
                   }
                   gi.EventActive = eventActive;
@@ -795,7 +795,7 @@ namespace Pattons_Best
             {
                if (reader.Name != "EventDisplayed")
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadGameInstanceXml(): node=" + reader.Name);
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXml(): node=" + reader.Name);
                   return null;
                }
                else
@@ -803,7 +803,7 @@ namespace Pattons_Best
                   string? eventDisplayed = reader.GetAttribute("value");
                   if (null == eventDisplayed)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ReadGameInstanceXml(): GetAttribute(EventDisplayed)=null");
+                     Logger.Log(LogEnum.LE_ERROR, "ReadXml(): GetAttribute(EventDisplayed)=null");
                      return null;
                   }
                   gi.EventDisplayed = eventDisplayed;
@@ -815,7 +815,7 @@ namespace Pattons_Best
             {
                if (reader.Name != "EventStart")
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadGameInstanceXml(): node=" + reader.Name);
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXml(): node=" + reader.Name);
                   return null;
                }
                else
@@ -823,7 +823,7 @@ namespace Pattons_Best
                   string? eventStart = reader.GetAttribute("value");
                   if (null == eventStart)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ReadGameInstanceXml(): GetAttribute(EventStart)=null");
+                     Logger.Log(LogEnum.LE_ERROR, "ReadXml(): GetAttribute(EventStart)=null");
                      return null;
                   }
                   gi.EventStart = eventStart;
@@ -835,7 +835,7 @@ namespace Pattons_Best
             {
                if (reader.Name != "GameTurn")
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadGameInstanceXml(): node=" + reader.Name);
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXml(): node=" + reader.Name);
                   return null;
                }
                else
@@ -843,7 +843,7 @@ namespace Pattons_Best
                   string? sAttribute = reader.GetAttribute("value");
                   if (null == sAttribute)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ReadGameInstanceXml(): GetAttribute(GameTurn)=null");
+                     Logger.Log(LogEnum.LE_ERROR, "ReadXml(): GetAttribute(GameTurn)=null");
                      return null;
                   }
                   gi.GameTurn = int.Parse(sAttribute);
@@ -854,7 +854,7 @@ namespace Pattons_Best
          } // try
          catch (Exception e)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadGameInstanceXml():\n" + e.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "ReadXml():\n" + e.ToString());
             return null;
          }
          finally
