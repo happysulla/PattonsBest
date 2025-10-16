@@ -21,12 +21,11 @@ namespace Pattons_Best
       //------------------------------------------------
       public bool IsMultipleSelectForDieResult { set; get; } = false;
       public bool IsGridActive { set; get; } = false;
-      public string EventActive { get; set; } = "e000";
-      public string EventDisplayed { set; get; } = "e000";
-      public string EventStart { set; get; } = "e000";
-      public List<string> Events { set; get; } = new List<string>();
       private Dictionary<string, int[]> myDieResults = new Dictionary<string, int[]>();
       public Dictionary<string, int[]> DieResults { get => myDieResults; }
+      //------------------------------------------------
+      public string EventActive { get; set; } = "e000";
+      public string EventDisplayed { set; get; } = "e000";
       //------------------------------------------------
       public int Day { get; set; } = 0;
       public int GameTurn { get; set; } = 0;

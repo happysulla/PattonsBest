@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace Pattons_Best
 {
@@ -813,26 +814,6 @@ namespace Pattons_Best
             reader.Read();
             if (reader.IsStartElement())
             {
-               if (reader.Name != "EventStart")
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXml(): node=" + reader.Name);
-                  return null;
-               }
-               else
-               {
-                  string? eventStart = reader.GetAttribute("value");
-                  if (null == eventStart)
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "ReadXml(): GetAttribute(EventStart)=null");
-                     return null;
-                  }
-                  gi.EventStart = eventStart;
-               }
-            }
-            //----------------------------------------------
-            reader.Read();
-            if (reader.IsStartElement())
-            {
                if (reader.Name != "GameTurn")
                {
                   Logger.Log(LogEnum.LE_ERROR, "ReadXml(): node=" + reader.Name);
@@ -847,6 +828,12 @@ namespace Pattons_Best
                      return null;
                   }
                   gi.GameTurn = int.Parse(sAttribute);
+               }
+               //--------------------------------
+               if (false == CreateXmReports(aXmlDocument, gi.Reports))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateXmlMapItemsWoundSpots() returned false");
+                  return false;
                }
             }
             //----------------------------------------------
@@ -1100,17 +1087,17 @@ namespace Pattons_Best
             return null;
          }
          //------------------------------------------
-         elem = aXmlDocument.CreateElement("EventStart");
+         elem = aXmlDocument.CreateElement("Day");
          if (null == elem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(EventStart) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(Day) returned null");
             return null;
          }
-         elem.SetAttribute("value", gi.EventStart);
+         elem.SetAttribute("value", gi.Day.ToString());
          node = root.AppendChild(elem);
          if (null == node)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(EventStart) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(Day) returned null");
             return null;
          }
          //------------------------------------------
@@ -1127,7 +1114,178 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(GameTurn) returned null");
             return null;
          }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("GamePhase");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(GamePhase) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.GamePhase.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(GamePhase) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("EndGameReason");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(EndGameReason) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.EndGameReason.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(EndGameReason) returned null");
+            return null;
+         }
          return aXmlDocument;
+      }
+      private bool CreateXmlGameReports(XmlDocument aXmlDocument, IAfterActionReports reports)
+      {
+         XmlNode? root = aXmlDocument.DocumentElement;
+         if (null == root)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): root is null");
+            return false;
+         }
+         XmlElement? reportsElem = aXmlDocument.CreateElement("Reports");
+         if (null == reportsElem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): CreateElement(Reports) returned null");
+            return false;
+         }
+         reportsElem.SetAttribute("count", reports.Count.ToString());
+         XmlNode? reportsNode = root.AppendChild(reportsElem);
+         if (null == reportsNode)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(reportsNode) returned null");
+            return false;
+         }
+         //--------------------------------
+         for (int k=0; k < reports.Count; k++)
+         {
+            IAfterActionReport? report = reports[k];
+            if( null == report )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): report=null");
+               return false;
+            }
+            XmlElement? reportElem = aXmlDocument.CreateElement("Report");
+            if (null == reportElem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(Report) returned false");
+               return false;
+            }
+            XmlNode? reportNode = reportsNode.AppendChild(reportElem);
+            if (null == reportNode)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(reportNode) returned false");
+               return false;
+            }
+            //------------------------------------------
+            XmlElement? elem = aXmlDocument.CreateElement("Day");
+            if (null == elem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(Day) returned false");
+               return false;
+            }
+            elem.SetAttribute("value", report.Day);
+            XmlNode? node = root.AppendChild(elem);
+            if (null == node)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(Day) returned false");
+               return false;
+            }
+            //------------------------------------------
+            elem = aXmlDocument.CreateElement("Scenario");
+            if (null == elem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(Scenario) returned false");
+               return false;
+            }
+            elem.SetAttribute("value", report.Scenario.ToString());
+            node = root.AppendChild(elem);
+            if (null == node)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(Scenario) returned false");
+               return false;
+            }
+            //------------------------------------------
+            elem = aXmlDocument.CreateElement("Probability");
+            if (null == elem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(Probability) returned false");
+               return false;
+            }
+            elem.SetAttribute("value", report.Probability.ToString());
+            node = root.AppendChild(elem);
+            if (null == node)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(Probability) returned false");
+               return false;
+            }
+            //------------------------------------------
+            elem = aXmlDocument.CreateElement("Resistance");
+            if (null == elem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(Resistance) returned false");
+               return false;
+            }
+            elem.SetAttribute("value", report.Resistance.ToString());
+            node = root.AppendChild(elem);
+            if (null == node)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(Resistance) returned false");
+               return false;
+            }
+            //------------------------------------------
+            elem = aXmlDocument.CreateElement("Name");
+            if (null == elem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(Name) returned false");
+               return false;
+            }
+            elem.SetAttribute("value", report.Name);
+            node = root.AppendChild(elem);
+            if (null == node)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(Name) returned false");
+               return false;
+            }
+            //------------------------------------------
+            elem = aXmlDocument.CreateElement("TankCardNum");
+            if (null == elem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(TankCardNum) returned false");
+               return false;
+            }
+            elem.SetAttribute("value", report.TankCardNum.ToString());
+            node = root.AppendChild(elem);
+            if (null == node)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(TankCardNum) returned false");
+               return false;
+            }
+            //------------------------------------------
+            elem = aXmlDocument.CreateElement("Weather");
+            if (null == elem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(Weather) returned false");
+               return false;
+            }
+            elem.SetAttribute("value", report.Weather);
+            node = root.AppendChild(elem);
+            if (null == node)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(Weather) returned false");
+               return false;
+            }
+         }
+         return true;
       }
       private bool CreateXmlTerritories(XmlDocument aXmlDocument, ITerritories territories, string attribute)
       {

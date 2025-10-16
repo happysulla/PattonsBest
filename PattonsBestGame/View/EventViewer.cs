@@ -124,7 +124,6 @@ namespace Pattons_Best
             CtorError = true;
             return;
          }
-         gi.Events.Add(gi.EventActive);
       }
       private bool CreateEvents(IGameInstance gi)
       {

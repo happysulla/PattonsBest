@@ -9111,7 +9111,6 @@ namespace Pattons_Best
          GameAction previousAction = action;
          GameAction previousDieAction = gi.DieRollAction;
          string previousEvent = gi.EventActive;
-         string previousStartEvent = gi.EventStart;
          switch (action)
          {
             case GameAction.ShowTankForcePath:
