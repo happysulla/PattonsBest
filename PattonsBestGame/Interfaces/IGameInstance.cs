@@ -113,6 +113,9 @@ namespace Pattons_Best
       IMapItem? ShermanHvss { set; get; }
       ICrewMember? ReturningCrewman { set; get; }
       //------------------------------------------------
+      ITerritories AreaTargets { get; set; }
+      ITerritories CounterattachRetreats { get; set; }
+      //------------------------------------------------
       ITerritory Home { get; set; }
       ITerritory? EnemyStrengthCheckTerritory { get; set; }
       ITerritory? ArtillerySupportCheck { get; set; }
@@ -121,8 +124,6 @@ namespace Pattons_Best
       ITerritory? AdvanceFire { get; set; }
       ITerritory? FriendlyAdvance { get; set; }
       ITerritory? EnemyAdvance { get; set; }
-      ITerritories AreaTargets { get; set; }
-      ITerritories CounterattachRetreats { get; set; }
       //------------------------------------------------
       bool IsHatchesActive { set; get; }
       bool IsRetreatToStartArea { set; get; }
@@ -131,7 +132,6 @@ namespace Pattons_Best
       string SwitchedCrewMember { set; get; }
       int AssistantOriginalRating { set; get; }
       //------------------------------------------------
-      bool IsShermanFirstShot { set; get; }
       bool IsShermanFiringAtFront { set; get; }
       bool IsShermanDeliberateImmobilization { set; get; }
       string ShermanTypeOfFire { set; get; }

@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Xml;
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace Pattons_Best
@@ -1142,7 +1143,1245 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlGameReports() returned false");
             return null;
          }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("BattlePhase");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(BattlePhase) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.BattlePhase.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(BattlePhase) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("CrewActionPhase");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(CrewActionPhase) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.CrewActionPhase.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(CrewActionPhase) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("MovementEffectOnSherman");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(MovementEffectOnSherman) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.MovementEffectOnSherman);
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(MovementEffectOnSherman) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("MovementEffectOnEnemy");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(MovementEffectOnEnemy) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.MovementEffectOnEnemy);
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(MovementEffectOnEnemy) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("FiredAmmoType");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(FiredAmmoType) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.FiredAmmoType);
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(FiredAmmoType) returned null");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlMapItems(aXmlDocument, gi.NewMembers, "NewMembers"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlMapItems(NewMembers) returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlMapItems(aXmlDocument, gi.ReadyRacks, "ReadyRacks"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlMapItems(ReadyRacks) returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlMapItems(aXmlDocument, gi.Hatches, "Hatches"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlMapItems(Hatches) returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlMapItems(aXmlDocument, gi.CrewActions, "CrewActions"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlMapItems(CrewActions) returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlMapItems(aXmlDocument, gi.GunLoads, "GunLoads"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlMapItems(GunLoads) returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlMapItems(aXmlDocument, gi.Targets, "Targets"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlMapItems(Targets) returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlMapItems(aXmlDocument, gi.AdvancingEnemies, "AdvancingEnemies"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlMapItems(AdvancingEnemies) returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlMapItems(aXmlDocument, gi.ShermanAdvanceOrRetreatEnemies, "ShermanAdvanceOrRetreatEnemies"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlMapItems(ShermanAdvanceOrRetreatEnemies) returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlMapItems(aXmlDocument, gi.InjuredCrewMembers, "InjuredCrewMembers"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlMapItems(InjuredCrewMembers) returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlMapItem(aXmlDocument, root, gi.Sherman))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlMapItem(Sherman) returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlMapItem(aXmlDocument, root, gi.TargetMainGun))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlMapItem(TargetMainGun) returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlMapItem(aXmlDocument, root, gi.TargetMg))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlMapItem(TargetMg) returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlMapItem(aXmlDocument, root, gi.ShermanHvss))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlMapItem(ShermanHvss) returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlMapItem(aXmlDocument, root, gi.ReturningCrewman))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlMapItem(ReturningCrewman) returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlTerritories(aXmlDocument, gi.AreaTargets, "AreaTargets"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlTerritories(AreaTargets) returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlTerritories(aXmlDocument, gi.CounterattachRetreats, "CounterattachRetreats"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlTerritories(CounterattachRetreats) returned false");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("Home");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(Home) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", "Home");
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(Home) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("EnemyStrengthCheckTerritory");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(EnemyStrengthCheckTerritory) returned null");
+            return null;
+         }
+         if( null == gi.EnemyStrengthCheckTerritory)
+            elem.SetAttribute("value", "null");
+         else
+            elem.SetAttribute("value", gi.EnemyStrengthCheckTerritory.Name);
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(EnemyStrengthCheckTerritory) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("ArtillerySupportCheck");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(ArtillerySupportCheck) returned null");
+            return null;
+         }
+         if (null == gi.ArtillerySupportCheck)
+            elem.SetAttribute("value", "null");
+         else
+            elem.SetAttribute("value", gi.ArtillerySupportCheck.Name);
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(ArtillerySupportCheck) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("AirStrikeCheckTerritory");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(AirStrikeCheckTerritory) returned null");
+            return null;
+         }
+         if (null == gi.AirStrikeCheckTerritory)
+            elem.SetAttribute("value", "null");
+         else
+            elem.SetAttribute("value", gi.AirStrikeCheckTerritory.Name);
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(AirStrikeCheckTerritory) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("EnteredArea");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(EnteredArea) returned null");
+            return null;
+         }
+         if (null == gi.EnteredArea)
+            elem.SetAttribute("value", "null");
+         else
+            elem.SetAttribute("value", gi.EnteredArea.Name);
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(EnteredArea) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("AdvanceFire");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(AdvanceFire) returned null");
+            return null;
+         }
+         if (null == gi.AdvanceFire)
+            elem.SetAttribute("value", "null");
+         else
+            elem.SetAttribute("value", gi.AdvanceFire.Name);
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(AdvanceFire) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("FriendlyAdvance");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(FriendlyAdvance) returned null");
+            return null;
+         }
+         if (null == gi.FriendlyAdvance)
+            elem.SetAttribute("value", "null");
+         else
+            elem.SetAttribute("value", gi.FriendlyAdvance.Name);
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(FriendlyAdvance) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("EnemyAdvance");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(EnemyAdvance) returned null");
+            return null;
+         }
+         if (null == gi.EnemyAdvance)
+            elem.SetAttribute("value", "null");
+         else
+            elem.SetAttribute("value", gi.EnemyAdvance.Name);
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(EnemyAdvance) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsHatchesActive");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsHatchesActive) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsHatchesActive.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsHatchesActive) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsRetreatToStartArea");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsRetreatToStartArea) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsRetreatToStartArea.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsRetreatToStartArea) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsShermanAdvancingOnMoveBoard");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsShermanAdvancingOnMoveBoard) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsShermanAdvancingOnMoveBoard.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsShermanAdvancingOnMoveBoard) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("SwitchedCrewMember");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(SwitchedCrewMember) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.SwitchedCrewMember);
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(SwitchedCrewMember) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("AssistantOriginalRating");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(AssistantOriginalRating) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.AssistantOriginalRating.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(AssistantOriginalRating) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsShermanFiringAtFront");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsShermanFiringAtFront) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsShermanFiringAtFront.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsShermanFiringAtFront) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsShermanDeliberateImmobilization");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsShermanDeliberateImmobilization) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsShermanDeliberateImmobilization.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsShermanDeliberateImmobilization) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("ShermanTypeOfFire");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(ShermanTypeOfFire) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.ShermanTypeOfFire);
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(ShermanTypeOfFire) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("NumSmokeAttacksThisRound");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(NumSmokeAttacksThisRound) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.NumSmokeAttacksThisRound.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(NumSmokeAttacksThisRound) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsMalfunctionedMainGun");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsMalfunctionedMainGun) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsMalfunctionedMainGun.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsMalfunctionedMainGun) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsMainGunRepairAttempted");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsMainGunRepairAttempted) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsMainGunRepairAttempted.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsMainGunRepairAttempted) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsBrokenMainGun");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsBrokenMainGun) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsBrokenMainGun.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsBrokenMainGun) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsBrokenGunSight");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsBrokenGunSight) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsBrokenGunSight.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsBrokenGunSight) returned null");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlFirstShots(aXmlDocument, gi.FirstShots))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlFirstShots(FirstShots) returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlTrainedGunners(aXmlDocument, gi.TrainedGunners))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlFirstShots(TrainedGunners) returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlTrainedGunners(aXmlDocument, gi.TrainedGunners))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlFirstShots(TrainedGunners) returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlShermanHits(aXmlDocument, gi.ShermanHits))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlShermanHits(ShermanHits) returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlShermanDeath(aXmlDocument, gi.Death))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlShermanDeath(Death) returned false");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IdentifiedTank");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IdentifiedTank) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IdentifiedTank);
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IdentifiedTank) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IdentifiedAtg");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IdentifiedAtg) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IdentifiedAtg);
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IdentifiedAtg) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IdentifiedSpg");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IdentifiedSpg) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IdentifiedSpg);
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IdentifiedSpg) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsShermanFiringAaMg");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsShermanFiringAaMg) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsShermanFiringAaMg.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsShermanFiringAaMg) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsShermanFiringBowMg");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsShermanFiringBowMg) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsShermanFiringBowMg.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsShermanFiringBowMg) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsShermanFiringCoaxialMg");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsShermanFiringCoaxialMg) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsShermanFiringCoaxialMg.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsShermanFiringCoaxialMg) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsShermanFiringSubMg");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsShermanFiringSubMg) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsShermanFiringSubMg.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsShermanFiringSubMg) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsCommanderDirectingMgFire");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsCommanderDirectingMgFire) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsCommanderDirectingMgFire.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsCommanderDirectingMgFire) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsShermanFiredAaMg");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsShermanFiredAaMg) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsShermanFiredAaMg.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsShermanFiredAaMg) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsShermanFiredBowMg");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsShermanFiredBowMg) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsShermanFiredBowMg.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsShermanFiredBowMg) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsShermanFiredCoaxialMg");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsShermanFiredCoaxialMg) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsShermanFiredCoaxialMg.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsShermanFiredCoaxialMg) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsShermanFiredSubMg");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsShermanFiredSubMg) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsShermanFiredSubMg.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsShermanFiredSubMg) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsMalfunctionedMgCoaxial");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsMalfunctionedMgCoaxial) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsMalfunctionedMgCoaxial.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsMalfunctionedMgCoaxial) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsMalfunctionedMgBow");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsMalfunctionedMgBow) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsMalfunctionedMgBow.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsMalfunctionedMgBow) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsMalfunctionedMgAntiAircraft");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsMalfunctionedMgAntiAircraft) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsMalfunctionedMgAntiAircraft.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsMalfunctionedMgAntiAircraft) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsCoaxialMgRepairAttempted");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsCoaxialMgRepairAttempted) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsCoaxialMgRepairAttempted.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsCoaxialMgRepairAttempted) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsBowMgRepairAttempted");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsBowMgRepairAttempted) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsBowMgRepairAttempted.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsBowMgRepairAttempted) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsAaMgRepairAttempted");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsAaMgRepairAttempted) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsAaMgRepairAttempted.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsAaMgRepairAttempted) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsBrokenMgAntiAircraft");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsBrokenMgAntiAircraft) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsBrokenMgAntiAircraft.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsBrokenMgAntiAircraft) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsBrokenMgBow");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsBrokenMgBow) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsBrokenMgBow.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsBrokenMgBow) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsBrokenMgCoaxial");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsBrokenMgCoaxial) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsBrokenMgCoaxial.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsBrokenMgCoaxial) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsBrokenPeriscopeDriver");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsBrokenPeriscopeDriver) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsBrokenPeriscopeDriver.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsBrokenPeriscopeDriver) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsBrokenPeriscopeLoader");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsBrokenPeriscopeLoader) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsBrokenPeriscopeLoader.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsBrokenPeriscopeLoader) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsBrokenPeriscopeAssistant");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsBrokenPeriscopeAssistant) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsBrokenPeriscopeAssistant.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsBrokenPeriscopeAssistant) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsBrokenPeriscopeGunner");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsBrokenPeriscopeGunner) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsBrokenPeriscopeGunner.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsBrokenPeriscopeGunner) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsBrokenPeriscopeCommander");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsBrokenPeriscopeCommander) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsBrokenPeriscopeCommander.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsBrokenPeriscopeCommander) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsShermanTurretRotated");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsShermanTurretRotated) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsShermanTurretRotated.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsShermanTurretRotated) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("ShermanRotationTurretOld");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(ShermanRotationTurretOld) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.ShermanRotationTurretOld.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(ShermanRotationTurretOld) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsCounterattackAmbush");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsCounterattackAmbush) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsCounterattackAmbush.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsCounterattackAmbush) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsLeadTank");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsLeadTank) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsLeadTank.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsLeadTank) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsAirStrikePending");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsAirStrikePending) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsAirStrikePending.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsAirStrikePending) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsAdvancingFireChosen");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsAdvancingFireChosen) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsAdvancingFireChosen.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsAdvancingFireChosen) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("AdvancingFireMarkerCount");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(AdvancingFireMarkerCount) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.AdvancingFireMarkerCount.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(AdvancingFireMarkerCount) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("BattleResistance");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(BattleResistance) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.BattleResistance.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(BattleResistance) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsMinefieldAttack");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsMinefieldAttack) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsMinefieldAttack.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsMinefieldAttack) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsHarrassingFireBonus");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsHarrassingFireBonus) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsHarrassingFireBonus.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsHarrassingFireBonus) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsFlankingFire");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsFlankingFire) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsFlankingFire.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsFlankingFire) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsEnemyAdvanceComplete");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsEnemyAdvanceComplete) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsEnemyAdvanceComplete.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsEnemyAdvanceComplete) returned null");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlPanzerfaustAttack(aXmlDocument, gi.Panzerfaust))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlPanzerfaustAttack(Panzerfaust) returned false");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("NumCollateralDamage");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(NumCollateralDamage) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.NumCollateralDamage.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(NumCollateralDamage) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("TankReplacementNumber");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(TankReplacementNumber) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.TankReplacementNumber.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(TankReplacementNumber) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("VictoryPtsTotalCampaign");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(VictoryPtsTotalCampaign) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.VictoryPtsTotalCampaign.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(VictoryPtsTotalCampaign) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("PromotionPointNum");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(PromotionPointNum) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.PromotionPointNum.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(PromotionPointNum) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("PromotionDay");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(PromotionDay) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.PromotionDay.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(PromotionDay) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("NumPurpleHeart");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(NumPurpleHeart) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.NumPurpleHeart.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(NumPurpleHeart) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsCommanderRescuePerformed");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsCommanderRescuePerformed) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsCommanderRescuePerformed.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsCommanderRescuePerformed) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsCommanderKilled");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsCommanderKilled) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsCommanderKilled.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsCommanderKilled) returned null");
+            return null;
+         }
+         //------------------------------------------
+         elem = aXmlDocument.CreateElement("IsPromoted");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsPromoted) returned null");
+            return null;
+         }
+         elem.SetAttribute("value", gi.IsPromoted.ToString());
+         node = root.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsPromoted) returned null");
+            return null;
+         }
          return aXmlDocument;
+      }
+      private bool CreateXmlGameOptions(XmlDocument aXmlDocument, Options options)
+      {
+         XmlNode? root = aXmlDocument.DocumentElement;
+         if (null == root)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): root is null");
+            return false;
+         }
+         XmlElement? optionsElem = aXmlDocument.CreateElement("Options");
+         if (null == optionsElem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(Options) returned null");
+            return false;
+         }
+         optionsElem.SetAttribute("count", options.Count.ToString());
+         XmlNode? optionsNode = root.AppendChild(optionsElem);
+         if (null == optionsNode)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(optionsNode) returned null");
+            return false;
+         }
+         //--------------------------------
+         foreach (Option option in options)
+         {
+            XmlElement? optionElem = aXmlDocument.CreateElement("Option");
+            if (null == optionElem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(Option) returned null");
+               return false;
+            }
+            optionElem.SetAttribute("Name", option.Name);
+            optionElem.SetAttribute("IsEnabled", option.IsEnabled.ToString());
+            XmlNode? optionNode = optionsNode.AppendChild(optionElem);
+            if (null == optionNode)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(optionNode) returned null");
+               return false;
+            }
+         }
+         return true;
+      }
+      private bool CreateXmlGameStat(XmlDocument aXmlDocument, GameStat stat)
+      {
+         XmlNode? root = aXmlDocument.DocumentElement;
+         if (null == root)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): root is null");
+            return false;
+         }
+         XmlElement? gameStatElem = aXmlDocument.CreateElement("GameStat");
+         if (null == gameStatElem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(gameStatElem) returned null");
+            return false;
+         }
+         XmlNode? gameStatNode = root.AppendChild(gameStatElem);
+         if (null == gameStatNode)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(gameStatNode) returned null");
+            return false;
+         }
+         return true;
       }
       private bool CreateXmlGameReports(XmlDocument aXmlDocument, IAfterActionReports reports)
       {
@@ -1166,10 +2405,10 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------
-         for (int k=0; k < reports.Count; k++)
+         for (int k = 0; k < reports.Count; k++)
          {
             IAfterActionReport? report = reports[k];
-            if( null == report )
+            if (null == report)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): report=null");
                return false;
@@ -1902,7 +3141,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Decorations) returned false");
                return false;
             }
-            for( int k1=0; k1 < report.Decorations.Count; ++k1 )
+            for (int k1 = 0; k1 < report.Decorations.Count; ++k1)
             {
                elem = aXmlDocument.CreateElement("Decoration");
                if (null == elem)
@@ -1993,110 +3232,6 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool CreateXmlTerritories(XmlDocument aXmlDocument, ITerritories territories, string attribute)
-      {
-         XmlNode? root = aXmlDocument.DocumentElement;
-         if (null == root)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): root is null");
-            return false;
-         }
-         XmlElement? territoriesElem = aXmlDocument.CreateElement("Territories");
-         if (null == territoriesElem)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(Territories) returned null");
-            return false;
-         }
-         territoriesElem.SetAttribute("value", attribute);
-         territoriesElem.SetAttribute("count", territories.Count.ToString());
-         XmlNode? territoriesNode = root.AppendChild(territoriesElem);
-         if (null == territoriesNode)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(territoriesNode) returned null");
-            return false;
-         }
-         //--------------------------------
-         foreach (Territory t in territories)
-         {
-            XmlElement? terrElem = aXmlDocument.CreateElement("Territory");  // name of territory
-            if (null == terrElem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(terrElem) returned null");
-               return false;
-            }
-            terrElem.SetAttribute("value", t.Name);
-            XmlNode? territoryNode = territoriesNode.AppendChild(terrElem);
-            if (null == territoryNode)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(territoryNode) returned null");
-               return false;
-            }
-         }
-         return true;
-      }
-      private bool CreateXmlGameOptions(XmlDocument aXmlDocument, Options options)
-      {
-         XmlNode? root = aXmlDocument.DocumentElement;
-         if (null == root)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): root is null");
-            return false;
-         }
-         XmlElement? optionsElem = aXmlDocument.CreateElement("Options");
-         if (null == optionsElem)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(Options) returned null");
-            return false;
-         }
-         optionsElem.SetAttribute("count", options.Count.ToString());
-         XmlNode? optionsNode = root.AppendChild(optionsElem);
-         if (null == optionsNode)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(optionsNode) returned null");
-            return false;
-         }
-         //--------------------------------
-         foreach (Option option in options)
-         {
-            XmlElement? optionElem = aXmlDocument.CreateElement("Option");
-            if (null == optionElem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(Option) returned null");
-               return false;
-            }
-            optionElem.SetAttribute("Name", option.Name);
-            optionElem.SetAttribute("IsEnabled", option.IsEnabled.ToString());
-            XmlNode? optionNode = optionsNode.AppendChild(optionElem);
-            if (null == optionNode)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(optionNode) returned null");
-               return false;
-            }
-         }
-         return true;
-      }
-      private bool CreateXmlGameStat(XmlDocument aXmlDocument, GameStat stat)
-      {
-         XmlNode? root = aXmlDocument.DocumentElement;
-         if (null == root)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): root is null");
-            return false;
-         }
-         XmlElement? gameStatElem = aXmlDocument.CreateElement("GameStat");
-         if (null == gameStatElem)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(gameStatElem) returned null");
-            return false;
-         }
-         XmlNode? gameStatNode = root.AppendChild(gameStatElem);
-         if (null == gameStatNode)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(gameStatNode) returned null");
-            return false;
-         }
-         return true;
-      }
       private bool CreateXmlMapItems(XmlDocument aXmlDocument, IMapItems mapItems, string attribute )
       {
          XmlNode? root = aXmlDocument.DocumentElement;
@@ -2130,7 +3265,7 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool CreateXmlMapItem(XmlDocument aXmlDocument, XmlNode mapItemsNode, IMapItem mi)
+      private bool CreateXmlMapItem(XmlDocument aXmlDocument, XmlNode mapItemsNode, IMapItem? mi)
       {
          XmlElement? miElem = aXmlDocument.CreateElement("MapItem");
          if (null == miElem)
@@ -2143,6 +3278,11 @@ namespace Pattons_Best
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(miNode) returned null");
             return false;
+         }
+         if( null == mi )
+         {
+            miElem.SetAttribute("value", "null");
+            return true;
          }
          //--------------------------------
          XmlElement? elem = aXmlDocument.CreateElement("Name");
@@ -2776,13 +3916,13 @@ namespace Pattons_Best
             XmlElement? spotElem = aXmlDocument.CreateElement("WoundSpot");
             if (null == spotElem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(spotElem) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsWoundSpots(): CreateElement(spotElem) returned null");
                return false;
             }
             XmlNode? spotNode = woundSpotsNode.AppendChild(spotElem);
             if (null == spotNode)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(miNode) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsWoundSpots(): AppendChild(miNode) returned null");
                return false;
             }
             //--------------------------------
@@ -2832,22 +3972,23 @@ namespace Pattons_Best
          XmlElement? enemyShotsElem = aXmlDocument.CreateElement("EnemyAcquiredShots");
          if (null == enemyShotsElem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsWoundSpots(): CreateElement(enemyShotsElem) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsEnemyAcquiredShots(): CreateElement(enemyShotsElem) returned null");
             return false;
          }
          enemyShotsElem.SetAttribute("count", enemyAcquiredShots.Count.ToString());
          XmlNode? enemyAcquireShotsNode = topNode.AppendChild(enemyShotsElem);
          if (null == enemyAcquireShotsNode)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsWoundSpots(): AppendChild(enemyAcquireShotsNode) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsEnemyAcquiredShots(): AppendChild(enemyAcquireShotsNode) returned null");
             return false;
          }
+         int count = 0;
          foreach(var kvp in enemyAcquiredShots)
          {
             XmlElement? enemyAcqShotElem = aXmlDocument.CreateElement("EnemyAcqShot");
             if (null == enemyAcqShotElem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(spotElem) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsEnemyAcquiredShots(): CreateElement(spotElem) returned null");
                return false;
             }
             enemyAcqShotElem.SetAttribute("enemy", kvp.Key);
@@ -2855,9 +3996,435 @@ namespace Pattons_Best
             XmlNode? enemyAcqShotNode = enemyAcquireShotsNode.AppendChild(enemyAcqShotElem);
             if (null == enemyAcqShotNode)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(miNode) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsEnemyAcquiredShots(): AppendChild(miNode) returned null");
                return false;
             }
+            count++;
+         }
+         if (count != enemyAcquiredShots.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsEnemyAcquiredShots(): count=" + count.ToString() + " enemyAcquiredShots=" + enemyAcquiredShots.Count.ToString());
+            return false;
+         }
+         return true;
+      }
+      private bool CreateXmlTerritories(XmlDocument aXmlDocument, ITerritories territories, string attribute)
+      {
+         XmlNode? root = aXmlDocument.DocumentElement;
+         if (null == root)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): root is null");
+            return false;
+         }
+         XmlElement? territoriesElem = aXmlDocument.CreateElement("Territories");
+         if (null == territoriesElem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(Territories) returned null");
+            return false;
+         }
+         territoriesElem.SetAttribute("value", attribute);
+         territoriesElem.SetAttribute("count", territories.Count.ToString());
+         XmlNode? territoriesNode = root.AppendChild(territoriesElem);
+         if (null == territoriesNode)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(territoriesNode) returned null");
+            return false;
+         }
+         //--------------------------------
+         foreach (Territory t in territories)
+         {
+            XmlElement? terrElem = aXmlDocument.CreateElement("Territory");  // name of territory
+            if (null == terrElem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(terrElem) returned null");
+               return false;
+            }
+            terrElem.SetAttribute("value", t.Name);
+            XmlNode? territoryNode = territoriesNode.AppendChild(terrElem);
+            if (null == territoryNode)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(territoryNode) returned null");
+               return false;
+            }
+         }
+         return true;
+      }
+      private bool CreateXmlFirstShots(XmlDocument aXmlDocument, Dictionary<string, bool> firstShots)
+      {
+         XmlNode? root = aXmlDocument.DocumentElement;
+         if (null == root)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlFirstShots(): root is null");
+            return false;
+         }
+         XmlElement? firstShotsElem = aXmlDocument.CreateElement("FirstShots");
+         if (null == firstShotsElem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlFirstShots(): CreateElement(FirstShots) returned null");
+            return false;
+         }
+         firstShotsElem.SetAttribute("count", firstShots.Count.ToString());
+         XmlNode? firstShotsNode = root.AppendChild(firstShotsElem);
+         if (null == firstShotsNode)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlFirstShots(): AppendChild(firstShotsNode) returned null");
+            return false;
+         }
+         int count = 0;
+         foreach (var kvp in firstShots)
+         {
+            XmlElement? firstShotElem = aXmlDocument.CreateElement("FirstShot");
+            if (null == firstShotElem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlFirstShots(): CreateElement(firstShotElem) returned null");
+               return false;
+            }
+            firstShotElem.SetAttribute("enemy", kvp.Key);
+            firstShotElem.SetAttribute("value", kvp.Value.ToString());
+            XmlNode? firstShotNode = firstShotsNode.AppendChild(firstShotElem);
+            if (null == firstShotNode)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlFirstShots(): AppendChild(firstShotElem) returned null");
+               return false;
+            }
+            count++;
+         }
+         if( count != firstShots.Count  )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlFirstShots(): count=" + count.ToString() + " firstShotsCount=" + firstShots.Count.ToString());
+            return false;
+         }
+         return true;
+      }
+      private bool CreateXmlTrainedGunners(XmlDocument aXmlDocument, List<string> trainedGunners)
+      {
+         XmlNode? root = aXmlDocument.DocumentElement;
+         if (null == root)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlTrainedGunners(): root is null");
+            return false;
+         }
+         XmlElement? trainedGunnersElem = aXmlDocument.CreateElement("TrainedGunners");
+         if (null == trainedGunnersElem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlTrainedGunners(): CreateElement(TrainedGunners) returned null");
+            return false;
+         }
+         trainedGunnersElem.SetAttribute("count", trainedGunners.Count.ToString());
+         XmlNode? trainedGunnersNode = root.AppendChild(trainedGunnersElem);
+         if (null == trainedGunnersNode)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlTrainedGunners(): AppendChild(trainedGunnersNode) returned null");
+            return false;
+         }
+         for(int i=0; i < trainedGunners.Count; ++i )
+         {
+            XmlElement? trainedGunnerElem = aXmlDocument.CreateElement("FirstShot");
+            if (null == trainedGunnerElem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlTrainedGunners(): CreateElement(trainedGunnerElem) returned null");
+               return false;
+            }
+            trainedGunnerElem.SetAttribute("value", trainedGunners[i]);
+            XmlNode? trainedGunnerNode = trainedGunnersNode.AppendChild(trainedGunnerElem);
+            if (null == trainedGunnerNode)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlTrainedGunners(): AppendChild(trainedGunnerNode) returned null");
+               return false;
+            }
+         }
+         return true;
+      }
+      private bool CreateXmlShermanHits(XmlDocument aXmlDocument, List<ShermanAttack> shermanHits)
+      {
+         XmlNode? root = aXmlDocument.DocumentElement;
+         if (null == root)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): root is null");
+            return false;
+         }
+         XmlElement? shermanHitsElem = aXmlDocument.CreateElement("TrainedGunners");
+         if (null == shermanHitsElem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(TrainedGunners) returned null");
+            return false;
+         }
+         shermanHitsElem.SetAttribute("count", shermanHits.Count.ToString());
+         XmlNode? shermanHitsNode = root.AppendChild(shermanHitsElem);
+         if (null == shermanHitsNode)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(trainedGunnersNode) returned null");
+            return false;
+         }
+         for (int i = 0; i < shermanHits.Count; ++i)
+         {
+            ShermanAttack shermanAttack = shermanHits[i];
+            XmlElement? shermanHitElem = aXmlDocument.CreateElement("ShermanHit");
+            if (null == shermanHitElem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(ShermanHit) returned null");
+               return false;
+            }
+            shermanHitElem.SetAttribute("myAttackType", shermanAttack.myAttackType);
+            shermanHitElem.SetAttribute("myAmmoType", shermanAttack.myAmmoType);
+            shermanHitElem.SetAttribute("myIsCriticalHit", shermanAttack.myIsCriticalHit.ToString());
+            shermanHitElem.SetAttribute("myHitLocation", shermanAttack.myHitLocation);
+            shermanHitElem.SetAttribute("myIsNoChance", shermanAttack.myIsNoChance.ToString());
+            shermanHitElem.SetAttribute("myIsImmobilization", shermanAttack.myIsImmobilization.ToString());
+            XmlNode? shermanHitNode = shermanHitsNode.AppendChild(shermanHitElem);
+            if (null == shermanHitNode)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(shermanHitNode) returned null");
+               return false;
+            }
+         }
+         return true;
+      }
+      private bool CreateXmlShermanDeath(XmlDocument aXmlDocument, ShermanDeath? death)
+      {
+         XmlNode? root = aXmlDocument.DocumentElement;
+         if (null == root)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): root is null");
+            return false;
+         }
+         XmlElement? shermanDeathElem = aXmlDocument.CreateElement("TrainedGunners");
+         if (null == shermanDeathElem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(TrainedGunners) returned null");
+            return false;
+         }
+         XmlNode? shermanDeathNode = root.AppendChild(shermanDeathElem);
+         if (null == shermanDeathNode)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(trainedGunnersNode) returned null");
+            return false;
+         }
+         if (null == death)
+         {
+            shermanDeathElem.SetAttribute("value", "null");
+            return true;
+         }
+         //------------------------------------------------
+         if( false == CreateXmlMapItem(aXmlDocument, shermanDeathNode, death.myEnemyUnit))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateXmlMapItem() returned null");
+            return false;
+         }
+         //------------------------------------------------
+         XmlElement? elem = aXmlDocument.CreateElement("HitLocation");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(HitLocation) returned null");
+            return false;
+         }
+         elem.SetAttribute("value", death.myHitLocation);
+         XmlNode? node = shermanDeathNode.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(HitLocation) returned null");
+            return false;
+         }
+         //------------------------------------------------
+         elem = aXmlDocument.CreateElement("EnemyFireDirection");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(EnemyFireDirection) returned null");
+            return false;
+         }
+         elem.SetAttribute("value", death.myEnemyFireDirection);
+         node = shermanDeathNode.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(EnemyFireDirection) returned null");
+            return false;
+         }
+         //------------------------------------------------
+         elem = aXmlDocument.CreateElement("Day");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(Day) returned null");
+            return false;
+         }
+         elem.SetAttribute("value", death.myDay.ToString());
+         node = shermanDeathNode.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(Day) returned null");
+            return false;
+         }
+         //------------------------------------------------
+         elem = aXmlDocument.CreateElement("Cause");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(Cause) returned null");
+            return false;
+         }
+         elem.SetAttribute("value", death.myCause);
+         node = shermanDeathNode.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(Cause) returned null");
+            return false;
+         }
+         //------------------------------------------------
+         elem = aXmlDocument.CreateElement("IsAmbush");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(IsAmbush) returned null");
+            return false;
+         }
+         elem.SetAttribute("value", death.myIsAmbush.ToString());
+         node = shermanDeathNode.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(IsAmbush) returned null");
+            return false;
+         }
+         //------------------------------------------------
+         elem = aXmlDocument.CreateElement("IsExplosion");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(IsExplosion) returned null");
+            return false;
+         }
+         elem.SetAttribute("value", death.myIsExplosion.ToString());
+         node = shermanDeathNode.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(IsExplosion) returned null");
+            return false;
+         }
+         //------------------------------------------------
+         elem = aXmlDocument.CreateElement("IsBailout");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(IsBailout) returned null");
+            return false;
+         }
+         elem.SetAttribute("value", death.myIsBailout.ToString());
+         node = shermanDeathNode.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(IsBailout) returned null");
+            return false;
+         }
+         //------------------------------------------------
+         elem = aXmlDocument.CreateElement("IsBrewUp");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(IsBrewUp) returned null");
+            return false;
+         }
+         elem.SetAttribute("value", death.myIsBrewUp.ToString());
+         node = shermanDeathNode.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(IsBrewUp) returned null");
+            return false;
+         }
+         return true;
+      }
+      private bool CreateXmlPanzerfaustAttack(XmlDocument aXmlDocument, PanzerfaustAttack? pfAttack)
+      {
+         XmlNode? root = aXmlDocument.DocumentElement;
+         if (null == root)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlPanzerfaustAttack(): root is null");
+            return false;
+         }
+         XmlElement? pfAttackElem = aXmlDocument.CreateElement("PanzerfaustAttack");
+         if (null == pfAttackElem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlPanzerfaustAttack(): CreateElement(PanzerfaustAttack) returned null");
+            return false;
+         }
+         XmlNode? pfAttackNode = root.AppendChild(pfAttackElem);
+         if (null == pfAttackNode)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlPanzerfaustAttack(): AppendChild(PanzerfaustAttack) returned null");
+            return false;
+         }
+         if (null == pfAttack)
+         {
+            pfAttackElem.SetAttribute("value", "null");
+            return true;
+         }
+         //------------------------------------------------
+         if (false == CreateXmlMapItem(aXmlDocument, pfAttackNode, pfAttack.myEnemyUnit))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlPanzerfaustAttack(): CreateXmlMapItem() returned null");
+            return false;
+         }
+         //------------------------------------------------
+         XmlElement? elem = aXmlDocument.CreateElement("Day");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlPanzerfaustAttack(): CreateElement(Day) returned null");
+            return false;
+         }
+         elem.SetAttribute("value", pfAttack.myDay.ToString());
+         XmlNode? node = pfAttackNode.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlPanzerfaustAttack(): AppendChild(Day) returned null");
+            return false;
+         }
+         //------------------------------------------------
+         elem = aXmlDocument.CreateElement("IsShermanMoving");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(IsShermanMoving) returned null");
+            return false;
+         }
+         elem.SetAttribute("value", pfAttack.myIsShermanMoving.ToString());
+         node = pfAttackNode.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(IsShermanMoving) returned null");
+            return false;
+         }
+         //------------------------------------------------
+         elem = aXmlDocument.CreateElement("IsLeadTank");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(IsLeadTank) returned null");
+            return false;
+         }
+         elem.SetAttribute("value", pfAttack.myIsLeadTank.ToString());
+         node = pfAttackNode.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(IsLeadTank) returned null");
+            return false;
+         }
+         //------------------------------------------------
+         elem = aXmlDocument.CreateElement("IsAdvancingFireZone");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(IsAdvancingFireZone) returned null");
+            return false;
+         }
+         elem.SetAttribute("value", pfAttack.myIsAdvancingFireZone.ToString());
+         node = pfAttackNode.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(IsAdvancingFireZone) returned null");
+            return false;
+         }
+         //------------------------------------------------
+         elem = aXmlDocument.CreateElement("Sector");
+         if (null == elem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(Sector) returned null");
+            return false;
+         }
+         elem.SetAttribute("value", pfAttack.mySector.ToString());
+         node = pfAttackNode.AppendChild(elem);
+         if (null == node)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(Sector) returned null");
+            return false;
          }
          return true;
       }

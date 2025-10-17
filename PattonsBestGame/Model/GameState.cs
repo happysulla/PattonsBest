@@ -1226,8 +1226,7 @@ namespace Pattons_Best
          gi.IsHatchesActive = false;
          gi.IsRetreatToStartArea = false;
          //---------------------------------
-         gi.IsShermanFirstShot = false;
-         gi.IsShermanFiringAtFront = false;
+         gi.IsShermanFiringAtFront = false; // Reset_ToPrepareForBattle()
          gi.IsShermanDeliberateImmobilization = false;
          gi.ShermanTypeOfFire = "";
          gi.NumSmokeAttacksThisRound = 0;
@@ -8867,7 +8866,6 @@ namespace Pattons_Best
          gi.IsFlankingFire = false;
          gi.IsEnemyAdvanceComplete = false;
          //-------------------------------------------------------
-         gi.IsShermanFirstShot = false;
          gi.IsShermanFiringAtFront = false;              // Reset_Day()
          gi.IsShermanDeliberateImmobilization = false;
          gi.ShermanTypeOfFire = "";

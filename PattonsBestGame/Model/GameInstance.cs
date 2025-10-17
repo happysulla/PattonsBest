@@ -75,7 +75,6 @@ namespace Pattons_Best
       public string SwitchedCrewMember { set; get; } = "";
       public int AssistantOriginalRating { set; get; } = 0;
       //---------------------------------------------------------------
-      public bool IsShermanFirstShot { set; get; } = false;
       public bool IsShermanFiringAtFront { set; get; } = false;
       public bool IsShermanDeliberateImmobilization { set; get; } = false;
       public int NumSmokeAttacksThisRound { set; get; } = 0;
