@@ -102,13 +102,14 @@ namespace Pattons_Best
       IMapItems Hatches { set; get; }
       IMapItems CrewActions { set; get; }
       IMapItems GunLoads { set; get; }
-      IMapItem Sherman { set; get; }
       IMapItems Targets { set; get; }
-      IMapItem? TargetMainGun { set; get; }
-      IMapItem? TargetMg { set; get; }
       IMapItems AdvancingEnemies { set; get; }
       IMapItems ShermanAdvanceOrRetreatEnemies { set; get; }
       IMapItems InjuredCrewMembers { set; get; }
+      //----------------------------------------------
+      IMapItem Sherman { set; get; }
+      IMapItem? TargetMainGun { set; get; }
+      IMapItem? TargetMg { set; get; }
       IMapItem? ShermanHvss { set; get; }
       ICrewMember? ReturningCrewman { set; get; }
       //------------------------------------------------
