@@ -767,6 +767,130 @@ namespace Pattons_Best
                return null;
             }
             //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "EventActive")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): EventActive != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? eventActive = reader.GetAttribute("value");
+            if (null == eventActive)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): eventActive=null");
+               return null;
+            }
+            gi.EventActive = eventActive;
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "EventDisplayed")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): EventDisplayed != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? eventDisplayed = reader.GetAttribute("value");
+            if (null == eventDisplayed)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): eventDisplayed=null");
+               return null;
+            }
+            gi.EventDisplayed = eventDisplayed;
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "Day")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): Day != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sDay = reader.GetAttribute("value");
+            if (null == sDay)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): eventDisplayed=null");
+               return null;
+            }
+            gi.Day = Int32.Parse(sDay);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "GameTurn")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): GameTurn != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sGameTurn = reader.GetAttribute("value");
+            if (null == sGameTurn)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): sGameTurn=null");
+               return null;
+            }
+            gi.GameTurn = Int32.Parse(sGameTurn);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "GamePhase")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): GamePhase != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sGamePhase = reader.GetAttribute("value");
+            if (null == sGamePhase)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): sGamePhase=null");
+               return null;
+            }
+            switch( sGamePhase )
+            {
+               case "MorningBriefing": gi.GamePhase = GamePhase.MorningBriefing; break;
+               case "Preparations": gi.GamePhase = GamePhase.Preparations; break;
+               case "Movement": gi.GamePhase = GamePhase.Movement; break;
+               case "Battle": gi.GamePhase = GamePhase.Battle; break;
+               case "BattleRoundSequence": gi.GamePhase = GamePhase.BattleRoundSequence; break;
+               case "EveningDebriefing": gi.GamePhase = GamePhase.EveningDebriefing; break;
+               case "EndGame": gi.GamePhase = GamePhase.EveningDebriefing; break;
+               default: Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reached default sGamePhase=" + sGamePhase); return null
+            }
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "EndGameReason")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): EndGameReason != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? endGameReason = reader.GetAttribute("value");
+            if (null == endGameReason)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): endGameReason=null");
+               return null;
+            }
+            gi.EndGameReason = endGameReason;
+            //----------------------------------------------
             if (false == ReadXmlGameMapItems(reader, gi))
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlGameMapItems() returned false");
