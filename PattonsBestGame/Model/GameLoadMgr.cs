@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -1136,9 +1137,71 @@ namespace Pattons_Best
          //----------------------------------------------
          if( false == ReadXmlCrewMember(reader, report.Commander))
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Commander) returned false");
             return false;
          }
+         //----------------------------------------------
+         if (false == ReadXmlCrewMember(reader, report.Gunner))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Gunner) returned false");
+            return false;
+         }
+         //----------------------------------------------
+         if (false == ReadXmlCrewMember(reader, report.Loader))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Loader) returned false");
+            return false;
+         }
+         //----------------------------------------------
+         if (false == ReadXmlCrewMember(reader, report.Driver))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Driver) returned false");
+            return false;
+         }
+         //----------------------------------------------
+         if (false == ReadXmlCrewMember(reader, report.Assistant))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): ReadXmlCrewMember(Assistant) returned false");
+            return false;
+         }
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "SunriseHour")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): SunriseHour != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sSunriseHour = reader.GetAttribute("value");
+         if (null == sSunriseHour)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): sSunriseHour=null");
+            return false;
+         }
+         report.SunriseHour = Convert.ToInt32(sSunriseHour);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "SunriseMin")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): SunriseMin != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sSunriseMin = reader.GetAttribute("value");
+         if (null == sSunriseMin)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): SunriseMin=null");
+            return false;
+         }
+         report.SunriseMin = Convert.ToInt32(sSunriseMin);
          return true;
       }
       private bool ReadXmlMapItems(XmlReader reader, IMapItems mapItems)
@@ -1179,12 +1242,164 @@ namespace Pattons_Best
       }
       private bool ReadXmlCrewMember(XmlReader reader, ICrewMember member)
       {
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "CrewMember")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): Name != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sRole = reader.GetAttribute("value");
+         if (null == sRole)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): sName=null");
+            return false;
+         }
+         member.Role = sRole;
+         //----------------------------------------------
          IMapItem mapItem = (IMapItem)member;
          if (false == ReadXmlMapItem(reader, mapItem))
          {
             Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): ReadXmlMapItem() returned false");
             return false;
          }
+         //----------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "Rank")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): Rank != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sRank = reader.GetAttribute("value");
+         if (null == sRank)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): Rank=null");
+            return false;
+         }
+         member.Rank = sRank;
+         //----------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "Rating")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): Rating != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sRating = reader.GetAttribute("value");
+         if (null == sRating)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): Rating=null");
+            return false;
+         }
+         member.Rating = Convert.ToInt32(sRating);
+         //----------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "IsButtonedUp")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): IsButtonedUp != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sIsButtonedUp = reader.GetAttribute("value");
+         if (null == sIsButtonedUp)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): IsButtonedUp=null");
+            return false;
+         }
+         member.IsButtonedUp = Convert.ToBoolean(sIsButtonedUp);
+         //----------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "Sector")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): Sector != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sSector = reader.GetAttribute("value");
+         if (null == sSector)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): Sector=null");
+            return false;
+         }
+         member.Sector = Convert.ToInt32(sSector);
+         //----------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "Action")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): Action != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sAction = reader.GetAttribute("value");
+         if (null == sAction)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): Action=null");
+            return false;
+         }
+         member.Action = sAction;
+         //----------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "Wound")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): Wound != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sWound = reader.GetAttribute("value");
+         if (null == sWound)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): Wound=null");
+            return false;
+         }
+         member.Wound = sWound;
+         //----------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "WoundDaysUntilReturn")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): WoundDaysUntilReturn != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sWoundDaysUntilReturn = reader.GetAttribute("value");
+         if (null == sWoundDaysUntilReturn)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): WoundDaysUntilReturn=null");
+            return false;
+         }
+         member.WoundDaysUntilReturn = Convert.ToInt32(sWoundDaysUntilReturn);
          return true;
       }
       private bool ReadXmlMapItem(XmlReader reader, IMapItem mi)
