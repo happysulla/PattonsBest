@@ -1168,18 +1168,18 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
             return false;
          }
          if (reader.Name != "SunriseHour")
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): SunriseHour != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): SunriseHour != (node=" + reader.Name + ")");
             return false;
          }
          string? sSunriseHour = reader.GetAttribute("value");
          if (null == sSunriseHour)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): sSunriseHour=null");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sSunriseHour=null");
             return false;
          }
          report.SunriseHour = Convert.ToInt32(sSunriseHour);
@@ -1187,21 +1187,916 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
             return false;
          }
          if (reader.Name != "SunriseMin")
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): SunriseMin != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): SunriseMin != (node=" + reader.Name + ")");
             return false;
          }
          string? sSunriseMin = reader.GetAttribute("value");
          if (null == sSunriseMin)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): SunriseMin=null");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): SunriseMin=null");
             return false;
          }
          report.SunriseMin = Convert.ToInt32(sSunriseMin);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "SunsetHour")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): SunsetHour != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sSunsetHour = reader.GetAttribute("value");
+         if (null == sSunsetHour)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): SunsetHour=null");
+            return false;
+         }
+         report.SunsetHour = Convert.ToInt32(sSunsetHour);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "SunsetMin")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): SunsetMin != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sSunsetMin = reader.GetAttribute("value");
+         if (null == sSunsetMin)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): SunsetMin=null");
+            return false;
+         }
+         report.SunsetMin = Convert.ToInt32(sSunsetMin);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "Ammo30CalibreMG")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): Ammo30CalibreMG != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sAmmo30CalibreMG = reader.GetAttribute("value");
+         if (null == sAmmo30CalibreMG)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): Ammo30CalibreMG=null");
+            return false;
+         }
+         report.Ammo30CalibreMG = Convert.ToInt32(sAmmo30CalibreMG);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "Ammo50CalibreMG")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): Ammo50CalibreMG != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sAmmo50CalibreMG = reader.GetAttribute("value");
+         if (null == sAmmo50CalibreMG)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): Ammo50CalibreMG=null");
+            return false;
+         }
+         report.Ammo50CalibreMG = Convert.ToInt32(sAmmo50CalibreMG);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "AmmoSmokeBomb")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): AmmoSmokeBomb != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sAmmoSmokeBomb = reader.GetAttribute("value");
+         if (null == sAmmoSmokeBomb)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): AmmoSmokeBomb=null");
+            return false;
+         }
+         report.AmmoSmokeBomb = Convert.ToInt32(sAmmoSmokeBomb);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "AmmoSmokeGrenade")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): AmmoSmokeGrenade != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sAmmoSmokeGrenade = reader.GetAttribute("value");
+         if (null == sAmmoSmokeGrenade)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): AmmoSmokeGrenade=null");
+            return false;
+         }
+         report.AmmoSmokeGrenade = Convert.ToInt32(sAmmoSmokeGrenade);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "AmmoPeriscope")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): AmmoSmokeGrenade != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sAmmoPeriscope = reader.GetAttribute("value");
+         if (null == sAmmoPeriscope)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): AmmoPeriscope=null");
+            return false;
+         }
+         report.AmmoPeriscope = Convert.ToInt32(sAmmoPeriscope);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "MainGunHE")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunHE != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sMainGunHE = reader.GetAttribute("value");
+         if (null == sMainGunHE)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunHE=null");
+            return false;
+         }
+         report.MainGunHE = Convert.ToInt32(sMainGunHE);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "MainGunAP")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunAP != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sMainGunAP = reader.GetAttribute("value");
+         if (null == sMainGunAP)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunAP=null");
+            return false;
+         }
+         report.MainGunAP = Convert.ToInt32(sMainGunAP);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "MainGunWP")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunWP != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sMainGunWP = reader.GetAttribute("value");
+         if (null == sMainGunWP)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunWP=null");
+            return false;
+         }
+         report.MainGunWP = Convert.ToInt32(sMainGunWP);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "MainGunHBCI")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunHBCI != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sMainGunHBCI = reader.GetAttribute("value");
+         if (null == sMainGunHBCI)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunHBCI=null");
+            return false;
+         }
+         report.MainGunHBCI = Convert.ToInt32(sMainGunHBCI);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "MainGunHVAP")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunHVAP != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sMainGunHVAP = reader.GetAttribute("value");
+         if (null == sMainGunHVAP)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): MainGunHVAP=null");
+            return false;
+         }
+         report.MainGunHVAP = Convert.ToInt32(sMainGunHVAP);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsFriendlyKiaLightWeapon")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaLightWeapon != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsFriendlyKiaLightWeapon = reader.GetAttribute("value");
+         if (null == sVictoryPtsFriendlyKiaLightWeapon)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sVictoryPtsFriendlyKiaLightWeapon=null");
+            return false;
+         }
+         report.VictoryPtsFriendlyKiaLightWeapon = Convert.ToInt32(sVictoryPtsFriendlyKiaLightWeapon);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsFriendlyKiaTruck")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaTruck != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsFriendlyKiaTruck = reader.GetAttribute("value");
+         if (null == sVictoryPtsFriendlyKiaTruck)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sVictoryPtsFriendlyKiaTruck=null");
+            return false;
+         }
+         report.VictoryPtsFriendlyKiaTruck = Convert.ToInt32(sVictoryPtsFriendlyKiaTruck);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsFriendlyKiaSpwOrPsw")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaSpwOrPsw != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsFriendlyKiaSpwOrPsw = reader.GetAttribute("value");
+         if (null == sVictoryPtsFriendlyKiaSpwOrPsw)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sVictoryPtsFriendlyKiaSpwOrPsw=null");
+            return false;
+         }
+         report.VictoryPtsFriendlyKiaSpwOrPsw = Convert.ToInt32(sVictoryPtsFriendlyKiaSpwOrPsw);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsFriendlyKiaSPGun")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaSPGun != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsFriendlyKiaSPGun = reader.GetAttribute("value");
+         if (null == sVictoryPtsFriendlyKiaSPGun)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaSPGun=null");
+            return false;
+         }
+         report.VictoryPtsFriendlyKiaSPGun = Convert.ToInt32(sVictoryPtsFriendlyKiaSPGun);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsFriendlyKiaPzIV")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaPzIV != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsFriendlyKiaPzIV = reader.GetAttribute("value");
+         if (null == sVictoryPtsFriendlyKiaPzIV)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaPzIV=null");
+            return false;
+         }
+         report.VictoryPtsFriendlyKiaPzIV = Convert.ToInt32(sVictoryPtsFriendlyKiaPzIV);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsFriendlyKiaPzV")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaPzV != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsFriendlyKiaPzV = reader.GetAttribute("value");
+         if (null == sVictoryPtsFriendlyKiaPzV)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaPzV=null");
+            return false;
+         }
+         report.VictoryPtsFriendlyKiaPzV = Convert.ToInt32(sVictoryPtsFriendlyKiaPzV);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsFriendlyKiaPzVI")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaPzVI != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsFriendlyKiaPzVI = reader.GetAttribute("value");
+         if (null == sVictoryPtsFriendlyKiaPzVI)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaPzVI=null");
+            return false;
+         }
+         report.VictoryPtsFriendlyKiaPzVI = Convert.ToInt32(sVictoryPtsFriendlyKiaPzVI);
+         report.VictoryPtsFriendlyKiaPzV = Convert.ToInt32(sVictoryPtsFriendlyKiaPzV);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsFriendlyKiaAtGun")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaAtGun != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsFriendlyKiaAtGun = reader.GetAttribute("value");
+         if (null == sVictoryPtsFriendlyKiaAtGun)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaAtGun=null");
+            return false;
+         }
+         report.VictoryPtsFriendlyKiaAtGun = Convert.ToInt32(sVictoryPtsFriendlyKiaAtGun);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsFriendlyKiaFortifiedPosition")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaFortifiedPosition != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsFriendlyKiaFortifiedPosition = reader.GetAttribute("value");
+         if (null == sVictoryPtsFriendlyKiaFortifiedPosition)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyKiaFortifiedPosition=null");
+            return false;
+         }
+         report.VictoryPtsFriendlyKiaFortifiedPosition = Convert.ToInt32(sVictoryPtsFriendlyKiaFortifiedPosition);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsYourKiaLightWeapon")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaLightWeapon != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsYourKiaLightWeapon = reader.GetAttribute("value");
+         if (null == sVictoryPtsYourKiaLightWeapon)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaLightWeapon=null");
+            return false;
+         }
+         report.VictoryPtsYourKiaLightWeapon = Convert.ToInt32(sVictoryPtsYourKiaLightWeapon);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsYourKiaTruck")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaTruck != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsYourKiaTruck = reader.GetAttribute("value");
+         if (null == sVictoryPtsYourKiaTruck)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaTruck=null");
+            return false;
+         }
+         report.VictoryPtsYourKiaTruck = Convert.ToInt32(sVictoryPtsYourKiaTruck);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsYourKiaSpwOrPsw")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaSpwOrPsw != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsYourKiaSpwOrPsw = reader.GetAttribute("value");
+         if (null == sVictoryPtsYourKiaSpwOrPsw)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaSpwOrPsw=null");
+            return false;
+         }
+         report.VictoryPtsYourKiaSpwOrPsw = Convert.ToInt32(sVictoryPtsYourKiaSpwOrPsw);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsYourKiaSPGun")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaSPGun != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsYourKiaSPGun = reader.GetAttribute("value");
+         if (null == sVictoryPtsYourKiaSPGun)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaSPGun=null");
+            return false;
+         }
+         report.VictoryPtsYourKiaSPGun = Convert.ToInt32(sVictoryPtsYourKiaSPGun);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsYourKiaPzIV")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaPzIV != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsYourKiaPzIV = reader.GetAttribute("value");
+         if (null == sVictoryPtsYourKiaPzIV)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaPzIV=null");
+            return false;
+         }
+         report.VictoryPtsYourKiaPzIV = Convert.ToInt32(sVictoryPtsYourKiaPzIV);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsYourKiaPzV")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaPzV != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsYourKiaPzV = reader.GetAttribute("value");
+         if (null == sVictoryPtsYourKiaPzV)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaPzV=null");
+            return false;
+         }
+         report.VictoryPtsYourKiaPzV = Convert.ToInt32(sVictoryPtsYourKiaPzV);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsYourKiaPzVI")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaPzVI != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsYourKiaPzVI = reader.GetAttribute("value");
+         if (null == sVictoryPtsYourKiaPzVI)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaPzVI=null");
+            return false;
+         }
+         report.VictoryPtsYourKiaPzVI = Convert.ToInt32(sVictoryPtsYourKiaPzVI);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsYourKiaAtGun")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaAtGun != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsYourKiaAtGun = reader.GetAttribute("value");
+         if (null == sVictoryPtsYourKiaAtGun)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaAtGun=null");
+            return false;
+         }
+         report.VictoryPtsYourKiaAtGun = Convert.ToInt32(sVictoryPtsYourKiaAtGun);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsYourKiaFortifiedPosition")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaFortifiedPosition != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsYourKiaFortifiedPosition = reader.GetAttribute("value");
+         if (null == sVictoryPtsYourKiaFortifiedPosition)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsYourKiaFortifiedPosition=null");
+            return false;
+         }
+         report.VictoryPtsYourKiaFortifiedPosition = Convert.ToInt32(sVictoryPtsYourKiaFortifiedPosition);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsCaptureArea")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsCaptureArea != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsCaptureArea = reader.GetAttribute("value");
+         if (null == sVictoryPtsCaptureArea)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsCaptureArea=null");
+            return false;
+         }
+         report.VictoryPtsCaptureArea = Convert.ToInt32(sVictoryPtsCaptureArea);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsCapturedExitArea")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsCapturedExitArea != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsCapturedExitArea = reader.GetAttribute("value");
+         if (null == sVictoryPtsCapturedExitArea)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsCapturedExitArea=null");
+            return false;
+         }
+         report.VictoryPtsCapturedExitArea = Convert.ToInt32(sVictoryPtsCapturedExitArea);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsLostArea")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsLostArea != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsLostArea = reader.GetAttribute("value");
+         if (null == sVictoryPtsLostArea)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsLostArea=null");
+            return false;
+         }
+         report.VictoryPtsLostArea = Convert.ToInt32(sVictoryPtsLostArea);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsFriendlyTank")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyTank != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsFriendlyTank = reader.GetAttribute("value");
+         if (null == sVictoryPtsFriendlyTank)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlyTank=null");
+            return false;
+         }
+         report.VictoryPtsFriendlyTank = Convert.ToInt32(sVictoryPtsFriendlyTank);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsFriendlySquad")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlySquad != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsFriendlySquad = reader.GetAttribute("value");
+         if (null == sVictoryPtsFriendlySquad)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsFriendlySquad=null");
+            return false;
+         }
+         report.VictoryPtsFriendlySquad = Convert.ToInt32(sVictoryPtsFriendlySquad);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsTotalYourTank")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalYourTank != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsTotalYourTank = reader.GetAttribute("value");
+         if (null == sVictoryPtsTotalYourTank)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalYourTank=null");
+            return false;
+         }
+         report.VictoryPtsTotalYourTank = Convert.ToInt32(sVictoryPtsTotalYourTank);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsTotalFriendlyForces")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalFriendlyForces != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsTotalFriendlyForces = reader.GetAttribute("value");
+         if (null == sVictoryPtsTotalFriendlyForces)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalFriendlyForces=null");
+            return false;
+         }
+         report.VictoryPtsTotalFriendlyForces = Convert.ToInt32(sVictoryPtsTotalFriendlyForces);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsTotalTerritory")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalTerritory != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsTotalTerritory = reader.GetAttribute("value");
+         if (null == sVictoryPtsTotalTerritory)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalTerritory=null");
+            return false;
+         }
+         report.VictoryPtsTotalTerritory = Convert.ToInt32(sVictoryPtsTotalTerritory);
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "VictoryPtsTotalEngagement")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalEngagement != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sVictoryPtsTotalEngagement = reader.GetAttribute("value");
+         if (null == sVictoryPtsTotalEngagement)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): VictoryPtsTotalEngagement=null");
+            return false;
+         }
+         report.VictoryPtsTotalEngagement = Convert.ToInt32(sVictoryPtsTotalEngagement);
+         //---------------------------------------------
+         reader.Read();
+         if (reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "Decorations")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
+            return false;
+         }
+         string? sCountDecoration = reader.GetAttribute("count");
+         if (null == sCountDecoration)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sCountDecoration=null");
+            return false;
+         }
+         int countDecoration = Convert.ToInt32(sCountDecoration);   
+         for(int i=0; i< countDecoration; ++i)
+         {
+            reader.Read();
+            if (reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+               return false;
+            }
+            if (reader.Name != "Decoration")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
+               return false;
+            }
+            string? sDecoration = reader.GetAttribute("value");
+            if (null == sDecoration)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sDecoration=null");
+               return false;
+            }
+            EnumDecoration decoration = EnumDecoration.ED_WW2Victory;
+            switch (sDecoration)
+            {
+               case "ED_BronzeStar": decoration = EnumDecoration.ED_BronzeStar; break;
+               case "ED_SilverStar": decoration = EnumDecoration.ED_SilverStar; break;
+               case "ED_DistinguisedServiceCross": decoration = EnumDecoration.ED_DistinguisedServiceCross; break;
+               case "ED_MedalOfHonor": decoration = EnumDecoration.ED_MedalOfHonor; break;
+               case "ED_PurpleHeart": decoration = EnumDecoration.ED_PurpleHeart; break;
+               case "ED_EuropeanCampain": decoration = EnumDecoration.ED_EuropeanCampain; break;
+               case "ED_WW2Victory": decoration = EnumDecoration.ED_WW2Victory; break;
+               default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reached default sDecoration=" + sDecoration); return false;
+            }
+            report.Decorations.Add(decoration);
+         }
+         if (0 < countDecoration)
+            reader.Read();
+         //---------------------------------------------
+         reader.Read();
+         if (reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "Notes")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
+            return false;
+         }
+         string? sCountNote = reader.GetAttribute("count");
+         if (null == sCountNote)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sCountNote=null");
+            return false;
+         }
+         int countNote = Convert.ToInt32(sCountNote);
+         for (int i = 0; i < countNote; ++i)
+         {
+            reader.Read();
+            if (reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+               return false;
+            }
+            if (reader.Name != "Note")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
+               return false;
+            }
+            string? sNote = reader.GetAttribute("value");
+            if (null == sNote)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sNote=null");
+               return false;
+            }
+            report.Notes.Add(sNote);
+         }
+         if (0 < countNote)
+            reader.Read();
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "DayEndedTime")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): DayEndedTime != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sDayEndedTime = reader.GetAttribute("value");
+         if (null == sDayEndedTime)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): DayEndedTime=null");
+            return false;
+         }
+         report.DayEndedTime = sDayEndedTime;
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "Breakdown")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): Breakdown != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sBreakdown = reader.GetAttribute("value");
+         if (null == sBreakdown)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): Breakdown=null");
+            return false;
+         }
+         report.Breakdown = sBreakdown;
+         //---------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "KnockedOut")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): KnockedOut != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sKnockedOut = reader.GetAttribute("value");
+         if (null == sKnockedOut)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): KnockedOut=null");
+            return false;
+         }
+         report.KnockedOut = sKnockedOut;
          return true;
       }
       private bool ReadXmlMapItems(XmlReader reader, IMapItems mapItems)
@@ -1236,7 +2131,7 @@ namespace Pattons_Best
                }
             }
             if (0 < count)
-               reader.Read(); // get past </Territories> tag
+               reader.Read(); 
          }
          return true;
       }
