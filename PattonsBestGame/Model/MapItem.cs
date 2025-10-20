@@ -192,7 +192,7 @@ namespace Pattons_Best
          }
       }
       //----------------------------------------------------------------------------
-      public MapItem()  // used in MapItemMove constructor
+      public MapItem()  // used in MapItemMove constructor & GameLoadMgr.ReadXml()
       {
       }
       public MapItem(string name, double zoom, string topImageName, ITerritory territory) :
@@ -749,6 +749,9 @@ namespace Pattons_Best
       public string Wound { get; set; } = "None";
       public int WoundDaysUntilReturn { get; set; } = 0;
       //-------------------------------------------------
+      public CrewMember() : base() // used in GameLoadMgr.ReadXml()
+      {
+      }
       public CrewMember(string role, string rank, string topImageName)
          : base(SurnameMgr.GetSurname(), 1.0, false, topImageName)
       {

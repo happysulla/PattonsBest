@@ -2589,8 +2589,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "GetEnemy_ToHitNumberYourTank(): unknown enemyUnit=" + mi.Name);
             return FN_ERROR;
          }
-         if( false == gi.FirstShots.ContainsKey(mi.Name))
+         if( false == gi.FirstShots.Contains(mi.Name))
          {
+            gi.FirstShots.Add(mi.Name);
             toHitModifierNum += 10; // add 10 if first shot
             Logger.Log(LogEnum.LE_SHOW_HIT_YOU_MOD, "GetEnemy_ToHitNumberYourTank(): eu=" + mi.Name + " +10 mod=" + toHitModifierNum.ToString() + " firstShot");
          }

@@ -1539,7 +1539,6 @@ namespace Pattons_Best
                         myGameInstance.Sherman.EnemyAcquiredShots[mi.Name]++;
                      else
                         myGameInstance.Sherman.EnemyAcquiredShots[mi.Name] = 0;
-                     myGameInstance.FirstShots[mi.Name] = true;
                      Logger.Log(LogEnum.LE_SHOW_NUM_ENEMY_SHOTS, "ShowDieResults(): Firing at Your Tank myState=" + myState.ToString() + " enemyAction=" + enemyAction + " mi=" + mi.Name + " numShots=" + myGameInstance.Sherman.EnemyAcquiredShots[mi.Name].ToString());
                      myGridRows[i].myModifierToHitYourTank = (int)TableMgr.GetEnemyToHitNumberModifierForYourTank(myGameInstance, mi, myGridRows[i].myRange);
                      if (TableMgr.FN_ERROR == myGridRows[i].myModifierToHitYourTank)

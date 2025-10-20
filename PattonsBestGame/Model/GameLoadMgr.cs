@@ -216,7 +216,7 @@ namespace Pattons_Best
          }
          return versionRunning.Major;
       }
-      public bool ReadXmlTerritories(XmlReader reader, ITerritories territories)
+      public bool ReadXmlTerritories(XmlReader reader, ITerritories territories) // initial loading of Territories.theTerritories
       {
          reader.Read();
          if (false == reader.IsStartElement())
@@ -507,7 +507,7 @@ namespace Pattons_Best
             reader.Read(); // get past </Territories> tag
          return true;
       }
-      public bool CreateXmlTerritories(XmlDocument aXmlDocument, ITerritories territories)
+      public bool CreateXmlTerritories(XmlDocument aXmlDocument, ITerritories territories) // initial creation of Territories.theTerritories during unit testing
       {
          XmlNode? root = aXmlDocument.DocumentElement;
          if (null == root)
@@ -895,8 +895,747 @@ namespace Pattons_Best
                return null;
             }
             //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "BattlePhase")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): node=" + reader.Name);
+               return null;
+            }
+            string? sBattlePhase = reader.GetAttribute("value");
+            if (null == sBattlePhase)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): BattlePhase=null");
+               return null;
+            }
+            switch (sBattlePhase)
+            {
+               case "Ambush": gi.BattlePhase = BattlePhase.Ambush; break;
+               case "AmbushRandomEvent": gi.BattlePhase = BattlePhase.AmbushRandomEvent; break;
+               case "Spotting": gi.BattlePhase = BattlePhase.Spotting; break;
+               case "MarkCrewAction": gi.BattlePhase = BattlePhase.MarkCrewAction; break;
+               case "MarkAmmoReload": gi.BattlePhase = BattlePhase.MarkAmmoReload; break;
+               case "ConductCrewAction": gi.BattlePhase = BattlePhase.ConductCrewAction; break;
+               case "EnemyAction": gi.BattlePhase = BattlePhase.EnemyAction; break;
+               case "FriendlyAction": gi.BattlePhase = BattlePhase.FriendlyAction; break;
+               case "RandomEvent": gi.BattlePhase = BattlePhase.RandomEvent; break;
+               case "BackToSpotting": gi.BattlePhase = BattlePhase.BackToSpotting; break;
+               default: Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reached default sScenario=" + sBattlePhase); return null;
+            }
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "CrewActionPhase")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): node=" + reader.Name);
+               return null;
+            }
+            string? sCrewActionPhase = reader.GetAttribute("value");
+            if (null == sCrewActionPhase)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): sCrewActionPhase=null");
+               return null;
+            }
+            switch (sCrewActionPhase)
+            {
+               case "Movement": gi.CrewActionPhase = CrewActionPhase.Movement; break;
+               case "TankMainGunFire": gi.CrewActionPhase = CrewActionPhase.TankMainGunFire; break;
+               case "TankMgFire": gi.CrewActionPhase = CrewActionPhase.TankMgFire; break;
+               case "ReplacePeriscope": gi.CrewActionPhase = CrewActionPhase.ReplacePeriscope; break;
+               case "RepairGun": gi.CrewActionPhase = CrewActionPhase.RepairGun; break;
+               case "FireMortar": gi.CrewActionPhase = CrewActionPhase.FireMortar; break;
+               case "ThrowGrenades": gi.CrewActionPhase = CrewActionPhase.ThrowGrenades; break;
+               case "RestockReadyRack": gi.CrewActionPhase = CrewActionPhase.RestockReadyRack; break;
+               case "CrewSwitch": gi.CrewActionPhase = CrewActionPhase.CrewSwitch; break;
+               default: Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reached default sCrewActionPhase=" + sCrewActionPhase); return null;
+            }
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "MovementEffectOnSherman")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): MovementEffectOnSherman != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sMovementEffectOnSherman = reader.GetAttribute("value");
+            if (null == sMovementEffectOnSherman)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): sMovementEffectOnSherman=null");
+               return null;
+            }
+            gi.MovementEffectOnSherman = sMovementEffectOnSherman;
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "MovementEffectOnEnemy")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): MovementEffectOnEnemy != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sMovementEffectOnEnemy = reader.GetAttribute("value");
+            if (null == sMovementEffectOnEnemy)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): MovementEffectOnEnemy=null");
+               return null;
+            }
+            gi.MovementEffectOnEnemy = sMovementEffectOnEnemy;
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "FiredAmmoType")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): FiredAmmoType != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sFiredAmmoType = reader.GetAttribute("value");
+            if (null == sFiredAmmoType)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): FiredAmmoType=null");
+               return null;
+            }
+            gi.FiredAmmoType = sFiredAmmoType;
+            //----------------------------------------------
+            if( false == ReadXmlMapItems(reader, gi.NewMembers))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlMapItems(NewMembers) returned null");
+               return null;
+            }
+            //----------------------------------------------
+            if (false == ReadXmlMapItems(reader, gi.ReadyRacks))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlMapItems(ReadyRacks) returned null");
+               return null;
+            }
+            //----------------------------------------------
+            if (false == ReadXmlMapItems(reader, gi.Hatches))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlMapItems(Hatches) returned null");
+               return null;
+            }
+            //----------------------------------------------
+            if (false == ReadXmlMapItems(reader, gi.CrewActions))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlMapItems(CrewActions) returned null");
+               return null;
+            }
+            //----------------------------------------------
+            if (false == ReadXmlMapItems(reader, gi.GunLoads))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlMapItems(GunLoads) returned null");
+               return null;
+            }
+            //----------------------------------------------
+            if (false == ReadXmlMapItems(reader, gi.Targets))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlMapItems(Targets) returned null");
+               return null;
+            }
+            //----------------------------------------------
+            if (false == ReadXmlMapItems(reader, gi.AdvancingEnemies))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlMapItems(AdvancingEnemies) returned null");
+               return null;
+            }
+            //----------------------------------------------
+            if (false == ReadXmlMapItems(reader, gi.NewMembers))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlMapItems() returned null");
+               return null;
+            }
+            //----------------------------------------------
+            if (false == ReadXmlMapItems(reader, gi.ShermanAdvanceOrRetreatEnemies))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlMapItems(ShermanAdvanceOrRetreatEnemies) returned null");
+               return null;
+            }
+            //----------------------------------------------
+            if (false == ReadXmlMapItems(reader, gi.InjuredCrewMembers))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlMapItems(InjuredCrewMembers) returned null");
+               return null;
+            }
+            //----------------------------------------------
+            if (false == ReadXmlMapItem(reader, gi.Sherman))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlMapItems(Sherman) returned null");
+               return null;
+            }
+            //----------------------------------------------
+            gi.TargetMainGun = null;
+            if (false == ReadXmlMapItem(reader, gi.TargetMainGun))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlMapItems(TargetMainGun) returned null");
+               return null;
+            }
+            //----------------------------------------------
+            gi.TargetMg = null;
+            if (false == ReadXmlMapItem(reader, gi.TargetMg))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlMapItems(TargetMg) returned null");
+               return null;
+            }
+            //----------------------------------------------
+            gi.ShermanHvss = null;
+            if (false == ReadXmlMapItem(reader, gi.ShermanHvss))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlMapItems(ShermanHvss) returned null");
+               return null;
+            }
+            //----------------------------------------------
+            gi.ReturningCrewman = null;
+            if (false == ReadXmlMapItem(reader, gi.ReturningCrewman))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlMapItems(ReturningCrewman) returned null");
+               return null;
+            }
+            //----------------------------------------------
+            if (false == ReadXmlTerritories(reader, gi.AreaTargets, "AreaTargets"))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlTerritories(AreaTargets) returned null");
+               return null;
+            }
+            //----------------------------------------------
+            if (false == ReadXmlTerritories(reader, gi.CounterattachRetreats, "CounterattachRetreats"))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlTerritories(CounterattachRetreats) returned null");
+               return null;
+            }
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "Home")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): Home != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sHome = reader.GetAttribute("value");
+            if (null == sHome)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): sHome=null");
+               return null;
+            }
+            ITerritory? tHome = Territories.theTerritories.Find(sHome);
+            if (null == tHome )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): Territories.theTerritories.Find(sHome)");
+               return null;
+            }
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "EnemyStrengthCheckTerritory")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): EnemyStrengthCheckTerritory != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sEnemyStrengthCheckTerritory = reader.GetAttribute("value");
+            if (null == sEnemyStrengthCheckTerritory)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): sEnemyStrengthCheckTerritory=null");
+               return null;
+            }
+            if( "null" == sEnemyStrengthCheckTerritory )
+            {
+               gi.EnemyStrengthCheckTerritory = null;
+            }
+            else
+            {
+               gi.EnemyStrengthCheckTerritory = Territories.theTerritories.Find(sEnemyStrengthCheckTerritory);
+               if (null == gi.EnemyStrengthCheckTerritory)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXml(): Territories.theTerritories.Find(sEnemyStrengthCheckTerritory)");
+                  return null;
+               }
+            }
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "ArtillerySupportCheck")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ArtillerySupportCheck != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sArtillerySupportCheck = reader.GetAttribute("value");
+            if (null == sArtillerySupportCheck)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ArtillerySupportCheck=null");
+               return null;
+            }
+            if ("null" == sArtillerySupportCheck)
+            {
+               gi.ArtillerySupportCheck = null;
+            }
+            else
+            {
+               gi.ArtillerySupportCheck = Territories.theTerritories.Find(sArtillerySupportCheck);
+               if (null == gi.ArtillerySupportCheck)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXml(): Territories.theTerritories.Find(sArtillerySupportCheck)");
+                  return null;
+               }
+            }
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "AirStrikeCheckTerritory")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): AirStrikeCheckTerritory != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sAirStrikeCheckTerritory = reader.GetAttribute("value");
+            if (null == sAirStrikeCheckTerritory)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): sAirStrikeCheckTerritory=null");
+               return null;
+            }
+            if ("null" == sAirStrikeCheckTerritory)
+            {
+               gi.AirStrikeCheckTerritory = null;
+            }
+            else
+            {
+               gi.AirStrikeCheckTerritory = Territories.theTerritories.Find(sAirStrikeCheckTerritory);
+               if (null == gi.AirStrikeCheckTerritory)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXml(): Territories.theTerritories.Find(tAirStrikeCheckTerritory)");
+                  return null;
+               }
+            }
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "EnteredArea")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): EnteredArea != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sEnteredArea = reader.GetAttribute("value");
+            if (null == sEnteredArea)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): sEnteredArea=null");
+               return null;
+            }
+            if ("null" == sEnteredArea)
+            {
+               gi.EnteredArea = null;
+            }
+            else
+            {
+               gi.EnteredArea = Territories.theTerritories.Find(sEnteredArea);
+               if (null == gi.EnteredArea)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXml(): Territories.theTerritories.Find(sEnteredArea)");
+                  return null;
+               }
+            }
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "AdvanceFire")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): AdvanceFire != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sAdvanceFire = reader.GetAttribute("value");
+            if (null == sAdvanceFire)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): AdvanceFire=null");
+               return null;
+            }
+            if ("null" == sAdvanceFire)
+            {
+               gi.AdvanceFire = null;
+            }
+            else
+            {
+               gi.AdvanceFire = Territories.theTerritories.Find(sAdvanceFire);
+               if (null == gi.AdvanceFire)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXml(): Territories.theTerritories.Find(sAdvanceFire)");
+                  return null;
+               }
+            }
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "FriendlyAdvance")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): FriendlyAdvance != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sFriendlyAdvance = reader.GetAttribute("value");
+            if (null == sFriendlyAdvance)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): sFriendlyAdvance=null");
+               return null;
+            }
+            if ("null" == sFriendlyAdvance)
+            {
+               gi.FriendlyAdvance = null;
+            }
+            else
+            {
+               gi.FriendlyAdvance = Territories.theTerritories.Find(sFriendlyAdvance);
+               if (null == gi.FriendlyAdvance)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXml(): Territories.theTerritories.Find(sFriendlyAdvance)");
+                  return null;
+               }
+            }
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "EnemyAdvance")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): EnemyAdvance != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sEnemyAdvance = reader.GetAttribute("value");
+            if (null == sEnemyAdvance)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): EnemyAdvance=null");
+               return null;
+            }
+            if ("null" == sEnemyAdvance)
+            {
+               gi.EnemyAdvance = null;
+            }
+            else
+            {
+               gi.EnemyAdvance = Territories.theTerritories.Find(sEnemyAdvance);
+               if (null == gi.AdvanceFire)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXml(): Territories.theTerritories.Find(sEnemyAdvance)");
+                  return null;
+               }
+            }
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "IsHatchesActive")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsHatchesActive != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sIsHatchesActive = reader.GetAttribute("value");
+            if (null == sIsHatchesActive)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): sIsHatchesActive=null");
+               return null;
+            }
+            gi.IsHatchesActive = Convert.ToBoolean(sIsHatchesActive);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "IsRetreatToStartArea")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsRetreatToStartArea != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sIsRetreatToStartArea = reader.GetAttribute("value");
+            if (null == sIsRetreatToStartArea)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsRetreatToStartArea=null");
+               return null;
+            }
+            gi.IsRetreatToStartArea = Convert.ToBoolean(sIsRetreatToStartArea);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "IsShermanAdvancingOnMoveBoard")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsShermanAdvancingOnMoveBoard != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sIsShermanAdvancingOnMoveBoard = reader.GetAttribute("value");
+            if (null == sIsShermanAdvancingOnMoveBoard)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsShermanAdvancingOnMoveBoard=null");
+               return null;
+            }
+            gi.IsShermanAdvancingOnMoveBoard = Convert.ToBoolean(sIsShermanAdvancingOnMoveBoard);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "SwitchedCrewMember")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): SwitchedCrewMember != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sSwitchedCrewMember = reader.GetAttribute("value");
+            if (null == sSwitchedCrewMember)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): SwitchedCrewMember=null");
+               return null;
+            }
+            gi.SwitchedCrewMember = sSwitchedCrewMember;
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "AssistantOriginalRating")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): AssistantOriginalRating != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sAssistantOriginalRating = reader.GetAttribute("value");
+            if (null == sAssistantOriginalRating)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): AssistantOriginalRating=null");
+               return null;
+            }
+            gi.AssistantOriginalRating = Convert.ToInt32(sAssistantOriginalRating);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "IsShermanFiringAtFront")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsShermanFiringAtFront != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sIsShermanFiringAtFront = reader.GetAttribute("value");
+            if (null == sIsShermanFiringAtFront)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsShermanFiringAtFront=null");
+               return null;
+            }
+            gi.IsShermanFiringAtFront = Convert.ToBoolean(sIsShermanFiringAtFront);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "IsShermanDeliberateImmobilization")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsShermanDeliberateImmobilization != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sIsShermanDeliberateImmobilization = reader.GetAttribute("value");
+            if (null == sIsShermanDeliberateImmobilization)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsShermanDeliberateImmobilization=null");
+               return null;
+            }
+            gi.IsShermanDeliberateImmobilization = Convert.ToBoolean(sIsShermanDeliberateImmobilization);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "ShermanTypeOfFire")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ShermanTypeOfFire != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sShermanTypeOfFire = reader.GetAttribute("value");
+            if (null == sShermanTypeOfFire)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ShermanTypeOfFire=null");
+               return null;
+            }
+            gi.ShermanTypeOfFire = sShermanTypeOfFire;
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "NumSmokeAttacksThisRound")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): NumSmokeAttacksThisRound != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sNumSmokeAttacksThisRound = reader.GetAttribute("value");
+            if (null == sNumSmokeAttacksThisRound)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): NumSmokeAttacksThisRound=null");
+               return null;
+            }
+            gi.NumSmokeAttacksThisRound = Convert.ToInt32(sNumSmokeAttacksThisRound);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "IsMalfunctionedMainGun")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsMalfunctionedMainGun != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sIsMalfunctionedMainGun = reader.GetAttribute("value");
+            if (null == sIsMalfunctionedMainGun)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsMalfunctionedMainGun=null");
+               return null;
+            }
+            gi.IsMalfunctionedMainGun = Convert.ToBoolean(sIsMalfunctionedMainGun);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "IsMainGunRepairAttempted")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsMainGunRepairAttempted != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sIsMainGunRepairAttempted = reader.GetAttribute("value");
+            if (null == sIsMainGunRepairAttempted)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsMainGunRepairAttempted=null");
+               return null;
+            }
+            gi.IsMainGunRepairAttempted = Convert.ToBoolean(sIsMainGunRepairAttempted);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "IsBrokenMainGun")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsBrokenMainGun != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sIsBrokenMainGun = reader.GetAttribute("value");
+            if (null == sIsBrokenMainGun)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsBrokenMainGun=null");
+               return null;
+            }
+            gi.IsBrokenMainGun = Convert.ToBoolean(sIsBrokenMainGun);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "IsBrokenGunSight")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsBrokenGunSight != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sIsBrokenGunSight = reader.GetAttribute("value");
+            if (null == sIsBrokenGunSight)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsBrokenMainGun=null");
+               return null;
+            }
+            gi.IsBrokenGunSight = Convert.ToBoolean(sIsBrokenGunSight);
+            //----------------------------------------------
+            if( false == ReadXmlFirstShots(reader, gi.FirstShots))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlFirstShots() returned false");
+               return null;
+            }
+            //----------------------------------------------
+            if (false == ReadXmlTrainedGunners(reader, gi.TrainedGunners))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlTrainedGunners() returned false");
+               return null;
+            }
+            //----------------------------------------------
+            if (false == ReadXmlShermanHits(reader, gi.ShermanHits))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlTrainedGunners() returned false");
+               return null;
+            }
+            //----------------------------------------------
+            if (false == ReadXmlShermanDeath(reader, gi.Death))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlShermanDeath() returned false");
+               return null;
+            }
+            //----------------------------------------------
             return gi;
          } // try
+         //==========================================
          catch (Exception e)
          {
             Logger.Log(LogEnum.LE_ERROR, "ReadXml():\n" + e.ToString());
@@ -966,6 +1705,7 @@ namespace Pattons_Best
       }
       private bool ReadXmlReports(XmlReader reader, IAfterActionReports reports)
       {
+         reports.Clear();
          reader.Read();
          if (reader.IsStartElement())
          {
@@ -1004,44 +1744,48 @@ namespace Pattons_Best
       {
          //----------------------------------------------
          reader.Read();
-         if (reader.IsStartElement())
+         if (false == reader.IsStartElement())
          {
-            if (reader.Name != "Day")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
-               return false;
-            }
-            string? sDay = reader.GetAttribute("value");
-            if (null == sDay)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sDay=null");
-               return false;
-            }
-            report.Day = sDay;
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
          }
+         if (reader.Name != "Day")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
+            return false;
+         }
+         string? sDay = reader.GetAttribute("value");
+         if (null == sDay)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sDay=null");
+            return false;
+         }
+         report.Day = sDay;
          //----------------------------------------------
          reader.Read();
-         if (reader.IsStartElement())
+         if (false == reader.IsStartElement())
          {
-            if (reader.Name != "Scenario")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
-               return false;
-            }
-            string? sScenario = reader.GetAttribute("value");
-            if (null == sScenario)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sScenario=null");
-               return false;
-            }
-            switch (sScenario)
-            {
-               case "Advance": report.Scenario = EnumScenario.Advance; break;
-               case "Battle": report.Scenario = EnumScenario.Battle; break;
-               case "Counterattack": report.Scenario = EnumScenario.Counterattack; break;
-               case "Retrofit": report.Scenario = EnumScenario.Retrofit; break;
-               default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reached default sScenario=" + sScenario); return false;
-            }
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "Scenario")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
+            return false;
+         }
+         string? sScenario = reader.GetAttribute("value");
+         if (null == sScenario)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sScenario=null");
+            return false;
+         }
+         switch (sScenario)
+         {
+            case "Advance": report.Scenario = EnumScenario.Advance; break;
+            case "Battle": report.Scenario = EnumScenario.Battle; break;
+            case "Counterattack": report.Scenario = EnumScenario.Counterattack; break;
+            case "Retrofit": report.Scenario = EnumScenario.Retrofit; break;
+            default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reached default sScenario=" + sScenario); return false;
          }
          //----------------------------------------------
          reader.Read();
@@ -2097,45 +2841,49 @@ namespace Pattons_Best
             return false;
          }
          report.KnockedOut = sKnockedOut;
+
          return true;
       }
       private bool ReadXmlMapItems(XmlReader reader, IMapItems mapItems)
       {
+         mapItems.Clear();
          reader.Read();
-         if (reader.IsStartElement())
+         if (false == reader.IsStartElement())
          {
-            if (reader.Name != "MapItems")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReports(): MapItems != (node=" + reader.Name + ")");
-               return false;
-            }
-            string? sCount = reader.GetAttribute("count");
-            if (null == sCount)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReports(): Count=null");
-               return false;
-            }
-            int count = int.Parse(sCount);
-            for (int i = 0; i < count; ++i)
-            {
-               IMapItem? mapItem = mapItems[i];
-               if( null == mapItem )
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlReports(): mapItem=null");
-                  return false;
-               }
-               if (false == ReadXmlMapItem(reader, mapItem))
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlReports(): ReadXmlReportsReport() returned false");
-                  return false;
-               }
-            }
-            if (0 < count)
-               reader.Read(); 
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReports(): IsStartElement()=null");
+            return false;
          }
+         if (reader.Name != "MapItems")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReports(): MapItems != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sCount = reader.GetAttribute("count");
+         if (null == sCount)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReports(): Count=null");
+            return false;
+         }
+         int count = int.Parse(sCount);
+         for (int i = 0; i < count; ++i)
+         {
+            IMapItem? mapItem = mapItems[i];
+            if( null == mapItem )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReports(): mapItem=null");
+               return false;
+            }
+            if (false == ReadXmlMapItem(reader, mapItem))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReports(): ReadXmlReportsReport() returned false");
+               return false;
+            }
+         }
+         if (0 < count)
+            reader.Read(); 
          return true;
       }
-      private bool ReadXmlCrewMember(XmlReader reader, ICrewMember member)
+      private bool ReadXmlCrewMember(XmlReader reader, ICrewMember? member)
       {
          reader.Read();
          if (false == reader.IsStartElement())
@@ -2154,6 +2902,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): sName=null");
             return false;
          }
+         if( "null" == sRole )
+            return true;
+         member = new CrewMember();
          member.Role = sRole;
          //----------------------------------------------
          IMapItem mapItem = (IMapItem)member;
@@ -2297,7 +3048,7 @@ namespace Pattons_Best
          member.WoundDaysUntilReturn = Convert.ToInt32(sWoundDaysUntilReturn);
          return true;
       }
-      private bool ReadXmlMapItem(XmlReader reader, IMapItem mi)
+      private bool ReadXmlMapItem(XmlReader reader, IMapItem? mi)
       {
          //---------------------------------------------
          reader.Read();
@@ -2317,6 +3068,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): sName=null");
             return false;
          }
+         if( "null" == sName )
+            return true;
+         mi = new MapItem();
          mi.Name = sName;
          //---------------------------------------------
          reader.Read();
@@ -2980,6 +3734,7 @@ namespace Pattons_Best
       }
       private bool ReadXmlMapItemWoundSpots( XmlReader reader, List<BloodSpot> bloodSpots )
       {
+         bloodSpots.Clear();
          reader.Read();
          if (reader.IsStartElement())
          {
@@ -3075,6 +3830,7 @@ namespace Pattons_Best
       }
       private bool ReadXmlMapItemEnemyAcquiredShots( XmlReader reader, Dictionary<string, int> enemyAcquiredShots)
       {
+         enemyAcquiredShots.Clear();
          reader.Read();
          if (reader.IsStartElement())
          {
@@ -3120,104 +3876,423 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool ReadXmlMapItemsTerritories(XmlReader reader, ITerritories territories, string nodeName)
+      private bool ReadXmlTerritories(XmlReader reader, ITerritories territories, string attribute)
       {
+         territories.Clear();
          reader.Read();
          if (reader.IsStartElement())
          {
-            if (reader.Name != nodeName)
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement() returned false");
+            return false;
+         }
+         if (reader.Name != "Territories")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Territories != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? attributeRead = reader.GetAttribute("value");
+         if (attribute != attributeRead)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): attributeRead=null for attribute=" + attribute);
+            return false;
+         }
+         string? sCount = reader.GetAttribute("count");
+         if (null == sCount)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Count=null");
+            return false;
+         }
+         int count = int.Parse(sCount);
+         for (int i = 0; i < count; ++i)
+         {
+            reader.Read();
+            if (true == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): " + nodeName + " != (node=" + reader.Name + ")");
-               return false;
-            }
-            string? sCount = reader.GetAttribute("count");
-            if (null == sCount)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Count=null");
-               return false;
-            }
-            int count = int.Parse(sCount);
-            for (int i = 0; i < count; ++i)
-            {
-               reader.Read();
-               if (true == reader.IsStartElement())
+               if (reader.Name != "Territory")
                {
-                  if (reader.Name != "Territory")
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameMapItems(): MapItem != (node=" + reader.Name + ")");
-                     return false;
-                  }
-                  string? tName = reader.GetAttribute("value");
-                  if (null == tName)
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameMapItems(): GetAttribute() returned false");
-                     return false;
-                  }
-                  ITerritory? territory = Territories.theTerritories.Find(tName);
-                  if (null == territory)
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameMapItems(): Find() returned null for tName=" + tName);
-                     return false;
-                  }
-                  territories.Add(territory);
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Territory != (node=" + reader.Name + ")");
+                  return false;
                }
+               string? tName = reader.GetAttribute("value");
+               if (null == tName)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute() returned false");
+                  return false;
+               }
+               ITerritory? territory = Territories.theTerritories.Find(tName);
+               if (null == territory)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Find() returned null for tName=" + tName);
+                  return false;
+               }
+               territories.Add(territory);
             }
-            if (0 < count)
-               reader.Read(); // get past end tag
+         }
+         if (0 < count)
+            reader.Read(); // get past </Territories> tag
+         return true;
+      }
+      private bool ReadXmlFirstShots(XmlReader reader, List<string> firstShots)
+      {
+         firstShots.Clear();
+         reader.Read();
+         if (reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlFirstShots(): IsStartElement() returned false");
+            return false;
+         }
+         if (reader.Name != "FirstShots")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlFirstShots(): FirstShots != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sCount = reader.GetAttribute("count");
+         if (null == sCount)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlFirstShots(): Count=null");
+            return false;
+         }
+         int count = int.Parse(sCount);
+         for (int i=0; i< count; i++)
+         {
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlFirstShots(): FirstShot != (node=" + reader.Name + ")");
+               return false;
+            }
+            if (reader.Name != "FirstShot")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlFirstShots(): FirstShot != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? miName = reader.GetAttribute("value");
+            if (null == miName)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlFirstShots(): GetAttribute(miName) returned false");
+               return false;
+            }
+            firstShots.Add(miName);
          }
          return true;
       }
-      private bool ReadXmlTerritories(XmlReader reader, ITerritories territories, string attribute)
+      private bool ReadXmlTrainedGunners(XmlReader reader, List<string> trainedGunners)
+      {
+         trainedGunners.Clear();
+         reader.Read();
+         if (reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlTrainedGunners(): IsStartElement() returned false");
+            return false;
+         }
+         if (reader.Name != "TrainedGunners")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlTrainedGunners(): TrainedGunners != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sCount = reader.GetAttribute("count");
+         if (null == sCount)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlTrainedGunners(): Count=null");
+            return false;
+         }
+         int count = int.Parse(sCount);
+         for (int i = 0; i < count; i++)
+         {
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTrainedGunners(): TrainedGunner != (node=" + reader.Name + ")");
+               return false;
+            }
+            if (reader.Name != "TrainedGunner")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTrainedGunners(): TrainedGunner != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? miName = reader.GetAttribute("value");
+            if (null == miName)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTrainedGunners(): GetAttribute(miName) returned false");
+               return false;
+            }
+            trainedGunners.Add(miName);
+         }
+         return true;
+      }
+      private bool ReadXmlShermanHits(XmlReader reader, List<ShermanAttack> hits)
+      {
+         hits.Clear();
+         reader.Read();
+         if (reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): IsStartElement() returned false");
+            return false;
+         }
+         if (reader.Name != "ShermanHits")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): ShermanHits != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sCount = reader.GetAttribute("count");
+         if (null == sCount)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): Count=null");
+            return false;
+         }
+         int count = int.Parse(sCount);
+         for (int i = 0; i < count; i++)
+         {
+            reader.Read();
+            if (reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): IsStartElement() returned false");
+               return false;
+            }
+            if (reader.Name != "ShermanHit")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): ShermanHit != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sAttackType = reader.GetAttribute("AttackType");
+            if (null == sAttackType)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): AttackType=null");
+               return false;
+            }
+            string? sAmmoType = reader.GetAttribute("AmmoType");
+            if (null == sAmmoType)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): AmmoType=null");
+               return false;
+            }
+            string? sIsCriticalHit = reader.GetAttribute("IsCriticalHit");
+            if (null == sIsCriticalHit)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): IsCriticalHit=null");
+               return false;
+            }
+            bool isCriticalHit = Convert.ToBoolean(sIsCriticalHit);
+            string? sHitLocation = reader.GetAttribute("HitLocation");
+            if (null == sHitLocation)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): HitLocation=null");
+               return false;
+            }
+            string? sIsNoChance = reader.GetAttribute("IsNoChance");
+            if (null == sIsNoChance)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): IsNoChance=null");
+               return false;
+            }
+            bool isNoChance = Convert.ToBoolean(sIsNoChance);
+            string? sIsImmobilization = reader.GetAttribute("IsImmobilization");
+            if (null == sIsImmobilization)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): IsImmobilization=null");
+               return false;
+            }
+            bool isImmobilization = Convert.ToBoolean(sIsImmobilization);
+            ShermanAttack attack = new ShermanAttack(sAttackType, sAmmoType, isCriticalHit, isImmobilization);
+            attack.myIsNoChance = isNoChance;
+            //---------------------------
+            hits.Add(attack);
+         }
+         return true;
+      }
+      private bool ReadXmlShermanDeath(XmlReader reader, ShermanDeath? death)
       {
          reader.Read();
          if (reader.IsStartElement())
          {
-            if (reader.Name != "Territories")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Territories != (node=" + reader.Name + ")");
-               return false;
-            }
-            string? attributeRead = reader.GetAttribute("value");
-            if (attribute != attributeRead)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): attributeRead=null for attribute=" + attribute);
-               return false;
-            }
-            string? sCount = reader.GetAttribute("count");
-            if (null == sCount)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Count=null");
-               return false;
-            }
-            int count = int.Parse(sCount);
-            for (int i = 0; i < count; ++i)
-            {
-               reader.Read();
-               if (true == reader.IsStartElement())
-               {
-                  if (reader.Name != "Territory")
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Territory != (node=" + reader.Name + ")");
-                     return false;
-                  }
-                  string? tName = reader.GetAttribute("value");
-                  if (null == tName)
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute() returned false");
-                     return false;
-                  }
-                  ITerritory? territory = Territories.theTerritories.Find(tName);
-                  if (null == territory)
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Find() returned null for tName=" + tName);
-                     return false;
-                  }
-                  territories.Add(territory);
-               }
-            }
-            if (0 < count)
-               reader.Read(); // get past </Territories> tag
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsStartElement(ShermanDeath) returned false");
+            return false;
          }
+         if (reader.Name != "ShermanDeath")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): ShermanDeath != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? value = reader.GetAttribute("value");
+         if( "null" == value )
+         {
+            death = null;
+            return true;
+         }
+         //----------------------------------
+         IMapItem? enemyUnit = null;
+         if ( false == ReadXmlMapItem(reader, enemyUnit))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): ReadXmlMapItem() returned false");
+            return false;
+         }
+         if( null == enemyUnit )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): enemyUnit=null");
+            return false;
+         }
+         //----------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): HitLocation != (node=" + reader.Name + ")");
+            return false;
+         }
+         if (reader.Name != "HitLocation")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): HitLocation != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sHitLocation = reader.GetAttribute("value");
+         if (null == sHitLocation)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): GetAttribute(sHitLocation) returned false");
+            return false;
+         }
+         //----------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): EnemyFireDirection != (node=" + reader.Name + ")");
+            return false;
+         }
+         if (reader.Name != "EnemyFireDirection")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): EnemyFireDirection != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sEnemyFireDirection = reader.GetAttribute("value");
+         if (null == sEnemyFireDirection)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): GetAttribute(EnemyFireDirection) returned false");
+            return false;
+         }
+         //----------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): Day != (node=" + reader.Name + ")");
+            return false;
+         }
+         if (reader.Name != "Day")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): Day != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sDay = reader.GetAttribute("value");
+         if (null == sDay)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): GetAttribute(sDay) returned false");
+            return false;
+         }
+         int day = Convert.ToInt32(sDay);
+         //----------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): Cause != (node=" + reader.Name + ")");
+            return false;
+         }
+         if (reader.Name != "Cause")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): Cause != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sCause = reader.GetAttribute("value");
+         if (null == sCause)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): GetAttribute(sCause) returned false");
+            return false;
+         }
+         //----------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsAmbush != (node=" + reader.Name + ")");
+            return false;
+         }
+         if (reader.Name != "IsAmbush")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsAmbush != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sIsAmbush = reader.GetAttribute("value");
+         if (null == sIsAmbush)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): GetAttribute(sIsAmbush) returned false");
+            return false;
+         }
+         bool isAmbush = Convert.ToBoolean(sIsAmbush);
+         //----------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsExplosion != (node=" + reader.Name + ")");
+            return false;
+         }
+         if (reader.Name != "IsExplosion")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsExplosion != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sIsExplosion = reader.GetAttribute("value");
+         if (null == sIsExplosion)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): GetAttribute(sIsExplosion) returned false");
+            return false;
+         }
+         bool isExplosion = Convert.ToBoolean(sIsExplosion);
+         //----------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsBailout != (node=" + reader.Name + ")");
+            return false;
+         }
+         if (reader.Name != "IsBailout")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsBailout != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sIsBailout = reader.GetAttribute("value");
+         if (null == sIsBailout)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): GetAttribute(IsBailout) returned false");
+            return false;
+         }
+         bool isBailout = Convert.ToBoolean(sIsBailout);
+         //----------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsBrewUp != (node=" + reader.Name + ")");
+            return false;
+         }
+         if (reader.Name != "IsBrewUp")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsBrewUp != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sIsBrewUp = reader.GetAttribute("value");
+         if (null == sIsBrewUp)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): GetAttribute(IsBrewUp) returned false");
+            return false;
+         }
+         bool isBrewUp = Convert.ToBoolean(sIsBrewUp);
+         //----------------------------------
+         death = new ShermanDeath();
+         death.myEnemyUnit = enemyUnit;
+         death.myHitLocation = sHitLocation;
+         death.myEnemyFireDirection = sEnemyFireDirection;
+         death.myDay = day;
+         death.myCause = sCause;
+         death.myIsAmbush = isAmbush;
+         death.myIsExplosion = isExplosion;
+         death.myIsBailout = isBailout;
+         death.myIsBrewUp = isBrewUp;
+         //----------------------------------
+         reader.Read(); // get past </ShermanDeath> tag
          return true;
       }
       //--------------------------------------------------
@@ -6286,7 +7361,7 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool CreateXmlFirstShots(XmlDocument aXmlDocument, Dictionary<string, bool> firstShots)
+      private bool CreateXmlFirstShots(XmlDocument aXmlDocument, List<string> firstShots)
       {
          XmlNode? root = aXmlDocument.DocumentElement;
          if (null == root)
@@ -6307,29 +7382,22 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlFirstShots(): AppendChild(firstShotsNode) returned null");
             return false;
          }
-         int count = 0;
-         foreach (var kvp in firstShots)
+         for( int i=0; i< firstShots.Count; ++i)
          {
+            string miName = firstShots[i];
             XmlElement? firstShotElem = aXmlDocument.CreateElement("FirstShot");
             if (null == firstShotElem)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlFirstShots(): CreateElement(firstShotElem) returned null");
                return false;
             }
-            firstShotElem.SetAttribute("enemy", kvp.Key);
-            firstShotElem.SetAttribute("value", kvp.Value.ToString());
+            firstShotElem.SetAttribute("value", miName);
             XmlNode? firstShotNode = firstShotsNode.AppendChild(firstShotElem);
             if (null == firstShotNode)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlFirstShots(): AppendChild(firstShotElem) returned null");
                return false;
             }
-            count++;
-         }
-         if( count != firstShots.Count  )
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlFirstShots(): count=" + count.ToString() + " firstShotsCount=" + firstShots.Count.ToString());
-            return false;
          }
          return true;
       }
@@ -6380,17 +7448,17 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): root is null");
             return false;
          }
-         XmlElement? shermanHitsElem = aXmlDocument.CreateElement("TrainedGunners");
+         XmlElement? shermanHitsElem = aXmlDocument.CreateElement("ShermanHits");
          if (null == shermanHitsElem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(TrainedGunners) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(ShermanHits) returned null");
             return false;
          }
          shermanHitsElem.SetAttribute("count", shermanHits.Count.ToString());
          XmlNode? shermanHitsNode = root.AppendChild(shermanHitsElem);
          if (null == shermanHitsNode)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(trainedGunnersNode) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(ShermanHits) returned null");
             return false;
          }
          for (int i = 0; i < shermanHits.Count; ++i)
@@ -6402,12 +7470,12 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(ShermanHit) returned null");
                return false;
             }
-            shermanHitElem.SetAttribute("myAttackType", shermanAttack.myAttackType);
-            shermanHitElem.SetAttribute("myAmmoType", shermanAttack.myAmmoType);
-            shermanHitElem.SetAttribute("myIsCriticalHit", shermanAttack.myIsCriticalHit.ToString());
-            shermanHitElem.SetAttribute("myHitLocation", shermanAttack.myHitLocation);
-            shermanHitElem.SetAttribute("myIsNoChance", shermanAttack.myIsNoChance.ToString());
-            shermanHitElem.SetAttribute("myIsImmobilization", shermanAttack.myIsImmobilization.ToString());
+            shermanHitElem.SetAttribute("AttackType", shermanAttack.myAttackType);
+            shermanHitElem.SetAttribute("AmmoType", shermanAttack.myAmmoType);
+            shermanHitElem.SetAttribute("IsCriticalHit", shermanAttack.myIsCriticalHit.ToString());
+            shermanHitElem.SetAttribute("HitLocation", shermanAttack.myHitLocation);
+            shermanHitElem.SetAttribute("IsNoChance", shermanAttack.myIsNoChance.ToString());
+            shermanHitElem.SetAttribute("IsImmobilization", shermanAttack.myIsImmobilization.ToString());
             XmlNode? shermanHitNode = shermanHitsNode.AppendChild(shermanHitElem);
             if (null == shermanHitNode)
             {
@@ -6425,16 +7493,16 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): root is null");
             return false;
          }
-         XmlElement? shermanDeathElem = aXmlDocument.CreateElement("TrainedGunners");
+         XmlElement? shermanDeathElem = aXmlDocument.CreateElement("ShermanDeath");
          if (null == shermanDeathElem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(TrainedGunners) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(ShermanDeath) returned null");
             return false;
          }
          XmlNode? shermanDeathNode = root.AppendChild(shermanDeathElem);
          if (null == shermanDeathNode)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(trainedGunnersNode) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(ShermanDeath) returned null");
             return false;
          }
          if (null == death)

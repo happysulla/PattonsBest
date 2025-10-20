@@ -15,6 +15,10 @@ namespace Pattons_Best
       public bool myIsExplosion = false;
       public bool myIsBailout = false;
       public bool myIsBrewUp = false;
+      public ShermanDeath()
+      {
+
+      }
       public ShermanDeath(IGameInstance gi, IMapItem eu, string loc, string cause)
       {
          myEnemyUnit = eu;
@@ -140,7 +144,7 @@ namespace Pattons_Best
       bool IsMainGunRepairAttempted { set; get; }
       bool IsBrokenMainGun { set; get; }
       bool IsBrokenGunSight { set; get; }
-      Dictionary<string, bool> FirstShots { set; get; }
+      List<string> FirstShots { set; get; }
       List<string> TrainedGunners { get; } // trained in use of HVSS 
       List<ShermanAttack> ShermanHits { set; get; }
       ShermanDeath? Death { set; get; }

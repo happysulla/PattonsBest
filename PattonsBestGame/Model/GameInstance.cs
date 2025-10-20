@@ -82,7 +82,7 @@ namespace Pattons_Best
       public bool IsMainGunRepairAttempted { set; get; } = false;
       public bool IsBrokenMainGun { set; get; } = false;
       public bool IsBrokenGunSight { set; get; } = false;
-      public Dictionary<string, bool> FirstShots { set; get; } = new Dictionary<string, bool>();
+      public List<string> FirstShots { set; get; } = new List<string>();
       public List<string> TrainedGunners { get; } = new List<string>();
       public List<ShermanAttack> ShermanHits { set; get; } = new List<ShermanAttack>();
       public ShermanDeath? Death { set; get; } = null;
