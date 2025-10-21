@@ -2365,6 +2365,164 @@ namespace Pattons_Best
             }
             gi.IsEnemyAdvanceComplete = Convert.ToBoolean(sIsEnemyAdvanceComplete);
             //----------------------------------------------
+            if( false == ReadXmlPanzerfaultAttack(reader, gi.Panzerfaust))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlPanzerfaultAttack() failed");
+               return null;
+            }
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "NumCollateralDamage")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): NumCollateralDamage != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sNumCollateralDamage = reader.GetAttribute("value");
+            if (null == sNumCollateralDamage)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): NumCollateralDamage=null");
+               return null;
+            }
+            gi.NumCollateralDamage = Convert.ToInt32(sNumCollateralDamage);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "TankReplacementNumber")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): TankReplacementNumber != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sTankReplacementNumber = reader.GetAttribute("value");
+            if (null == sTankReplacementNumber)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): TankReplacementNumber=null");
+               return null;
+            }
+            gi.TankReplacementNumber = Convert.ToInt32(sTankReplacementNumber);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "VictoryPtsTotalCampaign")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): VictoryPtsTotalCampaign != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sVictoryPtsTotalCampaign = reader.GetAttribute("value");
+            if (null == sVictoryPtsTotalCampaign)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): VictoryPtsTotalCampaign=null");
+               return null;
+            }
+            gi.VictoryPtsTotalCampaign = Convert.ToInt32(sVictoryPtsTotalCampaign);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "PromotionPointNum")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): PromotionPointNum != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sPromotionPointNum = reader.GetAttribute("value");
+            if (null == sPromotionPointNum)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): PromotionPointNum=null");
+               return null;
+            }
+            gi.VictoryPtsTotalCampaign = Convert.ToInt32(sPromotionPointNum);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "PromotionDay")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): PromotionDay != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sPromotionDay = reader.GetAttribute("value");
+            if (null == sPromotionDay)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): PromotionDay=null");
+               return null;
+            }
+            gi.PromotionDay = Convert.ToInt32(sPromotionDay);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "NumPurpleHeart")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): NumPurpleHeart != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sNumPurpleHeart = reader.GetAttribute("value");
+            if (null == sNumPurpleHeart)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): NumPurpleHeart=null");
+               return null;
+            }
+            gi.NumPurpleHeart = Convert.ToInt32(sNumPurpleHeart);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "IsCommanderRescuePerformed")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsCommanderRescuePerformed != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sIsCommanderRescuePerformed = reader.GetAttribute("value");
+            if (null == sIsCommanderRescuePerformed)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsCommanderRescuePerformed=null");
+               return null;
+            }
+            gi.IsCommanderRescuePerformed = Convert.ToBoolean(sIsCommanderRescuePerformed);
+            //----------------------------------------------
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               return null;
+            }
+            if (reader.Name != "IsCommanderKilled")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsCommanderKilled != (node=" + reader.Name + ")");
+               return null;
+            }
+            string? sIsCommanderKilled = reader.GetAttribute("value");
+            if (null == sIsCommanderKilled)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsCommanderKilled=null");
+               return null;
+            }
+            gi.IsCommanderRescuePerformed = Convert.ToBoolean(sIsCommanderKilled);
+            //----------------------------------------------
             return gi;
          } // try
          //==========================================
@@ -5043,6 +5201,27 @@ namespace Pattons_Best
          death.myIsBrewUp = isBrewUp;
          //----------------------------------
          reader.Read(); // get past </ShermanDeath> tag
+         return true;
+      }
+      private bool ReadXmlPanzerfaultAttack(XmlReader reader, PanzerfaustAttack? attack)
+      {
+         reader.Read();
+         if (reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsStartElement(Panzerfaust) returned false");
+            return false;
+         }
+         if (reader.Name != "Panzerfaust")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): Panzerfaust != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? value = reader.GetAttribute("value");
+         if ("null" == value)
+         {
+            attack = null;
+            return true;
+         }
          return true;
       }
       //--------------------------------------------------
