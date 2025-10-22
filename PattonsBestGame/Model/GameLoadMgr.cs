@@ -5557,6 +5557,93 @@ namespace Pattons_Best
       }
       private bool ReadXmlStacks(XmlReader reader, IStacks stacks, string attribute)
       {
+         stacks.Clear();
+         reader.Read();
+         if (reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): IsStartElement() returned false");
+            return false;
+         }
+         if (reader.Name != "Stacks")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): MapItemMoves != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sName = reader.GetAttribute("value");
+         if (null == sName)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): sName=null");
+            return false;
+         }
+         if( attribute != sName)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): sName=" + sName + " not equal to attribute=" + attribute);
+            return false;
+         }
+         string? sCount = reader.GetAttribute("count");
+         if (null == sCount)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): count=null");
+            return false;
+         }
+         int count = int.Parse(sCount);
+         for( int i=0; i<count; ++i )
+         {
+            reader.Read();
+            if (reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): IsStartElement() returned false");
+               return false;
+            }
+            if (reader.Name != "Stack")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): MapItemMoves != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? tName = reader.GetAttribute("value");
+            if (null == tName)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): tName=null");
+               return false;
+            }
+            ITerritory? t = Territories.theTerritories.Find(tName);
+            if( null == t )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): t=null for tName=" + tName);
+               return false;
+            }
+            //---------------------------------------------
+            reader.Read();
+            if (reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): IsStartElement() returned false");
+               return false;
+            }
+            if (reader.Name != "IsStacked")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): IsStacked != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sIsStacked = reader.GetAttribute("value");
+            if (null == sIsStacked)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): sIsStacked=null");
+               return false;
+            }
+            bool isStacked = Convert.ToBoolean(sIsStacked);
+            //---------------------------------------------
+            IMapItems mapItems = new MapItems();
+            if (false == ReadXmlMapItems(reader, mapItems))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): ReadXmlMapItems() returned false");
+               return false;
+            }
+            //--------------------------------------------
+            IStack stack = new Stack(t);
+            stack.IsStacked = isStacked;
+            stack.MapItems = mapItems;
+            stacks.Add(stack);
+         }
          return true;
       }
       private bool ReadXmlEnteredHexes(XmlReader reader, List<EnteredHex> hexes)
