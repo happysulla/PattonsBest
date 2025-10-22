@@ -26,8 +26,24 @@
       </StackPanel>
       <TextBlock  x:Name="myTextBlock" Grid.Row="1" TextWrapping="Wrap" Width="Auto" >
          <LineBreak/>
-          <Italic>1981 Charles S. Roberts Best Fantasy Board Game Winner:</Italic> Barbarian Prince is a solitaire game of heroic adventure in a forgotten age of barbarism and sorcery. The turns takes you through a sequence of encounters
-          which is different each time you play the game. For each encounter, you as the Barbarian Prince Cal Arath must make the decisions which will make your quest successful - or may cost you your life.
+          <Italic>For those of you who like to roll percentile dice -- this game's for you!</Italic> This is a solitaire game involving tank command -- 
+                  that is you control a Sherman tank (17 variations) and command a crew assigned to the 4th Armored Division as you move out of the 
+                  Cobra Breakout following the Normandy invasion.
+         <LineBreak/> <LineBreak/>
+         You and your tank move into a new territory and deal with German defenses situated in northern France and, as the campaign game
+         goes on, across the Rhine and into Germany. You will need to make life and death decisions in managing your crew&apos;s actions, 
+         your tank&apos;s facing, and attempt to take out enemy forces without losing your tank (which is extremely challenging). 
+         The combat system utilizes an area map for the larger scale movement of your task force but then switches to an 
+         abstracted Battle Board when contact is made with the enemy. 
+         <LineBreak/><LineBreak/>
+         <Italic>Game Designer: </Italic>
+         <Hyperlink NavigateUri="https://boardgamegeek.com/boardgamedesigner/1329/bruce-shelley" RequestNavigate="Hyperlink_RequestNavigate">Bruce Campbell Shelly</Hyperlink>
+         (born July 1948 in Fremont, Michigan) is an American game designer 
+         and writer who is most famously known as the computer game designer who helped design games such as Sid Meier&apos;s Civilization, 
+         Railroad Tycoon, and Age of Empires. In 1980, he and several of his friends at the University of Virginia formed the game 
+         company Iron Crown Enterprises. Strategy and Tactics Magazine published his first game in the early 1980s. In 1981, he briefly
+         worked for Simulations Publications, Inc. (SPI). He then worked for The Avalon Hill Game Co, contributing to such classic games 
+         as 1830: Railways and Robber Barons and Titan. 
       </TextBlock>
       <StackPanel Name="myStackPanelButtons" Grid.Row="2" Grid.ColumnSpan="1"  Orientation="Horizontal" VerticalAlignment="Center"  HorizontalAlignment="Center" Margin="5,5,5,5" >
          <Button x:Name="myButtonOK" HorizontalAlignment="Center" Width="70" Height="30" VerticalAlignment="Top" Margin="0,10,0,0" FontSize="14" Click="ButtonOk_Click" IsDefault="True">OK</Button>

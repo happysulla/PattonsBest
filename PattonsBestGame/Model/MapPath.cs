@@ -12,7 +12,7 @@ namespace Pattons_Best
       private double myMetric = 0;
       public double Metric { get; set; }
       private List<ITerritory> myTerritories = new List<ITerritory>();
-      public List<ITerritory> Territories { get => myTerritories; }
+      public List<ITerritory> Territories { set => myTerritories=value;  get => myTerritories; }
       //-----------------------------------------------------------
       public MapPath()
       {

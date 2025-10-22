@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Xps.Packaging;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -2523,6 +2524,29 @@ namespace Pattons_Best
             }
             gi.IsCommanderRescuePerformed = Convert.ToBoolean(sIsCommanderKilled);
             //----------------------------------------------
+            if( false == ReadXmlMapItemMoves(reader, gi.MapItemMoves))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlMapItemMoves() returned false");
+               return null;
+            }
+            //----------------------------------------------
+            if (false == ReadXmlStacks(reader, gi.MoveStacks, "MoveStacks"))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlStacks(MoveStacks) returned false");
+               return null;
+            }
+            //----------------------------------------------
+            if (false == ReadXmlStacks(reader, gi.BattleStacks, "BattleStacks"))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlStacks(BattleStacks) returned false");
+               return null;
+            }
+            //----------------------------------------------
+            if (false == ReadXmlEnteredHexes(reader, gi.EnteredHexes))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlEnteredHexes() returned false");
+               return null;
+            }
             return gi;
          } // try
          //==========================================
@@ -5189,8 +5213,7 @@ namespace Pattons_Best
          }
          bool isBrewUp = Convert.ToBoolean(sIsBrewUp);
          //----------------------------------
-         death = new ShermanDeath();
-         death.myEnemyUnit = enemyUnit;
+         death = new ShermanDeath(enemyUnit);
          death.myHitLocation = sHitLocation;
          death.myEnemyFireDirection = sEnemyFireDirection;
          death.myDay = day;
@@ -5208,12 +5231,12 @@ namespace Pattons_Best
          reader.Read();
          if (reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsStartElement(Panzerfaust) returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): IsStartElement(Panzerfaust) returned false");
             return false;
          }
          if (reader.Name != "Panzerfaust")
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): Panzerfaust != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): Panzerfaust != (node=" + reader.Name + ")");
             return false;
          }
          string? value = reader.GetAttribute("value");
@@ -5222,6 +5245,322 @@ namespace Pattons_Best
             attack = null;
             return true;
          }
+         //----------------------------------
+         IMapItem? enemyUnit = null;
+         if (false == ReadXmlMapItem(reader, enemyUnit))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): ReadXmlMapItem() returned false");
+            return false;
+         }
+         if (null == enemyUnit)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): enemyUnit=null");
+            return false;
+         }
+         //----------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): Day != (node=" + reader.Name + ")");
+            return false;
+         }
+         if (reader.Name != "Day")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): Day != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sDay = reader.GetAttribute("value");
+         if (null == sDay)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): GetAttribute(Day) returned false");
+            return false;
+         }
+         int day = Convert.ToInt32(sDay);
+         //----------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): IsShermanMoving != (node=" + reader.Name + ")");
+            return false;
+         }
+         if (reader.Name != "IsShermanMoving")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): IsShermanMoving != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sIsShermanMoving = reader.GetAttribute("value");
+         if (null == sIsShermanMoving)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): GetAttribute(IsShermanMoving) returned false");
+            return false;
+         }
+         bool isShermanMoving = Convert.ToBoolean(sIsShermanMoving);
+         //----------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): IsLeadTank != (node=" + reader.Name + ")");
+            return false;
+         }
+         if (reader.Name != "IsLeadTank")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): IsLeadTank != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sIsLeadTank = reader.GetAttribute("value");
+         if (null == sIsLeadTank)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): GetAttribute(IsLeadTank) returned false");
+            return false;
+         }
+         bool isLeadTank = Convert.ToBoolean(sIsLeadTank);
+         //----------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): IsAdvancingFireZone != (node=" + reader.Name + ")");
+            return false;
+         }
+         if (reader.Name != "IsAdvancingFireZone")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): IsAdvancingFireZone != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sIsAdvancingFireZone = reader.GetAttribute("value");
+         if (null == sIsAdvancingFireZone)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): GetAttribute(IsAdvancingFireZone) returned false");
+            return false;
+         }
+         bool isAdvancingFireZone = Convert.ToBoolean(sIsAdvancingFireZone);
+         //----------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): Sector != (node=" + reader.Name + ")");
+            return false;
+         }
+         if (reader.Name != "Sector")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): Sector != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sSector = reader.GetAttribute("value");
+         if (null == sSector)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): GetAttribute(Sector) returned false");
+            return false;
+         }
+         char sector = Convert.ToChar(sSector);
+         //----------------------------------
+         attack = new PanzerfaustAttack(enemyUnit);
+         attack.myDay = day;
+         attack.myIsShermanMoving = isShermanMoving;
+         attack.myIsLeadTank = isLeadTank;
+         attack.myIsAdvancingFireZone = isAdvancingFireZone;
+         attack.mySector = sector;
+         reader.Read(); // get past </Panzerfaust>
+         return true;
+      }
+      private bool ReadXmlMapItemMoves(XmlReader reader, IMapItemMoves mapItemMoves)
+      {
+         mapItemMoves.Clear();
+         reader.Read();
+         if (reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): IsStartElement() returned false");
+            return false;
+         }
+         if (reader.Name != "MapItemMoves")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): MapItemMoves != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sCount = reader.GetAttribute("count");
+         if (null == sCount)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): count=null");
+            return false;
+         }
+         int count = int.Parse(sCount);
+         for( int i=0; i<count; ++i)
+         {
+            reader.Read();
+            if (reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): IsStartElement() returned false");
+               return false;
+            }
+            if (reader.Name != "MapItemMove")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): MapItemMove != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? miName = reader.GetAttribute("value");
+            if (null == miName)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): miName=null");
+               return false;
+            }
+            //----------------------------------------------
+            IMapItem? mi = null;
+            if( false == ReadXmlMapItem(reader, mi))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): ReadXmlMapItem() returned false");
+               return false;
+            }
+            if( null == mi )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): mi=null");
+               return false;
+            }
+            //----------------------------------------------
+            reader.Read();
+            if (reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): IsStartElement() returned false");
+               return false;
+            }
+            if (reader.Name != "OldTerritory")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): OldTerritory != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sOldTerritory = reader.GetAttribute("value");
+            if ("null" == sOldTerritory)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): sOldTerritory=*null*");
+               return false;
+            }
+            if (null == sOldTerritory) 
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): sOldTerritory=null");
+               return false;
+            }
+            //----------------------------------------------
+            reader.Read();
+            if (reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): IsStartElement() returned false");
+               return false;
+            }
+            if (reader.Name != "NewTerritory")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): NewTerritory != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sNewTerritory = reader.GetAttribute("value");
+            if ("null" == sNewTerritory)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): sNewTerritory=*null*");
+               return false;
+            }
+            if (null == sNewTerritory)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): sNewTerritory=null");
+               return false;
+            }
+            //----------------------------------------------
+            IMapPath? path = null; 
+            if( false == ReadXmlMapItemMoveBestPath(reader, path))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): ReadXmlMapItemMoveBestPath() returned false");
+               return false;
+            }
+            reader.Read(); // get past </MapItemMove>
+         }
+         if ( 0 < count )
+            reader.Read();
+         return true;
+      }
+      private bool ReadXmlMapItemMoveBestPath(XmlReader reader, IMapPath? path)
+      {
+         reader.Read();
+         if (reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): IsStartElement() returned false");
+            return false;
+         }
+         if (reader.Name != "BestPath")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): BestPath != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sValue = reader.GetAttribute("value");
+         if (null == sValue)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): sValue=null");
+            return false;
+         }
+         if ("null" == sValue)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): count=*null*");
+            return false;
+         }
+         string? sName = reader.GetAttribute("name");
+         if (null == sName)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): sName=null");
+            return false;
+         }
+         //------------------------------
+         string? sMetric = reader.GetAttribute("metric");
+         if (null == sMetric)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): sMetric=null");
+            return false;
+         }
+         double metric = Convert.ToDouble(sMetric);
+         //------------------------------
+         string? sCount = reader.GetAttribute("count");
+         if (null == sCount)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): sCount=null");
+            return false;
+         }
+         int count = int.Parse(sCount);
+         //------------------------------
+         List<ITerritory> territories = new List<ITerritory>();
+         for (int i=0; i<count; ++i )
+         {
+            reader.Read();
+            if (reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): IsStartElement() returned false");
+               return false;
+            }
+            if (reader.Name != "Territory")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): MapItemMoves != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? tName = reader.GetAttribute("name");
+            if (null == tName)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): tName=null");
+               return false;
+            }
+            ITerritory? t = Territories.theTerritories.Find(tName);
+            if( null == t )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): tName=null for tName=" + tName);
+               return false;
+            }
+            territories.Add(t);
+         }
+         if( 0 < count )
+            reader.Read(); // get past </BestPath>
+         path = new MapPath(sName);
+         path.Metric = metric;
+         path.Territories = territories;
+         return true;
+      }
+      private bool ReadXmlStacks(XmlReader reader, IStacks stacks, string attribute)
+      {
+         return true;
+      }
+      private bool ReadXmlEnteredHexes(XmlReader reader, List<EnteredHex> hexes)
+      {
          return true;
       }
       //--------------------------------------------------
@@ -8772,7 +9111,7 @@ namespace Pattons_Best
             bestPathElem.SetAttribute("value", "null");
             return true;
          }
-         bestPathElem.SetAttribute("value", bestPath.Name);
+         bestPathElem.SetAttribute("name", bestPath.Name);
          bestPathElem.SetAttribute("metric", bestPath.Metric.ToString());
          bestPathElem.SetAttribute("count", bestPath.Territories.Count.ToString());
          for (int i = 0; i < bestPath.Territories.Count; ++i)
@@ -8789,8 +9128,8 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemMovesBestPath(): CreateElement(Territory) returned null");
                return false;
             }
-            tElem.SetAttribute("value", t.Name);
-            XmlNode? tNode = parent.AppendChild(tElem);
+            tElem.SetAttribute("name", t.Name);
+            XmlNode? tNode = mapItemMovesNode.AppendChild(tElem);
             if (null == tNode)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemMovesBestPath(): AppendChild(tNode) returned null");

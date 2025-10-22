@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.Common;
 using System.IO;
+using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Xml.Serialization;
 using System.Xml;
-using System.Data.Common;
-using System.Threading;
-using System.Windows.Documents;
-using System.Collections.Generic;
+using System.Xml.Serialization;
 namespace Pattons_Best
 {
    public class Utilities
@@ -266,6 +267,29 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Deserialize(): s=" + s_xml + " T=" + type.ToString() + "\nex=" + ex.ToString());
             return default;
          }
+      }
+   }
+   public static class AssemblyInfo
+   {
+      public static DateTime GetLinkerTimestamp(string filePath)
+      {
+         const int peHeaderOffset = 60;
+         const int linkerTimestampOffset = 8;
+
+         byte[] buffer = new byte[2048];
+         using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+         {
+            stream.Read(buffer, 0, buffer.Length);
+         }
+         int headerOffset = BitConverter.ToInt32(buffer, peHeaderOffset);
+         int timestamp = BitConverter.ToInt32(buffer, headerOffset + linkerTimestampOffset);
+         DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+         return epoch.AddSeconds(timestamp).ToLocalTime();
+      }
+      public static DateTime GetCurrentAssemblyLinkerTimestamp()
+      {
+         string location = Assembly.GetExecutingAssembly().Location;
+         return GetLinkerTimestamp(location);
       }
    }
 }

@@ -39,8 +39,8 @@ namespace Pattons_Best
          }
          sb.Append(version.ToString());
          sb.Append("_");
-         DateTime linkTimeLocal = GetLinkerTime(Assembly.GetExecutingAssembly());
-         sb.Append(linkTimeLocal.ToString());
+         DateTime linkerTimestamp = AssemblyInfo.GetCurrentAssemblyLinkerTimestamp();
+         sb.Append(linkerTimestamp.ToString());
          myTextBox.Text = sb.ToString();  
       }
       //-------------------------------------------------------------------------------

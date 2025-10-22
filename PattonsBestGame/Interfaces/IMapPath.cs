@@ -2,7 +2,7 @@
 
 namespace Pattons_Best
 {
-   struct MapPathCount
+   struct MapPathCount // used in counterattack when retreating
    {
       public int myCount;
       public ITerritory myTerritory;
@@ -12,11 +12,12 @@ namespace Pattons_Best
          myTerritory = territory;   
       }
    }
+   //---------------------------------------
    public interface IMapPath
    {
       string Name { get; set; }
       double Metric { get; set; }
-      List<ITerritory> Territories { get; }
+      List<ITerritory> Territories { set;  get; }
    }
    //---------------------------------------
    public interface IMapPaths : System.Collections.IEnumerable

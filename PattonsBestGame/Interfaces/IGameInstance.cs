@@ -15,9 +15,9 @@ namespace Pattons_Best
       public bool myIsExplosion = false;
       public bool myIsBailout = false;
       public bool myIsBrewUp = false;
-      public ShermanDeath()
+      public ShermanDeath(IMapItem eu)
       {
-
+         myEnemyUnit = eu;
       }
       public ShermanDeath(IGameInstance gi, IMapItem eu, string loc, string cause)
       {
@@ -47,6 +47,10 @@ namespace Pattons_Best
       public bool myIsLeadTank = false;
       public bool myIsAdvancingFireZone = false;
       public char mySector;
+      public PanzerfaustAttack(IMapItem eu)
+      {
+         myEnemyUnit = eu;
+      }
       public PanzerfaustAttack( IGameInstance gi, IMapItem enemyUnit, bool isAdvanceFire, char sector)
       {
          myEnemyUnit = enemyUnit;
