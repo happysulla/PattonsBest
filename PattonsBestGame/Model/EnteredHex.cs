@@ -30,6 +30,7 @@ namespace Pattons_Best
       public IMapPoint MapPoint { get; set; }
       public ColorActionEnum ColorAction { get; set; } = ColorActionEnum.CAE_START;
       //------------------------------------------------------------------------------------------------
+      public EnteredHex(IMapPoint mp) { MapPoint = mp; } // for GameLoadMgr.ReadXml()
       public EnteredHex(IGameInstance gi, ITerritory t, ColorActionEnum colorAction, IMapPoint mp)
       {
          ++theId;

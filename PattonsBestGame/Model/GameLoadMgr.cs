@@ -5648,6 +5648,182 @@ namespace Pattons_Best
       }
       private bool ReadXmlEnteredHexes(XmlReader reader, List<EnteredHex> hexes)
       {
+         hexes.Clear();
+         reader.Read();
+         if (reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement() returned false");
+            return false;
+         }
+         if (reader.Name != "EnteredHexes")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): EnteredHexes != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sCount = reader.GetAttribute("count");
+         if (null == sCount)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): count=null");
+            return false;
+         }
+         int count = int.Parse(sCount);
+         for (int i = 0; i < count; ++i)
+         {
+            reader.Read();
+            if (reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement() returned false");
+               return false;
+            }
+            if (reader.Name != "EnteredHex")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): EnteredHexes != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sId = reader.GetAttribute("value");
+            if (null == sId)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): sId=null");
+               return false;
+            }
+            //-----------------------------------
+            reader.Read();
+            if (reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement() returned false");
+               return false;
+            }
+            if (reader.Name != "Day")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): Day != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sDay = reader.GetAttribute("value");
+            if (null == sDay)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): sDay=null");
+               return false;
+            }
+            int day = Convert.ToInt32(sDay);
+            //-----------------------------------
+            reader.Read();
+            if (reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement() returned false");
+               return false;
+            }
+            if (reader.Name != "Date")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): Date != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? date = reader.GetAttribute("value");
+            if (null == date)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): Date=null");
+               return false;
+            }
+            //-----------------------------------
+            reader.Read();
+            if (reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement() returned false");
+               return false;
+            }
+            if (reader.Name != "Time")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): Time != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? time = reader.GetAttribute("value");
+            if (null == time)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): time=null");
+               return false;
+            }
+            //-----------------------------------
+            reader.Read();
+            if (reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement() returned false");
+               return false;
+            }
+            if (reader.Name != "TerritoryName")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): TerritoryName != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? territoryName = reader.GetAttribute("value");
+            if (null == territoryName)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): territoryName=null");
+               return false;
+            }
+            //-----------------------------------
+            reader.Read();
+            if (reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement() returned false");
+               return false;
+            }
+            if (reader.Name != "MapPoint")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): MapPoint != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sX = reader.GetAttribute("X");
+            if (null == sX)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): sX=null");
+               return false;
+            }
+            double x = Convert.ToDouble(sX);
+            string? sY = reader.GetAttribute("Y");
+            if (null == sY)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): sY=null");
+               return false;
+            }
+            double y = Convert.ToDouble(sY);
+            IMapPoint mp = new MapPoint(x, y);
+            //-----------------------------------
+            reader.Read();
+            if (reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement() returned false");
+               return false;
+            }
+            if (reader.Name != "ColorAction")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): ColorAction != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sColorAction = reader.GetAttribute("value");
+            if (null == sColorAction)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): sColorAction=null");
+               return false;
+            }
+            ColorActionEnum colorAction = ColorActionEnum.CAE_START;
+            switch (sColorAction)
+            {
+               case "CAE_START": colorAction = ColorActionEnum.CAE_START; break;
+               case "CAE_ENTER": colorAction = ColorActionEnum.CAE_ENTER; break;
+               case "CAE_RETREAT": colorAction = ColorActionEnum.CAE_RETREAT; break;
+               case "CAE_STOP": colorAction = ColorActionEnum.CAE_STOP; break;
+               default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): reached default sColorAction=" + sColorAction); return false;
+            }
+            reader.Read(); // get past </EnteredHex>
+            EnteredHex hex = new EnteredHex(mp);
+            hex.Identifer = sId;
+            hex.Day = day;
+            hex.Time = time;
+            hex.TerritoryName = territoryName;
+            hex.ColorAction = colorAction;
+            hexes.Add(hex);
+         }
+         if( 0 < count )
+            reader.Read(); // get past </EnteredHexes>
          return true;
       }
       //--------------------------------------------------
