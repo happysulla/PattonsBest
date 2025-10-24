@@ -16,7 +16,6 @@ namespace Pattons_Best
    {
       public static string theGamesDirectory = "";
       public static bool theIsCheckFileExist = false;
-      private IMapItems myMapItems = new MapItems();  // used to store all mapitems when reading from XML file
       //--------------------------------------------------
       public GameLoadMgr() { }
       //--------------------------------------------------
@@ -7278,7 +7277,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.Day);
-            XmlNode? node = reportsNode.AppendChild(elem);
+            XmlNode? node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Day) returned false");
@@ -7292,7 +7291,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.Scenario.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Scenario) returned false");
@@ -7306,7 +7305,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.Probability.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Probability) returned false");
@@ -7320,7 +7319,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.Resistance.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Resistance) returned false");
@@ -7334,7 +7333,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.Name);
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Name) returned false");
@@ -7348,7 +7347,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.TankCardNum.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(TankCardNum) returned false");
@@ -7362,7 +7361,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.Weather);
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Weather) returned false");
@@ -7406,7 +7405,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.SunriseHour.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(SunriseHour) returned false");
@@ -7420,7 +7419,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.SunriseMin.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(SunriseMin) returned false");
@@ -7434,7 +7433,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.SunsetHour.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(SunsetHour) returned false");
@@ -7448,7 +7447,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.SunsetMin.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(SunsetMin) returned false");
@@ -7462,7 +7461,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.Ammo30CalibreMG.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Ammo30CalibreMG) returned false");
@@ -7476,7 +7475,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.Ammo50CalibreMG.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Ammo50CalibreMG) returned false");
@@ -7490,7 +7489,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.AmmoSmokeBomb.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(AmmoSmokeBomb) returned false");
@@ -7504,7 +7503,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.AmmoSmokeGrenade.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(AmmoSmokeGrenade) returned false");
@@ -7518,7 +7517,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.AmmoPeriscope.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(AmmoPeriscope) returned false");
@@ -7532,7 +7531,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.MainGunHE.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(MainGunHE) returned false");
@@ -7546,7 +7545,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.MainGunAP.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(MainGunAP) returned false");
@@ -7560,7 +7559,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.MainGunWP.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(MainGunWP) returned false");
@@ -7574,7 +7573,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.MainGunHBCI.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(MainGunHBCI) returned false");
@@ -7588,7 +7587,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.MainGunHVAP.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(MainGunHVAP) returned false");
@@ -7602,7 +7601,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsFriendlyKiaLightWeapon.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaLightWeapon) returned false");
@@ -7616,7 +7615,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsFriendlyKiaTruck.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaTruck) returned false");
@@ -7630,7 +7629,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsFriendlyKiaSpwOrPsw.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaSpwOrPsw) returned false");
@@ -7644,7 +7643,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsFriendlyKiaSPGun.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaSPGun) returned false");
@@ -7658,7 +7657,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsFriendlyKiaPzIV.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaPzIV) returned false");
@@ -7672,7 +7671,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsFriendlyKiaPzV.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaPzV) returned false");
@@ -7686,7 +7685,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsFriendlyKiaPzVI.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaPzVI) returned false");
@@ -7700,7 +7699,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsFriendlyKiaAtGun.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaAtGun) returned false");
@@ -7714,7 +7713,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsFriendlyKiaFortifiedPosition.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyKiaFortifiedPosition) returned false");
@@ -7728,7 +7727,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsYourKiaLightWeapon.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaLightWeapon) returned false");
@@ -7742,7 +7741,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsYourKiaTruck.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaTruck) returned false");
@@ -7756,7 +7755,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsYourKiaSpwOrPsw.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaSpwOrPsw) returned false");
@@ -7770,7 +7769,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsYourKiaSPGun.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaSPGun) returned false");
@@ -7784,7 +7783,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsYourKiaPzIV.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaPzIV) returned false");
@@ -7798,7 +7797,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsYourKiaPzV.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaPzV) returned false");
@@ -7812,7 +7811,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsYourKiaPzVI.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaPzVI) returned false");
@@ -7826,7 +7825,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsYourKiaAtGun.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaAtGun) returned false");
@@ -7840,7 +7839,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsYourKiaFortifiedPosition.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsYourKiaFortifiedPosition) returned false");
@@ -7854,7 +7853,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsCaptureArea.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsCaptureArea) returned false");
@@ -7868,7 +7867,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsCapturedExitArea.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsCapturedExitArea) returned false");
@@ -7882,7 +7881,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsLostArea.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsLostArea) returned false");
@@ -7896,7 +7895,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsFriendlyTank.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlyTank) returned false");
@@ -7910,7 +7909,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsFriendlySquad.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsFriendlySquad) returned false");
@@ -7924,7 +7923,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsTotalYourTank.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsTotalYourTank) returned false");
@@ -7938,7 +7937,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsTotalFriendlyForces.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsTotalFriendlyForces) returned false");
@@ -7952,7 +7951,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsTotalTerritory.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsTotalTerritory) returned false");
@@ -7966,7 +7965,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.VictoryPtsTotalEngagement.ToString());
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(VictoryPtsTotalEngagement) returned false");
@@ -7980,7 +7979,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("count", report.Decorations.Count.ToString());
-            XmlNode? decorationsNode = reportsNode.AppendChild(elem);
+            XmlNode? decorationsNode = reportNode.AppendChild(elem);
             if (null == decorationsNode)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Decorations) returned false");
@@ -8010,7 +8009,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("count", report.Notes.Count.ToString());
-            XmlNode? notesNode = reportsNode.AppendChild(elem);
+            XmlNode? notesNode = reportNode.AppendChild(elem);
             if (null == notesNode)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Notes) returned false");
@@ -8040,7 +8039,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.DayEndedTime);
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(DayEndedTime) returned false");
@@ -8054,7 +8053,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.Breakdown);
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(Breakdown) returned false");
@@ -8068,7 +8067,7 @@ namespace Pattons_Best
                return false;
             }
             elem.SetAttribute("value", report.KnockedOut);
-            node = reportsNode.AppendChild(elem);
+            node = reportNode.AppendChild(elem);
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(KnockedOut) returned false");
@@ -8104,7 +8103,7 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool CreateXmlMapItem(XmlDocument aXmlDocument, XmlNode mapItemsNode, IMapItem? mi)
+      private bool CreateXmlMapItem(XmlDocument aXmlDocument, XmlNode parent, IMapItem? mi)
       {
          XmlElement? miElem = aXmlDocument.CreateElement("MapItem");
          if (null == miElem)
@@ -8112,8 +8111,8 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(miElem) returned null");
             return false;
          }
-         XmlNode? node = mapItemsNode.AppendChild(miElem);
-         if (null == node)
+         XmlNode? miNode = parent.AppendChild(miElem);
+         if (null == miNode)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(miNode) returned null");
             return false;
@@ -8131,7 +8130,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.Name);
-         node = mapItemsNode.AppendChild(elem);
+         XmlNode? node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(node) returned null");
@@ -8145,7 +8144,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.TopImageName);
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(TopImageName) returned null");
@@ -8159,7 +8158,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.BottomImageName);
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(BottomImageName) returned null");
@@ -8173,14 +8172,14 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.OverlayImageName);
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(OverlayImageName) returned null");
             return false;
          }
          //--------------------------------
-         if (false == CreateXmlMapItemsWoundSpots(aXmlDocument, mapItemsNode, mi.WoundSpots))
+         if (false == CreateXmlMapItemsWoundSpots(aXmlDocument, miNode, mi.WoundSpots))
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateXmlMapItemsWoundSpots() returned false");
             return false;
@@ -8193,7 +8192,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.Zoom.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(Zoom) returned null");
@@ -8207,7 +8206,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.IsMoved.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsMoved) returned null");
@@ -8221,7 +8220,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.Count.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(Count) returned null");
@@ -8235,7 +8234,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.RotationOffsetHull.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(RotationOffsetHull) returned null");
@@ -8249,7 +8248,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.RotationHull.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(RotationHull) returned null");
@@ -8263,7 +8262,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.RotationOffsetTurret.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(RotationOffsetTurret) returned null");
@@ -8277,7 +8276,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.RotationTurret.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(RotationTurret) returned null");
@@ -8291,7 +8290,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.Location.X.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(LocationX) returned null");
@@ -8305,7 +8304,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.Location.Y.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(LocationY) returned null");
@@ -8319,7 +8318,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.TerritoryCurrent.Name);
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(TerritoryCurrent) returned null");
@@ -8333,7 +8332,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.TerritoryStarting.Name);
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(TerritoryStarting) returned null");
@@ -8347,7 +8346,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.IsMoving.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsMoving) returned null");
@@ -8361,7 +8360,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.IsMoving.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsHullDown) returned null");
@@ -8375,7 +8374,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.IsTurret.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsTurret) returned null");
@@ -8389,7 +8388,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.IsKilled.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsKilled) returned null");
@@ -8403,7 +8402,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.IsUnconscious.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(IsUnconscious) returned null");
@@ -8417,7 +8416,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.IsIncapacitated.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsIncapacitated) returned null");
@@ -8431,7 +8430,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.IsFired.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsFired) returned null");
@@ -8445,14 +8444,14 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.IsSpotted.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsSpotted) returned null");
             return false;
          }
          //--------------------------------
-         if (false == CreateXmlMapItemsEnemyAcquiredShots(aXmlDocument, mapItemsNode, mi.EnemyAcquiredShots))
+         if (false == CreateXmlMapItemsEnemyAcquiredShots(aXmlDocument, miNode, mi.EnemyAcquiredShots))
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateXmlMapItemsWoundSpots() returned false");
             return false;
@@ -8465,7 +8464,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.IsVehicle.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsVehicle) returned null");
@@ -8479,7 +8478,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.IsMovingInOpen.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsMovingInOpen) returned null");
@@ -8493,7 +8492,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.IsWoods.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsWoods) returned null");
@@ -8507,7 +8506,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.IsBuilding.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsBuilding) returned null");
@@ -8521,7 +8520,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.IsFortification.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsFortification) returned null");
@@ -8535,7 +8534,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.IsThrownTrack.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsThrownTrack) returned null");
@@ -8549,7 +8548,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.IsBoggedDown.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsBoggedDown) returned null");
@@ -8563,7 +8562,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.IsAssistanceNeeded.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsAssistanceNeeded) returned null");
@@ -8577,7 +8576,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.IsHeHit.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsHeHit) returned null");
@@ -8591,7 +8590,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.IsApHit.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsApHit) returned null");
@@ -8605,7 +8604,7 @@ namespace Pattons_Best
             return false;
          }
          elem.SetAttribute("value", mi.Spotting.ToString());
-         node = mapItemsNode.AppendChild(elem);
+         node = miNode.AppendChild(elem);
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(Spotting) returned null");
