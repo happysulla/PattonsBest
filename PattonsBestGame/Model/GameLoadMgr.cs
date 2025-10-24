@@ -9,6 +9,7 @@ using System.Text;
 using System.Windows.Xps.Packaging;
 using System.Xml;
 using System.Xml.Linq;
+using static System.Windows.Forms.Design.AxImporter;
 
 namespace Pattons_Best
 {
@@ -25,7 +26,7 @@ namespace Pattons_Best
          {
             if (false == Directory.Exists(theGamesDirectory)) // create directory if does not exists
                Directory.CreateDirectory(theGamesDirectory);
-            string filename = theGamesDirectory + "Checkpoint.bpg";
+            string filename = theGamesDirectory + "Checkpoint.pbg";
             IGameInstance? gi = ReadXml(filename);
             if (null == gi)
             {
@@ -56,7 +57,7 @@ namespace Pattons_Best
          }
          try
          {
-            string filename = theGamesDirectory + "Checkpoint.bpg";
+            string filename = theGamesDirectory + "Checkpoint.pbg";
             XmlDocument? aXmlDocument = CreateXml(gi); // create a new XML document 
             if (null == aXmlDocument)
             {
@@ -100,14 +101,14 @@ namespace Pattons_Best
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             dlg.InitialDirectory = theGamesDirectory;
             dlg.RestoreDirectory = true;
-            dlg.Filter = "Barbarin Prince Games|*.bpg";
+            dlg.Filter = "Patton's Best Games|*.pbg";
             if (true == dlg.ShowDialog())
             {
                IGameInstance? gi = ReadXml(dlg.FileName);
                if (null == gi)
                {
                   Directory.SetCurrentDirectory(MainWindow.theAssemblyDirectory);
-                  Logger.Log(LogEnum.LE_ERROR, "OpenGame(): ReadXml(=) returned null for " + dlg.FileName);
+                  Logger.Log(LogEnum.LE_ERROR, "OpenGame(): ReadXml() returned null for " + dlg.FileName);
                   return null;
                }
                Logger.Log(LogEnum.LE_GAME_INIT, "OpenGameFromFile(): gi=" + gi.ToString());
@@ -243,7 +244,7 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(Parent)=false count=" + count.ToString() + " i=" + i.ToString() );
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(Territory)=false count=" + count.ToString() + " i=" + i.ToString() );
                return false;
             }
             if (reader.Name != "Territory")
@@ -722,9 +723,9 @@ namespace Pattons_Best
             // Load the reader with the data file and ignore all white space nodes.
             reader = new XmlTextReader(filename) { WhitespaceHandling = WhitespaceHandling.None };
             reader.Read();
-            if (true == reader.IsStartElement())
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsStartElement() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsStartElement(GameInstance) returned false");
                return null;
             }
             if (reader.Name != "GameInstance")
@@ -734,9 +735,9 @@ namespace Pattons_Best
             }
             //----------------------------------------------
             reader.Read();
-            if (reader.IsStartElement())
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsStartElement() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsStartElement(Version) returned false");
                return null;
             }
             if (reader.Name != "Version")
@@ -772,7 +773,7 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement(EventActive) = false");
                return null;
             }
             if (reader.Name != "EventActive")
@@ -791,7 +792,7 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement(EventDisplayed) = false");
                return null;
             }
             if (reader.Name != "EventDisplayed")
@@ -810,7 +811,7 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement(Day) = false");
                return null;
             }
             if (reader.Name != "Day")
@@ -829,7 +830,7 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement(GameTurn) = false");
                return null;
             }
             if (reader.Name != "GameTurn")
@@ -848,7 +849,7 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement(GamePhase) = false");
                return null;
             }
             if (reader.Name != "GamePhase")
@@ -877,7 +878,7 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement(EndGameReason) = false");
                return null;
             }
             if (reader.Name != "EndGameReason")
@@ -902,7 +903,7 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement(BattlePhase) = false");
                return null;
             }
             if (reader.Name != "BattlePhase")
@@ -934,7 +935,7 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement(CrewActionPhase) = false");
                return null;
             }
             if (reader.Name != "CrewActionPhase")
@@ -2585,7 +2586,7 @@ namespace Pattons_Best
          for (int i = 0; i < count; ++i)
          {
             reader.Read();
-            if (true == reader.IsStartElement())
+            if (false == reader.IsStartElement())
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): IsStartElement() returned false");
                return false;
@@ -2617,13 +2618,24 @@ namespace Pattons_Best
       }
       private bool ReadXmlGameStat(XmlReader reader, GameStat statistic)
       {
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "GameStat")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): GameStat != (node=" + reader.Name + ")");
+            return false;
+         }
          return true;
       }
       private bool ReadXmlReports(XmlReader reader, IAfterActionReports reports)
       {
          reports.Clear();
          reader.Read();
-         if (reader.IsStartElement())
+         if (false == reader.IsStartElement())
          {
             if (reader.Name != "Reports")
             {
@@ -2705,95 +2717,105 @@ namespace Pattons_Best
          }
          //----------------------------------------------
          reader.Read();
-         if (reader.IsStartElement())
+         if (false == reader.IsStartElement())
          {
-            if (reader.Name != "Probability")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
-               return false;
-            }
-            string? sProbability = reader.GetAttribute("value");
-            if (null == sProbability)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sProbability=null");
-               return false;
-            }
-            report.Probability = Convert.ToInt32(sProbability);
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(Probability) returned false");
+            return false;
+         }
+         if (reader.Name != "Probability")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
+            return false;
+         }
+         string? sProbability = reader.GetAttribute("value");
+         if (null == sProbability)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sProbability=null");
+            return false;
+         }
+         report.Probability = Convert.ToInt32(sProbability);
+         //----------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(Resistance) returned false");
+            return false;
+         }
+         if (reader.Name != "Resistance")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
+            return false;
+         }
+         string? sResistance = reader.GetAttribute("value");
+         if (null == sResistance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sProbability=null");
+            return false;
+         }
+         switch (sResistance)
+         {
+            case "Light": report.Resistance = EnumResistance.Light; break;
+            case "Medium": report.Resistance = EnumResistance.Medium; break;
+            case "Heavy": report.Resistance = EnumResistance.Heavy; break;
+            default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reached default sScenario=" + sResistance); return false;
          }
          //----------------------------------------------
          reader.Read();
-         if (reader.IsStartElement())
+         if (false == reader.IsStartElement())
          {
-            if (reader.Name != "Resistance")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
-               return false;
-            }
-            string? sResistance = reader.GetAttribute("value");
-            if (null == sResistance)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sProbability=null");
-               return false;
-            }
-            switch (sResistance)
-            {
-               case "Light": report.Resistance = EnumResistance.Light; break;
-               case "Medium": report.Resistance = EnumResistance.Medium; break;
-               case "Heavy": report.Resistance = EnumResistance.Heavy; break;
-               default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reached default sScenario=" + sResistance); return false;
-            }
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(Name) returned false");
+            return false;
          }
+         if (reader.Name != "Name")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
+            return false;
+         }
+         string? sName = reader.GetAttribute("value");
+         if (null == sName)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sName=null");
+            return false;
+         }
+         report.Name = sName;
          //----------------------------------------------
          reader.Read();
-         if (reader.IsStartElement())
+         if (false == reader.IsStartElement())
          {
-            if (reader.Name != "Name")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
-               return false;
-            }
-            string? sName = reader.GetAttribute("value");
-            if (null == sName)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sName=null");
-               return false;
-            }
-            report.Name = sName;
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(TankCardNum) returned false");
+            return false;
          }
+         if (reader.Name != "TankCardNum")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
+            return false;
+         }
+         string? sTankCardNum = reader.GetAttribute("value");
+         if (null == sTankCardNum)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): TankCardNum=null");
+            return false;
+         }
+         report.TankCardNum = Convert.ToInt32(sTankCardNum);
          //----------------------------------------------
          reader.Read();
-         if (reader.IsStartElement())
+         if (false == reader.IsStartElement())
          {
-            if (reader.Name != "TankCardNum")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
-               return false;
-            }
-            string? sTankCardNum = reader.GetAttribute("value");
-            if (null == sTankCardNum)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): TankCardNum=null");
-               return false;
-            }
-            report.TankCardNum = Convert.ToInt32(sTankCardNum);
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): IsStartElement(Weather) returned false");
+            return false;
          }
-         //----------------------------------------------
-         reader.Read();
-         if (reader.IsStartElement())
+         if (reader.Name != "Weather")
          {
-            if (reader.Name != "Weather")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
-               return false;
-            }
-            string? sWeather = reader.GetAttribute("value");
-            if (null == sWeather)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sWeather=null");
-               return false;
-            }
-            report.Weather = sWeather;
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): node=" + reader.Name);
+            return false;
          }
+         string? sWeather = reader.GetAttribute("value");
+         if (null == sWeather)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): sWeather=null");
+            return false;
+         }
+         report.Weather = sWeather;
          //----------------------------------------------
          if( false == ReadXmlCrewMember(reader, report.Commander))
          {
@@ -3151,7 +3173,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlyKiaSPGun) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsFriendlyKiaSPGun")
@@ -3170,7 +3192,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlyKiaPzIV) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsFriendlyKiaPzIV")
@@ -3189,7 +3211,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlyKiaPzV) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsFriendlyKiaPzV")
@@ -3208,7 +3230,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlyKiaPzVI) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsFriendlyKiaPzVI")
@@ -3228,7 +3250,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlyKiaAtGun) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsFriendlyKiaAtGun")
@@ -3247,7 +3269,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlyKiaFortifiedPosition) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsFriendlyKiaFortifiedPosition")
@@ -3266,7 +3288,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaLightWeapon) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsYourKiaLightWeapon")
@@ -3285,7 +3307,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaTruck) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsYourKiaTruck")
@@ -3304,7 +3326,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaSpwOrPsw) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsYourKiaSpwOrPsw")
@@ -3323,7 +3345,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaSPGun) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsYourKiaSPGun")
@@ -3342,7 +3364,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaPzIV) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsYourKiaPzIV")
@@ -3361,7 +3383,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaPzV) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsYourKiaPzV")
@@ -3380,7 +3402,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaPzVI) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsYourKiaPzVI")
@@ -3399,7 +3421,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaAtGun) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsYourKiaAtGun")
@@ -3418,7 +3440,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsYourKiaFortifiedPosition) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsYourKiaFortifiedPosition")
@@ -3437,7 +3459,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsCaptureArea) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsCaptureArea")
@@ -3456,7 +3478,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsCapturedExitArea) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsCapturedExitArea")
@@ -3475,7 +3497,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsLostArea) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsLostArea")
@@ -3494,7 +3516,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlyTank) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsFriendlyTank")
@@ -3513,7 +3535,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsFriendlySquad) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsFriendlySquad")
@@ -3532,7 +3554,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsTotalYourTank) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsTotalYourTank")
@@ -3551,7 +3573,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsTotalFriendlyForces) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsTotalFriendlyForces")
@@ -3570,7 +3592,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsTotalTerritory) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsTotalTerritory")
@@ -3589,7 +3611,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(VictoryPtsTotalEngagement) = false");
             return false;
          }
          if (reader.Name != "VictoryPtsTotalEngagement")
@@ -3606,9 +3628,9 @@ namespace Pattons_Best
          report.VictoryPtsTotalEngagement = Convert.ToInt32(sVictoryPtsTotalEngagement);
          //---------------------------------------------
          reader.Read();
-         if (reader.IsStartElement())
+         if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(Decorations) = false");
             return false;
          }
          if (reader.Name != "Decorations")
@@ -3626,9 +3648,9 @@ namespace Pattons_Best
          for(int i=0; i< countDecoration; ++i)
          {
             reader.Read();
-            if (reader.IsStartElement())
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(Decoration) = false");
                return false;
             }
             if (reader.Name != "Decoration")
@@ -3660,9 +3682,9 @@ namespace Pattons_Best
             reader.Read();
          //---------------------------------------------
          reader.Read();
-         if (reader.IsStartElement())
+         if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(Notes) = false");
             return false;
          }
          if (reader.Name != "Notes")
@@ -3680,9 +3702,9 @@ namespace Pattons_Best
          for (int i = 0; i < countNote; ++i)
          {
             reader.Read();
-            if (reader.IsStartElement())
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(Note) = false");
                return false;
             }
             if (reader.Name != "Note")
@@ -3704,7 +3726,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(DayEndedTime) = false");
             return false;
          }
          if (reader.Name != "DayEndedTime")
@@ -3723,7 +3745,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(Breakdown) = false");
             return false;
          }
          if (reader.Name != "Breakdown")
@@ -3742,7 +3764,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reader.IsStartElement(KnockedOut) = false");
             return false;
          }
          if (reader.Name != "KnockedOut")
@@ -3766,7 +3788,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReports(): IsStartElement()=null");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlReports(): IsStartElement(MapItems)=null");
             return false;
          }
          if (reader.Name != "MapItems")
@@ -3804,7 +3826,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement(CrewMember) = false");
             return false;
          }
          if (reader.Name != "CrewMember")
@@ -3833,7 +3855,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement(Rank) = false");
             return false;
          }
          if (reader.Name != "Rank")
@@ -3852,7 +3874,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement(Rating) = false");
             return false;
          }
          if (reader.Name != "Rating")
@@ -3871,7 +3893,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement(IsButtonedUp) = false");
             return false;
          }
          if (reader.Name != "IsButtonedUp")
@@ -3890,7 +3912,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement(Sector) = false");
             return false;
          }
          if (reader.Name != "Sector")
@@ -3909,7 +3931,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement(Action) = false");
             return false;
          }
          if (reader.Name != "Action")
@@ -3928,7 +3950,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement(Wound) = false");
             return false;
          }
          if (reader.Name != "Wound")
@@ -3947,7 +3969,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement(WoundDaysUntilReturn) = false");
             return false;
          }
          if (reader.Name != "WoundDaysUntilReturn")
@@ -3970,7 +3992,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(Name) = false");
             return false;
          }
          if (reader.Name != "Name")
@@ -3995,7 +4017,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(TopImageName) = false");
             return false;
          }
          if (reader.Name != "TopImageName")
@@ -4014,7 +4036,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(BottomImageName) = false");
             return false;
          }
          if (reader.Name != "BottomImageName")
@@ -4033,7 +4055,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(OverlayImageName) = false");
             return false;
          }
          if (reader.Name != "OverlayImageName")
@@ -4058,7 +4080,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(Zoom) = false");
             return false;
          }
          if (reader.Name != "Zoom")
@@ -4077,7 +4099,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(IsMoved) = false");
             return false;
          }
          if (reader.Name != "IsMoved")
@@ -4096,7 +4118,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(Count) = false");
             return false;
          }
          if (reader.Name != "Count")
@@ -4115,7 +4137,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(RotationOffsetHull) = false");
             return false;
          }
          if (reader.Name != "RotationOffsetHull")
@@ -4134,7 +4156,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(RotationHull) = false");
             return false;
          }
          if (reader.Name != "RotationHull")
@@ -4153,7 +4175,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(RotationOffsetTurret) = false");
             return false;
          }
          if (reader.Name != "RotationOffsetTurret")
@@ -4172,7 +4194,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(RotationTurret) = false");
             return false;
          }
          if (reader.Name != "RotationTurret")
@@ -4191,7 +4213,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(LocationX) = false");
             return false;
          }
          if (reader.Name != "LocationX")
@@ -4209,7 +4231,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(LocationY) = false");
             return false;
          }
          if (reader.Name != "LocationY")
@@ -4229,7 +4251,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(TerritoryCurrent) = false");
             return false;
          }
          if (reader.Name != "TerritoryCurrent")
@@ -4254,7 +4276,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(TerritoryStarting) = false");
             return false;
          }
          if (reader.Name != "TerritoryStarting")
@@ -4279,7 +4301,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(IsMoving) = false");
             return false;
          }
          if (reader.Name != "IsMoving")
@@ -4298,7 +4320,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(IsHullDown) = false");
             return false;
          }
          if (reader.Name != "IsHullDown")
@@ -4317,7 +4339,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(IsTurret) = false");
             return false;
          }
          if (reader.Name != "IsTurret")
@@ -4336,7 +4358,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(IsKilled) = false");
             return false;
          }
          if (reader.Name != "IsKilled")
@@ -4355,7 +4377,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(IsUnconscious) = false");
             return false;
          }
          if (reader.Name != "IsUnconscious")
@@ -4374,7 +4396,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(IsIncapacitated) = false");
             return false;
          }
          if (reader.Name != "IsIncapacitated")
@@ -4393,7 +4415,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(IsFired) = false");
             return false;
          }
          if (reader.Name != "IsFired")
@@ -4412,7 +4434,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(IsSpotted) = false");
             return false;
          }
          if (reader.Name != "IsSpotted")
@@ -4437,7 +4459,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(IsVehicle) = false");
             return false;
          }
          if (reader.Name != "IsVehicle")
@@ -4456,7 +4478,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(IsMovingInOpen) = false");
             return false;
          }
          if (reader.Name != "IsMovingInOpen")
@@ -4475,7 +4497,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(IsWoods) = false");
             return false;
          }
          if (reader.Name != "IsWoods")
@@ -4494,7 +4516,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(IsBuilding) = false");
             return false;
          }
          if (reader.Name != "IsBuilding")
@@ -4513,7 +4535,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(IsFortification) = false");
             return false;
          }
          if (reader.Name != "IsFortification")
@@ -4532,7 +4554,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(IsThrownTrack) = false");
             return false;
          }
          if (reader.Name != "IsThrownTrack")
@@ -4551,7 +4573,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(IsBoggedDown) = false");
             return false;
          }
          if (reader.Name != "IsBoggedDown")
@@ -4570,7 +4592,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(IsAssistanceNeeded) = false");
             return false;
          }
          if (reader.Name != "IsAssistanceNeeded")
@@ -4589,7 +4611,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(IsHeHit) = false");
             return false;
          }
          if (reader.Name != "IsHeHit")
@@ -4608,7 +4630,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(IsApHit) = false");
             return false;
          }
          if (reader.Name != "IsApHit")
@@ -4627,7 +4649,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(Spotting) = false");
             return false;
          }
          if (reader.Name != "Spotting")
@@ -4655,9 +4677,9 @@ namespace Pattons_Best
       {
          bloodSpots.Clear();
          reader.Read();
-         if (reader.IsStartElement())
+         if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(WoundSpots) = false");
             return false;
          }
          if (reader.Name != "WoundSpots")
@@ -4679,7 +4701,7 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(WoundSpot) = false");
                return false;
             }
             if (reader.Name != "WoundSpot")
@@ -4691,7 +4713,7 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(Size) = false");
                return false;
             }
             if (reader.Name != "Size")
@@ -4710,7 +4732,7 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(Left) = false");
                return false;
             }
             if (reader.Name != "Left")
@@ -4729,7 +4751,7 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(Top) = false");
                return false;
             }
             if (reader.Name != "Top")
@@ -4753,9 +4775,9 @@ namespace Pattons_Best
       {
          enemyAcquiredShots.Clear();
          reader.Read();
-         if (reader.IsStartElement())
+         if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemWoundSpots(): IsStartElement() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemWoundSpots(): IsStartElement(EnemyAcquiredShots) returned false");
             return false;
          }
          if (reader.Name != "EnemyAcquiredShots")
@@ -4775,7 +4797,7 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement() = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(EnemyAcqShot) = false");
                return false;
             }
             if (reader.Name != "EnemyAcqShot")
@@ -4805,9 +4827,9 @@ namespace Pattons_Best
       {
          territories.Clear();
          reader.Read();
-         if (reader.IsStartElement())
+         if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(Territories) returned false");
             return false;
          }
          if (reader.Name != "Territories")
@@ -4831,27 +4853,29 @@ namespace Pattons_Best
          for (int i = 0; i < count; ++i)
          {
             reader.Read();
-            if (true == reader.IsStartElement())
+            if (false == reader.IsStartElement())
             {
-               if (reader.Name != "Territory")
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Territory != (node=" + reader.Name + ")");
-                  return false;
-               }
-               string? tName = reader.GetAttribute("value");
-               if (null == tName)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute() returned false");
-                  return false;
-               }
-               ITerritory? territory = Territories.theTerritories.Find(tName);
-               if (null == territory)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Find() returned null for tName=" + tName);
-                  return false;
-               }
-               territories.Add(territory);
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsStartElement(GameInstance) returned false");
+               return false;
             }
+            if (reader.Name != "Territory")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Territory != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? tName = reader.GetAttribute("value");
+            if (null == tName)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute() returned false");
+               return false;
+            }
+            ITerritory? territory = Territories.theTerritories.Find(tName);
+            if (null == territory)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Find() returned null for tName=" + tName);
+               return false;
+            }
+            territories.Add(territory);
          }
          if (0 < count)
             reader.Read(); // get past </Territories> tag
@@ -4861,9 +4885,9 @@ namespace Pattons_Best
       {
          firstShots.Clear();
          reader.Read();
-         if (reader.IsStartElement())
+         if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlFirstShots(): IsStartElement() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlFirstShots(): IsStartElement(FirstShots) returned false");
             return false;
          }
          if (reader.Name != "FirstShots")
@@ -4883,7 +4907,7 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlFirstShots(): FirstShot != (node=" + reader.Name + ")");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlFirstShots(): IsStartElement(FirstShot) returned false");
                return false;
             }
             if (reader.Name != "FirstShot")
@@ -4907,9 +4931,9 @@ namespace Pattons_Best
       {
          trainedGunners.Clear();
          reader.Read();
-         if (reader.IsStartElement())
+         if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlTrainedGunners(): IsStartElement() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlTrainedGunners(): IsStartElement(TrainedGunners) returned false");
             return false;
          }
          if (reader.Name != "TrainedGunners")
@@ -4929,7 +4953,7 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTrainedGunners(): TrainedGunner != (node=" + reader.Name + ")");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTrainedGunners(): IsStartElement(TrainedGunner) returned false");
                return false;
             }
             if (reader.Name != "TrainedGunner")
@@ -4953,9 +4977,9 @@ namespace Pattons_Best
       {
          hits.Clear();
          reader.Read();
-         if (reader.IsStartElement())
+         if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): IsStartElement() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): IsStartElement(ShermanHits) returned false");
             return false;
          }
          if (reader.Name != "ShermanHits")
@@ -4973,9 +4997,9 @@ namespace Pattons_Best
          for (int i = 0; i < count; i++)
          {
             reader.Read();
-            if (reader.IsStartElement())
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): IsStartElement() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): IsStartElement(ShermanHit) returned false");
                return false;
             }
             if (reader.Name != "ShermanHit")
@@ -5034,7 +5058,7 @@ namespace Pattons_Best
       private bool ReadXmlShermanDeath(XmlReader reader, ShermanDeath? death)
       {
          reader.Read();
-         if (reader.IsStartElement())
+         if (false == reader.IsStartElement())
          {
             Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsStartElement(ShermanDeath) returned false");
             return false;
@@ -5066,7 +5090,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): HitLocation != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsStartElement(HitLocation) returned false");
             return false;
          }
          if (reader.Name != "HitLocation")
@@ -5084,7 +5108,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): EnemyFireDirection != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsStartElement(EnemyFireDirection) returned false");
             return false;
          }
          if (reader.Name != "EnemyFireDirection")
@@ -5102,7 +5126,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): Day != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsStartElement(Day) returned false");
             return false;
          }
          if (reader.Name != "Day")
@@ -5121,7 +5145,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): Cause != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsStartElement(Cause) returned false");
             return false;
          }
          if (reader.Name != "Cause")
@@ -5139,7 +5163,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsAmbush != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsStartElement(IsAmbush) returned false");
             return false;
          }
          if (reader.Name != "IsAmbush")
@@ -5158,7 +5182,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsExplosion != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsStartElement(IsExplosion) returned false");
             return false;
          }
          if (reader.Name != "IsExplosion")
@@ -5177,7 +5201,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsBailout != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsStartElement(IsBailout) returned false");
             return false;
          }
          if (reader.Name != "IsBailout")
@@ -5196,7 +5220,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsBrewUp != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanDeath(): IsStartElement(IsBrewUp) returned false");
             return false;
          }
          if (reader.Name != "IsBrewUp")
@@ -5228,7 +5252,7 @@ namespace Pattons_Best
       private bool ReadXmlPanzerfaultAttack(XmlReader reader, PanzerfaustAttack? attack)
       {
          reader.Read();
-         if (reader.IsStartElement())
+         if (false == reader.IsStartElement())
          {
             Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): IsStartElement(Panzerfaust) returned false");
             return false;
@@ -5260,7 +5284,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): Day != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack():  IsStartElement(Day) returned false");
             return false;
          }
          if (reader.Name != "Day")
@@ -5279,7 +5303,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): IsShermanMoving != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): IsStartElement(IsShermanMoving) returned false");
             return false;
          }
          if (reader.Name != "IsShermanMoving")
@@ -5298,7 +5322,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): IsLeadTank != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): IsStartElement(IsLeadTank) returned false");
             return false;
          }
          if (reader.Name != "IsLeadTank")
@@ -5317,7 +5341,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): IsAdvancingFireZone != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): IsStartElement(IsAdvancingFireZone) returned false");
             return false;
          }
          if (reader.Name != "IsAdvancingFireZone")
@@ -5336,7 +5360,7 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): Sector != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlPanzerfaultAttack(): IsStartElement(Sector) returned false");
             return false;
          }
          if (reader.Name != "Sector")
@@ -5365,9 +5389,9 @@ namespace Pattons_Best
       {
          mapItemMoves.Clear();
          reader.Read();
-         if (reader.IsStartElement())
+         if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): IsStartElement() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): IsStartElement(MapItemMoves) returned false");
             return false;
          }
          if (reader.Name != "MapItemMoves")
@@ -5385,9 +5409,9 @@ namespace Pattons_Best
          for( int i=0; i<count; ++i)
          {
             reader.Read();
-            if (reader.IsStartElement())
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): IsStartElement() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): IsStartElement(MapItemMove) returned false");
                return false;
             }
             if (reader.Name != "MapItemMove")
@@ -5415,9 +5439,9 @@ namespace Pattons_Best
             }
             //----------------------------------------------
             reader.Read();
-            if (reader.IsStartElement())
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): IsStartElement() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): IsStartElement(OldTerritory) returned false");
                return false;
             }
             if (reader.Name != "OldTerritory")
@@ -5438,9 +5462,9 @@ namespace Pattons_Best
             }
             //----------------------------------------------
             reader.Read();
-            if (reader.IsStartElement())
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): IsStartElement() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): IsStartElement(NewTerritory) returned false");
                return false;
             }
             if (reader.Name != "NewTerritory")
@@ -5475,9 +5499,9 @@ namespace Pattons_Best
       private bool ReadXmlMapItemMoveBestPath(XmlReader reader, IMapPath? path)
       {
          reader.Read();
-         if (reader.IsStartElement())
+         if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): IsStartElement() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): IsStartElement(BestPath) returned false");
             return false;
          }
          if (reader.Name != "BestPath")
@@ -5523,9 +5547,9 @@ namespace Pattons_Best
          for (int i=0; i<count; ++i )
          {
             reader.Read();
-            if (reader.IsStartElement())
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): IsStartElement() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): IsStartElement(Territory) returned false");
                return false;
             }
             if (reader.Name != "Territory")
@@ -5558,9 +5582,9 @@ namespace Pattons_Best
       {
          stacks.Clear();
          reader.Read();
-         if (reader.IsStartElement())
+         if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): IsStartElement() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): IsStartElement(Stacks) returned false");
             return false;
          }
          if (reader.Name != "Stacks")
@@ -5589,9 +5613,9 @@ namespace Pattons_Best
          for( int i=0; i<count; ++i )
          {
             reader.Read();
-            if (reader.IsStartElement())
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): IsStartElement() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): IsStartElement(Stack) returned false");
                return false;
             }
             if (reader.Name != "Stack")
@@ -5613,9 +5637,9 @@ namespace Pattons_Best
             }
             //---------------------------------------------
             reader.Read();
-            if (reader.IsStartElement())
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): IsStartElement() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlStacks(): IsStartElement(IsStacked) returned false");
                return false;
             }
             if (reader.Name != "IsStacked")
@@ -5649,9 +5673,9 @@ namespace Pattons_Best
       {
          hexes.Clear();
          reader.Read();
-         if (reader.IsStartElement())
+         if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement(EnteredHexes) returned false");
             return false;
          }
          if (reader.Name != "EnteredHexes")
@@ -5669,9 +5693,9 @@ namespace Pattons_Best
          for (int i = 0; i < count; ++i)
          {
             reader.Read();
-            if (reader.IsStartElement())
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement(EnteredHex) returned false");
                return false;
             }
             if (reader.Name != "EnteredHex")
@@ -5687,9 +5711,9 @@ namespace Pattons_Best
             }
             //-----------------------------------
             reader.Read();
-            if (reader.IsStartElement())
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement(Day) returned false");
                return false;
             }
             if (reader.Name != "Day")
@@ -5706,9 +5730,9 @@ namespace Pattons_Best
             int day = Convert.ToInt32(sDay);
             //-----------------------------------
             reader.Read();
-            if (reader.IsStartElement())
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement(Date) returned false");
                return false;
             }
             if (reader.Name != "Date")
@@ -5724,9 +5748,9 @@ namespace Pattons_Best
             }
             //-----------------------------------
             reader.Read();
-            if (reader.IsStartElement())
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement(Time) returned false");
                return false;
             }
             if (reader.Name != "Time")
@@ -5742,9 +5766,9 @@ namespace Pattons_Best
             }
             //-----------------------------------
             reader.Read();
-            if (reader.IsStartElement())
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement(TerritoryName) returned false");
                return false;
             }
             if (reader.Name != "TerritoryName")
@@ -5760,9 +5784,9 @@ namespace Pattons_Best
             }
             //-----------------------------------
             reader.Read();
-            if (reader.IsStartElement())
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement(MapPoint) returned false");
                return false;
             }
             if (reader.Name != "MapPoint")
@@ -5787,9 +5811,9 @@ namespace Pattons_Best
             IMapPoint mp = new MapPoint(x, y);
             //-----------------------------------
             reader.Read();
-            if (reader.IsStartElement())
+            if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlEnteredHexes(): IsStartElement(ColorAction) returned false");
                return false;
             }
             if (reader.Name != "ColorAction")
