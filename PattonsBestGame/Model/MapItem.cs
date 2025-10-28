@@ -138,7 +138,7 @@ namespace Pattons_Best
       public bool IsApHit { get; set; } = false;
       public EnumSpottingResult Spotting { get; set; } = EnumSpottingResult.UNSPOTTED;
       //----------------------------------------------------------------------------
-      protected MapItem(string name)
+      public MapItem(string name)
       {
          Name = name;
       }
@@ -206,26 +206,48 @@ namespace Pattons_Best
       //----------------------------------------------------------------------------
       public void Copy(IMapItem mi)
       {
+         this.Name = mi.Name;
+         this.TopImageName = mi.TopImageName;
+         this.BottomImageName = mi.BottomImageName;
+         this.OverlayImageName = mi.OverlayImageName;
+         foreach (BloodSpot bs in mi.WoundSpots)
+            this.WoundSpots.Add(bs);
+         this.Zoom = mi.Zoom;
          this.IsMoved = mi.IsMoved;
          this.Count = mi.Count;
+         this.Location.X = mi.Location.X;
+         this.Location.Y = mi.Location.Y;
          this.RotationOffsetHull = mi.RotationOffsetHull;
          this.RotationHull = mi.RotationHull;
-         this.RotationTurret = mi.RotationTurret;
          this.RotationOffsetTurret = mi.RotationOffsetTurret;
-         this.Location = mi.Location;
+         this.RotationTurret = mi.RotationTurret;
+         //--------------------------------------
+         this.TerritoryCurrent = mi.TerritoryCurrent;
          this.TerritoryStarting = mi.TerritoryStarting;
+         //--------------------------------------
          this.IsMoving = mi.IsMoving;
          this.IsHullDown = mi.IsHullDown;
          this.IsTurret = mi.IsTurret;
          this.IsKilled = mi.IsKilled;
+         this.IsUnconscious = mi.IsUnconscious;
+         this.IsIncapacitated = mi.IsIncapacitated;
          this.IsFired = mi.IsFired;
+         this.IsSpotted = mi.IsSpotted;
+         foreach (KeyValuePair<string, int> kvp in mi.EnemyAcquiredShots)
+            this.EnemyAcquiredShots.Add(kvp.Key, kvp.Value);
+         //--------------------------------------
          this.IsVehicle = mi.IsVehicle;
+         this.IsMovingInOpen = mi.IsMovingInOpen;
          this.IsWoods = mi.IsWoods;
          this.IsBuilding = mi.IsBuilding;
          this.IsFortification = mi.IsFortification;
+         this.IsThrownTrack = mi.IsThrownTrack;
+         this.IsBoggedDown = mi.IsBoggedDown;
+         this.IsAssistanceNeeded = mi.IsAssistanceNeeded;
+         //--------------------------------------
+         this.IsHeHit = mi.IsHeHit;
+         this.IsApHit = mi.IsApHit;
          this.Spotting = mi.Spotting;
-         foreach (KeyValuePair<string, int> kvp in mi.EnemyAcquiredShots)
-            this.EnemyAcquiredShots.Add(kvp.Key, kvp.Value);
       }
       public bool IsEnemyUnit()
       {
