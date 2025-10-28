@@ -222,7 +222,7 @@ namespace Pattons_Best
          }
          //-----------------------------------------------------------------------
          Logger.SetOff(LogEnum.LE_RESET_ROLL_STATE);
-         Application.Current.Shutdown();
+         ++gi.GameTurn;
          return true;
       }
       //--------------------------------------------------

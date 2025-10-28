@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Pattons_Best.UnitTests;
+using System.Collections.Generic;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows.Shapes;
@@ -47,13 +48,13 @@ namespace Pattons_Best
       public bool CreateUnitTests(IGameInstance gi, DockPanel dp, EventViewer ev, IDieRoller dr, CanvasImageViewer civ)
       {
          //-----------------------------------------------------------------------------
-         IUnitTest ut2 = new TerritoryCreateUnitTest(dp, gi, civ);
-         if (true == ut2.CtorError)
+         IUnitTest ut7 = new GameInstanceUnitTest(dp);
+         if (true == ut7.CtorError)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateUnitTests(): TerritoryCreateUnitTest() ctor error");
+            Logger.Log(LogEnum.LE_ERROR, "CreateUnitTests(): GameInstanceUnitTest() ctor error");
             return false;
          }
-         gi.UnitTests.Add(ut2);
+         gi.UnitTests.Add(ut7);
          //-----------------------------------------------------------------------------
          IUnitTest ut1 = new GameViewerCreateUnitTest(dp);
          if (true == ut1.CtorError)
@@ -62,6 +63,14 @@ namespace Pattons_Best
             return false;
          }
          gi.UnitTests.Add(ut1);
+         //-----------------------------------------------------------------------------
+         IUnitTest ut2 = new TerritoryCreateUnitTest(dp, gi, civ);
+         if (true == ut2.CtorError)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateUnitTests(): TerritoryCreateUnitTest() ctor error");
+            return false;
+         }
+         gi.UnitTests.Add(ut2);
          //-----------------------------------------------------------------------------
          IUnitTest ut3 = new TerritoryRegionUnitTest(dp, gi, civ);
          if (true == ut3.CtorError)
@@ -87,13 +96,13 @@ namespace Pattons_Best
          }
          gi.UnitTests.Add(ut5);
          //-----------------------------------------------------------------------------
-         IUnitTest ut7 = new DiceRollerUnitTest(dp, dr);
-         if (true == ut7.CtorError)
+         IUnitTest ut6 = new DiceRollerUnitTest(dp, dr);
+         if (true == ut6.CtorError)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateUnitTests(): DiceRollerUnitTest() ctor error");
             return false;
          }
-         gi.UnitTests.Add(ut7);
+         gi.UnitTests.Add(ut6);
          //-----------------------------------------------------------------------------
          return true;
       }

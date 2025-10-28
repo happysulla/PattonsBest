@@ -105,7 +105,6 @@ namespace Pattons_Best
       string MovementEffectOnEnemy { set; get; }
       string FiredAmmoType { set; get; }  
       //----------------------------------------------
-      IMapItems NewMembers { set; get; }
       IMapItems ReadyRacks { set; get; }
       IMapItems Hatches { set; get; }
       IMapItems CrewActions { set; get; }
@@ -113,6 +112,8 @@ namespace Pattons_Best
       IMapItems Targets { set; get; }
       IMapItems AdvancingEnemies { set; get; }
       IMapItems ShermanAdvanceOrRetreatEnemies { set; get; }
+      //----------------------------------------------
+      IMapItems NewMembers { set; get; }
       IMapItems InjuredCrewMembers { set; get; }
       //----------------------------------------------
       IMapItem Sherman { set; get; }
