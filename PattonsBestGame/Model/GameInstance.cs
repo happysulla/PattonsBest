@@ -42,7 +42,6 @@ namespace Pattons_Best
       public string ShermanTypeOfFire { set; get; } = "";
       public string FiredAmmoType { set; get; } = "";
       //---------------------------------------------------------------
-      public IMapItems NewMembers { set; get; } = new MapItems();
       public IMapItems ReadyRacks { set; get; } = new MapItems();
       public IMapItems Hatches { set; get; } = new MapItems();
       public IMapItems CrewActions { set; get; } = new MapItems();
@@ -51,12 +50,18 @@ namespace Pattons_Best
       public IMapItems Targets { set; get; } = new MapItems();
       public IMapItems AdvancingEnemies { set; get; } = new MapItems();   // enemies that appear on Move board for advancing to lower edge of board
       public IMapItems ShermanAdvanceOrRetreatEnemies { set; get; } = new MapItems(); // enemies that appear on Move board if Sherman Advances or Retreats
+      //---------------------------------------------------------------
+      public ICrewMembers NewMembers { set; get; } = new CrewMembers();
+      public ICrewMembers InjuredCrewMembers { set; get; } = new CrewMembers();
+      //---------------------------------------------------------------
       public IMapItem? TargetMainGun { set; get; } = null;
       public IMapItem? TargetMg { set; get; } = null;
-      public IMapItems InjuredCrewMembers { set; get; } = new MapItems();
       public IMapItem? ShermanHvss { set; get; } = null;
       public ICrewMember? ReturningCrewman { set; get; } = null;
       //------------------------------------------------
+      public ITerritories AreaTargets { get; set; } = new Territories();
+      public ITerritories CounterattachRetreats { get; set; } = new Territories();
+      //---------------------------------------------------------------
       public ITerritory Home { get; set; } = new Territory();
       public ITerritory? EnemyStrengthCheckTerritory { get; set; } = null;
       public ITerritory? ArtillerySupportCheck { get; set; } = null;
@@ -65,9 +70,7 @@ namespace Pattons_Best
       public ITerritory? AdvanceFire { get; set; } = null;
       public ITerritory? FriendlyAdvance { get; set; } = null;
       public ITerritory? EnemyAdvance { get; set; } = null;
-      public ITerritories AreaTargets { get; set; } = new Territories();
-      public ITerritories CounterattachRetreats { get; set; } = new Territories();
-      //---------------------------------------------------------------
+      //------------------------------------------------
       public bool IsHatchesActive { set; get; } = false;
       public bool IsRetreatToStartArea { set; get; } = false;
       public bool IsShermanAdvancingOnMoveBoard { set; get; } = false;

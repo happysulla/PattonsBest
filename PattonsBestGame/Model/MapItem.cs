@@ -759,7 +759,133 @@ namespace Pattons_Best
          b.Content = g;
       }
    }
-   //----------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   [Serializable]
+   public class MapItems : IEnumerable, IMapItems
+   {
+      private readonly ArrayList myList;
+      public MapItems() { myList = new ArrayList(); }
+      public MapItems(IMapItems mapItems)
+      {
+         myList = new ArrayList();
+         foreach (IMapItem item in mapItems) { Add(item); }
+      }
+      public void Add(IMapItem? mi) { myList.Add(mi); }
+      public void Insert(int index, IMapItem mi) { myList.Insert(index, mi); }
+      public int Count { get { return myList.Count; } }
+      public void Reverse() { myList.Reverse(); }
+      public void Clear() { myList.Clear(); }
+      public bool Contains(IMapItem mi) { return myList.Contains(mi); }
+      public IEnumerator GetEnumerator() { return myList.GetEnumerator(); }
+      public int IndexOf(IMapItem mi) { return myList.IndexOf(mi); }
+      public void Remove(IMapItem mi) { myList.Remove(mi); }
+      public IMapItem? Find(string miName)
+      {
+         foreach (object o in myList)
+         {
+            IMapItem? mi = o as IMapItem;
+            if (null == mi)
+               return null;
+            if (miName == Utilities.RemoveSpaces(mi.Name))
+               return mi;
+         }
+         return null;
+      }
+      public IMapItem? Remove(string miName)
+      {
+         foreach (object o in myList)
+         {
+            IMapItem? mi = (IMapItem)o;
+            if (null == mi) return null;
+            if (miName == mi.Name)
+            {
+               myList.Remove(mi);
+               return mi;
+            }
+         }
+         return null;
+      }
+      public IMapItem? RemoveAt(int index)
+      {
+         IMapItem? mi = myList[index] as IMapItem;
+         if (null == mi)
+            return null;
+         myList.RemoveAt(index);
+         return mi;
+      }
+      public IMapItem? this[int index]
+      {
+         get
+         {
+            IMapItem? mi = myList[index] as IMapItem;
+            return mi;
+         }
+         set { myList[index] = value; }
+      }
+      public IMapItems Shuffle()
+      {
+         IMapItems newOrder = new MapItems();
+         int count = myList.Count;
+         for (int i = 0; i < count; i++)
+         {
+            int index = Utilities.RandomGenerator.Next(myList.Count);
+            if (index < myList.Count)
+            {
+               IMapItem? randomMapItem = myList[index] as IMapItem;
+               myList.RemoveAt(index);
+               if (randomMapItem == null)
+                  Logger.Log(LogEnum.LE_ERROR, "Shuffle(): randomMapItem=null");
+               else
+                  newOrder.Add(randomMapItem);
+            }
+         }
+         return newOrder;
+      }
+      public void Rotate(int numOfRotates)
+      {
+         for (int j = 0; j < numOfRotates; j++)
+         {
+            object? temp = myList[0];
+            if (temp == null)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Rotate(): myList[0]=null");
+               return;
+            }
+            else
+            {
+               for (int i = 0; i < myList.Count - 1; i++)
+                  myList[i] = myList[i + 1];
+               myList[myList.Count - 1] = temp;
+            }
+         }
+      }
+      public override string ToString()
+      {
+         StringBuilder sb = new StringBuilder();
+         sb.Append("[ ");
+         foreach (object o in myList)
+         {
+            IMapItem mi = (IMapItem)o;
+            sb.Append(mi.Name);
+            sb.Append(" ");
+         }
+         sb.Append("]");
+         return sb.ToString();
+      }
+   }
+   //--------------------------------------------------------------------------
+   public static class MyMapItemExtensions
+   {
+      public static IMapItem? Find(this IList<IMapItem> list, string miName)
+      {
+         IEnumerable<IMapItem> results = from mi in list where mi.Name == miName select mi;
+         if (0 < results.Count())
+            return results.First();
+         else
+            return null;
+      }
+   }
+   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
    public class CrewMember : MapItem, ICrewMember
    {
       public string Role { get; set; } = string.Empty;
@@ -904,105 +1030,68 @@ namespace Pattons_Best
          b.Content = g;
       }
    }
-   //--------------------------------------------------------------------------
+   //----------------------------------------------------------------------------
    [Serializable]
-   public class MapItems : IEnumerable, IMapItems
+   public class CrewMembers : IEnumerable, IMapItems
    {
       private readonly ArrayList myList;
-      public MapItems() { myList = new ArrayList(); }
-      public MapItems(IMapItems mapItems)
+      public CrewMembers() { myList = new ArrayList(); }
+      public CrewMembers(ICrewMembers crewMembers)
       {
          myList = new ArrayList();
-         foreach (IMapItem item in mapItems) { Add(item); }
+         foreach (ICrewMember item in crewMembers) { Add(item); }
       }
-      public void Add(IMapItem? mi) { myList.Add(mi); }
-      public void Insert(int index, IMapItem mi) { myList.Insert(index, mi); }
+      public void Add(ICrewMember? cm) { myList.Add(cm); }
+      public void Insert(int index, ICrewMember cm) { myList.Insert(index, cm); }
       public int Count { get { return myList.Count; } }
       public void Reverse() { myList.Reverse(); }
       public void Clear() { myList.Clear(); }
-      public bool Contains(IMapItem mi) { return myList.Contains(mi); }
+      public bool Contains(ICrewMember cm) { return myList.Contains(cm); }
       public IEnumerator GetEnumerator() { return myList.GetEnumerator(); }
-      public int IndexOf(IMapItem mi) { return myList.IndexOf(mi); }
-      public void Remove(IMapItem mi) { myList.Remove(mi); }
-      public IMapItem? Find(string miName)
+      public int IndexOf(ICrewMember cm) { return myList.IndexOf(cm); }
+      public void Remove(ICrewMember cm) { myList.Remove(cm); }
+      public ICrewMember? Find(string cmName)
       {
          foreach (object o in myList)
          {
-            IMapItem? mi = o as IMapItem;
-            if (null == mi)
+            ICrewMember? cm = o as ICrewMember;
+            if (null == cm)
                return null;
-            if (miName == Utilities.RemoveSpaces(mi.Name))
-               return mi;
+            if (cmName == Utilities.RemoveSpaces(cm.Name))
+               return cm;
          }
          return null;
       }
-      public IMapItem? Remove(string miName)
+      public ICrewMember? Remove(string cmName)
       {
          foreach (object o in myList)
          {
-            IMapItem? mi = (IMapItem)o;
-            if (null == mi) return null;
-            if (miName == mi.Name)
+            ICrewMember? cm = (ICrewMember)o;
+            if (null == cm) return null;
+            if (cmName == cm.Name)
             {
-               myList.Remove(mi);
-               return mi;
+               myList.Remove(cm);
+               return cm;
             }
          }
          return null;
       }
-      public IMapItem? RemoveAt(int index)
+      public ICrewMember? RemoveAt(int index)
       {
-         IMapItem? mi = myList[index] as IMapItem;
-         if (null == mi)
+         ICrewMember? cm = myList[index] as ICrewMember;
+         if (null == cm)
             return null;
          myList.RemoveAt(index);
-         return mi;
+         return cm;
       }
-      public IMapItem? this[int index]
+      public ICrewMember? this[int index]
       {
          get
          {
-            IMapItem? mi = myList[index] as IMapItem;
-            return mi;
+            ICrewMember? cm = myList[index] as ICrewMember;
+            return cm;
          }
          set { myList[index] = value; }
-      }
-      public IMapItems Shuffle()
-      {
-         IMapItems newOrder = new MapItems();
-         int count = myList.Count;
-         for (int i = 0; i < count; i++)
-         {
-            int index = Utilities.RandomGenerator.Next(myList.Count);
-            if (index < myList.Count)
-            {
-               IMapItem? randomMapItem = myList[index] as IMapItem;
-               myList.RemoveAt(index);
-               if (randomMapItem == null)
-                  Logger.Log(LogEnum.LE_ERROR, "Shuffle(): randomMapItem=null");
-               else
-                  newOrder.Add(randomMapItem);
-            }
-         }
-         return newOrder;
-      }
-      public void Rotate(int numOfRotates)
-      {
-         for (int j = 0; j < numOfRotates; j++)
-         {
-            object? temp = myList[0];
-            if (temp == null)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Rotate(): myList[0]=null");
-               return;
-            }
-            else
-            {
-               for (int i = 0; i < myList.Count - 1; i++)
-                  myList[i] = myList[i + 1];
-               myList[myList.Count - 1] = temp;
-            }
-         }
       }
       public override string ToString()
       {
@@ -1010,24 +1099,12 @@ namespace Pattons_Best
          sb.Append("[ ");
          foreach (object o in myList)
          {
-            IMapItem mi = (IMapItem)o;
-            sb.Append(mi.Name);
+            ICrewMember cm = (ICrewMember)o;
+            sb.Append(cm.Name);
             sb.Append(" ");
          }
          sb.Append("]");
          return sb.ToString();
-      }
-   }
-   //--------------------------------------------------------------------------
-   public static class MyMapItemExtensions
-   {
-      public static IMapItem? Find(this IList<IMapItem> list, string miName)
-      {
-         IEnumerable<IMapItem> results = from mi in list where mi.Name == miName select mi;
-         if (0 < results.Count())
-            return results.First();
-         else
-            return null;
       }
    }
 }

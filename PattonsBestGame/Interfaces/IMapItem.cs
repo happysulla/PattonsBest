@@ -89,4 +89,21 @@ namespace Pattons_Best
       int WoundDaysUntilReturn { get; set; }
       ICrewMember Clone();
    }
+   //==========================================
+   public interface ICrewMembers : System.Collections.IEnumerable
+   {
+      int Count { get; }
+      void Add(ICrewMember? cm);
+      void Insert(int index, ICrewMember cm);
+      void Clear();
+      bool Contains(ICrewMember cm);
+      int IndexOf(ICrewMember cm);
+      void Remove(ICrewMember cmName);
+      void Reverse();
+      ICrewMember? Remove(string cmName);
+      ICrewMember? RemoveAt(int index);
+      ICrewMember? Find(string cmName);
+      ICrewMember? this[int index] { get; set; }
+
+   }
 }

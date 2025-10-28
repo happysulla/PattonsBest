@@ -1031,12 +1031,6 @@ namespace Pattons_Best
             }
             gi.FiredAmmoType = sFiredAmmoType;
             //----------------------------------------------
-            if( false == ReadXmlMapItems(reader, gi.NewMembers, "NewMembers"))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlMapItems(NewMembers) returned null");
-               return null;
-            }
-            //----------------------------------------------
             if (false == ReadXmlMapItems(reader, gi.ReadyRacks, "ReadyRacks"))
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlMapItems(ReadyRacks) returned null");
@@ -1079,9 +1073,15 @@ namespace Pattons_Best
                return null;
             }
             //----------------------------------------------
-            if (false == ReadXmlMapItems(reader, gi.InjuredCrewMembers, "InjuredCrewMembers"))
+            if (false == ReadXmlCrewMembers(reader, gi.NewMembers, "NewMembers"))
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlMapItems(InjuredCrewMembers) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlCrewMembers(NewMembers) returned null");
+               return null;
+            }
+            //----------------------------------------------
+            if (false == ReadXmlCrewMembers(reader, gi.InjuredCrewMembers, "InjuredCrewMembers"))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlCrewMembers(InjuredCrewMembers) returned null");
                return null;
             }
             //----------------------------------------------
@@ -4759,6 +4759,86 @@ namespace Pattons_Best
             reader.Read(); 
          return true;
       }
+      private bool ReadXmlMapItem(XmlReader reader, ref IMapItem? mi)
+      {
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(Name) = false");
+            return false;
+         }
+         if (reader.Name != "MapItem")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): Name != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sValue = reader.GetAttribute("value");
+         if (null == sValue)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): sNasValueme=null");
+            return false;
+         }
+         string? sName = reader.GetAttribute("name");
+         if (null == sName)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): sName=null");
+            return false;
+         }
+         if ("null" == sName)
+         {
+            mi = null;
+         }
+         else
+         {
+            mi = theMapItems.Find(sName);
+            if (null == mi)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): sName=null");
+               return false;
+            }
+         }
+         return true;
+      }
+      private bool ReadXmlCrewMembers(XmlReader reader, ICrewMembers crewMembers, string attribute)
+      {
+         mapItems.Clear();
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItems(): IsStartElement(MapItems)=null");
+            return false;
+         }
+         if (reader.Name != "MapItems")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItems(): MapItems != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sAttribute = reader.GetAttribute("value");
+         if (sAttribute != attribute)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItems(): (sAttribute=" + sAttribute + ") != (attribute=" + attribute + ")");
+            return false;
+         }
+         string? sCount = reader.GetAttribute("count");
+         if (null == sCount)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItems(): Count=null");
+            return false;
+         }
+         int count = int.Parse(sCount);
+         for (int i = 0; i < count; ++i)
+         {
+            IMapItem? mapItem = null;
+            if (false == ReadXmlMapItem(reader, ref mapItem))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItems(): ReadXmlMapItem() returned false");
+               return false;
+            }
+         }
+         if (0 < count)
+            reader.Read();
+         return true;
+      }
       private bool ReadXmlCrewMember(XmlReader reader, ref ICrewMember? member)
       {
          reader.Read();
@@ -4933,46 +5013,6 @@ namespace Pattons_Best
          }
          member.WoundDaysUntilReturn = Convert.ToInt32(sWoundDaysUntilReturn);
          reader.Read(); // get past </CrewMember>
-         return true;
-      }
-      private bool ReadXmlMapItem(XmlReader reader, ref IMapItem? mi)
-      {
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(Name) = false");
-            return false;
-         }
-         if (reader.Name != "MapItem")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): Name != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sValue = reader.GetAttribute("value");
-         if (null == sValue)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): sNasValueme=null");
-            return false;
-         }
-         string? sName = reader.GetAttribute("name");
-         if (null == sName)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): sName=null");
-            return false;
-         }
-         if( "null" == sName )
-         {
-            mi = null;
-         }
-         else
-         {
-            mi = theMapItems.Find(sName);
-            if( null == mi )
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): sName=null");
-               return false;
-            }
-         }
          return true;
       }
       private bool ReadXmlTerritories(XmlReader reader, ITerritories territories, string attribute)
@@ -7346,8 +7386,6 @@ namespace Pattons_Best
       }
       private bool CreateXmlListingOfMapItems(XmlDocument aXmlDocument, IGameInstance gi)
       {
-         foreach (IMapItem mi in gi.NewMembers)
-            theMapItems.Add(mi);
          foreach (IMapItem mi in gi.ReadyRacks)
             theMapItems.Add(mi);
          foreach (IMapItem mi in gi.Hatches)
@@ -7362,8 +7400,12 @@ namespace Pattons_Best
             theMapItems.Add(mi);
          foreach (IMapItem mi in gi.ShermanAdvanceOrRetreatEnemies)
             theMapItems.Add(mi);
-         foreach (IMapItem mi in gi.InjuredCrewMembers)
+         //-----------------------------------
+         foreach (IMapItem mi in gi.NewMembers) // only saving off the IMapItem portion of ICrewMember
             theMapItems.Add(mi);
+         foreach (IMapItem mi in gi.InjuredCrewMembers) // only saving off the IMapItem portion of ICrewMember
+            theMapItems.Add(mi);
+         //-----------------------------------
          if (null != gi.TargetMainGun)
             theMapItems.Add(gi.TargetMainGun);
          if (null != gi.TargetMg)
