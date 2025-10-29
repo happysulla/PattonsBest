@@ -4801,37 +4801,37 @@ namespace Pattons_Best
       }
       private bool ReadXmlCrewMembers(XmlReader reader, ICrewMembers crewMembers, string attribute)
       {
-         mapItems.Clear();
+         crewMembers.Clear();
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItems(): IsStartElement(MapItems)=null");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMembers(): IsStartElement(MapItems)=null");
             return false;
          }
-         if (reader.Name != "MapItems")
+         if (reader.Name != "CrewMembers")
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItems(): MapItems != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMembers(): MapItems != (node=" + reader.Name + ")");
             return false;
          }
          string? sAttribute = reader.GetAttribute("value");
          if (sAttribute != attribute)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItems(): (sAttribute=" + sAttribute + ") != (attribute=" + attribute + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMembers(): (sAttribute=" + sAttribute + ") != (attribute=" + attribute + ")");
             return false;
          }
          string? sCount = reader.GetAttribute("count");
          if (null == sCount)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItems(): Count=null");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMembers(): Count=null");
             return false;
          }
          int count = int.Parse(sCount);
          for (int i = 0; i < count; ++i)
          {
-            IMapItem? mapItem = null;
-            if (false == ReadXmlMapItem(reader, ref mapItem))
+            ICrewMember? crewMember = null;
+            if (false == ReadXmlCrewMember(reader, ref crewMember))
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItems(): ReadXmlMapItem() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMembers(): ReadXmlCrewMember() returned false");
                return false;
             }
          }
@@ -6260,12 +6260,6 @@ namespace Pattons_Best
             return null;
          }
          //------------------------------------------
-         if (false == CreateXmlMapItems(aXmlDocument, root, gi.NewMembers, "NewMembers"))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlMapItems(NewMembers) returned false");
-            return null;
-         }
-         //------------------------------------------
          if (false == CreateXmlMapItems(aXmlDocument, root, gi.ReadyRacks, "ReadyRacks"))
          {
             Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlMapItems(ReadyRacks) returned false");
@@ -6308,9 +6302,15 @@ namespace Pattons_Best
             return null;
          }
          //------------------------------------------
-         if (false == CreateXmlMapItems(aXmlDocument, root, gi.InjuredCrewMembers, "InjuredCrewMembers"))
+         if (false == CreateXmlCrewMembers(aXmlDocument, root, gi.NewMembers, "NewMembers"))
          {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlMapItems(InjuredCrewMembers) returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlCrewMembers(NewMembers) returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlCrewMembers(aXmlDocument, root, gi.InjuredCrewMembers, "InjuredCrewMembers"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlCrewMembers(InjuredCrewMembers) returned false");
             return null;
          }
          //------------------------------------------
@@ -8888,6 +8888,33 @@ namespace Pattons_Best
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): AppendChild(KnockedOut) returned false");
+               return false;
+            }
+         }
+         return true;
+      }
+      private bool CreateXmlCrewMembers(XmlDocument aXmlDocument, XmlNode parent, ICrewMembers crewMembers, string attribute)
+      {
+         XmlElement? crewMembersElem = aXmlDocument.CreateElement("CrewMembers");
+         if (null == crewMembersElem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlCrewMembers(): CreateElement(crewMembersElem) returned null");
+            return false;
+         }
+         crewMembersElem.SetAttribute("value", attribute);
+         crewMembersElem.SetAttribute("count", crewMembers.Count.ToString());
+         XmlNode? crewMembersNode = parent.AppendChild(crewMembersElem);
+         if (null == crewMembersNode)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlCrewMembers(): AppendChild(crewMembersNode) returned null");
+            return false;
+         }
+         //--------------------------------
+         foreach (ICrewMember cm in crewMembers)
+         {
+            if (false == CreateXmlCrewMember(aXmlDocument, crewMembersNode, cm))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlCrewMembers(): CreateXmlCrewMember() returned false");
                return false;
             }
          }

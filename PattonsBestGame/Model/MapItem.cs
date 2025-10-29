@@ -1032,7 +1032,7 @@ namespace Pattons_Best
    }
    //----------------------------------------------------------------------------
    [Serializable]
-   public class CrewMembers : IEnumerable, IMapItems
+   public class CrewMembers : IEnumerable, ICrewMembers
    {
       private readonly ArrayList myList;
       public CrewMembers() { myList = new ArrayList(); }

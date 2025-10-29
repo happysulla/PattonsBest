@@ -31,10 +31,10 @@ namespace Pattons_Best.UnitTests
       {
          //------------------------------------
          myIndexName = 0;
-         myHeaderNames.Add("07-Check Game Save/Load");
+         myHeaderNames.Add("07-Save Game");
          myHeaderNames.Add("07-Finish");
          //------------------------------------
-         myCommandNames.Add("Show Results");
+         myCommandNames.Add("Save Game");
          myCommandNames.Add("Finish");
          //------------------------------------
          myDockPanelTop = dp; // top most dock panel that holds menu, statusbar, left dockpanel, and right dockpanel
@@ -167,12 +167,13 @@ namespace Pattons_Best.UnitTests
                report.Ammo30CalibreMG = i + 100;
                report.Ammo50CalibreMG = i + 110;
                report.AmmoSmokeBomb = i + 120;
-               report.AmmoPeriscope = i + 130;
-               report.MainGunHE = i + 140;
-               report.MainGunAP = i + 150;
-               report.MainGunWP = i + 160;
-               report.MainGunHBCI = i + 170;
-               report.MainGunHVAP = i + 180;
+               report.AmmoSmokeGrenade = i + 130;
+               report.AmmoPeriscope = i + 140;
+               report.MainGunHE = i + 150;
+               report.MainGunAP = i + 160;
+               report.MainGunWP = i + 170;
+               report.MainGunHBCI = i + 180;
+               report.MainGunHVAP = i + 190;
                //----------------------------------------
                report.VictoryPtsFriendlyKiaLightWeapon = i + 1000;
                report.VictoryPtsFriendlyKiaTruck = i + 1100;
@@ -204,6 +205,7 @@ namespace Pattons_Best.UnitTests
                report.VictoryPtsTotalFriendlyForces = i + 4200;
                report.VictoryPtsTotalTerritory = i + 4300;
                report.VictoryPtsTotalEngagement = i + 4400;
+               gameInstance.Reports.Add(report);
             }
             //-----------------------
             gameInstance.Day = 01;
@@ -213,13 +215,178 @@ namespace Pattons_Best.UnitTests
             gameInstance.MovementEffectOnEnemy = "05";
             gameInstance.FiredAmmoType = "06";
             //-----------------------
-            for(int i=0; i<3; ++i )
+            int count = 2;
+            string tType = "1";
+            string tName = "ReadyRackAp" + count.ToString();
+            ITerritory? t = Territories.theTerritories.Find(tName, tType);
+            if (null == t)
             {
-               string miName = "Test" + Utilities.MapItemNum.ToString();
-               ++Utilities.MapItemNum;
-               IMapItem mi = new MapItem(miName, );
-               gi.NewMembers.Add(mi);
+               Logger.Log(LogEnum.LE_ERROR, "Command(): t=null for " + tName);
+               return false;
             }
+            IMapItem rr1 = new MapItem("ReadyRackAp", 0.9, "c12RoundsLeft", t);
+            rr1.Count = 2;
+            gameInstance.ReadyRacks.Add(rr1);
+            //-----------------------
+            IMapItem mi = new MapItem("Driver_OpenHatch", 1.0, "c15OpenHatch", t);
+            gameInstance.Hatches.Add(mi);
+            //-----------------------
+            IMapItem crewAction = new MapItem("Commander_ThrowGrenade", 1.0, "c70ThrowSmokeGrenade", t);
+            gameInstance.CrewActions.Add(crewAction);
+            //-----------------------
+            string enemyName = "LW" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            IMapItem enemy = new MapItem(enemyName, Utilities.ZOOM, "c91Lw", t);
+            gameInstance.Targets.Add(enemy);
+            //-----------------------
+            gameInstance.AdvancingEnemies.Add(enemy);
+            gameInstance.ShermanAdvanceOrRetreatEnemies.Add(enemy);
+            //----------------------------------------------
+            ICrewMember commander = new CrewMember("Commander", "Sgt", "c07Commander");
+            commander.Name = "Burtt";
+            gameInstance.NewMembers.Add(commander);
+            ICrewMember driver = new CrewMember("Driver", "Pvt", "c08Driver");
+            driver.Name = "Alice";
+            gameInstance.NewMembers.Add(driver);
+            //----------------------------------------------
+            gameInstance.InjuredCrewMembers.Add(commander);
+            ICrewMember loader = new CrewMember("Loader", "Cpl", "c09Loader");
+            loader.Name = "Ethel";
+            gameInstance.InjuredCrewMembers.Add(loader);
+            //----------------------------------------------
+            enemyName = "LW" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            enemy = new MapItem(enemyName, Utilities.ZOOM, "c91Lw", t);
+            gameInstance.TargetMainGun = enemy;
+            enemyName = "LW" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            enemy = new MapItem(enemyName, Utilities.ZOOM, "c91Lw", t);
+            gameInstance.TargetMg = enemy;
+            //----------------------------------------------
+            gameInstance.ShermanHvss = new MapItem("ShermanHvss555", 1.0, "c75Hvss", t);
+            //----------------------------------------------
+            commander = new CrewMember("Commander", "Sgt", "c07Commander");
+            commander.Name = "Burtt2";
+            gameInstance.ReturningCrewman = commander;
+            //----------------------------------------------
+            tName = "M001";
+            ITerritory? t1 = Territories.theTerritories.Find(tName);
+            if (null == t1)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Command(): t1=null for " + tName);
+               return false;
+            }
+            tName = "M002";
+            ITerritory? t2 = Territories.theTerritories.Find(tName);
+            if (null == t2)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Command(): t2=null for " + tName);
+               return false;
+            }
+            tName = "M003";
+            ITerritory? t3 = Territories.theTerritories.Find(tName);
+            if (null == t3)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Command(): t3=null for " + tName);
+               return false;
+            }
+            gameInstance.AreaTargets.Add(t1);
+            gameInstance.AreaTargets.Add(t2);
+            gameInstance.AreaTargets.Add(t3);
+            //----------------------------------------------
+            gameInstance.CounterattachRetreats.Add(t1);
+            gameInstance.CounterattachRetreats.Add(t2);
+            gameInstance.CounterattachRetreats.Add(t3);
+            //----------------------------------------------
+            gameInstance.EnemyStrengthCheckTerritory = t1;
+            gameInstance.ArtillerySupportCheck = t2;
+            gameInstance.AirStrikeCheckTerritory = t3;
+            gameInstance.EnteredArea = t1;
+            gameInstance.AdvanceFire = t2;
+            gameInstance.FriendlyAdvance = t3;
+            gameInstance.EnemyAdvance = t3;
+            //----------------------------------------------
+            gameInstance.IsHatchesActive = false;
+            gameInstance.IsRetreatToStartArea = true;
+            gameInstance.IsShermanAdvancingOnMoveBoard = false;
+            //----------------------------------------------
+            gameInstance.SwitchedCrewMember = "Frankie";
+            gameInstance.AssistantOriginalRating = 100;
+            gameInstance.IsShermanFiringAtFront = true;
+            gameInstance.IsShermanDeliberateImmobilization = false;
+            gameInstance.ShermanTypeOfFire = "nickle";
+            gameInstance.NumSmokeAttacksThisRound = 101;
+            //----------------------------------------------
+            gameInstance.IsMalfunctionedMainGun = false;
+            gameInstance.IsMainGunRepairAttempted = true;
+            gameInstance.IsBrokenMainGun = false;
+            gameInstance.IsBrokenGunSight = true;
+            gameInstance.FirstShots.Add("one");
+            gameInstance.FirstShots.Add("two");
+            gameInstance.FirstShots.Add("three");
+            gameInstance.TrainedGunners.Add("four");
+            gameInstance.TrainedGunners.Add("five");
+            gameInstance.TrainedGunners.Add("size");
+            //----------------------------------------------
+            ShermanAttack attack1 = new ShermanAttack("one", "WP", true, false);
+            ShermanAttack attack2 = new ShermanAttack("two", "AP", false, false);
+            ShermanAttack attack3 = new ShermanAttack("three", "WP", true, true);
+            gameInstance.ShermanHits.Add(attack1);
+            gameInstance.ShermanHits.Add(attack2);
+            gameInstance.ShermanHits.Add(attack3);
+            //----------------------------------------------
+            gameInstance.Death = new ShermanDeath(enemy);
+            //----------------------------------------------
+            gameInstance.IdentifiedTank = "seven";
+            gameInstance.IdentifiedAtg = "eight";
+            gameInstance.IdentifiedSpg = "nine";
+            //----------------------------------------------
+            gameInstance.IsShermanFiringAaMg = false;
+            gameInstance.IsShermanFiringBowMg = true;
+            gameInstance.IsShermanFiringCoaxialMg = false;
+            gameInstance.IsShermanFiringSubMg = true;
+            gameInstance.IsCommanderDirectingMgFire = false;
+            gameInstance.IsShermanFiredAaMg = true;
+            gameInstance.IsShermanFiredBowMg = false;
+            gameInstance.IsShermanFiredCoaxialMg = true;
+            gameInstance.IsShermanFiredSubMg = false;
+            //----------------------------------------------
+            gameInstance.IsMalfunctionedMgCoaxial = false;
+            gameInstance.IsMalfunctionedMgBow = true;
+            gameInstance.IsMalfunctionedMgAntiAircraft = false;
+            gameInstance.IsCoaxialMgRepairAttempted = true;
+            gameInstance.IsBowMgRepairAttempted = false;
+            gameInstance.IsAaMgRepairAttempted = true;
+            gameInstance.IsBrokenMgAntiAircraft = false;
+            gameInstance.IsBrokenMgBow = true;
+            gameInstance.IsBrokenMgCoaxial = false;
+            //----------------------------------------------
+            gameInstance.IsBrokenPeriscopeDriver = false;
+            gameInstance.IsBrokenPeriscopeLoader = true;
+            gameInstance.IsBrokenPeriscopeAssistant = false;
+            gameInstance.IsBrokenPeriscopeGunner = true;
+            gameInstance.IsBrokenPeriscopeCommander = false;
+            //----------------------------------------------
+            gameInstance.IsShermanTurretRotated = true;
+            gameInstance.ShermanRotationTurretOld = 555.55;
+            //----------------------------------------------
+            gameInstance.IsCounterattackAmbush = false;
+            gameInstance.IsLeadTank = true;
+            gameInstance.IsAirStrikePending = false;
+            gameInstance.IsAdvancingFireChosen = true;
+            gameInstance.AdvancingFireMarkerCount = 555;
+            gameInstance.BattleResistance = EnumResistance.Heavy;
+            //----------------------------------------------
+            gameInstance.IsMinefieldAttack = false;
+            gameInstance.IsHarrassingFireBonus = true;
+            gameInstance.IsFlankingFire = false;
+            gameInstance.IsEnemyAdvanceComplete = true;
+            gameInstance.Panzerfaust = new PanzerfaustAttack(enemy);
+            gameInstance.NumCollateralDamage = 777;
+            //----------------------------------------------
+            GameLoadMgr loadMgr = new GameLoadMgr();
+            if (false == loadMgr.SaveGameAsToFile(gameInstance))
+               Logger.Log(LogEnum.LE_ERROR, "Command(): GameLoadMgr.SaveGameAs() returned false");
          }
          else if (CommandName == myCommandNames[1])
          {

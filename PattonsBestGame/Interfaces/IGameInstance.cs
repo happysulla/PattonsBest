@@ -46,7 +46,7 @@ namespace Pattons_Best
       public bool myIsShermanMoving = false;
       public bool myIsLeadTank = false;
       public bool myIsAdvancingFireZone = false;
-      public char mySector;
+      public char mySector = 'E';
       public PanzerfaustAttack(IMapItem eu)
       {
          myEnemyUnit = eu;
