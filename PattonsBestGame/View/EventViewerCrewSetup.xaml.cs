@@ -559,12 +559,15 @@ namespace Pattons_Best
                if (STARTING_ASSIGNED_ROW <= rowNum) // only support dropping on grid row - all other drops just disable the move
                {
                   int i = rowNum - STARTING_ASSIGNED_ROW;
-                  if ( null == myGridRows[i].myCrewMember)
+                  #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+                    ICrewMember cm = myGridRows[i].myCrewMember;
+                  #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+                  if ( null == cm)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "Button_Click(): myGridRows[i].myMapItem=null for b.Name=" + b.Name);
                      return;
                   }
-                  myAssignables.Add(myGridRows[i].myCrewMember);   // add existing one back to myAssignables
+                  myAssignables.Add(cm);   // add existing one back to myAssignables
                   myAssignables.Remove(myCrewMemberDragged); // Remove dragged map item from myAssignables
                   myGridRows[i].myCrewMember = myCrewMemberDragged;   // grid row updated
                }

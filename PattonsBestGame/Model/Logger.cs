@@ -246,15 +246,15 @@ namespace Pattons_Best
             }
             catch (FileNotFoundException fileException)
             {
-               Console.WriteLine("Log(): ll=" + logLevel.ToString() + "desc=" + description + "\n" + fileException.ToString());
+               //System.Diagnostics.Debug.WriteLine("Log(): ll=" + logLevel.ToString() + " desc=" + description + "\n" + fileException.ToString());
             }
             catch (IOException ioException)
             {
-               Console.WriteLine("Log(): ll=" + logLevel.ToString() + "desc=" + description + "\n" + ioException.ToString());
+               //System.Diagnostics.Debug.WriteLine("Log(): ll=" + logLevel.ToString() + " desc=" + description + "\n" + ioException.ToString());
             }
             catch (Exception ex)
             {
-               Console.WriteLine("Log(): ll=" + logLevel.ToString() + "desc=" + description + "\n" + ex.ToString());
+               //System.Diagnostics.Debug.WriteLine("Log(): ll=" + logLevel.ToString() + " desc=" + description + "\n" + ex.ToString());
             }
             theMutex.ReleaseMutex();
          }

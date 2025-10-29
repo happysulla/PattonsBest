@@ -882,6 +882,7 @@ namespace Pattons_Best
                case "BattleRoundSequence": gi.GamePhase = GamePhase.BattleRoundSequence; break;
                case "EveningDebriefing": gi.GamePhase = GamePhase.EveningDebriefing; break;
                case "EndGame": gi.GamePhase = GamePhase.EveningDebriefing; break;
+               case "UnitTest": gi.GamePhase = GamePhase.UnitTest; break;
                default: Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reached default sGamePhase=" + sGamePhase); return null;
             }
             //----------------------------------------------
@@ -2887,13 +2888,20 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): sTerritoryCurrent=null");
                return false;
             }
-            ITerritory? tCurrent = Territories.theTerritories.Find(sTerritoryCurrent);
-            if (null == tCurrent)
+            if( "Offboard" == sTerritoryCurrent )
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): tCurrent=null");
-               return false;
+               mi.TerritoryCurrent = new Territory();
             }
-            mi.TerritoryCurrent = tCurrent;
+            else
+            {
+               ITerritory? tCurrent = Territories.theTerritories.Find(sTerritoryCurrent);
+               if (null == tCurrent)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): tCurrent=null for sTerritoryCurrent=" + sTerritoryCurrent);
+                  return false;
+               }
+               mi.TerritoryCurrent = tCurrent;
+            }
             //---------------------------------------------
             reader.Read();
             if (false == reader.IsStartElement())
@@ -3454,7 +3462,7 @@ namespace Pattons_Best
             enemyAcquiredShots[sEnemy] = Convert.ToInt32(sValue);
          }
          if (0 < count)
-            reader.Read(); // get past </FirstShots> tag
+            reader.Read(); // get past </EnemyAcquiredShots> tag
          return true;
       }
       private bool ReadXmlOptions(XmlReader reader, Options options)
@@ -9315,10 +9323,10 @@ namespace Pattons_Best
          }
          for(int i=0; i < trainedGunners.Count; ++i )
          {
-            XmlElement? trainedGunnerElem = aXmlDocument.CreateElement("FirstShot");
+            XmlElement? trainedGunnerElem = aXmlDocument.CreateElement("TrainedGunner");
             if (null == trainedGunnerElem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlTrainedGunners(): CreateElement(trainedGunnerElem) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlTrainedGunners(): CreateElement(TrainedGunner) returned null");
                return false;
             }
             trainedGunnerElem.SetAttribute("value", trainedGunners[i]);

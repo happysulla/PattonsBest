@@ -62,7 +62,7 @@ namespace Pattons_Best
    public interface IMapItems : System.Collections.IEnumerable
    {
       int Count { get; }
-      void Add(IMapItem? mi);
+      void Add(IMapItem mi);
       void Insert(int index, IMapItem mi);
       void Clear();
       bool Contains(IMapItem mi);
@@ -93,7 +93,7 @@ namespace Pattons_Best
    public interface ICrewMembers : System.Collections.IEnumerable
    {
       int Count { get; }
-      void Add(ICrewMember? cm);
+      void Add(ICrewMember cm);
       void Insert(int index, ICrewMember cm);
       void Clear();
       bool Contains(ICrewMember cm);

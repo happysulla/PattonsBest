@@ -18,8 +18,8 @@ namespace Pattons_Best.UnitTests
       private ScrollViewer? myScrollViewerCanvas = null;
       private Canvas? myCanvasMap = null;
       private Canvas? myCanvasTank = null;
-      private double myScrollingTime = 12.0;
-      private readonly FontFamily myFontFam = new FontFamily("Tahoma");
+      private IGameInstance? myGameInstanceSave = null;
+      private IGameInstance? myGameInstanceLoad = null;
       //--------------------------------------------------------------------
       private int myIndexName = 0;
       private List<string> myHeaderNames = new List<string>();
@@ -32,9 +32,13 @@ namespace Pattons_Best.UnitTests
          //------------------------------------
          myIndexName = 0;
          myHeaderNames.Add("07-Save Game");
+         myHeaderNames.Add("07-Load Game");
+         myHeaderNames.Add("07-Compare");
          myHeaderNames.Add("07-Finish");
          //------------------------------------
          myCommandNames.Add("Save Game");
+         myCommandNames.Add("Load Game");
+         myCommandNames.Add("Compare");
          myCommandNames.Add("Finish");
          //------------------------------------
          myDockPanelTop = dp; // top most dock panel that holds menu, statusbar, left dockpanel, and right dockpanel
@@ -97,16 +101,16 @@ namespace Pattons_Best.UnitTests
             Logger.Log(LogEnum.LE_ERROR, "Command(): myScrollViewerCanvas=null");
             return false;
          }
-         //-----------------------------------------------------
+         //----------------------------------------------------b-
          if (CommandName == myCommandNames[0])
          {
-            IGameInstance gameInstance = new GameInstance();
-            gameInstance.EventActive = "e001";
-            gameInstance.EventDisplayed = "e002";
-            gameInstance.Day = 01;
-            gameInstance.GameTurn = 02;
-            gameInstance.GamePhase = GamePhase.UnitTest;
-            gameInstance.EndGameReason = "03";
+            myGameInstanceSave = new GameInstance();
+            myGameInstanceSave.EventActive = "e001";
+            myGameInstanceSave.EventDisplayed = "e002";
+            myGameInstanceSave.Day = 01;
+            myGameInstanceSave.GameTurn = 02;
+            myGameInstanceSave.GamePhase = GamePhase.UnitTest;
+            myGameInstanceSave.EndGameReason = "03";
             //-----------------------
             for (int i=0; i < 3; ++i)
             {
@@ -205,15 +209,15 @@ namespace Pattons_Best.UnitTests
                report.VictoryPtsTotalFriendlyForces = i + 4200;
                report.VictoryPtsTotalTerritory = i + 4300;
                report.VictoryPtsTotalEngagement = i + 4400;
-               gameInstance.Reports.Add(report);
+               myGameInstanceSave.Reports.Add(report);
             }
             //-----------------------
-            gameInstance.Day = 01;
-            gameInstance.BattlePhase = BattlePhase.Ambush;
-            gameInstance.CrewActionPhase = CrewActionPhase.CrewSwitch;
-            gameInstance.MovementEffectOnSherman = "04";
-            gameInstance.MovementEffectOnEnemy = "05";
-            gameInstance.FiredAmmoType = "06";
+            myGameInstanceSave.Day = 01;
+            myGameInstanceSave.BattlePhase = BattlePhase.Ambush;
+            myGameInstanceSave.CrewActionPhase = CrewActionPhase.CrewSwitch;
+            myGameInstanceSave.MovementEffectOnSherman = "04";
+            myGameInstanceSave.MovementEffectOnEnemy = "05";
+            myGameInstanceSave.FiredAmmoType = "06";
             //-----------------------
             int count = 2;
             string tType = "1";
@@ -226,48 +230,48 @@ namespace Pattons_Best.UnitTests
             }
             IMapItem rr1 = new MapItem("ReadyRackAp", 0.9, "c12RoundsLeft", t);
             rr1.Count = 2;
-            gameInstance.ReadyRacks.Add(rr1);
+            myGameInstanceSave.ReadyRacks.Add(rr1);
             //-----------------------
             IMapItem mi = new MapItem("Driver_OpenHatch", 1.0, "c15OpenHatch", t);
-            gameInstance.Hatches.Add(mi);
+            myGameInstanceSave.Hatches.Add(mi);
             //-----------------------
             IMapItem crewAction = new MapItem("Commander_ThrowGrenade", 1.0, "c70ThrowSmokeGrenade", t);
-            gameInstance.CrewActions.Add(crewAction);
+            myGameInstanceSave.CrewActions.Add(crewAction);
             //-----------------------
             string enemyName = "LW" + Utilities.MapItemNum.ToString();
             Utilities.MapItemNum++;
             IMapItem enemy = new MapItem(enemyName, Utilities.ZOOM, "c91Lw", t);
-            gameInstance.Targets.Add(enemy);
+            myGameInstanceSave.Targets.Add(enemy);
             //-----------------------
-            gameInstance.AdvancingEnemies.Add(enemy);
-            gameInstance.ShermanAdvanceOrRetreatEnemies.Add(enemy);
+            myGameInstanceSave.AdvancingEnemies.Add(enemy);
+            myGameInstanceSave.ShermanAdvanceOrRetreatEnemies.Add(enemy);
             //----------------------------------------------
             ICrewMember commander = new CrewMember("Commander", "Sgt", "c07Commander");
             commander.Name = "Burtt";
-            gameInstance.NewMembers.Add(commander);
+            myGameInstanceSave.NewMembers.Add(commander);
             ICrewMember driver = new CrewMember("Driver", "Pvt", "c08Driver");
             driver.Name = "Alice";
-            gameInstance.NewMembers.Add(driver);
+            myGameInstanceSave.NewMembers.Add(driver);
             //----------------------------------------------
-            gameInstance.InjuredCrewMembers.Add(commander);
+            myGameInstanceSave.InjuredCrewMembers.Add(commander);
             ICrewMember loader = new CrewMember("Loader", "Cpl", "c09Loader");
             loader.Name = "Ethel";
-            gameInstance.InjuredCrewMembers.Add(loader);
+            myGameInstanceSave.InjuredCrewMembers.Add(loader);
             //----------------------------------------------
             enemyName = "LW" + Utilities.MapItemNum.ToString();
             Utilities.MapItemNum++;
             enemy = new MapItem(enemyName, Utilities.ZOOM, "c91Lw", t);
-            gameInstance.TargetMainGun = enemy;
+            myGameInstanceSave.TargetMainGun = enemy;
             enemyName = "LW" + Utilities.MapItemNum.ToString();
             Utilities.MapItemNum++;
             enemy = new MapItem(enemyName, Utilities.ZOOM, "c91Lw", t);
-            gameInstance.TargetMg = enemy;
+            myGameInstanceSave.TargetMg = enemy;
             //----------------------------------------------
-            gameInstance.ShermanHvss = new MapItem("ShermanHvss555", 1.0, "c75Hvss", t);
+            myGameInstanceSave.ShermanHvss = new MapItem("ShermanHvss555", 1.0, "c75Hvss", t);
             //----------------------------------------------
             commander = new CrewMember("Commander", "Sgt", "c07Commander");
             commander.Name = "Burtt2";
-            gameInstance.ReturningCrewman = commander;
+            myGameInstanceSave.ReturningCrewman = commander;
             //----------------------------------------------
             tName = "M001";
             ITerritory? t1 = Territories.theTerritories.Find(tName);
@@ -290,105 +294,129 @@ namespace Pattons_Best.UnitTests
                Logger.Log(LogEnum.LE_ERROR, "Command(): t3=null for " + tName);
                return false;
             }
-            gameInstance.AreaTargets.Add(t1);
-            gameInstance.AreaTargets.Add(t2);
-            gameInstance.AreaTargets.Add(t3);
+            myGameInstanceSave.AreaTargets.Add(t1);
+            myGameInstanceSave.AreaTargets.Add(t2);
+            myGameInstanceSave.AreaTargets.Add(t3);
             //----------------------------------------------
-            gameInstance.CounterattachRetreats.Add(t1);
-            gameInstance.CounterattachRetreats.Add(t2);
-            gameInstance.CounterattachRetreats.Add(t3);
+            myGameInstanceSave.CounterattachRetreats.Add(t1);
+            myGameInstanceSave.CounterattachRetreats.Add(t2);
+            myGameInstanceSave.CounterattachRetreats.Add(t3);
             //----------------------------------------------
-            gameInstance.EnemyStrengthCheckTerritory = t1;
-            gameInstance.ArtillerySupportCheck = t2;
-            gameInstance.AirStrikeCheckTerritory = t3;
-            gameInstance.EnteredArea = t1;
-            gameInstance.AdvanceFire = t2;
-            gameInstance.FriendlyAdvance = t3;
-            gameInstance.EnemyAdvance = t3;
+            myGameInstanceSave.EnemyStrengthCheckTerritory = t1;
+            myGameInstanceSave.ArtillerySupportCheck = t2;
+            myGameInstanceSave.AirStrikeCheckTerritory = t3;
+            myGameInstanceSave.EnteredArea = t1;
+            myGameInstanceSave.AdvanceFire = t2;
+            myGameInstanceSave.FriendlyAdvance = t3;
+            myGameInstanceSave.EnemyAdvance = t3;
             //----------------------------------------------
-            gameInstance.IsHatchesActive = false;
-            gameInstance.IsRetreatToStartArea = true;
-            gameInstance.IsShermanAdvancingOnMoveBoard = false;
+            myGameInstanceSave.IsHatchesActive = false;
+            myGameInstanceSave.IsRetreatToStartArea = true;
+            myGameInstanceSave.IsShermanAdvancingOnMoveBoard = false;
             //----------------------------------------------
-            gameInstance.SwitchedCrewMember = "Frankie";
-            gameInstance.AssistantOriginalRating = 100;
-            gameInstance.IsShermanFiringAtFront = true;
-            gameInstance.IsShermanDeliberateImmobilization = false;
-            gameInstance.ShermanTypeOfFire = "nickle";
-            gameInstance.NumSmokeAttacksThisRound = 101;
+            myGameInstanceSave.SwitchedCrewMember = "Frankie";
+            myGameInstanceSave.AssistantOriginalRating = 100;
+            myGameInstanceSave.IsShermanFiringAtFront = true;
+            myGameInstanceSave.IsShermanDeliberateImmobilization = false;
+            myGameInstanceSave.ShermanTypeOfFire = "nickle";
+            myGameInstanceSave.NumSmokeAttacksThisRound = 101;
             //----------------------------------------------
-            gameInstance.IsMalfunctionedMainGun = false;
-            gameInstance.IsMainGunRepairAttempted = true;
-            gameInstance.IsBrokenMainGun = false;
-            gameInstance.IsBrokenGunSight = true;
-            gameInstance.FirstShots.Add("one");
-            gameInstance.FirstShots.Add("two");
-            gameInstance.FirstShots.Add("three");
-            gameInstance.TrainedGunners.Add("four");
-            gameInstance.TrainedGunners.Add("five");
-            gameInstance.TrainedGunners.Add("size");
+            myGameInstanceSave.IsMalfunctionedMainGun = false;
+            myGameInstanceSave.IsMainGunRepairAttempted = true;
+            myGameInstanceSave.IsBrokenMainGun = false;
+            myGameInstanceSave.IsBrokenGunSight = true;
+            myGameInstanceSave.FirstShots.Add("one");
+            myGameInstanceSave.FirstShots.Add("two");
+            myGameInstanceSave.FirstShots.Add("three");
+            myGameInstanceSave.TrainedGunners.Add("four");
+            myGameInstanceSave.TrainedGunners.Add("five");
+            myGameInstanceSave.TrainedGunners.Add("size");
             //----------------------------------------------
             ShermanAttack attack1 = new ShermanAttack("one", "WP", true, false);
             ShermanAttack attack2 = new ShermanAttack("two", "AP", false, false);
             ShermanAttack attack3 = new ShermanAttack("three", "WP", true, true);
-            gameInstance.ShermanHits.Add(attack1);
-            gameInstance.ShermanHits.Add(attack2);
-            gameInstance.ShermanHits.Add(attack3);
+            myGameInstanceSave.ShermanHits.Add(attack1);
+            myGameInstanceSave.ShermanHits.Add(attack2);
+            myGameInstanceSave.ShermanHits.Add(attack3);
             //----------------------------------------------
-            gameInstance.Death = new ShermanDeath(enemy);
+            myGameInstanceSave.Death = new ShermanDeath(enemy);
             //----------------------------------------------
-            gameInstance.IdentifiedTank = "seven";
-            gameInstance.IdentifiedAtg = "eight";
-            gameInstance.IdentifiedSpg = "nine";
+            myGameInstanceSave.IdentifiedTank = "seven";
+            myGameInstanceSave.IdentifiedAtg = "eight";
+            myGameInstanceSave.IdentifiedSpg = "nine";
             //----------------------------------------------
-            gameInstance.IsShermanFiringAaMg = false;
-            gameInstance.IsShermanFiringBowMg = true;
-            gameInstance.IsShermanFiringCoaxialMg = false;
-            gameInstance.IsShermanFiringSubMg = true;
-            gameInstance.IsCommanderDirectingMgFire = false;
-            gameInstance.IsShermanFiredAaMg = true;
-            gameInstance.IsShermanFiredBowMg = false;
-            gameInstance.IsShermanFiredCoaxialMg = true;
-            gameInstance.IsShermanFiredSubMg = false;
+            myGameInstanceSave.IsShermanFiringAaMg = false;
+            myGameInstanceSave.IsShermanFiringBowMg = true;
+            myGameInstanceSave.IsShermanFiringCoaxialMg = false;
+            myGameInstanceSave.IsShermanFiringSubMg = true;
+            myGameInstanceSave.IsCommanderDirectingMgFire = false;
+            myGameInstanceSave.IsShermanFiredAaMg = true;
+            myGameInstanceSave.IsShermanFiredBowMg = false;
+            myGameInstanceSave.IsShermanFiredCoaxialMg = true;
+            myGameInstanceSave.IsShermanFiredSubMg = false;
             //----------------------------------------------
-            gameInstance.IsMalfunctionedMgCoaxial = false;
-            gameInstance.IsMalfunctionedMgBow = true;
-            gameInstance.IsMalfunctionedMgAntiAircraft = false;
-            gameInstance.IsCoaxialMgRepairAttempted = true;
-            gameInstance.IsBowMgRepairAttempted = false;
-            gameInstance.IsAaMgRepairAttempted = true;
-            gameInstance.IsBrokenMgAntiAircraft = false;
-            gameInstance.IsBrokenMgBow = true;
-            gameInstance.IsBrokenMgCoaxial = false;
+            myGameInstanceSave.IsMalfunctionedMgCoaxial = false;
+            myGameInstanceSave.IsMalfunctionedMgBow = true;
+            myGameInstanceSave.IsMalfunctionedMgAntiAircraft = false;
+            myGameInstanceSave.IsCoaxialMgRepairAttempted = true;
+            myGameInstanceSave.IsBowMgRepairAttempted = false;
+            myGameInstanceSave.IsAaMgRepairAttempted = true;
+            myGameInstanceSave.IsBrokenMgAntiAircraft = false;
+            myGameInstanceSave.IsBrokenMgBow = true;
+            myGameInstanceSave.IsBrokenMgCoaxial = false;
             //----------------------------------------------
-            gameInstance.IsBrokenPeriscopeDriver = false;
-            gameInstance.IsBrokenPeriscopeLoader = true;
-            gameInstance.IsBrokenPeriscopeAssistant = false;
-            gameInstance.IsBrokenPeriscopeGunner = true;
-            gameInstance.IsBrokenPeriscopeCommander = false;
+            myGameInstanceSave.IsBrokenPeriscopeDriver = false;
+            myGameInstanceSave.IsBrokenPeriscopeLoader = true;
+            myGameInstanceSave.IsBrokenPeriscopeAssistant = false;
+            myGameInstanceSave.IsBrokenPeriscopeGunner = true;
+            myGameInstanceSave.IsBrokenPeriscopeCommander = false;
             //----------------------------------------------
-            gameInstance.IsShermanTurretRotated = true;
-            gameInstance.ShermanRotationTurretOld = 555.55;
+            myGameInstanceSave.IsShermanTurretRotated = true;
+            myGameInstanceSave.ShermanRotationTurretOld = 555.55;
             //----------------------------------------------
-            gameInstance.IsCounterattackAmbush = false;
-            gameInstance.IsLeadTank = true;
-            gameInstance.IsAirStrikePending = false;
-            gameInstance.IsAdvancingFireChosen = true;
-            gameInstance.AdvancingFireMarkerCount = 555;
-            gameInstance.BattleResistance = EnumResistance.Heavy;
+            myGameInstanceSave.IsCounterattackAmbush = false;
+            myGameInstanceSave.IsLeadTank = true;
+            myGameInstanceSave.IsAirStrikePending = false;
+            myGameInstanceSave.IsAdvancingFireChosen = true;
+            myGameInstanceSave.AdvancingFireMarkerCount = 555;
+            myGameInstanceSave.BattleResistance = EnumResistance.Heavy;
             //----------------------------------------------
-            gameInstance.IsMinefieldAttack = false;
-            gameInstance.IsHarrassingFireBonus = true;
-            gameInstance.IsFlankingFire = false;
-            gameInstance.IsEnemyAdvanceComplete = true;
-            gameInstance.Panzerfaust = new PanzerfaustAttack(enemy);
-            gameInstance.NumCollateralDamage = 777;
+            myGameInstanceSave.IsMinefieldAttack = false;
+            myGameInstanceSave.IsHarrassingFireBonus = true;
+            myGameInstanceSave.IsFlankingFire = false;
+            myGameInstanceSave.IsEnemyAdvanceComplete = true;
+            myGameInstanceSave.Panzerfaust = new PanzerfaustAttack(enemy);
+            myGameInstanceSave.NumCollateralDamage = 777;
             //----------------------------------------------
             GameLoadMgr loadMgr = new GameLoadMgr();
-            if (false == loadMgr.SaveGameAsToFile(gameInstance))
+            if (false == loadMgr.SaveGameAsToFile(myGameInstanceSave))
+            {
                Logger.Log(LogEnum.LE_ERROR, "Command(): GameLoadMgr.SaveGameAs() returned false");
+               return false;
+            }
          }
-         else if (CommandName == myCommandNames[1])
+         else if( CommandName == myCommandNames[1])
+         {
+            GameLoadMgr loadMgr = new GameLoadMgr();
+            myGameInstanceLoad = loadMgr.OpenGameFromFile();
+            if (null == myGameInstanceLoad)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Command(): GameLoadMgr.OpenGameFromFile() returned null");
+               return false;
+            }
+         }
+         else if (CommandName == myCommandNames[12])
+         {
+            GameLoadMgr loadMgr = new GameLoadMgr();
+            myGameInstanceLoad = loadMgr.OpenGameFromFile();
+            if (false == IsEqual(myGameInstanceSave, myGameInstanceLoad))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Command(): GameLoadMgr.OpenGameFromFile() returned null");
+               return false;
+            }
+
+         }
+         else if (CommandName == myCommandNames[3])
          {
             if (false == Cleanup(ref gi))
             {
@@ -410,6 +438,14 @@ namespace Pattons_Best.UnitTests
             ++myIndexName;
          }
          else if (HeaderName == myHeaderNames[1])
+         {
+            ++myIndexName;
+         }
+         else if (HeaderName == myHeaderNames[2])
+         {
+            ++myIndexName;
+         }
+         else if (HeaderName == myHeaderNames[3])
          {
             if (false == Cleanup(ref gi))
             {
@@ -451,6 +487,229 @@ namespace Pattons_Best.UnitTests
          Canvas.SetTop(imageMap, 0);
          //--------------------------------------------------
          Application.Current.Shutdown();
+         return true;
+      }
+      //--------------------------------------------------------------------
+      private bool IsEqual(IGameInstance? left, IGameInstance? right)
+      {
+         if( null == left )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left=null");
+            return false;
+         }
+         if (null == right )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): right=null");
+            return false;
+         }
+         if(left.EventActive != right.EventActive )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.EventActive != right.EventActive");
+            return false;
+         }
+         if(left.EventDisplayed != right.EventDisplayed )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.EventDisplayed != right.EventDisplayed");
+            return false;
+         }
+         if( left.Day != right.Day )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Day != right.Day");
+            return false;
+         }
+         if (left.GameTurn != right.GameTurn )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.GameTurn != right.GameTurn");
+            return false;
+         }
+         if (left.GamePhase != right.GamePhase )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.GamePhase != right.GamePhase");
+            return false;
+         }
+         if(left.EndGameReason != right.EndGameReason )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.EndGameReason != right.EndGameReason");
+            return false;
+         }
+         if ( left.Reports.Count != right.Reports.Count )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Reports.Count != right.Reports.Count");
+            return false;
+         }
+         if(left.BattlePhase != right.BattlePhase )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.BattlePhase != right.BattlePhase");
+            return false;
+         }
+         if (left.CrewActionPhase != right.CrewActionPhase )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.CrewActionPhase != right.CrewActionPhase");
+            return false;
+         }  
+         if(left.MovementEffectOnSherman != right.MovementEffectOnSherman)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.MovementEffectOnSherman != right.MovementEffectOnSherman");
+            return false;
+         }
+         if( left.MovementEffectOnEnemy != right.MovementEffectOnEnemy )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.MovementEffectOnEnemy != right.MovementEffectOnEnemy");
+            return false;
+         }
+         if( left.FiredAmmoType != right.FiredAmmoType )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.FiredAmmoType != right.FiredAmmoType");
+            return false;
+         }
+         if( left.ReadyRacks.Count != right.ReadyRacks.Count )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.ReadyRacks.Count != right.ReadyRacks.Count");
+            return false;
+         }
+         if( left.Hatches.Count != right.Hatches.Count )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Hatches.Count != right.Hatches.Count");
+            return false;
+         }  
+         if( left.CrewActions.Count != right.CrewActions.Count )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.CrewActions.Count != right.CrewActions.Count");
+            return false;
+         }
+         if(left.Targets.Count != right.Targets.Count )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Targets.Count != right.Targets.Count");
+            return false;
+         }
+         if( left.AdvancingEnemies.Count != right.AdvancingEnemies.Count )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.AdvancingEnemies.Count != right.AdvancingEnemies.Count");
+            return false;
+         }
+         if(left.ShermanAdvanceOrRetreatEnemies.Count != right.ShermanAdvanceOrRetreatEnemies.Count )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.ShermanAdvanceOrRetreatEnemies.Count != right.ShermanAdvanceOrRetreatEnemies.Count");
+            return false;
+         }
+         if(left.NewMembers.Count != right.NewMembers.Count )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.NewMembers.Count != right.NewMembers.Count");
+            return false;
+         }
+         if(left.InjuredCrewMembers.Count != right.InjuredCrewMembers.Count )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.InjuredCrewMembers.Count != right.InjuredCrewMembers.Count");
+            return false;
+         }
+         //------------------------------------------------------------
+         if (false == IsEqual(left.Sherman, right.Sherman))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Sherman != right.Sherman");
+            return false;
+         }
+         //------------------------------------------------------------
+         if ( null == left.TargetMainGun && null != right.TargetMainGun)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.TargetMainGun=null");
+            return false;
+         }
+         if (null != left.TargetMainGun && null == right.TargetMainGun)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): right.TargetMainGun=null");
+            return false;
+         }
+         if( null != left.TargetMainGun && null != right.TargetMainGun)
+         {
+            if (left.TargetMainGun.Name != right.TargetMainGun.Name)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.TargetMainGun.Name != right.TargetMainGun.Name");
+               return false;
+            }
+         }
+         //------------------------------------------------------------
+         if (null == left.TargetMg && null != right.TargetMg)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.TargetMg=null");
+            return false;
+         }
+         if (null != left.TargetMg && null == right.TargetMg)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): right.TargetMg=null");
+            return false;
+         }
+         if (null != left.TargetMg && null != right.TargetMg)
+         {
+            if (left.TargetMg.Name != right.TargetMg.Name)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.TargetMg.Name != right.TargetMg.Name");
+               return false;
+            }
+         }
+         //------------------------------------------------------------
+         if (null == left.ShermanHvss && null != right.ShermanHvss)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.ShermanHvss=null");
+            return false;
+         }
+         if (null != left.ShermanHvss && null == right.ShermanHvss)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): right.ShermanHvss=null");
+            return false;
+         }
+         if (null != left.ShermanHvss && null != right.ShermanHvss)
+         {
+            if (left.ShermanHvss.Name != right.ShermanHvss.Name)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.ShermanHvss.Name != right.ShermanHvss.Name");
+               return false;
+            }
+         }
+         //------------------------------------------------------------
+         if (null == left.ReturningCrewman && null != right.ReturningCrewman)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.ReturningCrewman=null");
+            return false;
+         }
+         if (null != left.ReturningCrewman && null == right.ReturningCrewman)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): right.ReturningCrewman=null");
+            return false;
+         }
+         if (null != left.ReturningCrewman && null != right.ReturningCrewman)
+         {
+            if (left.ReturningCrewman.Name != right.ReturningCrewman.Name)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.ReturningCrewman.Name != right.ReturningCrewman.Name");
+               return false;
+            }
+         }
+         //------------------------------------------------------------
+         if (left.CounterattachRetreats.Count != right.CounterattachRetreats.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.CounterattachRetreats.Count != right.CounterattachRetreats.Count");
+            return false;
+         }
+
+         return true;
+      }
+      private bool IsEqual(IMapItem? left, IMapItem? right)
+      {
+         if (null == left)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left=null");
+            return false;
+         }
+         if (null == right)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): right=null");
+            return false;
+         }
+         if( left.Name != right.Name )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Name != right.Name");
+            return false;
+         }
          return true;
       }
    }

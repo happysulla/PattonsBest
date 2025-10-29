@@ -770,7 +770,12 @@ namespace Pattons_Best
          myList = new ArrayList();
          foreach (IMapItem item in mapItems) { Add(item); }
       }
-      public void Add(IMapItem? mi) { myList.Add(mi); }
+      public void Add(IMapItem mi) 
+      {
+         IMapItem? mi1 = Find(mi.Name); // do not add duplicates
+         if( null == mi1 )
+            myList.Add(mi); 
+      }
       public void Insert(int index, IMapItem mi) { myList.Insert(index, mi); }
       public int Count { get { return myList.Count; } }
       public void Reverse() { myList.Reverse(); }
@@ -1041,7 +1046,12 @@ namespace Pattons_Best
          myList = new ArrayList();
          foreach (ICrewMember item in crewMembers) { Add(item); }
       }
-      public void Add(ICrewMember? cm) { myList.Add(cm); }
+      public void Add(ICrewMember cm) 
+      {
+         ICrewMember? cm1 = Find(cm.Name); // do not add duplicates
+         if (null == cm1)
+            myList.Add(cm);
+      }
       public void Insert(int index, ICrewMember cm) { myList.Insert(index, cm); }
       public int Count { get { return myList.Count; } }
       public void Reverse() { myList.Reverse(); }
