@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace Pattons_Best.UnitTests
 {
@@ -544,9 +545,9 @@ namespace Pattons_Best.UnitTests
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.EndGameReason != right.EndGameReason");
             return false;
          }
-         if ( left.Reports.Count != right.Reports.Count )
+         if (false == IsEqual(left.Reports, right.Reports))
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Reports.Count != right.Reports.Count");
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): IsEqual(Reports)");
             return false;
          }
          if(left.BattlePhase != right.BattlePhase )
@@ -1204,6 +1205,363 @@ namespace Pattons_Best.UnitTests
          }
          return true;
       }
+      private bool IsEqual(IAfterActionReports left, IAfterActionReports right)
+      {
+         if (left.Count != right.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Count != right.Count");
+            return false;
+         }
+         for (int i = 0; i < left.Count; ++i)
+         {
+            IAfterActionReport? lReport = left[i];
+            if( null == lReport )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lReport=null");
+               return false;
+            }
+            IAfterActionReport? rReport = right[i];
+            if( null == rReport )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): rReport=null");
+               return false;
+            }
+            if ( false == IsEqual(lReport, rReport))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lReport != rReport");
+               return false;
+            }
+         }
+         return true;
+      }
+      private bool IsEqual( IAfterActionReport left, IAfterActionReport right )
+      {
+         if (left.Day != right.Day)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Day != right.Day");
+            return false;
+         }
+         if (left.Scenario != right.Scenario)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Scenario != right.Scenario");
+            return false;
+         }
+         if (left.Probability != right.Probability)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Probability != right.Probability");
+            return false;
+         }
+         if (left.Resistance != right.Resistance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Resistance != right.Resistance");
+            return false;
+         }
+         if (left.Name != right.Name)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Name != right.Name");
+            return false;
+         }
+         if (left.TankCardNum != right.TankCardNum)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.TankCardNum != right.TankCardNum");
+            return false;
+         }
+         if (left.Weather != right.Weather)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Weather != right.Weather");
+            return false;
+         }
+         //------------------------------------
+         if (false == IsEqual(left.Commander, right.Commander))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lReport.Commander != rReport.Commander");
+            return false;
+         }
+         if (false == IsEqual(left.Gunner, right.Gunner))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lReport.Gunner != rReport.Gunner");
+            return false;
+         }
+         if (false == IsEqual(left.Loader, right.Loader))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lReport.Loader != rReport.Loader");
+            return false;
+         }
+         if (false == IsEqual(left.Driver, right.Driver))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lReport.Driver != rReport.Driver");
+            return false;
+         }
+         if (false == IsEqual(left.Assistant, right.Assistant))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lReport.Assistant != rReport.CommaAssistantnder");
+            return false;
+         }
+         //------------------------------------
+         if (left.SunriseHour != right.SunriseHour)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.SunriseHour != right.SunriseHour");
+            return false;
+         }
+         if (left.SunriseMin != right.SunriseMin)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.SunriseMin != right.SunriseMin");
+            return false;
+         }
+         if (left.SunsetHour != right.SunsetHour)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.SunsetHour != right.SunsetHour");
+            return false;
+         }
+         if (left.SunsetHour != right.SunsetMin)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.SunsetMin != right.SunsetMin");
+            return false;
+         }
+         //------------------------------------
+         if (left.Ammo30CalibreMG != right.Ammo30CalibreMG)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Ammo30CalibreMG != right.Ammo30CalibreMG");
+            return false;
+         }
+         if (left.Ammo50CalibreMG != right.Ammo50CalibreMG)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Ammo50CalibreMG != right.Ammo50CalibreMG");
+            return false;
+         }
+         if (left.AmmoSmokeBomb != right.AmmoSmokeBomb)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.AmmoSmokeBomb != right.AmmoSmokeBomb");
+            return false;
+         }
+         if (left.AmmoSmokeGrenade != right.AmmoSmokeGrenade)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.AmmoSmokeGrenade != right.AmmoSmokeGrenade");
+            return false;
+         }
+         if (left.AmmoPeriscope != right.AmmoPeriscope)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.AmmoPeriscope != right.AmmoPeriscope");
+            return false;
+         }
+         if (left.MainGunHE != right.MainGunHE)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.MainGunHE != right.MainGunHE");
+            return false;
+         }
+         if (left.MainGunAP != right.MainGunAP)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.MainGunAP != right.MainGunAP");
+            return false;
+         }
+         if (left.MainGunWP != right.MainGunWP)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.MainGunWP != right.MainGunWP");
+            return false;
+         }
+         if (left.MainGunHBCI != right.MainGunHBCI)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.MainGunHBCI != right.MainGunHBCI");
+            return false;
+         }
+         if (left.MainGunHVAP != right.MainGunHVAP)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.MainGunHVAP != right.MainGunHVAP");
+            return false;
+         }
+         //------------------------------------
+         if (left.VictoryPtsFriendlyKiaLightWeapon != right.VictoryPtsFriendlyKiaLightWeapon)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsFriendlyKiaLightWeapon != right.VictoryPtsFriendlyKiaLightWeapon");
+            return false;
+         }
+         if (left.VictoryPtsFriendlyKiaTruck != right.VictoryPtsFriendlyKiaTruck)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsFriendlyKiaTruck != right.VictoryPtsFriendlyKiaTruck");
+            return false;
+         }
+         if (left.VictoryPtsFriendlyKiaSpwOrPsw != right.VictoryPtsFriendlyKiaSpwOrPsw)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsFriendlyKiaSpwOrPsw != right.VictoryPtsFriendlyKiaSpwOrPsw");
+            return false;
+         }
+         if (left.VictoryPtsFriendlyKiaSPGun != right.VictoryPtsFriendlyKiaSPGun)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsFriendlyKiaSPGun != right.VictoryPtsFriendlyKiaSPGun");
+            return false;
+         }
+         if (left.VictoryPtsFriendlyKiaPzIV != right.VictoryPtsFriendlyKiaPzIV)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsFriendlyKiaPzIV != right.VictoryPtsFriendlyKiaPzIV");
+            return false;
+         }
+         if (left.VictoryPtsFriendlyKiaPzV != right.VictoryPtsFriendlyKiaPzV)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsFriendlyKiaPzV != right.VictoryPtsFriendlyKiaPzV");
+            return false;
+         }
+         if (left.VictoryPtsFriendlyKiaPzVI != right.VictoryPtsFriendlyKiaPzVI)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsFriendlyKiaPzVI != right.VictoryPtsFriendlyKiaPzVI");
+            return false;
+         }
+         if (left.VictoryPtsFriendlyKiaAtGun != right.VictoryPtsFriendlyKiaAtGun)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsFriendlyKiaAtGun != right.VictoryPtsFriendlyKiaAtGun");
+            return false;
+         }
+         if (left.VictoryPtsFriendlyKiaFortifiedPosition != right.VictoryPtsFriendlyKiaFortifiedPosition)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsFriendlyKiaFortifiedPosition != right.VictoryPtsFriendlyKiaFortifiedPosition");
+            return false;
+         }
+         //------------------------------------
+         if (left.VictoryPtsYourKiaLightWeapon != right.VictoryPtsYourKiaLightWeapon)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsYourKiaLightWeapon != right.VictoryPtsYourKiaLightWeapon");
+            return false;
+         }
+         if (left.VictoryPtsYourKiaTruck != right.VictoryPtsYourKiaTruck)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsYourKiaTruck != right.VictoryPtsYourKiaTruck");
+            return false;
+         }
+         if (left.VictoryPtsYourKiaSpwOrPsw != right.VictoryPtsYourKiaSpwOrPsw)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsYourKiaSpwOrPsw != right.VictoryPtsYourKiaSpwOrPsw");
+            return false;
+         }
+         if (left.VictoryPtsYourKiaSPGun != right.VictoryPtsYourKiaSPGun)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsYourKiaSPGun != right.VictoryPtsYourKiaSPGun");
+            return false;
+         }
+         if (left.VictoryPtsYourKiaPzIV != right.VictoryPtsYourKiaPzIV)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsYourKiaPzIV != right.VictoryPtsYourKiaPzIV");
+            return false;
+         }
+         if (left.VictoryPtsYourKiaPzV != right.VictoryPtsYourKiaPzV)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsYourKiaPzV != right.VictoryPtsYourKiaPzV");
+            return false;
+         }
+         if (left.VictoryPtsYourKiaPzVI != right.VictoryPtsYourKiaPzVI)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsYourKiaPzVI != right.VictoryPtsYourKiaPzVI");
+            return false;
+         }
+         if (left.VictoryPtsYourKiaAtGun != right.VictoryPtsYourKiaAtGun)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsYourKiaAtGun != right.VictoryPtsYourKiaAtGun");
+            return false;
+         }
+         if (left.VictoryPtsYourKiaFortifiedPosition != right.VictoryPtsYourKiaFortifiedPosition)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsYourKiaFortifiedPosition != right.VictoryPtsYourKiaFortifiedPosition");
+            return false;
+         }
+         //------------------------------------
+         if (left.VictoryPtsCaptureArea != right.VictoryPtsCaptureArea)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsCaptureArea != right.VictoryPtsCaptureArea");
+            return false;
+         }
+         if (left.VictoryPtsCapturedExitArea != right.VictoryPtsCapturedExitArea)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsCapturedExitArea != right.VictoryPtsCapturedExitArea");
+            return false;
+         }
+         if (left.VictoryPtsLostArea != right.VictoryPtsLostArea)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsLostArea != right.VictoryPtsLostArea");
+            return false;
+         }
+         if (left.VictoryPtsFriendlyTank != right.VictoryPtsFriendlyTank)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsFriendlyTank != right.VictoryPtsFriendlyTank");
+            return false;
+         }
+         if (left.VictoryPtsFriendlySquad != right.VictoryPtsFriendlySquad)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsFriendlySquad != right.VictoryPtsFriendlySquad");
+            return false;
+         }
+         //------------------------------------
+         if (left.VictoryPtsTotalYourTank != right.VictoryPtsTotalYourTank)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsTotalYourTank != right.VictoryPtsTotalYourTank");
+            return false;
+         }
+         if (left.VictoryPtsTotalFriendlyForces != right.VictoryPtsTotalFriendlyForces)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsTotalFriendlyForces != right.VictoryPtsTotalFriendlyForces");
+            return false;
+         }
+         if (left.VictoryPtsTotalTerritory != right.VictoryPtsTotalTerritory)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsTotalTerritory != right.VictoryPtsTotalTerritory");
+            return false;
+         }
+         if (left.VictoryPtsTotalEngagement != right.VictoryPtsTotalEngagement)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.VictoryPtsTotalEngagement != right.VictoryPtsTotalEngagement");
+            return false;
+         }
+         //------------------------------------
+         if (left.Decorations.Count != right.Decorations.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Decorations.Count != right.Decorations.Count");
+            return false;
+         }
+         for( int i=0; i<left.Decorations.Count; ++i )
+         {
+            EnumDecoration lDecoration = left.Decorations[i];
+            EnumDecoration rDecoration = right.Decorations[i];
+            if (lDecoration != rDecoration)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lDecoration != rDecoration");
+               return false;
+            }
+         }
+         if (left.Notes.Count != right.Notes.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Notes.Count != right.Notes.Count");
+            return false;
+         }
+         for (int i = 0; i < left.Notes.Count; ++i)
+         {
+            string? lNote = left.Notes[i];
+            string? rNote = right.Notes[i];
+            if( null == lNote || null == rNote )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lNote or rNoe = null");
+               return false;
+            }
+            if (lNote != rNote)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lNote != rNote");
+               return false;
+            }
+         }
+         //------------------------------------
+         if (left.DayEndedTime != right.DayEndedTime)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.DayEndedTime != right.DayEndedTime");
+            return false;
+         }
+         if (left.Breakdown != right.Breakdown)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.Breakdown != right.Breakdown");
+            return false;
+         }
+         if (left.KnockedOut != right.KnockedOut)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.KnockedOut != right.KnockedOut");
+            return false;
+         }
+         return true;
+      }
       private bool IsEqual(IMapItems left, IMapItems right)
       {
          if (left.Count != right.Count)
@@ -1702,6 +2060,51 @@ namespace Pattons_Best.UnitTests
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(List<EnteredHex>): left.Count != right.Count");
             return false;
+         }
+         for (int i = 0; i < left.Count; ++i)
+         {
+            EnteredHex lHex = left[i];
+            EnteredHex rHex = right[i];
+            if (lHex.Identifer != rHex.Identifer)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lHex.Identifer != right.Identifer");
+               return false;
+            }
+            if (lHex.Day != rHex.Day)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lHex.Day != right.Day");
+               return false;
+            }
+            if (lHex.Date != rHex.Date)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lHex.Date != right.Date");
+               return false;
+            }
+            if (lHex.Time != rHex.Time)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lHex.Time != right.Time");
+               return false;
+            }
+            if (lHex.TerritoryName != rHex.TerritoryName)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lHex.TerritoryName != right.TerritoryName");
+               return false;
+            }
+            if (lHex.MapPoint.X != rHex.MapPoint.X)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lHex.MapPoint.x != right.MapPoint.X");
+               return false;
+            }
+            if (lHex.MapPoint.Y != rHex.MapPoint.Y)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lHex.MapPoint.Y != right.MapPoint.Y");
+               return false;
+            }
+            if (lHex.ColorAction != rHex.ColorAction)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lHex.ColorAction != right.ColorAction");
+               return false;
+            }
          }
          return true;
       }
