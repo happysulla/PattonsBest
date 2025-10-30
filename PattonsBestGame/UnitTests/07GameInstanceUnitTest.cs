@@ -501,6 +501,65 @@ namespace Pattons_Best.UnitTests
          myGameInstanceSave.IsEnemyAdvanceComplete = true;
          myGameInstanceSave.Panzerfaust = new PanzerfaustAttack(enemy);
          myGameInstanceSave.NumCollateralDamage = 777;
+         //----------------------------------------------
+         ITerritory? tstack = Territories.theTerritories.Find("B6M");
+         if (null == tstack)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Command(): t=null for B6M");
+            return false;
+         }
+         myGameInstanceSave.BattleStacks.Add(new MapItem("WeatherClear", 1.0, "c20Clear", tstack));
+         myGameInstanceSave.BattleStacks.Add(new MapItem("WeatherOvercast", 1.0, "c21Overcast", tstack));
+         tstack = Territories.theTerritories.Find("B9M");
+         if (null == tstack)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Command(): t=null ro B9M");
+            return false;
+         }
+         //----------------------------------------------
+         string nameEnemy = "Enemy" + Utilities.MapItemNum;
+         ++Utilities.MapItemNum;
+         myGameInstanceSave.BattleStacks.Add(new MapItem(nameEnemy, 1.0, "c77UnidentifiedSpg", tstack));
+         nameEnemy = "Enemy" + Utilities.MapItemNum;
+         ++Utilities.MapItemNum;
+         myGameInstanceSave.BattleStacks.Add(new MapItem(nameEnemy, 1.0, "c78UnidentifiedTank", tstack));
+         nameEnemy = "Enemy" + Utilities.MapItemNum;
+         ++Utilities.MapItemNum;
+         myGameInstanceSave.BattleStacks.Add(new MapItem(nameEnemy, 1.0, "c77UnidentifiedSpg", tstack));
+         tstack = Territories.theTerritories.Find("B3M");
+         if (null == tstack)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Command(): t=null ro B3M");
+            return false;
+         }
+         //----------------------------------------------
+         nameEnemy = "Enemy" + Utilities.MapItemNum;
+         ++Utilities.MapItemNum;
+         myGameInstanceSave.BattleStacks.Add(new MapItem(nameEnemy, 1.0, "c78UnidentifiedTank", tstack));
+         nameEnemy = "Enemy" + Utilities.MapItemNum;
+         ++Utilities.MapItemNum;
+         myGameInstanceSave.BattleStacks.Add(new MapItem(nameEnemy, 1.0, "c77UnidentifiedSpg", tstack));
+         //----------------------------------------------
+         tstack = Territories.theTerritories.Find("M007");
+         if (null == tstack)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Command(): t=null ro M007");
+            return false;
+         }
+         string name = "MARDERII" + Utilities.MapItemNum.ToString();
+         Utilities.MapItemNum++;
+         myGameInstanceSave.MoveStacks.Add(new MapItem(name, mi.Zoom, "c83MarderII", tstack));
+         tstack = Territories.theTerritories.Find("M008");
+         if (null == tstack)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Command(): t=null ro M008");
+            return false;
+         }
+         name = "MARDERII" + Utilities.MapItemNum.ToString();
+         Utilities.MapItemNum++;
+         myGameInstanceSave.MoveStacks.Add(new MapItem(name, mi.Zoom, "c83MarderII", tstack));
+         //----------------------------------------------
+
          return true;
       }
       private bool IsEqual(IGameInstance? left, IGameInstance? right)
@@ -1234,7 +1293,7 @@ namespace Pattons_Best.UnitTests
          }
          return true;
       }
-      private bool IsEqual( IAfterActionReport left, IAfterActionReport right )
+      private bool IsEqual(IAfterActionReport left, IAfterActionReport right)
       {
          if (left.Day != right.Day)
          {
