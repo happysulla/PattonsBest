@@ -1646,11 +1646,13 @@ namespace Pattons_Best
                return null;
             }
             //----------------------------------------------
-            if (false == ReadXmlShermanDeath(reader, gi.Death))
+            ShermanDeath? death = null;
+            if (false == ReadXmlShermanDeath(reader, ref death))
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlShermanDeath() returned false");
                return null;
             }
+            gi.Death = death;
             //----------------------------------------------
             reader.Read();
             if (false == reader.IsStartElement())
@@ -2380,11 +2382,13 @@ namespace Pattons_Best
             }
             gi.IsEnemyAdvanceComplete = Convert.ToBoolean(sIsEnemyAdvanceComplete);
             //----------------------------------------------
-            if( false == ReadXmlPanzerfaultAttack(reader, gi.Panzerfaust))
+            PanzerfaustAttack? panzerfaustAttack = null;
+            if ( false == ReadXmlPanzerfaultAttack(reader, ref panzerfaustAttack))
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlPanzerfaultAttack() failed");
                return null;
             }
+            gi.Panzerfaust = panzerfaustAttack;
             //----------------------------------------------
             reader.Read();
             if (false == reader.IsStartElement())
@@ -4762,6 +4766,12 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItems(): ReadXmlMapItem() returned false");
                return false;
             }
+            if (null == mapItem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMembers(): mapItem=null");
+               return false;
+            }
+            mapItems.Add(mapItem);
          }
          if (0 < count)
             reader.Read(); 
@@ -4842,6 +4852,12 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMembers(): ReadXmlCrewMember() returned false");
                return false;
             }
+            if( null == crewMember )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMembers(): crewMember=null");
+               return false;
+            }
+            crewMembers.Add(crewMember);
          }
          if (0 < count)
             reader.Read();
@@ -4944,25 +4960,6 @@ namespace Pattons_Best
             return false;
          }
          member.IsButtonedUp = Convert.ToBoolean(sIsButtonedUp);
-         //----------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement(Sector) = false");
-            return false;
-         }
-         if (reader.Name != "Sector")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): Sector != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sSector = reader.GetAttribute("value");
-         if (null == sSector)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): Sector=null");
-            return false;
-         }
-         member.Sector = Convert.ToInt32(sSector);
          //----------------------------------------------
          reader.Read();
          if (false == reader.IsStartElement())
@@ -5255,7 +5252,7 @@ namespace Pattons_Best
             reader.Read(); // get past </ShermanHits> tag
          return true;
       }
-      private bool ReadXmlShermanDeath(XmlReader reader, ShermanDeath? death)
+      private bool ReadXmlShermanDeath(XmlReader reader, ref ShermanDeath? death)
       {
          reader.Read();
          if (false == reader.IsStartElement())
@@ -5449,7 +5446,7 @@ namespace Pattons_Best
          reader.Read(); // get past </ShermanDeath> tag
          return true;
       }
-      private bool ReadXmlPanzerfaultAttack(XmlReader reader, PanzerfaustAttack? attack)
+      private bool ReadXmlPanzerfaultAttack(XmlReader reader, ref PanzerfaustAttack? attack)
       {
          reader.Read();
          if (false == reader.IsStartElement())
@@ -8995,20 +8992,6 @@ namespace Pattons_Best
          if (null == node)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsButtonedUp) returned null");
-            return false;
-         }
-         //--------------------------------
-         elem = aXmlDocument.CreateElement("Sector");
-         if (null == elem)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(Sector) returned null");
-            return false;
-         }
-         elem.SetAttribute("value", cm.Sector.ToString());
-         node = cmNode.AppendChild(elem);
-         if (null == node)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(Sector) returned null");
             return false;
          }
          //--------------------------------
