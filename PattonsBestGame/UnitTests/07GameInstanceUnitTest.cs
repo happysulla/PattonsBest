@@ -116,6 +116,7 @@ namespace Pattons_Best.UnitTests
                Logger.Log(LogEnum.LE_ERROR, "Command(): myGameInstanceSave=null");
                return false;
             }
+            ++myIndexName;
             //----------------------------------------------
             GameLoadMgr loadMgr = new GameLoadMgr();
             if (false == loadMgr.SaveGameAsToFile(myGameInstanceSave))
@@ -133,6 +134,7 @@ namespace Pattons_Best.UnitTests
                Logger.Log(LogEnum.LE_ERROR, "Command(): GameLoadMgr.OpenGameFromFile() returned null");
                return false;
             }
+            ++myIndexName;
          }
          else if (CommandName == myCommandNames[2])
          {
@@ -503,13 +505,13 @@ namespace Pattons_Best.UnitTests
          myGameInstanceSave.Panzerfaust = new PanzerfaustAttack(enemy);
          myGameInstanceSave.NumCollateralDamage = 777;
          //----------------------------------------------
-         ITerritory? tOld = Territories.theTerritories.Find("B3M");
+         ITerritory? tOld = Territories.theTerritories.Find("M010");
          if (null == tOld)
          {
             Logger.Log(LogEnum.LE_ERROR, "Command(): tOld=null for B3M");
             return false;
          }
-         ITerritory? tNew = Territories.theTerritories.Find("B4M");
+         ITerritory? tNew = Territories.theTerritories.Find("M012");
          if( null == tNew)
          {
             Logger.Log(LogEnum.LE_ERROR, "Command(): t=null for B6M");
@@ -1751,14 +1753,14 @@ namespace Pattons_Best.UnitTests
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): left.Count != right.Count");
             return false;
          }
-         if (left.Location.X != right.Location.X)
+         if (Math.Round(left.Location.X, 2) != Math.Round(right.Location.X, 2))
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): left.Location.X != right.Location.X");
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): (left.Location.X=" + left.Location.X.ToString("F2") + ") != (right.Location.X=" + right.Location.X.ToString("F2") + ")");
             return false;
          }
-         if (left.Location.Y != right.Location.Y)
+         if (Math.Round(left.Location.Y,  2) != Math.Round(right.Location.Y, 2))
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): left.Location.Y != right.Location.Y");
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): (left.Location.Y=" + left.Location.Y.ToString("F2") + ") != (right.Location.Y=" + right.Location.Y.ToString("F2") + ")");
             return false;
          }
          if (left.RotationOffsetHull != right.RotationOffsetHull)
@@ -1834,6 +1836,24 @@ namespace Pattons_Best.UnitTests
             return false;
          }
          //-------------------------------------------------
+         if (left.EnemyAcquiredShots.Count != right.EnemyAcquiredShots.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): left.EnemyAcquiredShots.Count != right.EnemyAcquiredShots.Count");
+            return false;
+         }
+         foreach(var kvp in left.EnemyAcquiredShots)
+         {
+            if( false == right.EnemyAcquiredShots.ContainsKey(kvp.Key))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): right.EnemyAcquiredShots.ContainsKey(kvp.Key) does not contain key=" + kvp.Key);
+               return false;
+            }
+            if (kvp.Value != right.EnemyAcquiredShots[kvp.Key])
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItem): kvp.Value != right.EnemyAcquiredShots[kvp.Key] for key=" + kvp.Key);
+               return false;
+            }
+         }
          //-------------------------------------------------
          if (left.IsVehicle != right.IsVehicle)
          {
@@ -2201,12 +2221,12 @@ namespace Pattons_Best.UnitTests
             }
             if (mimLeft.BestPath.Name != mimRight.BestPath.Name)
             {
-               Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItemMoves): left.Count != right.Count");
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(BestPath): (mimLeft.BestPath.Name=" + mimLeft.BestPath.Name + ") != (mimRight.BestPath.Name=" + mimRight.BestPath.Name  + ")");
                return false;
             }
-            if (mimLeft.BestPath.Metric != mimRight.BestPath.Metric)
+            if (Math.Round(mimLeft.BestPath.Metric,2) != Math.Round(mimRight.BestPath.Metric, 2))
             {
-               Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItemMoves): left.Count != right.Count");
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItemMoves): Math.Round(mimLeft.BestPath.Metric,2) != Math.Round(mimRight.BestPath.Metric, 2)");
                return false;
             }
             if (mimLeft.BestPath.Territories.Count != mimRight.BestPath.Territories.Count)

@@ -900,8 +900,7 @@ namespace Pattons_Best
          }
          else
          {
-            // Setup a path map for each adjacent territory
-            foreach (string adjTerritory in startT.Adjacents)
+            foreach (string adjTerritory in startT.Adjacents) // Setup a path map for each adjacent territory
             {
                IMapPath path = new MapPath(adjTerritory);
                ITerritory? adj = territories.Find(adjTerritory);
@@ -914,8 +913,7 @@ namespace Pattons_Best
                path.Metric = GetDistance(adj, endT);
                paths.Add(path);
                adjPaths.Add(path);
-               // If the adjacent territory is the end territory, no need to continue.  It is the best path.
-               if (adjTerritory == endT.Name)
+               if (adjTerritory == endT.Name)  // If the adjacent territory is the end territory, no need to continue.  It is the best path.
                {
                   Logger.Log(LogEnum.LE_VIEW_MIM, "GetBestPath(): Adjacent Move moving from " + startT.Name + " to " + endT.Name);
                   return path;

@@ -5586,6 +5586,7 @@ namespace Pattons_Best
          int count = int.Parse(sCount);
          for( int i=0; i<count; ++i)
          {
+            IMapItemMove mim = new MapItemMove();
             reader.Read();
             if (false == reader.IsStartElement())
             {
@@ -5615,6 +5616,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): mi=null");
                return false;
             }
+            mim.MapItem = mi;
             //----------------------------------------------
             reader.Read();
             if (false == reader.IsStartElement())
@@ -5636,6 +5638,12 @@ namespace Pattons_Best
             if (null == sOldTerritory) 
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): sOldTerritory=null");
+               return false;
+            }
+            mim.OldTerritory = Territories.theTerritories.Find(sOldTerritory);
+            if( null == mim.OldTerritory)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): sOldTerritory=null for name=" + sOldTerritory);
                return false;
             }
             //----------------------------------------------
@@ -5661,20 +5669,34 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): sNewTerritory=null");
                return false;
             }
+            mim.NewTerritory = Territories.theTerritories.Find(sNewTerritory);
+            if (null == mim.NewTerritory)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): sOldTerritory=null for name=" + sNewTerritory);
+               return false;
+            }
             //----------------------------------------------
             IMapPath? path = null; 
-            if( false == ReadXmlMapItemMoveBestPath(reader, path))
+            if( false == ReadXmlMapItemMoveBestPath(reader, ref path))
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): ReadXmlMapItemMoveBestPath() returned false");
                return false;
             }
+            if (null == path)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): ReadXmlMapItemMoveBestPath() returned path=null");
+               return false;
+            }
             reader.Read(); // get past </MapItemMove>
+            mim.BestPath = path;
+            //----------------------------------------------
+            mapItemMoves.Add(mim);
          }
          if ( 0 < count )
             reader.Read(); // get past </MapItemMoves>
          return true;
       }
-      private bool ReadXmlMapItemMoveBestPath(XmlReader reader, IMapPath? path)
+      private bool ReadXmlMapItemMoveBestPath(XmlReader reader, ref IMapPath? path)
       {
          reader.Read();
          if (false == reader.IsStartElement())
@@ -9683,7 +9705,7 @@ namespace Pattons_Best
             return true;
          }
          bestPathElem.SetAttribute("name", bestPath.Name);
-         bestPathElem.SetAttribute("metric", bestPath.Metric.ToString());
+         bestPathElem.SetAttribute("metric", bestPath.Metric.ToString("F2"));
          bestPathElem.SetAttribute("count", bestPath.Territories.Count.ToString());
          for (int i = 0; i < bestPath.Territories.Count; ++i)
          {
