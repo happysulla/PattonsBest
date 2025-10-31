@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 using System.Xml.Linq;
 
@@ -502,6 +503,32 @@ namespace Pattons_Best.UnitTests
          myGameInstanceSave.Panzerfaust = new PanzerfaustAttack(enemy);
          myGameInstanceSave.NumCollateralDamage = 777;
          //----------------------------------------------
+         ITerritory? tOld = Territories.theTerritories.Find("B3M");
+         if (null == tOld)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Command(): tOld=null for B3M");
+            return false;
+         }
+         ITerritory? tNew = Territories.theTerritories.Find("B4M");
+         if( null == tNew)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Command(): t=null for B6M");
+            return false;
+         }
+         MapItemMove mim = new MapItemMove();
+         mim.MapItem = new MapItem("c83MarderIITest0", 1.0, "c83MarderII", tOld);
+         mim.OldTerritory = tOld;
+         mim.NewTerritory = tNew;
+         mim.BestPath = Territory.GetBestPath(Territories.theTerritories, tOld, tNew, 10);
+         myGameInstanceSave.MapItemMoves.Add(mim);
+         //----------------------------------------------
+         mim = new MapItemMove();
+         mim.MapItem = new MapItem("c83MarderIITest1", 1.0, "c83MarderII", tNew);
+         mim.OldTerritory = tNew;
+         mim.NewTerritory = tOld;
+         mim.BestPath = Territory.GetBestPath(Territories.theTerritories, tNew, tOld, 10);
+         myGameInstanceSave.MapItemMoves.Add(mim);
+         //----------------------------------------------
          ITerritory? tstack = Territories.theTerritories.Find("B6M");
          if (null == tstack)
          {
@@ -559,7 +586,23 @@ namespace Pattons_Best.UnitTests
          Utilities.MapItemNum++;
          myGameInstanceSave.MoveStacks.Add(new MapItem(name, mi.Zoom, "c83MarderII", tstack));
          //----------------------------------------------
-
+         EnteredHex hex = new EnteredHex(new MapPoint(500, 500));
+         hex.Identifer = "hex55";
+         hex.Day = 6;
+         hex.Date = "07/10/1963";
+         hex.Time = "07:01";
+         hex.TerritoryName = "offboard";
+         hex.ColorAction = ColorActionEnum.CAE_STOP;
+         myGameInstanceSave.EnteredHexes.Add(hex);
+         //----------------------------------------------
+         hex = new EnteredHex(new MapPoint(501, 501));
+         hex.Identifer = "hex56";
+         hex.Day = 7;
+         hex.Date = "07/11/1963";
+         hex.Time = "07:02";
+         hex.TerritoryName = "offboard1";
+         hex.ColorAction = ColorActionEnum.CAE_RETREAT;
+         myGameInstanceSave.EnteredHexes.Add(hex);
          return true;
       }
       private bool IsEqual(IGameInstance? left, IGameInstance? right)
@@ -1372,9 +1415,9 @@ namespace Pattons_Best.UnitTests
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.SunsetHour != right.SunsetHour");
             return false;
          }
-         if (left.SunsetHour != right.SunsetMin)
+         if (left.SunsetMin != right.SunsetMin)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.SunsetMin != right.SunsetMin");
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): (left.SunsetMin=" + left.SunsetMin.ToString() + ") != (right.SunsetMin=" + right.SunsetMin.ToString() +")");
             return false;
          }
          //------------------------------------
@@ -1904,11 +1947,6 @@ namespace Pattons_Best.UnitTests
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(ICrewMember): left.IsButtonedUp != right.IsButtonedUp");
             return false;
          }
-         if (left.Action != right.Action)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(ICrewMember): left.Action != right.Action");
-            return false;
-         }
          if (left.Wound != right.Wound)
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(ICrewMember): left.Wound != right.Wound");
@@ -1987,7 +2025,7 @@ namespace Pattons_Best.UnitTests
             return false;
          }
          return true;
-      }
+      } //<<<<<<<<<<<<<<<<<<<
       private bool IsEqual( ShermanDeath? left, ShermanDeath? right )
       {
          if ( (null == left) && (null == right) )
@@ -2099,8 +2137,93 @@ namespace Pattons_Best.UnitTests
       {
          if (left.Count != right.Count)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItemMoves): left.Count != right.Count");
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItemMoves): (left.Count=" + left.Count.ToString() + ") != (right.Count=" + right.Count.ToString() + ")");
             return false;
+         }
+         for (int i = 0; i < left.Count; ++i)
+         {
+            IMapItemMove? mimLeft = left[i];
+            IMapItemMove? mimRight = right[i];
+            if (null == mimLeft || null == mimRight)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(IStacks): mimLeft=null or mimRight=null");
+               return false;
+            }
+            //----------------------------------------
+            if (false == IsEqual(mimLeft.MapItem, mimRight.MapItem))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(IStacks): IsEqual(mimLeft.MapItem, mimRight.MapItem) returned false");
+               return false;
+            }
+            //----------------------------------------
+            if (null == mimLeft.OldTerritory && null != mimRight.OldTerritory)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.OldTerritory=null");
+               return false;
+            }
+            if (null != mimLeft.OldTerritory && null == mimRight.OldTerritory)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): right.OldTerritory=null");
+               return false;
+            }
+            if (null != mimLeft.OldTerritory && null != mimRight.OldTerritory)
+            {
+               if (mimLeft.OldTerritory != mimRight.OldTerritory)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "IsEqual(): mimLeft.OldTerritory != mimRight.OldTerritory");
+                  return false;
+               }
+            }
+            //----------------------------------------
+            if (null == mimLeft.NewTerritory && null != mimRight.NewTerritory)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.NewTerritory=null");
+               return false;
+            }
+            if (null != mimLeft.NewTerritory && null == mimRight.NewTerritory)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): right.NewTerritory=null");
+               return false;
+            }
+            if (null != mimLeft.NewTerritory && null != mimRight.NewTerritory)
+            {
+               if (mimLeft.NewTerritory != mimRight.NewTerritory)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "IsEqual(): mimLeft.NewTerritory != mimRight.NewTerritory");
+                  return false;
+               }
+            }
+            //----------------------------------------
+            if (null == mimLeft.BestPath || null == mimRight.BestPath)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): mimLeft.BestPath=null or mimRight.BestPath=null");
+               return false;
+            }
+            if (mimLeft.BestPath.Name != mimRight.BestPath.Name)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItemMoves): left.Count != right.Count");
+               return false;
+            }
+            if (mimLeft.BestPath.Metric != mimRight.BestPath.Metric)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItemMoves): left.Count != right.Count");
+               return false;
+            }
+            if (mimLeft.BestPath.Territories.Count != mimRight.BestPath.Territories.Count)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItemMoves): mimLeft.BestPath.Territories.Count != mimRight.BestPath.Territories.Count");
+               return false;
+            }
+            for(int j=0; j < mimLeft.BestPath.Territories.Count; ++j)
+            {
+               ITerritory tLeft = mimLeft.BestPath.Territories[i];
+               ITerritory tRight = mimRight.BestPath.Territories[i];
+               if (tLeft.Name != tRight.Name)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "IsEqual(IMapItemMoves): tLeft.Name != tRight.Name");
+                  return false;
+               }
+            }
          }
          return true;
       }
@@ -2110,6 +2233,21 @@ namespace Pattons_Best.UnitTests
          {
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(IStacks): left.Count != right.Count");
             return false;
+         }
+         for (int i = 0; i < left.Count; ++i)
+         {
+            IStack? sLeft = left[i];
+            IStack? sRight = right[i];
+            if( null == sLeft || null == sRight )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(IStacks): sLeft=null or sRight=null");
+               return false;
+            }
+            if( false == IsEqual( sLeft.MapItems, sRight.MapItems ))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(IStacks): IsEqual( sLeft.MapItems, sRight.MapItems ) returned false");
+               return false;
+            }
          }
          return true;
       }
@@ -2136,7 +2274,7 @@ namespace Pattons_Best.UnitTests
             }
             if (lHex.Date != rHex.Date)
             {
-               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lHex.Date != right.Date");
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): (lHex.Date=+" + lHex.Date + ") != (rHex.Date=" + rHex.Date + ")");
                return false;
             }
             if (lHex.Time != rHex.Time)

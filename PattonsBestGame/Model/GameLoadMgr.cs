@@ -4964,25 +4964,6 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement(Action) = false");
-            return false;
-         }
-         if (reader.Name != "Action")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): Action != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sAction = reader.GetAttribute("value");
-         if (null == sAction)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): Action=null");
-            return false;
-         }
-         member.Action = sAction;
-         //----------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
             Logger.Log(LogEnum.LE_ERROR, "ReadXmlCrewMember(): reader.IsStartElement(Wound) = false");
             return false;
          }
@@ -5698,36 +5679,25 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): IsStartElement(BestPath) returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoveBestPath(): IsStartElement(BestPath) returned false");
             return false;
          }
          if (reader.Name != "BestPath")
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): BestPath != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sValue = reader.GetAttribute("value");
-         if (null == sValue)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): sValue=null");
-            return false;
-         }
-         if ("null" == sValue)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): count=*null*");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoveBestPath(): BestPath != (node=" + reader.Name + ")");
             return false;
          }
          string? sName = reader.GetAttribute("name");
          if (null == sName)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): sName=null");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoveBestPath(): sName=null");
             return false;
          }
          //------------------------------
          string? sMetric = reader.GetAttribute("metric");
          if (null == sMetric)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): sMetric=null");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoveBestPath(): sMetric=null");
             return false;
          }
          double metric = Convert.ToDouble(sMetric);
@@ -5735,7 +5705,7 @@ namespace Pattons_Best
          string? sCount = reader.GetAttribute("count");
          if (null == sCount)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): sCount=null");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoveBestPath(): sCount=null");
             return false;
          }
          int count = int.Parse(sCount);
@@ -5746,24 +5716,24 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): IsStartElement(Territory) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoveBestPath(): IsStartElement(Territory) returned false");
                return false;
             }
             if (reader.Name != "Territory")
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): MapItemMoves != (node=" + reader.Name + ")");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoveBestPath(): MapItemMoves != (node=" + reader.Name + ")");
                return false;
             }
             string? tName = reader.GetAttribute("name");
             if (null == tName)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): tName=null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoveBestPath(): tName=null");
                return false;
             }
             ITerritory? t = Territories.theTerritories.Find(tName);
             if( null == t )
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoves(): tName=null for tName=" + tName);
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemMoveBestPath(): tName=null for tName=" + tName);
                return false;
             }
             territories.Add(t);
@@ -6041,6 +6011,7 @@ namespace Pattons_Best
             EnteredHex hex = new EnteredHex(mp);
             hex.Identifer = sId;
             hex.Day = day;
+            hex.Date = date;
             hex.Time = time;
             hex.TerritoryName = territoryName;
             hex.ColorAction = colorAction;
@@ -8995,20 +8966,6 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------
-         elem = aXmlDocument.CreateElement("Action");
-         if (null == elem)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(Action) returned null");
-            return false;
-         }
-         elem.SetAttribute("value", cm.Action);
-         node = cmNode.AppendChild(elem);
-         if (null == node)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(Action) returned null");
-            return false;
-         }
-         //--------------------------------
          elem = aXmlDocument.CreateElement("Wound");
          if (null == elem)
          {
@@ -9698,7 +9655,7 @@ namespace Pattons_Best
                return false;
             }
             //--------------------------------------------
-            if (false == CreateXmlMapItemMovesBestPath(aXmlDocument, node, mim.BestPath))
+            if (false == CreateXmlMapItemMovesBestPath(aXmlDocument, mimNode, mim.BestPath))
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemMoves(): CreateXmlMapItemMoveBestPath() returned null");
                return false;

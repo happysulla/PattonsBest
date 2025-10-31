@@ -897,7 +897,6 @@ namespace Pattons_Best
       public string Rank { get; set; } = string.Empty;
       public int Rating { get; set; } = 0;
       public bool IsButtonedUp { get; set; } = true;
-      public string Action { get; set; } = "None";
       public string Wound { get; set; } = "None";
       public int WoundDaysUntilReturn { get; set; } = 0;
       //-------------------------------------------------
@@ -915,7 +914,6 @@ namespace Pattons_Best
          ICrewMember cm = new CrewMember(this.Role, this.Rank, this.TopImageName);
          cm.Rating = this.Rating;
          cm.IsButtonedUp = this.IsButtonedUp;
-         cm.Action = this.Action;
          cm.Wound = this.Wound;
          cm.IsUnconscious = this.IsUnconscious;
          cm.IsIncapacitated = this.IsIncapacitated;

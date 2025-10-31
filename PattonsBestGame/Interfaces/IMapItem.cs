@@ -83,7 +83,6 @@ namespace Pattons_Best
       string Rank { get; set; }
       int Rating { get; set; }
       bool IsButtonedUp { get; set; }
-      string Action { get; set; } // determine effects of collateral damage
       string Wound { get; set; }
       int WoundDaysUntilReturn { get; set; }
       ICrewMember Clone();
