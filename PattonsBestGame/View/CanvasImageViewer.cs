@@ -76,6 +76,56 @@ namespace Pattons_Best
                break;
             case GameAction.UpdateNewGame:
             case GameAction.UpdateLoadingGame:
+               if (null != myTargetCursor)
+                  myTargetCursor.Dispose();
+               myTargetCursor = null;
+               this.myCanvas.Cursor = System.Windows.Input.Cursors.Arrow; // get rid of the canvas cursor
+               //-----------------------------------------
+               IGameCommand? cmd = gi.GameCommands.GetLast();
+               if (null == cmd)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "LoadGame(): cmd=null");
+                  return;
+               }
+               CanvasImageViewer.theMainImage = cmd.MainImage;
+               switch(cmd.MainImage)
+               {
+                  case EnumMainImage.MI_Battle: ShowBattleMap(myCanvas); break;
+                  case EnumMainImage.MI_Move: ShowMovementMap(myCanvas); break;
+                  case EnumMainImage.MI_Other:
+                     switch(cmd.Action)
+                     {
+                        case GameAction.SetupShowMapHistorical:
+                           ShowHistoricalMap(myCanvas);
+                           break;
+                        case GameAction.UpdateTankExplosion:
+                           ShowTankExploding(gi, myCanvas);
+                           break;
+                        case GameAction.UpdateTankBrewUp:
+                           ShowTankBrewUp(gi, myCanvas);
+                           break;
+                        case GameAction.SetupShowCombatCalendarCheck:
+                           theMainImage = EnumMainImage.MI_Other;
+                           ShowCombatCalendarDialog(myCanvas);
+                           break;
+                        case GameAction.EndGameWin:
+                           theMainImage = EnumMainImage.MI_Other;
+                           ShowEndGameSuccess(myCanvas);
+                           break;
+                        case GameAction.EndGameLost:
+                           theMainImage = EnumMainImage.MI_Other;
+                           ShowEndGameFail(myCanvas);
+                           break;
+                        default:
+                           if (false == ShowAfterActionReportDialog(gi, myCanvas, true))
+                              Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowAfterActionReportDialog() returned false for a=" + action.ToString());
+                           break;
+                     }
+                     break;
+
+                  default: Logger.Log(LogEnum.LE_ERROR, "UpdateView(): reached default cmd.MainImage=" + cmd.MainImage.ToString()); return;
+               }
+               break;
             case GameAction.UpdateUndo:
                if (null != myTargetCursor)
                   myTargetCursor.Dispose();

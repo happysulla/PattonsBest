@@ -222,9 +222,9 @@ namespace Pattons_Best.UnitTests
       private bool SaveGame()
       {
          myGameInstanceSave = new GameInstance();
-         myGameInstanceSave.GameCommands.Add(new GameCommand(GameAction.EveningDebriefingRatingImprovement, GameAction.MorningBriefingWeatherRoll, "e003"));
-         myGameInstanceSave.GameCommands.Add(new GameCommand(GameAction.MorningBriefingTimeCheckRoll, GameAction.MorningBriefingWeatherRoll, "e004"));
-         myGameInstanceSave.GameCommands.Add(new GameCommand(GameAction.MorningBriefingTrainCrew, GameAction.DieRollActionNone, "e005"));
+         myGameInstanceSave.GameCommands.Add(new GameCommand(GamePhase.EndGame, GameAction.MorningBriefingWeatherRoll, "e003", GameAction.EveningDebriefingRatingImprovement, EnumMainImage.MI_Battle));
+         myGameInstanceSave.GameCommands.Add(new GameCommand(GamePhase.Movement, GameAction.MovementAdvanceFireAmmoUseRoll, "e004", GameAction.MorningBriefingTimeCheckRoll, EnumMainImage.MI_Move));
+         myGameInstanceSave.GameCommands.Add(new GameCommand(GamePhase.Preparations, GameAction.DieRollActionNone, "e005", GameAction.MorningBriefingTrainCrew, EnumMainImage.MI_Other));
          myGameInstanceSave.EventActive = "e001";
          myGameInstanceSave.EventDisplayed = "e002";
          myGameInstanceSave.Day = 01;

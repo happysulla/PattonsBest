@@ -170,16 +170,6 @@ namespace Pattons_Best
          gi.GamePhase = GamePhase.GameSetup;
          myMainMenuViewer = new MainMenuViewer(myMainMenu, ge, gi);
          //---------------------------------------------------------------
-         ICombatCalendarEntry? entry = TableMgr.theCombatCalendarEntries[0];
-         if (null == entry)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): entry=null");
-            CtorError = true;
-            return;
-         }
-         IAfterActionReport report1 = new AfterActionReport(entry); // initial created GameViewerWindow()
-         gi.Reports.Add(report1);
-         //---------------------------------------------------------------
          if (false == AddHotKeys(myMainMenuViewer))
          {
             Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): AddHotKeys() returned false");

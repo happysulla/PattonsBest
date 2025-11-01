@@ -23,7 +23,7 @@ namespace Pattons_Best
    public class Options : IEnumerable
    {
       [NonSerialized]
-      public static string[] theDefaults = new string[0] // first 16 entries must be persons
+      public static string[] theDefaults = new string[0] 
       {
 
       };

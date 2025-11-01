@@ -165,6 +165,11 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myGameInstance=null");
             return;
          }
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myGameEngine=null");
+            return;
+         }
          if (null == myRulesMgr)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myRulesMgr=null");
@@ -177,7 +182,7 @@ namespace Pattons_Best
          }
          if (null == myDieRoller)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateView() myDieRoller=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myDieRoller=null");
             return;
          }
          gi.IsGridActive = true;
@@ -244,7 +249,22 @@ namespace Pattons_Best
                   return;
                }
                if (false == OpenEvent(gi, gi.EventActive))
+               {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): OpenEvent() returned false ae=" + myGameInstance.EventActive + " a=" + action.ToString());
+                  return;
+               }
+               //------------------------------------
+               IGameCommand? cmd = gi.GameCommands.GetLast();
+               if (null == cmd)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "LoadGame(): cmd=null");
+                  return;
+               }
+               GameAction outAction = cmd.Action;
+               gi.GamePhase = cmd.Phase;
+               gi.DieRollAction = cmd.ActionDieRoll;
+               gi.EventDisplayed = gi.EventActive = cmd.EventActive;
+               myGameEngine.PerformAction(ref gi, ref outAction, 0);
                break;
             case GameAction.ShowAfterActionReportDialog:
                if (null == myAfterActionDialog)
@@ -6085,7 +6105,7 @@ namespace Pattons_Best
                //action = GameAction.TestingStartPreparations;     // <cgs> TEST - skip morning briefing and crew/ammo setup
                //action = GameAction.TestingStartMovement;         // <cgs> TEST - start with movement - skip battle prep phase
                //action = GameAction.TestingStartBattle;           // <cgs> TEST - skip the movement portion - begin with battle setup
-               action = GameAction.TestingStartAmbush;           // <cgs> TEST - skip battle setup
+               //action = GameAction.TestingStartAmbush;           // <cgs> TEST - skip battle setup
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Cancel":
@@ -6106,7 +6126,7 @@ namespace Pattons_Best
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
             case "Read Rules":
-               if (false == ShowRule("r1.1"))
+               if (false == ShowRule("r1.0"))
                {
                   Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): ShowRule(r1.1) returned false");
                   return false;

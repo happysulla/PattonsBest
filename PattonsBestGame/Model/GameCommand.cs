@@ -5,15 +5,19 @@ namespace Pattons_Best
 {
    public class GameCommand : IGameCommand
    {
+      public GamePhase Phase { set; get; } = GamePhase.Error;
       public GameAction Action { set; get; } = GameAction.Error;
       public GameAction ActionDieRoll { set; get; } = GameAction.Error;
       public string EventActive { set; get; } = "";
+      public EnumMainImage MainImage { set; get; } = EnumMainImage.MI_Other;
       public GameCommand() { }
-      public GameCommand(GameAction action, GameAction drAction, string evt )
+      public GameCommand(GamePhase phase, GameAction drAction, string evt, GameAction action, EnumMainImage mainImage )
       {
+         Phase = phase;
          EventActive = evt;
          Action = action;
          ActionDieRoll = drAction;
+         MainImage = mainImage;
       }
    }
    public class GameCommands : IEnumerable, IGameCommands
@@ -27,6 +31,13 @@ namespace Pattons_Best
       public bool Contains(IGameCommand gc) { return myList.Contains(gc); }
       public IEnumerator GetEnumerator() { return myList.GetEnumerator(); }
       public int IndexOf(IGameCommand gc) { return myList.IndexOf(gc); }
+      public IGameCommand? GetLast()
+      {
+         if (0 == myList.Count)
+            return null;
+         IGameCommand? lastCmd = this[myList.Count - 1];
+         return lastCmd;
+      }
       public IGameCommand? RemoveAt(int index)
       {
          IGameCommand? gc = myList[index] as IGameCommand;
@@ -34,6 +45,13 @@ namespace Pattons_Best
             return null;
          myList.RemoveAt(index);
          return gc;
+      }
+      public IGameCommand? RemoveLast()
+      {
+         if (0 == myList.Count)
+            return null;
+         IGameCommand? lastCommand = RemoveAt(myList.Count - 1);
+         return lastCommand;
       }
       public IGameCommand? this[int index]
       {

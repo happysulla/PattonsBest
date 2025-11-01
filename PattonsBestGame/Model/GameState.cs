@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Xml.Linq;
 using Windows.ApplicationModel.Appointments.DataProvider;
+using static System.Windows.Forms.AxHost;
 
 namespace Pattons_Best
 {
@@ -41,8 +42,6 @@ namespace Pattons_Best
       }
       protected bool LoadGame(ref IGameInstance gi, ref GameAction action)
       {
-         gi.MoveStacks.Clear();
-         gi.BattleStacks.Clear();
          return true;
       }
       protected void UndoCommand(ref IGameInstance gi, ref GameAction action)
@@ -98,7 +97,7 @@ namespace Pattons_Best
       }
       protected void SetCommand(IGameInstance gi, GameAction action, GameAction drAction, string evt)
       {
-         gi.GameCommands.Add(new GameCommand(action, drAction, evt));
+         gi.GameCommands.Add(new GameCommand(gi.GamePhase, drAction, evt, action, CanvasImageViewer.theMainImage));
          gi.EventActive = gi.EventDisplayed = evt;
          gi.DieRollAction = drAction;
       }
@@ -1577,6 +1576,13 @@ namespace Pattons_Best
             case GameAction.UpdateAfterActionReport:
             case GameAction.UpdateEventViewerDisplay: // Only change active event
                break;
+            case GameAction.UpdateLoadingGame:
+               if (false == LoadGame(ref gi, ref action))
+               {
+                  returnStatus = "LoadGame() returned false";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateEnded.PerformAction(): " + returnStatus);
+               }
+               break;
             case GameAction.TestingStartMorningBriefing:
                if (false == PerformAutoSetupSkipCrewAssignments(gi))
                {
@@ -1691,8 +1697,8 @@ namespace Pattons_Best
                }
                else
                {
-                  gi.GamePhase = GamePhase.Battle;
                   SetCommand(gi, action, GameAction.BattleAmbushRoll, "e035");
+                  gi.GamePhase = GamePhase.Battle;
                   if (false == AddStartingTestingState(gi))
                   {
                      returnStatus = "AddStartingTestingState(TestingStartAmbush) returned false";
@@ -1704,9 +1710,9 @@ namespace Pattons_Best
                gi.EventDisplayed = gi.EventActive; // next screen to show
                break;
             case GameAction.UpdateNewGame:
-            case GameAction.RemoveSplashScreen:
-               gi.Statistic.Clear();         // Clear any current statitics
-               gi.Statistic.myNumGames = 1;  // Set played games to 1
+            case GameAction.RemoveSplashScreen: // GameStateSetup.PerformAction()
+               gi.Statistic.Clear();            // Clear any current statitics
+               gi.Statistic.myNumGames = 1;     // Set played games to 1
                //----------------------------------------------------
                ICombatCalendarEntry? entry = TableMgr.theCombatCalendarEntries[0];
                if (null == entry)
@@ -1716,6 +1722,8 @@ namespace Pattons_Best
                }
                else
                {
+                  IAfterActionReport report1 = new AfterActionReport(entry); // initial created GameViewerWindow()
+                  gi.Reports.Add(report1);
                   Option? option = gi.Options.Find("AutoSetup");
                   if (null == option)
                   {
@@ -1773,8 +1781,8 @@ namespace Pattons_Best
                }
                break;
             case GameAction.SetupShowCombatCalendarCheck:
-               gi.GamePhase = GamePhase.MorningBriefing;
                SetCommand(gi, action, GameAction.SetupCombatCalendarRoll, "e006"); // Setup_ShowCombatCalendarCheck
+               gi.GamePhase = GamePhase.MorningBriefing;
                if (false == AssignNewCrewMembers(gi))
                {
                   returnStatus = "AssignNewCrewMembers() returned false";
@@ -2675,6 +2683,13 @@ namespace Pattons_Best
                case GameAction.UpdateEventViewerDisplay: // Only change active event
                case GameAction.EveningDebriefingResetDay:
                   break;
+               case GameAction.UpdateLoadingGame:
+                  if (false == LoadGame(ref gi, ref action))
+                  {
+                     returnStatus = "LoadGame() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEnded.PerformAction(): " + returnStatus);
+                  }
+                  break;
                case GameAction.MorningBriefingAmmoLoad:
                   break;
                case GameAction.UpdateEventViewerActive: // Only change active event
@@ -3009,7 +3024,7 @@ namespace Pattons_Best
                   {
                      gi.DieResults[gi.EventActive][0] = Utilities.NO_RESULT;
                      IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport); // MorningBriefingDayOfRest
-                     gi.Reports.Add(newReport);
+                     gi.Reports.Add(newReport); // MorningBriefingDayOfRest
                      Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "GameStateMorningBriefing.PerformAction(): newReport=" + gi.Day + " !!!!!!!!date=" + TableMgr.GetDate(gi.Day) + "!!!!!!!!! scenario = " + newReport.Scenario.ToString() + "-->" + newReport.Scenario.ToString());
                      if (EnumScenario.Retrofit == newReport.Scenario)
                         SetCommand(gi, action, GameAction.DieRollActionNone, "e006a");
@@ -3271,7 +3286,7 @@ namespace Pattons_Best
             return false;
          }
          IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport);  // AdvancePastRetrofit()
-         gi.Reports.Add(newReport);
+         gi.Reports.Add(newReport); // AdvancePastRetrofit()
          Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "Advance_PastRetrofit(): newReport=" + gi.Day + " date=" + TableMgr.GetDate(gi.Day) + " scenario=" + newReport.Scenario.ToString() + "-->" + newReport.Scenario.ToString());
          //-------------------------------------------------------
          SetCommand(gi, action, GameAction.MorningBriefingCalendarRoll, "e006"); // MorningBriefing_DayOfRest
@@ -3321,6 +3336,13 @@ namespace Pattons_Best
                   break;
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;
+                  break;
+               case GameAction.UpdateLoadingGame:
+                  if (false == LoadGame(ref gi, ref action))
+                  {
+                     returnStatus = "LoadGame() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEnded.PerformAction(): " + returnStatus);
+                  }
                   break;
                case GameAction.PreparationsDeploymentRoll:
                   gi.DieResults[key][0] = dieRoll;
@@ -3546,6 +3568,13 @@ namespace Pattons_Best
                   break;
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
+                  break;
+               case GameAction.UpdateLoadingGame:
+                  if (false == LoadGame(ref gi, ref action))
+                  {
+                     returnStatus = "LoadGame() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEnded.PerformAction(): " + returnStatus);
+                  }
                   break;
                case GameAction.MovementStartAreaSet:
                case GameAction.MovementStartAreaRestart: // No fight occurs
@@ -3774,9 +3803,9 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.MovementBattleActivation:
-                  AdvanceTime(lastReport, 15); 
-                  gi.GamePhase = GamePhase.Battle;
                   SetCommand(gi, action, GameAction.BattleAmbushRoll, "e035");
+                  gi.GamePhase = GamePhase.Battle;
+                  AdvanceTime(lastReport, 15); 
                   break;
                case GameAction.BattleActivation:   // GameStateMovement.PerformAction(BattleActivation)
                   AdvanceTime(lastReport, 15);
@@ -4253,6 +4282,13 @@ namespace Pattons_Best
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
                   break;
+               case GameAction.UpdateLoadingGame:
+                  if (false == LoadGame(ref gi, ref action))
+                  {
+                     returnStatus = "LoadGame() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEnded.PerformAction(): " + returnStatus);
+                  }
+                  break;
                case GameAction.BattleStart:
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e034");
                   break; 
@@ -4444,8 +4480,8 @@ namespace Pattons_Best
                         case "Mines":
                            if (true == gi.Sherman.IsMoving)
                            {
-                              gi.IsMinefieldAttack = true;
                               SetCommand(gi, action, GameAction.BattleRoundSequenceMinefieldRoll, "e043");
+                              gi.IsMinefieldAttack = true;
                            }
                            else
                            {
@@ -4636,6 +4672,13 @@ namespace Pattons_Best
                   break;
                case GameAction.UpdateBattleBoard: // Do not log event
                   break;
+               case GameAction.UpdateLoadingGame:
+                  if (false == LoadGame(ref gi, ref action))
+                  {
+                     returnStatus = "LoadGame() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEnded.PerformAction(): " + returnStatus);
+                  }
+                  break;
                case GameAction.BattleRoundSequenceAmbushCounterattack:
                   if (false == ResetRound(gi, action, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceAmbushCounterattack)", false))
                   {
@@ -4800,10 +4843,10 @@ namespace Pattons_Best
                      }
                      else if (gi.DieResults[key][0] < 3)
                      {
+                        SetCommand(gi, action, GameAction.BattleRoundSequenceMinefieldDisableRoll, "e043b");
                         gi.Sherman.IsThrownTrack = true; // BattleRoundSequenceMinefieldRoll
                         lastReport.Breakdown = "Thrown Track";
                         gi.Sherman.IsMoving = false;
-                        SetCommand(gi, action, GameAction.BattleRoundSequenceMinefieldDisableRoll, "e043b");
                      }
                      else // no effect
                      {
@@ -4955,7 +4998,6 @@ namespace Pattons_Best
                         {
                            IStack? stack = gi.BattleStacks.Find(tName1);
                            bool isUsControl = false;
-
                            if (null != stack)
                            {
                               foreach (IMapItem mi in stack.MapItems)
@@ -4974,6 +5016,7 @@ namespace Pattons_Best
                            }
                            else
                            {
+                              SetCommand(gi, action, GameAction.BattleRoundSequencePanzerfaustAttackRoll, "e044a");
                               IStack? stackPanzerfaust = gi.BattleStacks.Find(tName2);
                               bool isAdvancingFire = false;
                               if (null != stackPanzerfaust)
@@ -4990,7 +5033,6 @@ namespace Pattons_Best
                               gi.BattleStacks.Add(enemyUnit);
                               //-----------------------
                               gi.Panzerfaust = new PanzerfaustAttack(gi, enemyUnit, isAdvancingFire, sector);
-                              SetCommand(gi, action, GameAction.BattleRoundSequencePanzerfaustAttackRoll, "e044a");
                            }
                         }
                      }
@@ -5656,11 +5698,11 @@ namespace Pattons_Best
                      }
                      else
                      {
+                        SetCommand(gi, action, GameAction.BattleRoundSequencePlaceAdvanceFireRoll, "e054b");
                         advanceMg.Location = mpAdvance;
                         gi.BattleStacks.Add(advanceMg);
                         gi.AdvanceFire = null;
                         gi.AreaTargets.Clear();
-                        SetCommand(gi, action, GameAction.BattleRoundSequencePlaceAdvanceFireRoll, "e054b");
                      }
                   }
                   break;
@@ -6048,8 +6090,8 @@ namespace Pattons_Best
                         case "Mines":
                            if (true == gi.Sherman.IsMoving)
                            {
-                              gi.IsMinefieldAttack = true;
                               SetCommand(gi, action, GameAction.BattleRoundSequenceMinefieldRoll, "e043");
+                              gi.IsMinefieldAttack = true;
                            }
                            else
                            {
@@ -8446,6 +8488,13 @@ namespace Pattons_Best
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
                   break;
+               case GameAction.UpdateLoadingGame:
+                  if (false == LoadGame(ref gi, ref action))
+                  {
+                     returnStatus = "LoadGame() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEnded.PerformAction(): " + returnStatus);
+                  }
+                  break;
                case GameAction.EveningDebriefingStart: // Only change active event
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e100");
                   break;
@@ -8861,7 +8910,7 @@ namespace Pattons_Best
          IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport); // EveningDebriefingResetDay()
          if (true == gi.Sherman.IsKilled)
             newReport.Name = "To be determined";
-         gi.Reports.Add(newReport);
+         gi.Reports.Add(newReport); // EveningDebriefing_ResetDay()
          Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "EveningDebriefing_ResetDay(): newReport=" + gi.Day + " date=" + TableMgr.GetDate(gi.Day) + " scenario=" + newReport.Scenario.ToString() + "-->" + newReport.Scenario.ToString());
          //-------------------------------------------------------
          bool isCrewmanReplaced;
@@ -9003,7 +9052,7 @@ namespace Pattons_Best
                break;
             case GameAction.UpdateBattleBoard: // Do not log event
                break;
-            case GameAction.RemoveSplashScreen:
+            case GameAction.RemoveSplashScreen:  // GameStateUnitTest.PerformAction()
                PrintDiagnosticInfoToLog();
                break;
             case GameAction.UnitTestCommand: // call the unit test's Command() function

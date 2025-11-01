@@ -1213,7 +1213,8 @@ namespace Pattons_Best
                case "FriendlyAction": gi.BattlePhase = BattlePhase.FriendlyAction; break;
                case "RandomEvent": gi.BattlePhase = BattlePhase.RandomEvent; break;
                case "BackToSpotting": gi.BattlePhase = BattlePhase.BackToSpotting; break;
-               default: Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reached default sScenario=" + sBattlePhase); return null;
+               case "None": gi.BattlePhase = BattlePhase.None; break;
+               default: Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reached default sBattlePhase=" + sBattlePhase); return null;
             }
             //----------------------------------------------
             reader.Read();
@@ -2576,6 +2577,7 @@ namespace Pattons_Best
                case "Light": gi.BattleResistance = EnumResistance.Light; break;
                case "Medium": gi.BattleResistance = EnumResistance.Medium; break;
                case "Heavy": gi.BattleResistance = EnumResistance.Heavy; break;
+               case "None": gi.BattleResistance = EnumResistance.None; break;
                default: Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reached default sBattleResistance=" + sBattleResistance); return null;
             }
             //----------------------------------------------
@@ -3809,7 +3811,44 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): sEventActive=null");
                return false;
             }
-            IGameCommand gameCmd = new GameCommand(action, dieRollAction, sEventActive);
+            //------------------------------------
+            string? sGamePhase = reader.GetAttribute("Phase");
+            if (null == sGamePhase)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): sGamePhase=null");
+               return false;
+            }
+            GamePhase phase = GamePhase.Error;
+            switch (sGamePhase)
+            {
+               case "GameSetup": phase = GamePhase.GameSetup; break;
+               case "MorningBriefing": phase = GamePhase.MorningBriefing; break;
+               case "Preparations": phase = GamePhase.Preparations; break;
+               case "Movement": phase = GamePhase.Movement; break;
+               case "Battle": phase = GamePhase.Battle; break;
+               case "BattleRoundSequence": phase = GamePhase.BattleRoundSequence; break;
+               case "EveningDebriefing": phase = GamePhase.EveningDebriefing; break;
+               case "EndGame": phase = GamePhase.EveningDebriefing; break;
+               case "UnitTest": phase = GamePhase.UnitTest; break;
+               default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): reached default sGamePhase=" + sGamePhase); return false;
+            }
+            //------------------------------------
+            string? sMainImage = reader.GetAttribute("MainImage");
+            if (null == sMainImage)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): sMainImage=null");
+               return false;
+            }
+            EnumMainImage mainImage = EnumMainImage.MI_Other;
+            switch (sMainImage)
+            {
+               case "MI_Other": mainImage = EnumMainImage.MI_Other; break;
+               case "MI_Battle": mainImage = EnumMainImage.MI_Battle; break;
+               case "MI_Move": mainImage = EnumMainImage.MI_Move; break;
+               default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): reached default sMainImage=" + sMainImage); return false;
+            }
+            //------------------------------------
+            IGameCommand gameCmd = new GameCommand(phase, dieRollAction, sEventActive, action, mainImage);
             gameCmds.Add(gameCmd);
          }
          if (0 < count)
@@ -3915,7 +3954,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlReports(): ReadXmlReportsReport() returned false");
                return false;
             }
-            reports.Add(report);
+            reports.Add(report);  // ReadXmlReports()
          }
          if (0 < count)
             reader.Read(); // get past </Reports> tag
@@ -4022,7 +4061,7 @@ namespace Pattons_Best
             case "Light": report.Resistance = EnumResistance.Light; break;
             case "Medium": report.Resistance = EnumResistance.Medium; break;
             case "Heavy": report.Resistance = EnumResistance.Heavy; break;
-            default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reached default sScenario=" + sResistance); return false;
+            default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlReportsReport(): reached default sResistance=" + sResistance); return false;
          }
          //----------------------------------------------
          reader.Read();
@@ -8380,6 +8419,8 @@ namespace Pattons_Best
             gameCmdElem.SetAttribute("Action", gameCmd.Action.ToString());
             gameCmdElem.SetAttribute("ActionDieRoll", gameCmd.ActionDieRoll.ToString());
             gameCmdElem.SetAttribute("EventActive", gameCmd.EventActive.ToString());
+            gameCmdElem.SetAttribute("Phase", gameCmd.Phase.ToString());
+            gameCmdElem.SetAttribute("MainImage", gameCmd.MainImage.ToString());
             XmlNode? gameCmdNode = gameCmdsNode.AppendChild(gameCmdElem);
             if (null == gameCmdNode)
             {

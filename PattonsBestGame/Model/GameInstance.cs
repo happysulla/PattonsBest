@@ -38,8 +38,8 @@ namespace Pattons_Best
       public IAfterActionReports Reports { get; set; } = new AfterActionReports();
       public BattlePhase BattlePhase { set; get; } = BattlePhase.None;
       public CrewActionPhase CrewActionPhase { set; get; } = CrewActionPhase.None;
-      public string MovementEffectOnSherman { set; get; } = "unitialized";
-      public string MovementEffectOnEnemy { set; get; } = "unitialized";
+      public string MovementEffectOnSherman { set; get; } = "unintialized";
+      public string MovementEffectOnEnemy { set; get; } = "unintialized";
       public string ShermanTypeOfFire { set; get; } = "";
       public string FiredAmmoType { set; get; } = "";
       //---------------------------------------------------------------
@@ -198,6 +198,11 @@ namespace Pattons_Best
       public GameInstance(Options newGameOptions) // Constructor - set log levels
       {
          Options = newGameOptions;
+         ITerritory? tHome = Territories.theTerritories.Find("Home");
+         if (null == tHome)
+            Logger.Log(LogEnum.LE_ERROR, "GameInstance(): tHome=null");
+         else
+            Home = tHome;
       }
       public override string ToString()
       {

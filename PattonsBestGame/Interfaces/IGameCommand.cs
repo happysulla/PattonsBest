@@ -8,9 +8,11 @@ namespace Pattons_Best
 {
    public interface IGameCommand
    {
+      GamePhase Phase { set; get; }
       GameAction Action { set; get; }
       GameAction ActionDieRoll { set; get; }
       string EventActive { set; get; }
+      EnumMainImage MainImage { set; get; }
    }
    //==========================================
    public interface IGameCommands : System.Collections.IEnumerable
@@ -21,7 +23,9 @@ namespace Pattons_Best
       void Clear();
       bool Contains(IGameCommand gc);
       int IndexOf(IGameCommand gc);
+      IGameCommand? GetLast();
       IGameCommand? RemoveAt(int index);
+      public IGameCommand? RemoveLast();
       IGameCommand? this[int index] { get; set; }
    }
 }
