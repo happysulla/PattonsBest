@@ -5,6 +5,80 @@ using System.Windows.Controls;
 
 namespace Pattons_Best
 {
+   public class ShermanDeath
+   {
+      public bool myCtorError = false;
+      public IMapItem myEnemyUnit;
+      public string myHitLocation = "";
+      public string myEnemyFireDirection = "";
+      public int myDay = 0;
+      public string myCause = "";
+      public bool myIsAmbush = false;
+      public bool myIsExplosion = false;
+      public bool myIsBailout = false;
+      public bool myIsBrewUp = false;
+      public ShermanDeath(IMapItem eu)
+      {
+         myEnemyUnit = eu;
+      }
+      public ShermanDeath(IGameInstance gi, IMapItem eu, string loc, string cause)
+      {
+         myEnemyUnit = eu;
+         myHitLocation = loc;
+         if ("ERROR" == loc)
+         {
+            myCtorError = true;
+            Logger.Log(LogEnum.LE_ERROR, "ShermanDeath(): loc=ERROR");
+         }
+         myCause = cause;
+         myDay = gi.Day;
+         myIsAmbush = ((BattlePhase.Ambush == gi.BattlePhase) || (BattlePhase.AmbushRandomEvent == gi.BattlePhase));
+         myEnemyFireDirection = TableMgr.GetEnemyFireDirection(gi, eu, myHitLocation);
+         if ("ERROR" == myEnemyFireDirection)
+         {
+            myCtorError = true;
+            Logger.Log(LogEnum.LE_ERROR, "ShermanDeath(): GetEnemyFireDirection() returned ERROR");
+         }
+      }
+   }
+   public class PanzerfaustAttack
+   {
+      public IMapItem myEnemyUnit;
+      public int myDay = 0;
+      public bool myIsShermanMoving = false;
+      public bool myIsLeadTank = false;
+      public bool myIsAdvancingFireZone = false;
+      public char mySector = 'E';
+      public PanzerfaustAttack(IMapItem eu)
+      {
+         myEnemyUnit = eu;
+      }
+      public PanzerfaustAttack(IGameInstance gi, IMapItem enemyUnit, bool isAdvanceFire, char sector)
+      {
+         myEnemyUnit = enemyUnit;
+         myDay = gi.Day;
+         myIsShermanMoving = gi.Sherman.IsMoving;
+         myIsLeadTank = gi.IsLeadTank;
+         myIsAdvancingFireZone = isAdvanceFire;
+         mySector = sector;
+      }
+   }
+   public class ShermanAttack
+   {
+      public string myAttackType; // area or direct fire
+      public string myAmmoType;   // He, Ap, Hbci, Wp,
+      public bool myIsCriticalHit;
+      public string myHitLocation = ""; // Turret, Hull, Thrown Track
+      public bool myIsNoChance = false;
+      public bool myIsImmobilization = false;
+      public ShermanAttack(string attack, string ammo, bool critical, bool immobilization)
+      {
+         myAttackType = attack;
+         myAmmoType = ammo;
+         myIsCriticalHit = critical;
+         myIsImmobilization = immobilization;
+      }
+   }
    public enum EnumScenario
    {
       Advance,
@@ -37,27 +111,6 @@ namespace Pattons_Best
       ED_EuropeanCampain,
       ED_WW2Victory
    };
-   public enum EnumModel
-   {
-      M4_A,
-      M4_B,
-      M4_C,
-      M4A1_A,
-      M4A1_B,
-      M4A1_C,
-      M4A3_A,
-      M4A3_B,
-      M4A3_C,
-      M4A3_75W_D,
-      M4A3_75W_E,
-      M4A3E2_75W_F,
-      M4A3E2_76W_F,
-      M4A1_76W_G,
-      M4A1_76W_H,
-      M4A3_76W_H,
-      M4A3_76W_G
-   };
-   [Serializable]
    public enum GamePhase
    {
       UnitTest,
@@ -71,7 +124,6 @@ namespace Pattons_Best
       EndGame,
       Error
    };
-   [Serializable]
    public enum BattlePhase
    {
       None,
@@ -87,7 +139,6 @@ namespace Pattons_Best
       BackToSpotting,
       Error
    };
-   [Serializable]
    public enum CrewActionPhase
    {
       None,
@@ -102,11 +153,6 @@ namespace Pattons_Best
       CrewSwitch,
       Error
    };
-   // GameState is a subclass representing the state pattern. For each game state, there can be different
-   // game phases and game actions. The GameEngine makes a call that each class can act on..
-   // GameEngine.PerformAction() ==> GameState.PerformAction()
-   // GameState.PerformAction() ==> GameState.PerformAction()
-   [Serializable]
    public enum GameAction
    {
       RemoveSplashScreen,
@@ -377,6 +423,11 @@ namespace Pattons_Best
       EveningDebriefingResetDay,
       Error
    };
+   //================================================================================================
+   // GameState is a subclass representing the state pattern. For each game state, there can be different
+   // game phases and game actions. The GameEngine makes a call that each class can act on..
+   // GameEngine.PerformAction() ==> GameState.PerformAction()
+   // GameState.PerformAction() ==> GameState.PerformAction()
    public interface IGameEngine
    {
       List<IView> Views { get; }

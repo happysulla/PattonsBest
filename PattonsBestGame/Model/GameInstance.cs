@@ -16,6 +16,7 @@ namespace Pattons_Best
    {
       static public Logger Logger = new Logger();
       public bool CtorError { get; } = false;
+      public IGameCommands GameCommands { set; get; } = new GameCommands();
       public Options Options { get; set; } = new Options();
       public GameStat Statistic { get; set; } = new GameStat();
       //------------------------------------------------

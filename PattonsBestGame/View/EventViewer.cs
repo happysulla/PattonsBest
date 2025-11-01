@@ -5291,7 +5291,7 @@ namespace Pattons_Best
                            else
                            {
                               myGameInstance.EventDisplayed = myGameInstance.EventActive = "e006";                  
-                              myGameInstance.DieRollAction = GameAction.MorningBriefingCalendarRoll;    
+                              myGameInstance.DieRollAction = GameAction.MorningBriefingCalendarRoll;
                            }
                            action = GameAction.UpdateEventViewerActive;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);

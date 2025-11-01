@@ -714,6 +714,273 @@ namespace Pattons_Best
          }
          return true;
       }
+      private GameAction GetGameAction(string sGameAction)
+      {
+         switch (sGameAction)
+         {
+            case "RemoveSplashScreen": return GameAction.RemoveSplashScreen;
+            case "UpdateStatusBar": return GameAction.UpdateStatusBar;
+            case "UpdateTankCard": return GameAction.UpdateTankCard;
+            case "UpdateAfterActionReport": return GameAction.UpdateAfterActionReport;
+            case "UpdateBattleBoard": return GameAction.UpdateBattleBoard;
+            case "UpdateTankExplosion": return GameAction.UpdateTankExplosion;
+            case "UpdateTankBrewUp": return GameAction.UpdateTankBrewUp;
+            case "UpdateShowRegion": return GameAction.UpdateShowRegion;
+            case "UpdateEventViewerDisplay": return GameAction.UpdateEventViewerDisplay;
+            case "UpdateEventViewerActive": return GameAction.UpdateEventViewerActive;
+            case "DieRollActionNone": return GameAction.DieRollActionNone;
+
+            case "UpdateNewGame": return GameAction.UpdateNewGame;
+            case "UpdateGameOptions": return GameAction.UpdateGameOptions;
+            case "UpdateLoadingGame": return GameAction.UpdateLoadingGame;
+            case "UpdateUndo": return GameAction.UpdateUndo;
+            case "TestingStartMorningBriefing": return GameAction.TestingStartMorningBriefing;
+            case "TestingStartPreparations": return GameAction.TestingStartPreparations;
+            case "TestingStartMovement": return GameAction.TestingStartMovement;
+            case "TestingStartBattle": return GameAction.TestingStartBattle;
+            case "TestingStartAmbush": return GameAction.TestingStartAmbush;
+
+            case "ShowCombatCalendarDialog": return GameAction.ShowCombatCalendarDialog;
+            case "ShowAfterActionReportDialog": return GameAction.ShowAfterActionReportDialog;
+            case "ShowTankForcePath": return GameAction.ShowTankForcePath;
+            case "ShowMovementDiagramDialog": return GameAction.ShowMovementDiagramDialog;
+            case "ShowRoads": return GameAction.ShowRoads;
+            case "ShowRuleListingDialog": return GameAction.ShowRuleListingDialog;
+            case "ShowEventListingDialog": return GameAction.ShowEventListingDialog;
+            case "ShowTableListing": return GameAction.ShowTableListing;
+            case "ShowGameFeats": return GameAction.ShowGameFeats;
+            case "ShowReportErrorDialog": return GameAction.ShowReportErrorDialog;
+            case "ShowAboutDialog": return GameAction.ShowAboutDialog;
+
+            case "UnitTestStart": return GameAction.UnitTestStart;
+            case "UnitTestCommand": return GameAction.UnitTestCommand;
+            case "UnitTestNext": return GameAction.UnitTestNext;
+            case "UnitTestTest": return GameAction.UnitTestTest;
+            case "UnitTestCleanup": return GameAction.UnitTestCleanup;
+
+            case "EndGameWin": return GameAction.EndGameWin;
+            case "EndGameLost": return GameAction.EndGameLost;
+            case "EndGameShowFeats": return GameAction.EndGameShowFeats;
+            case "EndGameShowStats": return GameAction.EndGameShowStats;
+            case "EndGameClose": return GameAction.EndGameClose;
+            case "EndGameFinal": return GameAction.EndGameFinal;
+            case "EndGameExit": return GameAction.EndGameExit;
+            case "ExitGame": return GameAction.ExitGame;
+
+            case "SetupShowMapHistorical": return GameAction.SetupShowMapHistorical;
+            case "SetupShowMovementBoard": return GameAction.SetupShowMovementBoard;
+            case "SetupShowBattleBoard": return GameAction.SetupShowBattleBoard;
+            case "SetupShowTankCard": return GameAction.SetupShowTankCard;
+            case "SetupShowAfterActionReport": return GameAction.SetupShowAfterActionReport;
+            case "SetupAssignCrewRating": return GameAction.SetupAssignCrewRating;
+            case "SetupShowCombatCalendarCheck": return GameAction.SetupShowCombatCalendarCheck;
+            case "SetupChooseFunOptions": return GameAction.SetupChooseFunOptions;
+            case "SetupCombatCalendarRoll": return GameAction.SetupCombatCalendarRoll;
+            case "SetupFinalize": return GameAction.SetupFinalize;
+
+            case "MorningBriefingBegin": return GameAction.MorningBriefingBegin;
+            case "MorningBriefingCrewmanHealing": return GameAction.MorningBriefingCrewmanHealing;
+            case "MorningBriefingAssignCrewRating": return GameAction.MorningBriefingAssignCrewRating;
+            case "MorningBriefingExistingCrewman": return GameAction.MorningBriefingExistingCrewman;
+            case "MorningBriefingReturningCrewman": return GameAction.MorningBriefingReturningCrewman;
+            case "MorningBriefingAssignCrewRatingEnd": return GameAction.MorningBriefingAssignCrewRatingEnd;
+            case "MorningBriefingTankReplaceChoice": return GameAction.MorningBriefingTankReplaceChoice;
+            case "MorningBriefingTankKeepChoice": return GameAction.MorningBriefingTankKeepChoice;
+            case "MorningBriefingTrainCrew": return GameAction.MorningBriefingTrainCrew;
+            case "EveningDebriefingRatingTrainingEnd": return GameAction.EveningDebriefingRatingTrainingEnd;
+            case "MorningBriefingTrainCrewHvssEnd": return GameAction.MorningBriefingTrainCrewHvssEnd;
+            case "MorningBriefingTankReplacementRoll": return GameAction.MorningBriefingTankReplacementRoll;
+            case "MorningBriefingTankReplacementHvssRoll": return GameAction.MorningBriefingTankReplacementHvssRoll;
+            case "MorningBriefingDecreaseTankNum": return GameAction.MorningBriefingDecreaseTankNum;
+            case "MorningBriefingIncreaseTankNum": return GameAction.MorningBriefingIncreaseTankNum;
+            case "MorningBriefingTankReplacementEnd": return GameAction.MorningBriefingTankReplacementEnd;
+            case "MorningBriefingCalendarRoll": return GameAction.MorningBriefingCalendarRoll;
+            case "MorningBriefingWeatherRoll": return GameAction.MorningBriefingWeatherRoll;
+            case "MorningBriefingWeatherRollEnd": return GameAction.MorningBriefingWeatherRollEnd;
+            case "MorningBriefingSnowRoll": return GameAction.MorningBriefingSnowRoll;
+            case "MorningBriefingSnowRollEnd": return GameAction.MorningBriefingSnowRollEnd;
+            case "MorningBriefingAmmoLoad": return GameAction.MorningBriefingAmmoLoad;
+            case "MorningBriefingAmmoReadyRackLoad": return GameAction.MorningBriefingAmmoReadyRackLoad;
+            case "MorningBriefingTimeCheck": return GameAction.MorningBriefingTimeCheck;
+            case "MorningBriefingTimeCheckRoll": return GameAction.MorningBriefingTimeCheckRoll;
+            case "MorningBriefingDayOfRest": return GameAction.MorningBriefingDayOfRest;
+            case "MorningBriefingDeployment": return GameAction.MorningBriefingDeployment;
+
+            case "PreparationsDeploymentRoll": return GameAction.PreparationsDeploymentRoll;
+            case "PreparationsHatches": return GameAction.PreparationsHatches;
+            case "PreparationsShowHatchAction": return GameAction.PreparationsShowHatchAction;
+            case "PreparationsGunLoad": return GameAction.PreparationsGunLoad;
+            case "PreparationsLoader": return GameAction.PreparationsLoader;
+            case "PreparationsGunLoadSelect": return GameAction.PreparationsGunLoadSelect;
+            case "PreparationsTurret": return GameAction.PreparationsTurret;
+            case "PreparationsTurretRotateLeft": return GameAction.PreparationsTurretRotateLeft;
+            case "PreparationsTurretRotateRight": return GameAction.PreparationsTurretRotateRight;
+            case "PreparationsLoaderSpot": return GameAction.PreparationsLoaderSpot;
+            case "PreparationsLoaderSpotSet": return GameAction.PreparationsLoaderSpotSet;
+            case "PreparationsCommanderSpot": return GameAction.PreparationsCommanderSpot;
+            case "PreparationsCommanderSpotSet": return GameAction.PreparationsCommanderSpotSet;
+            case "PreparationsFinal": return GameAction.PreparationsFinal;
+
+            case "MovementStartAreaSet": return GameAction.MovementStartAreaSet;
+            case "MovementStartAreaSetRoll": return GameAction.MovementStartAreaSetRoll;
+            case "MovementExitAreaSet": return GameAction.MovementExitAreaSet;
+            case "MovementExitAreaSetRoll": return GameAction.MovementExitAreaSetRoll;
+            case "MovementEnemyStrengthChoice": return GameAction.MovementEnemyStrengthChoice;
+            case "MovementEnemyStrengthCheckTerritory": return GameAction.MovementEnemyStrengthCheckTerritory;
+            case "MovementEnemyStrengthCheckTerritoryRoll": return GameAction.MovementEnemyStrengthCheckTerritoryRoll;
+            case "MovementEnemyCheckCounterattack": return GameAction.MovementEnemyCheckCounterattack;
+            case "MovementBattleCheckCounterattackRoll": return GameAction.MovementBattleCheckCounterattackRoll;
+            case "MovementCounterattackEllapsedTimeRoll": return GameAction.MovementCounterattackEllapsedTimeRoll;
+            case "MovementBattleActivation": return GameAction.MovementBattleActivation;
+            case "MovementChooseOption": return GameAction.MovementChooseOption;
+            case "MovementArtillerySupportChoice": return GameAction.MovementArtillerySupportChoice;
+            case "MovementArtillerySupportCheck": return GameAction.MovementArtillerySupportCheck;
+            case "MovementArtillerySupportCheckRoll": return GameAction.MovementArtillerySupportCheckRoll;
+            case "MovementAirStrikeChoice": return GameAction.MovementAirStrikeChoice;
+            case "MovementAirStrikeCheckTerritory": return GameAction.MovementAirStrikeCheckTerritory;
+            case "MovementAirStrikeCheckTerritoryRoll": return GameAction.MovementAirStrikeCheckTerritoryRoll;
+            case "MovementAirStrikeCancel": return GameAction.MovementAirStrikeCancel;
+            case "MovementResupplyCheck": return GameAction.MovementResupplyCheck;
+            case "MovementResupplyCheckRoll": return GameAction.MovementResupplyCheckRoll;
+            case "MovementAmmoLoad": return GameAction.MovementAmmoLoad;
+            case "MovementEnterArea": return GameAction.MovementEnterArea;
+            case "MovementAdvanceFireChoice": return GameAction.MovementAdvanceFireChoice;
+            case "MovementAdvanceFireAmmoUseCheck": return GameAction.MovementAdvanceFireAmmoUseCheck;
+            case "MovementAdvanceFireAmmoUseRoll": return GameAction.MovementAdvanceFireAmmoUseRoll;
+            case "MovementAdvanceFire": return GameAction.MovementAdvanceFire;
+            case "MovementAdvanceFireSkip": return GameAction.MovementAdvanceFireSkip;
+            case "MovementEnterAreaUsControl": return GameAction.MovementEnterAreaUsControl;
+            case "MovementStrengthBattleBoardRoll": return GameAction.MovementStrengthBattleBoardRoll;
+            case "MovementBattleCheck": return GameAction.MovementBattleCheck;
+            case "MovementBattleCheckRoll": return GameAction.MovementBattleCheckRoll;
+            case "MovementStartAreaRestart": return GameAction.MovementStartAreaRestart;
+            case "MovementStartAreaRestartAfterBattle": return GameAction.MovementStartAreaRestartAfterBattle;
+            case "MovementExit": return GameAction.MovementExit;
+            case "MovementRetreatStartBattle": return GameAction.MovementRetreatStartBattle;
+
+            case "BattleStart": return GameAction.BattleStart;
+            case "BattleActivation": return GameAction.BattleActivation;
+            case "BattlePlaceAdvanceFire": return GameAction.BattlePlaceAdvanceFire;
+            case "BattleResolveAdvanceFire": return GameAction.BattleResolveAdvanceFire;
+            case "BattleResolveArtilleryFire": return GameAction.BattleResolveArtilleryFire;
+            case "BattleResolveAirStrike": return GameAction.BattleResolveAirStrike;
+            case "BattleAmbushStart": return GameAction.BattleAmbushStart;
+            case "BattleAmbushRoll": return GameAction.BattleAmbushRoll;
+            case "BattleSetupEnd": return GameAction.BattleSetupEnd;
+            case "BattleAmbush": return GameAction.BattleAmbush;
+            case "BattleRandomEvent": return GameAction.BattleRandomEvent;
+            case "BattleRandomEventRoll": return GameAction.BattleRandomEventRoll;
+            case "BattleCollateralDamageCheck": return GameAction.BattleCollateralDamageCheck;
+            case "BattleCrewReplaced": return GameAction.BattleCrewReplaced;
+            case "BattleEmpty": return GameAction.BattleEmpty;
+            case "BattleEmptyResolve": return GameAction.BattleEmptyResolve;
+            case "BattleShermanKilled": return GameAction.BattleShermanKilled;
+
+            case "BattleRoundSequenceStart": return GameAction.BattleRoundSequenceStart;
+            case "BattleRoundSequenceAmbushCounterattack": return GameAction.BattleRoundSequenceAmbushCounterattack;
+            case "BattleRoundSequenceSmokeDepletionEnd": return GameAction.BattleRoundSequenceSmokeDepletionEnd;
+            case "BattleRoundSequenceSpotting": return GameAction.BattleRoundSequenceSpotting;
+            case "BattleRoundSequenceSpottingEnd": return GameAction.BattleRoundSequenceSpottingEnd;
+            case "BattleRoundSequenceCrewOrders": return GameAction.BattleRoundSequenceCrewOrders;
+            case "BattleRoundSequenceAmmoOrders": return GameAction.BattleRoundSequenceAmmoOrders;
+            case "BattleRoundSequenceConductCrewAction": return GameAction.BattleRoundSequenceConductCrewAction;
+            case "BattleRoundSequenceMovementRoll": return GameAction.BattleRoundSequenceMovementRoll;
+            case "BattleRoundSequenceBoggedDownRoll": return GameAction.BattleRoundSequenceBoggedDownRoll;
+            case "BattleRoundSequencePivot": return GameAction.BattleRoundSequencePivot;
+            case "BattleRoundSequencePivotLeft": return GameAction.BattleRoundSequencePivotLeft;
+            case "BattleRoundSequencePivotRight": return GameAction.BattleRoundSequencePivotRight;
+            case "BattleRoundSequenceMovementPivotEnd": return GameAction.BattleRoundSequenceMovementPivotEnd;
+            case "BattleRoundSequenceChangeFacing": return GameAction.BattleRoundSequenceChangeFacing;
+            case "BattleRoundSequenceChangeFacingEnd": return GameAction.BattleRoundSequenceChangeFacingEnd;
+            case "BattleRoundSequenceTurretEnd": return GameAction.BattleRoundSequenceTurretEnd;
+            case "BattleRoundSequenceTurretEndRotateLeft": return GameAction.BattleRoundSequenceTurretEndRotateLeft;
+            case "BattleRoundSequenceTurretEndRotateRight": return GameAction.BattleRoundSequenceTurretEndRotateRight;
+            case "BattleRoundSequenceShermanFiringSelectTarget": return GameAction.BattleRoundSequenceShermanFiringSelectTarget;
+            case "BattleRoundSequenceShermanFiringMainGun": return GameAction.BattleRoundSequenceShermanFiringMainGun;
+            case "BattleRoundSequenceShermanFiringMainGunEnd": return GameAction.BattleRoundSequenceShermanFiringMainGunEnd;
+            case "BattleRoundSequenceShermanFiringMainGunNot": return GameAction.BattleRoundSequenceShermanFiringMainGunNot;
+            case "BattleRoundSequenceShermanToHitRoll": return GameAction.BattleRoundSequenceShermanToHitRoll;
+            case "BattleRoundSequenceShermanSkipRateOfFire": return GameAction.BattleRoundSequenceShermanSkipRateOfFire;
+            case "BattleRoundSequenceShermanToKillRoll": return GameAction.BattleRoundSequenceShermanToKillRoll;
+            case "BattleRoundSequenceShermanToHitRollNothing": return GameAction.BattleRoundSequenceShermanToHitRollNothing;
+            case "BattleRoundSequenceShermanToKillRollMiss": return GameAction.BattleRoundSequenceShermanToKillRollMiss;
+            case "BattleRoundSequenceShermanFiringSelectTargetMg": return GameAction.BattleRoundSequenceShermanFiringSelectTargetMg;
+            case "BattleRoundSequenceFireAaMg": return GameAction.BattleRoundSequenceFireAaMg;
+            case "BattleRoundSequenceFireBowMg": return GameAction.BattleRoundSequenceFireBowMg;
+            case "BattleRoundSequenceFireCoaxialMg": return GameAction.BattleRoundSequenceFireCoaxialMg;
+            case "BattleRoundSequenceFireSubMg": return GameAction.BattleRoundSequenceFireSubMg;
+            case "BattleRoundSequenceFireMgSkip": return GameAction.BattleRoundSequenceFireMgSkip;
+            case "BattleRoundSequenceShermanFiringMachineGun": return GameAction.BattleRoundSequenceShermanFiringMachineGun;
+            case "BattleRoundSequenceFireMachineGunRoll": return GameAction.BattleRoundSequenceFireMachineGunRoll;
+            case "BattleRoundSequenceFireMachineGunRollEnd": return GameAction.BattleRoundSequenceFireMachineGunRollEnd;
+            case "BattleRoundSequencePlaceAdvanceFire": return GameAction.BattleRoundSequencePlaceAdvanceFire;
+            case "BattleRoundSequencePlaceAdvanceFireRoll": return GameAction.BattleRoundSequencePlaceAdvanceFireRoll;
+            case "BattleRoundSequencePlaceAdvanceFireRollEnd": return GameAction.BattleRoundSequencePlaceAdvanceFireRollEnd;
+            case "BattleRoundSequenceReplacePeriscopes": return GameAction.BattleRoundSequenceReplacePeriscopes;
+            case "BattleRoundSequenceRepairMainGunRoll": return GameAction.BattleRoundSequenceRepairMainGunRoll;
+            case "BattleRoundSequenceRepairAaMgRoll": return GameAction.BattleRoundSequenceRepairAaMgRoll;
+            case "BattleRoundSequenceRepairCoaxialMgRoll": return GameAction.BattleRoundSequenceRepairCoaxialMgRoll;
+            case "BattleRoundSequenceRepairBowMgRoll": return GameAction.BattleRoundSequenceRepairBowMgRoll;
+            case "BattleRoundSequenceShermanFiringMortar": return GameAction.BattleRoundSequenceShermanFiringMortar;
+            case "BattleRoundSequenceShermanThrowGrenade": return GameAction.BattleRoundSequenceShermanThrowGrenade;
+            case "BattleRoundSequenceReadyRackHeMinus": return GameAction.BattleRoundSequenceReadyRackHeMinus;
+            case "BattleRoundSequenceReadyRackApMinus": return GameAction.BattleRoundSequenceReadyRackApMinus;
+            case "BattleRoundSequenceReadyRackWpMinus": return GameAction.BattleRoundSequenceReadyRackWpMinus;
+            case "BattleRoundSequenceReadyRackHbciMinus": return GameAction.BattleRoundSequenceReadyRackHbciMinus;
+            case "BattleRoundSequenceReadyRackHvapMinus": return GameAction.BattleRoundSequenceReadyRackHvapMinus;
+            case "BattleRoundSequenceReadyRackHePlus": return GameAction.BattleRoundSequenceReadyRackHePlus;
+            case "BattleRoundSequenceReadyRackApPlus": return GameAction.BattleRoundSequenceReadyRackApPlus;
+            case "BattleRoundSequenceReadyRackWpPlus": return GameAction.BattleRoundSequenceReadyRackWpPlus;
+            case "BattleRoundSequenceReadyRackHbciPlus": return GameAction.BattleRoundSequenceReadyRackHbciPlus;
+            case "BattleRoundSequenceReadyRackHvapPlus": return GameAction.BattleRoundSequenceReadyRackHvapPlus;
+            case "BattleRoundSequenceReadyRackEnd": return GameAction.BattleRoundSequenceReadyRackEnd;
+            case "BattleRoundSequenceCrewSwitchEnd": return GameAction.BattleRoundSequenceCrewSwitchEnd;
+            case "BattleRoundSequenceCrewReplaced": return GameAction.BattleRoundSequenceCrewReplaced;
+            case "BattleRoundSequenceEnemyAction": return GameAction.BattleRoundSequenceEnemyAction;
+            case "BattleRoundSequenceCollateralDamageCheck": return GameAction.BattleRoundSequenceCollateralDamageCheck;
+            case "BattleRoundSequenceFriendlyAction": return GameAction.BattleRoundSequenceFriendlyAction;
+            case "BattleRoundSequenceRandomEvent": return GameAction.BattleRoundSequenceRandomEvent;
+            case "BattleRoundSequenceBackToSpotting": return GameAction.BattleRoundSequenceBackToSpotting;
+            case "BattleRoundSequenceNextActionAfterRandomEvent": return GameAction.BattleRoundSequenceNextActionAfterRandomEvent;
+            case "BattleRoundSequenceLoadMainGun": return GameAction.BattleRoundSequenceLoadMainGun;
+            case "BattleRoundSequenceLoadMainGunEnd": return GameAction.BattleRoundSequenceLoadMainGunEnd;
+            case "BattleRoundSequenceShermanKilled": return GameAction.BattleRoundSequenceShermanKilled;
+            case "BattleRoundSequenceEnemyArtilleryRoll": return GameAction.BattleRoundSequenceEnemyArtilleryRoll;
+            case "BattleRoundSequenceMinefieldRoll": return GameAction.BattleRoundSequenceMinefieldRoll;
+            case "BattleRoundSequenceMinefieldDisableRoll": return GameAction.BattleRoundSequenceMinefieldDisableRoll;
+            case "BattleRoundSequenceMinefieldDriverWoundRoll": return GameAction.BattleRoundSequenceMinefieldDriverWoundRoll;
+            case "BattleRoundSequenceMinefieldAssistantWoundRoll": return GameAction.BattleRoundSequenceMinefieldAssistantWoundRoll;
+            case "BattleRoundSequencePanzerfaustSectorRoll": return GameAction.BattleRoundSequencePanzerfaustSectorRoll;
+            case "BattleRoundSequencePanzerfaustAttackRoll": return GameAction.BattleRoundSequencePanzerfaustAttackRoll;
+            case "BattleRoundSequencePanzerfaustToHitRoll": return GameAction.BattleRoundSequencePanzerfaustToHitRoll;
+            case "BattleRoundSequencePanzerfaustToKillRoll": return GameAction.BattleRoundSequencePanzerfaustToKillRoll;
+            case "BattleRoundSequenceHarrassingFire": return GameAction.BattleRoundSequenceHarrassingFire;
+            case "BattleRoundSequenceFriendlyAdvance": return GameAction.BattleRoundSequenceFriendlyAdvance;
+            case "BattleRoundSequenceFriendlyAdvanceSelected": return GameAction.BattleRoundSequenceFriendlyAdvanceSelected;
+            case "BattleRoundSequenceEnemyAdvance": return GameAction.BattleRoundSequenceEnemyAdvance;
+            case "BattleRoundSequenceEnemyAdvanceEnd": return GameAction.BattleRoundSequenceEnemyAdvanceEnd;
+            case "BattleRoundSequenceShermanAdvanceOrRetreat": return GameAction.BattleRoundSequenceShermanAdvanceOrRetreat;
+            case "BattleRoundSequenceShermanAdvanceOrRetreatEnd": return GameAction.BattleRoundSequenceShermanAdvanceOrRetreatEnd;
+            case "BattleRoundSequenceShermanRetreatChoice": return GameAction.BattleRoundSequenceShermanRetreatChoice;
+            case "BattleRoundSequenceShermanRetreatChoiceEnd": return GameAction.BattleRoundSequenceShermanRetreatChoiceEnd;
+
+            case "EveningDebriefingStart": return GameAction.EveningDebriefingStart;
+            case "EveningDebriefingRatingImprovement": return GameAction.EveningDebriefingRatingImprovement;
+            case "EveningDebriefingRatingImprovementEnd": return GameAction.EveningDebriefingRatingImprovementEnd;
+            case "EveningDebriefingCrewReplacedEnd": return GameAction.EveningDebriefingCrewReplacedEnd;
+            case "EveningDebriefingVictoryPointsCalculated": return GameAction.EveningDebriefingVictoryPointsCalculated;
+            case "EventDebriefPromotion": return GameAction.EventDebriefPromotion;
+            case "EventDebriefDecorationStart": return GameAction.EventDebriefDecorationStart;
+            case "EventDebriefDecorationContinue": return GameAction.EventDebriefDecorationContinue;
+            case "EventDebriefDecorationBronzeStar": return GameAction.EventDebriefDecorationBronzeStar;
+            case "EventDebriefDecorationSilverStar": return GameAction.EventDebriefDecorationSilverStar;
+            case "EventDebriefDecorationCross": return GameAction.EventDebriefDecorationCross;
+            case "EventDebriefDecorationHonor": return GameAction.EventDebriefDecorationHonor;
+            case "EventDebriefDecorationHeart": return GameAction.EventDebriefDecorationHeart;
+            case "EveningDebriefingResetDay": return GameAction.EveningDebriefingResetDay;
+            default: Logger.Log(LogEnum.LE_ERROR, " GetGameAction(): reached default sGameAction=" + sGameAction); return GameAction.Error;
+         }
+      }
       //--------------------------------------------------
       private IGameInstance? ReadXml(string filename)
       {
@@ -764,6 +1031,12 @@ namespace Pattons_Best
             if (version != GetMajorVersion())
             {
                System.Windows.MessageBox.Show("Unable to open due to version mismatch. File v" + version + " does not match running v" + GetMajorVersion() + ".");
+               return null;
+            }
+            //----------------------------------------------
+            if (false == ReadXmlGameCommands(reader, gi.GameCommands))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlGameCommands() returned false");
                return null;
             }
             //----------------------------------------------
@@ -3469,6 +3742,80 @@ namespace Pattons_Best
             reader.Read(); // get past </EnemyAcquiredShots> tag
          return true;
       }
+      private bool ReadXmlGameCommands(XmlReader reader, IGameCommands gameCmds)
+      {
+         gameCmds.Clear();
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): reader.IsStartElement(GameCommands) = false");
+            return false;
+         }
+         if (reader.Name != "GameCommands")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): GameCommands != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sCount = reader.GetAttribute("count");
+         if (null == sCount)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): Count=null");
+            return false;
+         }
+         //-------------------------------------
+         int count = int.Parse(sCount);
+         for(int i =0; i<count; ++i)
+         {
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): reader.IsStartElement(GameCommand) = false");
+               return false;
+            }
+            if (reader.Name != "GameCommand")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): GameCommand != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sAction = reader.GetAttribute("Action");
+            if (sAction == null)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): sAction=null");
+               return false;
+            }
+            GameAction action = GetGameAction(sAction);
+            if(GameAction.Error == action)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): GetGameAction() returned false");
+               return false;
+            }
+            //------------------------------------
+            string? sActionDieRoll = reader.GetAttribute("ActionDieRoll");
+            if (sActionDieRoll == null)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): sActionDieRoll=null");
+               return false;
+            }
+            GameAction dieRollAction = GetGameAction(sActionDieRoll);
+            if (GameAction.Error == dieRollAction)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): GetGameAction() returned false");
+               return false;
+            }
+            //------------------------------------
+            string? sEventActive = reader.GetAttribute("EventActive");
+            if (sEventActive == null)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): sEventActive=null");
+               return false;
+            }
+            IGameCommand gameCmd = new GameCommand(action, dieRollAction, sEventActive);
+            gameCmds.Add(gameCmd);
+         }
+         if (0 < count)
+            reader.Read(); // get past </GameCommands>
+         return true;
+      }
       private bool ReadXmlOptions(XmlReader reader, Options options)
       {
          options.Clear();
@@ -5185,18 +5532,21 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): ShermanHit != (node=" + reader.Name + ")");
                return false;
             }
+            //-----------------------------
             string? sAttackType = reader.GetAttribute("AttackType");
             if (null == sAttackType)
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): AttackType=null");
                return false;
             }
+            //-----------------------------
             string? sAmmoType = reader.GetAttribute("AmmoType");
             if (null == sAmmoType)
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): AmmoType=null");
                return false;
             }
+            //-----------------------------
             string? sIsCriticalHit = reader.GetAttribute("IsCriticalHit");
             if (null == sIsCriticalHit)
             {
@@ -5204,12 +5554,14 @@ namespace Pattons_Best
                return false;
             }
             bool isCriticalHit = Convert.ToBoolean(sIsCriticalHit);
+            //-----------------------------
             string? sHitLocation = reader.GetAttribute("HitLocation");
             if (null == sHitLocation)
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): HitLocation=null");
                return false;
             }
+            //-----------------------------
             string? sIsNoChance = reader.GetAttribute("IsNoChance");
             if (null == sIsNoChance)
             {
@@ -5217,6 +5569,7 @@ namespace Pattons_Best
                return false;
             }
             bool isNoChance = Convert.ToBoolean(sIsNoChance);
+            //-----------------------------
             string? sIsImmobilization = reader.GetAttribute("IsImmobilization");
             if (null == sIsImmobilization)
             {
@@ -5224,8 +5577,10 @@ namespace Pattons_Best
                return false;
             }
             bool isImmobilization = Convert.ToBoolean(sIsImmobilization);
+            //-----------------------------
             ShermanAttack attack = new ShermanAttack(sAttackType, sAmmoType, isCriticalHit, isImmobilization);
             attack.myIsNoChance = isNoChance;
+            attack.myHitLocation = sHitLocation;
             //---------------------------
             hits.Add(attack);
          }
@@ -6083,6 +6438,12 @@ namespace Pattons_Best
          if (null == versionNode)
          {
             Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(versionNode) returned null");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlGameCommands(aXmlDocument, gi.GameCommands))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlGameCommands() returned false");
             return null;
          }
          //------------------------------------------
@@ -7974,6 +8335,55 @@ namespace Pattons_Best
             if (null == node)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(Spotting) returned null");
+               return false;
+            }
+         }
+         return true;
+      }
+      private bool CreateXmlGameCommands(XmlDocument aXmlDocument, IGameCommands gameCommands)
+      {
+         XmlNode? root = aXmlDocument.DocumentElement;
+         if (null == root)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): root is null");
+            return false;
+         }
+         XmlElement? gamecmdsElem = aXmlDocument.CreateElement("GameCommands");
+         if (null == gamecmdsElem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(GameCommands) returned null");
+            return false;
+         }
+         gamecmdsElem.SetAttribute("count", gameCommands.Count.ToString());
+         XmlNode? gameCmdsNode = root.AppendChild(gamecmdsElem);
+         if (null == gameCmdsNode)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(gameCmdsNode) returned null");
+            return false;
+         }
+         //--------------------------------
+         for (int i= 0; i < gameCommands.Count; ++i)
+         {
+            IGameCommand? gameCmd = gameCommands[i];
+            if( null == gameCmd )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): gameCmd=null");
+               return false;
+            }
+            XmlElement? gameCmdElem = aXmlDocument.CreateElement("GameCommand");
+            if (null == gameCmdElem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(OptGameCommandion) returned null");
+               return false;
+            }
+            //---------------------------------------
+            gameCmdElem.SetAttribute("Action", gameCmd.Action.ToString());
+            gameCmdElem.SetAttribute("ActionDieRoll", gameCmd.ActionDieRoll.ToString());
+            gameCmdElem.SetAttribute("EventActive", gameCmd.EventActive.ToString());
+            XmlNode? gameCmdNode = gameCmdsNode.AppendChild(gameCmdElem);
+            if (null == gameCmdNode)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(gameCmdNode) returned null");
                return false;
             }
          }

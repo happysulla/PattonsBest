@@ -222,6 +222,9 @@ namespace Pattons_Best.UnitTests
       private bool SaveGame()
       {
          myGameInstanceSave = new GameInstance();
+         myGameInstanceSave.GameCommands.Add(new GameCommand(GameAction.EveningDebriefingRatingImprovement, GameAction.MorningBriefingWeatherRoll, "e003"));
+         myGameInstanceSave.GameCommands.Add(new GameCommand(GameAction.MorningBriefingTimeCheckRoll, GameAction.MorningBriefingWeatherRoll, "e004"));
+         myGameInstanceSave.GameCommands.Add(new GameCommand(GameAction.MorningBriefingTrainCrew, GameAction.DieRollActionNone, "e005"));
          myGameInstanceSave.EventActive = "e001";
          myGameInstanceSave.EventDisplayed = "e002";
          myGameInstanceSave.Day = 01;
@@ -450,8 +453,13 @@ namespace Pattons_Best.UnitTests
          myGameInstanceSave.TrainedGunners.Add("size");
          //----------------------------------------------
          ShermanAttack attack1 = new ShermanAttack("one", "WP", true, false);
+         attack1.myHitLocation = "high";
+         attack1.myIsNoChance = true;
          ShermanAttack attack2 = new ShermanAttack("two", "AP", false, false);
+         attack2.myHitLocation = "very high";
          ShermanAttack attack3 = new ShermanAttack("three", "WP", true, true);
+         attack3.myHitLocation = "highest";
+         attack3.myIsNoChance = true;
          myGameInstanceSave.ShermanHits.Add(attack1);
          myGameInstanceSave.ShermanHits.Add(attack2);
          myGameInstanceSave.ShermanHits.Add(attack3);
@@ -2044,8 +2052,43 @@ namespace Pattons_Best.UnitTests
             Logger.Log(LogEnum.LE_ERROR, "IsEqual(List<string>): left.Count != right.Count");
             return false;
          }
+         for(int i=0; i < left.Count; ++i )
+         {
+            ShermanAttack lattack = left[i]; 
+            ShermanAttack rattack = right[i];
+            if (lattack.myAttackType != rattack.myAttackType)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lattack.myAttackType != rattack.myAttackType");
+               return false;
+            }
+            if (lattack.myAmmoType != rattack.myAmmoType)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lattack.myAmmoType != rattack.myAmmoType");
+               return false;
+            }
+            if (lattack.myIsCriticalHit != rattack.myIsCriticalHit)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lattack.myIsCriticalHit != rattack.myIsCriticalHit");
+               return false;
+            }
+            if (lattack.myHitLocation != rattack.myHitLocation)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): (lattack.myHitLocation=" + lattack.myHitLocation + ") != (rattack.myHitLocation=" + rattack.myHitLocation + ")");
+               return false;
+            }
+            if (lattack.myIsNoChance != rattack.myIsNoChance)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lattack.myIsNoChance != rattack.myIsNoChance");
+               return false;
+            }
+            if (lattack.myIsImmobilization != rattack.myIsImmobilization)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "IsEqual(): lattack.myIsImmobilization != rattack.myIsImmobilization");
+               return false;
+            }
+         }
          return true;
-      } //<<<<<<<<<<<<<<<<<<<
+      } 
       private bool IsEqual( ShermanDeath? left, ShermanDeath? right )
       {
          if ( (null == left) && (null == right) )
