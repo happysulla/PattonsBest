@@ -131,7 +131,7 @@ namespace Pattons_Best.UnitTests
             myGameInstanceLoad = loadMgr.OpenGameFromFile();
             if (null == myGameInstanceLoad)
             {
-               Logger.Log(LogEnum.LE_ERROR, "Command(): GameLoadMgr.OpenGameFromFile() returned null");
+               Logger.Log(LogEnum.LE_ERROR, "Command(): GameLoadMgr.Open_GameFromFile() returned null");
                return false;
             }
             ++myIndexName;

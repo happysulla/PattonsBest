@@ -18,6 +18,7 @@ namespace Pattons_Best
       LE_SHOW_STACK_ADD,
       LE_SHOW_STACK_DEL,
       LE_SHOW_STACK_VIEW,
+      LE_SHOW_MAIN_CLEAR,
       LE_SHOW_ENTERED_HEX,
       LE_SHOW_BUTTON_MOVE,
       //-------------
@@ -138,8 +139,9 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_STACK_ADD);
          //SetOn(LogEnum.LE_SHOW_STACK_DEL);
          //SetOn(LogEnum.LE_SHOW_STACK_VIEW);
+         SetOn(LogEnum.LE_SHOW_MAIN_CLEAR);
          //SetOn(LogEnum.LE_SHOW_ENTERED_HEX);
-         SetOn(LogEnum.LE_SHOW_BUTTON_MOVE);
+         //SetOn(LogEnum.LE_SHOW_BUTTON_MOVE);
          //-------------------------------
          //SetOn(LogEnum.LE_SHOW_CREW_NAME);
          SetOn(LogEnum.LE_SHOW_ACTION_REPORT_NEW);

@@ -33,6 +33,12 @@ namespace Pattons_Best
          myLeft = r.Next(0, range - mySize);
          myTop  = r.Next(0, range - mySize);
       }
+      public BloodSpot( int size, double left, double top)
+      {
+         mySize = size;
+         myLeft = left;
+         myTop = top;
+      }
    }
    [Serializable]
    public class MapItem : IMapItem

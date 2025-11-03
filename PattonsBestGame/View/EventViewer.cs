@@ -253,18 +253,6 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): OpenEvent() returned false ae=" + myGameInstance.EventActive + " a=" + action.ToString());
                   return;
                }
-               //------------------------------------
-               IGameCommand? cmd = gi.GameCommands.GetLast();
-               if (null == cmd)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "LoadGame(): cmd=null");
-                  return;
-               }
-               GameAction outAction = cmd.Action;
-               gi.GamePhase = cmd.Phase;
-               gi.DieRollAction = cmd.ActionDieRoll;
-               gi.EventDisplayed = gi.EventActive = cmd.EventActive;
-               myGameEngine.PerformAction(ref gi, ref outAction, 0);
                break;
             case GameAction.ShowAfterActionReportDialog:
                if (null == myAfterActionDialog)
@@ -3116,7 +3104,7 @@ namespace Pattons_Best
          }
          if (0 == gi.ShermanHits.Count)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillInfantry(): gi.ShermanHits.Count=0 for key=" + key);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillInfantry(): gi.Sherman_Hits.Count=0 for key=" + key);
             return false;
          }
          ShermanAttack hit = gi.ShermanHits[0];
@@ -3210,7 +3198,7 @@ namespace Pattons_Best
          //-------------------------------------------------
          if (0 == gi.ShermanHits.Count)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillInfantryModifier(): gi.ShermanHits.Count=0");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillInfantryModifier(): gi.Sherman_Hits.Count=0");
             return "ERROR";
          }
          ShermanAttack hit = gi.ShermanHits[0];
@@ -3279,7 +3267,7 @@ namespace Pattons_Best
          //------------------------------------
          if (0 == gi.ShermanHits.Count)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): gi.ShermanHits.Count=0 for key=" + key);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle(): gi.Sherman_Hits.Count=0 for key=" + key);
             return false;
          }
          //------------------------------------

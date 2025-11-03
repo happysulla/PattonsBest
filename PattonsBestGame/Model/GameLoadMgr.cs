@@ -33,15 +33,15 @@ namespace Pattons_Best
             IGameInstance? gi = ReadXml(filename);
             if (null == gi)
             {
-               Logger.Log(LogEnum.LE_ERROR, "OpenGame(): ReadXml() returned null for " + filename);
+               Logger.Log(LogEnum.LE_ERROR, "Open_Game(): ReadXml() returned null for " + filename);
                return null;
             }
-            Logger.Log(LogEnum.LE_GAME_INIT, "OpenGame(): gi=" + gi.ToString());
+            Logger.Log(LogEnum.LE_GAME_INIT, "Open_Game(): gi=" + gi.ToString());
             return gi;
          }
          catch (Exception e)
          {
-            Logger.Log(LogEnum.LE_ERROR, "OpenGame(): path=" + theGamesDirectory + " e =" + e.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Open_Game(): path=" + theGamesDirectory + " e =" + e.ToString());
             return new GameInstance();
          }
       }
@@ -55,7 +55,7 @@ namespace Pattons_Best
          }
          catch (Exception e)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SaveGameToFile(): path=" + theGamesDirectory + " e=" + e.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "SaveGameTo_File(): path=" + theGamesDirectory + " e=" + e.ToString());
             return false;
          }
          try
@@ -64,7 +64,7 @@ namespace Pattons_Best
             XmlDocument? aXmlDocument = CreateXml(gi); // create a new XML document 
             if (null == aXmlDocument)
             {
-               Logger.Log(LogEnum.LE_ERROR, "SaveGameToFile(): CreateXml() returned null for path=" + theGamesDirectory);
+               Logger.Log(LogEnum.LE_ERROR, "SaveGameTo_File(): CreateXml() returned null for path=" + theGamesDirectory);
                return false;
             }
             using (FileStream writer = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write))
@@ -80,7 +80,7 @@ namespace Pattons_Best
          }
          catch (Exception ex)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SaveGameToFile(): path=" + theGamesDirectory + " e =" + ex.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "SaveGameTo_File(): path=" + theGamesDirectory + " e =" + ex.ToString());
             System.Diagnostics.Debug.WriteLine(ex.ToString());
             return false;
          }
@@ -96,7 +96,7 @@ namespace Pattons_Best
          }
          catch (Exception e)
          {
-            Logger.Log(LogEnum.LE_ERROR, "OpenGameFromFile(): path=" + theGamesDirectory + " e=" + e.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Open_GameFromFile(): path=" + theGamesDirectory + " e=" + e.ToString());
             return null;
          }
          try
@@ -111,15 +111,15 @@ namespace Pattons_Best
                if (null == gi)
                {
                   Directory.SetCurrentDirectory(MainWindow.theAssemblyDirectory);
-                  Logger.Log(LogEnum.LE_ERROR, "OpenGame(): ReadXml() returned null for " + dlg.FileName);
+                  Logger.Log(LogEnum.LE_ERROR, "Open_GameFromFile(): ReadXml() returned null for " + dlg.FileName);
                   return null;
                }
-               Logger.Log(LogEnum.LE_GAME_INIT, "OpenGameFromFile(): gi=" + gi.ToString());
+               Logger.Log(LogEnum.LE_GAME_INIT, "Open_GameFromFile(): gi=" + gi.ToString());
                string? gamePath = Path.GetDirectoryName(dlg.FileName); // save off the directory user chosen
                if (null == gamePath)
                {
                   Directory.SetCurrentDirectory(MainWindow.theAssemblyDirectory);
-                  Logger.Log(LogEnum.LE_ERROR, "OpenGameFromFile(): Path.GetDirectoryName() returned null for fn=" + dlg.FileName);
+                  Logger.Log(LogEnum.LE_ERROR, "Open_GameFromFile(): Path.GetDirectoryName() returned null for fn=" + dlg.FileName);
                   return null;
                }
                theGamesDirectory = gamePath;
@@ -130,7 +130,7 @@ namespace Pattons_Best
          }
          catch (Exception e)
          {
-            Logger.Log(LogEnum.LE_ERROR, "OpenGameFromFile(): path=" + theGamesDirectory + " e =" + e.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Open_GameFromFile(): path=" + theGamesDirectory + " e =" + e.ToString());
          }
          Directory.SetCurrentDirectory(MainWindow.theAssemblyDirectory);
          return null;
@@ -3617,7 +3617,7 @@ namespace Pattons_Best
          int count = int.Parse(sCount);
          for (int i = 0; i < count; ++i)
          {
-            BloodSpot bloodSpot = bloodSpots[i];
+
             //---------------------------------------------
             reader.Read();
             if (false == reader.IsStartElement())
@@ -3631,62 +3631,32 @@ namespace Pattons_Best
                return false;
             }
             //---------------------------------------------
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(Size) = false");
-               return false;
-            }
-            if (reader.Name != "Size")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemWoundSpots(): Size != (node=" + reader.Name + ")");
-               return false;
-            }
             string? sSize = reader.GetAttribute("value");
             if (null == sSize)
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemWoundSpots(): sSize=null");
                return false;
             }
-            bloodSpot.mySize = Convert.ToInt32(sSize);
+            int size = Convert.ToInt32(sSize);
             //---------------------------------------------
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(Left) = false");
-               return false;
-            }
-            if (reader.Name != "Left")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemWoundSpots(): Left != (node=" + reader.Name + ")");
-               return false;
-            }
             string? sLeft = reader.GetAttribute("value");
             if (null == sLeft)
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemWoundSpots(): sLeft=null");
                return false;
             }
-            bloodSpot.myLeft = Convert.ToInt32(sLeft);
+            double left = Convert.ToInt32(sLeft);
             //---------------------------------------------
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(Top) = false");
-               return false;
-            }
-            if (reader.Name != "Top")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemWoundSpots(): Top != (node=" + reader.Name + ")");
-               return false;
-            }
             string? sTop = reader.GetAttribute("value");
             if (null == sTop)
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemWoundSpots(): sTop=null");
                return false;
             }
-            bloodSpot.myTop = Convert.ToInt32(sTop);
+            double top = Convert.ToInt32(sTop);
+            //---------------------------------------------
+            BloodSpot bloodSpot = new BloodSpot(size, left, top);
+            bloodSpots.Add(bloodSpot);
          }
          if (0 < count)
             reader.Read(); // get past </WoundSpots> tag
@@ -5543,18 +5513,18 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): IsStartElement(ShermanHits) returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlSherman_Hits(): IsStartElement(ShermanHits) returned false");
             return false;
          }
          if (reader.Name != "ShermanHits")
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): ShermanHits != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlSherman_Hits(): ShermanHits != (node=" + reader.Name + ")");
             return false;
          }
          string? sCount = reader.GetAttribute("count");
          if (null == sCount)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): Count=null");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlSherman_Hits(): Count=null");
             return false;
          }
          int count = int.Parse(sCount);
@@ -5563,33 +5533,33 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): IsStartElement(ShermanHit) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlSherman_Hits(): IsStartElement(ShermanHit) returned false");
                return false;
             }
             if (reader.Name != "ShermanHit")
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): ShermanHit != (node=" + reader.Name + ")");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlSherman_Hits(): ShermanHit != (node=" + reader.Name + ")");
                return false;
             }
             //-----------------------------
             string? sAttackType = reader.GetAttribute("AttackType");
             if (null == sAttackType)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): AttackType=null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlSherman_Hits(): AttackType=null");
                return false;
             }
             //-----------------------------
             string? sAmmoType = reader.GetAttribute("AmmoType");
             if (null == sAmmoType)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): AmmoType=null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlSherman_Hits(): AmmoType=null");
                return false;
             }
             //-----------------------------
             string? sIsCriticalHit = reader.GetAttribute("IsCriticalHit");
             if (null == sIsCriticalHit)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): IsCriticalHit=null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlSherman_Hits(): IsCriticalHit=null");
                return false;
             }
             bool isCriticalHit = Convert.ToBoolean(sIsCriticalHit);
@@ -5597,14 +5567,14 @@ namespace Pattons_Best
             string? sHitLocation = reader.GetAttribute("HitLocation");
             if (null == sHitLocation)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): HitLocation=null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlSherman_Hits(): HitLocation=null");
                return false;
             }
             //-----------------------------
             string? sIsNoChance = reader.GetAttribute("IsNoChance");
             if (null == sIsNoChance)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): IsNoChance=null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlSherman_Hits(): IsNoChance=null");
                return false;
             }
             bool isNoChance = Convert.ToBoolean(sIsNoChance);
@@ -5612,7 +5582,7 @@ namespace Pattons_Best
             string? sIsImmobilization = reader.GetAttribute("IsImmobilization");
             if (null == sIsImmobilization)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlShermanHits(): IsImmobilization=null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlSherman_Hits(): IsImmobilization=null");
                return false;
             }
             bool isImmobilization = Convert.ToBoolean(sIsImmobilization);
@@ -7083,7 +7053,7 @@ namespace Pattons_Best
          //------------------------------------------
          if (false == CreateXmlShermanHits(aXmlDocument, gi.ShermanHits))
          {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlShermanHits(ShermanHits) returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlSherman_Hits(Sherman_Hits) returned false");
             return null;
          }
          //------------------------------------------
@@ -9540,52 +9510,13 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsWoundSpots(): CreateElement(spotElem) returned null");
                return false;
             }
+            spotElem.SetAttribute("value", bloodSpot.mySize.ToString());
+            spotElem.SetAttribute("value", bloodSpot.myLeft.ToString());
+            spotElem.SetAttribute("value", bloodSpot.myTop.ToString());
             XmlNode? spotNode = woundSpotsNode.AppendChild(spotElem);
             if (null == spotNode)
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsWoundSpots(): AppendChild(miNode) returned null");
-               return false;
-            }
-            //--------------------------------
-            XmlElement? elem = aXmlDocument.CreateElement("Size");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsWoundSpots(): CreateElement(Size) returned null");
-               return false;
-            }
-            elem.SetAttribute("value", bloodSpot.mySize.ToString());
-            XmlNode? node = spotNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsWoundSpots(): AppendChild(Size) returned null");
-               return false;
-            }
-            //--------------------------------
-            elem = aXmlDocument.CreateElement("Left");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsWoundSpots(): CreateElement(Left) returned null");
-               return false;
-            }
-            elem.SetAttribute("value", bloodSpot.myLeft.ToString());
-            node = spotNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsWoundSpots(): AppendChild(Left) returned null");
-               return false;
-            }
-            //--------------------------------
-            elem = aXmlDocument.CreateElement("Top");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsWoundSpots(): CreateElement(Top) returned null");
-               return false;
-            }
-            elem.SetAttribute("value", bloodSpot.myTop.ToString());
-            node = spotNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsWoundSpots(): AppendChild(Top) returned null");
                return false;
             }
          }
@@ -9757,20 +9688,20 @@ namespace Pattons_Best
          XmlNode? root = aXmlDocument.DocumentElement;
          if (null == root)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): root is null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Hits(): root is null");
             return false;
          }
          XmlElement? shermanHitsElem = aXmlDocument.CreateElement("ShermanHits");
          if (null == shermanHitsElem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(ShermanHits) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Hits(): CreateElement(Sherman_Hits) returned null");
             return false;
          }
          shermanHitsElem.SetAttribute("count", shermanHits.Count.ToString());
          XmlNode? shermanHitsNode = root.AppendChild(shermanHitsElem);
          if (null == shermanHitsNode)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(ShermanHits) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Hits(): AppendChild(Sherman_Hits) returned null");
             return false;
          }
          for (int i = 0; i < shermanHits.Count; ++i)
@@ -9779,7 +9710,7 @@ namespace Pattons_Best
             XmlElement? shermanHitElem = aXmlDocument.CreateElement("ShermanHit");
             if (null == shermanHitElem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(ShermanHit) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Hits(): CreateElement(Sherman_Hit) returned null");
                return false;
             }
             shermanHitElem.SetAttribute("AttackType", shermanAttack.myAttackType);
@@ -9791,7 +9722,7 @@ namespace Pattons_Best
             XmlNode? shermanHitNode = shermanHitsNode.AppendChild(shermanHitElem);
             if (null == shermanHitNode)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(shermanHitNode) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Hits(): AppendChild(shermanHitNode) returned null");
                return false;
             }
          }
@@ -9802,19 +9733,19 @@ namespace Pattons_Best
          XmlNode? root = aXmlDocument.DocumentElement;
          if (null == root)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): root is null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Death(): root is null");
             return false;
          }
          XmlElement? shermanDeathElem = aXmlDocument.CreateElement("ShermanDeath");
          if (null == shermanDeathElem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(ShermanDeath) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Death(): CreateElement(ShermanDeath) returned null");
             return false;
          }
          XmlNode? shermanDeathNode = root.AppendChild(shermanDeathElem);
          if (null == shermanDeathNode)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(ShermanDeath) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Death(): AppendChild(ShermanDeath) returned null");
             return false;
          }
          if (null == death)
@@ -9825,119 +9756,119 @@ namespace Pattons_Best
          //------------------------------------------------
          if( false == CreateXmlMapItem(aXmlDocument, shermanDeathNode, death.myEnemyUnit))
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateXmlMapItem() returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Death(): CreateXmlMapItem() returned null");
             return false;
          }
          //------------------------------------------------
          XmlElement? elem = aXmlDocument.CreateElement("HitLocation");
          if (null == elem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(HitLocation) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Death(): CreateElement(HitLocation) returned null");
             return false;
          }
          elem.SetAttribute("value", death.myHitLocation);
          XmlNode? node = shermanDeathNode.AppendChild(elem);
          if (null == node)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(HitLocation) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Death(): AppendChild(HitLocation) returned null");
             return false;
          }
          //------------------------------------------------
          elem = aXmlDocument.CreateElement("EnemyFireDirection");
          if (null == elem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(EnemyFireDirection) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Death(): CreateElement(EnemyFireDirection) returned null");
             return false;
          }
          elem.SetAttribute("value", death.myEnemyFireDirection);
          node = shermanDeathNode.AppendChild(elem);
          if (null == node)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(EnemyFireDirection) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Death(): AppendChild(EnemyFireDirection) returned null");
             return false;
          }
          //------------------------------------------------
          elem = aXmlDocument.CreateElement("Day");
          if (null == elem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(Day) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Death(): CreateElement(Day) returned null");
             return false;
          }
          elem.SetAttribute("value", death.myDay.ToString());
          node = shermanDeathNode.AppendChild(elem);
          if (null == node)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(Day) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Death(): AppendChild(Day) returned null");
             return false;
          }
          //------------------------------------------------
          elem = aXmlDocument.CreateElement("Cause");
          if (null == elem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(Cause) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Death(): CreateElement(Cause) returned null");
             return false;
          }
          elem.SetAttribute("value", death.myCause);
          node = shermanDeathNode.AppendChild(elem);
          if (null == node)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(Cause) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Death(): AppendChild(Cause) returned null");
             return false;
          }
          //------------------------------------------------
          elem = aXmlDocument.CreateElement("IsAmbush");
          if (null == elem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(IsAmbush) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Death(): CreateElement(IsAmbush) returned null");
             return false;
          }
          elem.SetAttribute("value", death.myIsAmbush.ToString());
          node = shermanDeathNode.AppendChild(elem);
          if (null == node)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(IsAmbush) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Death(): AppendChild(IsAmbush) returned null");
             return false;
          }
          //------------------------------------------------
          elem = aXmlDocument.CreateElement("IsExplosion");
          if (null == elem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(IsExplosion) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Death(): CreateElement(IsExplosion) returned null");
             return false;
          }
          elem.SetAttribute("value", death.myIsExplosion.ToString());
          node = shermanDeathNode.AppendChild(elem);
          if (null == node)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(IsExplosion) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Death(): AppendChild(IsExplosion) returned null");
             return false;
          }
          //------------------------------------------------
          elem = aXmlDocument.CreateElement("IsBailout");
          if (null == elem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(IsBailout) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Death(): CreateElement(IsBailout) returned null");
             return false;
          }
          elem.SetAttribute("value", death.myIsBailout.ToString());
          node = shermanDeathNode.AppendChild(elem);
          if (null == node)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(IsBailout) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Death(): AppendChild(IsBailout) returned null");
             return false;
          }
          //------------------------------------------------
          elem = aXmlDocument.CreateElement("IsBrewUp");
          if (null == elem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(IsBrewUp) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Death(): CreateElement(IsBrewUp) returned null");
             return false;
          }
          elem.SetAttribute("value", death.myIsBrewUp.ToString());
          node = shermanDeathNode.AppendChild(elem);
          if (null == node)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(IsBrewUp) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlSherman_Death(): AppendChild(IsBrewUp) returned null");
             return false;
          }
          return true;
@@ -9991,56 +9922,56 @@ namespace Pattons_Best
          elem = aXmlDocument.CreateElement("IsShermanMoving");
          if (null == elem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(IsShermanMoving) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlPanzerfaustAttack(): CreateElement(IsShermanMoving) returned null");
             return false;
          }
          elem.SetAttribute("value", pfAttack.myIsShermanMoving.ToString());
          node = pfAttackNode.AppendChild(elem);
          if (null == node)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(IsShermanMoving) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlPanzerfaustAttack(): AppendChild(IsShermanMoving) returned null");
             return false;
          }
          //------------------------------------------------
          elem = aXmlDocument.CreateElement("IsLeadTank");
          if (null == elem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(IsLeadTank) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlPanzerfaustAttack(): CreateElement(IsLeadTank) returned null");
             return false;
          }
          elem.SetAttribute("value", pfAttack.myIsLeadTank.ToString());
          node = pfAttackNode.AppendChild(elem);
          if (null == node)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(IsLeadTank) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlPanzerfaustAttack(): AppendChild(IsLeadTank) returned null");
             return false;
          }
          //------------------------------------------------
          elem = aXmlDocument.CreateElement("IsAdvancingFireZone");
          if (null == elem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(IsAdvancingFireZone) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlPanzerfaustAttack(): CreateElement(IsAdvancingFireZone) returned null");
             return false;
          }
          elem.SetAttribute("value", pfAttack.myIsAdvancingFireZone.ToString());
          node = pfAttackNode.AppendChild(elem);
          if (null == node)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(IsAdvancingFireZone) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlPanzerfaustAttack(): AppendChild(IsAdvancingFireZone) returned null");
             return false;
          }
          //------------------------------------------------
          elem = aXmlDocument.CreateElement("Sector");
          if (null == elem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): CreateElement(Sector) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlPanzerfaustAttack(): CreateElement(Sector) returned null");
             return false;
          }
          elem.SetAttribute("value", pfAttack.mySector.ToString());
          node = pfAttackNode.AppendChild(elem);
          if (null == node)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlShermanHits(): AppendChild(Sector) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlPanzerfaustAttack(): AppendChild(Sector) returned null");
             return false;
          }
          return true;

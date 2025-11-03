@@ -253,8 +253,8 @@ namespace Pattons_Best
          // the game engine such that when the model data is changed, the views are updated.
          ge.RegisterForUpdates(civ);
          ge.RegisterForUpdates(myMainMenuViewer);
-         ge.RegisterForUpdates(myEventViewer);
          ge.RegisterForUpdates(sbv);
+         ge.RegisterForUpdates(myEventViewer); // needs to be last so UploadGameView
          ge.RegisterForUpdates(this); // needs to be last so that canvas updates after all actions taken
          Logger.Log(LogEnum.LE_GAME_INIT, "GameViewerWindow(): \nzoomCanvas=" + Settings.Default.ZoomCanvas.ToString() + "\nwp=" + Settings.Default.WindowPlacement + "\noptions=" + Settings.Default.GameOptions);
 #if UT1
@@ -286,7 +286,24 @@ namespace Pattons_Best
             myMoveButtons.Clear();
             myBattleButtons.Clear();
             myTankButtons.Clear();
+            Logger.Log(LogEnum.LE_SHOW_MAIN_CLEAR, "UpdateCanvasMainClear(): Clearing action=" + action.ToString());
+            UpdateCanvasMainClear(myMoveButtons, gi.MoveStacks, action);
+            UpdateCanvasMainClear(myBattleButtons, gi.BattleStacks, action);
             myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas); // UploadNewGame - Return to previous saved zoom level
+            //---------------------------------- 
+            IGameCommand? cmd = gi.GameCommands.GetLast();
+            if (null == cmd)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "LoadGame(): cmd=null");
+               return;
+            }
+            GameAction outAction = cmd.Action;
+            gi.GamePhase = cmd.Phase;
+            gi.DieRollAction = cmd.ActionDieRoll;
+            gi.EventDisplayed = gi.EventActive = cmd.EventActive;
+            if (GameAction.UpdateNewGame == action)
+               outAction = GameAction.RemoveSplashScreen;
+            myGameEngine.PerformAction(ref gi, ref outAction, 0);
          }
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -561,7 +578,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                break;
             case GameAction.EveningDebriefingRatingImprovement:
-               UpdateCanvasMainClear(myBattleButtons, gi.BattleStacks);
+               UpdateCanvasMainClear(myBattleButtons, gi.BattleStacks, action);
                foreach (Button b in myBattleButtons)
                   myCanvasMain.Children.Remove(b);
                myBattleButtons.Clear();
@@ -1954,6 +1971,7 @@ namespace Pattons_Best
             stacks = gi.MoveStacks;
             buttons = myMoveButtons;
             myBattleButtons.Clear();
+            Logger.Log(LogEnum.LE_SHOW_MAIN_CLEAR, "UpdateCanvasMain(): UUUUUUUUUUUUUUUUUUUUUU Clearing MoveButtons action=" + action.ToString());
          }
          else if (EnumMainImage.MI_Battle == CanvasImageViewer.theMainImage )
          {
@@ -1968,13 +1986,15 @@ namespace Pattons_Best
             stacks = gi.BattleStacks;
             buttons = myBattleButtons;
             myMoveButtons.Clear();
+            Logger.Log(LogEnum.LE_SHOW_MAIN_CLEAR, "UpdateCanvasMain(): UUUUUUUUUUUUUUUUUUUUUU Clearing BattleButtons action=" + action.ToString());
          }
          else
          {
             return true;
          }
          //-------------------------------------------------------
-         UpdateCanvasMainClear(buttons, stacks);
+         if( GameAction.UpdateLoadingGame != action)
+            UpdateCanvasMainClear(buttons, stacks, action);
          //-------------------------------------------------------
          if (GamePhase.UnitTest == gi.GamePhase)
             return true;
@@ -2117,13 +2137,13 @@ namespace Pattons_Best
          }
          return true;
       }
-      private void UpdateCanvasMainClear(List<Button> buttons, IStacks stacks)
+      private void UpdateCanvasMainClear(List<Button> buttons, IStacks stacks, GameAction action)
       {
          Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "UpdateCanvasMainClear(): " + stacks.ToString());
          List<UIElement> elements = new List<UIElement>();
          foreach (UIElement ui in myCanvasMain.Children) // Clean the Canvas of all marks
          {
-            if (ui is Polygon polygon)
+            if (ui is Polygon polygon) 
             {
                elements.Add(ui);
             }
@@ -2232,7 +2252,7 @@ namespace Pattons_Best
                {
                   b.BeginAnimation(Canvas.LeftProperty, null); // end animation offset
                   b.BeginAnimation(Canvas.TopProperty, null);  // end animation offset
-                  Logger.Log(LogEnum.LE_VIEW_MIM, "UpdateCanvasMainMapItems(): Updating mi=" + mi.Name + " X=" + mi.Location.X.ToString() + " Y=" + mi.Location.Y.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "UpdateCanvasMainMapItems(): Updating mi=" + mi.Name + " X=" + mi.Location.X.ToString() + " Y=" + mi.Location.Y.ToString());
                   Canvas.SetLeft(b, mi.Location.X);
                   Canvas.SetTop(b, mi.Location.Y);
                   if (true == b.Name.Contains("Smoke"))
@@ -2250,7 +2270,6 @@ namespace Pattons_Best
                else
                {
                   Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "UpdateCanvasMainMapItems(): Adding mi=" + mi.Name + " to stack@" + stack.ToString());
-                  Logger.Log(LogEnum.LE_VIEW_MIM, "UpdateCanvasMainMapItems(): Adding mi=" + mi.Name + " X=" + mi.Location.X.ToString() + " Y=" + mi.Location.Y.ToString());
                   Button newButton = CreateButtonMapItem(buttons, mi);
                   myCanvasMain.Children.Add(newButton);
                }
@@ -2486,6 +2505,7 @@ namespace Pattons_Best
       //---------------------------------------
       private bool UpdateCanvasMainSpottingLoader(IGameInstance gi, GameAction action)
       {
+         Logger.Log(LogEnum.LE_SHOW_MAIN_CLEAR, "UpdateCanvasMainSpottingLoader(): SSSSSSS setting ellipse action=" + action.ToString());
          myEllipses.Clear();
          string[] sectors = new string[6] { "Spot1", "Spot2", "Spot3", "Spot4", "Spot6", "Spot9" };
          foreach (string s in sectors)
