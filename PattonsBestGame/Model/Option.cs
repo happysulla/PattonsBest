@@ -23,8 +23,11 @@ namespace Pattons_Best
    public class Options : IEnumerable
    {
       [NonSerialized]
-      public static string[] theDefaults = new string[0] 
+      public static string[] theDefaults = new string[3] 
       {
+         "AutoEnemyActivation",
+         "AutoRollNewMembers",
+         "AutoSkipTutorialScreens"
 
       };
       private readonly ArrayList myList;
