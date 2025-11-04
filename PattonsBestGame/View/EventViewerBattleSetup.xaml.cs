@@ -205,10 +205,10 @@ namespace Pattons_Best
             return false;
          }
          //------------------------------------------------------
-         Option? optionAutoActivation = myGameInstance.Options.Find("AutoEnemyActivation");
+         Option? optionAutoActivation = myGameInstance.Options.Find("AutoRollEnemyActivation");
          if (null == optionAutoActivation)
          {
-            optionAutoActivation = new Option("AutoEnemyActivation", false);
+            optionAutoActivation = new Option("AutoRollEnemyActivation", false);
             myGameInstance.Options.Add(optionAutoActivation);
          }
          //--------------------------------------------------
@@ -1166,10 +1166,10 @@ namespace Pattons_Best
             return;
          }
          //------------------------------------------------------
-         Option? optionAutoActivation = myGameInstance.Options.Find("AutoEnemyActivation");
+         Option? optionAutoActivation = myGameInstance.Options.Find("AutoRollEnemyActivation");
          if (null == optionAutoActivation)
          {
-            optionAutoActivation = new Option("AutoEnemyActivation", false);
+            optionAutoActivation = new Option("AutoRollEnemyActivation", false);
             myGameInstance.Options.Add(optionAutoActivation);
          }
          //------------------------------------------------------

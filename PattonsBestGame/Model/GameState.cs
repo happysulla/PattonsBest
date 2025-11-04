@@ -2436,10 +2436,10 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------
-         Option? option = gi.Options.Find("AutoEnemyActivation");
+         Option? option = gi.Options.Find("AutoRollEnemyActivation");
          if (null == option)
          {
-            option = new Option("AutoEnemyActivation", false);
+            option = new Option("AutoRollEnemyActivation", false);
             gi.Options.Add(option);
          }
          option.IsEnabled = true;
