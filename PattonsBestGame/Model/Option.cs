@@ -23,9 +23,14 @@ namespace Pattons_Best
    public class Options : IEnumerable
    {
       [NonSerialized]
-      public static string[] theDefaults = new string[5] 
+      public static string[] theDefaults = new string[10] 
       {
-         "AutoSkipTutorialScreens",
+         "SkipTutorial0",
+         "SkipTutorial1",
+         "SkipTutorial2",
+         "SkipTutorial3",
+         "SkipTutorial4",
+         "SkipTutorial5",
          "AutoRollNewMembers",
          "AutoPreparation",
          "AutoRollEnemyActivation",

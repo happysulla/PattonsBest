@@ -532,6 +532,11 @@ namespace Pattons_Best
                   InlineUIContainer ui = (InlineUIContainer)inline;
                   if (ui.Child is Button b)
                      b.Click -= Button_Click;
+                  if (ui.Child is CheckBox cb)
+                  {
+                     cb.Checked += CheckBox_Checked;
+                     cb.Unchecked += CheckBox_Unchecked;
+                  }
                }
             }
          }
@@ -5912,6 +5917,40 @@ namespace Pattons_Best
             }
          }
       }
+      private void CheckBox_Checked(object sender, RoutedEventArgs e)
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CheckBox_Checked(): myGameInstance=null");
+            return;
+         }
+         CheckBox cb = (CheckBox)sender;
+         e.Handled = true;
+         Option? option = myGameInstance.Options.Find(cb.Name);
+         if (null == option)
+         {
+            option = new Option(cb.Name, false);
+            myGameInstance.Options.Add(option);
+         }
+         option.IsEnabled = true;
+      }
+      private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CheckBox_Unchecked(): myGameInstance=null");
+            return;
+         }
+         CheckBox cb = (CheckBox)sender;
+         e.Handled = true;
+         Option? option = myGameInstance.Options.Find(cb.Name);
+         if (null == option)
+         {
+            option = new Option(cb.Name, false);
+            myGameInstance.Options.Add(option);
+         }
+         option.IsEnabled = false;
+      }
       private void CheckBoxCmdrFire_Checked(object sender, RoutedEventArgs e)
       {
          CheckBox cb = (CheckBox)sender;
@@ -6088,13 +6127,11 @@ namespace Pattons_Best
                }
                break;
             case "Begin Game":
-               action = GameAction.SetupShowMapHistorical;
-               //action = GameAction.TestingStartMorningBriefing;  // <cgs> TEST - skip the ammo setup
-               //action = GameAction.TestingStartPreparations;     // <cgs> TEST - skip morning briefing and crew/ammo setup
-               //action = GameAction.TestingStartMovement;         // <cgs> TEST - start with movement - skip battle prep phase
-               //action = GameAction.TestingStartBattle;           // <cgs> TEST - skip the movement portion - begin with battle setup
-               //action = GameAction.TestingStartAmbush;           // <cgs> TEST - skip battle setup
-               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               if( false == ShowFirstScreen())
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowFirstScreen() returned false");
+                  return false;
+               }
                break;
             case "Cancel":
                action = GameAction.MovementAirStrikeCancel;
@@ -6153,6 +6190,89 @@ namespace Pattons_Best
                }
                break;
          }
+         return true;
+      }
+      private bool ShowFirstScreen()
+      {
+         GameAction action = GameAction.SetupShowMapHistorical;
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowFirstScreen(): myGameInstance=null");
+            return false;
+         }
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowFirstScreen(): myGameEngine=null");
+            return false;
+         }
+         string name = "";
+         Option? option = null;
+         //--------------------------
+         {
+            name = "SkipTutorial1";
+            option = myGameInstance.Options.Find(name);
+            if (null == option)
+            {
+               option = new Option(name, false);
+               myGameInstance.Options.Add(option);
+            }
+            if (true == option.IsEnabled)
+               action = GameAction.SetupShowMovementBoard;
+         }
+         if(GameAction.SetupShowMovementBoard == action)
+         {
+            name = "SkipTutorial2";
+            option = myGameInstance.Options.Find(name);
+            if (null == option)
+            {
+               option = new Option(name, false);
+               myGameInstance.Options.Add(option);
+            }
+            if (true == option.IsEnabled)
+               action = GameAction.SetupShowBattleBoard;
+         }
+         if (GameAction.SetupShowBattleBoard == action)
+         {
+            name = "SkipTutorial3";
+            option = myGameInstance.Options.Find(name);
+            if (null == option)
+            {
+               option = new Option(name, false);
+               myGameInstance.Options.Add(option);
+            }
+            if (true == option.IsEnabled)
+               action = GameAction.SetupShowTankCard;
+         }
+         if (GameAction.SetupShowTankCard == action)
+         {
+            name = "SkipTutorial4";
+            option = myGameInstance.Options.Find(name);
+            if (null == option)
+            {
+               option = new Option(name, false);
+               myGameInstance.Options.Add(option);
+            }
+            if (true == option.IsEnabled)
+               action = GameAction.SetupShowAfterActionReport;
+         }
+         if (GameAction.SetupShowAfterActionReport == action)
+         {
+            name = "SkipTutorial5";
+            option = myGameInstance.Options.Find(name);
+            if (null == option)
+            {
+               option = new Option(name, false);
+               myGameInstance.Options.Add(option);
+            }
+            if (true == option.IsEnabled)
+               action = GameAction.SetupAssignCrewRating;
+         }
+         //action = GameAction.TestingStartMorningBriefing;  // <cgs> TEST - skip the ammo setup
+         //action = GameAction.TestingStartPreparations;     // <cgs> TEST - skip morning briefing and crew/ammo setup
+         //action = GameAction.TestingStartMovement;         // <cgs> TEST - start with movement - skip battle prep phase
+         //action = GameAction.TestingStartBattle;           // <cgs> TEST - skip the movement portion - begin with battle setup
+         //action = GameAction.TestingStartAmbush;           // <cgs> TEST - skip battle setup
+         myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
          return true;
       }
    }

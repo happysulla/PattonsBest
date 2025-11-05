@@ -2443,7 +2443,6 @@ namespace Pattons_Best
             gi.Options.Add(option);
          }
          option.IsEnabled = true;
-         gi.Options.Add(option);
          //--------------------------------
          //gi.Day = 67;                                        // <cgs> TEST - Day before first Retrofitting - day 37 is retrofitting
          //gi.Day = 100;                                       // <cgs> TEST - After Nov 1944 for HVSS   
