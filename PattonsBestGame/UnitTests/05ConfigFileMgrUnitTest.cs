@@ -96,7 +96,7 @@ namespace Pattons_Best
          }
          if(CommandName == myCommandNames[0])
          {
-            string key = myEventViewer.myRulesMgr.Events.Keys.ElementAt(myKeyIndex);
+            string key = RuleDialogViewer.Events.Keys.ElementAt(myKeyIndex);
             gi.EventActive = key;
             if (false == myEventViewer.OpenEvent(gi, key))
             {
@@ -104,7 +104,7 @@ namespace Pattons_Best
                return false;
             }
             ++myKeyIndex;
-            if (myEventViewer.myRulesMgr.Events.Keys.Count <= myKeyIndex)
+            if (RuleDialogViewer.Events.Keys.Count <= myKeyIndex)
                myKeyIndex = 0;
          }
          else if (CommandName == myCommandNames[1])

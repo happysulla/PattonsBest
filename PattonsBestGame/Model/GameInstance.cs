@@ -19,11 +19,12 @@ namespace Pattons_Best
       public IGameCommands GameCommands { set; get; } = new GameCommands();
       public Options Options { get; set; } = new Options();
       public GameStat Statistic { get; set; } = new GameStat();
+      private Dictionary<string, int[]> myDieResults = new Dictionary<string, int[]>();
+      public Dictionary<string, int[]> DieResults { get => myDieResults; }
       //------------------------------------------------
       public bool IsMultipleSelectForDieResult { set; get; } = false;
       public bool IsGridActive { set; get; } = false;
-      private Dictionary<string, int[]> myDieResults = new Dictionary<string, int[]>();
-      public Dictionary<string, int[]> DieResults { get => myDieResults; }
+      public bool IsUndoCommandAvailable { set; get; } = false;
       //------------------------------------------------
       public string EventActive { get; set; } = "e000";
       public string EventDisplayed { set; get; } = "e000";
@@ -32,7 +33,6 @@ namespace Pattons_Best
       public int GameTurn { get; set; } = 0;
       public GamePhase GamePhase { get; set; } = GamePhase.GameSetup;
       public GameAction DieRollAction { get; set; } = GameAction.DieRollActionNone;
-      public bool IsUndoCommandAvailable { set; get; } = false;
       public string EndGameReason { set; get; } = "";
       //------------------------------------------------
       public IAfterActionReports Reports { get; set; } = new AfterActionReports();

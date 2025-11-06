@@ -10,11 +10,10 @@ namespace Pattons_Best
       IGameCommands GameCommands { set; get; }
       Options Options { get; set; }
       GameStat Statistic { get; set; }
+      Dictionary<string, int[]> DieResults { get; }
       //----------------------------------------------
       bool IsMultipleSelectForDieResult { set; get; } // In EventViewer, show buttons instead of die results for user to choose from
       bool IsGridActive { set; get; } // True if there is some EventViewer manager active
-      Dictionary<string, int[]> DieResults { get; }
-      GameAction DieRollAction { set; get; } // Used in EventViewerPanel when die roll happens to indicate next event for die roll
       bool IsUndoCommandAvailable { set; get; } // Allow user to back up if selected wrong user action
       //----------------------------------------------
       string EventActive { set; get; }
@@ -23,6 +22,7 @@ namespace Pattons_Best
       int Day { get; set; }
       int GameTurn { set; get; }
       GamePhase GamePhase { set; get; }
+      GameAction DieRollAction { set; get; } // Used in EventViewerPanel when die roll happens to indicate next event for die roll
       String EndGameReason { set; get; }
       //----------------------------------------------
       IAfterActionReports Reports { get; set; }

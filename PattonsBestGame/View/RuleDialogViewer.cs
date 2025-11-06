@@ -16,14 +16,13 @@ namespace Pattons_Best
 {
    public class RuleDialogViewer
    {
+      public static Dictionary<string, string> Events = new Dictionary<string, string>();// this property is used for unit testing - 05COnfigFileMgrUnitTesting
       private const double theExtraWidth = 0;
       public bool CtorError { get; } = false;
       private Dictionary<string, string> myRules = new Dictionary<string, string>();
       public Dictionary<string, string> Rules { get => myRules; }
       private Dictionary<string, string> myTables = new Dictionary<string, string>();
       public Dictionary<string, string> Tables { get => myTables; }
-      private Dictionary<string, string> myEvents = new Dictionary<string, string>();
-      public Dictionary<string, string> Events { get => myEvents; set => myEvents = value; } // this property is used for unit testing - 05COnfigFileMgrUnitTesting
       private Dictionary<string, TableDialog?> myTableDialogs = new Dictionary<string, TableDialog?>();
       private Dictionary<string, BannerDialog?> myBannerDialogs = new Dictionary<string, BannerDialog?>();
       private Dictionary<string, BannerDialog?> myEventDialogs = new Dictionary<string, BannerDialog?>();
@@ -80,12 +79,12 @@ namespace Pattons_Best
       {
          try
          {
-            if (null == myEvents)
+            if (null == Events)
             {
                Logger.Log(LogEnum.LE_ERROR, "GetEventTitle(): myEvents=null for key=" + key);
                return "ERROR";
             }
-            string multilineString = myEvents[key];
+            string multilineString = Events[key];
             int indexOfStart = multilineString.IndexOf(key);
             if (-1 == indexOfStart)
             {
@@ -276,7 +275,7 @@ namespace Pattons_Best
                sb.Append(@"<TextBlock xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' Name='myTextBlockDisplay' xml:space='preserve' Width='555' Height='690' FontFamily='Georgia' FontSize='20' TextWrapping='WrapWithOverflow' IsHyphenationEnabled='true' HorizontalAlignment='Left' VerticalAlignment='Top' Margin='15,0,0,0'>");
             else
                sb.Append(@"<TextBlock xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' Name='myTextBlockDisplay' xml:space='preserve' Width='555' Height='690' FontFamily='Modern 20' FontSize='20' TextWrapping='WrapWithOverflow' IsHyphenationEnabled='true' HorizontalAlignment='Left' VerticalAlignment='Top' Margin='15,0,0,0'>");
-            sb.Append(myEvents[key]);
+            sb.Append(Events[key]);
             sb.Append(@"</TextBlock>");
             StringReader sr = new StringReader(sb.ToString());
             BannerDialog dialog = new BannerDialog(key, sr);

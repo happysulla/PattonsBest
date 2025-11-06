@@ -32,7 +32,6 @@ namespace Pattons_Best
       private const int SwShownormal = 1;
       private const int SwShowminimized = 2;
       #endregion
-      private const int MAX_DAILY_ACTIONS = 16;
       private const Double MARQUEE_SCROLL_ANMINATION_TIME = 30.0;
       private const Double ELLIPSE_DIAMETER = 40.0;
       private const Double ELLIPSE_RADIUS = ELLIPSE_DIAMETER / 2.0;

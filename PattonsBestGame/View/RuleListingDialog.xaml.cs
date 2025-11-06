@@ -35,7 +35,7 @@ namespace Pattons_Best
          if (true == isEventDialog)
          {
             this.Title = "Event Listing";
-            int numToDisplay = myRulesManager.Events.Keys.Count - STARTING_EVENT_ROW + 2; // add one for header row and one for separator
+            int numToDisplay = RuleDialogViewer.Events.Keys.Count - STARTING_EVENT_ROW + 2; // add one for header row and one for separator
             for (int i = 0; i < numToDisplay; ++i)
             {
                RowDefinition rowDef = new RowDefinition();
@@ -87,12 +87,12 @@ namespace Pattons_Best
          }
          if ( true == isEventDialog)
          {
-            int numToDisplay = myRulesManager.Events.Keys.Count - STARTING_EVENT_ROW; // add one for header row and one for separator
+            int numToDisplay = RuleDialogViewer.Events.Keys.Count - STARTING_EVENT_ROW; // add one for header row and one for separator
             int rowNum = 2;
             for (int i = 0; i < numToDisplay; ++i)
             {
                int eventNum = i + STARTING_EVENT_ROW;
-               string key = myRulesManager.Events.Keys.ElementAt(eventNum);
+               string key = RuleDialogViewer.Events.Keys.ElementAt(eventNum);
                string title = myRulesManager.GetEventTitle(key);
                if (null == title)
                {

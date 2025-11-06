@@ -1264,7 +1264,7 @@ namespace Pattons_Best
          {
             if (EnumScenario.Counterattack == report.Scenario)
             {
-               gi.DieResults["e011a"][0] = 100;   // <cgs> NEED TO FIX - TBD
+               gi.DieResults["e011a"][0] = 100;  
                SetCommand(gi, action, GameAction.DieRollActionNone, "e011a");
                if (false == SetDeployment(gi, 0))
                {
@@ -1619,7 +1619,7 @@ namespace Pattons_Best
                      gi.GamePhase = GamePhase.Preparations;
                      if (EnumScenario.Counterattack == lastReport.Scenario)
                      {
-                        gi.DieResults["e011a"][0] = 100;  // <cgs> NEED TO FIX - TBD
+                        gi.DieResults["e011a"][0] = 100; 
                         SetCommand(gi, action, GameAction.DieRollActionNone, "e011a");
                         if (false == SetDeployment(gi, 0))
                         {
@@ -3056,7 +3056,7 @@ namespace Pattons_Best
                   gi.DieResults["e007e"][0] = Utilities.NO_RESULT;
                   if (EnumScenario.Counterattack == lastReport.Scenario)
                   {
-                     gi.DieResults["e011a"][0] = 100;  // <cgs> NEED TO FIX - TBD
+                     gi.DieResults["e011a"][0] = 100;  
                      SetCommand(gi, action, GameAction.DieRollActionNone, "e011a");
                      if (false == SetDeployment(gi, 0))
                      {

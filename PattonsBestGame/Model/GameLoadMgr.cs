@@ -200,6 +200,9 @@ namespace Pattons_Best
          if (Day < 10)
             sb.Append("0");
          sb.Append(Day.ToString());
+         IGameCommand? command = gi.GameCommands.GetLast();
+         if( null != command )
+            sb.Append("-" + command.Action.ToString());
          sb.Append(".pbg");
          return sb.ToString();
       }
@@ -1004,12 +1007,6 @@ namespace Pattons_Best
                return null;
             }
             //----------------------------------------------
-            if( false == ReadXmlListingMapItems(reader))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlListingMapItems() returned false");
-               return null;
-            }
-            //----------------------------------------------
             reader.Read();
             if (false == reader.IsStartElement())
             {
@@ -1049,6 +1046,18 @@ namespace Pattons_Best
             if (false == ReadXmlGameStat(reader, gi.Statistic))
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlGameStat() returned false");
+               return null;
+            }
+            //----------------------------------------------
+            if (false == ReadXmlDieRollResults(reader, gi.DieResults))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlDieRollResults() returned false");
+               return null;
+            }
+            //----------------------------------------------
+            if (false == ReadXmlListingMapItems(reader))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlListingMapItems() returned false");
                return null;
             }
             //----------------------------------------------
@@ -2873,6 +2882,266 @@ namespace Pattons_Best
                reader.Close();
          }
       }
+      private bool ReadXmlGameCommands(XmlReader reader, IGameCommands gameCmds)
+      {
+         gameCmds.Clear();
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): reader.IsStartElement(GameCommands) = false");
+            return false;
+         }
+         if (reader.Name != "GameCommands")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): GameCommands != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sCount = reader.GetAttribute("count");
+         if (null == sCount)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): Count=null");
+            return false;
+         }
+         //-------------------------------------
+         int count = int.Parse(sCount);
+         for(int i =0; i<count; ++i)
+         {
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): reader.IsStartElement(GameCommand) = false");
+               return false;
+            }
+            if (reader.Name != "GameCommand")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): GameCommand != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sAction = reader.GetAttribute("Action");
+            if (sAction == null)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): sAction=null");
+               return false;
+            }
+            GameAction action = GetGameAction(sAction);
+            if(GameAction.Error == action)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): GetGameAction() returned false");
+               return false;
+            }
+            //------------------------------------
+            string? sActionDieRoll = reader.GetAttribute("ActionDieRoll");
+            if (sActionDieRoll == null)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): sActionDieRoll=null");
+               return false;
+            }
+            GameAction dieRollAction = GetGameAction(sActionDieRoll);
+            if (GameAction.Error == dieRollAction)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): GetGameAction() returned false");
+               return false;
+            }
+            //------------------------------------
+            string? sEventActive = reader.GetAttribute("EventActive");
+            if (sEventActive == null)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): sEventActive=null");
+               return false;
+            }
+            //------------------------------------
+            string? sGamePhase = reader.GetAttribute("Phase");
+            if (null == sGamePhase)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): sGamePhase=null");
+               return false;
+            }
+            GamePhase phase = GamePhase.Error;
+            switch (sGamePhase)
+            {
+               case "GameSetup": phase = GamePhase.GameSetup; break;
+               case "MorningBriefing": phase = GamePhase.MorningBriefing; break;
+               case "Preparations": phase = GamePhase.Preparations; break;
+               case "Movement": phase = GamePhase.Movement; break;
+               case "Battle": phase = GamePhase.Battle; break;
+               case "BattleRoundSequence": phase = GamePhase.BattleRoundSequence; break;
+               case "EveningDebriefing": phase = GamePhase.EveningDebriefing; break;
+               case "EndGame": phase = GamePhase.EveningDebriefing; break;
+               case "UnitTest": phase = GamePhase.UnitTest; break;
+               default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): reached default sGamePhase=" + sGamePhase); return false;
+            }
+            //------------------------------------
+            string? sMainImage = reader.GetAttribute("MainImage");
+            if (null == sMainImage)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): sMainImage=null");
+               return false;
+            }
+            EnumMainImage mainImage = EnumMainImage.MI_Other;
+            switch (sMainImage)
+            {
+               case "MI_Other": mainImage = EnumMainImage.MI_Other; break;
+               case "MI_Battle": mainImage = EnumMainImage.MI_Battle; break;
+               case "MI_Move": mainImage = EnumMainImage.MI_Move; break;
+               default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): reached default sMainImage=" + sMainImage); return false;
+            }
+            //------------------------------------
+            IGameCommand gameCmd = new GameCommand(phase, dieRollAction, sEventActive, action, mainImage);
+            gameCmds.Add(gameCmd);
+         }
+         if (0 < count)
+            reader.Read(); // get past </GameCommands>
+         return true;
+      }
+      private bool ReadXmlOptions(XmlReader reader, Options options)
+      {
+         options.Clear();
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): reader.IsStartElement(Options) = false");
+            return false;
+         }
+         if (reader.Name != "Options")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): Options != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sCount = reader.GetAttribute("count");
+         if (null == sCount)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): Count=null");
+            return false;
+         }
+         //-------------------------------------
+         int count = int.Parse(sCount);
+         for (int i = 0; i < count; ++i)
+         {
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): IsStartElement(Option) returned false");
+               return false;
+            }
+            if (reader.Name != "Option")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): Option != " + reader.Name);
+               return false;
+            }
+            string? name = reader.GetAttribute("Name");
+            if (name == null)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): Name=null");
+               return false;
+            }
+            string? sEnabled = reader.GetAttribute("IsEnabled");
+            if (sEnabled == null)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): IsEnabled=null");
+               return false;
+            }
+            bool isEnabled = bool.Parse(sEnabled);
+            Option option = new Option(name, isEnabled);
+            options.Add(option);
+         }
+         if( 0 < count )
+            reader.Read(); // get past </Options>
+         return true;
+      }
+      private bool ReadXmlGameStat(XmlReader reader, GameStat statistic)
+      {
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): reader.IsStartElement() = false");
+            return false;
+         }
+         if (reader.Name != "GameStat")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): GameStat != (node=" + reader.Name + ")");
+            return false;
+         }
+         return true;
+      }
+      private bool ReadXmlDieRollResults(XmlReader reader, Dictionary<string, int[]> dieResults)
+      {
+         try // resync the gi.DieResults[] to initial conditions
+         {
+            foreach (string key in RuleDialogViewer.Events.Keys)
+               dieResults[key] = new int[3] { Utilities.NO_RESULT, Utilities.NO_RESULT, Utilities.NO_RESULT };
+         }
+         catch (Exception e)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): e=" + e.ToString());
+            return false;
+         }
+         //------------------------------------------
+         reader.Read();
+         if (false == reader.IsStartElement())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): IsStartElement(EnemyAcquiredShots) returned false");
+            return false;
+         }
+         if (reader.Name != "DieRollResults")
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): DieRollResults != (node=" + reader.Name + ")");
+            return false;
+         }
+         string? sCount = reader.GetAttribute("count");
+         if (null == sCount)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): Count=null");
+            return false;
+         }
+         int count = int.Parse(sCount);
+         for (int i = 0; i < count; i++)
+         {
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): reader.IsStartElement(EnemyAcqShot) = false");
+               return false;
+            }
+            if (reader.Name != "DieRollResult")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): DieRollResult != (node=" + reader.Name + ")");
+               return false;
+            }
+            //-------------------------------
+            string? sKey = reader.GetAttribute("key");
+            if (null == sKey)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): sKey=null");
+               return false;
+            }
+            //-------------------------------
+            string? sRoll0 = reader.GetAttribute("r0");
+            if (null == sRoll0)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): sRoll0=null");
+               return false;
+            }
+            dieResults[sKey][0] = Convert.ToInt32(sRoll0);
+            //-------------------------------
+            string? sRoll1 = reader.GetAttribute("r1");
+            if (null == sRoll1)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): sRoll1=null");
+               return false;
+            }
+            dieResults[sKey][1] = Convert.ToInt32(sRoll1);
+            //-------------------------------
+            string? sRoll2 = reader.GetAttribute("r2");
+            if (null == sRoll2)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): sRoll2=null");
+               return false;
+            }
+            dieResults[sKey][2] = Convert.ToInt32(sRoll2);
+         }
+         reader.Read(); // get past </DieRollResults> tag
+         return true;
+      }
       private bool ReadXmlListingMapItems(XmlReader reader)
       {
          theMapItems.Clear();
@@ -3168,7 +3437,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): sTerritoryCurrent=null");
                return false;
             }
-            if( "Offboard" == sTerritoryCurrent )
+            if ("Offboard" == sTerritoryCurrent)
             {
                mi.TerritoryCurrent = new Territory();
             }
@@ -3601,18 +3870,18 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(WoundSpots) = false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItemsWoundSpots(): reader.IsStartElement(WoundSpots) = false");
             return false;
          }
          if (reader.Name != "WoundSpots")
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemWoundSpots(): WoundSpots != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItemsWoundSpots(): WoundSpots != (node=" + reader.Name + ")");
             return false;
          }
          string? sCount = reader.GetAttribute("count");
          if (null == sCount)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemWoundSpots(): Count=null");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItemsWoundSpots(): Count=null");
             return false;
          }
          int count = int.Parse(sCount);
@@ -3623,19 +3892,19 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItem(): reader.IsStartElement(WoundSpot) = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItemsWoundSpots(): reader.IsStartElement(WoundSpot) = false");
                return false;
             }
             if (reader.Name != "WoundSpot")
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemWoundSpots(): WoundSpot != (node=" + reader.Name + ")");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItemsWoundSpots(): WoundSpot != (node=" + reader.Name + ")");
                return false;
             }
             //---------------------------------------------
             string? sSize = reader.GetAttribute("value");
             if (null == sSize)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemWoundSpots(): sSize=null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItemsWoundSpots(): sSize=null");
                return false;
             }
             int size = Convert.ToInt32(sSize);
@@ -3643,7 +3912,7 @@ namespace Pattons_Best
             string? sLeft = reader.GetAttribute("value");
             if (null == sLeft)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemWoundSpots(): sLeft=null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItemsWoundSpots(): sLeft=null");
                return false;
             }
             double left = Convert.ToInt32(sLeft);
@@ -3651,7 +3920,7 @@ namespace Pattons_Best
             string? sTop = reader.GetAttribute("value");
             if (null == sTop)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemWoundSpots(): sTop=null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItemsWoundSpots(): sTop=null");
                return false;
             }
             double top = Convert.ToInt32(sTop);
@@ -3669,18 +3938,18 @@ namespace Pattons_Best
          reader.Read();
          if (false == reader.IsStartElement())
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemWoundSpots(): IsStartElement(EnemyAcquiredShots) returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItemsEnemyAcquiredShots(): IsStartElement(EnemyAcquiredShots) returned false");
             return false;
          }
          if (reader.Name != "EnemyAcquiredShots")
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemWoundSpots(): EnemyAcquiredShots != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItemsEnemyAcquiredShots(): EnemyAcquiredShots != (node=" + reader.Name + ")");
             return false;
          }
          string? sCount = reader.GetAttribute("count");
          if (null == sCount)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemWoundSpots(): Count=null");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItemsEnemyAcquiredShots(): Count=null");
             return false;
          }
          int count = int.Parse(sCount);
@@ -3689,211 +3958,30 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemWoundSpots(): reader.IsStartElement(EnemyAcqShot) = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItemsEnemyAcquiredShots(): reader.IsStartElement(EnemyAcqShot) = false");
                return false;
             }
             if (reader.Name != "EnemyAcqShot")
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemWoundSpots(): IsSpotted != (node=" + reader.Name + ")");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItemsEnemyAcquiredShots(): IsSpotted != (node=" + reader.Name + ")");
                return false;
             }
             string? sEnemy = reader.GetAttribute("enemy");
             if (null == sEnemy)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemWoundSpots(): sEnemy=null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItemsEnemyAcquiredShots(): sEnemy=null");
                return false;
             }
             string? sValue = reader.GetAttribute("value");
             if (null == sValue)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlMapItemWoundSpots(): sValue=null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItemsEnemyAcquiredShots(): sValue=null");
                return false;
             }
             enemyAcquiredShots[sEnemy] = Convert.ToInt32(sValue);
          }
          if (0 < count)
             reader.Read(); // get past </EnemyAcquiredShots> tag
-         return true;
-      }
-      private bool ReadXmlGameCommands(XmlReader reader, IGameCommands gameCmds)
-      {
-         gameCmds.Clear();
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): reader.IsStartElement(GameCommands) = false");
-            return false;
-         }
-         if (reader.Name != "GameCommands")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): GameCommands != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sCount = reader.GetAttribute("count");
-         if (null == sCount)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): Count=null");
-            return false;
-         }
-         //-------------------------------------
-         int count = int.Parse(sCount);
-         for(int i =0; i<count; ++i)
-         {
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): reader.IsStartElement(GameCommand) = false");
-               return false;
-            }
-            if (reader.Name != "GameCommand")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): GameCommand != (node=" + reader.Name + ")");
-               return false;
-            }
-            string? sAction = reader.GetAttribute("Action");
-            if (sAction == null)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): sAction=null");
-               return false;
-            }
-            GameAction action = GetGameAction(sAction);
-            if(GameAction.Error == action)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): GetGameAction() returned false");
-               return false;
-            }
-            //------------------------------------
-            string? sActionDieRoll = reader.GetAttribute("ActionDieRoll");
-            if (sActionDieRoll == null)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): sActionDieRoll=null");
-               return false;
-            }
-            GameAction dieRollAction = GetGameAction(sActionDieRoll);
-            if (GameAction.Error == dieRollAction)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): GetGameAction() returned false");
-               return false;
-            }
-            //------------------------------------
-            string? sEventActive = reader.GetAttribute("EventActive");
-            if (sEventActive == null)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): sEventActive=null");
-               return false;
-            }
-            //------------------------------------
-            string? sGamePhase = reader.GetAttribute("Phase");
-            if (null == sGamePhase)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): sGamePhase=null");
-               return false;
-            }
-            GamePhase phase = GamePhase.Error;
-            switch (sGamePhase)
-            {
-               case "GameSetup": phase = GamePhase.GameSetup; break;
-               case "MorningBriefing": phase = GamePhase.MorningBriefing; break;
-               case "Preparations": phase = GamePhase.Preparations; break;
-               case "Movement": phase = GamePhase.Movement; break;
-               case "Battle": phase = GamePhase.Battle; break;
-               case "BattleRoundSequence": phase = GamePhase.BattleRoundSequence; break;
-               case "EveningDebriefing": phase = GamePhase.EveningDebriefing; break;
-               case "EndGame": phase = GamePhase.EveningDebriefing; break;
-               case "UnitTest": phase = GamePhase.UnitTest; break;
-               default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): reached default sGamePhase=" + sGamePhase); return false;
-            }
-            //------------------------------------
-            string? sMainImage = reader.GetAttribute("MainImage");
-            if (null == sMainImage)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): sMainImage=null");
-               return false;
-            }
-            EnumMainImage mainImage = EnumMainImage.MI_Other;
-            switch (sMainImage)
-            {
-               case "MI_Other": mainImage = EnumMainImage.MI_Other; break;
-               case "MI_Battle": mainImage = EnumMainImage.MI_Battle; break;
-               case "MI_Move": mainImage = EnumMainImage.MI_Move; break;
-               default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): reached default sMainImage=" + sMainImage); return false;
-            }
-            //------------------------------------
-            IGameCommand gameCmd = new GameCommand(phase, dieRollAction, sEventActive, action, mainImage);
-            gameCmds.Add(gameCmd);
-         }
-         if (0 < count)
-            reader.Read(); // get past </GameCommands>
-         return true;
-      }
-      private bool ReadXmlOptions(XmlReader reader, Options options)
-      {
-         options.Clear();
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): reader.IsStartElement(Options) = false");
-            return false;
-         }
-         if (reader.Name != "Options")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): Options != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sCount = reader.GetAttribute("count");
-         if (null == sCount)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): Count=null");
-            return false;
-         }
-         //-------------------------------------
-         int count = int.Parse(sCount);
-         for (int i = 0; i < count; ++i)
-         {
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): IsStartElement(Option) returned false");
-               return false;
-            }
-            if (reader.Name != "Option")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): Option != " + reader.Name);
-               return false;
-            }
-            string? name = reader.GetAttribute("Name");
-            if (name == null)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): Name=null");
-               return false;
-            }
-            string? sEnabled = reader.GetAttribute("IsEnabled");
-            if (sEnabled == null)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): IsEnabled=null");
-               return false;
-            }
-            bool isEnabled = bool.Parse(sEnabled);
-            Option option = new Option(name, isEnabled);
-            options.Add(option);
-         }
-         if( 0 < count )
-            reader.Read(); // get past </Options>
-         return true;
-      }
-      private bool ReadXmlGameStat(XmlReader reader, GameStat statistic)
-      {
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): reader.IsStartElement() = false");
-            return false;
-         }
-         if (reader.Name != "GameStat")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): GameStat != (node=" + reader.Name + ")");
-            return false;
-         }
          return true;
       }
       private bool ReadXmlReports(XmlReader reader, IAfterActionReports reports)
@@ -6425,12 +6513,6 @@ namespace Pattons_Best
             return null;
          }
          //------------------------------------------
-         if( false == CreateXmlListingOfMapItems(aXmlDocument, gi))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlCreateListingOfMapItems() returned false");
-            return null;
-         }
-         //------------------------------------------
          XmlElement? versionElem = aXmlDocument.CreateElement("Version");
          if (null == versionElem)
          {
@@ -6466,6 +6548,18 @@ namespace Pattons_Best
          if (false == CreateXmlGameStat(aXmlDocument, gi.Statistic))
          {
             Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlGameStat() returned false");
+            return null;
+         }
+         //------------------------------------------
+         if (false == CreateXmlDieRollResults(aXmlDocument, root, gi.DieResults))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlDieRollResults() returned false");
+            return null;
+         }
+         //------------------------------------------
+         if ( false == CreateXmlListingOfMapItems(aXmlDocument, gi))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlCreateListingOfMapItems() returned false");
             return null;
          }
          //------------------------------------------
@@ -7753,6 +7847,57 @@ namespace Pattons_Best
          }
          return aXmlDocument;
       }
+      private bool CreateXmlGameCommands(XmlDocument aXmlDocument, IGameCommands gameCommands)
+      {
+         XmlNode? root = aXmlDocument.DocumentElement;
+         if (null == root)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): root is null");
+            return false;
+         }
+         XmlElement? gamecmdsElem = aXmlDocument.CreateElement("GameCommands");
+         if (null == gamecmdsElem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(GameCommands) returned null");
+            return false;
+         }
+         gamecmdsElem.SetAttribute("count", gameCommands.Count.ToString());
+         XmlNode? gameCmdsNode = root.AppendChild(gamecmdsElem);
+         if (null == gameCmdsNode)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(gameCmdsNode) returned null");
+            return false;
+         }
+         //--------------------------------
+         for (int i= 0; i < gameCommands.Count; ++i)
+         {
+            IGameCommand? gameCmd = gameCommands[i];
+            if( null == gameCmd )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): gameCmd=null");
+               return false;
+            }
+            XmlElement? gameCmdElem = aXmlDocument.CreateElement("GameCommand");
+            if (null == gameCmdElem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(OptGameCommandion) returned null");
+               return false;
+            }
+            //---------------------------------------
+            gameCmdElem.SetAttribute("Action", gameCmd.Action.ToString());
+            gameCmdElem.SetAttribute("ActionDieRoll", gameCmd.ActionDieRoll.ToString());
+            gameCmdElem.SetAttribute("EventActive", gameCmd.EventActive.ToString());
+            gameCmdElem.SetAttribute("Phase", gameCmd.Phase.ToString());
+            gameCmdElem.SetAttribute("MainImage", gameCmd.MainImage.ToString());
+            XmlNode? gameCmdNode = gameCmdsNode.AppendChild(gameCmdElem);
+            if (null == gameCmdNode)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(gameCmdNode) returned null");
+               return false;
+            }
+         }
+         return true;
+      }
       private bool CreateXmlListingOfMapItems(XmlDocument aXmlDocument, IGameInstance gi)
       {
          foreach (IMapItem mi in gi.ReadyRacks)
@@ -7815,7 +7960,7 @@ namespace Pattons_Best
             IAfterActionReport? report = gi.Reports[k];
             if (null == report)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameReports(): report=null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): report=null");
                return false;
             }
             if (null == theMapItems.Find(report.Commander.Name))
@@ -7833,20 +7978,20 @@ namespace Pattons_Best
          XmlNode? root = aXmlDocument.DocumentElement;
          if (null == root)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): root is null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): root is null");
             return false;
          }
          XmlElement? mapItemsElem = aXmlDocument.CreateElement("MapItems");
          if (null == mapItemsElem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItems(): CreateElement(MapItemsElem) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(MapItemsElem) returned null");
             return false;
          }
          mapItemsElem.SetAttribute("count", theMapItems.Count.ToString());
          XmlNode? mapItemsNode = root.AppendChild(mapItemsElem);
          if (null == mapItemsNode)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItems(): AppendChild(MapItemsNode) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(MapItemsNode) returned null");
             return false;
          }
          //--------------------------------
@@ -7855,13 +8000,13 @@ namespace Pattons_Best
             XmlElement? miElem = aXmlDocument.CreateElement("MapItem");
             if (null == miElem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(miElem) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(miElem) returned null");
                return false;
             }
             XmlNode? miNode = mapItemsNode.AppendChild(miElem);
             if (null == miNode)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(miNode) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(miNode) returned null");
                return false;
             }
             if (null == mi)
@@ -7877,35 +8022,35 @@ namespace Pattons_Best
             XmlElement? elem = aXmlDocument.CreateElement("TopImageName");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(TopImageName) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(TopImageName) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.TopImageName);
             XmlNode? node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(TopImageName) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(TopImageName) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("BottomImageName");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(BottomImageName) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(BottomImageName) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.BottomImageName);
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(BottomImageName) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(BottomImageName) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("OverlayImageName");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(OverlayImageName) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(OverlayImageName) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.OverlayImageName);
@@ -7916,58 +8061,58 @@ namespace Pattons_Best
                return false;
             }
             //--------------------------------
-            if (false == CreateXmlMapItemsWoundSpots(aXmlDocument, miNode, mi.WoundSpots))
+            if (false == CreateXmlListingOfMapItemsWoundSpots(aXmlDocument, miNode, mi.WoundSpots))
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateXmlMapItemsWoundSpots() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateXmlListingOfMapItemsWoundSpots() returned false");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("Zoom");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(Zoom) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(Zoom) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.Zoom.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(Zoom) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(Zoom) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("IsMoved");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(IsMoved) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsMoved) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.IsMoved.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsMoved) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsMoved) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("Count");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(Count) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(Count) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.Count.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(Count) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(Count) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("RotationOffsetHull");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(RotationOffsetHull) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(RotationOffsetHull) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.RotationOffsetHull.ToString("F3"));
@@ -7981,161 +8126,161 @@ namespace Pattons_Best
             elem = aXmlDocument.CreateElement("RotationHull");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(RotationHull) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(RotationHull) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.RotationHull.ToString("F3"));
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(RotationHull) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(RotationHull) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("RotationOffsetTurret");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(RotationOffsetTurret) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(RotationOffsetTurret) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.RotationOffsetTurret.ToString("F3"));
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(RotationOffsetTurret) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(RotationOffsetTurret) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("RotationTurret");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(RotationTurret) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(RotationTurret) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.RotationTurret.ToString("F3"));
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(RotationTurret) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(RotationTurret) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("LocationX");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(LocationX) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(LocationX) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.Location.X.ToString("F3"));
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(LocationX) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(LocationX) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("LocationY");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(LocationY) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(LocationY) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.Location.Y.ToString("F3"));
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(LocationY) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(LocationY) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("TerritoryCurrent");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(TerritoryCurrent) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(TerritoryCurrent) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.TerritoryCurrent.Name);
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(TerritoryCurrent) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(TerritoryCurrent) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("TerritoryStarting");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(TerritoryStarting) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(TerritoryStarting) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.TerritoryStarting.Name);
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(TerritoryStarting) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(TerritoryStarting) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("IsMoving");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(IsMoving) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsMoving) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.IsMoving.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsMoving) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsMoving) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("IsHullDown");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(IsHullDown) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsHullDown) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.IsMoving.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsHullDown) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsHullDown) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("IsTurret");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(IsTurret) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsTurret) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.IsTurret.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsTurret) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsTurret) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("IsKilled");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(IsKilled) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsKilled) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.IsKilled.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsKilled) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsKilled) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("IsUnconscious");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(IsUnconscious) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsUnconscious) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.IsUnconscious.ToString());
@@ -8149,255 +8294,325 @@ namespace Pattons_Best
             elem = aXmlDocument.CreateElement("IsIncapacitated");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(IsIncapacitated) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsIncapacitated) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.IsIncapacitated.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsIncapacitated) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsIncapacitated) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("IsFired");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(IsFired) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsFired) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.IsFired.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsFired) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsFired) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("IsSpotted");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(IsSpotted) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsSpotted) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.IsSpotted.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsSpotted) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsSpotted) returned null");
                return false;
             }
             //--------------------------------
-            if (false == CreateXmlMapItemsEnemyAcquiredShots(aXmlDocument, miNode, mi.EnemyAcquiredShots))
+            if (false == CreateXmlListingOfMapItemsAcquiredShots(aXmlDocument, miNode, mi.EnemyAcquiredShots))
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateXmlMapItemsWoundSpots() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateXmlListingOfMapItemsWoundSpots() returned false");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("IsVehicle");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(IsVehicle) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsVehicle) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.IsVehicle.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsVehicle) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsVehicle) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("IsMovingInOpen");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(IsMovingInOpen) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsMovingInOpen) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.IsMovingInOpen.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsMovingInOpen) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsMovingInOpen) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("IsWoods");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(IsWoods) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsWoods) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.IsWoods.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsWoods) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsWoods) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("IsBuilding");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(IsBuilding) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsBuilding) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.IsBuilding.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsBuilding) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsBuilding) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("IsFortification");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(IsFortification) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsFortification) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.IsFortification.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsFortification) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsFortification) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("IsThrownTrack");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(IsThrownTrack) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsThrownTrack) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.IsThrownTrack.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsThrownTrack) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsThrownTrack) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("IsBoggedDown");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(IsBoggedDown) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsBoggedDown) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.IsBoggedDown.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsBoggedDown) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsBoggedDown) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("IsAssistanceNeeded");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(IsAssistanceNeeded) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsAssistanceNeeded) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.IsAssistanceNeeded.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsAssistanceNeeded) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsAssistanceNeeded) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("IsHeHit");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(IsHeHit) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsHeHit) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.IsHeHit.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsHeHit) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsHeHit) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("IsApHit");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(IsApHit) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(IsApHit) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.IsApHit.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(IsApHit) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(IsApHit) returned null");
                return false;
             }
             //--------------------------------
             elem = aXmlDocument.CreateElement("Spotting");
             if (null == elem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): CreateElement(Spotting) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): CreateElement(Spotting) returned null");
                return false;
             }
             elem.SetAttribute("value", mi.Spotting.ToString());
             node = miNode.AppendChild(elem);
             if (null == node)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItem(): AppendChild(Spotting) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItems(): AppendChild(Spotting) returned null");
                return false;
             }
          }
          return true;
       }
-      private bool CreateXmlGameCommands(XmlDocument aXmlDocument, IGameCommands gameCommands)
+      private bool CreateXmlDieRollResults(XmlDocument aXmlDocument, XmlNode topNode, Dictionary<string, int[]> dieResults)
       {
-         XmlNode? root = aXmlDocument.DocumentElement;
-         if (null == root)
+         //------------------------------------------------------
+         XmlElement? dieRollResultsElem = aXmlDocument.CreateElement("DieRollResults");
+         if (null == dieRollResultsElem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): root is null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlDieRollResults(): CreateElement(dieRollResultsElem) returned null");
             return false;
          }
-         XmlElement? gamecmdsElem = aXmlDocument.CreateElement("GameCommands");
-         if (null == gamecmdsElem)
+         dieRollResultsElem.SetAttribute("count", dieResults.Count.ToString());
+         XmlNode? dieRollResultsNode = topNode.AppendChild(dieRollResultsElem);
+         if (null == dieRollResultsNode)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(GameCommands) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlDieRollResults(): AppendChild(dieRollResultsNode) returned null");
             return false;
          }
-         gamecmdsElem.SetAttribute("count", gameCommands.Count.ToString());
-         XmlNode? gameCmdsNode = root.AppendChild(gamecmdsElem);
-         if (null == gameCmdsNode)
+         int count = 0;
+         foreach (var kvp in dieResults)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(gameCmdsNode) returned null");
+            XmlElement? dieRollResultElem = aXmlDocument.CreateElement("DieRollResult");
+            if (null == dieRollResultElem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlDieRollResults(): CreateElement(dieRollResultElem) returned null");
+               return false;
+            }
+            dieRollResultElem.SetAttribute("key", kvp.Key);
+            dieRollResultElem.SetAttribute("r0", kvp.Value[0].ToString());
+            dieRollResultElem.SetAttribute("r1", kvp.Value[1].ToString());
+            dieRollResultElem.SetAttribute("r2", kvp.Value[2].ToString());
+            XmlNode? dieResultNode = dieRollResultsNode.AppendChild(dieRollResultElem);
+            if (null == dieResultNode)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlDieRollResults(): AppendChild(dieResultNode) returned null");
+               return false;
+            }
+            count++;
+         }
+         if (count != dieResults.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlDieRollResults(): count=" + count.ToString() + " dieResults.Count=" + dieResults.Count.ToString());
             return false;
          }
-         //--------------------------------
-         for (int i= 0; i < gameCommands.Count; ++i)
+         return true;
+      }
+      private bool CreateXmlListingOfMapItemsWoundSpots(XmlDocument aXmlDocument, XmlNode topNode, List<BloodSpot> woundSpots)
+      {
+         XmlElement? woundSpotsElem = aXmlDocument.CreateElement("WoundSpots");
+         if (null == woundSpotsElem)
          {
-            IGameCommand? gameCmd = gameCommands[i];
-            if( null == gameCmd )
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItemsWoundSpots(): CreateElement(woundsElement) returned null");
+            return false;
+         }
+         woundSpotsElem.SetAttribute("count", woundSpots.Count.ToString());
+         XmlNode? woundSpotsNode = topNode.AppendChild(woundSpotsElem);
+         if (null == woundSpotsNode)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItemsWoundSpots(): AppendChild(woundSpotsNode) returned null");
+            return false;
+         }
+         for (int k = 0; k < woundSpots.Count; ++k)
+         {
+            BloodSpot bloodSpot = woundSpots[k];
+            XmlElement? spotElem = aXmlDocument.CreateElement("WoundSpot");
+            if (null == spotElem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): gameCmd=null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItemsWoundSpots(): CreateElement(spotElem) returned null");
                return false;
             }
-            XmlElement? gameCmdElem = aXmlDocument.CreateElement("GameCommand");
-            if (null == gameCmdElem)
+            spotElem.SetAttribute("value", bloodSpot.mySize.ToString());
+            spotElem.SetAttribute("value", bloodSpot.myLeft.ToString());
+            spotElem.SetAttribute("value", bloodSpot.myTop.ToString());
+            XmlNode? spotNode = woundSpotsNode.AppendChild(spotElem);
+            if (null == spotNode)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(OptGameCommandion) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItemsWoundSpots(): AppendChild(miNode) returned null");
                return false;
             }
-            //---------------------------------------
-            gameCmdElem.SetAttribute("Action", gameCmd.Action.ToString());
-            gameCmdElem.SetAttribute("ActionDieRoll", gameCmd.ActionDieRoll.ToString());
-            gameCmdElem.SetAttribute("EventActive", gameCmd.EventActive.ToString());
-            gameCmdElem.SetAttribute("Phase", gameCmd.Phase.ToString());
-            gameCmdElem.SetAttribute("MainImage", gameCmd.MainImage.ToString());
-            XmlNode? gameCmdNode = gameCmdsNode.AppendChild(gameCmdElem);
-            if (null == gameCmdNode)
+         }
+         return true;
+      }
+      private bool CreateXmlListingOfMapItemsAcquiredShots(XmlDocument aXmlDocument, XmlNode topNode, Dictionary<string, int> enemyAcquiredShots)
+      {
+         XmlElement? enemyShotsElem = aXmlDocument.CreateElement("EnemyAcquiredShots");
+         if (null == enemyShotsElem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItemsAcquiredShots(): CreateElement(enemyShotsElem) returned null");
+            return false;
+         }
+         enemyShotsElem.SetAttribute("count", enemyAcquiredShots.Count.ToString());
+         XmlNode? enemyAcquireShotsNode = topNode.AppendChild(enemyShotsElem);
+         if (null == enemyAcquireShotsNode)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItemsAcquiredShots(): AppendChild(enemyAcquireShotsNode) returned null");
+            return false;
+         }
+         int count = 0;
+         foreach (var kvp in enemyAcquiredShots)
+         {
+            XmlElement? enemyAcqShotElem = aXmlDocument.CreateElement("EnemyAcqShot");
+            if (null == enemyAcqShotElem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(gameCmdNode) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItemsAcquiredShots(): CreateElement(spotElem) returned null");
                return false;
             }
+            enemyAcqShotElem.SetAttribute("enemy", kvp.Key);
+            enemyAcqShotElem.SetAttribute("value", kvp.Value.ToString());
+            XmlNode? enemyAcqShotNode = enemyAcquireShotsNode.AppendChild(enemyAcqShotElem);
+            if (null == enemyAcqShotNode)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItemsAcquiredShots(): AppendChild(miNode) returned null");
+               return false;
+            }
+            count++;
+         }
+         if (count != enemyAcquiredShots.Count)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItemsAcquiredShots(): count=" + count.ToString() + " enemyAcquiredShots=" + enemyAcquiredShots.Count.ToString());
+            return false;
          }
          return true;
       }
@@ -8406,20 +8621,20 @@ namespace Pattons_Best
          XmlNode? root = aXmlDocument.DocumentElement;
          if (null == root)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): root is null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameOptions(): root is null");
             return false;
          }
          XmlElement? optionsElem = aXmlDocument.CreateElement("Options");
          if (null == optionsElem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(Options) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameOptions(): CreateElement(Options) returned null");
             return false;
          }
          optionsElem.SetAttribute("count", options.Count.ToString());
          XmlNode? optionsNode = root.AppendChild(optionsElem);
          if (null == optionsNode)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(optionsNode) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameOptions(): AppendChild(optionsNode) returned null");
             return false;
          }
          //--------------------------------
@@ -8428,7 +8643,7 @@ namespace Pattons_Best
             XmlElement? optionElem = aXmlDocument.CreateElement("Option");
             if (null == optionElem)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(Option) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameOptions(): CreateElement(Option) returned null");
                return false;
             }
             optionElem.SetAttribute("Name", option.Name);
@@ -8436,7 +8651,7 @@ namespace Pattons_Best
             XmlNode? optionNode = optionsNode.AppendChild(optionElem);
             if (null == optionNode)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(optionNode) returned null");
+               Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameOptions(): AppendChild(optionNode) returned null");
                return false;
             }
          }
@@ -8447,19 +8662,19 @@ namespace Pattons_Best
          XmlNode? root = aXmlDocument.DocumentElement;
          if (null == root)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): root is null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameStat(): root is null");
             return false;
          }
          XmlElement? gameStatElem = aXmlDocument.CreateElement("GameStat");
          if (null == gameStatElem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(gameStatElem) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameStat(): CreateElement(gameStatElem) returned null");
             return false;
          }
          XmlNode? gameStatNode = root.AppendChild(gameStatElem);
          if (null == gameStatNode)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(gameStatNode) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameStat(): AppendChild(gameStatNode) returned null");
             return false;
          }
          return true;
@@ -9485,83 +9700,6 @@ namespace Pattons_Best
             miElem.SetAttribute("name", "null");
          else
             miElem.SetAttribute("name", mi.Name);
-         return true;
-      }
-      private bool CreateXmlMapItemsWoundSpots(XmlDocument aXmlDocument, XmlNode topNode, List<BloodSpot> woundSpots)
-      {
-         XmlElement? woundSpotsElem = aXmlDocument.CreateElement("WoundSpots");
-         if (null == woundSpotsElem)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsWoundSpots(): CreateElement(woundsElement) returned null");
-            return false;
-         }
-         woundSpotsElem.SetAttribute("count", woundSpots.Count.ToString());
-         XmlNode? woundSpotsNode = topNode.AppendChild(woundSpotsElem);
-         if (null == woundSpotsNode)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsWoundSpots(): AppendChild(woundSpotsNode) returned null");
-            return false;
-         }
-         for ( int k=0; k<woundSpots.Count; ++k)
-         {
-            BloodSpot bloodSpot = woundSpots[k];
-            XmlElement? spotElem = aXmlDocument.CreateElement("WoundSpot");
-            if (null == spotElem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsWoundSpots(): CreateElement(spotElem) returned null");
-               return false;
-            }
-            spotElem.SetAttribute("value", bloodSpot.mySize.ToString());
-            spotElem.SetAttribute("value", bloodSpot.myLeft.ToString());
-            spotElem.SetAttribute("value", bloodSpot.myTop.ToString());
-            XmlNode? spotNode = woundSpotsNode.AppendChild(spotElem);
-            if (null == spotNode)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsWoundSpots(): AppendChild(miNode) returned null");
-               return false;
-            }
-         }
-         return true;
-      }
-      private bool CreateXmlMapItemsEnemyAcquiredShots(XmlDocument aXmlDocument, XmlNode topNode, Dictionary<string, int> enemyAcquiredShots)
-      {
-         XmlElement? enemyShotsElem = aXmlDocument.CreateElement("EnemyAcquiredShots");
-         if (null == enemyShotsElem)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsEnemyAcquiredShots(): CreateElement(enemyShotsElem) returned null");
-            return false;
-         }
-         enemyShotsElem.SetAttribute("count", enemyAcquiredShots.Count.ToString());
-         XmlNode? enemyAcquireShotsNode = topNode.AppendChild(enemyShotsElem);
-         if (null == enemyAcquireShotsNode)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsEnemyAcquiredShots(): AppendChild(enemyAcquireShotsNode) returned null");
-            return false;
-         }
-         int count = 0;
-         foreach(var kvp in enemyAcquiredShots)
-         {
-            XmlElement? enemyAcqShotElem = aXmlDocument.CreateElement("EnemyAcqShot");
-            if (null == enemyAcqShotElem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsEnemyAcquiredShots(): CreateElement(spotElem) returned null");
-               return false;
-            }
-            enemyAcqShotElem.SetAttribute("enemy", kvp.Key);
-            enemyAcqShotElem.SetAttribute("value", kvp.Value.ToString());
-            XmlNode? enemyAcqShotNode = enemyAcquireShotsNode.AppendChild(enemyAcqShotElem);
-            if (null == enemyAcqShotNode)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsEnemyAcquiredShots(): AppendChild(miNode) returned null");
-               return false;
-            }
-            count++;
-         }
-         if (count != enemyAcquiredShots.Count)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXmlMapItemsEnemyAcquiredShots(): count=" + count.ToString() + " enemyAcquiredShots=" + enemyAcquiredShots.Count.ToString());
-            return false;
-         }
          return true;
       }
       private bool CreateXmlTerritories(XmlDocument aXmlDocument, ITerritories territories, string attribute)
