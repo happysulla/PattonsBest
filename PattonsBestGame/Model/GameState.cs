@@ -1676,10 +1676,10 @@ namespace Pattons_Best
                   else
                   {
 
-                     if (true == gi.IsAdvancingFireChosen)
+                     if (true == gi.IsAdvancingFireChosen)                            // TestingStartBattle
                      {
-                        gi.AdvancingFireMarkerCount = 6;
-                        action = GameAction.BattleStart;
+                        gi.AdvancingFireMarkerCount = 6;                              // TestingStartBattle
+                        action = GameAction.BattleStart;                              // TestingStartBattle
                         SetCommand(gi, action, GameAction.DieRollActionNone, "e034"); // TestingStartBattle
                      }
                      else
@@ -4361,7 +4361,7 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleStart:
-                  SetCommand(gi, action, GameAction.DieRollActionNone, "e034");
+                  SetCommand(gi, action, GameAction.DieRollActionNone, "e034"); // GameViewerWindow.UpdateView() highlights regions to drop in Advance Markers if gi.IsAdvancingFireChosen=true
                   break; 
                case GameAction.BattleActivation:               // GameStateBattle.PerformAction(BattleActivation)
                case GameAction.BattleResolveArtilleryFire:
@@ -4392,11 +4392,11 @@ namespace Pattons_Best
                      --gi.AdvancingFireMarkerCount;
                      if (0 < gi.AdvancingFireMarkerCount)
                      {
-                        action = GameAction.BattleStart;
+                        action = GameAction.BattleStart;        // GameViewerWindow.UpdateView() highlights regions for placing adv marker
                      }
                      else
                      {
-                        gi.IsAdvancingFireChosen = false;
+                        gi.IsAdvancingFireChosen = false;      // end setting advance fire markers
                         action = GameAction.BattleActivation;  // BattlePlaceAdvanceFire
                      }
                      //----------------------------------

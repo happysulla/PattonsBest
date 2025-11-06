@@ -2934,6 +2934,7 @@ namespace Pattons_Best
                return false;
             }
             mi.TopImageName = sTopImageName;
+            MapItem.theMapImages.GetBitmapImage(sTopImageName); // map images should be loaded in memory for MapItem already created
             //---------------------------------------------
             reader.Read();
             if (false == reader.IsStartElement())

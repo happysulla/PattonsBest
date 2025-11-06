@@ -184,7 +184,7 @@ namespace Pattons_Best
                myDieRoller.HideDie();
                theMainImage = EnumMainImage.MI_Battle;
                ShowBattleMap(myCanvas);
-               if( true == gi.IsAdvancingFireChosen )
+               if( true == gi.IsAdvancingFireChosen ) // show advance fire counter as mouse pointer
                {
                   double sizeCursor = Utilities.ZoomCanvas * Utilities.ZOOM * Utilities.theMapItemSize;
                   System.Windows.Point hotPoint = new System.Windows.Point(Utilities.theMapItemOffset, sizeCursor * 0.5); // set the center of the MapItem as the hot point for the cursor

@@ -302,7 +302,19 @@ namespace Pattons_Best
             gi.DieRollAction = cmd.ActionDieRoll;
             gi.EventDisplayed = gi.EventActive = cmd.EventActive;
             if (GameAction.UpdateNewGame == action)
+            {
                outAction = GameAction.RemoveSplashScreen;
+            }
+            else
+            {
+               if( "e034" == gi.EventActive)
+               {
+                  if ( 0 < gi.AdvancingFireMarkerCount )
+                     outAction = GameAction.BattleStart;
+                  else
+                     outAction = GameAction.BattleActivation;  // BattlePlaceAdvanceFire
+               }
+            }
             myGameEngine.PerformAction(ref gi, ref outAction, 0);
          }
          IAfterActionReport? lastReport = gi.Reports.GetLast();
