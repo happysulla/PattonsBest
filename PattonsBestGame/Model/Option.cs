@@ -87,20 +87,6 @@ namespace Pattons_Best
          Clear();
          foreach (string s in theDefaults)
             Add(new Option(s, false));
-         //-------------------------------
-         Option? option = null;
-         option = this.Find("SkipTutorial0");
-         option.IsEnabled = true;
-         option = this.Find("SkipTutorial1");
-         option.IsEnabled = true;
-         option = this.Find("SkipTutorial2");
-         option.IsEnabled = true;
-         option = this.Find("SkipTutorial3");
-         option.IsEnabled = true;
-         option = this.Find("SkipTutorial4");
-         option.IsEnabled = true;
-         option = this.Find("SkipTutorial5");
-         option.IsEnabled = true;
       }
    }
 }

@@ -83,8 +83,6 @@ namespace Pattons_Best
          sb.Append("\n\tnetVersion=");
          sb.Append(Environment.Version.ToString());
          //--------------------------------------------
-
-         //--------------------------------------------
          Screen? screen = Screen.PrimaryScreen;
          if (null != screen)
          {
@@ -1595,7 +1593,7 @@ namespace Pattons_Best
                {
                   SetCommand(gi, action, GameAction.MorningBriefingWeatherRoll, "e008");
                   gi.GamePhase = GamePhase.MorningBriefing;
-                  if ( false == AddStartingTestingState(gi))
+                  if ( false == AddStartingTestingState(gi))  // TestingStartMorningBriefing
                   {
                      returnStatus = "AddStartingTestingState(TestingStartMorningBriefing) returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
@@ -1635,7 +1633,7 @@ namespace Pattons_Best
                      }
                      gi.Sherman.TerritoryCurrent = gi.Home;
                      gi.BattleStacks.Add(gi.Sherman);
-                     if (false == AddStartingTestingState(gi))
+                     if (false == AddStartingTestingState(gi)) // TestingStartPreparations
                      {
                         returnStatus = "AddStartingTestingState(TestingStartPreparations) returned false";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
@@ -1653,7 +1651,7 @@ namespace Pattons_Best
                {
                   SetCommand(gi, action, GameAction.MovementStartAreaSetRoll, "e018");
                   gi.GamePhase = GamePhase.Movement;
-                  if (false == AddStartingTestingState(gi))
+                  if (false == AddStartingTestingState(gi)) // TestingStartMovement
                   {
                      returnStatus = "AddStartingTestingState(TestingStartMovement) returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
@@ -1670,7 +1668,7 @@ namespace Pattons_Best
                {
                   gi.GamePhase = GamePhase.Battle;
                   gi.DieRollAction = GameAction.DieRollActionNone;
-                  if (false == AddStartingTestingState(gi))
+                  if (false == AddStartingTestingState(gi)) // TestingStartBattle
                   {
                      returnStatus = "AddStartingTestingState(TestingStartBattle) returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
@@ -1701,7 +1699,7 @@ namespace Pattons_Best
                {
                   SetCommand(gi, action, GameAction.BattleAmbushRoll, "e035");
                   gi.GamePhase = GamePhase.Battle;
-                  if (false == AddStartingTestingState(gi))
+                  if (false == AddStartingTestingState(gi)) // TestingStartAmbush
                   {
                      returnStatus = "AddStartingTestingState(TestingStartAmbush) returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
@@ -1713,10 +1711,15 @@ namespace Pattons_Best
                break;
             case GameAction.UpdateNewGame:
             case GameAction.RemoveSplashScreen: // GameStateSetup.PerformAction()
-               if( false == ResetGame(gi, ref action))
+               if( false == SetupNewGame(gi, ref action))
                {
-                  returnStatus = "ResetGame() returned false";
+                  returnStatus = "SetupNewGame() returned false";
                   Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
+               }
+               else if (false == ShowTutorialScreen(gi, ref action))
+               {
+                  returnStatus = "Show_TutorialScreen() returned false";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(" + action.ToString() + "): " + returnStatus);
                }
                break;
             case GameAction.SetupShowMapHistorical:
@@ -1726,7 +1729,7 @@ namespace Pattons_Best
             case GameAction.SetupShowAfterActionReport:
                if ( false == ShowTutorialScreen(gi, ref action))
                {
-                  returnStatus = "ShowTutorialScreen() returned false";
+                  returnStatus = "Show_TutorialScreen() returned false";
                   Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(" + action.ToString() + "): " + returnStatus);
                }
                break;
@@ -2418,14 +2421,6 @@ namespace Pattons_Best
             return false;
          }
          //--------------------------------
-         Option? option = gi.Options.Find("AutoRollEnemyActivation");
-         if (null == option)
-         {
-            option = new Option("AutoRollEnemyActivation", false);
-            gi.Options.Add(option);
-         }
-         option.IsEnabled = true;
-         //--------------------------------
          //gi.Day = 67;                                        // <cgs> TEST - Day before first Retrofitting - day 37 is retrofitting
          //gi.Day = 100;                                       // <cgs> TEST - After Nov 1944 for HVSS   
          //gi.Day = 110;                                      // <cgs> TEST - After Nov 1944 - day 111 is retrofit period 
@@ -2536,6 +2531,56 @@ namespace Pattons_Best
          //   Logger.Log(LogEnum.LE_ERROR, "Add_StartingTestingState(): AddStartingTestingStateEnemyRetreatAreas() returned false");
          //   return false;
          //}
+         //================================================
+         Option? option = gi.Options.Find("AutoRollEnemyActivation");
+         if (null == option)
+         {
+            option = new Option("AutoRollEnemyActivation", false);
+            gi.Options.Add(option);
+         }
+         option.IsEnabled = true;
+         option = gi.Options.Find("SkipTutorial0");
+         if (null == option)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingState(): option null for SkipTutorial0");
+            return false;
+         }
+         option.IsEnabled = true;
+         option = gi.Options.Find("SkipTutorial1");
+         if (null == option)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingState(): option null SkipTutorial1");
+            return false;
+         }
+         option.IsEnabled = true;
+         option = gi.Options.Find("SkipTutorial2");
+         if (null == option)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingState(): option null for SkipTutorial2");
+            return false;
+         }
+         option.IsEnabled = true;
+         option = gi.Options.Find("SkipTutorial3");
+         if (null == option)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingState(): option null for SkipTutorial3");
+            return false;
+         }
+         option.IsEnabled = true;
+         option = gi.Options.Find("SkipTutorial4");
+         if (null == option)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingState(): option null for SkipTutorial4");
+            return false;
+         }
+         option.IsEnabled = true;
+         option = gi.Options.Find("SkipTutorial5");
+         if (null == option)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingState(): option null for SkipTutorial5");
+            return false;
+         }
+         option.IsEnabled = true;
          return true;
       }
       private bool AddStartingTestingStateEnemyRetreatAreas(IGameInstance gi)
@@ -2596,8 +2641,10 @@ namespace Pattons_Best
          gi.MoveStacks.Add(strengthMarker);
          return true;
       }
-      private bool ResetGame(IGameInstance gi, ref GameAction outAction)
+      private bool SetupNewGame(IGameInstance gi, ref GameAction outAction)
       {
+         PrintDiagnosticInfoToLog();
+         gi.GamePhase = GamePhase.GameSetup;
          gi.Statistic.Clear();            // Clear any current statitics
          gi.Statistic.myNumGames = 1;     // Set played games to 1
          //-------------------------------------------------------
@@ -2606,7 +2653,7 @@ namespace Pattons_Best
          gi.DieRollAction = GameAction.DieRollActionNone;
          if (false == ResetDieResults(gi))
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResetGame(): ResetDieResults() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Setup_NewGame(): ResetDieResults() returned false");
             return false;
          }
          //-------------------------------------------------------
@@ -2656,7 +2703,7 @@ namespace Pattons_Best
          gi.NumCollateralDamage = 0;
          gi.TargetMainGun = null;
          //-------------------------------------------------------
-         Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "ResetGame(): gi.MapItemMoves.Clear()");
+         Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "Setup_NewGame(): gi.MapItemMoves.Clear()");
          gi.MapItemMoves.Clear();
          gi.Sherman.IsMoved = false;
          //-------------------------------------------------------
@@ -2666,24 +2713,33 @@ namespace Pattons_Best
          ICombatCalendarEntry? entry = TableMgr.theCombatCalendarEntries[0];
          if (null == entry)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResetGame(): entry=null");
+            Logger.Log(LogEnum.LE_ERROR, "Setup_NewGame(): entry=null");
             return false;
          }
-         IAfterActionReport report1 = new AfterActionReport(entry); // ResetGame()
+         IAfterActionReport report1 = new AfterActionReport(entry); // Setup_NewGame()
          gi.Reports.Add(report1);
          //---------------------------------------------
          gi.Options.SetOriginalGameOptions();
-         gi.GamePhase = GamePhase.GameSetup;
-         SetCommand(gi, outAction, GameAction.DieRollActionNone, "e000");
-         PrintDiagnosticInfoToLog();
+         //---------------------------------------------
+         if (false == AddStartingTestingState(gi)) // TestingStartAmbush
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Setup_NewGame():  Add_StartingTestingState() returned false");
+            return false;
+         }
          return true;
       }
       private bool ShowTutorialScreen(IGameInstance gi, ref GameAction outAction)
       {
          if (null == gi)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowTutorialScreen(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreen(): myGameInstance=null");
             return false;
+         }
+         Option? option0 = gi.Options.Find("SkipTutorial0");
+         if (null == option0)
+         {
+            option0 = new Option("SkipTutorial0", false);
+            gi.Options.Add(option0);
          }
          Option? option1 = gi.Options.Find("SkipTutorial1");
          if (null == option1)
@@ -2719,6 +2775,43 @@ namespace Pattons_Best
          string eventName = "ERROR";
          switch (outAction)
          {
+            case GameAction.UpdateNewGame:
+            case GameAction.RemoveSplashScreen:
+               eventName = "e000";
+               if( true == option0.IsEnabled )
+               {
+                  eventName = "e001";
+                  outAction = GameAction.SetupShowMapHistorical;
+                  if (true == option1.IsEnabled)
+                  {
+                     eventName = "e002";
+                     outAction = GameAction.SetupShowMovementBoard;
+                     if (true == option2.IsEnabled)
+                     {
+                        eventName = "e003";
+                        outAction = GameAction.SetupShowBattleBoard;
+                        if (true == option3.IsEnabled)
+                        {
+                           eventName = "e004";
+                           outAction = GameAction.SetupShowTankCard;
+                           if (true == option4.IsEnabled)
+                           {
+                              eventName = "e005";
+                              outAction = GameAction.SetupShowAfterActionReport;
+                              if (true == option5.IsEnabled)
+                              {
+                                 if (false == SetupAssignCrewRating(gi, ref outAction))
+                                 {
+                                    Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreen(): SetupAssignCrewRating() returned false");
+                                    return false;
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  }
+               }
+               break;
             case GameAction.SetupShowMapHistorical:
                eventName = "e001";
                if ( true == option1.IsEnabled )
@@ -2741,7 +2834,7 @@ namespace Pattons_Best
                            {
                               if (false == SetupAssignCrewRating(gi, ref outAction))
                               {
-                                 Logger.Log(LogEnum.LE_ERROR, "ShowTutorialScreen(): SetupAssignCrewRating() returned false");
+                                 Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreen(): SetupAssignCrewRating() returned false");
                                  return false;
                               }
                            }
@@ -2768,7 +2861,7 @@ namespace Pattons_Best
                         {
                            if (false == SetupAssignCrewRating(gi, ref outAction))
                            {
-                              Logger.Log(LogEnum.LE_ERROR, "ShowTutorialScreen(): SetupAssignCrewRating() returned false");
+                              Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreen(): SetupAssignCrewRating() returned false");
                               return false;
                            }
                         }
@@ -2790,7 +2883,7 @@ namespace Pattons_Best
                      {
                         if (false == SetupAssignCrewRating(gi, ref outAction))
                         {
-                           Logger.Log(LogEnum.LE_ERROR, "ShowTutorialScreen(): SetupAssignCrewRating() returned false");
+                           Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreen(): SetupAssignCrewRating() returned false");
                            return false;
                         }
                      }
@@ -2807,7 +2900,7 @@ namespace Pattons_Best
                   {
                      if (false == SetupAssignCrewRating(gi, ref outAction))
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "ShowTutorialScreen(): SetupAssignCrewRating() returned false");
+                        Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreen(): SetupAssignCrewRating() returned false");
                         return false;
                      }
                   }
@@ -2819,13 +2912,13 @@ namespace Pattons_Best
                {
                   if (false == SetupAssignCrewRating(gi, ref outAction))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ShowTutorialScreen(): SetupAssignCrewRating() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreen(): SetupAssignCrewRating() returned false");
                      return false;
                   }
                }
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "ShowTutorialScreen(): reached default outActin=" + outAction.ToString());
+               Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreen(): reached default outActin=" + outAction.ToString());
                return false;
          }
          SetCommand(gi, outAction, GameAction.DieRollActionNone, eventName);
