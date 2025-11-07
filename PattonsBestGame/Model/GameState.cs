@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using System.Security.Policy;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -1575,6 +1576,7 @@ namespace Pattons_Best
             case GameAction.EndGameShowFeats:
             case GameAction.UpdateAfterActionReport:
             case GameAction.UpdateEventViewerDisplay: // Only change active event
+            case GameAction.UpdateNewGameEnd:
                break;
             case GameAction.UpdateLoadingGame:
                if (false == LoadGame(ref gi, ref action))
@@ -1718,35 +1720,21 @@ namespace Pattons_Best
                }
                break;
             case GameAction.SetupShowMapHistorical:
-               SetCommand(gi, action, GameAction.DieRollActionNone, "e001");
-               break;
             case GameAction.SetupShowMovementBoard:
-               SetCommand(gi, action, GameAction.DieRollActionNone, "e002");
-               break;
             case GameAction.SetupShowBattleBoard:
-               SetCommand(gi, action, GameAction.DieRollActionNone, "e003");
-               break;
             case GameAction.SetupShowTankCard:
-               SetCommand(gi, action, GameAction.DieRollActionNone, "e004");
-               break;
             case GameAction.SetupShowAfterActionReport:
-               SetCommand(gi, action, GameAction.DieRollActionNone, "e005");
+               if ( false == ShowTutorialScreen(gi, ref action))
+               {
+                  returnStatus = "ShowTutorialScreen() returned false";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(" + action.ToString() + "): " + returnStatus);
+               }
                break;
             case GameAction.SetupAssignCrewRating:
-               gi.NewMembers.Clear();
-               IAfterActionReport? report = gi.Reports.GetLast();
-               if (null == report)
+               if( false == SetupAssignCrewRating(gi, ref action))
                {
-                  returnStatus = "gi.Reports.GetLast() returned null";
+                  returnStatus = "SetupAssignCrewRating() returned false";
                   Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(SetupAssignCrewRating): " + returnStatus);
-               }
-               else
-               {
-                  gi.NewMembers.Add(report.Commander); // GameStateSetup.PerformAction(SetupAssignCrewRating)
-                  gi.NewMembers.Add(report.Gunner);    // GameStateSetup.PerformAction(SetupAssignCrewRating)
-                  gi.NewMembers.Add(report.Loader);    // GameStateSetup.PerformAction(SetupAssignCrewRating)
-                  gi.NewMembers.Add(report.Driver);    // GameStateSetup.PerformAction(SetupAssignCrewRating)
-                  gi.NewMembers.Add(report.Assistant); // GameStateSetup.PerformAction(SetupAssignCrewRating)
                }
                break;
             case GameAction.SetupShowCombatCalendarCheck:
@@ -1755,7 +1743,7 @@ namespace Pattons_Best
                if (false == AssignNewCrewMembers(gi))
                {
                   returnStatus = "AssignNewCrewMembers() returned false";
-                  Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(SetupAssignCrewRating): " + returnStatus);
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(SetupShowCombatCalendarCheck): " + returnStatus);
                }
                break;
             case GameAction.EndGameClose:
@@ -1788,12 +1776,6 @@ namespace Pattons_Best
          else
             Logger.Log(LogEnum.LE_ERROR, sb12.ToString());
          return returnStatus;
-      }
-      private bool PerformAutoSetup(IGameInstance gi, ref GameAction outaction)
-      {
-         if (GameAction.UpdateNewGame == outaction)
-            outaction = GameAction.RemoveSplashScreen;
-         return true;
       }
       private bool PerformAutoSetupSkipCrewAssignments(IGameInstance gi)
       {
@@ -2687,31 +2669,182 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ResetGame(): entry=null");
             return false;
          }
-         IAfterActionReport report1 = new AfterActionReport(entry); // initial created GameViewerWindow()
+         IAfterActionReport report1 = new AfterActionReport(entry); // ResetGame()
          gi.Reports.Add(report1);
          //---------------------------------------------
-         Option? option = gi.Options.Find("AutoSetup");
-         if (null == option)
-         {
-            option = new Option("AutoSetup", false);
-            gi.Options.Add(option);
-         }
-         if (true == option.IsEnabled)
-         {
-            if (false == PerformAutoSetup(gi, ref outAction))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): PerformAutoSetup() returned false");
-               return false;
-            }
-            SetCommand(gi, outAction, GameAction.DieRollActionNone, "e203");
-         }
-         else
-         {
-            gi.Options.SetOriginalGameOptions();
-            gi.GamePhase = GamePhase.GameSetup;
-            SetCommand(gi, outAction, GameAction.DieRollActionNone, "e000");
-         }
+         gi.Options.SetOriginalGameOptions();
+         gi.GamePhase = GamePhase.GameSetup;
+         SetCommand(gi, outAction, GameAction.DieRollActionNone, "e000");
          PrintDiagnosticInfoToLog();
+         return true;
+      }
+      private bool ShowTutorialScreen(IGameInstance gi, ref GameAction outAction)
+      {
+         if (null == gi)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowTutorialScreen(): myGameInstance=null");
+            return false;
+         }
+         Option? option1 = gi.Options.Find("SkipTutorial1");
+         if (null == option1)
+         {
+            option1 = new Option("SkipTutorial1", false);
+            gi.Options.Add(option1);
+         }
+         Option? option2 = gi.Options.Find("SkipTutorial2");
+         if (null == option2)
+         {
+            option2 = new Option("SkipTutorial2", false);
+            gi.Options.Add(option2);
+         }
+         Option? option3 = gi.Options.Find("SkipTutorial3");
+         if (null == option3)
+         {
+            option3 = new Option("SkipTutorial3", false);
+            gi.Options.Add(option3);
+         }
+         Option? option4 = gi.Options.Find("SkipTutorial4");
+         if (null == option4)
+         {
+            option4 = new Option("SkipTutorial4", false);
+            gi.Options.Add(option4);
+         }
+         Option? option5 = gi.Options.Find("SkipTutorial5");
+         if (null == option5)
+         {
+            option5 = new Option("SkipTutorial5", false);
+            gi.Options.Add(option5);
+         }
+         //-----------------------------------------------
+         string eventName = "ERROR";
+         switch (outAction)
+         {
+            case GameAction.SetupShowMapHistorical:
+               eventName = "e001";
+               if ( true == option1.IsEnabled )
+               {
+                  eventName = "e002";
+                  outAction = GameAction.SetupShowMovementBoard;
+                  if (true == option2.IsEnabled)
+                  {
+                     eventName = "e003";
+                     outAction = GameAction.SetupShowBattleBoard;
+                     if (true == option3.IsEnabled)
+                     {
+                        eventName = "e004";
+                        outAction = GameAction.SetupShowTankCard;
+                        if (true == option4.IsEnabled)
+                        {
+                           eventName = "e005";
+                           outAction = GameAction.SetupShowAfterActionReport;
+                           if (true == option5.IsEnabled)
+                           {
+                              if (false == SetupAssignCrewRating(gi, ref outAction))
+                              {
+                                 Logger.Log(LogEnum.LE_ERROR, "ShowTutorialScreen(): SetupAssignCrewRating() returned false");
+                                 return false;
+                              }
+                           }
+                        }
+                     }
+                  }
+               }
+               break;
+            case GameAction.SetupShowMovementBoard:
+               eventName = "e002";
+               if (true == option2.IsEnabled)
+               {
+                  eventName = "e003";
+                  outAction = GameAction.SetupShowBattleBoard;
+                  if (true == option3.IsEnabled)
+                  {
+                     eventName = "e004";
+                     outAction = GameAction.SetupShowTankCard;
+                     if (true == option4.IsEnabled)
+                     {
+                        eventName = "e005";
+                        outAction = GameAction.SetupShowAfterActionReport;
+                        if (true == option5.IsEnabled)
+                        {
+                           if (false == SetupAssignCrewRating(gi, ref outAction))
+                           {
+                              Logger.Log(LogEnum.LE_ERROR, "ShowTutorialScreen(): SetupAssignCrewRating() returned false");
+                              return false;
+                           }
+                        }
+                     }
+                  }
+               }
+               break;
+            case GameAction.SetupShowBattleBoard:
+               eventName = "e003";
+               if (true == option3.IsEnabled)
+               {
+                  eventName = "e004";
+                  outAction = GameAction.SetupShowTankCard;
+                  if (true == option4.IsEnabled)
+                  {
+                     eventName = "e005";
+                     outAction = GameAction.SetupShowAfterActionReport;
+                     if (true == option5.IsEnabled)
+                     {
+                        if (false == SetupAssignCrewRating(gi, ref outAction))
+                        {
+                           Logger.Log(LogEnum.LE_ERROR, "ShowTutorialScreen(): SetupAssignCrewRating() returned false");
+                           return false;
+                        }
+                     }
+                  }
+               }
+               break;
+            case GameAction.SetupShowTankCard:
+               eventName = "e004";
+               if (true == option4.IsEnabled)
+               {
+                  eventName = "e005";
+                  outAction = GameAction.SetupShowAfterActionReport;
+                  if (true == option5.IsEnabled)
+                  {
+                     if (false == SetupAssignCrewRating(gi, ref outAction))
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "ShowTutorialScreen(): SetupAssignCrewRating() returned false");
+                        return false;
+                     }
+                  }
+               }
+               break;
+            case GameAction.SetupShowAfterActionReport:
+               eventName = "e005";
+               if (true == option5.IsEnabled)
+               {
+                  if (false == SetupAssignCrewRating(gi, ref outAction))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "ShowTutorialScreen(): SetupAssignCrewRating() returned false");
+                     return false;
+                  }
+               }
+               break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "ShowTutorialScreen(): reached default outActin=" + outAction.ToString());
+               return false;
+         }
+         SetCommand(gi, outAction, GameAction.DieRollActionNone, eventName);
+         return true;
+      }
+      private bool SetupAssignCrewRating(IGameInstance gi, ref GameAction outAction)
+      {
+         gi.NewMembers.Clear();
+         IAfterActionReport? report = gi.Reports.GetLast();
+         if (null == report)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetupAssignCrewRating(): gi.Reports.GetLast() returned null");
+            return false;
+         }
+         gi.NewMembers.Add(report.Commander); // GameStateSetup.PerformAction(SetupAssignCrewRating)
+         gi.NewMembers.Add(report.Gunner);    // GameStateSetup.PerformAction(SetupAssignCrewRating)
+         gi.NewMembers.Add(report.Loader);    // GameStateSetup.PerformAction(SetupAssignCrewRating)
+         gi.NewMembers.Add(report.Driver);    // GameStateSetup.PerformAction(SetupAssignCrewRating)
+         gi.NewMembers.Add(report.Assistant); // GameStateSetup.PerformAction(SetupAssignCrewRating)
          return true;
       }
    }
@@ -9118,7 +9251,7 @@ namespace Pattons_Best
                break;
             case GameAction.UpdateBattleBoard: // Do not log event
                break;
-            case GameAction.RemoveSplashScreen:  // GameStateUnitTest.PerformAction()
+            case GameAction.RemoveSplashScreen:  // GameStateUnitTest.PerformAction() - Unit Test PerintDiagnosticInfoToLog()
                PrintDiagnosticInfoToLog();
                break;
             case GameAction.UnitTestCommand: // call the unit test's Command() function

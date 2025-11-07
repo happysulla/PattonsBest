@@ -734,6 +734,7 @@ namespace Pattons_Best
             case "DieRollActionNone": return GameAction.DieRollActionNone;
 
             case "UpdateNewGame": return GameAction.UpdateNewGame;
+            case "UpdateNewGameEnd": return GameAction.UpdateNewGameEnd;
             case "UpdateGameOptions": return GameAction.UpdateGameOptions;
             case "UpdateLoadingGame": return GameAction.UpdateLoadingGame;
             case "UpdateUndo": return GameAction.UpdateUndo;
@@ -1046,12 +1047,6 @@ namespace Pattons_Best
             if (false == ReadXmlGameStat(reader, gi.Statistic))
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlGameStat() returned false");
-               return null;
-            }
-            //----------------------------------------------
-            if (false == ReadXmlDieRollResults(reader, gi.DieResults))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlDieRollResults() returned false");
                return null;
             }
             //----------------------------------------------
@@ -3901,7 +3896,7 @@ namespace Pattons_Best
                return false;
             }
             //---------------------------------------------
-            string? sSize = reader.GetAttribute("value");
+            string? sSize = reader.GetAttribute("size");
             if (null == sSize)
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItemsWoundSpots(): sSize=null");
@@ -3909,7 +3904,7 @@ namespace Pattons_Best
             }
             int size = Convert.ToInt32(sSize);
             //---------------------------------------------
-            string? sLeft = reader.GetAttribute("value");
+            string? sLeft = reader.GetAttribute("left");
             if (null == sLeft)
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItemsWoundSpots(): sLeft=null");
@@ -3917,7 +3912,7 @@ namespace Pattons_Best
             }
             double left = Convert.ToInt32(sLeft);
             //---------------------------------------------
-            string? sTop = reader.GetAttribute("value");
+            string? sTop = reader.GetAttribute("top");
             if (null == sTop)
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItemsWoundSpots(): sTop=null");
@@ -6557,12 +6552,6 @@ namespace Pattons_Best
             return null;
          }
          //------------------------------------------
-         if ( false == CreateXmlListingOfMapItems(aXmlDocument, gi))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlCreateListingOfMapItems() returned false");
-            return null;
-         }
-         //------------------------------------------
          XmlElement? elem = aXmlDocument.CreateElement("EventActive");
          if (null == elem)
          {
@@ -8563,9 +8552,9 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "CreateXmlListingOfMapItemsWoundSpots(): CreateElement(spotElem) returned null");
                return false;
             }
-            spotElem.SetAttribute("value", bloodSpot.mySize.ToString());
-            spotElem.SetAttribute("value", bloodSpot.myLeft.ToString());
-            spotElem.SetAttribute("value", bloodSpot.myTop.ToString());
+            spotElem.SetAttribute("size", bloodSpot.mySize.ToString());
+            spotElem.SetAttribute("left", bloodSpot.myLeft.ToString());
+            spotElem.SetAttribute("top", bloodSpot.myTop.ToString());
             XmlNode? spotNode = woundSpotsNode.AppendChild(spotElem);
             if (null == spotNode)
             {

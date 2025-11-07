@@ -168,6 +168,7 @@ namespace Pattons_Best
       DieRollActionNone,          // The field in IGameInstance indicates what the roll apply. If none expected, it is set to this value.
 
       UpdateNewGame,              // Menu Options
+      UpdateNewGameEnd,           // finish setting up for new game
       UpdateGameOptions, 
       UpdateLoadingGame,
       UpdateUndo,

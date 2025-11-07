@@ -302,7 +302,7 @@ namespace Pattons_Best
             gi.EventDisplayed = gi.EventActive = cmd.EventActive;
             if (GameAction.UpdateNewGame == action)
             {
-               outAction = GameAction.RemoveSplashScreen;
+               outAction = GameAction.UpdateNewGameEnd;
             }
             else
             {
@@ -603,6 +603,7 @@ namespace Pattons_Best
                SaveDefaultsToSettings();
                break;
             case GameAction.RemoveSplashScreen:
+            case GameAction.UpdateNewGameEnd:
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                mySplashScreen.Close();

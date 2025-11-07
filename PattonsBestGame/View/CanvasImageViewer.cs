@@ -154,8 +154,9 @@ namespace Pattons_Best
                ShowTankBrewUp(gi, myCanvas);
                break;
             case GameAction.RemoveSplashScreen:
+            case GameAction.UpdateNewGameEnd:
                theMainImage = EnumMainImage.MI_Other;
-               ShowInitialScreen(myCanvas);
+               ShowShermanPhoto(myCanvas);
                break;
             case GameAction.SetupShowMapHistorical:
                theMainImage = EnumMainImage.MI_Other;
@@ -285,7 +286,7 @@ namespace Pattons_Best
          Canvas.SetZIndex(img, 0);
       }
       //-------------------------------------------------
-      private void ShowInitialScreen(Canvas c)
+      private void ShowShermanPhoto(Canvas c)
       {
          Image img = new Image() { Name = "CanvasMain", Width = 1617, Height = 880, Source = MapItem.theMapImages.GetBitmapImage("Sherman3") };
          c.Children.Add(img);
