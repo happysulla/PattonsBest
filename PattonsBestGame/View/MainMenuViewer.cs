@@ -252,6 +252,19 @@ namespace Pattons_Best
       }
       public void MenuItemFileOptions_Click(object sender, RoutedEventArgs e)
       {
+         OptionsSelectionDialog dialog = new OptionsSelectionDialog(myGameInstance.Options); // Set Options in Game
+         if (true == dialog.CtorError)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MenuItemFileOptions_Click(): OptionSelectionDialog CtorError=true");
+            return;
+         }
+         if (true == dialog.ShowDialog())
+         {
+            this.NewGameOptions = dialog.NewOptions;
+            Logger.Log(LogEnum.LE_VIEW_SHOW_OPTIONS, "MenuItemFileOptions_Click(): " + this.NewGameOptions.ToString());
+            GameAction action = GameAction.UpdateGameOptions;
+            myGameEngine.PerformAction(ref myGameInstance, ref action);
+         }
       }
       public void MenuItemEditUndo_Click(object sender, RoutedEventArgs e)
       {

@@ -1572,8 +1572,13 @@ namespace Pattons_Best
             case GameAction.ShowMovementDiagramDialog:
             case GameAction.ShowAboutDialog:
             case GameAction.EndGameShowFeats:
+            case GameAction.UpdateStatusBar:
+            case GameAction.UpdateTankCard:
+            case GameAction.UpdateGameOptions:
+            case GameAction.UpdateShowRegion:
             case GameAction.UpdateAfterActionReport:
             case GameAction.UpdateEventViewerDisplay: // Only change active event
+            case GameAction.UpdateBattleBoard: // Do not log event
             case GameAction.UpdateNewGameEnd:
                break;
             case GameAction.UpdateLoadingGame:
@@ -2975,8 +2980,13 @@ namespace Pattons_Best
                case GameAction.ShowReportErrorDialog:
                case GameAction.ShowAboutDialog:
                case GameAction.EndGameShowFeats:
+               case GameAction.UpdateStatusBar:
+               case GameAction.UpdateTankCard:
+               case GameAction.UpdateGameOptions:
+               case GameAction.UpdateShowRegion:
                case GameAction.UpdateAfterActionReport:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
+               case GameAction.UpdateBattleBoard: // Do not log event
                case GameAction.EveningDebriefingResetDay:
                   break;
                case GameAction.UpdateLoadingGame:
@@ -3625,8 +3635,15 @@ namespace Pattons_Best
                case GameAction.ShowReportErrorDialog:
                case GameAction.ShowAboutDialog:
                case GameAction.EndGameShowFeats:
+               case GameAction.UpdateStatusBar:
+               case GameAction.UpdateTankCard:
+               case GameAction.UpdateGameOptions:
+               case GameAction.UpdateShowRegion:
                case GameAction.UpdateAfterActionReport:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
+               case GameAction.UpdateBattleBoard: // Do not log event
+               case GameAction.MorningBriefingAssignCrewRating: // handled in EventViewer by showing dialog
+               case GameAction.MorningBriefingAmmoReadyRackLoad:
                   break;
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
@@ -3856,12 +3873,13 @@ namespace Pattons_Best
                case GameAction.EndGameShowFeats:
                case GameAction.UpdateStatusBar:
                case GameAction.UpdateTankCard:
+               case GameAction.UpdateGameOptions:
                case GameAction.UpdateShowRegion:
+               case GameAction.UpdateAfterActionReport:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
+               case GameAction.UpdateBattleBoard: // Do not log event
                case GameAction.MorningBriefingAssignCrewRating: // handled in EventViewer by showing dialog
                case GameAction.MorningBriefingAmmoReadyRackLoad:
-                  break;
-               case GameAction.UpdateBattleBoard: // Do not log event
                   break;
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
@@ -4566,6 +4584,7 @@ namespace Pattons_Best
                case GameAction.ShowReportErrorDialog:
                case GameAction.ShowAboutDialog:
                case GameAction.EndGameShowFeats:
+               case GameAction.UpdateGameOptions:
                case GameAction.UpdateStatusBar:
                case GameAction.UpdateTankCard:
                case GameAction.UpdateShowRegion:
@@ -4957,15 +4976,15 @@ namespace Pattons_Best
                case GameAction.EndGameShowFeats:
                case GameAction.UpdateStatusBar:
                case GameAction.UpdateTankCard:
+               case GameAction.UpdateGameOptions:
                case GameAction.UpdateShowRegion:
                case GameAction.UpdateAfterActionReport:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
+               case GameAction.UpdateBattleBoard: // Do not log event
                case GameAction.MorningBriefingAssignCrewRating: // handled in EventViewer by showing dialog
                   break;
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
-                  break;
-               case GameAction.UpdateBattleBoard: // Do not log event
                   break;
                case GameAction.UpdateLoadingGame:
                   if (false == LoadGame(ref gi, ref action))
@@ -8771,10 +8790,10 @@ namespace Pattons_Best
                case GameAction.EndGameShowFeats:
                case GameAction.UpdateStatusBar:
                case GameAction.UpdateTankCard:
+               case GameAction.UpdateGameOptions:
                case GameAction.UpdateShowRegion:
                case GameAction.UpdateAfterActionReport:
                case GameAction.UpdateEventViewerDisplay: // Only change active event
-                  break;
                case GameAction.UpdateBattleBoard: // Do not log event
                   break;
                case GameAction.UpdateEventViewerActive: // Only change active event
@@ -9251,10 +9270,10 @@ namespace Pattons_Best
             case GameAction.EndGameShowFeats:
             case GameAction.UpdateStatusBar:
             case GameAction.UpdateTankCard:
+            case GameAction.UpdateGameOptions:
             case GameAction.UpdateShowRegion:
             case GameAction.UpdateAfterActionReport:
             case GameAction.UpdateEventViewerDisplay: // Only change active event
-               break;
             case GameAction.UpdateBattleBoard: // Do not log event
                break;
             case GameAction.EndGameWin:
@@ -9267,8 +9286,6 @@ namespace Pattons_Best
                SetCommand(gi, action, GameAction.DieRollActionNone, "e503");
                break;
             case GameAction.EndGameClose:
-               break;
-            case GameAction.UpdateGameOptions:
                break;
             case GameAction.EndGameFinal:
                SetCommand(gi, action, GameAction.DieRollActionNone, "e504");
@@ -9336,6 +9353,7 @@ namespace Pattons_Best
             case GameAction.ShowReportErrorDialog:
             case GameAction.ShowAboutDialog:
             case GameAction.EndGameShowFeats:
+            case GameAction.UpdateGameOptions:
             case GameAction.UpdateStatusBar:
             case GameAction.UpdateTankCard:
             case GameAction.UpdateShowRegion:
