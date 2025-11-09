@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Transactions;
 using System.Windows;
@@ -293,11 +294,16 @@ namespace Pattons_Best
       }
       private XmlDocument CreateRoadsXml()
       {
+         //---------------------------------------------
+         CultureInfo currentCulture = CultureInfo.CurrentCulture;
+         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+         //---------------------------------------------
          XmlDocument aXmlDocument = new XmlDocument();
          aXmlDocument.LoadXml("<Roads></Roads>");
          if( null == aXmlDocument.DocumentElement )
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateRoadsXml(): aXmlDocument.DocumentElement=null");
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
             return aXmlDocument;
          }
          foreach (KeyValuePair<string, Polyline> kvp in myPolyLines)
@@ -318,6 +324,7 @@ namespace Pattons_Best
                if (null == lastChild)
                {
                   Logger.Log(LogEnum.LE_ERROR, "CreateRoadsXml(): lastChild=null");
+                  System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
                   return aXmlDocument;
                }
                else
@@ -326,6 +333,7 @@ namespace Pattons_Best
                }
             }
          }
+         System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
          return aXmlDocument;
       }
       private bool ReadRoadsXml()
@@ -335,6 +343,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ReadRoadsXml(): myCanvasMain = null");
             return false;
          }
+         //---------------------------------------------
+         CultureInfo currentCulture = CultureInfo.CurrentCulture;
+         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
          //---------------------------------------------
          XmlTextReader? reader = null;
          PointCollection? points = null;
@@ -421,7 +432,9 @@ namespace Pattons_Best
          {
             if (reader != null)
                reader.Close();
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
          }
+         System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
          return true;
       }
       //----------------------------------------------------------

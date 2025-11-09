@@ -2532,55 +2532,55 @@ namespace Pattons_Best
          //   return false;
          //}
          //================================================
-         Option? option = gi.Options.Find("AutoRollEnemyActivation");
-         if (null == option)
-         {
-            option = new Option("AutoRollEnemyActivation", false);
-            gi.Options.Add(option);
-         }
-         option.IsEnabled = true;
-         option = gi.Options.Find("SkipTutorial0");
-         if (null == option)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingState(): option null for SkipTutorial0");
-            return false;
-         }
-         option.IsEnabled = true;
-         option = gi.Options.Find("SkipTutorial1");
-         if (null == option)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingState(): option null SkipTutorial1");
-            return false;
-         }
-         option.IsEnabled = true;
-         option = gi.Options.Find("SkipTutorial2");
-         if (null == option)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingState(): option null for SkipTutorial2");
-            return false;
-         }
-         option.IsEnabled = true;
-         option = gi.Options.Find("SkipTutorial3");
-         if (null == option)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingState(): option null for SkipTutorial3");
-            return false;
-         }
-         option.IsEnabled = true;
-         option = gi.Options.Find("SkipTutorial4");
-         if (null == option)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingState(): option null for SkipTutorial4");
-            return false;
-         }
-         option.IsEnabled = true;
-         option = gi.Options.Find("SkipTutorial5");
-         if (null == option)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingState(): option null for SkipTutorial5");
-            return false;
-         }
-         option.IsEnabled = true;
+         //Option? option = gi.Options.Find("AutoRollEnemyActivation");
+         //if (null == option)
+         //{
+         //   option = new Option("AutoRollEnemyActivation", false);
+         //   gi.Options.Add(option);
+         //}
+         //option.IsEnabled = true;
+         //option = gi.Options.Find("SkipTutorial0");
+         //if (null == option)
+         //{
+         //   Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingState(): option null for SkipTutorial0");
+         //   return false;
+         //}
+         //option.IsEnabled = true;
+         //option = gi.Options.Find("SkipTutorial1");
+         //if (null == option)
+         //{
+         //   Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingState(): option null SkipTutorial1");
+         //   return false;
+         //}
+         //option.IsEnabled = true;
+         //option = gi.Options.Find("SkipTutorial2");
+         //if (null == option)
+         //{
+         //   Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingState(): option null for SkipTutorial2");
+         //   return false;
+         //}
+         //option.IsEnabled = true;
+         //option = gi.Options.Find("SkipTutorial3");
+         //if (null == option)
+         //{
+         //   Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingState(): option null for SkipTutorial3");
+         //   return false;
+         //}
+         //option.IsEnabled = true;
+         //option = gi.Options.Find("SkipTutorial4");
+         //if (null == option)
+         //{
+         //   Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingState(): option null for SkipTutorial4");
+         //   return false;
+         //}
+         //option.IsEnabled = true;
+         //option = gi.Options.Find("SkipTutorial5");
+         //if (null == option)
+         //{
+         //   Logger.Log(LogEnum.LE_ERROR, "AddStartingTestingState(): option null for SkipTutorial5");
+         //   return false;
+         //}
+         //option.IsEnabled = true;
          return true;
       }
       private bool AddStartingTestingStateEnemyRetreatAreas(IGameInstance gi)

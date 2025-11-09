@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Security.Cryptography.Pkcs;
 using System.Windows;
@@ -631,6 +632,7 @@ namespace Pattons_Best
       }
       private bool CreateXml(ITerritories territories)
       {
+         CultureInfo currentCulture = CultureInfo.CurrentCulture;
          if (null == myFileName)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXml(): myFileName=null");
@@ -638,6 +640,8 @@ namespace Pattons_Best
          }
          try
          {
+            System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            //-----------------------------------------------------
             System.IO.File.Delete(myFileName);           // Delete Existing Territories.xml file and create a new one based on myGameEngine.Territories container
             //-----------------------------------------------------
             System.Xml.XmlDocument aXmlDocument = new XmlDocument();
@@ -648,6 +652,7 @@ namespace Pattons_Best
                return false;
             }
             GameLoadMgr loadMgr = new GameLoadMgr();
+
             if (false == loadMgr.CreateXmlTerritories(aXmlDocument, territories))
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateXmlTerritories() returned false");
@@ -666,8 +671,10 @@ namespace Pattons_Best
          catch (Exception e)
          {
             Logger.Log(LogEnum.LE_ERROR, "Cleanup(): exeption=\n" + e.Message);
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
             return false;
          }
+         System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
          return true;
       }
       private bool SetRandomPoint(ITerritory t)

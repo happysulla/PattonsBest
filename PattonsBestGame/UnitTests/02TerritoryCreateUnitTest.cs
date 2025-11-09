@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -694,11 +695,14 @@ namespace Pattons_Best
                return false;
             }
             GameLoadMgr loadMgr = new GameLoadMgr();
+            CultureInfo currentCulture = CultureInfo.CurrentCulture;
+            System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             if (false == loadMgr.CreateXmlTerritories(aXmlDocument, territories))
             {
                Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateXmlTerritories() returned false");
                return false;
             }
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
             //-----------------------------------------------------
             using (FileStream writer = new FileStream(myFileName, FileMode.OpenOrCreate, FileAccess.Write))
             {

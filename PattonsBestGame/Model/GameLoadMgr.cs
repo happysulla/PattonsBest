@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -30,7 +31,12 @@ namespace Pattons_Best
             if (false == Directory.Exists(theGamesDirectory)) // create directory if does not exists
                Directory.CreateDirectory(theGamesDirectory);
             string filename = theGamesDirectory + "Checkpoint.pbg";
+            //-------------------------------------
+            CultureInfo currentCulture = CultureInfo.CurrentCulture;
+            System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             IGameInstance? gi = ReadXml(filename);
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+            //-------------------------------------
             if (null == gi)
             {
                Logger.Log(LogEnum.LE_ERROR, "Open_Game(): ReadXml() returned null for " + filename);
@@ -61,7 +67,12 @@ namespace Pattons_Best
          try
          {
             string filename = theGamesDirectory + "Checkpoint.pbg";
-            XmlDocument? aXmlDocument = CreateXml(gi); // create a new XML document 
+            //--------------------------------------
+            CultureInfo currentCulture = CultureInfo.CurrentCulture;
+            System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            XmlDocument? aXmlDocument = CreateXml(gi); // create a new XML document
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+            //--------------------------------------
             if (null == aXmlDocument)
             {
                Logger.Log(LogEnum.LE_ERROR, "SaveGameTo_File(): CreateXml() returned null for path=" + theGamesDirectory);
@@ -107,7 +118,10 @@ namespace Pattons_Best
             dlg.Filter = "Patton's Best Games|*.pbg";
             if (true == dlg.ShowDialog())
             {
+               CultureInfo currentCulture = CultureInfo.CurrentCulture;
+               System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                IGameInstance? gi = ReadXml(dlg.FileName);
+               System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
                if (null == gi)
                {
                   Directory.SetCurrentDirectory(MainWindow.theAssemblyDirectory);
@@ -157,7 +171,10 @@ namespace Pattons_Best
             dlg.RestoreDirectory = true;
             if (true == dlg.ShowDialog())
             {
-               XmlDocument? aXmlDocument = CreateXml(gi); // create a new XML document 
+               CultureInfo currentCulture = CultureInfo.CurrentCulture;
+               System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+               XmlDocument? aXmlDocument = CreateXml(gi); // create a new XML document
+               System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
                if (null == aXmlDocument)
                {
                   Logger.Log(LogEnum.LE_ERROR, "SaveGameAsToFile(): CreateXml() returned null for path=" + theGamesDirectory);
@@ -225,495 +242,514 @@ namespace Pattons_Best
       }
       public bool ReadXmlTerritories(XmlReader reader, ITerritories territories) // initial loading of Territories.theTerritories
       {
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(Territories)=false");
-            return false;
-         }
-         if (reader.Name != "Territories")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Territories != (node=" + reader.Name + ")");
-            return false;
-         }
-         //-----------------------------------------------------------------
-         string? sCount = reader.GetAttribute("count");
-         if (null == sCount)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Territories.Count=null");
-            return false;
-         }
-         int count = int.Parse(sCount);
-         //-----------------------------------------------------------------
-         for (int i = 0; i < count; ++i)
+         CultureInfo currentCulture = CultureInfo.CurrentCulture;
+         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+         try
          {
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(Territory)=false count=" + count.ToString() + " i=" + i.ToString() );
+               Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): IsStartElement(Territories)=false");
                return false;
             }
-            if (reader.Name != "Territory")
+            if (reader.Name != "Territories")
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Territory != (node=" + reader.Name + ")");
+               Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): Territories != (node=" + reader.Name + ")");
                return false;
             }
-            string? tName = reader.GetAttribute("value");
-            if (null == tName)
+            //-----------------------------------------------------------------
+            string? sCount = reader.GetAttribute("count");
+            if (null == sCount)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): Territories.Count=null");
                return false;
             }
-            ITerritory territory = new Territory(tName);
-            //--------------------------------------
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(Parent)=false tName=" + tName);
-               return false;
-            }
-            if (reader.Name != "Parent")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Parent != (node=" + reader.Name + ")");
-               return false;
-            }
-            string? sAttribute = reader.GetAttribute("value");
-            if (null == sAttribute)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(Parent)=null");
-               return false;
-            }
-            territory.CanvasName = sAttribute;
-            //--------------------------------------
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(Type)=false");
-               return false;
-            }
-            if (reader.Name != "Type")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Type != (node=" + reader.Name + ")");
-               return false;
-            }
-            string? sAttribute1 = reader.GetAttribute("value");
-            if (null == sAttribute1)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(Type)=null");
-               return false;
-            }
-            territory.Type = sAttribute1;
-            //--------------------------------------
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(CenterPoint)=false");
-               return false;
-            }
-            if (reader.Name != "CenterPoint")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): CenterPoint != (node=" + reader.Name + ")");
-               return false;
-            }
-            string? sX = reader.GetAttribute("X");
-            if (null == sX)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(sX)=null");
-               return false;
-            }
-            territory.CenterPoint.X = double.Parse(sX);
-            string? sY = reader.GetAttribute("Y");
-            if (null == sY)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(sX)=null");
-               return false;
-            }
-            territory.CenterPoint.Y = double.Parse(sY);
-            //--------------------------------------
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(Points)=false");
-               return false;
-            }
-            if (reader.Name != "Points")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Points != (node=" + reader.Name + ")");
-               return false;
-            }
-            string? sCount0 = reader.GetAttribute("count");
-            if (null == sCount0)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(sCount0)=null");
-               return false;
-            }
-            int count0 = int.Parse(sCount0);
-            for (int i1 = 0; i1 < count0; ++i1)
+            int count = int.Parse(sCount);
+            //-----------------------------------------------------------------
+            for (int i = 0; i < count; ++i)
             {
                reader.Read();
                if (false == reader.IsStartElement())
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(regionPoint)=false");
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): IsStartElement(Territory)=false count=" + count.ToString() + " i=" + i.ToString());
                   return false;
                }
-               if (reader.Name != "regionPoint")
+               if (reader.Name != "Territory")
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): regionPoint != (node=" + reader.Name + ")");
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): Territory != (node=" + reader.Name + ")");
                   return false;
                }
-               string? sX1 = reader.GetAttribute("X");
-               if (null == sX1)
+               string? tName = reader.GetAttribute("value");
+               if (null == tName)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(sX1)=null");
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): GetAttribute() returned false");
                   return false;
                }
-               string? sY1 = reader.GetAttribute("Y");
-               if (null == sY1)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(sY1)=null");
-                  return false;
-               }
-               double x = double.Parse(sX1);
-               double y = double.Parse(sY1);
-               IMapPoint mp = new MapPoint(x, y);
-               territory.Points.Add(mp);
-            }
-            if (0 < count0)
-               reader.Read(); // get past </Points> tag
-            //--------------------------------------
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(Adjacents)=false");
-               return false;
-            }
-            if (reader.Name != "Adjacents")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): Adjacents != (node=" + reader.Name + ")");
-               return false;
-            }
-            string? sCount3 = reader.GetAttribute("count");
-            if (null == sCount3)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(sCount3)=null");
-               return false;
-            }
-            int count3 = int.Parse(sCount3);
-            for (int i3 = 0; i3 < count3; ++i3)
-            {
+               ITerritory territory = new Territory(tName);
+               //--------------------------------------
                reader.Read();
                if (false == reader.IsStartElement())
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(adjacent)=false");
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): IsStartElement(Parent)=false tName=" + tName);
                   return false;
                }
-               if (reader.Name != "adjacent")
+               if (reader.Name != "Parent")
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): adjacent != (node=" + reader.Name + ")");
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): Parent != (node=" + reader.Name + ")");
                   return false;
                }
-               string? sAdjacent = reader.GetAttribute("value");
-               if (null == sAdjacent)
+               string? sAttribute = reader.GetAttribute("value");
+               if (null == sAttribute)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(sAdjacent)=null");
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): GetAttribute(Parent)=null");
                   return false;
                }
-               territory.Adjacents.Add(sAdjacent);
-            }
-            if (0 < count3)
-               reader.Read(); // get past </Adjacents> tag
-            //--------------------------------------
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(PavedRoads)=false");
-               return false;
-            }
-            if (reader.Name != "PavedRoads")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): PavedRoads != (node=" + reader.Name + ")");
-               return false;
-            }
-            string? sCount4 = reader.GetAttribute("count");
-            if (null == sCount4)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(sCount4)=null");
-               return false;
-            }
-            int count4 = int.Parse(sCount4);
-            for (int i4 = 0; i4 < count4; ++i4)
-            {
+               territory.CanvasName = sAttribute;
+               //--------------------------------------
                reader.Read();
                if (false == reader.IsStartElement())
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(paved)=false");
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): IsStartElement(Type)=false");
                   return false;
                }
-               if (reader.Name != "paved")
+               if (reader.Name != "Type")
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): paved != (node=" + reader.Name + ")");
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): Type != (node=" + reader.Name + ")");
                   return false;
                }
-               string? sPaved= reader.GetAttribute("value");
-               if (null == sPaved)
+               string? sAttribute1 = reader.GetAttribute("value");
+               if (null == sAttribute1)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(sPaved)=null");
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): GetAttribute(Type)=null");
                   return false;
                }
-               territory.PavedRoads.Add(sPaved);
-            }
-            if (0 < count4)
-               reader.Read(); // get past </PavedRoads> tag
-            //--------------------------------------
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(UnpavedRoads)=false");
-               return false;
-            }
-            if (reader.Name != "UnpavedRoads")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): UnpavedRoads != (node=" + reader.Name + ")");
-               return false;
-            }
-            string? sCount5 = reader.GetAttribute("count");
-            if (null == sCount5)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(sCount5)=null");
-               return false;
-            }
-            int count5 = int.Parse(sCount5);
-            for (int i5 = 0; i5 < count5; ++i5)
-            {
+               territory.Type = sAttribute1;
+               //--------------------------------------
                reader.Read();
                if (false == reader.IsStartElement())
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): IsStartElement(unpaved)=false");
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): IsStartElement(CenterPoint)=false");
                   return false;
                }
-               if (reader.Name != "unpaved")
+               if (reader.Name != "CenterPoint")
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): unpaved != (node=" + reader.Name + ")");
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): CenterPoint != (node=" + reader.Name + ")");
                   return false;
                }
-               string? sUnpaved = reader.GetAttribute("value");
-               if (null == sUnpaved)
+               string? sX = reader.GetAttribute("X");
+               if (null == sX)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlTerritories(): GetAttribute(sUnpaved)=null");
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): GetAttribute(sX)=null");
                   return false;
                }
-               territory.UnpavedRoads.Add(sUnpaved);
+               territory.CenterPoint.X = double.Parse(sX);
+               string? sY = reader.GetAttribute("Y");
+               if (null == sY)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): GetAttribute(sX)=null");
+                  return false;
+               }
+               territory.CenterPoint.Y = double.Parse(sY);
+               //--------------------------------------
+               reader.Read();
+               if (false == reader.IsStartElement())
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): IsStartElement(Points)=false");
+                  return false;
+               }
+               if (reader.Name != "Points")
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): Points != (node=" + reader.Name + ")");
+                  return false;
+               }
+               string? sCount0 = reader.GetAttribute("count");
+               if (null == sCount0)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): GetAttribute(sCount0)=null");
+                  return false;
+               }
+               int count0 = int.Parse(sCount0);
+               for (int i1 = 0; i1 < count0; ++i1)
+               {
+                  reader.Read();
+                  if (false == reader.IsStartElement())
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): IsStartElement(regionPoint)=false");
+                     return false;
+                  }
+                  if (reader.Name != "regionPoint")
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): regionPoint != (node=" + reader.Name + ")");
+                     return false;
+                  }
+                  string? sX1 = reader.GetAttribute("X");
+                  if (null == sX1)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): GetAttribute(sX1)=null");
+                     return false;
+                  }
+                  string? sY1 = reader.GetAttribute("Y");
+                  if (null == sY1)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): GetAttribute(sY1)=null");
+                     return false;
+                  }
+                  double x = double.Parse(sX1);
+                  double y = double.Parse(sY1);
+                  IMapPoint mp = new MapPoint(x, y);
+                  territory.Points.Add(mp);
+               }
+               if (0 < count0)
+                  reader.Read(); // get past </Points> tag
+               //--------------------------------------
+               reader.Read();
+               if (false == reader.IsStartElement())
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): IsStartElement(Adjacents)=false");
+                  return false;
+               }
+               if (reader.Name != "Adjacents")
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): Adjacents != (node=" + reader.Name + ")");
+                  return false;
+               }
+               string? sCount3 = reader.GetAttribute("count");
+               if (null == sCount3)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): GetAttribute(sCount3)=null");
+                  return false;
+               }
+               int count3 = int.Parse(sCount3);
+               for (int i3 = 0; i3 < count3; ++i3)
+               {
+                  reader.Read();
+                  if (false == reader.IsStartElement())
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): IsStartElement(adjacent)=false");
+                     return false;
+                  }
+                  if (reader.Name != "adjacent")
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): adjacent != (node=" + reader.Name + ")");
+                     return false;
+                  }
+                  string? sAdjacent = reader.GetAttribute("value");
+                  if (null == sAdjacent)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): GetAttribute(sAdjacent)=null");
+                     return false;
+                  }
+                  territory.Adjacents.Add(sAdjacent);
+               }
+               if (0 < count3)
+                  reader.Read(); // get past </Adjacents> tag
+                                 //--------------------------------------
+               reader.Read();
+               if (false == reader.IsStartElement())
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): IsStartElement(PavedRoads)=false");
+                  return false;
+               }
+               if (reader.Name != "PavedRoads")
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): PavedRoads != (node=" + reader.Name + ")");
+                  return false;
+               }
+               string? sCount4 = reader.GetAttribute("count");
+               if (null == sCount4)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): GetAttribute(sCount4)=null");
+                  return false;
+               }
+               int count4 = int.Parse(sCount4);
+               for (int i4 = 0; i4 < count4; ++i4)
+               {
+                  reader.Read();
+                  if (false == reader.IsStartElement())
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): IsStartElement(paved)=false");
+                     return false;
+                  }
+                  if (reader.Name != "paved")
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): paved != (node=" + reader.Name + ")");
+                     return false;
+                  }
+                  string? sPaved = reader.GetAttribute("value");
+                  if (null == sPaved)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): GetAttribute(sPaved)=null");
+                     return false;
+                  }
+                  territory.PavedRoads.Add(sPaved);
+               }
+               if (0 < count4)
+                  reader.Read(); // get past </PavedRoads> tag
+                                 //--------------------------------------
+               reader.Read();
+               if (false == reader.IsStartElement())
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): IsStartElement(UnpavedRoads)=false");
+                  return false;
+               }
+               if (reader.Name != "UnpavedRoads")
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): UnpavedRoads != (node=" + reader.Name + ")");
+                  return false;
+               }
+               string? sCount5 = reader.GetAttribute("count");
+               if (null == sCount5)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): GetAttribute(sCount5)=null");
+                  return false;
+               }
+               int count5 = int.Parse(sCount5);
+               for (int i5 = 0; i5 < count5; ++i5)
+               {
+                  reader.Read();
+                  if (false == reader.IsStartElement())
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): IsStartElement(unpaved)=false");
+                     return false;
+                  }
+                  if (reader.Name != "unpaved")
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): unpaved != (node=" + reader.Name + ")");
+                     return false;
+                  }
+                  string? sUnpaved = reader.GetAttribute("value");
+                  if (null == sUnpaved)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Read_XmlTerritories(): GetAttribute(sUnpaved)=null");
+                     return false;
+                  }
+                  territory.UnpavedRoads.Add(sUnpaved);
+               }
+               if (0 < count5)
+                  reader.Read(); // get past </UnpavedRoads> tag
+                                 //--------------------------------------
+               territories.Add(territory);
+               reader.Read(); // get past </Territory> tag
             }
-            if (0 < count5)
-               reader.Read(); // get past </UnpavedRoads> tag
-            //--------------------------------------
-            territories.Add(territory);
-            reader.Read(); // get past </Territory> tag
+            if (0 < count)
+               reader.Read(); // get past </Territories> tag
          }
-         if (0 < count)
-            reader.Read(); // get past </Territories> tag
+         finally
+         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+         }
+         System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
          return true;
       }
       public bool CreateXmlTerritories(XmlDocument aXmlDocument, ITerritories territories) // initial creation of Territories.theTerritories during unit testing
       {
-         XmlNode? root = aXmlDocument.DocumentElement;
-         if (null == root)
+         CultureInfo currentCulture = CultureInfo.CurrentCulture;
+         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+         try
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): root is null");
-            return false;
+            XmlNode? root = aXmlDocument.DocumentElement;
+            if (null == root)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): root is null");
+               return false;
+            }
+            XmlAttribute xmlAttribute = aXmlDocument.CreateAttribute("count");
+            xmlAttribute.Value = territories.Count.ToString();
+            if (null == root.Attributes)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): root.Attributes is null");
+               return false;
+            }
+            root.Attributes.Append(xmlAttribute);
+            //--------------------------------
+            foreach (Territory t in territories)
+            {
+               XmlElement? terrElem = aXmlDocument.CreateElement("Territory");  // name of territory
+               if (null == terrElem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): CreateElement(terrElem) returned null");
+                  return false;
+               }
+               terrElem.SetAttribute("value", t.Name);
+               XmlNode? territoryNode = root.AppendChild(terrElem);
+               if (null == territoryNode)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): AppendChild(territoryNode) returned null");
+                  return false;
+               }
+               //---------------------------------
+               XmlElement? elem = aXmlDocument.CreateElement("Parent");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): CreateElement(terrElem) returned null");
+                  return false;
+               }
+               elem.SetAttribute("value", t.CanvasName);
+               XmlNode? node = territoryNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): AppendChild(node) returned null");
+                  return false;
+               }
+               //---------------------------------
+               elem = aXmlDocument.CreateElement("Type");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): CreateElement(terrElem) returned null");
+                  return false;
+               }
+               elem.SetAttribute("value", t.Type);
+               node = territoryNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): AppendChild(node) returned null");
+                  return false;
+               }
+               //---------------------------------
+               elem = aXmlDocument.CreateElement("CenterPoint");
+               if (null == elem)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): CreateElement(CenterPoint) returned null");
+                  return false;
+               }
+               elem.SetAttribute("X", t.CenterPoint.X.ToString("0000.00"));
+               elem.SetAttribute("Y", t.CenterPoint.Y.ToString("0000.00"));
+               node = territoryNode.AppendChild(elem);
+               if (null == node)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): AppendChild(node) returned null");
+                  return false;
+               }
+               //---------------------------------
+               XmlElement? elemPoints = aXmlDocument.CreateElement("Points");
+               if (null == elemPoints)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): CreateElement(elemPoints) returned null");
+                  return false;
+               }
+               elemPoints.SetAttribute("count", t.Points.Count.ToString());
+               XmlNode? nodePoints = territoryNode.AppendChild(elemPoints);
+               if (null == nodePoints)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): AppendChild(nodePoints) returned null");
+                  return false;
+               }
+               //---------------------------------
+               foreach (IMapPoint mp in t.Points)
+               {
+                  elem = aXmlDocument.CreateElement("regionPoint");
+                  if (null == elem)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): CreateElement(terrElem) returned null");
+                     return false;
+                  }
+                  elem.SetAttribute("X", mp.X.ToString("0000.00"));
+                  elem.SetAttribute("Y", mp.Y.ToString("0000.00"));
+                  node = nodePoints.AppendChild(elem);
+                  if (null == node)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): AppendChild(node) returned null");
+                     return false;
+                  }
+               }
+               //-----------------------------------------------------------
+               XmlElement? elemAdjacents = aXmlDocument.CreateElement("Adjacents");
+               if (null == elemAdjacents)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): CreateElement(elemAdjacents) returned null");
+                  return false;
+               }
+               elemAdjacents.SetAttribute("count", t.Adjacents.Count.ToString());
+               XmlNode? nodeAdjacents = territoryNode.AppendChild(elemAdjacents);
+               if (null == nodeAdjacents)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): AppendChild(nodePoints) returned null");
+                  return false;
+               }
+               //---------------------------------
+               foreach (string s in t.Adjacents)
+               {
+                  elem = aXmlDocument.CreateElement("adjacent");
+                  if (null == elem)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): CreateElement(adjacent) returned null");
+                     return false;
+                  }
+                  elem.SetAttribute("value", s);
+                  node = nodeAdjacents.AppendChild(elem);
+                  if (null == node)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): AppendChild(nodeAdjacents) returned null");
+                     return false;
+                  }
+               }
+               //-----------------------------------------------------------
+               XmlElement? elemPavedRoads = aXmlDocument.CreateElement("PavedRoads");
+               if (null == elemPavedRoads)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): CreateElement(elemPavedRoads) returned null");
+                  return false;
+               }
+               elemPavedRoads.SetAttribute("count", t.PavedRoads.Count.ToString());
+               XmlNode? nodePavedRoads = territoryNode.AppendChild(elemPavedRoads);
+               if (null == nodePavedRoads)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): AppendChild(nodePavedRoads) returned null");
+                  return false;
+               }
+               //---------------------------------
+               foreach (string s in t.PavedRoads)
+               {
+                  elem = aXmlDocument.CreateElement("paved");
+                  if (null == elem)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): CreateElement(paved) returned null");
+                     return false;
+                  }
+                  elem.SetAttribute("value", s);
+                  node = nodePavedRoads.AppendChild(elem);
+                  if (null == node)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): AppendChild(paved) returned null");
+                     return false;
+                  }
+               }
+               //-----------------------------------------------------------
+               XmlElement? elemUnpavedRoads = aXmlDocument.CreateElement("UnpavedRoads");
+               if (null == elemUnpavedRoads)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): CreateElement(elemUnpavedRoads) returned null");
+                  return false;
+               }
+               elemUnpavedRoads.SetAttribute("count", t.UnpavedRoads.Count.ToString());
+               XmlNode? nodeUnpavedRoads = territoryNode.AppendChild(elemUnpavedRoads);
+               if (null == nodeUnpavedRoads)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): AppendChild(nodeUnpavedRoads) returned null");
+                  return false;
+               }
+               //---------------------------------
+               foreach (string s in t.UnpavedRoads)
+               {
+                  elem = aXmlDocument.CreateElement("unpaved");
+                  if (null == elem)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): CreateElement(unpaved) returned null");
+                     return false;
+                  }
+                  elem.SetAttribute("value", s);
+                  node = nodeUnpavedRoads.AppendChild(elem);
+                  if (null == node)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Create_XmlTerritories(): AppendChild(unpaved) returned null");
+                     return false;
+                  }
+               }
+            }
          }
-         XmlAttribute xmlAttribute = aXmlDocument.CreateAttribute("count");
-         xmlAttribute.Value = territories.Count.ToString();
-         if (null == root.Attributes)
+         finally
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateXml(): root.Attributes is null");
-            return false;
-         }
-         root.Attributes.Append(xmlAttribute);
-         //--------------------------------
-         foreach (Territory t in territories)
-         {
-            XmlElement? terrElem = aXmlDocument.CreateElement("Territory");  // name of territory
-            if (null == terrElem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(terrElem) returned null");
-               return false;
-            }
-            terrElem.SetAttribute("value", t.Name);
-            XmlNode? territoryNode = root.AppendChild(terrElem);
-            if (null == territoryNode)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(territoryNode) returned null");
-               return false;
-            }
-            //---------------------------------
-            XmlElement? elem = aXmlDocument.CreateElement("Parent");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(terrElem) returned null");
-               return false;
-            }
-            elem.SetAttribute("value", t.CanvasName);
-            XmlNode? node = territoryNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(node) returned null");
-               return false;
-            }
-            //---------------------------------
-            elem = aXmlDocument.CreateElement("Type");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(terrElem) returned null");
-               return false;
-            }
-            elem.SetAttribute("value", t.Type);
-            node = territoryNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(node) returned null");
-               return false;
-            }
-            //---------------------------------
-            elem = aXmlDocument.CreateElement("CenterPoint");
-            if (null == elem)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(CenterPoint) returned null");
-               return false;
-            }
-            elem.SetAttribute("X", t.CenterPoint.X.ToString("0000.00"));
-            elem.SetAttribute("Y", t.CenterPoint.Y.ToString("0000.00"));
-            node = territoryNode.AppendChild(elem);
-            if (null == node)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(node) returned null");
-               return false;
-            }
-            //---------------------------------
-            XmlElement? elemPoints = aXmlDocument.CreateElement("Points");
-            if (null == elemPoints)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(elemPoints) returned null");
-               return false;
-            }
-            elemPoints.SetAttribute("count", t.Points.Count.ToString());
-            XmlNode? nodePoints = territoryNode.AppendChild(elemPoints);
-            if (null == nodePoints)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(nodePoints) returned null");
-               return false;
-            }
-            //---------------------------------
-            foreach (IMapPoint mp in t.Points)
-            {
-               elem = aXmlDocument.CreateElement("regionPoint");
-               if (null == elem)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(terrElem) returned null");
-                  return false;
-               }
-               elem.SetAttribute("X", mp.X.ToString("0000.00"));
-               elem.SetAttribute("Y", mp.Y.ToString("0000.00"));
-               node = nodePoints.AppendChild(elem);
-               if (null == node)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(node) returned null");
-                  return false;
-               }
-            }
-            //-----------------------------------------------------------
-            XmlElement? elemAdjacents = aXmlDocument.CreateElement("Adjacents");
-            if (null == elemAdjacents)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(elemAdjacents) returned null");
-               return false;
-            }
-            elemAdjacents.SetAttribute("count", t.Adjacents.Count.ToString());
-            XmlNode? nodeAdjacents = territoryNode.AppendChild(elemAdjacents);
-            if (null == nodeAdjacents)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(nodePoints) returned null");
-               return false;
-            }
-            //---------------------------------
-            foreach (string s in t.Adjacents)
-            {
-               elem = aXmlDocument.CreateElement("adjacent");
-               if (null == elem)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(adjacent) returned null");
-                  return false;
-               }
-               elem.SetAttribute("value", s);
-               node = nodeAdjacents.AppendChild(elem);
-               if (null == node)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(nodeAdjacents) returned null");
-                  return false;
-               }
-            }
-            //-----------------------------------------------------------
-            XmlElement? elemPavedRoads = aXmlDocument.CreateElement("PavedRoads");
-            if (null == elemPavedRoads)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(elemPavedRoads) returned null");
-               return false;
-            }
-            elemPavedRoads.SetAttribute("count", t.PavedRoads.Count.ToString());
-            XmlNode? nodePavedRoads = territoryNode.AppendChild(elemPavedRoads);
-            if (null == nodePavedRoads)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(nodePavedRoads) returned null");
-               return false;
-            }
-            //---------------------------------
-            foreach (string s in t.PavedRoads)
-            {
-               elem = aXmlDocument.CreateElement("paved");
-               if (null == elem)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(paved) returned null");
-                  return false;
-               }
-               elem.SetAttribute("value", s);
-               node = nodePavedRoads.AppendChild(elem);
-               if (null == node)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(paved) returned null");
-                  return false;
-               }
-            }
-            //-----------------------------------------------------------
-            XmlElement? elemUnpavedRoads = aXmlDocument.CreateElement("UnpavedRoads");
-            if (null == elemUnpavedRoads)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(elemUnpavedRoads) returned null");
-               return false;
-            }
-            elemUnpavedRoads.SetAttribute("count", t.UnpavedRoads.Count.ToString());
-            XmlNode? nodeUnpavedRoads = territoryNode.AppendChild(elemUnpavedRoads);
-            if (null == nodeUnpavedRoads)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(nodeUnpavedRoads) returned null");
-               return false;
-            }
-            //---------------------------------
-            foreach (string s in t.UnpavedRoads)
-            {
-               elem = aXmlDocument.CreateElement("unpaved");
-               if (null == elem)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): CreateElement(unpaved) returned null");
-                  return false;
-               }
-               elem.SetAttribute("value", s);
-               node = nodeUnpavedRoads.AppendChild(elem);
-               if (null == node)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateXml(): AppendChild(unpaved) returned null");
-                  return false;
-               }
-            }
+
          }
          return true;
       }
@@ -6798,13 +6834,13 @@ namespace Pattons_Best
          //------------------------------------------
          if (false == CreateXmlTerritories(aXmlDocument, gi.AreaTargets, "AreaTargets"))
          {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlTerritories(AreaTargets) returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): Create_XmlTerritories(AreaTargets) returned false");
             return null;
          }
          //------------------------------------------
          if (false == CreateXmlTerritories(aXmlDocument, gi.CounterattachRetreats, "CounterattachRetreats"))
          {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlTerritories(CounterattachRetreats) returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): Create_XmlTerritories(CounterattachRetreats) returned false");
             return null;
          }
          //------------------------------------------

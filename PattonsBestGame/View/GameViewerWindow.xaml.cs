@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -16,6 +17,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Xml;
 using System.Xml.Serialization;
+using Windows.System;
 using Button = System.Windows.Controls.Button;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Point = System.Windows.Point;
@@ -106,13 +108,15 @@ namespace Pattons_Best
       private IDieRoller? myDieRoller = null;
       private EventViewer? myEventViewer = null;
       private MainMenuViewer? myMainMenuViewer = null;
-      private System.Windows.Input.Cursor? myTargetCursor = null;
-      private readonly FontFamily myFontFam = new FontFamily("Tahofma");
-      private double myPreviousScrollHeight = 0.0;
-      private double myPreviousScrollWidth = 0.0;
-      private EllipseDisplayDialog? myEllipseDisplayDialog = null;
+      //---------------------------------------------------------------------
+      private readonly List<Button> myMoveButtons = new List<Button>();
+      private readonly List<Button> myBattleButtons = new List<Button>();
+      private readonly List<Button> myTankButtons = new List<Button>();
+      private int myTankCardNum = 1;
       private Dictionary<string, Polyline> myRoads = new Dictionary<string, Polyline>();
       //---------------------------------------------------------------------
+      private int myBrushIndex = 0;
+      private readonly List<Brush> myBrushes = new List<Brush>();
       private readonly SolidColorBrush mySolidColorBrushClear = new SolidColorBrush() { Color = Color.FromArgb(0, 0, 1, 0) };
       private readonly SolidColorBrush mySolidColorBrushBlack = new SolidColorBrush() { Color = Colors.Black };
       private readonly SolidColorBrush mySolidColorBrushGreen = new SolidColorBrush() { Color = Colors.Green };
@@ -121,18 +125,18 @@ namespace Pattons_Best
       private readonly SolidColorBrush mySolidColorBrushSteelBlue = new SolidColorBrush { Color = Colors.SteelBlue };
       private readonly SolidColorBrush mySolidColorBrushWhite = new SolidColorBrush { Color = Colors.White };
       private readonly SolidColorBrush mySolidColorBrushLawnGreen = new SolidColorBrush { Color = Colors.LawnGreen };
+      private readonly FontFamily myFontFam = new FontFamily("Tahofma");
       //---------------------------------------------------------------------
       private Button? myDraggedButton = null;
-      private readonly List<Button> myMoveButtons = new List<Button>();
-      private readonly List<Button> myBattleButtons = new List<Button>();
-      private readonly List<Button> myTankButtons = new List<Button>();
-      private int myTankCardNum = 1;
+      private System.Windows.Input.Cursor? myTargetCursor = null;
+      private EllipseDisplayDialog? myEllipseDisplayDialog = null;
+      private double myPreviousScrollHeight = 0.0;
+      private double myPreviousScrollWidth = 0.0;
+      //---------------------------------------------------------------------
       private readonly SplashDialog mySplashScreen;
       private Dictionary<string, ContextMenu> myContextMenuCrewActions = new Dictionary<string, ContextMenu>();
       private Dictionary<string, ContextMenu> myContextMenuGunLoadActions = new Dictionary<string, ContextMenu>();
       private readonly DoubleCollection myDashArray = new DoubleCollection();
-      private int myBrushIndex = 0;
-      private readonly List<Brush> myBrushes = new List<Brush>();
       private readonly List<Rectangle> myRectangles = new List<Rectangle>();
       private readonly List<Polygon> myPolygons = new List<Polygon>();
       private readonly List<Ellipse> myEllipses = new List<Ellipse>();
@@ -176,16 +180,26 @@ namespace Pattons_Best
             return;
          }
          //---------------------------------------------------------------
-         Options options = Deserialize(Settings.Default.GameOptions);
-         myMainMenuViewer.NewGameOptions = options;
-         gi.Options = options; // use the new game options for setting up the first game
+         if( false == DeserializeOptions(Settings.Default.GameOptions, gi.Options))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): DeserializeOptions() returned false");
+            CtorError = true;
+            return;
+         }
+         myMainMenuViewer.NewGameOptions = myGameInstance.Options;
          //---------------------------------------------------------------
          if (false == String.IsNullOrEmpty(Settings.Default.GameDirectoryName))
             GameLoadMgr.theGamesDirectory = Settings.Default.GameDirectoryName; // remember the game directory name
          //---------------------------------------------------------------
+         CultureInfo currentCulture = CultureInfo.CurrentCulture;
+         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
+         System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+         //---------------------------------------------------------------
          Utilities.ZoomCanvas = Settings.Default.ZoomCanvas;
          myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas); // Constructor - revert to save zoom
          StatusBarViewer sbv = new StatusBarViewer(myStatusBar, ge, gi, myCanvasMain);
+         //---------------------------------------------------------------
+         SetDisplayIconForUninstall(); // This is specialized code to add to Windows Registry the icon for uninstall
          //---------------------------------------------------------------
          Utilities.theBrushBlood.Color = Color.FromArgb(0xFF, 0xA4, 0x07, 0x07);
          Utilities.theBrushRegion.Color = Color.FromArgb(0x7F, 0x11, 0x09, 0xBB); // nearly transparent but slightly colored
@@ -598,6 +612,7 @@ namespace Pattons_Best
                break;
             case GameAction.EndGameWin:
             case GameAction.EndGameLost:
+               SaveDefaultsToSettings(); // EndGameWin or EndGameLost
                if (false == UpdateCanvasAnimateBattlePhase(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
                SaveDefaultsToSettings();
@@ -1350,7 +1365,7 @@ namespace Pattons_Best
       }
       private bool CreateRoadsFromXml()
       {
-         CultureInfo culture1 = CultureInfo.CurrentCulture;
+         CultureInfo currentCulture = CultureInfo.CurrentCulture;
          System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
          XmlTextReader? reader = null;
          PointCollection? points = null;
@@ -1430,53 +1445,239 @@ namespace Pattons_Best
          catch (Exception e)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateRoadsFromXml(): Exception=\n" + e.Message);
-            System.Threading.Thread.CurrentThread.CurrentCulture = culture1;
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
             return false;
          }
          finally
          {
             if (reader != null)
                reader.Close();
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
          }
-         System.Threading.Thread.CurrentThread.CurrentCulture = culture1;
          return true;
       }
       //---------------------------------------
-      private Options Deserialize(String s_xml)
+      private void SaveDefaultsToSettings(bool isWindowPlacementSaved = true)
       {
-         Options? options = new Options();
-         if (false == String.IsNullOrEmpty(s_xml))
+         CultureInfo currentCulture = CultureInfo.CurrentCulture;
+         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
+         //-------------------------------------------
+         if (true == isWindowPlacementSaved)
          {
-            try // XML serializer does not work for Interfaces
+            WindowPlacement wp; // Persist window placement details to application settings
+            var hwnd = new WindowInteropHelper(this).Handle;
+            if (false == GetWindowPlacement(hwnd, out wp))
+               Logger.Log(LogEnum.LE_ERROR, "SaveDefaultsToSettings(): GetWindowPlacement() returned false");
+            string sWinPlace = Utilities.Serialize<WindowPlacement>(wp);
+            Settings.Default.WindowPlacement = sWinPlace;
+         }
+         //-------------------------------------------
+         Settings.Default.ZoomCanvas = Utilities.ZoomCanvas;
+         //-------------------------------------------
+         Settings.Default.ScrollViewerHeight = myScrollViewerMap.Height;
+         Settings.Default.ScrollViewerWidth = myScrollViewerMap.Width;
+         //-------------------------------------------
+         string? sOptions = SerializeOptions(myGameInstance.Options);
+         if (null == sOptions)
+            Logger.Log(LogEnum.LE_ERROR, "SaveDefaultsToSettings(): SerializeOptions() returned false");
+         else
+            Settings.Default.GameOptions = sOptions;
+         //-------------------------------------------
+         Settings.Default.Save();
+         System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+      }
+      private string? SerializeOptions(Options options)
+      {
+         XmlDocument aXmlDocument = new XmlDocument();
+         aXmlDocument.LoadXml("<Options></Options>");
+         if (null == aXmlDocument.DocumentElement)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SerializeOptions(): aXmlDocument.DocumentElement=null");
+            return null;
+         }
+         XmlNode? root = aXmlDocument.DocumentElement;
+         if (null == root)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SerializeOptions(): root is null");
+            return null;
+         }
+         aXmlDocument.DocumentElement.SetAttribute("count", options.Count.ToString());
+         //--------------------------------
+         foreach (Option option in options)
+         {
+            XmlElement? optionElem = aXmlDocument.CreateElement("Option");
+            if (null == optionElem)
             {
-               StringReader stringreader = new StringReader(s_xml);
-               XmlReader xmlReader = XmlReader.Create(stringreader);
-               XmlSerializer serializer = new XmlSerializer(typeof(Options)); // Sustem.IO.FileNotFoundException thrown but normal behavior - handled in XmlSerializer constructor
-               Object? obj = serializer.Deserialize(xmlReader);
-               options = obj as Options;
+               Logger.Log(LogEnum.LE_ERROR, "SerializeOptions(): CreateElement(Option) returned null");
+               return null;
             }
-            catch (DirectoryNotFoundException dirException)
+            optionElem.SetAttribute("Name", option.Name);
+            optionElem.SetAttribute("IsEnabled", option.IsEnabled.ToString());
+            XmlNode? optionNode = root.AppendChild(optionElem);
+            if (null == optionNode)
             {
-               Logger.Log(LogEnum.LE_ERROR, "Deserialize(): s=" + s_xml + "\ndirException=" + dirException.ToString());
+               Logger.Log(LogEnum.LE_ERROR, "SerializeOptions(): AppendChild(optionNode) returned null");
+               return null;
             }
-            catch (FileNotFoundException fileException)
+         }
+         //--------------------------------
+         return aXmlDocument.OuterXml;
+
+      }
+      private void SetDisplayIconForUninstall()
+      {
+#if !DEBUG // Only do this for release version
+         if (true == Properties.Settings.Default.theIsFirstRun) // only do once - must set it in registry
+         {
+            try
             {
-               Logger.Log(LogEnum.LE_ERROR, "Deserialize(): s=" + s_xml + "\nfileException=" + fileException.ToString());
-            }
-            catch (IOException ioException)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Deserialize(): s=" + s_xml + "\nioException=" + ioException.ToString());
+               string iconSourcePath = System.IO.Path.Combine(MapImage.theImageDirectory, "PattonsBest.ico");
+               Microsoft.Win32.RegistryKey? sUnInstallKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Uninstall");
+               if (null == sUnInstallKey)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "SetDisplayIconForUninstall(): sUnInstallKey=null");
+                  return;
+               }
+               string[] sSubKeyNames = sUnInstallKey.GetSubKeyNames();
+               for (int i = 0; i < sSubKeyNames.Length; i++)
+               {
+                  string? sSubKeyName = sSubKeyNames[i];
+                  if (null == sSubKeyName)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "SetDisplayIconForUninstall(): sSubKeyName=null");
+                     return;
+                  }
+                  Microsoft.Win32.RegistryKey? aKey = sUnInstallKey.OpenSubKey(sSubKeyName, true);
+                  if (null == aKey)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "SetDisplayIconForUninstall(): aKey=null");
+                     return;
+                  }
+                  // ClickOnce(Publish)
+                  // Publish -> Settings -> Options 
+                  // Publish Options -> Description -> Product Name (is your DisplayName)
+                  Object? key = aKey.GetValue("DisplayName");
+                  if( null == key )
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "SetDisplayIconForUninstall(): aKey=null");
+                     return;
+                  }
+                  string? sDisplayName = (string)key;
+                  if( null == sDisplayName )
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "SetDisplayIconForUninstall(): sDisplayName=null");
+                     return;
+                  }
+                  if (true == sDisplayName.Contains("Patton's Best"))
+                  {
+                     Logger.Log(LogEnum.LE_GAME_INIT, "SetDisplayIconForUninstall(): iconSourcePath=" + iconSourcePath);
+                     aKey.SetValue("DisplayIcon", iconSourcePath);
+                     break;
+                  }
+               }
+               Properties.Settings.Default.theIsFirstRun = false;
+               Properties.Settings.Default.Save();
             }
             catch (Exception ex)
             {
-               Logger.Log(LogEnum.LE_ERROR, "Deserialize(): s=" + s_xml + "\nex=" + ex.ToString());
+               Logger.Log(LogEnum.LE_ERROR, "SetDisplayIconForUninstall(): e=" + ex.ToString());
             }
          }
-         if (null == options)
+#endif
+      }
+      //---------------------------------------
+      private bool DeserializeOptions(String sXml, Options options)
+      {
+         CultureInfo currentCulture = CultureInfo.CurrentCulture;
+         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
+         //-----------------------------------------------
+         options = new Options();
+         if (true == String.IsNullOrEmpty(sXml))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): String.IsNullOrEmpty() returned true");
+            return false;
+         }
+         try // XML serializer does not work for Interfaces
+         {
+            StringReader stringreader = new StringReader(sXml);
+            XmlReader reader = XmlReader.Create(stringreader);
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): reader.IsStartElement(Options) = false");
+               return false;
+            }
+            if (reader.Name != "Options")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): Options != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sCount = reader.GetAttribute("count");
+            if (null == sCount)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): Count=null");
+               return false;
+            }
+            //-------------------------------------
+            int count = int.Parse(sCount);
+            for (int i = 0; i < count; ++i)
+            {
+               reader.Read();
+               if (false == reader.IsStartElement())
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): IsStartElement(Option) returned false");
+                  return false;
+               }
+               if (reader.Name != "Option")
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): Option != " + reader.Name);
+                  return false;
+               }
+               string? name = reader.GetAttribute("Name");
+               if (name == null)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): Name=null");
+                  return false;
+               }
+               string? sEnabled = reader.GetAttribute("IsEnabled");
+               if (sEnabled == null)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): IsEnabled=null");
+                  return false;
+               }
+               bool isEnabled = bool.Parse(sEnabled);
+               Option option = new Option(name, isEnabled);
+               options.Add(option);
+            }
+            if (0 < count)
+               reader.Read(); // get past </Options>
+         }
+         catch (DirectoryNotFoundException dirException)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Deserialize_Options(): s=" + sXml + "\ndirException=" + dirException.ToString());
+         }
+         catch (FileNotFoundException fileException)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Deserialize_Options(): s=" + sXml + "\nfileException=" + fileException.ToString());
+         }
+         catch (IOException ioException)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Deserialize_Options(): s=" + sXml + "\nioException=" + ioException.ToString());
+         }
+         catch (Exception ex)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Deserialize_Options(): s=" + sXml + "\nex=" + ex.ToString());
+         }
+         finally
+         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+         }
+         if (null == myGameInstance.Options)
             options = new Options();
          if (0 == options.Count)
             options.SetOriginalGameOptions();
-         return options;
+         System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+         return true;
       }
       //---------------------------------------
       private bool UpdateCanvasTank(IGameInstance gi, GameAction action)
@@ -4143,6 +4344,7 @@ namespace Pattons_Best
       }
       private void ClosedGameViewerWindow(object sender, EventArgs e)
       {
+         SaveDefaultsToSettings(false); // ClosedGameViewerWindow()
          Application app = Application.Current;
          app.Shutdown();
       }
