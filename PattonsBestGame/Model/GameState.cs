@@ -2941,6 +2941,7 @@ namespace Pattons_Best
          gi.NewMembers.Add(report.Loader);    // GameStateSetup.PerformAction(SetupAssignCrewRating)
          gi.NewMembers.Add(report.Driver);    // GameStateSetup.PerformAction(SetupAssignCrewRating)
          gi.NewMembers.Add(report.Assistant); // GameStateSetup.PerformAction(SetupAssignCrewRating)
+         outAction = GameAction.SetupAssignCrewRating;
          return true;
       }
    }

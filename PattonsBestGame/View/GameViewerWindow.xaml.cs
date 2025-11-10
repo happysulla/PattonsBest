@@ -620,6 +620,7 @@ namespace Pattons_Best
                break;
             case GameAction.RemoveSplashScreen:
             case GameAction.UpdateNewGameEnd:
+            case GameAction.SetupAssignCrewRating:
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                mySplashScreen.Close();

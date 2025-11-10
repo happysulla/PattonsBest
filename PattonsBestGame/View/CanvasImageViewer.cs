@@ -143,7 +143,6 @@ namespace Pattons_Best
             case GameAction.EventDebriefDecorationSilverStar:
             case GameAction.EventDebriefDecorationCross:
             case GameAction.EventDebriefDecorationHonor:
-            case GameAction.SetupAssignCrewRating:
                if (null != myAarUserControl)
                   myAarUserControl.UpdateReport(gi);
                return;
@@ -202,6 +201,7 @@ namespace Pattons_Best
                }
                break;
             case GameAction.SetupShowAfterActionReport:
+            case GameAction.SetupAssignCrewRating:
                myDieRoller.HideDie();
                theMainImage = EnumMainImage.MI_Other;
                if (false == ShowAfterActionReportDialog(gi, myCanvas, true))
