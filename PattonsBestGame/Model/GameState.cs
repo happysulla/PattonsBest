@@ -2778,7 +2778,7 @@ namespace Pattons_Best
          string eventName = "ERROR";
          switch (outAction)
          {
-            case GameAction.UpdateNewGame:
+            case GameAction.UpdateNewGame:  // ShowTutorialScreen()
             case GameAction.RemoveSplashScreen:
                eventName = "e000";
                if( true == option0.IsEnabled )

@@ -17,7 +17,7 @@ namespace Pattons_Best
       private const int STARTING_RULE_ROW = 0;
       private const int STARTING_EVENT_ROW = 0;
       public bool CtorError = false;
-      private RuleDialogViewer? myRulesManager = null;
+      private RuleDialogViewer? myRulesMgr = null;
       private Thickness myThickness = new Thickness(5, 2, 5, 2);
       private readonly FontFamily myFontFam = new FontFamily("Courier New");
       //----------------------------------------------------------------
@@ -31,11 +31,11 @@ namespace Pattons_Best
             CtorError = true;
             return;
          }
-         myRulesManager = rm;
+         myRulesMgr = rm;
          if (true == isEventDialog)
          {
             this.Title = "Event Listing";
-            int numToDisplay = RuleDialogViewer.Events.Keys.Count - STARTING_EVENT_ROW + 2; // add one for header row and one for separator
+            int numToDisplay = myRulesMgr.Events.Keys.Count - STARTING_EVENT_ROW + 2; // add one for header row and one for separator
             for (int i = 0; i < numToDisplay; ++i)
             {
                RowDefinition rowDef = new RowDefinition();
@@ -44,7 +44,7 @@ namespace Pattons_Best
          }
          else
          {
-            int numToDisplay = myRulesManager.Rules.Keys.Count - STARTING_RULE_ROW + 2; // add one for header row and one for separator
+            int numToDisplay = myRulesMgr.Rules.Keys.Count - STARTING_RULE_ROW + 2; // add one for header row and one for separator
             for (int i = 0; i < numToDisplay; ++i)
             {
                RowDefinition rowDef = new RowDefinition();
@@ -80,20 +80,20 @@ namespace Pattons_Best
       }
       private bool UpdateGridRows(bool isEventDialog)
       {
-         if( null == myRulesManager)
+         if( null == myRulesMgr)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): myRulesManager=null");
             return false;
          }
          if ( true == isEventDialog)
          {
-            int numToDisplay = RuleDialogViewer.Events.Keys.Count - STARTING_EVENT_ROW; // add one for header row and one for separator
+            int numToDisplay = myRulesMgr.Events.Keys.Count - STARTING_EVENT_ROW; // add one for header row and one for separator
             int rowNum = 2;
             for (int i = 0; i < numToDisplay; ++i)
             {
                int eventNum = i + STARTING_EVENT_ROW;
-               string key = RuleDialogViewer.Events.Keys.ElementAt(eventNum);
-               string title = myRulesManager.GetEventTitle(key);
+               string key = myRulesMgr.Events.Keys.ElementAt(eventNum);
+               string title = myRulesMgr.GetEventTitle(key);
                if (null == title)
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): title=null for key=" + key);
@@ -113,15 +113,15 @@ namespace Pattons_Best
          }
          else
          {
-            int numToDisplay = myRulesManager.Rules.Keys.Count - STARTING_RULE_ROW; // add one for header row and one for separator
+            int numToDisplay = myRulesMgr.Rules.Keys.Count - STARTING_RULE_ROW; // add one for header row and one for separator
             int rowNum = 2;
             for (int i = 0; i < numToDisplay; ++i)
             {
                int ruleNum = i + STARTING_RULE_ROW;
-               string key = myRulesManager.Rules.Keys.ElementAt(ruleNum);
+               string key = myRulesMgr.Rules.Keys.ElementAt(ruleNum);
                if ('0' != key.Last())
                   continue;
-               string title = myRulesManager.GetRuleTitle(key);
+               string title = myRulesMgr.GetRuleTitle(key);
                if (null == title)
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): title=null");
@@ -143,7 +143,7 @@ namespace Pattons_Best
       }
       private void ButtonShowRule_Click(object sender, RoutedEventArgs e)
       {
-         if (null == myRulesManager)
+         if (null == myRulesMgr)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): myRulesManager=null");
             return;
@@ -152,7 +152,7 @@ namespace Pattons_Best
          string key = (string)b.Content;
          if (true == key.StartsWith("r")) // rules based click
          {
-            if (false == myRulesManager.ShowRule(key))
+            if (false == myRulesMgr.ShowRule(key))
             {
                Logger.Log(LogEnum.LE_ERROR, "Button_Click(): ShowRule() returned false");
                return;
@@ -160,7 +160,7 @@ namespace Pattons_Best
          }
          else if (true == key.StartsWith("e")) // event based click
          {
-            if (false == myRulesManager.ShowEventDialog(key))
+            if (false == myRulesMgr.ShowEventDialog(key))
             {
                Logger.Log(LogEnum.LE_ERROR, "Button_Click():  ShowEvent() returned false");
                return;
@@ -168,7 +168,7 @@ namespace Pattons_Best
          }
          else  // table based click
          {
-            if (false == myRulesManager.ShowTable(key))
+            if (false == myRulesMgr.ShowTable(key))
             {
                Logger.Log(LogEnum.LE_ERROR, "Button_Click():  ShowTable() returned false");
                return;

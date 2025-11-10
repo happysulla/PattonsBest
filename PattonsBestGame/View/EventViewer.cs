@@ -112,13 +112,13 @@ namespace Pattons_Best
             return;
          }
          //--------------------------------------------------------
-         if (false == CreateEvents(gi))
+         if (false == CreateEvents(gi)) // EventViewer()
          {
-            Logger.Log(LogEnum.LE_ERROR, "EventViewer(): CreateEvents() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewer(): Create_Events() returned false");
             CtorError = true;
             return;
          }
-         if (null == RuleDialogViewer.Events)
+         if (null == myRulesMgr.Events)
          {
             Logger.Log(LogEnum.LE_ERROR, "EventViewer(): myRulesMgr.Events=null");
             CtorError = true;
@@ -129,7 +129,7 @@ namespace Pattons_Best
       {
          if (null == myRulesMgr)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateEvents(): myRulesMgr=null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Events(): myRulesMgr=null");
             return false;
          }
          try
@@ -138,21 +138,21 @@ namespace Pattons_Best
             ConfigFileReader cfr = new ConfigFileReader(filename);
             if (true == cfr.CtorError)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateEvents(): cfr.CtorError=true");
+               Logger.Log(LogEnum.LE_ERROR, "Create_Events(): cfr.CtorError=true");
                return false;
             }
-            RuleDialogViewer.Events = cfr.Entries;
-            if (0 == RuleDialogViewer.Events.Count)
+            myRulesMgr.Events = cfr.Entries;
+            if (0 == myRulesMgr.Events.Count)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CreateEvents(): myRulesMgr.Events.Count=0");
+               Logger.Log(LogEnum.LE_ERROR, "Create_Events(): myRulesMgr.Events.Count=0");
                return false;
             }
-            foreach (string key in RuleDialogViewer.Events.Keys) // For each event, create a dictionary entry. There can be no more than three die rolls per event
+            foreach (string key in myRulesMgr.Events.Keys) // For each event, create a dictionary entry. There can be no more than three die rolls per event
                gi.DieResults[key] = new int[3] { Utilities.NO_RESULT, Utilities.NO_RESULT, Utilities.NO_RESULT };
          }
          catch (Exception e)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateEvents(): e=" + e.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Create_Events(): e=" + e.ToString());
             return false;
          }
          return true;
@@ -237,16 +237,6 @@ namespace Pattons_Best
                myRulesMgr.GameInstance = gi;
                gi.IsGridActive = false;
                myScrollViewerTextBlock.Cursor = Cursors.Arrow;
-               try // resync the gi.DieResults[] to initial conditions
-               {
-                  foreach (string key in RuleDialogViewer.Events.Keys)
-                     gi.DieResults[key] = new int[3] { Utilities.NO_RESULT, Utilities.NO_RESULT, Utilities.NO_RESULT };
-               }
-               catch (Exception e)
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "CreateEvents(): e=" + e.ToString());
-                  return;
-               }
                if (false == OpenEvent(gi, gi.EventActive))
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): OpenEvent() returned false ae=" + myGameInstance.EventActive + " a=" + action.ToString());
@@ -522,7 +512,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "OpenEvent(): myRulesMgr=null");
             return false;
          }
-         if (null == RuleDialogViewer.Events)
+         if (null == myRulesMgr.Events)
          {
             Logger.Log(LogEnum.LE_ERROR, "OpenEvent(): myRulesMgr.Events=null");
             return false;
@@ -562,7 +552,7 @@ namespace Pattons_Best
          {
             StringBuilder sb = new StringBuilder();
             sb.Append(@"<TextBlock xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' Name='myTextBlockDisplay' xml:space='preserve' Width='573' Background='#FFB9EA9E' FontFamily='Georgia' FontSize='18' TextWrapping='WrapWithOverflow' IsHyphenationEnabled='true' LineStackingStrategy='BlockLineHeight' Margin='0,0,0,0'>");
-            sb.Append(RuleDialogViewer.Events[key]);
+            sb.Append(myRulesMgr.Events[key]);
             sb.Append(@"</TextBlock>");
             StringReader sr = new StringReader(sb.ToString());
             XmlTextReader xr = new XmlTextReader(sr);

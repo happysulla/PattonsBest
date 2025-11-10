@@ -16,13 +16,15 @@ namespace Pattons_Best
 {
    public class RuleDialogViewer
    {
-      public static Dictionary<string, string> Events = new Dictionary<string, string>();// this property is used for unit testing - 05COnfigFileMgrUnitTesting
+
       private const double theExtraWidth = 0;
       public bool CtorError { get; } = false;
       private Dictionary<string, string> myRules = new Dictionary<string, string>();
       public Dictionary<string, string> Rules { get => myRules; }
       private Dictionary<string, string> myTables = new Dictionary<string, string>();
       public Dictionary<string, string> Tables { get => myTables; }
+      private Dictionary<string, string> myEvents = new Dictionary<string, string>();// this property is used for unit testing - 05COnfigFileMgrUnitTesting
+      public Dictionary<string, string> Events { get => myEvents; set => myEvents = value; }
       private Dictionary<string, TableDialog?> myTableDialogs = new Dictionary<string, TableDialog?>();
       private Dictionary<string, BannerDialog?> myBannerDialogs = new Dictionary<string, BannerDialog?>();
       private Dictionary<string, BannerDialog?> myEventDialogs = new Dictionary<string, BannerDialog?>();

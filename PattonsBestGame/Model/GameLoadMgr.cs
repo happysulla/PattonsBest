@@ -3094,85 +3094,85 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool ReadXmlDieRollResults(XmlReader reader, Dictionary<string, int[]> dieResults)
-      {
-         try // resync the gi.DieResults[] to initial conditions
-         {
-            foreach (string key in RuleDialogViewer.Events.Keys)
-               dieResults[key] = new int[3] { Utilities.NO_RESULT, Utilities.NO_RESULT, Utilities.NO_RESULT };
-         }
-         catch (Exception e)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): e=" + e.ToString());
-            return false;
-         }
-         //------------------------------------------
-         reader.Read();
-         if (false == reader.IsStartElement())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): IsStartElement(EnemyAcquiredShots) returned false");
-            return false;
-         }
-         if (reader.Name != "DieRollResults")
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): DieRollResults != (node=" + reader.Name + ")");
-            return false;
-         }
-         string? sCount = reader.GetAttribute("count");
-         if (null == sCount)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): Count=null");
-            return false;
-         }
-         int count = int.Parse(sCount);
-         for (int i = 0; i < count; i++)
-         {
-            reader.Read();
-            if (false == reader.IsStartElement())
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): reader.IsStartElement(EnemyAcqShot) = false");
-               return false;
-            }
-            if (reader.Name != "DieRollResult")
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): DieRollResult != (node=" + reader.Name + ")");
-               return false;
-            }
-            //-------------------------------
-            string? sKey = reader.GetAttribute("key");
-            if (null == sKey)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): sKey=null");
-               return false;
-            }
-            //-------------------------------
-            string? sRoll0 = reader.GetAttribute("r0");
-            if (null == sRoll0)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): sRoll0=null");
-               return false;
-            }
-            dieResults[sKey][0] = Convert.ToInt32(sRoll0);
-            //-------------------------------
-            string? sRoll1 = reader.GetAttribute("r1");
-            if (null == sRoll1)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): sRoll1=null");
-               return false;
-            }
-            dieResults[sKey][1] = Convert.ToInt32(sRoll1);
-            //-------------------------------
-            string? sRoll2 = reader.GetAttribute("r2");
-            if (null == sRoll2)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): sRoll2=null");
-               return false;
-            }
-            dieResults[sKey][2] = Convert.ToInt32(sRoll2);
-         }
-         reader.Read(); // get past </DieRollResults> tag
-         return true;
-      }
+      //private bool ReadXmlDieRollResults(XmlReader reader, Dictionary<string, int[]> dieResults)
+      //{
+      //   try // resync the gi.DieResults[] to initial conditions
+      //   {
+      //      foreach (string key in myRulesMgr.Events.Keys)
+      //         dieResults[key] = new int[3] { Utilities.NO_RESULT, Utilities.NO_RESULT, Utilities.NO_RESULT };
+      //   }
+      //   catch (Exception e)
+      //   {
+      //      Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): e=" + e.ToString());
+      //      return false;
+      //   }
+      //   //------------------------------------------
+      //   reader.Read();
+      //   if (false == reader.IsStartElement())
+      //   {
+      //      Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): IsStartElement(EnemyAcquiredShots) returned false");
+      //      return false;
+      //   }
+      //   if (reader.Name != "DieRollResults")
+      //   {
+      //      Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): DieRollResults != (node=" + reader.Name + ")");
+      //      return false;
+      //   }
+      //   string? sCount = reader.GetAttribute("count");
+      //   if (null == sCount)
+      //   {
+      //      Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): Count=null");
+      //      return false;
+      //   }
+      //   int count = int.Parse(sCount);
+      //   for (int i = 0; i < count; i++)
+      //   {
+      //      reader.Read();
+      //      if (false == reader.IsStartElement())
+      //      {
+      //         Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): reader.IsStartElement(EnemyAcqShot) = false");
+      //         return false;
+      //      }
+      //      if (reader.Name != "DieRollResult")
+      //      {
+      //         Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): DieRollResult != (node=" + reader.Name + ")");
+      //         return false;
+      //      }
+      //      //-------------------------------
+      //      string? sKey = reader.GetAttribute("key");
+      //      if (null == sKey)
+      //      {
+      //         Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): sKey=null");
+      //         return false;
+      //      }
+      //      //-------------------------------
+      //      string? sRoll0 = reader.GetAttribute("r0");
+      //      if (null == sRoll0)
+      //      {
+      //         Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): sRoll0=null");
+      //         return false;
+      //      }
+      //      dieResults[sKey][0] = Convert.ToInt32(sRoll0);
+      //      //-------------------------------
+      //      string? sRoll1 = reader.GetAttribute("r1");
+      //      if (null == sRoll1)
+      //      {
+      //         Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): sRoll1=null");
+      //         return false;
+      //      }
+      //      dieResults[sKey][1] = Convert.ToInt32(sRoll1);
+      //      //-------------------------------
+      //      string? sRoll2 = reader.GetAttribute("r2");
+      //      if (null == sRoll2)
+      //      {
+      //         Logger.Log(LogEnum.LE_ERROR, "ReadXmlDieRollResults(): sRoll2=null");
+      //         return false;
+      //      }
+      //      dieResults[sKey][2] = Convert.ToInt32(sRoll2);
+      //   }
+      //   reader.Read(); // get past </DieRollResults> tag
+      //   return true;
+      //}
       private bool ReadXmlListingMapItems(XmlReader reader)
       {
          theMapItems.Clear();
