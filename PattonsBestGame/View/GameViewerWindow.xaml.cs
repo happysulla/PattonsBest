@@ -41,9 +41,7 @@ namespace Pattons_Best
       private Double theOldYAfterAnimation = 0.0;
       public bool CtorError { get; } = false;
       //---------------------------------------------------------------------
-      [Serializable]
-      [StructLayout(LayoutKind.Sequential)] 
-      public struct POINT  // used in WindowPlacement structure
+      [Serializable] [StructLayout(LayoutKind.Sequential)]  public struct POINT  // used in WindowPlacement structure
       {
          public int X;
          public int Y;
@@ -54,9 +52,7 @@ namespace Pattons_Best
          }
       }
       //-------------------------------------------
-      [Serializable]
-      [StructLayout(LayoutKind.Sequential)]
-      public struct RECT // used in WindowPlacement structure
+      [Serializable] [StructLayout(LayoutKind.Sequential)] public struct RECT // used in WindowPlacement structure
       {
          public int Left;
          public int Top;
@@ -71,9 +67,7 @@ namespace Pattons_Best
          }
       }
       //-------------------------------------------
-      [Serializable]
-      [StructLayout(LayoutKind.Sequential)]
-      public struct WindowPlacement // used to save window position between sessions
+      [Serializable] [StructLayout(LayoutKind.Sequential)] public struct WindowPlacement // used to save window position between sessions
       {
          public int length;
          public int flags;

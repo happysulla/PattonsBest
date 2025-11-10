@@ -237,6 +237,8 @@ namespace Pattons_Best
                myRulesMgr.GameInstance = gi;
                gi.IsGridActive = false;
                myScrollViewerTextBlock.Cursor = Cursors.Arrow;
+               foreach (string key in myRulesMgr.Events.Keys) // For each event, create a dictionary entry. There can be no more than three die rolls per event
+                  gi.DieResults[key] = new int[3] { Utilities.NO_RESULT, Utilities.NO_RESULT, Utilities.NO_RESULT };
                if (false == OpenEvent(gi, gi.EventActive))
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): OpenEvent() returned false ae=" + myGameInstance.EventActive + " a=" + action.ToString());
@@ -582,7 +584,7 @@ namespace Pattons_Best
          }
          catch (Exception e)
          {
-            Logger.Log(LogEnum.LE_ERROR, "OpenEvent(): for key=" + key + " e=" + e.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "OpenEvent(): gi.DieResults[key] exception for key=" + key + " e=" + e.ToString());
             return false;
          }
          //------------------------------------
