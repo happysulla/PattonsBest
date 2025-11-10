@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Text;
+using System.Windows.Forms;
 using System.Xml.Serialization;
 
 namespace Pattons_Best
@@ -16,6 +18,16 @@ namespace Pattons_Best
       {
          Name = name;
          IsEnabled = isEnabled;
+      }
+      public override string ToString()
+      {
+         StringBuilder sb = new StringBuilder();
+         sb.Append("(name=");
+         sb.Append(this.Name.ToString());
+         sb.Append("->");
+         sb.Append(this.IsEnabled.ToString());
+         sb.Append(")");
+         return sb.ToString();
       }
    }
    [XmlInclude(typeof(Option))]
@@ -87,6 +99,18 @@ namespace Pattons_Best
          Clear();
          foreach (string s in theDefaults)
             Add(new Option(s, false));
+      }
+      public override string ToString()
+      {
+         StringBuilder sb = new StringBuilder();
+         sb.Append("[");
+         foreach (Object obj in myList )
+         {
+            Option option = (Option)obj;
+            sb.Append(option.ToString());
+         }
+         sb.Append("]");
+         return sb.ToString();
       }
    }
 }

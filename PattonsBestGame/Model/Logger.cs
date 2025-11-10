@@ -86,6 +86,7 @@ namespace Pattons_Best
       LE_VIEW_MIM_ADD,
       LE_VIEW_MIM_CLEAR,
       LE_VIEW_TIME_TRACK,
+      LE_VIEW_CONTROL_NAME,
       //-------------
       LE_EVENT_VIEWER_BATTLE_SETUP,
       LE_EVENT_VIEWER_ENEMY_ACTION,
@@ -205,6 +206,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_VIEW_MIM_ADD);
          //SetOn(LogEnum.LE_VIEW_MIM_CLEAR);
          //SetOn(LogEnum.LE_VIEW_TIME_TRACK);
+         SetOn(LogEnum.LE_VIEW_CONTROL_NAME);
          //-------------------------------
          //SetOn(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP);
          //SetOn(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION);

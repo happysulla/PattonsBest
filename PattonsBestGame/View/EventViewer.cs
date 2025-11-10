@@ -541,11 +541,13 @@ namespace Pattons_Best
                {
                   InlineUIContainer ui = (InlineUIContainer)inline;
                   if (ui.Child is Button b)
+                  {
                      b.Click -= Button_Click;
+                  }
                   if (ui.Child is CheckBox cb)
                   {
-                     cb.Checked += CheckBox_Checked;
-                     cb.Unchecked += CheckBox_Unchecked;
+                     cb.Checked -= CheckBox_Checked;
+                     cb.Unchecked -= CheckBox_Unchecked;
                   }
                }
             }
@@ -610,6 +612,20 @@ namespace Pattons_Best
                         Logger.Log(LogEnum.LE_ERROR, "OpenEvent(): SetButtonState() returned false");
                         return false;
                      }
+                  }
+                  else if (ui.Child is CheckBox cb)
+                  {
+                     Logger.Log(LogEnum.LE_VIEW_CONTROL_NAME, "OpenEvent(): cb.Name=" + cb.Name + " for ae=" + gi.EventActive);
+                     cb.Checked += CheckBox_Checked;
+                     cb.Unchecked += CheckBox_Unchecked;
+                     Option? option = gi.Options.Find(cb.Name);
+                     if (null == option)
+                     {
+                        option = new Option(cb.Name, false);
+                        gi.Options.Add(option);
+                     }
+                     if (true == option.IsEnabled)
+                        cb.IsChecked = true;
                   }
                   else if (ui.Child is Image img)
                   {
@@ -6137,9 +6153,9 @@ namespace Pattons_Best
                }
                break;
             case "Begin Game":
-               if( false == ShowFirstScreen())
+               if( false == ShowTutorialScreens())
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowFirstScreen() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowTutorialScreens() returned false");
                   return false;
                }
                break;
@@ -6202,17 +6218,17 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool ShowFirstScreen()
+      private bool ShowTutorialScreens()
       {
          GameAction action = GameAction.SetupShowMapHistorical;
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowFirstScreen(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowTutorialScreens(): myGameInstance=null");
             return false;
          }
          if (null == myGameEngine)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowFirstScreen(): myGameEngine=null");
+            Logger.Log(LogEnum.LE_ERROR, "ShowTutorialScreens(): myGameEngine=null");
             return false;
          }
          string name = "";

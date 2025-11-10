@@ -26,7 +26,7 @@ namespace Pattons_Best
       private IGameInstance myGameInstance;
       public bool IsPathShown { get; set; } = true;
       public bool IsRoadsShown { get; set; } = false;
-      public Options? NewGameOptions { get; set; } = null;
+      public Options? NewGameOptions { get; set; } = null;  // These options take affect when new game menu item is selected
       //-----------------------------------------------------------------------
       public MainMenuViewer(Menu mi, IGameEngine ge, IGameInstance gi) // Constructor creates default top level menus that get changed with UpdateView() based on GamePhase and GameAction
       {
@@ -261,7 +261,9 @@ namespace Pattons_Best
          if (true == dialog.ShowDialog())
          {
             this.NewGameOptions = dialog.NewOptions;
-            Logger.Log(LogEnum.LE_VIEW_SHOW_OPTIONS, "MenuItemFileOptions_Click(): " + this.NewGameOptions.ToString());
+            Logger.Log(LogEnum.LE_VIEW_SHOW_OPTIONS, "MenuItemFileOptions_Click(): new=" + this.NewGameOptions.ToString());
+            ApplyOptionsToCurrentGame(this.NewGameOptions, myGameInstance.Options);
+            Logger.Log(LogEnum.LE_VIEW_SHOW_OPTIONS, "MenuItemFileOptions_Click(): current=" + myGameInstance.Options.ToString());
             GameAction action = GameAction.UpdateGameOptions;
             myGameEngine.PerformAction(ref myGameInstance, ref action);
          }
@@ -370,6 +372,31 @@ namespace Pattons_Best
       {
          GameAction action = GameAction.UnitTestCleanup;
          myGameEngine.PerformAction(ref myGameInstance, ref action);
+      }
+      //----------------------------------------------------------
+      private void ApplyOptionsToCurrentGame(Options newOptions, Options currentOptions)
+      {
+         string name = "SkipTutorial0";
+         Option? currentOption = currentOptions.Find(name);
+         if (null == currentOption)
+         {
+            currentOption = new Option(name, false);
+            currentOptions.Add(currentOption);
+         }
+         Option? newOption = newOptions.Find(name);
+         if (null == newOption)
+         {
+            newOption = new Option(name, false);
+            newOptions.Add(newOption);
+         }
+         currentOption.IsEnabled = newOption.IsEnabled;
+         //-----------------------------------------
+         currentOptions.Clear();
+         foreach(Option option in newOptions)
+         {
+            Option newbie = new Option(option.Name, option.IsEnabled);
+            currentOptions.Add(newbie);
+         }
       }
    }
 }

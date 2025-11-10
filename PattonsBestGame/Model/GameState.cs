@@ -2724,8 +2724,6 @@ namespace Pattons_Best
          IAfterActionReport report1 = new AfterActionReport(entry); // Setup_NewGame()
          gi.Reports.Add(report1);
          //---------------------------------------------
-         gi.Options.SetOriginalGameOptions();
-         //---------------------------------------------
          if (false == AddStartingTestingState(gi)) // TestingStartAmbush
          {
             Logger.Log(LogEnum.LE_ERROR, "Setup_NewGame():  Add_StartingTestingState() returned false");

@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Collections.Generic;
+using Windows.System;
 
 
 
@@ -17,6 +18,12 @@ namespace Pattons_Best
       public OptionsSelectionDialog(Options options)
       {
          Logger.Log(LogEnum.LE_VIEW_SHOW_OPTIONS, "OptionSelectionDialog(): " + options.ToString());
+         myOptions = new Options();
+         foreach( Option o in options )
+         {
+            Option option = new Option(o.Name, o.IsEnabled);
+            myOptions.Add(option);
+         }
          InitializeComponent();
          //-----------------------------
          myCheckBoxSkipOpening.ToolTip = "Skip opening screen with tank image. Contains button to begin game or read rules.";
@@ -35,6 +42,59 @@ namespace Pattons_Best
       //----------------------------------
       private bool UpdateDisplay(Options options)
       {
+         string name = "SkipTutorial0";
+         Option? option = options.Find(name);
+         if (null == option)
+         {
+            option = new Option(name, false);
+            myOptions.Add(option);
+         }
+         myCheckBoxSkipOpening.IsChecked = option.IsEnabled;
+         //------------------------------
+         name = "SkipTutorial1";
+         option = options.Find(name);
+         if (null == option)
+         {
+            option = new Option(name, false);
+            myOptions.Add(option);
+         }
+         myCheckBoxSkipHistorical.IsChecked = option.IsEnabled;
+         //------------------------------
+         name = "SkipTutorial2";
+         option = options.Find(name);
+         if (null == option)
+         {
+            option = new Option(name, false);
+            myOptions.Add(option);
+         }
+         myCheckBoxSkipMoveBoard.IsChecked = option.IsEnabled;
+         //------------------------------
+         name = "SkipTutorial3";
+         option = options.Find(name);
+         if (null == option)
+         {
+            option = new Option(name, false);
+            myOptions.Add(option);
+         }
+         myCheckBoxPrinceBattleBoard.IsChecked = option.IsEnabled;
+         //------------------------------
+         name = "SkipTutorial4";
+         option = options.Find(name);
+         if (null == option)
+         {
+            option = new Option(name, false);
+            myOptions.Add(option);
+         }
+         myCheckBoxPrinceTankCard.IsChecked = option.IsEnabled;
+         //------------------------------
+         name = "SkipTutorial5";
+         option = options.Find(name);
+         if (null == option)
+         {
+            option = new Option(name, false);
+            myOptions.Add(option);
+         }
+         myCheckBoxStartAfterActionReport.IsChecked = option.IsEnabled;
          return true;
       }
       //----------------------CONTROLLER FUNCTIONS----------------------

@@ -186,7 +186,8 @@ namespace Pattons_Best
             CtorError = true;
             return;
          }
-         myMainMenuViewer.NewGameOptions = myGameInstance.Options;
+         myMainMenuViewer.NewGameOptions = gi.Options;
+         Logger.Log(LogEnum.LE_VIEW_SHOW_OPTIONS, "GameViewerWindow(): Options=" + gi.Options.ToString());
          //---------------------------------------------------------------
          if (false == String.IsNullOrEmpty(Settings.Default.GameDirectoryName))
             GameLoadMgr.theGamesDirectory = Settings.Default.GameDirectoryName; // remember the game directory name
@@ -1477,6 +1478,7 @@ namespace Pattons_Best
          Settings.Default.ScrollViewerHeight = myScrollViewerMap.Height;
          Settings.Default.ScrollViewerWidth = myScrollViewerMap.Width;
          //-------------------------------------------
+         Logger.Log(LogEnum.LE_VIEW_SHOW_OPTIONS, "SaveDefaultsToSettings(): Options=" + myGameInstance.Options.ToString());
          string? sOptions = SerializeOptions(myGameInstance.Options);
          if (null == sOptions)
             Logger.Log(LogEnum.LE_ERROR, "SaveDefaultsToSettings(): SerializeOptions() returned false");
@@ -1591,7 +1593,7 @@ namespace Pattons_Best
          CultureInfo currentCulture = CultureInfo.CurrentCulture;
          System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
          //-----------------------------------------------
-         options = new Options();
+         options.Clear();
          if (true == String.IsNullOrEmpty(sXml))
          {
             Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): String.IsNullOrEmpty() returned true");
