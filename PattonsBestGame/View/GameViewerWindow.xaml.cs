@@ -288,42 +288,11 @@ namespace Pattons_Best
             this.myCanvasMain.Cursor = myTargetCursor;
          }
          //-------------------------------------------------------
-         else if ((GameAction.UpdateLoadingGame == action) || (GameAction.UpdateNewGame == action))
+         else if ((GameAction.UpdateLoadingGame == action) || (GameAction.UpdateNewGame == action) || (GameAction.RemoveSplashScreen == action) )
          {
-            myGameInstance = gi;
-            myMoveButtons.Clear();
-            myBattleButtons.Clear();
-            myTankButtons.Clear();
-            Logger.Log(LogEnum.LE_SHOW_MAIN_CLEAR, "UpdateCanvasMainClear(): Clearing action=" + action.ToString());
-            UpdateCanvasMainClear(myMoveButtons, gi.MoveStacks, action);
-            UpdateCanvasMainClear(myBattleButtons, gi.BattleStacks, action);
-            myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas); // UploadNewGame - Return to previous saved zoom level
-            //---------------------------------- 
-            IGameCommand? cmd = gi.GameCommands.GetLast();
-            if (null == cmd)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "LoadGame(): cmd=null");
-               return;
-            }
-            GameAction outAction = cmd.Action;
-            gi.GamePhase = cmd.Phase;
-            gi.DieRollAction = cmd.ActionDieRoll;
-            gi.EventDisplayed = gi.EventActive = cmd.EventActive;
-            if (GameAction.UpdateNewGame == action)
-            {
-               outAction = GameAction.UpdateNewGameEnd;
-            }
-            else
-            {
-               if( "e034" == gi.EventActive)
-               {
-                  if ( 0 < gi.AdvancingFireMarkerCount )
-                     outAction = GameAction.BattleStart;
-                  else
-                     outAction = GameAction.BattleActivation;  // BattlePlaceAdvanceFire
-               }
-            }
-            myGameEngine.PerformAction(ref gi, ref outAction, 0);
+            if( false == UpdateViewForNewGame(ref gi, action)) // This calls PerformAction() to get to proper event
+               Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateViewForNewGame() returned false");
+            return;
          }
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -648,6 +617,50 @@ namespace Pattons_Best
                break;
          }
          //UpdateScrollbarThumbnails(gi.Prince.Territory);
+      }
+      private bool UpdateViewForNewGame(ref IGameInstance gi, GameAction action) // GameAction.UpdateLoadingGame  GameAction.UpdateNewGame
+      {
+         myGameInstance = gi;
+         myMoveButtons.Clear();
+         myBattleButtons.Clear();
+         myTankButtons.Clear();
+         Logger.Log(LogEnum.LE_SHOW_MAIN_CLEAR, "UpdateViewForNewGame(): Clearing action=" + action.ToString());
+         UpdateCanvasMainClear(myMoveButtons, gi.MoveStacks, action);
+         UpdateCanvasMainClear(myBattleButtons, gi.BattleStacks, action);
+         myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas); // UploadNewGame - Return to previous saved zoom level
+         //---------------------------------- 
+         GameAction nextAction = GameAction.Error;
+         if ( GameAction.UpdateLoadingGame == action )
+         {
+            IGameCommand? cmd = gi.GameCommands.GetLast();
+            if (null == cmd)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateViewForNewGame(): cmd=null");
+               return false;
+            }
+            nextAction = cmd.Action;
+            gi.GamePhase = cmd.Phase;
+            gi.DieRollAction = cmd.ActionDieRoll;
+            gi.EventDisplayed = gi.EventActive = cmd.EventActive;
+            if ("e034" == gi.EventActive)
+            {
+               if (0 < gi.AdvancingFireMarkerCount)
+                  nextAction = GameAction.BattleStart;
+               else
+                  nextAction = GameAction.BattleActivation;  // BattlePlaceAdvanceFire
+            }
+         }
+         else if (GameAction.UpdateNewGame == action)
+         {
+            nextAction = GameAction.UpdateNewGameEnd;
+         }
+         else if( GameAction.RemoveSplashScreen == action )
+         {
+            mySplashScreen.Close();
+            nextAction = GameAction.UpdateNewGameEnd;
+         }
+         myGameEngine.PerformAction(ref gi, ref nextAction, 0);
+         return true;
       }
       private string UpdateViewTitle(IGameInstance gi, IAfterActionReport report)
       {

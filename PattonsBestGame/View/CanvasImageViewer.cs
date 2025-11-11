@@ -75,6 +75,36 @@ namespace Pattons_Best
                }
                break;
             case GameAction.UpdateNewGame:
+               if (null != myTargetCursor)
+                  myTargetCursor.Dispose();
+               myTargetCursor = null;
+               this.myCanvas.Cursor = System.Windows.Input.Cursors.Arrow; // get rid of the canvas cursor
+               //-----------------------------------------
+               switch (gi.EventActive)
+               {
+                  case "e000":
+                     theMainImage = EnumMainImage.MI_Other;
+                     ShowShermanPhoto(myCanvas);
+                     break;
+                  case "e001":
+                     theMainImage = EnumMainImage.MI_Other;
+                     ShowHistoricalMap(myCanvas);
+                     break;
+                  case "e002":
+                     theMainImage = EnumMainImage.MI_Move;
+                     ShowMovementMap(myCanvas);
+                     break;
+                  case "e003":
+                     theMainImage = EnumMainImage.MI_Battle;
+                     ShowBattleMap(myCanvas);
+                     break;
+                  default:
+                     theMainImage = EnumMainImage.MI_Other;
+                     if (false == ShowAfterActionReportDialog(gi, myCanvas, true))
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowAfterActionReportDialog() returned false for a=" + action.ToString());
+                     break;
+               }
+               break;
             case GameAction.UpdateLoadingGame:
                if (null != myTargetCursor)
                   myTargetCursor.Dispose();
@@ -118,7 +148,7 @@ namespace Pattons_Best
                            break;
                         default:
                            if (false == ShowAfterActionReportDialog(gi, myCanvas, true))
-                              Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowAfterActionReportDialog() returned false for a=" + action.ToString());
+                              Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowAfterActionReportDialog() returned false for cmd.Action=" + cmd.Action.ToString());
                            break;
                      }
                      break;

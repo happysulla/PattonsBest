@@ -1579,7 +1579,6 @@ namespace Pattons_Best
             case GameAction.UpdateAfterActionReport:
             case GameAction.UpdateEventViewerDisplay: // Only change active event
             case GameAction.UpdateBattleBoard: // Do not log event
-            case GameAction.UpdateNewGameEnd:
                break;
             case GameAction.UpdateLoadingGame:
                if (false == LoadGame(ref gi, ref action))
@@ -1716,12 +1715,14 @@ namespace Pattons_Best
                break;
             case GameAction.UpdateNewGame:
             case GameAction.RemoveSplashScreen: // GameStateSetup.PerformAction()
-               if( false == SetupNewGame(gi, ref action))
+               if (false == SetupNewGame(gi, ref action))
                {
                   returnStatus = "SetupNewGame() returned false";
                   Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
                }
-               else if (false == ShowTutorialScreen(gi, ref action))
+               break;
+            case GameAction.UpdateNewGameEnd:
+               if (false == ShowTutorialScreen(gi, ref action))
                {
                   returnStatus = "Show_TutorialScreen() returned false";
                   Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(" + action.ToString() + "): " + returnStatus);
@@ -2778,8 +2779,7 @@ namespace Pattons_Best
          string eventName = "ERROR";
          switch (outAction)
          {
-            case GameAction.UpdateNewGame:  // ShowTutorialScreen()
-            case GameAction.RemoveSplashScreen:
+            case GameAction.UpdateNewGameEnd:  // ShowTutorialScreen()
                eventName = "e000";
                if( true == option0.IsEnabled )
                {
