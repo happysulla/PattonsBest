@@ -159,14 +159,14 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_GUN_LOAD_PREP);
          //SetOn(LogEnum.LE_SHOW_MAPITEM_TANK);
          //SetOn(LogEnum.LE_SHOW_MAPITEM_CREWACTION);
-         SetOn(LogEnum.LE_SHOW_BATTLE_PHASE);
+         //SetOn(LogEnum.LE_SHOW_BATTLE_PHASE);
          //SetOn(LogEnum.LE_SHOW_START_BATTLE);
          //SetOn(LogEnum.LE_SHOW_BATTLE_ROUND_START);
          //SetOn(LogEnum.LE_SHOW_RESET_ROUND);
          //SetOn(LogEnum.LE_SHOW_HIT_YOU_MOD);
          //SetOn(LogEnum.LE_SHOW_WOUND_MOD);
-         //SetOn(LogEnum.LE_SHOW_SPOT_MOD);
-         //SetOn(LogEnum.LE_SHOW_SPOT_RESULT);
+         SetOn(LogEnum.LE_SHOW_SPOT_MOD);
+         SetOn(LogEnum.LE_SHOW_SPOT_RESULT);
          //SetOn(LogEnum.LE_SHOW_ORDERS_MENU);
          //SetOn(LogEnum.LE_SHOW_CREW_SWITCH);
          //SetOn(LogEnum.LE_SHOW_CREW_REPLACE);
@@ -212,7 +212,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION);
          //SetOn(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED);
          //SetOn(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED_BAILOUT);
-         //SetOn(LogEnum.LE_EVENT_VIEWER_SPOTTING);
+         SetOn(LogEnum.LE_EVENT_VIEWER_SPOTTING);
          //SetOn(LogEnum.LE_EVENT_VIEWER_ORDERS);
          return true;
       }

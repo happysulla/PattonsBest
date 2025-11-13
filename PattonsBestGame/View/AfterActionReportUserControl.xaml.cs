@@ -644,8 +644,10 @@ namespace Pattons_Best
                {
                   if (uiContainer.Child is System.Windows.Controls.TextBox textbox)
                   {
-                     if (false == String.IsNullOrEmpty(textbox.Text))
-                        assistant.Name = textbox.Text;
+                     string name = Utilities.RemoveSpaces(textbox.Text);
+                     string trimString = name.Trim(new char[] { ' ', '*', '_' });
+                     if (false == String.IsNullOrEmpty(trimString))
+                        assistant.Name = trimString;
                      else
                         textbox.Text = assistant.Name;
                   }

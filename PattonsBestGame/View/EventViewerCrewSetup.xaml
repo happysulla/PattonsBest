@@ -25,6 +25,8 @@
          <RowDefinition Height="Auto"></RowDefinition>
          <RowDefinition Height="Auto"></RowDefinition>
          <RowDefinition Height="Auto"></RowDefinition>
+         <RowDefinition Height="Auto"></RowDefinition>
+         <RowDefinition Height="Auto"></RowDefinition>
       </Grid.RowDefinitions>
       <StackPanel Grid.Row="0" Grid.ColumnSpan="3" Orientation="Horizontal">
          <TextBlock Name="myTextBlockHeader" Text=" Ratings for New Men" FontWeight="Bold" FontFamily='Georgia' FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>
@@ -39,9 +41,11 @@
          <Rectangle  Height="42" Width="42" Stroke="Black" />
       </StackPanel>
       <Rectangle Grid.Row="4" Grid.ColumnSpan="3" Margin="5" Height="1" Fill="Black"/>
+      <StackPanel Grid.Row="5" Grid.ColumnSpan="3" Name="myStackPanelCheckMarks" DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5,0,0,0"/>
+      <Rectangle Grid.Row="6" Grid.ColumnSpan="3" Margin="5" Height="1" Fill="Black"/>
       <!--Table Header Row-->
-      <TextBlock Grid.Row="5" Grid.Column="0" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock1">Ammo Type</TextBlock>
-      <TextBlock Grid.Row="5" Grid.Column="1" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock2">Normal</TextBlock>
-      <TextBlock Grid.Row="5" Grid.Column="2" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock3">Extra</TextBlock>
+      <TextBlock Grid.Row="7" Grid.Column="0" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock1">Crew Member</TextBlock>
+      <TextBlock Grid.Row="7" Grid.Column="1" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock2">Roll</TextBlock>
+      <TextBlock Grid.Row="7" Grid.Column="2" FontFamily='Georgia' FontSize="12" VerticalAlignment="Center"  HorizontalAlignment="Center" Name="myTextBlock3">Rating</TextBlock>
    </Grid>
 </UserControl>

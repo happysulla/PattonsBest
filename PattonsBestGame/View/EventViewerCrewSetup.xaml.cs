@@ -21,7 +21,7 @@ namespace Pattons_Best
    {
       public delegate bool EndCrewMgrCallback();
       private const int MAX_GRID_LEN = 5;
-      private const int STARTING_ASSIGNED_ROW = 6;
+      private const int STARTING_ASSIGNED_ROW = 8;
       private const bool IS_ENABLE = true;
       private const bool NO_ENABLE = false;
       private const bool IS_STATS = true;
@@ -190,6 +190,11 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateGrid(): UpdateAssignablePanel() returned false");
             return false;
          }
+         if (false == UpdateCheckBoxPanel())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateGrid():  UpdateCheckBoxPanel() returned false");
+            return false;
+         }
          if (false == UpdateGridRows())
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateGrid(): UpdateGridRows() returned false");
@@ -274,6 +279,28 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateAssignablePanel(): reached default s=" + myState.ToString());
                return false;
          }
+         return true;
+      }
+      private bool UpdateCheckBoxPanel()
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCheckBoxPanel(): myGameInstance=null");
+            return false;
+         }
+         myStackPanelCheckMarks.Children.Clear();
+         CheckBox cb = new CheckBox() { FontSize = 12, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
+         cb.Content = "Click if what to roll for all members with one roll";
+         Option? option = myGameInstance.Options.Find("AutoRollNewMembers");
+         if( null == option )
+         {
+            option = new Option("AutoRollNewMembers", false);
+            myGameInstance.Options.Add(option);
+         }
+         cb.IsChecked = option.IsEnabled;
+         cb.Checked += CheckBox_Checked;
+         cb.Unchecked += CheckBox_Unchecked;
+         myStackPanelCheckMarks.Children.Add(cb);
          return true;
       }
       private bool UpdateGridRows()
@@ -614,6 +641,48 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Button_Click(): UpdateGrid() return false");
             return;
          }
+      }
+      private void CheckBox_Checked(object sender, RoutedEventArgs e)
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CheckBox_Checked(): myGameInstance=null");
+            return;
+         }
+         //---------------------------
+         CheckBox cb = (CheckBox)sender;
+         cb.IsChecked = true;
+         Option? option = myGameInstance.Options.Find("AutoRollNewMembers");
+         if (null == option)
+         {
+            option = new Option("AutoRollNewMembers", true);
+            myGameInstance.Options.Add(option);
+         }
+         option.IsEnabled = true;
+         //---------------------------
+         if (false == UpdateGrid())
+            Logger.Log(LogEnum.LE_ERROR, "CheckBox_Checked(): UpdateGrid() return false");
+      }
+      private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+      {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CheckBox_Unchecked(): myGameInstance=null");
+            return;
+         }
+         //---------------------------
+         CheckBox cb = (CheckBox)sender;
+         cb.IsChecked = false;
+         Option? option = myGameInstance.Options.Find("AutoRollNewMembers");
+         if (null == option)
+         {
+            option = new Option("AutoRollNewMembers", false);
+            myGameInstance.Options.Add(option);
+         }
+         option.IsEnabled = false;
+         //---------------------------
+         if (false == UpdateGrid())
+            Logger.Log(LogEnum.LE_ERROR, "CheckBox_Unchecked(): UpdateGrid() return false");
       }
    }
 }

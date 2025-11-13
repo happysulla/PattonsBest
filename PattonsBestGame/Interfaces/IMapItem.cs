@@ -51,6 +51,7 @@ namespace Pattons_Best
       EnumSpottingResult Spotting { get; set; }
       //----------------------------------------
       void Copy(IMapItem mi);
+      void Sync(IMapItem mi); // synchronize most of the data but not all
       bool IsEnemyUnit();
       string GetEnemyUnit();
       void SetBloodSpots(int percent = 40);

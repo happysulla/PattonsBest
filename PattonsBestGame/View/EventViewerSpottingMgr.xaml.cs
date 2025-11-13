@@ -675,7 +675,7 @@ namespace Pattons_Best
                   myGridRows[i].myMapItemAppearing = enemyUnitAppearing;
                   myGameInstance.BattleStacks.Remove(mi);
                   Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "ShowCombatResults(): removing mi=" + mi.Name + " from BattleStacks=" + myGameInstance.BattleStacks.ToString());
-                  enemyUnitAppearing.Copy(mi);
+                  enemyUnitAppearing.Sync(mi);
                   myGameInstance.BattleStacks.Add(enemyUnitAppearing);
                   Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "ShowCombatResults(): adding mi=" + enemyUnitAppearing.Name + " from BattleStacks=" + myGameInstance.BattleStacks.ToString());
                }
@@ -701,7 +701,7 @@ namespace Pattons_Best
             myGridRows[i].myMapItemAppearing = enemyUnitAppearing;
             myGameInstance.BattleStacks.Remove(mi);
             Logger.Log(LogEnum.LE_SHOW_STACK_DEL, "ShowCombatResults(): removing mi=" + mi.Name + " from BattleStacks=" + myGameInstance.BattleStacks.ToString());
-            enemyUnitAppearing.Copy(mi);
+            enemyUnitAppearing.Sync(mi);
             myGameInstance.BattleStacks.Add(enemyUnitAppearing);
             Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "ShowCombatResults(): adding mi=" + enemyUnitAppearing.Name + " from BattleStacks=" + myGameInstance.BattleStacks.ToString());
          }
