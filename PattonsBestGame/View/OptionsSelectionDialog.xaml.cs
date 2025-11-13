@@ -33,6 +33,9 @@ namespace Pattons_Best
          myCheckBoxPrinceTankCard.ToolTip = "Skip showing description of Tank Card. Introduces Tank Card boxes and starting tank model.";
          myCheckBoxStartAfterActionReport.ToolTip = "Skip showing description of After Action Report. Allows changing names of tank and crew names.";
          //-----------------------------
+         myCheckBoxAutoRollRatings.ToolTip = "Roll a single die and automatically roll all other die for new crew ratings.";
+         myCheckBoxAutoRollEnemySetup.ToolTip = "Automatically roll die rolls for sector, terrain, and facing when activating an enemy.";
+         //-----------------------------
          if (false == UpdateDisplay(myOptions))
          {
             Logger.Log(LogEnum.LE_ERROR, "OptionSelectionDialog(): UpdateDisplay() returned false");
@@ -95,6 +98,25 @@ namespace Pattons_Best
             myOptions.Add(option);
          }
          myCheckBoxStartAfterActionReport.IsChecked = option.IsEnabled;
+         //------------------------------
+         name = "AutoRollNewMembers";
+         option = options.Find(name);
+         if (null == option)
+         {
+            option = new Option(name, false);
+            myOptions.Add(option);
+         }
+         myCheckBoxAutoRollRatings.IsChecked = option.IsEnabled;
+         //------------------------------
+         name = "AutoRollEnemyActivation";
+         option = options.Find(name);
+         if (null == option)
+         {
+            option = new Option(name, false);
+            myOptions.Add(option);
+         }
+         myCheckBoxAutoRollEnemySetup.IsChecked = option.IsEnabled;
+         //------------------------------
          return true;
       }
       //----------------------CONTROLLER FUNCTIONS----------------------
@@ -155,6 +177,29 @@ namespace Pattons_Best
                   option.IsEnabled = !option.IsEnabled;
                break;
             default: Logger.Log(LogEnum.LE_ERROR, "StackPanelOptions_Click(): reached default name=" + cb.Name); return;
+         }
+      }
+      private void StackPanelAutoRolls_Click(object sender, RoutedEventArgs e)
+      {
+         CheckBox cb = (CheckBox)sender;
+         Option? option = null;
+         switch (cb.Name)
+         {
+            case "myCheckBoxAutoRollRatings":
+               option = myOptions.Find("AutoRollNewMembers");
+               if (null == option)
+                  Logger.Log(LogEnum.LE_ERROR, "StackPanelAutoRolls_Click(): myOptions.Find() for name=" + cb.Name);
+               else
+                  option.IsEnabled = !option.IsEnabled;
+               break;
+            case "myCheckBoxAutoRollEnemySetup":
+               option = myOptions.Find("AutoRollEnemyActivation");
+               if (null == option)
+                  Logger.Log(LogEnum.LE_ERROR, "StackPanelAutoRolls_Click(): myOptions.Find() for name=" + cb.Name);
+               else
+                  option.IsEnabled = !option.IsEnabled;
+               break;
+            default: Logger.Log(LogEnum.LE_ERROR, "StackPanelAutoRolls_Click(): reached default name=" + cb.Name); return;
          }
       }
    }

@@ -32,6 +32,7 @@ namespace Pattons_Best
       public enum E071Enum
       {
          ROLL_RATING,
+         ROLL_RATING_AUTO,
          ASSIGN_CREWMEN,
          SHOW_RESULTS,
          END
@@ -147,6 +148,15 @@ namespace Pattons_Best
          //--------------------------------------------------
          myGridRows = new GridRow[MAX_GRID_LEN];
          myState = E071Enum.ROLL_RATING;
+         Option? option = myGameInstance.Options.Find("AutoRollNewMembers");
+         if (null == option)
+         {
+            option = new Option("AutoRollNewMembers", false);
+            myGameInstance.Options.Add(option);
+         }
+         if (true == option.IsEnabled)
+            myState = E071Enum.ROLL_RATING_AUTO;
+         //--------------------------------------------------
          myMaxRowCount = myGameInstance.NewMembers.Count;
          myIsRollInProgress = false;
          myRollResultRowNum = 0;
@@ -237,6 +247,9 @@ namespace Pattons_Best
             case E071Enum.ROLL_RATING:
                myTextBlockInstructions.Inlines.Add(new Run("Roll all dice for all rows."));
                break;
+            case E071Enum.ROLL_RATING_AUTO:
+               myTextBlockInstructions.Inlines.Add(new Run("Roll one die and auto-roll all others."));
+               break;
             case E071Enum.ASSIGN_CREWMEN:
                myTextBlockInstructions.Inlines.Add(new Run("Click and drag crew members to rectangles."));
                break;
@@ -255,6 +268,7 @@ namespace Pattons_Best
          switch (myState)
          {
             case E071Enum.ROLL_RATING:
+            case E071Enum.ROLL_RATING_AUTO:
                foreach (ICrewMember cm in myAssignables)
                {
                   Button b = CreateButton(cm, NO_ENABLE, false, IS_STATS, NO_ADORN, NO_CURSOR);
@@ -289,8 +303,8 @@ namespace Pattons_Best
             return false;
          }
          myStackPanelCheckMarks.Children.Clear();
-         CheckBox cb = new CheckBox() { FontSize = 12, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
-         cb.Content = "Click if what to roll for all members with one roll";
+         CheckBox cb = new CheckBox() { FontSize = 12, IsEnabled = false, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
+         cb.Content = "Click to roll for one member and auto-roll rest";
          Option? option = myGameInstance.Options.Find("AutoRollNewMembers");
          if( null == option )
          {
@@ -298,8 +312,20 @@ namespace Pattons_Best
             myGameInstance.Options.Add(option);
          }
          cb.IsChecked = option.IsEnabled;
-         cb.Checked += CheckBox_Checked;
-         cb.Unchecked += CheckBox_Unchecked;
+         //------------------------------------
+         bool isRollMade = false;
+         for(int i=0; i < myMaxRowCount; ++i )
+         {
+            GridRow row = myGridRows[i];
+            if (Utilities.NO_RESULT < row.myDieRoll)
+               isRollMade = true;
+         }
+         if( false == isRollMade ) // if any roll is made, user cannot change state of checkbox
+         {
+            cb.Checked += CheckBox_Checked;
+            cb.Unchecked += CheckBox_Unchecked;
+            cb.IsEnabled = true;
+         }
          myStackPanelCheckMarks.Children.Add(cb);
          return true;
       }
@@ -419,11 +445,28 @@ namespace Pattons_Best
          }
          myGridRows[i].myDieRoll = dieRoll;
          //------------------------------------
-         myState = E071Enum.ASSIGN_CREWMEN;
-         for (int j = 0; j < myMaxRowCount; ++j)
+
+         if (E071Enum.ROLL_RATING_AUTO == myState )
          {
-            if (Utilities.NO_RESULT == myGridRows[j].myDieRoll)
-               myState = E071Enum.ROLL_RATING;
+            myState = E071Enum.ASSIGN_CREWMEN;
+            for (int j = 0; j < myMaxRowCount; ++j)
+            {
+               if (Utilities.NO_RESULT == myGridRows[j].myDieRoll)
+               {
+                  myGridRows[j].myDieRoll = Utilities.RandomGenerator.Next(10);
+                  if (0 == myGridRows[j].myDieRoll)
+                     myGridRows[j].myDieRoll = 10;
+               }
+            }
+         }
+         else
+         {
+            myState = E071Enum.ASSIGN_CREWMEN;
+            for (int j = 0; j < myMaxRowCount; ++j)
+            {
+               if (Utilities.NO_RESULT == myGridRows[j].myDieRoll)
+                  myState = E071Enum.ROLL_RATING;
+            }
          }
          if (false == UpdateGrid())
             Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): UpdateGrid() return false");
@@ -659,6 +702,7 @@ namespace Pattons_Best
             myGameInstance.Options.Add(option);
          }
          option.IsEnabled = true;
+         myState = E071Enum.ROLL_RATING_AUTO;
          //---------------------------
          if (false == UpdateGrid())
             Logger.Log(LogEnum.LE_ERROR, "CheckBox_Checked(): UpdateGrid() return false");
@@ -680,6 +724,7 @@ namespace Pattons_Best
             myGameInstance.Options.Add(option);
          }
          option.IsEnabled = false;
+         myState = E071Enum.ROLL_RATING;
          //---------------------------
          if (false == UpdateGrid())
             Logger.Log(LogEnum.LE_ERROR, "CheckBox_Unchecked(): UpdateGrid() return false");
