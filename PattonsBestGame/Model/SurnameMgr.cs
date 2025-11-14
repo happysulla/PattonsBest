@@ -41,8 +41,8 @@ namespace Pattons_Best
       }
       public static string GetSurname()
       {
-         //int randomNum = Utilities.RandomGenerator.Next(1000000);
-         int randomNum = Utilities.RandomGenerator.Next(8000);
+         int randomNum = Utilities.RandomGenerator.Next(1000000);
+         //int randomNum = Utilities.RandomGenerator.Next(8000);
          string retValue = theSurnames[0];
          for (int i = 0; i < theProbabilities.Count; ++i) // step through probablities - find when the random number is less than probablility for that number. In that event, return that name.
          {
