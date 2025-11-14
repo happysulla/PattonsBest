@@ -319,7 +319,7 @@ e027	"<Bold>e027 Attempt to Resupply</Bold>
 <LineBreak/><LineBreak/>
 Consult the 
 <InlineUIContainer><Button Content='Time' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-to see if resupply occurs. If successful, you may relead your tank with ammo. 
+to see if resupply occurs. If successful, you may reload your tank with ammo. 
 <LineBreak/><LineBreak/>
 Die Roll =  <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>  
 <LineBreak/><LineBreak/>"
