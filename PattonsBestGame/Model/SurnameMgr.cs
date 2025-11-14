@@ -11,7 +11,7 @@ namespace Pattons_Best
    {
       private static List<string> theSurnames = new List<string>();
       private static List<int> theProbabilities = new List<int>();
-      public static bool SetInitial()
+      public static bool SetInitial() // read in name and probability name exists
       {
          string filename = ConfigFileReader.theConfigDirectory + @"Surnames.txt";
          try
@@ -41,9 +41,10 @@ namespace Pattons_Best
       }
       public static string GetSurname()
       {
-         int randomNum = Utilities.RandomGenerator.Next(1000000);
+         //int randomNum = Utilities.RandomGenerator.Next(1000000);
+         int randomNum = Utilities.RandomGenerator.Next(8000);
          string retValue = theSurnames[0];
-         for (int i = 0; i < theProbabilities.Count; ++i)
+         for (int i = 0; i < theProbabilities.Count; ++i) // step through probablities - find when the random number is less than probablility for that number. In that event, return that name.
          {
             if (randomNum < theProbabilities[i])
                return retValue;
@@ -67,13 +68,19 @@ namespace Pattons_Best
             if (cmOriginal.Name == cmCompare.Name)
             {
                if (true == cmCompare.Name.Contains(" Jr"))
-                  cmOriginal.Name += " I";
+               {
+                  char[] charsToTrim = { 'J', 'r' };
+                  cmOriginal.Name = cmCompare.Name.TrimEnd(charsToTrim);
+                  cmOriginal.Name += "II";
+               }
                else if (true == cmCompare.Name.Contains(" I"))
-                  cmOriginal.Name += " II";
-               else if (true == cmCompare.Name.Contains(" II"))
-                  cmOriginal.Name += " III";
+               {
+                  cmOriginal.Name += "I";
+               }
                else
+               {
                   cmOriginal.Name += " Jr";
+               }
                break;
             }
          }

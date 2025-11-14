@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -80,27 +81,12 @@ namespace Pattons_Best
       public string KnockedOut { get; set; } = "No";
       //---------------------------------------------------------------------------------
       public AfterActionReport() { }
-      public AfterActionReport(IGameInstance gi, ICombatCalendarEntry entry)
+      public AfterActionReport(ICombatCalendarEntry entry)
       {
          Day = entry.Date;
          Scenario = entry.Scenario;
          Probability = entry.Probability;
          Resistance = entry.Resistance;
-         string[] crewmembers = new string[5] { "Commander", "Gunner", "Loader", "Driver", "Assistant" };
-         foreach (string role1 in crewmembers)
-         {
-            ICrewMember? cm = gi.GetCrewMemberByName(role1);
-            if( null == cm)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "AfterActionReport(): GetCrewMemberByName() returned null for role1=" + role1);
-               return;
-            }
-            if ( false == SurnameMgr.AppendGenerationalSuffix(gi, cm))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "AfterActionReport(): AppendGenerationalSuffix() returned false");
-               cm.Name = SurnameMgr.GetSurname();
-            }
-         }
       }
       public AfterActionReport(ICombatCalendarEntry entry, IAfterActionReport aar)
       {

@@ -2747,8 +2747,34 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Setup_NewGame(): entry=null");
             return false;
          }
-         IAfterActionReport report1 = new AfterActionReport(gi, entry); // Setup_NewGame()
+         IAfterActionReport report1 = new AfterActionReport(entry); // Setup_NewGame()
          gi.Reports.Add(report1);
+         string[] crewmembers = new string[5] { "Assistant", "Driver", "Loader", "Gunner", "Commander"};
+         bool isNameChange = true; // must enter loop at least once
+         while(true == isNameChange)
+         {
+            isNameChange = false;
+            foreach (string role1 in crewmembers)
+            {
+               ICrewMember? cm = gi.GetCrewMemberByRole(role1);
+               if (null == cm)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Setup_NewGame(): GetCrewMemberByRole() returned error role=" + role1);
+                  return false;
+               }
+               string originalName = cm.Name;
+               if (false == SurnameMgr.AppendGenerationalSuffix(gi, cm))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Setup_NewGame(): AppendGenerationalSuffix() returned error role=" + role1);
+                  return false;
+               }
+               if( originalName != cm.Name )
+               {
+                  isNameChange = true;
+                  break;
+               }
+            }
+         }
          //---------------------------------------------
          if (false == AddStartingTestingState(gi)) // TestingStartAmbush
          {
