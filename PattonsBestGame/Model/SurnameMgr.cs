@@ -51,5 +51,33 @@ namespace Pattons_Best
          }
          return theSurnames[999];
       }
+      public static bool AppendGenerationalSuffix(IGameInstance gi, ICrewMember cmOriginal)
+      {
+         string[] crewmembers = new string[5] { "Commander", "Gunner", "Loader", "Driver", "Assistant" }; 
+         foreach (string role1 in crewmembers)
+         {
+            ICrewMember? cmCompare = gi.GetCrewMemberByRole(role1);
+            if (null == cmCompare)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "AppendGenerationalSuffix(): returned error with cm=null for role=" + role1);
+               return false;
+            }
+            if (role1 == cmOriginal.Role)
+               continue;
+            if (cmOriginal.Name == cmCompare.Name)
+            {
+               if (true == cmCompare.Name.Contains(" Jr"))
+                  cmOriginal.Name += " I";
+               else if (true == cmCompare.Name.Contains(" I"))
+                  cmOriginal.Name += " II";
+               else if (true == cmCompare.Name.Contains(" II"))
+                  cmOriginal.Name += " III";
+               else
+                  cmOriginal.Name += " Jr";
+               break;
+            }
+         }
+         return true;
+      }
    }
 }

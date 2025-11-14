@@ -221,8 +221,13 @@ namespace Pattons_Best
                {
                   case "Driver":
                      lastReport.Driver = new CrewMember("Driver", "Pvt", "c08Driver");
+                     if (false == SurnameMgr.AppendGenerationalSuffix(gi, lastReport.Driver))
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): AppendGenerationalSuffix(Driver) returned false");
+                        return false;
+                     }
                      lastReport.Driver.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                     gi.NewMembers.Add(lastReport.Driver);
+                     gi.NewMembers.Add(lastReport.Driver);  // ReplaceInjuredCrewmen()
                      if (false == gi.SetCrewActionTerritory(lastReport.Driver))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): SetCrewActionTerritory(Driver) returned false");
@@ -232,8 +237,13 @@ namespace Pattons_Best
                      break;
                   case "Loader":
                      lastReport.Loader = new CrewMember("Loader", "Cpl", "c09Loader");
+                     if (false == SurnameMgr.AppendGenerationalSuffix(gi, lastReport.Loader))
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): AppendGenerationalSuffix(Loader) returned false");
+                        return false;
+                     }
                      lastReport.Loader.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                     gi.NewMembers.Add(lastReport.Loader);
+                     gi.NewMembers.Add(lastReport.Loader); // ReplaceInjuredCrewmen()
                      if (false == gi.SetCrewActionTerritory(lastReport.Loader))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): SetCrewActionTerritory(Loader) returned false");
@@ -243,8 +253,13 @@ namespace Pattons_Best
                      break;
                   case "Assistant":
                      lastReport.Assistant = new CrewMember("Assistant", "Pvt", "c10Assistant");
+                     if( false == SurnameMgr.AppendGenerationalSuffix(gi, lastReport.Assistant))
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): AppendGenerationalSuffix(Assistant) returned false");
+                        return false;
+                     }
                      lastReport.Assistant.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                     gi.NewMembers.Add(lastReport.Assistant);
+                     gi.NewMembers.Add(lastReport.Assistant); // ReplaceInjuredCrewmen()
                      if (false == gi.SetCrewActionTerritory(lastReport.Assistant))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): SetCrewActionTerritory(Assistant) returned false");
@@ -254,8 +269,13 @@ namespace Pattons_Best
                      break;
                   case "Gunner":
                      lastReport.Gunner = new CrewMember("Gunner", "Cpl", "c11Gunner");
+                     if (false == SurnameMgr.AppendGenerationalSuffix(gi, lastReport.Gunner))
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): AppendGenerationalSuffix(Gunner) returned false");
+                        return false;
+                     }
                      lastReport.Gunner.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                     gi.NewMembers.Add(lastReport.Gunner);
+                     gi.NewMembers.Add(lastReport.Gunner); // ReplaceInjuredCrewmen()
                      if (false == gi.SetCrewActionTerritory(lastReport.Gunner))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): SetCrewActionTerritory(Gunner) returned false");
@@ -265,8 +285,13 @@ namespace Pattons_Best
                      break;
                   case "Commander":
                      lastReport.Commander = new CrewMember("Commander", "Sgt", "c07Commander");
+                     if (false == SurnameMgr.AppendGenerationalSuffix(gi, lastReport.Commander))
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): AppendGenerationalSuffix(Commander) returned false");
+                        return false;
+                     }
                      lastReport.Commander.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                     gi.NewMembers.Add(lastReport.Commander);
+                     gi.NewMembers.Add(lastReport.Commander); // ReplaceInjuredCrewmen()
                      if (false == gi.SetCrewActionTerritory(lastReport.Commander))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): SetCrewActionTerritory(Commander) returned false");
@@ -2722,7 +2747,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Setup_NewGame(): entry=null");
             return false;
          }
-         IAfterActionReport report1 = new AfterActionReport(entry); // Setup_NewGame()
+         IAfterActionReport report1 = new AfterActionReport(gi, entry); // Setup_NewGame()
          gi.Reports.Add(report1);
          //---------------------------------------------
          if (false == AddStartingTestingState(gi)) // TestingStartAmbush

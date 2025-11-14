@@ -86,7 +86,6 @@ namespace Pattons_Best
       bool IsButtonedUp { get; set; }
       string Wound { get; set; }
       int WoundDaysUntilReturn { get; set; }
-      ICrewMember Clone();
    }
    //==========================================
    public interface ICrewMembers : System.Collections.IEnumerable

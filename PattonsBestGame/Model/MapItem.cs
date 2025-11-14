@@ -953,18 +953,6 @@ namespace Pattons_Best
          Role = role;
          Rank = rank;
       }
-      public ICrewMember Clone()
-      {
-         ICrewMember cm = new CrewMember(this.Role, this.Rank, this.TopImageName);
-         cm.Rating = this.Rating;
-         cm.IsButtonedUp = this.IsButtonedUp;
-         cm.Wound = this.Wound;
-         cm.IsUnconscious = this.IsUnconscious;
-         cm.IsIncapacitated = this.IsIncapacitated;
-         cm.IsKilled = this.IsKilled;
-         cm.OverlayImageName = this.OverlayImageName;
-         return cm;
-      }
       public static void SetButtonContent(Button b, ICrewMember cm, bool isMapItemZoom = true, bool isDecoration = true, bool isBloodSpotsShown = true)
       {
          double zoom = Utilities.ZOOM;
