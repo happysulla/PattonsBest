@@ -239,6 +239,7 @@ namespace Pattons_Best
       MorningBriefingSnowRoll,
       MorningBriefingSnowRollEnd,
       MorningBriefingAmmoLoad,
+      MorningBriefingAmmoLoadSkip,
       MorningBriefingAmmoReadyRackLoad,
       MorningBriefingTimeCheck,
       MorningBriefingTimeCheckRoll,

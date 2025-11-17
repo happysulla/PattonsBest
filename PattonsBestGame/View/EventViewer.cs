@@ -193,9 +193,12 @@ namespace Pattons_Best
             case GameAction.UpdateBattleBoard:
             case GameAction.UpdateTankExplosion:
             case GameAction.UpdateTankBrewUp:
-            case GameAction.UpdateGameOptions:
             case GameAction.ShowTankForcePath:
             case GameAction.ShowRoads:
+               break;
+            case GameAction.UpdateGameOptions:
+               if (false == OpenEvent(gi, gi.EventActive))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): OpenEvent() returned false ae=" + myGameInstance.EventActive + " a=" + action.ToString());
                break;
             case GameAction.MorningBriefingCalendarRoll:
             case GameAction.MorningBriefingDayOfRest:
@@ -4703,7 +4706,6 @@ namespace Pattons_Best
             else
                outAction = GameAction.MovementChooseOption;
          }
-
          StringBuilder sb11 = new StringBuilder("     ######ShowAmmoLoadResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
@@ -5372,7 +5374,16 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "GotoMorningAmmoLimitsSetEnd":
-                           action = GameAction.MorningBriefingAmmoLoad;
+                           Option? option = myGameInstance.Options.Find("AutoRollAmmoLoad");
+                           if( null == option )
+                           {
+                              option = new Option("AutoRollAmmoLoad", false);
+                              myGameInstance.Options.Add(option);
+                           }
+                           if(true == option.IsEnabled)
+                              action = GameAction.MorningBriefingAmmoLoadSkip;
+                           else
+                              action = GameAction.MorningBriefingAmmoLoad;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "GotoMorningBriefingDayOfRest":

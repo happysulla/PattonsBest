@@ -18,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Xml.Linq;
 using Windows.ApplicationModel.Appointments.DataProvider;
+using static Pattons_Best.EventViewerAmmoSetup;
 using static System.Windows.Forms.AxHost;
 
 namespace Pattons_Best
@@ -3048,6 +3049,13 @@ namespace Pattons_Best
                   break;
                case GameAction.MorningBriefingAmmoLoad:
                   break;
+               case GameAction.MorningBriefingAmmoLoadSkip:
+                  if (false == SkipAmmoLoadSetupScreens(gi, ref action))
+                  {
+                     returnStatus = "SkipAmmoLoadSetupScreens() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEnded.PerformAction(): " + returnStatus);
+                  }
+                  break;
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
                   break;
@@ -3649,6 +3657,119 @@ namespace Pattons_Best
          SetCommand(gi, action, GameAction.MorningBriefingCalendarRoll, "e006"); // MorningBriefing_DayOfRest
          return true;
       }
+      protected bool SkipAmmoLoadSetupScreens(IGameInstance gi, ref GameAction outaction)
+      {
+         //------------------------------------------------------
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SkipAmmoLoadSetupScreens(): lastReport=null");
+            return false;
+         }
+         string tType = lastReport.TankCardNum.ToString();
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         //------------------------------------------------------
+         int unassignedCount = card.myNumMainGunRound;
+         if (12 < lastReport.TankCardNum)
+         {
+            lastReport.MainGunWP = 0;
+            lastReport.MainGunHBCI = 0;
+            lastReport.MainGunHVAP += Utilities.RandomGenerator.Next(1, 11);
+            unassignedCount -= lastReport.MainGunHVAP;
+         }
+         else
+         {
+            lastReport.MainGunHVAP = 0;
+            lastReport.MainGunWP = Utilities.RandomGenerator.Next(5, 15); // assign gun loads and ready rack randomly
+            unassignedCount -= lastReport.MainGunWP;
+            lastReport.MainGunHBCI += Utilities.RandomGenerator.Next(1, 11);
+            unassignedCount -= lastReport.MainGunHBCI;
+         }
+         //--------------------------------------------------
+         int extraAmmoDieRoll = Utilities.RandomGenerator.Next(1, 11);
+         if (6 < extraAmmoDieRoll)
+         {
+            unassignedCount += 30;
+            lastReport.Ammo30CalibreMG += 10;
+         }
+         else if (2 < extraAmmoDieRoll)
+         {
+            unassignedCount += 20;
+            lastReport.Ammo30CalibreMG += 10;
+         }
+         lastReport.MainGunHE = (int)Math.Ceiling(unassignedCount * 0.6);
+         unassignedCount -= lastReport.MainGunHE;
+         lastReport.MainGunAP = unassignedCount;
+         //--------------------------------------------------
+         int count = 2;
+         string tName = "ReadyRackAp" + count.ToString();
+         ITerritory? t = Territories.theTerritories.Find(tName, tType);
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SkipAmmoLoadSetupScreens(): t=null for " + tName);
+            return false;
+         }
+         IMapItem rr1 = new MapItem("ReadyRackAp", 0.9, "c12RoundsLeft", t);
+         rr1.Count = count;
+         gi.ReadyRacks.Add(rr1);
+         //--------------------------------------------------
+         if (12 < lastReport.TankCardNum)
+         {
+            count = 2;
+            tName = "ReadyRackHvap" + count.ToString();
+            t = Territories.theTerritories.Find(tName, tType);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SkipAmmoLoadSetupScreens(): t=null for " + tName);
+               return false;
+            }
+         }
+         else
+         {
+            rr1 = new MapItem("ReadyRackHvap", 0.9, "c12RoundsLeft", t);
+            rr1.Count = count;
+            gi.ReadyRacks.Add(rr1);
+            count = 1;
+            tName = "ReadyRackWp" + count.ToString();
+            t = Territories.theTerritories.Find(tName, tType);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SkipAmmoLoadSetupScreens(): t=null for " + tName);
+               return false;
+            }
+            rr1 = new MapItem("ReadyRackWp", 0.9, "c12RoundsLeft", t);
+            rr1.Count = count;
+            gi.ReadyRacks.Add(rr1);
+            //--------------------------------------------------
+            count = 1;
+            tName = "ReadyRackHbci" + count.ToString();
+            t = Territories.theTerritories.Find(tName, tType);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SkipAmmoLoadSetupScreens(): t=null for " + tName);
+               return false;
+            }
+            rr1 = new MapItem("ReadyRackHbci", 0.9, "c12RoundsLeft", t);
+            rr1.Count = count;
+            gi.ReadyRacks.Add(rr1);
+         }
+         //--------------------------------------------------
+         count = card.myMaxReadyRackCount - 2;
+         tName = "ReadyRackHe" + count.ToString();
+         t = Territories.theTerritories.Find(tName, tType);
+         if (null == t)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SkipAmmoLoadSetupScreens(): t=null for " + tName);
+            return false;
+         }
+         rr1 = new MapItem("ReadyRackHe", 0.9, "c12RoundsLeft", t);
+         rr1.Count = count;
+         gi.ReadyRacks.Add(rr1);
+         //------------------------------------------------------
+         outaction = GameAction.MorningBriefingTimeCheck;
+         SetCommand(gi, outaction, GameAction.MorningBriefingTimeCheckRoll, "e010");
+         return true;
+      }
    }
    //-----------------------------------------------------
    class GameStateBattlePrep : GameState
@@ -4240,7 +4361,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, sb12.ToString());
          return returnStatus;
       }
-      private bool SetChoicesForOperations(IGameInstance gi, GameAction action)
+      protected bool SetChoicesForOperations(IGameInstance gi, GameAction action)
       {
          if (false == ResetDieResults(gi))
          {

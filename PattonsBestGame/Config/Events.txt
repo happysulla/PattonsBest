@@ -151,6 +151,7 @@ Snow is in the forecast. Roll for type of snow on the
 <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/><LineBreak/>"
 e009	"<Bold>e009 Ammo Loading Limits</Bold> <InlineUIContainer><Button Content='r16.0' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
+<LineBreak/><LineBreak/> <InlineUIContainer><CheckBox Name='AutoRollAmmoLoad' IsEnabled='True' Content='Automatically Load Ammo' FontFamily='Courier New'  FontSize='12'></CheckBox></InlineUIContainer>
 <LineBreak/><LineBreak/>
 See 
 <InlineUIContainer><Button Content='r16.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
