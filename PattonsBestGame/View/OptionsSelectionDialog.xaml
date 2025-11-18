@@ -31,6 +31,7 @@
             <StackPanel Name="myStackPanelAutoRoll" Orientation="Vertical" VerticalAlignment="Top" Margin="5,5,5,5" >
                <CheckBox x:Name="myCheckBoxAutoRollRatings"  Content="Auto Roll New Members" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelAutoRolls_Click"/>
                <CheckBox x:Name="myCheckBoxAutoRollAmmoLoad"  Content="Auto Setup Ammo Loads" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelAutoRolls_Click"/>
+               <CheckBox x:Name="myCheckBoxAutoPreparation"  Content="Use Previous Battle Preparations" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelAutoRolls_Click"/>
                <CheckBox x:Name="myCheckBoxAutoRollEnemySetup"  Content="Auto Roll Enemy Setup" Margin="5,0,5,0" Padding="4,-4,0,0" Click="StackPanelAutoRolls_Click"/>
             </StackPanel>
          </GroupBox>

@@ -610,17 +610,11 @@ namespace Pattons_Best
                   }
                   else if (ui.Child is CheckBox cb)
                   {
-                     Logger.Log(LogEnum.LE_VIEW_CONTROL_NAME, "OpenEvent(): cb.Name=" + cb.Name + " for ae=" + gi.EventActive);
-                     cb.Checked += CheckBox_Checked;
-                     cb.Unchecked += CheckBox_Unchecked;
-                     Option? option = gi.Options.Find(cb.Name);
-                     if (null == option)
+                     if (false == SetCheckboxState(gi, key, cb))
                      {
-                        option = new Option(cb.Name, false);
-                        gi.Options.Add(option);
+                        Logger.Log(LogEnum.LE_ERROR, "OpenEvent(): SetCheckboxState() returned false");
+                        return false;
                      }
-                     if (true == option.IsEnabled)
-                        cb.IsChecked = true;
                   }
                   else if (ui.Child is Image img)
                   {
@@ -4537,6 +4531,28 @@ namespace Pattons_Best
             b.IsEnabled = false;
          else
             b.IsEnabled = true;
+         return true;
+      }
+      private bool SetCheckboxState(IGameInstance gi, string key, CheckBox cb)
+      {
+         Logger.Log(LogEnum.LE_VIEW_CONTROL_NAME, "SetCheckboxState(): cb.Name=" + cb.Name + " for ae=" + gi.EventActive);
+         switch(key)
+         {
+            case "e017":
+               break;
+            default:
+               cb.Checked += CheckBox_Checked;
+               cb.Unchecked += CheckBox_Unchecked;
+               Option? option = gi.Options.Find(cb.Name);
+               if (null == option)
+               {
+                  option = new Option(cb.Name, false);
+                  gi.Options.Add(option);
+               }
+               if (true == option.IsEnabled)
+                  cb.IsChecked = true;
+               break;
+         }
          return true;
       }
       private bool IsEnemyStrengthCheckNeeded(IGameInstance gi, out bool isCheckNeeded)

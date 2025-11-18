@@ -35,6 +35,8 @@ namespace Pattons_Best
          //-----------------------------
          myCheckBoxAutoRollRatings.ToolTip = "Roll a single die and automatically roll all other die for new crew ratings.";
          myCheckBoxAutoRollAmmoLoad.ToolTip = "Automatically roll die rolls forAmmo Loads. Setup ammo with default levels.";
+         myCheckBoxAutoRollAmmoLoad.ToolTip = "Automatically roll die rolls forAmmo Loads. Setup ammo with default levels.";
+         myCheckBoxAutoPreparation.ToolTip = "Use the same setup from previous battle preparations. Only enabled if previous setup performed, and all similar conditions (such as uninjuried crewmen) exists.";
          myCheckBoxAutoRollEnemySetup.ToolTip = "Automatically roll die rolls for sector, terrain, and facing when activating an enemy.";
          //-----------------------------
          if (false == UpdateDisplay(myOptions))
@@ -117,6 +119,15 @@ namespace Pattons_Best
             myOptions.Add(option);
          }
          myCheckBoxAutoRollAmmoLoad.IsChecked = option.IsEnabled;
+         //------------------------------
+         name = "AutoPreparation";
+         option = options.Find(name);
+         if (null == option)
+         {
+            option = new Option(name, false);
+            myOptions.Add(option);
+         }
+         myCheckBoxAutoPreparation.IsChecked = option.IsEnabled;
          //------------------------------
          name = "AutoRollEnemyActivation";
          option = options.Find(name);
@@ -204,6 +215,13 @@ namespace Pattons_Best
                break;
             case "myCheckBoxAutoRollAmmoLoad":
                option = myOptions.Find("AutoRollAmmoLoad");
+               if (null == option)
+                  Logger.Log(LogEnum.LE_ERROR, "StackPanelAutoRolls_Click(): myOptions.Find() for name=" + cb.Name);
+               else
+                  option.IsEnabled = !option.IsEnabled;
+               break;
+            case "myCheckBoxAutoPreparation":
+               option = myOptions.Find("AutoPreparation");
                if (null == option)
                   Logger.Log(LogEnum.LE_ERROR, "StackPanelAutoRolls_Click(): myOptions.Find() for name=" + cb.Name);
                else
