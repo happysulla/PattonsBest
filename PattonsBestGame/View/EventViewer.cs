@@ -4347,7 +4347,7 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "EventViewer.SetButtonState(): lastReport=null");
             return false;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
@@ -5987,6 +5987,197 @@ namespace Pattons_Best
             }
          }
       }
+      private bool Button_ClickShowOther(string content, string name, out GameAction action)
+      {
+         action = GameAction.Error;
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): myGameInstance=null");
+            return false;
+         }
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): myGameEngine=null");
+            return false;
+         }
+         switch (content)
+         {
+            case "   -   ":
+               switch (name)
+               {
+                  case "ButtonDecreaseTankNum":
+                     action = GameAction.MorningBriefingDecreaseTankNum;
+                     break;
+                  case "ButtonPivotHullLeft":
+                     action = GameAction.BattleRoundSequencePivotLeft;
+                     break;
+                  case "ButtonPivotTurretLeft":
+                     if (BattlePhase.ConductCrewAction == myGameInstance.BattlePhase)
+                        action = GameAction.BattleRoundSequenceTurretEndRotateLeft;
+                     else
+                        action = GameAction.PreparationsTurretRotateLeft;
+                     break;
+                  case "HeMinus":
+                     action = GameAction.BattleRoundSequenceReadyRackHeMinus;
+                     break;
+                  case "ApMinus":
+                     action = GameAction.BattleRoundSequenceReadyRackApMinus;
+                     break;
+                  case "WpMinus":
+                     action = GameAction.BattleRoundSequenceReadyRackWpMinus;
+                     break;
+                  case "HbciMinus":
+                     action = GameAction.BattleRoundSequenceReadyRackHbciMinus;
+                     break;
+                  case "HvapMinus":
+                     action = GameAction.BattleRoundSequenceReadyRackHvapMinus;
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): reached default Unknown name=" + name);
+                     return false;
+               }
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "   +   ":
+               switch (name)
+               {
+                  case "ButtonIncreaseTankNum":
+                     action = GameAction.MorningBriefingIncreaseTankNum;
+                     break;
+                  case "ButtonPivotHullRight":
+                     action = GameAction.BattleRoundSequencePivotRight;
+                     break;
+                  case "ButtonPivotTurretRight":
+                     if (BattlePhase.ConductCrewAction == myGameInstance.BattlePhase)
+                        action = GameAction.BattleRoundSequenceTurretEndRotateRight;
+                     else
+                        action = GameAction.PreparationsTurretRotateRight;
+                     break;
+                  case "HePlus":
+                     action = GameAction.BattleRoundSequenceReadyRackHePlus;
+                     break;
+                  case "ApPlus":
+                     action = GameAction.BattleRoundSequenceReadyRackApPlus;
+                     break;
+                  case "WpPlus":
+                     action = GameAction.BattleRoundSequenceReadyRackWpPlus;
+                     break;
+                  case "HbciPlus":
+                     action = GameAction.BattleRoundSequenceReadyRackHbciPlus;
+                     break;
+                  case "HvapPlus":
+                     action = GameAction.BattleRoundSequenceReadyRackHvapPlus;
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): reached default Unknown name=" + name);
+                     return false;
+               }
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case " Area ":
+               myGameInstance.ShermanTypeOfFire = "Area";
+               action = GameAction.BattleRoundSequenceShermanFiringMainGun; // Area Button
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "  AA MG   ":
+               action = GameAction.BattleRoundSequenceFireAaMg;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "  Bow MG  ":
+               action = GameAction.BattleRoundSequenceFireBowMg;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "Coaxial MG":
+               action = GameAction.BattleRoundSequenceFireCoaxialMg;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "  Sub MG  ":
+               action = GameAction.BattleRoundSequenceFireSubMg;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "   Skip   ":
+               action = GameAction.BattleRoundSequenceFireMgSkip;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "AAR":
+               if (null == myAfterActionDialog)
+               {
+                  AfterActionReportUserControl aarUserControl = new AfterActionReportUserControl(myGameInstance);
+                  if (true == aarUserControl.CtorError)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "UpdateView(): AfterActionReportUserControl CtorError=true");
+                     return false;
+                  }
+                  myAfterActionDialog = new AfterActionDialog(myGameInstance, CloseAfterActionDialog);
+                  myAfterActionDialog.Show();
+               }
+               break;
+            case "Begin Game":
+               if (false == ShowTutorialScreens())
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowTutorialScreens() returned false");
+                  return false;
+               }
+               break;
+            case "Cancel":
+               action = GameAction.MovementAirStrikeCancel;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "Direct":
+               myGameInstance.ShermanTypeOfFire = "Direct";
+               action = GameAction.BattleRoundSequenceShermanFiringMainGun;  // Direct Buttn
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "Enter":
+               action = GameAction.MovementEnterArea;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "Fire":
+               action = GameAction.BattleRoundSequenceShermanFiringMainGun; // Fire Button
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "Read Rules":
+               if (false == ShowRule("r1.0"))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): ShowRule(r1.1) returned false");
+                  return false;
+               }
+               break;
+            case "Resupply":
+               action = GameAction.MovementResupplyCheck;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "Skip":
+               action = GameAction.BattleRoundSequenceShermanSkipRateOfFire; // Skip the Rate of Fire
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case " Skip ":
+               myGameInstance.ShermanTypeOfFire = "Skip";
+               action = GameAction.BattleRoundSequenceShermanFiringMainGunNot;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "Strength Check":
+               action = GameAction.MovementEnemyStrengthChoice;   // Button_ClickShowOther(): "Strength Check"
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "Strike":
+               action = GameAction.MovementAirStrikeChoice;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            case "Support":
+               action = GameAction.MovementArtillerySupportChoice;
+               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+               break;
+            default:
+               if (false == ShowTable(content))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): ShowTable() returned false for key=" + content);
+                  return false;
+               }
+               break;
+         }
+         return true;
+      }
       private void CheckBox_Checked(object sender, RoutedEventArgs e)
       {
          if (null == myGameInstance)
@@ -6070,197 +6261,6 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_SHOW_IMMOBILIZATION, "CheckBoxCmdFire_Unchecked(): gi.IsShermanDeliberateImmobilization=" + myGameInstance.IsShermanDeliberateImmobilization.ToString());
          if (false == OpenEvent(myGameInstance, myGameInstance.EventActive))
             Logger.Log(LogEnum.LE_ERROR, "CheckBoxImmobilization_Checked(): OpenEvent() returned false ae=" + myGameInstance.EventActive );
-      }
-      private bool Button_ClickShowOther(string content, string name, out GameAction action)
-      {
-         action = GameAction.Error;
-         if (null == myGameInstance)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): myGameInstance=null");
-            return false;
-         }
-         if (null == myGameEngine)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): myGameEngine=null");
-            return false;
-         }
-         switch (content)
-         {
-            case "   -   ":
-               switch( name )
-               {
-                  case "ButtonDecreaseTankNum":
-                     action = GameAction.MorningBriefingDecreaseTankNum;
-                     break;
-                  case "ButtonPivotHullLeft":
-                     action = GameAction.BattleRoundSequencePivotLeft;
-                     break;
-                  case "ButtonPivotTurretLeft":
-                     if (BattlePhase.ConductCrewAction == myGameInstance.BattlePhase)
-                        action = GameAction.BattleRoundSequenceTurretEndRotateLeft;
-                     else
-                        action = GameAction.PreparationsTurretRotateLeft;
-                     break;
-                  case "HeMinus":
-                     action = GameAction.BattleRoundSequenceReadyRackHeMinus;
-                     break;
-                  case "ApMinus":
-                     action = GameAction.BattleRoundSequenceReadyRackApMinus;
-                     break;
-                  case "WpMinus":
-                     action = GameAction.BattleRoundSequenceReadyRackWpMinus;
-                     break;
-                  case "HbciMinus":
-                     action = GameAction.BattleRoundSequenceReadyRackHbciMinus;
-                     break;
-                  case "HvapMinus":
-                     action = GameAction.BattleRoundSequenceReadyRackHvapMinus;
-                     break;
-                  default:
-                     Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): reached default Unknown name=" + name);
-                     return false;
-               }
-               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-               break;
-            case "   +   ":
-               switch (name)
-               {
-                  case "ButtonIncreaseTankNum":
-                     action = GameAction.MorningBriefingIncreaseTankNum;
-                     break;
-                  case "ButtonPivotHullRight":
-                     action = GameAction.BattleRoundSequencePivotRight;
-                     break;
-                  case "ButtonPivotTurretRight":
-                     if (BattlePhase.ConductCrewAction == myGameInstance.BattlePhase)
-                        action = GameAction.BattleRoundSequenceTurretEndRotateRight;
-                     else
-                        action = GameAction.PreparationsTurretRotateRight;
-                     break;
-                  case "HePlus":
-                        action = GameAction.BattleRoundSequenceReadyRackHePlus;
-                     break;
-                  case "ApPlus":
-                     action = GameAction.BattleRoundSequenceReadyRackApPlus;
-                     break;
-                  case "WpPlus":
-                     action = GameAction.BattleRoundSequenceReadyRackWpPlus;
-                     break;
-                  case "HbciPlus":
-                     action = GameAction.BattleRoundSequenceReadyRackHbciPlus;
-                     break;
-                  case "HvapPlus":
-                     action = GameAction.BattleRoundSequenceReadyRackHvapPlus;
-                     break;
-                  default:
-                     Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): reached default Unknown name=" + name);
-                     return false;
-               }
-               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-               break;
-            case " Area ":
-               myGameInstance.ShermanTypeOfFire = "Area";
-               action = GameAction.BattleRoundSequenceShermanFiringMainGun; // Area Button
-               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-               break;
-            case "  AA MG   ":
-               action = GameAction.BattleRoundSequenceFireAaMg;
-               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-               break;
-            case "  Bow MG  ":
-               action = GameAction.BattleRoundSequenceFireBowMg;
-               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-               break;
-            case "Coaxial MG":
-               action = GameAction.BattleRoundSequenceFireCoaxialMg;
-               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-               break;
-            case "  Sub MG  ":
-               action = GameAction.BattleRoundSequenceFireSubMg;
-               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-               break;
-            case "   Skip   ":
-               action = GameAction.BattleRoundSequenceFireMgSkip;
-               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-               break;
-            case "AAR":
-               if (null == myAfterActionDialog)
-               {
-                  AfterActionReportUserControl aarUserControl = new AfterActionReportUserControl(myGameInstance);
-                  if (true == aarUserControl.CtorError)
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateView(): AfterActionReportUserControl CtorError=true");
-                     return false;
-                  }
-                  myAfterActionDialog = new AfterActionDialog(myGameInstance, CloseAfterActionDialog);
-                  myAfterActionDialog.Show();
-               }
-               break;
-            case "Begin Game":
-               if( false == ShowTutorialScreens())
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowTutorialScreens() returned false");
-                  return false;
-               }
-               break;
-            case "Cancel":
-               action = GameAction.MovementAirStrikeCancel;
-               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-               break;
-            case "Direct":
-               myGameInstance.ShermanTypeOfFire = "Direct";
-               action = GameAction.BattleRoundSequenceShermanFiringMainGun;  // Direct Buttn
-               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-               break;
-            case "Enter":
-               action = GameAction.MovementEnterArea;
-               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-               break;
-            case "Fire":
-               action = GameAction.BattleRoundSequenceShermanFiringMainGun; // Fire Button
-               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-               break;
-            case "Read Rules":
-               if (false == ShowRule("r1.0"))
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): ShowRule(r1.1) returned false");
-                  return false;
-               }
-               break;
-            case "Resupply":
-               action = GameAction.MovementResupplyCheck;
-               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-               break;
-            case "Skip":
-               action = GameAction.BattleRoundSequenceShermanSkipRateOfFire; // Skip the Rate of Fire
-               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-               break;
-            case " Skip ":
-               myGameInstance.ShermanTypeOfFire = "Skip";
-               action = GameAction.BattleRoundSequenceShermanFiringMainGunNot;
-               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-               break;
-            case "Strength Check":
-               action = GameAction.MovementEnemyStrengthChoice;   // Button_ClickShowOther(): "Strength Check"
-               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-               break;
-            case "Strike":
-               action = GameAction.MovementAirStrikeChoice;
-               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-               break;
-            case "Support":
-               action = GameAction.MovementArtillerySupportChoice;
-               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
-               break;
-            default:
-               if (false == ShowTable(content))
-               {
-                  Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): ShowTable() returned false for key=" + content);
-                  return false;
-               }
-               break;
-         }
-         return true;
       }
       private bool ShowTutorialScreens()
       {

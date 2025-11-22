@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 using WpfAnimatedGif;
 
 namespace Pattons_Best
@@ -239,19 +240,37 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackHe0");
             return false;
          }
-         IMapItem rr1 = new MapItem("ReadyRackHe", 0.9, "c12RoundsLeft", t);
-         //--------------------------------------------------
+         string name = "ReadyRackHe" + Utilities.MapItemNum.ToString();
+         Utilities.MapItemNum++;
+         IMapItem rr1 = new MapItem(name, 0.9, "c12RoundsLeft", t);
          myGameInstance.ReadyRacks.Add(rr1);
+         //--------------------------------------------------
          t = Territories.theTerritories.Find("ReadyRackAp0", tType);
          if (null == t)
          {
             Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackAp0");
             return false;
          }
-         IMapItem rr2 = new MapItem("ReadyRackAp", 0.9, "c12RoundsLeft", t);
-         //--------------------------------------------------
+         name = "ReadyRackAp" + Utilities.MapItemNum.ToString();
+         Utilities.MapItemNum++;
+         IMapItem rr2 = new MapItem(name, 0.9, "c12RoundsLeft", t);
          myGameInstance.ReadyRacks.Add(rr2);
-         if ("75" == myMainGun)
+         //--------------------------------------------------
+         if (12 <lastReport.TankCardNum)
+         {
+            myUnassignedCount -= myHvapRoundCount;
+            t = Territories.theTerritories.Find("ReadyRackHvap0", tType);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackHvap0");
+               return false;
+            }
+            name = "ReadyRackHvap" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            IMapItem rr3 = new MapItem(name, 0.9, "c12RoundsLeft", t);
+            myGameInstance.ReadyRacks.Add(rr3);
+         }
+         else
          {
             myWpRoundCount = 5;
             myUnassignedCount -= myWpRoundCount;
@@ -261,7 +280,9 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackWp0");
                return false;
             }
-            IMapItem rr3 = new MapItem("ReadyRackWp", 0.9, "c12RoundsLeft", t);
+            name = "ReadyRackWp" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            IMapItem rr3 = new MapItem(name, 0.9, "c12RoundsLeft", t);
             myGameInstance.ReadyRacks.Add(rr3);
             //--------------------------------------------------
             myUnassignedCount -= myHbciRoundCount;
@@ -271,20 +292,10 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackHbci0");
                return false;
             }
-            IMapItem rr4 = new MapItem("ReadyRackHbci", 0.9, "c12RoundsLeft", t);
+            name = "ReadyRackHbci" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            IMapItem rr4 = new MapItem(name, 0.9, "c12RoundsLeft", t);
             myGameInstance.ReadyRacks.Add(rr4);
-         }
-         else
-         {
-            myUnassignedCount -= myHvapRoundCount;
-            t = Territories.theTerritories.Find("ReadyRackHvap0", tType);
-            if (null == t)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "LoadAmmo(): t=null for ReadyRackHvap0");
-               return false;
-            }
-            IMapItem rr3 = new MapItem("ReadyRackHvap", 0.9, "c12RoundsLeft", t);
-            myGameInstance.ReadyRacks.Add(rr3);
          }
          myHeRoundCount = (int)Math.Ceiling((double)myUnassignedCount * 0.6);                   // Assign 60% or rounds to HE
          myUnassignedCount -= myHeRoundCount;
@@ -299,7 +310,7 @@ namespace Pattons_Best
          myHvapReadyRackCount = 0;
          if (false == UpdateReadyRack())
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): UpdateReadyRack returned false");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): UpdateReady_Rack() returned false");
             return false;
          }
          return true;
@@ -907,7 +918,7 @@ namespace Pattons_Best
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReady_Rack() (): myGameInstance=null");
             return false;
          }
          //--------------------------------------------------
@@ -919,107 +930,152 @@ namespace Pattons_Best
          }
          string tType = lastReport.TankCardNum.ToString();
          //--------------------------------------------------
-         IMapItem? rrHe = myGameInstance.ReadyRacks[0];
-         if( null == rrHe )
+         IMapItem? rr = null;
+         string name = "ReadyRackHe";
+         foreach (IMapItem mi in myGameInstance.ReadyRacks)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): rrHe=null");
+            if(true == mi.Name.Contains(name))
+            {
+               rr = mi;
+               break;
+            }
+         }
+         if ( null == rr)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReady_Rack() (): rrHe=null");
             return false;
          }
-         rrHe.Count = myHeReadyRackCount;
-         string tName = rrHe.Name + rrHe.Count.ToString();
+         rr.Count = myHeReadyRackCount;
+         string tName = name + rr.Count.ToString();
          ITerritory? newT = Territories.theTerritories.Find(tName, tType);
          if (null == newT)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): newT=null for " + tName);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReady_Rack() (): newT=null for " + tName);
             return false;
          }
-         if (false == SetTerritory(rrHe, newT))
+         if (false == SetTerritory(rr, newT))
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): SetTerritory() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReady_Rack() (): SetTerritory() returned false");
             return false;
          }
          //------------------------------------------
-         IMapItem? rrAp = myGameInstance.ReadyRacks[1];
-         if (null == rrAp)
+         rr = null;
+         name = "ReadyRackAp";
+         foreach (IMapItem mi in myGameInstance.ReadyRacks)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): rrAp=null");
+            if (true == mi.Name.Contains(name))
+            {
+               rr = mi;
+               break;
+            }
+         }
+         if (null == rr)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReady_Rack() (): rrAp=null");
             return false;
          }
-         rrAp.Count = myApReadyRackCount;
-         tName = rrAp.Name + rrAp.Count.ToString();
+         rr.Count = myApReadyRackCount;
+         tName = name + rr.Count.ToString();
          newT = Territories.theTerritories.Find(tName, tType);
          if (null == newT)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): newT=null for " + tName);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReady_Rack() (): newT=null for " + tName);
             return false;
          }
-         if (false == SetTerritory(rrAp, newT))
+         if (false == SetTerritory(rr, newT))
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): SetTerritory() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReady_Rack() (): SetTerritory() returned false");
             return false;
          }
          //------------------------------------------
-         if ( "75" == myMainGun )
+         if (lastReport.TankCardNum < 13)
          {
-            IMapItem? rrWp = myGameInstance.ReadyRacks[2];
-            if (null == rrWp)
+            rr = null;
+            name = "ReadyRackWp";
+            foreach (IMapItem mi in myGameInstance.ReadyRacks)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): rrAp=null");
+               if (true == mi.Name.Contains(name))
+               {
+                  rr = mi;
+                  break;
+               }
+            }
+            if (null == rr)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateReady_Rack() (): rrWp=null");
                return false;
             }
-            rrWp.Count = myWpReadyRackCount;
-            tName = rrWp.Name + rrWp.Count.ToString();
+            rr.Count = myWpReadyRackCount;
+            tName = name + rr.Count.ToString();
             newT = Territories.theTerritories.Find(tName, tType);
             if (null == newT)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): newT=null for " + tName);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateReady_Rack() (): newT=null for " + tName);
                return false;
             }
-            if (false == SetTerritory(rrWp, newT))
+            if (false == SetTerritory(rr, newT))
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): SetTerritory() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "UpdateReady_Rack() (): SetTerritory() returned false");
                return false;
             }
             //------------------------------------------
-            IMapItem? rrHbci = myGameInstance.ReadyRacks[3];
-            if (null == rrHbci)
+            rr = null;
+            name = "ReadyRackHbci";
+            foreach (IMapItem mi in myGameInstance.ReadyRacks)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): rrAp=null");
+               if (true == mi.Name.Contains(name))
+               {
+                  rr = mi;
+                  break;
+               }
+            }
+            if (null == rr)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateReady_Rack() (): rrHbci=null");
                return false;
             }
-            rrHbci.Count = myHbciReadyRackCount;
-            tName = rrHbci.Name + rrHbci.Count.ToString();
+            rr.Count = myHbciReadyRackCount;
+            tName = name + rr.Count.ToString();
             newT = Territories.theTerritories.Find(tName, tType);
             if (null == newT)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): newT=null for " + tName);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateReady_Rack() (): newT=null for " + tName);
                return false;
             }
-            if (false == SetTerritory(rrHbci, newT))
+            if (false == SetTerritory(rr, newT))
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): SetTerritory() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "UpdateReady_Rack() (): SetTerritory() returned false");
                return false;
             }
          }
          else
          {
-            IMapItem? rrHvap = myGameInstance.ReadyRacks[2];
-            if (null == rrHvap)
+            rr = null;
+            name = "ReadyRackHvap";
+            foreach (IMapItem mi in myGameInstance.ReadyRacks)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): rrHvap=null");
+               if (true == mi.Name.Contains(name))
+               {
+                  rr = mi;
+                  break;
+               }
+            }
+            if (null == rr)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateReady_Rack() (): rrHvap=null");
                return false;
             }
-            rrHvap.Count = myHvapReadyRackCount;
-            tName = rrHvap.Name + rrHvap.Count.ToString();
+            rr.Count = myHvapReadyRackCount;
+            tName = name + rr.Count.ToString();
             newT = Territories.theTerritories.Find(tName, tType);
             if (null == newT)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): newT=null for " + tName);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateReady_Rack() (): newT=null for " + tName);
                return false;
             }
-            if( false == SetTerritory(rrHvap, newT))
+            if( false == SetTerritory(rr, newT))
             {        
-               Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): SetTerritory() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "UpdateReady_Rack() (): SetTerritory() returned false");
                return false;
             }
          }
@@ -1360,68 +1416,77 @@ namespace Pattons_Best
          string tType = lastReport.TankCardNum.ToString();
          //--------------------------------------------------
          IMapItem? rr = null;
+         string name = "";
          bool isCountIncrease = false;
          Button b = (Button)sender;
          switch (b.Name)
          {
             case "bMinusHe":
-               rr = myGameInstance.ReadyRacks[0];
+               name = "ReadyRackHe";
                myHeReadyRackCount -= 1;
                myUnassignedReadyRack += 1;
                break;
             case "bPlusHe":
-               rr = myGameInstance.ReadyRacks[0];
+               name = "ReadyRackHe";
                isCountIncrease = true;
                myHeReadyRackCount += 1;
                myUnassignedReadyRack -= 1;
                break;
             case "bMinusAp":
-               rr = myGameInstance.ReadyRacks[1];
+               name = "ReadyRackAp";
                myApReadyRackCount -= 1;
                myUnassignedReadyRack += 1;
                break;
             case "bPlusAp":
-               rr = myGameInstance.ReadyRacks[1];
+               name = "ReadyRackAp";
                isCountIncrease = true;
                myApReadyRackCount += 1;
                myUnassignedReadyRack -= 1;
                break;
             case "bMinusWp":
-               rr = myGameInstance.ReadyRacks[2];
+               name = "ReadyRackWp";
                myWpReadyRackCount -= 1;
                myUnassignedReadyRack += 1;
                break;
             case "bPlusWp":
-               rr = myGameInstance.ReadyRacks[2];
+               name = "ReadyRackWp";
                isCountIncrease = true;
                myWpReadyRackCount += 1;
                myUnassignedReadyRack -= 1;
                break;
             case "bMinusHbci":
-               rr = myGameInstance.ReadyRacks[3];
+               name = "ReadyRackHbci";
                myHbciReadyRackCount -= 1;
                myUnassignedReadyRack += 1;
                break;
             case "bPlusHbci":
-               rr = myGameInstance.ReadyRacks[3];
+               name = "ReadyRackHbci";
                isCountIncrease = true;
                myHbciReadyRackCount += 1;
                myUnassignedReadyRack -= 1;
                break;
             case "bMinusHvap":
-               rr = myGameInstance.ReadyRacks[2];
+               name = "ReadyRackHvap";
                myHvapReadyRackCount -= 1;
                myUnassignedReadyRack += 1;
                break;
             case "bPlusHvap":
-               rr = myGameInstance.ReadyRacks[2];
+               name = "ReadyRackHvap";
                isCountIncrease = true;
                myHvapReadyRackCount += 1;
                myUnassignedReadyRack -= 1;
                break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "ButtonAmmoChange_Click(): reached default with key=" + b.Name);
+               return;
+         }
+         foreach (IMapItem mi in myGameInstance.ReadyRacks)
+         {
+            if (true == mi.Name.Contains(name))
+            {
+               rr = mi;
                break;
+            }
          }
          if (null == rr)
          {
@@ -1432,16 +1497,16 @@ namespace Pattons_Best
             rr.Count++;
          else
             rr.Count--;
-         string tName = rr.Name + rr.Count.ToString();
+         string tName = name + rr.Count.ToString();
          ITerritory? newT = Territories.theTerritories.Find(tName, tType);
          if (null == newT)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ButtonReadyRackChange_Click(): newT=null for " + tName);
+            Logger.Log(LogEnum.LE_ERROR, "ButtonReadyRackChange_Click(): newT=null for tName=" + tName);
             return;
          }
          if( false == SetTerritory(rr, newT))
          {
-            Logger.Log(LogEnum.LE_ERROR, "ButtonReadyRackChange_Click(): SetTerritory() returned false for " + tName);
+            Logger.Log(LogEnum.LE_ERROR, "ButtonReadyRackChange_Click(): SetTerritory() returned false for tName=" + tName);
             return;
          }
          GameAction action = GameAction.MorningBriefingAmmoReadyRackLoad;

@@ -1860,7 +1860,7 @@ namespace Pattons_Best
       {
          if (false == PerformAutoSetupSkipCrewAssignments(gi))
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): PerformAutoSetupSkipCrewAssignments() return false");
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetup_SkipMorningBriefing(): PerformAutoSetupSkipCrewAssignments() return false");
             return false;
          }
          //---------------------------------
@@ -1868,7 +1868,7 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetup_SkipMorningBriefing(): lastReport=null");
             return false;
          }
          string tType = lastReport.TankCardNum.ToString();
@@ -1883,7 +1883,7 @@ namespace Pattons_Best
          }
          if (false == SetWeatherCounters(gi))
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): SetWeatherCounters() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetup_SkipMorningBriefing(): SetWeatherCounters() returned false");
             return false;
          }
          //--------------------------------------------------
@@ -1924,73 +1924,83 @@ namespace Pattons_Best
          //lastReport.MainGunHBCI = 3;  // <cgs> Limit initial gun loads
          //--------------------------------------------------
          int count = 2;
-         string tName = "ReadyRackAp" + count.ToString();
+         string tName = "ReadyRackAp2";
          ITerritory? t = Territories.theTerritories.Find(tName, tType);
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): t=null for " + tName);
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetup_SkipMorningBriefing(): t=null for " + tName);
             return false;
          }
-         IMapItem rr1 = new MapItem("ReadyRackAp", 0.9, "c12RoundsLeft", t);
+         string name = "ReadyRackAp" + Utilities.MapItemNum.ToString();
+         Utilities.MapItemNum++;
+         IMapItem rr1 = new MapItem(name, 0.9, "c12RoundsLeft", t);
          rr1.Count = count;
          gi.ReadyRacks.Add(rr1);
          //--------------------------------------------------
-         if (true == gi.Sherman.Name.Contains("Sherman75"))
+         if (12 < lastReport.TankCardNum)
          {
-            count = 1;
-            tName = "ReadyRackWp" + count.ToString();
+            count += 2;
+            tName = "ReadyRackHvap2";
             t = Territories.theTerritories.Find(tName, tType);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): t=null for " + tName);
+               Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetup_SkipMorningBriefing(): t=null for " + tName);
                return false;
             }
-            rr1 = new MapItem("ReadyRackWp", 0.9, "c12RoundsLeft", t);
-            rr1.Count = count;
-            gi.ReadyRacks.Add(rr1);
-            //--------------------------------------------------
-            count = 1;
-            tName = "ReadyRackHbci" + count.ToString();
-            t = Territories.theTerritories.Find(tName, tType);
-            if (null == t)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): t=null for " + tName);
-               return false;
-            }
-            rr1 = new MapItem("ReadyRackHbci", 0.9, "c12RoundsLeft", t);
-            rr1.Count = count;
+            name = "ReadyRackHvap" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            rr1 = new MapItem(name, 0.9, "c12RoundsLeft", t);
+            rr1.Count = 2;
             gi.ReadyRacks.Add(rr1);
          }
          else
          {
-            count = 2;
-            tName = "ReadyRackHvap" + count.ToString();
+            count += 1;
+            tName = "ReadyRackWp1";
             t = Territories.theTerritories.Find(tName, tType);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): t=null for " + tName);
+               Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetup_SkipMorningBriefing(): t=null for " + tName);
                return false;
             }
-            rr1 = new MapItem("ReadyRackHvap", 0.9, "c12RoundsLeft", t);
-            rr1.Count = count;
+            name = "ReadyRackWp" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            rr1 = new MapItem(name, 0.9, "c12RoundsLeft", t);
+            rr1.Count = 1;
+            gi.ReadyRacks.Add(rr1);
+            //--------------------------------------------------
+            count += 1;
+            tName = "ReadyRackHbci1";
+            t = Territories.theTerritories.Find(tName, tType);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetup_SkipMorningBriefing(): t=null for " + tName);
+               return false;
+            }
+            name = "ReadyRackHbci" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            rr1 = new MapItem(name, 0.9, "c12RoundsLeft", t);
+            rr1.Count = 1;
             gi.ReadyRacks.Add(rr1);
          }
          //--------------------------------------------------
-         count = card.myMaxReadyRackCount - 2;
+         int countHe = card.myMaxReadyRackCount - count;
          tName = "ReadyRackHe" + count.ToString();
          t = Territories.theTerritories.Find(tName, tType);
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): t=null for " + tName);
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetup_SkipMorningBriefing(): t=null for " + tName);
             return false;
          }
-         rr1 = new MapItem("ReadyRackHe", 0.9, "c12RoundsLeft", t);
-         rr1.Count = count;
+         name = "ReadyRackHe" + Utilities.MapItemNum.ToString();
+         Utilities.MapItemNum++;
+         rr1 = new MapItem(name, 0.9, "c12RoundsLeft", t); // PerformAutoSetup_SkipMorningBriefing()
+         rr1.Count = countHe;
          gi.ReadyRacks.Add(rr1);
          //--------------------------------------------------
          if (false == TableMgr.SetTimeTrack(lastReport, gi.Day)) // passing sunrise and sunset
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipMorningBriefing(): TableMgr.SetTimeTrack() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetup_SkipMorningBriefing(): TableMgr.SetTimeTrack() returned false");
             return false;
          }
          dieRoll = Utilities.RandomGenerator.Next(1, 11);
@@ -3680,7 +3690,7 @@ namespace Pattons_Best
          else
          {
             lastReport.MainGunHVAP = 0;
-            lastReport.MainGunWP = Utilities.RandomGenerator.Next(5, 15); // assign gun loads and ready rack randomly
+            lastReport.MainGunWP = Utilities.RandomGenerator.Next(5, 15); // assign WP load randomly
             unassignedCount -= lastReport.MainGunWP;
             lastReport.MainGunHBCI += Utilities.RandomGenerator.Next(1, 11);
             unassignedCount -= lastReport.MainGunHBCI;
@@ -3709,61 +3719,71 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SkipAmmoLoadSetupScreens(): t=null for " + tName);
             return false;
          }
-         IMapItem rr1 = new MapItem("ReadyRackAp", 0.9, "c12RoundsLeft", t);
+         string name = "ReadyRackAp" + Utilities.MapItemNum.ToString(); // there is always AP
+         Utilities.MapItemNum++;
+         IMapItem rr1 = new MapItem(name, 0.9, "c12RoundsLeft", t);
          rr1.Count = count;
          gi.ReadyRacks.Add(rr1);
          //--------------------------------------------------
          if (12 < lastReport.TankCardNum)
          {
-            count = 2;
-            tName = "ReadyRackHvap" + count.ToString();
+            count += 2;
+            tName = "ReadyRackHvap2";
             t = Territories.theTerritories.Find(tName, tType);
             if (null == t)
             {
                Logger.Log(LogEnum.LE_ERROR, "SkipAmmoLoadSetupScreens(): t=null for " + tName);
                return false;
             }
+            name = "ReadyRackHvap" + Utilities.MapItemNum.ToString(); // there is always AP
+            Utilities.MapItemNum++;
+            rr1 = new MapItem(name, 0.9, "c12RoundsLeft", t);
+            rr1.Count = 2;
+            gi.ReadyRacks.Add(rr1);
          }
          else
          {
-            rr1 = new MapItem("ReadyRackHvap", 0.9, "c12RoundsLeft", t);
-            rr1.Count = count;
-            gi.ReadyRacks.Add(rr1);
-            count = 1;
-            tName = "ReadyRackWp" + count.ToString();
+            count += 1;
+            tName = "ReadyRackWp1";
             t = Territories.theTerritories.Find(tName, tType);
             if (null == t)
             {
                Logger.Log(LogEnum.LE_ERROR, "SkipAmmoLoadSetupScreens(): t=null for " + tName);
                return false;
             }
-            rr1 = new MapItem("ReadyRackWp", 0.9, "c12RoundsLeft", t);
-            rr1.Count = count;
+            name = "ReadyRackWp" + Utilities.MapItemNum.ToString(); 
+            Utilities.MapItemNum++;
+            rr1 = new MapItem(name, 0.9, "c12RoundsLeft", t);
+            rr1.Count = 1;
             gi.ReadyRacks.Add(rr1);
             //--------------------------------------------------
-            count = 1;
-            tName = "ReadyRackHbci" + count.ToString();
+            count += 1;
+            tName = "ReadyRackHbci1";
             t = Territories.theTerritories.Find(tName, tType);
             if (null == t)
             {
                Logger.Log(LogEnum.LE_ERROR, "SkipAmmoLoadSetupScreens(): t=null for " + tName);
                return false;
             }
-            rr1 = new MapItem("ReadyRackHbci", 0.9, "c12RoundsLeft", t);
-            rr1.Count = count;
+            name = "ReadyRackHbci" + Utilities.MapItemNum.ToString(); // there is always AP
+            Utilities.MapItemNum++;
+            rr1 = new MapItem(name, 0.9, "c12RoundsLeft", t);
+            rr1.Count = 1;
             gi.ReadyRacks.Add(rr1);
          }
          //--------------------------------------------------
-         count = card.myMaxReadyRackCount - 2;
-         tName = "ReadyRackHe" + count.ToString();
+         int countHe = card.myMaxReadyRackCount - count;
+         tName = "ReadyRackHe" + countHe.ToString();
          t = Territories.theTerritories.Find(tName, tType);
          if (null == t)
          {
             Logger.Log(LogEnum.LE_ERROR, "SkipAmmoLoadSetupScreens(): t=null for " + tName);
             return false;
          }
-         rr1 = new MapItem("ReadyRackHe", 0.9, "c12RoundsLeft", t);
-         rr1.Count = count;
+         name = "ReadyRackHe" + Utilities.MapItemNum.ToString();
+         Utilities.MapItemNum++;
+         rr1 = new MapItem(name, 0.9, "c12RoundsLeft", t);  // Skip_AmmoLoadSetupScreens()
+         rr1.Count = countHe;
          gi.ReadyRacks.Add(rr1);
          //------------------------------------------------------
          outaction = GameAction.MorningBriefingTimeCheck;
@@ -8831,14 +8851,14 @@ namespace Pattons_Best
          int readyRackLoadCount = gi.GetReadyRackReload(ammoType);
          if (0 == readyRackLoadCount)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): Invalid state - readyRackLoadCount=0 for " + ammoType);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack_Minus(): Invalid state - readyRackLoadCount=0 for " + ammoType);
             return false;
          }
          readyRackLoadCount--;
-         Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "UpdateReadyRack(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString());
+         Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "UpdateReadyRack_Minus(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString());
          if (false == gi.SetReadyRackReload(ammoType, readyRackLoadCount))
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): SetReadyRackReload() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack_Minus(): SetReadyRackReload() returned false");
             return false;
          }
          return true;
@@ -8848,7 +8868,7 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack_Plus(): lastReport=null");
             return false;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
@@ -8860,16 +8880,16 @@ namespace Pattons_Best
             ammoAvailable--;
          if ((ammoAvailable < 1) || (card.myMaxReadyRackCount <= gi.GetReadyRackTotalLoad()))
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): Invalid state - maxReload reached for " + ammoType + " ammo=" + ammoAvailable.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack_Plus(): Invalid state - maxReload reached for " + ammoType + " ammo=" + ammoAvailable.ToString());
             return false;
          }
          else
          {
             readyRackLoadCount++;
-            Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "UpdateReadyRack(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString() + "--> ammoCount=" + ammoAvailable.ToString());
+            Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "UpdateReadyRack_Plus(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString() + "--> ammoCount=" + ammoAvailable.ToString());
             if (false == gi.SetReadyRackReload(ammoType, readyRackLoadCount))
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack(): SetReadyRackReload() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack_Plus(): SetReadyRack_Reload() returned false");
                return false;
             }
          }
