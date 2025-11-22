@@ -192,6 +192,7 @@ namespace Pattons_Best
                ShowHistoricalMap(myCanvas);
                break;
             case GameAction.SetupShowMovementBoard:
+            case GameAction.PreparationsFinalSkip:
             case GameAction.MovementStartAreaSet:
             case GameAction.MovementStartAreaSetRoll:
             case GameAction.TestingStartMovement:

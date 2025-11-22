@@ -91,6 +91,7 @@ namespace Pattons_Best
       public List<string> TrainedGunners { get; } = new List<string>();
       public List<ShermanAttack> ShermanHits { set; get; } = new List<ShermanAttack>();
       public ShermanDeath? Death { set; get; } = null;
+      public ShermanSetup BattlePrep { set; get; } = new ShermanSetup();  // only used if option AutoPreparation is enabled
       //---------------------------------------------------------------
       public string IdentifiedTank { set; get; } = "";
       public string IdentifiedAtg { set; get; } = "";

@@ -475,7 +475,7 @@ namespace Pattons_Best
             StringBuilder sb = new StringBuilder("At ");
             sb.Append(TableMgr.GetTime(report));
             sb.Append(", you are the Lead Tank!");
-            report.Notes.Add(sb.ToString());  // Set_Deployment(): gi.IsLedTank
+            report.Notes.Add(sb.ToString());  // Set_Deployment(): gi.IsLeadTank
          }
          return true;
       }
@@ -3958,6 +3958,11 @@ namespace Pattons_Best
                            returnStatus = "SetUsControlOnBattleMap() returned false";
                            Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
                         }
+                        else if (false == SaveBattlePreparationsSetup(gi))
+                        {
+                           returnStatus = "SaveBattlePreparationsSetup() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsCommanderSpot): " + returnStatus);
+                        }
                      }
                   }
                   break;
@@ -3975,6 +3980,11 @@ namespace Pattons_Best
                   {
                      returnStatus = "SetUsControlOnBattleMap() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
+                  }
+                  else if(false == SaveBattlePreparationsSetup(gi))
+                  {
+                     returnStatus = "SaveBattlePreparationsSetup() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsFinal): " + returnStatus);
                   }
                   break;
                default:
@@ -4005,6 +4015,30 @@ namespace Pattons_Best
          else
             Logger.Log(LogEnum.LE_ERROR, sb12.ToString());
          return returnStatus;
+      }
+      public bool SaveBattlePreparationsSetup(IGameInstance gi)
+      {
+         gi.BattlePrep.myIsSetupPerformed = true;
+         //---------------------------
+         gi.BattlePrep.myHatches.Clear();
+         foreach (IMapItem mi in gi.Hatches)
+            gi.BattlePrep.myHatches.Add(mi);
+         //---------------------------
+         gi.BattlePrep.myAmmoType = gi.GetGunLoadType();
+         gi.BattlePrep.myTurretRotation = gi.Sherman.RotationTurret;
+         //---------------------------
+         IMapItem? spotter = gi.BattleStacks.FindMapItem("LoaderSpot");
+         if (null == spotter)
+            gi.BattlePrep.myLoaderSpotTerritory = "";
+         else
+            gi.BattlePrep.myLoaderSpotTerritory = spotter.TerritoryCurrent.Name;
+         //---------------------------
+         spotter = gi.BattleStacks.FindMapItem("CommanderSpot");
+         if (null == spotter)
+            gi.BattlePrep.myCommanderSpotTerritory = "";
+         else
+            gi.BattlePrep.myCommanderSpotTerritory = spotter.TerritoryCurrent.Name;
+         return true;
       }
    }
    //-----------------------------------------------------
@@ -4059,7 +4093,23 @@ namespace Pattons_Best
                   if (false == LoadGame(ref gi, ref action))
                   {
                      returnStatus = "LoadGame() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateEnded.PerformAction(): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.PreparationsFinalSkip:
+                  if (false == PerformBattlePreparationsSetup(gi))
+                  {
+                     returnStatus = "Perform_BattlePreparationsSetup() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(PreparationsFinalSkip): " + returnStatus);
+                  }
+                  else
+                  {
+                     theIs1stEnemyStrengthCheckTerritory = true; // do not do enemy strength check on first area which is the start area
+                     if (false == MovementPhaseRestart(gi, lastReport, action))
+                     {
+                        returnStatus = "MovementPhaseRestart() returned false";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(PreparationsFinalSkip): " + returnStatus);
+                     }
                   }
                   break;
                case GameAction.MovementStartAreaSet:
@@ -4068,8 +4118,8 @@ namespace Pattons_Best
                   theIs1stEnemyStrengthCheckTerritory = true; // do not do enemy strength check on first area which is the start area
                   if (false == MovementPhaseRestart(gi, lastReport, action))
                   {
-                     returnStatus = "SetStartArea() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
+                     returnStatus = "MovementPhaseRestart() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(" + action.ToString() + "): " + returnStatus);
                   }
                   break;
                case GameAction.MovementStartAreaSetRoll:
@@ -4707,15 +4757,116 @@ namespace Pattons_Best
          //--------------------------------------------------------------
          gi.IsAirStrikePending = false;
          gi.IsAdvancingFireChosen = false;
-         gi.BattleResistance = EnumResistance.None;                      // MovementPhaseRestart()
+         gi.BattleResistance = EnumResistance.None;                      // MovementPhase_Restart()
          gi.MoveStacks.Clear();
-         Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "MovementPhaseRestart(): gi.MapItemMoves.Clear()");
+         Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "MovementPhase_Restart(): gi.MapItemMoves.Clear()");
          gi.MapItemMoves.Clear();
          gi.EnteredHexes.Clear();
          //--------------------------------------------------------------
          if (false == ResetDieResults(gi))
          {
-            Logger.Log(LogEnum.LE_ERROR, "MovementPhaseRestart(): ResetDieResults() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "MovementPhase_Restart(): ResetDieResults() returned false");
+            return false;
+         }
+         return true;
+      }
+      private bool PerformBattlePreparationsSetup(IGameInstance gi)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Perform_BattlePreparationsSetup(): lastReport=null");
+            return false;
+         }
+         //---------------------------
+         lastReport.Commander.IsButtonedUp = true;
+         lastReport.Gunner.IsButtonedUp = true;
+         lastReport.Loader.IsButtonedUp = true;
+         lastReport.Driver.IsButtonedUp = true;
+         lastReport.Assistant.IsButtonedUp = true;
+         gi.Hatches.Clear();
+         foreach (IMapItem mi in gi.BattlePrep.myHatches)
+            gi.Hatches.Add(mi);
+         foreach (IMapItem mi in gi.Hatches)
+         {
+            string[] aStringArray1 = mi.Name.Split('_');
+            if (2 != aStringArray1.Length)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Perform_BattlePreparationsSetup(): aStringArray1.Length not equal to two for mi.Name=" + mi.Name);
+               return false;
+            }
+            string role = aStringArray1[0];
+            ICrewMember? cm = gi.GetCrewMemberByRole(role);
+            if (null == cm)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Perform_BattlePreparationsSetup(): cm=null mi.Name=" + mi.Name);
+               return false;
+            }
+            cm.IsButtonedUp = false;
+         }
+         //---------------------------
+         gi.GunLoads.Clear();
+         int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
+         if (0 < totalAmmo)
+         {
+            IMapItem gunLoad = new MapItem("GunLoadInGun", 1.0, "c17GunLoad", new Territory());
+            gi.GunLoads.Add(gunLoad);
+            bool isSetGunLoadTerritoryGood = true;
+            if (0 < lastReport.MainGunHE)
+               isSetGunLoadTerritoryGood = gi.SetGunLoadTerritory("He");
+            else if (0 < lastReport.MainGunAP)
+               isSetGunLoadTerritoryGood = gi.SetGunLoadTerritory("Ap");
+            else if (0 < lastReport.MainGunHVAP)
+               isSetGunLoadTerritoryGood = gi.SetGunLoadTerritory("Hvap");
+            else if (0 < lastReport.MainGunWP)
+               isSetGunLoadTerritoryGood = gi.SetGunLoadTerritory("Wp");
+            else if (0 < lastReport.MainGunHBCI)
+               isSetGunLoadTerritoryGood = gi.SetGunLoadTerritory("Hbci");
+            else
+               isSetGunLoadTerritoryGood = false;
+            if (false == isSetGunLoadTerritoryGood)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Perform_BattlePreparationsSetup(): gi.SetGunLoadTerritory() returned false");
+               return false;
+            }
+            Logger.Log(LogEnum.LE_SHOW_GUN_LOAD_PREP, "Perform_BattlePreparationsSetup(): gunLoad=" + gunLoad.Name + " t=" + gunLoad.TerritoryCurrent.Name);
+         }
+         //---------------------------
+         gi.BattlePrep.myTurretRotation = gi.Sherman.RotationTurret;
+         //---------------------------
+         if (false == string.IsNullOrEmpty(gi.BattlePrep.myLoaderSpotTerritory))
+         {
+            ITerritory? t = Territories.theTerritories.Find(gi.BattlePrep.myLoaderSpotTerritory);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Perform_BattlePreparationsSetup(): loader t=null for name=" + gi.BattlePrep.myLoaderSpotTerritory);
+               return false;
+            }
+            IMapItem? spotter = gi.BattleStacks.FindMapItem("LoaderSpot");
+            if (null == spotter)
+               gi.BattleStacks.Add(new MapItem("LoaderSpot", 1.0, "c18LoaderSpot", t));
+            else
+               spotter.TerritoryCurrent = t;
+         }
+         //---------------------------
+         if (false == string.IsNullOrEmpty(gi.BattlePrep.myCommanderSpotTerritory))
+         {
+            ITerritory? t = Territories.theTerritories.Find(gi.BattlePrep.myCommanderSpotTerritory);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Perform_BattlePreparationsSetup(): cmdr t=null for name=" + gi.BattlePrep.myCommanderSpotTerritory);
+               return false;
+            }
+            IMapItem? spotter = gi.BattleStacks.FindMapItem("CommanderSpot");
+            if (null == spotter)
+               gi.BattleStacks.Add(new MapItem("CommanderSpot", 1.0, "c19CommanderSpot", t));
+            else
+               spotter.TerritoryCurrent = t;
+         }
+         //---------------------------
+         if (false == SetUsControlOnBattleMap(gi))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Perform_BattlePreparationsSetup(): SetUsControlOnBattleMap() returned false");
             return false;
          }
          return true;
@@ -8821,7 +8972,12 @@ namespace Pattons_Best
          foreach (IMapItem mi in removals)
             gi.BattleStacks.Remove(mi);
          //-------------------------------------------------------
-         foreach(IMapItem mi in gi.Hatches) // sync crewmember status to what hatches shows
+         lastReport.Commander.IsButtonedUp = true;
+         lastReport.Gunner.IsButtonedUp = true;
+         lastReport.Loader.IsButtonedUp = true;
+         lastReport.Driver.IsButtonedUp = true;
+         lastReport.Assistant.IsButtonedUp = true;
+         foreach (IMapItem mi in gi.Hatches) // sync crewmember status to what hatches shows
          {
             string[] aStringArray1 = mi.Name.Split('_');
             if (2 != aStringArray1.Length)

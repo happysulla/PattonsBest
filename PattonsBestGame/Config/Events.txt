@@ -175,8 +175,8 @@ Die Roll =
 <InlineUIContainer><Image Name='DieRollWhite' Height='21' Width='21' > </Image></InlineUIContainer>
 <LineBreak/><LineBreak/>"
 e011	"<Bold>e011 Deployment</Bold> 
-<InlineUIContainer><Button Content='r4.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
-<LineBreak/><LineBreak/> <InlineUIContainer><CheckBox Name='AutoPreparation' IsEnabled='False' Content='Use Setup of Previous Battle Prep' FontFamily='Courier New'  FontSize='12'></CheckBox></InlineUIContainer>
+<InlineUIContainer><Button Content='r4.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<LineBreak/><LineBreak/> <InlineUIContainer><CheckBox Name='AutoPreparation' Visibility='Hidden' Content='Use Setup of Previous Battle Prep' FontFamily='Courier New'  FontSize='12'></CheckBox></InlineUIContainer>
 <LineBreak/><LineBreak/>
 Determine your tank&apos;s deployment from the 
 <InlineUIContainer><Button Content='Deployment' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table.
@@ -235,7 +235,6 @@ If the Commander is buttoned up or does not have a vision cupola, mark the secto
 <LineBreak/><LineBreak/>"
 e017	"<Bold>e017 Preparations Final</Bold> 
 <InlineUIContainer><Button Content='r4.46' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
-<LineBreak/><LineBreak/> <InlineUIContainer><CheckBox Name='AutoPreparation' IsEnabled='False' Content='Use Setup of Previous Battle Prep' FontFamily='Courier New'  FontSize='12'></CheckBox></InlineUIContainer>
 <LineBreak/><LineBreak/>
 US Control markers are placed on sectors 1, 2, and 3. The Weather is displayed on top left of Battle Board.
 <LineBreak/><LineBreak/>

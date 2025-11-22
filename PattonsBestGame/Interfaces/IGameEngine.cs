@@ -41,6 +41,16 @@ namespace Pattons_Best
          }
       }
    }
+   public class ShermanSetup
+   {
+      public bool myIsSetupPerformed = false; // set to true after 1st setup complete
+      public IMapItems myHatches = new MapItems();
+      public string myAmmoType = "";
+      public double myTurretRotation = 0.0;
+      public string myLoaderSpotTerritory = "";
+      public string myCommanderSpotTerritory = "";
+      public ShermanSetup(){}
+   }
    public class PanzerfaustAttack
    {
       public IMapItem myEnemyUnit;
@@ -260,6 +270,7 @@ namespace Pattons_Best
       PreparationsCommanderSpot,
       PreparationsCommanderSpotSet,
       PreparationsFinal,
+      PreparationsFinalSkip,
 
       MovementStartAreaSet,
       MovementStartAreaSetRoll,

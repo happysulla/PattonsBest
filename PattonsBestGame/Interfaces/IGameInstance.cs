@@ -80,6 +80,7 @@ namespace Pattons_Best
       List<string> TrainedGunners { get; } // trained in use of HVSS 
       List<ShermanAttack> ShermanHits { set; get; }
       ShermanDeath? Death { set; get; }
+      ShermanSetup BattlePrep { set; get; } // only used if option AutoPreparation is enabled
       //------------------------------------------------
       string IdentifiedTank { set; get; }
       string IdentifiedAtg { set; get; }

@@ -4535,24 +4535,35 @@ namespace Pattons_Best
       }
       private bool SetCheckboxState(IGameInstance gi, string key, CheckBox cb)
       {
-         Logger.Log(LogEnum.LE_VIEW_CONTROL_NAME, "SetCheckboxState(): cb.Name=" + cb.Name + " for ae=" + gi.EventActive);
-         switch(key)
+         Logger.Log(LogEnum.LE_VIEW_CONTROL_NAME, "Set_CheckboxState(): cb.Name=" + cb.Name + " for ae=" + gi.EventActive);
+         //------------------------------------
+         Option? option = gi.Options.Find(cb.Name);
+         if (null == option)
          {
-            case "e017":
-               break;
-            default:
-               cb.Checked += CheckBox_Checked;
-               cb.Unchecked += CheckBox_Unchecked;
-               Option? option = gi.Options.Find(cb.Name);
-               if (null == option)
-               {
-                  option = new Option(cb.Name, false);
-                  gi.Options.Add(option);
-               }
-               if (true == option.IsEnabled)
-                  cb.IsChecked = true;
-               break;
+            option = new Option(cb.Name, false);
+            gi.Options.Add(option);
          }
+         if (true == option.IsEnabled)
+            cb.IsChecked = true;
+         //------------------------------------
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Set_CheckboxState(): myGameInstance=null");
+            return false;
+         }
+         if (("e011" == key) && (false == myGameInstance.BattlePrep.myIsSetupPerformed))
+         {
+            cb.Visibility = Visibility.Hidden;
+            option.IsEnabled = false;
+            cb.IsChecked = false;
+         }
+         else
+         {
+            cb.Visibility = Visibility.Visible;
+         }
+         //------------------------------------
+         cb.Checked += CheckBox_Checked;
+         cb.Unchecked += CheckBox_Unchecked;
          return true;
       }
       private bool IsEnemyStrengthCheckNeeded(IGameInstance gi, out bool isCheckNeeded)
@@ -5415,7 +5426,21 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "MorningBriefingDeploymentEnd":
-                           action = GameAction.PreparationsHatches;
+                           Option? option1 = myGameInstance.Options.Find("AutoPreparation");
+                           if (null == option1)
+                           {
+                              option1 = new Option("AutoPreparation", false);
+                              myGameInstance.Options.Add(option1);
+                           }
+                           if( true == option1.IsEnabled)
+                           {
+                              myGameInstance.GamePhase = GamePhase.Movement;
+                              action = GameAction.PreparationsFinalSkip; // user skips battle prep steps and uses previous setup
+                           }
+                           else
+                           {
+                              action = GameAction.PreparationsHatches;
+                           }
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "c15OpenHatch":
