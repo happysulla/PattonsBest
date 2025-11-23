@@ -986,12 +986,12 @@ namespace Pattons_Best
          }
          rrMarker.Count = value;
          //-------------------------------------------------
-         string tName = rrMarker.Name + rrMarker.Count.ToString();
+         string tName = "ReadyRack" + ammoType + rrMarker.Count.ToString();
          string tType = lastReport.TankCardNum.ToString();
          ITerritory? newT = Territories.theTerritories.Find(tName, tType);
          if (null == newT)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetReadyRackReload(): newT=null for " + tName);
+            Logger.Log(LogEnum.LE_ERROR, "SetReadyRackReload(): newT=null for " + tName + " ammoType=" + ammoType + " tType=" + tType);
             return false;
          }
          rrMarker.TerritoryCurrent = newT;

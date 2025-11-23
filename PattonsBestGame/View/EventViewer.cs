@@ -4623,6 +4623,96 @@ namespace Pattons_Best
          }
          return true;
       }
+      private bool ContinueAfterBattlePrep(IGameInstance gi, ref GameAction outAction)
+      {
+         //---------------------------------------------------
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Continue_AfterBattlePrep(): lastReport=null");
+            return false;
+         }
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         //-----------------------------------------------------
+         bool isMapStartAreaExist = false;
+         foreach (IStack stack in gi.MoveStacks)
+         {
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.Name.Contains("StartArea"))
+               {
+                  isMapStartAreaExist = true;
+                  break;
+               }
+            }
+         }
+         //-----------------------------------------------------
+         bool isMapExitAreaExist = false;
+         foreach (IStack stack in gi.MoveStacks)
+         {
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.Name.Contains("ExitArea"))
+               {
+                  isMapExitAreaExist = true;
+                  break;
+               }
+            }
+         }
+         //-----------------------------------------------------
+         if (EnumScenario.Counterattack == lastReport.Scenario)
+         {
+            bool isStartAreaReached = false;
+            if (true == isMapStartAreaExist)
+            {
+               if (false == gi.IsTaskForceInStartArea(out isStartAreaReached))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Continue_AfterBattlePrep(): IsTaskForceInStartArea() returned false");
+                  return false;
+               }
+               if (true == isStartAreaReached)
+                  outAction = GameAction.MovementStartAreaRestartAfterBattle;
+               else
+                  outAction = GameAction.MovementEnemyCheckCounterattack;
+            }
+            else
+            {
+               outAction = GameAction.MovementStartAreaSet; // Setting the first start area
+            }
+         }
+         else
+         {
+            bool isExitAreaReached = false;
+            if (true == isMapExitAreaExist)
+            {
+               if (false == gi.IsTaskForceInExitArea(out isExitAreaReached))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Continue_AfterBattlePrep(): IsTaskForceInExitArea() returned false");
+                  return false;
+               }
+            }
+            if (true == isExitAreaReached)
+               outAction = GameAction.MovementStartAreaRestartAfterBattle;
+            else if (false == isMapStartAreaExist)
+               outAction = GameAction.MovementStartAreaSet; // Setting the first start area
+            else
+            {
+               outAction = GameAction.MovementEnemyStrengthChoice;  // Continue_AfterBattlePrep(): "Continue 017" - Preparations Final
+               if (false == gi.IsShermanAdvancingOnMoveBoard) // If sherman advancing on BattleBoard, there will be enemy units in same area of move board until Sherman moves out
+               {
+                  bool isEnemyInMoveArea;
+                  if (false == gi.IsTaskForceInEnemyArea(out isEnemyInMoveArea))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Continue_AfterBattlePrep(): IsTaskForceInEnemyArea() returned false");
+                     return false;
+                  }
+                  if (true == isEnemyInMoveArea)
+                     outAction = GameAction.BattleActivation;  // Continue_AfterBattlePrep() 
+               }
+            }
+         }
+         return true;
+      }
       //--------------------------------------------------------------------
       public void CloseAfterActionDialog()
       {
@@ -5279,7 +5369,7 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentPromotion():  myGameInstance.Reports.GetLast()");
+            Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown():  myGameInstance.Reports.GetLast()");
             return;
          }
          //------------------------------------------------------------------------
@@ -5468,84 +5558,11 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "Continue017": // Preparations Final
-                           bool isMapStartAreaExist = false;
-                           foreach (IStack stack in myGameInstance.MoveStacks)
+                           if(false == ContinueAfterBattlePrep(myGameInstance, ref action))
                            {
-                              foreach (IMapItem mi in stack.MapItems)
-                              {
-                                 if (true == mi.Name.Contains("StartArea"))
-                                 {
-                                    isMapStartAreaExist = true;
-                                    break;
-                                 }
-                              }
+                              Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): ContinueAfterBattlePrep() returned false");
+                              return;
                            }
-                           //-----------------------------------------------------
-                           bool isMapExitAreaExist = false;
-                           foreach (IStack stack in myGameInstance.MoveStacks)
-                           {
-                              foreach (IMapItem mi in stack.MapItems)
-                              {
-                                 if (true == mi.Name.Contains("ExitArea"))
-                                 {
-                                    isMapExitAreaExist = true;
-                                    break;
-                                 }
-                              }
-                           }
-                           //-----------------------------------------------------
-                           if (EnumScenario.Counterattack == lastReport.Scenario)
-                           {
-                              bool isStartAreaReached = false;
-                              if (true == isMapStartAreaExist)
-                              {
-                                 if (false == myGameInstance.IsTaskForceInStartArea(out isStartAreaReached))
-                                 {
-                                    Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): IsTaskForceInStartArea() returned false");
-                                    return;
-                                 }
-                                 if (true == isStartAreaReached)
-                                    action = GameAction.MovementStartAreaRestartAfterBattle;
-                                 else
-                                    action = GameAction.MovementEnemyCheckCounterattack;
-                              }
-                              else
-                              {
-                                 action = GameAction.MovementStartAreaSet; // Setting the first start area
-                              }
-                           }
-                           else
-                           {
-                              bool isExitAreaReached = false;
-                              if (true == isMapExitAreaExist)
-                              {
-                                 if( false == myGameInstance.IsTaskForceInExitArea(out isExitAreaReached))
-                                 {
-                                    Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): IsTaskForceInExitArea() returned false");
-                                    return;
-                                 }
-                              }
-                              if( true == isExitAreaReached )
-                                 action = GameAction.MovementStartAreaRestartAfterBattle;
-                              else if (false == isMapStartAreaExist)
-                                 action = GameAction.MovementStartAreaSet; // Setting the first start area
-                              else
-                              {
-                                 action = GameAction.MovementEnemyStrengthChoice;  // TextBlock_MouseDown(): "Continue017" - Preparations Final
-                                 if ( false == myGameInstance.IsShermanAdvancingOnMoveBoard ) // If sherman advancing on BattleBoard, there will be enemy units in same area of move board until Sherman moves out
-                                 {
-                                    bool isEnemyInMoveArea;
-                                    if (false == myGameInstance.IsTaskForceInEnemyArea(out isEnemyInMoveArea))
-                                    {
-                                       Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): IsTaskForceInEnemyArea() returned false");
-                                       return;
-                                    }
-                                    if (true == isEnemyInMoveArea)
-                                       action = GameAction.BattleActivation;  // TextBlock_MouseDown(Continue017): 
-                                 }
-                              }
-                           }
-                           //-----------------------------------------------------
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "Sherman1":
