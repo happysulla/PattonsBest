@@ -3115,7 +3115,31 @@ namespace Pattons_Best
             cm.SetBloodSpots(40);
             cm.IsKilled = true;
             if ("Commander" == cm.Role)
+            {
                gi.IsCommanderKilled = true; // SetWounds()
+               Option? option = gi.Options.Find("GameEndsOnCommanderDeath");
+               if (null == option)
+               {
+                  option = new Option("GameEndsOnCommanderDeath", false);
+                  gi.Options.Add(option);
+               }
+               if (true == option.IsEnabled) // End game when commander is kill if this option is enabled
+               {
+                  StringBuilder sb = new StringBuilder();
+                  ICrewMember? commander = gi.GetCrewMemberByRole(cm.Role);
+                  if(null == commander)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "SetWounds(): GetCrewMemberByRole() returned null for commander");
+                  }
+                  else
+                  {
+                     sb.Append(commander.Name);
+                     sb.Append(" died of wounds received in battle on ");
+                     sb.Append(TableMgr.GetDate(gi.Day));
+                     gi.EndGameReason = sb.ToString();
+                  }
+               }
+            }
             cm.Wound = "Killed";
             return "Killed";
          }
@@ -3177,7 +3201,31 @@ namespace Pattons_Best
             cm.IsKilled = true;
             cm.Wound = "Killed";
             if ("Commander" == cm.Role)
+            {
                gi.IsCommanderKilled = true; // SetWounds()
+               Option? option = gi.Options.Find("GameEndsOnCommanderDeath");
+               if (null == option)
+               {
+                  option = new Option("GameEndsOnCommanderDeath", false);
+                  gi.Options.Add(option);
+               }
+               if (true == option.IsEnabled) // End game when commander is kill if this option is enabled
+               {
+                  StringBuilder sb = new StringBuilder();
+                  ICrewMember? commander = gi.GetCrewMemberByRole(cm.Role);
+                  if (null == commander)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "SetWounds(): GetCrewMemberByRole() returned null for commander");
+                  }
+                  else
+                  {
+                     sb.Append(commander.Name);
+                     sb.Append(" died of wounds received in battle on ");
+                     sb.Append(TableMgr.GetDate(gi.Day));
+                     gi.EndGameReason = sb.ToString();
+                  }
+               }
+            }
             return "Killed";
          }
       }

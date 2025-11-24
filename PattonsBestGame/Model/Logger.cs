@@ -138,6 +138,8 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_GAME_INIT);
          //SetOn(LogEnum.LE_GAME_INIT_VERSION);
          SetOn(LogEnum.LE_NEXT_ACTION);
+         SetOn(LogEnum.LE_GAME_END);
+         SetOn(LogEnum.LE_GAME_END_CHECK);
          //SetOn(LogEnum.LE_SHOW_STACK_ADD);
          //SetOn(LogEnum.LE_SHOW_STACK_DEL);
          //SetOn(LogEnum.LE_SHOW_STACK_VIEW);

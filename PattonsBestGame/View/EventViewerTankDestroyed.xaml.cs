@@ -309,7 +309,7 @@ namespace Pattons_Best
          }
          if (false == UpdateGridRows())
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateGrid(): UpdateGridRowExplodes() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateGrid(): Update_GridRows() returned false");
             return false;
          }
          return true;
@@ -1125,11 +1125,27 @@ namespace Pattons_Best
                         Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): myGameInstance.GetCrewMemberByRole() returned null for " + crewmember);
                         return;
                      }
-                     myGameInstance.SetIncapacitated(cm0);
                      cm0.IsKilled = true;
                      cm0.SetBloodSpots();
+                     myGameInstance.SetIncapacitated(cm0);
                      if ("Commander" == cm0.Role)
+                     {
                         myGameInstance.IsCommanderKilled = true; // Tank Explodes
+                        Option? option = myGameInstance.Options.Find("GameEndsOnCommanderDeath");
+                        if (null == option)
+                        {
+                           option = new Option("GameEndsOnCommanderDeath", false);
+                           myGameInstance.Options.Add(option);
+                        }
+                        if (true == option.IsEnabled) // End game when commander is kill if this option is enabled
+                        {
+                           StringBuilder sb = new StringBuilder();
+                           sb.Append(cm0.Name);
+                           sb.Append(" died quickly as tank exploded on ");
+                           sb.Append(TableMgr.GetDate(myGameInstance.Day));
+                           myGameInstance.EndGameReason = sb.ToString();
+                        }
+                     }
                   }
                   outAction = GameAction.UpdateTankExplosion;
                   myGameEngine.PerformAction(ref myGameInstance, ref outAction);
@@ -1311,7 +1327,23 @@ namespace Pattons_Best
                         cm10.IsKilled = true;
                         cm10.SetBloodSpots();
                         if ("Commander" == cm10.Role)
+                        {
                            myGameInstance.IsCommanderKilled = true; // Tank Burns and not rescued or bailed
+                           Option? option = myGameInstance.Options.Find("GameEndsOnCommanderDeath");
+                           if (null == option)
+                           {
+                              option = new Option("GameEndsOnCommanderDeath", false);
+                              myGameInstance.Options.Add(option);
+                           }
+                           if (true == option.IsEnabled) // End game when commander is kill if this option is enabled
+                           {
+                              StringBuilder sb = new StringBuilder();
+                              sb.Append(cm10.Name);
+                              sb.Append(" died in horrible fire when tank burned without rescue on ");
+                              sb.Append(TableMgr.GetDate(myGameInstance.Day));
+                              myGameInstance.EndGameReason = sb.ToString();
+                           }
+                        }
                      }
                   }
                   outAction = GameAction.UpdateTankBrewUp;

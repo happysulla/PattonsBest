@@ -39,6 +39,7 @@ namespace Pattons_Best
          myCheckBoxAutoPreparation.ToolTip = "Use the same setup from previous battle preparations. Only enabled if previous setup performed, and all similar conditions (such as uninjuried crewmen) exists.";
          myCheckBoxAutoRollEnemySetup.ToolTip = "Automatically roll die rolls for sector, terrain, and facing when activating an enemy.";
          //-----------------------------
+         myCheckBoxEndOnCmdrDeath.ToolTip = "Campaign game ends when commander dies.";
          if (false == UpdateDisplay(myOptions))
          {
             Logger.Log(LogEnum.LE_ERROR, "OptionSelectionDialog(): UpdateDisplay() returned false");
@@ -138,6 +139,14 @@ namespace Pattons_Best
          }
          myCheckBoxAutoRollEnemySetup.IsChecked = option.IsEnabled;
          //------------------------------
+         name = "GameEndsOnCommanderDeath";
+         option = options.Find(name);
+         if (null == option)
+         {
+            option = new Option(name, false);
+            myOptions.Add(option);
+         }
+         myCheckBoxEndOnCmdrDeath.IsChecked = option.IsEnabled;
          return true;
       }
       //----------------------CONTROLLER FUNCTIONS----------------------
@@ -235,6 +244,22 @@ namespace Pattons_Best
                   option.IsEnabled = !option.IsEnabled;
                break;
             default: Logger.Log(LogEnum.LE_ERROR, "StackPanelAutoRolls_Click(): reached default name=" + cb.Name); return;
+         }
+      }
+      private void StackPanelGameChoice_Click(object sender, RoutedEventArgs e)
+      {
+         CheckBox cb = (CheckBox)sender;
+         Option? option = null;
+         switch (cb.Name)
+         {
+            case "GameEndsOnCommanderDeath":
+               option = myOptions.Find("AutoRollNewMembers");
+               if (null == option)
+                  Logger.Log(LogEnum.LE_ERROR, "StackPanelGameChoice_Click(): myOptions.Find() for name=" + cb.Name);
+               else
+                  option.IsEnabled = !option.IsEnabled;
+               break;
+            default: Logger.Log(LogEnum.LE_ERROR, "StackPanelGameChoice_Click(): reached default name=" + cb.Name); return;
          }
       }
    }

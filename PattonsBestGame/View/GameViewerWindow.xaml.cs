@@ -183,6 +183,15 @@ namespace Pattons_Best
          myMainMenuViewer.NewGameOptions = gi.Options;
          Logger.Log(LogEnum.LE_VIEW_SHOW_OPTIONS, "GameViewerWindow(): Options=" + gi.Options.ToString());
          //---------------------------------------------------------------
+         if (false == DeserializeGameFeats(Settings.Default.GameFeats, GameEngine.theFeatsInGame))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): DeserializeOptions() returned false");
+            CtorError = true;
+            return;
+         }
+         GameEngine.theFeatsInGameStarting = GameEngine.theFeatsInGame.Clone(); // need to know difference between starting feats and feats that happen in this game
+         Logger.Log(LogEnum.LE_VIEW_SHOW_OPTIONS, "GameViewerWindow(): Options=" + gi.Options.ToString());
+         //---------------------------------------------------------------
          if (false == String.IsNullOrEmpty(Settings.Default.GameDirectoryName))
             GameLoadMgr.theGamesDirectory = Settings.Default.GameDirectoryName; // remember the game directory name
          //---------------------------------------------------------------
@@ -576,7 +585,7 @@ namespace Pattons_Best
                break;
             case GameAction.EndGameWin:
             case GameAction.EndGameLost:
-               SaveDefaultsToSettings(); // EndGameWin or EndGameLost
+               SaveDefaultsToSettings(); // End_GameWin or End_GameLost
                if (false == UpdateCanvasAnimateBattlePhase(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
                SaveDefaultsToSettings();
@@ -1493,11 +1502,19 @@ namespace Pattons_Best
          else
             Settings.Default.GameOptions = sOptions;
          //-------------------------------------------
+         Logger.Log(LogEnum.LE_VIEW_SHOW_OPTIONS, "SaveDefaultsToSettings(): Options=" + myGameInstance.Options.ToString());
+         string? sGameFeats = SerializeGameFeats(GameEngine.theFeatsInGame);
+         if (null == sGameFeats)
+            Logger.Log(LogEnum.LE_ERROR, "SaveDefaultsToSettings(): SerializeGameFeats() returned false");
+         else
+            Settings.Default.GameFeats = sGameFeats;
+         //-------------------------------------------
          Settings.Default.Save();
          System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
       }
       private string? SerializeOptions(Options options)
       {
+         //--------------------------------                                                                                              //--------------------------------                                                                                  //--------------------------------
          XmlDocument aXmlDocument = new XmlDocument();
          aXmlDocument.LoadXml("<Options></Options>");
          if (null == aXmlDocument.DocumentElement)
@@ -1533,6 +1550,43 @@ namespace Pattons_Best
          //--------------------------------
          return aXmlDocument.OuterXml;
 
+      }
+      private string? SerializeGameFeats(GameFeats feats)
+      {
+         XmlDocument aXmlDocument = new XmlDocument();
+         aXmlDocument.LoadXml("<GameFeats></GameFeats>");
+         if (null == aXmlDocument.DocumentElement)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SerializeGameFeats(): aXmlDocument.DocumentElement=null");
+            return null;
+         }
+         XmlNode? root = aXmlDocument.DocumentElement;
+         if (null == root)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SerializeGameFeats(): root is null");
+            return null;
+         }
+         aXmlDocument.DocumentElement.SetAttribute("count", feats.Count.ToString());
+         //--------------------------------
+         foreach (GameFeat feat in feats)
+         {
+            XmlElement? featElem = aXmlDocument.CreateElement("Feat");
+            if (null == featElem)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SerializeGameFeats(): CreateElement(Option) returned null");
+               return null;
+            }
+            featElem.SetAttribute("Key", feat.Key);
+            featElem.SetAttribute("Value", feat.Value.ToString());
+            XmlNode? featNode = root.AppendChild(featElem);
+            if (null == featNode)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "SerializeGameFeats(): AppendChild(featNode) returned null");
+               return null;
+            }
+         }
+         //--------------------------------
+         return aXmlDocument.OuterXml;
       }
       private void SetDisplayIconForUninstall()
       {
@@ -1598,15 +1652,15 @@ namespace Pattons_Best
       //---------------------------------------
       private bool DeserializeOptions(String sXml, Options options)
       {
-         CultureInfo currentCulture = CultureInfo.CurrentCulture;
-         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
-         //-----------------------------------------------
          options.Clear();
          if (true == String.IsNullOrEmpty(sXml))
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): String.IsNullOrEmpty() returned true");
+            Logger.Log(LogEnum.LE_ERROR, "Deserialize_Options(): String.IsNullOrEmpty() returned true");
             return false;
          }
+         //-----------------------------------------------
+         CultureInfo currentCulture = CultureInfo.CurrentCulture;
+         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
          try // XML serializer does not work for Interfaces
          {
             StringReader stringreader = new StringReader(sXml);
@@ -1614,18 +1668,18 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): reader.IsStartElement(Options) = false");
+               Logger.Log(LogEnum.LE_ERROR, "Deserialize_Options(): reader.IsStartElement(Options) = false");
                return false;
             }
             if (reader.Name != "Options")
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): Options != (node=" + reader.Name + ")");
+               Logger.Log(LogEnum.LE_ERROR, "Deserialize_Options(): Options != (node=" + reader.Name + ")");
                return false;
             }
             string? sCount = reader.GetAttribute("count");
             if (null == sCount)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): Count=null");
+               Logger.Log(LogEnum.LE_ERROR, "Deserialize_Options(): Count=null");
                return false;
             }
             //-------------------------------------
@@ -1635,24 +1689,24 @@ namespace Pattons_Best
                reader.Read();
                if (false == reader.IsStartElement())
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): IsStartElement(Option) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "Deserialize_Options(): IsStartElement(Option) returned false");
                   return false;
                }
                if (reader.Name != "Option")
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): Option != " + reader.Name);
+                  Logger.Log(LogEnum.LE_ERROR, "Deserialize_Options(): Option != " + reader.Name);
                   return false;
                }
                string? name = reader.GetAttribute("Name");
                if (name == null)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): Name=null");
+                  Logger.Log(LogEnum.LE_ERROR, "Deserialize_Options(): Name=null");
                   return false;
                }
                string? sEnabled = reader.GetAttribute("IsEnabled");
                if (sEnabled == null)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): IsEnabled=null");
+                  Logger.Log(LogEnum.LE_ERROR, "Deserialize_Options(): IsEnabled=null");
                   return false;
                }
                bool isEnabled = bool.Parse(sEnabled);
@@ -1686,6 +1740,99 @@ namespace Pattons_Best
             options = new Options();
          if (0 == options.Count)
             options.SetOriginalGameOptions();
+         System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+         return true;
+      }
+      private bool DeserializeGameFeats(String sXml, GameFeats feats)
+      {
+         feats.Clear();
+         if (true == String.IsNullOrEmpty(sXml))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): String.IsNullOrEmpty() returned true");
+            return false;
+         }
+         //-----------------------------------------------
+         CultureInfo currentCulture = CultureInfo.CurrentCulture;
+         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
+         try // XML serializer does not work for Interfaces
+         {
+            StringReader stringreader = new StringReader(sXml);
+            XmlReader reader = XmlReader.Create(stringreader);
+            reader.Read();
+            if (false == reader.IsStartElement())
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): reader.IsStartElement(Options) = false");
+               return false;
+            }
+            if (reader.Name != "GameFeats")
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): Options != (node=" + reader.Name + ")");
+               return false;
+            }
+            string? sCount = reader.GetAttribute("count");
+            if (null == sCount)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): Count=null");
+               return false;
+            }
+            //-------------------------------------
+            int count = int.Parse(sCount);
+            for (int i = 0; i < count; ++i)
+            {
+               reader.Read();
+               if (false == reader.IsStartElement())
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): IsStartElement(Feat) returned false");
+                  return false;
+               }
+               if (reader.Name != "Feat")
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): Feat != " + reader.Name);
+                  return false;
+               }
+               string? key = reader.GetAttribute("Key");
+               if (key == null)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): Key=null");
+                  return false;
+               }
+               string? sValue = reader.GetAttribute("Value");
+               if (sValue == null)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): sValue=null");
+                  return false;
+               }
+               int value = Convert.ToInt32(sValue);
+               GameFeat feat = new GameFeat(key, value);
+               feats.Add(feat);
+            }
+            if (0 < count)
+               reader.Read(); // get past </GameFeats>
+         }
+         catch (DirectoryNotFoundException dirException)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): s=" + sXml + "\ndirException=" + dirException.ToString());
+         }
+         catch (FileNotFoundException fileException)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): s=" + sXml + "\nfileException=" + fileException.ToString());
+         }
+         catch (IOException ioException)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): s=" + sXml + "\nioException=" + ioException.ToString());
+         }
+         catch (Exception ex)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): s=" + sXml + "\nex=" + ex.ToString());
+         }
+         finally
+         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+         }
+         if (null == feats)
+            feats = new GameFeats();
+         if (0 == feats.Count)
+            feats.SetOriginalGameFeats();
          System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
          return true;
       }

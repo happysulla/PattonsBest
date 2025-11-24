@@ -215,8 +215,9 @@ namespace Pattons_Best
                   cm.IsIncapacitated = false;
                   continue;
                }
-               isCrewmanReplaced = true;
-               gi.InjuredCrewMembers.Add(cm);
+               isCrewmanReplaced = true;  // inform calling routine that crewman replaced
+               if( false == cm.IsKilled )
+                  gi.InjuredCrewMembers.Add(cm);
                int dieRoll = Utilities.RandomGenerator.Next(1, 11);
                switch (cm.Role)
                {
@@ -228,7 +229,7 @@ namespace Pattons_Best
                         return false;
                      }
                      lastReport.Driver.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                     gi.NewMembers.Add(lastReport.Driver);  // ReplaceInjuredCrewmen()
+                     gi.NewMembers.Add(lastReport.Driver);  // Replace_InjuredCrewmen()
                      if (false == gi.SetCrewActionTerritory(lastReport.Driver))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): SetCrewActionTerritory(Driver) returned false");
@@ -244,7 +245,7 @@ namespace Pattons_Best
                         return false;
                      }
                      lastReport.Loader.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                     gi.NewMembers.Add(lastReport.Loader); // ReplaceInjuredCrewmen()
+                     gi.NewMembers.Add(lastReport.Loader); // Replace_InjuredCrewmen()
                      if (false == gi.SetCrewActionTerritory(lastReport.Loader))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): SetCrewActionTerritory(Loader) returned false");
@@ -260,7 +261,7 @@ namespace Pattons_Best
                         return false;
                      }
                      lastReport.Assistant.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                     gi.NewMembers.Add(lastReport.Assistant); // ReplaceInjuredCrewmen()
+                     gi.NewMembers.Add(lastReport.Assistant); // Replace_InjuredCrewmen()
                      if (false == gi.SetCrewActionTerritory(lastReport.Assistant))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): SetCrewActionTerritory(Assistant) returned false");
@@ -276,7 +277,7 @@ namespace Pattons_Best
                         return false;
                      }
                      lastReport.Gunner.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                     gi.NewMembers.Add(lastReport.Gunner); // ReplaceInjuredCrewmen()
+                     gi.NewMembers.Add(lastReport.Gunner); // Replace_InjuredCrewmen()
                      if (false == gi.SetCrewActionTerritory(lastReport.Gunner))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): SetCrewActionTerritory(Gunner) returned false");
@@ -292,7 +293,7 @@ namespace Pattons_Best
                         return false;
                      }
                      lastReport.Commander.Rating = (int)Math.Ceiling(dieRoll / 2.0);
-                     gi.NewMembers.Add(lastReport.Commander); // ReplaceInjuredCrewmen()
+                     gi.NewMembers.Add(lastReport.Commander); // Replace_InjuredCrewmen()
                      if (false == gi.SetCrewActionTerritory(lastReport.Commander))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): SetCrewActionTerritory(Commander) returned false");
@@ -1570,6 +1571,53 @@ namespace Pattons_Best
          }
          Logger.Log(LogEnum.LE_VIEW_MIM_ADD, "Create_MapItemMove(): mi=" + mi.Name + " moving to t=" + newT.Name);
          gi.MapItemMoves.Insert(0, mim); // add at front
+         return true;
+      }
+      protected bool PerformEndCheck(IGameInstance gi, ref GameAction action, out bool isGameEnded)
+      {
+         isGameEnded = false;
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Perform_EndCheck(): lastReport=null");
+            return false;
+         }
+         Logger.Log(LogEnum.LE_GAME_END_CHECK, "PerformEndCheck(): ae=" + gi.EventActive + " action=" + action.ToString() + " day=" + lastReport.Day.ToString());
+         //----------------------------------------------------------
+         Option? option = gi.Options.Find("GameEndsOnCommanderDeath");
+         if (null == option)
+         {
+            option = new Option("GameEndsOnCommanderDeath", false);
+            gi.Options.Add(option);
+         }
+         if (true == option.IsEnabled) // do not end game when ommander is kill if this option is enabled
+            gi.IsCommanderKilled = false;
+         //----------------------------------------------------------
+         if( true == gi.IsCommanderKilled )
+         {
+            Logger.Log(LogEnum.LE_GAME_END, "PerformEndCheck(): 1-EndGameLost " + lastReport.Commander.Name + " is killed.");
+            action = GameAction.EndGameLost;  // PerformEndCheck() - Prince Killed
+         }
+         //----------------------------------------------------------
+         if (191 < gi.Day)
+         {
+            Logger.Log(LogEnum.LE_GAME_END, "PerformEndCheck(): 191 < (day=" + gi.Day.ToString() + ") (VP=" + gi.VictoryPtsTotalCampaign.ToString() + ")");
+            if( 0 < gi.VictoryPtsTotalCampaign )
+               action = GameAction.EndGameWin; 
+            else
+               action = GameAction.EndGameLost;  
+         }
+         //----------------------------------------------------------
+         if( GameAction.EndGameWin == action )
+         {
+            isGameEnded = true;
+            gi.GamePhase = GamePhase.EndGame;
+         }
+         else if( GameAction.EndGameLost == action)
+         {
+            isGameEnded = true;
+            gi.GamePhase = GamePhase.EndGame;
+         }
          return true;
       }
    }
@@ -3446,7 +3494,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Healed_CrewmanDayDecrease(): lastReport=null");
             return false;
          }
-         foreach (IMapItem mi in gi.InjuredCrewMembers)
+         foreach (IMapItem mi in gi.InjuredCrewMembers) // Healed_CrewmanDayDecrease()
          {
             ICrewMember? cm = mi as ICrewMember;
             if (null == cm)
@@ -3488,7 +3536,7 @@ namespace Pattons_Best
       {
          Logger.Log(LogEnum.LE_SHOW_CREW_RETURN, "CheckCrewReturning(): ++++++++++++++setting gi.ReturningCrewman=null");
          gi.ReturningCrewman = null;
-         foreach (IMapItem mi in gi.InjuredCrewMembers)
+         foreach (IMapItem mi in gi.InjuredCrewMembers) // Check_CrewReturning()
          {
             ICrewMember? cm = mi as ICrewMember;
             if (null == cm)
