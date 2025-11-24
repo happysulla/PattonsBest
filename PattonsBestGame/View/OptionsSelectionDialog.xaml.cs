@@ -252,8 +252,8 @@ namespace Pattons_Best
          Option? option = null;
          switch (cb.Name)
          {
-            case "GameEndsOnCommanderDeath":
-               option = myOptions.Find("AutoRollNewMembers");
+            case "myCheckBoxEndOnCmdrDeath":
+               option = myOptions.Find("GameEndsOnCommanderDeath");
                if (null == option)
                   Logger.Log(LogEnum.LE_ERROR, "StackPanelGameChoice_Click(): myOptions.Find() for name=" + cb.Name);
                else

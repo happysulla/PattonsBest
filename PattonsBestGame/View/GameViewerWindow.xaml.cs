@@ -174,7 +174,13 @@ namespace Pattons_Best
             return;
          }
          //---------------------------------------------------------------
-         if( false == DeserializeOptions(Settings.Default.GameOptions, gi.Options))
+         if (false == String.IsNullOrEmpty(Settings.Default.GameDirectoryName))
+            GameLoadMgr.theGamesDirectory = Settings.Default.GameDirectoryName; // remember the game directory name
+         //---------------------------------------------------------------
+         CultureInfo currentCulture = CultureInfo.CurrentCulture;
+         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
+         //---------------------------------------------------------------//---------------------------------------------------------------
+         if ( false == DeserializeOptions(Settings.Default.GameOptions, gi.Options))
          {
             Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): DeserializeOptions() returned false");
             CtorError = true;
@@ -187,23 +193,24 @@ namespace Pattons_Best
          {
             Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): DeserializeOptions() returned false");
             CtorError = true;
-            return;
+            return;        
          }
          GameEngine.theFeatsInGameStarting = GameEngine.theFeatsInGame.Clone(); // need to know difference between starting feats and feats that happen in this game
          Logger.Log(LogEnum.LE_VIEW_SHOW_OPTIONS, "GameViewerWindow(): Options=" + gi.Options.ToString());
          //---------------------------------------------------------------
-         if (false == String.IsNullOrEmpty(Settings.Default.GameDirectoryName))
-            GameLoadMgr.theGamesDirectory = Settings.Default.GameDirectoryName; // remember the game directory name
-         //---------------------------------------------------------------
-         CultureInfo currentCulture = CultureInfo.CurrentCulture;
-         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
-         System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+         if (false == DeserializeRoadsFromXml())
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): DeserializeRoadsFromXml() returned false");
+            CtorError = true;
+            return;
+         }
          //---------------------------------------------------------------
          Utilities.ZoomCanvas = Settings.Default.ZoomCanvas;
          myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas); // Constructor - revert to save zoom
          StatusBarViewer sbv = new StatusBarViewer(myStatusBar, ge, gi, myCanvasMain);
          //---------------------------------------------------------------
          SetDisplayIconForUninstall(); // This is specialized code to add to Windows Registry the icon for uninstall
+         System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture; // return back to current culture
          //---------------------------------------------------------------
          Utilities.theBrushBlood.Color = Color.FromArgb(0xFF, 0xA4, 0x07, 0x07);
          Utilities.theBrushRegion.Color = Color.FromArgb(0x7F, 0x11, 0x09, 0xBB); // nearly transparent but slightly colored
@@ -255,13 +262,6 @@ namespace Pattons_Best
          if (true == civ.CtorError)
          {
             Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): civ.CtorError=true");
-            CtorError = true;
-            return;
-         }
-         //---------------------------------------------------------------
-         if (false == CreateRoadsFromXml())
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): CreateRoadsFromXml() returned false");
             CtorError = true;
             return;
          }
@@ -1381,99 +1381,6 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool CreateRoadsFromXml()
-      {
-         CultureInfo currentCulture = CultureInfo.CurrentCulture;
-         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
-         XmlTextReader? reader = null;
-         PointCollection? points = null;
-         string? name = null;
-         try
-         {
-            string filename = ConfigFileReader.theConfigDirectory + "Roads.xml";
-            reader = new XmlTextReader(filename) { WhitespaceHandling = WhitespaceHandling.None }; // Load the reader with the data file and ignore all white space nodes.    
-            if (null == reader)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "CreateRoadsFromXml(): reader=null");
-               return false;
-            }
-            while (reader.Read())
-            {
-               if (reader.Name == "Road")
-               {
-                  points = new PointCollection();
-                  if (reader.IsStartElement())
-                  {
-                     name = reader.GetAttribute("value");
-                     if( null == name )
-                     {
-                        Logger.Log(LogEnum.LE_ERROR, "CreateRoadsFromXml(): value=null for name");
-                        return false;
-                     }
-                     string[] aStringArray1 = name.Split('_');
-                     if (2 != aStringArray1.Length)
-                     {
-                        Logger.Log(LogEnum.LE_ERROR, "CreateRoadsFromXml(): aStringArray1.Length=" + aStringArray1.Length);
-                        return false;
-                     }
-                     int indexOfRoad = Int32.Parse(aStringArray1[1]);
-                     while (reader.Read())
-                     {
-                        if ((reader.Name == "point" && (reader.IsStartElement())))
-                        {
-                           string? value = reader.GetAttribute("X");
-                           if( null == value )
-                           {
-                              Logger.Log(LogEnum.LE_ERROR, "CreateRoadsFromXml(): X=null");
-                              return false;
-                           }
-                           Double X1 = Double.Parse(value);
-                           value = reader.GetAttribute("Y");
-                           if (null == value)
-                           {
-                              Logger.Log(LogEnum.LE_ERROR, "CreateRoadsFromXml(): Y=null");
-                              return false;
-                           }
-                           Double Y1 = Double.Parse(value);
-                           points.Add(new System.Windows.Point(X1, Y1));
-                        }
-                        else
-                        {
-                           break;
-                        }
-                     }  // end while
-                     //-----------------------------------------
-                     System.Windows.Media.Brush? brush = null;
-                     double roadThickness = 8.0;
-                     if (indexOfRoad < 4)
-                     {
-                        brush = mySolidColorBrushSteelBlue;
-                     }
-                     else
-                     {
-                        brush = mySolidColorBrushLawnGreen;
-                        roadThickness = 5.0;
-                     }
-                     Polyline polyline = new Polyline { Name=name, Points = points, Stroke = brush, StrokeThickness = roadThickness, StrokeDashArray = myDashArray, Visibility = Visibility.Visible };
-                     myRoads[name] = polyline;
-                  } // end if
-               } // end if
-            } // end while
-         } // try
-         catch (Exception e)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateRoadsFromXml(): Exception=\n" + e.Message);
-            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
-            return false;
-         }
-         finally
-         {
-            if (reader != null)
-               reader.Close();
-            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
-         }
-         return true;
-      }
       //---------------------------------------
       private void SaveDefaultsToSettings(bool isWindowPlacementSaved = true)
       {
@@ -1825,15 +1732,104 @@ namespace Pattons_Best
          {
             Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): s=" + sXml + "\nex=" + ex.ToString());
          }
-         finally
-         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
-         }
          if (null == feats)
             feats = new GameFeats();
          if (0 == feats.Count)
             feats.SetOriginalGameFeats();
          System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+         return true;
+      }
+      private bool DeserializeRoadsFromXml()
+      {
+         CultureInfo currentCulture = CultureInfo.CurrentCulture;
+         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
+         XmlTextReader? reader = null;
+         PointCollection? points = null;
+         string? name = null;
+         try
+         {
+            string filename = ConfigFileReader.theConfigDirectory + "Roads.xml";
+            reader = new XmlTextReader(filename) { WhitespaceHandling = WhitespaceHandling.None }; // Load the reader with the data file and ignore all white space nodes.    
+            if (null == reader)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "CreateRoadsFromXml(): reader=null");
+               return false;
+            }
+            while (reader.Read())
+            {
+               if (reader.Name == "Road")
+               {
+                  points = new PointCollection();
+                  if (reader.IsStartElement())
+                  {
+                     name = reader.GetAttribute("value");
+                     if (null == name)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "CreateRoadsFromXml(): value=null for name");
+                        return false;
+                     }
+                     string[] aStringArray1 = name.Split('_');
+                     if (2 != aStringArray1.Length)
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "CreateRoadsFromXml(): aStringArray1.Length=" + aStringArray1.Length);
+                        return false;
+                     }
+                     int indexOfRoad = Int32.Parse(aStringArray1[1]);
+                     while (reader.Read())
+                     {
+                        if ((reader.Name == "point" && (reader.IsStartElement())))
+                        {
+                           string? value = reader.GetAttribute("X");
+                           if (null == value)
+                           {
+                              Logger.Log(LogEnum.LE_ERROR, "CreateRoadsFromXml(): X=null");
+                              return false;
+                           }
+                           Double X1 = Double.Parse(value);
+                           value = reader.GetAttribute("Y");
+                           if (null == value)
+                           {
+                              Logger.Log(LogEnum.LE_ERROR, "CreateRoadsFromXml(): Y=null");
+                              return false;
+                           }
+                           Double Y1 = Double.Parse(value);
+                           points.Add(new System.Windows.Point(X1, Y1));
+                        }
+                        else
+                        {
+                           break;
+                        }
+                     }  // end while
+                     //-----------------------------------------
+                     System.Windows.Media.Brush? brush = null;
+                     double roadThickness = 8.0;
+                     if (indexOfRoad < 4)
+                     {
+                        brush = mySolidColorBrushSteelBlue;
+                     }
+                     else
+                     {
+                        brush = mySolidColorBrushLawnGreen;
+                        roadThickness = 5.0;
+                     }
+                     Polyline polyline = new Polyline { Name = name, Points = points, Stroke = brush, StrokeThickness = roadThickness, StrokeDashArray = myDashArray, Visibility = Visibility.Visible };
+                     myRoads[name] = polyline;
+                  } // end if
+               } // end if
+            } // end while
+         } // try
+         catch (Exception e)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateRoadsFromXml(): Exception=\n" + e.Message);
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+            return false;
+         }
+         finally
+         {
+            if (reader != null)
+               reader.Close();
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+         }
          return true;
       }
       //---------------------------------------

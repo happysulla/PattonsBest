@@ -1936,7 +1936,6 @@ namespace Pattons_Best
                string modiferString = UpdateEventContentGetMovingModifier(gi);
                myTextBlock.Inlines.Add(new Run(modiferString));
                myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new Run("Roll for Effect on Sherman: "));
                if (Utilities.NO_RESULT == gi.DieResults[key][0])
                {
@@ -1955,6 +1954,8 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("  " + gi.MovementEffectOnSherman));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Roll for Effect on Enemy: " + gi.MovementEffectOnEnemy));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("White Die Roll: " + DieRoller.WhiteDie.ToString()));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("                                            "));
@@ -3826,24 +3827,16 @@ namespace Pattons_Best
             sb.Append(" for assistant rating\n");
          }
          //------------------------------------
-         if (true == gi.TargetMg.IsMoving)
+         if ( (true == gi.TargetMg.IsMoving) && ("LW" == enemyUnitType) )
          {
             if ("Bow" == mgType)
-            {
-               sb.Append("-10 if target moving with bow MG\n");
-            }
+               sb.Append("-10 if LW moving with bow MG\n");
             else if ("Coaxial" == mgType)
-            {
-               sb.Append("-15 if target moving with co-axial MG\n");
-            }
+               sb.Append("-15 if LW moving with co-axial MG\n");
             else if ("Aa" == mgType)
-            {
-               sb.Append("-15 if target moving with AA MG\n");
-            }
+               sb.Append("-15 if LW moving with AA MG\n");
             else
-            {
-               sb.Append("-5 if target moving with Sub MG\n");
-            }
+               sb.Append("-5 if LW moving with Sub MG\n");
          }
          //------------------------------------
          if (true == isMovingOrPivoting)

@@ -515,7 +515,7 @@
                <LineBreak/>
                <Run Text=' (3) nc = no chance To Kill'></Run>
                <LineBreak/>
-               <Run Text=' (4) Base number To Kill are havled for each Smoke marker the fire encounters from the firers zone to the targets zone, inclusive.'></Run>
+               <Run Text=' (4) Base number To Kill are halved for each Smoke marker the fire encounters from the firers zone to the targets zone, inclusive.'></Run>
                <LineBreak/>
                <Run Text=' (5) During fog or falling snow '></Run>
                <InlineUIContainer>
