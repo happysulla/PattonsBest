@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 using Windows.System;
 using Button = System.Windows.Controls.Button;
@@ -191,12 +192,12 @@ namespace Pattons_Best
          //---------------------------------------------------------------
          if (false == DeserializeGameFeats(Settings.Default.GameFeats, GameEngine.theFeatsInGame))
          {
-            Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): DeserializeOptions() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): DeserializeGameFeats() returned false");
             CtorError = true;
             return;        
          }
          GameEngine.theFeatsInGameStarting = GameEngine.theFeatsInGame.Clone(); // need to know difference between starting feats and feats that happen in this game
-         Logger.Log(LogEnum.LE_VIEW_SHOW_OPTIONS, "GameViewerWindow(): Options=" + gi.Options.ToString());
+         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameViewerWindow(): GameEngine.theFeatsInGameStarting=" + GameEngine.theFeatsInGameStarting.ToString());
          //---------------------------------------------------------------
          if (false == DeserializeRoadsFromXml())
          {
@@ -440,8 +441,8 @@ namespace Pattons_Best
             case GameAction.MorningBriefingDecreaseTankNum:
             case GameAction.MorningBriefingIncreaseTankNum:
             case GameAction.MorningBriefingTankReplacementEnd:
-               if (false == UpdateCanvasTank(gi, action))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               //if (false == UpdateCanvasTank(gi, action))
+               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                break;
             case GameAction.BattleRandomEventRoll:
                break;
@@ -467,12 +468,12 @@ namespace Pattons_Best
             case GameAction.BattleRoundSequenceReadyRackWpPlus:
             case GameAction.BattleRoundSequenceReadyRackHbciPlus:
             case GameAction.BattleRoundSequenceReadyRackHvapPlus:
-               if (false == UpdateCanvasTank(gi, action))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               //if (false == UpdateCanvasTank(gi, action))
+               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                break;
             case GameAction.MorningBriefingDeployment:
-               if (false == UpdateCanvasTank(gi, action))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               //if (false == UpdateCanvasTank(gi, action))
+               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
@@ -483,8 +484,8 @@ namespace Pattons_Best
             case GameAction.BattleRoundSequenceCrewOrders:
                if (false == CreateContextMenuCrewAction(myGameInstance))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): CreateContextMenuCrewAction() returned false");
-               if (false == UpdateCanvasTank(gi, action))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               //if (false == UpdateCanvasTank(gi, action))
+               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                if (false == UpdateCanvasMain(gi, action)) // update smoke depletion
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
@@ -493,15 +494,15 @@ namespace Pattons_Best
                   b.ContextMenu = null;
                if (false == CreateContextMenuGunLoadAction(myGameInstance))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): CreateContextMenuGunLoadAction() returned false");
-               if (false == UpdateCanvasTank(gi, action))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               //if (false == UpdateCanvasTank(gi, action))
+               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                if (false == UpdateCanvasAnimateBattlePhase(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
                break;
             case GameAction.PreparationsTurret:
             case GameAction.BattleRoundSequenceTurretEnd:
-               if (false == UpdateCanvasTank(gi, action))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               //if (false == UpdateCanvasTank(gi, action))
+               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
@@ -525,8 +526,8 @@ namespace Pattons_Best
             case GameAction.BattleRoundSequencePivotRight:
                foreach (Button b in myTankButtons)
                   b.ContextMenu = null;
-               if (false == UpdateCanvasTank(gi, action))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               //if (false == UpdateCanvasTank(gi, action))
+               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
@@ -543,23 +544,23 @@ namespace Pattons_Best
             case GameAction.BattleRoundSequenceShermanFiringSelectTarget:
                foreach (Button b in myTankButtons)
                   b.ContextMenu = null;
-               if (false == UpdateCanvasTank(gi, action))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               //if (false == UpdateCanvasTank(gi, action))
+               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                if ( false == UpdateCanvasShermanSelectTarget(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasShermanSelectTarget() returned error ");
                break;
             case GameAction.BattleRoundSequenceShermanFiringSelectTargetMg:
                foreach (Button b in myTankButtons)
                   b.ContextMenu = null;
-               if (false == UpdateCanvasTank(gi, action))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               //if (false == UpdateCanvasTank(gi, action))
+               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                if (false == UpdateCanvasShermanSelectTargetMg(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasShermanSelectTargetMg() returned error ");
                break;
             case GameAction.BattleRoundSequenceEnemyAction:
             case GameAction.BattleRoundSequenceShermanToHitRoll:
-               if (false == UpdateCanvasTank(gi, action))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               //if (false == UpdateCanvasTank(gi, action))
+               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
@@ -568,12 +569,12 @@ namespace Pattons_Best
             case GameAction.BattleRoundSequenceBackToSpotting:
                if (false == UpdateCanvasAnimateBattlePhase(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
-               if (false == UpdateCanvasTank(gi, action))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               //if (false == UpdateCanvasTank(gi, action))
+               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                break;
             case GameAction.EveningDebriefingStart:
-               if (false == UpdateCanvasTank(gi, action))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               //if (false == UpdateCanvasTank(gi, action))
+               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                break;
             case GameAction.EveningDebriefingRatingImprovement:
                UpdateCanvasMainClear(myBattleButtons, gi.BattleStacks, action);
@@ -615,8 +616,8 @@ namespace Pattons_Best
             case GameAction.UpdateTankExplosion:
             case GameAction.UpdateTankBrewUp:
             case GameAction.BattleShermanKilled:
-               if (false == UpdateCanvasTank(gi, action))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
+               //if (false == UpdateCanvasTank(gi, action))
+               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
@@ -625,7 +626,9 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
          }
-         //UpdateScrollbarThumbnails(gi.Prince.Territory);
+         //-------------------------------------------------------
+         if (false == UpdateCanvasTank(gi, action))
+            Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error for action=" + action.ToString());
       }
       private bool UpdateViewForNewGame(ref IGameInstance gi, GameAction action) // GameAction.UpdateLoadingGame  GameAction.UpdateNewGame
       {
@@ -1153,7 +1156,7 @@ namespace Pattons_Best
             }
          }
          //===========================================================================================================
-         if( true == string.IsNullOrEmpty(gi.SwitchedCrewMember) )
+         if( true == string.IsNullOrEmpty(gi.SwitchedCrewMemberRole) )
          {
             if (true == driver.IsIncapacitated)
             {
@@ -1194,14 +1197,14 @@ namespace Pattons_Best
             menuItem1.Name = "Assistant_SwitchAsst";
             menuItem1.Header = "Return to Assistant";
             menuItem1.Click += MenuItemCrewActionClick;
-            myContextMenuCrewActions[gi.SwitchedCrewMember].Items.Add(menuItem1);
+            myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
             if (true == driver.IsIncapacitated)
             {
                menuItem1 = new MenuItem();
                menuItem1.Name = "Assistant_SwitchDvr";
                menuItem1.Header = "Switch w/ Driver";
                menuItem1.Click += MenuItemCrewActionClick;
-               myContextMenuCrewActions[gi.SwitchedCrewMember].Items.Add(menuItem1);
+               myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
             }
             if (true == loader.IsIncapacitated)
             {
@@ -1209,7 +1212,7 @@ namespace Pattons_Best
                menuItem1.Name = "Assistant_SwitchLdr";
                menuItem1.Header = "Switch w/ Loader";
                menuItem1.Click += MenuItemCrewActionClick;
-               myContextMenuCrewActions[gi.SwitchedCrewMember].Items.Add(menuItem1);
+               myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
             }
             if (true == gunner.IsIncapacitated)
             {
@@ -1217,7 +1220,7 @@ namespace Pattons_Best
                menuItem1.Name = "Assistant_SwitchGunr";
                menuItem1.Header = "Switch w/ Gunner";
                menuItem1.Click += MenuItemCrewActionClick;
-               myContextMenuCrewActions[gi.SwitchedCrewMember].Items.Add(menuItem1);
+               myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
             }
             if (true == commander.IsIncapacitated)
             {
@@ -1225,7 +1228,7 @@ namespace Pattons_Best
                menuItem1.Name = "Assistant_SwitchCmdr";
                menuItem1.Header = "Switch w/ Commander";
                menuItem1.Click += MenuItemCrewActionClick;
-               myContextMenuCrewActions[gi.SwitchedCrewMember].Items.Add(menuItem1);
+               myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
             }
          }
          return true;
@@ -1559,15 +1562,19 @@ namespace Pattons_Best
       //---------------------------------------
       private bool DeserializeOptions(String sXml, Options options)
       {
+         CultureInfo currentCulture = CultureInfo.CurrentCulture;
+         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
+         //-----------------------------------------------
          options.Clear();
          if (true == String.IsNullOrEmpty(sXml))
          {
             Logger.Log(LogEnum.LE_ERROR, "Deserialize_Options(): String.IsNullOrEmpty() returned true");
-            return false;
+            if (0 == options.Count)
+               options.SetOriginalGameOptions();
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+            return true;
          }
          //-----------------------------------------------
-         CultureInfo currentCulture = CultureInfo.CurrentCulture;
-         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
          try // XML serializer does not work for Interfaces
          {
             StringReader stringreader = new StringReader(sXml);
@@ -1643,8 +1650,6 @@ namespace Pattons_Best
          {
             System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
          }
-         if (null == myGameInstance.Options)
-            options = new Options();
          if (0 == options.Count)
             options.SetOriginalGameOptions();
          System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
@@ -1652,15 +1657,18 @@ namespace Pattons_Best
       }
       private bool DeserializeGameFeats(String sXml, GameFeats feats)
       {
+         CultureInfo currentCulture = CultureInfo.CurrentCulture;
+         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
+         //-----------------------------------------------
          feats.Clear();
          if (true == String.IsNullOrEmpty(sXml))
          {
-            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): String.IsNullOrEmpty() returned true");
-            return false;
+            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): String.IsNullOrEmpty(sXml) returned true");
+            feats.SetOriginalGameFeats();
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+            return true;
          }
          //-----------------------------------------------
-         CultureInfo currentCulture = CultureInfo.CurrentCulture;
-         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
          try // XML serializer does not work for Interfaces
          {
             StringReader stringreader = new StringReader(sXml);
@@ -1732,8 +1740,6 @@ namespace Pattons_Best
          {
             Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): s=" + sXml + "\nex=" + ex.ToString());
          }
-         if (null == feats)
-            feats = new GameFeats();
          if (0 == feats.Count)
             feats.SetOriginalGameFeats();
          System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
@@ -2063,6 +2069,7 @@ namespace Pattons_Best
                }
                if ( (true == cm.IsButtonedUp) && (false == cm.IsIncapacitated) )
                {
+
                   string tName = crewmember + "_Hatch";
                   ITerritory? t = Territories.theTerritories.Find(tName, tType);
                   if (null == t)
@@ -3461,7 +3468,9 @@ namespace Pattons_Best
                   return;
                }
                cm.IsButtonedUp = false;
-               IMapItem mi = new MapItem(crewmember + "_OpenHatch", 1.0, "c15OpenHatch", t);
+               string name = crewmember + Utilities.MapItemNum.ToString() + "_OpenHatch";
+               Utilities.MapItemNum++;
+               IMapItem mi = new MapItem(name, 1.0, "c15OpenHatch", t);
                myGameInstance.Hatches.Add(mi);
                break;
             }
@@ -3967,8 +3976,8 @@ namespace Pattons_Best
          string action = aStringArray1[1];
          if ( true == action.Contains("Switch")) // need to find where the Assistant is located
          {
-            if (false == string.IsNullOrEmpty(myGameInstance.SwitchedCrewMember))
-               sCrewMemberRole = myGameInstance.SwitchedCrewMember;
+            if (false == string.IsNullOrEmpty(myGameInstance.SwitchedCrewMemberRole))
+               sCrewMemberRole = myGameInstance.SwitchedCrewMemberRole;
          }
          //--------------------------------------
          string tName = sCrewMemberRole + "Action";
@@ -4433,6 +4442,11 @@ namespace Pattons_Best
       private void MouseMoveGameViewerWindow(object sender, MouseEventArgs e)
       {
          if (null == myDraggedButton)
+         {
+            base.OnMouseMove(e);
+            return;
+         }
+         if( true == myTankButtons.Contains(myDraggedButton))
          {
             base.OnMouseMove(e);
             return;

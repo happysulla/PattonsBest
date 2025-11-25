@@ -364,7 +364,8 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateGridRows(): reached default OffBottomRight=null");
                   return false;
                }
-               IMapItem buttonUp = new MapItem(crewMember.Role + "_OpenHatch", 1.0, "c15OpenHatch", t);
+               string name = crewMember.Role + "_OpenHatch";
+               IMapItem buttonUp = new MapItem(name, 1.0, "c15OpenHatch", t);
                Button b2 = CreateButton(buttonUp);
                myGrid.Children.Add(b2);
                Grid.SetRow(b2, rowNum);

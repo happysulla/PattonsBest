@@ -352,7 +352,9 @@ namespace Pattons_Best.UnitTests
          rr1.Count = 2;
          myGameInstanceSave.ReadyRacks.Add(rr1);
          //-----------------------
-         IMapItem mi = new MapItem("Driver_OpenHatch", 1.0, "c15OpenHatch", t);
+         string nameHatch = "Driver" + Utilities.MapItemNum.ToString() + "_OpenHatch";
+         Utilities.MapItemNum++;
+         IMapItem mi = new MapItem(nameHatch, 1.0, "c15OpenHatch", t);
          myGameInstanceSave.Hatches.Add(mi);
          //-----------------------
          IMapItem crewAction = new MapItem("Commander_ThrowGrenade", 1.0, "c70ThrowSmokeGrenade", t);
@@ -434,7 +436,7 @@ namespace Pattons_Best.UnitTests
          myGameInstanceSave.IsRetreatToStartArea = true;
          myGameInstanceSave.IsShermanAdvancingOnMoveBoard = false;
          //----------------------------------------------
-         myGameInstanceSave.SwitchedCrewMember = "Frankie";
+         myGameInstanceSave.SwitchedCrewMemberRole = "Frankie";
          myGameInstanceSave.AssistantOriginalRating = 100;
          myGameInstanceSave.IsShermanFiringAtFront = true;
          myGameInstanceSave.IsShermanDeliberateImmobilization = false;
@@ -972,14 +974,14 @@ namespace Pattons_Best.UnitTests
             return false;
          }
          //------------------------------------------------------------
-         if (left.SwitchedCrewMember != right.SwitchedCrewMember)
+         if (left.SwitchedCrewMemberRole != right.SwitchedCrewMemberRole)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.SwitchedCrewMember != right.SwitchedCrewMember");
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.SwitchedCrewMemberRole != right.SwitchedCrewMemberRole");
             return false;
          }
          if (left.AssistantOriginalRating != right.AssistantOriginalRating)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.AssistantOriginalRating != right.SwitchedCrewMember");
+            Logger.Log(LogEnum.LE_ERROR, "IsEqual(): left.AssistantOriginalRating != right.SwitchedCrewMemberRole");
             return false;
          }
          if (left.IsShermanFiringAtFront != right.IsShermanFiringAtFront)

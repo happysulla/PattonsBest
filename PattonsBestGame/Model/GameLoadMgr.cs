@@ -1758,18 +1758,18 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reader.IsStartElement() = false");
                return null;
             }
-            if (reader.Name != "SwitchedCrewMember")
+            if (reader.Name != "SwitchedCrewMemberRole")
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): SwitchedCrewMember != (node=" + reader.Name + ")");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): SwitchedCrewMemberRole != (node=" + reader.Name + ")");
                return null;
             }
             string? sSwitchedCrewMember = reader.GetAttribute("value");
             if (null == sSwitchedCrewMember)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): SwitchedCrewMember=null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): SwitchedCrewMemberRole=null");
                return null;
             }
-            gi.SwitchedCrewMember = sSwitchedCrewMember;
+            gi.SwitchedCrewMemberRole = sSwitchedCrewMember;
             //----------------------------------------------
             reader.Read();
             if (false == reader.IsStartElement())
@@ -7019,17 +7019,17 @@ namespace Pattons_Best
             return null;
          }
          //------------------------------------------
-         elem = aXmlDocument.CreateElement("SwitchedCrewMember");
+         elem = aXmlDocument.CreateElement("SwitchedCrewMemberRole");
          if (null == elem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(SwitchedCrewMember) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(SwitchedCrewMemberRole) returned null");
             return null;
          }
-         elem.SetAttribute("value", gi.SwitchedCrewMember);
+         elem.SetAttribute("value", gi.SwitchedCrewMemberRole);
          node = root.AppendChild(elem);
          if (null == node)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(SwitchedCrewMember) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(SwitchedCrewMemberRole) returned null");
             return null;
          }
          //------------------------------------------

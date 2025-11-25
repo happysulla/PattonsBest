@@ -2874,6 +2874,7 @@ namespace Pattons_Best
             //----------------------------
             if (true == enemyUnit.IsVehicle)
             {
+               //----------------------------
                string enemyUnitType = enemyUnit.GetEnemyUnit();
                if ("ERROR" == enemyUnitType)
                {
@@ -2973,6 +2974,7 @@ namespace Pattons_Best
                      return "ERROR";
                   }
                }
+               //----------------------------
                if (true == gi.IsShermanDeliberateImmobilization)
                {
                   if ('C' == range)
@@ -4230,9 +4232,9 @@ namespace Pattons_Best
          {
             if (true == mi.Name.Contains("Assistant")) // assistant can always pass ammo
                isAssistantOrderGiven = true;
-            if ((true == mi.Name.Contains("Gunner")) || (("Gunner" == gi.SwitchedCrewMember) && (true == mi.Name.Contains("Switch"))) )
+            if ((true == mi.Name.Contains("Gunner")) || (("Gunner" == gi.SwitchedCrewMemberRole) && (true == mi.Name.Contains("Switch"))) )
                isGunnerOrderGiven = true;
-            if ( (true == mi.Name.Contains("Commander")) || (("Commander" == gi.SwitchedCrewMember) && (true == mi.Name.Contains("Switch")) ) )
+            if ( (true == mi.Name.Contains("Commander")) || (("Commander" == gi.SwitchedCrewMemberRole) && (true == mi.Name.Contains("Switch")) ) )
                isCommanderOrderGiven = true;
          }
          //-----------------------------------------------

@@ -465,7 +465,9 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "SetDeployment(): cannot find tName=" + tName + " tType=" + tType);
                      return false;
                   }
-                  IMapItem mi = new MapItem(cm.Role + "_OpenHatch", 1.0, "c15OpenHatch", t);
+                  string name = cm.Role + Utilities.MapItemNum.ToString() + "_OpenHatch";
+                  Utilities.MapItemNum++;
+                  IMapItem mi = new MapItem(name, 1.0, "c15OpenHatch", t);
                   gi.Hatches.Add(mi);
                }
             }
@@ -2106,7 +2108,9 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for Commander_Hatch");
                return false;
             }
-            IMapItem mi = new MapItem(cm.Role + "_OpenHatch", 1.0, "c15OpenHatch", t);
+            string name = cm.Role + Utilities.MapItemNum.ToString() + "_OpenHatch";
+            Utilities.MapItemNum++;
+            IMapItem mi = new MapItem(name, 1.0, "c15OpenHatch", t);
             int delta0 = (int)(mi.Zoom * Utilities.theMapItemOffset);
             mi.Location.X = t.CenterPoint.X - delta0;
             mi.Location.Y = t.CenterPoint.Y - delta0;
@@ -2128,7 +2132,9 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for Driver_Hatch");
                return false;
             }
-            IMapItem mi = new MapItem(cm.Role + "_OpenHatch", 1.0, "c15OpenHatch", t);
+            string name = cm.Role + Utilities.MapItemNum.ToString() + "_OpenHatch";
+            Utilities.MapItemNum++;
+            IMapItem mi = new MapItem(name, 1.0, "c15OpenHatch", t);
             int delta1 = (int)(mi.Zoom * Utilities.theMapItemOffset);
             mi.Location.X = t.CenterPoint.X - delta1;
             mi.Location.Y = t.CenterPoint.Y - delta1;
@@ -2150,7 +2156,9 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): t null for Assistant_Hatch");
                return false;
             }
-            IMapItem mi = new MapItem(cm.Role + "_OpenHatch", 1.0, "c15OpenHatch", t);
+            string name = cm.Role + Utilities.MapItemNum.ToString() + "_OpenHatch";
+            Utilities.MapItemNum++;
+            IMapItem mi = new MapItem(name, 1.0, "c15OpenHatch", t);
             int delta3 = (int)(mi.Zoom * Utilities.theMapItemOffset);
             mi.Location.X = t.CenterPoint.X - delta3;
             mi.Location.Y = t.CenterPoint.Y - delta3;
@@ -4855,22 +4863,22 @@ namespace Pattons_Best
          gi.Hatches.Clear();
          foreach (IMapItem mi in gi.BattlePrep.myHatches)
             gi.Hatches.Add(mi);
+         string[] crewmembers = new string[5] { "Commander", "Gunner", "Loader", "Driver", "Assistant" };
          foreach (IMapItem mi in gi.Hatches)
          {
-            string[] aStringArray1 = mi.Name.Split('_');
-            if (2 != aStringArray1.Length)
+            foreach (string role in crewmembers)
             {
-               Logger.Log(LogEnum.LE_ERROR, "Perform_BattlePreparationsSetup(): aStringArray1.Length not equal to two for mi.Name=" + mi.Name);
-               return false;
+               if (true == mi.Name.Contains(role))
+               {
+                  ICrewMember? cm = gi.GetCrewMemberByRole(role);
+                  if (null == cm)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "ResetRound(): cm=null mi.Name=" + mi.Name);
+                     return false;
+                  }
+                  cm.IsButtonedUp = false;
+               }
             }
-            string role = aStringArray1[0];
-            ICrewMember? cm = gi.GetCrewMemberByRole(role);
-            if (null == cm)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Perform_BattlePreparationsSetup(): cm=null mi.Name=" + mi.Name);
-               return false;
-            }
-            cm.IsButtonedUp = false;
          }
          //---------------------------
          gi.GunLoads.Clear();
@@ -7512,7 +7520,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 18a-phase=" + gi.CrewActionPhase.ToString());
                if (false == gi.SwitchMembers("Loader"))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "Conduct_CrewAction(): SwitchedCrewMember() returned false for cm=Loader");
+                  Logger.Log(LogEnum.LE_ERROR, "Conduct_CrewAction(): SwitchedCrewMemberRole() returned false for cm=Loader");
                   return false;
                }
             }
@@ -7523,7 +7531,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 18b-phase=" + gi.CrewActionPhase.ToString());
                if (false == gi.SwitchMembers("Driver"))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "Conduct_CrewAction(): SwitchedCrewMember() returned false for cm=Driver");
+                  Logger.Log(LogEnum.LE_ERROR, "Conduct_CrewAction(): SwitchedCrewMemberRole() returned false for cm=Driver");
                   return false;
                }
             }
@@ -7534,7 +7542,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 18c-phase=" + gi.CrewActionPhase.ToString());
                if (false == gi.SwitchMembers("Gunner"))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "Conduct_CrewAction(): SwitchedCrewMember() returned false for cm=Gunner");
+                  Logger.Log(LogEnum.LE_ERROR, "Conduct_CrewAction(): SwitchedCrewMemberRole() returned false for cm=Gunner");
                   return false;
                }
             }
@@ -7545,7 +7553,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 18d-phase=" + gi.CrewActionPhase.ToString());
                if (false == gi.SwitchMembers("Commander"))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "Conduct_CrewAction(): SwitchedCrewMember() returned false for cm=Commander");
+                  Logger.Log(LogEnum.LE_ERROR, "Conduct_CrewAction(): SwitchedCrewMemberRole() returned false for cm=Commander");
                   return false;
                }
             }
@@ -7556,7 +7564,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 18d-phase=" + gi.CrewActionPhase.ToString());
                if (false == gi.SwitchMembers("Assistant"))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "Conduct_CrewAction(): SwitchedCrewMember() returned false for switching back assistant");
+                  Logger.Log(LogEnum.LE_ERROR, "Conduct_CrewAction(): SwitchedCrewMemberRole() returned false for switching back assistant");
                   return false;
                }
             }
@@ -9144,22 +9152,22 @@ namespace Pattons_Best
          lastReport.Loader.IsButtonedUp = true;
          lastReport.Driver.IsButtonedUp = true;
          lastReport.Assistant.IsButtonedUp = true;
+         string[] crewmembers = new string[5] { "Commander", "Gunner", "Loader", "Driver", "Assistant" };
          foreach (IMapItem mi in gi.Hatches) // sync crewmember status to what hatches shows
          {
-            string[] aStringArray1 = mi.Name.Split('_');
-            if (2 != aStringArray1.Length)
+            foreach( string role in crewmembers)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ResetRound(): aStringArray1.Length not equal to two for mi.Name=" + mi.Name);
-               return false;
+               if( true == mi.Name.Contains(role))
+               {
+                  ICrewMember? cm = gi.GetCrewMemberByRole(role);
+                  if (null == cm)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "ResetRound(): cm=null mi.Name=" + mi.Name);
+                     return false;
+                  }
+                  cm.IsButtonedUp = false;
+               }
             }
-            string role = aStringArray1[0];
-            ICrewMember? cm = gi.GetCrewMemberByRole(role);
-            if( null == cm )
-            {
-               Logger.Log(LogEnum.LE_ERROR, "ResetRound(): cm=null mi.Name=" + mi.Name);
-               return false;
-            }
-            cm.IsButtonedUp = false;
          }
          //-------------------------------------------------------
          gi.CrewActionPhase = CrewActionPhase.Movement;

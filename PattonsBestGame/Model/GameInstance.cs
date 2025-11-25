@@ -77,7 +77,7 @@ namespace Pattons_Best
       public bool IsRetreatToStartArea { set; get; } = false;
       public bool IsShermanAdvancingOnMoveBoard { set; get; } = false;
       //---------------------------------------------------------------
-      public string SwitchedCrewMember { set; get; } = "";
+      public string SwitchedCrewMemberRole { set; get; } = "";
       public int AssistantOriginalRating { set; get; } = 0;
       //---------------------------------------------------------------
       public bool IsShermanFiringAtFront { set; get; } = false;
@@ -487,25 +487,25 @@ namespace Pattons_Best
             }
          }
          //=========================================================
-         if (false == String.IsNullOrEmpty(this.SwitchedCrewMember)) // Return SwitchedCrewMember and Assistant back to their original positions
+         if (false == String.IsNullOrEmpty(this.SwitchedCrewMemberRole)) // Return SwitchedCrewMemberRole and Assistant back to their original positions
          {
             ICrewMember? switchedMember = GetCrewMemberByRole("Assistant"); // assistant is in role of switched member
             if (null == switchedMember)
             {
-               Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): switchedMember=null for role" + this.SwitchedCrewMember);
+               Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): switchedMember=null for role" + this.SwitchedCrewMemberRole);
                return false;
             }
             switchedMember.IsButtonedUp = true;
-            Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "SwitchMembers(): Return Assistant to original position of crew member to " + this.SwitchedCrewMember);
+            Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "SwitchMembers(): Return Assistant to original position of crew member to " + this.SwitchedCrewMemberRole);
             foreach (IMapItem mi in this.Hatches)
             {
-               if (true == mi.Name.Contains(this.SwitchedCrewMember))
+               if (true == mi.Name.Contains(this.SwitchedCrewMemberRole))
                {
                   this.Hatches.Remove(mi);
                   break;
                }
             }
-            switch (this.SwitchedCrewMember)
+            switch (this.SwitchedCrewMemberRole)
             {
                case "Driver":
                   report.Assistant = report.Driver;
@@ -559,7 +559,7 @@ namespace Pattons_Best
                return false;
             }
          }
-         this.SwitchedCrewMember = "";
+         this.SwitchedCrewMemberRole = "";
          if ("Assistant" == switchingMemberRole)
             return true;
          //=========================================================
@@ -583,8 +583,8 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): switchedMember=null for role=" + switchingMemberRole);
             return false;
          }
-         this.SwitchedCrewMember = switchingMember.Role;
-         switch (this.SwitchedCrewMember)
+         this.SwitchedCrewMemberRole = switchingMember.Role;
+         switch (this.SwitchedCrewMemberRole)
          {
             case "Driver":
                report.Driver = report.Assistant;
@@ -633,7 +633,7 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "SwitchMembers(): SetCrewMemberTerritory for role=" + switchingMember.Role);
          report.Assistant = switchingMember;
          report.Assistant.Role = "Assistant";
-         if (false == SetCrewActionTerritory(report.Assistant)) // put SwitchedCrewMember in proper spot
+         if (false == SetCrewActionTerritory(report.Assistant)) // put SwitchedCrewMemberRole in proper spot
          {
             Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(Assistant) returned false");
             return false;
