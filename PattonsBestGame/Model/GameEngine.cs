@@ -12,6 +12,8 @@ namespace Pattons_Best
       static public GameFeats theFeatsInGame = new GameFeats();          // feats that change from starting as this session runs
       static public GameFeats theFeatsInGameStarting = new GameFeats();  // starting feats read in at app initialization
       //---------------------------------------------------------------------
+      static public GameStatistics theTotalStatistics = new GameStatistics();
+      //---------------------------------------------------------------------
       TableMgr myTableMgr = new TableMgr();
       //---------------------------------------------------------------------
       private readonly MainWindow myMainWindow;
