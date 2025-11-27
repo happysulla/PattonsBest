@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Text;
 using System.Windows.Forms;
+using System.Windows.Input;
 using System.Xml.Serialization;
 
 namespace Pattons_Best
@@ -60,7 +61,7 @@ namespace Pattons_Best
       public bool Contains(Option o) { return myList.Contains(o); }
       public IEnumerator GetEnumerator() { return myList.GetEnumerator(); }
       public int IndexOf(Option o) { return myList.IndexOf(o); }
-      public Option? Find(string name)
+      public Option Find(string name)
       {
          int i = 0;
          foreach (object o in myList)
@@ -72,7 +73,9 @@ namespace Pattons_Best
                return option;
             ++i;
          }
-         return null;
+         Option option1 = new Option(name, false);
+         this.myList.Add(option1);
+         return option1;
       }
       public Option? RemoveAt(int index)
       {
@@ -101,6 +104,17 @@ namespace Pattons_Best
          Clear();
          foreach (string s in theDefaults)
             Add(new Option(s, false));
+      }
+      public void SetValue(string key, bool value)
+      {
+         Option? o = Find(key);
+         if (null == o)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Option.SetValue(): null for key=" + key);
+            o = new Option(key, false);
+            this.myList.Add(o);
+         }
+         o.IsEnabled = value;
       }
       public override string ToString()
       {

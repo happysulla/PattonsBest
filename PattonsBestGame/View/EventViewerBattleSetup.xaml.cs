@@ -205,12 +205,7 @@ namespace Pattons_Best
             return false;
          }
          //------------------------------------------------------
-         Option? optionAutoActivation = myGameInstance.Options.Find("AutoRollEnemyActivation");
-         if (null == optionAutoActivation)
-         {
-            optionAutoActivation = new Option("AutoRollEnemyActivation", false);
-            myGameInstance.Options.Add(optionAutoActivation);
-         }
+         Option optionAutoActivation = myGameInstance.Options.Find("AutoRollEnemyActivation");
          //--------------------------------------------------
          myState = E046Enum.ACTIVATION;
          myMaxRowCount = 0;
@@ -1166,12 +1161,7 @@ namespace Pattons_Best
             return;
          }
          //------------------------------------------------------
-         Option? optionAutoActivation = myGameInstance.Options.Find("AutoRollEnemyActivation");
-         if (null == optionAutoActivation)
-         {
-            optionAutoActivation = new Option("AutoRollEnemyActivation", false);
-            myGameInstance.Options.Add(optionAutoActivation);
-         }
+         Option optionAutoActivation = myGameInstance.Options.Find("AutoRollEnemyActivation");
          //------------------------------------------------------
          switch (myState)
          {

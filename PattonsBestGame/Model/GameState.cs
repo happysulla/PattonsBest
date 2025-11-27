@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.Design;
 using System.Diagnostics.Eventing.Reader;
 using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
@@ -1575,53 +1576,6 @@ namespace Pattons_Best
          gi.MapItemMoves.Insert(0, mim); // add at front
          return true;
       }
-      protected bool PerformEndCheck(IGameInstance gi, ref GameAction action, out bool isGameEnded)
-      {
-         isGameEnded = false;
-         IAfterActionReport? lastReport = gi.Reports.GetLast();
-         if (null == lastReport)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Perform_EndCheck(): lastReport=null");
-            return false;
-         }
-         Logger.Log(LogEnum.LE_GAME_END_CHECK, "PerformEndCheck(): ae=" + gi.EventActive + " action=" + action.ToString() + " day=" + lastReport.Day.ToString());
-         //----------------------------------------------------------
-         Option? option = gi.Options.Find("GameEndsOnCommanderDeath");
-         if (null == option)
-         {
-            option = new Option("GameEndsOnCommanderDeath", false);
-            gi.Options.Add(option);
-         }
-         if (true == option.IsEnabled) // do not end game when ommander is kill if this option is enabled
-            gi.IsCommanderKilled = false;
-         //----------------------------------------------------------
-         if( true == gi.IsCommanderKilled )
-         {
-            Logger.Log(LogEnum.LE_GAME_END, "PerformEndCheck(): 1-EndGameLost " + lastReport.Commander.Name + " is killed.");
-            action = GameAction.EndGameLost;  // PerformEndCheck() - Prince Killed
-         }
-         //----------------------------------------------------------
-         if (191 < gi.Day)
-         {
-            Logger.Log(LogEnum.LE_GAME_END, "PerformEndCheck(): 191 < (day=" + gi.Day.ToString() + ") (VP=" + gi.VictoryPtsTotalCampaign.ToString() + ")");
-            if( 0 < gi.VictoryPtsTotalCampaign )
-               action = GameAction.EndGameWin; 
-            else
-               action = GameAction.EndGameLost;  
-         }
-         //----------------------------------------------------------
-         if( GameAction.EndGameWin == action )
-         {
-            isGameEnded = true;
-            gi.GamePhase = GamePhase.EndGame;
-         }
-         else if( GameAction.EndGameLost == action)
-         {
-            isGameEnded = true;
-            gi.GamePhase = GamePhase.EndGame;
-         }
-         return true;
-      }
    }
    //-----------------------------------------------------
    class GameStateSetup : GameState
@@ -2743,8 +2697,8 @@ namespace Pattons_Best
       {
          PrintDiagnosticInfoToLog();
          gi.GamePhase = GamePhase.GameSetup;
-         gi.Statistic.Clear();            // Clear any current statitics
-         gi.Statistic.myNumGames = 1;     // Set played games to 1
+         gi.Statistics = new GameStatistics();
+         gi.Statistics.SetValue("NumGames", 1);     // Set played games to 1
          //-------------------------------------------------------
          gi.GunLoads.Clear();
          //-------------------------------------------------------
@@ -9521,6 +9475,16 @@ namespace Pattons_Best
                   return false;
             }
          }
+         if(true == gi.IsPromoted)
+         {
+            StringBuilder sb = new StringBuilder("At ");
+            sb.Append(TableMgr.GetTime(report));
+            sb.Append(", ");
+            sb.Append(report.Commander.Name);
+            sb.Append(" was promoted to ");
+            sb.Append(report.Commander.Rank);
+            report.Notes.Add(sb.ToString());  // Set_Deployment(): gi.IsLeadTank
+         }
          //--------------------------------------------
          Logger.Log(LogEnum.LE_SHOW_PROMOTION, "UpdatePromotion(): oldRank=" + oldRank + " promoDate=" + lastPromoDate.ToString() + " diff=" + diff.ToString() + " isPromoted=" + gi.IsPromoted);
          return true;
@@ -9533,7 +9497,10 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateDecoration(): commander=null");
             return false;
          }
-         StringBuilder sb1 = new StringBuilder(commander.Name);
+         StringBuilder sb1 = new StringBuilder("At ");
+         sb1.Append(TableMgr.GetTime(report));
+         sb1.Append(", ");
+         sb1.Append(commander.Name);
          //----------------------------------------------------
          switch (action)
          {
@@ -9743,8 +9710,47 @@ namespace Pattons_Best
             else
                SetCommand(gi, action, GameAction.MorningBriefingCalendarRoll, "e006");
          }
+         //-------------------------------------------------------
+         if ( false == PerformEndCheck( gi, ref action) )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): Perform_EndCheck() returned false");
+            return false;
+         }
          return true;
       }
+      protected bool PerformEndCheck(IGameInstance gi, ref GameAction action)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Perform_EndCheck(): lastReport=null");
+            return false;
+         }
+         Logger.Log(LogEnum.LE_GAME_END_CHECK, "PerformEndCheck(): ae=" + gi.EventActive + " action=" + action.ToString() + " day=" + lastReport.Day.ToString());
+         //----------------------------------------------------------
+         Option option = gi.Options.Find("GameEndsOnCommanderDeath");
+         if (true == option.IsEnabled) // do not end game when ommander is kill if this option is enabled
+            gi.IsCommanderKilled = false;
+         //----------------------------------------------------------
+         if (true == gi.IsCommanderKilled)
+         {
+            Logger.Log(LogEnum.LE_GAME_END, "PerformEndCheck(): 1-EndGameLost " + lastReport.Commander.Name + " is killed.");
+            gi.GamePhase = GamePhase.EndGame;
+            action = GameAction.EndGameLost;  // PerformEndCheck() - Prince Killed
+         }
+         //----------------------------------------------------------
+         if (191 < gi.Day)
+         {
+            Logger.Log(LogEnum.LE_GAME_END, "PerformEndCheck(): 191 < (day=" + gi.Day.ToString() + ") (VP=" + gi.VictoryPtsTotalCampaign.ToString() + ")");
+            gi.GamePhase = GamePhase.EndGame;
+            if (0 < gi.VictoryPtsTotalCampaign)
+               action = GameAction.EndGameWin;
+            else
+               action = GameAction.EndGameLost;
+         }
+         return true;
+      }
+
    }
    //-----------------------------------------------------
    class GameStateEnded : GameState

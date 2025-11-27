@@ -148,12 +148,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          myGridRows = new GridRow[MAX_GRID_LEN];
          myState = E071Enum.ROLL_RATING;
-         Option? option = myGameInstance.Options.Find("AutoRollNewMembers");
-         if (null == option)
-         {
-            option = new Option("AutoRollNewMembers", false);
-            myGameInstance.Options.Add(option);
-         }
+         Option option = myGameInstance.Options.Find("AutoRollNewMembers");
          if (true == option.IsEnabled)
             myState = E071Enum.ROLL_RATING_AUTO;
          //--------------------------------------------------
@@ -305,12 +300,7 @@ namespace Pattons_Best
          myStackPanelCheckMarks.Children.Clear();
          CheckBox cb = new CheckBox() { FontSize = 12, IsEnabled = false, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
          cb.Content = "Click to roll for one member and auto-roll rest";
-         Option? option = myGameInstance.Options.Find("AutoRollNewMembers");
-         if( null == option )
-         {
-            option = new Option("AutoRollNewMembers", false);
-            myGameInstance.Options.Add(option);
-         }
+         Option option = myGameInstance.Options.Find("AutoRollNewMembers");
          cb.IsChecked = option.IsEnabled;
          //------------------------------------
          bool isRollMade = false;
@@ -695,12 +685,7 @@ namespace Pattons_Best
          //---------------------------
          CheckBox cb = (CheckBox)sender;
          cb.IsChecked = true;
-         Option? option = myGameInstance.Options.Find("AutoRollNewMembers");
-         if (null == option)
-         {
-            option = new Option("AutoRollNewMembers", true);
-            myGameInstance.Options.Add(option);
-         }
+         Option option = myGameInstance.Options.Find("AutoRollNewMembers");
          option.IsEnabled = true;
          myState = E071Enum.ROLL_RATING_AUTO;
          //---------------------------
@@ -717,12 +702,7 @@ namespace Pattons_Best
          //---------------------------
          CheckBox cb = (CheckBox)sender;
          cb.IsChecked = false;
-         Option? option = myGameInstance.Options.Find("AutoRollNewMembers");
-         if (null == option)
-         {
-            option = new Option("AutoRollNewMembers", false);
-            myGameInstance.Options.Add(option);
-         }
+         Option option = myGameInstance.Options.Find("AutoRollNewMembers");
          option.IsEnabled = false;
          myState = E071Enum.ROLL_RATING;
          //---------------------------

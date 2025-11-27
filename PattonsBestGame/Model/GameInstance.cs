@@ -19,7 +19,7 @@ namespace Pattons_Best
       public bool CtorError { get; } = false;
       public IGameCommands GameCommands { set; get; } = new GameCommands();
       public Options Options { get; set; } = new Options();
-      public GameStat Statistic { get; set; } = new GameStat();
+      public GameStatistics Statistics { get; set; } = new GameStatistics();
       private Dictionary<string, int[]> myDieResults = new Dictionary<string, int[]>();
       public Dictionary<string, int[]> DieResults { get => myDieResults; }
       //------------------------------------------------

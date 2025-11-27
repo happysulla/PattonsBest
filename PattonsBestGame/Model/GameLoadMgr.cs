@@ -1080,7 +1080,7 @@ namespace Pattons_Best
                return null;
             }
             //----------------------------------------------
-            if (false == ReadXmlGameStat(reader, gi.Statistic))
+            if (false == ReadXmlGameStat(reader, gi.Statistics))
             {
                Logger.Log(LogEnum.LE_ERROR, "ReadXml(): ReadXmlGameStat() returned false");
                return null;
@@ -3079,7 +3079,7 @@ namespace Pattons_Best
             reader.Read(); // get past </Options>
          return true;
       }
-      private bool ReadXmlGameStat(XmlReader reader, GameStat statistic)
+      private bool ReadXmlGameStat(XmlReader reader, GameStatistics statistic)
       {
          reader.Read();
          if (false == reader.IsStartElement())
@@ -3087,9 +3087,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): reader.IsStartElement() = false");
             return false;
          }
-         if (reader.Name != "GameStat")
+         if (reader.Name != "GameStatistics")
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): GameStat != (node=" + reader.Name + ")");
+            Logger.Log(LogEnum.LE_ERROR, "ReadXmlOptions(): GameStatistics != (node=" + reader.Name + ")");
             return false;
          }
          return true;
@@ -6576,7 +6576,7 @@ namespace Pattons_Best
             return null;
          }
          //------------------------------------------
-         if (false == CreateXmlGameStat(aXmlDocument, gi.Statistic))
+         if (false == CreateXmlGameStatistics(aXmlDocument, gi.Statistics))
          {
             Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateXmlGameStat() returned false");
             return null;
@@ -8682,7 +8682,7 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool CreateXmlGameStat(XmlDocument aXmlDocument, GameStat stat)
+      private bool CreateXmlGameStatistics(XmlDocument aXmlDocument, GameStatistics stat)
       {
          XmlNode? root = aXmlDocument.DocumentElement;
          if (null == root)
@@ -8690,7 +8690,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameStat(): root is null");
             return false;
          }
-         XmlElement? gameStatElem = aXmlDocument.CreateElement("GameStat");
+         XmlElement? gameStatElem = aXmlDocument.CreateElement("GameStatistics");
          if (null == gameStatElem)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateXmlGameStat(): CreateElement(gameStatElem) returned null");

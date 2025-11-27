@@ -3149,12 +3149,7 @@ namespace Pattons_Best
             if ("Commander" == cm.Role)
             {
                gi.IsCommanderKilled = true; // SetWounds()
-               Option? option = gi.Options.Find("GameEndsOnCommanderDeath");
-               if (null == option)
-               {
-                  option = new Option("GameEndsOnCommanderDeath", false);
-                  gi.Options.Add(option);
-               }
+               Option option = gi.Options.Find("GameEndsOnCommanderDeath");
                if (true == option.IsEnabled) // End game when commander is kill if this option is enabled
                {
                   StringBuilder sb = new StringBuilder();
@@ -3235,12 +3230,7 @@ namespace Pattons_Best
             if ("Commander" == cm.Role)
             {
                gi.IsCommanderKilled = true; // SetWounds()
-               Option? option = gi.Options.Find("GameEndsOnCommanderDeath");
-               if (null == option)
-               {
-                  option = new Option("GameEndsOnCommanderDeath", false);
-                  gi.Options.Add(option);
-               }
+               Option option = gi.Options.Find("GameEndsOnCommanderDeath");
                if (true == option.IsEnabled) // End game when commander is kill if this option is enabled
                {
                   StringBuilder sb = new StringBuilder();

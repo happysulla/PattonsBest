@@ -1131,12 +1131,7 @@ namespace Pattons_Best
                      if ("Commander" == cm0.Role)
                      {
                         myGameInstance.IsCommanderKilled = true; // Tank Explodes
-                        Option? option = myGameInstance.Options.Find("GameEndsOnCommanderDeath");
-                        if (null == option)
-                        {
-                           option = new Option("GameEndsOnCommanderDeath", false);
-                           myGameInstance.Options.Add(option);
-                        }
+                        Option option = myGameInstance.Options.Find("GameEndsOnCommanderDeath");
                         if (true == option.IsEnabled) // End game when commander is kill if this option is enabled
                         {
                            StringBuilder sb = new StringBuilder();
@@ -1329,12 +1324,7 @@ namespace Pattons_Best
                         if ("Commander" == cm10.Role)
                         {
                            myGameInstance.IsCommanderKilled = true; // Tank Burns and not rescued or bailed
-                           Option? option = myGameInstance.Options.Find("GameEndsOnCommanderDeath");
-                           if (null == option)
-                           {
-                              option = new Option("GameEndsOnCommanderDeath", false);
-                              myGameInstance.Options.Add(option);
-                           }
+                           Option option = myGameInstance.Options.Find("GameEndsOnCommanderDeath");
                            if (true == option.IsEnabled) // End game when commander is kill if this option is enabled
                            {
                               StringBuilder sb = new StringBuilder();

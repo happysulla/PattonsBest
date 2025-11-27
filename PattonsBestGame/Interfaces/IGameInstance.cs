@@ -9,7 +9,7 @@ namespace Pattons_Best
       bool CtorError { get; }
       IGameCommands GameCommands { set; get; }
       Options Options { get; set; }
-      GameStat Statistic { get; set; }
+      GameStatistics Statistics { get; set; }
       Dictionary<string, int[]> DieResults { get; }
       //----------------------------------------------
       bool IsMultipleSelectForDieResult { set; get; } // In EventViewer, show buttons instead of die results for user to choose from

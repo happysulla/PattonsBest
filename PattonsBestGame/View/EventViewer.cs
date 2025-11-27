@@ -4532,12 +4532,7 @@ namespace Pattons_Best
       {
          Logger.Log(LogEnum.LE_VIEW_CONTROL_NAME, "Set_CheckboxState(): cb.Name=" + cb.Name + " for ae=" + gi.EventActive);
          //------------------------------------
-         Option? option = gi.Options.Find(cb.Name);
-         if (null == option)
-         {
-            option = new Option(cb.Name, false);
-            gi.Options.Add(option);
-         }
+         Option option = gi.Options.Find(cb.Name);
          if (true == option.IsEnabled)
             cb.IsChecked = true;
          //------------------------------------
@@ -5486,12 +5481,7 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "GotoMorningAmmoLimitsSetEnd":
-                           Option? option = myGameInstance.Options.Find("AutoRollAmmoLoad");
-                           if( null == option )
-                           {
-                              option = new Option("AutoRollAmmoLoad", false);
-                              myGameInstance.Options.Add(option);
-                           }
+                           Option option = myGameInstance.Options.Find("AutoRollAmmoLoad");
                            if(true == option.IsEnabled)
                               action = GameAction.MorningBriefingAmmoLoadSkip;
                            else
@@ -5511,12 +5501,7 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "MorningBriefingDeploymentEnd":
-                           Option? option1 = myGameInstance.Options.Find("AutoPreparation");
-                           if (null == option1)
-                           {
-                              option1 = new Option("AutoPreparation", false);
-                              myGameInstance.Options.Add(option1);
-                           }
+                           Option option1 = myGameInstance.Options.Find("AutoPreparation");
                            if( true == option1.IsEnabled)
                            {
                               myGameInstance.GamePhase = GamePhase.Movement;
@@ -6199,12 +6184,7 @@ namespace Pattons_Best
          }
          CheckBox cb = (CheckBox)sender;
          e.Handled = true;
-         Option? option = myGameInstance.Options.Find(cb.Name);
-         if (null == option)
-         {
-            option = new Option(cb.Name, false);
-            myGameInstance.Options.Add(option);
-         }
+         Option option = myGameInstance.Options.Find(cb.Name);
          option.IsEnabled = true;
       }
       private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
@@ -6216,12 +6196,7 @@ namespace Pattons_Best
          }
          CheckBox cb = (CheckBox)sender;
          e.Handled = true;
-         Option? option = myGameInstance.Options.Find(cb.Name);
-         if (null == option)
-         {
-            option = new Option(cb.Name, false);
-            myGameInstance.Options.Add(option);
-         }
+         Option option = myGameInstance.Options.Find(cb.Name);
          option.IsEnabled = false;
       }
       private void CheckBoxCmdrFire_Checked(object sender, RoutedEventArgs e)
@@ -6288,16 +6263,11 @@ namespace Pattons_Best
             return false;
          }
          string name = "";
-         Option? option = null;
+         Option option;
          //--------------------------
          {
             name = "SkipTutorial1";
             option = myGameInstance.Options.Find(name);
-            if (null == option)
-            {
-               option = new Option(name, false);
-               myGameInstance.Options.Add(option);
-            }
             if (true == option.IsEnabled)
                action = GameAction.SetupShowMovementBoard;
          }

@@ -17,6 +17,10 @@ namespace Pattons_Best
       public GameFeat()
       {
       }
+      public GameFeat(string name)
+      {
+         Key = name;
+      }
       public GameFeat(string name, int value)
       {
          Key = name;
@@ -44,40 +48,40 @@ namespace Pattons_Best
    public class GameFeats : IEnumerable
    {
       [NonSerialized]
-      public static string[] theDefaults = new string[32]
+      public static string[,] theDefaults = 
       {
-         "End Game from Tank Explosion",
-         "End Game from Commander Wounds",
-         "End Game from Commander KIA in Brew up",
-         "End Campaign Game",
-         "Win Campaign Game",
-         "Receive Purple Heart",
-         "Receive Bronze Star",
-         "Receive Silver Star",
-         "Receive Distinguished Cross",
-         "Receive Medal of Honor",
-         "Kill Light Infantry",
-         "Kill Machine Gun Squad",
-         "Kill Truck",
-         "Kill PzIV Tank",
-         "Kill PzV Tank",
-         "Kill PzVIe (Tiger) Tank",
-         "Kill PzVIb Tank",
-         "Kill Marder II SPG",
-         "Kill Marder III SPG",
-         "Kill STuGIIIg SPG",
-         "Kill JgdPzIV SPG",
-         "Kill JgdPz38t SPG",
-         "Kill PSW232 AFV",
-         "Kill SPW251 AFV",
-         "Kill Pak38 ATG",
-         "Kill Pak40 ATG",
-         "Kill Pak43 ATG",
-         "Train on HVSS Use",
-         "Successfully Repair Main Gun",
-         "Successfully Repair Machine Gun",
-         "Fire Mortar in Combat",
-         "Throw Smoke from Hatch"
+         {"EndGameExplode", "Game ended due to tank explosion killing crew" },
+         {"EndGameWounds", "Game ended due to Commander dieing from wounds" },
+         {"EndGameCmdrKilled", "Game ended due to Commander KIA in Brew up"},
+         {"EndGame", "Reached the end of a campaign game"},
+         {"EndGameWin", "Scored positive points an end of campaign"},
+         {"DecorPurpleHeart", "Commander received Purple Heart"},
+         {"DecorPurpleBronze", "Commander received Bronze Star"},
+         {"DecorPurpleSilver", "Commander received Silver Star"},
+         {"DecorPurpleCross", "Commander received Distinguished Cross"},
+         {"DecorHonor", "Commander received Medal of Honor"},
+         {"KillLw", "Killed Light Infantry"},
+         {"KillMg", "Killed Machine Gun Squad"},
+         {"KillTruck", "Killed Truck"},
+         {"KillPzIV", "Killed PzIV Tank"},
+         {"KillPzV", "Killed PzV Tank"},
+         {"KillPzVIe", "Killed PzVIe (Tiger) Tank"},
+         {"KillPzVIb", "Killed PzVIb Tank"},
+         {"KillMII", "Killed Marder II SPG"},
+         {"KillMIII", "Killed Marder III SPG"},
+         {"KillStug", "Killed STuGIIIg SPG"},
+         {"KillLJgdPzIV", "Killed JgdPzIV SPG"},
+         {"KillJgdPz38t", "Killed JgdPz38t SPG"},
+         {"KillPSW", "Killed PSW232 AFV"},
+         {"KillSPW", "Killed SPW251 AFV"},
+         {"KillPak38", "Killed Pak38 ATG"},
+         {"KillPak40", "Killed Pak40 ATG"},
+         {"KillPak43", "Killed Pak43 ATG"},
+         {"Hvss", "Crew trained on HVSS Use"},
+         {"RepairMain", "Successfully repaired Main Gun"},
+         {"RepairMg", "Successfully repaired Machine Gun"},
+         {"FireMortar", "Fired Mortar in Combat"},
+         {"ThrowSmoke", "Threw Smoke from Hatch"}
       };
       [NonSerialized] public static string theGameFeatDirectory = "";
       private readonly ArrayList myList;
@@ -160,8 +164,8 @@ namespace Pattons_Best
       public void SetOriginalGameFeats()
       {
          Clear();
-         foreach (string s in theDefaults)
-            Add(new GameFeat(s, 0));
+         for (int row=0; row < theDefaults.Length; row++)
+            Add(new GameFeat(theDefaults[row,0]));
       }
       public override string ToString()
       {
