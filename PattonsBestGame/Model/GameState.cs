@@ -5433,6 +5433,7 @@ namespace Pattons_Best
                case GameAction.UpdateEventViewerDisplay: // Only change active event
                case GameAction.UpdateBattleBoard: // Do not log event
                case GameAction.MorningBriefingAssignCrewRating: // handled in EventViewer by showing dialog
+               case GameAction.BattleRoundSequenceShowFeat:
                   break;
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
@@ -5441,7 +5442,14 @@ namespace Pattons_Best
                   if (false == LoadGame(ref gi, ref action))
                   {
                      returnStatus = "LoadGame() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateEnded.PerformAction(): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEnded.PerformAction(UpdateLoadingGame): " + returnStatus);
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceShowFeatEnd:
+                  if( false == ResetRoundSetState(gi, ref action))
+                  {
+                     returnStatus = "ResetRoundSetState() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEnded.PerformAction(BattleRoundSequenceShowFeatEnd): " + returnStatus);
                   }
                   break;
                case GameAction.BattleRoundSequenceAmbushCounterattack:
@@ -9178,7 +9186,34 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "ResetRound(): gi.MapItemMoves.Clear()");
          gi.MapItemMoves.Clear();
          gi.Sherman.IsMoved = false;
-         //-------------------------------------------------------
+         if (false == ResetRoundSetState(gi, ref action))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResetRound(): ResetRoundSetState() retruned false");
+            return false;
+         }
+         return true;
+      }
+      private bool ResetRoundSetState(IGameInstance gi, ref GameAction outAction)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Reset_RoundSetState(): lastReport=null");
+            return false;
+         }
+         //----------------------------------------
+         GameFeat changedFeat;
+         if (false == GameEngine.theFeatsInGame.GetFeatChange(GameEngine.theFeatsInGameStarting, out changedFeat)) // Game Feats
+         {
+            Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "Reset_RoundSetState(): Get_FeatChange() returned false");
+            return false;
+         }
+         if( false == String.IsNullOrEmpty(changedFeat.Key))
+         {
+            outAction = GameAction.BattleRoundSequenceShowFeat;
+            return true;
+         }
+         //----------------------------------------
          bool isBattleBoardEmpty = true;
          foreach (IStack stack in gi.BattleStacks)
          {
@@ -9193,20 +9228,20 @@ namespace Pattons_Best
          }
          if (false == isBattleBoardEmpty)
          {
-            SetCommand(gi, action, GameAction.DieRollActionNone, "e060");
-            Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "ResetRound(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.BackToSpotting");
+            SetCommand(gi, outAction, GameAction.DieRollActionNone, "e060");
+            Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "Reset_RoundSetState(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.BackToSpotting");
             gi.BattlePhase = BattlePhase.BackToSpotting;
          }
          else
          {
-            if( EnumScenario.Counterattack == lastReport.Scenario)
+            if (EnumScenario.Counterattack == lastReport.Scenario)
             {
-               SetCommand(gi, action, GameAction.MovementCounterattackEllapsedTimeRoll, "e036a"); // ResetRound()
+               SetCommand(gi, outAction, GameAction.MovementCounterattackEllapsedTimeRoll, "e036a"); // ResetRound()
                gi.GamePhase = GamePhase.Movement;
             }
             else
             {
-               SetCommand(gi, action, GameAction.DieRollActionNone, "e036");
+               SetCommand(gi, outAction, GameAction.DieRollActionNone, "e036");
             }
          }
          return true;
@@ -9306,14 +9341,14 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   gi.DieResults[key][0] = dieRoll;
                   break;
-               case GameAction.EventDebriefDecorationContinue:
+               case GameAction.EventDebriefDecorationContinue:  // GameStateEveningDebriefing.PerformAction()
                case GameAction.EventDebriefDecorationBronzeStar:
                case GameAction.EventDebriefDecorationSilverStar:
                case GameAction.EventDebriefDecorationCross:
                case GameAction.EventDebriefDecorationHonor:
                   if (false == UpdateDecoration(gi, lastReport, action))
                   {
-                     returnStatus = "UpdateDecoration() returned false";
+                     returnStatus = "Update_Decoration() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(): " + returnStatus);
                   }
                   break;
@@ -9323,7 +9358,9 @@ namespace Pattons_Best
                      returnStatus = "EveningDebriefing_ResetDay() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(EventDebriefDecorationHeart): " + returnStatus);
                   }
-                  action = GameAction.EveningDebriefingResetDay;
+                  break;
+               case GameAction.EveningDebriefingShowFeat:
+
                   break;
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;
@@ -9494,7 +9531,7 @@ namespace Pattons_Best
          ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
          if (null == commander)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateDecoration(): commander=null");
+            Logger.Log(LogEnum.LE_ERROR, "Update_Decoration(): commander=null");
             return false;
          }
          StringBuilder sb1 = new StringBuilder("At ");
@@ -9504,7 +9541,7 @@ namespace Pattons_Best
          //----------------------------------------------------
          switch (action)
          {
-            case GameAction.EventDebriefDecorationContinue:
+            case GameAction.EventDebriefDecorationContinue:  // UpdateDecoration()
                break;
             case GameAction.EventDebriefDecorationBronzeStar:
                sb1.Append(" received the Bronze Star.");
@@ -9523,7 +9560,7 @@ namespace Pattons_Best
                report.Notes.Add(sb1.ToString());
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "UpdateDecoration(): reached default action=" + action.ToString());
+               Logger.Log(LogEnum.LE_ERROR, "Update_Decoration(): reached default action=" + action.ToString());
                return false;
          }
          //---------------------------------------------
@@ -9539,10 +9576,9 @@ namespace Pattons_Best
          {
             if (false == EveningDebriefingResetDay(gi, report, action))
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateDecoration(): EveningDebriefing_ResetDay(=null) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "Update_Decoration(): EveningDebriefing_ResetDay(=null) returned false");
                return false;
             }
-            action = GameAction.EveningDebriefingResetDay;
          }
          return true;
       }
@@ -9674,6 +9710,7 @@ namespace Pattons_Best
          ++gi.Day;
          gi.GameTurn++;
          gi.GamePhase = GamePhase.MorningBriefing;
+         action = GameAction.EveningDebriefingResetDay;
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
@@ -9726,7 +9763,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Perform_EndCheck(): lastReport=null");
             return false;
          }
-         Logger.Log(LogEnum.LE_GAME_END_CHECK, "PerformEndCheck(): ae=" + gi.EventActive + " action=" + action.ToString() + " day=" + lastReport.Day.ToString());
+         Logger.Log(LogEnum.LE_GAME_END_CHECK, "Perform_EndCheck(): ae=" + gi.EventActive + " action=" + action.ToString() + " day=" + lastReport.Day.ToString());
          //----------------------------------------------------------
          Option option = gi.Options.Find("GameEndsOnCommanderDeath");
          if (true == option.IsEnabled) // do not end game when ommander is kill if this option is enabled
@@ -9734,23 +9771,29 @@ namespace Pattons_Best
          //----------------------------------------------------------
          if (true == gi.IsCommanderKilled)
          {
-            Logger.Log(LogEnum.LE_GAME_END, "PerformEndCheck(): 1-EndGameLost " + lastReport.Commander.Name + " is killed.");
+            Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): 1-EndGameLost " + lastReport.Commander.Name + " is killed.");
             gi.GamePhase = GamePhase.EndGame;
-            action = GameAction.EndGameLost;  // PerformEndCheck() - Prince Killed
+            action = GameAction.EndGameLost;
+            SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
          }
          //----------------------------------------------------------
          if (191 < gi.Day)
          {
-            Logger.Log(LogEnum.LE_GAME_END, "PerformEndCheck(): 191 < (day=" + gi.Day.ToString() + ") (VP=" + gi.VictoryPtsTotalCampaign.ToString() + ")");
+            Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): 191 < (day=" + gi.Day.ToString() + ") (VP=" + gi.VictoryPtsTotalCampaign.ToString() + ")");
             gi.GamePhase = GamePhase.EndGame;
             if (0 < gi.VictoryPtsTotalCampaign)
+            {
                action = GameAction.EndGameWin;
+               SetCommand(gi, action, GameAction.DieRollActionNone, "e501");
+            }
             else
+            {
                action = GameAction.EndGameLost;
+               SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
+            }
          }
          return true;
       }
-
    }
    //-----------------------------------------------------
    class GameStateEnded : GameState

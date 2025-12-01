@@ -135,7 +135,7 @@ namespace Pattons_Best
          outFeat = new GameFeat();
          if (feats.Count != this.Count)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetFeatChange(): (feats.Count=" + feats.Count.ToString() + ") != (this.Count=" + this.Count.ToString() + ")");
+            Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): (feats.Count=" + feats.Count.ToString() + ") != (this.Count=" + this.Count.ToString() + ")");
             return false;
          }
          for (int i = 0; i < feats.Count; ++i)
@@ -143,13 +143,13 @@ namespace Pattons_Best
             GameFeat? right = feats[i];
             if (null == right)
             {
-               Logger.Log(LogEnum.LE_ERROR, "GetFeatChange(): right=null for i=" + i.ToString());
+               Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): right=null for i=" + i.ToString());
                return false;
             }
             GameFeat? left = this[i];
             if (null == left)
             {
-               Logger.Log(LogEnum.LE_ERROR, "GetFeatChange(): left=null for i=" + i.ToString());
+               Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): left=null for i=" + i.ToString());
                return false;
             }
             if (left.Value != right.Value)

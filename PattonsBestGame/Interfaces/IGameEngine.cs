@@ -419,6 +419,8 @@ namespace Pattons_Best
       BattleRoundSequenceShermanAdvanceOrRetreatEnd,
       BattleRoundSequenceShermanRetreatChoice,
       BattleRoundSequenceShermanRetreatChoiceEnd,
+      BattleRoundSequenceShowFeat,
+      BattleRoundSequenceShowFeatEnd,
 
       EveningDebriefingStart,
       EveningDebriefingRatingImprovement,
@@ -434,6 +436,8 @@ namespace Pattons_Best
       EventDebriefDecorationHonor,
       EventDebriefDecorationHeart,
       EveningDebriefingResetDay,
+      EveningDebriefingShowFeat,
+      EveningDebriefingShowFeatEnd,
       Error
    };
    //================================================================================================

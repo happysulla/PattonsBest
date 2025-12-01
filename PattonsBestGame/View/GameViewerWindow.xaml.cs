@@ -22,6 +22,7 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using Windows.System;
 using WpfAnimatedGif;
+using static System.Windows.Forms.AxHost;
 using Button = System.Windows.Controls.Button;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Point = System.Windows.Point;
@@ -124,6 +125,7 @@ namespace Pattons_Best
       private readonly SolidColorBrush mySolidColorBrushWhite = new SolidColorBrush { Color = Colors.White };
       private readonly SolidColorBrush mySolidColorBrushLawnGreen = new SolidColorBrush { Color = Colors.LawnGreen };
       private readonly FontFamily myFontFam = new FontFamily("Tahofma");
+      private readonly FontFamily myFontFam1 = new FontFamily("Old English Text MT");
       //---------------------------------------------------------------------
       private Button? myDraggedButton = null;
       private System.Windows.Input.Cursor? myTargetCursor = null;
@@ -314,13 +316,13 @@ namespace Pattons_Best
          else if ((GameAction.UpdateLoadingGame == action) || (GameAction.UpdateNewGame == action) || (GameAction.RemoveSplashScreen == action) )
          {
             if( false == UpdateViewForNewGame(ref gi, action)) // This calls PerformAction() to get to proper event
-               Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateViewForNewGame() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "Update_View(): UpdateViewForNewGame() returned false");
             return;
          }
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateView(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Update_View(): lastReport=null");
             return;
          }
          this.Title = UpdateViewTitle(gi, lastReport);
@@ -369,14 +371,12 @@ namespace Pattons_Best
             case GameAction.UnitTestCommand:
             case GameAction.UnitTestNext:
             case GameAction.UnitTestCleanup:
-               break;
             case GameAction.ShowCombatCalendarDialog:
             case GameAction.ShowAfterActionReportDialog:
             case GameAction.ShowRuleListingDialog:
             case GameAction.ShowEventListingDialog:
             case GameAction.ShowReportErrorDialog:
             case GameAction.ShowAboutDialog:
-               break;
             case GameAction.SetupShowMapHistorical:
             case GameAction.SetupShowMovementBoard:
             case GameAction.SetupShowBattleBoard:
@@ -385,17 +385,58 @@ namespace Pattons_Best
             case GameAction.SetupShowCombatCalendarCheck:
             case GameAction.SetupCombatCalendarRoll:
             case GameAction.EveningDebriefingResetDay:
+            case GameAction.MorningBriefingBegin:
+            case GameAction.MorningBriefingCrewmanHealing:
+            case GameAction.MorningBriefingExistingCrewman:
+            case GameAction.MorningBriefingReturningCrewman:
+            case GameAction.MorningBriefingCalendarRoll:
+            case GameAction.MorningBriefingDayOfRest:
+            case GameAction.MorningBriefingTankReplacementHvssRoll:
+            case GameAction.MorningBriefingTankReplacementRoll:
+            case GameAction.MorningBriefingDecreaseTankNum:
+            case GameAction.MorningBriefingIncreaseTankNum:
+            case GameAction.MorningBriefingTankReplacementEnd:
+            case GameAction.BattleRandomEventRoll:
+            case GameAction.TestingStartMorningBriefing:
+            case GameAction.TestingStartPreparations:
+            case GameAction.TestingStartMovement:
+            case GameAction.TestingStartBattle:
+            case GameAction.TestingStartAmbush:
+            case GameAction.MorningBriefingAmmoReadyRackLoad:
+            case GameAction.PreparationsHatches:
+            case GameAction.PreparationsGunLoad:
+            case GameAction.PreparationsGunLoadSelect:
+            case GameAction.BattleRoundSequenceStart:
+            case GameAction.UpdateTankCard:
+            case GameAction.BattleRoundSequenceShermanToHitRollNothing:
+            case GameAction.BattleRoundSequenceReadyRackHeMinus:
+            case GameAction.BattleRoundSequenceReadyRackApMinus:
+            case GameAction.BattleRoundSequenceReadyRackWpMinus:
+            case GameAction.BattleRoundSequenceReadyRackHbciMinus:
+            case GameAction.BattleRoundSequenceReadyRackHvapMinus:
+            case GameAction.BattleRoundSequenceReadyRackHePlus:
+            case GameAction.BattleRoundSequenceReadyRackApPlus:
+            case GameAction.BattleRoundSequenceReadyRackWpPlus:
+            case GameAction.BattleRoundSequenceReadyRackHbciPlus:
+            case GameAction.BattleRoundSequenceReadyRackHvapPlus:
+            case GameAction.EveningDebriefingStart:
+               break;
+            case GameAction.BattleRoundSequenceShowFeat:
+            case GameAction.EveningDebriefingShowFeat:
+            case GameAction.EndGameShowFeats:
+               if (false == UpdateCanvasShowFeats())
+                  Logger.Log(LogEnum.LE_ERROR, "Update_View(): UpdateCanvasShowFeats(" + action.ToString() + ") returned error ");
                break;
             case GameAction.ShowTankForcePath:
                if (null == myMainMenuViewer)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myMainMenuViewer=null");
+                  Logger.Log(LogEnum.LE_ERROR, "Update_View(): myMainMenuViewer=null");
                   return;
                }
                if ((true == myMainMenuViewer.IsPathShown) && (EnumMainImage.MI_Move == CanvasImageViewer.theMainImage))
                {
                   if (false == UpdateCanvasPath(gi))
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasPath() returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "Update_View(): UpdateCanvasPath() returned false");
                }
                else
                {
@@ -442,51 +483,7 @@ namespace Pattons_Best
                      myCanvasMain.Children.Remove(ui1);
                }
                break;
-            case GameAction.MorningBriefingBegin:
-            case GameAction.MorningBriefingCrewmanHealing:
-            case GameAction.MorningBriefingExistingCrewman:
-            case GameAction.MorningBriefingReturningCrewman:
-            case GameAction.MorningBriefingCalendarRoll:
-            case GameAction.MorningBriefingDayOfRest:
-               break;
-            case GameAction.MorningBriefingTankReplacementHvssRoll:
-            case GameAction.MorningBriefingTankReplacementRoll:
-            case GameAction.MorningBriefingDecreaseTankNum:
-            case GameAction.MorningBriefingIncreaseTankNum:
-            case GameAction.MorningBriefingTankReplacementEnd:
-               //if (false == UpdateCanvasTank(gi, action))
-               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
-               break;
-            case GameAction.BattleRandomEventRoll:
-               break;
-            case GameAction.TestingStartMorningBriefing:
-            case GameAction.TestingStartPreparations:
-            case GameAction.TestingStartMovement:
-            case GameAction.TestingStartBattle:
-            case GameAction.TestingStartAmbush:
-            case GameAction.MorningBriefingAmmoReadyRackLoad:
-            case GameAction.PreparationsHatches:
-            case GameAction.PreparationsGunLoad:
-            case GameAction.PreparationsGunLoadSelect:
-            case GameAction.BattleRoundSequenceStart:
-            case GameAction.UpdateTankCard:
-            case GameAction.BattleRoundSequenceShermanToHitRollNothing:
-            case GameAction.BattleRoundSequenceReadyRackHeMinus:
-            case GameAction.BattleRoundSequenceReadyRackApMinus:
-            case GameAction.BattleRoundSequenceReadyRackWpMinus:
-            case GameAction.BattleRoundSequenceReadyRackHbciMinus:
-            case GameAction.BattleRoundSequenceReadyRackHvapMinus:
-            case GameAction.BattleRoundSequenceReadyRackHePlus:
-            case GameAction.BattleRoundSequenceReadyRackApPlus:
-            case GameAction.BattleRoundSequenceReadyRackWpPlus:
-            case GameAction.BattleRoundSequenceReadyRackHbciPlus:
-            case GameAction.BattleRoundSequenceReadyRackHvapPlus:
-               //if (false == UpdateCanvasTank(gi, action))
-               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
-               break;
             case GameAction.MorningBriefingDeployment:
-               //if (false == UpdateCanvasTank(gi, action))
-               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
@@ -497,8 +494,6 @@ namespace Pattons_Best
             case GameAction.BattleRoundSequenceCrewOrders:
                if (false == CreateContextMenuCrewAction(myGameInstance))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): CreateContextMenuCrewAction() returned false");
-               //if (false == UpdateCanvasTank(gi, action))
-               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                if (false == UpdateCanvasMain(gi, action)) // update smoke depletion
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
@@ -507,15 +502,11 @@ namespace Pattons_Best
                   b.ContextMenu = null;
                if (false == CreateContextMenuGunLoadAction(myGameInstance))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): CreateContextMenuGunLoadAction() returned false");
-               //if (false == UpdateCanvasTank(gi, action))
-               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                if (false == UpdateCanvasAnimateBattlePhase(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
                break;
             case GameAction.PreparationsTurret:
             case GameAction.BattleRoundSequenceTurretEnd:
-               //if (false == UpdateCanvasTank(gi, action))
-               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
@@ -539,8 +530,6 @@ namespace Pattons_Best
             case GameAction.BattleRoundSequencePivotRight:
                foreach (Button b in myTankButtons)
                   b.ContextMenu = null;
-               //if (false == UpdateCanvasTank(gi, action))
-               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
@@ -557,23 +546,17 @@ namespace Pattons_Best
             case GameAction.BattleRoundSequenceShermanFiringSelectTarget:
                foreach (Button b in myTankButtons)
                   b.ContextMenu = null;
-               //if (false == UpdateCanvasTank(gi, action))
-               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                if ( false == UpdateCanvasShermanSelectTarget(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasShermanSelectTarget() returned error ");
                break;
             case GameAction.BattleRoundSequenceShermanFiringSelectTargetMg:
                foreach (Button b in myTankButtons)
                   b.ContextMenu = null;
-               //if (false == UpdateCanvasTank(gi, action))
-               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                if (false == UpdateCanvasShermanSelectTargetMg(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasShermanSelectTargetMg() returned error ");
                break;
             case GameAction.BattleRoundSequenceEnemyAction:
             case GameAction.BattleRoundSequenceShermanToHitRoll:
-               //if (false == UpdateCanvasTank(gi, action))
-               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
@@ -582,12 +565,6 @@ namespace Pattons_Best
             case GameAction.BattleRoundSequenceBackToSpotting:
                if (false == UpdateCanvasAnimateBattlePhase(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
-               //if (false == UpdateCanvasTank(gi, action))
-               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
-               break;
-            case GameAction.EveningDebriefingStart:
-               //if (false == UpdateCanvasTank(gi, action))
-               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
                break;
             case GameAction.EveningDebriefingRatingImprovement:
                UpdateCanvasMainClear(myBattleButtons, gi.BattleStacks, action);
@@ -596,13 +573,6 @@ namespace Pattons_Best
                myBattleButtons.Clear();
                foreach (IStack stack in gi.BattleStacks)
                   stack.MapItems.Clear();
-               break;
-            case GameAction.EndGameWin:
-            case GameAction.EndGameLost:
-               SaveDefaultsToSettings(); // End_GameWin or End_GameLost
-               if (false == UpdateCanvasAnimateBattlePhase(gi))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
-               SaveDefaultsToSettings();
                break;
             case GameAction.RemoveSplashScreen:
             case GameAction.UpdateNewGameEnd:
@@ -626,14 +596,16 @@ namespace Pattons_Best
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
+            case GameAction.EndGameWin:
+            case GameAction.EndGameLost:
+               SaveDefaultsToSettings(); // End_GameWin or End_GameLost
+               if (false == UpdateCanvasAnimateBattlePhase(gi))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
+               SaveDefaultsToSettings();
+               break;
             case GameAction.UpdateTankExplosion:
             case GameAction.UpdateTankBrewUp:
             case GameAction.BattleShermanKilled:
-               //if (false == UpdateCanvasTank(gi, action))
-               //   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error ");
-               if (false == UpdateCanvasMain(gi, action))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
-               break;
             default:
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
@@ -1533,7 +1505,7 @@ namespace Pattons_Best
          }
          aXmlDocument.DocumentElement.SetAttribute("count", statistics.Count.ToString());
          //--------------------------------
-         foreach (GameFeat statistic in statistics)
+         foreach (GameStatistic statistic in statistics)
          {
             XmlElement? statisticElem = aXmlDocument.CreateElement("GameStatistic");
             if (null == statisticElem)
@@ -3020,242 +2992,223 @@ namespace Pattons_Best
          myRectangleMoving.Visibility = Visibility.Visible;
          return true;
       }
-      //private bool UpdateCanvasShowFeats()
-      //{
-      //   myMoveButtons.Clear();
-      //   myBattleButtons.Clear();
-      //   List<UIElement> elements = new List<UIElement>();
-      //   foreach (UIElement ui in myCanvasMain.Children)
-      //   {
-      //      if (ui is Image img)
-      //      {
-      //         if ("Map" == img.Name)
-      //            continue;
-      //         elements.Add(ui);
-      //      }
-      //      if (ui is TextBlock tb)
-      //         elements.Add(ui);
-      //      if (ui is Label label)
-      //         elements.Add(ui);
-      //      if (ui is Button b)
-      //      {
-      //         if (false == b.Name.Contains("Die"))
-      //            elements.Add(ui);
-      //      }
-      //   }
-      //   foreach (UIElement ui1 in elements)
-      //      myCanvasMain.Children.Remove(ui1);
-      //   //------------------------------------
-      //   myCanvasMain.LayoutTransform = new ScaleTransform(1.0, 1.0);
-      //   double centerX = myCanvasMain.ActualWidth * 0.5;
-      //   double centerY = myCanvasMain.ActualHeight * 0.5;
-      //   //------------------------------------
-      //   string featChange = GameEngine.theFeatsInGame.GetFeatChange(GameEngine.theFeatsInGameStarting);
-      //   if (true == String.IsNullOrEmpty(featChange))
-      //   {
-      //      Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasShowFeats(): No feats found");
-      //      return false;
-      //   }
-      //   //------------------------------------
-      //   double sizeOfImage = Math.Min(myCanvasMain.ActualHeight, myCanvasMain.ActualWidth);
-      //   BitmapImage bmi1 = new BitmapImage();
-      //   bmi1.BeginInit();
-      //   bmi1.UriSource = new Uri(MapImage.theImageDirectory + "StarReward.gif", UriKind.Absolute);
-      //   bmi1.EndInit();
-      //   Image imgFeat = new Image { Source = bmi1, Height = sizeOfImage, Width = sizeOfImage, Name = "Feat" };
-      //   ImageBehavior.SetAnimatedSource(imgFeat, bmi1);
-      //   myCanvasMain.Add(imgFeat);
-      //   double X = centerX - (sizeOfImage * 0.5);
-      //   double Y = centerY - (sizeOfImage * 0.5);
-      //   Canvas.SetLeft(imgFeat, X);
-      //   Canvas.SetTop(imgFeat, Y);
-      //   Canvas.SetZIndex(imgFeat, 99998);
-      //   myCanvasMain.MouseDown += MouseDownGameFeat;
-      //   //-------------------------------------
-      //   System.Windows.Controls.Label labelTitle = new System.Windows.Controls.Label() { Content = "Game Feat Completed!", FontStyle = FontStyles.Italic, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam1, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center };
-      //   myCanvasMain.Children.Add(labelTitle);
-      //   System.Windows.Controls.Label labelForFeat = new System.Windows.Controls.Label() { Content = featChange, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam1, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center };
-      //   myCanvasMain.Children.Add(labelForFeat);
-      //   System.Windows.Controls.Label labelClick = new System.Windows.Controls.Label() { Content = "Click to continue", FontStyle = FontStyles.Italic, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam1, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center };
-      //   myCanvasMain.Children.Add(labelClick);
-      //   labelTitle.UpdateLayout();
-      //   labelForFeat.UpdateLayout();
-      //   labelClick.UpdateLayout();
-      //   //-------------------------------------
-      //   double X1 = centerX - labelTitle.ActualWidth * 0.5;
-      //   double Y1 = centerY - labelTitle.ActualHeight * 0.5;
-      //   double X2 = centerX - labelForFeat.ActualWidth * 0.5;
-      //   double Y2 = centerY + labelTitle.ActualHeight * 0.5;
-      //   double X3 = centerX - labelClick.ActualWidth * 0.5;
-      //   double Y3 = centerY + labelTitle.ActualHeight * 0.5 + labelForFeat.ActualHeight;
-      //   //-------------------------------------
-      //   Canvas.SetLeft(labelTitle, X1);
-      //   Canvas.SetTop(labelTitle, Y1);
-      //   Canvas.SetZIndex(labelTitle, 99999);
-      //   Canvas.SetLeft(labelForFeat, X2);
-      //   Canvas.SetTop(labelForFeat, Y2);
-      //   Canvas.SetZIndex(labelForFeat, 99999);
-      //   Canvas.SetLeft(labelClick, X3);
-      //   Canvas.SetTop(labelClick, Y3);
-      //   Canvas.SetZIndex(labelClick, 99999);
-      //   //-------------------------------------
-      //   return true;
-      //}
-      //private bool UpdateCanvasShowStats(IGameInstance gi)
-      //{
-      //   myButtonMapItems.Clear();
-      //   List<UIElement> elements = new List<UIElement>();
-      //   foreach (UIElement ui in myCanvas.Children)
-      //   {
-      //      if (ui is Image img)
-      //      {
-      //         if ("Map" == img.Name)
-      //            continue;
-      //         elements.Add(ui);
-      //      }
-      //      if (ui is TextBlock tb)
-      //         elements.Add(ui);
-      //      if (ui is Label label)
-      //         elements.Add(ui);
-      //      if (ui is Button b)
-      //      {
-      //         if (false == b.Name.Contains("Die"))
-      //            elements.Add(ui);
-      //      }
-      //   }
-      //   foreach (UIElement ui1 in elements)
-      //      myCanvas.Children.Remove(ui1);
-      //   //-------------------------------
-      //   myDieRoller.HideDie();
-      //   gi.Statistic.myEndDaysCount++;  // add one to get rid of zero index
-      //   //-------------------------------
-      //   int index = gi.Options.GetGameIndex();
-      //   string gametype = gi.Options.GetGameName(index);
-      //   bool isMultipleGameTypesPlayed = UpdateCanvasShowStatsAdds(index, gi.Statistic);
-      //   //-------------------------------
-      //   myTextBoxMarquee.Inlines.Clear();
-      //   myTextBoxMarquee.Inlines.Add(new Run("Current Game Statistics:") { FontWeight = FontWeights.Bold, FontStyle = FontStyles.Italic, TextDecorations = TextDecorations.Underline });
-      //   UpdateCanvasShowStatsText(myTextBoxMarquee, gi.Statistic);
-      //   //-------------------------------
-      //   SaveDefaultsToSettings();
-      //   //-------------------------------
-      //   if (1 < myGameEngine.Statistics[index].myNumGames)
-      //   {
-      //      myTextBoxMarquee.Inlines.Add(new LineBreak());
-      //      myTextBoxMarquee.Inlines.Add(new LineBreak());
-      //      string title1 = "All '" + gametype + "' Statistics:";
-      //      myTextBoxMarquee.Inlines.Add(new Run(title1) { FontWeight = FontWeights.Bold, FontStyle = FontStyles.Italic, TextDecorations = TextDecorations.Underline });
-      //      UpdateCanvasShowStatsText(myTextBoxMarquee, myGameEngine.Statistics[index]);
-      //   }
-      //   //-------------------------------
-      //   if (true == isMultipleGameTypesPlayed)
-      //   {
-      //      myTextBoxMarquee.Inlines.Add(new LineBreak());
-      //      myTextBoxMarquee.Inlines.Add(new LineBreak());
-      //      string title2 = "All Games Statistics:";
-      //      myTextBoxMarquee.Inlines.Add(new Run(title2) { FontWeight = FontWeights.Bold, FontStyle = FontStyles.Italic, TextDecorations = TextDecorations.Underline });
-      //      UpdateCanvasShowStatsText(myTextBoxMarquee, myGameEngine.Statistics[6]);
-      //   }
-      //   //-------------------------------
-      //   myCanvas.ClipToBounds = true;
-      //   myCanvas.Children.Add(myTextBoxMarquee);
-      //   myTextBoxMarquee.UpdateLayout();
-      //   //-------------------------------
-      //   DoubleAnimation doubleAnimation = new DoubleAnimation();
-      //   doubleAnimation.From = -myTextBoxMarquee.ActualHeight;
-      //   doubleAnimation.To = myCanvas.ActualHeight;
-      //   doubleAnimation.RepeatBehavior = RepeatBehavior.Forever;
-      //   doubleAnimation.Duration = new Duration(TimeSpan.FromSeconds(MARQUEE_SCROLL_ANMINATION_TIME));
-      //   Storyboard.SetTargetName(doubleAnimation, "tbMarquee");
-      //   Storyboard.SetTargetProperty(doubleAnimation, new PropertyPath(Canvas.BottomProperty));
-      //   myStoryboard.Children.Add(doubleAnimation);
-      //   myStoryboard.Begin(this, true);
-      //   return true;
-      //}
-      //private bool UpdateCanvasShowStatsAdds(int index, GameStatistics stats)
-      //{
-      //   myGameEngine.Statistics[index].myNumGames++;
-      //   myGameEngine.Statistics[index].myNumWins += stat.myNumWins;
-      //   myGameEngine.Statistics[index].myEndDaysCount += stat.myEndDaysCount;
-      //   myGameEngine.Statistics[index].myEndCoinCount += stat.myEndCoinCount;
-      //   myGameEngine.Statistics[index].myEndFoodCount += stat.myEndFoodCount;
-      //   myGameEngine.Statistics[index].myEndPartyCount += stat.myEndPartyCount;
-      //   myGameEngine.Statistics[index].myDaysLost += stat.myDaysLost;
-      //   myGameEngine.Statistics[index].myNumEncounters += stat.myNumEncounters;
-      //   myGameEngine.Statistics[index].myNumOfRestDays += stat.myNumOfRestDays;
-      //   myGameEngine.Statistics[index].myNumOfAudienceAttempt += stat.myNumOfAudienceAttempt;
-      //   myGameEngine.Statistics[index].myNumOfAudience += stat.myNumOfAudience;
-      //   myGameEngine.Statistics[index].myNumOfOffering += stat.myNumOfOffering;
-      //   myGameEngine.Statistics[index].myDaysInJailorDungeon += stat.myDaysInJailorDungeon;
-      //   myGameEngine.Statistics[index].myNumRiverCrossingSuccess += stat.myNumRiverCrossingSuccess;
-      //   myGameEngine.Statistics[index].myNumRiverCrossingFailure += stat.myNumRiverCrossingFailure;
-      //   myGameEngine.Statistics[index].myNumDaysOnRaft += stat.myNumDaysOnRaft;
-      //   myGameEngine.Statistics[index].myNumDaysAirborne += stat.myNumDaysAirborne;
-      //   myGameEngine.Statistics[index].myNumDaysArchTravel += stat.myNumDaysArchTravel;
-      //   myGameEngine.Statistics[index].myNumOfPartyKilled += stat.myNumOfPartyKilled;
-      //   myGameEngine.Statistics[index].myNumOfPartyHeal += stat.myNumOfPartyHeal;
-      //   myGameEngine.Statistics[index].myNumOfPartyKill += stat.myNumOfPartyKill;
-      //   myGameEngine.Statistics[index].myNumOfPartyKillEndurance += stat.myNumOfPartyKillEndurance;
-      //   myGameEngine.Statistics[index].myNumOfPartyKillCombat += stat.myNumOfPartyKillCombat;
-      //   myGameEngine.Statistics[index].myNumOfPrinceKill += stat.myNumOfPrinceKill;
-      //   myGameEngine.Statistics[index].myNumOfPrinceHeal += stat.myNumOfPrinceHeal;
-      //   myGameEngine.Statistics[index].myNumOfPrinceStarveDays += stat.myNumOfPrinceStarveDays;
-      //   myGameEngine.Statistics[index].myNumOfPrinceUncounscious += stat.myNumOfPrinceUncounscious;
-      //   myGameEngine.Statistics[index].myNumOfPrinceResurrection += stat.myNumOfPrinceResurrection;
-      //   myGameEngine.Statistics[index].myNumOfPrinceAxeDeath += stat.myNumOfPrinceAxeDeath;
-      //   if (myGameEngine.Statistics[index].myMaxPartySize < stat.myMaxPartySize)
-      //      myGameEngine.Statistics[index].myMaxPartySize = stat.myMaxPartySize;
-      //   if (myGameEngine.Statistics[index].myMaxPartyEndurance < stat.myMaxPartyEndurance)
-      //      myGameEngine.Statistics[index].myMaxPartyEndurance = stat.myMaxPartyEndurance;
-      //   if (myGameEngine.Statistics[index].myMaxPartyCombat < stat.myMaxPartyCombat)
-      //      myGameEngine.Statistics[index].myMaxPartyCombat = stat.myMaxPartyCombat;
-      //   //-----------------------------------------
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumGames++;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumWins += stat.myNumWins;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myEndDaysCount += stat.myEndDaysCount;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myEndCoinCount += stat.myEndCoinCount;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myEndFoodCount += stat.myEndFoodCount;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myEndPartyCount += stat.myEndPartyCount;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myDaysLost += stat.myDaysLost;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumEncounters += stat.myNumEncounters;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumOfRestDays += stat.myNumOfRestDays;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumOfAudienceAttempt += stat.myNumOfAudienceAttempt;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumOfAudience += stat.myNumOfAudience;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumOfOffering += stat.myNumOfOffering;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myDaysInJailorDungeon += stat.myDaysInJailorDungeon;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumRiverCrossingSuccess += stat.myNumRiverCrossingSuccess;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumRiverCrossingFailure += stat.myNumRiverCrossingFailure;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumDaysOnRaft += stat.myNumDaysOnRaft;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumDaysAirborne += stat.myNumDaysAirborne;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumDaysArchTravel += stat.myNumDaysArchTravel;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumOfPartyKilled += stat.myNumOfPartyKilled;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumOfPartyHeal += stat.myNumOfPartyHeal;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumOfPartyKill += stat.myNumOfPartyKill;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumOfPartyKillEndurance += stat.myNumOfPartyKillEndurance;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumOfPartyKillCombat += stat.myNumOfPartyKillCombat;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumOfPrinceKill += stat.myNumOfPrinceKill;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumOfPrinceHeal += stat.myNumOfPrinceHeal;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumOfPrinceStarveDays += stat.myNumOfPrinceStarveDays;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumOfPrinceUncounscious += stat.myNumOfPrinceUncounscious;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumOfPrinceResurrection += stat.myNumOfPrinceResurrection;
-      //   myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myNumOfPrinceAxeDeath += stat.myNumOfPrinceAxeDeath;
-      //   if (myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myMaxPartySize < stat.myMaxPartySize)
-      //      myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myMaxPartySize = stat.myMaxPartySize;
-      //   if (myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myMaxPartyEndurance < stat.myMaxPartyEndurance)
-      //      myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myMaxPartyEndurance = stat.myMaxPartyEndurance;
-      //   if (myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myMaxPartyCombat < stat.myMaxPartyCombat)
-      //      myGameEngine.Statistics[GameEngine.MAX_GAME_TYPE].myMaxPartyCombat = stat.myMaxPartyCombat;
-      //   //-----------------------------------------
-      //   bool isMultipleGameTypesPlayed = false;
-      //   for (int i = 0; i < GameEngine.MAX_GAME_TYPE; ++i)
-      //   {
-      //      if (index == i) // do not look at current game type
-      //         continue;
-      //      if (0 < myGameEngine.Statistics[i].myNumGames)
-      //         isMultipleGameTypesPlayed = true;
-      //   }
-      //   return isMultipleGameTypesPlayed;
-      //}
+      private bool UpdateCanvasShowFeats()
+      {
+         myMoveButtons.Clear();
+         myBattleButtons.Clear();
+         List<UIElement> elements = new List<UIElement>();
+         foreach (UIElement ui in myCanvasMain.Children)
+         {
+            if (ui is Image img)
+            {
+               if ("Map" == img.Name)
+                  continue;
+               elements.Add(ui);
+            }
+            if (ui is TextBlock tb)
+               elements.Add(ui);
+            if (ui is Label label)
+               elements.Add(ui);
+            if (ui is Button b)
+            {
+               if (false == b.Name.Contains("Die"))
+                  elements.Add(ui);
+            }
+         }
+         foreach (UIElement ui1 in elements)
+            myCanvasMain.Children.Remove(ui1);
+         //------------------------------------
+         myCanvasMain.LayoutTransform = new ScaleTransform(1.0, 1.0);
+         double centerX = myCanvasMain.ActualWidth * 0.5;
+         double centerY = myCanvasMain.ActualHeight * 0.5;
+         //------------------------------------
+         GameFeat featChange;
+         if( false == GameEngine.theFeatsInGame.GetFeatChange(GameEngine.theFeatsInGameStarting, out featChange)) // Update_CanvasShowFeats()
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowFeats(): Get_FeatChange() returned false");
+            return false;
+         }
+         if (true == String.IsNullOrEmpty(featChange.Key))
+            return true;
+         //------------------------------------
+         double sizeOfImage = Math.Min(myCanvasMain.ActualHeight, myCanvasMain.ActualWidth);
+         BitmapImage bmi1 = new BitmapImage();
+         bmi1.BeginInit();
+         bmi1.UriSource = new Uri(MapImage.theImageDirectory + "StarReward.gif", UriKind.Absolute);
+         bmi1.EndInit();
+         Image imgFeat = new Image { Source = bmi1, Height = sizeOfImage, Width = sizeOfImage, Name = "Feat" };
+         ImageBehavior.SetAnimatedSource(imgFeat, bmi1);
+         myCanvasMain.Children.Add(imgFeat);
+         double X = centerX - (sizeOfImage * 0.5);
+         double Y = centerY - (sizeOfImage * 0.5);
+         Canvas.SetLeft(imgFeat, X);
+         Canvas.SetTop(imgFeat, Y);
+         Canvas.SetZIndex(imgFeat, 99998);
+         myCanvasMain.MouseDown += MouseDownGameFeat;
+         //-------------------------------------
+         System.Windows.Controls.Label labelTitle = new System.Windows.Controls.Label() { Content = "Game Feat Completed!", FontStyle = FontStyles.Italic, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam1, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center };
+         myCanvasMain.Children.Add(labelTitle);
+         System.Windows.Controls.Label labelForFeat = new System.Windows.Controls.Label() { Content = featChange, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam1, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center };
+         myCanvasMain.Children.Add(labelForFeat);
+         System.Windows.Controls.Label labelClick = new System.Windows.Controls.Label() { Content = "Click to continue", FontStyle = FontStyles.Italic, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam1, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center };
+         myCanvasMain.Children.Add(labelClick);
+         labelTitle.UpdateLayout();
+         labelForFeat.UpdateLayout();
+         labelClick.UpdateLayout();
+         //-------------------------------------
+         double X1 = centerX - labelTitle.ActualWidth * 0.5;
+         double Y1 = centerY - labelTitle.ActualHeight * 0.5;
+         double X2 = centerX - labelForFeat.ActualWidth * 0.5;
+         double Y2 = centerY + labelTitle.ActualHeight * 0.5;
+         double X3 = centerX - labelClick.ActualWidth * 0.5;
+         double Y3 = centerY + labelTitle.ActualHeight * 0.5 + labelForFeat.ActualHeight;
+         //-------------------------------------
+         Canvas.SetLeft(labelTitle, X1);
+         Canvas.SetTop(labelTitle, Y1);
+         Canvas.SetZIndex(labelTitle, 99999);
+         Canvas.SetLeft(labelForFeat, X2);
+         Canvas.SetTop(labelForFeat, Y2);
+         Canvas.SetZIndex(labelForFeat, 99999);
+         Canvas.SetLeft(labelClick, X3);
+         Canvas.SetTop(labelClick, Y3);
+         Canvas.SetZIndex(labelClick, 99999);
+         return true;
+      }
+      private bool UpdateCanvasShowStatistics(IGameInstance gi)
+      {
+         if( null == myDieRoller )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasShowStatistics(): myDieRoller=null");
+            return false;
+         }
+         myMoveButtons.Clear();
+         myBattleButtons.Clear();
+         List<UIElement> elements = new List<UIElement>();
+         foreach (UIElement ui in myCanvasMain.Children)
+         {
+            if (ui is Image img)
+            {
+               if ("Map" == img.Name)
+                  continue;
+               elements.Add(ui);
+            }
+            if (ui is TextBlock tb)
+               elements.Add(ui);
+            if (ui is Label label)
+               elements.Add(ui);
+            if (ui is Button b)
+            {
+               if (false == b.Name.Contains("Die"))
+                  elements.Add(ui);
+            }
+         }
+         foreach (UIElement ui1 in elements)
+            myCanvasMain.Children.Remove(ui1);
+         myDieRoller.HideDie();
+         //-------------------------------
+         gi.Statistics.AddOne("NumDays");  // add one to get rid of zero index
+         bool isMultipleGameTypesPlayed = UpdateCanvasShowStatsAdds(gi.Statistics);
+         //-------------------------------
+         myTextBoxMarquee.Inlines.Clear();
+         myTextBoxMarquee.Inlines.Add(new Run("Current Game Statistics:") { FontWeight = FontWeights.Bold, FontStyle = FontStyles.Italic, TextDecorations = TextDecorations.Underline });
+         UpdateCanvasShowStatsText(myTextBoxMarquee, gi.Statistics);
+         //-------------------------------
+         SaveDefaultsToSettings();
+         //-------------------------------
+         if (true == isMultipleGameTypesPlayed)
+         {
+            myTextBoxMarquee.Inlines.Add(new LineBreak());
+            myTextBoxMarquee.Inlines.Add(new LineBreak());
+            string title2 = "All Games Statistics:";
+            myTextBoxMarquee.Inlines.Add(new Run(title2) { FontWeight = FontWeights.Bold, FontStyle = FontStyles.Italic, TextDecorations = TextDecorations.Underline });
+            UpdateCanvasShowStatsText(myTextBoxMarquee, GameEngine.theTotalStatistics);
+         }
+         //-------------------------------
+         myCanvasMain.ClipToBounds = true;
+         myCanvasMain.Children.Add(myTextBoxMarquee);
+         myTextBoxMarquee.UpdateLayout();
+         //-------------------------------
+         DoubleAnimation doubleAnimation = new DoubleAnimation();
+         doubleAnimation.From = -myTextBoxMarquee.ActualHeight;
+         doubleAnimation.To = myCanvasMain.ActualHeight;
+         doubleAnimation.RepeatBehavior = RepeatBehavior.Forever;
+         doubleAnimation.Duration = new Duration(TimeSpan.FromSeconds(MARQUEE_SCROLL_ANMINATION_TIME));
+         Storyboard.SetTargetName(doubleAnimation, "tbMarquee");
+         Storyboard.SetTargetProperty(doubleAnimation, new PropertyPath(Canvas.BottomProperty));
+         myStoryboard.Children.Add(doubleAnimation);
+         myStoryboard.Begin(this, true);
+         return true;
+      }
+      private bool UpdateCanvasShowStatsAdds(GameStatistics stats)
+      {
+         bool isMultipleGameTypesPlayed = false;
+         GameStatistic stat = GameEngine.theTotalStatistics.Find("NumGames");
+         if (0 < stat.Value)
+            isMultipleGameTypesPlayed = true;
+         ++stat.Value;
+         //-----------------------------------------
+
+
+         return isMultipleGameTypesPlayed;
+      }
+      private void UpdateCanvasShowStatsText(TextBlock tb, GameStatistics statistics)
+      {
+         GameStatistic numGames = statistics.Find("NumGames");
+         GameStatistic numWins = statistics.Find("NumWins");
+         GameStatistic numDays = statistics.Find("NumDays");
+         GameStatistic numLostTanks = statistics.Find("NumLostTanks");
+         GameStatistic numBattles = statistics.Find("NumOfBattles");
+         GameStatistic numKilledCrewman = statistics.Find("NumOfKilledCrewman");
+         GameStatistic numKilledEnemy= statistics.Find("NumOfEnemyKills");
+         if (1 < numGames.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Games = " + numGames.Value.ToString()) { FontWeight = FontWeights.Bold });
+            int winRatio = (int)Math.Round(100.0 * ((double)numGames.Value / (double)numWins.Value));
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("% Wins = " + winRatio.ToString()) { FontWeight = FontWeights.Bold });
+            //-------------------------------------
+            tb.Inlines.Add(new LineBreak());
+            int average = numDays.Value / numGames.Value;
+            tb.Inlines.Add(new Run("Average Days per Game = " + average.ToString()) { FontWeight = FontWeights.Bold });
+            //-------------------------------------
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Lost Tanks = " + numLostTanks.Value.ToString()) { FontWeight = FontWeights.Bold });
+            tb.Inlines.Add(new LineBreak());
+            average = numLostTanks.Value / numGames.Value;
+            tb.Inlines.Add(new Run("Average Num Days between Lost Tanks = " + average.ToString()) { FontWeight = FontWeights.Bold });
+            //-------------------------------------
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Lost Tanks = " + numLostTanks.Value.ToString()) { FontWeight = FontWeights.Bold });
+            tb.Inlines.Add(new LineBreak());
+            average = numKilledCrewman.Value / numGames.Value;
+            tb.Inlines.Add(new Run("Average Num Days for Killed Crewman = " + average.ToString()) { FontWeight = FontWeights.Bold });
+            //-------------------------------------
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Killed Enemy = " + numKilledEnemy.Value.ToString()) { FontWeight = FontWeights.Bold });
+            tb.Inlines.Add(new LineBreak());
+            average = numKilledEnemy.Value / numGames.Value;
+            tb.Inlines.Add(new Run("Average Num Days for Killed Enemy = " + average.ToString()) { FontWeight = FontWeights.Bold });
+         }
+         else
+         {
+            int dateDay = numDays.Value - 1;
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("End Date = " + TableMgr.GetDate(dateDay)) { FontWeight = FontWeights.Bold });
+            //-------------------------------------
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Days = " + numDays.Value.ToString()) { FontWeight = FontWeights.Bold });
+            //-------------------------------------
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Lost Tanks = " + numLostTanks.Value.ToString()) { FontWeight = FontWeights.Bold });
+            //-------------------------------------
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Killed Crewman = " + numKilledCrewman.Value.ToString()) { FontWeight = FontWeights.Bold });
+            //-------------------------------------
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Killed Enemy = " + numKilledEnemy.Value.ToString()) { FontWeight = FontWeights.Bold });
+         }
+      }
       //---------------------------------------
       private bool UpdateCanvasMainSpottingLoader(IGameInstance gi, GameAction action)
       {
@@ -4252,6 +4205,58 @@ namespace Pattons_Best
             }
          }
          e.Handled = true;
+      }
+      private void MouseDownGameFeat(object send, MouseEventArgs e)
+      {
+         System.Windows.Point p = e.GetPosition((UIElement)send);
+         HitTestResult result = VisualTreeHelper.HitTest(myCanvasMain, p);  // Get the Point where the hit test occurrs
+         foreach (UIElement ui in myCanvasMain.Children)
+         {
+            if (ui is Image img1)
+            {
+               if (result.VisualHit == img1)
+               {
+                  if ("Feat" == img1.Name)
+                  {
+                     GameAction action = GameAction.Error;
+                     if (GamePhase.EveningDebriefing == myGameInstance.GamePhase)
+                     {
+                        GameFeat featChange;
+                        if (false == GameEngine.theFeatsInGame.GetFeatChange(GameEngine.theFeatsInGameStarting, out featChange)) // MouseDownGameFeat - EventingDebriefing
+                        {
+                           Logger.Log(LogEnum.LE_ERROR, "Mouse_DownGameFeat(): Get_FeatChange() returned false");
+                           return;
+                        }
+                        if (true == String.IsNullOrEmpty(featChange.Key))
+                        {
+                           action = GameAction.EveningDebriefingShowFeatEnd;
+                           myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
+                        }
+                        else
+                        {
+                           action = GameAction.EveningDebriefingShowFeat;
+                        }
+                     }
+                     else
+                     {
+                        GameFeat featChange;
+                        if (false == GameEngine.theFeatsInGame.GetFeatChange(GameEngine.theFeatsInGameStarting, out featChange)) // MouseDownGameFeat - NOT EventingDebriefing
+                        {
+                           Logger.Log(LogEnum.LE_ERROR, "Mouse_DownGameFeat(): Get_FeatChange() returned false");
+                           return;
+                        }
+                        if (true == String.IsNullOrEmpty(featChange.Key)) // no changed feat
+                           action = GameAction.EndGameShowStats;
+                        else
+                           action = GameAction.EndGameShowFeats;
+                     }
+                     myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                     e.Handled = true;
+                     return;
+                  }
+               }
+            }
+         }
       }
       private void MouseLeftButtonDownMarquee(object sender, MouseEventArgs e)
       {

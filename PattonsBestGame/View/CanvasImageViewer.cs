@@ -100,8 +100,8 @@ namespace Pattons_Best
                      break;
                   default:
                      theMainImage = EnumMainImage.MI_Other;
-                     if (false == ShowAfterActionReportDialog(gi, myCanvas, true))
-                        Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowAfterActionReportDialog() returned false for a=" + action.ToString());
+                     if (false == ShowAfterActionReportDialog(gi, myCanvas, true)) // GameAction.UpdateNewGame
+                        Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Show_AfterActionReportDialog() returned false for a=" + action.ToString());
                      break;
                }
                break;
@@ -147,12 +147,11 @@ namespace Pattons_Best
                            ShowEndGameFail(myCanvas);
                            break;
                         default:
-                           if (false == ShowAfterActionReportDialog(gi, myCanvas, true))
-                              Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowAfterActionReportDialog() returned false for cmd.Action=" + cmd.Action.ToString());
+                           if (false == ShowAfterActionReportDialog(gi, myCanvas, true)) // GameAction.UpdateLoadingGame
+                              Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Show_AfterActionReportDialog() returned false for cmd.Action=" + cmd.Action.ToString());
                            break;
                      }
                      break;
-
                   default: Logger.Log(LogEnum.LE_ERROR, "UpdateView(): reached default cmd.MainImage=" + cmd.MainImage.ToString()); return;
                }
                break;
@@ -235,8 +234,8 @@ namespace Pattons_Best
             case GameAction.SetupAssignCrewRating:
                myDieRoller.HideDie();
                theMainImage = EnumMainImage.MI_Other;
-               if (false == ShowAfterActionReportDialog(gi, myCanvas, true))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowAfterActionReportDialog() returned false for a=" + action.ToString());
+               if (false == ShowAfterActionReportDialog(gi, myCanvas, true)) // GameAction.SetupAssignCrewRating
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Show_AfterActionReportDialog() returned false for a=" + action.ToString());
                break;
             case GameAction.TestingStartMorningBriefing:
             case GameAction.MorningBriefingBegin:
@@ -247,7 +246,7 @@ namespace Pattons_Best
             case GameAction.EveningDebriefingRatingImprovementEnd:
                theMainImage = EnumMainImage.MI_Other;
                if ( false == ShowAfterActionReportDialog(gi, myCanvas, false))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowAfterActionReportDialog() returned false for a=" + action.ToString());
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Show_AfterActionReportDialog() returned false for a=" + action.ToString());
                break;
             case GameAction.SetupShowCombatCalendarCheck:
                theMainImage = EnumMainImage.MI_Other;
@@ -339,7 +338,7 @@ namespace Pattons_Best
          myAarUserControl = new AfterActionReportUserControl(gi, isEditable);
          if( true == myAarUserControl.CtorError )
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myAarUserControl.CtorError = true");
+            Logger.Log(LogEnum.LE_ERROR, "Show_AfterActionReportDialog(): myAarUserControl.CtorError = true");
             return false;
          }
          CleanCanvas(c);

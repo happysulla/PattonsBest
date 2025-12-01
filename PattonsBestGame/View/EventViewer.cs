@@ -767,7 +767,12 @@ namespace Pattons_Best
       //--------------------------------------------------------------------
       private bool UpdateEventContent(IGameInstance gi, string key)
       {
-         if( null == myTextBlock)
+         if (null == myGameEngine)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): myGameEngine=null");
+            return false;
+         }
+         if ( null == myTextBlock)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): myTextBlock=null");
             return false;
@@ -2408,6 +2413,112 @@ namespace Pattons_Best
             case "e104":
                ReplaceText("NUMBER_PURPLE_HEARTS", gi.NumPurpleHeart.ToString());
                break;
+            case "e501":
+               StringBuilder sbEndWon = new StringBuilder();
+               sbEndWon.Append("Game ends on ");
+               sbEndWon.Append(TableMgr.GetDate(gi.Day));
+               sbEndWon.Append(" due to '");
+               sbEndWon.Append(gi.EndGameReason);
+               myTextBlock.Inlines.Add(new Run(sbEndWon.ToString()));
+               Image? imgEndGameWon = null;
+               switch (Utilities.RandomGenerator.Next(10))
+               {
+                  case 0:
+                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("QuicksandJump"), Width = 300, Height = 300 };
+                     break;
+                  case 1:
+                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Gems"), Width = 300, Height = 300 };
+                     break;
+                  case 2:
+                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Muscle"), Width = 300, Height = 300 };
+                     break;
+                  case 3:
+                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Sword1"), Width = 300, Height = 300 };
+                     break;
+                  case 4:
+                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Star"), Width = 300, Height = 300 };
+                     break;
+                  default:
+                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Win"), Width = 300, Height = 300 };
+                     break;
+               }
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("                                  "));
+               myTextBlock.Inlines.Add(new InlineUIContainer(imgEndGameWon));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("Click image to continue show game statistics and feats."));
+               break;
+            case "e502":
+               StringBuilder sbEndLost = new StringBuilder();
+               sbEndLost.Append("Game ends on ");
+               sbEndLost.Append(TableMgr.GetDate(gi.Day));
+               sbEndLost.Append(" due to '");
+               sbEndLost.Append(gi.EndGameReason);
+               myTextBlock.Inlines.Add(new Run(sbEndLost.ToString()));
+               Image? imgEndGameLost = null;
+               switch (Utilities.RandomGenerator.Next(11))
+               {
+                  case 0:
+                     imgEndGameLost = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Deny"), Width = 300, Height = 300 };
+                     break;
+                  case 1:
+                     imgEndGameLost = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Idiot"), Width = 300, Height = 300 };
+                     break;
+                  case 2:
+                     imgEndGameLost = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("OBlood1"), Width = 300, Height = 300 };
+                     break;
+                  case 3:
+                     imgEndGameLost = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("FarmerDead"), Width = 300, Height = 300 };
+                     break;
+                  case 4:
+                     imgEndGameLost = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Skulls"), Width = 300, Height = 300 };
+                     break;
+                  default:
+                     imgEndGameLost = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Frown"), Width = 300, Height = 300 };
+                     break;
+               }
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("                                  "));
+               myTextBlock.Inlines.Add(new InlineUIContainer(imgEndGameLost));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("Click image to continue show game statistics and feats."));
+               break;
+            case "e503a":
+               GameAction action = GameAction.Error;
+               GameFeat changedFeat;
+               if (false == GameEngine.theFeatsInGame.GetFeatChange(GameEngine.theFeatsInGameStarting, out changedFeat)) // Game Feats
+               {
+                  Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "UpdateEventContent(): Get_FeatChange() returned false");
+                  return false;
+               }
+               if (GamePhase.EndGame == gi.GamePhase)
+               {
+                  if (true == String.IsNullOrEmpty(changedFeat.Key))
+                     action = GameAction.EndGameShowStats;
+                  else
+                     action = GameAction.EndGameShowFeats;
+               }
+               else if (GamePhase.EveningDebriefing == gi.GamePhase)
+               {
+                  if (true == String.IsNullOrEmpty(changedFeat.Key))
+                     action = GameAction.EveningDebriefingShowFeatEnd;
+                  else
+                     action = GameAction.EveningDebriefingShowFeat;
+               }
+               else if(GamePhase.BattleRoundSequence == gi.GamePhase)
+               {
+                  if (true == String.IsNullOrEmpty(changedFeat.Key))
+                     action = GameAction.BattleRoundSequenceShowFeatEnd;
+                  else
+                     action = GameAction.BattleRoundSequenceShowFeat;
+               }
+               myGameEngine.PerformAction(ref gi, ref action, 0);
+               break;
+
             default:
                break;
          }
@@ -5915,6 +6026,19 @@ namespace Pattons_Best
                            action = GameAction.EventDebriefDecorationHeart;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
+                        case "EndGameShowStats":
+                           GameFeat changedFeat;
+                           if (false == GameEngine.theFeatsInGame.GetFeatChange(GameEngine.theFeatsInGameStarting, out changedFeat)) // End Game Feats and Stats
+                           {
+                              Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "TextBlock_MouseDown(): Get_FeatChange() returned false");
+                              return;
+                           }
+                           if( true == String.IsNullOrEmpty(changedFeat.Key))
+                              action = GameAction.EndGameShowStats; 
+                           else
+                              action = GameAction.EndGameShowFeats;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
                         default:
                            break;// do nothing
                      }

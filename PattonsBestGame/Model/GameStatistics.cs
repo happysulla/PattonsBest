@@ -50,6 +50,7 @@ namespace Pattons_Best
       [NonSerialized]
       public static string[] theDefaults =
       {
+         "NumDays",
          "NumGames",
          "NumWins",
          "NumLostTanks",
@@ -93,19 +94,22 @@ namespace Pattons_Best
       public bool Contains(GameStatistic o) { return myList.Contains(o); }
       public IEnumerator GetEnumerator() { return myList.GetEnumerator(); }
       public int IndexOf(GameStatistic o) { return myList.IndexOf(o); }
-      public GameStatistic? Find(string key)
+      public GameStatistic Find(string key)
       {
          int i = 0;
          foreach (object o in myList)
          {
-            GameStatistic? stat = (GameStatistic)o;
-            if (null == stat)
+            GameStatistic? stat1 = (GameStatistic)o;
+            if (null == stat1)
                continue;
-            if (key == stat.Key)
-               return stat;
+            if (key == stat1.Key)
+               return stat1;
             ++i;
          }
-         return null;
+         Logger.Log(LogEnum.LE_ERROR, "Find(): null for key=" + key);
+         GameStatistic? stat = new GameStatistic(key);
+         this.myList.Add(stat);
+         return stat;
       }
       public GameStatistic? RemoveAt(int index)
       {
@@ -145,6 +149,17 @@ namespace Pattons_Best
             this.myList.Add(o);
          }
          o.Value = value;
+      }
+      public void AddOne(string key)
+      {
+         GameStatistic? o = Find(key);
+         if (null == o)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetValue(): null for key=" + key);
+            o = new GameStatistic(key);
+            this.myList.Add(o);
+         }
+         o.Value++;
       }
       public override string ToString()
       {

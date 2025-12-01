@@ -181,7 +181,7 @@ namespace Pattons_Best
             return false;
          }
          //----------------------------------
-         if ( false == UpdateReportTimeTrack(lastReport))
+         if ( false == UpdateReportTimeTrack(lastReport)) // Reset Time Rectangles 
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): UpdateReportTimeTrack() returned false");
             return false;
@@ -238,7 +238,16 @@ namespace Pattons_Best
          }
          myTextBlockDisplay.Text = sb.ToString();
          //----------------------------------
-         if( false == String.IsNullOrEmpty(lastReport.DayEndedTime))
+         if( true == String.IsNullOrEmpty(lastReport.DayEndedTime))
+         {
+            mySpanTimeEnded.Inlines.Clear();
+            mySpanTimeEnded.Inlines.Add(new Run("_______________"));
+            mySpanBreakdown.Inlines.Clear();
+            mySpanBreakdown.Inlines.Add(new Run("_______________"));
+            mySpanKnockedOut.Inlines.Clear();
+            mySpanKnockedOut.Inlines.Add(new Run("_______________"));
+         }
+         else
          {
             s = AddSpaces(lastReport.DayEndedTime, END_TIME_LEN);
             mySpanTimeEnded.Inlines.Clear();
@@ -254,6 +263,18 @@ namespace Pattons_Best
       }
       private bool UpdateReportTimeTrack(IAfterActionReport report)
       {
+         foreach (UIElement ui0 in myGridTime.Children)  // Clear all rectangles
+         {
+            if (ui0 is StackPanel sp)
+            {
+               foreach (UIElement ui1 in sp.Children)
+               {
+                  if (ui1 is Rectangle rect)
+                     rect.Fill = Brushes.Transparent;
+               }
+            }
+         }
+         //-----------------------------------------------
          int hour = 5;
          foreach (UIElement ui0 in myGridTime.Children)
          {
