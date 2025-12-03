@@ -168,6 +168,7 @@ namespace Pattons_Best
       bool IsTaskForceInStartArea(out bool isStartArea);
       bool IsTaskForceInExitArea(out bool isExitAreaReached);
       bool IsTaskForceInEnemyArea(out bool isEnemyAreaReached);
+      bool KillEnemy(IAfterActionReport report, IMapItem mi, bool isYourFire);
       void KillSherman(IAfterActionReport report, string reason);
       void ScoreYourVictoryPoint(IAfterActionReport report, IMapItem enemy);
       void ScoreFriendlyVictoryPoint(IAfterActionReport report, IMapItem enemy);

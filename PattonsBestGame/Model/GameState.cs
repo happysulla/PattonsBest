@@ -8344,14 +8344,12 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK_INF, "ResolveToKillEnemyUnitKill(): attacking infantry=" + gi.TargetMainGun.Name + " toHit=" + toKillNum.ToString() + " modifier=" + modifier.ToString());
             if (TableMgr.KIA == modifier)  // automatic KILL
             {
-               gi.ScoreYourVictoryPoint(lastReport, gi.TargetMainGun);
-               gi.TargetMainGun.IsHeHit = false;
-               gi.TargetMainGun.IsApHit = false;
-               gi.TargetMainGun.IsKilled = true;
-               gi.TargetMainGun.IsMoving = false;
-               gi.TargetMainGun.EnemyAcquiredShots.Remove("Sherman");
-               gi.Sherman.EnemyAcquiredShots.Remove(gi.TargetMainGun.Name);
-               gi.TargetMainGun.SetBloodSpots();
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK_INF, "ResolveToKillEnemyUnitKill(): vs Infantry target -- AUTO KILL - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+               if ( false == gi.KillEnemy(lastReport, gi.TargetMainGun, true))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitKill(): KillEnemy() returned error");
+                  return false;
+               }
                return true;
             }
             if (TableMgr.NO_CHANCE == modifier)
@@ -8396,14 +8394,11 @@ namespace Pattons_Best
                   if (TableMgr.KIA == toKillNum) // automatic KILL
                   {
                      Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): AUTO KIlled KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
-                     gi.ScoreYourVictoryPoint(lastReport, gi.TargetMainGun);
-                     gi.TargetMainGun.IsHeHit = false;
-                     gi.TargetMainGun.IsApHit = false;
-                     gi.TargetMainGun.IsKilled = true;
-                     gi.TargetMainGun.IsMoving = false;
-                     gi.TargetMainGun.EnemyAcquiredShots.Remove("Sherman");
-                     gi.Sherman.EnemyAcquiredShots.Remove(gi.TargetMainGun.Name);
-                     gi.TargetMainGun.SetBloodSpots();
+                     if (false == gi.KillEnemy(lastReport, gi.TargetMainGun, true))
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitKill(): KillEnemy() returned error");
+                        return false;
+                     }
                      return true;
                   }
                   else if (TableMgr.NO_CHANCE == toKillNum)
@@ -8467,14 +8462,11 @@ namespace Pattons_Best
                   if (TableMgr.KIA == toKillNum) // automatic KILL
                   {
                      Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): AUTO KIlled KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
-                     gi.ScoreYourVictoryPoint(lastReport, gi.TargetMainGun);
-                     gi.TargetMainGun.IsHeHit = false;
-                     gi.TargetMainGun.IsApHit = false;
-                     gi.TargetMainGun.IsKilled = true;
-                     gi.TargetMainGun.IsMoving = false;
-                     gi.TargetMainGun.SetBloodSpots();
-                     gi.TargetMainGun.EnemyAcquiredShots.Remove("Sherman");
-                     gi.Sherman.EnemyAcquiredShots.Remove(gi.TargetMainGun.Name);
+                     if (false == gi.KillEnemy(lastReport, gi.TargetMainGun, true))
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitKill(): KillEnemy() returned error");
+                        return false;
+                     }
                      return true;
                   }
                   else if (TableMgr.NO_CHANCE == toKillNum)
@@ -8505,14 +8497,11 @@ namespace Pattons_Best
                   if (TableMgr.KIA == toKillNum) // automatic KILL
                   {
                      Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): AUTO KIlled KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
-                     gi.ScoreYourVictoryPoint(lastReport, gi.TargetMainGun);
-                     gi.TargetMainGun.IsHeHit = false;
-                     gi.TargetMainGun.IsApHit = false;
-                     gi.TargetMainGun.IsKilled = true;
-                     gi.TargetMainGun.IsMoving = false;
-                     gi.TargetMainGun.SetBloodSpots();
-                     gi.TargetMainGun.EnemyAcquiredShots.Remove("Sherman");
-                     gi.Sherman.EnemyAcquiredShots.Remove(gi.TargetMainGun.Name);
+                     if (false == gi.KillEnemy(lastReport, gi.TargetMainGun, true))
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitKill(): KillEnemy() returned error");
+                        return false;
+                     }
                      return true;
                   }
                   else if ( (TableMgr.NO_CHANCE == toKillNum) || (TableMgr.THROWN_TRACK == toKillNum) )
@@ -8592,14 +8581,11 @@ namespace Pattons_Best
             case "He":
             case "Ap":
             case "Hvap":
-               gi.ScoreYourVictoryPoint(lastReport, gi.TargetMainGun);
-               gi.TargetMainGun.IsHeHit = false;
-               gi.TargetMainGun.IsApHit = false;
-               gi.TargetMainGun.IsKilled = true;
-               gi.TargetMainGun.IsMoving = false;
-               gi.TargetMainGun.EnemyAcquiredShots.Remove("Sherman");
-               gi.Sherman.EnemyAcquiredShots.Remove(gi.TargetMainGun.Name);
-               gi.TargetMainGun.SetBloodSpots();
+               if (false == gi.KillEnemy(lastReport, gi.TargetMainGun, true))
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitKill(): KillEnemy() returned error");
+                  return false;
+               }
                break;
             default:
                break;

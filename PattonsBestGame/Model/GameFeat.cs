@@ -48,40 +48,45 @@ namespace Pattons_Best
    public class GameFeats : IEnumerable
    {
       [NonSerialized]
-      public static string[,] theDefaults = 
+      public static string[] theDefaults = 
       {
-         {"EndGameExplode", "Game ended due to tank explosion killing crew" },
-         {"EndGameWounds", "Game ended due to Commander dieing from wounds" },
-         {"EndGameCmdrKilled", "Game ended due to Commander KIA in Brew up"},
-         {"EndGame", "Reached the end of a campaign game"},
-         {"EndGameWin", "Scored positive points an end of campaign"},
-         {"DecorPurpleHeart", "Commander received Purple Heart"},
-         {"DecorPurpleBronze", "Commander received Bronze Star"},
-         {"DecorPurpleSilver", "Commander received Silver Star"},
-         {"DecorPurpleCross", "Commander received Distinguished Cross"},
-         {"DecorHonor", "Commander received Medal of Honor"},
-         {"KillLw", "Killed Light Infantry"},
-         {"KillMg", "Killed Machine Gun Squad"},
-         {"KillTruck", "Killed Truck"},
-         {"KillPzIV", "Killed PzIV Tank"},
-         {"KillPzV", "Killed PzV Tank"},
-         {"KillPzVIe", "Killed PzVIe (Tiger) Tank"},
-         {"KillPzVIb", "Killed PzVIb Tank"},
-         {"KillMII", "Killed Marder II SPG"},
-         {"KillMIII", "Killed Marder III SPG"},
-         {"KillStug", "Killed STuGIIIg SPG"},
-         {"KillLJgdPzIV", "Killed JgdPzIV SPG"},
-         {"KillJgdPz38t", "Killed JgdPz38t SPG"},
-         {"KillPSW", "Killed PSW232 AFV"},
-         {"KillSPW", "Killed SPW251 AFV"},
-         {"KillPak38", "Killed Pak38 ATG"},
-         {"KillPak40", "Killed Pak40 ATG"},
-         {"KillPak43", "Killed Pak43 ATG"},
-         {"Hvss", "Crew trained on HVSS Use"},
-         {"RepairMain", "Successfully repaired Main Gun"},
-         {"RepairMg", "Successfully repaired Machine Gun"},
-         {"FireMortar", "Fired Mortar in Combat"},
-         {"ThrowSmoke", "Threw Smoke from Hatch"}
+         "EndGameExplode",
+         "EndGameWounds",
+         "EndGameCmdrKilled", 
+         "EndGame",
+         "EndGameWin",
+         //------------
+         "NumKillLw",
+         "NumKillMg",
+         "NumKillTruck",
+         "NumKillPsw",
+         "NumKillSpw",
+         "NumKillPzIV",
+         "NumKillPzV",
+         "NumKillPzVIe",
+         "NumKillPzVIb",
+         "NumKillMarderII",
+         "NumKillMarderIII",
+         "NumKillSTuGIIIg",
+         "NumKillJgdPzIV",
+         "NumKillJgdPz38t",
+         "NumKillPsw232",
+         "NumKillSpw251",
+         "NumKillPak38",
+         "NumKillPak40",
+         "NumKillPak43",
+         //------------
+         "NumPurpleHearts",
+         "NumBronzeStars",
+         "NumSilverStars",
+         "NumDistinguishedCrosses",
+         "NumMedalOfHonors",
+         //------------
+         "Hvss",
+         "RepairMain",
+         "RepairMg",
+         "FireMortar",
+         "ThrowSmoke"
       };
       [NonSerialized] public static string theGameFeatDirectory = "";
       private readonly ArrayList myList;
@@ -161,11 +166,34 @@ namespace Pattons_Best
          }
          return true;
       }
+
       public void SetOriginalGameFeats()
       {
          Clear();
-         for (int row=0; row < theDefaults.Length; row++)
-            Add(new GameFeat(theDefaults[row,0]));
+         foreach (string s in theDefaults)
+            Add(new GameFeat(s));
+      }
+      public void SetValue(string key, int value)
+      {
+         GameFeat? o = Find(key);
+         if (null == o)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SetValue(): null for key=" + key);
+            o = new GameFeat(key);
+            this.myList.Add(o);
+         }
+         o.Value = value;
+      }
+      public void AddOne(string key)
+      {
+         GameFeat? o = Find(key);
+         if (null == o)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "AddOne(): null for key=" + key);
+            o = new GameFeat(key);
+            this.myList.Add(o);
+         }
+         o.Value++;
       }
       public override string ToString()
       {
@@ -180,4 +208,36 @@ namespace Pattons_Best
          return sb.ToString();
       }
    }
+         //{"EndGameExplode", "Game ended due to tank explosion killing crew" },
+         //{ "EndGameWounds", "Game ended due to Commander dieing from wounds" },
+         //{ "EndGameCmdrKilled", "Game ended due to Commander KIA in Brew up"},
+         //{ "EndGame", "Reached the end of a campaign game"},
+         //{ "EndGameWin", "Scored positive points an end of campaign"},
+         //{ "DecorPurpleHeart", "Commander received Purple Heart"},
+         //{ "DecorPurpleBronze", "Commander received Bronze Star"},
+         //{ "DecorPurpleSilver", "Commander received Silver Star"},
+         //{ "DecorPurpleCross", "Commander received Distinguished Cross"},
+         //{ "DecorHonor", "Commander received Medal of Honor"},
+         //{ "KillLw", "Killed Light Infantry"},
+         //{ "KillMg", "Killed Machine Gun Squad"},
+         //{ "KillTruck", "Killed Truck"},
+         //{ "KillPzIV", "Killed PzIV Tank"},
+         //{ "KillPzV", "Killed PzV Tank"},
+         //{ "KillPzVIe", "Killed PzVIe (Tiger) Tank"},
+         //{ "KillPzVIb", "Killed PzVIb Tank"},
+         //{ "KillMII", "Killed Marder II SPG"},
+         //{ "KillMIII", "Killed Marder III SPG"},
+         //{ "KillStug", "Killed STuGIIIg SPG"},
+         //{ "KillLJgdPzIV", "Killed JgdPzIV SPG"},
+         //{ "KillJgdPz38t", "Killed JgdPz38t SPG"},
+         //{ "KillPSW", "Killed PSW232 AFV"},
+         //{ "KillSPW", "Killed SPW251 AFV"},
+         //{ "KillPak38", "Killed Pak38 ATG"},
+         //{ "KillPak40", "Killed Pak40 ATG"},
+         //{ "KillPak43", "Killed Pak43 ATG"},
+         //{ "Hvss", "Crew trained on HVSS Use"},
+         //{ "RepairMain", "Successfully repaired Main Gun"},
+         //{ "RepairMg", "Successfully repaired Machine Gun"},
+         //{ "FireMortar", "Fired Mortar in Combat"},
+         //{ "ThrowSmoke", "Threw Smoke from Hatch"}
 }

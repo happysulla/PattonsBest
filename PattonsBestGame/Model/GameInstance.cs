@@ -1100,6 +1100,56 @@ namespace Pattons_Best
          }
          return true;
       }
+      public bool KillEnemy(IAfterActionReport report, IMapItem mi, bool isYourFire)
+      {
+         if( true == isYourFire)
+         {
+            this.ScoreYourVictoryPoint(report, mi);
+         }
+         else
+         {
+
+         }
+         //-------------------------------------
+         mi.IsKilled = true;
+         mi.IsMoving = false;
+         mi.IsHeHit = false;
+         mi.IsApHit = false;
+         mi.EnemyAcquiredShots.Remove("Sherman");
+         mi.SetBloodSpots();
+         this.Sherman.EnemyAcquiredShots.Remove(mi.Name);
+         string enemyUnit = mi.GetEnemyUnit();
+         string name = "";
+         switch(enemyUnit)
+         {
+            case "TANK": name = "NumKillPzVIb"; break;
+            case "ATG": name = "NumKillPzVIe"; break;
+            case "SPG": name = "NumKillPzVIe"; break;
+            case "LW": name = "NumKillLw"; break;
+            case "MG": name = "NumKillMg"; break;
+            case "TRUCK": name = "NumKillTruck"; break;
+            case "PSW": name = "NumKillPsw"; break;
+            case "SPW": name = "NumKillSpw"; break;
+            case "Pak38": name = "NumKillPzVIe"; break;
+            case "Pak40": name = "NumKillPzVIe"; break;
+            case "Pak43": name = "NumKillPzVIe"; break;
+            case "PzIV": name = "NumKillPzIV"; break;
+            case "PzV": name = "NumKillPzV"; break;
+            case "PzVIb": name = "NumKillPzVIb"; break;
+            case "PzVIe": name = "NumKillPzVIe"; break;
+            case "STuGIIIg": name = "NumKillSTuGIIIg"; break;
+            case "MARDERII": name = "NumKillMarderII"; break;
+            case "MARDERIII": name = "NumKillMarderIII"; break;
+            case "JdgPzIV": name = "NumKillJgdPzIV"; break;
+            case "JdgPz38t": name = "NumKillJgdPz38t"; break;
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "KillEnemy(): reached default with enemyUnit=" + enemyUnit);
+               return false;
+         }
+         this.Statistics.AddOne(name);
+         GameEngine.theFeatsInGame.AddOne(name);
+         return true;
+      }
       public void KillSherman(IAfterActionReport report, string reason)
       {
          this.Sherman.IsKilled = true;

@@ -56,10 +56,13 @@ namespace Pattons_Best
          "NumLostTanks",
          "NumOfBattles",
          "NumOfKilledCrewman",
+         //--------------
          "NumOfEnemyKills",
          "NumKillLw",
          "NumKillMg",
          "NumKillTruck",
+         "NumKillPsw",
+         "NumKillSpw",
          "NumKillPzIV",
          "NumKillPzV",
          "NumKillPzVIe",
@@ -74,11 +77,13 @@ namespace Pattons_Best
          "NumKillPak38",
          "NumKillPak40",
          "NumKillPak43",
+         //--------------
          "NumPurpleHearts",
          "NumBronzeStars",
          "NumSilverStars",
          "NumDistinguishedCrosses",
          "NumMedalOfHonors",
+         //--------------
          "DayMaxBetweenCombat",
          "MaxRollsForAirSupport",
          "MaxRollsForArtillerySupport"
@@ -155,7 +160,7 @@ namespace Pattons_Best
          GameStatistic? o = Find(key);
          if (null == o)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetValue(): null for key=" + key);
+            Logger.Log(LogEnum.LE_ERROR, "AddOne(): null for key=" + key);
             o = new GameStatistic(key);
             this.myList.Add(o);
          }
