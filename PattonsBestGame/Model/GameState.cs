@@ -1134,13 +1134,13 @@ namespace Pattons_Best
          }
          if ( (true == isInjuredCrewmanReplaced) && (true == isDayLightLeft) )
          {
-            SetCommand(gi, action, GameAction.DieRollActionNone, "e062");
+            SetCommand(gi, action, GameAction.DieRollActionNone, "e062"); // TODO: Need to account for GameFeat process when injured crewman replaced
          }
          else
          {
-            if (false == ResetToPrepareForBattle(gi, report, action)) // Resolve_EmptyBattleBoard()
+            if (false == ResetToPrepareForBattle(gi, report, action)) // Resolve_EmptyBattleBoard() - If no Injured Crewman
             {
-               Logger.Log(LogEnum.LE_ERROR, "Resolve_EmptyBattleBoard(): ResetToPrepareForBattle() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "Resolve_EmptyBattleBoard(): Reset_ToPrepareForBattle() returned false");
                return false;
             }
          }
@@ -2718,12 +2718,17 @@ namespace Pattons_Best
          //-------------------------------------------------------
          gi.IsHatchesActive = false;
          //-------------------------------------------------------
-         gi.ShermanTypeOfFire = "";                    // ResetGame()
-         gi.IsShermanDeliberateImmobilization = false; // ResetGame()
+         gi.ShermanTypeOfFire = "";                    // Setup_NewGame()
+         gi.IsShermanDeliberateImmobilization = false; // Setup_NewGame()
          gi.NumSmokeAttacksThisRound = 0;
          gi.ShermanHits.Clear();
+         //--------------------------------------------------
+         Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Setup_NewGame(): reset identified to empty string");
+         gi.IdentifiedAtg = ""; // Setup_NewGame()
+         gi.IdentifiedTank = "";
+         gi.IdentifiedSpg = "";
          //-------------------------------------------------------
-         gi.IsCommanderDirectingMgFire = false;       // ResetGame()
+         gi.IsCommanderDirectingMgFire = false;       // Setup_NewGame()
          gi.IsShermanFiringAaMg = false;
          gi.IsShermanFiringBowMg = false;
          gi.IsShermanFiringCoaxialMg = false;
@@ -2738,7 +2743,7 @@ namespace Pattons_Best
          gi.IsBowMgRepairAttempted = false;
          gi.IsCoaxialMgRepairAttempted = false;
          //-------------------------------------------------------
-         gi.IsShermanTurretRotated = false;       // ResetGame()
+         gi.IsShermanTurretRotated = false;       // Setup_NewGame()
          gi.ShermanRotationTurretOld = gi.Sherman.RotationTurret;
          //-------------------------------------------------------
          gi.IsAirStrikePending = false;
@@ -4827,7 +4832,7 @@ namespace Pattons_Best
                   ICrewMember? cm = gi.GetCrewMemberByRole(role);
                   if (null == cm)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ResetRound(): cm=null mi.Name=" + mi.Name);
+                     Logger.Log(LogEnum.LE_ERROR, "Perform_BattlePreparationsSetup(): cm=null mi.Name=" + mi.Name);
                      return false;
                   }
                   cm.IsButtonedUp = false;
@@ -5164,7 +5169,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
                   }
                   break;
-               case GameAction.BattleCrewReplaced:
+               case GameAction.BattleCrewReplaced: 
                   if (false == ResetToPrepareForBattle(gi, lastReport, action)) // GameStateBattle.PerformAction(Battle_CrewReplaced)
                   {
                      returnStatus = "Reset_ToPrepareForBattle() returned false";
@@ -5558,7 +5563,7 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattle.GameStateBattleRoundSequence(BattleRoundSequenceAmmoOrders): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.MarkAmmoReload");
+                     Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceAmmoOrders): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.MarkAmmoReload");
                      gi.BattlePhase = BattlePhase.MarkAmmoReload;
                      int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
                      if (0 == totalAmmo)
@@ -6718,10 +6723,10 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleCrewReplaced:
-                  if (false == ResetToPrepareForBattle(gi, lastReport, action)) // GameStateBattle.PerformAction(Battle_CrewReplaced)
+                  if (false == ResetToPrepareForBattle(gi, lastReport, action)) // GameStateBattleRoundSequence.PerformAction(Battle_CrewReplaced)
                   {
                      returnStatus = "Reset_ToPrepareForBattle() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): " + returnStatus);
                   }
                   break;
                case GameAction.BattleRoundSequenceCrewReplaced:
@@ -6737,7 +6742,7 @@ namespace Pattons_Best
                      returnStatus = "ResetRound() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanAdvanceOrRetreatEnd): " + returnStatus);
                   }
-                  else if (false == ResetToPrepareForBattle(gi, lastReport, action)) 
+                  else if (false == ResetToPrepareForBattle(gi, lastReport, action)) // BattleRoundSequenceShermanAdvanceOrRetreatEnd !!! follows ResetRound()
                   {
                      returnStatus = "Reset_ToPrepareForBattle() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanAdvanceOrRetreatEnd): " + returnStatus);
@@ -7016,11 +7021,16 @@ namespace Pattons_Best
       private bool BattleRoundSequenceStart(IGameInstance gi, ref GameAction action)
       {
          //-------------------------------------------------------
-         if (false == ResetRound(gi, action, "BattleRoundSequenceStart()", false))
+         if (false == ResetRound(gi, action, "BattleRoundSequence_Start()", false))
          {
-            Logger.Log(LogEnum.LE_ERROR, "BattleRoundSequenceStart(): ResetRound() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "BattleRoundSequence_Start(): Reset_Round() returned false");
             return false;
          }
+         //--------------------------------------------------
+         Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "BattleRoundSequence_Start(): reset identified to empty string");
+         gi.IdentifiedAtg = ""; // BattleRoundSequence_Start()
+         gi.IdentifiedTank = "";
+         gi.IdentifiedSpg = "";
          //-------------------------------------------------------
          bool isBattleBoardEmpty = true;
          foreach (IStack stack in gi.BattleStacks)
@@ -7037,7 +7047,7 @@ namespace Pattons_Best
          if (true == isBattleBoardEmpty)
             return true;
          //-------------------------------------------------------
-         Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "BattleRoundSequenceStart(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Spotting");
+         Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "BattleRoundSequence_Start(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Spotting");
          gi.BattlePhase = BattlePhase.Spotting;
          int smokeCount = 0;
          foreach (IStack stack in gi.BattleStacks)
@@ -7054,9 +7064,9 @@ namespace Pattons_Best
          }
          else
          {
-            if (false == SpottingPhaseBegin(gi, ref action, "BattleRoundSequenceStart()"))
+            if (false == SpottingPhaseBegin(gi, ref action, "BattleRoundSequence_Start()"))
             {
-               Logger.Log(LogEnum.LE_ERROR, "BattleRoundSequenceStart(): SpottingPhaseBegin() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "BattleRoundSequence_Start(): SpottingPhase_Begin() returned false");
                return false;
             }
          }
@@ -7651,7 +7661,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "MoveSherman(): Replace_InjuredCrewmen() returned false");
                   return false;
                }
-               if (true == isInjuredCrewmanReplaced)
+               if (true == isInjuredCrewmanReplaced) // Generate MorningBriefingAssignCrewRating when image clicked which allows replacing crew
                {
                   SetCommand(gi, outAction, GameAction.DieRollActionNone, "e062a");
                }
@@ -7784,13 +7794,13 @@ namespace Pattons_Best
                //-----------------------------------
                if (false == ResetRound(gi, outAction, "MoveSherman_AdvanceOrRetreat() gi.EnteredHexes.Count < 2")) // MoveSherman_AdvanceOrRetreat() - Retreating
                {
-                  Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): ResetRound() = false");
+                  Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): Reset_Round() returned false");
                   return false;
                }
                //-----------------------------------
-               if (false == ResetToPrepareForBattle(gi, lastReport, outAction)) // MoveSherman_AdvanceOrRetreat()
+               if (false == ResetToPrepareForBattle(gi, lastReport, outAction)) // MoveSherman_AdvanceOrRetreat() !!! After ResetRound()
                {
-                  Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): ResetToPrepareForBattle() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "MoveSherman_AdvanceOrRetreat(): Reset_ToPrepareForBattle() returned false");
                   return false;
                }
                //-----------------------------------
@@ -9045,7 +9055,7 @@ namespace Pattons_Best
          {
             if (false == ResetRound(gi, outAction, "NextStepAfterRandomEvent()"))    // NextStepAfterRandomEvent
             {
-               Logger.Log(LogEnum.LE_ERROR, "NextStepAfterRandomEvent(): ResetRound() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "NextStepAfterRandomEvent(): Reset_Round() returned false");
                return false;
             }
             else if (("None" == gi.GetGunLoadType()) && (BattlePhase.BackToSpotting == gi.BattlePhase))
@@ -9066,11 +9076,11 @@ namespace Pattons_Best
       }
       private bool ResetRound(IGameInstance gi, GameAction action, string caller, bool isAmmoReset = false)
       {
-         Logger.Log(LogEnum.LE_SHOW_RESET_ROUND, "ResetRound(): %%%%%%%%%%%%%%%%%% entering - called by " + caller);
+         Logger.Log(LogEnum.LE_SHOW_RESET_ROUND, "Reset_Round(): %%%%%%%%%%%%%%%%%% entering - called by " + caller);
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResetRound(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Reset_Round(): lastReport=null");
             return false;
          }
          //-------------------------------------------------------
@@ -9091,7 +9101,7 @@ namespace Pattons_Best
          gi.DieRollAction = GameAction.DieRollActionNone;
          if (false == ResetDieResults(gi))
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResetRound(): ResetDieResults() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Reset_Round(): ResetDieResults() returned false");
             return false;
          }
          //-------------------------------------------------------
@@ -9124,7 +9134,7 @@ namespace Pattons_Best
                   ICrewMember? cm = gi.GetCrewMemberByRole(role);
                   if (null == cm)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ResetRound(): cm=null mi.Name=" + mi.Name);
+                     Logger.Log(LogEnum.LE_ERROR, "Reset_Round(): cm=null mi.Name=" + mi.Name);
                      return false;
                   }
                   cm.IsButtonedUp = false;
@@ -9138,13 +9148,12 @@ namespace Pattons_Best
          //-------------------------------------------------------
          gi.IsHatchesActive = false;
          //-------------------------------------------------------
-         gi.ShermanTypeOfFire = "";                    // Reset Round()
-         gi.IsShermanDeliberateImmobilization = false; // Reset Round()
+         gi.ShermanTypeOfFire = "";                    // Reset_Round()
+         gi.IsShermanDeliberateImmobilization = false; // Reset_Round()
          gi.NumSmokeAttacksThisRound = 0;
          gi.ShermanHits.Clear();
-         
          //-------------------------------------------------------
-         gi.IsCommanderDirectingMgFire = false;       // Reset Round()
+         gi.IsCommanderDirectingMgFire = false;       // Reset_Round()
          gi.IsShermanFiringAaMg = false;
          gi.IsShermanFiringBowMg = false;
          gi.IsShermanFiringCoaxialMg = false;
@@ -9159,7 +9168,7 @@ namespace Pattons_Best
          gi.IsBowMgRepairAttempted = false;
          gi.IsCoaxialMgRepairAttempted = false;
          //-------------------------------------------------------
-         gi.IsShermanTurretRotated = false;       // Reset Round()
+         gi.IsShermanTurretRotated = false;       // Reset_Round()
          gi.ShermanRotationTurretOld = gi.Sherman.RotationTurret;
          //-------------------------------------------------------
          gi.IsAirStrikePending = false;
@@ -9183,12 +9192,12 @@ namespace Pattons_Best
             }
          }
          //-------------------------------------------------------
-         Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "ResetRound(): gi.MapItemMoves.Clear()");
+         Logger.Log(LogEnum.LE_VIEW_MIM_CLEAR, "Reset_Round(): gi.MapItemMoves.Clear()");
          gi.MapItemMoves.Clear();
          gi.Sherman.IsMoved = false;
          if (false == ResetRoundSetState(gi, ref action))
          {
-            Logger.Log(LogEnum.LE_ERROR, "ResetRound(): ResetRoundSetState() retruned false");
+            Logger.Log(LogEnum.LE_ERROR, "Reset_Round(): ResetRoundSetState() retruned false");
             return false;
          }
          return true;
@@ -9593,11 +9602,11 @@ namespace Pattons_Best
          //-------------------------------------------------------
          gi.ReadyRacks.Clear();
          gi.Hatches.Clear();
-         gi.CrewActions.Clear();            // Reset_Day()
+         gi.CrewActions.Clear();            // EveningDebriefing_ResetDay()
          Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "EveningDebriefing_ResetDay(): clear all crewactions");
          gi.GunLoads.Clear();
-         gi.TargetMainGun = null;           // Reset_Day()
-         gi.IsShermanFiringAtFront = false; // Reset_Day()
+         gi.TargetMainGun = null;           // EveningDebriefing_ResetDay()
+         gi.IsShermanFiringAtFront = false; // EveningDebriefing_ResetDay()
          //-------------------------------------------------------
          gi.EnemyStrengthCheckTerritory = null;
          gi.ArtillerySupportCheck = null;
@@ -9607,12 +9616,12 @@ namespace Pattons_Best
          //-------------------------------------------------------
          gi.IsHatchesActive = false;
          //-------------------------------------------------------
-         gi.IsMinefieldAttack = false;                    // Reset_Day()
+         gi.IsMinefieldAttack = false;                    // EveningDebriefing_ResetDay()
          gi.IsHarrassingFireBonus = false;
          gi.IsFlankingFire = false;
          gi.IsEnemyAdvanceComplete = false;
          //-------------------------------------------------------
-         gi.IsShermanFiringAtFront = false;              // Reset_Day()
+         gi.IsShermanFiringAtFront = false;              // EveningDebriefing_ResetDay()
          gi.IsShermanDeliberateImmobilization = false;
          gi.ShermanTypeOfFire = "";
          gi.NumSmokeAttacksThisRound = 0;
@@ -9625,16 +9634,21 @@ namespace Pattons_Best
          gi.Panzerfaust = null;
          gi.NumCollateralDamage = 0;
          //-------------------------------------------------------
-         gi.TargetMainGun = null;                      // Reset_Day()
-         if( (true == gi.IsMalfunctionedMainGun) || (true == gi.IsBrokenMainGun) )
+         gi.TargetMainGun = null;                      // EveningDebriefing_ResetDay()
+         if ( (true == gi.IsMalfunctionedMainGun) || (true == gi.IsBrokenMainGun) )
             Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "EveningDebriefing_ResetDay(): Main Gun Repaired");
          gi.IsMalfunctionedMainGun = false;
          gi.IsBrokenMainGun = false;
          gi.IsBrokenGunSight = false;
-         gi.FirstShots.Clear();                     // Reset_Day()
+         gi.FirstShots.Clear();                     // EveningDebriefing_ResetDay()
          gi.ShermanHits.Clear();
+         //--------------------------------------------------
+         Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "EveningDebriefing_ResetDay(): reset identified to empty string");
+         gi.IdentifiedAtg = ""; // EveningDebriefing_ResetDay()
+         gi.IdentifiedTank = "";
+         gi.IdentifiedSpg = "";
          //-------------------------------------------------------
-         gi.IsCommanderDirectingMgFire = false;     // Reset_Day()
+         gi.IsCommanderDirectingMgFire = false;     // EveningDebriefing_ResetDay()
          gi.IsShermanFiringAaMg = false;
          gi.IsShermanFiringBowMg = false;
          gi.IsShermanFiringCoaxialMg = false;
@@ -9656,7 +9670,7 @@ namespace Pattons_Best
          gi.IsBrokenPeriscopeGunner = false;
          gi.IsBrokenPeriscopeCommander = false;
          //-------------------------------------------------------
-         gi.IsShermanTurretRotated = false;  // Reset_Day()
+         gi.IsShermanTurretRotated = false;  // EveningDebriefing_ResetDay()
          gi.ShermanRotationTurretOld = 0.0;
          //-------------------------------------------------------
          gi.IsLeadTank = false;
@@ -9672,7 +9686,7 @@ namespace Pattons_Best
          gi.IsCommanderRescuePerformed = false;
          gi.IsPromoted = false;
          //-------------------------------------------------------
-         gi.BattleResistance = EnumResistance.None;                      // Reset_Day()
+         gi.BattleResistance = EnumResistance.None;                      // EveningDebriefing_ResetDay()
          gi.Death = null;
          gi.Panzerfaust = null;
          gi.NumCollateralDamage = 0;
@@ -9731,7 +9745,7 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "EveningDebriefing_ResetDay(): newReport=" + gi.Day + " date=" + TableMgr.GetDate(gi.Day) + " scenario=" + newReport.Scenario.ToString() + "-->" + newReport.Scenario.ToString());
          //-------------------------------------------------------
          bool isCrewmanReplaced;
-         if (false == ReplaceInjuredCrewmen(gi, out isCrewmanReplaced, "EveningDebriefing_ResetDay()"))  // Reset_Day()
+         if (false == ReplaceInjuredCrewmen(gi, out isCrewmanReplaced, "EveningDebriefing_ResetDay()"))  // Reset_Day() - TODO: Check feats process
          {
             Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): Replace_InjuredCrewmen() returned false");
             return false;

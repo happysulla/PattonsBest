@@ -133,38 +133,38 @@ namespace Pattons_Best
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformSpotting(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "Perform_Spotting(): myGameInstance=null");
             return false;
          }
          Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "PerformSpotting(): ++++++++++++++++++++++++++++++ battlestacks=" + myGameInstance.BattleStacks.ToString());
          if (null == myCanvas)
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformSpotting(): myCanvas=null");
+            Logger.Log(LogEnum.LE_ERROR, "Perform_Spotting(): myCanvas=null");
             return false;
          }
          if (null == myScrollViewer)
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformSpotting(): myScrollViewer=null");
+            Logger.Log(LogEnum.LE_ERROR, "Perform_Spotting(): myScrollViewer=null");
             return false;
          }
          if (null == myRulesMgr)
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformSpotting(): myRulesMgr=null");
+            Logger.Log(LogEnum.LE_ERROR, "Perform_Spotting(): myRulesMgr=null");
             return false;
          }
          if (null == myDieRoller)
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformSpotting(): myDieRoller=null");
+            Logger.Log(LogEnum.LE_ERROR, "Perform_Spotting(): myDieRoller=null");
             return false;
          }
          IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformSpotting(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Perform_Spotting(): lastReport=null");
             return false;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
-         Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "PerformSpotting(): crew=" + lastReport.Commander.Name);
+         Logger.Log(LogEnum.LE_SHOW_CREW_NAME, "Perform_Spotting(): crew=" + lastReport.Commander.Name);
          //--------------------------------------------------
          bool isMainGunBeingFired = false;
          foreach (IMapItem crewaction in myGameInstance.CrewActions) // Loader may not spot if main gun is being fired
@@ -172,10 +172,6 @@ namespace Pattons_Best
             if (("Gunner_FireMainGun" == crewaction.Name) || ("Gunner_RotateFireMainGun" == crewaction.Name))
                isMainGunBeingFired = true;
          }
-         //--------------------------------------------------
-         myGameInstance.IdentifiedAtg = "";
-         myGameInstance.IdentifiedTank= "";
-         myGameInstance.IdentifiedSpg = "";
          //--------------------------------------------------
          myCallback = callback;
          myState = E0472Enum.SELECT_CREWMAN;
@@ -193,7 +189,7 @@ namespace Pattons_Best
             ICrewMember? cm = myGameInstance.GetCrewMemberByRole(crewmember);
             if (null == cm)
             {
-               Logger.Log(LogEnum.LE_ERROR, "PerformSpotting(): cm=null for name=" + crewmember);
+               Logger.Log(LogEnum.LE_ERROR, "Perform_Spotting(): cm=null for name=" + crewmember);
                return false;
             }
             //---------------------------------------
@@ -207,7 +203,7 @@ namespace Pattons_Best
             List<string>? spottedTerritories = Territory.GetSpottedTerritories(myGameInstance, cm);
             if (null == spottedTerritories)
             {
-               Logger.Log(LogEnum.LE_ERROR, "PerformSpotting(): GetSpottedTerritories() returned null for cm=" + cm.Role);
+               Logger.Log(LogEnum.LE_ERROR, "Perform_Spotting(): GetSpottedTerritories() returned null for cm=" + cm.Role);
                return false;
             }
             if( true == Logger.theLogLevel[(int)LogEnum.LE_EVENT_VIEWER_SPOTTING]) // print out spotted territories
@@ -223,7 +219,7 @@ namespace Pattons_Best
                   i++; ;
                }
                sb.Append("]");
-               Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "PerformSpotting():  cm=" + cm.Role + " spottedTerritories=" + sb.ToString());
+               Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Perform_Spotting():  cm=" + cm.Role + " spottedTerritories=" + sb.ToString());
             }
             if ( 0 < spottedTerritories.Count)
             {
@@ -235,7 +231,7 @@ namespace Pattons_Best
                      if ( (("Loader_Load" != crewaction.Name) && ("Loader_FireAaMg" != crewaction.Name) && ("Loader_FireSubMg" != crewaction.Name)) || ((true == myGameInstance.IsBrokenPeriscopeLoader) && (true == isButtonUp)) || (true== isMainGunBeingFired) )
                      {
                         isCrewMemberAdded = false;
-                        Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "PerformSpotting():  isCrewMemberAdded=FALSE for cm=" + cm.Role + " crewaction=" + crewaction.Name);
+                        Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Perform_Spotting():  isCrewMemberAdded=FALSE for cm=" + cm.Role + " crewaction=" + crewaction.Name);
                      }
                      break;
                   }
@@ -244,7 +240,7 @@ namespace Pattons_Best
                      if (("Driver_Stop" != crewaction.Name) && ((true == myGameInstance.IsBrokenPeriscopeDriver) && (true == isButtonUp)))
                      {
                         isCrewMemberAdded = false;
-                        Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "PerformSpotting():  isCrewMemberAdded=FALSE for cm=" + cm.Role + " crewaction=" + crewaction.Name);
+                        Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Perform_Spotting():  isCrewMemberAdded=FALSE for cm=" + cm.Role + " crewaction=" + crewaction.Name);
                      }
                      break;
                   }
@@ -253,7 +249,7 @@ namespace Pattons_Best
                      if ((("Gunner_FireCoaxialMg" != crewaction.Name) && ("Gunner_ThrowGrenade" != crewaction.Name)) || ((true == myGameInstance.IsBrokenPeriscopeGunner) && (true == isButtonUp)))
                      {
                         isCrewMemberAdded = false;
-                        Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "PerformSpotting():  isCrewMemberAdded=FALSE for cm=" + cm.Role + " crewaction=" + crewaction.Name);
+                        Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Perform_Spotting():  isCrewMemberAdded=FALSE for cm=" + cm.Role + " crewaction=" + crewaction.Name);
                      }
                      break;
                   }
@@ -262,7 +258,7 @@ namespace Pattons_Best
                      if (("Assistant_FireBowMg" != crewaction.Name) || ((true == myGameInstance.IsBrokenPeriscopeAssistant) && (true == isButtonUp)))
                      {
                         isCrewMemberAdded = false;
-                        Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "PerformSpotting():  isCrewMemberAdded=FALSE for cm=" + cm.Role + " crewaction=" + crewaction.Name);
+                        Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Perform_Spotting():  isCrewMemberAdded=FALSE for cm=" + cm.Role + " crewaction=" + crewaction.Name);
                      }
                      break;
                   }
@@ -271,7 +267,7 @@ namespace Pattons_Best
                      if ((("Commander_Move" != crewaction.Name) && ("Commander_MainGunFire" != crewaction.Name) && ("Commander_MGFire" != crewaction.Name) && ("Commander_ThrowGrenade" != crewaction.Name) && ("Commander_FireAaMg" != crewaction.Name) && ("Commander_FireSubMg" != crewaction.Name)) || ((true == myGameInstance.IsBrokenPeriscopeCommander) && (true == isButtonUp) && (false == card.myIsVisionCupola)))
                      {
                         isCrewMemberAdded = false;
-                        Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "PerformSpotting():  isCrewMemberAdded=FALSE for cm=" + cm.Role + " crewaction=" + crewaction.Name);
+                        Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "Perform_Spotting():  isCrewMemberAdded=FALSE for cm=" + cm.Role + " crewaction=" + crewaction.Name);
                      }
                      break;
                   }
@@ -283,7 +279,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (false == UpdateGrid())
          {
-            Logger.Log(LogEnum.LE_ERROR, "PerformSpotting(): UpdateGrid() return false");
+            Logger.Log(LogEnum.LE_ERROR, "Perform_Spotting(): UpdateGrid() return false");
             return false;
          }
          myScrollViewer.Content = myGrid;

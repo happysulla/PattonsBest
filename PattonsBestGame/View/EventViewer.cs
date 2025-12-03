@@ -4885,7 +4885,7 @@ namespace Pattons_Best
          else if( 0 < myGameInstance.ShermanAdvanceOrRetreatEnemies.Count) 
             outAction = GameAction.BattleRoundSequenceCrewReplaced; // enemies transfer to Move board due to advancing or retreating Sherman
          else
-            outAction = GameAction.BattleCrewReplaced; // due to Resolve_EmptyBattleBoard() call in GameState class
+            outAction = GameAction.BattleCrewReplaced; 
          StringBuilder sb11 = new StringBuilder("     ######Show_CrewRatingResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
@@ -6343,7 +6343,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CheckBoxCmdFire_Unchecked(): myGameInstance=null");
             return;
          }
-         myGameInstance.IsCommanderDirectingMgFire = false;
+         myGameInstance.IsCommanderDirectingMgFire = false; //  EventViewer.CheckBoxCmdrFire_Unchecked()
       }
       private void CheckBoxImmobilization_Checked(object sender, RoutedEventArgs e)
       {
