@@ -4249,7 +4249,7 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): lastReport=null");
             return "ERROR";
          }
          if (false == isArtilleryFire && (true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling")))
@@ -4260,26 +4260,25 @@ namespace Pattons_Best
          //----------------------------------------------------
          if (dieRoll < 4) // always a kill if below 4 regardless of modifiers
          {
-            gi.ScoreYourVictoryPoint(lastReport, mi);
-            mi.IsKilled = true;
-            mi.IsMoving = false;
-            mi.EnemyAcquiredShots.Remove("Sherman");
-            gi.Sherman.EnemyAcquiredShots.Remove(mi.Name);
-            mi.SetBloodSpots();
+            if (false == gi.KillEnemy(lastReport, mi, false))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): KillEnemy() returned error");
+               return "ERROR";
+            }
             return "KO";
          }
          //----------------------------------------------------
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): unknown enemyUnit=" + mi.Name);
+            Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): unknown enemyUnit=" + mi.Name);
             return "ERROR";
          }
          //----------------------------------------------------
          IStack? stack = gi.BattleStacks.Find(mi.TerritoryCurrent);
          if (null == stack)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): stack=null for t=" + mi.TerritoryCurrent.Name);
+            Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): stack=null for t=" + mi.TerritoryCurrent.Name);
             return "ERROR";
          }
          bool isSmokeAddedToTerritory = false;
@@ -4317,7 +4316,7 @@ namespace Pattons_Best
                   isSmokeAddedToTerritory = true;
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): reached default with enemyUnit=" + enemyUnit);
+               Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): reached default with enemyUnit=" + enemyUnit);
                return "ERROR";
          }
          if (true == isSmokeAddedToTerritory)
@@ -4334,7 +4333,7 @@ namespace Pattons_Best
          int modifier = GetFriendlyActionModifier(gi, mi, numUsControlledSector, isAdvancingFire, isArtilleryFire, isAirStrike);
          if (modifier < -99)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): GetFriendlyActionModifier() returned error");
+            Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): GetFriendlyActionModifier() returned error");
             return "ERROR";
          }
          dieRoll += modifier;
@@ -4380,17 +4379,16 @@ namespace Pattons_Best
                   mi.IsKilled = true;
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "SetFriendlyActionResult(): reached default with enemyUnit=" + enemyUnit);
+               Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): reached default with enemyUnit=" + enemyUnit);
                return "ERROR";
          }
          if (true == mi.IsKilled)
          {
-            gi.ScoreYourVictoryPoint(lastReport, mi);
-            mi.IsKilled = true;
-            mi.IsMoving = false;
-            mi.EnemyAcquiredShots.Remove("Sherman");
-            gi.Sherman.EnemyAcquiredShots.Remove(mi.Name);
-            mi.SetBloodSpots();
+            if (false == gi.KillEnemy(lastReport, mi, false))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): KillEnemy() returned error");
+               return "ERROR";
+            }
             return "KO";
          }
          return "None";

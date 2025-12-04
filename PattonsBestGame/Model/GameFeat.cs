@@ -56,25 +56,45 @@ namespace Pattons_Best
          "EndGame",
          "EndGameWin",
          //------------
-         "NumKillLw",
-         "NumKillMg",
-         "NumKillTruck",
-         "NumKillPsw",
-         "NumKillSpw",
-         "NumKillPzIV",
-         "NumKillPzV",
-         "NumKillPzVIe",
-         "NumKillPzVIb",
-         "NumKillMarderII",
-         "NumKillMarderIII",
-         "NumKillSTuGIIIg",
-         "NumKillJgdPzIV",
-         "NumKillJgdPz38t",
-         "NumKillPsw232",
-         "NumKillSpw251",
-         "NumKillPak38",
-         "NumKillPak40",
-         "NumKillPak43",
+         "NumKillLwFriendlyFire",
+         "NumKillMgFriendlyFire",
+         "NumKillTruckFriendlyFire",
+         "NumKillPswFriendlyFire",
+         "NumKillSpwFriendlyFire",
+         "NumKillPzIVFriendlyFire",
+         "NumKillPzVFriendlyFire",
+         "NumKillPzVIeFriendlyFire",
+         "NumKillPzVIbFriendlyFire",
+         "NumKillMarderIIFriendlyFire",
+         "NumKillMarderIIIFriendlyFire",
+         "NumKillSTuGIIIgFriendlyFire",
+         "NumKillJgdPzIVFriendlyFire",
+         "NumKillJgdPz38tFriendlyFire",
+         "NumKillPsw232FriendlyFire",
+         "NumKillSpw251FriendlyFire",
+         "NumKillPak38FriendlyFire",
+         "NumKillPak40FriendlyFire",
+         "NumKillPak43FriendlyFire",
+         //------------
+         "NumKillLwYourFire",
+         "NumKillMgYourFire",
+         "NumKillTruckYourFire",
+         "NumKillPswYourFire",
+         "NumKillSpwYourFire",
+         "NumKillPzIVYourFire",
+         "NumKillPzVYourFire",
+         "NumKillPzVIeYourFire",
+         "NumKillPzVIbYourFire",
+         "NumKillMarderIIYourFire",
+         "NumKillMarderIIIYourFire",
+         "NumKillSTuGIIIgYourFire",
+         "NumKillJgdPzIVYourFire",
+         "NumKillJgdPz38tYourFire",
+         "NumKillPsw232YourFire",
+         "NumKillSpw251YourFire",
+         "NumKillPak38YourFire",
+         "NumKillPak40YourFire",
+         "NumKillPak43YourFire",
          //------------
          "NumPurpleHearts",
          "NumBronzeStars",
@@ -135,23 +155,30 @@ namespace Pattons_Best
          }
          return copy;
       }
-      public bool GetFeatChange(GameFeats feats, out GameFeat outFeat)
+      public bool GetFeatChange(GameFeats startingFeats, out GameFeat outFeat)
       {
          outFeat = new GameFeat();
-         if (feats.Count != this.Count)
+         if (startingFeats.Count != this.Count) // sync up the two lists
          {
-            Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): (feats.Count=" + feats.Count.ToString() + ") != (this.Count=" + this.Count.ToString() + ")");
-            return false;
+            Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): (startingFeats.Count=" + startingFeats.Count.ToString() + ") != (this.Count=" + this.Count.ToString() + ")");
+            foreach (GameFeat feat in this)
+            {
+               if (null == startingFeats.Find(feat.Key))
+               {
+                  feat.Value = 0;
+                  startingFeats.Add(feat);
+               }
+            }
          }
-         for (int i = 0; i < feats.Count; ++i)
+         for (int i = 0; i < startingFeats.Count; ++i)
          {
-            GameFeat? right = feats[i];
+            GameFeat? right = startingFeats[i];
             if (null == right)
             {
                Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): right=null for i=" + i.ToString());
                return false;
             }
-            GameFeat? left = this[i];
+            GameFeat? left = this.Find(right.Key);
             if (null == left)
             {
                Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): left=null for i=" + i.ToString());
@@ -159,8 +186,8 @@ namespace Pattons_Best
             }
             if (left.Value != right.Value)
             {
-               right.Value = right.Value;
-               outFeat = left;
+               left.Value = right.Value;
+               outFeat = right;
                return true;
             }
          }

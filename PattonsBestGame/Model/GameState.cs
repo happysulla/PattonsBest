@@ -6373,12 +6373,11 @@ namespace Pattons_Best
                                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MG_ATTACK, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceFireMachineGunRoll): (toKillNum=" + toKillNum.ToString() + ") + (mod=" + modifier.ToString() + ") = (total=" + total.ToString() + ") dr=" + gi.DieResults[key][0].ToString());
                                  if ((gi.DieResults[key][0] <= total) || (gi.DieResults[key][0] < 4))
                                  {
-                                    gi.ScoreYourVictoryPoint(lastReport, gi.TargetMg);
-                                    gi.TargetMg.IsKilled = true;
-                                    gi.TargetMg.IsMoving = false;
-                                    gi.TargetMg.EnemyAcquiredShots.Remove("Sherman");
-                                    gi.Sherman.EnemyAcquiredShots.Remove(gi.TargetMg.Name);
-                                    gi.TargetMg.SetBloodSpots();
+                                    if (false == gi.KillEnemy(lastReport, gi.TargetMg, true))
+                                    {
+                                       returnStatus = "Kill_Enemy() returned false";
+                                       Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence()PerformAction(BattleRoundSequenceFireMachineGunRoll): " + returnStatus);
+                                    }
                                  }
                                  else if (97 < gi.DieResults[key][0])
                                  {

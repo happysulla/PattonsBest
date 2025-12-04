@@ -1102,37 +1102,30 @@ namespace Pattons_Best
       }
       public bool KillEnemy(IAfterActionReport report, IMapItem mi, bool isYourFire)
       {
-         if( true == isYourFire)
-         {
-            this.ScoreYourVictoryPoint(report, mi);
-         }
-         else
-         {
-
-         }
          //-------------------------------------
+         mi.SetBloodSpots();
          mi.IsKilled = true;
          mi.IsMoving = false;
          mi.IsHeHit = false;
          mi.IsApHit = false;
          mi.EnemyAcquiredShots.Remove("Sherman");
-         mi.SetBloodSpots();
          this.Sherman.EnemyAcquiredShots.Remove(mi.Name);
+         //-------------------------------------
          string enemyUnit = mi.GetEnemyUnit();
          string name = "";
          switch(enemyUnit)
          {
             case "TANK": name = "NumKillPzVIb"; break;
-            case "ATG": name = "NumKillPzVIe"; break;
-            case "SPG": name = "NumKillPzVIe"; break;
+            case "ATG": name = "NumKillPak43"; break;
+            case "SPG": name = "NumKillSTuGIIIg"; break;
             case "LW": name = "NumKillLw"; break;
             case "MG": name = "NumKillMg"; break;
             case "TRUCK": name = "NumKillTruck"; break;
             case "PSW": name = "NumKillPsw"; break;
             case "SPW": name = "NumKillSpw"; break;
-            case "Pak38": name = "NumKillPzVIe"; break;
-            case "Pak40": name = "NumKillPzVIe"; break;
-            case "Pak43": name = "NumKillPzVIe"; break;
+            case "Pak38": name = "NumKillPak38"; break;
+            case "Pak40": name = "NumKillPak40"; break;
+            case "Pak43": name = "NumKillPak43"; break;
             case "PzIV": name = "NumKillPzIV"; break;
             case "PzV": name = "NumKillPzV"; break;
             case "PzVIb": name = "NumKillPzVIb"; break;
@@ -1146,6 +1139,18 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "KillEnemy(): reached default with enemyUnit=" + enemyUnit);
                return false;
          }
+         //-------------------------------------
+         if (true == isYourFire)
+         {
+            this.ScoreYourVictoryPoint(report, mi);
+            name += "YourFire";
+         }
+         else
+         {
+            this.ScoreFriendlyVictoryPoint(report, mi);
+            name += "FriendlyFire";
+         }
+         //-------------------------------------
          this.Statistics.AddOne(name);
          GameEngine.theFeatsInGame.AddOne(name);
          return true;

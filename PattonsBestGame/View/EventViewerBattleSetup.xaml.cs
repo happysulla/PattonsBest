@@ -1161,6 +1161,13 @@ namespace Pattons_Best
             return;
          }
          //------------------------------------------------------
+         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): lastReport=null");
+            return;
+         }
+         //------------------------------------------------------
          Option optionAutoActivation = myGameInstance.Options.Find("AutoRollEnemyActivation");
          //------------------------------------------------------
          switch (myState)
@@ -1354,11 +1361,11 @@ namespace Pattons_Best
                if (dieRoll < 4) // crticial hit automatically hits - gun malfunction already checked before enemy unit arrives
                {
                   myAdvanceFireGridRows[i].myAdvanceFireResult = "KO";
-                  myAdvanceFireGridRows[i].myEnemyUnit.IsKilled = true;
-                  myAdvanceFireGridRows[i].myEnemyUnit.IsMoving = false;
-                  myAdvanceFireGridRows[i].myEnemyUnit.EnemyAcquiredShots.Remove("Sherman");
-                  myGameInstance.Sherman.EnemyAcquiredShots.Remove(myAdvanceFireGridRows[i].myEnemyUnit.Name);
-                  myAdvanceFireGridRows[i].myEnemyUnit.SetBloodSpots();
+                  if (false == myGameInstance.KillEnemy(lastReport, myAdvanceFireGridRows[i].myEnemyUnit, true))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): KillEnemy() returned error");
+                     return;
+                  }
                }
                else if (combo < dieRoll)
                {
@@ -1367,11 +1374,11 @@ namespace Pattons_Best
                else
                {
                   myAdvanceFireGridRows[i].myAdvanceFireResult = "KO";
-                  myAdvanceFireGridRows[i].myEnemyUnit.IsKilled = true;
-                  myAdvanceFireGridRows[i].myEnemyUnit.IsMoving = false;
-                  myAdvanceFireGridRows[i].myEnemyUnit.EnemyAcquiredShots.Remove("Sherman");
-                  myGameInstance.Sherman.EnemyAcquiredShots.Remove(myAdvanceFireGridRows[i].myEnemyUnit.Name);
-                  myAdvanceFireGridRows[i].myEnemyUnit.SetBloodSpots();
+                  if (false == myGameInstance.KillEnemy(lastReport, myAdvanceFireGridRows[i].myEnemyUnit, true))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): KillEnemy() returned error");
+                     return;
+                  }
                }
                myState = E046Enum.ADVANCE_FIRE_SHOW;
                for (int j = 0; j < myMaxRowCountAdvanceFire; ++j)

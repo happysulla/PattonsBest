@@ -1690,11 +1690,11 @@ namespace Pattons_Best
                if (dieRoll < 4) // gun malfunction already checked before enemy unit arrives
                {
                   myAdvanceFireGridRows[i].myAdvanceFireResult = "KO";
-                  myAdvanceFireGridRows[i].myEnemyUnit.IsKilled = true;
-                  myAdvanceFireGridRows[i].myEnemyUnit.IsMoving = false;
-                  myAdvanceFireGridRows[i].myEnemyUnit.EnemyAcquiredShots.Remove("Sherman");
-                  myGameInstance.Sherman.EnemyAcquiredShots.Remove(myAdvanceFireGridRows[i].myEnemyUnit.Name);
-                  myAdvanceFireGridRows[i].myEnemyUnit.SetBloodSpots();
+                  if (false == myGameInstance.KillEnemy(lastReport, myAdvanceFireGridRows[i].myEnemyUnit, true))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(ENEMY_ACTION_MOVE): KillEnemy() returned error");
+                     return;
+                  }
                }
                if (combo < dieRoll )
                {
@@ -1703,11 +1703,11 @@ namespace Pattons_Best
                else
                {
                   myAdvanceFireGridRows[i].myAdvanceFireResult = "KO";
-                  myAdvanceFireGridRows[i].myEnemyUnit.IsKilled = true;
-                  myAdvanceFireGridRows[i].myEnemyUnit.IsMoving = false;
-                  myAdvanceFireGridRows[i].myEnemyUnit.EnemyAcquiredShots.Remove("Sherman");
-                  myGameInstance.Sherman.EnemyAcquiredShots.Remove(myAdvanceFireGridRows[i].myEnemyUnit.Name);
-                  myAdvanceFireGridRows[i].myEnemyUnit.SetBloodSpots();
+                  if (false == myGameInstance.KillEnemy(lastReport, myAdvanceFireGridRows[i].myEnemyUnit, true))
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(ENEMY_ACTION_MOVE): KillEnemy() returned error dr=" + dieRoll.ToString());
+                     return;
+                  }
                }
                myState = E0475Enum.ENEMY_ACTION_ADVANCE_FIRE_SHOW;
                for (int j = 0; j < myMaxRowCountAdvanceFire; ++j)
