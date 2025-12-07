@@ -41,6 +41,9 @@ namespace Pattons_Best
             GameFeats.theGameFeatDirectory = appDataDir + @"\PattonsBest\GameFeat\";
             if (false == Directory.Exists(GameFeats.theGameFeatDirectory)) // create directory if does not exists
                Directory.CreateDirectory(GameFeats.theGameFeatDirectory);
+            GameStatistics.theGameStatisticsDirectory = appDataDir + @"\PattonsBest\GameStatistics\";
+            if (false == Directory.Exists(GameStatistics.theGameStatisticsDirectory)) // create directory if does not exists
+               Directory.CreateDirectory(GameStatistics.theGameStatisticsDirectory);
             //--------------------------------------------
             Utilities.InitializeRandomNumGenerators();
             //--------------------------------------------

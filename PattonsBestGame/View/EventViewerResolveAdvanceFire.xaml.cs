@@ -282,7 +282,7 @@ namespace Pattons_Best
                   if( (true == mapItem.Name.Contains("AdvanceFire")) || (true == mapItem.IsKilled) )
                   {
                      removals.Add(mapItem);
-                     if( false == mapItem.Name.Contains("Sherman"))
+                     if( true == mapItem.IsEnemyUnit())
                         myGameInstance.ScoreFriendlyVictoryPoint(lastReport, mapItem);
                   }
                }

@@ -1152,7 +1152,7 @@ namespace Pattons_Best
          }
          //-------------------------------------
          this.Statistics.AddOne(name);
-         GameEngine.theFeatsInGame.AddOne(name);
+         GameEngine.theInGameFeats.AddOne(name);
          return true;
       }
       public void KillSherman(IAfterActionReport report, string reason)
@@ -1218,37 +1218,37 @@ namespace Pattons_Best
             case "LW":
             case "MG":
                report.VictoryPtsFriendlyKiaLightWeapon++;
-               Logger.Log(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES, "ScoreFriendlyVictoryPoint(): LW|MG #=" + report.VictoryPtsFriendlyKiaLightWeapon.ToString());
+               Logger.Log(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES, "Score_FriendlyVictoryPoint(): LW|MG #=" + report.VictoryPtsFriendlyKiaLightWeapon.ToString());
                break;
             case "ATG":
             case "Pak43":
             case "Pak38":
             case "Pak40":
                report.VictoryPtsFriendlyKiaAtGun++;
-               Logger.Log(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES, "ScoreFriendlyVictoryPoint(): ATG #=" + report.VictoryPtsFriendlyKiaAtGun.ToString());
+               Logger.Log(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES, "Score_FriendlyVictoryPoint(): ATG #=" + report.VictoryPtsFriendlyKiaAtGun.ToString());
                break;
             case "TRUCK":
                report.VictoryPtsFriendlyKiaTruck++;
-               Logger.Log(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES, "ScoreFriendlyVictoryPoint(): Trk #=" + report.VictoryPtsFriendlyKiaTruck.ToString());
+               Logger.Log(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES, "Score_FriendlyVictoryPoint(): Trk #=" + report.VictoryPtsFriendlyKiaTruck.ToString());
                break;
             case "PSW":
             case "SPW":
                report.VictoryPtsFriendlyKiaSpwOrPsw++;
-               Logger.Log(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES, "ScoreFriendlyVictoryPoint(): Spw or Psw #=" + report.VictoryPtsFriendlyKiaSpwOrPsw.ToString());
+               Logger.Log(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES, "Score_FriendlyVictoryPoint(): Spw or Psw #=" + report.VictoryPtsFriendlyKiaSpwOrPsw.ToString());
                break;
             case "PzIV":
                report.VictoryPtsFriendlyKiaPzIV++;
-               Logger.Log(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES, "ScoreFriendlyVictoryPoint(): PzIV #=" + report.VictoryPtsFriendlyKiaPzIV.ToString());
+               Logger.Log(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES, "Score_FriendlyVictoryPoint(): PzIV #=" + report.VictoryPtsFriendlyKiaPzIV.ToString());
                break;
             case "PzV":
                report.VictoryPtsFriendlyKiaPzV++;
-               Logger.Log(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES, "ScoreFriendlyVictoryPoint(): PzV #=" + report.VictoryPtsFriendlyKiaPzV.ToString());
+               Logger.Log(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES, "Score_FriendlyVictoryPoint(): PzV #=" + report.VictoryPtsFriendlyKiaPzV.ToString());
                break;
             case "TANK":
             case "PzVIe":
             case "PzVIb":
                report.VictoryPtsFriendlyKiaPzVI++;
-               Logger.Log(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES, "ScoreFriendlyVictoryPoint(): " + enemyUnit + " #=" + report.VictoryPtsFriendlyKiaPzVI.ToString());
+               Logger.Log(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES, "Score_FriendlyVictoryPoint(): " + enemyUnit + " #=" + report.VictoryPtsFriendlyKiaPzVI.ToString());
                break;
             case "SPG":
             case "STuGIIIg":
@@ -1257,10 +1257,10 @@ namespace Pattons_Best
             case "JdgPzIV":
             case "JdgPz38t":
                report.VictoryPtsFriendlyKiaSPGun++;
-               Logger.Log(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES, "ScoreFriendlyVictoryPoint(): " + enemyUnit + " #=" + report.VictoryPtsFriendlyKiaSPGun.ToString());
+               Logger.Log(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES, "Score_FriendlyVictoryPoint(): " + enemyUnit + " #=" + report.VictoryPtsFriendlyKiaSPGun.ToString());
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "ScoreFriendlyVictoryPoint(): reached default with enemyUnit=" + enemyUnit);
+               Logger.Log(LogEnum.LE_ERROR, "Score_FriendlyVictoryPoint(): reached default with enemyUnit=" + enemyUnit);
                break;
          }
          if (true == enemy.IsFortification)

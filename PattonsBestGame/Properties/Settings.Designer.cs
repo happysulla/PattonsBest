@@ -107,29 +107,5 @@ namespace Pattons_Best.Properties {
                 this["ScrollViewerWidth"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string GameFeats {
-            get {
-                return ((string)(this["GameFeats"]));
-            }
-            set {
-                this["GameFeats"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string GameStatistics {
-            get {
-                return ((string)(this["GameStatistics"]));
-            }
-            set {
-                this["GameStatistics"] = value;
-            }
-        }
     }
 }

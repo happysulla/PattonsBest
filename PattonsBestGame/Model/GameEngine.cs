@@ -9,8 +9,8 @@ namespace Pattons_Best
 {
    public class GameEngine : IGameEngine
    {
-      static public GameFeats theFeatsInGame = new GameFeats();          // feats that change from starting as this session runs
-      static public GameFeats theFeatsInGameStarting = new GameFeats();  // starting feats read in at app initialization
+      static public GameFeats theInGameFeats = new GameFeats();          // feats that change from starting as this session runs
+      static public GameFeats theStartingFeats = new GameFeats();  // starting feats read in at app initialization
       //---------------------------------------------------------------------
       static public GameStatistics theTotalStatistics = new GameStatistics();
       //---------------------------------------------------------------------

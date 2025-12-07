@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -18,11 +17,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using Windows.System;
 using WpfAnimatedGif;
-using static System.Windows.Forms.AxHost;
 using Button = System.Windows.Controls.Button;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Point = System.Windows.Point;
@@ -183,9 +178,6 @@ namespace Pattons_Best
          if (false == String.IsNullOrEmpty(Settings.Default.GameDirectoryName))
             GameLoadMgr.theGamesDirectory = Settings.Default.GameDirectoryName; // remember the game directory name
          //---------------------------------------------------------------
-         CultureInfo currentCulture = CultureInfo.CurrentCulture;
-         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
-         //---------------------------------------------------------------
          if ( false == DeserializeOptions(Settings.Default.GameOptions, gi.Options))
          {
             Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): DeserializeOptions() returned false");
@@ -195,24 +187,22 @@ namespace Pattons_Best
          myMainMenuViewer.NewGameOptions = gi.Options;
          Logger.Log(LogEnum.LE_VIEW_SHOW_OPTIONS, "GameViewerWindow(): Options=" + gi.Options.ToString());
          //---------------------------------------------------------------
-         if (false == DeserializeGameFeats(Settings.Default.GameFeats, GameEngine.theFeatsInGame))
+         if (false == DeserializeGameFeats(GameEngine.theInGameFeats))
          {
             Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): DeserializeGameFeats() returned false");
             CtorError = true;
             return;        
          }
-         GameEngine.theFeatsInGameStarting = GameEngine.theFeatsInGame.Clone(); // need to know difference between starting feats and feats that happen in this game
-         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameViewerWindow(): GameEngine.theFeatsInGameStarting=" + GameEngine.theFeatsInGameStarting.ToString());
+         GameEngine.theStartingFeats = GameEngine.theInGameFeats.Clone(); // need to know difference between starting feats and feats that happen in this game
+         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameViewerWindow(): GameEngine.theInGameFeats=" + GameEngine.theInGameFeats.ToString());
          //---------------------------------------------------------------
-         if (false == DeserializeGameStatistics(Settings.Default.GameStatistics, GameEngine.theTotalStatistics))
+         if (false == DeserializeGameStatistics(GameEngine.theTotalStatistics))
          {
             Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): DeserializeGameStatistics() returned false");
             CtorError = true;
             return;
          }
-         GameEngine.theFeatsInGameStarting = GameEngine.theFeatsInGame.Clone(); // need to know difference between starting feats and feats that happen in this game
-         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameViewerWindow(): GameEngine.theFeatsInGameStarting=" + GameEngine.theFeatsInGameStarting.ToString());
-
+         Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "GameViewerWindow(): GameEngine.theStartingFeats=" + GameEngine.theStartingFeats.ToString());
          //---------------------------------------------------------------
          if (false == DeserializeRoadsFromXml())
          {
@@ -226,7 +216,6 @@ namespace Pattons_Best
          StatusBarViewer sbv = new StatusBarViewer(myStatusBar, ge, gi, myCanvasMain);
          //---------------------------------------------------------------
          SetDisplayIconForUninstall(); // This is specialized code to add to Windows Registry the icon for uninstall
-         System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture; // return back to current culture
          //---------------------------------------------------------------
          Utilities.theBrushBlood.Color = Color.FromArgb(0xFF, 0xA4, 0x07, 0x07);
          Utilities.theBrushRegion.Color = Color.FromArgb(0x7F, 0x11, 0x09, 0xBB); // nearly transparent but slightly colored
@@ -1397,17 +1386,11 @@ namespace Pattons_Best
          else
             Settings.Default.GameOptions = sOptions;
          //-------------------------------------------
-         string? sGameFeats = SerializeGameFeats(GameEngine.theFeatsInGame);
-         if (null == sGameFeats)
+         if (false == SerializeGameFeats(GameEngine.theInGameFeats))
             Logger.Log(LogEnum.LE_ERROR, "SaveDefaultsToSettings(): SerializeGameFeats() returned false");
-         else
-            Settings.Default.GameFeats = sGameFeats;
          //-------------------------------------------
-         string? sGameStatistics = SerializeGameStatistics(GameEngine.theTotalStatistics);
-         if (null == sGameStatistics )
+         if (false == SerializeGameStatistics(GameEngine.theTotalStatistics))
             Logger.Log(LogEnum.LE_ERROR, "SaveDefaultsToSettings(): SerializeGameStatistics() returned false");
-         else
-            Settings.Default.GameStatistics = sGameStatistics;
          //-------------------------------------------
          Settings.Default.Save();
          System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
@@ -1451,20 +1434,22 @@ namespace Pattons_Best
          return aXmlDocument.OuterXml;
 
       }
-      private string? SerializeGameFeats(GameFeats feats)
+      private bool SerializeGameFeats(GameFeats feats)
       {
+         CultureInfo currentCulture = CultureInfo.CurrentCulture;
+         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
          XmlDocument aXmlDocument = new XmlDocument();
          aXmlDocument.LoadXml("<GameFeats></GameFeats>");
          if (null == aXmlDocument.DocumentElement)
          {
             Logger.Log(LogEnum.LE_ERROR, "Serialize_GameFeats(): aXmlDocument.DocumentElement=null");
-            return null;
+            return false;
          }
          XmlNode? root = aXmlDocument.DocumentElement;
          if (null == root)
          {
             Logger.Log(LogEnum.LE_ERROR, "Serialize_GameFeats(): root is null");
-            return null;
+            return false;
          }
          aXmlDocument.DocumentElement.SetAttribute("count", feats.Count.ToString());
          //--------------------------------
@@ -1474,7 +1459,7 @@ namespace Pattons_Best
             if (null == featElem)
             {
                Logger.Log(LogEnum.LE_ERROR, "Serialize_GameFeats(): CreateElement(Feat) returned null");
-               return null;
+               return false;
             }
             featElem.SetAttribute("Key", feat.Key);
             featElem.SetAttribute("Value", feat.Value.ToString());
@@ -1482,36 +1467,76 @@ namespace Pattons_Best
             if (null == featNode)
             {
                Logger.Log(LogEnum.LE_ERROR, "Serialize_GameFeats(): AppendChild(featNode) returned null");
-               return null;
+               return false;
             }
          }
-         //--------------------------------
-         return aXmlDocument.OuterXml;
+         //-----------------------------------------
+         if (null == aXmlDocument)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "SaveGameTo_File(): aXmlDocument=null");
+            return false;
+         }
+         //-----------------------------------------
+         try
+         {
+            if (false == Directory.Exists(GameFeats.theGameFeatDirectory)) // create directory if does not exists
+               Directory.CreateDirectory(GameFeats.theGameFeatDirectory);
+         }
+         catch (Exception e)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Serialize_GameFeats(): path=" + GameFeats.theGameFeatDirectory + "\n e=" + e.ToString());
+            return false;
+         }
+         string filename = GameFeats.theGameFeatDirectory + "feats.xml";
+         FileStream? writer = null;
+         //-----------------------------------------
+         try
+         {
+            writer = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write);
+            XmlWriterSettings settings = new XmlWriterSettings { Indent = true, OmitXmlDeclaration = true, NewLineOnAttributes = false };
+            XmlWriter xmlWriter = XmlWriter.Create(writer, settings);// For XmlWriter, it uses the stream that was created: writer.
+            aXmlDocument.Save(xmlWriter);
+         }
+         catch (Exception ex)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Serialize_GameFeats(): path=" + GameFeats.theGameFeatDirectory + "\n e =" + ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            return false;
+         }
+         finally
+         {
+            if (writer != null)
+               writer.Close();
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+         }
+         return true;
       }
-      private string? SerializeGameStatistics(GameStatistics statistics)
+      private bool SerializeGameStatistics(GameStatistics statistics)
       {
+         CultureInfo currentCulture = CultureInfo.CurrentCulture;
+         System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
          XmlDocument aXmlDocument = new XmlDocument();
          aXmlDocument.LoadXml("<GameStatistics></GameStatistics>");
          if (null == aXmlDocument.DocumentElement)
          {
             Logger.Log(LogEnum.LE_ERROR, "Serialize_GameStatistics(): aXmlDocument.DocumentElement=null");
-            return null;
+            return false;
          }
          XmlNode? root = aXmlDocument.DocumentElement;
          if (null == root)
          {
             Logger.Log(LogEnum.LE_ERROR, "Serialize_GameStatistics(): root is null");
-            return null;
+            return false;
          }
          aXmlDocument.DocumentElement.SetAttribute("count", statistics.Count.ToString());
-         //--------------------------------
+         //-----------------------------------------
          foreach (GameStatistic statistic in statistics)
          {
             XmlElement? statisticElem = aXmlDocument.CreateElement("GameStatistic");
             if (null == statisticElem)
             {
                Logger.Log(LogEnum.LE_ERROR, "Serialize_GameStatistics(): CreateElement(GameStatistic) returned null");
-               return null;
+               return false;
             }
             statisticElem.SetAttribute("Key", statistic.Key);
             statisticElem.SetAttribute("Value", statistic.Value.ToString());
@@ -1519,11 +1544,34 @@ namespace Pattons_Best
             if (null == statisticNode)
             {
                Logger.Log(LogEnum.LE_ERROR, "Serialize_GameStatistics(): AppendChild(statisticNode) returned null");
-               return null;
+               return false;
             }
          }
+         //-----------------------------------------
+         string filename = GameStatistics.theGameStatisticsDirectory + "Stats.xml";
+         FileStream? writer = null;
+         //-----------------------------------------
+         try
+         {
+            writer = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write);
+            XmlWriterSettings settings = new XmlWriterSettings { Indent = true, OmitXmlDeclaration = true, NewLineOnAttributes = false };
+            XmlWriter xmlWriter = XmlWriter.Create(writer, settings);// For XmlWriter, it uses the stream that was created: writer.
+            aXmlDocument.Save(xmlWriter);
+         }
+         catch (Exception ex)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Serialize_GameStatistics(): path=" + GameFeats.theGameFeatDirectory + "\n e =" + ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            return false;
+         }
+         finally
+         {
+            if (writer != null)
+               writer.Close();
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+         }
          //--------------------------------
-         return aXmlDocument.OuterXml;
+         return true;
       }
       private void SetDisplayIconForUninstall()
       {
@@ -1675,31 +1723,27 @@ namespace Pattons_Best
          }
          finally
          {
+            if (0 == options.Count)
+               options.SetOriginalGameOptions();
             System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
          }
-         if (0 == options.Count)
-            options.SetOriginalGameOptions();
-         System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
          return true;
       }
-      private bool DeserializeGameFeats(String sXml, GameFeats feats)
+      private bool DeserializeGameFeats(GameFeats feats)
       {
+         feats.Clear();
          CultureInfo currentCulture = CultureInfo.CurrentCulture;
          System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
-         //-----------------------------------------------
-         feats.Clear();
-         if (true == String.IsNullOrEmpty(sXml))
+         XmlTextReader? reader = null;
+         try
          {
-            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): String.IsNullOrEmpty(sXml) returned true");
-            feats.SetOriginalGameFeats();
-            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
-            return true;
-         }
-         //-----------------------------------------------
-         try // XML serializer does not work for Interfaces
-         {
-            StringReader stringreader = new StringReader(sXml);
-            XmlReader reader = XmlReader.Create(stringreader);
+            string filename = GameFeats.theGameFeatDirectory + "feats.xml";
+            reader = new XmlTextReader(filename) { WhitespaceHandling = WhitespaceHandling.None };
+            if( null == reader )
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): reader=null");
+               return false;
+            }
             reader.Read();
             if (false == reader.IsStartElement())
             {
@@ -1751,45 +1795,46 @@ namespace Pattons_Best
             if (0 < count)
                reader.Read(); // get past </GameFeats>
          }
+         //==========================================
          catch (DirectoryNotFoundException dirException)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): s=" + sXml + "\ndirException=" + dirException.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): dirException=" + dirException.ToString());
+            return false;
          }
-         catch (FileNotFoundException fileException)
+         catch (FileNotFoundException )
          {
-            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): s=" + sXml + "\nfileException=" + fileException.ToString());
+            // expected on first run
          }
          catch (IOException ioException)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): s=" + sXml + "\nioException=" + ioException.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): ioException=" + ioException.ToString());
+            return false;
          }
          catch (Exception ex)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): s=" + sXml + "\nex=" + ex.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): ex=" + ex.ToString());
+            return false;
          }
-         if (0 == feats.Count)
-            feats.SetOriginalGameFeats();
-         System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+         finally
+         {
+            if (reader != null)
+               reader.Close();
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+            if (0 == feats.Count)
+               feats.SetOriginalGameFeats();
+         }
          return true;
       }
-      private bool DeserializeGameStatistics(String sXml, GameStatistics statistics)
+      private bool DeserializeGameStatistics(GameStatistics statistics)
       {
+         statistics.Clear();
          CultureInfo currentCulture = CultureInfo.CurrentCulture;
          System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
-         //-----------------------------------------------
-         statistics.Clear();
-         if (true == String.IsNullOrEmpty(sXml))
+         XmlTextReader? reader = null;
+         try
          {
-            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameStatistics(): String.IsNullOrEmpty(sXml) returned true");
-            statistics.SetOriginalGameStatistics();
-            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
-            return true;
-         }
-         //-----------------------------------------------
-         try // XML serializer does not work for Interfaces
-         {
-            StringReader stringreader = new StringReader(sXml);
-            XmlReader reader = XmlReader.Create(stringreader);
+            string filename = GameStatistics.theGameStatisticsDirectory + "feats.xml";
+            reader = new XmlTextReader(filename) { WhitespaceHandling = WhitespaceHandling.None };
             reader.Read();
             if (false == reader.IsStartElement())
             {
@@ -1841,25 +1886,34 @@ namespace Pattons_Best
             if (0 < count)
                reader.Read(); // get past </GameFeats>
          }
+         //==========================================
          catch (DirectoryNotFoundException dirException)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameStatistics(): s=" + sXml + "\ndirException=" + dirException.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): dirException=" + dirException.ToString());
+            return false;
          }
-         catch (FileNotFoundException fileException)
+         catch (FileNotFoundException)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameStatistics(): s=" + sXml + "\nfileException=" + fileException.ToString());
+            // expected on first run
          }
          catch (IOException ioException)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameStatistics(): s=" + sXml + "\nioException=" + ioException.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): ioException=" + ioException.ToString());
+            return false;
          }
          catch (Exception ex)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameStatistics(): s=" + sXml + "\nex=" + ex.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameFeats(): ex=" + ex.ToString());
+            return false;
          }
-         if (0 == statistics.Count)
-            statistics.SetOriginalGameStatistics();
-         System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+         finally
+         {
+            if (reader != null)
+               reader.Close();
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+            if (0 == statistics.Count)
+               statistics.SetOriginalGameStatistics();
+         }
          return true;
       }
       private bool DeserializeRoadsFromXml()
@@ -1944,7 +1998,6 @@ namespace Pattons_Best
          catch (Exception e)
          {
             Logger.Log(LogEnum.LE_ERROR, "CreateRoadsFromXml(): Exception=\n" + e.Message);
-            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
             return false;
          }
          finally
@@ -3001,7 +3054,7 @@ namespace Pattons_Best
          {
             if (ui is Image img)
             {
-               if ("Map" == img.Name)
+               if ("Canvas" == img.Name)
                   continue;
                elements.Add(ui);
             }
@@ -3023,13 +3076,15 @@ namespace Pattons_Best
          double centerY = myCanvasMain.ActualHeight * 0.5;
          //------------------------------------
          GameFeat featChange;
-         if( false == GameEngine.theFeatsInGame.GetFeatChange(GameEngine.theFeatsInGameStarting, out featChange)) // Update_CanvasShowFeats()
+         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateCanvasShowFeats(): \n  Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
+         if ( false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange)) // Update_CanvasShowFeats()
          {
             Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowFeats(): Get_FeatChange() returned false");
             return false;
          }
          if (true == String.IsNullOrEmpty(featChange.Key))
             return true;
+         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateCanvasShowFeats(): Change=" + featChange.ToString());
          //------------------------------------
          double sizeOfImage = Math.Min(myCanvasMain.ActualHeight, myCanvasMain.ActualWidth);
          BitmapImage bmi1 = new BitmapImage();
@@ -4221,8 +4276,9 @@ namespace Pattons_Best
                      GameAction action = GameAction.Error;
                      if (GamePhase.EveningDebriefing == myGameInstance.GamePhase)
                      {
-                        GameFeat featChange;
-                        if (false == GameEngine.theFeatsInGame.GetFeatChange(GameEngine.theFeatsInGameStarting, out featChange)) // MouseDownGameFeat - EventingDebriefing
+                        GameFeat featChange; 
+                        Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Mouse_DownGameFeat(): \n Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
+                        if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange)) // MouseDownGameFeat - EventingDebriefing
                         {
                            Logger.Log(LogEnum.LE_ERROR, "Mouse_DownGameFeat(): Get_FeatChange() returned false");
                            return;
@@ -4234,21 +4290,28 @@ namespace Pattons_Best
                         }
                         else
                         {
+                           Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Mouse_DownGameFeat(): Change=" + featChange.ToString());
                            action = GameAction.EveningDebriefingShowFeat;
                         }
                      }
                      else
                      {
                         GameFeat featChange;
-                        if (false == GameEngine.theFeatsInGame.GetFeatChange(GameEngine.theFeatsInGameStarting, out featChange)) // MouseDownGameFeat - NOT EventingDebriefing
+                        Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Mouse_DownGameFeat(): \n  Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
+                        if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange)) // MouseDownGameFeat - NOT EventingDebriefing
                         {
                            Logger.Log(LogEnum.LE_ERROR, "Mouse_DownGameFeat(): Get_FeatChange() returned false");
                            return;
                         }
                         if (true == String.IsNullOrEmpty(featChange.Key)) // no changed feat
+                        {
                            action = GameAction.EndGameShowStats;
+                        }
                         else
+                        {
+                           Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Mouse_DownGameFeat(): Change=" + featChange.ToString());
                            action = GameAction.EndGameShowFeats;
+                        }
                      }
                      myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                      e.Handled = true;

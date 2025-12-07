@@ -158,18 +158,38 @@ namespace Pattons_Best
       public bool GetFeatChange(GameFeats startingFeats, out GameFeat outFeat)
       {
          outFeat = new GameFeat();
-         if (startingFeats.Count != this.Count) // sync up the two lists
+         if (this.Count < startingFeats.Count) // sync up the two lists
          {
-            Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): (startingFeats.Count=" + startingFeats.Count.ToString() + ") != (this.Count=" + this.Count.ToString() + ")");
-            foreach (GameFeat feat in this)
+            Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): (startingFeats.Count=" + startingFeats.Count.ToString() + ") > (this.Count=" + this.Count.ToString() + ")");
+            return false;
+         }
+         if (startingFeats.Count < this.Count) // sync up the two lists
+         {
+            while (startingFeats.Count < this.Count)
             {
-               if (null == startingFeats.Find(feat.Key))
+               Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Get_FeatChange(): (startingFeats.Count=" + startingFeats.Count.ToString() + ") <  (this.Count=" + this.Count.ToString() + ")");
+               for (int i = 0; i < startingFeats.Count; ++i)
                {
-                  feat.Value = 0;
-                  startingFeats.Add(feat);
+                  GameFeat? right = startingFeats[i];
+                  if (null == right)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): right=null for i=" + i.ToString());
+                     return false;
+                  }
+                  GameFeat? left = this[i];
+                  if (null == left)
+                  {
+                     Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): left=null for i=" + i.ToString());
+                     return false;
+                  }
+                  if (left.Key == right.Key)
+                     continue;
+                  startingFeats.Insert(i, right);
+                  break;
                }
             }
          }
+         //--------------------------------------------
          for (int i = 0; i < startingFeats.Count; ++i)
          {
             GameFeat? right = startingFeats[i];
@@ -178,10 +198,15 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): right=null for i=" + i.ToString());
                return false;
             }
-            GameFeat? left = this.Find(right.Key);
+            GameFeat? left = this[i];
             if (null == left)
             {
                Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): left=null for i=" + i.ToString());
+               return false;
+            }
+            if (left.Key != right.Key)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): left.key=" + left.Key + " right.key=" + right.Key);
                return false;
             }
             if (left.Value != right.Value)
@@ -193,7 +218,6 @@ namespace Pattons_Best
          }
          return true;
       }
-
       public void SetOriginalGameFeats()
       {
          Clear();

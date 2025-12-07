@@ -2490,7 +2490,8 @@ namespace Pattons_Best
             case "e503a":
                GameAction action = GameAction.Error;
                GameFeat changedFeat;
-               if (false == GameEngine.theFeatsInGame.GetFeatChange(GameEngine.theFeatsInGameStarting, out changedFeat)) // Game Feats
+               Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateEventContent(): \n  Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
+               if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out changedFeat)) // Game Feats
                {
                   Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "UpdateEventContent(): Get_FeatChange() returned false");
                   return false;
@@ -2498,9 +2499,14 @@ namespace Pattons_Best
                if (GamePhase.EndGame == gi.GamePhase)
                {
                   if (true == String.IsNullOrEmpty(changedFeat.Key))
+                  {
                      action = GameAction.EndGameShowStats;
+                  }
                   else
+                  {
+                     Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateEventContent(): Change=" + changedFeat.ToString());
                      action = GameAction.EndGameShowFeats;
+                  }
                }
                else if (GamePhase.EveningDebriefing == gi.GamePhase)
                {
@@ -5857,7 +5863,7 @@ namespace Pattons_Best
                            action = GameAction.BattleRoundSequenceHarrassingFire;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
-                        case "Continue046a": // Firendly Advance Ignored
+                        case "Continue046a": // Friendly Advance Ignored
                         case "Continue047":  // Enemy Reinforcements
                            if( BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase)
                            {
@@ -6028,15 +6034,21 @@ namespace Pattons_Best
                            break;
                         case "EndGameShowStats":
                            GameFeat changedFeat;
-                           if (false == GameEngine.theFeatsInGame.GetFeatChange(GameEngine.theFeatsInGameStarting, out changedFeat)) // End Game Feats and Stats
+                           Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Reset_RoundSetState(): \n  Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
+                           if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out changedFeat)) // End Game Feats and Stats
                            {
                               Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "TextBlock_MouseDown(): Get_FeatChange() returned false");
                               return;
                            }
                            if( true == String.IsNullOrEmpty(changedFeat.Key))
-                              action = GameAction.EndGameShowStats; 
+                           {
+                              action = GameAction.EndGameShowStats;
+                           }
                            else
+                           {
+                              Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "TextBlock_MouseDown(): Change=" + changedFeat.ToString());
                               action = GameAction.EndGameShowFeats;
+                           }
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         default:

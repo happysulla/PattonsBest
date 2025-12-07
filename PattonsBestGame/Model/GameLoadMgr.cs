@@ -5,14 +5,8 @@ using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Xps.Packaging;
 using System.Xml;
-using System.Xml.Linq;
-using Windows.ApplicationModel.Chat;
-using static System.Windows.Forms.Design.AxImporter;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace Pattons_Best
 {
