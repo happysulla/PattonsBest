@@ -1299,6 +1299,7 @@ namespace Pattons_Best
          {
             Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Reset_ToPrepareForBattle(): Change=" + changedFeat1.ToString());
             action = GameAction.PreparationsShowFeat; // Reset_ToPrepareForBattle()
+            SetCommand(gi, action, GameAction.DieRollActionNone, "e503a");
          }
          else if ((true == gi.IsBrokenMainGun) || (true == gi.IsBrokenGunSight))
          {
@@ -3865,7 +3866,6 @@ namespace Pattons_Best
                case GameAction.UpdateBattleBoard: // Do not log event
                case GameAction.MorningBriefingAssignCrewRating: // handled in EventViewer by showing dialog
                case GameAction.MorningBriefingAmmoReadyRackLoad:
-               case GameAction.PreparationsShowFeat:
                   break;
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
@@ -4016,6 +4016,9 @@ namespace Pattons_Best
                         }
                      }
                   }
+                  break;
+               case GameAction.PreparationsShowFeat:
+                  SetCommand(gi, action, GameAction.DieRollActionNone, "e503a");
                   break;
                case GameAction.BattleEmptyResolve: // GameStateBattlePrep
                case GameAction.PreparationsShowFeatEnd:
@@ -5455,7 +5458,6 @@ namespace Pattons_Best
                case GameAction.UpdateEventViewerDisplay: // Only change active event
                case GameAction.UpdateBattleBoard: // Do not log event
                case GameAction.MorningBriefingAssignCrewRating: // handled in EventViewer by showing dialog
-               case GameAction.BattleRoundSequenceShowFeat:
                   break;
                case GameAction.UpdateEventViewerActive: // Only change active event
                   gi.EventDisplayed = gi.EventActive; // next screen to show
@@ -5466,6 +5468,9 @@ namespace Pattons_Best
                      returnStatus = "LoadGame() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEnded.PerformAction(UpdateLoadingGame): " + returnStatus);
                   }
+                  break;
+               case GameAction.BattleRoundSequenceShowFeat:
+                  SetCommand(gi, action, GameAction.DieRollActionNone, "e503a");
                   break;
                case GameAction.BattleRoundSequenceShowFeatEnd:
                   if (false == BattleRoundSequenceStart(gi, ref action))
@@ -5505,6 +5510,7 @@ namespace Pattons_Best
                   {
                      Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameStateEnded.PerformAction(BattleRoundSequenceStart): Change=" + changedFeat0.ToString());
                      action = GameAction.BattleRoundSequenceShowFeat;  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceStart)
+                     SetCommand(gi, action, GameAction.DieRollActionNone, "e503a");
                   }
                   else if (false == BattleRoundSequenceStart(gi, ref action))
                   {
@@ -9358,10 +9364,32 @@ namespace Pattons_Best
                   if (false == LoadGame(ref gi, ref action))
                   {
                      returnStatus = "LoadGame() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateEnded.PerformAction(): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(): " + returnStatus);
                   }
                   break;
                case GameAction.EveningDebriefingStart: // Only change active event
+                  GameFeat featChange;
+                  if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange))
+                  {
+                     returnStatus = "theInGameFeats.GetFeatChange() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(EveningDebriefingStart): " + returnStatus);
+                  }
+                  if (false == String.IsNullOrEmpty(featChange.Key))
+                  {
+                     Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameStateEveningDebriefing.PerformAction(EveningDebriefingStart):  Change=" + featChange.ToString());
+                     action = GameAction.EveningDebriefingShowFeat; // GameStateEveningDebriefing.PerformAction(EveningDebriefingStart)
+                     SetCommand(gi, action, GameAction.DieRollActionNone, "e503a");
+                  }
+                  else
+                  {
+                     SetCommand(gi, action, GameAction.DieRollActionNone, "e100");
+                  }
+                  break;
+               case GameAction.EveningDebriefingShowFeat:
+                  SetCommand(gi, action, GameAction.DieRollActionNone, "e503a");
+                  break;
+               case GameAction.EveningDebriefingShowFeatEnd:
+                  action = GameAction.EveningDebriefingStart;
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e100");
                   break;
                case GameAction.EveningDebriefingRatingImprovement: // Only change active event
@@ -9423,9 +9451,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(EventDebriefDecorationHeart): " + returnStatus);
                   }
                   break;
-               case GameAction.EveningDebriefingShowFeat:
-
-                  break;
+  
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;
                   break;
@@ -9890,7 +9916,6 @@ namespace Pattons_Best
             case GameAction.ShowMovementDiagramDialog:
             case GameAction.ShowReportErrorDialog:
             case GameAction.ShowAboutDialog:
-            case GameAction.EndGameShowFeats:
             case GameAction.UpdateStatusBar:
             case GameAction.UpdateTankCard:
             case GameAction.UpdateGameOptions:
@@ -9898,6 +9923,9 @@ namespace Pattons_Best
             case GameAction.UpdateAfterActionReport:
             case GameAction.UpdateEventViewerDisplay: // Only change active event
             case GameAction.UpdateBattleBoard: // Do not log event
+               break;
+            case GameAction.EndGameShowFeats:
+               SetCommand(gi, action, GameAction.DieRollActionNone, "e503a");
                break;
             case GameAction.EndGameWin:
                SetCommand(gi, action, GameAction.DieRollActionNone, "e501");
