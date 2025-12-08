@@ -271,6 +271,8 @@ namespace Pattons_Best
       PreparationsCommanderSpotSet,
       PreparationsFinal,
       PreparationsFinalSkip,
+      PreparationsShowFeat,
+      PreparationsShowFeatEnd,
 
       MovementStartAreaSet,
       MovementStartAreaSetRoll,

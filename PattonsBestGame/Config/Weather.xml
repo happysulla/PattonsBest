@@ -305,13 +305,13 @@
                <InlineUIContainer>
                   <Button Content='Movement' FontFamily='Courier New'  FontSize='8'></Button>
                </InlineUIContainer>
-               <Run Text='Table'/>
+               <Run Text='Table: +X modifiers for Sherman movement.'/>
                <LineBreak/>
-               <Run Text='    (2) See '></Run>
+               <Run Text='    (2) Per '></Run>
                <InlineUIContainer>
                   <Button Content='Time' FontFamily='Courier New'  FontSize='8'></Button>
                </InlineUIContainer>
-               <Run Text=' Table'></Run>
+               <Run Text=' Table:  Movement +15m during mud, fog, rain, ground snow, or deep snow.'></Run>
                <LineBreak/>
                <Run Text='    (3) Reduced HE effect'></Run>
             </Paragraph>
@@ -337,7 +337,9 @@
                <LineBreak/>
                <Run Text='    (1) Rapid smoke depletion'></Run>
                <LineBreak/>
-               <Run Text='    (2) After two hours of rain in one day, mud conditions exists'></Run>     
+               <Run Text='    (2) After two hours of rain in one day, mud conditions exists'></Run>
+               <LineBreak/>
+               <Run Text='    (3) No air strikes possible with rain.'></Run>
             </Paragraph>
          </TableCell>
       </TableRow>
@@ -352,7 +354,9 @@
                <LineBreak/>
                <Run Text='    (3) If snow, roll 1D at the beginning of each hour (1-8 = snow continues) (9-10 = snow stops)'></Run>
                <LineBreak/>
-               <Run Text='    (4) If no snow, roll 1D at the beginning of each hour (1-8 = no snow continues) (9-10 = snow starts)'></Run>           
+               <Run Text='    (4) If no snow, roll 1D at the beginning of each hour (1-8 = no snow continues) (9-10 = snow starts)'></Run>
+               <LineBreak/>
+               <Run Text='    (5) No air strikes possible with falling snow.'></Run>
             </Paragraph>
          </TableCell>
       </TableRow>

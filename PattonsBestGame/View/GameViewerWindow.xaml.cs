@@ -120,7 +120,6 @@ namespace Pattons_Best
       private readonly SolidColorBrush mySolidColorBrushWhite = new SolidColorBrush { Color = Colors.White };
       private readonly SolidColorBrush mySolidColorBrushLawnGreen = new SolidColorBrush { Color = Colors.LawnGreen };
       private readonly FontFamily myFontFam = new FontFamily("Tahofma");
-      private readonly FontFamily myFontFam1 = new FontFamily("Old English Text MT");
       //---------------------------------------------------------------------
       private Button? myDraggedButton = null;
       private System.Windows.Input.Cursor? myTargetCursor = null;
@@ -202,7 +201,7 @@ namespace Pattons_Best
             CtorError = true;
             return;
          }
-         Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "GameViewerWindow(): GameEngine.theStartingFeats=" + GameEngine.theStartingFeats.ToString());
+         Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "GameViewerWindow(): GameEngine.theTotalStatistics=" + GameEngine.theTotalStatistics.ToString());
          //---------------------------------------------------------------
          if (false == DeserializeRoadsFromXml())
          {
@@ -410,11 +409,12 @@ namespace Pattons_Best
             case GameAction.BattleRoundSequenceReadyRackHvapPlus:
             case GameAction.EveningDebriefingStart:
                break;
+            case GameAction.PreparationsShowFeat:
             case GameAction.BattleRoundSequenceShowFeat:
             case GameAction.EveningDebriefingShowFeat:
             case GameAction.EndGameShowFeats:
                if (false == UpdateCanvasShowFeats())
-                  Logger.Log(LogEnum.LE_ERROR, "Update_View(): UpdateCanvasShowFeats(" + action.ToString() + ") returned error ");
+                  Logger.Log(LogEnum.LE_ERROR, "Update_View(): UpdateCanvas_ShowFeats(" + action.ToString() + ") returned error ");
                break;
             case GameAction.ShowTankForcePath:
                if (null == myMainMenuViewer)
@@ -3054,10 +3054,12 @@ namespace Pattons_Best
          {
             if (ui is Image img)
             {
-               if ("Canvas" == img.Name)
+               if (true == img.Name.Contains("Canvas"))
                   continue;
                elements.Add(ui);
             }
+            if (ui is Polygon polygon)
+               elements.Add(ui);
             if (ui is TextBlock tb)
                elements.Add(ui);
             if (ui is Label label)
@@ -3076,15 +3078,18 @@ namespace Pattons_Best
          double centerY = myCanvasMain.ActualHeight * 0.5;
          //------------------------------------
          GameFeat featChange;
-         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateCanvasShowFeats(): \n  Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
+         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateCanvas_ShowFeats(): \n  Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
          if ( false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange)) // Update_CanvasShowFeats()
          {
             Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowFeats(): Get_FeatChange() returned false");
             return false;
          }
          if (true == String.IsNullOrEmpty(featChange.Key))
-            return true;
-         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateCanvasShowFeats(): Change=" + featChange.ToString());
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowFeats(): featChange=empty");
+            return false;
+         }
+         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateCanvas_ShowFeats(): Change=" + featChange.ToString());
          //------------------------------------
          double sizeOfImage = Math.Min(myCanvasMain.ActualHeight, myCanvasMain.ActualWidth);
          BitmapImage bmi1 = new BitmapImage();
@@ -3101,11 +3106,11 @@ namespace Pattons_Best
          Canvas.SetZIndex(imgFeat, 99998);
          myCanvasMain.MouseDown += MouseDownGameFeat;
          //-------------------------------------
-         System.Windows.Controls.Label labelTitle = new System.Windows.Controls.Label() { Content = "Game Feat Completed!", FontStyle = FontStyles.Italic, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam1, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center };
+         System.Windows.Controls.Label labelTitle = new System.Windows.Controls.Label() { Content = "Game Feat Completed!", FontStyle = FontStyles.Italic, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center };
          myCanvasMain.Children.Add(labelTitle);
-         System.Windows.Controls.Label labelForFeat = new System.Windows.Controls.Label() { Content = featChange, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam1, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center };
+         System.Windows.Controls.Label labelForFeat = new System.Windows.Controls.Label() { Content = GameFeat.GetFeatMessage(featChange), FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center };
          myCanvasMain.Children.Add(labelForFeat);
-         System.Windows.Controls.Label labelClick = new System.Windows.Controls.Label() { Content = "Click to continue", FontStyle = FontStyles.Italic, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam1, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center };
+         System.Windows.Controls.Label labelClick = new System.Windows.Controls.Label() { Content = "Click to continue", FontStyle = FontStyles.Italic, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center };
          myCanvasMain.Children.Add(labelClick);
          labelTitle.UpdateLayout();
          labelForFeat.UpdateLayout();
@@ -3127,6 +3132,14 @@ namespace Pattons_Best
          Canvas.SetLeft(labelClick, X3);
          Canvas.SetTop(labelClick, Y3);
          Canvas.SetZIndex(labelClick, 99999);
+         //-------------------------------------
+         GameFeat? startingFeat = GameEngine.theStartingFeats.Find(featChange.Key);
+         if ( null == startingFeat )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowFeats(): startingFeat=null");
+            return false;
+         }
+         startingFeat.Value = featChange.Value;
          return true;
       }
       private bool UpdateCanvasShowStatistics(IGameInstance gi)
@@ -4274,47 +4287,70 @@ namespace Pattons_Best
                   if ("Feat" == img1.Name)
                   {
                      GameAction action = GameAction.Error;
-                     if (GamePhase.EveningDebriefing == myGameInstance.GamePhase)
+                     GameFeat featChange;
+                     Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Mouse_DownGameFeat(): \n Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
+                     if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange)) // MouseDownGameFeat - EventingDebriefing
                      {
-                        GameFeat featChange; 
-                        Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Mouse_DownGameFeat(): \n Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
-                        if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange)) // MouseDownGameFeat - EventingDebriefing
+                        Logger.Log(LogEnum.LE_ERROR, "Mouse_DownGameFeat(): Get_FeatChange() returned false");
+                        return;
+                     }
+                     //-------------------------------------
+                     if (GamePhase.EndGame == myGameInstance.GamePhase)
+                     {
+                        if (false == String.IsNullOrEmpty(featChange.Key))
                         {
-                           Logger.Log(LogEnum.LE_ERROR, "Mouse_DownGameFeat(): Get_FeatChange() returned false");
-                           return;
+                           action = GameAction.EndGameShowFeats;
+                           Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Mouse_DownGameFeat(): 1-Change=" + featChange.Key);
                         }
-                        if (true == String.IsNullOrEmpty(featChange.Key))
+                        else
+                        {
+                           action = GameAction.EndGameShowStats;
+                           myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
+                        }
+                     }
+                     else if (GamePhase.EveningDebriefing == myGameInstance.GamePhase)
+                     {
+                        if (false == String.IsNullOrEmpty(featChange.Key))
+                        {
+                           action = GameAction.EveningDebriefingShowFeat;
+                           Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Mouse_DownGameFeat(): 2-Change=" + featChange.Key);
+                        }
+                        else
                         {
                            action = GameAction.EveningDebriefingShowFeatEnd;
                            myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
                         }
-                        else
-                        {
-                           Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Mouse_DownGameFeat(): Change=" + featChange.ToString());
-                           action = GameAction.EveningDebriefingShowFeat;
-                        }
                      }
-                     else
+                     else if (GamePhase.BattleRoundSequence == myGameInstance.GamePhase)
                      {
-                        GameFeat featChange;
-                        Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Mouse_DownGameFeat(): \n  Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
-                        if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange)) // MouseDownGameFeat - NOT EventingDebriefing
+                        if (false == String.IsNullOrEmpty(featChange.Key)) // no changed feat
                         {
-                           Logger.Log(LogEnum.LE_ERROR, "Mouse_DownGameFeat(): Get_FeatChange() returned false");
-                           return;
-                        }
-                        if (true == String.IsNullOrEmpty(featChange.Key)) // no changed feat
-                        {
-                           action = GameAction.EndGameShowStats;
+                           action = GameAction.BattleRoundSequenceShowFeat;
+                           Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Mouse_DownGameFeat(): 3-Change=" + featChange.Key);
+
                         }
                         else
                         {
-                           Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Mouse_DownGameFeat(): Change=" + featChange.ToString());
-                           action = GameAction.EndGameShowFeats;
+                           action = GameAction.BattleRoundSequenceShowFeatEnd;
+                           myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
                         }
                      }
-                     myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                     else if (GamePhase.Preparations == myGameInstance.GamePhase)
+                     {
+                        if (false == String.IsNullOrEmpty(featChange.Key)) // no changed feat
+                        {
+                           action = GameAction.PreparationsShowFeat;
+                           Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Mouse_DownGameFeat(): 4-Change=" + featChange.Key);
+                        }
+                        else
+                        {
+                           action = GameAction.PreparationsShowFeatEnd;
+                           myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);
+                        }
+                     }
+                     myCanvasMain.MouseDown -= MouseDownGameFeat;
                      e.Handled = true;
+                     myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                      return;
                   }
                }

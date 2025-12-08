@@ -14,6 +14,7 @@ namespace Pattons_Best
    {
       public string Key { get; set; } = string.Empty;
       public int Value { get; set; } = 0;
+      public int Threshold { get; set; } = 1;
       public GameFeat()
       {
       }
@@ -34,12 +35,78 @@ namespace Pattons_Best
       public override string ToString()
       {
          StringBuilder sb = new StringBuilder();
-         sb.Append("(k=");
-         sb.Append(this.Key.ToString());
-         sb.Append("->");
-         sb.Append(this.Value.ToString());
-         sb.Append(")");
+         if( 0 < this.Value)
+         {
+            sb.Append("(k=");
+            sb.Append(this.Key.ToString());
+            sb.Append("->");
+            sb.Append(this.Value.ToString());
+            sb.Append(")");
+         }
          return sb.ToString();
+      }
+      public static string GetFeatMessage(GameFeat feat)
+      {
+         switch(feat.Key)
+         {
+            case "EndGameExplode":  return "Tank Explodes Killing Crew";
+            case "EndGameWounds":    return "Game Ends with Commander Killed";
+            case "EndGameCmdrKilled":    return "Game Ends with Commander Killed";
+            case "EndGame":    return "Completed a Campaign Game";
+            case "EndGameWin":    return "Win a Campaign Game";
+            //------------
+            case "NumKillLwFriendlyFire": return "Kill " + feat.Value.ToString() + " LWs with Friendly Fire";
+            case "NumKillMgFriendlyFire": return "Kill " + feat.Value.ToString() + " MGs with Friendly Fire";
+            case "NumKillTruckFriendlyFire": return "Kill " + feat.Value.ToString() + " Trucks with Friendly Fire";
+            case "NumKillPswFriendlyFire": return "Kill " + feat.Value.ToString() + " PSW 232 with Friendly Fire";
+            case "NumKillSpwFriendlyFire": return "Kill " + feat.Value.ToString() + " SPW 251 with Friendly Fire";
+            case "NumKillPzIVFriendlyFire": return "Kill " + feat.Value.ToString() + " Pz IV with Friendly Fire";
+            case "NumKillPzVFriendlyFire": return "Kill " + feat.Value.ToString() + " Pz V with Friendly Fire";
+            case "NumKillPzVIeFriendlyFire": return "Kill " + feat.Value.ToString() + " Pz VIe with Friendly Fire";
+            case "NumKillPzVIbFriendlyFire": return "Kill " + feat.Value.ToString() + " Pz VIb with Friendly Fire";
+            case "NumKillMarderIIFriendlyFire": return "Kill " + feat.Value.ToString() + " Marder II with Friendly Fire";
+            case "NumKillMarderIIIFriendlyFire": return "Kill " + feat.Value.ToString() + " Marder III with Friendly Fire";
+            case "NumKillSTuGIIIgFriendlyFire": return "Kill " + feat.Value.ToString() + " STuG IIIg with Friendly Fire";
+            case "NumKillJgdPzIVFriendlyFire": return "Kill " + feat.Value.ToString() + " JgdPz IV with Friendly Fire";
+            case "NumKillJgdPz38tFriendlyFire": return "Kill " + feat.Value.ToString() + " JgdPz 38t with Friendly Fire";
+            case "NumKillPak38FriendlyFire": return "Kill " + feat.Value.ToString() + " Pak38 with Friendly Fire";
+            case "NumKillPak40FriendlyFire": return "Kill " + feat.Value.ToString() + " Pak40 with Friendly Fire";
+            case "NumKillPak43FriendlyFire": return "Kill " + feat.Value.ToString() + " Pak43 with Friendly Fire";
+            //------------
+            case "NumKillLwYourFire":  return "Kill " + feat.Value.ToString() + " LWs with your Tank";
+            case "NumKillMgYourFire": return "Kill " + feat.Value.ToString() + " MGs with your Tank";
+            case "NumKillTruckYourFire": return "Kill " + feat.Value.ToString() + " Trucks with your Tank";
+            case "NumKillPswYourFire": return "Kill " + feat.Value.ToString() + " PSW 232 with your Tank";
+            case "NumKillSpwYourFire": return "Kill " + feat.Value.ToString() + " SPW 251 with your Tank";
+            case "NumKillPzIVYourFire": return "Kill " + feat.Value.ToString() + " Pz IV with your Tank";
+            case "NumKillPzVYourFire": return "Kill " + feat.Value.ToString() + " Pz V with your Tank";
+            case "NumKillPzVIeYourFire": return "Kill " + feat.Value.ToString() + " Pz VIe with your Tank";
+            case "NumKillPzVIbYourFire": return "Kill " + feat.Value.ToString() + " Pz VIb with your Tank";
+            case "NumKillMarderIIYourFire": return "Kill " + feat.Value.ToString() + " Marder II with your Tank";
+            case "NumKillMarderIIIYourFire": return "Kill " + feat.Value.ToString() + " Marder III with your Tank";
+            case "NumKillSTuGIIIgYourFire": return "Kill " + feat.Value.ToString() + " STuG IIIg with your Tank";
+            case "NumKillJgdPzIVYourFire": return "Kill " + feat.Value.ToString() + " JgdPz IV with your Tank";
+            case "NumKillJgdPz38tYourFire": return "Kill " + feat.Value.ToString() + " JgdPz 38t with your Tank";
+            case "NumKillPak38YourFire": return "Kill " + feat.Value.ToString() + " Pak38 with your Tank";
+            case "NumKillPak40YourFire": return "Kill " + feat.Value.ToString() + " Pak40 with your Tank";
+            case "NumKillPak43YourFire": return "Kill " + feat.Value.ToString() + " Pak43 with your Tank";
+            //------------
+            case "NumPurpleHearts": return "Receive " + feat.Value.ToString() + " Purple Hearts";
+            case "NumBronzeStars": return "Receive " + feat.Value.ToString() + " Bronze Stars";
+            case "NumSilverStars": return "Receive " + feat.Value.ToString() + " Silver Stars";
+            case "NumDistinguishedCrosses": return "Receive " + feat.Value.ToString() + " Distinguished Crosses";
+            case "NumMedalOfHonors":    return "Receive " + feat.Value.ToString() +" Medal of Honor";
+            //------------
+            case "Hvss":    return "Use Main Gun when Moving";
+            case "RepairMain":    return "Repair the Main Gun in Battle";
+            case "RepairMg":    return "Repair a disabled MG in Battle";
+            case "FireMortar":    return "Sherman Fires a Mortar";
+            case "ThrowSmoke" :    return "Throw Smoke out of Tank Hatch";
+
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetFeatMessage(): Unknown key=" + feat.Key);
+               return feat.Key;
+         }
       }
    }
    //========================================
@@ -70,8 +137,6 @@ namespace Pattons_Best
          "NumKillSTuGIIIgFriendlyFire",
          "NumKillJgdPzIVFriendlyFire",
          "NumKillJgdPz38tFriendlyFire",
-         "NumKillPsw232FriendlyFire",
-         "NumKillSpw251FriendlyFire",
          "NumKillPak38FriendlyFire",
          "NumKillPak40FriendlyFire",
          "NumKillPak43FriendlyFire",
@@ -90,8 +155,6 @@ namespace Pattons_Best
          "NumKillSTuGIIIgYourFire",
          "NumKillJgdPzIVYourFire",
          "NumKillJgdPz38tYourFire",
-         "NumKillPsw232YourFire",
-         "NumKillSpw251YourFire",
          "NumKillPak38YourFire",
          "NumKillPak40YourFire",
          "NumKillPak43YourFire",
@@ -155,22 +218,22 @@ namespace Pattons_Best
          }
          return copy;
       }
-      public bool GetFeatChange(GameFeats startingFeats, out GameFeat outFeat)
+      public bool GetFeatChange(GameFeats rightFeats, out GameFeat outFeat)
       {
          outFeat = new GameFeat();
-         if (this.Count < startingFeats.Count) // sync up the two lists
+         if (this.Count < rightFeats.Count) // sync up the two lists
          {
-            Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): (startingFeats.Count=" + startingFeats.Count.ToString() + ") > (this.Count=" + this.Count.ToString() + ")");
+            Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): (rightFeats.Count=" + rightFeats.Count.ToString() + ") > (this.Count=" + this.Count.ToString() + ")");
             return false;
          }
-         if (startingFeats.Count < this.Count) // sync up the two lists
+         if (rightFeats.Count < this.Count) // sync up the two lists
          {
-            while (startingFeats.Count < this.Count)
+            while (rightFeats.Count < this.Count)
             {
-               Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Get_FeatChange(): (startingFeats.Count=" + startingFeats.Count.ToString() + ") <  (this.Count=" + this.Count.ToString() + ")");
-               for (int i = 0; i < startingFeats.Count; ++i)
+               Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Get_FeatChange(): (rightFeats.Count=" + rightFeats.Count.ToString() + ") <  (this.Count=" + this.Count.ToString() + ")");
+               for (int i = 0; i < rightFeats.Count; ++i)
                {
-                  GameFeat? right = startingFeats[i];
+                  GameFeat? right = rightFeats[i];
                   if (null == right)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): right=null for i=" + i.ToString());
@@ -184,15 +247,15 @@ namespace Pattons_Best
                   }
                   if (left.Key == right.Key)
                      continue;
-                  startingFeats.Insert(i, right);
+                  rightFeats.Insert(i, right);
                   break;
                }
             }
          }
          //--------------------------------------------
-         for (int i = 0; i < startingFeats.Count; ++i)
+         for (int i = 0; i < rightFeats.Count; ++i)
          {
-            GameFeat? right = startingFeats[i];
+            GameFeat? right = rightFeats[i];
             if (null == right)
             {
                Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): right=null for i=" + i.ToString());
@@ -211,8 +274,9 @@ namespace Pattons_Best
             }
             if (left.Value != right.Value)
             {
-               left.Value = right.Value;
-               outFeat = right;
+               Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Get_FeatChange(): Key=" + right.Key + " (left.Value=" + left.Value.ToString() + ") != (right.Value =" + right.Value.ToString() + ")");
+               if( 0 == left.Value % left.Threshold) // when the value reaches an iterative threshold, show feat
+                  outFeat = left;
                return true;
             }
          }
@@ -259,36 +323,4 @@ namespace Pattons_Best
          return sb.ToString();
       }
    }
-         //{"EndGameExplode", "Game ended due to tank explosion killing crew" },
-         //{ "EndGameWounds", "Game ended due to Commander dieing from wounds" },
-         //{ "EndGameCmdrKilled", "Game ended due to Commander KIA in Brew up"},
-         //{ "EndGame", "Reached the end of a campaign game"},
-         //{ "EndGameWin", "Scored positive points an end of campaign"},
-         //{ "DecorPurpleHeart", "Commander received Purple Heart"},
-         //{ "DecorPurpleBronze", "Commander received Bronze Star"},
-         //{ "DecorPurpleSilver", "Commander received Silver Star"},
-         //{ "DecorPurpleCross", "Commander received Distinguished Cross"},
-         //{ "DecorHonor", "Commander received Medal of Honor"},
-         //{ "KillLw", "Killed Light Infantry"},
-         //{ "KillMg", "Killed Machine Gun Squad"},
-         //{ "KillTruck", "Killed Truck"},
-         //{ "KillPzIV", "Killed PzIV Tank"},
-         //{ "KillPzV", "Killed PzV Tank"},
-         //{ "KillPzVIe", "Killed PzVIe (Tiger) Tank"},
-         //{ "KillPzVIb", "Killed PzVIb Tank"},
-         //{ "KillMII", "Killed Marder II SPG"},
-         //{ "KillMIII", "Killed Marder III SPG"},
-         //{ "KillStug", "Killed STuGIIIg SPG"},
-         //{ "KillLJgdPzIV", "Killed JgdPzIV SPG"},
-         //{ "KillJgdPz38t", "Killed JgdPz38t SPG"},
-         //{ "KillPSW", "Killed PSW232 AFV"},
-         //{ "KillSPW", "Killed SPW251 AFV"},
-         //{ "KillPak38", "Killed Pak38 ATG"},
-         //{ "KillPak40", "Killed Pak40 ATG"},
-         //{ "KillPak43", "Killed Pak43 ATG"},
-         //{ "Hvss", "Crew trained on HVSS Use"},
-         //{ "RepairMain", "Successfully repaired Main Gun"},
-         //{ "RepairMg", "Successfully repaired Machine Gun"},
-         //{ "FireMortar", "Fired Mortar in Combat"},
-         //{ "ThrowSmoke", "Threw Smoke from Hatch"}
 }

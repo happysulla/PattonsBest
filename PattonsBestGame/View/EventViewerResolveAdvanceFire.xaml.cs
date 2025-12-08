@@ -466,10 +466,10 @@ namespace Pattons_Best
          }
          IMapItem mi = myGridRows[i].myMapItemEnemy;
          myGridRows[i].myDieRoll = dieRoll;
-         myGridRows[i].myResult = TableMgr.SetFriendlyActionResult(myGameInstance, mi, dieRoll, myNumUseControlled, true, false, false);
+         myGridRows[i].myResult = TableMgr.SetFriendlyActionResult(myGameInstance, mi, dieRoll, myNumUseControlled, true, false, false); // EventViewerResolveAdvanceFire.ShowDieResults()
          if ( "ERROR" == myGridRows[i].myResult )
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): SetFriendlyActionResult() returned ERROR");
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Set_FriendlyActionResult() returned ERROR");
             return;
          }
          myGameInstance.BattleStacks.Remove(myGridRows[i].myMapItemAdvance);

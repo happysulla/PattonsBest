@@ -293,7 +293,7 @@ namespace Pattons_Best
                this.Title = "Weather Tables";
                this.Background = theBrushOrange;
                this.Width = this.MinWidth = this.MaxWidth = 700;
-               this.MinHeight = this.MaxHeight = 710;
+               this.MinHeight = this.MaxHeight = 720;
                break;
             case "Wounds":
                this.Title = "Wounds Tables";

@@ -184,7 +184,7 @@ namespace Pattons_Best
          //-------------------------------
          //SetOn(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION);
          //SetOn(LogEnum.LE_SHOW_SHERMAN_MOVE); 
-         SetOn(LogEnum.LE_SHOW_APPEARING_UNITS);
+         //SetOn(LogEnum.LE_SHOW_APPEARING_UNITS);
          //-------------------------------
          SetOn(LogEnum.LE_SHOW_TO_HIT_MODIFIER);
          SetOn(LogEnum.LE_SHOW_TO_HIT_ATTACK);

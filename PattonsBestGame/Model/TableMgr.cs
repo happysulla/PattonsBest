@@ -339,7 +339,7 @@ namespace Pattons_Best
          {
             case 0:
             case 1:
-               return "Falling Snow";
+               return "Falling";
             case 2:
             case 3:
             case 6:
@@ -3461,23 +3461,23 @@ namespace Pattons_Best
          }
       }
       //-------------------------------------------
-      public static int GetSpottingModifier(IGameInstance gi, IMapItem mi, ICrewMember cm, char sector, char range)
+      public static int GetSpottingModifier(IGameInstance gi, IMapItem eu, ICrewMember cm, char sector, char range)
       {
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetSpottingModifier(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Get_SpottingModifier(): lastReport=null");
             return FN_ERROR;
          }
          //--------------------------------------------------------------
-         string enemyUnit = mi.GetEnemyUnit();
+         string enemyUnit = eu.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetSpottingModifier(): unknown enemyUnit=" + mi.Name);
+            Logger.Log(LogEnum.LE_ERROR, "Get_SpottingModifier(): unknown enemyUnit=" + eu.Name);
             return FN_ERROR;
          }
          //-------------------------------------------------------
-         Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): cm=" + cm.Name + " at eu=" + enemyUnit + " ----------------------------------------------");
+         Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "Get_SpottingModifier(): cm=" + cm.Name + " cm.Role" + cm.Role + " bu=" + cm.IsButtonedUp.ToString() + " at eu=" + enemyUnit + " ----------------------------------------------");
          TankCard card = new TankCard(lastReport.TankCardNum);
          int spottingModifer = 0;
          if (true == cm.IsButtonedUp)
@@ -3485,52 +3485,52 @@ namespace Pattons_Best
             if (("Commander" == cm.Role) && (true == card.myIsVisionCupola))
             {
                spottingModifer += 2;
-               Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): bu=+2 mod=" + spottingModifer.ToString());
+               Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "Get_SpottingModifier(): bu=+2 mod=" + spottingModifer.ToString());
             }
             else
             {
                spottingModifer += 3;
-               Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): bu=+3 mod=" + spottingModifer.ToString());
+               Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "Get_SpottingModifier(): bu=+3 mod=" + spottingModifer.ToString());
             }
          }
          if (true == gi.Sherman.IsMoving)
          {
             spottingModifer += 1;
-            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): ==> move+1 mod=" + spottingModifer.ToString());
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "Get_SpottingModifier(): ==> move+1 mod=" + spottingModifer.ToString());
          }
-         if (true == mi.IsWoods)
+         if (true == eu.IsWoods)
          {
             spottingModifer += 1;
-            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): woods+1 mod=" + spottingModifer.ToString());
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "Get_SpottingModifier(): woods+1 mod=" + spottingModifer.ToString());
          }
-         if (true == mi.IsBuilding)
+         if (true == eu.IsBuilding)
          {
             spottingModifer += 1;
-            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): build+1 mod=" + spottingModifer.ToString());
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "Get_SpottingModifier(): build+1 mod=" + spottingModifer.ToString());
          }
-         if (true == mi.IsFortification)
+         if (true == eu.IsFortification)
          {
             spottingModifer += 1;
-            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): fort+1 mod=" + spottingModifer.ToString());
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "Get_SpottingModifier(): fort+1 mod=" + spottingModifer.ToString());
          }
-         if (true == mi.IsHullDown)
+         if (true == eu.IsHullDown)
          {
             spottingModifer += 1;
-            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): hull+1 mod=" + spottingModifer.ToString());
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "Get_SpottingModifier(): hull+1 mod=" + spottingModifer.ToString());
          }
          if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
          {
             spottingModifer += 1;
-            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): fog+1 mod=" + spottingModifer.ToString());
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "Get_SpottingModifier(): fog+1 mod=" + spottingModifer.ToString());
          }
          int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
          if (numSmokeMarkers < 0)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetSpottingModifier(): GetSmokeCount() returned error");
+            Logger.Log(LogEnum.LE_ERROR, "Get_SpottingModifier(): GetSmokeCount() returned error");
             return FN_ERROR;
          }
          spottingModifer += numSmokeMarkers;
-         Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): smoke+" + numSmokeMarkers.ToString() + " mod=" + spottingModifer.ToString());
+         Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "Get_SpottingModifier(): smoke+" + numSmokeMarkers.ToString() + " mod=" + spottingModifer.ToString());
          //----------------------------------------------------
          switch (enemyUnit)
          {
@@ -3547,20 +3547,20 @@ namespace Pattons_Best
             case "JdgPzIV":
             case "JdgPz38t":
                spottingModifer += 1;
-               Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): size+1 mod=" + spottingModifer.ToString());
+               Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "Get_SpottingModifier(): size+1 mod=" + spottingModifer.ToString());
                break;
             case "TANK":
             case "PzVIe":
             case "PzV":
                spottingModifer -= 1;
-               Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): size-1 mod=" + spottingModifer.ToString());
+               Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "Get_SpottingModifier(): size-1 mod=" + spottingModifer.ToString());
                break;
             case "PzVIb":
                spottingModifer -= 2;
-               Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): size-2 mod=" + spottingModifer.ToString());
+               Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "Get_SpottingModifier(): size-2 mod=" + spottingModifer.ToString());
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetSpottingModifier(): Reached Default enemyUnit=" + enemyUnit);
+               Logger.Log(LogEnum.LE_ERROR, "Get_SpottingModifier(): Reached Default enemyUnit=" + enemyUnit);
                return FN_ERROR;
          }
 
@@ -3568,30 +3568,30 @@ namespace Pattons_Best
          if ('M' == range)
          {
             spottingModifer -= 1;
-            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): range-1 mod=" + spottingModifer.ToString());
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "Get_SpottingModifier(): range-1 mod=" + spottingModifer.ToString());
          }
          else if ('C' == range)
          {
             spottingModifer -= 2;
-            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): range-2 mod=" + spottingModifer.ToString());
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "Get_SpottingModifier(): range-2 mod=" + spottingModifer.ToString());
          }
          //----------------------------------------------------
-         if (true == mi.IsFired)
+         if (true == eu.IsFired)
          {
             spottingModifer -= 2;
-            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): fired-2 mod=" + spottingModifer.ToString());
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "Get_SpottingModifier(): fired-2 mod=" + spottingModifer.ToString());
          }
          //----------------------------------------------------
-         if (true == mi.IsMoving)
+         if (true == eu.IsMoving)
          {
             spottingModifer -= 3;
-            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): move-3 mod=" + spottingModifer.ToString());
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "Get_SpottingModifier(): move-3 mod=" + spottingModifer.ToString());
          }
          //----------------------------------------------------
-         if (true == mi.IsSpotted)
+         if (true == eu.IsSpotted)
          {
             spottingModifer -= 3;
-            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "GetSpottingModifier(): spot-3 mod=" + spottingModifer.ToString());
+            Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "Get_SpottingModifier(): spot-3 mod=" + spottingModifer.ToString());
          }
          return spottingModifer;
       }
@@ -3955,7 +3955,7 @@ namespace Pattons_Best
          //-------------------------------------------------
          if (true == lastReport.Weather.Contains("Ground Snow"))
             movingModifier += 3;
-         else if (true == lastReport.Weather.Contains("Falling Snow"))
+         else if (true == lastReport.Weather.Contains("Falling"))
             movingModifier += 6;
          else if (true == lastReport.Weather.Contains("Mud"))
             movingModifier += 9;
@@ -4265,7 +4265,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): KillEnemy() returned error");
                return "ERROR";
             }
-            return "KO";
+            return "KO";  // <<<<<<<<<<<<<<<<<<<<<<<<<<< return
          }
          //----------------------------------------------------
          string enemyUnit = mi.GetEnemyUnit();
@@ -4389,7 +4389,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): KillEnemy() returned error");
                return "ERROR";
             }
-            return "KO";
+            return "KO"; // <<<<<<<<<<<<<<<<<<<<<<<<<<< return
          }
          return "None";
       }

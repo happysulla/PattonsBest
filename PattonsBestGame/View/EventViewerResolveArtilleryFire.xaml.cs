@@ -512,10 +512,10 @@ namespace Pattons_Best
          //dieRoll = 50; // <cgs> TEST - AdvanceRetreat - AAAAAAAAAAAAAAAAAAAAAAA no artillery deaths
          //dieRoll = 1;  // <cgs> TEST -                  AAAAAAAAAAAAAAAAAAAAAAA ensure artillery deaths to end battle quickly
          myGridRows[i].myDieRoll = dieRoll;
-         myGridRows[i].myResult = TableMgr.SetFriendlyActionResult(myGameInstance, mi, dieRoll, myNumUseControlled, false, true, false);
+         myGridRows[i].myResult = TableMgr.SetFriendlyActionResult(myGameInstance, mi, dieRoll, myNumUseControlled, false, true, false); // EventViewerResolveArtilleryFire.ShowDieResults()
          if ( "ERROR" == myGridRows[i].myResult )
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): SetFriendlyActionResult() returned ERROR");
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Set_FriendlyActionResult() returned ERROR");
             return;
          }
          //-------------------------------

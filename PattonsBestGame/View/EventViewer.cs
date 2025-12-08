@@ -1017,7 +1017,7 @@ namespace Pattons_Best
                      case "Deep Snow":
                         imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowDeep"), Width = 400, Height = 266, Name = "SnowRollEnd" };
                         break;
-                     case "Falling Snow":
+                     case "Falling":
                         imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling"), Width = 400, Height = 266, Name = "SnowRollEnd" };
                         break;
                      case "Falling and Deep Snow":
@@ -2424,16 +2424,16 @@ namespace Pattons_Best
                switch (Utilities.RandomGenerator.Next(10))
                {
                   case 0:
-                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("QuicksandJump"), Width = 300, Height = 300 };
+                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Win"), Width = 300, Height = 300 };
                      break;
                   case 1:
-                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Gems"), Width = 300, Height = 300 };
+                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Muscle"), Width = 300, Height = 300 };
                      break;
                   case 2:
                      imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Muscle"), Width = 300, Height = 300 };
                      break;
                   case 3:
-                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Sword1"), Width = 300, Height = 300 };
+                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Star"), Width = 300, Height = 300 };
                      break;
                   case 4:
                      imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Star"), Width = 300, Height = 300 };
@@ -2498,29 +2498,51 @@ namespace Pattons_Best
                }
                if (GamePhase.EndGame == gi.GamePhase)
                {
-                  if (true == String.IsNullOrEmpty(changedFeat.Key))
-                  {
-                     action = GameAction.EndGameShowStats;
-                  }
-                  else
+                  if (false == String.IsNullOrEmpty(changedFeat.Key))
                   {
                      Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateEventContent(): Change=" + changedFeat.ToString());
                      action = GameAction.EndGameShowFeats;
                   }
+                  else
+                  {
+                     action = GameAction.EndGameShowStats;
+                  }
                }
                else if (GamePhase.EveningDebriefing == gi.GamePhase)
                {
-                  if (true == String.IsNullOrEmpty(changedFeat.Key))
-                     action = GameAction.EveningDebriefingShowFeatEnd;
-                  else
+                  if (false == String.IsNullOrEmpty(changedFeat.Key))
+                  {
+                     Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateEventContent(): Change=" + changedFeat.ToString());
                      action = GameAction.EveningDebriefingShowFeat;
+                  }
+                  else
+                  {
+                     action = GameAction.EveningDebriefingShowFeatEnd;
+                  }
                }
                else if(GamePhase.BattleRoundSequence == gi.GamePhase)
                {
-                  if (true == String.IsNullOrEmpty(changedFeat.Key))
-                     action = GameAction.BattleRoundSequenceShowFeatEnd;
-                  else
+                  if (false == String.IsNullOrEmpty(changedFeat.Key))
+                  {
+                     Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateEventContent(): Change=" + changedFeat.ToString());
                      action = GameAction.BattleRoundSequenceShowFeat;
+                  }
+                  else
+                  {
+                     action = GameAction.BattleRoundSequenceShowFeatEnd;
+                  }
+               }
+               else if (GamePhase.Preparations == gi.GamePhase)
+               {
+                  if (false == String.IsNullOrEmpty(changedFeat.Key))
+                  {
+                     Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateEventContent(): Change=" + changedFeat.ToString());
+                     action = GameAction.PreparationsShowFeat;
+                  }
+                  else
+                  {
+                     action = GameAction.PreparationsShowFeatEnd;
+                  }
                }
                myGameEngine.PerformAction(ref gi, ref action, 0);
                break;
@@ -2650,7 +2672,7 @@ namespace Pattons_Best
          //-------------------------------------------------
          if (true == lastReport.Weather.Contains("Ground Snow"))
             sb51.Append("+3 for Ground Snow\n");
-         else if (true == lastReport.Weather.Contains("Falling Snow"))
+         else if (true == lastReport.Weather.Contains("Falling"))
             sb51.Append("+6 for Deep Snow\n");
          else if (true == lastReport.Weather.Contains("Mud"))
             sb51.Append("+9 for Mud\n");
@@ -3481,9 +3503,9 @@ namespace Pattons_Best
             if ("75" == tankcard.myMainGun) // This screen only applies to HE and AP hits against enemy vehicles   
             {
                if ("He" == hit.myAmmoType)
-                  be53ce1.Content = "HE to Kill (75)";
+                  be53ce1.Content = "HE To Kill (75)";
                else if ("Ap" == hit.myAmmoType)
-                  be53ce1.Content = "AP to Kill (75)";
+                  be53ce1.Content = "AP To Kill (75)";
                else
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unknown ammotype=" + hit.myAmmoType + " guntype=" + tankcard.myMainGun);
@@ -3493,9 +3515,9 @@ namespace Pattons_Best
             else if ("76L" == tankcard.myMainGun)
             {
                if ("He" == hit.myAmmoType)
-                  be53ce1.Content = "HE to Kill (76)";
+                  be53ce1.Content = "HE To Kill (76)";
                else if (("Ap" == hit.myAmmoType) || ("Hvap" == hit.myAmmoType))
-                  be53ce1.Content = "AP to Kill (76L)";
+                  be53ce1.Content = "AP To Kill (76L)";
                else
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unknown ammotype=" + hit.myAmmoType + " guntype=" + tankcard.myMainGun);
@@ -3505,9 +3527,9 @@ namespace Pattons_Best
             else if ("76LL" == tankcard.myMainGun)
             {
                if ("He" == hit.myAmmoType)
-                  be53ce1.Content = "HE to Kill (76)";
+                  be53ce1.Content = "HE To Kill (76)";
                else if (("Ap" == hit.myAmmoType) || ("Hvap" == hit.myAmmoType))
-                  be53ce1.Content = "AP to Kill (76LL)";
+                  be53ce1.Content = "AP To Kill (76LL)";
                else
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicle():  unknown ammotype=" + hit.myAmmoType + " guntype=" + tankcard.myMainGun);
@@ -4639,7 +4661,7 @@ namespace Pattons_Best
       }
       private bool SetButtonAirStrike(IGameInstance gi, IAfterActionReport lastReport, Button b)
       {
-         if( (true == lastReport.Weather.Contains("Overcast")) || (true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling Snow")) || (true == gi.IsAirStrikePending))
+         if( (true == lastReport.Weather.Contains("Overcast")) || (true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")) || (true == gi.IsAirStrikePending))
             b.IsEnabled = false;
          else
             b.IsEnabled = true;
