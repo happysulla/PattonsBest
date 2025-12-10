@@ -9468,8 +9468,8 @@ namespace Pattons_Best
                   }
                   if (false == String.IsNullOrEmpty(featChange.Key))
                   {
-                     Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameStateEveningDebriefing.PerformAction(EveningDebriefing_Start):  Change=" + featChange.ToString());
-                     action = GameAction.EveningDebriefingShowFeat; // GameStateEveningDebriefing.PerformAction(EveningDebriefing_Start)
+                     Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameStateEveningDebriefing.PerformAction(EveningDebriefingStart):  Change=" + featChange.ToString());
+                     action = GameAction.EveningDebriefingShowFeat; // GameStateEveningDebriefing.PerformAction(EveningDebriefingStart)
                      SetCommand(gi, action, GameAction.DieRollActionNone, "e503a");
                   }
                   else
