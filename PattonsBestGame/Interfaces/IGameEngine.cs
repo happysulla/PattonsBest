@@ -206,7 +206,7 @@ namespace Pattons_Best
       ShowRuleListingDialog,
       ShowEventListingDialog,
       ShowTableListing,
-      ShowGameFeats,
+      ShowGameFeatsDialog,
       ShowReportErrorDialog,
       ShowAboutDialog,
 

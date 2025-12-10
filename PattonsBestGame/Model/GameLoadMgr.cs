@@ -782,7 +782,7 @@ namespace Pattons_Best
             case "ShowRuleListingDialog": return GameAction.ShowRuleListingDialog;
             case "ShowEventListingDialog": return GameAction.ShowEventListingDialog;
             case "ShowTableListing": return GameAction.ShowTableListing;
-            case "ShowGameFeats": return GameAction.ShowGameFeats;
+            case "ShowGameFeatsDialog": return GameAction.ShowGameFeatsDialog;
             case "ShowReportErrorDialog": return GameAction.ShowReportErrorDialog;
             case "ShowAboutDialog": return GameAction.ShowAboutDialog;
 

@@ -1612,7 +1612,7 @@ namespace Pattons_Best
             case GameAction.ShowRoads:
             case GameAction.ShowCombatCalendarDialog:
             case GameAction.ShowAfterActionReportDialog:
-            case GameAction.ShowGameFeats:
+            case GameAction.ShowGameFeatsDialog:
             case GameAction.ShowRuleListingDialog:
             case GameAction.ShowEventListingDialog:
             case GameAction.ShowTableListing:
@@ -3067,7 +3067,7 @@ namespace Pattons_Best
                case GameAction.ShowRoads:
                case GameAction.ShowCombatCalendarDialog:
                case GameAction.ShowAfterActionReportDialog:
-               case GameAction.ShowGameFeats:
+               case GameAction.ShowGameFeatsDialog:
                case GameAction.ShowRuleListingDialog:
                case GameAction.ShowEventListingDialog:
                case GameAction.ShowTableListing:
@@ -3879,7 +3879,7 @@ namespace Pattons_Best
                case GameAction.ShowRoads:
                case GameAction.ShowCombatCalendarDialog:
                case GameAction.ShowAfterActionReportDialog:
-               case GameAction.ShowGameFeats:
+               case GameAction.ShowGameFeatsDialog:
                case GameAction.ShowRuleListingDialog:
                case GameAction.ShowEventListingDialog:
                case GameAction.ShowTableListing:
@@ -4153,7 +4153,7 @@ namespace Pattons_Best
                case GameAction.ShowRoads:
                case GameAction.ShowCombatCalendarDialog:
                case GameAction.ShowAfterActionReportDialog:
-               case GameAction.ShowGameFeats:
+               case GameAction.ShowGameFeatsDialog:
                case GameAction.ShowRuleListingDialog:
                case GameAction.ShowEventListingDialog:
                case GameAction.ShowTableListing:
@@ -5111,7 +5111,7 @@ namespace Pattons_Best
                case GameAction.ShowRoads:
                case GameAction.ShowCombatCalendarDialog:
                case GameAction.ShowAfterActionReportDialog:
-               case GameAction.ShowGameFeats:
+               case GameAction.ShowGameFeatsDialog:
                case GameAction.ShowRuleListingDialog:
                case GameAction.ShowEventListingDialog:
                case GameAction.ShowTableListing:
@@ -5517,7 +5517,7 @@ namespace Pattons_Best
                case GameAction.ShowRoads:
                case GameAction.ShowCombatCalendarDialog:
                case GameAction.ShowAfterActionReportDialog:
-               case GameAction.ShowGameFeats:
+               case GameAction.ShowGameFeatsDialog:
                case GameAction.ShowRuleListingDialog:
                case GameAction.ShowEventListingDialog:
                case GameAction.ShowTableListing:
@@ -9433,7 +9433,7 @@ namespace Pattons_Best
                case GameAction.ShowCombatCalendarDialog:
                case GameAction.ShowAfterActionReportDialog:
                case GameAction.ShowRoads:
-               case GameAction.ShowGameFeats:
+               case GameAction.ShowGameFeatsDialog:
                case GameAction.ShowRuleListingDialog:
                case GameAction.ShowEventListingDialog:
                case GameAction.ShowTableListing:
@@ -10006,7 +10006,7 @@ namespace Pattons_Best
             case GameAction.ShowRoads:
             case GameAction.ShowCombatCalendarDialog:
             case GameAction.ShowAfterActionReportDialog:
-            case GameAction.ShowGameFeats:
+            case GameAction.ShowGameFeatsDialog:
             case GameAction.ShowRuleListingDialog:
             case GameAction.ShowEventListingDialog:
             case GameAction.ShowTableListing:
@@ -10093,7 +10093,7 @@ namespace Pattons_Best
             case GameAction.ShowRoads:
             case GameAction.ShowCombatCalendarDialog:
             case GameAction.ShowAfterActionReportDialog:
-            case GameAction.ShowGameFeats:
+            case GameAction.ShowGameFeatsDialog:
             case GameAction.ShowRuleListingDialog:
             case GameAction.ShowEventListingDialog:
             case GameAction.ShowTableListing:

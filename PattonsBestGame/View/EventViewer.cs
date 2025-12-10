@@ -376,6 +376,17 @@ namespace Pattons_Best
                   myDialogMovementDiagram.Activate();
                }
                break;
+            case GameAction.ShowGameFeatsDialog:
+               ShowFeatDisplayDialog dialogShowFeats = new ShowFeatDisplayDialog(myRulesMgr);
+               if (true == dialogShowFeats.CtorError)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): FeatDisplayDialog CtorError=true");
+                  return;
+               }
+               if (true == dialogShowFeats.ShowDialog())
+               {
+               }
+               break;
             case GameAction.SetupAssignCrewRating:
             case GameAction.MorningBriefingAssignCrewRating:
                EventViewerCrewSetup newCrewMgr = new EventViewerCrewSetup(myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);

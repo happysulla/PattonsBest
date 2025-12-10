@@ -322,7 +322,7 @@ namespace Pattons_Best
       }
       public void MenuItemViewFeats_Click(object sender, RoutedEventArgs e)
       {
-         GameAction action = GameAction.ShowGameFeats;
+         GameAction action = GameAction.ShowGameFeatsDialog;
          myGameEngine.PerformAction(ref myGameInstance, ref action);
       }
       public void MenuItemViewRoads_Click(object sender, RoutedEventArgs e)
