@@ -3463,6 +3463,7 @@ namespace Pattons_Best
       //-------------------------------------------
       public static int GetSpottingModifier(IGameInstance gi, IMapItem eu, ICrewMember cm, char sector, char range)
       {
+         Logger.Log(LogEnum.LE_SHOW_CREW_BU, "Get_SpottingModifier(): role=" + cm.Role + " isBU=" + cm.IsButtonedUp.ToString() + " isInc=" + cm.IsIncapacitated.ToString());
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
@@ -3477,7 +3478,7 @@ namespace Pattons_Best
             return FN_ERROR;
          }
          //-------------------------------------------------------
-         Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "Get_SpottingModifier(): cm=" + cm.Name + " cm.Role" + cm.Role + " bu=" + cm.IsButtonedUp.ToString() + " at eu=" + enemyUnit + " ----------------------------------------------");
+         Logger.Log(LogEnum.LE_SHOW_SPOT_MOD, "Get_SpottingModifier(): cm=" + cm.Name + " role=" + cm.Role + " bu=" + cm.IsButtonedUp.ToString() + " at eu=" + enemyUnit + " ----------------------------------------------");
          TankCard card = new TankCard(lastReport.TankCardNum);
          int spottingModifer = 0;
          if (true == cm.IsButtonedUp)

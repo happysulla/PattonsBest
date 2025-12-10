@@ -35,14 +35,11 @@ namespace Pattons_Best
       public override string ToString()
       {
          StringBuilder sb = new StringBuilder();
-         if( 0 < this.Value)
-         {
-            sb.Append("(k=");
-            sb.Append(this.Key.ToString());
-            sb.Append("->");
-            sb.Append(this.Value.ToString());
-            sb.Append(")");
-         }
+         sb.Append("(k=");
+         sb.Append(this.Key.ToString());
+         sb.Append("->");
+         sb.Append(this.Value.ToString());
+         sb.Append(")");
          return sb.ToString();
       }
       public static string GetFeatMessage(GameFeat feat)
@@ -221,36 +218,10 @@ namespace Pattons_Best
       public bool GetFeatChange(GameFeats rightFeats, out GameFeat outFeat)
       {
          outFeat = new GameFeat();
-         if (this.Count < rightFeats.Count) // sync up the two lists
+         if (this.Count != rightFeats.Count) // sync up the two lists
          {
             Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): (rightFeats.Count=" + rightFeats.Count.ToString() + ") > (this.Count=" + this.Count.ToString() + ")");
             return false;
-         }
-         if (rightFeats.Count < this.Count) // sync up the two lists
-         {
-            while (rightFeats.Count < this.Count)
-            {
-               Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Get_FeatChange(): (rightFeats.Count=" + rightFeats.Count.ToString() + ") <  (this.Count=" + this.Count.ToString() + ")");
-               for (int i = 0; i < rightFeats.Count; ++i)
-               {
-                  GameFeat? right = rightFeats[i];
-                  if (null == right)
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): right=null for i=" + i.ToString());
-                     return false;
-                  }
-                  GameFeat? left = this[i];
-                  if (null == left)
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): left=null for i=" + i.ToString());
-                     return false;
-                  }
-                  if (left.Key == right.Key)
-                     continue;
-                  rightFeats.Insert(i, right);
-                  break;
-               }
-            }
          }
          //--------------------------------------------
          for (int i = 0; i < rightFeats.Count; ++i)
@@ -275,8 +246,9 @@ namespace Pattons_Best
             if (left.Value != right.Value)
             {
                Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Get_FeatChange(): Key=" + right.Key + " (left.Value=" + left.Value.ToString() + ") != (right.Value =" + right.Value.ToString() + ")");
-               if( 0 == left.Value % left.Threshold) // when the value reaches an iterative threshold, show feat
+               if (0 == left.Value % left.Threshold) // when the value reaches an iterative threshold, show feat
                   outFeat = left;
+               right.Value = left.Value - 1; // starting feat is one behind current feat - gets set to same value when user acknowledges feat
                return true;
             }
          }
@@ -287,6 +259,53 @@ namespace Pattons_Best
          Clear();
          foreach (string s in theDefaults)
             Add(new GameFeat(s));
+      }
+      public void SetGameFeatThreshold()
+      {
+         foreach( GameFeat feat in this)
+         {
+            int threshold = 1;
+            switch (feat.Key)
+            {
+               case "NumKillLwFriendlyFire": threshold = 12; break;
+               case "NumKillMgFriendlyFire": threshold = 10; break;
+               case "NumKillTruckFriendlyFire": threshold = 10; break;
+               case "NumKillPswFriendlyFire": threshold = 8; break;
+               case "NumKillSpwFriendlyFire": threshold = 8; break;
+               case "NumKillPzIVFriendlyFire": threshold = 5; break;
+               case "NumKillPzVFriendlyFire": threshold = 4; break;
+               case "NumKillPzVIeFriendlyFire": threshold = 3; break;
+               case "NumKillPzVIbFriendlyFire": threshold = 1; break;
+               case "NumKillMarderIIFriendlyFire": threshold = 3; break;
+               case "NumKillMarderIIIFriendlyFire": threshold = 3; break;
+               case "NumKillSTuGIIIgFriendlyFire": threshold = 5; break;
+               case "NumKillJgdPzIVFriendlyFire": threshold = 2; break;
+               case "NumKillJgdPz38tFriendlyFire": threshold = 1; break;
+               case "NumKillPak38FriendlyFire": threshold = 8; break;
+               case "NumKillPak40FriendlyFire": threshold = 6; break;
+               case "NumKillPak43FriendlyFire": threshold = 4; break;
+               //-------------------------------------------
+               case "NumKillLwYourFire": threshold = 6; break;
+               case "NumKillMgYourFire": threshold = 5; break;
+               case "NumKillTruckYourFire": threshold = 5; break;
+               case "NumKillPswYourFire": threshold = 4; break;
+               case "NumKillSpwYourFire": threshold = 4; break;
+               case "NumKillPzIVYourFire": threshold = 3; break;
+               case "NumKillPzVYourFire": threshold = 2; break;
+               case "NumKillPzVIeYourFire": threshold = 1; break;
+               case "NumKillPzVIbYourFire": threshold = 1; break;
+               case "NumKillMarderIIYourFire": threshold = 2; break;
+               case "NumKillMarderIIIYourFire": threshold = 1; break;
+               case "NumKillSTuGIIIgYourFire": threshold = 3; break;
+               case "NumKillJgdPzIVYourFire": threshold = 1; break;
+               case "NumKillJgdPz38tYourFire": threshold = 1; break;
+               case "NumKillPak38YourFire": threshold = 4; break;
+               case "NumKillPak40YourFire": threshold = 3; break;
+               case "NumKillPak43YourFire": threshold = 2; break;
+               default: threshold = 1; break;
+            }
+            feat.Threshold = threshold;
+         }
       }
       public void SetValue(string key, int value)
       {
@@ -309,6 +328,7 @@ namespace Pattons_Best
             this.myList.Add(o);
          }
          o.Value++;
+         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "AddOne():  key=" + o.Key + " value=" + o.Value);
       }
       public override string ToString()
       {

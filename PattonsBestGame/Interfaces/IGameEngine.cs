@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Threading;
 using System.Windows.Controls;
 
 namespace Pattons_Best
@@ -50,6 +50,15 @@ namespace Pattons_Best
       public string myLoaderSpotTerritory = "";
       public string myCommanderSpotTerritory = "";
       public ShermanSetup(){}
+      public void Clear()
+      {
+         myIsSetupPerformed = false;
+         myHatches.Clear();
+         myAmmoType = "";
+         myTurretRotation = 0.0;
+         myLoaderSpotTerritory = "";
+         myCommanderSpotTerritory = "";
+      }
    }
    public class PanzerfaustAttack
    {

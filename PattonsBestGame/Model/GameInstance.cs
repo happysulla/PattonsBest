@@ -1111,48 +1111,47 @@ namespace Pattons_Best
          mi.EnemyAcquiredShots.Remove("Sherman");
          this.Sherman.EnemyAcquiredShots.Remove(mi.Name);
          //-------------------------------------
-         string enemyUnit = mi.GetEnemyUnit();
-         string name = "";
-         switch(enemyUnit)
+         StringBuilder sb = new StringBuilder("NumKill");
+        switch(mi.GetEnemyUnit())
          {
-            case "TANK": name = "NumKillPzVIb"; break;
-            case "ATG": name = "NumKillPak43"; break;
-            case "SPG": name = "NumKillSTuGIIIg"; break;
-            case "LW": name = "NumKillLw"; break;
-            case "MG": name = "NumKillMg"; break;
-            case "TRUCK": name = "NumKillTruck"; break;
-            case "PSW": name = "NumKillPsw"; break;
-            case "SPW": name = "NumKillSpw"; break;
-            case "Pak38": name = "NumKillPak38"; break;
-            case "Pak40": name = "NumKillPak40"; break;
-            case "Pak43": name = "NumKillPak43"; break;
-            case "PzIV": name = "NumKillPzIV"; break;
-            case "PzV": name = "NumKillPzV"; break;
-            case "PzVIb": name = "NumKillPzVIb"; break;
-            case "PzVIe": name = "NumKillPzVIe"; break;
-            case "STuGIIIg": name = "NumKillSTuGIIIg"; break;
-            case "MARDERII": name = "NumKillMarderII"; break;
-            case "MARDERIII": name = "NumKillMarderIII"; break;
-            case "JdgPzIV": name = "NumKillJgdPzIV"; break;
-            case "JdgPz38t": name = "NumKillJgdPz38t"; break;
+            case "TANK": sb.Append("PzVIb"); break;
+            case "ATG": sb.Append("Pak43"); break;
+            case "SPG": sb.Append("STuGIIIg"); break;
+            case "LW": sb.Append("Lw"); break;
+            case "MG": sb.Append("Mg"); break;
+            case "TRUCK": sb.Append("Truck"); break;
+            case "PSW": sb.Append("Psw"); break;
+            case "SPW": sb.Append("Spw"); break;
+            case "Pak38": sb.Append("Pak38"); break;
+            case "Pak40": sb.Append("Pak40"); break;
+            case "Pak43": sb.Append("Pak43"); break;
+            case "PzIV": sb.Append("PzIV"); break;
+            case "PzV": sb.Append("PzV"); break;
+            case "PzVIb": sb.Append("PzVIb"); break;
+            case "PzVIe": sb.Append("PzVIe"); break;
+            case "STuGIIIg": sb.Append("STuGIIIg"); break;
+            case "MARDERII": sb.Append("MarderII"); break;
+            case "MARDERIII": sb.Append("MarderIII"); break;
+            case "JdgPzIV": sb.Append("JgdPzIV"); break;
+            case "JdgPz38t": sb.Append("JgdPz38t"); break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "KillEnemy(): reached default with enemyUnit=" + enemyUnit);
+               Logger.Log(LogEnum.LE_ERROR, "KillEnemy(): reached default with enemyUnit=" + mi.GetEnemyUnit());
                return false;
          }
          //-------------------------------------
          if (true == isYourFire)
          {
             this.ScoreYourVictoryPoint(report, mi);
-            name += "YourFire";
+            sb.Append("YourFire");
          }
          else
          {
             this.ScoreFriendlyVictoryPoint(report, mi);
-            name += "FriendlyFire";
+            sb.Append("FriendlyFire");
          }
          //-------------------------------------
-         this.Statistics.AddOne(name);
-         GameEngine.theInGameFeats.AddOne(name);
+         this.Statistics.AddOne(sb.ToString());
+         GameEngine.theInGameFeats.AddOne(sb.ToString());
          return true;
       }
       public void KillSherman(IAfterActionReport report, string reason)

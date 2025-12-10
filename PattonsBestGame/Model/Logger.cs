@@ -26,6 +26,7 @@ namespace Pattons_Best
       LE_VIEW_SHOW_STATS,
       //-------------
       LE_SHOW_CREW_NAME,
+      LE_SHOW_CREW_BU,
       LE_SHOW_START_AREA,
       LE_SHOW_ACTION_REPORT_NEW,
       LE_SHOW_ENEMY_STRENGTH,
@@ -148,12 +149,13 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_MAIN_CLEAR);
          //SetOn(LogEnum.LE_SHOW_ENTERED_HEX);
          //SetOn(LogEnum.LE_SHOW_BUTTON_MOVE);
-         SetOn(LogEnum.LE_VIEW_SHOW_OPTIONS);
+         //SetOn(LogEnum.LE_VIEW_SHOW_OPTIONS);
          SetOn(LogEnum.LE_VIEW_SHOW_FEATS);
          SetOn(LogEnum.LE_VIEW_SHOW_STATS);
          //-------------------------------
          //SetOn(LogEnum.LE_SHOW_CREW_NAME);
-         SetOn(LogEnum.LE_SHOW_ACTION_REPORT_NEW);
+         SetOn(LogEnum.LE_SHOW_CREW_BU);
+         //SetOn(LogEnum.LE_SHOW_ACTION_REPORT_NEW);
          SetOn(LogEnum.LE_SHOW_START_AREA);
          //SetOn(LogEnum.LE_SHOW_ENEMY_STRENGTH);
          SetOn(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA);
@@ -168,7 +170,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_BATTLE_PHASE);
          //SetOn(LogEnum.LE_SHOW_START_BATTLE);
          //SetOn(LogEnum.LE_SHOW_BATTLE_ROUND_START);
-         SetOn(LogEnum.LE_SHOW_RESET_ROUND);
+         //SetOn(LogEnum.LE_SHOW_RESET_ROUND);
          //SetOn(LogEnum.LE_SHOW_HIT_YOU_MOD);
          //SetOn(LogEnum.LE_SHOW_WOUND_MOD);
          SetOn(LogEnum.LE_SHOW_SPOT_MOD);

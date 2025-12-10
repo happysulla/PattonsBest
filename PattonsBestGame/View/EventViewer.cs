@@ -2419,6 +2419,7 @@ namespace Pattons_Best
                sbEndWon.Append(TableMgr.GetDate(gi.Day));
                sbEndWon.Append(" due to '");
                sbEndWon.Append(gi.EndGameReason);
+               sbEndWon.Append("'");
                myTextBlock.Inlines.Add(new Run(sbEndWon.ToString()));
                Image? imgEndGameWon = null;
                switch (Utilities.RandomGenerator.Next(10))
@@ -2454,7 +2455,7 @@ namespace Pattons_Best
                StringBuilder sbEndLost = new StringBuilder();
                sbEndLost.Append("Game ends on ");
                sbEndLost.Append(TableMgr.GetDate(gi.Day));
-               sbEndLost.Append(" due to '");
+               sbEndLost.Append(" due to ");
                sbEndLost.Append(gi.EndGameReason);
                myTextBlock.Inlines.Add(new Run(sbEndLost.ToString()));
                Image? imgEndGameLost = null;
@@ -2487,66 +2488,6 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new Run("Click image to continue show game statistics and feats."));
                break;
-            case "e503a":
-               GameAction action = GameAction.Error;
-               GameFeat changedFeat;
-               Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateEventContent(): \n  Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
-               if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out changedFeat)) // Game Feats
-               {
-                  Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "UpdateEventContent(): Get_FeatChange() returned false");
-                  return false;
-               }
-               if (GamePhase.EndGame == gi.GamePhase)
-               {
-                  if (false == String.IsNullOrEmpty(changedFeat.Key))
-                  {
-                     Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateEventContent(): Change=" + changedFeat.ToString());
-                     action = GameAction.EndGameShowFeats;
-                  }
-                  else
-                  {
-                     action = GameAction.EndGameShowStats;
-                  }
-               }
-               else if (GamePhase.EveningDebriefing == gi.GamePhase)
-               {
-                  if (false == String.IsNullOrEmpty(changedFeat.Key))
-                  {
-                     Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateEventContent(): Change=" + changedFeat.ToString());
-                     action = GameAction.EveningDebriefingShowFeat;
-                  }
-                  else
-                  {
-                     action = GameAction.EveningDebriefingShowFeatEnd;
-                  }
-               }
-               else if(GamePhase.BattleRoundSequence == gi.GamePhase)
-               {
-                  if (false == String.IsNullOrEmpty(changedFeat.Key))
-                  {
-                     Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateEventContent(): Change=" + changedFeat.ToString());
-                     action = GameAction.BattleRoundSequenceShowFeat;
-                  }
-                  else
-                  {
-                     action = GameAction.BattleRoundSequenceShowFeatEnd;
-                  }
-               }
-               else if (GamePhase.Preparations == gi.GamePhase)
-               {
-                  if (false == String.IsNullOrEmpty(changedFeat.Key))
-                  {
-                     Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "UpdateEventContent(): Change=" + changedFeat.ToString());
-                     action = GameAction.PreparationsShowFeat;
-                  }
-                  else
-                  {
-                     action = GameAction.PreparationsShowFeatEnd;
-                  }
-               }
-               myGameEngine.PerformAction(ref gi, ref action, 0);
-               break;
-
             default:
                break;
          }

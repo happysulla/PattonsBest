@@ -193,7 +193,8 @@ namespace Pattons_Best
             return;        
          }
          GameEngine.theStartingFeats = GameEngine.theInGameFeats.Clone(); // need to know difference between starting feats and feats that happen in this game
-         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameViewerWindow(): GameEngine.theInGameFeats=" + GameEngine.theInGameFeats.ToString());
+         GameEngine.theStartingFeats.SetGameFeatThreshold();
+         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameViewerWindow():\n  feats=" + GameEngine.theInGameFeats.ToString() + "\n Sfeats=" + GameEngine.theStartingFeats.ToString());
          //---------------------------------------------------------------
          if (false == DeserializeGameStatistics(GameEngine.theTotalStatistics))
          {
@@ -1822,6 +1823,7 @@ namespace Pattons_Best
             System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
             if (0 == feats.Count)
                feats.SetOriginalGameFeats();
+            feats.SetGameFeatThreshold(); // always set game feat thresholds to a known value on startup
          }
          return true;
       }
@@ -2237,6 +2239,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateCanvas_TankHatches(): cm=null for " + crewmember);
                   return false;
                }
+               Logger.Log(LogEnum.LE_SHOW_CREW_BU, "UpdateCanvas_TankHatches(): role=" + crewmember + " isBU=" + cm.IsButtonedUp.ToString() + " isInc=" + cm.IsIncapacitated.ToString());
                if ( (true == cm.IsButtonedUp) && (false == cm.IsIncapacitated) )
                {
 
