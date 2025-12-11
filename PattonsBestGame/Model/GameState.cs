@@ -3657,6 +3657,7 @@ namespace Pattons_Best
          //-----------------------------------------
          if ( (null != gi.ShermanHvss) && (29 < totalRating) && ( (37 == gi.Day) || (68 == gi.Day) || (97 == gi.Day) || (137 == gi.Day) || (144 == gi.Day) ) ) // retrofits must be greater than 7 days for training 
          {
+            GameEngine.theInGameFeats.AddOne("HvssTrained");
             gi.TrainedGunners.Add(lastReport.Gunner.Name);
             SetCommand(gi, action, GameAction.DieRollActionNone, "e006c");
          }
@@ -7580,6 +7581,7 @@ namespace Pattons_Best
             if (true == isThrowGrenade)
             {
                SetCommand(gi, outAction, GameAction.DieRollActionNone, "e058");
+               GameEngine.theInGameFeats.AddOne("ThrowSmoke");
                gi.CrewActionPhase = CrewActionPhase.ThrowGrenades;
                Logger.Log(LogEnum.LE_SHOW_CONDUCT_CREW_ACTION, "Conduct_CrewAction(): 16-phase=" + gi.CrewActionPhase.ToString());
             }
@@ -8957,6 +8959,7 @@ namespace Pattons_Best
          //-------------------------------------------------------
          if (combo < 21)
          {
+            GameEngine.theInGameFeats.AddOne("RepairMain");
             gi.IsMalfunctionedMainGun = false;
             Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "RepairMainGunAttempt(): Main Gun Repaired with combo=" + combo.ToString());
          }
@@ -9014,6 +9017,7 @@ namespace Pattons_Best
          //-------------------------------------------------------
          if (combo < 21)
          {
+            GameEngine.theInGameFeats.AddOne("RepairMg");
             gi.IsMalfunctionedMgAntiAircraft = false;
          }
          else if ((90 < combo) || (97 < gi.DieResults[key][0])) // gun automatically breaks on unmodified die roll greater than 97
@@ -9046,6 +9050,7 @@ namespace Pattons_Best
          //-------------------------------------------------------
          if (combo < 21)
          {
+            GameEngine.theInGameFeats.AddOne("RepairMg");
             gi.IsMalfunctionedMgBow = false;
          }
          else if ((90 < combo) || (97 < gi.DieResults[key][0])) // gun automatically breaks on unmodified die roll greater than 97
@@ -9078,6 +9083,7 @@ namespace Pattons_Best
          //-------------------------------------------------------
          if (combo < 21)
          {
+            GameEngine.theInGameFeats.AddOne("RepairMg");
             gi.IsMalfunctionedMgCoaxial = false;
          }
          else if ((90 < combo) || (97 < gi.DieResults[key][0])) // gun automatically breaks on unmodified die roll greater than 97
@@ -9144,6 +9150,7 @@ namespace Pattons_Best
          IMapPoint mp1 = Territory.GetRandomPoint(t, Utilities.theMapItemOffset);
          smoke1.Location = mp1;
          gi.BattleStacks.Add(smoke1);
+         GameEngine.theInGameFeats.AddOne("FireMortar");
          //--------------------------------------------------
          gi.CrewActionPhase = CrewActionPhase.ThrowGrenades;
          if (false == ConductCrewAction(gi, ref outAction))
@@ -9553,13 +9560,13 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.EventDebriefDecorationHeart:
+                  GameEngine.theInGameFeats.AddOne("NumPurpleHearts");
                   if (false == EveningDebriefingResetDay(gi, lastReport, ref action))
                   {
                      returnStatus = "EveningDebriefing_ResetDay() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(EventDebriefDecorationHeart): " + returnStatus);
                   }
                   break;
-  
                case GameAction.EndGameClose:
                   gi.GamePhase = GamePhase.EndGame;
                   break;
@@ -9742,18 +9749,22 @@ namespace Pattons_Best
             case GameAction.EventDebriefDecorationContinue:  // UpdateDecoration()
                break;
             case GameAction.EventDebriefDecorationBronzeStar:
+               GameEngine.theInGameFeats.AddOne("NumBronzeStars");
                sb1.Append(" received the Bronze Star.");
                report.Notes.Add(sb1.ToString());
                break;
             case GameAction.EventDebriefDecorationSilverStar:
+               GameEngine.theInGameFeats.AddOne("NumSilverStars");
                sb1.Append(" received the Silver Star.");
                report.Notes.Add(sb1.ToString());
                break;
             case GameAction.EventDebriefDecorationCross:
+               GameEngine.theInGameFeats.AddOne("NumDistinguishedCrosses");
                sb1.Append(" received the Distinguished Cross.");
                report.Notes.Add(sb1.ToString());
                break;
             case GameAction.EventDebriefDecorationHonor:
+               GameEngine.theInGameFeats.AddOne("NumMedalOfHonors");
                sb1.Append(" received the Medal of Honor.");
                report.Notes.Add(sb1.ToString());
                break;

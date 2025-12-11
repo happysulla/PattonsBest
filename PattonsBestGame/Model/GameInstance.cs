@@ -1151,8 +1151,8 @@ namespace Pattons_Best
             sb.Append("FriendlyFire");
          }
          //-------------------------------------
-         this.Statistics.AddOne(sb.ToString());
          GameEngine.theInGameFeats.AddOne(sb.ToString());
+         this.Statistics.AddOne(sb.ToString());
          return true;
       }
       public void KillSherman(IAfterActionReport report, string reason)

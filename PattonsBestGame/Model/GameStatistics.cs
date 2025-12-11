@@ -60,6 +60,12 @@ namespace Pattons_Best
          "ShermanExplodes",
          "ShermanBurns",
          "ShermanLostPenetration",
+         //--------------
+         "DayMaxBetweenCombat",
+         "MaxRollsForAirSupport",
+         "MaxRollsForArtillerySupport",
+         "MaxEnemiesInOneBattle",
+         "MaxRoundsOfCombat",
          //------------
          "NumKillLwFriendlyFire",
          "NumKillMgFriendlyFire",
@@ -75,8 +81,6 @@ namespace Pattons_Best
          "NumKillSTuGIIIgFriendlyFire",
          "NumKillJgdPzIVFriendlyFire",
          "NumKillJgdPz38tFriendlyFire",
-         "NumKillPsw232FriendlyFire",
-         "NumKillSpw251FriendlyFire",
          "NumKillPak38FriendlyFire",
          "NumKillPak40FriendlyFire",
          "NumKillPak43FriendlyFire",
@@ -95,8 +99,6 @@ namespace Pattons_Best
          "NumKillSTuGIIIgYourFire",
          "NumKillJgdPzIVYourFire",
          "NumKillJgdPz38tYourFire",
-         "NumKillPsw232YourFire",
-         "NumKillSpw251YourFire",
          "NumKillPak38YourFire",
          "NumKillPak40YourFire",
          "NumKillPak43YourFire",
@@ -105,16 +107,285 @@ namespace Pattons_Best
          "NumBronzeStars",
          "NumSilverStars",
          "NumDistinguishedCrosses",
-         "NumMedalOfHonors",
-         //--------------
-         "DayMaxBetweenCombat",
-         "MaxRollsForAirSupport",
-         "MaxRollsForArtillerySupport",
-         "MaxEnemiesInOneBattle",
-         "MaxRoundsOfCombat"
+         "NumMedalOfHonors"
       };
       [NonSerialized] public static string theGameStatisticsDirectory = "";
       private readonly ArrayList myList;
+      public static string GetStatisticMessage(GameStatistic stat)
+      {
+         StringBuilder sb = new StringBuilder();
+         switch (stat.Key)
+         {
+            case "EndCampaignGame":
+               sb.Append("Complete campaign game ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "EndCampaignGameOnTime":
+               sb.Append("Lasted all days of a campaign game ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "EndCampaignGameWin": 
+               sb.Append("Campaign game won ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "EndGameExplode":
+               sb.Append("Game ends with tank explosion ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "EndGameCmdrKilled": 
+               sb.Append("Game ends with commander killed ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            //------------
+            case "ShermanExplodes":
+               sb.Append("Sherman exploded ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "ShermanBurns":
+               sb.Append("Sherman brewup ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "ShermanPenetration":
+               sb.Append("Sherman killed by penetration ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            //------------
+            case "HvssTrained":
+               sb.Append("Trained on HVSS that allows firing when moving ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "RepairMain": 
+               sb.Append("Repair a disabled main gun in battle ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "RepairMg":
+               sb.Append("Repair a disabled MG in battle ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "FireMortar":
+               sb.Append("Sherman fires a mortar ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "ThrowSmoke":
+               sb.Append("Throw smoke out of tank hatch ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            //------------
+            case "NumKillLwFriendlyFire":
+               sb.Append("Killed LW units with friendly fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillMgFriendlyFire":
+               sb.Append("Killed MG Teams with friendly fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillTruckFriendlyFire":
+               sb.Append("Killed trucks with friendly fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillPswFriendlyFire":
+               sb.Append("Killed PSW232 AFVs with friendly fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillSpwFriendlyFire":
+               sb.Append("Killed SPW251 AFVs with friendly fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillPzIVFriendlyFire":
+               sb.Append("Killed PzIV Tanks with friendly fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillPzVFriendlyFire":
+               sb.Append("Killed PzV Tanks with friendly fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillPzVIeFriendlyFire":
+               sb.Append("Killed PzVIe Tanks with friendly fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillPzVIbFriendlyFire":
+               sb.Append("Killed PzVIb Tanks with friendly fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillMarderIIFriendlyFire":
+               sb.Append("Killed MarderII SPGs with friendly fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillMarderIIIFriendlyFire":
+               sb.Append("Killed MarderIII SPGs with friendly fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillSTuGIIIgFriendlyFire":
+               sb.Append("Killed STuGIIIg SPGs with friendly fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillJgdPzIVFriendlyFire":
+               sb.Append("Killed JgdPzIV SPGs with friendly fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillJgdPz38tFriendlyFire":
+               sb.Append("Killed JgdPz38t SPGs with friendly fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillPak38FriendlyFire":
+               sb.Append("Killed Pak38 ATGs with friendly fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillPak40FriendlyFire":
+               sb.Append("Killed Pak40 ATGs with friendly fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillPak43FriendlyFire":
+               sb.Append("Killed Pak43 ATGs with friendly fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            //------------
+            case "NumKillLwYourFire":
+               sb.Append("Killed LW units with your fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillMgYourFire":
+               sb.Append("Killed MG Teams with your fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillTruckYourFire":
+               sb.Append("Killed trucks with your fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillPswYourFire":
+               sb.Append("Killed PSW232 AFVs with your fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillSpwYourFire":
+               sb.Append("Killed SPW251 AFVs with your fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillPzIVYourFire":
+               sb.Append("Killed PzIV Tanks with your fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillPzVYourFire":
+               sb.Append("Killed PzV Tanks with your fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillPzVIeYourFire":
+               sb.Append("Killed PzVIe Tanks with your fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillPzVIbYourFire":
+               sb.Append("Killed PzVIb Tanks with your fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillMarderIIYourFire":
+               sb.Append("Killed MarderII SPGs with your fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillMarderIIIYourFire":
+               sb.Append("Killed MarderIII SPGs with your fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillSTuGIIIgYourFire":
+               sb.Append("Killed STuGIIIg SPGs with your fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillJgdPzIVYourFire":
+               sb.Append("Killed JgdPzIV SPGs with your fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillJgdPz38tYourFire":
+               sb.Append("Killed JgdPz38t SPGs with your fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillPak38YourFire":
+               sb.Append("Killed Pak38 ATGs with your fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillPak40YourFire":
+               sb.Append("Killed Pak40 ATGs with your fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumKillPak43YourFire":
+               sb.Append("Killed Pak43 ATGs with your fire ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            //------------
+            case "NumPurpleHearts":
+               sb.Append("Receive Purple Heart medal ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumBronzeStars":
+               sb.Append("Receive Bronze Star medal ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumSilverStars":
+               sb.Append("Receive Siler Star medal ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumDistinguishedCrosses":
+               sb.Append("Receive Distinguished Cross medal ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumMedalOfHonors":
+               sb.Append("Receive Medal of Honor ");
+               sb.Append(stat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetStatisticMessage(): Unknown key=" + stat.Key);
+               return "UNKNOWN: " + stat.Key;
+         }
+      }
       public GameStatistics() { myList = new ArrayList(); }
       public int Count { get => myList.Count; }
       public void Add(GameStatistic o) { myList.Add(o); }

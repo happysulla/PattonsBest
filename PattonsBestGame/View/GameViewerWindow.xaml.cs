@@ -593,6 +593,10 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
                SaveDefaultsToSettings();
                break;
+            case GameAction.EndGameShowStats:
+               if (false == UpdateCanvasShowStatistics(gi))
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): SerializeGameStatistics() returned error ");
+               break;
             case GameAction.UpdateTankExplosion:
             case GameAction.UpdateTankBrewUp:
             case GameAction.BattleShermanKilled:
