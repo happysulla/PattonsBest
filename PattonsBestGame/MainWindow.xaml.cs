@@ -38,10 +38,10 @@ namespace Pattons_Best
             string appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             Logger.theLogDirectory = appDataDir + @"\PattonsBest\Logs\";
             GameLoadMgr.theGamesDirectory = appDataDir + @"\PattonsBest\Games\";
-            GameFeats.theGameFeatDirectory = appDataDir + @"\PattonsBest\GameFeat\";
+            GameFeats.theGameFeatDirectory = appDataDir + @"\PattonsBest\GameData\";
             if (false == Directory.Exists(GameFeats.theGameFeatDirectory)) // create directory if does not exists
                Directory.CreateDirectory(GameFeats.theGameFeatDirectory);
-            GameStatistics.theGameStatisticsDirectory = appDataDir + @"\PattonsBest\GameStatistics\";
+            GameStatistics.theGameStatisticsDirectory = appDataDir + @"\PattonsBest\GameData\";
             if (false == Directory.Exists(GameStatistics.theGameStatisticsDirectory)) // create directory if does not exists
                Directory.CreateDirectory(GameStatistics.theGameStatisticsDirectory);
             //--------------------------------------------

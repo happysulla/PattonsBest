@@ -36,8 +36,10 @@ namespace Pattons_Best
    public class Options : IEnumerable
    {
       [NonSerialized]
-      public static string[] theDefaults = new string[12] 
+      public static string[] theDefaults = new string[] 
       {
+         "CampaignGame",
+         "CampaignSingleDay",
          "SkipTutorial0",
          "SkipTutorial1",
          "SkipTutorial2",

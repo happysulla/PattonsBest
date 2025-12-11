@@ -66,13 +66,21 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ShowFeatDisplayDialog(): feat=null for i=" + i.ToString() );
                return false;
             }
-            bool isFeatDisplayed = (feat.Threshold < feat.Value);
-            bool isFeatChecked = myDisplayedFeats[i];
+            bool isFeatChecked = false;
+            if (0 == feat.Threshold)
+            {
+               if (0 < feat.Value)
+                  isFeatChecked = true;
+            }
+            else if (feat.Threshold <= feat.Value)
+            {
+               isFeatChecked = true;
+            }
             CheckBox cb = new CheckBox() { IsEnabled = false, IsChecked = isFeatChecked, FontSize = 14, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(5) };
             myGrid.Children.Add(cb);
             Grid.SetColumn(cb, 0);
             Grid.SetRow(cb, rowNum);
-            if ((false == myIsAllFeatsShown) && (false == isFeatDisplayed) && (false == isFeatChecked))
+            if ((false == myIsAllFeatsShown) && (false == myDisplayedFeats[i]) && (false == isFeatChecked))
             {
                System.Windows.Controls.Button b = new Button { Name = feat.Key, FontFamily = myFontFam1, FontSize = 10, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Center, Content = "Show", Margin = new Thickness(5) };
                b.Click += ButtonShowFeat_Click;
@@ -83,7 +91,7 @@ namespace Pattons_Best
             else
             {
                TextBlock tb = new TextBlock() { FontFamily = myFontFam1, FontSize = 14, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(5) };
-               tb.Inlines.Add(new Run(GameFeat.GetFeatMessage(feat, true)));
+               tb.Inlines.Add(new Run(GameFeats.GetFeatMessage(feat, true)));
                myGrid.Children.Add(tb);
                Grid.SetColumn(tb, 1);
                Grid.SetRow(tb, rowNum);

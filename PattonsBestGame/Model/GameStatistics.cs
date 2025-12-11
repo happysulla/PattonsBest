@@ -57,6 +57,10 @@ namespace Pattons_Best
          "NumOfBattles",
          "NumOfKilledCrewman",
          //------------
+         "ShermanExplodes",
+         "ShermanBurns",
+         "ShermanLostPenetration",
+         //------------
          "NumKillLwFriendlyFire",
          "NumKillMgFriendlyFire",
          "NumKillTruckFriendlyFire",
@@ -164,6 +168,10 @@ namespace Pattons_Best
          Clear();
          for (int i = 0; i < theDefaults.Length; i++)
             Add(new GameStatistic(theDefaults[i]));
+      }
+      public void SyncGameStatistics()
+      {
+
       }
       public void SetValue(string key, int value)
       {

@@ -3111,7 +3111,7 @@ namespace Pattons_Best
          //-------------------------------------
          System.Windows.Controls.Label labelTitle = new System.Windows.Controls.Label() { Content = "Game Feat Completed!", FontStyle = FontStyles.Italic, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center };
          myCanvasMain.Children.Add(labelTitle);
-         System.Windows.Controls.Label labelForFeat = new System.Windows.Controls.Label() { Content = GameFeat.GetFeatMessage(featChange), FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center };
+         System.Windows.Controls.Label labelForFeat = new System.Windows.Controls.Label() { Content = GameFeats.GetFeatMessage(featChange), FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center };
          myCanvasMain.Children.Add(labelForFeat);
          System.Windows.Controls.Label labelClick = new System.Windows.Controls.Label() { Content = "Click to continue", FontStyle = FontStyles.Italic, FontSize = 24, FontWeight = FontWeights.Bold, FontFamily = myFontFam, VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center };
          myCanvasMain.Children.Add(labelClick);
@@ -3873,8 +3873,9 @@ namespace Pattons_Best
                   return;
                }
                cm.IsButtonedUp = false;
+               Logger.Log(LogEnum.LE_SHOW_CREW_BU, "MouseDownPolygonHatches(): cm.Name= " + cm.Name + " role=" + cm.Role);
                string name = crewmember + Utilities.MapItemNum.ToString() + "_OpenHatch";
-               Utilities.MapItemNum++;
+                Utilities.MapItemNum++;
                IMapItem mi = new MapItem(name, 1.0, "c15OpenHatch", t);
                myGameInstance.Hatches.Add(mi);
                break;
@@ -4164,6 +4165,7 @@ namespace Pattons_Best
                if (true == button.Name.Contains(role)) // Remove the open hatch
                {
                   crewMember.IsButtonedUp = true;
+                  Logger.Log(LogEnum.LE_SHOW_CREW_BU, "ClickButtonMapItem(): cm.Name= " + crewMember.Name + " role=" + role);
                   myGameInstance.Hatches.Remove(button.Name);
                   this.myTankButtons.Remove(button);
                   myCanvasTank.Children.Remove(button);

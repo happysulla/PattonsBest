@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.RightsManagement;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
@@ -42,172 +43,7 @@ namespace Pattons_Best
          sb.Append(")");
          return sb.ToString();
       }
-      public static string GetFeatMessage(GameFeat feat, bool isThreshold = false)
-      {
-         StringBuilder sb = new StringBuilder("Kill ");
-         switch (feat.Key)
-         {
-            case "EndGameExplode":  return "Tank Explodes Killing Crew";
-            case "EndGameWounds":    return "Game Ends with Commander Killed";
-            case "EndGameCmdrKilled":    return "Game Ends with Commander Killed";
-            case "EndGame":    return "Completed a Campaign Game";
-            case "EndGameWin":    return "Win a Campaign Game";
-            //------------
-            case "NumKillLwFriendlyFire": 
-               sb.Append( isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append( " LW units with Friendly Fire");
-               return sb.ToString();
-            case "NumKillMgFriendlyFire": 
-               sb.Append( isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append( " MG Teams with Friendly Fire");
-               return sb.ToString();
-            case "NumKillTruckFriendlyFire": 
-               sb.Append( isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append( " Trucks with Friendly Fire");
-               return sb.ToString();
-            case "NumKillPswFriendlyFire": 
-               sb.Append( isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append( "  PSW232s with Friendly Fire");
-               return sb.ToString();
-            case "NumKillSpwFriendlyFire": 
-               sb.Append( isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append( " SPW251s with Friendly Fire");
-               return sb.ToString();
-            case "NumKillPzIVFriendlyFire": 
-               sb.Append( isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append( " Pz IV tanks with Friendly Fire");
-               return sb.ToString();
-            case "NumKillPzVFriendlyFire": 
-               sb.Append( isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append( " Pz V tanks with Friendly Fire");
-               return sb.ToString();
-            case "NumKillPzVIeFriendlyFire": 
-               sb.Append( isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append( " Pz VIe tanks with Friendly Fire");
-               return sb.ToString();
-            case "NumKillPzVIbFriendlyFire": 
-               sb.Append( isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append( " Pz VIb tanks with Friendly Fire");
-               return sb.ToString();
-            case "NumKillMarderIIFriendlyFire": 
-               sb.Append( isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append( " Marder II SPGs with Friendly Fire");
-               return sb.ToString();
-            case "NumKillMarderIIIFriendlyFire": 
-               sb.Append( isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append( " Marder III SPGs with Friendly Fire");
-               return sb.ToString();
-            case "NumKillSTuGIIIgFriendlyFire": 
-               sb.Append( isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append( " STuG IIIg SPGs with Friendly Fire");
-               return sb.ToString();
-            case "NumKillJgdPzIVFriendlyFire": 
-               sb.Append( isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append( " JgdPz IV SPGs with Friendly Fire");
-               return sb.ToString();
-            case "NumKillJgdPz38tFriendlyFire": 
-               sb.Append( isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append( " JgdPz 38t SPGs with Friendly Fire");
-               return sb.ToString();
-            case "NumKillPak38FriendlyFire": 
-               sb.Append( isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append( " Pak38 ATGs with Friendly Fire");
-               return sb.ToString();
-            case "NumKillPak40FriendlyFire": 
-               sb.Append( isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append( " Pak40 ATGs with Friendly Fire");
-               return sb.ToString();
-            case "NumKillPak43FriendlyFire": 
-               sb.Append( isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append( " Pak43 ATGs with Friendly Fire");
-               return sb.ToString();
-            //------------
-            case "NumKillLwYourFire":
-               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append(" LW units with Your Fire");
-               return sb.ToString();
-            case "NumKillMgYourFire":
-               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append(" MG Teams with Your Fire");
-               return sb.ToString();
-            case "NumKillTruckYourFire":
-               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append(" Trucks with Your Fire");
-               return sb.ToString();
-            case "NumKillPswYourFire":
-               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append("  PSW232s with Your Fire");
-               return sb.ToString();
-            case "NumKillSpwYourFire":
-               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append(" SPW251s with Your Fire");
-               return sb.ToString();
-            case "NumKillPzIVYourFire":
-               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append(" Pz IV tanks with Your Fire");
-               return sb.ToString();
-            case "NumKillPzVYourFire":
-               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append(" Pz V tanks with Your Fire");
-               return sb.ToString();
-            case "NumKillPzVIeYourFire":
-               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append(" Pz VIe tanks with Your Fire");
-               return sb.ToString();
-            case "NumKillPzVIbYourFire":
-               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append(" Pz VIb tanks with Your Fire");
-               return sb.ToString();
-            case "NumKillMarderIIYourFire":
-               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append(" Marder II SPGs with Your Fire");
-               return sb.ToString();
-            case "NumKillMarderIIIYourFire":
-               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append(" Marder III SPGs with Your Fire");
-               return sb.ToString();
-            case "NumKillSTuGIIIgYourFire":
-               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append(" STuG IIIg SPGs with Your Fire");
-               return sb.ToString();
-            case "NumKillJgdPzIVYourFire":
-               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append(" JgdPz IV SPGs with Your Fire");
-               return sb.ToString();
-            case "NumKillJgdPz38tYourFire":
-               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append(" JgdPz 38t SPGs with Your Fire");
-               return sb.ToString();
-            case "NumKillPak38YourFire":
-               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append(" Pak38 ATGs with Your Fire");
-               return sb.ToString();
-            case "NumKillPak40YourFire":
-               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append(" Pak40 ATGs with Your Fire");
-               return sb.ToString();
-            case "NumKillPak43YourFire":
-               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
-               sb.Append(" Pak43 ATGs with Your Fire");
-               return sb.ToString();
-            //------------
-            case "NumPurpleHearts": return "Receive " + feat.Value.ToString() + " Purple Hearts";
-            case "NumBronzeStars": return "Receive " + feat.Value.ToString() + " Bronze Stars";
-            case "NumSilverStars": return "Receive " + feat.Value.ToString() + " Silver Stars";
-            case "NumDistinguishedCrosses": return "Receive " + feat.Value.ToString() + " Distinguished Crosses";
-            case "NumMedalOfHonors":    return "Receive " + feat.Value.ToString() +" Medal of Honor";
-            //------------
-            case "Hvss":    return "Use Main Gun when Moving";
-            case "RepairMain":    return "Repair the Main Gun in Battle";
-            case "RepairMg":    return "Repair a disabled MG in Battle";
-            case "FireMortar":    return "Sherman Fires a Mortar";
-            case "ThrowSmoke" :    return "Throw Smoke out of Tank Hatch";
 
-            default:
-               Logger.Log(LogEnum.LE_ERROR, "GetFeatMessage(): Unknown key=" + feat.Key);
-               return feat.Key;
-         }
-      }
    }
    //========================================
    [XmlInclude(typeof(GameFeat))]
@@ -217,11 +53,15 @@ namespace Pattons_Best
       [NonSerialized]
       public static string[] theDefaults = 
       {
+         "EndCampaignGame",
+         "EndCampaignGameOnTime",
+         "EndCampaignGameWin",
          "EndGameExplode",
-         "EndGameWounds",
          "EndGameCmdrKilled", 
-         "EndGame",
-         "EndGameWin",
+         //------------
+         "ShermanExplodes",
+         "ShermanBurns",
+         "ShermanPenetration",
          //------------
          "NumKillLwFriendlyFire",
          "NumKillMgFriendlyFire",
@@ -273,6 +113,231 @@ namespace Pattons_Best
       };
       [NonSerialized] public static string theGameFeatDirectory = "";
       private readonly ArrayList myList;
+      public static string GetFeatMessage(GameFeat feat, bool isThreshold = false)
+      {
+         StringBuilder sb = new StringBuilder();
+         switch (feat.Key)
+         {
+            case "EndCampaignGame": return "Complete a Campaign Game";
+            case "EndCampaignGameOnTime": return "Last All Days of a Campaign without Commander Dieing";
+            case "EndCampaignGameWin": return "Win a Campaign Game";
+            case "EndGameExplode": return "Game Ends with Tank Explostion";
+            case "EndGameCmdrKilled": return "Game Ends with Commander Killed";
+            //------------
+            case "ShermanExplodes":
+               sb.Append("Sherman explodes ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "ShermanBurns":
+               sb.Append("Sherman brew up ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            case "ShermanPenetration":
+               sb.Append("Sherman killed by penetration ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" times");
+               return sb.ToString();
+            //------------
+            case "NumKillLwFriendlyFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" LW units with Friendly Fire");
+               return sb.ToString();
+            case "NumKillMgFriendlyFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" MG Teams with Friendly Fire");
+               return sb.ToString();
+            case "NumKillTruckFriendlyFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" Trucks with Friendly Fire");
+               return sb.ToString();
+            case "NumKillPswFriendlyFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append("  PSW232s with Friendly Fire");
+               return sb.ToString();
+            case "NumKillSpwFriendlyFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" SPW251s with Friendly Fire");
+               return sb.ToString();
+            case "NumKillPzIVFriendlyFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" Pz IV tanks with Friendly Fire");
+               return sb.ToString();
+            case "NumKillPzVFriendlyFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" Pz V tanks with Friendly Fire");
+               return sb.ToString();
+            case "NumKillPzVIeFriendlyFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" Pz VIe tanks with Friendly Fire");
+               return sb.ToString();
+            case "NumKillPzVIbFriendlyFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" Pz VIb tanks with Friendly Fire");
+               return sb.ToString();
+            case "NumKillMarderIIFriendlyFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" Marder II SPGs with Friendly Fire");
+               return sb.ToString();
+            case "NumKillMarderIIIFriendlyFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" Marder III SPGs with Friendly Fire");
+               return sb.ToString();
+            case "NumKillSTuGIIIgFriendlyFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" STuG IIIg SPGs with Friendly Fire");
+               return sb.ToString();
+            case "NumKillJgdPzIVFriendlyFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" JgdPz IV SPGs with Friendly Fire");
+               return sb.ToString();
+            case "NumKillJgdPz38tFriendlyFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" JgdPz 38t SPGs with Friendly Fire");
+               return sb.ToString();
+            case "NumKillPak38FriendlyFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" Pak38 ATGs with Friendly Fire");
+               return sb.ToString();
+            case "NumKillPak40FriendlyFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" Pak40 ATGs with Friendly Fire");
+               return sb.ToString();
+            case "NumKillPak43FriendlyFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" Pak43 ATGs with Friendly Fire");
+               return sb.ToString();
+            //------------
+            case "NumKillLwYourFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" LW units with Your Fire");
+               return sb.ToString();
+            case "NumKillMgYourFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" MG Teams with Your Fire");
+               return sb.ToString();
+            case "NumKillTruckYourFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" Trucks with Your Fire");
+               return sb.ToString();
+            case "NumKillPswYourFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append("  PSW232s with Your Fire");
+               return sb.ToString();
+            case "NumKillSpwYourFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" SPW251s with Your Fire");
+               return sb.ToString();
+            case "NumKillPzIVYourFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" Pz IV tanks with Your Fire");
+               return sb.ToString();
+            case "NumKillPzVYourFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" Pz V tanks with Your Fire");
+               return sb.ToString();
+            case "NumKillPzVIeYourFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" Pz VIe tanks with Your Fire");
+               return sb.ToString();
+            case "NumKillPzVIbYourFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" Pz VIb tanks with Your Fire");
+               return sb.ToString();
+            case "NumKillMarderIIYourFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" Marder II SPGs with Your Fire");
+               return sb.ToString();
+            case "NumKillMarderIIIYourFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" Marder III SPGs with Your Fire");
+               return sb.ToString();
+            case "NumKillSTuGIIIgYourFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" STuG IIIg SPGs with Your Fire");
+               return sb.ToString();
+            case "NumKillJgdPzIVYourFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" JgdPz IV SPGs with Your Fire");
+               return sb.ToString();
+            case "NumKillJgdPz38tYourFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" JgdPz 38t SPGs with Your Fire");
+               return sb.ToString();
+            case "NumKillPak38YourFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" Pak38 ATGs with Your Fire");
+               return sb.ToString();
+            case "NumKillPak40YourFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" Pak40 ATGs with Your Fire");
+               return sb.ToString();
+            case "NumKillPak43YourFire":
+               sb.Append("Kill ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" Pak43 ATGs with Your Fire");
+               return sb.ToString();
+            //------------
+            case "NumPurpleHearts":
+               sb.Append("Receive ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" Purple Heart Medals");
+               return sb.ToString();
+            case "NumBronzeStars":
+               sb.Append("Receive ");
+               sb.Append(isThreshold ? feat.Threshold.ToString() : feat.Value.ToString());
+               sb.Append(" Bronze Star Medals");
+               return sb.ToString();
+            case "NumSilverStars": return "Receive a Silver Star";
+            case "NumDistinguishedCrosses": return "Receive a Distinguished Cross";
+            case "NumMedalOfHonors": return "!!!!!!Receive the Medal of Honor!!!!";
+            //------------
+            case "Hvss": return "Use Main Gun when Moving";
+            case "RepairMain": return "Repair the Main Gun in Battle";
+            case "RepairMg": return "Repair a disabled MG in Battle";
+            case "FireMortar": return "Sherman Fires a Mortar";
+            case "ThrowSmoke": return "Throw Smoke out of Tank Hatch";
+
+            default:
+               Logger.Log(LogEnum.LE_ERROR, "GetFeatMessage(): Unknown key=" + feat.Key);
+               return feat.Key;
+         }
+      }
+      //---------------------------------------------------
       public GameFeats() { myList = new ArrayList(); }
       public int Count { get => myList.Count; }
       public void Add(GameFeat o) { myList.Add(o); }
@@ -321,10 +386,23 @@ namespace Pattons_Best
       public bool GetFeatChange(GameFeats rightFeats, out GameFeat outFeat)
       {
          outFeat = new GameFeat();
-         if (this.Count != rightFeats.Count) // sync up the two lists
+         if (this.Count < rightFeats.Count) // this should not happen
          {
             Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): (rightFeats.Count=" + rightFeats.Count.ToString() + ") > (this.Count=" + this.Count.ToString() + ")");
             return false;
+         }
+         if (rightFeats.Count < this.Count)
+         {
+            for (int i = rightFeats.Count; i < this.Count; ++i)
+            {
+               GameFeat? feat = this[i];
+               if (null == feat)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): feat is null for i=" + i.ToString());
+                  return false;
+               }
+               rightFeats.Add(feat);
+            }
          }
          //--------------------------------------------
          for (int i = 0; i < rightFeats.Count; ++i)
@@ -349,7 +427,9 @@ namespace Pattons_Best
             if (left.Value != right.Value)
             {
                Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Get_FeatChange(): Key=" + right.Key + " (left.Value=" + left.Value.ToString() + ") != (right.Value =" + right.Value.ToString() + ")");
-               if (0 == left.Value % left.Threshold) // when the value reaches an iterative threshold, show feat
+               if( 0 == left.Threshold )
+                  outFeat = left;
+               else if (0 == left.Value % left.Threshold) // when the value reaches an iterative threshold, show feat
                   outFeat = left;
                right.Value = left.Value - 1; // starting feat is one behind current feat - gets set to same value when user acknowledges feat
                return true;
@@ -367,9 +447,13 @@ namespace Pattons_Best
       {
          foreach( GameFeat feat in this)
          {
-            int threshold = 1;
+            int threshold = 0;
             switch (feat.Key)
             {
+               case "ShermanExplodes": threshold = 3; break;
+               case "ShermanBurns": threshold = 5; break;
+               case "ShermanLostPenetration": threshold = 8; break;
+               //-------------------------------------------
                case "NumKillLwFriendlyFire": threshold = 12; break;
                case "NumKillMgFriendlyFire": threshold = 10; break;
                case "NumKillTruckFriendlyFire": threshold = 10; break;
@@ -405,7 +489,10 @@ namespace Pattons_Best
                case "NumKillPak38YourFire": threshold = 4; break;
                case "NumKillPak40YourFire": threshold = 3; break;
                case "NumKillPak43YourFire": threshold = 2; break;
-               default: threshold = 1; break;
+               //-------------------------------------------
+               case "NumPurpleHearts": threshold = 5; break;
+               case "NumBronzeStars": threshold = 2; break;
+               default: threshold = 0; break;
             }
             feat.Threshold = threshold;
          }

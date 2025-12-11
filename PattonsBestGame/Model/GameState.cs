@@ -4891,6 +4891,7 @@ namespace Pattons_Best
          string[] crewmembers = new string[5] { "Commander", "Gunner", "Loader", "Driver", "Assistant" };
          foreach (IMapItem mi in gi.Hatches)
          {
+            Logger.Log(LogEnum.LE_SHOW_CREW_BU, "Perform_BattlePreparationsSetup(): miName=" + mi.Name);
             foreach (string role in crewmembers)
             {
                if (true == mi.Name.Contains(role))
@@ -4901,6 +4902,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "Perform_BattlePreparationsSetup(): cm=null mi.Name=" + mi.Name);
                      return false;
                   }
+                  Logger.Log(LogEnum.LE_SHOW_CREW_BU, "Perform_BattlePreparationsSetup(): 13-name=" + cm.Name + " role=" + cm.Role + " isBU=" + cm.IsButtonedUp.ToString() + " isInc=" + cm.IsIncapacitated.ToString());
                   cm.IsButtonedUp = false;
                }
             }
@@ -4915,7 +4917,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "Perform_BattlePreparationsSetup(): cm=null crewmember=" + crewmember);
                   return false;
                }
-               Logger.Log(LogEnum.LE_SHOW_CREW_BU, "GameStateEveningDebriefing.PerformAction(MorningBriefingTankReplacementRoll): role=" + cm.Role + " isBU=" + cm.IsButtonedUp.ToString() + " isInc=" + cm.IsIncapacitated.ToString());
+               Logger.Log(LogEnum.LE_SHOW_CREW_BU, "Perform_BattlePreparationsSetup(): 14-name=" + cm.Name + " role=" + cm.Role + " isBU=" + cm.IsButtonedUp.ToString() + " isInc=" + cm.IsIncapacitated.ToString());
             }
          }
          //---------------------------
@@ -9307,7 +9309,8 @@ namespace Pattons_Best
          string[] crewmembers = new string[5] { "Commander", "Gunner", "Loader", "Driver", "Assistant" };
          foreach (IMapItem mi in gi.Hatches) // sync crewmember status to what hatches shows
          {
-            foreach( string role in crewmembers)
+            Logger.Log(LogEnum.LE_SHOW_CREW_BU, "Reset_Round(): miName=" + mi.Name);
+            foreach ( string role in crewmembers)
             {
                if( true == mi.Name.Contains(role))
                {
@@ -9318,8 +9321,21 @@ namespace Pattons_Best
                      return false;
                   }
                   cm.IsButtonedUp = false;
-                  Logger.Log(LogEnum.LE_SHOW_CREW_BU, "Reset_Round(): role=" + cm.Role + " isBU=" + cm.IsButtonedUp.ToString() + " isInc=" + cm.IsIncapacitated.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_CREW_BU, "Reset_Round(): 11-name=" + cm.Name + " role=" + cm.Role + " isBU=" + cm.IsButtonedUp.ToString() + " isInc=" + cm.IsIncapacitated.ToString());
                }
+            }
+         }
+         if( true == Logger.theLogLevel[(int)LogEnum.LE_SHOW_CREW_BU])
+         {
+            foreach (string crewmember in crewmembers)
+            {
+               ICrewMember? cm = gi.GetCrewMemberByRole(crewmember);
+               if (null == cm)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Reset_Round(): cm=null crewmember=" + crewmember);
+                  return false;
+               }
+               Logger.Log(LogEnum.LE_SHOW_CREW_BU, "Reset_Round(): 12-name=" + cm.Name + " role=" + cm.Role + " isBU=" + cm.IsButtonedUp.ToString() + " isInc=" + cm.IsIncapacitated.ToString());
             }
          }
          //-------------------------------------------------------
@@ -9954,32 +9970,41 @@ namespace Pattons_Best
             return false;
          }
          Logger.Log(LogEnum.LE_GAME_END_CHECK, "Perform_EndCheck(): ae=" + gi.EventActive + " action=" + action.ToString() + " day=" + lastReport.Day.ToString());
+         Option optionCommanderDeath = gi.Options.Find("GameEndsOnCommanderDeath");
+         Option optionGameType= gi.Options.Find("CampaignGame");
          //----------------------------------------------------------
-         Option option = gi.Options.Find("GameEndsOnCommanderDeath");
-         if (true == option.IsEnabled) // do not end game when ommander is kill if this option is enabled
-            gi.IsCommanderKilled = false;
-         //----------------------------------------------------------
-         if (true == gi.IsCommanderKilled)
+         if ( (null != gi.Death) && (true == gi.Death.myIsExplosion) && (true == optionCommanderDeath.IsEnabled) )
          {
-            Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): 1-EndGameLost " + lastReport.Commander.Name + " is killed.");
+            Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): TankExplodes");
+            GameEngine.theInGameFeats.AddOne("EndGameExplode");
+            if (false == optionGameType.IsEnabled)
+               GameEngine.theInGameFeats.AddOne("EndCampaignGame");
             gi.GamePhase = GamePhase.EndGame;
             action = GameAction.EndGameLost;
             SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
-            if( null != gi.Death)
-            {
-               if (true == gi.Death.myIsExplosion)
-                  gi.EndGameReason = "Tank Explodes";
-            }
          }
          //----------------------------------------------------------
-         if (191 < gi.Day)
+         else if ( (true == gi.IsCommanderKilled) && (true == optionCommanderDeath.IsEnabled) )
+         {
+            Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): gi.IsCommanderKilled=true -- " + lastReport.Commander.Name + " is killed.");
+            GameEngine.theInGameFeats.AddOne("EndGameCmdrKilled");
+            if (false == optionGameType.IsEnabled)
+               GameEngine.theInGameFeats.AddOne("EndCampaignGame");
+            gi.GamePhase = GamePhase.EndGame;
+            action = GameAction.EndGameLost;
+            SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
+         }
+         //----------------------------------------------------------
+         else if (191 < gi.Day)
          {
             Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): 191 < (day=" + gi.Day.ToString() + ") (VP=" + gi.VictoryPtsTotalCampaign.ToString() + ")");
+            GameEngine.theInGameFeats.AddOne("EndCampaignGameOnTime");
             gi.GamePhase = GamePhase.EndGame;
             if (0 < gi.VictoryPtsTotalCampaign)
             {
                action = GameAction.EndGameWin;
                SetCommand(gi, action, GameAction.DieRollActionNone, "e501");
+               GameEngine.theInGameFeats.AddOne("EndCampaignGameWin");
             }
             else
             {

@@ -792,7 +792,7 @@ namespace Pattons_Best
             case "UnitTestTest": return GameAction.UnitTestTest;
             case "UnitTestCleanup": return GameAction.UnitTestCleanup;
 
-            case "EndGameWin": return GameAction.EndGameWin;
+            case "EndCampaignGameWin": return GameAction.EndGameWin;
             case "EndGameLost": return GameAction.EndGameLost;
             case "EndGameShowFeats": return GameAction.EndGameShowFeats;
             case "EndGameShowStats": return GameAction.EndGameShowStats;
@@ -1188,7 +1188,7 @@ namespace Pattons_Best
                case "Battle": gi.GamePhase = GamePhase.Battle; break;
                case "BattleRoundSequence": gi.GamePhase = GamePhase.BattleRoundSequence; break;
                case "EveningDebriefing": gi.GamePhase = GamePhase.EveningDebriefing; break;
-               case "EndGame": gi.GamePhase = GamePhase.EveningDebriefing; break;
+               case "EndCampaignGame": gi.GamePhase = GamePhase.EveningDebriefing; break;
                case "UnitTest": gi.GamePhase = GamePhase.UnitTest; break;
                default: Logger.Log(LogEnum.LE_ERROR, "ReadXml(): reached default sGamePhase=" + sGamePhase); return null;
             }
@@ -2991,7 +2991,7 @@ namespace Pattons_Best
                case "Battle": phase = GamePhase.Battle; break;
                case "BattleRoundSequence": phase = GamePhase.BattleRoundSequence; break;
                case "EveningDebriefing": phase = GamePhase.EveningDebriefing; break;
-               case "EndGame": phase = GamePhase.EveningDebriefing; break;
+               case "EndCampaignGame": phase = GamePhase.EveningDebriefing; break;
                case "UnitTest": phase = GamePhase.UnitTest; break;
                default: Logger.Log(LogEnum.LE_ERROR, "ReadXmlGameCommands(): reached default sGamePhase=" + sGamePhase); return false;
             }

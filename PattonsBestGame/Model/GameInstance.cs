@@ -466,6 +466,7 @@ namespace Pattons_Best
          foreach (IMapItem mi in removals)
             this.Hatches.Remove(mi);
          cm.IsButtonedUp = true;
+         Logger.Log(LogEnum.LE_SHOW_CREW_BU, "Set_Incapacitated():name=" + cm.Name + " role=" + cm.Role + " isBU=" + cm.IsButtonedUp.ToString() + " isInc=" + cm.IsIncapacitated.ToString());
       }
       public bool SwitchMembers(string switchingMemberRole)
       {
