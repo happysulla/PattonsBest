@@ -6219,7 +6219,16 @@ namespace Pattons_Best
                   myAfterActionDialog.Show();
                }
                break;
-            case "Begin Game":
+            case " Begin Campaign":
+               myGameInstance.Options.SetValue("SingleDayScenario", false);
+               if (false == ShowTutorialScreens())
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowTutorialScreens() returned false");
+                  return false;
+               }
+               break;
+            case " Begin One Day ":
+               myGameInstance.Options.SetValue("SingleDayScenario", true);
                if (false == ShowTutorialScreens())
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowTutorialScreens() returned false");
@@ -6243,7 +6252,7 @@ namespace Pattons_Best
                action = GameAction.BattleRoundSequenceShermanFiringMainGun; // Fire Button
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
-            case "Read Rules":
+            case "   Read Rules  ":
                if (false == ShowRule("r1.0"))
                {
                   Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): ShowRule(r1.1) returned false");

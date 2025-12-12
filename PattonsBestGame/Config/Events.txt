@@ -6,9 +6,15 @@ The game starts with a tutorial how to play. However, before starting, it is imp
 You can explore what may happen by showing inactive events. Inactive events have a gray background. To return to the current active event, select the active event button in the status bar per the image.
 <LineBreak/>
                <InlineUIContainer><Image Name='Tutorial0' Height='70'  Width='370'> </Image></InlineUIContainer>
+<LineBreak/>
+Choose a button to begin:
 <LineBreak/><LineBreak/>
-<InlineUIContainer><Button Name='Read_Rules' Content='Read Rules' FontFamily='Courier New'  FontSize='12'> </Button></InlineUIContainer> or 
-<InlineUIContainer><Button Name='Begin' Content='Begin Game' FontFamily='Courier New'  FontSize='12'> </Button></InlineUIContainer>"
+<InlineUIContainer><Button Name='Read_Rules' Content='   Read Rules  ' FontFamily='Courier New'  FontSize='12'> </Button></InlineUIContainer>
+ - Can skip as rules are presented as needed <LineBreak/>
+<InlineUIContainer><Button Name='BeginCampaign' Content=' Begin Campaign' FontFamily='Courier New'  FontSize='12'> </Button></InlineUIContainer>
+ - Campaign from 07/44 to 04/45 <LineBreak/>
+<InlineUIContainer><Button Name='BeginSingleDay' Content=' Begin One Day ' FontFamily='Courier New'  FontSize='12'> </Button></InlineUIContainer>
+ - Choose tank and day of operations<LineBreak/>"
 e001	"<Bold>e001 Fourth Armor Division Campaign</Bold> <InlineUIContainer><Button Content='r1.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/> <InlineUIContainer><CheckBox Name='SkipTutorial1' IsEnabled='True' Content='Skip in Future' FontFamily='Courier New'  FontSize='12'></CheckBox></InlineUIContainer>
 <LineBreak/><LineBreak/>
@@ -971,9 +977,6 @@ e502	"<Bold>e502 Game Lost</Bold>
 e503	"<Bold>e503 End Game Statistics and Feats </Bold>
 <LineBreak/><LineBreak/>
 Select 'File | New' menu option to play again.
-<LineBreak/><LineBreak/>
-Click image to review map: 
-<LineBreak/><InlineUIContainer><Image Name='Win' Height='100' Width='100'></Image></InlineUIContainer>
 <LineBreak/><LineBreak/>
 Click image to exit game:
 <LineBreak/>   <InlineUIContainer><Image Name='DoorClosing' Height='150' Width='75'></Image></InlineUIContainer>"
