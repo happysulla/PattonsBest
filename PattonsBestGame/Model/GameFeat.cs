@@ -155,11 +155,41 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             //------------
-            case "HvssTrained": return "Trained on HVSS that allows firing when moving";
-            case "RepairMain": return "Repair the main gun in battle";
-            case "RepairMg": return "Repair a disabled MG in battle";
-            case "FireMortar": return "Sherman fires a mortar";
-            case "ThrowSmoke": return "Throw smoke out of tank hatch";
+            case "HvssTrained": 
+               sb.Append("Trained on HVSS that allows firing when moving ");
+               sb.Append(feat.Value.ToString());
+               if (true == isThreshold)
+                  sb.Append(" out of 1");
+               sb.Append(" times");
+               return sb.ToString();
+            case "RepairMain": 
+               sb.Append("Repair the main gun in battle ");
+               sb.Append(feat.Value.ToString());
+               if (true == isThreshold)
+                  sb.Append(" out of 1");
+               sb.Append(" times");
+               return sb.ToString();
+            case "RepairMg":
+               sb.Append("Repair the disabled MG in battle ");
+               sb.Append(feat.Value.ToString());
+               if (true == isThreshold)
+                  sb.Append(" out of 1");
+               sb.Append(" times");
+               return sb.ToString();
+            case "FireMortar":
+               sb.Append("Sherman fires a mortar ");
+               sb.Append(feat.Value.ToString());
+               if (true == isThreshold)
+                  sb.Append(" out of 1");
+               sb.Append(" times");
+               return sb.ToString();
+            case "ThrowSmoke":
+               sb.Append("Throw smoke out of tank hatch ");
+               sb.Append(feat.Value.ToString());
+               if (true == isThreshold)
+                  sb.Append(" out of 1");
+               sb.Append(" times");
+               return sb.ToString();
             //------------
             case "NumKillLwFriendlyFire":
                sb.Append("Killed LW units with friendly fire ");
@@ -524,18 +554,24 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             case "NumSilverStars":
-               sb.Append("Receive Siler Star medal ");
+               sb.Append("Receive Silver Star medal ");
                sb.Append(feat.Value.ToString());
+               if (true == isThreshold)
+                  sb.Append(" out of 1");
                sb.Append(" times");
                return sb.ToString();
             case "NumDistinguishedCrosses":
                sb.Append("Receive Distinguished Cross medal ");
                sb.Append(feat.Value.ToString());
+               if (true == isThreshold)
+                  sb.Append(" out of 1");
                sb.Append(" times");
                return sb.ToString();
             case "NumMedalOfHonors":
                sb.Append("!!!!!!!!!!!!Receive Medal of Honor ");
                sb.Append(feat.Value.ToString());
+               if (true == isThreshold)
+                  sb.Append(" out of 1");
                sb.Append(" times!!!!!!!!!!!!");
                return sb.ToString();
             default:
@@ -658,7 +694,7 @@ namespace Pattons_Best
             {
                case "ShermanExplodes": threshold = 3; break;
                case "ShermanBurns": threshold = 5; break;
-               case "ShermanLostPenetration": threshold = 8; break;
+               case "ShermanPenetration": threshold = 8; break;
                //-------------------------------------------
                case "NumKillLwFriendlyFire": threshold = 12; break;
                case "NumKillMgFriendlyFire": threshold = 10; break;

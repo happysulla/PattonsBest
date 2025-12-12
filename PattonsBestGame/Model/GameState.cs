@@ -9982,7 +9982,7 @@ namespace Pattons_Best
          }
          Logger.Log(LogEnum.LE_GAME_END_CHECK, "Perform_EndCheck(): ae=" + gi.EventActive + " action=" + action.ToString() + " day=" + lastReport.Day.ToString());
          Option optionCommanderDeath = gi.Options.Find("GameEndsOnCommanderDeath");
-         Option optionGameType= gi.Options.Find("CampaignGame");
+         Option optionGameType= gi.Options.Find("SingleDayScenario");
          //----------------------------------------------------------
          if ( (null != gi.Death) && (true == gi.Death.myIsExplosion) && (true == optionCommanderDeath.IsEnabled) )
          {

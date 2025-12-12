@@ -12,7 +12,14 @@ namespace Pattons_Best
       static public GameFeats theInGameFeats = new GameFeats();          // feats that change from starting as this session runs
       static public GameFeats theStartingFeats = new GameFeats();  // starting feats read in at app initialization
       //---------------------------------------------------------------------
+      public const int MAX_GAME_TYPE = 4;
       static public GameStatistics theTotalStatistics = new GameStatistics();
+      private GameStatistics[] myStatistics = new GameStatistics[MAX_GAME_TYPE];
+      public GameStatistics[] Statistics
+      {
+         set { myStatistics = value; }
+         get { return myStatistics; }
+      }
       //---------------------------------------------------------------------
       TableMgr myTableMgr = new TableMgr();
       //---------------------------------------------------------------------

@@ -252,7 +252,7 @@ namespace Pattons_Best
       }
       public void MenuItemFileOptions_Click(object sender, RoutedEventArgs e)
       {
-         OptionsSelectionDialog dialog = new OptionsSelectionDialog(myGameInstance.Options); // Set Options in Game
+         ShowOptionsSelectionDialog dialog = new ShowOptionsSelectionDialog(myGameInstance.Options); // Set Options in Game
          if (true == dialog.CtorError)
          {
             Logger.Log(LogEnum.LE_ERROR, "MenuItemFileOptions_Click(): OptionSelectionDialog CtorError=true");

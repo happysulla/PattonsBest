@@ -38,20 +38,39 @@ namespace Pattons_Best
       [NonSerialized]
       public static string[] theDefaults = new string[] 
       {
-         "CampaignGame",
-         "CampaignSingleDay",
+         "OriginalGame",
+         "Generalv25No3",
+         "OtherGame",
+         "CustomGame",
+         //---------------------
+         "SingleDayScenario",
+         "GameEndsOnCommanderDeath",
+         //---------------------
          "SkipTutorial0",
          "SkipTutorial1",
          "SkipTutorial2",
          "SkipTutorial3",
          "SkipTutorial4",
          "SkipTutorial5",
+         //---------------------
          "AutoRollNewMembers",
          "AutoRollAmmoLoad",
          "AutoPreparation",
          "AutoRollEnemyActivation",
          "AutoRollBowMgFire",
-         "GameEndsOnCommanderDeath"
+         //---------------------
+         "AirInterdiction",
+         "TerrainPointValue",
+         "TankCoveredArc",
+         "SlowTransverseCoveredArc",
+         "SpgCoveredArc",
+         "AtgCoveredArc",
+         //---------------------
+         "EnemyContinueMove",
+         "EnemyRearFacingOnMove",
+         "ShermanIncreaseMoveChances",
+         "ShermanEnhanceMgFire",
+         "ShermanSurpressingMgFire"
       };
       private readonly ArrayList myList;
       public Options() { myList = new ArrayList(); }
@@ -100,6 +119,19 @@ namespace Pattons_Best
             copy.Add(copyO);
          }
          return copy;
+      }
+      public int GetGameIndex()
+      {
+         Option option = this.Find("CustomGame");
+         if (true == option.IsEnabled)
+            return 3;
+         option = this.Find("OtherGame");
+         if (true == option.IsEnabled)
+            return 2;
+         option = this.Find("Generalv25No3");
+         if (true == option.IsEnabled)
+            return 1;
+         return 0;
       }
       public void SetOriginalGameOptions()
       {

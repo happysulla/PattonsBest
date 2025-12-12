@@ -1839,7 +1839,7 @@ namespace Pattons_Best
          XmlTextReader? reader = null;
          try
          {
-            string filename = GameStatistics.theGameStatisticsDirectory + "feats.xml";
+            string filename = GameStatistics.theGameStatisticsDirectory + "stats.xml";
             reader = new XmlTextReader(filename) { WhitespaceHandling = WhitespaceHandling.None };
             reader.Read();
             if (false == reader.IsStartElement())
@@ -1849,7 +1849,7 @@ namespace Pattons_Best
             }
             if (reader.Name != "GameStatistics")
             {
-               Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameStatistics(): Options != (node=" + reader.Name + ")");
+               Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameStatistics(): GameStatistics != (node=" + reader.Name + ")");
                return false;
             }
             string? sCount = reader.GetAttribute("count");
@@ -1870,7 +1870,7 @@ namespace Pattons_Best
                }
                if (reader.Name != "GameStatistic")
                {
-                  Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameStatistics(): Feat != " + reader.Name);
+                  Logger.Log(LogEnum.LE_ERROR, "Deserialize_GameStatistics(): GameStatistic != " + reader.Name);
                   return false;
                }
                string? key = reader.GetAttribute("Key");

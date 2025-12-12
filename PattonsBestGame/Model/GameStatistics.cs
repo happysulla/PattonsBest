@@ -51,7 +51,10 @@ namespace Pattons_Best
       public static string[] theDefaults =
       {
          "NumDays",
-         "NumGames",
+         "NumCampaignGames",
+         "NumCampaignWins",
+         "NumDailyGames",
+         "NumDailyWins",
          "NumWins",
          "NumLostTanks",
          "NumOfBattles",
@@ -110,7 +113,6 @@ namespace Pattons_Best
          "NumMedalOfHonors"
       };
       [NonSerialized] public static string theGameStatisticsDirectory = "";
-      private readonly ArrayList myList;
       public static string GetStatisticMessage(GameStatistic stat)
       {
          StringBuilder sb = new StringBuilder();
@@ -126,7 +128,7 @@ namespace Pattons_Best
                sb.Append(stat.Value.ToString());
                sb.Append(" times");
                return sb.ToString();
-            case "EndCampaignGameWin": 
+            case "EndCampaignGameWin":
                sb.Append("Campaign game won ");
                sb.Append(stat.Value.ToString());
                sb.Append(" times");
@@ -136,7 +138,7 @@ namespace Pattons_Best
                sb.Append(stat.Value.ToString());
                sb.Append(" times");
                return sb.ToString();
-            case "EndGameCmdrKilled": 
+            case "EndGameCmdrKilled":
                sb.Append("Game ends with commander killed ");
                sb.Append(stat.Value.ToString());
                sb.Append(" times");
@@ -163,7 +165,7 @@ namespace Pattons_Best
                sb.Append(stat.Value.ToString());
                sb.Append(" times");
                return sb.ToString();
-            case "RepairMain": 
+            case "RepairMain":
                sb.Append("Repair a disabled main gun in battle ");
                sb.Append(stat.Value.ToString());
                sb.Append(" times");
@@ -386,6 +388,7 @@ namespace Pattons_Best
                return "UNKNOWN: " + stat.Key;
          }
       }
+      private readonly ArrayList myList;
       public GameStatistics() { myList = new ArrayList(); }
       public int Count { get => myList.Count; }
       public void Add(GameStatistic o) { myList.Add(o); }
