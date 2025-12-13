@@ -4673,6 +4673,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Set_CheckboxState(): myGameInstance=null");
             return false;
          }
+         Logger.Log(LogEnum.LE_SHOW_AUTOSETUP_BATTLEPREP, "SetCheckboxState(): isSetupPerformed=" + gi.BattlePrep.myIsSetupPerformed.ToString() + " for key=" + key);
          if (("e011" == key) && (false == myGameInstance.BattlePrep.myIsSetupPerformed))
          {
             cb.Visibility = Visibility.Hidden;
@@ -5541,6 +5542,10 @@ namespace Pattons_Best
                         case "DieRollBlue":
                            myDieRoller.RollMovingDice(myCanvasMain, rollEndCallback);
                            img.Visibility = Visibility.Hidden;
+                           return;
+                        case "DoorClosing":
+                           action = GameAction.EndGameExit;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "Continue001":
                            action = GameAction.SetupShowMovementBoard;

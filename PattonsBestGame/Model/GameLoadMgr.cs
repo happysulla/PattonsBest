@@ -797,7 +797,6 @@ namespace Pattons_Best
             case "EndGameShowFeats": return GameAction.EndGameShowFeats;
             case "EndGameShowStats": return GameAction.EndGameShowStats;
             case "EndGameClose": return GameAction.EndGameClose;
-            case "EndGameFinal": return GameAction.EndGameFinal;
             case "EndGameExit": return GameAction.EndGameExit;
             case "ExitGame": return GameAction.ExitGame;
 

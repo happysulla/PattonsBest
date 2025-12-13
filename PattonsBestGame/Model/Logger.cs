@@ -24,11 +24,13 @@ namespace Pattons_Best
       LE_VIEW_SHOW_OPTIONS,
       LE_VIEW_SHOW_FEATS,
       LE_VIEW_SHOW_STATS,
+      LE_VIEW_SHOW_SETTINGS,
       //-------------
       LE_SHOW_CREW_NAME,
       LE_SHOW_CREW_BU,
       LE_SHOW_START_AREA,
       LE_SHOW_ACTION_REPORT_NEW,
+      LE_SHOW_AUTOSETUP_BATTLEPREP,
       LE_SHOW_ENEMY_STRENGTH,
       LE_SHOW_OVERRUN_TO_PREVIOUS_AREA,
       LE_SHOW_RETREAT_TO_PREVIOUS_AREA,
@@ -152,10 +154,12 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_VIEW_SHOW_OPTIONS);
          SetOn(LogEnum.LE_VIEW_SHOW_FEATS);
          SetOn(LogEnum.LE_VIEW_SHOW_STATS);
+         SetOn(LogEnum.LE_VIEW_SHOW_SETTINGS);
          //-------------------------------
          //SetOn(LogEnum.LE_SHOW_CREW_NAME);
          SetOn(LogEnum.LE_SHOW_CREW_BU);
          //SetOn(LogEnum.LE_SHOW_ACTION_REPORT_NEW);
+         SetOn(LogEnum.LE_SHOW_AUTOSETUP_BATTLEPREP);
          SetOn(LogEnum.LE_SHOW_START_AREA);
          //SetOn(LogEnum.LE_SHOW_ENEMY_STRENGTH);
          SetOn(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA);

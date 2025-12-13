@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -573,6 +574,7 @@ namespace Pattons_Best
                myScrollViewerMap.UpdateLayout();
                break;
             case GameAction.UpdateGameOptions:
+               Logger.Log(LogEnum.LE_VIEW_SHOW_SETTINGS, "GameViewerWindow.UpdateView(): SaveDefaultsToSettings() due to a=" + action.ToString());
                SaveDefaultsToSettings();
                break;
             case GameAction.SetupChooseFunOptions:
@@ -581,17 +583,12 @@ namespace Pattons_Best
                if (false == UpdateCanvasMain(gi, action))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
-            case GameAction.EndGameFinal:
-               myCanvasMain.LayoutTransform = new ScaleTransform(Utilities.ZoomCanvas, Utilities.ZoomCanvas);  // EndGameFinal - show map for last time
-               if (false == UpdateCanvasMain(gi, action))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
-               break;
             case GameAction.EndGameWin:
             case GameAction.EndGameLost:
-               SaveDefaultsToSettings(); // End_GameWin or End_GameLost
                if (false == UpdateCanvasAnimateBattlePhase(gi))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasAnimateBattlePhase() returned error ");
-               SaveDefaultsToSettings();
+               Logger.Log(LogEnum.LE_VIEW_SHOW_SETTINGS, "GameViewerWindow.UpdateView(): SaveDefaultsToSettings() due to a=" + action.ToString());
+               SaveDefaultsToSettings(); // End_GameWin or End_GameLost
                break;
             case GameAction.EndGameShowStats:
                if (false == UpdateCanvasShowStatistics(gi))
@@ -1374,7 +1371,7 @@ namespace Pattons_Best
             WindowPlacement wp; // Persist window placement details to application settings
             var hwnd = new WindowInteropHelper(this).Handle;
             if (false == GetWindowPlacement(hwnd, out wp))
-               Logger.Log(LogEnum.LE_ERROR, "SaveDefaultsToSettings(): GetWindowPlacement() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): GetWindowPlacement() returned false");
             string sWinPlace = Utilities.Serialize<WindowPlacement>(wp);
             Settings.Default.WindowPlacement = sWinPlace;
          }
@@ -1384,18 +1381,20 @@ namespace Pattons_Best
          Settings.Default.ScrollViewerHeight = myScrollViewerMap.Height;
          Settings.Default.ScrollViewerWidth = myScrollViewerMap.Width;
          //-------------------------------------------
-         Logger.Log(LogEnum.LE_VIEW_SHOW_OPTIONS, "SaveDefaultsToSettings(): Options=" + myGameInstance.Options.ToString());
+         Logger.Log(LogEnum.LE_VIEW_SHOW_OPTIONS, "Save_DefaultsToSettings(): Options=" + myGameInstance.Options.ToString());
          string? sOptions = SerializeOptions(myGameInstance.Options);
          if (null == sOptions)
-            Logger.Log(LogEnum.LE_ERROR, "SaveDefaultsToSettings(): SerializeOptions() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): SerializeOptions() returned false");
          else
             Settings.Default.GameOptions = sOptions;
          //-------------------------------------------
+         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "SaveDefaultsToSettings():\n  feats=" + GameEngine.theInGameFeats.ToString() + "\n Sfeats=" + GameEngine.theStartingFeats.ToString());
          if (false == SerializeGameFeats(GameEngine.theInGameFeats))
-            Logger.Log(LogEnum.LE_ERROR, "SaveDefaultsToSettings(): SerializeGameFeats() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): SerializeGameFeats() returned false");
          //-------------------------------------------
+         Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "GameViewerWindow(): GameEngine.theTotalStatistics=" + GameEngine.theTotalStatistics.ToString());
          if (false == SerializeGameStatistics(GameEngine.theTotalStatistics))
-            Logger.Log(LogEnum.LE_ERROR, "SaveDefaultsToSettings(): SerializeGameStatistics() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): SerializeGameStatistics() returned false");
          //-------------------------------------------
          Settings.Default.Save();
          System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
@@ -3188,7 +3187,8 @@ namespace Pattons_Best
          myTextBoxMarquee.Inlines.Add(new Run("Current Game Statistics:") { FontWeight = FontWeights.Bold, FontStyle = FontStyles.Italic, TextDecorations = TextDecorations.Underline });
          UpdateCanvasShowStatsText(myTextBoxMarquee, gi.Statistics);
          //-------------------------------
-         SaveDefaultsToSettings();
+         Logger.Log(LogEnum.LE_VIEW_SHOW_SETTINGS, "GameViewerWindow.UpdateCanvasShowStatistics(): Called SaveDefaultsToSettings()");
+         SaveDefaultsToSettings(); 
          //-------------------------------
          if (true == isMultipleGameTypesPlayed)
          {
@@ -4787,6 +4787,14 @@ namespace Pattons_Best
             return;
          }
          //--------------------------------------
+         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasTankHatches(): lastReport=null");
+            return;
+         }
+         string tType = lastReport.TankCardNum.ToString();
+         //--------------------------------------
          string[] aStringArray = menuitem.Name.Split(new char[] { '_' });
          if (aStringArray.Length < 2)
          {
@@ -4796,10 +4804,10 @@ namespace Pattons_Best
          string tName = aStringArray[0];
          string order = aStringArray[1];
          //--------------------------------------
-         ITerritory? t = Territories.theTerritories.Find(tName);
+         ITerritory? t = Territories.theTerritories.Find(tName, tType);
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MenuItemAmmoReloadClick(): t=null for " + tName);
+            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): t=null for " + tName + " tType=" + tType);
             return;
          }
          ContextMenu menu = myContextMenuGunLoadActions[tName];
@@ -5005,6 +5013,7 @@ namespace Pattons_Best
       }
       private void ClosedGameViewerWindow(object sender, EventArgs e)
       {
+         System.Diagnostics.Debug.WriteLine("GameViewerWindow.ClosedGameViewerWindow(): Called SaveDefaultsToSettings()");
          SaveDefaultsToSettings(false); // ClosedGameViewerWindow()
          Application app = Application.Current;
          app.Shutdown();
@@ -5041,33 +5050,13 @@ namespace Pattons_Best
       protected override void OnClosing(CancelEventArgs e) //  // WARNING - Not fired when Application.SessionEnding is fired
       {
          base.OnClosing(e);
+         System.Diagnostics.Debug.WriteLine("GameViewerWindow.ClosedGameViewerWindow(): Called SaveDefaultsToSettings()");
          SaveDefaultsToSettings();
          GameLoadMgr loadMgr = new GameLoadMgr();
          if (false == loadMgr.SaveGameToFile(myGameInstance))
             Logger.Log(LogEnum.LE_ERROR, "OnClosing(): SaveGameToFile() returned false");
       }
       //-------------CONTROLLER HELPER FUNCTIONS---------------------------------
-      private void SaveDefaultsToSettings()
-      {
-         //WindowPlacement wp; // Persist window placement details to application settings
-         //var hwnd = new WindowInteropHelper(this).Handle;
-         //if (false == GetWindowPlacement(hwnd, out wp))
-         //   Logger.Log(LogEnum.LE_ERROR, "OnClosing(): GetWindowPlacement() returned false");
-         //string sWinPlace = Utilities.Serialize<WindowPlacement>(wp);
-         //Settings.Default.WindowPlacement = sWinPlace;
-         //-------------------------------------------
-         Settings.Default.ZoomCanvas = Utilities.ZoomCanvas;
-         //-------------------------------------------
-         Settings.Default.ScrollViewerHeight = myScrollViewerMap.Height;
-         Settings.Default.ScrollViewerWidth = myScrollViewerMap.Width;
-         //-------------------------------------------
-         Settings.Default.GameDirectoryName = GameLoadMgr.theGamesDirectory;
-         //-------------------------------------------
-         //string sOptions = Utilities.Serialize<Options>(myGameInstance.Options);
-         //Settings.Default.GameOptions = sOptions;
-         //-------------------------------------------
-         Settings.Default.Save();
-      }
       private bool AddHotKeys(MainMenuViewer mmv)
       {
          try

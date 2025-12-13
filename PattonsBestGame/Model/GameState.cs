@@ -3102,18 +3102,34 @@ namespace Pattons_Best
       }
       private bool SetupAssignCrewRating(IGameInstance gi, ref GameAction outAction)
       {
-         gi.NewMembers.Clear();
-         IAfterActionReport? report = gi.Reports.GetLast();
-         if (null == report)
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
          {
             Logger.Log(LogEnum.LE_ERROR, "SetupAssignCrewRating(): gi.Reports.GetLast() returned null");
             return false;
          }
-         gi.NewMembers.Add(report.Commander); // GameStateSetup.PerformAction(SetupAssignCrewRating)
-         gi.NewMembers.Add(report.Gunner);    // GameStateSetup.PerformAction(SetupAssignCrewRating)
-         gi.NewMembers.Add(report.Loader);    // GameStateSetup.PerformAction(SetupAssignCrewRating)
-         gi.NewMembers.Add(report.Driver);    // GameStateSetup.PerformAction(SetupAssignCrewRating)
-         gi.NewMembers.Add(report.Assistant); // GameStateSetup.PerformAction(SetupAssignCrewRating)
+         Option option = gi.Options.Find("SingleDayScenario"); // If Single Day Scenario, user chooses tankmat to use
+         if( true == option.IsEnabled)
+         {
+            gi.BattleStacks.Remove(gi.Sherman);
+            string tankImageName1 = "t";
+            if (9 < lastReport.TankCardNum)
+               tankImageName1 += lastReport.TankCardNum.ToString();
+            else
+               tankImageName1 += ("0" + lastReport.TankCardNum.ToString());
+            string shermanName1 = "Sherman75";
+            if (12 < lastReport.TankCardNum)
+               shermanName1 = "Sherman76";
+            gi.Sherman = new MapItem(shermanName1, 2.0, tankImageName1, gi.Home);
+         }
+         //------------------------------
+         gi.BattleStacks.Add(gi.Sherman);
+         gi.NewMembers.Clear();
+         gi.NewMembers.Add(lastReport.Commander); // GameStateSetup.PerformAction(SetupAssignCrewRating)
+         gi.NewMembers.Add(lastReport.Gunner);    // GameStateSetup.PerformAction(SetupAssignCrewRating)
+         gi.NewMembers.Add(lastReport.Loader);    // GameStateSetup.PerformAction(SetupAssignCrewRating)
+         gi.NewMembers.Add(lastReport.Driver);    // GameStateSetup.PerformAction(SetupAssignCrewRating)
+         gi.NewMembers.Add(lastReport.Assistant); // GameStateSetup.PerformAction(SetupAssignCrewRating)
          outAction = GameAction.SetupAssignCrewRating;
          return true;
       }
@@ -3436,7 +3452,6 @@ namespace Pattons_Best
                      shermanName1 = "Sherman76";
                   gi.Sherman = new MapItem(shermanName1, 2.0, tankImageName1, gi.Home);
                   gi.BattleStacks.Add(gi.Sherman);
-                  //---------------------------------
                   //---------------------------------
                   if (false == TankReplacementEnd(gi, action))
                   {
@@ -4087,6 +4102,11 @@ namespace Pattons_Best
                                  returnStatus = "SetUsControlOnBattleMap() returned false";
                                  Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsLoaderSpot): " + returnStatus);
                               }
+                              else if(false == SaveBattlePreparationsSetup(gi)) // GameStateBattlePrep.PerformAction(PreparationsLoaderSpot)
+                              {
+                                 returnStatus = "Save_BattlePreparationsSetup() returned false";
+                                 Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsLoaderSpot): " + returnStatus);
+                              }
                            }
                         }
                      }
@@ -4117,9 +4137,9 @@ namespace Pattons_Best
                            returnStatus = "SetUsControlOnBattleMap() returned false";
                            Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
                         }
-                        else if (false == SaveBattlePreparationsSetup(gi))
+                        else if (false == SaveBattlePreparationsSetup(gi)) // GameStateBattlePrep.PerformAction(PreparationsCommanderSpot)
                         {
-                           returnStatus = "SaveBattlePreparationsSetup() returned false";
+                           returnStatus = "Save_BattlePreparationsSetup() returned false";
                            Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsCommanderSpot): " + returnStatus);
                         }
                      }
@@ -4144,7 +4164,7 @@ namespace Pattons_Best
                      returnStatus = "SetUsControlOnBattleMap() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
                   }
-                  else if(false == SaveBattlePreparationsSetup(gi))
+                  else if(false == SaveBattlePreparationsSetup(gi)) // GameStateBattlePrep.PerformAction(PreparationsFinal)
                   {
                      returnStatus = "SaveBattlePreparationsSetup() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsFinal): " + returnStatus);
@@ -4182,6 +4202,7 @@ namespace Pattons_Best
       public bool SaveBattlePreparationsSetup(IGameInstance gi)
       {
          gi.BattlePrep.myIsSetupPerformed = true;
+         Logger.Log(LogEnum.LE_SHOW_AUTOSETUP_BATTLEPREP, "Save_BattlePreparationsSetup(): isSetupPerformed=" + gi.BattlePrep.myIsSetupPerformed.ToString());
          //---------------------------
          gi.BattlePrep.myHatches.Clear();
          foreach (IMapItem mi in gi.Hatches)
@@ -7860,11 +7881,21 @@ namespace Pattons_Best
                foreach (IMapItem mi in stack.MapItems)
                {
                   if (true == mi.TerritoryCurrent.Name.Contains("OffTop")) // BattleRoundSequenceMovementRoll -  Sherman Movement cause enemy to move
+                  {
+                     mi.EnemyAcquiredShots.Remove("Sherman");
+                     gi.Sherman.EnemyAcquiredShots.Remove(mi.Name);
                      gi.ShermanAdvanceOrRetreatEnemies.Add(mi);
+                  }
                   else if ((true == mi.TerritoryCurrent.Name.Contains("OffBottom")) && (EnumScenario.Counterattack != lastReport.Scenario)) // BattleRoundSequenceMovementRoll -  Sherman Movement cause enemy to move off
+                  {
+                     mi.EnemyAcquiredShots.Remove("Sherman");
+                     gi.Sherman.EnemyAcquiredShots.Remove(mi.Name);
                      gi.ShermanAdvanceOrRetreatEnemies.Add(mi);
+                  }
                   else if (true == mi.IsEnemyUnit())
+                  {
                      isAnyEnemyLeft = true;
+                  }
                }
             }
             foreach (IMapItem mi in gi.ShermanAdvanceOrRetreatEnemies)
@@ -8553,7 +8584,7 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool ResolveToKillEnemyUnitKill(IGameInstance gi, ref GameAction outAction, int dieRoll)
+      private bool ResolveToKillEnemyUnitKill(IGameInstance gi, ref GameAction outAction, int dieRoll) 
       {
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -10058,7 +10089,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Perform_EndCheck(): lastReport=null");
             return false;
          }
-         Logger.Log(LogEnum.LE_GAME_END_CHECK, "Perform_EndCheck(): ae=" + gi.EventActive + " action=" + action.ToString() + " day=" + lastReport.Day.ToString());
+         Logger.Log(LogEnum.LE_GAME_END_CHECK, "Perform_EndCheck(): ae=" + gi.EventActive + " action=" + action.ToString() + " day=" + gi.Day.ToString() + " entrydate=" + lastReport.Day);
          Option optionCommanderDeath = gi.Options.Find("GameEndsOnCommanderDeath");
          Option optionGameType= gi.Options.Find("SingleDayScenario");
          //----------------------------------------------------------
@@ -10084,19 +10115,24 @@ namespace Pattons_Best
             SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
          }
          //----------------------------------------------------------
-         else if (191 < gi.Day)
+         //else if ((189 < gi.Day) || (true == optionGameType.IsEnabled)) // ends on day 190
+         else if (189 < gi.Day)  // ends on day 190
          {
             Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): 191 < (day=" + gi.Day.ToString() + ") (VP=" + gi.VictoryPtsTotalCampaign.ToString() + ")");
-            GameEngine.theInGameFeats.AddOne("EndCampaignGameOnTime");
+            if (false == optionGameType.IsEnabled)
+               GameEngine.theInGameFeats.AddOne("EndCampaignGameOnTime");
             gi.GamePhase = GamePhase.EndGame;
             if (0 < gi.VictoryPtsTotalCampaign)
             {
+               if (false == optionGameType.IsEnabled)
+                  GameEngine.theInGameFeats.AddOne("EndCampaignGameWin");
+               gi.EndGameReason = "Won on Points: " + gi.VictoryPtsTotalCampaign.ToString() + " > 0";
                action = GameAction.EndGameWin;
                SetCommand(gi, action, GameAction.DieRollActionNone, "e501");
-               GameEngine.theInGameFeats.AddOne("EndCampaignGameWin");
             }
             else
             {
+               gi.EndGameReason = "Lost on Points: " + gi.VictoryPtsTotalCampaign.ToString() + " < 1";
                action = GameAction.EndGameLost;
                SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
             }
@@ -10149,9 +10185,7 @@ namespace Pattons_Best
                break;
             case GameAction.EndGameClose:
                break;
-            case GameAction.EndGameFinal:
-               SetCommand(gi, action, GameAction.DieRollActionNone, "e504");
-               break;
+
             case GameAction.UpdateLoadingGame:
                if (false == LoadGame(ref gi, ref action))
                {

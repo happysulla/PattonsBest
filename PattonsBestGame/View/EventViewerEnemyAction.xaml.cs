@@ -347,7 +347,11 @@ namespace Pattons_Best
                   if ( (true == mapItem.IsKilled) && (false == mapItem.Name.Contains("Sherman")) ) // remove enemy KIA units
                      removals.Add(mapItem);
                   if( true == mapItem.TerritoryCurrent.Name.Contains("Off")) // EventViewerEnemyAction.UpdateEndState() - remove all units that left the board
+                  {
+                     mapItem.EnemyAcquiredShots.Remove("Sherman");
+                     myGameInstance.Sherman.EnemyAcquiredShots.Remove(mapItem.Name);
                      removals.Add(mapItem);
+                  }
                }
             }
             foreach (IMapItem mi in removals)
@@ -1355,6 +1359,8 @@ namespace Pattons_Best
                Utilities.MapItemNum++;
                Logger.Log(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA, "UpdateEndState(): gi.AdvancingEnemies.Add(mi=" + mi.Name + ") ==>" + name);
                mi.Name = name;
+               mi.EnemyAcquiredShots.Remove("Sherman");
+               myGameInstance.Sherman.EnemyAcquiredShots.Remove(mi.Name);
                myGameInstance.AdvancingEnemies.Add(mi);
             }
          }

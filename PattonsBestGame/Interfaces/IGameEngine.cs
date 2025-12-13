@@ -221,7 +221,6 @@ namespace Pattons_Best
       EndGameShowFeats,
       EndGameShowStats,
       EndGameClose,
-      EndGameFinal,  
       EndGameExit,
       ExitGame,
 
