@@ -1635,6 +1635,73 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "GameStateEnded.PerformAction(): " + returnStatus);
                }
                break;
+            case GameAction.SetupSingleGameDay:
+               SetCommand(gi, action, GameAction.DieRollActionNone, "e005a");
+               break;
+            case GameAction.SetupDecreaseDate:
+               if (0 == gi.Day)
+                  gi.Day = 189;
+               else
+                  gi.Day--;
+               string dateDecrease = TableMgr.GetDate(gi.Day);
+               if(11 < dateDecrease.Length)
+               {
+                  if (0 == gi.Day)
+                     gi.Day = 189;
+                  else
+                     gi.Day--;
+               }
+               string date1 = TableMgr.GetMonth(gi.Day);
+               if (("Jul" == date1) || ("Aug" == date1))
+               {
+                  gi.TankReplacementNumber = 0;
+                  if (false == TableMgr.GetNextTankNum(gi))
+                  {
+                     returnStatus = "GetNextTankNum() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(SetupDecreaseDate): " + returnStatus);
+                  }
+               }
+               break;
+            case GameAction.SetupIncreaseDate:
+               if (189 == gi.Day)
+                  gi.Day = 0;
+               else
+                  gi.Day++;
+               string dateIncrease = TableMgr.GetDate(gi.Day);
+               if (11 < dateIncrease.Length)
+               {
+                  if (189 == gi.Day)
+                     gi.Day = 0;
+                  else
+                     gi.Day++;
+               }
+               string date2 = TableMgr.GetMonth(gi.Day);
+               if (("Jul" == date2) || ("Aug" == date2))
+               {
+                  gi.TankReplacementNumber = 0;
+                  if (false == TableMgr.GetNextTankNum(gi))
+                  {
+                     returnStatus = "GetNextTankNum() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(SetupIncreaseDate): " + returnStatus);
+                  }
+               }
+               break;
+            case GameAction.MorningBriefingDecreaseTankNum:
+               gi.TankReplacementNumber--;
+               if (false == TableMgr.GetNextTankNum(gi))
+               {
+                  returnStatus = "GetNextTankNum() returned false";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingDecreaseTankNum): " + returnStatus);
+               }
+               break;
+            case GameAction.MorningBriefingIncreaseTankNum:
+               gi.TankReplacementNumber++;
+               if (false == TableMgr.GetNextTankNum(gi))
+               {
+                  returnStatus = "GetNextTankNum() returned false";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingIncreaseTankNum): " + returnStatus);
+               }
+               break;
             case GameAction.TestingStartMorningBriefing:
                if (false == PerformAutoSetupSkipCrewAssignments(gi))
                {
@@ -1797,6 +1864,15 @@ namespace Pattons_Best
             case GameAction.SetupShowCombatCalendarCheck:
                SetCommand(gi, action, GameAction.SetupCombatCalendarRoll, "e006"); // Setup_ShowCombatCalendarCheck
                gi.GamePhase = GamePhase.MorningBriefing;
+               if (false == AssignNewCrewMembers(gi))
+               {
+                  returnStatus = "AssignNewCrewMembers() returned false";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(SetupShowCombatCalendarCheck): " + returnStatus);
+               }
+               break;
+            case GameAction.SetupShowSingleDayBattleStart:
+               gi.GamePhase = GamePhase.MorningBriefing;
+               SetCommand(gi, action, GameAction.MorningBriefingWeatherRoll, "e008"); // Weather Roll
                if (false == AssignNewCrewMembers(gi))
                {
                   returnStatus = "AssignNewCrewMembers() returned false";
@@ -2835,42 +2911,13 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreen(): myGameInstance=null");
             return false;
          }
-         Option? option0 = gi.Options.Find("SkipTutorial0");
-         if (null == option0)
-         {
-            option0 = new Option("SkipTutorial0", false);
-            gi.Options.Add(option0);
-         }
-         Option? option1 = gi.Options.Find("SkipTutorial1");
-         if (null == option1)
-         {
-            option1 = new Option("SkipTutorial1", false);
-            gi.Options.Add(option1);
-         }
-         Option? option2 = gi.Options.Find("SkipTutorial2");
-         if (null == option2)
-         {
-            option2 = new Option("SkipTutorial2", false);
-            gi.Options.Add(option2);
-         }
-         Option? option3 = gi.Options.Find("SkipTutorial3");
-         if (null == option3)
-         {
-            option3 = new Option("SkipTutorial3", false);
-            gi.Options.Add(option3);
-         }
-         Option? option4 = gi.Options.Find("SkipTutorial4");
-         if (null == option4)
-         {
-            option4 = new Option("SkipTutorial4", false);
-            gi.Options.Add(option4);
-         }
-         Option? option5 = gi.Options.Find("SkipTutorial5");
-         if (null == option5)
-         {
-            option5 = new Option("SkipTutorial5", false);
-            gi.Options.Add(option5);
-         }
+         Option option0 = gi.Options.Find("SkipTutorial0");
+         Option option1 = gi.Options.Find("SkipTutorial1");
+         Option option2 = gi.Options.Find("SkipTutorial2");
+         Option option3 = gi.Options.Find("SkipTutorial3");
+         Option option4 = gi.Options.Find("SkipTutorial4");
+         Option option5 = gi.Options.Find("SkipTutorial5");
+         Option option6 = gi.Options.Find("SingleDayScenario");
          //-----------------------------------------------
          string eventName = "ERROR";
          switch (outAction)
@@ -2899,10 +2946,15 @@ namespace Pattons_Best
                               outAction = GameAction.SetupShowAfterActionReport;
                               if (true == option5.IsEnabled)
                               {
-                                 if (false == SetupAssignCrewRating(gi, ref outAction))
+                                 eventName = "e005a";
+                                 outAction = GameAction.SetupSingleGameDay;
+                                 if (false == option6.IsEnabled)
                                  {
-                                    Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreen(): SetupAssignCrewRating() returned false");
-                                    return false;
+                                    if (false == SetupAssignCrewRating(gi, ref outAction))
+                                    {
+                                       Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreen(): SetupAssignCrewRating() returned false");
+                                       return false;
+                                    }
                                  }
                               }
                            }
@@ -2931,10 +2983,15 @@ namespace Pattons_Best
                            outAction = GameAction.SetupShowAfterActionReport;
                            if (true == option5.IsEnabled)
                            {
-                              if (false == SetupAssignCrewRating(gi, ref outAction))
+                              eventName = "e005a";
+                              outAction = GameAction.SetupSingleGameDay;
+                              if (false == option6.IsEnabled)
                               {
-                                 Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreen(): SetupAssignCrewRating() returned false");
-                                 return false;
+                                 if (false == SetupAssignCrewRating(gi, ref outAction))
+                                 {
+                                    Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreen(): SetupAssignCrewRating() returned false");
+                                    return false;
+                                 }
                               }
                            }
                         }
@@ -2958,10 +3015,15 @@ namespace Pattons_Best
                         outAction = GameAction.SetupShowAfterActionReport;
                         if (true == option5.IsEnabled)
                         {
-                           if (false == SetupAssignCrewRating(gi, ref outAction))
+                           eventName = "e005a";
+                           outAction = GameAction.SetupSingleGameDay;
+                           if (false == option6.IsEnabled)
                            {
-                              Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreen(): SetupAssignCrewRating() returned false");
-                              return false;
+                              if (false == SetupAssignCrewRating(gi, ref outAction))
+                              {
+                                 Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreen(): SetupAssignCrewRating() returned false");
+                                 return false;
+                              }
                            }
                         }
                      }
@@ -2980,10 +3042,15 @@ namespace Pattons_Best
                      outAction = GameAction.SetupShowAfterActionReport;
                      if (true == option5.IsEnabled)
                      {
-                        if (false == SetupAssignCrewRating(gi, ref outAction))
+                        eventName = "e005a";
+                        outAction = GameAction.SetupSingleGameDay;
+                        if (false == option6.IsEnabled)
                         {
-                           Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreen(): SetupAssignCrewRating() returned false");
-                           return false;
+                           if (false == SetupAssignCrewRating(gi, ref outAction))
+                           {
+                              Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreen(): SetupAssignCrewRating() returned false");
+                              return false;
+                           }
                         }
                      }
                   }
@@ -2997,10 +3064,15 @@ namespace Pattons_Best
                   outAction = GameAction.SetupShowAfterActionReport;
                   if (true == option5.IsEnabled)
                   {
-                     if (false == SetupAssignCrewRating(gi, ref outAction))
+                     eventName = "e005a";
+                     outAction = GameAction.SetupSingleGameDay;
+                     if (false == option6.IsEnabled)
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreen(): SetupAssignCrewRating() returned false");
-                        return false;
+                        if (false == SetupAssignCrewRating(gi, ref outAction))
+                        {
+                           Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreen(): SetupAssignCrewRating() returned false");
+                           return false;
+                        }
                      }
                   }
                }
@@ -3009,10 +3081,15 @@ namespace Pattons_Best
                eventName = "e005";
                if (true == option5.IsEnabled)
                {
-                  if (false == SetupAssignCrewRating(gi, ref outAction))
+                  eventName = "e005a";
+                  outAction = GameAction.SetupSingleGameDay;
+                  if( false  == option6.IsEnabled )
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreen(): SetupAssignCrewRating() returned false");
-                     return false;
+                     if (false == SetupAssignCrewRating(gi, ref outAction))
+                     {
+                        Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreen(): SetupAssignCrewRating() returned false");
+                        return false;
+                     }
                   }
                }
                break;
@@ -8823,17 +8900,18 @@ namespace Pattons_Best
             tNames.Add("B4C");
             if ((false == lastReport.Weather.Contains("Fog")) && (false == lastReport.Weather.Contains("Falling")))
             {
-               tNames.Add("B6L");
-               tNames.Add("B9M");
-               tNames.Add("B9L");
                tNames.Add("B1M");
-               tNames.Add("B1L");
                tNames.Add("B2M");
-               tNames.Add("B2L");
                tNames.Add("B3M");
-               tNames.Add("B3L");
                tNames.Add("B4M");
+               tNames.Add("B6M");
+               tNames.Add("B9M");
+               tNames.Add("B1L");
+               tNames.Add("B2L");
+               tNames.Add("B3L");
                tNames.Add("B4L");
+               tNames.Add("B6L");
+               tNames.Add("B9L");
             }
          }
          else if (("Coaxial" == mgType) || ("Bow" == mgType))

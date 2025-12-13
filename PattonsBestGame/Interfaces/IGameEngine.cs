@@ -235,6 +235,10 @@ namespace Pattons_Best
       SetupChooseFunOptions,
       SetupCombatCalendarRoll,
       SetupFinalize,
+      SetupSingleGameDay,
+      SetupDecreaseDate,
+      SetupIncreaseDate,
+      SetupShowSingleDayBattleStart,
 
       MorningBriefingBegin,
       MorningBriefingCrewmanHealing,

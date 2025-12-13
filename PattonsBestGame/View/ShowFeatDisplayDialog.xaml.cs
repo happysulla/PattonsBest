@@ -12,7 +12,7 @@ namespace Pattons_Best
    public partial class ShowFeatDisplayDialog : Window
    {
       public bool CtorError = false;
-      private RuleDialogViewer myRulesManager = null;
+      private RuleDialogViewer? myRulesManager = null;
       private readonly FontFamily myFontFam1 = new FontFamily("Georgia");
       private bool myIsAllFeatsShown = false;
       private GameFeat myGameFeatToShow = new GameFeat();

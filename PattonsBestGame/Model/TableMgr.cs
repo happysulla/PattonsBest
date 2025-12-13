@@ -4817,8 +4817,8 @@ namespace Pattons_Best
                   case 11: lastReport.TankCardNum = 12; break;
                   case 12: lastReport.TankCardNum = 13; break;
                   case 13: lastReport.TankCardNum = 14; break;
-                  case 14: lastReport.TankCardNum = 16; break;
-                  case 15: lastReport.TankCardNum = 14; break;
+                  case 14: lastReport.TankCardNum = 15; break;
+                  case 15: lastReport.TankCardNum = 16; break;
                   case 16: lastReport.TankCardNum = 17; break;
                   default: Logger.Log(LogEnum.LE_ERROR, "SelectNewSherman(): reached default month=" + month + " selection=" + gi.TankReplacementNumber.ToString()); return false;
                }
@@ -5522,25 +5522,16 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitBaseNumber(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "GetShermanRateOfFire(): lastReport=null");
             return FN_ERROR;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
          //---------------------------------------------------
          int rateOfFireNumber = 0;
-         if ("75" == card.myMainGun)
-         {
-            rateOfFireNumber = 30;
-         }
-         else if ("75" == card.myMainGun)
-         {
+         if (12 < lastReport.TankCardNum)
             rateOfFireNumber = 20;
-         }
          else
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitBaseNumber(): reached default guntype=" + card.myMainGun);
-            return FN_ERROR;
-         }
+            rateOfFireNumber = 30;
          rateOfFireNumber -= GetShermanRateOfFireModifier(gi);
          return rateOfFireNumber;
       }

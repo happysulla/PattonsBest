@@ -140,7 +140,7 @@ namespace Pattons_Best
       public PanzerfaustAttack? Panzerfaust { set; get; } = null;
       public int NumCollateralDamage { set; get; } = 0;
       //---------------------------------------------------------------
-      public int TankReplacementNumber { set; get; } = 1;
+      public int TankReplacementNumber { set; get; } = 0;
       public int VictoryPtsTotalCampaign { get; set; } = 0;
       public int PromotionPointNum { get; set; } = 0;
       public int PromotionDay { get; set; } = -1;

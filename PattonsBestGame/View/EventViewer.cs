@@ -778,6 +778,11 @@ namespace Pattons_Best
       //--------------------------------------------------------------------
       private bool UpdateEventContent(IGameInstance gi, string key)
       {
+         if (null == myGameInstance)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): myGameInstance=null");
+            return false;
+         }
          if (null == myGameEngine)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): myGameEngine=null");
@@ -805,6 +810,42 @@ namespace Pattons_Best
          int firstDieResult = gi.DieResults[key][0];
          switch (key)
          {
+            case "e005a":
+
+               Button be005a1 = new Button() { Name= "ButtonDecreaseDate", Content = "   -   ", FontFamily = myFontFam1, FontSize = 12 };
+               be005a1.Click += Button_Click;
+               Button be005a2 = new Button() { Name = "ButtonIncreaseDate", Content = "   +   ", FontFamily = myFontFam1, FontSize = 12 };
+               be005a2.Click += Button_Click;
+               Button be005a3 = new Button() { Name = "ButtonDecreaseTankNum", Content = "   -   ", FontFamily = myFontFam1, FontSize = 12 };
+               be005a3.Click += Button_Click;
+               Button be005a4 = new Button() { Name = "ButtonIncreaseTankNum", Content = "   +   ", FontFamily = myFontFam1, FontSize = 12 };
+               be005a4.Click += Button_Click;
+               //------------------------------
+               string date = TableMgr.GetMonth(myGameInstance.Day); // no new tank models allowed in Jul/Aug 1944
+               if (("Jul" == date) || ("Aug" == date))
+               {
+                  be005a3.IsEnabled = false;
+                  be005a4.IsEnabled = false;
+               }
+               Image imge005a = new Image { Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = 100, Height = 100, Name = "Continue005a" };
+               myTextBlock.Inlines.Add(new Run(" Date: "));
+               myTextBlock.Inlines.Add(be005a1);
+               myTextBlock.Inlines.Add(new Run("  "));
+               myTextBlock.Inlines.Add(be005a2);
+               myTextBlock.Inlines.Add(new Run("    "));
+               myTextBlock.Inlines.Add(new Run(TableMgr.GetDate(myGameInstance.Day)));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("Tank: "));
+               myTextBlock.Inlines.Add(be005a3);
+               myTextBlock.Inlines.Add(new Run("  "));
+               myTextBlock.Inlines.Add(be005a4);
+               myTextBlock.Inlines.Add(new Run("    Num = "));
+               myTextBlock.Inlines.Add(new Run(report.TankCardNum.ToString()));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("                                            "));
+               myTextBlock.Inlines.Add(new InlineUIContainer(imge005a));
+               break;
             case "e006":
                ReplaceText("DATE", report.Day);
                switch (report.Scenario)
@@ -4858,14 +4899,26 @@ namespace Pattons_Best
             return false;
          }
          GameAction outAction = GameAction.Error;
-         if( GamePhase.GameSetup == myGameInstance.GamePhase ) 
-            outAction = GameAction.SetupShowCombatCalendarCheck;
+         if( GamePhase.GameSetup == myGameInstance.GamePhase )
+         {
+            Option option = myGameInstance.Options.Find("SingleDayScenario");
+            if( true == option.IsEnabled )
+               outAction = GameAction.SetupShowSingleDayBattleStart;
+            else
+               outAction = GameAction.SetupShowCombatCalendarCheck;
+         }
          else if( GamePhase.MorningBriefing == myGameInstance.GamePhase )
+         {
             outAction = GameAction.MorningBriefingDayOfRest;
-         else if( 0 < myGameInstance.ShermanAdvanceOrRetreatEnemies.Count) 
+         }
+         else if( 0 < myGameInstance.ShermanAdvanceOrRetreatEnemies.Count)
+         {
             outAction = GameAction.BattleRoundSequenceCrewReplaced; // enemies transfer to Move board due to advancing or retreating Sherman
+         }
          else
-            outAction = GameAction.BattleCrewReplaced; 
+         {
+            outAction = GameAction.BattleCrewReplaced;
+         }
          StringBuilder sb11 = new StringBuilder("     ######Show_CrewRatingResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
@@ -5506,6 +5559,14 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "Continue005":
+                           Option optionSingleDayScenario = myGameInstance.Options.Find("SingleDayScenario");
+                           if( true == optionSingleDayScenario.IsEnabled )
+                              action = GameAction.SetupSingleGameDay;
+                           else
+                              action = GameAction.SetupAssignCrewRating;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "Continue005a":
                            action = GameAction.SetupAssignCrewRating;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
@@ -5572,8 +5633,8 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "GotoMorningAmmoLimitsSetEnd":
-                           Option option = myGameInstance.Options.Find("AutoRollAmmoLoad");
-                           if(true == option.IsEnabled)
+                           Option optionAutoRollAmmoLoad = myGameInstance.Options.Find("AutoRollAmmoLoad");
+                           if(true == optionAutoRollAmmoLoad.IsEnabled)
                               action = GameAction.MorningBriefingAmmoLoadSkip;
                            else
                               action = GameAction.MorningBriefingAmmoLoad;
@@ -5592,8 +5653,8 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "MorningBriefingDeploymentEnd":
-                           Option option1 = myGameInstance.Options.Find("AutoPreparation");
-                           if( true == option1.IsEnabled)
+                           Option optionAutoPreparation = myGameInstance.Options.Find("AutoPreparation");
+                           if( true == optionAutoPreparation.IsEnabled)
                            {
                               myGameInstance.GamePhase = GamePhase.Movement;
                               action = GameAction.PreparationsFinalSkip; // user skips battle prep steps and uses previous setup
@@ -6112,6 +6173,9 @@ namespace Pattons_Best
             case "   -   ":
                switch (name)
                {
+                  case "ButtonDecreaseDate":
+                     action = GameAction.SetupDecreaseDate;
+                     break;
                   case "ButtonDecreaseTankNum":
                      action = GameAction.MorningBriefingDecreaseTankNum;
                      break;
@@ -6148,6 +6212,9 @@ namespace Pattons_Best
             case "   +   ":
                switch (name)
                {
+                  case "ButtonIncreaseDate":
+                     action = GameAction.SetupIncreaseDate;
+                     break;
                   case "ButtonIncreaseTankNum":
                      action = GameAction.MorningBriefingIncreaseTankNum;
                      break;
@@ -6381,62 +6448,42 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "ShowTutorialScreens(): myGameEngine=null");
             return false;
          }
-         string name = "";
          Option option;
          //--------------------------
          {
-            name = "SkipTutorial1";
-            option = myGameInstance.Options.Find(name);
+            option = myGameInstance.Options.Find("SkipTutorial1");
             if (true == option.IsEnabled)
                action = GameAction.SetupShowMovementBoard;
          }
          if(GameAction.SetupShowMovementBoard == action)
          {
-            name = "SkipTutorial2";
-            option = myGameInstance.Options.Find(name);
-            if (null == option)
-            {
-               option = new Option(name, false);
-               myGameInstance.Options.Add(option);
-            }
+            option = myGameInstance.Options.Find("SkipTutorial2");
             if (true == option.IsEnabled)
                action = GameAction.SetupShowBattleBoard;
          }
          if (GameAction.SetupShowBattleBoard == action)
          {
-            name = "SkipTutorial3";
-            option = myGameInstance.Options.Find(name);
-            if (null == option)
-            {
-               option = new Option(name, false);
-               myGameInstance.Options.Add(option);
-            }
+            option = myGameInstance.Options.Find("SkipTutorial3");
             if (true == option.IsEnabled)
                action = GameAction.SetupShowTankCard;
          }
          if (GameAction.SetupShowTankCard == action)
          {
-            name = "SkipTutorial4";
-            option = myGameInstance.Options.Find(name);
-            if (null == option)
-            {
-               option = new Option(name, false);
-               myGameInstance.Options.Add(option);
-            }
+            option = myGameInstance.Options.Find("SkipTutorial4");
             if (true == option.IsEnabled)
                action = GameAction.SetupShowAfterActionReport;
          }
          if (GameAction.SetupShowAfterActionReport == action)
          {
-            name = "SkipTutorial5";
-            option = myGameInstance.Options.Find(name);
-            if (null == option)
-            {
-               option = new Option(name, false);
-               myGameInstance.Options.Add(option);
-            }
+            option = myGameInstance.Options.Find("SkipTutorial5");
             if (true == option.IsEnabled)
-               action = GameAction.SetupAssignCrewRating;
+            {
+               option = myGameInstance.Options.Find("SingleDayScenario");
+               if (true == option.IsEnabled)
+                  action = GameAction.SetupSingleGameDay;
+               else
+                  action = GameAction.SetupAssignCrewRating;
+            }
          }
          //action = GameAction.TestingStartMorningBriefing;  // <cgs> TEST - skip the ammo setup
          //action = GameAction.TestingStartPreparations;     // <cgs> TEST - skip morning briefing and crew/ammo setup

@@ -141,13 +141,7 @@ namespace Pattons_Best
       }
       public void SetValue(string key, bool value)
       {
-         Option? o = Find(key);
-         if (null == o)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "Option.SetValue(): null for key=" + key);
-            o = new Option(key, false);
-            this.myList.Add(o);
-         }
+         Option o = Find(key);
          o.IsEnabled = value;
       }
       public override string ToString()
