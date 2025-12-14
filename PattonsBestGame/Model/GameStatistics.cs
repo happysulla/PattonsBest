@@ -51,24 +51,8 @@ namespace Pattons_Best
       public static string[] theDefaults =
       {
          "NumDays",
-         "NumCampaignGames",
-         "NumCampaignWins",
-         "NumDailyGames",
-         "NumDailyWins",
+         "NumGames",
          "NumWins",
-         "NumLostTanks",
-         "NumOfBattles",
-         "NumOfKilledCrewman",
-         //------------
-         "ShermanExplodes",
-         "ShermanBurns",
-         "ShermanLostPenetration",
-         //--------------
-         "DayMaxBetweenCombat",
-         "MaxRollsForAirSupport",
-         "MaxRollsForArtillerySupport",
-         "MaxEnemiesInOneBattle",
-         "MaxRoundsOfCombat",
          //------------
          "NumKillLwFriendlyFire",
          "NumKillMgFriendlyFire",
@@ -110,7 +94,23 @@ namespace Pattons_Best
          "NumBronzeStars",
          "NumSilverStars",
          "NumDistinguishedCrosses",
-         "NumMedalOfHonors"
+         "NumMedalOfHonors",
+         //------------
+         "NumOfBattles",
+         "NumOfKilledCrewman",
+         "NumShermanExplodes",
+         "NumShermanBurns",
+         "NumShermanPenetration",
+         "NumPanzerfaultAttack",
+         "NumPanzerfaultDeath",
+         "NumMineAttack",
+         "NumMineImmobilization",
+         //--------------
+         "MaxRollsForAirSupport",
+         "MaxRollsForArtillerySupport",
+         "MaxDayBetweenCombat",
+         "MaxEnemiesInOneBattle",
+         "MaxRoundsOfCombat"
       };
       [NonSerialized] public static string theGameStatisticsDirectory = "";
       public static string GetStatisticMessage(GameStatistic stat)
@@ -144,17 +144,17 @@ namespace Pattons_Best
                sb.Append(" times");
                return sb.ToString();
             //------------
-            case "ShermanExplodes":
+            case "NumShermanExplodes":
                sb.Append("Sherman exploded ");
                sb.Append(stat.Value.ToString());
                sb.Append(" times");
                return sb.ToString();
-            case "ShermanBurns":
+            case "NumShermanBurns":
                sb.Append("Sherman brewup ");
                sb.Append(stat.Value.ToString());
                sb.Append(" times");
                return sb.ToString();
-            case "ShermanPenetration":
+            case "NumShermanPenetration":
                sb.Append("Sherman killed by penetration ");
                sb.Append(stat.Value.ToString());
                sb.Append(" times");

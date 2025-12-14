@@ -1142,16 +1142,16 @@ namespace Pattons_Best
                         }
                      }
                   }
-                  GameEngine.theInGameFeats.AddOne("ShermanExplodes");
-                  myGameInstance.Statistics.AddOne("ShermanExplodes");
+                  GameEngine.theInGameFeats.AddOne("NumShermanExplodes");
+                  myGameInstance.Statistics.AddOne("NumShermanExplodes");
                   outAction = GameAction.UpdateTankExplosion;
                   myGameEngine.PerformAction(ref myGameInstance, ref outAction);
                }
                else
                {
                   myGridRowExplodes[0].myExplosionResult = "Penetration";
-                  GameEngine.theInGameFeats.AddOne("ShermanPenetration");
-                  myGameInstance.Statistics.AddOne("ShermanPenetration");
+                  GameEngine.theInGameFeats.AddOne("NumShermanPenetration");
+                  myGameInstance.Statistics.AddOne("NumShermanPenetration");
                }
                myState = E0481Enum.TANK_EXPLOSION_ROLL_SHOW;
                break;
@@ -1340,8 +1340,8 @@ namespace Pattons_Best
                         }
                      }
                   }
-                  GameEngine.theInGameFeats.AddOne("ShermanBurns");
-                  myGameInstance.Statistics.AddOne("ShermanBurns");
+                  GameEngine.theInGameFeats.AddOne("NumShermanBurns");
+                  myGameInstance.Statistics.AddOne("NumShermanBurns");
                   outAction = GameAction.UpdateTankBrewUp;
                   myGameEngine.PerformAction(ref myGameInstance, ref outAction);
                }

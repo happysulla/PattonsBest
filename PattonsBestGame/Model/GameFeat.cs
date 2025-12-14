@@ -57,18 +57,9 @@ namespace Pattons_Best
          "EndCampaignGame",
          "EndCampaignGameOnTime",
          "EndCampaignGameWin",
+         "EndSingleDayWin",
          "EndGameExplode",
          "EndGameCmdrKilled", 
-         //------------
-         "ShermanExplodes",
-         "ShermanBurns",
-         "ShermanPenetration",
-         //------------
-         "HvssTrained",
-         "RepairMain",
-         "RepairMg",
-         "FireMortar",
-         "ThrowSmoke", 
          //------------
          "NumKillLwFriendlyFire",
          "NumKillMgFriendlyFire",
@@ -110,7 +101,19 @@ namespace Pattons_Best
          "NumBronzeStars",
          "NumSilverStars",
          "NumDistinguishedCrosses",
-         "NumMedalOfHonors"
+         "NumMedalOfHonors",
+         //------------
+         "HvssTrained",
+         "RepairMain",
+         "RepairMg",
+         "FireMortar",
+         "ThrowSmoke",
+         //------------
+         "NumShermanExplodes",
+         "NumShermanBurns",
+         "NumShermanPenetration",
+         "NumPanzerfaustDeath",
+         "NumMineImmobilization"
       };
       private readonly ArrayList myList;
       public static string GetFeatMessage(GameFeat feat, bool isThreshold = false)
@@ -121,75 +124,9 @@ namespace Pattons_Best
             case "EndCampaignGame": return "Complete a campaign game";
             case "EndCampaignGameOnTime": return "Last all days of a campaign";
             case "EndCampaignGameWin": return "Win a campaign game";
+            case "EndSingleDayWin": return "Win a Single Day Game";
             case "EndGameExplode": return "Game ends with tank explosion";
             case "EndGameCmdrKilled": return "Game ends with commander killed";
-            //------------
-            case "ShermanExplodes":
-               sb.Append("Sherman exploded ");
-               sb.Append(feat.Value.ToString());
-               if ( true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
-               sb.Append(" times");
-               return sb.ToString();
-            case "ShermanBurns":
-               sb.Append("Sherman brewup ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
-               sb.Append(" times");
-               return sb.ToString();
-            case "ShermanPenetration":
-               sb.Append("Sherman killed by penetration ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-               {
-                  sb.Append(" out of ");
-                  sb.Append(feat.Threshold.ToString());
-               }
-               sb.Append(" times");
-               return sb.ToString();
-            //------------
-            case "HvssTrained": 
-               sb.Append("Trained on HVSS that allows firing when moving ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-                  sb.Append(" out of 1");
-               sb.Append(" times");
-               return sb.ToString();
-            case "RepairMain": 
-               sb.Append("Repair the main gun in battle ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-                  sb.Append(" out of 1");
-               sb.Append(" times");
-               return sb.ToString();
-            case "RepairMg":
-               sb.Append("Repair the disabled MG in battle ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-                  sb.Append(" out of 1");
-               sb.Append(" times");
-               return sb.ToString();
-            case "FireMortar":
-               sb.Append("Sherman fires a mortar ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-                  sb.Append(" out of 1");
-               sb.Append(" times");
-               return sb.ToString();
-            case "ThrowSmoke":
-               sb.Append("Throw smoke out of tank hatch ");
-               sb.Append(feat.Value.ToString());
-               if (true == isThreshold)
-                  sb.Append(" out of 1");
-               sb.Append(" times");
-               return sb.ToString();
             //------------
             case "NumKillLwFriendlyFire":
                sb.Append("Killed LW units with friendly fire ");
@@ -574,6 +511,75 @@ namespace Pattons_Best
                   sb.Append(" out of 1");
                sb.Append(" times!!!!!!!!!!!!");
                return sb.ToString();
+            //------------
+            case "HvssTrained":
+               sb.Append("Trained on HVSS that allows firing when moving ");
+               sb.Append(feat.Value.ToString());
+               if (true == isThreshold)
+                  sb.Append(" out of 1");
+               sb.Append(" times");
+               return sb.ToString();
+            case "RepairMain":
+               sb.Append("Repair the main gun in battle ");
+               sb.Append(feat.Value.ToString());
+               if (true == isThreshold)
+                  sb.Append(" out of 1");
+               sb.Append(" times");
+               return sb.ToString();
+            case "RepairMg":
+               sb.Append("Repair the disabled MG in battle ");
+               sb.Append(feat.Value.ToString());
+               if (true == isThreshold)
+                  sb.Append(" out of 1");
+               sb.Append(" times");
+               return sb.ToString();
+            case "FireMortar":
+               sb.Append("Sherman fires a mortar ");
+               sb.Append(feat.Value.ToString());
+               if (true == isThreshold)
+                  sb.Append(" out of 1");
+               sb.Append(" times");
+               return sb.ToString();
+            case "ThrowSmoke":
+               sb.Append("Throw smoke out of tank hatch ");
+               sb.Append(feat.Value.ToString());
+               if (true == isThreshold)
+                  sb.Append(" out of 1");
+               sb.Append(" times");
+               return sb.ToString();
+            //------------
+            case "NumShermanExplodes":
+               sb.Append("Sherman exploded ");
+               sb.Append(feat.Value.ToString());
+               if (true == isThreshold)
+               {
+                  sb.Append(" out of ");
+                  sb.Append(feat.Threshold.ToString());
+               }
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumShermanBurns":
+               sb.Append("Sherman brewup ");
+               sb.Append(feat.Value.ToString());
+               if (true == isThreshold)
+               {
+                  sb.Append(" out of ");
+                  sb.Append(feat.Threshold.ToString());
+               }
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumShermanPenetration":
+               sb.Append("Sherman killed by penetration ");
+               sb.Append(feat.Value.ToString());
+               if (true == isThreshold)
+               {
+                  sb.Append(" out of ");
+                  sb.Append(feat.Threshold.ToString());
+               }
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumPanzerfaustDeath": return "Tank destroyed from Panzerfaust attack";
+            case "NumMineImmobilization": return "Mine attack causes Sherman immobilization";
             default:
                Logger.Log(LogEnum.LE_ERROR, "GetFeatMessage(): Unknown key=" + feat.Key);
                return "UNKNOWN: " + feat.Key;
@@ -692,9 +698,9 @@ namespace Pattons_Best
             int threshold = 0;
             switch (feat.Key)
             {
-               case "ShermanExplodes": threshold = 3; break;
-               case "ShermanBurns": threshold = 5; break;
-               case "ShermanPenetration": threshold = 8; break;
+               case "NumShermanExplodes": threshold = 3; break;
+               case "NumShermanBurns": threshold = 5; break;
+               case "NumShermanPenetration": threshold = 8; break;
                //-------------------------------------------
                case "NumKillLwFriendlyFire": threshold = 12; break;
                case "NumKillMgFriendlyFire": threshold = 10; break;

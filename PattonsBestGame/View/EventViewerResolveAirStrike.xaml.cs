@@ -235,7 +235,11 @@ namespace Pattons_Best
          myMaxRowCount = i;
          //--------------------------------------------------
          for(int k=0; k<myMaxRowCount; ++k )
+         {
             myGridRows[k].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[k].myMapItemEnemy, myNumUseControlled, false, false, true);
+            if (TableMgr.FN_ERROR == myGridRows[k].myModifier)
+               Logger.Log(LogEnum.LE_ERROR, "ResolveAirStrike(): GetFriendlyActionModifier() return false");
+         }
          //--------------------------------------------------
          if (false == UpdateGrid())
          {
@@ -514,7 +518,11 @@ namespace Pattons_Best
             for (int j = 0; j < myMaxRowCount; ++j)
             {
                if (Utilities.NO_RESULT == myGridRows[j].myDieRoll)
+               {
                   myGridRows[j].myModifier = TableMgr.GetFriendlyActionModifier(myGameInstance, myGridRows[j].myMapItemEnemy, myNumUseControlled, false, false, true);
+                  if (TableMgr.FN_ERROR == myGridRows[j].myModifier)
+                     Logger.Log(LogEnum.LE_ERROR, "EventViewerResolveAirStrike.ShowDieResults(): GetFriendlyActionModifier() return false");
+               }
             }
          }
          //-------------------------------

@@ -19,6 +19,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml;
 using WpfAnimatedGif;
+using static System.Windows.Forms.AxHost;
 using Button = System.Windows.Controls.Button;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Point = System.Windows.Point;
@@ -197,13 +198,20 @@ namespace Pattons_Best
          GameEngine.theStartingFeats.SetGameFeatThreshold();
          Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameViewerWindow():\n  feats=" + GameEngine.theInGameFeats.ToString() + "\n Sfeats=" + GameEngine.theStartingFeats.ToString());
          //---------------------------------------------------------------
-         if (false == DeserializeGameStatistics(GameEngine.theTotalStatistics))
+         if (false == DeserializeGameStatistics(GameEngine.theCampaignStatistics, "stat1"))
          {
-            Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): DeserializeGameStatistics() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): DeserializeGameStatistics(theCampaignStatistics) returned false");
             CtorError = true;
             return;
          }
-         Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "GameViewerWindow(): GameEngine.theTotalStatistics=" + GameEngine.theTotalStatistics.ToString());
+         Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "GameViewerWindow(): GameEngine.theCampaignStatistics=" + GameEngine.theCampaignStatistics.ToString());
+         if (false == DeserializeGameStatistics(GameEngine.theSingleDayStatistics, "stat0"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): DeserializeGameStatistics(theSingleDayStatistics) returned false");
+            CtorError = true;
+            return;
+         }
+         Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "GameViewerWindow(): GameEngine.theSingleDayStatistics=" + GameEngine.theSingleDayStatistics.ToString());
          //---------------------------------------------------------------
          if (false == DeserializeRoadsFromXml())
          {
@@ -592,19 +600,19 @@ namespace Pattons_Best
                break;
             case GameAction.EndGameShowStats:
                if (false == UpdateCanvasShowStatistics(gi))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): SerializeGameStatistics() returned error ");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Update_CanvasShowStatistics() returned error ");
                break;
             case GameAction.UpdateTankExplosion:
             case GameAction.UpdateTankBrewUp:
             case GameAction.BattleShermanKilled:
             default:
                if (false == UpdateCanvasMain(gi, action))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Update_CanvasMain() returned error ");
                break;
          }
          //-------------------------------------------------------
          if (false == UpdateCanvasTank(gi, action))
-            Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasTank() returned error for action=" + action.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Update_CanvasTank() returned error for action=" + action.ToString());
       }
       private bool UpdateViewForNewGame(ref IGameInstance gi, GameAction action) // GameAction.UpdateLoadingGame  GameAction.UpdateNewGame
       {
@@ -652,15 +660,30 @@ namespace Pattons_Best
       }
       private string UpdateViewTitle(IGameInstance gi, IAfterActionReport report)
       {
+         Option optionSingleDayScenario = gi.Options.Find("SingleDayScenario");
          StringBuilder sb = new StringBuilder();
          sb.Append("Patton's Best  -  ");
-         sb.Append(report.Scenario.ToString());
-         sb.Append("  -  ");
-         sb.Append(report.Resistance.ToString());
-         sb.Append("  -  ");
+         if( true == optionSingleDayScenario.IsEnabled )
+            sb.Append("Single Day, ");
+         else
+            sb.Append("Campaign Game, ");
+         int index= gi.Options.GetGameIndex();
+         if( 0 == index )
+            sb.Append("Original Game:    ");
+         else if ( 1 == index )
+            sb.Append("General v24 No3 Game:    ");
+         else if (2 == index)
+            sb.Append("Enhanced Game:    ");
+         else 
+            sb.Append("Custom Game:    ");
          sb.Append(TableMgr.GetDate(gi.Day));
          sb.Append(" ");
          sb.Append(TableMgr.GetTime(report));
+         sb.Append("  -  ");
+         sb.Append(report.Scenario.ToString());
+         sb.Append(" Scenario -  ");
+         sb.Append(report.Resistance.ToString());
+         sb.Append(" Resistance Expected");
          return sb.ToString();
       }
       //-----------------------SUPPORTING FUNCTIONS--------------------
@@ -1830,7 +1853,7 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool DeserializeGameStatistics(GameStatistics statistics)
+      private bool DeserializeGameStatistics(GameStatistics statistics, string filename)
       {
          statistics.Clear();
          CultureInfo currentCulture = CultureInfo.CurrentCulture;
@@ -1838,8 +1861,8 @@ namespace Pattons_Best
          XmlTextReader? reader = null;
          try
          {
-            string filename = GameStatistics.theGameStatisticsDirectory + "stats.xml";
-            reader = new XmlTextReader(filename) { WhitespaceHandling = WhitespaceHandling.None };
+            string qualifiedFilename = GameStatistics.theGameStatisticsDirectory + filename;
+            reader = new XmlTextReader(qualifiedFilename) { WhitespaceHandling = WhitespaceHandling.None };
             reader.Read();
             if (false == reader.IsStartElement())
             {
@@ -3152,7 +3175,7 @@ namespace Pattons_Best
       {
          if( null == myDieRoller )
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasShowStatistics(): myDieRoller=null");
+            Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatistics(): myDieRoller=null");
             return false;
          }
          myMoveButtons.Clear();
@@ -3180,16 +3203,60 @@ namespace Pattons_Best
             myCanvasMain.Children.Remove(ui1);
          myDieRoller.HideDie();
          //-------------------------------
-         gi.Statistics.AddOne("NumDays");  // add one to get rid of zero index
-         bool isMultipleGameTypesPlayed = UpdateCanvasShowStatsAdds(gi.Statistics);
-         //-------------------------------
          myTextBoxMarquee.Inlines.Clear();
          myTextBoxMarquee.Inlines.Add(new Run("Current Game Statistics:") { FontWeight = FontWeights.Bold, FontStyle = FontStyles.Italic, TextDecorations = TextDecorations.Underline });
-         UpdateCanvasShowStatsText(myTextBoxMarquee, gi.Statistics);
+         if (false == UpdateCanvasShowStatsText(myTextBoxMarquee, gi.Statistics))
+         {
+            Logger.Log(LogEnum.LE_VIEW_SHOW_SETTINGS, "GameViewerWindow.Update_CanvasShowStatistics(): UpdateCanvasShowStatsText() returned false");
+            return false;
+         }
          //-------------------------------
-         Logger.Log(LogEnum.LE_VIEW_SHOW_SETTINGS, "GameViewerWindow.UpdateCanvasShowStatistics(): Called SaveDefaultsToSettings()");
-         SaveDefaultsToSettings(); 
+         bool isMultipleGameTypesPlayed = false;
+         Option optionSingleDayGame = gi.Options.Find("SingleDayScenario");
+         if( true == optionSingleDayGame.IsEnabled)
+         {
+            if (false == DeserializeGameStatistics(GameEngine.theSingleDayStatistics, "stat0"))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatsAdds(): DeserializeGameStatistics(theSingleDayStatistics) returned false");
+               return false;
+            }
+            isMultipleGameTypesPlayed = UpdateCanvasShowStatsAdds(gi.Statistics, GameEngine.theSingleDayStatistics);
+            Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): GameEngine.theSingleDayStatistics=" + GameEngine.theSingleDayStatistics.ToString());
+            if (true == isMultipleGameTypesPlayed)
+            {
+               myTextBoxMarquee.Inlines.Add(new LineBreak());
+               myTextBoxMarquee.Inlines.Add(new LineBreak());
+               string title2 = "Single Games Statistics:";
+               myTextBoxMarquee.Inlines.Add(new Run(title2) { FontWeight = FontWeights.Bold, FontStyle = FontStyles.Italic, TextDecorations = TextDecorations.Underline });
+               UpdateCanvasShowStatsText(myTextBoxMarquee, GameEngine.theSingleDayStatistics);
+            }
+         }
+         else
+         {
+            if (false == DeserializeGameStatistics(GameEngine.theCampaignStatistics, "stat1"))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatsAdds(): DeserializeGameStatistics(theCampaignStatistics) returned false");
+               return false;
+            }
+            isMultipleGameTypesPlayed = UpdateCanvasShowStatsAdds(gi.Statistics, GameEngine.theCampaignStatistics);
+            Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): GameEngine.theCampaignStatistics=" + GameEngine.theCampaignStatistics.ToString());
+            if (true == isMultipleGameTypesPlayed)
+            {
+               myTextBoxMarquee.Inlines.Add(new LineBreak());
+               myTextBoxMarquee.Inlines.Add(new LineBreak());
+               string title2 = "Campaign Games Statistics:";
+               myTextBoxMarquee.Inlines.Add(new Run(title2) { FontWeight = FontWeights.Bold, FontStyle = FontStyles.Italic, TextDecorations = TextDecorations.Underline });
+               UpdateCanvasShowStatsText(myTextBoxMarquee, GameEngine.theCampaignStatistics);
+            }
+         }
          //-------------------------------
+         if (false == DeserializeGameStatistics(GameEngine.theTotalStatistics, "stat2"))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatsAdds(): DeserializeGameStatistics(theTotalStatistics) returned false");
+            return false;
+         }
+         Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): GameEngine.theTotalStatistics=" + GameEngine.theTotalStatistics.ToString());
+         isMultipleGameTypesPlayed = UpdateCanvasShowStatsAdds(gi.Statistics, GameEngine.theTotalStatistics);
          if (true == isMultipleGameTypesPlayed)
          {
             myTextBoxMarquee.Inlines.Add(new LineBreak());
@@ -3212,58 +3279,132 @@ namespace Pattons_Best
          Storyboard.SetTargetProperty(doubleAnimation, new PropertyPath(Canvas.BottomProperty));
          myStoryboard.Children.Add(doubleAnimation);
          myStoryboard.Begin(this, true);
+         //-------------------------------
+         Logger.Log(LogEnum.LE_VIEW_SHOW_SETTINGS, "GameViewerWindow.Update_CanvasShowStatistics(): Called SaveDefaultsToSettings()");
+         SaveDefaultsToSettings();
          return true;
       }
-      private bool UpdateCanvasShowStatsAdds(GameStatistics stats)
+      private bool UpdateCanvasShowStatsAdds(GameStatistics statistics, GameStatistics totalStatistics)
       {
-         bool isMultipleGameTypesPlayed = false;
+         //-------------------------------------
+         foreach (GameStatistic numOneGame in statistics)
+         {
+            if (true == numOneGame.Key.Contains("Num"))
+            {
+               GameStatistic statAllNum = totalStatistics.Find(numOneGame.Key);
+               statAllNum.Value += numOneGame.Value;
+            }
+         }
+         //-------------------------------------
+         foreach (GameStatistic maxOneGame in statistics)
+         {
+            if (true == maxOneGame.Key.Contains("Max"))
+            {
+               GameStatistic statAllMax = totalStatistics.Find(maxOneGame.Key);
+               statAllMax.Value += maxOneGame.Value;
+            }
+         }
+         //-----------------------------------------
          GameStatistic stat = GameEngine.theTotalStatistics.Find("NumGames");
          if (0 < stat.Value)
-            isMultipleGameTypesPlayed = true;
-         ++stat.Value;
-         //-----------------------------------------
-
-
-         return isMultipleGameTypesPlayed;
+            return true;
+         else
+            return false;
       }
-      private void UpdateCanvasShowStatsText(TextBlock tb, GameStatistics statistics)
+      private bool UpdateCanvasShowStatsText(TextBlock tb, GameStatistics statistics)
       {
          GameStatistic numGames = statistics.Find("NumGames");
-         GameStatistic numWins = statistics.Find("NumWins");
+         if( 0 == numGames.Value )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasShowStatsText(): numGames=0");
+            return false;
+         }
          GameStatistic numDays = statistics.Find("NumDays");
-         GameStatistic numLostTanks = statistics.Find("NumLostTanks");
-         GameStatistic numBattles = statistics.Find("NumOfBattles");
-         GameStatistic numKilledCrewman = statistics.Find("NumOfKilledCrewman");
-         GameStatistic numKilledEnemy= statistics.Find("NumOfEnemyKills");
+         if (0 == numDays.Value)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasShowStatsText(): numDays=0");
+            return false;
+         }
+         GameStatistic numWins = statistics.Find("NumWins");
+         GameStatistic numOfBattles = statistics.Find("NumOfBattles");
+         GameStatistic numOfKilledCrewman = statistics.Find("NumOfKilledCrewman");
+         GameStatistic numShermanExplodes = statistics.Find("NumShermanExplodes");
+         GameStatistic numShermanBurns = statistics.Find("NumShermanBurns");
+         GameStatistic numShermanPenetrations = statistics.Find("NumShermanPenetration");
+         GameStatistic numPanzerfaultAttacks = statistics.Find("NumPanzerfaultAttack");
+         GameStatistic numPanzerfaultDeaths = statistics.Find("NumPanzerfaultDeath");
+         GameStatistic numMineAttack = statistics.Find("NumMineAttack");
+         GameStatistic numMineImmobilization = statistics.Find("NumMineImmobilization");
+         int numLostTanks = numShermanExplodes.Value + numShermanBurns.Value + numShermanPenetrations.Value;
+         int numKilledEnemyFriendlyFire = 0;
+         int numKilledEnemyYourFire = 0;
+         foreach(GameStatistic stat in statistics)
+         {
+            if (true == stat.Key.Contains("FriendlyFire")) numKilledEnemyFriendlyFire += stat.Value;
+            if (true == stat.Key.Contains("YourFire")) numKilledEnemyYourFire += stat.Value;
+         }
+         int numKilledEnemyTotal = numKilledEnemyFriendlyFire + numKilledEnemyYourFire;
+         int average = 0;
          if (1 < numGames.Value)
          {
             tb.Inlines.Add(new LineBreak());
             tb.Inlines.Add(new Run("Games = " + numGames.Value.ToString()) { FontWeight = FontWeights.Bold });
-            int winRatio = (int)Math.Round(100.0 * ((double)numGames.Value / (double)numWins.Value));
+            int winRatio = 0;
+            if (0 < numWins.Value)
+               winRatio = (int)Math.Round(100.0 * ((double)numGames.Value / (double)numWins.Value));
             tb.Inlines.Add(new LineBreak());
             tb.Inlines.Add(new Run("% Wins = " + winRatio.ToString()) { FontWeight = FontWeights.Bold });
             //-------------------------------------
             tb.Inlines.Add(new LineBreak());
-            int average = numDays.Value / numGames.Value;
+            average = numDays.Value / numGames.Value;
             tb.Inlines.Add(new Run("Average Days per Game = " + average.ToString()) { FontWeight = FontWeights.Bold });
             //-------------------------------------
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Lost Tanks = " + numLostTanks.Value.ToString()) { FontWeight = FontWeights.Bold });
-            tb.Inlines.Add(new LineBreak());
-            average = numLostTanks.Value / numGames.Value;
-            tb.Inlines.Add(new Run("Average Num Days between Lost Tanks = " + average.ToString()) { FontWeight = FontWeights.Bold });
+            if (0 < numLostTanks)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Lost Tanks = " + numLostTanks.ToString()) { FontWeight = FontWeights.Bold });
+               tb.Inlines.Add(new LineBreak());
+               average = numLostTanks / numDays.Value;
+               tb.Inlines.Add(new Run("Average Num Days between Lost Tanks = " + average.ToString()) { FontWeight = FontWeights.Bold });
+            }
             //-------------------------------------
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Lost Tanks = " + numLostTanks.Value.ToString()) { FontWeight = FontWeights.Bold });
-            tb.Inlines.Add(new LineBreak());
-            average = numKilledCrewman.Value / numGames.Value;
-            tb.Inlines.Add(new Run("Average Num Days for Killed Crewman = " + average.ToString()) { FontWeight = FontWeights.Bold });
+            if( 0 < numOfKilledCrewman.Value )
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Killed Crewmen = " + numOfKilledCrewman.Value.ToString()) { FontWeight = FontWeights.Bold });
+               tb.Inlines.Add(new LineBreak());
+               average = numDays.Value / numOfKilledCrewman.Value;
+               tb.Inlines.Add(new Run("Average Num Days per Killed Crewman = " + average.ToString()) { FontWeight = FontWeights.Bold });
+               average = numOfKilledCrewman.Value / numGames.Value;
+               tb.Inlines.Add(new Run("Average Crewmen Killed Per Day = " + average.ToString()) { FontWeight = FontWeights.Bold });
+            }
             //-------------------------------------
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Killed Enemy = " + numKilledEnemy.Value.ToString()) { FontWeight = FontWeights.Bold });
-            tb.Inlines.Add(new LineBreak());
-            average = numKilledEnemy.Value / numGames.Value;
-            tb.Inlines.Add(new Run("Average Num Days for Killed Enemy = " + average.ToString()) { FontWeight = FontWeights.Bold });
+            if( 0 < numKilledEnemyTotal )
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Killed Enemy = " + numKilledEnemyTotal.ToString()) { FontWeight = FontWeights.Bold });
+               tb.Inlines.Add(new LineBreak());
+               average = numKilledEnemyTotal / numGames.Value;
+               tb.Inlines.Add(new Run("Average Num Days for Killed Enemy = " + average.ToString()) { FontWeight = FontWeights.Bold });
+            }
+            //-------------------------------------
+            if (0 < numKilledEnemyYourFire)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Killed Enemy Your Tank = " + numKilledEnemyYourFire.ToString()) { FontWeight = FontWeights.Bold });
+               tb.Inlines.Add(new LineBreak());
+               average = numKilledEnemyYourFire / numGames.Value;
+               tb.Inlines.Add(new Run("Average Num Days for Killed Enemy = " + average.ToString()) { FontWeight = FontWeights.Bold });
+            }
+            //-------------------------------------
+            if (0 < numKilledEnemyFriendlyFire)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Killed Enemy Your Tank = " + numKilledEnemyFriendlyFire.ToString()) { FontWeight = FontWeights.Bold });
+               tb.Inlines.Add(new LineBreak());
+               average = numKilledEnemyFriendlyFire / numGames.Value;
+               tb.Inlines.Add(new Run("Average Num Days for Killed Enemy = " + average.ToString()) { FontWeight = FontWeights.Bold });
+            }
          }
          else
          {
@@ -3274,15 +3415,156 @@ namespace Pattons_Best
             tb.Inlines.Add(new LineBreak());
             tb.Inlines.Add(new Run("Days = " + numDays.Value.ToString()) { FontWeight = FontWeights.Bold });
             //-------------------------------------
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Lost Tanks = " + numLostTanks.Value.ToString()) { FontWeight = FontWeights.Bold });
+            if( 0 < numLostTanks )
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Lost Tanks = " + numLostTanks.ToString()) { FontWeight = FontWeights.Bold });
+            }
             //-------------------------------------
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Killed Crewman = " + numKilledCrewman.Value.ToString()) { FontWeight = FontWeights.Bold });
+            if (0 < numOfKilledCrewman.Value)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Killed Crewmen = " + numOfKilledCrewman.Value.ToString()) { FontWeight = FontWeights.Bold });
+               tb.Inlines.Add(new LineBreak());
+               average = numDays.Value / numOfKilledCrewman.Value;
+               tb.Inlines.Add(new Run("Average Num Days per Killed Crewman = " + average.ToString()) { FontWeight = FontWeights.Bold });
+            }
             //-------------------------------------
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Killed Enemy = " + numKilledEnemy.Value.ToString()) { FontWeight = FontWeights.Bold });
+            if (0 < numKilledEnemyTotal)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Killed Enemy = " + numKilledEnemyTotal.ToString()) { FontWeight = FontWeights.Bold });
+            }
+            //-------------------------------------
+            if (0 < numKilledEnemyYourFire)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Killed Enemy Your Tank = " + numKilledEnemyYourFire.ToString()) { FontWeight = FontWeights.Bold });
+            }
+            //-------------------------------------
+            if (0 < numKilledEnemyFriendlyFire)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Killed Enemy Friendly Fire = " + numKilledEnemyFriendlyFire.ToString()) { FontWeight = FontWeights.Bold });
+            }
+            //-------------------------------------
+            if (0 < numKilledEnemyFriendlyFire)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Killed Enemy Friendly Fire = " + numKilledEnemyFriendlyFire.ToString()) { FontWeight = FontWeights.Bold });
+            }
          }
+         //-------------------------------------
+         GameStatistic numPurpleHearts = statistics.Find("NumPurpleHearts");
+         if (0 < numPurpleHearts.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Num Purple Hearts = " + numPurpleHearts.Value.ToString()) { FontWeight = FontWeights.Bold });
+         }
+         GameStatistic numBronzeStars = statistics.Find("NumBronzeStars");
+         if (0 < numBronzeStars.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Num Bronze Stars = " + numBronzeStars.Value.ToString()) { FontWeight = FontWeights.Bold });
+         }
+         GameStatistic numSilverStars = statistics.Find("NumSilverStars");
+         if (0 < numSilverStars.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Num Bronze Stars = " + numSilverStars.Value.ToString()) { FontWeight = FontWeights.Bold });
+         }
+         GameStatistic numDistinguishedCrosses = statistics.Find("NumDistinguishedCrosses");
+         if (0 < numDistinguishedCrosses.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Num Bronze Stars = " + numDistinguishedCrosses.Value.ToString()) { FontWeight = FontWeights.Bold });
+         }
+         GameStatistic numMedalOfHonors = statistics.Find("NumMedalOfHonors");
+         if (0 < numMedalOfHonors.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Num Bronze Stars = " + numMedalOfHonors.Value.ToString()) { FontWeight = FontWeights.Bold });
+         }
+         //-------------------------------------
+         if (0 < numPanzerfaultAttacks.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Panzerfaust Attacks = " + numPanzerfaultAttacks.ToString()) { FontWeight = FontWeights.Bold });
+            tb.Inlines.Add(new LineBreak());
+            average = numPanzerfaultDeaths.Value / numPanzerfaultAttacks.Value;
+            tb.Inlines.Add(new Run("Average Kills per PzFaust Attack = " + average.ToString()) { FontWeight = FontWeights.Bold });
+         }
+         if (0 < numMineAttack.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Mine Attacks = " + numMineAttack.ToString()) { FontWeight = FontWeights.Bold });
+            tb.Inlines.Add(new LineBreak());
+            average = numMineImmobilization.Value / numPanzerfaultAttacks.Value;
+            tb.Inlines.Add(new Run("Average Mine Immobilizations = " + average.ToString()) { FontWeight = FontWeights.Bold });
+         }
+         //-------------------------------------
+         GameStatistic maxDayBetweenCombat = statistics.Find("MaxDayBetweenCombat");
+         if (0 < maxDayBetweenCombat.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Maximum Days Between Combat = " + maxDayBetweenCombat.Value.ToString()) { FontWeight = FontWeights.Bold });
+         }
+         GameStatistic maxRollsForAirSupport = statistics.Find("MaxRollsForAirSupport");
+         if (0 < maxRollsForAirSupport.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Maximum Rolls For Air Support = " + maxRollsForAirSupport.Value.ToString()) { FontWeight = FontWeights.Bold });
+         }
+         GameStatistic maxRollsForArtillerySupport = statistics.Find("MaxRollsForArtillerySupport");
+         if (0 < maxRollsForArtillerySupport.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Maximum Rolls For Air Support = " + maxRollsForArtillerySupport.Value.ToString()) { FontWeight = FontWeights.Bold });
+         }
+         GameStatistic maxEnemiesInOneBattle = statistics.Find("MaxEnemiesInOneBattle");
+         if (0 < maxEnemiesInOneBattle.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Maximum Rolls For Air Support = " + maxEnemiesInOneBattle.Value.ToString()) { FontWeight = FontWeights.Bold });
+         }
+         GameStatistic maxRoundsOfCombat = statistics.Find("MaxRoundsOfCombat");
+         if (0 < maxRoundsOfCombat.Value)
+         {
+            tb.Inlines.Add(new LineBreak());
+            tb.Inlines.Add(new Run("Maximum Rolls For Air Support = " + maxRoundsOfCombat.Value.ToString()) { FontWeight = FontWeights.Bold });
+         }
+         //-------------------------------------
+         foreach (GameStatistic kill in statistics)
+         {
+            StringBuilder sb = new StringBuilder();
+            if (true == kill.Key.Contains("FriendlyFire"))
+            {
+               if (0 < kill.Value)
+               {
+                  int index = kill.Key.IndexOf("Friendly");
+                  sb.Append(" Killed by Friendly Fire ");
+                  sb.Append(kill.Key.Substring(8, index));
+                  sb.Append(" = ");
+                  sb.Append(kill.Value.ToString());
+                  tb.Inlines.Add(new LineBreak());
+                  tb.Inlines.Add(new Run(sb.ToString()) { FontWeight = FontWeights.Bold });
+               }
+            }
+            if (true == kill.Key.Contains("YourFire"))
+            {
+               if (0 < kill.Value)
+               {
+                  int index = kill.Key.IndexOf("Your");
+                  sb.Append(" Killed by Your Fire ");
+                  sb.Append(kill.Key.Substring(8, index));
+                  sb.Append(" = ");
+                  sb.Append(kill.Value.ToString());
+                  tb.Inlines.Add(new LineBreak());
+                  tb.Inlines.Add(new Run(sb.ToString()) { FontWeight = FontWeights.Bold });
+               }
+            }
+         }
+         return true;
       }
       //---------------------------------------
       private bool UpdateCanvasMainSpottingLoader(IGameInstance gi, GameAction action)

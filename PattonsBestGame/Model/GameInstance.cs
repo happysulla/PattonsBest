@@ -18,10 +18,16 @@ namespace Pattons_Best
       static public Logger Logger = new Logger();
       public bool CtorError { get; } = false;
       public IGameCommands GameCommands { set; get; } = new GameCommands();
-      public Options Options { get; set; } = new Options();
-      public GameStatistics Statistics { get; set; } = new GameStatistics();
       private Dictionary<string, int[]> myDieResults = new Dictionary<string, int[]>();
       public Dictionary<string, int[]> DieResults { get => myDieResults; }
+      //------------------------------------------------
+      public Options Options { get; set; } = new Options();
+      public GameStatistics Statistics { get; set; } = new GameStatistics();
+      public int MaxDayBetweenCombat { get; set; } = 0;
+      public int MaxRollsForAirSupport { get; set; } = 0;
+      public int MaxRollsForArtillerySupport { get; set; } = 0;
+      public int MaxEnemiesInOneBattle { get; set; } = 0;
+      public int MaxRoundsOfCombat { get; set; } = 0;
       //------------------------------------------------
       public bool IsMultipleSelectForDieResult { set; get; } = false;
       public bool IsGridActive { set; get; } = false;

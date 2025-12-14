@@ -4154,22 +4154,22 @@ namespace Pattons_Best
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetFriendlyActionModifier(): unknown enemyUnit=" + mi.Name);
-            return -100;
+            Logger.Log(LogEnum.LE_ERROR, "Get_FriendlyActionModifier(): unknown enemyUnit=" + mi.Name);
+            return FN_ERROR;
          }
          //----------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetFriendlyActionModifier(): lastReport=null");
-            return -100;
+            Logger.Log(LogEnum.LE_ERROR, "Get_FriendlyActionModifier(): lastReport=null");
+            return FN_ERROR;
          }
          //----------------------------------------------------
          IStack? stack = gi.BattleStacks.Find(mi.TerritoryCurrent);
          if (null == stack)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetFriendlyActionModifier(): stack=null for t=" + mi.TerritoryCurrent.Name);
-            return -100;
+            Logger.Log(LogEnum.LE_ERROR, "Get_FriendlyActionModifier(): stack=null for t=" + mi.TerritoryCurrent.Name);
+            return FN_ERROR;
          }
          //----------------------------------------------------
          int numSmokeInTargetZone = 0;
@@ -4217,8 +4217,8 @@ namespace Pattons_Best
                friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetFriendlyActionModifier(): reached default with enemyUnit=" + enemyUnit);
-               return -1;
+               Logger.Log(LogEnum.LE_ERROR, "Get_FriendlyActionModifier(): reached default with enemyUnit=" + enemyUnit);
+               return FN_ERROR;
          }
          //----------------------------------------------------
          if (true == gi.IsFlankingFire)
@@ -4239,7 +4239,7 @@ namespace Pattons_Best
          if (true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
             modifier += 10;
          //----------------------------------------------------
-         if (true == isTargetVehicle && (true == isAdvancingFire || true == isArtilleryFire))
+         if ((true == isTargetVehicle) && (true == isAdvancingFire || true == isArtilleryFire))
             modifier += 10;
          //----------------------------------------------------
          return modifier;
@@ -4253,10 +4253,10 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): lastReport=null");
             return "ERROR";
          }
-         if (false == isArtilleryFire && (true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling")))
+         if ((false == isArtilleryFire) && (true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling")))
          {
             if ("B6M" == mi.TerritoryCurrent.Name || "B6L" == mi.TerritoryCurrent.Name) // no Friendly action allowed in these regions unless artillery
-               return "ERROR";
+               return "None";
          }
          //----------------------------------------------------
          if (dieRoll < 4) // always a kill if below 4 regardless of modifiers
@@ -4332,9 +4332,9 @@ namespace Pattons_Best
          }
          //----------------------------------------------------
          int modifier = GetFriendlyActionModifier(gi, mi, numUsControlledSector, isAdvancingFire, isArtilleryFire, isAirStrike);
-         if (modifier < -99)
+         if (FN_ERROR == modifier)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): GetFriendlyActionModifier() returned error");
+            Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): Get_FriendlyActionModifier() returned error");
             return "ERROR";
          }
          dieRoll += modifier;

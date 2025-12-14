@@ -8,9 +8,15 @@ namespace Pattons_Best
    {
       bool CtorError { get; }
       IGameCommands GameCommands { set; get; }
+      Dictionary<string, int[]> DieResults { get; }
+      //----------------------------------------------
       Options Options { get; set; }
       GameStatistics Statistics { get; set; }
-      Dictionary<string, int[]> DieResults { get; }
+      int MaxDayBetweenCombat { get; set; }
+      int MaxRollsForAirSupport { get; set; }
+      int MaxRollsForArtillerySupport { get; set; }
+      int MaxEnemiesInOneBattle { get; set; }
+      int MaxRoundsOfCombat { get; set; }
       //----------------------------------------------
       bool IsMultipleSelectForDieResult { set; get; } // In EventViewer, show buttons instead of die results for user to choose from
       bool IsGridActive { set; get; } // True if there is some EventViewer manager active

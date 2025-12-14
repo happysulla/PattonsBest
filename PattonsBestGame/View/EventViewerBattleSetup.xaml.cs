@@ -257,11 +257,20 @@ namespace Pattons_Best
             if (EnumScenario.Counterattack == lastReport.Scenario)
             {
                if (EnumResistance.Light == lastReport.Resistance)
-                  myMaxRowCount += 2;
+               {
+                  myMaxRowCount = 2;
+                  myGameInstance.MaxEnemiesInOneBattle = 2;
+               }
                else if (EnumResistance.Medium == lastReport.Resistance)
-                  myMaxRowCount += 3;
+               {
+                  myMaxRowCount = 3;
+                  myGameInstance.MaxEnemiesInOneBattle = 3;
+               }
                else if (EnumResistance.Heavy == lastReport.Resistance)
-                  myMaxRowCount += 4;
+               {
+                  myMaxRowCount = 4;
+                  myGameInstance.MaxEnemiesInOneBattle = 4;
+               }
                else
                {
                   Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): reached default with resistance=" + lastReport.Scenario.ToString());
@@ -272,15 +281,15 @@ namespace Pattons_Best
             else
             {
                IMapItems removals = new MapItems();
-               IStack? stack = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
-               if (null == stack)
+               IStack? moveAreaStack = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
+               if (null == moveAreaStack)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): stack=null");
+                  Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): moveAreaStack=null");
                   return false;
                }
-               Logger.Log(LogEnum.LE_SHOW_RETREAT_TO_PREVIOUS_AREA, "SetupBattle(): stack=" + stack.MapItems.ToString());
+               Logger.Log(LogEnum.LE_SHOW_RETREAT_TO_PREVIOUS_AREA, "SetupBattle(): stack=" + moveAreaStack.MapItems.ToString());
                IMapItem? strengthCounter = null;
-               foreach (IMapItem mi1 in stack.MapItems)  // determine how many to activiate based on enemy strength in area
+               foreach (IMapItem mi1 in moveAreaStack.MapItems)  // determine how many to activiate based on enemy strength in area
                {
                   if (true == mi1.IsEnemyUnit())
                   {
@@ -366,11 +375,11 @@ namespace Pattons_Best
                               return false;
                            }
                         }
-
                      }
                      //--------------------------------------------
                      startingRow++;
                      myMaxRowCount++;
+                     myGameInstance.MaxEnemiesInOneBattle++;
                   }
                   if (true == mi1.Name.Contains("Strength"))
                      strengthCounter = mi1;
@@ -384,11 +393,20 @@ namespace Pattons_Best
                   return false;
                }
                if (true == strengthCounter.Name.Contains("Light"))
+               {
                   myMaxRowCount += 2;
+                  myGameInstance.MaxEnemiesInOneBattle += 2;
+               }
                else if (true == strengthCounter.Name.Contains("Medium"))
+               {
                   myMaxRowCount += 3;
+                  myGameInstance.MaxEnemiesInOneBattle += 3;
+               }
                else if (true == strengthCounter.Name.Contains("Heavy"))
+               {
                   myMaxRowCount += 4;
+                  myGameInstance.MaxEnemiesInOneBattle += 4;
+               }
                else
                {
                   Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): reached default strengthCounter.Count =" + strengthCounter.Count.ToString() + "strengthCounter=" + strengthCounter.Name);
@@ -400,9 +418,15 @@ namespace Pattons_Best
          else // Battle Sequence Round Phase adds reinforcements
          {
             if (EnumScenario.Advance == lastReport.Scenario) // activate one additional for Advance and two additional for Battle | Counterattack
+            {
                myMaxRowCount = 1;
+               myGameInstance.MaxEnemiesInOneBattle += 1;
+            }
             else
+            {
                myMaxRowCount = 2;
+               myGameInstance.MaxEnemiesInOneBattle += 2;
+            }
             //myMaxRowCount = 6;  // <cgs> TEST - generate extra units
          }
          //--------------------------------------------------

@@ -909,9 +909,15 @@ namespace Pattons_Best
             IMapPoint mp = Territory.GetRandomPoint(gi.ArtillerySupportCheck, artillerySupportMarker.Zoom * Utilities.theMapItemOffset);
             artillerySupportMarker.Location = mp;
             gi.MoveStacks.Add(artillerySupportMarker);
+            //----------------------------------------
+            GameStatistic stat = gi.Statistics.Find("MaxRollsForArtillerySupport");
+            if (stat.Value < gi.MaxRollsForArtillerySupport)
+               stat.Value = gi.MaxRollsForArtillerySupport;
+            gi.MaxRollsForArtillerySupport = 0;
          }
          else
          {
+            gi.MaxRollsForArtillerySupport++;
          }
          if (true == gi.IsAirStrikePending)
          {
@@ -1290,6 +1296,15 @@ namespace Pattons_Best
          gi.BattlePhase = BattlePhase.None;
          gi.GamePhase = GamePhase.Preparations;
          //---------------------------------
+         GameStatistic statMaxEnemiesInOneBattle = gi.Statistics.Find("MaxEnemiesInOneBattle");
+         if (statMaxEnemiesInOneBattle.Value < gi.MaxEnemiesInOneBattle)
+            statMaxEnemiesInOneBattle.Value = gi.MaxEnemiesInOneBattle;
+         gi.MaxEnemiesInOneBattle = 0;
+         GameStatistic statMaxRoundsOfCombat = gi.Statistics.Find("MaxRoundsOfCombat");
+         if (statMaxRoundsOfCombat.Value < gi.MaxRoundsOfCombat)
+            statMaxRoundsOfCombat.Value = gi.MaxRoundsOfCombat;
+         gi.MaxRoundsOfCombat = 0;
+         //---------------------------------
          GameFeat changedFeat1;
          Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Reset_ToPrepareForBattle():\n  Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
          if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out changedFeat1))
@@ -1658,7 +1673,7 @@ namespace Pattons_Best
                   if (false == TableMgr.GetNextTankNum(gi))
                   {
                      returnStatus = "GetNextTankNum() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(SetupDecreaseDate): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(SetupDecreaseDate): " + returnStatus);
                   }
                }
                break;
@@ -1682,7 +1697,7 @@ namespace Pattons_Best
                   if (false == TableMgr.GetNextTankNum(gi))
                   {
                      returnStatus = "GetNextTankNum() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(SetupIncreaseDate): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(SetupIncreaseDate): " + returnStatus);
                   }
                }
                break;
@@ -1691,7 +1706,7 @@ namespace Pattons_Best
                if (false == TableMgr.GetNextTankNum(gi))
                {
                   returnStatus = "GetNextTankNum() returned false";
-                  Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingDecreaseTankNum): " + returnStatus);
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(MorningBriefingDecreaseTankNum): " + returnStatus);
                }
                break;
             case GameAction.MorningBriefingIncreaseTankNum:
@@ -1699,7 +1714,7 @@ namespace Pattons_Best
                if (false == TableMgr.GetNextTankNum(gi))
                {
                   returnStatus = "GetNextTankNum() returned false";
-                  Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingIncreaseTankNum): " + returnStatus);
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(MorningBriefingIncreaseTankNum): " + returnStatus);
                }
                break;
             case GameAction.TestingStartMorningBriefing:
@@ -1710,11 +1725,11 @@ namespace Pattons_Best
                }
                else
                {
-                  SetCommand(gi, action, GameAction.MorningBriefingWeatherRoll, "e008");
+                  SetCommand(gi, action, GameAction.MorningBriefingWeatherRoll, "e008"); // GameStateSetup.PerformAction((TestingStartMorningBriefing)
                   gi.GamePhase = GamePhase.MorningBriefing;
                   if ( false == AddStartingTestingState(gi))  // TestingStartMorningBriefing
                   {
-                     returnStatus = "AddStartingTestingState(TestingStartMorningBriefing) returned false";
+                     returnStatus = "AddStartingTestingState() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(): " + returnStatus);
                   }
                }
@@ -1872,7 +1887,7 @@ namespace Pattons_Best
                break;
             case GameAction.SetupShowSingleDayBattleStart:
                gi.GamePhase = GamePhase.MorningBriefing;
-               SetCommand(gi, action, GameAction.MorningBriefingWeatherRoll, "e008"); // Weather Roll
+               SetCommand(gi, action, GameAction.MorningBriefingWeatherRoll, "e008"); // GameStateSetup.PerformAction(SetupShowCombatCalendarCheck) - First Weather Roll
                if (false == AssignNewCrewMembers(gi))
                {
                   returnStatus = "AssignNewCrewMembers() returned false";
@@ -3461,7 +3476,7 @@ namespace Pattons_Best
                   break;
                case GameAction.SetupCombatCalendarRoll: // only applies when coming from Setup GamePhase
                case GameAction.MorningBriefingCalendarRoll:
-                  if (false == HealedCrewmanDayDecrease(gi))
+                  if (false == HealedCrewmanDayDecrease(gi)) // GameStateEveningDebriefing.PerformAction(Morning_BriefingCalendarRoll)
                   {
                      returnStatus = "Healed_CrewmanDayDecrease() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(Morning_BriefingCalendarRoll): " + returnStatus);
@@ -3469,10 +3484,11 @@ namespace Pattons_Best
                   //dieRoll = 6; // <cgs> TEST - NO COMBAT - stay on move board
                   gi.DieResults[key][0] = dieRoll; // clicking on image either restarts next day or continues with MorningBriefingBegin
                   break;
-               case GameAction.MorningBriefingWeatherRoll:
+               case GameAction.MorningBriefingWeatherRoll: //######
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   lastReport.Weather = TableMgr.GetWeather(gi.Day, dieRoll);
+                  gi.MaxDayBetweenCombat++;
                   break;
                case GameAction.MorningBriefingWeatherRollEnd:
                   if (true == lastReport.Weather.Contains("Snow"))
@@ -3540,6 +3556,7 @@ namespace Pattons_Best
                   break;
                case GameAction.MorningBriefingDayOfRest:
                   ++gi.Day;
+                  gi.MaxDayBetweenCombat++;
                   gi.NewMembers.Clear();
                   ICombatCalendarEntry? newEntry = TableMgr.theCombatCalendarEntries[gi.Day];
                   if (null == newEntry)
@@ -3632,7 +3649,6 @@ namespace Pattons_Best
                {
                   cm.WoundDaysUntilReturn--;
                }
-
             }
          }
          return true;
@@ -3671,7 +3687,7 @@ namespace Pattons_Best
          }
          else
          {
-            SetCommand(gi, action, GameAction.MorningBriefingWeatherRoll, "e008"); // Weather Roll
+            SetCommand(gi, action, GameAction.MorningBriefingWeatherRoll, "e008"); // CheckCrewReturning() - Weather Roll
             action = GameAction.UpdateEventViewerActive;
          }
          return true;
@@ -3794,7 +3810,7 @@ namespace Pattons_Best
       }
       protected bool AdvancePastRetrofit(IGameInstance gi, GameAction action)
       {
-         if (false == HealedCrewmanDayDecrease(gi))
+         if (false == HealedCrewmanDayDecrease(gi)) // Advance_PastRetrofit()
          {
             Logger.Log(LogEnum.LE_ERROR, "Advance_PastRetrofit(): Healed_CrewmanDayDecrease() returned false");
             return false;
@@ -4654,10 +4670,14 @@ namespace Pattons_Best
                gi.MoveStacks.Remove(airStrike);
             }
             gi.IsAirStrikePending = true;
+            GameStatistic stat = gi.Statistics.Find("MaxRollsForAirSupport");
+            if (stat.Value < gi.MaxRollsForAirSupport)
+               stat.Value = gi.MaxRollsForAirSupport;
+            gi.MaxRollsForAirSupport = 0;
          }
          else
          {
-
+            gi.MaxRollsForAirSupport++;
          }
          return true;
       }
@@ -5828,6 +5848,7 @@ namespace Pattons_Best
                   }
                   else
                   {
+                     gi.Statistics.AddOne("NumMineAttack");
                      if (gi.DieResults[key][0] < 2)
                      {
                         lastReport.VictoryPtsFriendlyTank += 1;
@@ -5843,6 +5864,8 @@ namespace Pattons_Best
                         gi.Sherman.IsThrownTrack = true; // BattleRoundSequenceMinefieldRoll
                         lastReport.Breakdown = "Thrown Track";
                         gi.Sherman.IsMoving = false;
+                        GameEngine.theInGameFeats.AddOne("NumMineImmobilization");
+                        gi.Statistics.AddOne("NumMineImmobilization");
                      }
                      else // no effect
                      {
@@ -6050,6 +6073,8 @@ namespace Pattons_Best
                      }
                      else
                      {
+                        GameEngine.theInGameFeats.AddOne("NumPanzerfaustDeath");
+                        gi.Statistics.AddOne("NumPanzerfaustDeath");
                         int modifier = 0;
                         if (91 < gi.Panzerfaust.myDay)
                            modifier -= 1;
@@ -6151,6 +6176,8 @@ namespace Pattons_Best
                            else
                            {
                               action = GameAction.BattleRoundSequenceShermanKilled;
+                              GameEngine.theInGameFeats.AddOne("NumPanzerfaultDeath");
+                              gi.Statistics.AddOne("NumPanzerfaultDeath");
                            }
                         }
                         else
@@ -9670,6 +9697,7 @@ namespace Pattons_Best
                   break;
                case GameAction.EventDebriefDecorationHeart:
                   GameEngine.theInGameFeats.AddOne("NumPurpleHearts");
+                  gi.Statistics.AddOne("NumPurpleHearts");
                   if (false == EveningDebriefingResetDay(gi, lastReport, ref action))
                   {
                      returnStatus = "EveningDebriefing_ResetDay() returned false";
@@ -9859,21 +9887,25 @@ namespace Pattons_Best
                break;
             case GameAction.EventDebriefDecorationBronzeStar:
                GameEngine.theInGameFeats.AddOne("NumBronzeStars");
+               gi.Statistics.AddOne("NumBronzeStars");
                sb1.Append(" received the Bronze Star.");
                report.Notes.Add(sb1.ToString());
                break;
             case GameAction.EventDebriefDecorationSilverStar:
                GameEngine.theInGameFeats.AddOne("NumSilverStars");
+               gi.Statistics.AddOne("NumSilverStars");
                sb1.Append(" received the Silver Star.");
                report.Notes.Add(sb1.ToString());
                break;
             case GameAction.EventDebriefDecorationCross:
                GameEngine.theInGameFeats.AddOne("NumDistinguishedCrosses");
+               gi.Statistics.AddOne("NumDistinguishedCrosses");
                sb1.Append(" received the Distinguished Cross.");
                report.Notes.Add(sb1.ToString());
                break;
             case GameAction.EventDebriefDecorationHonor:
                GameEngine.theInGameFeats.AddOne("NumMedalOfHonors");
+               gi.Statistics.AddOne("NumMedalOfHonors");
                sb1.Append(" received the Medal of Honor.");
                report.Notes.Add(sb1.ToString());
                break;
@@ -10079,6 +10111,8 @@ namespace Pattons_Best
                   SetCommand(gi, action, GameAction.MorningBriefingCalendarRoll, "e006");
             }
          }
+         //----------------------------------------------------------
+         gi.Statistics.AddOne("NumDays");
          return true;
       }
       protected bool PerformEndCheck(IGameInstance gi, ref GameAction action)
@@ -10102,14 +10136,13 @@ namespace Pattons_Best
             gi.GamePhase = GamePhase.EndGame;
             action = GameAction.EndGameLost;
             SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
+
          }
          //----------------------------------------------------------
          else if ( (true == gi.IsCommanderKilled) && (true == optionCommanderDeath.IsEnabled) )
          {
             Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): gi.IsCommanderKilled=true -- " + lastReport.Commander.Name + " is killed.");
             GameEngine.theInGameFeats.AddOne("EndGameCmdrKilled");
-            if (false == optionGameType.IsEnabled)
-               GameEngine.theInGameFeats.AddOne("EndCampaignGame");
             gi.GamePhase = GamePhase.EndGame;
             action = GameAction.EndGameLost;
             SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
@@ -10119,12 +10152,15 @@ namespace Pattons_Best
          else if (189 < gi.Day)  // ends on day 190
          {
             Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): 191 < (day=" + gi.Day.ToString() + ") (VP=" + gi.VictoryPtsTotalCampaign.ToString() + ")");
-            if (false == optionGameType.IsEnabled)
+            if ((false == optionGameType.IsEnabled) && (189 < gi.Day) )
                GameEngine.theInGameFeats.AddOne("EndCampaignGameOnTime");
             gi.GamePhase = GamePhase.EndGame;
             if (0 < gi.VictoryPtsTotalCampaign)
             {
-               if (false == optionGameType.IsEnabled)
+               gi.Statistics.AddOne("NumWins");
+               if (true == optionGameType.IsEnabled)
+                  GameEngine.theInGameFeats.AddOne("EndSingleDayWin");
+               else
                   GameEngine.theInGameFeats.AddOne("EndCampaignGameWin");
                gi.EndGameReason = "Won on Points: " + gi.VictoryPtsTotalCampaign.ToString() + " > 0";
                action = GameAction.EndGameWin;
@@ -10137,6 +10173,34 @@ namespace Pattons_Best
                SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
             }
          }
+         //----------------------------------------------------------
+         if (GamePhase.EndGame == gi.GamePhase)
+         {
+            if (false == optionGameType.IsEnabled)
+               GameEngine.theInGameFeats.AddOne("EndCampaignGame");
+            gi.Statistics.AddOne("NumGames");
+            GameStatistic statMaxRollsForAirSupport = gi.Statistics.Find("MaxRollsForAirSupport");
+            if (statMaxRollsForAirSupport.Value < gi.MaxRollsForAirSupport)
+               statMaxRollsForAirSupport.Value = gi.MaxRollsForAirSupport;
+            gi.MaxRollsForAirSupport = 0;
+            GameStatistic statMaxRollsForArtillerySupport = gi.Statistics.Find("MaxRollsForArtillerySupport");
+            if (statMaxRollsForArtillerySupport.Value < gi.MaxRollsForArtillerySupport)
+               statMaxRollsForArtillerySupport.Value = gi.MaxRollsForArtillerySupport;
+            gi.MaxRollsForArtillerySupport = 0;
+         }
+         //----------------------------------------------------------
+         GameStatistic statMaxDayBetweenCombat = gi.Statistics.Find("MaxDayBetweenCombat");
+         if (statMaxDayBetweenCombat.Value < gi.MaxDayBetweenCombat)
+            statMaxDayBetweenCombat.Value = gi.MaxDayBetweenCombat;
+         gi.MaxDayBetweenCombat = 0;
+         GameStatistic statMaxEnemiesInOneBattle = gi.Statistics.Find("MaxEnemiesInOneBattle");
+         if (statMaxEnemiesInOneBattle.Value < gi.MaxEnemiesInOneBattle)
+            statMaxEnemiesInOneBattle.Value = gi.MaxEnemiesInOneBattle;
+         gi.MaxEnemiesInOneBattle = 0;
+         GameStatistic statMaxRoundsOfCombat = gi.Statistics.Find("MaxRoundsOfCombat");
+         if (statMaxRoundsOfCombat.Value < gi.MaxRoundsOfCombat)
+            statMaxRoundsOfCombat.Value = gi.MaxRoundsOfCombat;
+         gi.MaxRoundsOfCombat = 0;
          return true;
       }
    }
