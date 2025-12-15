@@ -1381,72 +1381,72 @@ namespace Pattons_Best
                   adjName = "B9M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      isEmptySectorAdjacentToUsControl = true;
                   adjName = "B2M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      isEmptySectorAdjacentToUsControl = true;
                   break;
                case "2":
                   adjName = "B1M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      isEmptySectorAdjacentToUsControl = true;
                   adjName = "B3M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      isEmptySectorAdjacentToUsControl = true;
                   break;
                case "3":
                   adjName = "B2M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      isEmptySectorAdjacentToUsControl = true;
                   adjName = "B4M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      isEmptySectorAdjacentToUsControl = true;
                   break;
                case "4":
                   adjName = "B3M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      isEmptySectorAdjacentToUsControl = true;
                   adjName = "B6M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      isEmptySectorAdjacentToUsControl = true;
                   break;
                case "6":
                   adjName = "B4M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      isEmptySectorAdjacentToUsControl = true;
                   adjName = "B9M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      isEmptySectorAdjacentToUsControl = true;
                   break;
                case "9":
                   adjName = "B6M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      isEmptySectorAdjacentToUsControl = true;
                   adjName = "B1M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      isEmptySectorAdjacentToUsControl = true;
                   break;
                default:
@@ -6731,17 +6731,17 @@ namespace Pattons_Best
                         Option optionAutoRollBowMgAdvance = gi.Options.Find("AutoRollBowMgFire");
                         if (true == optionAutoRollBowMgAdvance.IsEnabled )
                         {
-                           int diceRoll = 0;
+                           int diceRollAuto = 0;
                            int die1 = Utilities.RandomGenerator.Next(0, 10);
                            int die2 = Utilities.RandomGenerator.Next(0, 10);
                            if (0 == die1 && 0 == die2)
-                              diceRoll = 100;
+                              diceRollAuto = 100;
                            else
-                              diceRoll = die1 + 10 * die2;
-                           gi.DieResults[key][0] = dieRoll;
-                           if (gi.DieResults[key][0] < 31) // Assume that sub MG do not use ammo
+                              diceRollAuto = die1 + 10 * die2;
+                           gi.DieResults["e054b"][0] = diceRollAuto;
+                           if (gi.DieResults["e054b"][0] < 31) // Assume that sub MG do not use ammo
                               lastReport.Ammo30CalibreMG--;
-                           else if (97 < gi.DieResults[key][0])
+                           else if (97 < gi.DieResults["e054b"][0])
                               gi.IsMalfunctionedMgBow = true;               // GameStateBattleRoundSequence.PerformAction(BattleRoundSequencePlaceAdvanceFireRoll)
                         }
                      }
@@ -10142,20 +10142,23 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Perform_EndCheck(): lastReport=null");
             return false;
          }
-         Logger.Log(LogEnum.LE_GAME_END_CHECK, "Perform_EndCheck(): ae=" + gi.EventActive + " action=" + action.ToString() + " day=" + gi.Day.ToString() + " entrydate=" + lastReport.Day);
          Option optionCommanderDeath = gi.Options.Find("GameEndsOnCommanderDeath");
          Option optionGameType= gi.Options.Find("SingleDayScenario");
+         Logger.Log(LogEnum.LE_GAME_END_CHECK, "Perform_EndCheck(): ae=" + gi.EventActive + " action=" + action.ToString() + " day=" + gi.Day.ToString() + " entrydate=" + lastReport.Day + " o?=" + optionCommanderDeath.IsEnabled.ToString() + " k?=" + gi.IsCommanderKilled.ToString());
          //----------------------------------------------------------
-         if ( (null != gi.Death) && (true == gi.Death.myIsExplosion) && (true == optionCommanderDeath.IsEnabled) )
+         if ( null != gi.Death) 
          {
-            Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): TankExplodes");
-            GameEngine.theInGameFeats.AddOne("EndGameExplode");
-            if (false == optionGameType.IsEnabled)
-               GameEngine.theInGameFeats.AddOne("EndCampaignGame");
-            gi.GamePhase = GamePhase.EndGame;
-            action = GameAction.EndGameLost;
-            SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
-
+            Logger.Log(LogEnum.LE_GAME_END_CHECK, "Perform_EndCheck():  gi.Death=" + gi.Death.ToString());
+            if ((true == gi.Death.myIsExplosion) && (true == optionCommanderDeath.IsEnabled))
+            {
+               Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): TankExplodes");
+               GameEngine.theInGameFeats.AddOne("EndGameExplode");
+               if (false == optionGameType.IsEnabled)
+                  GameEngine.theInGameFeats.AddOne("EndCampaignGame");
+               gi.GamePhase = GamePhase.EndGame;
+               action = GameAction.EndGameLost;
+               SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
+            }
          }
          //----------------------------------------------------------
          else if ( (true == gi.IsCommanderKilled) && (true == optionCommanderDeath.IsEnabled) )

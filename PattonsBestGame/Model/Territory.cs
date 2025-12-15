@@ -829,7 +829,7 @@ namespace Pattons_Best
                return "ERROR";
          }
       }
-      public static bool IsEnemyUnitInSector(IGameInstance gi, string sector)
+      public static bool IsEnemyUnitInSector(IGameInstance gi, string sector, bool isFriendlyAdvance = false)
       {
          string tName = "B" + sector + "C";
          IStack? stack = gi.BattleStacks.Find(tName);
@@ -838,7 +838,12 @@ namespace Pattons_Best
             foreach (IMapItem mi in stack.MapItems)
             {
                if (true == mi.IsEnemyUnit())
-                  return true;
+               {
+                  if (true == isFriendlyAdvance)
+                     return true;
+                  else if ((EnumSpottingResult.SPOTTED == mi.Spotting) || (EnumSpottingResult.IDENTIFIED == mi.Spotting))
+                     return true;
+               }
             }
          }
          //--------------------------------------
@@ -848,7 +853,9 @@ namespace Pattons_Best
          {
             foreach (IMapItem mi in stack.MapItems)
             {
-               if (true == mi.IsEnemyUnit())
+               if (true == isFriendlyAdvance)
+                  return true;
+               else if ((EnumSpottingResult.SPOTTED == mi.Spotting) || (EnumSpottingResult.IDENTIFIED == mi.Spotting))
                   return true;
             }
          }
@@ -859,7 +866,9 @@ namespace Pattons_Best
          {
             foreach (IMapItem mi in stack.MapItems)
             {
-               if (true == mi.IsEnemyUnit())
+               if (true == isFriendlyAdvance)
+                  return true;
+               else if ((EnumSpottingResult.SPOTTED == mi.Spotting) || (EnumSpottingResult.IDENTIFIED == mi.Spotting))
                   return true;
             }
          }

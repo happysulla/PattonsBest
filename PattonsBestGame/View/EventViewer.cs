@@ -2230,12 +2230,24 @@ namespace Pattons_Best
                }
                break;
             case "e054b":
-               if (Utilities.NO_RESULT < gi.DieResults[key][0])
+               myTextBlock.Inlines.Add(new Run("Die Roll = "));
+               if (Utilities.NO_RESULT == gi.DieResults[key][0])
                {
+                  BitmapImage bmi = new BitmapImage();
+                  bmi.BeginInit();
+                  bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
+                  bmi.EndInit();
+                  Image imgDice = new Image { Name = "DieRollBlue", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+                  ImageBehavior.SetAnimatedSource(imgDice, bmi);
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
+               }
+               else
+               {
+                  myTextBlock.Inlines.Add(gi.DieResults[key][0].ToString());
                   if (gi.DieResults[key][0] < 31) // Assume that sub MG do not use ammo
-                     myTextBlock.Inlines.Add("= Use One MG Ammo box.");
+                     myTextBlock.Inlines.Add(" = Use One MG Ammo box.");
                   else if (97 < gi.DieResults[key][0])
-                     myTextBlock.Inlines.Add("= MG malfunction!");
+                     myTextBlock.Inlines.Add(" = MG malfunction!");
                   else 
                      myTextBlock.Inlines.Add("= No Effect.");
                   myTextBlock.Inlines.Add(new LineBreak());

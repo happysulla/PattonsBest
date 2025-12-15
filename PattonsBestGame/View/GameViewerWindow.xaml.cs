@@ -3191,6 +3191,9 @@ namespace Pattons_Best
             myCanvasMain.Children.Remove(ui1);
          myDieRoller.HideDie();
          //-------------------------------
+         GameStatistic statNumGames = gi.Statistics.Find("NumGames"); // current game always set to one
+         statNumGames.Value = 1;
+         //-------------------------------
          myTextBoxMarquee.Inlines.Clear();
          myTextBoxMarquee.Inlines.Add(new Run("Current Game Statistics:") { FontWeight = FontWeights.Bold, FontStyle = FontStyles.Italic, TextDecorations = TextDecorations.Underline });
          if (false == UpdateCanvasShowStatsText(myTextBoxMarquee, gi.Statistics))
@@ -3199,10 +3202,7 @@ namespace Pattons_Best
             return false;
          }
          //-------------------------------
-         bool isMultipleGameTypesPlayed = false;
          Option optionSingleDayGame = gi.Options.Find("SingleDayScenario");
-         GameStatistic statNumGames = gi.Statistics.Find("NumGames"); // current game always set to one
-         statNumGames.Value = 1;
          if( true == optionSingleDayGame.IsEnabled)
          {
             if (false == DeserializeGameStatistics(GameEngine.theSingleDayStatistics, "stat0"))
@@ -3301,7 +3301,7 @@ namespace Pattons_Best
       }
       private bool UpdateCanvasShowStatsText(TextBlock tb, GameStatistics statistics)
       {
-         GameStatistic numGames = statistics.Find("NumGames");
+         GameStatistic numGames = statistics.Find("NumGames"); // check that at least one
          if( 0 == numGames.Value )
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasShowStatsText(): numGames=0");
@@ -3388,7 +3388,7 @@ namespace Pattons_Best
             if (0 < numKilledEnemyFriendlyFire)
             {
                tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Killed Enemy Your Tank = " + numKilledEnemyFriendlyFire.ToString()) { FontWeight = FontWeights.Bold });
+               tb.Inlines.Add(new Run("Killed Enemy Friendly Tank = " + numKilledEnemyFriendlyFire.ToString()) { FontWeight = FontWeights.Bold });
                tb.Inlines.Add(new LineBreak());
                average = numKilledEnemyFriendlyFire / numGames.Value;
                tb.Inlines.Add(new Run("Average Num Days for Killed Enemy = " + average.ToString()) { FontWeight = FontWeights.Bold });
@@ -3428,12 +3428,6 @@ namespace Pattons_Best
             {
                tb.Inlines.Add(new LineBreak());
                tb.Inlines.Add(new Run("Killed Enemy Your Tank = " + numKilledEnemyYourFire.ToString()) { FontWeight = FontWeights.Bold });
-            }
-            //-------------------------------------
-            if (0 < numKilledEnemyFriendlyFire)
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Killed Enemy Friendly Fire = " + numKilledEnemyFriendlyFire.ToString()) { FontWeight = FontWeights.Bold });
             }
             //-------------------------------------
             if (0 < numKilledEnemyFriendlyFire)
@@ -3531,7 +3525,7 @@ namespace Pattons_Best
                {
                   int index = kill.Key.IndexOf("Friendly"); //NumKillLwFriendlyFire
                   sb.Append("Killed ");
-                  sb.Append(kill.Key.Substring(7, index-8));
+                  sb.Append(kill.Key.Substring(7, index-7));
                   sb.Append(" by Friendly Fire = ");
                   sb.Append(kill.Value.ToString());
                   tb.Inlines.Add(new LineBreak());
@@ -3544,7 +3538,7 @@ namespace Pattons_Best
                {
                   int index = kill.Key.IndexOf("Your");
                   sb.Append("Killed ");
-                  sb.Append(kill.Key.Substring(7, index-4));
+                  sb.Append(kill.Key.Substring(7, index-3));
                   sb.Append(" by Your Fire = ");
                   sb.Append(kill.Value.ToString());
                   tb.Inlines.Add(new LineBreak());
@@ -3731,72 +3725,72 @@ namespace Pattons_Best
                   adjName = "B9M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if( (null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)) )
+                  if( (null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)) )
                      highlightedTerritoryNames.Add(adjName);
                   adjName = "B2M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      highlightedTerritoryNames.Add(adjName);
                   break;
                case "2":
                   adjName = "B1M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      highlightedTerritoryNames.Add(adjName);
                   adjName = "B3M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      highlightedTerritoryNames.Add(adjName);
                   break;
                case "3":
                   adjName = "B2M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      highlightedTerritoryNames.Add(adjName);
                   adjName = "B4M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      highlightedTerritoryNames.Add(adjName);
                   break;
                case "4":
                   adjName = "B3M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      highlightedTerritoryNames.Add(adjName);
                   adjName = "B6M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      highlightedTerritoryNames.Add(adjName);
                   break;
                case "6":
                   adjName = "B4M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      highlightedTerritoryNames.Add(adjName);
                   adjName = "B9M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      highlightedTerritoryNames.Add(adjName);
                   break;
                case "9":
                   adjName = "B6M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      highlightedTerritoryNames.Add(adjName);
                   adjName = "B1M";
                   adjSector = adjName[1].ToString();
                   adjTerritory = usControlledTerritory.Find(adjName);
-                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector)))
+                  if ((null == adjTerritory) && (false == Territory.IsEnemyUnitInSector(gi, adjSector, true)))
                      highlightedTerritoryNames.Add(adjName);
                   break;
                default:
