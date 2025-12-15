@@ -2,12 +2,72 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace Pattons_Best
 {
+   //---------------------------------------------------------------------
+   [Serializable]
+   [StructLayout(LayoutKind.Sequential)]
+   public struct POINT  // used in WindowPlacement structure
+   {
+      public int X;
+      public int Y;
+      public POINT(int x, int y)
+      {
+         X = x;
+         Y = y;
+      }
+   }
+   //-------------------------------------------
+   [Serializable]
+   [StructLayout(LayoutKind.Sequential)]
+   public struct RECT // used in WindowPlacement structure
+   {
+      public int Left;
+      public int Top;
+      public int Right;
+      public int Bottom;
+      public RECT(int left, int top, int right, int bottom)
+      {
+         Left = left;
+         Top = top;
+         Right = right;
+         Bottom = bottom;
+      }
+   }
+   //-------------------------------------------
+   [Serializable]
+   [StructLayout(LayoutKind.Sequential)]
+   public struct WindowPlacement // used to save window position between sessions
+   {
+      public int length;
+      public int flags;
+      public int showCmd;
+      public POINT minPosition;
+      public POINT maxPosition;
+      public RECT normalPosition;
+      public bool IsZero()
+      {
+         if (0 != length)
+            return false;
+         if (0 != flags)
+            return false;
+         if (0 != minPosition.X)
+            return false;
+         if (0 != minPosition.Y)
+            return false;
+         if (0 != maxPosition.X)
+            return false;
+         if (0 != maxPosition.Y)
+            return false;
+         return true;
+      }
+   }
+   //===========================================================================
    public partial class MainWindow : Window
    {
       public static string theAssemblyDirectory = "";

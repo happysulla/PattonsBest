@@ -310,7 +310,7 @@ namespace Pattons_Best
                }
                else if (hour == report.SunriseHour)
                {
-                  if( min <= report.SunriseMin)
+                  if( min < report.SunriseMin)
                      rect.Fill = Brushes.Black;
                }
                else
@@ -321,7 +321,7 @@ namespace Pattons_Best
                   }
                   else if ( hour == report.SunsetHour)
                   {
-                     if (report.SunriseMin <= min)
+                     if (report.SunsetMin <= min)
                         rect.Fill = Brushes.Black;
                   }
                }

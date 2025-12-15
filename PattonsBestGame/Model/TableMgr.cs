@@ -254,6 +254,22 @@ namespace Pattons_Best
          }
          return true;
       }
+      public static int GetTimeRemaining(IAfterActionReport lastReport)
+      {
+         int sunrisehour = lastReport.SunriseHour + 1;
+         int sunrsethour = lastReport.SunsetHour;
+         int numMins = (sunrsethour - sunrisehour) * 60;
+         if( 0 < numMins)
+         {
+            numMins += (60 - lastReport.SunriseMin);
+            numMins += lastReport.SunsetMin;
+         }
+         else
+         {
+            numMins += (lastReport.SunsetMin - lastReport.SunriseMin);
+         }
+         return numMins;
+      }
       //-------------------------------------------
       public static string GetWeather(int day, int dieRoll)
       {

@@ -1090,6 +1090,7 @@ namespace Pattons_Best
             case "LW":
                t = tRight;
                mi = new MapItem(name, Utilities.ZOOM, "c91Lw", t);
+               mi.Spotting = EnumSpottingResult.IDENTIFIED;
                mi.IsSpotted = true; 
                myGridRows[i].myDieRollFacing = NO_FACING;
                Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "CreateMapItem(): myState=" + myState.ToString() + " myGridRows[" + i.ToString() + "].myFacing=" + myGridRows[i].myFacing + " due to LW");
@@ -1098,6 +1099,7 @@ namespace Pattons_Best
             case "MG":
                t = tRight;
                mi = new MapItem(name, Utilities.ZOOM, "c92MgTeam", t);
+               mi.Spotting = EnumSpottingResult.IDENTIFIED;
                mi.IsSpotted = true;
                myGridRows[i].myDieRollFacing = NO_FACING;
                Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "CreateMapItem(): myState=" + myState.ToString() + " myGridRows[" + i.ToString() + "].myFacing=" + myGridRows[i].myFacing + " due to MG");
@@ -1106,12 +1108,14 @@ namespace Pattons_Best
             case "PSW/SPW":
                t = tLeft;
                mi = new MapItem(name, Utilities.ZOOM, "SpwOrPsw", t);
+               mi.Spotting = EnumSpottingResult.IDENTIFIED;
                mi.IsSpotted = true;
                mi.IsVehicle = true;
                return true;
             case "PSW":
                t = tLeft;
                mi = new MapItem(name, Utilities.ZOOM + 0.2, "c89Psw232", t);
+               mi.Spotting = EnumSpottingResult.IDENTIFIED;
                mi.IsSpotted = true;
                mi.IsVehicle = true;
                myIsVehicleActivated = true;
@@ -1119,6 +1123,7 @@ namespace Pattons_Best
             case "SPW":
                t = tLeft;
                mi = new MapItem(name, Utilities.ZOOM + 0.2, "c90Spw251", t);
+               mi.Spotting = EnumSpottingResult.IDENTIFIED;
                mi.IsSpotted = true;
                mi.IsVehicle = true;
                myIsVehicleActivated = true;
@@ -1139,6 +1144,7 @@ namespace Pattons_Best
             case "TRUCK":
                t = tRight;
                mi = new MapItem(name, Utilities.ZOOM + 0.3, "c88Truck", t);
+               mi.Spotting = EnumSpottingResult.IDENTIFIED;
                mi.IsSpotted = true;
                mi.IsVehicle = true;
                myIsVehicleActivated = true;

@@ -42,58 +42,6 @@ namespace Pattons_Best
       private Double theOldXAfterAnimation = 0.0;
       private Double theOldYAfterAnimation = 0.0;
       public bool CtorError { get; } = false;
-      //---------------------------------------------------------------------
-      [Serializable] [StructLayout(LayoutKind.Sequential)]  public struct POINT  // used in WindowPlacement structure
-      {
-         public int X;
-         public int Y;
-         public POINT(int x, int y)
-         {
-            X = x;
-            Y = y;
-         }
-      }
-      //-------------------------------------------
-      [Serializable] [StructLayout(LayoutKind.Sequential)] public struct RECT // used in WindowPlacement structure
-      {
-         public int Left;
-         public int Top;
-         public int Right;
-         public int Bottom;
-         public RECT(int left, int top, int right, int bottom)
-         {
-            Left = left;
-            Top = top;
-            Right = right;
-            Bottom = bottom;
-         }
-      }
-      //-------------------------------------------
-      [Serializable] [StructLayout(LayoutKind.Sequential)] public struct WindowPlacement // used to save window position between sessions
-      {
-         public int length;
-         public int flags;
-         public int showCmd;
-         public POINT minPosition;
-         public POINT maxPosition;
-         public RECT normalPosition;
-         public bool IsZero()
-         {
-            if (0 != length)
-               return false;
-            if (0 != flags)
-               return false;
-            if (0 != minPosition.X)
-               return false;
-            if (0 != minPosition.Y)
-               return false;
-            if (0 != maxPosition.X)
-               return false;
-            if (0 != maxPosition.Y)
-               return false;
-            return true;
-         }
-      }
       //-------------------------------------------
       private static Double theEllipseDiameter = 14.0;
       private static Double theEllipseOffset = theEllipseDiameter / 2.0;
@@ -3376,32 +3324,34 @@ namespace Pattons_Best
                tb.Inlines.Add(new Run("Average Num Days for Killed Enemy = " + average.ToString()) { FontWeight = FontWeights.Bold });
             }
             //-------------------------------------
-            if (0 < numKilledEnemyYourFire)
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Killed Enemy Your Tank = " + numKilledEnemyYourFire.ToString()) { FontWeight = FontWeights.Bold });
-               tb.Inlines.Add(new LineBreak());
-               average = numKilledEnemyYourFire / numGames.Value;
-               tb.Inlines.Add(new Run("Average Num Days for Killed Enemy = " + average.ToString()) { FontWeight = FontWeights.Bold });
-            }
-            //-------------------------------------
             if (0 < numKilledEnemyFriendlyFire)
             {
                tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Killed Enemy Friendly Tank = " + numKilledEnemyFriendlyFire.ToString()) { FontWeight = FontWeights.Bold });
+               tb.Inlines.Add(new Run("Killed Enemy by Friendly Fire = " + numKilledEnemyFriendlyFire.ToString()) { FontWeight = FontWeights.Bold });
                tb.Inlines.Add(new LineBreak());
                average = numKilledEnemyFriendlyFire / numGames.Value;
+               tb.Inlines.Add(new Run("Average Num Days for Killed Enemy = " + average.ToString()) { FontWeight = FontWeights.Bold });
+            }
+            //-------------------------------------
+            if (0 < numKilledEnemyYourFire)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Killed Enemy by Your Tank = " + numKilledEnemyYourFire.ToString()) { FontWeight = FontWeights.Bold });
+               tb.Inlines.Add(new LineBreak());
+               average = numKilledEnemyYourFire / numGames.Value;
                tb.Inlines.Add(new Run("Average Num Days for Killed Enemy = " + average.ToString()) { FontWeight = FontWeights.Bold });
             }
          }
          else
          {
-            int dateDay = numDays.Value - 1;
             tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("End Date = " + TableMgr.GetDate(dateDay)) { FontWeight = FontWeights.Bold });
+            tb.Inlines.Add(new Run("End Date = " + TableMgr.GetDate(myGameInstance.Day)) { FontWeight = FontWeights.Bold });
             //-------------------------------------
-            tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Days = " + numDays.Value.ToString()) { FontWeight = FontWeights.Bold });
+            if ( 1 < numDays.Value )
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Days = " + numDays.Value.ToString()) { FontWeight = FontWeights.Bold });
+            }
             //-------------------------------------
             if( 0 < numLostTanks )
             {
@@ -3424,16 +3374,16 @@ namespace Pattons_Best
                tb.Inlines.Add(new Run("Killed Enemy = " + numKilledEnemyTotal.ToString()) { FontWeight = FontWeights.Bold });
             }
             //-------------------------------------
-            if (0 < numKilledEnemyYourFire)
-            {
-               tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Killed Enemy Your Tank = " + numKilledEnemyYourFire.ToString()) { FontWeight = FontWeights.Bold });
-            }
-            //-------------------------------------
             if (0 < numKilledEnemyFriendlyFire)
             {
                tb.Inlines.Add(new LineBreak());
-               tb.Inlines.Add(new Run("Killed Enemy Friendly Fire = " + numKilledEnemyFriendlyFire.ToString()) { FontWeight = FontWeights.Bold });
+               tb.Inlines.Add(new Run("Killed Enemy by Friendly Fire = " + numKilledEnemyFriendlyFire.ToString()) { FontWeight = FontWeights.Bold });
+            }
+            //-------------------------------------
+            if (0 < numKilledEnemyYourFire)
+            {
+               tb.Inlines.Add(new LineBreak());
+               tb.Inlines.Add(new Run("Killed Enemy by Your Tank = " + numKilledEnemyYourFire.ToString()) { FontWeight = FontWeights.Bold });
             }
          }
          //-------------------------------------
@@ -3538,7 +3488,7 @@ namespace Pattons_Best
                {
                   int index = kill.Key.IndexOf("Your");
                   sb.Append("Killed ");
-                  sb.Append(kill.Key.Substring(7, index-3));
+                  sb.Append(kill.Key.Substring(7, index-7));
                   sb.Append(" by Your Fire = ");
                   sb.Append(kill.Value.ToString());
                   tb.Inlines.Add(new LineBreak());

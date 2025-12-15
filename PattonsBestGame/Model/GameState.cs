@@ -655,10 +655,12 @@ namespace Pattons_Best
                   break;
                case "LW":
                   mi = new MapItem(nameEnemy, 1.0, "c91Lw", t1);
+                  mi.Spotting = EnumSpottingResult.IDENTIFIED;
                   mi.IsSpotted = true;
                   break;
                case "MG":
                   mi = new MapItem(nameEnemy, 1.0, "c92MgTeam", t1);
+                  mi.Spotting = EnumSpottingResult.IDENTIFIED;
                   mi.IsSpotted = true;
                   break;
                case "PSW/SPW":
@@ -666,8 +668,9 @@ namespace Pattons_Best
                   nameEnemy = enemyUnit + Utilities.MapItemNum;
                   Utilities.MapItemNum++;
                   mi = new MapItem(nameEnemy, 1.0, "c89Psw232", t1);
-                  mi.IsVehicle = true;
+                  mi.Spotting = EnumSpottingResult.IDENTIFIED;
                   mi.IsSpotted = true;
+                  mi.IsVehicle = true;
                   break;
                case "SPG":
                   mi = new MapItem(nameEnemy, 1.0, "c77UnidentifiedSpg", t1);
@@ -680,8 +683,9 @@ namespace Pattons_Best
                   break;
                case "TRUCK":
                   mi = new MapItem(nameEnemy, 1.0, "c88Truck", t1);
-                  mi.IsVehicle = true;
+                  mi.Spotting = EnumSpottingResult.IDENTIFIED;
                   mi.IsSpotted = true;
+                  mi.IsVehicle = true;
                   break;
                default:
                   Logger.Log(LogEnum.LE_ERROR, "SetStartAreaExtraEnemy(): reached default with enemyUnit=" + enemyUnit);
@@ -1308,7 +1312,7 @@ namespace Pattons_Best
          //---------------------------------
          GameFeat changedFeat1;
          Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Reset_ToPrepareForBattle():\n  Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
-         if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out changedFeat1))
+         if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out changedFeat1)) // Reset_ToPrepareForBattle()
          {
             Logger.Log(LogEnum.LE_ERROR, "Reset_ToPrepareForBattle(): GameEngine.theInGameFeats.GetFeat_Change() returned false");
             return false;
@@ -1678,6 +1682,18 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(SetupDecreaseDate): " + returnStatus);
                   }
                }
+               //--------------------------------------------------
+               IAfterActionReport? lastReportSetupDecreaseDate = gi.Reports.GetLast();
+               if (null == lastReportSetupDecreaseDate)
+               {
+                  returnStatus = "lastReportSetupDecreaseDate=null";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(TestingStartPreparations): " + returnStatus);
+               }
+               else if (false == TableMgr.SetTimeTrack(lastReportSetupDecreaseDate, gi.Day)) // passing sunrise and sunset
+               {
+                  returnStatus = "SetTimeTrack() returned false";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(TestingStartPreparations): " + returnStatus);
+               }
                break;
             case GameAction.SetupIncreaseDate:
                if (189 == gi.Day)
@@ -1701,6 +1717,18 @@ namespace Pattons_Best
                      returnStatus = "GetNextTankNum() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(SetupIncreaseDate): " + returnStatus);
                   }
+               }
+               //--------------------------------------------------
+               IAfterActionReport? lastReportSetupIncreaseDate = gi.Reports.GetLast();
+               if (null == lastReportSetupIncreaseDate)
+               {
+                  returnStatus = "lastReportSetupIncreaseDate=null";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(TestingStartPreparations): " + returnStatus);
+               }
+               else if (false == TableMgr.SetTimeTrack(lastReportSetupIncreaseDate, gi.Day)) // passing sunrise and sunset
+               {
+                  returnStatus = "SetTimeTrack() returned false";
+                  Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(TestingStartPreparations): " + returnStatus);
                }
                break;
             case GameAction.MorningBriefingDecreaseTankNum:
@@ -2479,10 +2507,12 @@ namespace Pattons_Best
                   break;
                case "LW":
                   mi = new MapItem(name, Utilities.ZOOM, "c91Lw", t);
+                  mi.Spotting = EnumSpottingResult.IDENTIFIED;
                   mi.IsSpotted = true;
                   break;
                case "MG":
                   mi = new MapItem(name, Utilities.ZOOM, "c92MgTeam", t);
+                  mi.Spotting = EnumSpottingResult.IDENTIFIED;
                   mi.IsSpotted = true;
                   break;
                case "PSW/SPW":
@@ -2490,8 +2520,9 @@ namespace Pattons_Best
                   name = enemyUnit + Utilities.MapItemNum;
                   Utilities.MapItemNum++;
                   mi = new MapItem(name, Utilities.ZOOM + 0.2, "c89Psw232", t);
-                  mi.IsVehicle = true;
+                  mi.Spotting = EnumSpottingResult.IDENTIFIED;
                   mi.IsSpotted = true;
+                  mi.IsVehicle = true;
                   break;
                case "SPG":
                   mi = new MapItem(name, Utilities.ZOOM + 0.5, "c77UnidentifiedSpg", t);
@@ -2504,8 +2535,9 @@ namespace Pattons_Best
                   break;
                case "TRUCK":
                   mi = new MapItem(name, Utilities.ZOOM + 0.3, "c88Truck", t);
-                  mi.IsVehicle = true;
+                  mi.Spotting = EnumSpottingResult.IDENTIFIED;
                   mi.IsSpotted = true;
+                  mi.IsVehicle = true;
                   break;
                default:
                   Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): reached default with enemyUnit=" + enemyUnit);
@@ -2588,8 +2620,8 @@ namespace Pattons_Best
          //gi.Day = 100;                                       // <cgs> TEST - After Nov 1944 for HVSS   
          //gi.Day = 110;                                      // <cgs> TEST - After Nov 1944 - day 111 is retrofit period 
          //--------------------------------
-         //lastReport.SunriseHour = 19;  // <cgs> TEST - EndOfDay - start at end of day
-         //lastReport.SunriseMin = 00;   // <cgs> TEST - EndOfDay - start at end of day
+         lastReport.SunriseHour = 18;  // <cgs> TEST - EndOfDay - start at end of day
+         lastReport.SunriseMin = 00;   // <cgs> TEST - EndOfDay - start at end of day
          //--------------------------------
          //lastReport.Driver.SetBloodSpots(20);              // <cgs> TEST - wounded crewmen
          //lastReport.Driver.Wound = "Light Wound";          // <cgs> TEST - wounded crewmen
@@ -2618,6 +2650,7 @@ namespace Pattons_Best
          //gi.Sherman.IsBoggedDown = true;
          //gi.Sherman.IsAssistanceNeeded = true;
          //--------------------------------
+         lastReport.Ammo30CalibreMG = 5;
          //lastReport.AmmoPeriscope = 3;
          //gi.IsBrokenPeriscopeDriver = true;
          //gi.IsBrokenPeriscopeLoader = true;
@@ -2785,6 +2818,8 @@ namespace Pattons_Best
          string enemyName = "LW" + Utilities.MapItemNum.ToString();
          Utilities.MapItemNum++;
          IMapItem enemyOne = new MapItem(enemyName, Utilities.ZOOM, "c91Lw", t);
+         enemyOne.Spotting = EnumSpottingResult.IDENTIFIED;
+         enemyOne.IsSpotted = true;
          IMapPoint mp = Territory.GetRandomPoint(t, enemyOne.Zoom * Utilities.theMapItemOffset);
          enemyOne.Location = mp;
          gi.MoveStacks.Add(enemyOne);
@@ -2792,6 +2827,8 @@ namespace Pattons_Best
          enemyName = "LW" + Utilities.MapItemNum.ToString();
          Utilities.MapItemNum++;
          enemyOne = new MapItem(enemyName, Utilities.ZOOM, "c91Lw", t);
+         enemyOne.Spotting = EnumSpottingResult.IDENTIFIED;
+         enemyOne.IsSpotted = true;
          mp = Territory.GetRandomPoint(t, enemyOne.Zoom * Utilities.theMapItemOffset);
          enemyOne.Location = mp;
          gi.MoveStacks.Add(enemyOne);
@@ -2885,7 +2922,12 @@ namespace Pattons_Best
             return false;
          }
          IAfterActionReport report1 = new AfterActionReport(entry); // Setup_NewGame()
-         gi.Reports.Add(report1);
+         gi.Reports.Add(report1); // Setup_NewGame()
+         if (false == TableMgr.SetTimeTrack(report1, gi.Day)) // Setup_NewGame()
+         {
+            Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(SetupDecreaseDate): SetTimeTrack() returned false");
+            return false;
+         }
          string[] crewmembers = new string[5] { "Assistant", "Driver", "Loader", "Gunner", "Commander"};
          bool isNameChange = true; // must enter loop at least once
          while(true == isNameChange)
@@ -3572,6 +3614,11 @@ namespace Pattons_Best
                      gi.DieResults[gi.EventActive][0] = Utilities.NO_RESULT;
                      IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport); // MorningBriefingDayOfRest
                      gi.Reports.Add(newReport); // MorningBriefingDayOfRest
+                     if (false == TableMgr.SetTimeTrack(newReport, gi.Day)) // passing sunrise and sunset
+                     {
+                        returnStatus = "SetTimeTrack() returned false";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateSetup.PerformAction(MorningBriefingDayOfRest): " + returnStatus);
+                     }
                      Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "GameStateMorningBriefing.PerformAction(): newReport=" + gi.Day + " !!!!!!!!date=" + TableMgr.GetDate(gi.Day) + "!!!!!!!!! scenario = " + newReport.Scenario.ToString() + "-->" + newReport.Scenario.ToString());
                      if (EnumScenario.Retrofit == newReport.Scenario)
                         SetCommand(gi, action, GameAction.DieRollActionNone, "e006a");
@@ -3835,6 +3882,11 @@ namespace Pattons_Best
          }
          IAfterActionReport newReport = new AfterActionReport(newEntry, lastReport);  // AdvancePastRetrofit()
          gi.Reports.Add(newReport); // AdvancePastRetrofit()
+         if (false == TableMgr.SetTimeTrack(newReport, gi.Day)) // passing sunrise and sunset
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Advance_PastRetrofit(): SetTimeTrack() returned false");
+            return false;
+         }
          Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "Advance_PastRetrofit(): newReport=" + gi.Day + " date=" + TableMgr.GetDate(gi.Day) + " scenario=" + newReport.Scenario.ToString() + "-->" + newReport.Scenario.ToString());
          //-------------------------------------------------------
          SetCommand(gi, action, GameAction.MorningBriefingCalendarRoll, "e006"); // MorningBriefing_DayOfRest
@@ -4582,7 +4634,7 @@ namespace Pattons_Best
                case GameAction.EveningDebriefingStart:
                   action = GameAction.EveningDebriefingStart;
                   GameFeat featChange1;
-                  if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange1))
+                  if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange1))  // GameStateMovement.PerformAction(EveningDebriefingStart)
                   {
                      returnStatus = "theInGameFeats.GetFeatChange() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(EveningDebriefingStart): " + returnStatus);
@@ -5521,7 +5573,7 @@ namespace Pattons_Best
                case GameAction.EveningDebriefingStart:
                   action = GameAction.EveningDebriefingStart;
                   GameFeat featChange1;
-                  if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange1))
+                  if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange1)) // GameStateBattle.PerformAction(EveningDebriefingStart)
                   {
                      returnStatus = "theInGameFeats.GetFeatChange() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(EveningDebriefingStart): " + returnStatus);
@@ -5701,7 +5753,7 @@ namespace Pattons_Best
                   //-------------------------------------------------------
                   GameFeat changedFeat0;
                   Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceStart):\n  Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
-                  if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out changedFeat0)) 
+                  if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out changedFeat0))  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceStart)
                   {
                      returnStatus = "GameEngine.theInGameFeats.GetFeat_Change() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceStart): " + returnStatus);
@@ -7264,7 +7316,7 @@ namespace Pattons_Best
                case GameAction.EveningDebriefingStart:
                   action = GameAction.EveningDebriefingStart;
                   GameFeat featChange1;
-                  if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange1))
+                  if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange1)) // GameStateBattleRoundSequence.PerformAction(EveningDebriefingStart)
                   {
                      returnStatus = "theInGameFeats.GetFeatChange() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(EveningDebriefingStart): " + returnStatus);
@@ -9639,7 +9691,7 @@ namespace Pattons_Best
                   break;
                case GameAction.EveningDebriefingStart: // Only change active event
                   GameFeat featChange;
-                  if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange))
+                  if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange))  // GameStateEveningDebriefing.PerformAction(EveningDebriefingStart)
                   {
                      returnStatus = "theInGameFeats.GetFeatChange() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(EveningDebriefingStart): " + returnStatus);
@@ -10102,6 +10154,11 @@ namespace Pattons_Best
          if (true == gi.Sherman.IsKilled)
             newReport.Name = "To be determined";
          gi.Reports.Add(newReport); // EveningDebriefing_ResetDay()
+         if (false == TableMgr.SetTimeTrack(newReport, gi.Day)) // passing sunrise and sunset
+         {
+            Logger.Log(LogEnum.LE_ERROR, "EveningDebriefing_ResetDay(): SetTimeTrack() returned false");
+            return false;
+         }
          Logger.Log(LogEnum.LE_SHOW_ACTION_REPORT_NEW, "EveningDebriefing_ResetDay(): newReport=" + gi.Day + " date=" + TableMgr.GetDate(gi.Day) + " scenario=" + newReport.Scenario.ToString() + "-->" + newReport.Scenario.ToString());
          //-------------------------------------------------------
          if (false == PerformEndCheck(gi, ref action))

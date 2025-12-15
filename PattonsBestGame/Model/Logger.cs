@@ -153,7 +153,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_ENTERED_HEX);
          //SetOn(LogEnum.LE_SHOW_BUTTON_MOVE);
          //SetOn(LogEnum.LE_VIEW_SHOW_OPTIONS);
-         //SetOn(LogEnum.LE_VIEW_SHOW_FEATS);
+         SetOn(LogEnum.LE_VIEW_SHOW_FEATS);
          //SetOn(LogEnum.LE_VIEW_SHOW_STATS);
          //SetOn(LogEnum.LE_VIEW_SHOW_SETTINGS);
          //-------------------------------

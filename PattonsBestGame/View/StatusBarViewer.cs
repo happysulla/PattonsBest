@@ -39,6 +39,7 @@ namespace Pattons_Best
          {
             myGameInstance = gi;
          }
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
          //-------------------------------------------------------
          if ((null != myTargetCursor) && (GameAction.UpdateStatusBar == action)) // increase/decrease size of cursor when zoom in or out
          {
@@ -94,6 +95,36 @@ namespace Pattons_Best
          buttonGoto.Click += ButtonEventActive_Click;
          myStatusBar.Items.Add(buttonGoto);
          //--------------------------------------------
+         if (null != lastReport)
+         {
+            myStatusBar.Items.Add(new Separator());
+            int minLeft = TableMgr.GetTimeRemaining(lastReport);
+            Label labelTimeRemaining = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = "Mins Left=" + minLeft.ToString() };
+            myStatusBar.Items.Add(labelTimeRemaining);
+            Image imgTimeRemaining;
+            if (minLeft < 61)
+               imgTimeRemaining = new Image { Source = MapItem.theMapImages.GetBitmapImage("Alert1"), Width = 30, Height = 25 };
+            else
+               imgTimeRemaining = new Image { Source = MapItem.theMapImages.GetBitmapImage("Sunset"), Width = 30, Height = 15 };
+            myStatusBar.Items.Add(imgTimeRemaining);
+            if ((lastReport.MainGunHE < 10) || (lastReport.MainGunAP < 5))
+            {
+               myStatusBar.Items.Add(new Separator());
+               Label labelLowAmmoMain = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = "Low Main Ammo" };
+               Image imgLowAmmoMain = new Image { Source = MapItem.theMapImages.GetBitmapImage("Alert2"), Width = 30, Height = 30 };
+               myStatusBar.Items.Add(labelLowAmmoMain);
+               myStatusBar.Items.Add(imgLowAmmoMain);
+            }
+            if (lastReport.Ammo30CalibreMG < 10)
+            {
+               myStatusBar.Items.Add(new Separator());
+               Label labelLowAmmoMg = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = "Low MG Ammo" };
+               Image imgLowAmmoMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("Alert3"), Width = 30, Height = 26 };
+               myStatusBar.Items.Add(labelLowAmmoMg);
+               myStatusBar.Items.Add(imgLowAmmoMg);
+            }
+         }
+         //--------------------------------------------
          if (true == gi.IsAirStrikePending)
          {
             myStatusBar.Items.Add(new Separator());
@@ -111,7 +142,6 @@ namespace Pattons_Best
             myStatusBar.Items.Add(imgLead);
          }
          //-------------------------------------------------------
-         IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null != lastReport)
          {
             if (0 < lastReport.VictoryPtsFriendlyTank)

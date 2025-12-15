@@ -363,6 +363,8 @@ namespace Pattons_Best.UnitTests
          string enemyName = "LW" + Utilities.MapItemNum.ToString();
          Utilities.MapItemNum++;
          IMapItem enemy = new MapItem(enemyName, Utilities.ZOOM, "c91Lw", t);
+         enemy.Spotting = EnumSpottingResult.IDENTIFIED;
+         enemy.IsSpotted = true;
          myGameInstanceSave.Targets.Add(enemy);
          //-----------------------
          myGameInstanceSave.AdvancingEnemies.Add(enemy);
