@@ -327,109 +327,83 @@ namespace Pattons_Best
       private void StackPanelTutorial_Click(object sender, RoutedEventArgs e)
       {
          CheckBox cb = (CheckBox)sender;
-         Option? option = null;
+         Option option;
          switch (cb.Name)
          {
             case "myCheckBoxSkipOpening":
                option = myOptions.Find("SkipTutorial0");
-               if (null == option)
-                  Logger.Log(LogEnum.LE_ERROR, "StackPanelOptions_Click(): myOptions.Find() for name=" + cb.Name);
-               else
-                  option.IsEnabled = !option.IsEnabled;
+               option.IsEnabled = !option.IsEnabled;
                break;
             case "myCheckBoxSkipHistorical":
                option = myOptions.Find("SkipTutorial1");
-               if (null == option)
-                  Logger.Log(LogEnum.LE_ERROR, "StackPanelOptions_Click(): myOptions.Find() for name=" + cb.Name);
-               else
-                  option.IsEnabled = !option.IsEnabled;
+               option.IsEnabled = !option.IsEnabled;
                break;
             case "myCheckBoxSkipMoveBoard":
                option = myOptions.Find("SkipTutorial2");
-               if (null == option)
-                  Logger.Log(LogEnum.LE_ERROR, "StackPanelOptions_Click(): myOptions.Find() for name=" + cb.Name);
-               else
-                  option.IsEnabled = !option.IsEnabled;
+               option.IsEnabled = !option.IsEnabled;
                break;
             case "myCheckBoxPrinceBattleBoard":
                option = myOptions.Find("SkipTutorial3");
-               if (null == option)
-                  Logger.Log(LogEnum.LE_ERROR, "StackPanelOptions_Click(): myOptions.Find() for name=" + cb.Name);
-               else
-                  option.IsEnabled = !option.IsEnabled;
+               option.IsEnabled = !option.IsEnabled;
                break;
             case "myCheckBoxPrinceTankCard":
                option = myOptions.Find("SkipTutorial4");
-               if (null == option)
-                  Logger.Log(LogEnum.LE_ERROR, "StackPanelOptions_Click(): myOptions.Find() for name=" + cb.Name);
-               else
-                  option.IsEnabled = !option.IsEnabled;
+               option.IsEnabled = !option.IsEnabled;
                break;
             case "myCheckBoxStartAfterActionReport":
                option = myOptions.Find("SkipTutorial5");
-               if (null == option)
-                  Logger.Log(LogEnum.LE_ERROR, "StackPanelOptions_Click(): myOptions.Find() for name=" + cb.Name);
-               else
-                  option.IsEnabled = !option.IsEnabled;
+               option.IsEnabled = !option.IsEnabled;
                break;
             default: Logger.Log(LogEnum.LE_ERROR, "StackPanelOptions_Click(): reached default name=" + cb.Name); return;
          }
+         if (false == UpdateDisplay(myOptions))
+            Logger.Log(LogEnum.LE_ERROR, "StackPanelGameOtherRules_Click(): UpdateDisplay() returned false for name=" + cb.Name);
       }
       private void StackPanelAutoRolls_Click(object sender, RoutedEventArgs e)
       {
          CheckBox cb = (CheckBox)sender;
-         Option? option = null;
+         Option option;
          switch (cb.Name)
          {
             case "myCheckBoxAutoRollRatings":
                option = myOptions.Find("AutoRollNewMembers");
-               if (null == option)
-                  Logger.Log(LogEnum.LE_ERROR, "StackPanelAutoRolls_Click(): myOptions.Find() for name=" + cb.Name);
-               else
-                  option.IsEnabled = !option.IsEnabled;
+               option.IsEnabled = !option.IsEnabled;
                break;
             case "myCheckBoxAutoRollAmmoLoad":
                option = myOptions.Find("AutoRollAmmoLoad");
-               if (null == option)
-                  Logger.Log(LogEnum.LE_ERROR, "StackPanelAutoRolls_Click(): myOptions.Find() for name=" + cb.Name);
-               else
-                  option.IsEnabled = !option.IsEnabled;
+               option.IsEnabled = !option.IsEnabled;
                break;
             case "myCheckBoxAutoPreparation":
                option = myOptions.Find("AutoPreparation");
-               if (null == option)
-                  Logger.Log(LogEnum.LE_ERROR, "StackPanelAutoRolls_Click(): myOptions.Find() for name=" + cb.Name);
-               else
-                  option.IsEnabled = !option.IsEnabled;
+               option.IsEnabled = !option.IsEnabled;
                break;
             case "myCheckBoxAutoRollEnemySetup":
                option = myOptions.Find("AutoRollEnemyActivation");
-               if (null == option)
-                  Logger.Log(LogEnum.LE_ERROR, "StackPanelAutoRolls_Click(): myOptions.Find() for name=" + cb.Name);
-               else
-                  option.IsEnabled = !option.IsEnabled;
+               option.IsEnabled = !option.IsEnabled;
+               break;
+            case "myCheckBoxAutoRollBowMg":
+               option = myOptions.Find("AutoRollBowMgFire");
+               option.IsEnabled = !option.IsEnabled;
                break;
             default: Logger.Log(LogEnum.LE_ERROR, "StackPanelAutoRolls_Click(): reached default name=" + cb.Name); return;
          }
+         if (false == UpdateDisplay(myOptions))
+            Logger.Log(LogEnum.LE_ERROR, "StackPanelGameOtherRules_Click(): UpdateDisplay() returned false for name=" + cb.Name);
       }
       private void StackPanelGeneralV25No3_Click(object sender, RoutedEventArgs e)
       {
          CheckBox cb = (CheckBox)sender;
-         Option? option = null;
+         Option option;
          switch (cb.Name)
          {
-            case "myCheckBoxAirInterdiction": option = myOptions.Find("AirInterdiction"); break;
-            case "myCheckBoxTerrainPointValue": option = myOptions.Find("TerrainPointValue"); break;
-            case "myCheckBoxTankCoverArc": option = myOptions.Find("TankCoveredArc"); break;
-            case "myCheckBoxSlowTransverseCoverArc": option = myOptions.Find("SlowTransverseCoveredArc"); break;
-            case "myCheckBoxSpgCoverArc": option = myOptions.Find("SpgCoveredArc"); break;
-            case "myCheckBoxAtgCoverArc": option = myOptions.Find("AtgCoveredArc"); break;
+            case "myCheckBoxAirInterdiction": option = myOptions.Find("AirInterdiction"); option.IsEnabled = !option.IsEnabled; break;
+            case "myCheckBoxTerrainPointValue": option = myOptions.Find("TerrainPointValue"); option.IsEnabled = !option.IsEnabled; break;
+            case "myCheckBoxTankCoverArc": option = myOptions.Find("TankCoveredArc"); option.IsEnabled = !option.IsEnabled; break;
+            case "myCheckBoxSlowTransverseCoverArc": option = myOptions.Find("SlowTransverseCoveredArc"); option.IsEnabled = !option.IsEnabled; break;
+            case "myCheckBoxSpgCoverArc": option = myOptions.Find("SpgCoveredArc"); option.IsEnabled = !option.IsEnabled; break;
+            case "myCheckBoxAtgCoverArc": option = myOptions.Find("AtgCoveredArc"); option.IsEnabled = !option.IsEnabled; break;
             default: Logger.Log(LogEnum.LE_ERROR, "StackPanelGeneralV25No3_Click(): reached default name=" + cb.Name); return;
          }
-         if (null == option)
-            Logger.Log(LogEnum.LE_ERROR, "StackPanelGameOtherRules_Click(): myOptions.Find() for name=" + cb.Name);
-         else
-            option.IsEnabled = !option.IsEnabled;
          //----------------------------------
          if (false == UpdateDisplay(myOptions))
             Logger.Log(LogEnum.LE_ERROR, "StackPanelGameOtherRules_Click(): UpdateDisplay() returned false for name=" + cb.Name);
@@ -437,21 +411,17 @@ namespace Pattons_Best
       private void StackPanelGameOtherRules_Click(object sender, RoutedEventArgs e)
       {
          CheckBox cb = (CheckBox)sender;
-         Option? option = null;
+         Option option;
          switch (cb.Name)
          {
-            case "myCheckBoxContinueMove": option = myOptions.Find("EnemyContinueMove"); break;
-            case "myCheckBoxRearFacingAfterMoveAway": option = myOptions.Find("EnemyRearFacingOnMove"); break;
-            case "myCheckBoxIncreasedMove": option = myOptions.Find("ShermanIncreaseMoveChances"); break;
-            case "myCheckBoxEnhancedMgFire": option = myOptions.Find("ShermanEnhanceMgFire"); break;
-            case "myCheckBoxMgSurpressingFire": option = myOptions.Find("ShermanSurpressingMgFire"); break;
+            case "myCheckBoxContinueMove": option = myOptions.Find("EnemyContinueMove"); option.IsEnabled = !option.IsEnabled; break;
+            case "myCheckBoxRearFacingAfterMoveAway": option = myOptions.Find("EnemyRearFacingOnMove"); option.IsEnabled = !option.IsEnabled; break;
+            case "myCheckBoxIncreasedMove": option = myOptions.Find("ShermanIncreaseMoveChances"); option.IsEnabled = !option.IsEnabled; break;
+            case "myCheckBoxEnhancedMgFire": option = myOptions.Find("ShermanEnhanceMgFire"); option.IsEnabled = !option.IsEnabled; break;
+            case "myCheckBoxMgSurpressingFire": option = myOptions.Find("ShermanSurpressingMgFire"); option.IsEnabled = !option.IsEnabled; break;
+            case "myCheckBoxEndOnCmdrDeath": option = myOptions.Find("GameEndsOnCommanderDeath"); option.IsEnabled = !option.IsEnabled; break;
             default: Logger.Log(LogEnum.LE_ERROR, "StackPanelGameOtherRules_Click(): reached default name=" + cb.Name); return;
          }
-         if (null == option)
-            Logger.Log(LogEnum.LE_ERROR, "StackPanelGameOtherRules_Click(): myOptions.Find() for name=" + cb.Name);
-         else
-            option.IsEnabled = !option.IsEnabled;
-         //----------------------------------
          if (false == UpdateDisplay(myOptions))
             Logger.Log(LogEnum.LE_ERROR, "StackPanelGameOtherRules_Click(): UpdateDisplay() returned false for name=" + cb.Name);
       }

@@ -72,6 +72,7 @@ namespace Pattons_Best
       LE_SHOW_IMMOBILIZATION,
       LE_SHOW_PROMOTION,
       //-------------
+      LE_SHOW_TIME,
       LE_SHOW_VP_FRIENDLY_FORCES,
       LE_SHOW_VP_CAPTURED_AREA,
       LE_SHOW_VP_TOTAL,
@@ -159,7 +160,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_CREW_NAME);
          SetOn(LogEnum.LE_SHOW_CREW_BU);
          //SetOn(LogEnum.LE_SHOW_ACTION_REPORT_NEW);
-         SetOn(LogEnum.LE_SHOW_AUTOSETUP_BATTLEPREP);
+         //SetOn(LogEnum.LE_SHOW_AUTOSETUP_BATTLEPREP);
          SetOn(LogEnum.LE_SHOW_START_AREA);
          //SetOn(LogEnum.LE_SHOW_ENEMY_STRENGTH);
          SetOn(LogEnum.LE_SHOW_OVERRUN_TO_PREVIOUS_AREA);
@@ -204,6 +205,7 @@ namespace Pattons_Best
          SetOn(LogEnum.LE_SHOW_FIRE_DIRECTION);
          SetOn(LogEnum.LE_SHOW_IMMOBILIZATION);
          //-------------------------------
+         SetOn(LogEnum.LE_SHOW_TIME);
          SetOn(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES);
          SetOn(LogEnum.LE_SHOW_VP_CAPTURED_AREA);
          SetOn(LogEnum.LE_SHOW_VP_TOTAL);

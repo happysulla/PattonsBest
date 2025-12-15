@@ -63,11 +63,12 @@ The events of each engagement or day of battle are recorded as they unfold on th
 e005a	"<Bold>e005a Single Day of Battle</Bold> 
 <LineBreak/><LineBreak/>
 You elected to only fight one day of battle. The game is won or lost based on victory points at end of day per 
-<InlineUIContainer><Button Content='r6.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
- Click the date's minus sign button to show all possible tanks.
+<InlineUIContainer><Button Content='r6.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
 Click buttons to get day and tank you want. The tank choice is limited by date shown on 
-<InlineUIContainer><Button Content='Replacement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. Click image when ready to begin.
+<InlineUIContainer><Button Content='Replacement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.  Hint: Click the date's minus sign button to rollover and show all possible tanks. 
+<LineBreak/><LineBreak/>
+Click image when ready to begin.
 <LineBreak/><LineBreak/>"
 e006	"<Bold>e006 Combat Calendar Check</Bold> 
 <InlineUIContainer><Button Content='r4.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 

@@ -101,8 +101,8 @@ namespace Pattons_Best
          "NumShermanExplodes",
          "NumShermanBurns",
          "NumShermanPenetration",
-         "NumPanzerfaultAttack",
-         "NumPanzerfaultDeath",
+         "NumPanzerfaustAttack",
+         "NumPanzerfaustDeath",
          "NumMineAttack",
          "NumMineImmobilization",
          //--------------

@@ -252,7 +252,6 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTimeCheckRoll): reached default day=" + day.ToString());
                return false;
          }
-
          return true;
       }
       //-------------------------------------------

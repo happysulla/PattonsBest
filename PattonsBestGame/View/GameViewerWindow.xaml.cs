@@ -198,21 +198,6 @@ namespace Pattons_Best
          GameEngine.theStartingFeats.SetGameFeatThreshold();
          Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameViewerWindow():\n  feats=" + GameEngine.theInGameFeats.ToString() + "\n Sfeats=" + GameEngine.theStartingFeats.ToString());
          //---------------------------------------------------------------
-         if (false == DeserializeGameStatistics(GameEngine.theCampaignStatistics, "stat1"))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): DeserializeGameStatistics(theCampaignStatistics) returned false");
-            CtorError = true;
-            return;
-         }
-         Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "GameViewerWindow(): GameEngine.theCampaignStatistics=" + GameEngine.theCampaignStatistics.ToString());
-         if (false == DeserializeGameStatistics(GameEngine.theSingleDayStatistics, "stat0"))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): DeserializeGameStatistics(theSingleDayStatistics) returned false");
-            CtorError = true;
-            return;
-         }
-         Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "GameViewerWindow(): GameEngine.theSingleDayStatistics=" + GameEngine.theSingleDayStatistics.ToString());
-         //---------------------------------------------------------------
          if (false == DeserializeRoadsFromXml())
          {
             Logger.Log(LogEnum.LE_ERROR, "GameViewerWindow(): DeserializeRoadsFromXml() returned false");
@@ -1415,9 +1400,12 @@ namespace Pattons_Best
          if (false == SerializeGameFeats(GameEngine.theInGameFeats))
             Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): SerializeGameFeats() returned false");
          //-------------------------------------------
-         Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "GameViewerWindow(): GameEngine.theTotalStatistics=" + GameEngine.theTotalStatistics.ToString());
-         if (false == SerializeGameStatistics(GameEngine.theTotalStatistics))
+         if (false == SerializeGameStatistics(GameEngine.theSingleDayStatistics, "stat0"))
             Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): SerializeGameStatistics() returned false");
+         if (false == SerializeGameStatistics(GameEngine.theCampaignStatistics, "stat1"))
+            Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): SerializeGameStatistics(theCampaignStatistics) returned false");
+         if (false == SerializeGameStatistics(GameEngine.theTotalStatistics, "stat2"))
+            Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): SerializeGameStatistics(theTotalStatistics) returned false");
          //-------------------------------------------
          Settings.Default.Save();
          System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
@@ -1538,7 +1526,7 @@ namespace Pattons_Best
          }
          return true;
       }
-      private bool SerializeGameStatistics(GameStatistics statistics)
+      private bool SerializeGameStatistics(GameStatistics statistics, string filename)
       {
          CultureInfo currentCulture = CultureInfo.CurrentCulture;
          System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // for saving doubles with decimal instead of comma for German users
@@ -1575,12 +1563,12 @@ namespace Pattons_Best
             }
          }
          //-----------------------------------------
-         string filename = GameStatistics.theGameStatisticsDirectory + "Stats.xml";
+         string filenameFull = GameStatistics.theGameStatisticsDirectory + filename + ".xml";
          FileStream? writer = null;
          //-----------------------------------------
          try
          {
-            writer = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write);
+            writer = new FileStream(filenameFull, FileMode.OpenOrCreate, FileAccess.Write);
             XmlWriterSettings settings = new XmlWriterSettings { Indent = true, OmitXmlDeclaration = true, NewLineOnAttributes = false };
             XmlWriter xmlWriter = XmlWriter.Create(writer, settings);// For XmlWriter, it uses the stream that was created: writer.
             aXmlDocument.Save(xmlWriter);
@@ -3213,16 +3201,19 @@ namespace Pattons_Best
          //-------------------------------
          bool isMultipleGameTypesPlayed = false;
          Option optionSingleDayGame = gi.Options.Find("SingleDayScenario");
+         GameStatistic statNumGames = gi.Statistics.Find("NumGames"); // current game always set to one
+         statNumGames.Value = 1;
          if( true == optionSingleDayGame.IsEnabled)
          {
             if (false == DeserializeGameStatistics(GameEngine.theSingleDayStatistics, "stat0"))
             {
-               Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatsAdds(): DeserializeGameStatistics(theSingleDayStatistics) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatsAdds(): Deserialize_GameStatistics(theSingleDayStatistics) returned false");
                return false;
             }
-            isMultipleGameTypesPlayed = UpdateCanvasShowStatsAdds(gi.Statistics, GameEngine.theSingleDayStatistics);
+            UpdateCanvasShowStatsAdds(gi.Statistics, GameEngine.theSingleDayStatistics);
             Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): GameEngine.theSingleDayStatistics=" + GameEngine.theSingleDayStatistics.ToString());
-            if (true == isMultipleGameTypesPlayed)
+            GameStatistic stat0NumGames = GameEngine.theSingleDayStatistics.Find("NumGames");
+            if (1 < stat0NumGames.Value)
             {
                myTextBoxMarquee.Inlines.Add(new LineBreak());
                myTextBoxMarquee.Inlines.Add(new LineBreak());
@@ -3235,12 +3226,13 @@ namespace Pattons_Best
          {
             if (false == DeserializeGameStatistics(GameEngine.theCampaignStatistics, "stat1"))
             {
-               Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatsAdds(): DeserializeGameStatistics(theCampaignStatistics) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatsAdds(): Deserialize_GameStatistics(theCampaignStatistics) returned false");
                return false;
             }
-            isMultipleGameTypesPlayed = UpdateCanvasShowStatsAdds(gi.Statistics, GameEngine.theCampaignStatistics);
+            UpdateCanvasShowStatsAdds(gi.Statistics, GameEngine.theCampaignStatistics);
             Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): GameEngine.theCampaignStatistics=" + GameEngine.theCampaignStatistics.ToString());
-            if (true == isMultipleGameTypesPlayed)
+            GameStatistic stat1NumGames = GameEngine.theCampaignStatistics.Find("NumGames");
+            if (1 < stat1NumGames.Value)
             {
                myTextBoxMarquee.Inlines.Add(new LineBreak());
                myTextBoxMarquee.Inlines.Add(new LineBreak());
@@ -3252,12 +3244,13 @@ namespace Pattons_Best
          //-------------------------------
          if (false == DeserializeGameStatistics(GameEngine.theTotalStatistics, "stat2"))
          {
-            Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatsAdds(): DeserializeGameStatistics(theTotalStatistics) returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatsAdds(): Deserialize_GameStatistics(theTotalStatistics) returned false");
             return false;
          }
          Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): GameEngine.theTotalStatistics=" + GameEngine.theTotalStatistics.ToString());
-         isMultipleGameTypesPlayed = UpdateCanvasShowStatsAdds(gi.Statistics, GameEngine.theTotalStatistics);
-         if (true == isMultipleGameTypesPlayed)
+         UpdateCanvasShowStatsAdds(gi.Statistics, GameEngine.theTotalStatistics);
+         GameStatistic stat2NumGames = GameEngine.theTotalStatistics.Find("NumGames");
+         if (1 < stat2NumGames.Value)
          {
             myTextBoxMarquee.Inlines.Add(new LineBreak());
             myTextBoxMarquee.Inlines.Add(new LineBreak());
@@ -3284,7 +3277,7 @@ namespace Pattons_Best
          SaveDefaultsToSettings();
          return true;
       }
-      private bool UpdateCanvasShowStatsAdds(GameStatistics statistics, GameStatistics totalStatistics)
+      private void UpdateCanvasShowStatsAdds(GameStatistics statistics, GameStatistics totalStatistics)
       {
          //-------------------------------------
          foreach (GameStatistic numOneGame in statistics)
@@ -3300,16 +3293,11 @@ namespace Pattons_Best
          {
             if (true == maxOneGame.Key.Contains("Max"))
             {
-               GameStatistic statAllMax = totalStatistics.Find(maxOneGame.Key);
-               statAllMax.Value += maxOneGame.Value;
+               GameStatistic statMax = totalStatistics.Find(maxOneGame.Key);
+               if(statMax.Value < maxOneGame.Value )
+                  statMax.Value = maxOneGame.Value;
             }
          }
-         //-----------------------------------------
-         GameStatistic stat = GameEngine.theTotalStatistics.Find("NumGames");
-         if (0 < stat.Value)
-            return true;
-         else
-            return false;
       }
       private bool UpdateCanvasShowStatsText(TextBlock tb, GameStatistics statistics)
       {
@@ -3513,25 +3501,25 @@ namespace Pattons_Best
          if (0 < maxRollsForAirSupport.Value)
          {
             tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Maximum Rolls For Air Support = " + maxRollsForAirSupport.Value.ToString()) { FontWeight = FontWeights.Bold });
+            tb.Inlines.Add(new Run("Maximum Rolls For Air Strikes = " + maxRollsForAirSupport.Value.ToString()) { FontWeight = FontWeights.Bold });
          }
          GameStatistic maxRollsForArtillerySupport = statistics.Find("MaxRollsForArtillerySupport");
          if (0 < maxRollsForArtillerySupport.Value)
          {
             tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Maximum Rolls For Air Support = " + maxRollsForArtillerySupport.Value.ToString()) { FontWeight = FontWeights.Bold });
+            tb.Inlines.Add(new Run("Maximum Rolls For Artillery Support = " + maxRollsForArtillerySupport.Value.ToString()) { FontWeight = FontWeights.Bold });
          }
          GameStatistic maxEnemiesInOneBattle = statistics.Find("MaxEnemiesInOneBattle");
          if (0 < maxEnemiesInOneBattle.Value)
          {
             tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Maximum Rolls For Air Support = " + maxEnemiesInOneBattle.Value.ToString()) { FontWeight = FontWeights.Bold });
+            tb.Inlines.Add(new Run("Maximum Enemies In One Battle = " + maxEnemiesInOneBattle.Value.ToString()) { FontWeight = FontWeights.Bold });
          }
          GameStatistic maxRoundsOfCombat = statistics.Find("MaxRoundsOfCombat");
          if (0 < maxRoundsOfCombat.Value)
          {
             tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Maximum Rolls For Air Support = " + maxRoundsOfCombat.Value.ToString()) { FontWeight = FontWeights.Bold });
+            tb.Inlines.Add(new Run("Maximum Rounds of Combat = " + maxRoundsOfCombat.Value.ToString()) { FontWeight = FontWeights.Bold });
          }
          //-------------------------------------
          foreach (GameStatistic kill in statistics)
@@ -3541,10 +3529,10 @@ namespace Pattons_Best
             {
                if (0 < kill.Value)
                {
-                  int index = kill.Key.IndexOf("Friendly");
-                  sb.Append(" Killed by Friendly Fire ");
-                  sb.Append(kill.Key.Substring(8, index));
-                  sb.Append(" = ");
+                  int index = kill.Key.IndexOf("Friendly"); //NumKillLwFriendlyFire
+                  sb.Append("Killed ");
+                  sb.Append(kill.Key.Substring(7, index-8));
+                  sb.Append(" by Friendly Fire = ");
                   sb.Append(kill.Value.ToString());
                   tb.Inlines.Add(new LineBreak());
                   tb.Inlines.Add(new Run(sb.ToString()) { FontWeight = FontWeights.Bold });
@@ -3555,9 +3543,9 @@ namespace Pattons_Best
                if (0 < kill.Value)
                {
                   int index = kill.Key.IndexOf("Your");
-                  sb.Append(" Killed by Your Fire ");
-                  sb.Append(kill.Key.Substring(8, index));
-                  sb.Append(" = ");
+                  sb.Append("Killed ");
+                  sb.Append(kill.Key.Substring(7, index-4));
+                  sb.Append(" by Your Fire = ");
                   sb.Append(kill.Value.ToString());
                   tb.Inlines.Add(new LineBreak());
                   tb.Inlines.Add(new Run(sb.ToString()) { FontWeight = FontWeights.Bold });

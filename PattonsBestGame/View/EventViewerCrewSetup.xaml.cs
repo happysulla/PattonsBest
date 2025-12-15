@@ -642,11 +642,8 @@ namespace Pattons_Best
                if( cm.Role == b.Name )
                   myCrewMemberDragged = cm;
             }
-            if (null == myCrewMemberDragged)
-            {
-               Logger.Log(LogEnum.LE_ERROR, "Button_Click(): mi=null for b.Name=" + b.Name);
+            if (null == myCrewMemberDragged) // When finish dragging all Crewmembers, cannot drag anymore
                return;
-            }
             myGrid.Cursor = myCursors[myCrewMemberDragged.Name]; // change cursor of button being dragged
             if (STARTING_ASSIGNED_ROW <= rowNum)
             {

@@ -1134,6 +1134,7 @@ namespace Pattons_Best
          }
          //---------------------------------
          bool isDayLightLeft = gi.IsDaylightLeft(report);
+         Logger.Log(LogEnum.LE_SHOW_TIME, "Resolve_EmptyBattleBoard(): sunsetHour=" + report.SunsetHour.ToString() + " min=" + report.SunsetMin.ToString() + " time=" + TableMgr.GetTime(report) + " dayLight?=" + isDayLightLeft.ToString());
          bool isInjuredCrewmanReplaced;
          if (false == ReplaceInjuredCrewmen(gi, out isInjuredCrewmanReplaced, "Resolve_EmptyBattleBoard()")) // Resolve_EmptyBattleBoard
          {
@@ -1325,6 +1326,7 @@ namespace Pattons_Best
          }
          else if (false == gi.IsDaylightLeft(report))
          {
+            Logger.Log(LogEnum.LE_SHOW_TIME, "Reset_ToPrepareForBattle(): sunsetHour=" + report.SunsetHour.ToString() + " min=" + report.SunsetMin.ToString() + " time=" + TableMgr.GetTime(report) + " dayLight?=false");
             SetCommand(gi, action, GameAction.DieRollActionNone, "e100");
             gi.GamePhase = GamePhase.EveningDebriefing;
          }
@@ -2808,7 +2810,6 @@ namespace Pattons_Best
          gi.GamePhase = GamePhase.GameSetup;
          gi.Statistics = new GameStatistics();
          gi.Statistics.SetOriginalGameStatistics();
-         gi.Statistics.SetValue("NumGames", 1);     // Set played games to 1
          //-------------------------------------------------------
          gi.GunLoads.Clear();
          //-------------------------------------------------------
@@ -3522,9 +3523,11 @@ namespace Pattons_Best
                      returnStatus = "TableMgr.SetTimeTrack() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(): " + returnStatus);
                   }
+                  Logger.Log(LogEnum.LE_SHOW_TIME, "GameStateMorningBriefing.PerformAction(MorningBriefingTimeCheckRoll): sunsetHour=" + lastReport.SunsetHour.ToString() + " min=" + lastReport.SunsetMin.ToString() + " time=" + TableMgr.GetTime(lastReport));
                   lastReport.SunriseHour += (int)Math.Floor(dieRoll * 0.5) + 1;
                   lastReport.MainGunHE -= dieRoll * 2;
                   lastReport.Ammo30CalibreMG -= dieRoll;
+                  Logger.Log(LogEnum.LE_SHOW_TIME, "GameStateMorningBriefing.PerformAction(MorningBriefingTimeCheckRoll): sunsetHour=" + lastReport.SunsetHour.ToString() + " min=" + lastReport.SunsetMin.ToString() + " time=" + TableMgr.GetTime(lastReport));
                   break;
                case GameAction.MorningBriefingDeployment:
                   gi.DieResults["e007e"][0] = Utilities.NO_RESULT;
@@ -4366,6 +4369,7 @@ namespace Pattons_Best
                case GameAction.MovementChooseOption:
                   if( false == gi.IsDaylightLeft(lastReport))
                   {
+                     Logger.Log(LogEnum.LE_SHOW_TIME, "GameStateMovement.PerformAction(MovementChooseOption): sunsetHour=" + lastReport.SunsetHour.ToString() + " min=" + lastReport.SunsetMin.ToString() + " time=" + TableMgr.GetTime(lastReport) + " dayLight?=false");
                      SetCommand(gi, action, GameAction.DieRollActionNone, "e100");
                      gi.GamePhase = GamePhase.EveningDebriefing;
                   }
@@ -6073,8 +6077,7 @@ namespace Pattons_Best
                      }
                      else
                      {
-                        GameEngine.theInGameFeats.AddOne("NumPanzerfaustDeath");
-                        gi.Statistics.AddOne("NumPanzerfaustDeath");
+                        gi.Statistics.AddOne("NumPanzerfaustAttack");
                         int modifier = 0;
                         if (91 < gi.Panzerfaust.myDay)
                            modifier -= 1;
@@ -6163,6 +6166,8 @@ namespace Pattons_Best
                      {
                         if (gi.DieResults[key][0] < 9)
                         {
+                           GameEngine.theInGameFeats.AddOne("NumPanzerfaustDeath");
+                           gi.Statistics.AddOne("NumPanzerfaustDeath");
                            gi.KillSherman(lastReport, "Panzerfaust");
                            string hitLocation = "Hull";
                            if (0 == Utilities.RandomGenerator.Next(2))
@@ -6176,8 +6181,6 @@ namespace Pattons_Best
                            else
                            {
                               action = GameAction.BattleRoundSequenceShermanKilled;
-                              GameEngine.theInGameFeats.AddOne("NumPanzerfaultDeath");
-                              gi.Statistics.AddOne("NumPanzerfaultDeath");
                            }
                         }
                         else
@@ -6720,11 +6723,27 @@ namespace Pattons_Best
                      }
                      else
                      {
-                        SetCommand(gi, action, GameAction.BattleRoundSequencePlaceAdvanceFireRoll, "e054b");
                         advanceMg.Location = mpAdvance;
                         gi.BattleStacks.Add(advanceMg);
                         gi.AdvanceFire = null;
                         gi.AreaTargets.Clear();
+                        SetCommand(gi, action, GameAction.BattleRoundSequencePlaceAdvanceFireRoll, "e054b");
+                        Option optionAutoRollBowMgAdvance = gi.Options.Find("AutoRollBowMgFire");
+                        if (true == optionAutoRollBowMgAdvance.IsEnabled )
+                        {
+                           int diceRoll = 0;
+                           int die1 = Utilities.RandomGenerator.Next(0, 10);
+                           int die2 = Utilities.RandomGenerator.Next(0, 10);
+                           if (0 == die1 && 0 == die2)
+                              diceRoll = 100;
+                           else
+                              diceRoll = die1 + 10 * die2;
+                           gi.DieResults[key][0] = dieRoll;
+                           if (gi.DieResults[key][0] < 31) // Assume that sub MG do not use ammo
+                              lastReport.Ammo30CalibreMG--;
+                           else if (97 < gi.DieResults[key][0])
+                              gi.IsMalfunctionedMgBow = true;               // GameStateBattleRoundSequence.PerformAction(BattleRoundSequencePlaceAdvanceFireRoll)
+                        }
                      }
                   }
                   break;
@@ -10178,7 +10197,6 @@ namespace Pattons_Best
          {
             if (false == optionGameType.IsEnabled)
                GameEngine.theInGameFeats.AddOne("EndCampaignGame");
-            gi.Statistics.AddOne("NumGames");
             GameStatistic statMaxRollsForAirSupport = gi.Statistics.Find("MaxRollsForAirSupport");
             if (statMaxRollsForAirSupport.Value < gi.MaxRollsForAirSupport)
                statMaxRollsForAirSupport.Value = gi.MaxRollsForAirSupport;

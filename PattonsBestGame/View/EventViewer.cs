@@ -1164,7 +1164,14 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   Image imge011 = new Image { Name = "MorningBriefingDeploymentEnd" };
-                  if (true == gi.Sherman.IsHullDown)
+                  if (true == gi.IsLeadTank)
+                  {
+                     imge011.Source = MapItem.theMapImages.GetBitmapImage("ShermanLead");
+                     imge011.Width = 300;
+                     imge011.Height = 150;
+                     myTextBlock.Inlines.Add(new Run("                            "));
+                  }
+                  else if (true == gi.Sherman.IsHullDown)
                   {
                      imge011.Source = MapItem.theMapImages.GetBitmapImage("c14HullDown");
                      imge011.Width = 300;
@@ -1507,6 +1514,7 @@ namespace Pattons_Best
                      }
                      else
                      {
+                        Logger.Log(LogEnum.LE_SHOW_TIME, "UpdateEventContent(e032a): sunsetHour=" + report.SunsetHour.ToString() + " min=" + report.SunsetMin.ToString() + " time=" + TableMgr.GetTime(report) + " dayLight?=false");
                         imge032a.Name = "DebriefStart";
                         myTextBlock.Inlines.Add(new Run("Since there is no daylight left, go to Evening Debriefing "));
                         imge032a.Source = MapItem.theMapImages.GetBitmapImage("c28UsControl");
@@ -1526,6 +1534,7 @@ namespace Pattons_Best
                Button b2 = new Button() { FontFamily = myFontFam1, FontSize = 12 };
                if (false == gi.IsDaylightLeft(report))
                {
+                  Logger.Log(LogEnum.LE_SHOW_TIME, "UpdateEventContent(e033): sunsetHour=" + report.SunsetHour.ToString() + " min=" + report.SunsetMin.ToString() + " time=" + TableMgr.GetTime(report) + " dayLight?=false");
                   imge033.Name = "DebriefStart";
                   b2.Content = "r4.9";
                   b2.Click += Button_Click;
@@ -2478,26 +2487,41 @@ namespace Pattons_Best
                {
                   case 0:
                      imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Win"), Width = 300, Height = 300 };
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("                                  "));
                      break;
                   case 1:
                      imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Muscle"), Width = 300, Height = 300 };
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("                                  "));
                      break;
                   case 2:
                      imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Muscle"), Width = 300, Height = 300 };
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("                                  "));
                      break;
                   case 3:
                      imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Star"), Width = 300, Height = 300 };
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("                                  "));
                      break;
                   case 4:
                      imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Star"), Width = 300, Height = 300 };
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("                           "));
                      break;
                   default:
                      imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Win"), Width = 300, Height = 300 };
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("                                  "));
                      break;
                }
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new Run("                                  "));
                myTextBlock.Inlines.Add(new InlineUIContainer(imgEndGameWon));
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
