@@ -4057,8 +4057,12 @@ namespace Pattons_Best
          StringBuilder sbe101 = new StringBuilder();
          sbe101.Append("Engagement Victory Points: ");
          sbe101.Append(report.VictoryPtsTotalEngagement.ToString());
-         sbe101.Append("\nCampaign Victory Points: ");
-         sbe101.Append(gi.VictoryPtsTotalCampaign.ToString());
+         Option optionSingleDayGame = gi.Options.Find("SingleDayScenario");
+         if( false == optionSingleDayGame.IsEnabled )
+         {
+            sbe101.Append("\nCampaign Victory Points: ");
+            sbe101.Append(gi.VictoryPtsTotalCampaign.ToString());
+         }
          //----------------------------------------
          Image? imge101 = null;
          if (true == gi.IsCommanderKilled)

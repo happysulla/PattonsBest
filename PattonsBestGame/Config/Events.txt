@@ -949,7 +949,7 @@ e101	"<Bold>e101 Evening Debriefing - Victory Point Total</Bold>
 <LineBreak/><LineBreak/>
 The After Action Report 
 <InlineUIContainer><Button Content='AAR' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-is updated to reflect victory points for both your tank and friendly forces. 
+updated to reflect victory points for both your tank and friendly forces. 
 <LineBreak/><LineBreak/>"
 e102	"<Bold>e102 Evening Debriefing - Promotions</Bold> 
 <InlineUIContainer><Button Content='r4.93' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
