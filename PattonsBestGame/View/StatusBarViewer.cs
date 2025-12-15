@@ -95,7 +95,7 @@ namespace Pattons_Best
          buttonGoto.Click += ButtonEventActive_Click;
          myStatusBar.Items.Add(buttonGoto);
          //--------------------------------------------
-         if (null != lastReport)
+         if ( (null != lastReport) && (GamePhase.GameSetup != myGameInstance.GamePhase) )
          {
             myStatusBar.Items.Add(new Separator());
             int minLeft = TableMgr.GetTimeRemaining(lastReport);

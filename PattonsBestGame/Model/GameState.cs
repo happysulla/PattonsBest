@@ -2620,8 +2620,8 @@ namespace Pattons_Best
          //gi.Day = 100;                                       // <cgs> TEST - After Nov 1944 for HVSS   
          //gi.Day = 110;                                      // <cgs> TEST - After Nov 1944 - day 111 is retrofit period 
          //--------------------------------
-         lastReport.SunriseHour = 18;  // <cgs> TEST - EndOfDay - start at end of day
-         lastReport.SunriseMin = 00;   // <cgs> TEST - EndOfDay - start at end of day
+         //lastReport.SunriseHour = 18;  // <cgs> TEST - EndOfDay - start at end of day
+         //lastReport.SunriseMin = 00;   // <cgs> TEST - EndOfDay - start at end of day
          //--------------------------------
          //lastReport.Driver.SetBloodSpots(20);              // <cgs> TEST - wounded crewmen
          //lastReport.Driver.Wound = "Light Wound";          // <cgs> TEST - wounded crewmen
@@ -2650,7 +2650,7 @@ namespace Pattons_Best
          //gi.Sherman.IsBoggedDown = true;
          //gi.Sherman.IsAssistanceNeeded = true;
          //--------------------------------
-         lastReport.Ammo30CalibreMG = 5;
+         //lastReport.Ammo30CalibreMG = 5;
          //lastReport.AmmoPeriscope = 3;
          //gi.IsBrokenPeriscopeDriver = true;
          //gi.IsBrokenPeriscopeLoader = true;
