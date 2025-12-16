@@ -95,7 +95,7 @@ namespace Pattons_Best
          buttonGoto.Click += ButtonEventActive_Click;
          myStatusBar.Items.Add(buttonGoto);
          //--------------------------------------------
-         if ( (null != lastReport) && (GamePhase.GameSetup != myGameInstance.GamePhase) )
+         if ( (null != lastReport) && ( (GamePhase.GameSetup != myGameInstance.GamePhase)||(GamePhase.EveningDebriefing != myGameInstance.GamePhase)) )
          {
             myStatusBar.Items.Add(new Separator());
             int minLeft = TableMgr.GetTimeRemaining(lastReport);
@@ -107,10 +107,18 @@ namespace Pattons_Best
             else
                imgTimeRemaining = new Image { Source = MapItem.theMapImages.GetBitmapImage("Sunset"), Width = 30, Height = 15 };
             myStatusBar.Items.Add(imgTimeRemaining);
-            if ((lastReport.MainGunHE < 10) || (lastReport.MainGunAP < 5))
+            if (lastReport.MainGunHE < 10)
             {
                myStatusBar.Items.Add(new Separator());
-               Label labelLowAmmoMain = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = "Low Main Ammo" };
+               Label labelLowAmmoMain = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = "Low HE Ammo=" + lastReport.MainGunHE.ToString() };
+               Image imgLowAmmoMain = new Image { Source = MapItem.theMapImages.GetBitmapImage("Alert2"), Width = 30, Height = 30 };
+               myStatusBar.Items.Add(labelLowAmmoMain);
+               myStatusBar.Items.Add(imgLowAmmoMain);
+            }
+            if (lastReport.MainGunAP < 6)
+            {
+               myStatusBar.Items.Add(new Separator());
+               Label labelLowAmmoMain = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = "Low AP Ammo=" + lastReport.MainGunAP.ToString() };
                Image imgLowAmmoMain = new Image { Source = MapItem.theMapImages.GetBitmapImage("Alert2"), Width = 30, Height = 30 };
                myStatusBar.Items.Add(labelLowAmmoMain);
                myStatusBar.Items.Add(imgLowAmmoMain);
@@ -118,7 +126,7 @@ namespace Pattons_Best
             if (lastReport.Ammo30CalibreMG < 10)
             {
                myStatusBar.Items.Add(new Separator());
-               Label labelLowAmmoMg = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = "Low MG Ammo" };
+               Label labelLowAmmoMg = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = "Low 30mm Ammo=" + lastReport.Ammo30CalibreMG.ToString() };
                Image imgLowAmmoMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("Alert3"), Width = 30, Height = 26 };
                myStatusBar.Items.Add(labelLowAmmoMg);
                myStatusBar.Items.Add(imgLowAmmoMg);

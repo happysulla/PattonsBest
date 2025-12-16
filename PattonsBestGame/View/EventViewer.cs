@@ -4718,7 +4718,10 @@ namespace Pattons_Best
          {
             cb.Visibility = Visibility.Hidden;
             option.IsEnabled = false;
-            cb.IsChecked = false;
+         }
+         else if ( ("e054b" == key) && (false == myGameInstance.IsShermanFiringBowMg) )
+         {
+            cb.Visibility = Visibility.Hidden;
          }
          else
          {

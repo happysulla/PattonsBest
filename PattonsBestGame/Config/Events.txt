@@ -793,6 +793,8 @@ The MG ammo is marked off the After Action Report <InlineUIContainer><Button Con
 e054b	"<Bold>e054b MG Firing - Advancing Fire</Bold> 
 <InlineUIContainer><Button Content='r4.74.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r22.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
+<LineBreak/><LineBreak/> 
+<InlineUIContainer><CheckBox Name='AutoRollBowMgFire' IsEnabled='True' Content='Autoroll Bow MG Advance Fire in Future' FontFamily='Courier New'  FontSize='12'></CheckBox></InlineUIContainer>
 <LineBreak/><LineBreak/>
 Advancing fire attacks infantry targets that move into the zone. It also help protect against Panzerfaust attacks. 
 <LineBreak/><LineBreak/>
