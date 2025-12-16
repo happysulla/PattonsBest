@@ -6673,6 +6673,8 @@ namespace Pattons_Best
                                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MG_ATTACK, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceFireMachineGunRoll): (toKillNum=" + toKillNum.ToString() + ") + (mod=" + modifier.ToString() + ") = (total=" + total.ToString() + ") dr=" + gi.DieResults[key][0].ToString());
                                  if ((gi.DieResults[key][0] <= total) || (gi.DieResults[key][0] < 4))
                                  {
+                                    if (gi.DieResults[key][0] < 4)
+                                       GameEngine.theInGameFeats.AddOne("NumCriticalHitWithMG");
                                     if (false == gi.KillEnemy(lastReport, gi.TargetMg, true))
                                     {
                                        returnStatus = "Kill_Enemy() returned false";
@@ -8719,6 +8721,8 @@ namespace Pattons_Best
             if (TableMgr.KIA == modifier)  // automatic KILL
             {
                Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK_INF, "ResolveToKillEnemyUnitKill(): vs Infantry target -- AUTO KILL - AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+               if (true == hit.myIsCriticalHit)
+                  GameEngine.theInGameFeats.AddOne("NumCriticalHitWithMainGun");
                if ( false == gi.KillEnemy(lastReport, gi.TargetMainGun, true))
                {
                   Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitKill(): Kill_Enemy() returned error");
@@ -8768,6 +8772,8 @@ namespace Pattons_Best
                   if (TableMgr.KIA == toKillNum) // automatic KILL
                   {
                      Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): AUTO KIlled KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
+                     if (true == hit.myIsCriticalHit)
+                        GameEngine.theInGameFeats.AddOne("NumCriticalHitWithMainGun");
                      if (false == gi.KillEnemy(lastReport, gi.TargetMainGun, true))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitKill(): Kill_Enemy() returned error");
@@ -8836,9 +8842,11 @@ namespace Pattons_Best
                   if (TableMgr.KIA == toKillNum) // automatic KILL
                   {
                      Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): AUTO KIlled KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
+                     if (true == hit.myIsCriticalHit)
+                        GameEngine.theInGameFeats.AddOne("NumCriticalHitWithMainGun");
                      if (false == gi.KillEnemy(lastReport, gi.TargetMainGun, true))
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitKill(): KillEnemy() returned error");
+                        Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitKill(): Kill_Enemy() returned error");
                         return false;
                      }
                      return true;
@@ -8871,9 +8879,11 @@ namespace Pattons_Best
                   if (TableMgr.KIA == toKillNum) // automatic KILL
                   {
                      Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitKill(): AUTO KIlled KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
+                     if (true == hit.myIsCriticalHit)
+                        GameEngine.theInGameFeats.AddOne("NumCriticalHitWithMainGun");
                      if (false == gi.KillEnemy(lastReport, gi.TargetMainGun, true))
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitKill(): KillEnemy() returned error");
+                        Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitKill(): Kill_Enemy() returned error");
                         return false;
                      }
                      return true;
@@ -8955,9 +8965,11 @@ namespace Pattons_Best
             case "He":
             case "Ap":
             case "Hvap":
+               if (true == hit.myIsCriticalHit)
+                  GameEngine.theInGameFeats.AddOne("NumCriticalHitWithMainGun");
                if (false == gi.KillEnemy(lastReport, gi.TargetMainGun, true))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitKill(): KillEnemy() returned error");
+                  Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitKill(): Kill_Enemy() returned error");
                   return false;
                }
                break;
@@ -10200,7 +10212,7 @@ namespace Pattons_Best
             return false;
          }
          Option optionCommanderDeath = gi.Options.Find("GameEndsOnCommanderDeath");
-         Option optionGameType= gi.Options.Find("SingleDayScenario");
+         Option optionSingleDayGame= gi.Options.Find("SingleDayScenario");
          Logger.Log(LogEnum.LE_GAME_END_CHECK, "Perform_EndCheck(): ae=" + gi.EventActive + " action=" + action.ToString() + " day=" + gi.Day.ToString() + " entrydate=" + lastReport.Day + " o?=" + optionCommanderDeath.IsEnabled.ToString() + " k?=" + gi.IsCommanderKilled.ToString());
          //----------------------------------------------------------
          if ( null != gi.Death) 
@@ -10210,7 +10222,7 @@ namespace Pattons_Best
             {
                Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): TankExplodes");
                GameEngine.theInGameFeats.AddOne("EndGameExplode");
-               if (false == optionGameType.IsEnabled)
+               if (false == optionSingleDayGame.IsEnabled)
                   GameEngine.theInGameFeats.AddOne("EndCampaignGame");
                gi.GamePhase = GamePhase.EndGame;
                action = GameAction.EndGameLost;
@@ -10227,17 +10239,22 @@ namespace Pattons_Best
             SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
          }
          //----------------------------------------------------------
-         //else if ((189 < gi.Day) || (true == optionGameType.IsEnabled)) // ends on day 190
-         else if (189 < gi.Day)  // ends on day 190
+         else if ((189 < gi.Day) || (true == optionSingleDayGame.IsEnabled)) // ends on day 190
          {
             Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): 191 < (day=" + gi.Day.ToString() + ") (VP=" + gi.VictoryPtsTotalCampaign.ToString() + ")");
-            if ((false == optionGameType.IsEnabled) && (189 < gi.Day) )
+            int crewRating = lastReport.Commander.Rating + lastReport.Gunner.Rating + lastReport.Loader.Rating + lastReport.Driver.Rating + lastReport.Assistant.Rating;
+            GameStatistic statMaxCrewRatingWin = gi.Statistics.Find("MaxCrewRatingWin");
+            statMaxCrewRatingWin.Value = crewRating;
+            GameStatistic statMinCrewRatingWin = gi.Statistics.Find("MinCrewRatingWin");
+            statMinCrewRatingWin.Value = crewRating;
+            if ((false == optionSingleDayGame.IsEnabled) && (189 < gi.Day))
                GameEngine.theInGameFeats.AddOne("EndCampaignGameOnTime");
+            //-------------------------------------------------------------
             gi.GamePhase = GamePhase.EndGame;
             if (0 < gi.VictoryPtsTotalCampaign)
             {
                gi.Statistics.AddOne("NumWins");
-               if (true == optionGameType.IsEnabled)
+               if (true == optionSingleDayGame.IsEnabled)
                   GameEngine.theInGameFeats.AddOne("EndSingleDayWin");
                else
                   GameEngine.theInGameFeats.AddOne("EndCampaignGameWin");
@@ -10255,7 +10272,7 @@ namespace Pattons_Best
          //----------------------------------------------------------
          if (GamePhase.EndGame == gi.GamePhase)
          {
-            if (false == optionGameType.IsEnabled)
+            if (false == optionSingleDayGame.IsEnabled)
                GameEngine.theInGameFeats.AddOne("EndCampaignGame");
             GameStatistic statMaxRollsForAirSupport = gi.Statistics.Find("MaxRollsForAirSupport");
             if (statMaxRollsForAirSupport.Value < gi.MaxRollsForAirSupport)
@@ -10264,7 +10281,7 @@ namespace Pattons_Best
             GameStatistic statMaxRollsForArtillerySupport = gi.Statistics.Find("MaxRollsForArtillerySupport");
             if (statMaxRollsForArtillerySupport.Value < gi.MaxRollsForArtillerySupport)
                statMaxRollsForArtillerySupport.Value = gi.MaxRollsForArtillerySupport;
-            gi.MaxRollsForArtillerySupport = 0;
+            gi.MaxRollsForArtillerySupport = 0;        
          }
          //----------------------------------------------------------
          GameStatistic statMaxDayBetweenCombat = gi.Statistics.Find("MaxDayBetweenCombat");

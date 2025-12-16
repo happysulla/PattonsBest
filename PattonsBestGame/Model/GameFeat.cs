@@ -108,6 +108,8 @@ namespace Pattons_Best
          "RepairMg",
          "FireMortar",
          "ThrowSmoke",
+         "NumCriticalHitWithMG",
+         "NumCriticalHitWithMainGun",
          //------------
          "NumShermanExplodes",
          "NumShermanBurns",
@@ -547,6 +549,20 @@ namespace Pattons_Best
                   sb.Append(" out of 1");
                sb.Append(" times");
                return sb.ToString();
+            case "NumCriticalHitWithMG":
+               sb.Append("Critical Hit Kill with MG ");
+               sb.Append(feat.Value.ToString());
+               if (true == isThreshold)
+                  sb.Append(" out of 1");
+               sb.Append(" times");
+               return sb.ToString();
+            case "NumCriticalHitWithMainGun":
+               sb.Append("Critical Hit Kill with Main Gun ");
+               sb.Append(feat.Value.ToString());
+               if (true == isThreshold)
+                  sb.Append(" out of 1");
+               sb.Append(" times");
+               return sb.ToString();
             //------------
             case "NumShermanExplodes":
                sb.Append("Sherman exploded ");
@@ -631,9 +647,9 @@ namespace Pattons_Best
          }
          return copy;
       }
-      public bool GetFeatChange(GameFeats rightFeats, out GameFeat outFeat)
+      public bool GetFeatChange(GameFeats rightFeats, out GameFeat changedFeat)
       {
-         outFeat = new GameFeat();
+         changedFeat = new GameFeat();
          if (this.Count < rightFeats.Count) // this should not happen
          {
             Logger.Log(LogEnum.LE_ERROR, "Get_FeatChange(): (rightFeats.Count=" + rightFeats.Count.ToString() + ") > (this.Count=" + this.Count.ToString() + ")");
@@ -674,13 +690,22 @@ namespace Pattons_Best
             }
             if (left.Value != right.Value)
             {
-               Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Get_FeatChange(): Key=" + right.Key + " (left.Value=" + left.Value.ToString() + ") != (right.Value =" + right.Value.ToString() + ")");
-               if( 0 == left.Threshold )
-                  outFeat = left;
+               if (0 == left.Threshold)
+               {
+                  Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Get_FeatChange(): No Threshold Key=" + right.Key + " (left.Value=" + left.Value.ToString() + ") != (right.Value =" + right.Value.ToString() + ")");
+                  changedFeat = left;
+                  return true;
+               }
                else if (0 == left.Value % left.Threshold) // when the value reaches an iterative threshold, show feat
-                  outFeat = left;
-               right.Value = left.Value - 1; // starting feat is one behind current feat - gets set to same value when user acknowledges feat
-               return true;
+               {
+                  Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Get_FeatChange(): Reached Threshold=" + left.Threshold.ToString() + " Key=" + right.Key + " (left.Value=" + left.Value.ToString() + ") != (right.Value =" + right.Value.ToString() + ")");
+                  changedFeat = left;
+                  return true;
+               }
+               else
+               {
+                  right.Value = left.Value; // if not at threshold, ignore but update to current value
+               }
             }
          }
          return true;

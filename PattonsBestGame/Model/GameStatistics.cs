@@ -45,7 +45,7 @@ namespace Pattons_Best
    //========================================
    [XmlInclude(typeof(GameStatistic))]
    [Serializable]
-   public class GameStatistics : IEnumerable
+   public class GameStatistics : IEnumerable // Must have prefix Num, Max, or Min
    {
       [NonSerialized]
       public static string[] theDefaults =
@@ -110,7 +110,9 @@ namespace Pattons_Best
          "MaxRollsForArtillerySupport",
          "MaxDayBetweenCombat",
          "MaxEnemiesInOneBattle",
-         "MaxRoundsOfCombat"
+         "MaxRoundsOfCombat",
+         "MaxCrewRatingWin",
+         "MinCrewRatingWin"
       };
       [NonSerialized] public static string theGameStatisticsDirectory = "";
       public static string GetStatisticMessage(GameStatistic stat)

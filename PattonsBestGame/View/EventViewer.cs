@@ -3871,31 +3871,31 @@ namespace Pattons_Best
          //------------------------------------
          if (null == gi.TargetMg)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): gi.TargetMg=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMgToKillModifier(): gi.TargetMg=null");
             return "ERROR";
          }
          //------------------------------------
          if (3 != gi.TargetMg.TerritoryCurrent.Name.Length)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): 3 != TerritoryCurrent.Name.Length=" + gi.TargetMg.TerritoryCurrent.Name);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMgToKillModifier(): 3 != TerritoryCurrent.Name.Length=" + gi.TargetMg.TerritoryCurrent.Name);
             return "ERROR";
          }
          char range = gi.TargetMg.TerritoryCurrent.Name[2];
          if (('C' != range) && ('M' != range) && ('L' != range))
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): unknown range=" + range.ToString() + " t=" + gi.TargetMg.TerritoryCurrent.Name);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMgToKillModifier(): unknown range=" + range.ToString() + " t=" + gi.TargetMg.TerritoryCurrent.Name);
             return "ERROR";
          }
          //------------------------------------
          string enemyUnitType = gi.TargetMg.GetEnemyUnit();
          if ("ERROR" == enemyUnitType)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): unknown gi.TargetMg=" + gi.TargetMg.Name);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMgToKillModifier(): unknown gi.TargetMg=" + gi.TargetMg.Name);
             return "ERROR";
          }
          if (("LW" != enemyUnitType) && ("MG" != enemyUnitType) && ("ATG" != enemyUnitType) && ("Pak38" != enemyUnitType) && ("Pak40" != enemyUnitType) && ("Pak43" != enemyUnitType) && ("TRUCK" != enemyUnitType))
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): MG fire not appropriate for enemyType=" + enemyUnitType);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMgToKillModifier(): MG fire not appropriate for enemyType=" + enemyUnitType);
             return "ERROR";
          }
          //------------------------------------
@@ -3937,7 +3937,7 @@ namespace Pattons_Best
             ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
             if (null == commander)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): commander=null");
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMgToKillModifier(): commander=null");
                return "ERROR";
             }
             sb.Append("-");
@@ -3950,7 +3950,7 @@ namespace Pattons_Best
             ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
             if (null == commander)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): commander=null");
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMgToKillModifier(): commander=null");
                return "ERROR";
             }
             sb.Append("-");
@@ -3963,7 +3963,7 @@ namespace Pattons_Best
             ICrewMember? loader = gi.GetCrewMemberByRole("Loader");
             if (null == loader)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): loader=null");
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMgToKillModifier(): loader=null");
                return "ERROR";
             }
             sb.Append("-");
@@ -3976,7 +3976,7 @@ namespace Pattons_Best
             ICrewMember? gunner = gi.GetCrewMemberByRole("Gunner");
             if (null == gunner)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): gunner=null");
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMgToKillModifier(): gunner=null");
                return "ERROR";
             }
             sb.Append("-");
@@ -3989,7 +3989,7 @@ namespace Pattons_Best
             ICrewMember? assistant = gi.GetCrewMemberByRole("Assistant");
             if (null == assistant)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKillModifier(): assistant=null");
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMgToKillModifier(): assistant=null");
                return "ERROR";
             }
             sb.Append("-");
@@ -4103,7 +4103,7 @@ namespace Pattons_Best
          //----------------------------------------
          if (null == myTextBlock)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentPromotion(): myTextBlock=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentPromotion(): myTextBlock=null");
             return false;
          }
          string key = gi.EventActive;
@@ -4111,7 +4111,7 @@ namespace Pattons_Best
          IAfterActionReport? report = gi.Reports.GetLast();
          if (null == report)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentPromotion():  gi.Reports.GetLast()");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentPromotion():  gi.Reports.GetLast()");
             return false;
          }
          //----------------------------------------
@@ -4161,7 +4161,7 @@ namespace Pattons_Best
          //----------------------------------------
          if (null == myTextBlock)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentDecoration(): myTextBlock=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentDecoration(): myTextBlock=null");
             return false;
          }
          string key = gi.EventActive;
@@ -4169,14 +4169,14 @@ namespace Pattons_Best
          IAfterActionReport? report = gi.Reports.GetLast();
          if (null == report)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentDecoration():  gi.Reports.GetLast()");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentDecoration():  gi.Reports.GetLast()");
             return false;
          }
          //----------------------------------------
          ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
          if (null == commander)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentDecoration(): commander=null for key=" + key);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentDecoration(): commander=null for key=" + key);
             return false;
          }
          int modifierDecoration = 0;
@@ -4328,7 +4328,7 @@ namespace Pattons_Best
          ICrewMember? loader = gi.GetCrewMemberByRole("Loader");
          if (null == loader)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): loader=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMainGunRepair(): loader=null");
             return "ERROR";
          }
          modifier -= loader.Rating;
@@ -4340,7 +4340,7 @@ namespace Pattons_Best
             ICrewMember? gunner = gi.GetCrewMemberByRole("Gunner");
             if (null == gunner)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gunner=null");
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMainGunRepair(): gunner=null");
                return "ERROR";
             }
             modifier -= gunner.Rating;
@@ -4370,7 +4370,7 @@ namespace Pattons_Best
             ICrewMember? loader = gi.GetCrewMemberByRole("Loader");
             if (null == loader)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): loader=null");
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMainGunRepair(): loader=null");
                return "ERROR";
             }
             modifier -= loader.Rating;
@@ -4383,7 +4383,7 @@ namespace Pattons_Best
             ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
             if (null == commander)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): commander=null");
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMainGunRepair(): commander=null");
                return "ERROR";
             }
             modifier -= commander.Rating;
@@ -4414,7 +4414,7 @@ namespace Pattons_Best
          {
             if (false == gi.IsCrewActionSelectable("Assistant", out isAssistantOrderGiven))
             {
-               Logger.Log(LogEnum.LE_ERROR, "IsOrdersGiven(): IsCrewActionSelectable(Assistant) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "IsOrders_Given(): IsCrewActionSelectable(Assistant) returned false");
                isOrdersGiven = false;
                return false;
             }
@@ -4424,7 +4424,7 @@ namespace Pattons_Best
          {
             if (false == gi.IsCrewActionSelectable("Gunner", out isGunnerOrderGiven))
             {
-               Logger.Log(LogEnum.LE_ERROR, "IsOrdersGiven(): IsCrewActionSelectable(Gunner) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "IsOrders_Given(): IsCrewActionSelectable(Gunner) returned false");
                isOrdersGiven = false;
                return false;
             }
@@ -4434,7 +4434,7 @@ namespace Pattons_Best
          {
             if (false == gi.IsCrewActionSelectable("Commander", out isCommanderOrderGiven))
             {
-               Logger.Log(LogEnum.LE_ERROR, "IsOrdersGiven():  IsCrewActionSelectable(Commander) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "IsOrders_Given():  IsCrewActionSelectable(Commander) returned false");
                isOrdersGiven = false;
                return false;
             }

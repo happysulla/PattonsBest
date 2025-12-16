@@ -3228,22 +3228,24 @@ namespace Pattons_Best
       private void UpdateCanvasShowStatsAdds(GameStatistics statistics, GameStatistics totalStatistics)
       {
          //-------------------------------------
-         foreach (GameStatistic numOneGame in statistics)
+         foreach (GameStatistic stat in statistics)
          {
-            if (true == numOneGame.Key.Contains("Num"))
+            if (true == stat.Key.Contains("Num"))
             {
-               GameStatistic statAllNum = totalStatistics.Find(numOneGame.Key);
-               statAllNum.Value += numOneGame.Value;
+               GameStatistic statAllNum = totalStatistics.Find(stat.Key);
+               statAllNum.Value += stat.Value;
             }
-         }
-         //-------------------------------------
-         foreach (GameStatistic maxOneGame in statistics)
-         {
-            if (true == maxOneGame.Key.Contains("Max"))
+            else if (true == stat.Key.Contains("Max"))
             {
-               GameStatistic statMax = totalStatistics.Find(maxOneGame.Key);
-               if(statMax.Value < maxOneGame.Value )
-                  statMax.Value = maxOneGame.Value;
+               GameStatistic statMax = totalStatistics.Find(stat.Key);
+               if (statMax.Value < stat.Value)
+                  statMax.Value = stat.Value;
+            }
+            else if (true == stat.Key.Contains("Min"))
+            {
+               GameStatistic statMin = totalStatistics.Find(stat.Key);
+               if (stat.Value < statMin.Value )
+                  statMin.Value = stat.Value;
             }
          }
       }
