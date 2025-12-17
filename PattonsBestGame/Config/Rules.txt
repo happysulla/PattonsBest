@@ -1141,7 +1141,7 @@ The .50 calibre anti-aircraft (AA) MG is fixed to a pintle mount (post) on top o
 <LineBreak/><LineBreak/>
 Several hand held submachine guns (sub MGs) are carried in the turret and may be fired from open hatches.
 <LineBreak/><LineBreak/>
-                                      <InlineUIContainer><Image Name='c51FireCoaxialMg'  Height='100' Width='100'></Image></InlineUIContainer>"
+                                      <InlineUIContainer><Image Name='c51GFireCoaxialMg'  Height='100' Width='100'></Image></InlineUIContainer>"
 r10.2	"<Bold>r10.2 Firing Machine Guns (MGs)</Bold> 
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r10.21' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Description<LineBreak/>
@@ -1302,7 +1302,7 @@ Vehicle types are:<LineBreak/>
  <LineBreak/><LineBreak/>
 Infantry types are:<LineBreak/>
 <InlineUIContainer><Button Content='r12.16' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Light Weapons (LW)<LineBreak/>
-<InlineUIContainer><Button Content='r12.17' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Muchaine Gun (MG) Team<LineBreak/>
+<InlineUIContainer><Button Content='r12.17' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Machine Gun (MG) Team<LineBreak/>
 <InlineUIContainer><Button Content='r12.18' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Antitank (AT) Gun
 <LineBreak/><LineBreak/>
 Tank, SPG, and AT guns are printed in black on their front side and red on their back side. When these units first appear, place them red side up. They remain on their red side until they are identified by spotting per 
@@ -1341,7 +1341,7 @@ SPGs have no turret and are designed as assault or anti-tnak guns. They appear i
   <InlineUIContainer><Image Name='c87JgdPz38t'  Height='100' Width='100'></Image></InlineUIContainer>"
 r12.13	"<Bold>r12.13 Truck</Bold> 
 <LineBreak/><LineBreak/>
-Any medium truck of the period
+Any medium truck of the period. Trucks require TO HIT roll for main gun but can also be targeted with MG fire.
 <LineBreak/><LineBreak/>
                                       <InlineUIContainer><Image Name='c88Truck' Height='100' Width='100'></Image></InlineUIContainer>"
 r12.14	"<Bold>r12.14 Panzerspahwagen (PSW)</Bold> 

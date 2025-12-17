@@ -2822,7 +2822,7 @@ namespace Pattons_Best
             double toHitNum = TableMgr.GetShermanToHitBaseNumber(gi, gi.TargetMainGun);
             if (TableMgr.FN_ERROR == toHitNum)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentToGetToHit(): GetShermanToHitBaseNumber() returned error for key=" + key);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentToGetToHit(): Get_ShermanToHitBaseNumber() returned error for key=" + key);
                return false;
             }
             double modifier = TableMgr.GetShermanToHitModifier(gi, gi.TargetMainGun);
@@ -3736,7 +3736,7 @@ namespace Pattons_Best
          }
          if (TableMgr.FN_ERROR == toKillNum)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicleCheckIfNoChance(): GetShermanToHitBaseNumber() returned error");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillVehicleCheckIfNoChance(): Get_ShermanToHitBaseNumber() returned error");
             return TableMgr.FN_ERROR;
          }
          return toKillNum;
@@ -3824,7 +3824,10 @@ namespace Pattons_Best
             sb.Append(" - ");
          sb.Append(Math.Abs(modifier).ToString());
          sb.Append(" = ");
-         sb.Append(comboMg.ToString());
+         if( 3 < comboMg )
+            sb.Append(comboMg.ToString());
+         else
+            sb.Append("3"); // unmodified roll of 3 is automatic KIA
          sb.Append(" or less: ");
          myTextBlock.Inlines.Add(new Run(sb.ToString()));
          if (Utilities.NO_RESULT == gi.DieResults[key][0])

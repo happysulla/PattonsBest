@@ -931,7 +931,7 @@
                <LineBreak/>
                <Run Text=' (5) Base numbers To Hit are halved for each Smoke marker in teh firer&apos;s zone in the target&apos;s zone, and in any zone in between.'></Run>
                <LineBreak/>
-               <Run Text=' (6) A crew may yonly fire while also moving or pivoting if they have been trained in usng the Gyrostabilizers per '></Run>
+               <Run Text=' (6) A crew may only fire while also moving or pivoting if they have been trained in usng the Gyrostabilizers per '></Run>
                <InlineUIContainer>
                   <Button Content='r27.2' FontFamily='Courier New'  FontSize='8'></Button>
                </InlineUIContainer>

@@ -14,7 +14,7 @@
                <LineBreak/>SHERMAN MACHINE GUN vs INFANTRY TARGETS
                <LineBreak/>
                <Italic>
-                  <Run FontSize='12' Text='Infantry targets are LW, MG, and AT. Roll the base number shown or less To Kill:'></Run>
+                  <Run FontSize='12' Text='Infantry targets are LW, MG, and AT. Trucks can also be hit. Roll the base number shown or less To Kill:'></Run>
                </Italic>
             </Paragraph>
          </TableCell>

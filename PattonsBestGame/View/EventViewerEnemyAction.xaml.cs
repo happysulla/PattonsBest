@@ -1529,7 +1529,7 @@ namespace Pattons_Best
                   myGridRows[i].myToKillNumber = (int) TableMgr.GetEnemyToKillNumberInfantry(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
                   if(TableMgr.FN_ERROR == myGridRows[i].myToKillNumber )
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetEnemyToKillNumberInfantry() returned " + myGridRows[i].myToKillNumber.ToString() + " for action=" + enemyAction);
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Get_EnemyToKillNumberInfantry() returned " + myGridRows[i].myToKillNumber.ToString() + " for action=" + enemyAction);
                      return;
                   }
                   myGridRows[i].myDieRollToHitYourTank = NO_FIRE_YOUR_TANK;
@@ -1549,13 +1549,13 @@ namespace Pattons_Best
                      myGridRows[i].myModifierToHitYourTank = (int)TableMgr.GetEnemyToHitNumberModifierForYourTank(myGameInstance, mi, myGridRows[i].myRange);
                      if (TableMgr.FN_ERROR == myGridRows[i].myModifierToHitYourTank)
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetEnemyToKillNumberInfantry() returned " + myGridRows[i].myDieRollToHitYourTank.ToString() + " for action=" + enemyAction);
+                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Get_EnemyToHitNumberModifierForYourTank() returned " + myGridRows[i].myDieRollToHitYourTank.ToString() + " for action=" + enemyAction);
                         return;
                      }
                      myGridRows[i].myToHitNumberYourTank = (int)TableMgr.GetEnemyToHitNumberYourTank(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
                      if (TableMgr.FN_ERROR == myGridRows[i].myToHitNumberYourTank)
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetEnemyToKillNumberInfantry() returned " + myGridRows[i].myDieRollToHitYourTank.ToString() + " for action=" + enemyAction);
+                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Get_EnemyToHitNumberYourTank() returned " + myGridRows[i].myDieRollToHitYourTank.ToString() + " for action=" + enemyAction);
                         return;
                      }
                      myGridRows[i].myDieRollFire = NO_FIRE; // not firing at other tanks... only firing at your tank
@@ -1574,7 +1574,7 @@ namespace Pattons_Best
                      myGridRows[i].myToKillNumber = (int)TableMgr.GetEnemyToKillNumberTank(myGameInstance, mi, myGridRows[i].mySector, myGridRows[i].myRange);
                      if (TableMgr.FN_ERROR == myGridRows[i].myToKillNumber)
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): GetEnemyToKillNumberInfantry() returned " + myGridRows[i].myToKillNumber.ToString() + " for action=" + enemyAction);
+                        Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Get_EnemyToKillNumberTank() returned " + myGridRows[i].myToKillNumber.ToString() + " for action=" + enemyAction);
                         return;
                      }
                      myGridRows[i].myDieRollToHitYourTank = NO_FIRE_YOUR_TANK;

@@ -1121,7 +1121,7 @@ namespace Pattons_Best
          StringBuilder sb = new StringBuilder("NumKill");
         switch(mi.GetEnemyUnit())
          {
-            case "TANK": sb.Append("PzVIb"); break;
+            case "TANK": sb.Append("PzVIe"); break;
             case "ATG": sb.Append("Pak43"); break;
             case "SPG": sb.Append("STuGIIIg"); break;
             case "LW": sb.Append("Lw"); break;
@@ -1134,8 +1134,8 @@ namespace Pattons_Best
             case "Pak43": sb.Append("Pak43"); break;
             case "PzIV": sb.Append("PzIV"); break;
             case "PzV": sb.Append("PzV"); break;
-            case "PzVIb": sb.Append("PzVIb"); break;
-            case "PzVIe": sb.Append("PzVIe"); break;
+            case "PzVIb": sb.Append("PzVIb"); break;  // king tiger
+            case "PzVIe": sb.Append("PzVIe"); break;  // tiger
             case "STuGIIIg": sb.Append("STuGIIIg"); break;
             case "MARDERII": sb.Append("MarderII"); break;
             case "MARDERIII": sb.Append("MarderIII"); break;

@@ -2183,14 +2183,14 @@ namespace Pattons_Best
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberInfantry(): unknown enemyUnit=" + mi.Name);
+            Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberInfantry(): unknown enemyUnit=" + mi.Name);
             return FN_ERROR;
          }
          //----------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberInfantry(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberInfantry(): lastReport=null");
             return FN_ERROR;
          }
          //----------------------------------------------------
@@ -2235,7 +2235,7 @@ namespace Pattons_Best
                      toKillNum = 10;
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberInfantry(): Advance | Battle - reached default with enemyUnit=" + enemyUnit);
+                  Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberInfantry(): Advance | Battle - reached default with enemyUnit=" + enemyUnit);
                   return FN_ERROR;
             }
          }
@@ -2275,20 +2275,20 @@ namespace Pattons_Best
                      toKillNum = 05;
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberInfantry(): Counterattack - reached default with enemyUnit=" + enemyUnit);
+                  Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberInfantry(): Counterattack - reached default with enemyUnit=" + enemyUnit);
                   return FN_ERROR;
             }
          }
          else
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberInfantry():  reached default with scearno=" + lastReport.Scenario);
+            Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberInfantry():  reached default with scearno=" + lastReport.Scenario);
             return FN_ERROR;
          }
          //------------------------------------
          int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
          if (numSmokeMarkers < 0)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberTank(): GetSmokeCount() returned error");
+            Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberInfantry(): GetSmokeCount() returned error");
             return FN_ERROR;
          }
          if (0 < numSmokeMarkers)
@@ -5265,7 +5265,7 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitBaseNumber(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitBaseNumber(): lastReport=null");
             return FN_ERROR;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
@@ -5273,7 +5273,7 @@ namespace Pattons_Best
          //------------------------------------
          if (3 != enemyUnit.TerritoryCurrent.Name.Length)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitBaseNumber(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
+            Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitBaseNumber(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
             return FN_ERROR;
          }
          char sector = enemyUnit.TerritoryCurrent.Name[1];
@@ -5282,21 +5282,20 @@ namespace Pattons_Best
          string enemyUnitType = enemyUnit.GetEnemyUnit();
          if ("ERROR" == enemyUnitType)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitBaseNumber(): unknown enemyUnit=" + enemyUnit.Name);
+            Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitBaseNumber(): unknown enemyUnit=" + enemyUnit.Name);
             return FN_ERROR;
          }
          switch (enemyUnitType)
          {
             case "LW":
             case "MG":
-            case "TRUCK":
             case "ATG":
             case "Pak38":
             case "Pak40":
             case "Pak43":
                if ("75" == guntype)
                {
-                  if ("Direct" == gi.ShermanTypeOfFire) // TableMgr.GetShermanToHitBaseNumber()
+                  if ("Direct" == gi.ShermanTypeOfFire) // TableMgr.Get_ShermanToHitBaseNumber()
                   {
                      if ('C' == range)
                         toHitNum = 55;
@@ -5306,7 +5305,7 @@ namespace Pattons_Best
                         toHitNum = 00;
                      else
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitBaseNumber(): unknown range=" + range.ToString());
+                        Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitBaseNumber(): unknown range=" + range.ToString());
                         return FN_ERROR;
                      }
                   }
@@ -5320,19 +5319,19 @@ namespace Pattons_Best
                         toHitNum = 50;
                      else
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitBaseNumber(): unknown range=" + range.ToString());
+                        Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitBaseNumber(): unknown range=" + range.ToString());
                         return FN_ERROR;
                      }
                   }
                   else
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitBaseNumber(): ShermanTypeOfFire=" + gi.ShermanTypeOfFire);
+                     Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitBaseNumber(): ShermanTypeOfFire=" + gi.ShermanTypeOfFire);
                      return FN_ERROR;
                   }
                }
                else if ("76L" == guntype)
                {
-                  if ("Direct" == gi.ShermanTypeOfFire) // TableMgr.GetShermanToHitBaseNumber()
+                  if ("Direct" == gi.ShermanTypeOfFire) // TableMgr.Get_ShermanToHitBaseNumber()
                   {
                      if ('C' == range)
                         toHitNum = 55;
@@ -5342,11 +5341,11 @@ namespace Pattons_Best
                         toHitNum = 05;
                      else
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitBaseNumber(): unknown range=" + range.ToString());
+                        Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitBaseNumber(): unknown range=" + range.ToString());
                         return FN_ERROR;
                      }
                   }
-                  else if ("Area" == gi.ShermanTypeOfFire) // TableMgr.GetShermanToHitBaseNumber()
+                  else if ("Area" == gi.ShermanTypeOfFire) // TableMgr.Get_ShermanToHitBaseNumber()
                   {
                      if ('C' == range)
                         toHitNum = 45;
@@ -5356,19 +5355,19 @@ namespace Pattons_Best
                         toHitNum = 55;
                      else
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitBaseNumber(): unknown range=" + range.ToString());
+                        Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitBaseNumber(): unknown range=" + range.ToString());
                         return FN_ERROR;
                      }
                   }
                   else
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitBaseNumber(): ShermanTypeOfFire=" + gi.ShermanTypeOfFire);
+                     Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitBaseNumber(): ShermanTypeOfFire=" + gi.ShermanTypeOfFire);
                      return FN_ERROR;
                   }
                }
                else
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitBaseNumber(): unknown guntype=" + guntype);
+                  Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitBaseNumber(): unknown guntype=" + guntype);
                   return FN_ERROR;
                }
                break;
@@ -5385,9 +5384,10 @@ namespace Pattons_Best
             case "MARDERIII":
             case "JdgPzIV":
             case "JdgPz38t":
+            case "TRUCK":
                if ("75" == guntype)
                {
-                  if ("Direct" == gi.ShermanTypeOfFire) // TableMgr.GetShermanToHitBaseNumber()
+                  if ("Direct" == gi.ShermanTypeOfFire) // TableMgr.Get_ShermanToHitBaseNumber()
                   {
                      if ('C' == range)
                         toHitNum = 75;
@@ -5397,11 +5397,11 @@ namespace Pattons_Best
                         toHitNum = 20;
                      else
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitBaseNumber(): unknown range=" + range.ToString());
+                        Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitBaseNumber(): unknown range=" + range.ToString());
                         return FN_ERROR;
                      }
                   }
-                  else if ("Area" == gi.ShermanTypeOfFire) // TableMgr.GetShermanToHitBaseNumber()
+                  else if ("Area" == gi.ShermanTypeOfFire) // TableMgr.Get_ShermanToHitBaseNumber()
                   {
                      if ('C' == range)
                         toHitNum = 45;
@@ -5411,19 +5411,19 @@ namespace Pattons_Best
                         toHitNum = 50;
                      else
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitBaseNumber(): unknown range=" + range.ToString());
+                        Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitBaseNumber(): unknown range=" + range.ToString());
                         return FN_ERROR;
                      }
                   }
                   else
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitBaseNumber(): ShermanTypeOfFire=" + gi.ShermanTypeOfFire);
+                     Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitBaseNumber(): ShermanTypeOfFire=" + gi.ShermanTypeOfFire);
                      return toHitNum;
                   }
                }
                else if ("76L" == guntype)
                {
-                  if ("Direct" == gi.ShermanTypeOfFire) // TableMgr.GetShermanToHitBaseNumber()
+                  if ("Direct" == gi.ShermanTypeOfFire) // TableMgr.Get_ShermanToHitBaseNumber()
                   {
                      if ('C' == range)
                         toHitNum = 75;
@@ -5433,11 +5433,11 @@ namespace Pattons_Best
                         toHitNum = 40;
                      else
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitBaseNumber(): unknown range=" + range.ToString());
+                        Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitBaseNumber(): unknown range=" + range.ToString());
                         return FN_ERROR;
                      }
                   }
-                  else if ("Area" == gi.ShermanTypeOfFire) // TableMgr.GetShermanToHitBaseNumber()
+                  else if ("Area" == gi.ShermanTypeOfFire) // TableMgr.Get_ShermanToHitBaseNumber()
                   {
                      if ('C' == range)
                         toHitNum = 45;
@@ -5447,32 +5447,32 @@ namespace Pattons_Best
                         toHitNum = 55;
                      else
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitBaseNumber(): unknown range=" + range.ToString());
+                        Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitBaseNumber(): unknown range=" + range.ToString());
                         return FN_ERROR;
                      }
                   }
                   else
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitBaseNumber(): ShermanTypeOfFire=" + gi.ShermanTypeOfFire);
+                     Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitBaseNumber(): ShermanTypeOfFire=" + gi.ShermanTypeOfFire);
                      return FN_ERROR;
                   }
                }
                else
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitBaseNumber(): unknown guntype=" + guntype);
+                  Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitBaseNumber(): unknown guntype=" + guntype);
                   return FN_ERROR;
                }
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitBaseNumber(): 2-Reached Default enemyUnit=" + enemyUnit);
+               Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitBaseNumber(): 2-Reached Default enemyUnit=" + enemyUnit);
                return FN_ERROR;
          }
          //------------------------------------
-         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitBaseNumber(): Original To Hit base#=" + toHitNum.ToString());
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitBaseNumber(): Original To Hit base#=" + toHitNum.ToString());
          int numSmokeMarkers = Territory.GetSmokeCount(gi, sector, range);
          if (numSmokeMarkers < 0)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitBaseNumber(): GetSmokeCount() returned error");
+            Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitBaseNumber(): GetSmokeCount() returned error");
             return FN_ERROR;
          }
          if (0 < numSmokeMarkers)
@@ -5484,7 +5484,7 @@ namespace Pattons_Best
          if ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")))
             toHitNum *= 0.5;
          //------------------------------------
-         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitBaseNumber(): After Smoke/Fog base#=" + toHitNum.ToString());
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitBaseNumber(): After Smoke/Fog base#=" + toHitNum.ToString());
          return toHitNum;
       }
       public static int GetShermanRateOfFireModifier(IGameInstance gi)

@@ -8418,13 +8418,13 @@ namespace Pattons_Best
          double toHitNumber = TableMgr.GetShermanToHitBaseNumber(gi, gi.TargetMainGun);  // determine the To Hit number
          if (TableMgr.FN_ERROR == toHitNumber)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnits(): GetShermanToHitBaseNumber() returned error");
+            Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnits(): Get_ShermanToHitBaseNumber() returned error");
             return false;
          }
          double modifier = TableMgr.GetShermanToHitModifier(gi, gi.TargetMainGun);  // determine the To Hit number
          if (TableMgr.FN_ERROR == modifier)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnits(): GetShermanToHitModifier() returned error");
+            Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnits(): Get_ShermanToHitModifier() returned error");
             return false;
          }
          double combo = toHitNumber - modifier;
@@ -8510,7 +8510,7 @@ namespace Pattons_Best
                   gi.BattleStacks.Add(smoke);
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnits(): GetShermanToHitBaseNumber() reached default gunload=" + gunLoadType + " for a=" + outAction.ToString());
+                  Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnits(): Get_ShermanToHitBaseNumber() reached default gunload=" + gunLoadType + " for a=" + outAction.ToString());
                   return false;
             }
          }

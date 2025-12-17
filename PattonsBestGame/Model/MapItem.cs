@@ -591,7 +591,7 @@ namespace Pattons_Best
                   imgTurret = new Image() { Height = height, Width = width, Source = thePzIVTurret };
                else if (true == mi.Name.Contains("PzV"))
                   imgTurret = new Image() { Height = height, Width = width, Source = thePzVTurret };
-               else if (true == mi.Name.Contains("PzVIe"))
+               else if (true == mi.Name.Contains("PzVI"))
                   imgTurret = new Image() { Height = height, Width = width, Source = thePzVIeTurret };
                if (null == imgTurret)
                {
