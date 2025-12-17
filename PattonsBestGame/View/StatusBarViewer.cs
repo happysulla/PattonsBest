@@ -103,7 +103,7 @@ namespace Pattons_Best
             myStatusBar.Items.Add(labelTimeRemaining);
             Image imgTimeRemaining;
             if (minLeft < 61)
-               imgTimeRemaining = new Image { Source = MapItem.theMapImages.GetBitmapImage("Alert1"), Width = 30, Height = 25 };
+               imgTimeRemaining = new Image { Source = MapItem.theMapImages.GetBitmapImage("Alert2"), Width = 30, Height = 25 };
             else
                imgTimeRemaining = new Image { Source = MapItem.theMapImages.GetBitmapImage("Sunset"), Width = 30, Height = 15 };
             myStatusBar.Items.Add(imgTimeRemaining);
@@ -111,7 +111,7 @@ namespace Pattons_Best
             {
                myStatusBar.Items.Add(new Separator());
                Label labelLowAmmoMain = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = "Low HE Ammo=" + lastReport.MainGunHE.ToString() };
-               Image imgLowAmmoMain = new Image { Source = MapItem.theMapImages.GetBitmapImage("Alert2"), Width = 30, Height = 30 };
+               Image imgLowAmmoMain = new Image { Source = MapItem.theMapImages.GetBitmapImage("Alert1"), Width = 30, Height = 30 };
                myStatusBar.Items.Add(labelLowAmmoMain);
                myStatusBar.Items.Add(imgLowAmmoMain);
             }
@@ -119,7 +119,7 @@ namespace Pattons_Best
             {
                myStatusBar.Items.Add(new Separator());
                Label labelLowAmmoMain = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = "Low AP Ammo=" + lastReport.MainGunAP.ToString() };
-               Image imgLowAmmoMain = new Image { Source = MapItem.theMapImages.GetBitmapImage("Alert2"), Width = 30, Height = 30 };
+               Image imgLowAmmoMain = new Image { Source = MapItem.theMapImages.GetBitmapImage("Alert5"), Width = 30, Height = 30 };
                myStatusBar.Items.Add(labelLowAmmoMain);
                myStatusBar.Items.Add(imgLowAmmoMain);
             }

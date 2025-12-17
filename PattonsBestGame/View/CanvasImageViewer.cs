@@ -238,6 +238,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Show_AfterActionReportDialog() returned false for a=" + action.ToString());
                break;
             case GameAction.TestingStartMorningBriefing:
+            case GameAction.SetupShowSingleDayBattleStart:
             case GameAction.MorningBriefingBegin:
             case GameAction.MorningBriefingWeatherRollEnd:
             case GameAction.MorningBriefingTimeCheck:

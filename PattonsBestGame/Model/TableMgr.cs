@@ -266,7 +266,10 @@ namespace Pattons_Best
          }
          else
          {
-            numMins += (lastReport.SunsetMin - lastReport.SunriseMin);
+            if (lastReport.SunriseHour == lastReport.SunsetHour)
+               numMins += (lastReport.SunsetMin - lastReport.SunriseMin);
+            else
+               numMins += ((60 - lastReport.SunriseMin) + lastReport.SunsetMin);
          }
          return numMins;
       }
