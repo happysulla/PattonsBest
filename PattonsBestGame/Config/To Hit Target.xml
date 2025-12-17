@@ -869,7 +869,7 @@
          </TableCell>
          <TableCell  ColumnSpan='2' TextAlignment='Center' Background='DarkSeaGreen'>
             <Paragraph>
-               <Run Text='Automatic Kill'></Run>
+               <Run Text='Critical Hit'></Run>
             </Paragraph>
          </TableCell>
          <TableCell  ColumnSpan='2' TextAlignment='Center' Background='DarkSeaGreen'>

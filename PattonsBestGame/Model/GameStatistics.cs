@@ -465,7 +465,7 @@ namespace Pattons_Best
          GameStatistic? o = Find(key);
          if (null == o)
          {
-            Logger.Log(LogEnum.LE_ERROR, "AddOne(): null for key=" + key);
+            Logger.Log(LogEnum.LE_ERROR, "Add_One(): null for key=" + key);
             o = new GameStatistic(key);
             this.myList.Add(o);
          }

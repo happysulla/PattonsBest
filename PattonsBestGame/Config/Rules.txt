@@ -1035,8 +1035,8 @@ Only one target at a time may be acquired by your tank. Acquired markers are rem
 <LineBreak/><LineBreak/>
 Additionally, the marker is removed if your turret rotates away from the target&apos;s zone or if you fire at a different target.
 <LineBreak/><LineBreak/>
-                           <InlineUIContainer><Image Name='c103Acquired1'  Height='100' Width='100'></Image></InlineUIContainer>
-     <InlineUIContainer><Image Name='c104Acquired2'  Height='100' Width='100'></Image></InlineUIContainer>"
+                           <InlineUIContainer><Image Name='c103Acquired1_0'  Height='100' Width='100'></Image></InlineUIContainer>
+     <InlineUIContainer><Image Name='c104Acquired2_0'  Height='100' Width='100'></Image></InlineUIContainer>"
 r9.4	"<Bold>r9.4 Rate of Fire</Bold> 
 <LineBreak/><LineBreak/>
 Achieving Rate of Fire allows for your crew to immediately fire another shot from the main gun. When a To Hit roll is made firing the main gun, the number rolled also deteremines whether the gun has acheived Rate of Fire.

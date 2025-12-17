@@ -53,7 +53,7 @@ namespace Pattons_Best
       [NonSerialized] public static string theGameFeatDirectory = "";
       [NonSerialized]
       public static string[] theDefaults =
-{
+   {
          "EndCampaignGame",
          "EndCampaignGameOnTime",
          "EndCampaignGameWin",
@@ -690,7 +690,7 @@ namespace Pattons_Best
             }
             if (left.Value != right.Value)
             {
-               if (0 == left.Threshold)
+               if ( (0 == left.Threshold) && (1 == left.Value) ) // only want to show this GameFeat one time when value is 1
                {
                   Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Get_FeatChange(): No Threshold Key=" + right.Key + " (left.Value=" + left.Value.ToString() + ") != (right.Value =" + right.Value.ToString() + ")");
                   changedFeat = left;

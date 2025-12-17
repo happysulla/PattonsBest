@@ -1663,9 +1663,11 @@ namespace Pattons_Best
                   else
                      myTextBlock.Inlines.Add(new Run("3 Squads"));
                   myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
                   Image imge042 = new Image { Name = "EnemyArtilleryEnd", Width = 200, Height = 115, Source = MapItem.theMapImages.GetBitmapImage("SquadKia") };
                   myTextBlock.Inlines.Add(new Run("                                  "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge042));
+                  myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }

@@ -3273,7 +3273,7 @@ namespace Pattons_Best
          GameStatistic numPanzerfaultDeaths = statistics.Find("NumPanzerfaustDeath");
          GameStatistic numMineAttack = statistics.Find("NumMineAttack");
          GameStatistic numMineImmobilization = statistics.Find("NumMineImmobilization");
-         int numLostTanks = numShermanExplodes.Value + numShermanBurns.Value + numShermanPenetrations.Value;
+         int numLostTanks = numShermanExplodes.Value + numShermanPenetrations.Value;
          int numKilledEnemyFriendlyFire = 0;
          int numKilledEnemyYourFire = 0;
          foreach(GameStatistic stat in statistics)
@@ -3297,6 +3297,7 @@ namespace Pattons_Best
             average = numDays.Value / numGames.Value;
             tb.Inlines.Add(new Run("Average Days per Game = " + average.ToString()) { FontWeight = FontWeights.Bold });
             //-------------------------------------
+            tb.Inlines.Add(new LineBreak());
             tb.Inlines.Add(new Run("------------------------------"));
             if (0 < numLostTanks)
             {
@@ -3356,6 +3357,7 @@ namespace Pattons_Best
                tb.Inlines.Add(new Run("Days = " + numDays.Value.ToString()) { FontWeight = FontWeights.Bold });
             }
             //-------------------------------------
+            tb.Inlines.Add(new LineBreak());
             tb.Inlines.Add(new Run("------------------------------"));
             if ( 0 < numLostTanks )
             {
@@ -3391,6 +3393,7 @@ namespace Pattons_Best
             }
          }
          //-------------------------------------
+         tb.Inlines.Add(new LineBreak());
          tb.Inlines.Add(new Run("------------------------------"));
          GameStatistic numPurpleHearts = statistics.Find("NumPurpleHearts");
          if (0 < numPurpleHearts.Value)
@@ -3440,6 +3443,7 @@ namespace Pattons_Best
             tb.Inlines.Add(new Run("Average Mine Immobilizations = " + average.ToString()) { FontWeight = FontWeights.Bold });
          }
          //-------------------------------------
+         tb.Inlines.Add(new LineBreak());
          tb.Inlines.Add(new Run("------------------------------"));
          GameStatistic maxDayBetweenCombat = statistics.Find("MaxDayBetweenCombat");
          if (0 < maxDayBetweenCombat.Value)
@@ -3484,6 +3488,7 @@ namespace Pattons_Best
             tb.Inlines.Add(new Run("Min Crew Rating wtih Win = " + minCrewRatingWin.Value.ToString()) { FontWeight = FontWeights.Bold });
          }
          //-------------------------------------
+         tb.Inlines.Add(new LineBreak());
          tb.Inlines.Add(new Run("------------------------------"));
          foreach (GameStatistic kill in statistics)
          {
@@ -3494,14 +3499,19 @@ namespace Pattons_Best
                {
                   int index = kill.Key.IndexOf("Friendly"); //NumKillLwFriendlyFire
                   sb.Append("Killed ");
-                  sb.Append(kill.Key.Substring(7, index-7));
+                  sb.Append(kill.Key.Substring(7, index - 7));
                   sb.Append(" by Friendly Fire = ");
                   sb.Append(kill.Value.ToString());
                   tb.Inlines.Add(new LineBreak());
                   tb.Inlines.Add(new Run(sb.ToString()) { FontWeight = FontWeights.Bold });
                }
             }
-            tb.Inlines.Add(new Run("------------------------------"));
+         }
+         tb.Inlines.Add(new LineBreak());
+         tb.Inlines.Add(new Run("------------------------------"));
+         foreach (GameStatistic kill in statistics)
+         {
+            StringBuilder sb = new StringBuilder();
             if (true == kill.Key.Contains("YourFire"))
             {
                if (0 < kill.Value)

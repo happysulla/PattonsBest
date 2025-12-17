@@ -768,7 +768,15 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Button_Click(): myGameInstance.GetCrewMemberByRole() returned null for cm=" + b.Name);
             return;
          }
-         myAssignables.Remove(b.Name);
+         //---------------------------------------
+         foreach(ICrewMember crewMember in myAssignables)
+         {
+            if( b.Name == crewMember.Role )
+            {
+               myAssignables.Remove(crewMember);
+               break;
+            }
+         }
          //---------------------------------------
          myState = E0472Enum.SELECT_CREWMAN_SHOW;
          List<string>? spottedTerritories = Territory.GetSpottedTerritories(myGameInstance, mySelectedCrewman);
