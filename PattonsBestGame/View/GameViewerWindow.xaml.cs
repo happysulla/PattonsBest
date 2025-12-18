@@ -1686,9 +1686,9 @@ namespace Pattons_Best
          }
          finally
          {
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
             if (0 == options.Count)
                options.SetOriginalGameOptions();
-            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
          }
          return true;
       }

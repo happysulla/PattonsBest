@@ -301,6 +301,9 @@ Table.
 <InlineUIContainer><Button Content='Resupply' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
 <InlineUIContainer><Button Content='e028' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Choose adjacent area to 
 <InlineUIContainer><Button Content='Enter' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>"
+e022a	"<Bold>e022a Rain Roll</Bold> 
+<InlineUIContainer><Button Content='Weather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+<LineBreak/><LineBreak/>"
 e023	"<Bold>e023 Call for Artillery Support</Bold> 
 <InlineUIContainer><Button Content='r23.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <InlineUIContainer><Button Content='r4.54.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
@@ -794,7 +797,7 @@ e054b	"<Bold>e054b MG Firing - Advancing Fire</Bold>
 <InlineUIContainer><Button Content='r4.74.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r22.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
 <LineBreak/><LineBreak/> 
-<InlineUIContainer><CheckBox Name='AutoRollBowMgFire' IsEnabled='True' Content='Autoroll Bow MG Advance Fire in Future' FontFamily='Courier New'  FontSize='12'></CheckBox></InlineUIContainer>
+<InlineUIContainer><CheckBox Name='AutoRollBowMgFire' IsEnabled='True' Content='Autoroll Bow MG Fire in Future' FontFamily='Courier New'  FontSize='12'></CheckBox></InlineUIContainer>
 <LineBreak/><LineBreak/>
 Advancing fire attacks infantry targets that move into the zone. It also help protect against Panzerfaust attacks. 
 <LineBreak/><LineBreak/>

@@ -1430,28 +1430,28 @@ namespace Pattons_Best
                   Image imge022b;
                   if (true == report.Weather.Contains("Falling"))
                   {
-                     if (5 < gi.DieResults[key][0])
-                     {
-                        myTextBlock.Inlines.Add(new Run(" = Continues."));
-                        imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
-                     }
-                     else
+                     if (gi.DieResults[key][0] < 9)
                      {
                         myTextBlock.Inlines.Add(new Run(" = Snow Stops."));
                         imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercast"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
                      }
-                  }
-                  else 
-                  {
-                     if (8 < gi.DieResults[key][0])
+                     else
                      {
-                        myTextBlock.Inlines.Add(new Run(" = Snow Starts."));
+                        myTextBlock.Inlines.Add(new Run(" = Continues."));
                         imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
                      }
-                     else
+                  }
+                  else if( true == gi.IsFallingSnowStopped)
+                  {
+                     if (gi.DieResults[key][0] < 9 )
                      {
                         myTextBlock.Inlines.Add(new Run(" = No Effect."));
                         imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercast"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
+                     }
+                     else
+                     {
+                        myTextBlock.Inlines.Add(new Run(" = Snow Starts Again."));
+                        imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
                      }
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());

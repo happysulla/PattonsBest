@@ -14,6 +14,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -354,16 +355,18 @@ namespace Pattons_Best
                gi.BattleStacks.Add(new MapItem("WeatherClear"+Utilities.MapItemNum.ToString(), zoom, "c20Clear", w1));
                Utilities.MapItemNum++;
                break;
-            case "Overcast": 
+            case "Fog": 
+               gi.BattleStacks.Add(new MapItem("WeatherFog" + Utilities.MapItemNum.ToString(), zoom, "c22Fog", w1));
+               Utilities.MapItemNum++;
+               break;
+            case "Overcast":
                gi.BattleStacks.Add(new MapItem("WeatherOvercast" + Utilities.MapItemNum.ToString(), zoom, "c21Overcast", w1));
                Utilities.MapItemNum++;
                break;
-            case "Rain": 
-               gi.BattleStacks.Add(new MapItem("WeatherRain" + Utilities.MapItemNum.ToString(), zoom, "c24Rain", w1));
+            case "Overcast/Rain":
+               gi.BattleStacks.Add(new MapItem("WeatherOvercast" + Utilities.MapItemNum.ToString(), zoom, "c21Overcast", w1));
                Utilities.MapItemNum++;
-               break;
-            case "Fog": 
-               gi.BattleStacks.Add(new MapItem("WeatherFog" + Utilities.MapItemNum.ToString(), zoom, "c22Fog", w1));
+               gi.BattleStacks.Add(new MapItem("WeatherRain" + Utilities.MapItemNum.ToString(), zoom, "c24Rain", w2));
                Utilities.MapItemNum++;
                break;
             case "Mud": 
@@ -4477,6 +4480,105 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(): " + returnStatus);
                   }
                   break;
+               case GameAction.MovementRainRoll: 
+                  gi.DieResults[key][0] = dieRoll;
+                  break;
+               case GameAction.MovementRainRollEnd:
+                  if (true == lastReport.Weather.Contains("Rain")) // Rain, Mud/Rain, or Overcast/Rain
+                  {
+                     if (5 < gi.DieResults[key][0]) // rain continues
+                     {
+                        gi.HoursOfRainThisDay++;
+                        if( (2 < gi.HoursOfRainThisDay) && (false == lastReport.Weather.Contains("Mud")) )
+                        {
+                           lastReport.Weather = "Mud/Rain";
+                           if (false == SetWeatherCounters(gi)) // GameStateMovement.PerformAction(MovementRainRollEnd)
+                           {
+                              returnStatus = "Set_WeatherCounters() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementRainRollEnd): " + returnStatus);
+                           }
+                        }
+                     }
+                     else // rain stops
+                     {
+                        if (2 < gi.HoursOfRainThisDay)
+                           lastReport.Weather = "Mud/Overcast";
+                        else
+                           lastReport.Weather = "Overcast";
+                        if (false == SetWeatherCounters(gi)) // GameStateMovement.PerformAction(MovementRainRollEnd)
+                        {
+                           returnStatus = "Set_WeatherCounters() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementRainRollEnd): " + returnStatus);
+                        }
+                     }
+                  }
+                  else // Overcast or Mud/Overcast
+                  {
+                     if (8 < gi.DieResults[key][0])  // start raining
+                     {
+                        if (2 < gi.HoursOfRainThisDay) 
+                           lastReport.Weather = "Mud/Rain";
+                        else
+                           lastReport.Weather = "Overcast/Rain";
+                        if (false == SetWeatherCounters(gi)) // GameStateMovement.PerformAction(MovementRainRollEnd)
+                        {
+                           returnStatus = "Set_WeatherCounters() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementRainRollEnd): " + returnStatus);
+                        }
+                     }
+                  }
+                  gi.DieResults[key][0] = Utilities.NO_RESULT;
+                  //------------------------------------------
+                  if (false == SetChoicesForOperations(gi, action)) // GameStateMovement.PerformAction(MovementChooseOption)
+                  {
+                     returnStatus = "Set_ChoicesForOperations() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementRainRollEnd): " + returnStatus);
+                  }
+                  break;
+               case GameAction.MovementSnowRoll: 
+                  gi.DieResults[key][0] = dieRoll;
+                  break;
+               case GameAction.MovementSnowRollEnd:
+                  if (true == lastReport.Weather.Contains("Falling"))
+                  {
+                     if (gi.DieResults[key][0] < 9) // Snow Stops
+                     {
+                        gi.IsFallingSnowStopped = true;
+                        if ("Falling and Ground Snow" == lastReport.Weather)
+                           lastReport.Weather = "Ground Snow";
+                        else
+                           lastReport.Weather = "Deep Snow";
+                        if (false == SetWeatherCounters(gi)) // GameStateMovement.PerformAction(MovementRainRollEnd)
+                        {
+                           returnStatus = "Set_WeatherCounters() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementRainRollEnd): " + returnStatus);
+                        }
+                     }
+                  }
+                  else
+                  {
+                     if ( 8 < gi.DieResults[key][0]) // Snow Starts
+                     {
+                        gi.IsFallingSnowStopped = false;
+                        if ("Ground Snow" == lastReport.Weather)
+                           lastReport.Weather = "Falling and Ground Snow";
+                        else
+                           lastReport.Weather = "Falling and Deep Snow"; 
+                        if (false == SetWeatherCounters(gi)) // GameStateMovement.PerformAction(MovementRainRollEnd)
+                        {
+                           returnStatus = "Set_WeatherCounters() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementRainRollEnd): " + returnStatus);
+                        }
+                     }
+                  }
+                  gi.DieResults[key][0] = Utilities.NO_RESULT;
+                  //------------------------------------------
+                  if (false == SetChoicesForOperations(gi, action)) // GameStateMovement.PerformAction(MovementChooseOption)
+                  {
+                     returnStatus = "Set_ChoicesForOperations() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementSnowRollEnd): " + returnStatus);
+                  }
+                  break;
                case GameAction.MovementChooseOption:
                   if( false == gi.IsDaylightLeft(lastReport))
                   {
@@ -4484,9 +4586,9 @@ namespace Pattons_Best
                      SetCommand(gi, action, GameAction.DieRollActionNone, "e100");
                      gi.GamePhase = GamePhase.EveningDebriefing;
                   }
-                  else if (false == SetChoicesForOperations(gi, action)) // GameStateMovement.PerformAction(MovementChooseOption)
+                  else if (false == WeatherChangeCheck(gi, ref action)) // GameStateMovement.PerformAction(MovementChooseOption)
                   {
-                     returnStatus = "Set_ChoicesForOperations() returned false";
+                     returnStatus = "Weather_ChangeCheck() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementChooseOption): " + returnStatus);
                   }
                   else if (false == SetChoicesForOperations(gi, action)) // GameStateMovement.PerformAction(MovementChooseOption)
@@ -4504,17 +4606,30 @@ namespace Pattons_Best
                   else
                   {
                      bool isCheckNeeded = false;
-                     if (false == IsEnemyStrengthCheckNeededInAdjacent(gi, out isCheckNeeded))
+                     if (false == IsEnemyStrengthCheckNeededInAdjacent(gi, out isCheckNeeded))  // GameStateMovement.PerformAction(MovementEnterAreaUsControl)
                      {
-                        returnStatus = "IsEnemyStrengthCheckNeededInAdjacent() returned false";
+                        returnStatus = "Is_EnemyStrengthCheckNeededInAdjacent() returned false";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementEnterAreaUsControl): " + returnStatus);
                      }
                      else
                      {
                         if (true == isCheckNeeded)
+                        {
                            SetCommand(gi, action, GameAction.DieRollActionNone, "e020");
+                        }
                         else
-                           SetCommand(gi, action, GameAction.DieRollActionNone, "e022");
+                        {
+                           if (false == WeatherChangeCheck(gi, ref action)) // GameStateMovement.PerformAction(MovementEnterAreaUsControl)
+                           {
+                              returnStatus = "Weather_ChangeCheck() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementChooseOption): " + returnStatus);
+                           }
+                           else if (false == SetChoicesForOperations(gi, action)) // GameStateMovement.PerformAction(MovementEnterAreaUsControl)
+                           {
+                              returnStatus = "Set_ChoicesForOperations() returned false";
+                              Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementChooseOption): " + returnStatus);
+                           }
+                        }
                      }
                   }
                   break;
@@ -4555,7 +4670,12 @@ namespace Pattons_Best
                   break;
                case GameAction.MovementAirStrikeCancel:
                   gi.IsAirStrikePending = false;
-                  if (false == SetChoicesForOperations(gi, action)) // GameStateMovement.PerformAction(MovementAirStrikeCancel)
+                  if (false == WeatherChangeCheck(gi, ref action)) // GameStateMovement.PerformAction(MovementAirStrikeCancel)
+                  {
+                     returnStatus = "Weather_ChangeCheck() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementChooseOption): " + returnStatus);
+                  }
+                  else if (false == SetChoicesForOperations(gi, action)) // GameStateMovement.PerformAction(MovementAirStrikeCancel)
                   {
                      returnStatus = "Set_ChoicesForOperations() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementAirStrikeCancel): " + returnStatus);
@@ -4580,7 +4700,12 @@ namespace Pattons_Best
                      }
                      else
                      {
-                        if (false == SetChoicesForOperations(gi, action)) // GameStateMovement.PerformAction(MovementResupplyCheckRoll)
+                        if (false == WeatherChangeCheck(gi, ref action)) // GameStateMovement.PerformAction(MovementAirStrikeCancel)
+                        {
+                           returnStatus = "Weather_ChangeCheck() returned false";
+                           Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementChooseOption): " + returnStatus);
+                        }
+                        else if (false == SetChoicesForOperations(gi, action)) // GameStateMovement.PerformAction(MovementResupplyCheckRoll)
                         { 
                            returnStatus = "Set_ChoicesForOperations() returned false";
                            Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(MovementResupplyCheckRoll): " + returnStatus);
@@ -4764,7 +4889,24 @@ namespace Pattons_Best
          gi.ArtillerySupportCheck = null;
          if (false == gi.IsAirStrikePending)
             gi.AirStrikeCheckTerritory = null;
-         SetCommand(gi, action, GameAction.DieRollActionNone, "e022");
+         SetCommand(gi, action, GameAction.DieRollActionNone, "e022"); // Set_ChoicesForOperations()
+         return true;
+      }
+      private bool WeatherChangeCheck(IGameInstance gi, ref GameAction action)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "WeatherChangeCheck(): lastReport=null");
+            return false;
+         }
+         if ((0 != lastReport.SunriseMin) && (gi.MinSinceLastCheck < 60))
+            return true;
+         gi.MinSinceLastCheck = lastReport.SunriseMin;
+         if ( (true == lastReport.Weather.Contains("Overcast")) || (true == lastReport.Weather.Contains("Rain")) )
+            SetCommand(gi, action, GameAction.MovementRainRoll, "e022a");
+         if ( (true == lastReport.Weather.Contains("Falling")) || (true == gi.IsFallingSnowStopped) )
+            SetCommand(gi, action, GameAction.MovementSnowRoll, "e022b");
          return true;
       }
       private bool SetAirStrikeCounter(IGameInstance gi, int dieRoll)
@@ -5043,7 +5185,7 @@ namespace Pattons_Best
          isCheckNeeded = false;
          if (null == gi.EnteredArea)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsEnemyStrengthCheckNeededInAdjacent(): gi.EnteredArea=null");
+            Logger.Log(LogEnum.LE_ERROR, "Is_EnemyStrengthCheckNeededInAdjacent(): gi.EnteredArea=null");
             return false;
          }
          //--------------------------------
@@ -5052,18 +5194,18 @@ namespace Pattons_Best
          {
             if (true == s.Contains("E")) // Ignore Entry or Exit Areas
                continue;
-            Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "IsEnemyStrengthCheckNeededInAdjacent(): Checking territory=" + gi.EnteredArea.Name + " adj=" + s);
+            Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "Is_EnemyStrengthCheckNeededInAdjacent(): Checking territory=" + gi.EnteredArea.Name + " adj=" + s);
             ITerritory? t = Territories.theTerritories.Find(s);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "IsEnemyStrengthCheckNeededInAdjacent(): t=null for s=" + s);
+               Logger.Log(LogEnum.LE_ERROR, "Is_EnemyStrengthCheckNeededInAdjacent(): t=null for s=" + s);
                return false;
             }
-            Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "IsEnemyStrengthCheckNeededInAdjacent(): Checking territory=" + s);
+            Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "Is_EnemyStrengthCheckNeededInAdjacent(): Checking territory=" + s);
             IStack? stack = gi.MoveStacks.Find(t);
             if (null == stack)
             {
-               Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "IsEnemyStrengthCheckNeededInAdjacent(): no stack for=" + s + " in " + gi.MoveStacks.ToString());
+               Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "Is_EnemyStrengthCheckNeededInAdjacent(): no stack for=" + s + " in " + gi.MoveStacks.ToString());
                isCheckNeeded = true;
                return true;
             }
@@ -5074,14 +5216,14 @@ namespace Pattons_Best
                {
                   if (true == mi1.Name.Contains("Strength") || true == mi1.Name.Contains("UsControl"))
                   {
-                     Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "SetButtonStateEnemyStrength(): Found mi=" + mi1.Name + " for=" + s + " in " + gi.MoveStacks.ToString());
+                     Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "Is_EnemyStrengthCheckNeededInAdjacent(): Found mi=" + mi1.Name + " for=" + s + " in " + gi.MoveStacks.ToString());
                      isCounterInStack = true;
                      break;
                   }
                }
                if (false == isCounterInStack)
                {
-                  Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "SetButtonStateEnemyStrength(): no counter for=" + s + " in " + gi.MoveStacks.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_ENEMY_STRENGTH, "Is_EnemyStrengthCheckNeededInAdjacent(): no counter for=" + s + " in " + gi.MoveStacks.ToString());
                   isCheckNeeded = true;
                   return true;
                }
@@ -5343,22 +5485,6 @@ namespace Pattons_Best
                }
             }
          }
-         return true;
-      }
-      private bool WeatherChangeCheck(IGameInstance gi, ref GameAction action)
-      {
-         IAfterActionReport? lastReport = gi.Reports.GetLast();
-         if (null == lastReport)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "WeatherChangeCheck(): lastReport=null");
-            return false;
-         }
-         if ( (0 != lastReport.SunriseMin) && (gi.MinSinceLastCheck < 60) )
-            return true;
-         if (true == lastReport.Weather.Contains("Overcast"))
-            SetCommand(gi, action, GameAction.MovementRainRoll, "e022a");
-         if (true == lastReport.Weather.Contains("Falling Snow"))
-            SetCommand(gi, action, GameAction.MovementRainRoll, "e022b");
          return true;
       }
    }
@@ -10141,6 +10267,9 @@ namespace Pattons_Best
          gi.AdvanceFire = null;
          //-------------------------------------------------------
          gi.IsHatchesActive = false;
+         gi.IsFallingSnowStopped = false;
+         gi.HoursOfRainThisDay = 0;
+         gi.MinSinceLastCheck = 0;
          //-------------------------------------------------------
          gi.IsMinefieldAttack = false;                    // EveningDebriefing_ResetDay()
          gi.IsHarrassingFireBonus = false;
