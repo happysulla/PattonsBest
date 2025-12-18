@@ -1350,6 +1350,119 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run(" Air Strike if you want different choice. Time is not recovered."));
                }
                break;
+            case "e022a":
+               if (Utilities.NO_RESULT == gi.DieResults[key][0])
+               {
+                  myTextBlock.Inlines.Add(new Run("At the top of every hour..."));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  if ( true == report.Weather.Contains("Rain"))
+                     myTextBlock.Inlines.Add(new Run("Roll if rain continues (6-10): "));
+                  if (true == report.Weather.Contains("Overcast"))
+                     myTextBlock.Inlines.Add(new Run("Roll if rain starts (9-10): "));
+                  BitmapImage bmi = new BitmapImage();
+                  bmi.BeginInit();
+                  bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollWhite.gif", UriKind.Absolute);
+                  bmi.EndInit();
+                  Image imgDice = new Image { Name = "DieRollWhite", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+                  ImageBehavior.SetAnimatedSource(imgDice, bmi);
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
+               }
+               else
+               {
+                  Image imge022a;
+                  if (true == report.Weather.Contains("Rain"))
+                  {
+                     if( 5 < gi.DieResults[key][0])
+                     {
+                        myTextBlock.Inlines.Add(new Run(" = Continues."));
+                        imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherRain"), Width = 400, Height = 225, Name = "MovementRainRollEnd" };
+                     }
+                     else
+                     {
+                        myTextBlock.Inlines.Add(new Run(" = Rain Stops."));
+                        imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercast"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
+                     }
+                  }
+                  else if (true == report.Weather.Contains("Overcast"))
+                  {
+                     if (8 < gi.DieResults[key][0])
+                     {
+                        myTextBlock.Inlines.Add(new Run(" = Rain Starts."));
+                        imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherRain"), Width = 400, Height = 225, Name = "MovementRainRollEnd" };
+                     }
+                     else 
+                     {
+                        myTextBlock.Inlines.Add(new Run(" = No Effect."));
+                        if( 1 < gi.HoursOfRainThisDay )
+                           imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercastMud"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
+                        else
+                           imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercast"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
+                     }
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("                                           "));
+                     myTextBlock.Inlines.Add(new InlineUIContainer(imge022a));
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("Click image to continue."));
+                  }
+               }
+               break;
+            case "e022b":
+               if (Utilities.NO_RESULT == gi.DieResults[key][0])
+               {
+                  myTextBlock.Inlines.Add(new Run("At the top of every hour..."));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  if (true == report.Weather.Contains("Falling"))
+                     myTextBlock.Inlines.Add(new Run("Roll if snow continues (1-8): "));
+                  else
+                     myTextBlock.Inlines.Add(new Run("Roll if snow starts (9-10): "));
+                  BitmapImage bmi = new BitmapImage();
+                  bmi.BeginInit();
+                  bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollWhite.gif", UriKind.Absolute);
+                  bmi.EndInit();
+                  Image imgDice = new Image { Name = "DieRollWhite", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+                  ImageBehavior.SetAnimatedSource(imgDice, bmi);
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
+               }
+               else
+               {
+                  Image imge022b;
+                  if (true == report.Weather.Contains("Falling"))
+                  {
+                     if (5 < gi.DieResults[key][0])
+                     {
+                        myTextBlock.Inlines.Add(new Run(" = Continues."));
+                        imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
+                     }
+                     else
+                     {
+                        myTextBlock.Inlines.Add(new Run(" = Snow Stops."));
+                        imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercast"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
+                     }
+                  }
+                  else 
+                  {
+                     if (8 < gi.DieResults[key][0])
+                     {
+                        myTextBlock.Inlines.Add(new Run(" = Snow Starts."));
+                        imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
+                     }
+                     else
+                     {
+                        myTextBlock.Inlines.Add(new Run(" = No Effect."));
+                        imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercast"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
+                     }
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("                                           "));
+                     myTextBlock.Inlines.Add(new InlineUIContainer(imge022b));
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("Click image to continue."));
+                  }
+               }
+               break;
             case "e024":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
@@ -4699,7 +4812,7 @@ namespace Pattons_Best
       }
       private bool SetButtonAirStrike(IGameInstance gi, IAfterActionReport lastReport, Button b)
       {
-         if( (true == lastReport.Weather.Contains("Overcast")) || (true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")) || (true == gi.IsAirStrikePending))
+         if( (true == lastReport.Weather.Contains("Overcast")) || (true == lastReport.Weather.Contains("Rain")) || (true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling")) || (true == gi.IsAirStrikePending))
             b.IsEnabled = false;
          else
             b.IsEnabled = true;

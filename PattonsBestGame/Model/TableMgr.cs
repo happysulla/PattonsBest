@@ -342,7 +342,7 @@ namespace Pattons_Best
                      return "Overcast";
                }
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetWeather(): Reached Default month=" + month);
+               Logger.Log(LogEnum.LE_ERROR, "Get_Weather(): Reached Default month=" + month);
                return "ERROR";
          }
       }

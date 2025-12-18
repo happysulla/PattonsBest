@@ -140,7 +140,7 @@ namespace Pattons_Best
             IStack stack = (IStack)o;
             foreach (MapItem mapItem in stack.MapItems)
             {
-               if (miName == mapItem.Name)
+               if (true == mapItem.Name.Contains(miName))
                {
                   stack.MapItems.Remove(mapItem);
                   if (0 == stack.MapItems.Count)

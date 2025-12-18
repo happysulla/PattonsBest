@@ -322,6 +322,10 @@ namespace Pattons_Best
       MovementStartAreaRestartAfterBattle,
       MovementExit,
       MovementRetreatStartBattle,
+      MovementRainRoll,
+      MovementRainRollEnd,
+      MovementSnowRoll,
+      MovementSnowRollEnd,
 
       BattleStart,
       BattleActivation,
