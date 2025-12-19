@@ -43,7 +43,6 @@ namespace Pattons_Best
          sb.Append(")");
          return sb.ToString();
       }
-
    }
    //========================================
    [XmlInclude(typeof(GameFeat))]
@@ -690,10 +689,17 @@ namespace Pattons_Best
             }
             if (left.Value != right.Value)
             {
-               if ( (0 == left.Threshold) && (1 == left.Value) ) // only want to show this GameFeat one time when value is 1
+               if (0 == left.Threshold) 
                {
-                  Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Get_FeatChange(): No Threshold Key=" + right.Key + " (left.Value=" + left.Value.ToString() + ") != (right.Value =" + right.Value.ToString() + ")");
-                  changedFeat = left;
+                  if( 1 == left.Value) // only want to show this GameFeat one time when value is 1
+                  {
+                     Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Get_FeatChange(): No Threshold Key=" + right.Key + " (left.Value=" + left.Value.ToString() + ") != (right.Value =" + right.Value.ToString() + ")");
+                     changedFeat = left;
+                  }
+                  else
+                  {
+                     right.Value = left.Value; // if not at threshold, ignore but update to current value
+                  }
                   return true;
                }
                else if (0 == left.Value % left.Threshold) // when the value reaches an iterative threshold, show feat

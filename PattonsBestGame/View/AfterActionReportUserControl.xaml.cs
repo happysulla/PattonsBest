@@ -292,10 +292,10 @@ namespace Pattons_Best
       }
       private bool UpdateReportTimeTrackRow(StackPanel sp, int hour, IAfterActionReport report)
       {
+         Logger.Log(LogEnum.LE_VIEW_TIME_TRACK, "UpdateReportTimeTrackRow(): Rise=" + report.SunriseHour.ToString() + ":" + report.SunriseMin.ToString() + " Set=" + report.SunsetHour.ToString() + ":" + report.SunsetMin.ToString() );
          int min = 0;
          foreach (UIElement ui in sp.Children)
          {
-            Logger.Log(LogEnum.LE_VIEW_TIME_TRACK, "UpdateReportTimeTrackRow(): Updating " + sp.Name + " min=" + min.ToString());
             if (true == ui is Rectangle)
             {
                Rectangle? rect = ui as Rectangle;
@@ -304,6 +304,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateReportTimeTrackRow(): Rectangle not found");
                   return false;
                }
+               Logger.Log(LogEnum.LE_VIEW_TIME_TRACK, "UpdateReportTimeTrackRow(): --------------------------------------" + sp.Name + " min=" + min.ToString());
                if (hour < report.SunriseHour )
                {
                   rect.Fill = Brushes.Black;
@@ -311,7 +312,10 @@ namespace Pattons_Best
                else if (hour == report.SunriseHour)
                {
                   if( min < report.SunriseMin)
+                  {
                      rect.Fill = Brushes.Black;
+                     Logger.Log(LogEnum.LE_VIEW_TIME_TRACK, "UpdateReportTimeTrackRow(): SSSSSSSSSSSSSSSS min=" + min.ToString());
+                  }
                }
                else
                {
@@ -319,10 +323,13 @@ namespace Pattons_Best
                   {
                      rect.Fill = Brushes.Black;
                   }
-                  else if ( hour == report.SunsetHour)
+                  else if (report.SunsetHour == hour)
                   {
                      if (report.SunsetMin <= min)
+                     {
                         rect.Fill = Brushes.Black;
+                        Logger.Log(LogEnum.LE_VIEW_TIME_TRACK, "UpdateReportTimeTrackRow(): FFFFFFFFFFFFFFFF min=" + min.ToString());
+                     }
                   }
                }
             }

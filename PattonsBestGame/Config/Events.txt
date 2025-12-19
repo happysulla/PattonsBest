@@ -301,7 +301,7 @@ Table.
 <InlineUIContainer><Button Content='Resupply' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
 <InlineUIContainer><Button Content='e028' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Choose adjacent area to 
 <InlineUIContainer><Button Content='Enter' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>"
-e022a	"<Bold>e022a Rain Roll</Bold> 
+e022a	"<Bold>e022a Rain Roll</Bold>    
 <InlineUIContainer><Button Content='Weather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>"
 e023	"<Bold>e023 Call for Artillery Support</Bold> 
@@ -834,6 +834,26 @@ e056c	"<Bold>e056c Repair Coaxial Machine Gun</Bold>
 <InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>
 Attempt to repair malfunction gun by rolling on the <InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
+<LineBreak/><LineBreak/>"
+e056d	"<Bold>056d Repair Main Gun - End of Battle Repair Attempt</Bold> 
+<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Attempt to repair malfunction gun by rolling on the <InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. Any result other than broken repairs the gun.
+<LineBreak/><LineBreak/>"
+e056e	"<Bold>056e Repair AA MG - End of Battle Repair Attempt</Bold> 
+<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Attempt to repair malfunction gun by rolling on the <InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. Any result other than broken repairs the gun.
+<LineBreak/><LineBreak/>"
+e056f	"<Bold>056f Repair Coaxial MG - End of Battle Repair Attempt</Bold> 
+<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Attempt to repair malfunction gun by rolling on the <InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. Any result other than broken repairs the gun.
+<LineBreak/><LineBreak/>"
+e056g	"<Bold>056g Repair Bow MG - End of Battle Repair Attempt</Bold> 
+<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Attempt to repair malfunction gun by rolling on the <InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. Any result other than broken repairs the gun.
 <LineBreak/><LineBreak/>"
 e057	"<Bold>e057 Fire 2 Inch Mortar</Bold> 
 <InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
