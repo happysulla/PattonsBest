@@ -1686,9 +1686,9 @@ namespace Pattons_Best
          }
          finally
          {
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
             if (0 == options.Count)
                options.SetOriginalGameOptions();
-            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
          }
          return true;
       }
@@ -3411,54 +3411,54 @@ namespace Pattons_Best
          if (0 < numSilverStars.Value)
          {
             tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Num Bronze Stars = " + numSilverStars.Value.ToString()) { FontWeight = FontWeights.Bold });
+            tb.Inlines.Add(new Run("Num Silver Stars = " + numSilverStars.Value.ToString()) { FontWeight = FontWeights.Bold });
          }
          GameStatistic numDistinguishedCrosses = statistics.Find("NumDistinguishedCrosses");
          if (0 < numDistinguishedCrosses.Value)
          {
             tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Num Bronze Stars = " + numDistinguishedCrosses.Value.ToString()) { FontWeight = FontWeights.Bold });
+            tb.Inlines.Add(new Run("Num Distinguished Crosses = " + numDistinguishedCrosses.Value.ToString()) { FontWeight = FontWeights.Bold });
          }
          GameStatistic numMedalOfHonors = statistics.Find("NumMedalOfHonors");
          if (0 < numMedalOfHonors.Value)
          {
             tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Num Bronze Stars = " + numMedalOfHonors.Value.ToString()) { FontWeight = FontWeights.Bold });
+            tb.Inlines.Add(new Run("Num Medal of Honor = " + numMedalOfHonors.Value.ToString()) { FontWeight = FontWeights.Bold });
          }
          //-------------------------------------
          if (0 < numPanzerfaultAttacks.Value)
          {
             tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Panzerfaust Attacks = " + numPanzerfaultAttacks.ToString()) { FontWeight = FontWeights.Bold });
+            tb.Inlines.Add(new Run("Panzerfaust Attacks = " + numPanzerfaultAttacks.Value.ToString()) { FontWeight = FontWeights.Bold });
             tb.Inlines.Add(new LineBreak());
             average = numPanzerfaultDeaths.Value / numPanzerfaultAttacks.Value;
-            tb.Inlines.Add(new Run("Average Kills per PzFaust Attack = " + average.ToString()) { FontWeight = FontWeights.Bold });
+            tb.Inlines.Add(new Run("Average Deaths per PzFaust Attack = " + average.ToString()) { FontWeight = FontWeights.Bold });
          }
          if (0 < numMineAttack.Value)
          {
             tb.Inlines.Add(new LineBreak());
             tb.Inlines.Add(new Run("Mine Attacks = " + numMineAttack.ToString()) { FontWeight = FontWeights.Bold });
             tb.Inlines.Add(new LineBreak());
-            average = numMineImmobilization.Value / numPanzerfaultAttacks.Value;
+            average = numMineImmobilization.Value / numMineAttack.Value;
             tb.Inlines.Add(new Run("Average Mine Immobilizations = " + average.ToString()) { FontWeight = FontWeights.Bold });
          }
          //-------------------------------------
          tb.Inlines.Add(new LineBreak());
          tb.Inlines.Add(new Run("------------------------------"));
          GameStatistic maxDayBetweenCombat = statistics.Find("MaxDayBetweenCombat");
-         if (0 < maxDayBetweenCombat.Value)
+         if (1 < maxDayBetweenCombat.Value)
          {
             tb.Inlines.Add(new LineBreak());
             tb.Inlines.Add(new Run("Max Days Between Combat = " + maxDayBetweenCombat.Value.ToString()) { FontWeight = FontWeights.Bold });
          }
          GameStatistic maxRollsForAirSupport = statistics.Find("MaxRollsForAirSupport");
-         if (0 < maxRollsForAirSupport.Value)
+         if (1 < maxRollsForAirSupport.Value)
          {
             tb.Inlines.Add(new LineBreak());
             tb.Inlines.Add(new Run("Max Rolls For Air Strikes = " + maxRollsForAirSupport.Value.ToString()) { FontWeight = FontWeights.Bold });
          }
          GameStatistic maxRollsForArtillerySupport = statistics.Find("MaxRollsForArtillerySupport");
-         if (0 < maxRollsForArtillerySupport.Value)
+         if (1 < maxRollsForArtillerySupport.Value)
          {
             tb.Inlines.Add(new LineBreak());
             tb.Inlines.Add(new Run("Max Rolls For Artillery Support = " + maxRollsForArtillerySupport.Value.ToString()) { FontWeight = FontWeights.Bold });

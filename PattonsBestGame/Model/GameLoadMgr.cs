@@ -1867,7 +1867,7 @@ namespace Pattons_Best
             }
             if (reader.Name != "IsMalfunctionedMainGun")
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsMalfunctionedMainGun != (node=" + reader.Name + ")");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): Is_MalfunctionedMainGun != (node=" + reader.Name + ")");
                return null;
             }
             string? sIsMalfunctionedMainGun = reader.GetAttribute("value");
@@ -7099,14 +7099,14 @@ namespace Pattons_Best
          elem = aXmlDocument.CreateElement("IsMalfunctionedMainGun");
          if (null == elem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsMalfunctionedMainGun) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(Is_MalfunctionedMainGun) returned null");
             return null;
          }
          elem.SetAttribute("value", gi.IsMalfunctionedMainGun.ToString());
          node = root.AppendChild(elem);
          if (null == node)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsMalfunctionedMainGun) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(Is_MalfunctionedMainGun) returned null");
             return null;
          }
          //------------------------------------------

@@ -158,21 +158,21 @@ namespace Pattons_Best
             return "Jul";
          if (day < 36)
             return "Aug";
-         if (day < 58)
+         if (day < 57)
             return "Sep";
-         if (day < 70)
+         if (day < 69)
             return "Oct";
-         if (day < 92)
+         if (day < 91)
             return "Nov";
-         if (day < 110)
+         if (day < 109)
             return "Dec";
-         if (day < 137)
+         if (day < 135)
             return "Jan";
-         if (day < 147)
+         if (day < 145)
             return "Feb";
-         if (day < 174)
+         if (day < 172)
             return "Mar";
-         if (day < 193)
+         if (day < 191)
             return "Apr";
          Logger.Log(LogEnum.LE_ERROR, "GetMonth(): reached default day=" + day.ToString());
          return "ERROR";
@@ -189,9 +189,18 @@ namespace Pattons_Best
          sb.Append(aar.SunriseMin);
          return sb.ToString();
       }
-      public static bool SetTimeTrack(IAfterActionReport lastReport, int day)
+      public static bool InitializeTimeTrackForNewDay(IGameInstance gi)
       {
-         switch (GetMonth(day))
+         //----------------------------------------------------
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "InitializeTimeTrackForNewDay(): lastReport=null");
+            return false;
+         }
+         //-------------------------------------------------
+         string month = GetMonth(gi.Day); 
+         switch (month)
          {
             case "Jul":
             case "Aug":
@@ -249,9 +258,11 @@ namespace Pattons_Best
                lastReport.SunsetMin = 00;
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTimeCheckRoll): reached default day=" + day.ToString());
+               Logger.Log(LogEnum.LE_ERROR, "GameStateMorningBriefing.PerformAction(MorningBriefingTimeCheckRoll): reached default day=" + gi.Day.ToString());
                return false;
          }
+         Logger.Log(LogEnum.LE_VIEW_TIME_TRACK, "InitializeTimeTrackForNewDay(): Day=" + gi.Day.ToString() + " Month=" + month + " Rise =" + lastReport.SunriseHour.ToString() + ":" + lastReport.SunriseMin.ToString() + " Set=" + lastReport.SunsetHour.ToString() + ":" + lastReport.SunsetMin.ToString() );
+         gi.MinSinceLastCheck = lastReport.SunriseMin; // MinSinceLastCheck tracks when to check for weather change... we want to check at top of hour
          return true;
       }
       public static int GetTimeRemaining(IAfterActionReport lastReport)
@@ -276,6 +287,7 @@ namespace Pattons_Best
       //-------------------------------------------
       public static string GetWeather(int day, int dieRoll)
       {
+         return "Snow"; // <cgs> TESTING - Set Weather
          string month = GetMonth(day);
          switch (month)
          {
@@ -348,6 +360,7 @@ namespace Pattons_Best
       }
       public static string GetWeatherSnow(int day, int dieRoll)
       {
+         return "Falling Snow"; // <cgs> TESTING - Set Weather
          string month = GetMonth(day);
          if ("Nov" == month)
             --dieRoll;
@@ -357,7 +370,7 @@ namespace Pattons_Best
          {
             case 0:
             case 1:
-               return "Falling";
+               return "Falling Snow";
             case 2:
             case 3:
             case 6:
@@ -4271,7 +4284,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Set_FriendlyActionResult(): lastReport=null");
             return "ERROR";
          }
-         if ((false == isArtilleryFire) && (true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling")))
+         if ( (false == isArtilleryFire)  &&  ((true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))) )
          {
             if ("B6M" == mi.TerritoryCurrent.Name || "B6L" == mi.TerritoryCurrent.Name) // no Friendly action allowed in these regions unless artillery
                return "None";

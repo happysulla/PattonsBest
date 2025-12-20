@@ -1069,7 +1069,7 @@ namespace Pattons_Best
                      case "Deep Snow":
                         imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowDeep"), Width = 400, Height = 266, Name = "SnowRollEnd" };
                         break;
-                     case "Falling":
+                     case "Falling Snow":
                         imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling"), Width = 400, Height = 266, Name = "SnowRollEnd" };
                         break;
                      case "Falling and Deep Snow":
@@ -1130,9 +1130,9 @@ namespace Pattons_Best
                {
                   StringBuilder sbE010 = new StringBuilder("On ");
                   sbE010.Append(entry.Date);
-                  sbE010.Append(": Sunset = ");
+                  sbE010.Append(": Sunrise = ");
                   sbE010.Append(Utilities.GetTime(report.SunriseHour, report.SunriseMin));
-                  sbE010.Append(" and Sunrise = ");
+                  sbE010.Append("  --and--  Sunset = ");
                   sbE010.Append(Utilities.GetTime(report.SunsetHour, report.SunsetMin));
                   myTextBlock.Inlines.Add(new Run(sbE010.ToString()));
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -1351,14 +1351,15 @@ namespace Pattons_Best
                }
                break;
             case "e022a":
+               myTextBlock.Inlines.Add(new Run("At the top of every hour..."));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               if (true == report.Weather.Contains("Rain"))
+                  myTextBlock.Inlines.Add(new Run("Roll if rain continues (6-10): "));
+               else if (true == report.Weather.Contains("Overcast"))
+                  myTextBlock.Inlines.Add(new Run("Roll if rain starts (9-10): "));
                if (Utilities.NO_RESULT == gi.DieResults[key][0])
                {
-                  myTextBlock.Inlines.Add(new Run("At the top of every hour..."));
-                  myTextBlock.Inlines.Add(new LineBreak());
-                  if ( true == report.Weather.Contains("Rain"))
-                     myTextBlock.Inlines.Add(new Run("Roll if rain continues (6-10): "));
-                  if (true == report.Weather.Contains("Overcast"))
-                     myTextBlock.Inlines.Add(new Run("Roll if rain starts (9-10): "));
                   BitmapImage bmi = new BitmapImage();
                   bmi.BeginInit();
                   bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollWhite.gif", UriKind.Absolute);
@@ -1369,6 +1370,7 @@ namespace Pattons_Best
                }
                else
                {
+                  myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
                   Image imge022a;
                   if (true == report.Weather.Contains("Rain"))
                   {
@@ -1382,6 +1384,13 @@ namespace Pattons_Best
                         myTextBlock.Inlines.Add(new Run(" = Rain Stops."));
                         imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercast"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
                      }
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("                     "));
+                     myTextBlock.Inlines.Add(new InlineUIContainer(imge022a));
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("Click image to continue."));
                   }
                   else if (true == report.Weather.Contains("Overcast"))
                   {
@@ -1400,7 +1409,7 @@ namespace Pattons_Best
                      }
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new Run("                                           "));
+                     myTextBlock.Inlines.Add(new Run("                     "));
                      myTextBlock.Inlines.Add(new InlineUIContainer(imge022a));
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
@@ -1409,14 +1418,15 @@ namespace Pattons_Best
                }
                break;
             case "e022b":
+               myTextBlock.Inlines.Add(new Run("At the top of every hour..."));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
+               if (true == report.Weather.Contains("Falling"))
+                  myTextBlock.Inlines.Add(new Run("Roll if snow continues (1-8): "));
+               else
+                  myTextBlock.Inlines.Add(new Run("Roll if snow starts (9-10): "));
                if (Utilities.NO_RESULT == gi.DieResults[key][0])
                {
-                  myTextBlock.Inlines.Add(new Run("At the top of every hour..."));
-                  myTextBlock.Inlines.Add(new LineBreak());
-                  if (true == report.Weather.Contains("Falling"))
-                     myTextBlock.Inlines.Add(new Run("Roll if snow continues (1-8): "));
-                  else
-                     myTextBlock.Inlines.Add(new Run("Roll if snow starts (9-10): "));
                   BitmapImage bmi = new BitmapImage();
                   bmi.BeginInit();
                   bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollWhite.gif", UriKind.Absolute);
@@ -1424,38 +1434,84 @@ namespace Pattons_Best
                   Image imgDice = new Image { Name = "DieRollWhite", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
                   ImageBehavior.SetAnimatedSource(imgDice, bmi);
                   myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
+
                }
                else
                {
+                  myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
                   Image imge022b;
-                  if (true == report.Weather.Contains("Falling"))
+                  if (true == report.Weather.Contains("Falling")) // snow falling
                   {
-                     if (5 < gi.DieResults[key][0])
-                     {
-                        myTextBlock.Inlines.Add(new Run(" = Continues."));
-                        imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
-                     }
-                     else
+                     if (gi.DieResults[key][0] < 9)
                      {
                         myTextBlock.Inlines.Add(new Run(" = Snow Stops."));
-                        imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercast"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
-                     }
-                  }
-                  else 
-                  {
-                     if (8 < gi.DieResults[key][0])
-                     {
-                        myTextBlock.Inlines.Add(new Run(" = Snow Starts."));
-                        imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
+                        if ("Ground Snow" == report.Weather)
+                           imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowGround"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
+                        else if ("Deep Snow" == report.Weather)
+                           imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowDeep"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
+                        else
+                           imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherClear"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
                      }
                      else
                      {
-                        myTextBlock.Inlines.Add(new Run(" = No Effect."));
-                        imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercast"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
+                        myTextBlock.Inlines.Add(new Run(" = Continues."));
+                        if ("Ground Snow" == report.Weather)
+                           imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFallingGround"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
+                        else if ("Deep Snow" == report.Weather)
+                           imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFallingDeep"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
+                        else
+                           imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
                      }
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new Run("                                           "));
+                     myTextBlock.Inlines.Add(new Run("                "));
+                     myTextBlock.Inlines.Add(new InlineUIContainer(imge022b));
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("Click image to continue."));
+                  }
+                  else if( true == gi.IsFallingSnowStopped) // snow not falling
+                  {
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     if (gi.DieResults[key][0] < 9 )
+                     {
+                        myTextBlock.Inlines.Add(new Run(" = No Effect."));
+                        if ("Ground Snow" == report.Weather)
+                        {
+                           imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowGround"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
+                           myTextBlock.Inlines.Add(new Run("                "));
+                        }
+                        else if ("Deep Snow" == report.Weather)
+                        {
+                           imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowDeep"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
+                           myTextBlock.Inlines.Add(new Run("                "));
+                        }
+                        else
+                        {
+                           imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherClear"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                           myTextBlock.Inlines.Add(new Run("                                        "));
+                        }
+                     }
+                     else
+                     {
+                        myTextBlock.Inlines.Add(new Run(" = Snow Starts Again."));
+                        if ("Ground Snow" == report.Weather)
+                        {
+                           imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFallingGround"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
+                           myTextBlock.Inlines.Add(new Run("                "));
+                        }
+                        else if ("Deep Snow" == report.Weather)
+                        {
+                           imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFallingDeep"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
+                           myTextBlock.Inlines.Add(new Run("                "));
+                        }
+                        else
+                        {
+                           imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
+                           myTextBlock.Inlines.Add(new Run("                                        "));
+                        }
+                     }
                      myTextBlock.Inlines.Add(new InlineUIContainer(imge022b));
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
@@ -2577,6 +2633,214 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Click image to continue."));
                }
                break;
+            case "e056d":
+               myTextBlock.Inlines.Add(new Run("Modifiers") { TextDecorations = TextDecorations.Underline });
+               myTextBlock.Inlines.Add(new LineBreak());
+               int modifier56d = 0;
+               StringBuilder sbe056d = new StringBuilder();
+               if( false == report.Loader.IsIncapacitated )
+               {
+                  sbe056d.Append(" -");
+                  sbe056d.Append(report.Loader.Rating.ToString());
+                  sbe056d.Append(" for loader rating\n");
+                  modifier56d -= report.Loader.Rating;
+               }
+               if (false == report.Gunner.IsIncapacitated)
+               {
+                  sbe056d.Append(" -");
+                  sbe056d.Append(report.Gunner.Rating.ToString());
+                  sbe056d.Append(" for gunner rating\n");
+                  modifier56d -= report.Gunner.Rating;
+               }
+               if( 0 == sbe056d.Length )
+                  sbe056d.Append(" None");
+               sbe056d.Append("\n");
+               myTextBlock.Inlines.Add(new Run(sbe056d.ToString()));
+               myTextBlock.Inlines.Add(new Run("Die Roll: "));
+               if (Utilities.NO_RESULT == gi.DieResults[key][0])
+               {
+                  BitmapImage bmi = new BitmapImage();
+                  bmi.BeginInit();
+                  bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
+                  bmi.EndInit();
+                  Image imgDice = new Image { Name = "DieRollBlue", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+                  ImageBehavior.SetAnimatedSource(imgDice, bmi);
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
+               }
+               else
+               {
+                  int combo = gi.DieResults[key][0] + modifier56d;
+                  myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
+                  myTextBlock.Inlines.Add(new Run(" - " + Math.Abs(modifier56d).ToString()));
+                  myTextBlock.Inlines.Add(new Run(" = " + combo.ToString()));
+                  if ((90 < combo) || (97 < gi.DieResults[key][0]))
+                     myTextBlock.Inlines.Add(new Run(" = GUN BROKEN!"));
+                  else
+                     myTextBlock.Inlines.Add(new Run(" = Gun Repaired."));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  Image imge056d = new Image { Name = "PreparationsRepairMainGunRollEnd", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge056d));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
+            case "e056e":
+               myTextBlock.Inlines.Add(new Run("Modifiers") { TextDecorations = TextDecorations.Underline });
+               myTextBlock.Inlines.Add(new LineBreak());
+               int modifier56e = 0;
+               StringBuilder sbe056e = new StringBuilder();
+               if( (12 == report.TankCardNum) || (14 == report.TankCardNum) )
+               {
+                  if (false == report.Loader.IsIncapacitated)
+                  {
+                     sbe056e.Append(" -");
+                     sbe056e.Append(report.Loader.Rating.ToString());
+                     sbe056e.Append(" for loader rating\n");
+                     modifier56e -= report.Loader.Rating;
+                  }
+               }
+               else
+               {
+                  if (false == report.Commander.IsIncapacitated)
+                  {
+                     sbe056e.Append(" -");
+                     sbe056e.Append(report.Commander.Rating.ToString());
+                     sbe056e.Append(" for commander rating\n");
+                     modifier56e -= report.Gunner.Rating;
+                  }
+               }
+               if (0 == sbe056e.Length)
+                  sbe056e.Append(" None");
+               sbe056e.Append("\n");
+               myTextBlock.Inlines.Add(new Run(sbe056e.ToString()));
+               myTextBlock.Inlines.Add(new Run("Die Roll: "));
+               if (Utilities.NO_RESULT == gi.DieResults[key][0])
+               {
+                  BitmapImage bmi = new BitmapImage();
+                  bmi.BeginInit();
+                  bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
+                  bmi.EndInit();
+                  Image imgDice = new Image { Name = "DieRollBlue", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+                  ImageBehavior.SetAnimatedSource(imgDice, bmi);
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
+               }
+               else
+               {
+                  int combo = gi.DieResults[key][0] + modifier56e;
+                  myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
+                  myTextBlock.Inlines.Add(new Run(" - " + Math.Abs(modifier56e).ToString()));
+                  myTextBlock.Inlines.Add(new Run(" = " + combo.ToString()));
+                  if ((90 < combo) || (97 < gi.DieResults[key][0]))
+                     myTextBlock.Inlines.Add(new Run(" = GUN BROKEN!"));
+                  else
+                     myTextBlock.Inlines.Add(new Run(" = Gun Repaired."));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  Image imge056e = new Image { Name = "PreparationsRepairAaMgRollEnd", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge056e));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
+            case "e056f":
+               myTextBlock.Inlines.Add(new Run("Modifiers") { TextDecorations = TextDecorations.Underline });
+               myTextBlock.Inlines.Add(new LineBreak());
+               int modifier56f = 0;
+               StringBuilder sbe056f = new StringBuilder();
+               if (false == report.Loader.IsIncapacitated)
+               {
+                  sbe056f.Append(" -");
+                  sbe056f.Append(report.Loader.Rating.ToString());
+                  sbe056f.Append(" for loader rating\n");
+                  modifier56f -= report.Loader.Rating;
+               }
+               if (0 == sbe056f.Length)
+                  sbe056f.Append(" None");
+               sbe056f.Append("\n");
+               myTextBlock.Inlines.Add(new Run(sbe056f.ToString()));
+               myTextBlock.Inlines.Add(new Run("Die Roll: "));
+               if (Utilities.NO_RESULT == gi.DieResults[key][0])
+               {
+                  BitmapImage bmi = new BitmapImage();
+                  bmi.BeginInit();
+                  bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
+                  bmi.EndInit();
+                  Image imgDice = new Image { Name = "DieRollBlue", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+                  ImageBehavior.SetAnimatedSource(imgDice, bmi);
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
+               }
+               else
+               {
+                  int combo = gi.DieResults[key][0] + modifier56f;
+                  myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
+                  myTextBlock.Inlines.Add(new Run(" - " + Math.Abs(modifier56f).ToString()));
+                  myTextBlock.Inlines.Add(new Run(" = " + combo.ToString()));
+                  if ((90 < combo) || (97 < gi.DieResults[key][0]))
+                     myTextBlock.Inlines.Add(new Run(" = GUN BROKEN!"));
+                  else
+                     myTextBlock.Inlines.Add(new Run(" = Gun Repaired."));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  Image imge056f = new Image { Name = "PreparationsRepairCoaxialMgRollEnd", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge056f));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
+            case "e056g":
+               myTextBlock.Inlines.Add(new Run("Modifiers") { TextDecorations = TextDecorations.Underline });
+               myTextBlock.Inlines.Add(new LineBreak());
+               int modifier56g = 0;
+               StringBuilder sbe056g = new StringBuilder();
+               if (false == report.Loader.IsIncapacitated)
+               {
+                  sbe056g.Append(" -");
+                  sbe056g.Append(report.Loader.Rating.ToString());
+                  sbe056g.Append(" for loader rating\n");
+                  modifier56g -= report.Loader.Rating;
+               }
+               if (0 == sbe056g.Length)
+                  sbe056g.Append(" None");
+               sbe056g.Append("\n");
+               myTextBlock.Inlines.Add(new Run(sbe056g.ToString()));
+               myTextBlock.Inlines.Add(new Run("Die Roll: "));
+               if (Utilities.NO_RESULT == gi.DieResults[key][0])
+               {
+                  BitmapImage bmi = new BitmapImage();
+                  bmi.BeginInit();
+                  bmi.UriSource = new Uri(MapImage.theImageDirectory + "DieRollBlue.gif", UriKind.Absolute);
+                  bmi.EndInit();
+                  Image imgDice = new Image { Name = "DieRollBlue", Source = bmi, Width = Utilities.theMapItemOffset, Height = Utilities.theMapItemOffset };
+                  ImageBehavior.SetAnimatedSource(imgDice, bmi);
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imgDice));
+               }
+               else
+               {
+                  int combo = gi.DieResults[key][0] + modifier56g;
+                  myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
+                  myTextBlock.Inlines.Add(new Run(" - " + Math.Abs(modifier56g).ToString()));
+                  myTextBlock.Inlines.Add(new Run(" = " + combo.ToString()));
+                  if ((90 < combo) || (97 < gi.DieResults[key][0]))
+                     myTextBlock.Inlines.Add(new Run(" = GUN BROKEN!"));
+                  else
+                     myTextBlock.Inlines.Add(new Run(" = Gun Repaired."));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  Image imge056g = new Image { Name = "PreparationsRepairBowMgRollEnd", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
+                  myTextBlock.Inlines.Add(new InlineUIContainer(imge056g));
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new LineBreak());
+                  myTextBlock.Inlines.Add(new Run("Click image to continue."));
+               }
+               break;
             case "e101":
                if (false == UpdateEventContentVictoryPointTotal(gi))
                {
@@ -2734,7 +2998,7 @@ namespace Pattons_Best
                   imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercastMud"), Width = 400, Height = 266, Name = "WeatherRollEnd" };
                   break;
                case "Snow":
-                  imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling"), Width = 400, Height = 266, Name = "WeatherRollEnd" };
+                  imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowIcon"), Width = 400, Height = 266, Name = "WeatherRollEnd" };
                   break;
                default:
                   Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentWeather(): reached default snow=" + report.Weather);
@@ -5026,6 +5290,7 @@ namespace Pattons_Best
       {
          myDialogAbout = null;
       }
+      //--------------------------------------------------------------------
       public void ShowDieResult(int dieRoll)
       {
          if (null == myGameInstance)
@@ -5831,6 +6096,22 @@ namespace Pattons_Best
                            }
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
+                        case "PreparationsRepairMainGunRollEnd":
+                           action = GameAction.PreparationsRepairMainGunRollEnd;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "PreparationsRepairAaMgRollEnd":
+                           action = GameAction.PreparationsRepairAaMgRollEnd;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "PreparationsRepairCoaxialMgRollEnd":
+                           action = GameAction.PreparationsRepairCoaxialMgRollEnd;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "PreparationsRepairBowMgRollEnd":
+                           action = GameAction.PreparationsRepairBowMgRollEnd;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
                         case "c15OpenHatch":
                            action = GameAction.PreparationsGunLoad;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
@@ -5877,6 +6158,14 @@ namespace Pattons_Best
                            break;
                         case "MovementExitAreaSet":
                            action = GameAction.MovementExitAreaSet;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "MovementRainRollEnd":
+                           action = GameAction.MovementRainRollEnd;
+                           myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
+                           return;
+                        case "MovementSnowRollEnd":
+                           action = GameAction.MovementSnowRollEnd;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "MovementEnemyCheckCounterattack":
