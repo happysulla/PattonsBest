@@ -1439,7 +1439,7 @@ namespace Pattons_Best
          }
          else
          {
-            if (EnumScenario.Counterattack == report.Scenario)
+            if (EnumScenario.Counterattack == lastReport.Scenario)
             {
                gi.DieResults["e011a"][0] = 100;
                SetCommand(gi, action, GameAction.DieRollActionNone, "e011a");
