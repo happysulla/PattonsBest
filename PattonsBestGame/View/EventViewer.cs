@@ -926,7 +926,7 @@ namespace Pattons_Best
                }
                break;
             case "e007a":
-               if ( 0 == gi.InjuredCrewMembers.Count )
+               if ( 0 == gi.InjuredCrewMembers.Count ) 
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): gi.InjuredCrewMembers.Count=0 for key=" + key);
                   return false;
@@ -1376,12 +1376,12 @@ namespace Pattons_Best
                   {
                      if( 5 < gi.DieResults[key][0])
                      {
-                        myTextBlock.Inlines.Add(new Run(" = Continues."));
+                        myTextBlock.Inlines.Add(new Run(" = Continues"));
                         imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherRain"), Width = 400, Height = 225, Name = "MovementRainRollEnd" };
                      }
                      else
                      {
-                        myTextBlock.Inlines.Add(new Run(" = Rain Stops."));
+                        myTextBlock.Inlines.Add(new Run(" = Rain Stops"));
                         imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercast"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
                      }
                      myTextBlock.Inlines.Add(new LineBreak());
@@ -1396,14 +1396,14 @@ namespace Pattons_Best
                   {
                      if (8 < gi.DieResults[key][0])
                      {
-                        myTextBlock.Inlines.Add(new Run(" = Rain Starts."));
+                        myTextBlock.Inlines.Add(new Run(" = Rain Starts"));
                         imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherRain"), Width = 400, Height = 225, Name = "MovementRainRollEnd" };
                      }
                      else 
                      {
-                        myTextBlock.Inlines.Add(new Run(" = No Effect."));
+                        myTextBlock.Inlines.Add(new Run(" = No Effect"));
                         if( 1 < gi.HoursOfRainThisDay )
-                           imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercastMud"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
+                           imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherMudRain"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
                         else
                            imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercast"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
                      }
@@ -1442,19 +1442,33 @@ namespace Pattons_Best
                   Image imge022b;
                   if (true == report.Weather.Contains("Falling")) // snow falling
                   {
-                     if (gi.DieResults[key][0] < 9)
+                     if (8 < gi.DieResults[key][0])
                      {
-                        myTextBlock.Inlines.Add(new Run(" = Snow Stops."));
+                        myTextBlock.Inlines.Add(new Run(" = Snow Stops"));
+                        myTextBlock.Inlines.Add(new LineBreak());
+                        myTextBlock.Inlines.Add(new LineBreak());
                         if ("Ground Snow" == report.Weather)
+                        {
                            imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowGround"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
+                           myTextBlock.Inlines.Add(new Run("                "));
+                        }
                         else if ("Deep Snow" == report.Weather)
+                        {
                            imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowDeep"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
+                           myTextBlock.Inlines.Add(new Run("                "));
+                        }
                         else
-                           imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherClear"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
+                        {
+                           imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherClear"), Width = 150, Height = 150, Name = "MovementSnowRollEnd" };
+                           myTextBlock.Inlines.Add(new Run("                                        "));
+                        }
                      }
                      else
                      {
-                        myTextBlock.Inlines.Add(new Run(" = Continues."));
+                        myTextBlock.Inlines.Add(new Run(" = Continues"));
+                        myTextBlock.Inlines.Add(new LineBreak());
+                        myTextBlock.Inlines.Add(new LineBreak());
+                        myTextBlock.Inlines.Add(new Run("                "));
                         if ("Ground Snow" == report.Weather)
                            imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFallingGround"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
                         else if ("Deep Snow" == report.Weather)
@@ -1462,9 +1476,6 @@ namespace Pattons_Best
                         else
                            imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
                      }
-                     myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new Run("                "));
                      myTextBlock.Inlines.Add(new InlineUIContainer(imge022b));
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
@@ -1472,11 +1483,11 @@ namespace Pattons_Best
                   }
                   else if( true == gi.IsFallingSnowStopped) // snow not falling
                   {
-                     myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new LineBreak());
                      if (gi.DieResults[key][0] < 9 )
                      {
-                        myTextBlock.Inlines.Add(new Run(" = No Effect."));
+                        myTextBlock.Inlines.Add(new Run(" = No Effect"));
+                        myTextBlock.Inlines.Add(new LineBreak());
+                        myTextBlock.Inlines.Add(new LineBreak());
                         if ("Ground Snow" == report.Weather)
                         {
                            imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowGround"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
@@ -1489,29 +1500,30 @@ namespace Pattons_Best
                         }
                         else
                         {
-                           imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherClear"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                           imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherClear"), Width = 150, Height = 150, Name = "MovementSnowRollEnd" };
                            myTextBlock.Inlines.Add(new Run("                                        "));
                         }
                      }
                      else
                      {
-                        myTextBlock.Inlines.Add(new Run(" = Snow Starts Again."));
+                        myTextBlock.Inlines.Add(new Run(" = Snow Starts Again"));
+                        myTextBlock.Inlines.Add(new LineBreak());
+                        myTextBlock.Inlines.Add(new LineBreak());
+                        myTextBlock.Inlines.Add(new Run("                "));
                         if ("Ground Snow" == report.Weather)
                         {
                            imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFallingGround"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
-                           myTextBlock.Inlines.Add(new Run("                "));
                         }
                         else if ("Deep Snow" == report.Weather)
                         {
                            imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFallingDeep"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
-                           myTextBlock.Inlines.Add(new Run("                "));
                         }
                         else
                         {
                            imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
-                           myTextBlock.Inlines.Add(new Run("                                        "));
                         }
                      }
+   
                      myTextBlock.Inlines.Add(new InlineUIContainer(imge022b));
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
@@ -2151,7 +2163,7 @@ namespace Pattons_Best
                if ("None" != gi.GetAmmoReloadType())  // only show continue image after user selected a Ammo Reload 
                {
                   Image imge050 = new Image { Name = "Continue50", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
-                  myTextBlock.Inlines.Add(new Run("                                          "));
+                  myTextBlock.Inlines.Add(new Run("                                             "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge050));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -2290,7 +2302,7 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new Run("When you are satisfied with the current orientation, click image between buttons to continue."));
                break;
             case "e052a":
-               myTextBlock.Inlines.Add(new Run("                                               "));
+               myTextBlock.Inlines.Add(new Run("                                                   "));
                Image? imge52a = null;
                double rotation52a = gi.Sherman.RotationHull + gi.Sherman.RotationTurret;
                if (359.0 < rotation52a)
@@ -2868,7 +2880,7 @@ namespace Pattons_Best
             case "e501":
                StringBuilder sbEndWon = new StringBuilder();
                sbEndWon.Append("Game ends on ");
-               sbEndWon.Append(TableMgr.GetDate(gi.Day));
+               sbEndWon.Append(TableMgr.GetDate(gi.Day-1));
                sbEndWon.Append(" due to '");
                sbEndWon.Append(gi.EndGameReason);
                sbEndWon.Append("'");
@@ -2921,35 +2933,40 @@ namespace Pattons_Best
             case "e502":
                StringBuilder sbEndLost = new StringBuilder();
                sbEndLost.Append("Game ends on ");
-               sbEndLost.Append(TableMgr.GetDate(gi.Day));
+               sbEndLost.Append(TableMgr.GetDate(gi.Day-1));
                sbEndLost.Append(" due to ");
                sbEndLost.Append(gi.EndGameReason);
                myTextBlock.Inlines.Add(new Run(sbEndLost.ToString()));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
                Image? imgEndGameLost = null;
                switch (Utilities.RandomGenerator.Next(11))
                {
                   case 0:
                      imgEndGameLost = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Deny"), Width = 300, Height = 300 };
+                     myTextBlock.Inlines.Add(new Run("                                  "));
                      break;
                   case 1:
                      imgEndGameLost = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Idiot"), Width = 300, Height = 300 };
+                     myTextBlock.Inlines.Add(new Run("                                  "));
                      break;
                   case 2:
                      imgEndGameLost = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("OBlood1"), Width = 300, Height = 300 };
+                     myTextBlock.Inlines.Add(new Run("                                  "));
                      break;
                   case 3:
                      imgEndGameLost = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("FarmerDead"), Width = 300, Height = 300 };
+                     myTextBlock.Inlines.Add(new Run("                                  "));
                      break;
                   case 4:
                      imgEndGameLost = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Skulls"), Width = 300, Height = 300 };
+                     myTextBlock.Inlines.Add(new Run("                                  "));
                      break;
                   default:
                      imgEndGameLost = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Frown"), Width = 300, Height = 300 };
+                     myTextBlock.Inlines.Add(new Run("                           "));
                      break;
                }
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new Run("                                  "));
                myTextBlock.Inlines.Add(new InlineUIContainer(imgEndGameLost));
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
@@ -2995,7 +3012,7 @@ namespace Pattons_Best
                   imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherMud"), Width = 400, Height = 266, Name = "WeatherRollEnd" };
                   break;
                case "Mud/Overcast":
-                  imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercastMud"), Width = 400, Height = 266, Name = "WeatherRollEnd" };
+                  imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherMudOvercast"), Width = 400, Height = 266, Name = "WeatherRollEnd" };
                   break;
                case "Snow":
                   imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowIcon"), Width = 400, Height = 266, Name = "WeatherRollEnd" };
@@ -3080,7 +3097,7 @@ namespace Pattons_Best
          //-------------------------------------------------
          if (true == lastReport.Weather.Contains("Ground Snow"))
             sb51.Append("+3 for Ground Snow\n");
-         else if (true == lastReport.Weather.Contains("Falling"))
+         else if (true == lastReport.Weather.Contains("Deep"))
             sb51.Append("+6 for Deep Snow\n");
          else if (true == lastReport.Weather.Contains("Mud"))
             sb51.Append("+9 for Mud\n");
@@ -5325,6 +5342,13 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Show_CrewRatingResults(): myGameEngine=null");
             return false;
          }
+         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ShowCrewRatingResults():  myGameInstance.Reports.GetLast()");
+            return false;
+         }
+         //----------------------------------------
          GameAction outAction = GameAction.Error;
          if( GamePhase.GameSetup == myGameInstance.GamePhase )
          {
@@ -5341,6 +5365,10 @@ namespace Pattons_Best
          else if( 0 < myGameInstance.ShermanAdvanceOrRetreatEnemies.Count)
          {
             outAction = GameAction.BattleRoundSequenceCrewReplaced; // enemies transfer to Move board due to advancing or retreating Sherman
+         }
+         else if (EnumScenario.Counterattack == lastReport.Scenario)
+         {
+            outAction = GameAction.PreparationsReplaceCrewEnd; // enemies transfer to Move board due to advancing or retreating Sherman
          }
          else
          {

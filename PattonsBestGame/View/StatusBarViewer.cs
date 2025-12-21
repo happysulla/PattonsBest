@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing.Printing;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -95,41 +96,93 @@ namespace Pattons_Best
          buttonGoto.Click += ButtonEventActive_Click;
          myStatusBar.Items.Add(buttonGoto);
          //--------------------------------------------
-         if ( (null != lastReport) && ( (GamePhase.GameSetup != myGameInstance.GamePhase)||(GamePhase.EveningDebriefing != myGameInstance.GamePhase)) )
+         if (null != lastReport)
          {
-            myStatusBar.Items.Add(new Separator());
-            int minLeft = TableMgr.GetTimeRemaining(lastReport);
-            Label labelTimeRemaining = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = "Mins Left=" + minLeft.ToString() };
-            myStatusBar.Items.Add(labelTimeRemaining);
-            Image imgTimeRemaining;
-            if (minLeft < 61)
-               imgTimeRemaining = new Image { Source = MapItem.theMapImages.GetBitmapImage("Alert2"), Width = 30, Height = 30 };
-            else
-               imgTimeRemaining = new Image { Source = MapItem.theMapImages.GetBitmapImage("Sunset"), Width = 30, Height = 15 };
-            myStatusBar.Items.Add(imgTimeRemaining);
-            if (lastReport.MainGunHE < 10)
+            if ((GamePhase.GameSetup != myGameInstance.GamePhase) || (GamePhase.EveningDebriefing != myGameInstance.GamePhase))
             {
                myStatusBar.Items.Add(new Separator());
-               Label labelLowAmmoMain = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = "Low HE Ammo=" + lastReport.MainGunHE.ToString() };
-               Image imgLowAmmoMain = new Image { Source = MapItem.theMapImages.GetBitmapImage("Alert1"), Width = 35, Height = 30 };
-               myStatusBar.Items.Add(labelLowAmmoMain);
-               myStatusBar.Items.Add(imgLowAmmoMain);
-            }
-            if (lastReport.MainGunAP < 6)
-            {
+               Label labelWeather = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = lastReport.Weather };
+               Image imgWeather;
+               switch(lastReport.Weather)
+               {
+                  case "Clear": 
+                     imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherClear"), Width = 30, Height = 30 }; 
+                     break;
+                  case "Snow":
+                     imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowIcon"), Width = 30, Height = 30 };
+                     break;
+                  case "Deep Snow": 
+                     imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowDeep"), Width = 45, Height = 30 };
+                     break;
+                  case "Falling Snow": 
+                     imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling"), Width = 45, Height = 30 }; 
+                     break;
+                  case "Falling and Deep Snow": 
+                     imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFallingDeep"), Width = 45, Height = 30 }; 
+                     break;
+                  case "Falling and Ground Snow": 
+                     imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFallingGround"), Width = 45, Height = 30 }; 
+                     break;
+                  case "Overcast": 
+                     imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercast"), Width = 45, Height = 30 };
+                     break;
+                  case "Fog":
+                     imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherFog"), Width = 45, Height = 30 };
+                     break;
+                  case "Mud":
+                     imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherMud"), Width = 45, Height = 30 };
+                     break;
+                  case "Mud/Overcast":
+                     imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherMudOvercast"), Width = 45, Height = 30 };
+                     break;
+                  case "Overcast/Rain":
+                     imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherRain"), Width = 45, Height = 30 };
+                     break;
+                  case "Mud/Rain":
+                     imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherRainMud"), Width = 45, Height = 30 };
+                     break;
+                  default:
+                     Logger.Log(LogEnum.LE_ERROR, "StatusBarViewer::UpdateView(): reached default weather=" + lastReport.Weather);
+                     imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherClear"), Width = 30, Height = 30 };
+                     break;
+               }
+               myStatusBar.Items.Add(labelWeather);
+               myStatusBar.Items.Add(imgWeather);
+               //----------------------------------------
                myStatusBar.Items.Add(new Separator());
-               Label labelLowAmmoMain = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = "Low AP Ammo=" + lastReport.MainGunAP.ToString() };
-               Image imgLowAmmoMain = new Image { Source = MapItem.theMapImages.GetBitmapImage("Alert5"), Width = 34, Height = 30 };
-               myStatusBar.Items.Add(labelLowAmmoMain);
-               myStatusBar.Items.Add(imgLowAmmoMain);
-            }
-            if (lastReport.Ammo30CalibreMG < 10)
-            {
-               myStatusBar.Items.Add(new Separator());
-               Label labelLowAmmoMg = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = "Low 30mm Ammo=" + lastReport.Ammo30CalibreMG.ToString() };
-               Image imgLowAmmoMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("Alert3"), Width = 33, Height = 30 };
-               myStatusBar.Items.Add(labelLowAmmoMg);
-               myStatusBar.Items.Add(imgLowAmmoMg);
+               int minLeft = TableMgr.GetTimeRemaining(lastReport);
+               Label labelTimeRemaining = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = "Mins Left=" + minLeft.ToString() };
+               myStatusBar.Items.Add(labelTimeRemaining);
+               Image imgTimeRemaining;
+               if (minLeft < 61)
+                  imgTimeRemaining = new Image { Source = MapItem.theMapImages.GetBitmapImage("Alert2"), Width = 30, Height = 30 };
+               else
+                  imgTimeRemaining = new Image { Source = MapItem.theMapImages.GetBitmapImage("Sunset"), Width = 50, Height = 25 };
+               myStatusBar.Items.Add(imgTimeRemaining);
+               if (lastReport.MainGunHE < 10)
+               {
+                  myStatusBar.Items.Add(new Separator());
+                  Label labelLowAmmoMain = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = "Low HE Ammo=" + lastReport.MainGunHE.ToString() };
+                  Image imgLowAmmoMain = new Image { Source = MapItem.theMapImages.GetBitmapImage("Alert1"), Width = 35, Height = 30 };
+                  myStatusBar.Items.Add(labelLowAmmoMain);
+                  myStatusBar.Items.Add(imgLowAmmoMain);
+               }
+               if (lastReport.MainGunAP < 6)
+               {
+                  myStatusBar.Items.Add(new Separator());
+                  Label labelLowAmmoMain = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = "Low AP Ammo=" + lastReport.MainGunAP.ToString() };
+                  Image imgLowAmmoMain = new Image { Source = MapItem.theMapImages.GetBitmapImage("Alert5"), Width = 34, Height = 30 };
+                  myStatusBar.Items.Add(labelLowAmmoMain);
+                  myStatusBar.Items.Add(imgLowAmmoMain);
+               }
+               if (lastReport.Ammo30CalibreMG < 10)
+               {
+                  myStatusBar.Items.Add(new Separator());
+                  Label labelLowAmmoMg = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = "Low 30mm Ammo=" + lastReport.Ammo30CalibreMG.ToString() };
+                  Image imgLowAmmoMg = new Image { Source = MapItem.theMapImages.GetBitmapImage("Alert3"), Width = 33, Height = 30 };
+                  myStatusBar.Items.Add(labelLowAmmoMg);
+                  myStatusBar.Items.Add(imgLowAmmoMg);
+               }
             }
          }
          //--------------------------------------------

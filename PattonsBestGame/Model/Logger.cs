@@ -54,6 +54,7 @@ namespace Pattons_Best
       LE_SHOW_TO_HIT_MODIFIER,
       LE_SHOW_TO_HIT_ATTACK,
       LE_SHOW_MAIN_GUN_BREAK,
+      LE_SHOW_MAIN_MG_BREAK,
       LE_SHOW_TO_KILL_MODIFIER,
       LE_SHOW_TO_KILL_ATTACK_INF,
       LE_SHOW_TO_KILL_ATTACK,
@@ -196,6 +197,7 @@ namespace Pattons_Best
          SetOn(LogEnum.LE_SHOW_TO_HIT_MODIFIER);
          SetOn(LogEnum.LE_SHOW_TO_HIT_ATTACK);
          SetOn(LogEnum.LE_SHOW_MAIN_GUN_BREAK);
+         SetOn(LogEnum.LE_SHOW_MAIN_MG_BREAK);
          SetOn(LogEnum.LE_SHOW_TO_KILL_MODIFIER);
          SetOn(LogEnum.LE_SHOW_TO_KILL_ATTACK_INF);
          //SetOn(LogEnum.LE_SHOW_TO_KILL_ATTACK);
@@ -205,7 +207,7 @@ namespace Pattons_Best
          SetOn(LogEnum.LE_SHOW_FIRE_DIRECTION);
          SetOn(LogEnum.LE_SHOW_IMMOBILIZATION);
          //-------------------------------
-         SetOn(LogEnum.LE_SHOW_TIME);
+         //SetOn(LogEnum.LE_SHOW_TIME);
          //SetOn(LogEnum.LE_SHOW_VP_FRIENDLY_FORCES);
          //SetOn(LogEnum.LE_SHOW_VP_CAPTURED_AREA);
          //SetOn(LogEnum.LE_SHOW_VP_TOTAL);
@@ -219,7 +221,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_VIEW_MIM);
          //SetOn(LogEnum.LE_VIEW_MIM_ADD);
          //SetOn(LogEnum.LE_VIEW_MIM_CLEAR);
-         SetOn(LogEnum.LE_VIEW_TIME_TRACK);
+         //SetOn(LogEnum.LE_VIEW_TIME_TRACK);
          //SetOn(LogEnum.LE_VIEW_CONTROL_NAME);
          //-------------------------------
          //SetOn(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP);

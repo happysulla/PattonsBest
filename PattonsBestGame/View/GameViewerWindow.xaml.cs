@@ -576,7 +576,7 @@ namespace Pattons_Best
                if (0 < gi.AdvancingFireMarkerCount)
                   nextAction = GameAction.BattleStart;
                else
-                  nextAction = GameAction.BattleActivation;  // BattlePlaceAdvanceFire
+                  nextAction = GameAction.BattleActivation; 
             }
          }
          else if (GameAction.UpdateNewGame == action)
@@ -737,9 +737,9 @@ namespace Pattons_Best
          }
          bool isGunnerTrainedInHvss = ( (true == gi.TrainedGunners.Contains(lastReport.Gunner.Name)) && (false == lastReport.Gunner.IsIncapacitated) );
          bool isTargetInCurrentMainGunSector = Territory.IsEnemyUnitInSector(gi, sector);
-         bool iMainGunAbleAbleToFireDueToMoving = (false == isTankMoving) || (true == isGunnerTrainedInHvss);
+         bool iMainGunAbleAbleToFireDueToMoving = ( (false == isTankMoving) || (true == isGunnerTrainedInHvss) );
          bool isMainGunFiringAvailable = ((true == iMainGunAbleAbleToFireDueToMoving) && (false == gi.IsMalfunctionedMainGun) && (false == gi.IsBrokenMainGun) && (false == gi.IsBrokenGunSight) && (0 < totalAmmo) && ("None" != gi.GetGunLoadType()) && (false == isLoaderChangingLoad) );
-         bool isShermanMoveAvailable = ((false == gi.Sherman.IsThrownTrack) && (false == gi.Sherman.IsAssistanceNeeded) && (false == gi.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch));
+         bool isShermanMoveAvailable = ( (false == gi.Sherman.IsThrownTrack) && (false == gi.Sherman.IsAssistanceNeeded) && ((false == gi.IsBrokenPeriscopeDriver) || (true == isDriverOpenHatch)) );
          //---------------------------------
          MenuItem menuItem1 = new MenuItem();
          myContextMenuCrewActions["Driver"].Items.Clear();
@@ -866,17 +866,11 @@ namespace Pattons_Best
                      menuItem1.Header = "Forward To Hull Down";
                      menuItem1.Click += MenuItemCrewActionClick;
                      myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
-                  }
-                  if (false == gi.Sherman.IsAssistanceNeeded) // if assistenance is needed, the tank is stuck and cannot free itself
-                  {
                      menuItem1 = new MenuItem();
                      menuItem1.Name = "Driver_Reverse";
                      menuItem1.Header = "Reverse";
                      menuItem1.Click += MenuItemCrewActionClick;
                      myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
-                  }
-                  if (false == gi.Sherman.IsBoggedDown)
-                  {
                      menuItem1 = new MenuItem();
                      menuItem1.Name = "Driver_ReverseToHullDown";
                      menuItem1.Header = "Reverse To Hull Down";
@@ -887,6 +881,17 @@ namespace Pattons_Best
                      menuItem1.Header = "Pivot Tank";
                      menuItem1.Click += MenuItemCrewActionClick;
                      myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
+                  }
+                  else // if bogged down, allow attempt to reverse
+                  {
+                     if (false == gi.Sherman.IsAssistanceNeeded) // if assistenance is needed, the tank is stuck and cannot free itself
+                     {
+                        menuItem1 = new MenuItem();
+                        menuItem1.Name = "Driver_Reverse";
+                        menuItem1.Header = "Reverse out of Bog";
+                        menuItem1.Click += MenuItemCrewActionClick;
+                        myContextMenuCrewActions["Driver"].Items.Add(menuItem1);
+                     }
                   }
                }
             }
@@ -3612,8 +3617,11 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateCanvasMainAdvancingMarkerFirePlace(): t=null for tName=" + s);
                return false;
             }
-            if ( ((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling"))) && ('C' != s[2])) // only close range allowed in Fog or Falling Snow
-               continue;
+            if (((true == lastReport.Weather.Contains("Fog")) || (true == lastReport.Weather.Contains("Falling"))) ) 
+            {
+               if( ('6' == s[1]) && ('C' != s[2])) // only close range allowed in Fog or Falling Snow for sector 6-8
+                  continue;
+            }
             PointCollection points = new PointCollection();
             foreach (IMapPoint mp1 in t.Points)
                points.Add(new System.Windows.Point(mp1.X, mp1.Y));

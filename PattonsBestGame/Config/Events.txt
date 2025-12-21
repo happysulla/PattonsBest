@@ -301,7 +301,10 @@ Table.
 <InlineUIContainer><Button Content='Resupply' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>
 <InlineUIContainer><Button Content='e028' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Choose adjacent area to 
 <InlineUIContainer><Button Content='Enter' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer><LineBreak/>"
-e022a	"<Bold>e022a Rain Roll</Bold>    
+e022a	"<Bold>e022a Rain Roll</Bold> 
+<InlineUIContainer><Button Content='Weather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
+<LineBreak/><LineBreak/>"
+e022b	"<Bold>e022b Falling Snow Roll</Bold> 
 <InlineUIContainer><Button Content='Weather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>    
 <LineBreak/><LineBreak/>"
 e023	"<Bold>e023 Call for Artillery Support</Bold> 
@@ -704,6 +707,7 @@ Resolve movement per the
 e051a	"<Bold>e051a Bogged Down</Bold> 
 <InlineUIContainer><Button Content='r4.74.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r11.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<LineBreak/><LineBreak/>
 A bogged down tank may not move or pivot until it has freed itself by using reverse movement on the
  <InlineUIContainer><Button Content='Bogged Down' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table.
 <LineBreak/><LineBreak/>
@@ -743,7 +747,8 @@ e053a	"<Bold>e053a Main Gun Firing - No Target Available</Bold>
 There is no target that is selectable. Only enemy units that have been spotted may be selected.
 <LineBreak/><LineBreak/>
 The main gun may only fire at a target in the turret&apos;s front sector. 
-Since that is not possible, the gun fires at no target. Need to roll for malfunctioning gun (98, 99, or 100). 
+Since that is not possible, the gun fires at no target. Need to roll for malfunctioning gun (98, 99, or 100). Note: Spotting and Combat only allowed at close range for rain or falling snow per 
+<InlineUIContainer><Button Content='Weather' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
 <LineBreak/><LineBreak/>
 Die Roll: <InlineUIContainer><Image Name='DieRollBlue' Height='21' Width='21' > </Image></InlineUIContainer>"
 e053b	"<Bold>e053b Main Gun Firing - Target Selected</Bold> 
@@ -834,26 +839,6 @@ e056c	"<Bold>e056c Repair Coaxial Machine Gun</Bold>
 <InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>
 Attempt to repair malfunction gun by rolling on the <InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
-<LineBreak/><LineBreak/>"
-e056d	"<Bold>056d Repair Main Gun - End of Battle Repair Attempt</Bold> 
-<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
-<LineBreak/><LineBreak/>
-Attempt to repair malfunction gun by rolling on the <InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. Any result other than broken repairs the gun.
-<LineBreak/><LineBreak/>"
-e056e	"<Bold>056e Repair AA MG - End of Battle Repair Attempt</Bold> 
-<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
-<LineBreak/><LineBreak/>
-Attempt to repair malfunction gun by rolling on the <InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. Any result other than broken repairs the gun.
-<LineBreak/><LineBreak/>"
-e056f	"<Bold>056f Repair Coaxial MG - End of Battle Repair Attempt</Bold> 
-<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
-<LineBreak/><LineBreak/>
-Attempt to repair malfunction gun by rolling on the <InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. Any result other than broken repairs the gun.
-<LineBreak/><LineBreak/>"
-e056g	"<Bold>056g Repair Bow MG - End of Battle Repair Attempt</Bold> 
-<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
-<LineBreak/><LineBreak/>
-Attempt to repair malfunction gun by rolling on the <InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. Any result other than broken repairs the gun.
 <LineBreak/><LineBreak/>"
 e057	"<Bold>e057 Fire 2 Inch Mortar</Bold> 
 <InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   

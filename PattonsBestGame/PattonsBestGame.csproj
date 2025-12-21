@@ -1219,6 +1219,9 @@
     <None Update="Images\WeatherGroundSnow.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Images\WeatherMudOvercast.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Images\WeatherRain.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1246,7 +1249,7 @@
     <None Update="Images\WeatherSnowGround.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Images\WeatherOvercastMud.gif">
+    <None Update="Images\WeatherMudRain.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Images\WeatherSnowIcon.gif">

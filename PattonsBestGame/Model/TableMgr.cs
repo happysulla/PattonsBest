@@ -56,10 +56,10 @@ namespace Pattons_Best
                return "09/23-09/24 1944";
             sb.Append("09/");
             int dayOfMonth = day - 35;
-            if (37 < day)
-               dayOfMonth = day - 27;
             if (50 < day)
                dayOfMonth = day - 26;
+            else if (37 < day)
+               dayOfMonth = day - 27;
             if (dayOfMonth < 10)
                sb.Append("0");
             sb.Append(dayOfMonth.ToString());
@@ -114,7 +114,9 @@ namespace Pattons_Best
             if (137 == day)
                return "02/03-02/21 1945";
             sb.Append("02/");
-            int dayOfMonth = day - 116;
+            int dayOfMonth = day - 134;
+            if (137 < day)
+               dayOfMonth = day - 116;
             if (dayOfMonth < 10)
                sb.Append("0");
             sb.Append(dayOfMonth.ToString());
@@ -130,12 +132,12 @@ namespace Pattons_Best
                return "03/21-03/23 1945";
             sb.Append("03/");
             int dayOfMonth = day - 144;
-            if (149 < day)
-               dayOfMonth = day - 143;
-            if (155 < day)
-               dayOfMonth = day - 139;
             if (163 < day)
                dayOfMonth = day - 140;
+            else if (155 < day)
+               dayOfMonth = day - 142;
+            else if (147 < day)
+               dayOfMonth = day - 143;
             if (dayOfMonth < 10)
                sb.Append("0");
             sb.Append(dayOfMonth.ToString());
@@ -2237,8 +2239,8 @@ namespace Pattons_Best
                case "PzV":
                case "PzVIe":
                case "PzVIb":
-               case "STuGIIIg":
                case "SPG":
+               case "STuGIIIg":
                case "MARDERII":
                case "MARDERIII":
                case "JdgPzIV":
@@ -2278,11 +2280,14 @@ namespace Pattons_Best
                case "TANK":
                case "PzIV":
                case "PzV":
-               case "PzVI":
-               case "STuGIIIg":
+               case "PzVIe":
+               case "PzVIb":
                case "SPG":
-               case "MARDER":
-               case "JdgPz":
+               case "STuGIIIg":
+               case "MARDERII":
+               case "MARDERIII":
+               case "JdgPzIV":
+               case "JdgPz38t":
                   if ('C' == range)
                      toKillNum = 55;
                   else if ('M' == range)
@@ -3987,7 +3992,7 @@ namespace Pattons_Best
          //-------------------------------------------------
          if (true == lastReport.Weather.Contains("Ground Snow"))
             movingModifier += 3;
-         else if (true == lastReport.Weather.Contains("Falling"))
+         else if (true == lastReport.Weather.Contains("Deep"))
             movingModifier += 6;
          else if (true == lastReport.Weather.Contains("Mud"))
             movingModifier += 9;
