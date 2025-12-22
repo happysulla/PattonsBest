@@ -1377,12 +1377,18 @@ namespace Pattons_Best
                      if( 5 < gi.DieResults[key][0])
                      {
                         myTextBlock.Inlines.Add(new Run(" = Continues"));
-                        imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherRain"), Width = 400, Height = 225, Name = "MovementRainRollEnd" };
+                        if (1 < gi.HoursOfRainThisDay)
+                           imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherMudRain"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
+                        else
+                           imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherRain"), Width = 400, Height = 225, Name = "MovementRainRollEnd" };
                      }
                      else
                      {
                         myTextBlock.Inlines.Add(new Run(" = Rain Stops"));
-                        imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercast"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
+                        if (1 < gi.HoursOfRainThisDay)
+                           imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherMudOvercast"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
+                        else
+                           imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercast"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
                      }
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
@@ -1392,18 +1398,21 @@ namespace Pattons_Best
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new Run("Click image to continue."));
                   }
-                  else if (true == report.Weather.Contains("Overcast"))
+                  else // Overcast
                   {
                      if (8 < gi.DieResults[key][0])
                      {
                         myTextBlock.Inlines.Add(new Run(" = Rain Starts"));
-                        imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherRain"), Width = 400, Height = 225, Name = "MovementRainRollEnd" };
+                        if (1 < gi.HoursOfRainThisDay)
+                           imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherMudRain"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
+                        else
+                           imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherRain"), Width = 400, Height = 225, Name = "MovementRainRollEnd" };
                      }
                      else 
                      {
                         myTextBlock.Inlines.Add(new Run(" = No Effect"));
                         if( 1 < gi.HoursOfRainThisDay )
-                           imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherMudRain"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
+                           imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherMudOvercast"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
                         else
                            imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercast"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
                      }
@@ -1447,12 +1456,12 @@ namespace Pattons_Best
                         myTextBlock.Inlines.Add(new Run(" = Snow Stops"));
                         myTextBlock.Inlines.Add(new LineBreak());
                         myTextBlock.Inlines.Add(new LineBreak());
-                        if ("Ground Snow" == report.Weather)
+                        if ( true == report.Weather.Contains("Ground Snow"))
                         {
                            imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowGround"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
                            myTextBlock.Inlines.Add(new Run("                "));
                         }
-                        else if ("Deep Snow" == report.Weather)
+                        else if (true == report.Weather.Contains("Deep Snow"))
                         {
                            imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowDeep"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
                            myTextBlock.Inlines.Add(new Run("                "));
@@ -1469,9 +1478,9 @@ namespace Pattons_Best
                         myTextBlock.Inlines.Add(new LineBreak());
                         myTextBlock.Inlines.Add(new LineBreak());
                         myTextBlock.Inlines.Add(new Run("                "));
-                        if ("Ground Snow" == report.Weather)
+                        if (true == report.Weather.Contains("Ground Snow"))
                            imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFallingGround"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
-                        else if ("Deep Snow" == report.Weather)
+                        else if (true == report.Weather.Contains("Deep Snow"))
                            imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFallingDeep"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
                         else
                            imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
@@ -1488,12 +1497,12 @@ namespace Pattons_Best
                         myTextBlock.Inlines.Add(new Run(" = No Effect"));
                         myTextBlock.Inlines.Add(new LineBreak());
                         myTextBlock.Inlines.Add(new LineBreak());
-                        if ("Ground Snow" == report.Weather)
+                        if (true == report.Weather.Contains("Ground Snow"))
                         {
                            imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowGround"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
                            myTextBlock.Inlines.Add(new Run("                "));
                         }
-                        else if ("Deep Snow" == report.Weather)
+                        else if (true == report.Weather.Contains("Deep Snow"))
                         {
                            imge022b = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowDeep"), Width = 400, Height = 266, Name = "MovementSnowRollEnd" };
                            myTextBlock.Inlines.Add(new Run("                "));
@@ -2046,7 +2055,7 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   Image imge044 = new Image { Name = "PanzerfaultSector", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("c107Panzerfaust") };
-                  myTextBlock.Inlines.Add(new Run("                                            "));
+                  myTextBlock.Inlines.Add(new Run("                                               "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge044));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -2996,26 +3005,35 @@ namespace Pattons_Best
          //----------------------------------------
          if (Utilities.NO_RESULT < gi.DieResults[key][0])
          {
+            myTextBlock.Inlines.Add(new Run("Weather calls for " + report.Weather + ":"));
+            myTextBlock.Inlines.Add(new LineBreak());
+            myTextBlock.Inlines.Add(new LineBreak());
             Image? imgWeather = null;
             switch (report.Weather)
             {
                case "Clear":
                   imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherClear"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                  myTextBlock.Inlines.Add(new Run("                                        "));
                   break;
                case "Overcast":
                   imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercast"), Width = 400, Height = 266, Name = "WeatherRollEnd" };
+                  myTextBlock.Inlines.Add(new Run("                "));
                   break;
                case "Fog":
                   imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherFog"), Width = 400, Height = 266, Name = "WeatherRollEnd" };
+                  myTextBlock.Inlines.Add(new Run("                "));
                   break;
                case "Mud":
                   imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherMud"), Width = 400, Height = 266, Name = "WeatherRollEnd" };
+                  myTextBlock.Inlines.Add(new Run("                "));
                   break;
                case "Mud/Overcast":
                   imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherMudOvercast"), Width = 400, Height = 266, Name = "WeatherRollEnd" };
+                  myTextBlock.Inlines.Add(new Run("                "));
                   break;
                case "Snow":
-                  imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowIcon"), Width = 400, Height = 266, Name = "WeatherRollEnd" };
+                  imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowIcon"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
+                  myTextBlock.Inlines.Add(new Run("                                        "));
                   break;
                default:
                   Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentWeather(): reached default snow=" + report.Weather);
@@ -3026,13 +3044,6 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentWeather(): img=null for key=" + key);
                return false;
             }
-            myTextBlock.Inlines.Add(new Run("Weather calls for " + report.Weather + ":"));
-            myTextBlock.Inlines.Add(new LineBreak());
-            myTextBlock.Inlines.Add(new LineBreak());
-            if ("Clear" == report.Weather)
-               myTextBlock.Inlines.Add(new Run("                                        "));
-            else
-               myTextBlock.Inlines.Add(new Run("                "));
             myTextBlock.Inlines.Add(new InlineUIContainer(imgWeather));
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new LineBreak());
@@ -5113,7 +5124,7 @@ namespace Pattons_Best
             return false;
          }
          Logger.Log(LogEnum.LE_SHOW_AUTOSETUP_BATTLEPREP, "SetCheckboxState(): isSetupPerformed=" + gi.BattlePrep.myIsSetupPerformed.ToString() + " for key=" + key);
-         if (("e011" == key) && (false == myGameInstance.BattlePrep.myIsSetupPerformed))
+         if ( (("e011" == key) || ("e011a" == key)) && (false == myGameInstance.BattlePrep.myIsSetupPerformed))
          {
             cb.Visibility = Visibility.Hidden;
             option.IsEnabled = false;

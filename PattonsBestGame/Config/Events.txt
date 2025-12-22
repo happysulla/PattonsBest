@@ -192,7 +192,8 @@ Die Roll =
 <LineBreak/><LineBreak/>"
 e011	"<Bold>e011 Deployment</Bold> 
 <InlineUIContainer><Button Content='r4.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
-<LineBreak/><LineBreak/> <InlineUIContainer><CheckBox Name='AutoPreparation' Visibility='Hidden' Content='Use Setup of Previous Battle Prep' FontFamily='Courier New'  FontSize='12'></CheckBox></InlineUIContainer>
+<LineBreak/><LineBreak/> 
+<InlineUIContainer><CheckBox Name='AutoPreparation' Visibility='Hidden' Content='Use Setup of Previous Battle Prep' FontFamily='Courier New'  FontSize='12'></CheckBox></InlineUIContainer>
 <LineBreak/><LineBreak/>
 Determine your tank&apos;s deployment from the 
 <InlineUIContainer><Button Content='Deployment' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  Table.
@@ -202,6 +203,8 @@ Die Roll =
 <LineBreak/><LineBreak/>"
 e011a	"<Bold>e011a Deployment - Counterattack Scenario</Bold> 
 <InlineUIContainer><Button Content='r20.41' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>  
+<LineBreak/><LineBreak/>
+<InlineUIContainer><CheckBox Name='AutoPreparation' Visibility='Hidden' Content='Use Setup of Previous Battle Prep' FontFamily='Courier New'  FontSize='12'></CheckBox></InlineUIContainer>
 <LineBreak/><LineBreak/>
 Since this is a Counterattack scenario, your tank&apos;s deployment is automatically stopped and hull down.  
 <LineBreak/><LineBreak/>"

@@ -739,7 +739,7 @@ namespace Pattons_Best
                foreach (KeyValuePair<string, int> kvp in mi.EnemyAcquiredShots)
                {
                   BitmapImage? acquireMarker = null;
-                  if (1 == kvp.Value)
+                  if (0 == kvp.Value)
                      acquireMarker = theAcquiredOne[i];
                   else
                      acquireMarker = theAcquiredTwo[i];

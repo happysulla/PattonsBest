@@ -52,6 +52,12 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myCanvas=null");
             return;
          }
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CanvasImageViewer.UpdateView(): lastReport=null");
+            return;
+         }
          if (null == myDieRoller)
          {
             Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myDieRoller=null");
@@ -96,12 +102,12 @@ namespace Pattons_Best
                      break;
                   case "e003":
                      theMainImage = EnumMainImage.MI_Battle;
-                     ShowBattleMap(myCanvas);
+                     ShowBattleMap(lastReport, myCanvas);
                      break;
                   default:
                      theMainImage = EnumMainImage.MI_Other;
                      if (false == ShowAfterActionReportDialog(gi, myCanvas, true)) // GameAction.UpdateNewGame
-                        Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Show_AfterActionReportDialog() returned false for a=" + action.ToString());
+                        Logger.Log(LogEnum.LE_ERROR, "CanvasImageViewer.UpdateView(): Show_AfterActionReportDialog() returned false for a=" + action.ToString());
                      break;
                }
                break;
@@ -120,7 +126,7 @@ namespace Pattons_Best
                CanvasImageViewer.theMainImage = cmd.MainImage;
                switch(cmd.MainImage)
                {
-                  case EnumMainImage.MI_Battle: ShowBattleMap(myCanvas); break;
+                  case EnumMainImage.MI_Battle: ShowBattleMap(lastReport,myCanvas); break;
                   case EnumMainImage.MI_Move: ShowMovementMap(myCanvas); break;
                   case EnumMainImage.MI_Other:
                      switch(cmd.Action)
@@ -213,7 +219,7 @@ namespace Pattons_Best
             case GameAction.BattleRoundSequenceShermanAdvanceOrRetreatEnd:
                myDieRoller.HideDie();
                theMainImage = EnumMainImage.MI_Battle;
-               ShowBattleMap(myCanvas);
+               ShowBattleMap(lastReport, myCanvas);
                if( true == gi.IsAdvancingFireChosen ) // show advance fire counter as mouse pointer
                {
                   double sizeCursor = Utilities.ZoomCanvas * Utilities.ZOOM * Utilities.theMapItemSize;
@@ -235,7 +241,7 @@ namespace Pattons_Best
                myDieRoller.HideDie();
                theMainImage = EnumMainImage.MI_Other;
                if (false == ShowAfterActionReportDialog(gi, myCanvas, true)) // GameAction.SetupAssignCrewRating
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Show_AfterActionReportDialog() returned false for a=" + action.ToString());
+                  Logger.Log(LogEnum.LE_ERROR, "CanvasImageViewer.UpdateView(): Show_AfterActionReportDialog() returned false for a=" + action.ToString());
                break;
             case GameAction.TestingStartMorningBriefing:
             case GameAction.SetupShowSingleDayBattleStart:
@@ -307,10 +313,14 @@ namespace Pattons_Best
          Canvas.SetTop(img, 0);
          Canvas.SetZIndex(img, 0);
       }
-      public void ShowBattleMap(Canvas c)
+      public void ShowBattleMap(IAfterActionReport lastReport, Canvas c)
       {
          CleanCanvas(c, true);
-         Image img = new Image() { Name = "CanvasMain", Width = 1000, Height = 890, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapBattle") };
+         Image img;
+         if ( (true == lastReport.Weather.Contains("Falling")) || (true == lastReport.Weather.Contains("Fog")) )
+            img = new Image() { Name = "CanvasMain", Width = 1000, Height = 890, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapBattleFogFalling") };
+         else
+            img = new Image() { Name = "CanvasMain", Width = 1000, Height = 890, Stretch = Stretch.Fill, Source = MapItem.theMapImages.GetBitmapImage("MapBattle") };
          c.Children.Add(img);
          Canvas.SetLeft(img, 0);
          Canvas.SetTop(img, 0);

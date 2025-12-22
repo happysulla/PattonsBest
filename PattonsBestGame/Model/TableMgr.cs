@@ -2666,7 +2666,7 @@ namespace Pattons_Best
          //-----------------------------------------------
          if (true == gi.Sherman.EnemyAcquiredShots.ContainsKey(mi.Name))  // GetEnemy_ToHitNumberYourTank()
          {
-            if (1 < gi.Sherman.EnemyAcquiredShots[mi.Name]) // GetEnemy_ToHitNumberYourTank()
+            if (0 < gi.Sherman.EnemyAcquiredShots[mi.Name]) // GetEnemy_ToHitNumberYourTank() - acquire 2 marker
             {
                if ('C' == range)
                {

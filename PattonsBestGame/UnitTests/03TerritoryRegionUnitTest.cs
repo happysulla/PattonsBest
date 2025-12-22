@@ -151,6 +151,12 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Command(): myCanvasImageViewer=null");
             return false;
          }
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "{(): lastReport=null");
+            return false;
+         }
          if (CommandName == myCommandNames[0])
          {
             //--------------------------------------------
@@ -178,7 +184,7 @@ namespace Pattons_Best
             else
             {
                myIsBattleMapShown = true;
-               myCanvasImageViewer.ShowBattleMap(myCanvasMain);
+               myCanvasImageViewer.ShowBattleMap(lastReport, myCanvasMain);
             }
             if (false == CreateEllipses(true))
             {

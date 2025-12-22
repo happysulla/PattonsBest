@@ -142,6 +142,17 @@ namespace Pattons_Best
       }
       public bool Command(ref IGameInstance gi) // Performs function based on CommandName string
       {
+         if( null == myGameInstance )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Command(): myGameInstance=null");
+            return false;
+         }
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CanvasImageViewer.UpdateView(): lastReport=null");
+            return false;
+         }
          if (null == myCanvasTank)
          {
             Logger.Log(LogEnum.LE_ERROR, "Command(): myCanvasTank=null");
@@ -188,7 +199,7 @@ namespace Pattons_Best
             else
             {
                myIsBattleMapShown = true;
-               myCanvasImageViewer.ShowBattleMap(myCanvasMain);
+               myCanvasImageViewer.ShowBattleMap(lastReport, myCanvasMain);
             }
             if( false == CreateEllipses() )
             {

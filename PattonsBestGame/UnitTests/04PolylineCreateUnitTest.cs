@@ -17,6 +17,7 @@ namespace Pattons_Best
    {
       public static Double theEllipseOffset = 8;
       //--------------------------------------------------------
+      private IGameInstance myGameInstance;
       private DockPanel? myDockPanel = null;
       private Canvas? myCanvasTank = null;
       private Canvas? myCanvasMain = null;
@@ -41,6 +42,7 @@ namespace Pattons_Best
       //--------------------------------------------------------
       public PolylineCreateUnitTest(DockPanel dp, IGameInstance gi, CanvasImageViewer civ)
       {
+         myGameInstance = gi;
          myIndexName = 0;
          myHeaderNames.Add("04-Switch Map");
          myHeaderNames.Add("04-Make Road");
@@ -110,7 +112,14 @@ namespace Pattons_Best
          else
          {
             myIsBattleMapShown = true;
-            myCanvasImageViewer.ShowBattleMap(myCanvasMain);
+            IAfterActionReport? lastReport = gi.Reports.GetLast();
+            if (null == lastReport)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "TerritoryRegionUnitTest(): lastReport=null");
+               CtorError = true;
+               return;
+            }
+            myCanvasImageViewer.ShowBattleMap(lastReport, myCanvasMain);
          }
          //-------------------------------------
          myDashArray.Add(5);  // used for dotted lines
@@ -144,7 +153,13 @@ namespace Pattons_Best
             else
             {
                myIsBattleMapShown = true;
-               myCanvasImageViewer.ShowBattleMap(myCanvasMain);
+               IAfterActionReport? lastReport = gi.Reports.GetLast();
+               if (null == lastReport)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "Command(): lastReport=null");
+                  return false;
+               }
+               myCanvasImageViewer.ShowBattleMap(lastReport, myCanvasMain);
             }
          }
          else if (CommandName == myCommandNames[1])
