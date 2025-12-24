@@ -1802,7 +1802,7 @@ namespace Pattons_Best
          XmlTextReader? reader = null;
          try
          {
-            string qualifiedFilename = GameStatistics.theGameStatisticsDirectory + filename;
+            string qualifiedFilename = GameStatistics.theGameStatisticsDirectory + filename + ".xml";
             reader = new XmlTextReader(qualifiedFilename) { WhitespaceHandling = WhitespaceHandling.None };
             reader.Read();
             if (false == reader.IsStartElement())
@@ -3249,7 +3249,7 @@ namespace Pattons_Best
             else if (true == stat.Key.Contains("Min"))
             {
                GameStatistic statMin = totalStatistics.Find(stat.Key);
-               if (stat.Value < statMin.Value )
+               if ( (0 == statMin.Value) || (stat.Value < statMin.Value ) )
                   statMin.Value = stat.Value;
             }
          }
@@ -3490,7 +3490,7 @@ namespace Pattons_Best
          if (0 < minCrewRatingWin.Value)
          {
             tb.Inlines.Add(new LineBreak());
-            tb.Inlines.Add(new Run("Min Crew Rating wtih Win = " + minCrewRatingWin.Value.ToString()) { FontWeight = FontWeights.Bold });
+            tb.Inlines.Add(new Run("Min Crew Rating with Win = " + minCrewRatingWin.Value.ToString()) { FontWeight = FontWeights.Bold });
          }
          //-------------------------------------
          tb.Inlines.Add(new LineBreak());

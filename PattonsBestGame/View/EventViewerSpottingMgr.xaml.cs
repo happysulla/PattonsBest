@@ -625,8 +625,8 @@ namespace Pattons_Best
       //------------------------------------------------------------------------------------
       public void ShowDieResults(int dieRoll)
       {
-         //dieRoll = 8; // <cgs> TEST - Spotting Denied
-         //dieRoll = 1; // <cgs> TEST - Spotting Identified
+         //dieRoll = 8; // <CGS> TEST - Spotting Denied
+         //dieRoll = 1; // <CGS> TEST - Spotting Identified
          Logger.Log(LogEnum.LE_EVENT_VIEWER_SPOTTING, "EventViewerSpottingMgr.ShowDieResults(): +++++++++++++++++myState=" + myState.ToString() + " dr=" + dieRoll.ToString() );
          if (null == myGameInstance)
          {

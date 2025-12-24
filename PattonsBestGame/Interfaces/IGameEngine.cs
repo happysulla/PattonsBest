@@ -293,7 +293,7 @@ namespace Pattons_Best
       PreparationsRepairCoaxialMgRollEnd,
       PreparationsRepairBowMgRoll,
       PreparationsRepairBowMgRollEnd,
-      PreparationsReplaceCrewEnd,
+      PreparationsCrewReplaced,
 
       MovementStartAreaSet,
       MovementStartAreaSetRoll,

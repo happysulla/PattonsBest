@@ -1505,14 +1505,14 @@ namespace Pattons_Best
                }
                mi.IsFired = false; // set to true if unit fires
                //if( ('1' == myGridRows[i].mySector) || ('2' == myGridRows[i].mySector) || ('3' == myGridRows[i].mySector) )
-               //dieRoll = 31; // <cgs> TEST - Move-B for Infantry in Battle Scenario - ambush
-               //dieRoll = 51; // <cgs> TEST - Move-B for Infantry in Battle Scenario - no ambush
+               //dieRoll = 31; // <CGS> TEST - Move-B for Infantry in Battle Scenario - ambush
+               //dieRoll = 51; // <CGS> TEST - Move-B for Infantry in Battle Scenario - no ambush
                //else
-               //dieRoll = 5; // <cgs> TEST - AdvanceRetreat - Do Nothing for Infantry in Battle Scenario
-               //dieRoll = 77; // <cgs> TEST - KillYourTank - Fire At Your Tank when stationary in Battle Scenario
-               //dieRoll = 15; // <cgs> TEST - Move-F for Infantry in Battle Scenario
+               //dieRoll = 5; // <CGS> TEST - AdvanceRetreat - Do Nothing for Infantry in Battle Scenario
+               //dieRoll = 77; // <CGS> TEST - KillYourTank - Fire At Your Tank when stationary in Battle Scenario
+               //dieRoll = 15; // <CGS> TEST - Move-F for Infantry in Battle Scenario
                //if ( (true == mi.TerritoryCurrent.Name.Contains("1")) || (true == mi.TerritoryCurrent.Name.Contains("2")) || (true == mi.TerritoryCurrent.Name.Contains("3")) )
-               //  dieRoll = 51; // <cgs> TEST - Move-B for Infantry in Battle Scenario - no ambush
+               //  dieRoll = 51; // <CGS> TEST - Move-B for Infantry in Battle Scenario - no ambush
                myGridRows[i].myDieRollEnemyAction = dieRoll;
                string enemyAction = TableMgr.SetEnemyActionResult(myGameInstance, mi, dieRoll);
                if ("ERROR" == enemyAction)
@@ -1758,7 +1758,7 @@ namespace Pattons_Best
                break;
             //------------------------------------------------------------------------------------------------
             case E0475Enum.ENEMY_ACTION_TO_HIT_YOUR_TANK:
-               //dieRoll = 1; // <cgs> TEST - KillYourTank - Tto hit your tank
+               //dieRoll = 1; // <CGS> TEST - KillYourTank - Tto hit your tank
                myGridRows[i].myDieRollToHitYourTank = dieRoll;
                int modifiedDieRoll = dieRoll + myGridRows[i].myModifierToHitYourTank;
                Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Firing at Your Tank myState=" + myState.ToString() + " dr=" + modifiedDieRoll.ToString());
@@ -1812,7 +1812,7 @@ namespace Pattons_Best
                }
                else if (4 == myRollResultColNum)
                {
-                  //dieRoll = 5; // <cgs> TEST - KillYourTank - To Kill your Tank
+                  //dieRoll = 5; // <CGS> TEST - KillYourTank - To Kill your Tank
                   Logger.Log(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION, "ShowDieResults(): Killing Your Tank for myState=" + myState.ToString() + " dr=" + dieRoll);
                   myGridRows[i].myDieRollToKillYourTank = dieRoll;
                   if( dieRoll <= myGridRows[i].myToKillNumberYourTank )

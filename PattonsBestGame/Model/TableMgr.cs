@@ -269,6 +269,8 @@ namespace Pattons_Best
       }
       public static int GetTimeRemaining(IAfterActionReport lastReport)
       {
+         if ((lastReport.SunsetHour <= lastReport.SunriseHour) && (lastReport.SunsetMin <= lastReport.SunriseMin))
+            return 0;
          int sunrisehour = lastReport.SunriseHour + 1;
          int sunrsethour = lastReport.SunsetHour;
          int numMins = (sunrsethour - sunrisehour) * 60;
@@ -289,7 +291,7 @@ namespace Pattons_Best
       //-------------------------------------------
       public static string GetWeather(int day, int dieRoll)
       {
-         return "Snow"; // <cgs> TESTING - Set Weather
+         return "Snow";
          string month = GetMonth(day);
          switch (month)
          {
@@ -362,7 +364,7 @@ namespace Pattons_Best
       }
       public static string GetWeatherSnow(int day, int dieRoll)
       {
-         return "Falling Snow"; // <cgs> TESTING - Set Weather
+         return "Falling Snow";
          string month = GetMonth(day);
          if ("Nov" == month)
             --dieRoll;
@@ -3432,7 +3434,7 @@ namespace Pattons_Best
       //-------------------------------------------
       public static string GetRandomEvent(EnumScenario scenario, int dieRoll)
       {
-         //dieRoll = 80; // <cgs> TEST - Random Event
+         //dieRoll = 80; // <CGS> TEST - Random Event
          switch (scenario)
          {
             case EnumScenario.Advance:
@@ -7514,6 +7516,7 @@ namespace Pattons_Best
                   return FN_ERROR;
                }
                toKillModifierNum -= commander.Rating;
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): commander rating -" + commander.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
             }
             if (("Loader_FireSubMg" == crewAction.Name) && ("Sub" == mgType))
             {
@@ -7524,7 +7527,7 @@ namespace Pattons_Best
                   return FN_ERROR;
                }
                toKillModifierNum -= loader.Rating;
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): gunner rating -" + loader.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): loader rating -" + loader.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
             }
             if (("Loader_FireAaMg" == crewAction.Name) && ("Aa" == mgType))
             {
@@ -7535,7 +7538,7 @@ namespace Pattons_Best
                   return FN_ERROR;
                }
                toKillModifierNum -= loader.Rating;
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): gunner rating -" + loader.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): loader rating -" + loader.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
             }
             if (("Gunner_FireCoaxialMg" == crewAction.Name) && ("Coaxial" == mgType))
             {
@@ -7557,7 +7560,7 @@ namespace Pattons_Best
                   return FN_ERROR;
                }
                toKillModifierNum -= assistant.Rating;
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): Assistant rating -" + assistant.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanMgToKillModifier(): assistant rating -" + assistant.Rating.ToString() + "  mod=" + toKillModifierNum.ToString());
             }
             if ("Driver_Forward" == crewAction.Name)
                isShermanMovingOrPivoting = true;

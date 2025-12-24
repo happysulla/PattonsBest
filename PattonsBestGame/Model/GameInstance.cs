@@ -451,7 +451,7 @@ namespace Pattons_Best
          IMapItems removals = new MapItems(); // Remove any coorresponding crew actions and add the hurt crewman in the crewaction box
          foreach (IMapItem ca in this.CrewActions)
          {
-            if ( true == ca.Name.Contains(cm.Role) || (cm.Name == ca.Name) ) // crew action contains role or it is already incapacitated and added
+            if ( (true == ca.Name.Contains(cm.Role)) || (cm.Name == ca.Name) ) // crew action contains role or it is already incapacitated and added
                removals.Add(ca);
             if (cm.Name == ca.Name) // if crew action matches cm.Name -- it is already incapacitated and added
                isAlreadyIncapacitated = true;

@@ -304,6 +304,15 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_ERROR, "UpdateReportTimeTrackRow(): Rectangle not found");
                   return false;
                }
+               if ((report.SunsetHour <= report.SunriseHour) && (report.SunsetMin <= report.SunriseMin))
+               {
+                  rect.Fill = Brushes.Black;
+                  continue;
+               }
+               if (hour < report.SunriseHour)
+               {
+                  rect.Fill = Brushes.Black;
+               }
                Logger.Log(LogEnum.LE_VIEW_TIME_TRACK, "UpdateReportTimeTrackRow(): --------------------------------------" + sp.Name + " min=" + min.ToString());
                if (hour < report.SunriseHour )
                {

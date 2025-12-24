@@ -843,6 +843,26 @@ e056c	"<Bold>e056c Repair Coaxial Machine Gun</Bold>
 <LineBreak/><LineBreak/>
 Attempt to repair malfunction gun by rolling on the <InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.
 <LineBreak/><LineBreak/>"
+e056d	"<Bold>056d Repair Main Gun - Between Battles</Bold> 
+<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Attempt to repair malfunction gun by rolling on the <InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. Anything other than break repairs the gun.
+<LineBreak/><LineBreak/>"
+e056e	"<Bold>e056e Repair AA Machine Gun - Between Battles</Bold> 
+<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Attempt to repair malfunction gun by rolling on the <InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. Anything other than break repairs the gun.
+<LineBreak/><LineBreak/>"
+e056f	"<Bold>e056f Repair Coaxial Machine Gun - Between Battles</Bold> 
+<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Attempt to repair malfunction gun by rolling on the <InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. Anything other than break repairs the gun.
+<LineBreak/><LineBreak/>"
+e056g	"<Bold>e056g Repair Bow Machine Gun - Between Battles</Bold> 
+<InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+Attempt to repair malfunction gun by rolling on the <InlineUIContainer><Button Content='Gun Malfunction' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table. Anything other than break repairs the gun.
+<LineBreak/><LineBreak/>"
 e057	"<Bold>e057 Fire 2 Inch Mortar</Bold> 
 <InlineUIContainer><Button Content='r4.74.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <InlineUIContainer><Button Content='r18.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   

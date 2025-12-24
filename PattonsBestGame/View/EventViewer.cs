@@ -635,9 +635,13 @@ namespace Pattons_Best
                      else if (true == img.Name.Contains("Ambulance"))
                         imageName = "Ambulance";
                      else if( true == img.Name.Contains("DieRollWhite"))
+                     {
                         imageName = "DieRollWhite";
+                     }
                      else if (true == img.Name.Contains("DieRollBlue"))
+                     {
                         imageName = "DieRollBlue";
+                     }
                      else if (true == img.Name.Contains("DieRoll"))
                      {
                         Logger.Log(LogEnum.LE_ERROR, "OpenEvent(): imageName=DieRoll for key=" + key);
@@ -652,6 +656,10 @@ namespace Pattons_Best
                      ImageBehavior.SetAnimatedSource(img, img.Source);
                      if ((true == img.Name.Contains("DieRollWhite")) || (true == img.Name.Contains("DieRollBlue")))
                      {
+                        //RoutedCommand command = new RoutedCommand();
+                        //KeyGesture keyGesture = new KeyGesture(Key.Enter, ModifierKeys.None);
+                        //myTextBlock.InputBindings.Add(new KeyBinding(command, keyGesture));
+                        //myTextBlock.CommandBindings.Add(new CommandBinding(command, myTextBlock.MouseDown));
                         if (true == isDieShown[dieCount])
                         {
                            if (Utilities.NO_RESULT == eventDieRolls[dieNumIndex]) // if true, perform a one time insert b/c dieNumIndex increments by one
@@ -1217,39 +1225,11 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new Run("Click image to continue."));
                break;
             case "e014":
-               myTextBlock.Inlines.Add(new Run("                                               "));
-               Image? imgee014 = null;
-               double rotation = gi.Sherman.RotationHull + gi.Sherman.RotationTurret;
-               if (359.0 < rotation)
-                  rotation -= 360.0;
-               switch (rotation)
+               if (false == UpdateEventTankTurret(gi))
                {
-                  case 0.0:
-                     imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75") };
-                     break;
-                  case 60.0:
-                     imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t060") };
-                     break;
-                  case 120.0:
-                     imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t120") };
-                     break;
-                  case 180.0:
-                     imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t180") };
-                     break;
-                  case 240.0:
-                     imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t240") };
-                     break;
-                  case 300.0:
-                     imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t300") };
-                     break;
-                  default:
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default tr=" + gi.Sherman.RotationTurret.ToString());
-                     return false;
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): UpdateEvent_TankTurret() returned false for key=" + key);
+                  return false;
                }
-               myTextBlock.Inlines.Add(new InlineUIContainer(imgee014));
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new Run("When you are satisfied with the current orientation, click image between buttons to continue."));
                break;
             case "e015":
                IMapItem? loaderSpot = gi.BattleStacks.FindMapItem("LoaderSpot");
@@ -1281,7 +1261,7 @@ namespace Pattons_Best
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
                   Image imge018 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c33StartArea"), Width = 100, Height = 100, Name = "MovementExitAreaSet" };
-                  myTextBlock.Inlines.Add(new Run("                                           "));
+                  myTextBlock.Inlines.Add(new Run("                                               "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge018));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -1296,7 +1276,7 @@ namespace Pattons_Best
                      imge019.Name = "MovementEnemyCheckCounterattack"; // UpdateEventContent(): e019 
                   else
                      imge019.Name = "MovementEnemyStrengthChoice"; // UpdateEventContent(): e019 
-                  myTextBlock.Inlines.Add(new Run("                                           "));
+                  myTextBlock.Inlines.Add(new Run("                                                 "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge019));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -1376,8 +1356,8 @@ namespace Pattons_Best
                   {
                      if( 5 < gi.DieResults[key][0])
                      {
-                        myTextBlock.Inlines.Add(new Run(" = Continues"));
-                        if (1 < gi.HoursOfRainThisDay)
+                        myTextBlock.Inlines.Add(new Run(" = Continues")); // if rain continues, two hours of rain have occurred which causes mud
+                        if (0 < gi.HoursOfRainThisDay)
                            imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherMudRain"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
                         else
                            imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherRain"), Width = 400, Height = 225, Name = "MovementRainRollEnd" };
@@ -1447,6 +1427,7 @@ namespace Pattons_Best
                }
                else
                {
+                  int dieRoll = gi.DieResults[key][0];
                   myTextBlock.Inlines.Add(new Run(gi.DieResults[key][0].ToString()));
                   Image imge022b;
                   if (true == report.Weather.Contains("Falling")) // snow falling
@@ -1818,7 +1799,7 @@ namespace Pattons_Best
                if (true == isOrdersGiven)
                {
                   Image imge038 = new Image { Name = "Continue38", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
-                  myTextBlock.Inlines.Add(new Run("                                          "));
+                  myTextBlock.Inlines.Add(new Run("                                             "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge038));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -2311,39 +2292,11 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new Run("When you are satisfied with the current orientation, click image between buttons to continue."));
                break;
             case "e052a":
-               myTextBlock.Inlines.Add(new Run("                                                   "));
-               Image? imge52a = null;
-               double rotation52a = gi.Sherman.RotationHull + gi.Sherman.RotationTurret;
-               if (359.0 < rotation52a)
-                  rotation52a -= 360.0;
-               switch (rotation52a)
+               if( false == UpdateEventTankTurret(gi))
                {
-                  case 0.0:
-                     imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75") };
-                     break;
-                  case 60.0:
-                     imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t060") };
-                     break;
-                  case 120.0:
-                     imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t120") };
-                     break;
-                  case 180.0:
-                     imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t180") };
-                     break;
-                  case 240.0:
-                     imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t240") };
-                     break;
-                  case 300.0:
-                     imge52a = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t300") };
-                     break;
-                  default:
-                     Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default tr=" + gi.Sherman.RotationTurret.ToString());
-                     return false;
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): UpdateEvent_TankTurret() returned false for key=" + key);
+                  return false;
                }
-               myTextBlock.Inlines.Add(new InlineUIContainer(imge52a));
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new Run("When you are satisfied with the current orientation, click image between buttons to continue."));
                break;
             case "e053a":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
@@ -2820,12 +2773,12 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new LineBreak());
                int modifier56g = 0;
                StringBuilder sbe056g = new StringBuilder();
-               if (false == report.Loader.IsIncapacitated)
+               if (false == report.Assistant.IsIncapacitated)
                {
                   sbe056g.Append(" -");
-                  sbe056g.Append(report.Loader.Rating.ToString());
-                  sbe056g.Append(" for loader rating\n");
-                  modifier56g -= report.Loader.Rating;
+                  sbe056g.Append(report.Assistant.Rating.ToString());
+                  sbe056g.Append(" for assistant rating\n");
+                  modifier56g -= report.Assistant.Rating;
                }
                if (0 == sbe056g.Length)
                   sbe056g.Append(" None");
@@ -2919,7 +2872,7 @@ namespace Pattons_Best
                      imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Star"), Width = 300, Height = 300 };
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new Run("                                  "));
+                     myTextBlock.Inlines.Add(new Run("                           "));
                      break;
                   case 4:
                      imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Star"), Width = 300, Height = 300 };
@@ -3035,6 +2988,14 @@ namespace Pattons_Best
                   imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowIcon"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
                   myTextBlock.Inlines.Add(new Run("                                        "));
                   break;
+               case "Overcast/Rain":
+                  imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherRain"), Width = 400, Height = 266, Name = "WeatherRollEnd" };
+                  myTextBlock.Inlines.Add(new Run("                "));
+                  break;
+               case "Mud/Rain":
+                  imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherMudRain"), Width = 400, Height = 266, Name = "WeatherRollEnd" };
+                  myTextBlock.Inlines.Add(new Run("                "));
+                  break;
                default:
                   Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentWeather(): reached default snow=" + report.Weather);
                   return false;
@@ -3049,6 +3010,89 @@ namespace Pattons_Best
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new Run("Click image to continue."));
          }
+         return true;
+      }
+      private bool UpdateEventTankTurret(IGameInstance gi)
+      {
+         //----------------------------------------
+         if (null == myTextBlock)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventTankTurret(): myTextBlock=null");
+            return false;
+         }
+         string key = gi.EventActive;
+         //----------------------------------------
+         IAfterActionReport? report = gi.Reports.GetLast();
+         if (null == report)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventTankTurret():  gi.Reports.GetLast()");
+            return false;
+         }
+         //----------------------------------------
+         myTextBlock.Inlines.Add(new Run("                                               "));
+         Image? imgee014 = null;
+         double rotation = gi.Sherman.RotationHull + gi.Sherman.RotationTurret;
+         if (359.0 < rotation)
+            rotation -= 360.0;
+         //----------------------------------------
+         if (12 < report.TankCardNum)
+         {
+            switch (rotation)
+            {
+               case 0.0:
+                  imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman76") };
+                  break;
+               case 60.0:
+                  imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman76t060") };
+                  break;
+               case 120.0:
+                  imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman76t120") };
+                  break;
+               case 180.0:
+                  imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman76t180") };
+                  break;
+               case 240.0:
+                  imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman76t240") };
+                  break;
+               case 300.0:
+                  imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman76t300") };
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventTankTurret(): reached default tr=" + gi.Sherman.RotationTurret.ToString());
+                  return false;
+            }
+         }
+         else
+         {
+            switch (rotation)
+            {
+               case 0.0:
+                  imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75") };
+                  break;
+               case 60.0:
+                  imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t060") };
+                  break;
+               case 120.0:
+                  imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t120") };
+                  break;
+               case 180.0:
+                  imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t180") };
+                  break;
+               case 240.0:
+                  imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t240") };
+                  break;
+               case 300.0:
+                  imgee014 = new Image { Name = "c16TurretSherman75", Width = 120, Height = 120, Source = MapItem.theMapImages.GetBitmapImage("c16TurretSherman75t300") };
+                  break;
+               default:
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventTankTurret(): reached default tr=" + gi.Sherman.RotationTurret.ToString());
+                  return false;
+            }
+         }
+         myTextBlock.Inlines.Add(new InlineUIContainer(imgee014));
+         myTextBlock.Inlines.Add(new LineBreak());
+         myTextBlock.Inlines.Add(new LineBreak());
+         myTextBlock.Inlines.Add(new Run("When you are satisfied with the current orientation, click image between buttons to continue."));
          return true;
       }
       private string UpdateEventContentGetMovingModifier(IGameInstance gi)
@@ -4500,7 +4544,7 @@ namespace Pattons_Best
             myTextBlock.Inlines.Add(new Run(sbe101.ToString()));
             myTextBlock.Inlines.Add(new LineBreak());
             myTextBlock.Inlines.Add(new LineBreak());
-            myTextBlock.Inlines.Add(new Run("                                                 "));
+            myTextBlock.Inlines.Add(new Run("                                                   "));
          }
          myTextBlock.Inlines.Add(new InlineUIContainer(imge101));
          myTextBlock.Inlines.Add(new LineBreak());
@@ -4557,7 +4601,7 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): reached default newRank=" + report.Commander.Rank);
                return false;
          }
-         myTextBlock.Inlines.Add(new Run("                                              "));
+         myTextBlock.Inlines.Add(new Run("                                                "));
          myTextBlock.Inlines.Add(new InlineUIContainer(imge102));
          myTextBlock.Inlines.Add(new LineBreak());
          myTextBlock.Inlines.Add(new LineBreak());
@@ -4717,7 +4761,7 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add("Do not qualify for decoration. Click image to continue.");
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new Run("                                            "));
+               myTextBlock.Inlines.Add(new Run("                                              "));
                Image imge103 = new Image { Name = "Continue103", Width = 100, Height = 100, Source = MapItem.theMapImages.GetBitmapImage("Continue") };
                myTextBlock.Inlines.Add(new InlineUIContainer(imge103));
             }
@@ -5125,18 +5169,11 @@ namespace Pattons_Best
          }
          Logger.Log(LogEnum.LE_SHOW_AUTOSETUP_BATTLEPREP, "SetCheckboxState(): isSetupPerformed=" + gi.BattlePrep.myIsSetupPerformed.ToString() + " for key=" + key);
          if ( (("e011" == key) || ("e011a" == key)) && (false == myGameInstance.BattlePrep.myIsSetupPerformed))
-         {
             cb.Visibility = Visibility.Hidden;
-            option.IsEnabled = false;
-         }
          else if ( ("e054b" == key) && (false == myGameInstance.IsShermanFiringBowMg) )
-         {
             cb.Visibility = Visibility.Hidden;
-         }
          else
-         {
             cb.Visibility = Visibility.Visible;
-         }
          //------------------------------------
          cb.Checked += CheckBox_Checked;
          cb.Unchecked += CheckBox_Unchecked;
@@ -5249,7 +5286,7 @@ namespace Pattons_Best
                if (true == isStartAreaReached)
                   outAction = GameAction.MovementStartAreaRestartAfterBattle;
                else
-                  outAction = GameAction.MovementEnemyCheckCounterattack;
+                  outAction = GameAction.MovementEnemyCheckCounterattack;  // ContinueAfterBattlePrep()
             }
             else
             {
@@ -5356,13 +5393,15 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowCrewRatingResults():  myGameInstance.Reports.GetLast()");
+            Logger.Log(LogEnum.LE_ERROR, "Show_CrewRatingResults():  myGameInstance.Reports.GetLast()");
             return false;
          }
          //----------------------------------------
          GameAction outAction = GameAction.Error;
          if( GamePhase.GameSetup == myGameInstance.GamePhase )
          {
+            //if (false == lastReport.Loader.IsIncapacitated) // <CGS> TEST - Set crewman incapacitated
+            //   myGameInstance.SetIncapacitated(lastReport.Loader); // <CGS> TEST - Set crewman incapacitated
             Option option = myGameInstance.Options.Find("SingleDayScenario");
             if( true == option.IsEnabled )
                outAction = GameAction.SetupShowSingleDayBattleStart;
@@ -5379,7 +5418,7 @@ namespace Pattons_Best
          }
          else if (EnumScenario.Counterattack == lastReport.Scenario)
          {
-            outAction = GameAction.PreparationsReplaceCrewEnd; // enemies transfer to Move board due to advancing or retreating Sherman
+            outAction = GameAction.PreparationsCrewReplaced; // enemies transfer to Move board due to advancing or retreating Sherman
          }
          else
          {
@@ -6050,6 +6089,11 @@ namespace Pattons_Best
                               myGameInstance.EventDisplayed = myGameInstance.EventActive = "e006a";       
                               myGameInstance.DieRollAction = GameAction.DieRollActionNone;   
                            }
+                           if (EnumScenario.Counterattack == lastReport.Scenario)
+                           {
+                              myGameInstance.EventDisplayed = myGameInstance.EventActive = "e006a";
+                              myGameInstance.DieRollAction = GameAction.DieRollActionNone;
+                           }
                            else
                            {
                               myGameInstance.EventDisplayed = myGameInstance.EventActive = "e006";                  
@@ -6124,7 +6168,7 @@ namespace Pattons_Best
                            return;
                         case "MorningBriefingDeploymentEnd":
                            Option optionAutoPreparation = myGameInstance.Options.Find("AutoPreparation");
-                           if( true == optionAutoPreparation.IsEnabled)
+                           if( (true == optionAutoPreparation.IsEnabled) && (true == myGameInstance.BattlePrep.myIsSetupPerformed))
                            {
                               myGameInstance.GamePhase = GamePhase.Movement;
                               action = GameAction.PreparationsFinalSkip; // user skips battle prep steps and uses previous setup
@@ -6176,7 +6220,7 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "Continue017": // Preparations Final
-                           if(false == ContinueAfterBattlePrep(myGameInstance, ref action))
+                           if (false == ContinueAfterBattlePrep(myGameInstance, ref action)) // Preparations Final
                            {
                               Logger.Log(LogEnum.LE_ERROR, "TextBlock_MouseDown(): ContinueAfterBattlePrep() returned false");
                               return;
@@ -6208,7 +6252,7 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "MovementEnemyCheckCounterattack":
-                           action = GameAction.MovementEnemyCheckCounterattack;
+                           action = GameAction.MovementEnemyCheckCounterattack; // TextBlock_MouseDown(): e019 Set Exit Area
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "MovementEnemyStrengthChoice":
@@ -6263,7 +6307,10 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue32a":  // Counterattack Check
-                           action = GameAction.MovementBattleCheckCounterattackRoll;  
+                           if (false == myGameInstance.IsDaylightLeft(lastReport))
+                              action = GameAction.EveningDebriefingStart;
+                           else
+                              action = GameAction.MovementBattleCheckCounterattackRoll;  
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Ambush":
@@ -6889,6 +6936,7 @@ namespace Pattons_Best
             return;
          }
          myGameInstance.IsCommanderDirectingMgFire = true;
+         Logger.Log(LogEnum.LE_SHOW_MG_CMDR_DIRECT_FIRE, "CheckBoxCmdFire_Checked(): IsCommanderDirectingMgFire=" + myGameInstance.IsCommanderDirectingMgFire.ToString());
       }
       private void CheckBoxCmdrFire_Unchecked(object sender, RoutedEventArgs e)
       {
@@ -6900,6 +6948,7 @@ namespace Pattons_Best
             return;
          }
          myGameInstance.IsCommanderDirectingMgFire = false; //  EventViewer.CheckBoxCmdrFire_Unchecked()
+         Logger.Log(LogEnum.LE_SHOW_MG_CMDR_DIRECT_FIRE, "CheckBoxCmdrFire_Unchecked(): IsCommanderDirectingMgFire=" + myGameInstance.IsCommanderDirectingMgFire.ToString());
       }
       private void CheckBoxImmobilization_Checked(object sender, RoutedEventArgs e)
       {
@@ -6979,11 +7028,11 @@ namespace Pattons_Best
                   action = GameAction.SetupAssignCrewRating;
             }
          }
-         //action = GameAction.TestingStartMorningBriefing;  // <cgs> TEST - skip the ammo setup
-         //action = GameAction.TestingStartPreparations;     // <cgs> TEST - skip morning briefing and crew/ammo setup
-         //action = GameAction.TestingStartMovement;         // <cgs> TEST - start with movement - skip battle prep phase
-         //action = GameAction.TestingStartBattle;           // <cgs> TEST - skip the movement portion - begin with battle setup
-         //action = GameAction.TestingStartAmbush;           // <cgs> TEST - skip battle setup
+         //action = GameAction.TestingStartMorningBriefing;  // <CGS> TEST - skip the ammo setup
+         //action = GameAction.TestingStartPreparations;     // <CGS> TEST - skip morning briefing and crew/ammo setup
+         //action = GameAction.TestingStartMovement;         // <CGS> TEST - start with movement - skip battle prep phase
+         //action = GameAction.TestingStartBattle;           // <CGS> TEST - skip the movement portion - begin with battle setup
+         //action = GameAction.TestingStartAmbush;           // <CGS> TEST - skip battle setup
          myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
          return true;
       }

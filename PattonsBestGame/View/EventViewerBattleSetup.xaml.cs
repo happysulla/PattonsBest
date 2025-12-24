@@ -427,7 +427,7 @@ namespace Pattons_Best
                myMaxRowCount = 2;
                myGameInstance.MaxEnemiesInOneBattle += 2;
             }
-            //myMaxRowCount = 6;  // <cgs> TEST - generate extra units
+            //myMaxRowCount = 6;  // <CGS> TEST - generate extra units
          }
          //--------------------------------------------------
          for (int i1 = startingRow; i1 < myMaxRowCount; ++i1)
@@ -1203,10 +1203,10 @@ namespace Pattons_Best
          switch (myState)
          {
             case E046Enum.ACTIVATION:
-               //dieRoll = 11; // <cgs> TEST - infantry appearing
-               //dieRoll = 10; // <cgs> TEST - AdvanceRetreat - MG Appearing
-               //dieRoll = 45; // <cgs> TEST - KillYourTank - TANKS APPEARING in battle scenario
-               //dieRoll = 91; // <cgs> TEST - PSW/SPW APPEARING in Advance scenario
+               //dieRoll = 11; // <CGS> TEST - infantry appearing
+               //dieRoll = 10; // <CGS> TEST - AdvanceRetreat - MG Appearing
+               //dieRoll = 45; // <CGS> TEST - KillYourTank - TANKS APPEARING in battle scenario
+               //dieRoll = 91; // <CGS> TEST - PSW/SPW APPEARING in Advance scenario
                myGridRows[i].myDieRollActivation = dieRoll;
                myGridRows[i].myActivation = TableMgr.SetEnemyUnit(myScenario, myDay, dieRoll);
                if (false == CreateMapItem(i))
@@ -1298,7 +1298,7 @@ namespace Pattons_Best
                break;
             //-------------------------------------------------------------------
             case E046Enum.PLACE_RANGE:
-               //dieRoll = 10; // <cgs> TEST - AdvanceRetreat - Start at long range
+               //dieRoll = 10; // <CGS> TEST - AdvanceRetreat - Start at long range
                myGridRows[i].myDieRollRange = dieRoll;
                myGridRows[i].myRange = TableMgr.GetEnemyRange(myAreaType, myGridRows[i].myActivation, dieRoll);
                if ( "ERROR" == myGridRows[i].myRange )
@@ -1351,7 +1351,7 @@ namespace Pattons_Best
                break;
             //-------------------------------------------------------------------
             case E046Enum.PLACE_TERRAIN:
-               //dieRoll = 1; // <cgs> TEST - Set Terrain to hull down
+               //dieRoll = 1; // <CGS> TEST - Set Terrain to hull down
                myGridRows[i].myDieRollTerrain = dieRoll;
                myGridRows[i].myTerrain = TableMgr.GetEnemyTerrain(myScenario, myDay, myAreaType, myGridRows[i].myActivation, dieRoll);
                if ("ERROR" == myGridRows[i].myTerrain)
@@ -1450,7 +1450,7 @@ namespace Pattons_Best
          }
          //------------------------------------------------------------
          int dieRoll = Utilities.RandomGenerator.Next(1, 11);
-         //dieRoll = 13; // <cgs> TEST - AdvanceRetreat - long range
+         //dieRoll = 13; // <CGS> TEST - AdvanceRetreat - long range
          myGridRows[i].myDieRollRange = dieRoll;
          myGridRows[i].myRange = TableMgr.GetEnemyRange(myAreaType, myGridRows[i].myActivation, dieRoll);
          if ("ERROR" == myGridRows[i].myRange)
@@ -1488,7 +1488,7 @@ namespace Pattons_Best
          }
          //------------------------------------------------------------
          dieRoll = Utilities.RandomGenerator.Next(1, 11);
-         //dieRoll = 1; // <cgs> TEST - force hull down for auto rolls.
+         //dieRoll = 1; // <CGS> TEST - force hull down for auto rolls.
          myGridRows[i].myDieRollTerrain = dieRoll;
          myGridRows[i].myTerrain = TableMgr.GetEnemyTerrain(myScenario, myDay, myAreaType, myGridRows[i].myActivation, dieRoll);
          if ("ERROR" == myGridRows[i].myTerrain)

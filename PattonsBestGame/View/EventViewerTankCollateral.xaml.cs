@@ -524,7 +524,7 @@ namespace Pattons_Best
          {
             case E0481Enum.COLLATERAL_DAMAGE_ROLL:
                myGameInstance.NumCollateralDamage--;
-               //dieRoll = 91; // <cgs> TEST - Commander Collateral Damage
+               //dieRoll = 91; // <CGS> TEST - Commander Collateral Damage
                myDieRollCollateral = dieRoll;
                myCollateralDamage = TableMgr.GetCollateralDamage(myGameInstance, dieRoll);
                if ("ERROR" == myCollateralDamage)

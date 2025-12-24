@@ -111,17 +111,20 @@ namespace Pattons_Best
                   case "Snow":
                      imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowIcon"), Width = 30, Height = 30 };
                      break;
+                  case "Ground Snow":
+                     imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowGround"), Width = 45, Height = 30 };
+                     break;
                   case "Deep Snow": 
                      imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowDeep"), Width = 45, Height = 30 };
                      break;
                   case "Falling Snow": 
                      imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFalling"), Width = 45, Height = 30 }; 
                      break;
+                  case "Falling and Ground Snow":
+                     imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFallingGround"), Width = 45, Height = 30 };
+                     break;
                   case "Falling and Deep Snow": 
                      imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFallingDeep"), Width = 45, Height = 30 }; 
-                     break;
-                  case "Falling and Ground Snow": 
-                     imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowFallingGround"), Width = 45, Height = 30 }; 
                      break;
                   case "Overcast": 
                      imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercast"), Width = 45, Height = 30 };
@@ -139,7 +142,7 @@ namespace Pattons_Best
                      imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherRain"), Width = 45, Height = 30 };
                      break;
                   case "Mud/Rain":
-                     imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherRainMud"), Width = 45, Height = 30 };
+                     imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherMudRain"), Width = 45, Height = 30 };
                      break;
                   default:
                      Logger.Log(LogEnum.LE_ERROR, "StatusBarViewer::UpdateView(): reached default weather=" + lastReport.Weather);
@@ -157,7 +160,7 @@ namespace Pattons_Best
                if (minLeft < 61)
                   imgTimeRemaining = new Image { Source = MapItem.theMapImages.GetBitmapImage("Alert2"), Width = 30, Height = 30 };
                else
-                  imgTimeRemaining = new Image { Source = MapItem.theMapImages.GetBitmapImage("Sunset"), Width = 50, Height = 25 };
+                  imgTimeRemaining = new Image { Source = MapItem.theMapImages.GetBitmapImage("Sunset"), Width = 30, Height = 30 };
                myStatusBar.Items.Add(imgTimeRemaining);
                if (lastReport.MainGunHE < 10)
                {
