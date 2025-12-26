@@ -254,6 +254,11 @@ namespace Pattons_Best
          //--------------------------------------------------
          if ( GamePhase.Battle == myGameInstance.GamePhase ) // Battle Phase setup initial forces 
          {
+            Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "SetupBattle(): reset 'unidentified' spotting units");
+            myGameInstance.IdentifiedAtg = ""; // Start_SmokeDepletion()
+            myGameInstance.IdentifiedTank = "";
+            myGameInstance.IdentifiedSpg = "";
+            //--------------------------------------------------
             if (EnumScenario.Counterattack == lastReport.Scenario)
             {
                if (EnumResistance.Light == lastReport.Resistance)

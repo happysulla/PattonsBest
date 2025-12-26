@@ -27,7 +27,7 @@ namespace Pattons_Best
       public int MaxRollsForAirSupport { get; set; } = 0;
       public int MaxRollsForArtillerySupport { get; set; } = 0;
       public int MaxEnemiesInOneBattle { get; set; } = 0;
-      public int MaxRoundsOfCombat { get; set; } = 0;
+      public int RoundsOfCombat { get; set; } = 0;
       //------------------------------------------------
       public bool IsMultipleSelectForDieResult { set; get; } = false;
       public bool IsGridActive { set; get; } = false;

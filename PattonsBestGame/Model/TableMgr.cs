@@ -269,12 +269,19 @@ namespace Pattons_Best
       }
       public static int GetTimeRemaining(IAfterActionReport lastReport)
       {
-         if ((lastReport.SunsetHour <= lastReport.SunriseHour) && (lastReport.SunsetMin <= lastReport.SunriseMin))
-            return 0;
-         int sunrisehour = lastReport.SunriseHour + 1;
+         int sunrisehour = lastReport.SunriseHour;
+         if (lastReport.SunsetHour <= lastReport.SunriseHour)
+         {
+            if (lastReport.SunsetMin <= lastReport.SunriseMin )
+               return 0;
+         }
+         else
+         {
+            sunrisehour = lastReport.SunriseHour + 1;
+         }
          int sunrsethour = lastReport.SunsetHour;
          int numMins = (sunrsethour - sunrisehour) * 60;
-         if( 0 < numMins)
+         if( 0 < numMins )
          {
             numMins += (60 - lastReport.SunriseMin);
             numMins += lastReport.SunsetMin;
@@ -3676,7 +3683,7 @@ namespace Pattons_Best
          //-------------------------------
          if (total <= cm.Rating)
          {
-            int halfRating = (int)Math.Ceiling(cm.Rating * 0.5);
+            int halfRating = (int)Math.Floor(cm.Rating * 0.5); // rules say round down... table says round up
             if (total <= halfRating)
             {
                Logger.Log(LogEnum.LE_SHOW_SPOT_RESULT, "GetSpottingResult(): mi=" + mi.Name + " Identified - dr=" + dieRoll.ToString());
@@ -4265,14 +4272,15 @@ namespace Pattons_Best
          if (true == isTargetVehicle && true == isAirStrike)
             modifier -= 10;
          //----------------------------------------------------
-         modifier -= 3 * numUsControlledSector;
-         //----------------------------------------------------
          if (true == isTargetInWoods)
             modifier -= 3;
          //----------------------------------------------------
-         modifier += friendlySquadsLost;
-         //----------------------------------------------------
-         modifier += 2 * friendlyTanksLost;
+         if ((true == isAdvancingFire)) // friendly losses and movement sectos do not affect artillery/airstrikes
+         {
+            modifier -= 3 * numUsControlledSector;
+            modifier += friendlySquadsLost;
+            modifier += 2 * friendlyTanksLost;
+         }
          //----------------------------------------------------
          if (true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
             modifier += 10;

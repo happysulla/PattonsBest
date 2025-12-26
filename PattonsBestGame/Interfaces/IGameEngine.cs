@@ -354,7 +354,7 @@ namespace Pattons_Best
       BattleEmptyResolve,
       BattleShermanKilled,
 
-      BattleRoundSequenceStart,
+      BattleRoundSequenceRoundStart,
       BattleRoundSequenceAmbushCounterattack,
       BattleRoundSequenceSmokeDepletionEnd,
       BattleRoundSequenceSpotting,

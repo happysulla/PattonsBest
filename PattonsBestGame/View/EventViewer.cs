@@ -417,14 +417,14 @@ namespace Pattons_Best
                EventViewerResolveAdvanceFire battleResolveAdvFire = new EventViewerResolveAdvanceFire(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == battleResolveAdvFire.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): battleResolveAdvFire.CtorError=true");
-               else if (false == battleResolveAdvFire.ResolveAdvanceFire(ShowBattleSetupFireResults) )
+               else if (false == battleResolveAdvFire.ResolveAdvanceFire(ShowSupportingFireResults) )
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ResolveAdvanceFire() returned false");
                break;
             case GameAction.BattleResolveArtilleryFire:
                EventViewerResolveArtilleryFire battleResolveArtFire = new EventViewerResolveArtilleryFire(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == battleResolveArtFire.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): BattleResolveArtilleryFire.CtorError=true");
-               else if (false == battleResolveArtFire.ResolveArtilleryFire(ShowBattleSetupFireResults))
+               else if (false == battleResolveArtFire.ResolveArtilleryFire(ShowSupportingFireResults))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ResolveArtilleryFire() returned false");
                break;
             case GameAction.BattleRoundSequenceFriendlyAction:
@@ -438,7 +438,7 @@ namespace Pattons_Best
                EventViewerResolveAirStrike battleResolveAirStrike = new EventViewerResolveAirStrike(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == battleResolveAirStrike.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): battleResolveAdvFire.CtorError=true");
-               else if (false == battleResolveAirStrike.ResolveAirStrike(ShowBattleSetupFireResults))
+               else if (false == battleResolveAirStrike.ResolveAirStrike(ShowSupportingFireResults))
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ResolveAirStrike() returned false");
                break;
             case GameAction.BattleAmbush:
@@ -1061,7 +1061,7 @@ namespace Pattons_Best
             case "e008":
                if (false == UpdateEventContentWeather(gi))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): UpdateEventContentWeather() returned false for key=" + key);
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): UpdateEvent_ContentWeather() returned false for key=" + key);
                   return false;
                }
                break;
@@ -1742,7 +1742,7 @@ namespace Pattons_Best
                }
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new Run("                                           "));
+               myTextBlock.Inlines.Add(new Run("                                              "));
                myTextBlock.Inlines.Add(new InlineUIContainer(imge033));
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
@@ -2944,7 +2944,7 @@ namespace Pattons_Best
          //----------------------------------------
          if (null == myTextBlock)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentWeather(): myTextBlock=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentWeather(): myTextBlock=null");
             return false;
          }
          string key = gi.EventActive;
@@ -2952,7 +2952,7 @@ namespace Pattons_Best
          IAfterActionReport? report = gi.Reports.GetLast();
          if (null == report)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentWeather():  gi.Reports.GetLast()");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentWeather():  gi.Reports.GetLast()");
             return false;
          }
          //----------------------------------------
@@ -2986,7 +2986,7 @@ namespace Pattons_Best
                   break;
                case "Snow":
                   imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherSnowIcon"), Width = 150, Height = 150, Name = "WeatherRollEnd" };
-                  myTextBlock.Inlines.Add(new Run("                                        "));
+                  myTextBlock.Inlines.Add(new Run("                                           "));
                   break;
                case "Overcast/Rain":
                   imgWeather = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherRain"), Width = 400, Height = 266, Name = "WeatherRollEnd" };
@@ -2997,12 +2997,12 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("                "));
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentWeather(): reached default snow=" + report.Weather);
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentWeather(): reached default snow=" + report.Weather);
                   return false;
             }
             if (null == imgWeather)
             {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentWeather(): img=null for key=" + key);
+               Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentWeather(): img=null for key=" + key);
                return false;
             }
             myTextBlock.Inlines.Add(new InlineUIContainer(imgWeather));
@@ -5436,12 +5436,12 @@ namespace Pattons_Best
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowAmmoLoadResults(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "Show_AmmoLoadResults(): myGameInstance=null");
             return false;
          }
          if (null == myGameEngine)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowAmmoLoadResults(): myGameEngine=null");
+            Logger.Log(LogEnum.LE_ERROR, "Show_AmmoLoadResults(): myGameEngine=null");
             return false;
          }
          GameAction outAction = GameAction.Error;
@@ -5454,7 +5454,7 @@ namespace Pattons_Best
             IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
             if (null == lastReport)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetupFireResults(): lastReport=null");
+               Logger.Log(LogEnum.LE_ERROR, "Show_AmmoLoadResults(): lastReport=null");
                return false;
             }
             if( EnumScenario.Counterattack == lastReport.Scenario )
@@ -5462,7 +5462,7 @@ namespace Pattons_Best
             else
                outAction = GameAction.MovementChooseOption;
          }
-         StringBuilder sb11 = new StringBuilder("     ######ShowAmmoLoadResults() :");
+         StringBuilder sb11 = new StringBuilder("     ######Show_AmmoLoadResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
          sb11.Append(" a="); sb11.Append(outAction.ToString());
@@ -5484,14 +5484,14 @@ namespace Pattons_Best
          }
          //--------------------------------------------------
          GameAction outAction = GameAction.Error;
-         if ( BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase ) // Friendly Action Result during Ambush phase
+         if ( BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase) // Show_BattleSetupResults() - (AmbushRandomEvent=GamePhase) ==> BattleRoundSequence_RoundStart 
          {
-            Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "Show_BattleSetupResults(): AmbushRandomEvent e=" + myGameInstance.EventActive);
-            outAction = GameAction.BattleRoundSequenceStart; // Show_BattleSetupResults() - AmbushRandomEvent
+            Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "Show_BattleSetupResults(): Enemy Reinforcements added new units during Ambush e=" + myGameInstance.EventActive );
+            outAction = GameAction.BattleRoundSequenceRoundStart;   // Show_BattleSetupResults() - (AmbushRandomEvent=GamePhase) ==> Enemy Reinforcements added new units during Ambush ==> start round
          }
-         else if (BattlePhase.RandomEvent == myGameInstance.BattlePhase) // Friendly Action Result in BattleRoundSequence phase
+         else if (BattlePhase.RandomEvent == myGameInstance.BattlePhase) // Show_BattleSetupResults() - (RandomEvent=GamePhase) ==> BattleRoundSequenceBackToSpotting 
          {
-            outAction = GameAction.BattleRoundSequenceBackToSpotting; // Show_BattleSetupResults - FriendlyAction
+            outAction = GameAction.BattleRoundSequenceBackToSpotting;  // Show_BattleSetupResults() - (RandomEvent=GamePhase) ==> BattleRoundSequenceBackToSpotting 
          }
          else                                                               // Battle Setup phase
          {
@@ -5522,7 +5522,7 @@ namespace Pattons_Best
                   isArtilleryStrike = true;
             }
             //--------------------------------------------------
-            outAction = GameAction.BattleAmbushStart;
+            outAction = GameAction.BattleAmbushStart; // always enter with Ambush die check unless there is advancing fire, air strike, or artillery support
             int enemyCount = 0;
             IMapItems removals = new MapItems();
             foreach (IStack stack in myGameInstance.BattleStacks)
@@ -5572,53 +5572,53 @@ namespace Pattons_Best
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
          return true;
       }
-      public bool ShowBattleSetupFireResults()
+      public bool ShowSupportingFireResults()
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetup_FireResults(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "Show_SupportingFireResults(): myGameInstance=null");
             return false;
          }
          if (null == myGameEngine)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetup_FireResults(): myGameEngine=null");
+            Logger.Log(LogEnum.LE_ERROR, "Show_SupportingFireResults(): myGameEngine=null");
             return false;
          }
          IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetup_FireResults(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Show_SupportingFireResults(): lastReport=null");
             return false;
          }
          //--------------------------------------------------
          bool isAirStrike = false;
          bool isArtilleryStrike = false;
          GameAction outAction = GameAction.Error;
-         if( BattlePhase.RandomEvent == myGameInstance.BattlePhase )
+         if (BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase) // Show_SupportingFireResults() - (AmbushRandomEvent == gamephase) ==> Friendly Artillery as Random Event during ambush
          {
-            outAction = GameAction.BattleRoundSequenceBackToSpotting; // ShowBattleSetup_FireResults() - AmbushRandomEvent 
+            Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "Show_SupportingFireResults(): Friendly Artillery during Ambush Random Event e=" + myGameInstance.EventActive);
+            outAction = GameAction.BattleRoundSequenceRoundStart;   // Show_SupportingFireResults() - AmbushRandomEvent 
          }
-         else if (BattlePhase.FriendlyAction == myGameInstance.BattlePhase)  // Friendly action during counterattack ambush 
+         else if (BattlePhase.FriendlyAction == myGameInstance.BattlePhase)  // Show_SupportingFireResults() - (FriendlyAction == gamephase) ==> Friendly Action 
          {
             myGameInstance.GamePhase = GamePhase.Battle;
-            outAction = GameAction.BattleRandomEvent; // ShowBattleSetup_FireResults() - AmbushRandomEvent 
+            outAction = GameAction.BattleRandomEvent; // Show_SupportingFireResults() - AmbushRandomEvent 
          }
-         else if (BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase)  // Friendly action during ambush as part of Random Events
+         else if ( BattlePhase.RandomEvent == myGameInstance.BattlePhase) // Show_SupportingFireResults() - (RandomEvent == gamephase) ==> Friendly Artillery as Random Event
          {
-            Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "ShowBattleSetup_FireResults(): AmbushRandomEvent e=" + myGameInstance.EventActive);
-            outAction = GameAction.BattleRoundSequenceStart; // ShowBattleSetup_FireResults() - AmbushRandomEvent 
+            outAction = GameAction.BattleRoundSequenceBackToSpotting; // Show_SupportingFireResults() - (BattlePhase.RandomEvent == gamephase) ==> Friendly Artillery as Random Event
          }
-         else if (GamePhase.Battle == myGameInstance.GamePhase)
+         else if (GamePhase.Battle == myGameInstance.GamePhase) // Setup Battle - Advancing Fire, Artillery Fire, and Air Strike
          {
             if (null == myGameInstance.EnteredArea)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetup_FireResults(): myGameInstance.EnteredArea=null");
+               Logger.Log(LogEnum.LE_ERROR, "Show_SupportingFireResults(): myGameInstance.EnteredArea=null");
                return false;
             }
             IStack? stackEnteredArea = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
             if (null == stackEnteredArea)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetup_FireResults(): stackEnteredArea=null");
+               Logger.Log(LogEnum.LE_ERROR, "Show_SupportingFireResults(): stackEnteredArea=null");
                return false;
             }
             foreach (IMapItem mi in stackEnteredArea.MapItems)
@@ -5651,13 +5651,9 @@ namespace Pattons_Best
             else
                outAction = GameAction.BattleAmbushStart;
          }
-         else if (GamePhase.Battle == myGameInstance.GamePhase) // Advancing Fire Finished
-         {
-            outAction = GameAction.BattleAmbushStart;
-         }
          else
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowBattleSetup_FireResults(): Reached default GP=" + myGameInstance.GamePhase.ToString() + " BP=" + myGameInstance.BattlePhase.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "Show_SupportingFireResults(): Reached default GP=" + myGameInstance.GamePhase.ToString() + " BP=" + myGameInstance.BattlePhase.ToString());
             return false;
          }
          //--------------------------------------------------
@@ -5673,10 +5669,10 @@ namespace Pattons_Best
                }
             }
          }
-         if ( true == isBattleBoardEmpty)
-            outAction = GameAction.BattleEmpty;  // ShowBattleSetup_FireResults()
+         if ( true == isBattleBoardEmpty )
+            outAction = GameAction.BattleEmpty;  // Show_SupportingFireResults()
          //--------------------------------------------------
-         StringBuilder sb11 = new StringBuilder("     ######ShowBattleSetup_FireResults() :");
+         StringBuilder sb11 = new StringBuilder("     ######Show_SupportingFireResults() :");
          sb11.Append(" p="); sb11.Append(myGameInstance.GamePhase.ToString());
          sb11.Append(" ae="); sb11.Append(myGameInstance.EventActive);
          sb11.Append(" a="); sb11.Append(outAction.ToString());
@@ -5745,22 +5741,22 @@ namespace Pattons_Best
          }
          //-----------------------------------------
          GameAction outAction = GameAction.Error;
-         if (BattlePhase.Ambush == myGameInstance.BattlePhase)
+         if (BattlePhase.Ambush == myGameInstance.BattlePhase) // Show_CollateralDamageResults() - (Ambush==BattlePhase)  ==> BattleRandomEvent
          {
-            outAction = GameAction.BattleRandomEvent;
+            outAction = GameAction.BattleRandomEvent; // Show_CollateralDamageResults() - (Ambush==BattlePhase)  ==> BattleRandomEvent
          }
-         else if (BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase)
+         else if (BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase) // Show_CollateralDamageResults() - (AmbushRandomEvent==BattlePhase)  ==> start round
          {
-            Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "Show_CollateralDamageResults(): AmbushRandomEvent e=" + myGameInstance.EventActive);
-            outAction = GameAction.BattleRoundSequenceStart; // Show_CollateralDamageResults() - BattlePhase.AmbushRandomEvent
+            Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "Show_CollateralDamageResults(): Collateraly Damage during Ambush e=" + myGameInstance.EventActive);
+            outAction = GameAction.BattleRoundSequenceRoundStart;   // Show_CollateralDamageResults() - BattlePhase.AmbushRandomEvent
          }
-         else if (BattlePhase.EnemyAction == myGameInstance.BattlePhase)
+         else if (BattlePhase.EnemyAction == myGameInstance.BattlePhase) // Show_CollateralDamageResults() - (EnemyAction==BattlePhase)  ==> BattleRoundSequenceFriendlyAction
          {
-            outAction = GameAction.BattleRoundSequenceFriendlyAction; // Show_CollateralDamageResults()- BattlePhase.BattleRoundSequenceFriendlyAction
+            outAction = GameAction.BattleRoundSequenceFriendlyAction; // Show_CollateralDamageResults() - (EnemyAction==BattlePhase)  ==> BattleRoundSequenceFriendlyAction
          }
-         else if (BattlePhase.RandomEvent == myGameInstance.BattlePhase)
+         else if (BattlePhase.RandomEvent == myGameInstance.BattlePhase)  // Show_CollateralDamageResults() - (RandomEvent==BattlePhase) ==> BattleRoundSequenceBackToSpotting
          {
-            outAction = GameAction.BattleRoundSequenceBackToSpotting; // Show_CollateralDamageResults() - BattlePhase.AmbushRandomEvent
+            outAction = GameAction.BattleRoundSequenceBackToSpotting; // Show_CollateralDamageResults() - (RandomEvent==BattlePhase) ==> BattleRoundSequenceBackToSpotting
          }
          else
          {
@@ -6325,24 +6321,24 @@ namespace Pattons_Best
                            }
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
-                        case "Continue35":  // Ambush Check
+                        case "Continue35":  // Ambush Check results in no ambush
                            Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "TextBlock_MouseDown(): Ambush Check e=" + myGameInstance.EventActive);
-                           action = GameAction.BattleRoundSequenceStart;  // Ambush Check 
+                           action = GameAction.BattleRoundSequenceRoundStart;          // Ambush Check results in no ambush ==> start round
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "MovementCounterattackEllapsedTimeRoll":
                            action = GameAction.MovementCounterattackEllapsedTimeRoll;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
-                        case "Continue43":  // minefield attack
+                        case "Continue43":  // Minefield attack Ignored
                            if( BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase)
                            {
                               Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "TextBlock_MouseDown(): Minefield Attack e=" + myGameInstance.EventActive);
-                              action = GameAction.BattleRoundSequenceStart;           // Minefield Attack
+                              action = GameAction.BattleRoundSequenceRoundStart;           // Ambush occurred - Minefield Attack Ignored ==> start round
                            }
                            else
                            {
-                              action = GameAction.BattleRoundSequenceBackToSpotting;  // Minefield Attack
+                              action = GameAction.BattleRoundSequenceBackToSpotting;  // No Ambush - Minefield Attack Ignored
                            }
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
@@ -6399,7 +6395,7 @@ namespace Pattons_Best
                            if (BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase)
                            {
                               Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "TextBlock_MouseDown(): Military Watch e=" + myGameInstance.EventActive);
-                              action = GameAction.BattleRoundSequenceStart;          // Military Watch
+                              action = GameAction.BattleRoundSequenceRoundStart;           // Ambush occurred - Military Watch
                            }
                            else
                            {
@@ -6444,11 +6440,11 @@ namespace Pattons_Best
                            if( BattlePhase.AmbushRandomEvent == myGameInstance.BattlePhase)
                            {
                               Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "TextBlock_MouseDown(): Frendly Advance Ignored | Enemy Reinforcements e=" + myGameInstance.EventActive);
-                              action = GameAction.BattleRoundSequenceStart;           // Friendly Advance Ignored | Enemy Reinforcements 
+                              action = GameAction.BattleRoundSequenceRoundStart;           // AmbushRandom Event - Friendly Advance Ignored | Enemy Reinforcements 
                            }
                            else
                            {
-                              action = GameAction.BattleRoundSequenceBackToSpotting; // Friendly Advance Ignored | Enemy Reinforcements 
+                              action = GameAction.BattleRoundSequenceBackToSpotting; // No Ambush - Friendly Advance Ignored | Enemy Reinforcements 
                            }
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
@@ -6463,7 +6459,8 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue50b":
-                           action = GameAction.BattleRoundSequenceStart;
+                           Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "TextBlock_MouseDown(): Out of Main Gun Rounds e=" + myGameInstance.EventActive);
+                           action = GameAction.BattleRoundSequenceRoundStart;          // e050b - Out of Main Gun Rounds ==> continue with next round
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue51":
@@ -6557,7 +6554,8 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue60":
-                           action = GameAction.BattleRoundSequenceStart;
+                           Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "TextBlock_MouseDown(): Reset Round for  next round e=" + myGameInstance.EventActive);
+                           action = GameAction.BattleRoundSequenceRoundStart;          // Show e060 - Reset Round Finishes ==> continue with next round
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "CarryingMan":

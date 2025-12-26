@@ -337,7 +337,7 @@ namespace Pattons_Best
             case GameAction.PreparationsHatches:
             case GameAction.PreparationsGunLoad:
             case GameAction.PreparationsGunLoadSelect:
-            case GameAction.BattleRoundSequenceStart:
+            case GameAction.BattleRoundSequenceRoundStart:
             case GameAction.UpdateTankCard:
             case GameAction.BattleRoundSequenceShermanToHitRollNothing:
             case GameAction.BattleRoundSequenceReadyRackHeMinus:

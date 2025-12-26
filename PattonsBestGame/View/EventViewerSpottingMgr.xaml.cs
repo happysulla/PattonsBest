@@ -28,6 +28,7 @@ namespace Pattons_Best
       public enum E0472Enum
       {
          SELECT_CREWMAN,
+         SELECT_CREWMAN_CHOOSE_SECTOR, // Loader and Commander Need to Choose Sector after initial contact
          SELECT_CREWMAN_SHOW,
          ROLL_SPOTTING,
          ROLL_SPOTTING_SHOW,
@@ -779,6 +780,7 @@ namespace Pattons_Best
          }
          //---------------------------------------
          myState = E0472Enum.SELECT_CREWMAN_SHOW;
+         //---------------------------------------
          List<string>? spottedTerritories = Territory.GetSpottedTerritories(myGameInstance, mySelectedCrewman);
          if (null == spottedTerritories)
          {

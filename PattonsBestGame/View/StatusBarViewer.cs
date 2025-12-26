@@ -188,6 +188,20 @@ namespace Pattons_Best
                }
             }
          }
+         //-------------------------------------------------------
+         if (true == gi.IsLeadTank)
+         {
+            myStatusBar.Items.Add(new Separator());
+            Image imgLead = new Image { Source = MapItem.theMapImages.GetBitmapImage("ShermanLead"), Width = 45, Height = 30 };
+            myStatusBar.Items.Add(imgLead);
+         }
+         //--------------------------------------------
+         if (0 < gi.RoundsOfCombat)
+         {
+            myStatusBar.Items.Add(new Separator());
+            Label labelCombatRound = new Label() { FontFamily = myFontFam, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Left, Content = "Round = "  + gi.RoundsOfCombat.ToString()};
+            myStatusBar.Items.Add(labelCombatRound);
+         }
          //--------------------------------------------
          if (true == gi.IsAirStrikePending)
          {
@@ -197,13 +211,6 @@ namespace Pattons_Best
             Image imgAirStrike = new Image { Source = MapItem.theMapImages.GetBitmapImage("AirStrike"), Width = 40, Height = 20 };
             myStatusBar.Items.Add(labelAirStrike);
             myStatusBar.Items.Add(imgAirStrike);
-         }
-         //-------------------------------------------------------
-         if (true == gi.IsLeadTank)
-         {
-            myStatusBar.Items.Add(new Separator());
-            Image imgLead = new Image { Source = MapItem.theMapImages.GetBitmapImage("ShermanLead"), Width = 45, Height = 30 };
-            myStatusBar.Items.Add(imgLead);
          }
          //-------------------------------------------------------
          if (null != lastReport)

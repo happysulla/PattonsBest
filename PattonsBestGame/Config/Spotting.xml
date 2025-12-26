@@ -11,7 +11,7 @@
 				<Paragraph>
 					<LineBreak/>SPOTTING TABLE<LineBreak/>
                <Italic>
-                  <Run FontSize='12' Text='If the roll is less than or equal to the crew members rating, the target is spotted. If the roll is less than 1/2 (round up) of the rating, the target is also identified. '></Run>
+                  <Run FontSize='12' Text='If the roll is less than or equal to the crew members rating, the target is spotted. If the roll is less than 1/2 (round down) of the rating, the target is also identified. '></Run>
                </Italic>
 				</Paragraph>
 			</TableCell>

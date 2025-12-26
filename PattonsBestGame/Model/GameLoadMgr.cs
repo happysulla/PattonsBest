@@ -909,7 +909,7 @@ namespace Pattons_Best
             case "BattleEmptyResolve": return GameAction.BattleEmptyResolve;
             case "BattleShermanKilled": return GameAction.BattleShermanKilled;
 
-            case "BattleRoundSequenceStart": return GameAction.BattleRoundSequenceStart;
+            case "BattleRoundSequenceRoundStart": return GameAction.BattleRoundSequenceRoundStart;
             case "BattleRoundSequenceAmbushCounterattack": return GameAction.BattleRoundSequenceAmbushCounterattack;
             case "BattleRoundSequenceSmokeDepletionEnd": return GameAction.BattleRoundSequenceSmokeDepletionEnd;
             case "BattleRoundSequenceSpotting": return GameAction.BattleRoundSequenceSpotting;

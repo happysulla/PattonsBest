@@ -104,6 +104,24 @@ namespace Pattons_Best
          gi.EventActive = gi.EventDisplayed = evt;
          gi.DieRollAction = drAction;
       }
+      protected bool ResetDieResults(IGameInstance gi)
+      {
+         try
+         {
+            Logger.Log(LogEnum.LE_RESET_ROLL_STATE, "ResetDieResults(): resetting die rolls");
+            foreach (KeyValuePair<string, int[]> kvp in gi.DieResults)
+            {
+               for (int i = 0; i < 3; ++i)
+                  kvp.Value[i] = Utilities.NO_RESULT;
+            }
+         }
+         catch (Exception)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResetDieResults(): reset rolls");
+            return false;
+         }
+         return true;
+      }
       //------------
       protected void AdvanceTime(IAfterActionReport report, int minToAdd)
       {
@@ -1065,32 +1083,18 @@ namespace Pattons_Best
          }
          return true;
       }
-      protected bool ResetDieResults(IGameInstance gi)
-      {
-         try
-         {
-            Logger.Log(LogEnum.LE_RESET_ROLL_STATE, "ResetDieResults(): resetting die rolls");
-            foreach (KeyValuePair<string, int[]> kvp in gi.DieResults)
-            {
-               for (int i = 0; i < 3; ++i)
-                  kvp.Value[i] = Utilities.NO_RESULT;
-            }
-         }
-         catch (Exception)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "ResetDieResults(): reset rolls");
-            return false;
-         }
-         return true;
-      }
       protected bool SpottingPhaseBegin(IGameInstance gi, ref GameAction outAction, string caller)
       {
+         // SpottingPhase_Begin() sets the state for the next step in the beginning of the Battle Sequence Round.
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
             Logger.Log(LogEnum.LE_ERROR, "SpottingPhase_Begin(): lastReport=null");
             return false;
          }
+         //-------------------------------------
+         //-------------------------------------
+         gi.RoundsOfCombat++; 
          //-------------------------------------
          string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Gunner" };
          foreach (string crewmember in crewmembers)
@@ -1126,7 +1130,7 @@ namespace Pattons_Best
                }
                if (0 < spottedTerritories.Count)
                {
-                  outAction = GameAction.BattleRoundSequenceSpotting;
+                  outAction = GameAction.BattleRoundSequenceSpotting; // Targets are found, need to spot
                   return true;
                }
             }
@@ -1371,9 +1375,9 @@ namespace Pattons_Best
             statMaxEnemiesInOneBattle.Value = gi.MaxEnemiesInOneBattle;
          gi.MaxEnemiesInOneBattle = 0;
          GameStatistic statMaxRoundsOfCombat = gi.Statistics.Find("MaxRoundsOfCombat");
-         if (statMaxRoundsOfCombat.Value < gi.MaxRoundsOfCombat)
-            statMaxRoundsOfCombat.Value = gi.MaxRoundsOfCombat;
-         gi.MaxRoundsOfCombat = 0;
+         if (statMaxRoundsOfCombat.Value < gi.RoundsOfCombat)
+            statMaxRoundsOfCombat.Value = gi.RoundsOfCombat;
+         gi.RoundsOfCombat = 0;
          return true;
       }
       protected bool PrepareForBattleSetState(IGameInstance gi, ref GameAction action)
@@ -4439,6 +4443,12 @@ namespace Pattons_Best
                   }
                   break;
                case GameAction.BattleEmptyResolve: // GameStateBattlePrep
+                  if (false == ResolveEmptyBattleBoard(gi, lastReport, ref action)) // GameStateBattle.PerformAction(Battle_EmptyResolve) //###########
+                  {
+                     returnStatus = "Resolve_EmptyBattleBoard() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(Battle_EmptyResolve): " + returnStatus);
+                  }
+                  break;
                case GameAction.PreparationsShowFeat:
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e503a");
                   break;
@@ -4964,7 +4974,7 @@ namespace Pattons_Best
                         GameFeat featChange11;
                         if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange11))  // GameStateMovement.PerformAction(EveningDebriefing_Start)
                         {
-                           returnStatus = "theInGameFeats.GetFeatChange() returned false";
+                           returnStatus = "theInGameFeats.Get_FeatChange() returned false";
                            Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(EveningDebriefing_Start): " + returnStatus);
                         }
                         if (false == String.IsNullOrEmpty(featChange11.Key))
@@ -5040,7 +5050,7 @@ namespace Pattons_Best
                   GameFeat featChange1;
                   if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange1))  // GameStateMovement.PerformAction(EveningDebriefing_Start)
                   {
-                     returnStatus = "theInGameFeats.GetFeatChange() returned false";
+                     returnStatus = "theInGameFeats.Get_FeatChange() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateMovement.PerformAction(EveningDebriefing_Start): " + returnStatus);
                   }
                   if (false == String.IsNullOrEmpty(featChange1.Key))
@@ -5822,6 +5832,7 @@ namespace Pattons_Best
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (dieRoll < 8)
                   {
+                     gi.RoundsOfCombat++;
                      Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "GameStateBattle.PerformAction(BattleAmbushRoll): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Ambush");
                      gi.BattlePhase = BattlePhase.Ambush;
                      if( EnumScenario.Counterattack == lastReport.Scenario) // GameStateBattle.PerformAction(BattleAmbushRoll) - indicate a counterattack ambush
@@ -5873,7 +5884,7 @@ namespace Pattons_Best
                   if (false == ResolveEmptyBattleBoard(gi, lastReport, ref action)) // GameStateBattle.PerformAction(Battle_EmptyResolve)
                   {
                      returnStatus = "Resolve_EmptyBattleBoard() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleEmptyResolve): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(Battle_EmptyResolve): " + returnStatus);
                   }
                   break;
                case GameAction.BattleCrewReplaced:
@@ -5940,7 +5951,7 @@ namespace Pattons_Best
                            SetCommand(gi, action, GameAction.DieRollActionNone, "e040");
                            gi.MinSinceLastCheck += 15;
                            AdvanceTime(lastReport, 15);  // BattleRandomEventRoll - Time
-                           if (false == NextStepAfterRandomEvent(gi, ref action))
+                           if (false == NextStepAfterRandomEventBattle(gi, ref action))
                            {
                               returnStatus = "NextStep_AfterRandomEvent() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(BattleRandomEventRoll): random event=" + randomEvent + " " + returnStatus);
@@ -5951,7 +5962,7 @@ namespace Pattons_Best
                            {
                               action = GameAction.BattleResolveArtilleryFire;
                            }
-                           else if (false == NextStepAfterRandomEvent(gi, ref action))
+                           else if (false == NextStepAfterRandomEventBattle(gi, ref action))
                            {
                               returnStatus = "NextStep_AfterRandomEvent() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(BattleRandomEventRoll): random event=" + randomEvent + " " + returnStatus);
@@ -6006,7 +6017,7 @@ namespace Pattons_Best
                               action = GameAction.BattleResolveArtilleryFire;
                               gi.IsFlankingFire = true;
                            }
-                           else if (false == NextStepAfterRandomEvent(gi, ref action))
+                           else if (false == NextStepAfterRandomEventBattle(gi, ref action))
                            {
                               returnStatus = "NextStep_AfterRandomEvent() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(BattleRandomEventRoll): Flanking Fire - " + returnStatus);
@@ -6032,7 +6043,7 @@ namespace Pattons_Best
                   GameFeat featChange1;
                   if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange1)) // GameStateBattle.PerformAction(EveningDebriefing_Start)
                   {
-                     returnStatus = "theInGameFeats.GetFeatChange() returned false";
+                     returnStatus = "theInGameFeats.Get_FeatChange() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattle.PerformAction(EveningDebriefing_Start): " + returnStatus);
                   }
                   if (false == String.IsNullOrEmpty(featChange1.Key))
@@ -6078,7 +6089,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, sb12.ToString());
          return returnStatus;
       }
-      private bool NextStepAfterRandomEvent(IGameInstance gi, ref GameAction outAction)
+      private bool NextStepAfterRandomEventBattle(IGameInstance gi, ref GameAction outAction)
       {
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
@@ -6100,25 +6111,25 @@ namespace Pattons_Best
             }
          }
          //----------------------------------------
-         if (false == isBattleBoardEmpty)
+         if (true == isBattleBoardEmpty)
          {
-            gi.GamePhase = GamePhase.BattleRoundSequence;
-            if (false == SpottingPhaseBegin(gi, ref outAction, "NextStep_AfterRandomEvent()"))
+            if (EnumScenario.Counterattack == lastReport.Scenario) // GameStateBattle.NextStep_AfterRandomEvent() - empty battle board
             {
-               Logger.Log(LogEnum.LE_ERROR, "NextStep_AfterRandomEvent(): SpottingPhase_Begin() returned false");
-               return false;
-            }
-         }
-         else
-         {
-            if (EnumScenario.Counterattack == lastReport.Scenario) // GameStateBattle.NextStep_AfterRandomEvent()
-            {
-               SetCommand(gi, outAction, GameAction.MovementCounterattackEllapsedTimeRoll, "e036a");  // GameStateBattle.NextStep_AfterRandomEvent()
+               SetCommand(gi, outAction, GameAction.MovementCounterattackEllapsedTimeRoll, "e036a");  // GameStateBattle.NextStep_AfterRandomEvent() - empty battle board
                gi.GamePhase = GamePhase.Movement;
             }
             else
             {
-               SetCommand(gi, outAction, GameAction.DieRollActionNone, "e036");
+               SetCommand(gi, outAction, GameAction.DieRollActionNone, "e036"); // GameStateBattle.NextStep_AfterRandomEvent() - empty battle board
+            }
+         }
+         else
+         {
+            gi.GamePhase = GamePhase.BattleRoundSequence;
+            if (false == SpottingPhaseBegin(gi, ref outAction, "NextStep_AfterRandomEvent()"))  // GameStateBattle.NextStepAfterRandomEventBattle() - if battle board is not empty
+            {
+               Logger.Log(LogEnum.LE_ERROR, "NextStep_AfterRandomEvent(): SpottingPhase_Begin() returned false");
+               return false;
             }
          }
          return true;
@@ -6181,49 +6192,35 @@ namespace Pattons_Best
                   SetCommand(gi, action, GameAction.DieRollActionNone, "e503a");
                   break;
                case GameAction.BattleRoundSequenceShowFeatEnd:
-                  if (false == BattleRoundSequenceStart(gi, ref action)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShowFeatEnd)
+                  if (false == StartSmokeDepletion(gi, ref action)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShowFeatEnd)
                   {
-                     returnStatus = "BattleRoundSequence_Start() returned false";
+                     returnStatus = "Start_SmokeDepletion() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShowFeatEnd): " + returnStatus);
                   }
                   break;
                case GameAction.BattleRoundSequenceAmbushCounterattack:
                   bool isEmptyBattleBoard;
-                  if (false == ResetRound(gi, action, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceAmbushCounterattack)", false, out isEmptyBattleBoard))
+                  if (false == ResetRound(gi, action, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_AmbushCounterattack)", false, out isEmptyBattleBoard))
                   {
                      returnStatus = "Reset_Round() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceAmbushCounterattack): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_AmbushCounterattack): " + returnStatus);
                   }
-                  if( true == isEmptyBattleBoard )
+                  if( true == isEmptyBattleBoard ) // there must be enemy units to trigger a counterattack ambush - this is the first action of the battle so no smoke has occurred yet
                   {
                      returnStatus = "Invald State: isEmptyBattleBoard=true";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceAmbushCounterattack): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_AmbushCounterattack): " + returnStatus);
                   }
-                  else if (false == SpottingPhaseBegin(gi, ref action, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceAmbushCounterattack)"))
+                  else if (false == SpottingPhaseBegin(gi, ref action, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_AmbushCounterattack)")) // counterattack ambush occurs
                   {
                      returnStatus = "SpottingPhase_Begin() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceAmbushCounterattack): " + returnStatus);
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_AmbushCounterattack): " + returnStatus);
                   }
                   break;
-               case GameAction.BattleRoundSequenceStart:
-                  //-------------------------------------------------------
-                  GameFeat changedFeat0;
-                  Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_Start):\n  Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
-                  if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out changedFeat0))  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_Start)
+               case GameAction.BattleRoundSequenceRoundStart:
+                  if (false == StartSmokeDepletion(gi, ref action)) // GameStateBattleRoundSequence.PerformAction(Start_SmokeDepletion)
                   {
-                     returnStatus = "GameEngine.theInGameFeats.GetFeat_Change() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_Start): " + returnStatus);
-                  }
-                  else if (false == String.IsNullOrEmpty(changedFeat0.Key)) 
-                  {
-                     Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "GameStateEnded.PerformAction(BattleRoundSequence_Start): Change=" + changedFeat0.ToString());
-                     action = GameAction.BattleRoundSequenceShowFeat;  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_Start)
-                     SetCommand(gi, action, GameAction.DieRollActionNone, "e503a");
-                  }
-                  else if (false == BattleRoundSequenceStart(gi, ref action)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_Start)
-                  {
-                     returnStatus = "BattleRoundSequence_Start() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_Start): " + returnStatus);
+                     returnStatus = "Start_SmokeDepletion() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(Start_SmokeDepletion): " + returnStatus);
                   }
                   break;
                case GameAction.BattleRoundSequenceSmokeDepletionEnd:
@@ -6231,7 +6228,7 @@ namespace Pattons_Best
                   if( true == lastReport.Weather.Contains("Rain")) // deplete smoke twice as fast when there is rain
                      DepleteSmoke(gi);
                   //----------------------------------------------
-                  if (false == SpottingPhaseBegin(gi, ref action, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceSmokeDepletionEnd)"))
+                  if (false == SpottingPhaseBegin(gi, ref action, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceSmokeDepletionEnd)")) // Smoke depletion end
                   {
                      returnStatus = "SpottingPhase_Begin() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceSmokeDepletionEnd): " + returnStatus);
@@ -6290,7 +6287,7 @@ namespace Pattons_Best
                   {
                      if (false == CheckCrewMemberExposed(gi, ref action)) // calls SpottingPhase_Begin() if no collateral
                      {
-                        returnStatus = "CheckCrewMemberExposed() returned false";
+                        returnStatus = "Check_CrewMemberExposed() returned false";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceEnemyArtilleryRoll): " + returnStatus);
                      }
                   }
@@ -6877,7 +6874,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceLoadMainGun:
                   break;
                case GameAction.BattleRoundSequenceLoadMainGunEnd:
-                  SetCommand(gi, action, GameAction.DieRollActionNone, "e060"); // Goto "Reset Round" event
+                  SetCommand(gi, action, GameAction.DieRollActionNone, "e060"); // BattleRoundSequenceLoadMainGunEnd - Goto "Reset Round" event
                   if (false == gi.ReloadGun())
                   {
                      returnStatus = "ReloadGun() returned false";
@@ -7651,7 +7648,7 @@ namespace Pattons_Best
                            }
                            else if (false == NextStepAfterRandomEvent(gi, ref action))
                            {
-                              returnStatus = "NextStepAfterRandomEvent() returned false";
+                              returnStatus = "NextStep_AfterRandomEvent() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMinefieldRoll): " + returnStatus);
                            }
                            break;
@@ -7662,7 +7659,7 @@ namespace Pattons_Best
                      }
                   }
                   break;
-               case GameAction.BattleRoundSequenceBackToSpotting:
+               case GameAction.BattleRoundSequenceBackToSpotting: 
                   bool isEmptyBattleBoard3;
                   if (false == ResetRound(gi, action, "GameStateBattleRoundSequence(BattleRoundSequence_BackToSpotting)", false, out isEmptyBattleBoard3))    // BattleRoundSequence_BackToSpotting
                   {
@@ -7695,8 +7692,8 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceNextActionAfterRandomEvent:
                   if (false == NextStepAfterRandomEvent(gi, ref action))
                   {
-                     returnStatus = "NextStepAfterRandomEvent() returned false";
-                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceNextActionAfterRandomEvent): " + returnStatus);
+                     returnStatus = "NextStep_AfterRandomEvent() returned false";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_NextActionAfterRandomEvent): " + returnStatus);
                   }
                   break;
                case GameAction.BattleShermanKilled:
@@ -7742,7 +7739,7 @@ namespace Pattons_Best
                   GameFeat featChange1;
                   if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange1)) // GameStateBattleRoundSequence.PerformAction(EveningDebriefing_Start)
                   {
-                     returnStatus = "theInGameFeats.GetFeatChange() returned false";
+                     returnStatus = "theInGameFeats.Get_FeatChange() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(EveningDebriefing_Start): " + returnStatus);
                   }
                   if (false == String.IsNullOrEmpty(featChange1.Key))
@@ -7787,6 +7784,59 @@ namespace Pattons_Best
          else
             Logger.Log(LogEnum.LE_ERROR, sb12.ToString());
          return returnStatus;
+      }
+      private bool StartSmokeDepletion(IGameInstance gi, ref GameAction action)
+      {
+         // At the end of this routine, SpottingPhase_Begin() marks the start of each combat round including ambush attacks as one round
+         //-------------------------------------------------------
+         GameFeat changedFeat1;
+         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Start_SmokeDepletion():\n  Feats=" + GameEngine.theInGameFeats.ToString() + " \n SFeats=" + GameEngine.theStartingFeats.ToString());
+         if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out changedFeat1)) // Start_SmokeDepletion()
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Start_SmokeDepletion(): GameEngine.theInGameFeats.GetFeat_Change() returned false");
+            return false;
+         }
+         if (false == String.IsNullOrEmpty(changedFeat1.Key))
+         {
+            Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Start_SmokeDepletion(): Change=" + changedFeat1.ToString());
+            action = GameAction.PreparationsShowFeat; // Start_SmokeDepletion()
+            SetCommand(gi, action, GameAction.DieRollActionNone, "e503a");
+            return true;
+         }
+         //-------------------------------------------------------
+         bool isBattleBoardEmpty;
+         if (false == ResetRound(gi, action, "Start_SmokeDepletion()", false, out isBattleBoardEmpty))  // Start_SmokeDepletion - GoTo e060, e036, or e036a
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Start_SmokeDepletion(): Reset_Round() returned false");
+            return false;
+         }
+         if (true == isBattleBoardEmpty) 
+            return true;                  // ResetRound() shows what event to show user
+         //-------------------------------------------------------
+         Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "Start_SmokeDepletion(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Spotting");
+         gi.BattlePhase = BattlePhase.Spotting;
+         int smokeCount = 0;
+         foreach (IStack stack in gi.BattleStacks)
+         {
+            foreach (IMapItem mi in stack.MapItems)
+            {
+               if (true == mi.Name.Contains("Smoke"))
+                  smokeCount++;
+            }
+         }
+         if (0 < smokeCount)
+         {
+            SetCommand(gi, action, GameAction.DieRollActionNone, "e037");
+         }
+         else
+         {
+            if (false == SpottingPhaseBegin(gi, ref action, "Start_SmokeDepletion()")) // Start_SmokeDepletion() - begin spotting phase if there is no smoke
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Start_SmokeDepletion(): SpottingPhase_Begin() returned false");
+               return false;
+            }
+         }
+         return true;
       }
       private void DepleteSmoke(IGameInstance gi)
       {
@@ -7850,48 +7900,6 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_STACK_ADD, "GameStateBattleRoundSequence.PerformAction(): adding mi=" + addition.Name + " from BattleStacks=" + gi.BattleStacks.ToString());
          }
       }
-      private bool BattleRoundSequenceStart(IGameInstance gi, ref GameAction action)
-      {
-         //--------------------------------------------------
-         Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "BattleRoundSequence_Start(): reset identified to empty string for acton=" + action.ToString());
-         gi.IdentifiedAtg = ""; // BattleRoundSequence_Start()
-         gi.IdentifiedTank = "";
-         gi.IdentifiedSpg = "";
-         //-------------------------------------------------------
-         bool isBattleBoardEmpty;
-         if (false == ResetRound(gi, action, "BattleRoundSequence_Start()", false, out isBattleBoardEmpty))  // BattleRoundSequence_Start - GoTo e060, e036, or e036a
-         {
-            Logger.Log(LogEnum.LE_ERROR, "BattleRoundSequence_Start(): Reset_Round() returned false");
-            return false;
-         }
-         if (true == isBattleBoardEmpty)
-            return true;
-         //-------------------------------------------------------
-         Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "BattleRoundSequence_Start(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.Spotting");
-         gi.BattlePhase = BattlePhase.Spotting;
-         int smokeCount = 0;
-         foreach (IStack stack in gi.BattleStacks)
-         {
-            foreach (IMapItem mi in stack.MapItems)
-            {
-               if (true == mi.Name.Contains("Smoke"))
-                  smokeCount++;
-            }
-         }
-         if (0 < smokeCount)
-         {
-            SetCommand(gi, action, GameAction.DieRollActionNone, "e037");
-         }
-         else
-         {
-            if (false == SpottingPhaseBegin(gi, ref action, "BattleRoundSequence_Start()"))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "BattleRoundSequence_Start(): SpottingPhase_Begin() returned false");
-               return false;
-            }
-         }
-         return true;
-      }
       private bool CheckCrewMemberExposed(IGameInstance gi, ref GameAction outAction)
       {
          bool isCrewExposed = false;
@@ -7901,7 +7909,7 @@ namespace Pattons_Best
             ICrewMember? cm = gi.GetCrewMemberByRole(crewmember);
             if (null == cm)
             {
-               Logger.Log(LogEnum.LE_ERROR, "CheckCrewMemberExposed(): gi.GetCrewMemberByRole() returned null");
+               Logger.Log(LogEnum.LE_ERROR, "Check_CrewMemberExposed(): gi.GetCrewMemberByRole() returned null");
                return false;
             }
             foreach (IMapItem hatch in gi.Hatches)
@@ -7920,9 +7928,9 @@ namespace Pattons_Best
             outAction = GameAction.BattleCollateralDamageCheck;
             gi.NumCollateralDamage++; // check for collateral damage after resolving artillery roll
          }
-         else if (false == SpottingPhaseBegin(gi, ref outAction, "CheckCrewMemberExposed()"))
+         else if (false == SpottingPhaseBegin(gi, ref outAction, "Check_CrewMemberExposed()")) // Check_CrewMemberExposed() - no exposed crew after BattleRoundSequenceEnemyArtilleryRoll occurs
          {
-            Logger.Log(LogEnum.LE_ERROR, "CheckCrewMemberExposed(): SpottingPhaseBegin() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Check_CrewMemberExposed(): SpottingPhase_Begin() returned false");
             return false;
          }
          return true;
@@ -9934,7 +9942,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if ( (BattlePhase.AmbushRandomEvent == gi.BattlePhase) && (false == isBattleBoardEmpty) )
          {
-            if (false == SpottingPhaseBegin(gi, ref outAction, "NextStep_AfterRandomEvent()"))
+            if (false == SpottingPhaseBegin(gi, ref outAction, "NextStep_AfterRandomEvent()")) // NextStep_AfterRandomEvent() - at end of random event when ambush happens
             {
                Logger.Log(LogEnum.LE_ERROR, "NextStep_AfterRandomEvent(): SpottingPhase_Begin() returned false");
                return false;
@@ -9943,7 +9951,7 @@ namespace Pattons_Best
          else
          {
             bool isEmptyBattleBoard;
-            if (false == ResetRound(gi, outAction, "NextStep_AfterRandomEvent()", false, out isEmptyBattleBoard))    // NextStep_AfterRandomEvent
+            if (false == ResetRound(gi, outAction, "NextStep_AfterRandomEvent()", false, out isEmptyBattleBoard))    // NextStep_AfterRandomEvent()
             {
                Logger.Log(LogEnum.LE_ERROR, "NextStep_AfterRandomEvent(): Reset_Round() returned false");
                return false;
@@ -9966,6 +9974,7 @@ namespace Pattons_Best
       }
       private bool ResetRound(IGameInstance gi, GameAction action, string caller, bool isAmmoReset, out bool isEmptyBattleBoard)
       {
+         // Method does not change action but does change EventActive and Die Roll Action
          isEmptyBattleBoard = true;
          Logger.Log(LogEnum.LE_SHOW_RESET_ROUND, "Reset_Round(): %%%%%%%%%%%%%%%%%% entering - called by " + caller);
          IAfterActionReport? lastReport = gi.Reports.GetLast();
@@ -10116,8 +10125,8 @@ namespace Pattons_Best
          }
          if (false == isEmptyBattleBoard)
          {
-            SetCommand(gi, action, GameAction.DieRollActionNone, "e060"); // if BattleBoard NOT Empty, Goto 'Reset Round'
-            Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "Reset_RoundSetState(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.BackToSpotting");
+            SetCommand(gi, action, GameAction.DieRollActionNone, "e060"); // Reset_Round() - if BattleBoard NOT Empty, Goto 'Reset Round'
+            Logger.Log(LogEnum.LE_SHOW_BATTLE_PHASE, "Reset_Round(): phase=" + gi.BattlePhase.ToString() + "-->BattlePhase.BackToSpotting");
             gi.BattlePhase = BattlePhase.BackToSpotting;
          }
          else
@@ -10189,7 +10198,7 @@ namespace Pattons_Best
                   GameFeat featChange;
                   if (false == GameEngine.theInGameFeats.GetFeatChange(GameEngine.theStartingFeats, out featChange))  // GameStateEveningDebriefing.PerformAction(EveningDebriefing_Start)
                   {
-                     returnStatus = "theInGameFeats.GetFeatChange() returned false";
+                     returnStatus = "theInGameFeats.Get_FeatChange() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(EveningDebriefing_Start): " + returnStatus);
                   }
                   if (false == String.IsNullOrEmpty(featChange.Key))
@@ -10781,9 +10790,9 @@ namespace Pattons_Best
             statMaxEnemiesInOneBattle.Value = gi.MaxEnemiesInOneBattle;
          gi.MaxEnemiesInOneBattle = 0;
          GameStatistic statMaxRoundsOfCombat = gi.Statistics.Find("MaxRoundsOfCombat");
-         if (statMaxRoundsOfCombat.Value < gi.MaxRoundsOfCombat)
-            statMaxRoundsOfCombat.Value = gi.MaxRoundsOfCombat;
-         gi.MaxRoundsOfCombat = 0;
+         if (statMaxRoundsOfCombat.Value < gi.RoundsOfCombat)
+            statMaxRoundsOfCombat.Value = gi.RoundsOfCombat;
+         gi.RoundsOfCombat = 0;
          return true;
       }
    }
