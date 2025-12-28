@@ -835,7 +835,7 @@ namespace Pattons_Best
                   be005a3.IsEnabled = false;
                   be005a4.IsEnabled = false;
                }
-               Image imge005a = new Image { Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = 100, Height = 100, Name = "Continue005a" };
+
                myTextBlock.Inlines.Add(new Run(" Date: "));
                myTextBlock.Inlines.Add(be005a1);
                myTextBlock.Inlines.Add(new Run("  "));
@@ -851,7 +851,21 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new Run(report.TankCardNum.ToString()));
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run(report.Scenario.ToString()));
+               myTextBlock.Inlines.Add(new Run(" Scenario"));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run(report.Resistance.ToString()));
+               myTextBlock.Inlines.Add(new Run(" Resistance Expected"));
+               myTextBlock.Inlines.Add(new LineBreak());
+               if ( false == String.IsNullOrEmpty(entry.Note) )
+               {
+                  myTextBlock.Inlines.Add(new Run("Historical Battle: "));
+                  myTextBlock.Inlines.Add(new Run(entry.Note)) ;
+               }
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new Run("                                            "));
+               Image imge005a = new Image { Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = 100, Height = 100, Name = "Continue005a" };
                myTextBlock.Inlines.Add(new InlineUIContainer(imge005a));
                break;
             case "e006":
@@ -1198,7 +1212,7 @@ namespace Pattons_Best
                      imge011.Source = MapItem.theMapImages.GetBitmapImage("Continue");
                      imge011.Width = 100;
                      imge011.Height = 100;
-                     myTextBlock.Inlines.Add(new Run("                                           "));
+                     myTextBlock.Inlines.Add(new Run("                                             "));
                   }
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge011));
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -1312,7 +1326,7 @@ namespace Pattons_Best
                         return false;
                      }
                   }
-                  myTextBlock.Inlines.Add(new Run("                                           "));
+                  myTextBlock.Inlines.Add(new Run("                                              "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge021));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -1552,8 +1566,8 @@ namespace Pattons_Best
             case "e027":
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  Image imge027 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c29AmmoReload"), Width = 100, Height = 100, Name = "Resupply" };
-                  myTextBlock.Inlines.Add(new Run("                                           "));
+                  Image imge027 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c29AmmoReload"), Width = 100, Height = 100, Name = "MovementResupplyCheckRollEnd" };
+                  myTextBlock.Inlines.Add(new Run("                                              "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge027));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -1578,7 +1592,7 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   Image imge030 = new Image { Width = 100, Height = 100, Name = "MovementAdvanceFire", Source = MapItem.theMapImages.GetBitmapImage("c44AdvanceFire") };
-                  myTextBlock.Inlines.Add(new Run("                                          "));
+                  myTextBlock.Inlines.Add(new Run("                                             "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge030));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -1621,7 +1635,7 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Combat! Enter Battle Board."));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("                                     "));
+                  myTextBlock.Inlines.Add(new Run("                                       "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge031));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -2361,7 +2375,7 @@ namespace Pattons_Best
                      cbe054.Checked += CheckBoxCmdrFire_Checked;
                      cbe054.Unchecked += CheckBoxCmdrFire_Unchecked;
                      myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new LineBreak()); 
+                     myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new InlineUIContainer(cbe054));
                      myTextBlock.Inlines.Add(new Run(" Check if Commander directs fire - only allowed once per round"));
                   }
@@ -2854,7 +2868,7 @@ namespace Pattons_Best
                      imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Win"), Width = 300, Height = 300 };
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new Run("                                  "));
+                     myTextBlock.Inlines.Add(new Run("                                "));
                      break;
                   case 1:
                      imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Muscle"), Width = 300, Height = 300 };
@@ -2884,7 +2898,7 @@ namespace Pattons_Best
                      imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Win"), Width = 300, Height = 300 };
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new Run("                                  "));
+                     myTextBlock.Inlines.Add(new Run("                                "));
                      break;
                }
                myTextBlock.Inlines.Add(new InlineUIContainer(imgEndGameWon));
@@ -5001,7 +5015,7 @@ namespace Pattons_Best
                }
                break;
             case "e032a":
-               if ("Resupply" == content)
+               if ("Resupply" == content) 
                {
                   if( Utilities.NO_RESULT == gi.DieResults[key][0])
                      b.IsEnabled = true;
@@ -5010,33 +5024,41 @@ namespace Pattons_Best
                }
                break;
             case "e054":
-               bool isSubMgFire = false;
-               bool isAAFire = false;
-               bool isCoaxialMgFire = false;
-               bool isBowMgFire = false;
-               foreach (IMapItem crewAction in gi.CrewActions)
+               Logger.Log(LogEnum.LE_SHOW_MG_FIRE, "SetButtonState(): a=" + gi.IsShermanFiringAaMg.ToString() + " c=" + gi.IsShermanFiringAaMg.ToString() + " b=" + gi.IsShermanFiringBowMg.ToString() + " s=" + gi.IsShermanFiringSubMg.ToString());
+               if( (true == gi.IsShermanFiringAaMg) || (true == gi.IsShermanFiringCoaxialMg) || (true == gi.IsShermanFiringBowMg) || (true == gi.IsShermanFiringSubMg) )
                {
-                  if ( ("Loader_FireSubMg" == crewAction.Name) && (false == gi.IsShermanFiredSubMg) )  // can only fire MG once per round
-                     isSubMgFire = true;
-                  if ( ("Loader_FireAaMg" == crewAction.Name)  && (false == gi.IsShermanFiredAaMg) )
-                     isAAFire = true;
-                  if ( ("Gunner_FireCoaxialMg" == crewAction.Name) && (false == gi.IsShermanFiredCoaxialMg) )
-                     isCoaxialMgFire = true;
-                  if ( ("Assistant_FireBowMg" == crewAction.Name) && (false == gi.IsShermanFiredBowMg) && (false == gi.Sherman.IsHullDown) )
-                     isBowMgFire = true;
-                  if ( ("Commander_FireSubMg" == crewAction.Name) && (false == gi.IsShermanFiredSubMg) )
-                     isSubMgFire = true;
-                  if ( ("Commander_FireAaMg" == crewAction.Name) && (false == gi.IsShermanFiredAaMg) )
-                     isAAFire = true;
+                  b.IsEnabled = false;
                }
-               if ("  AA MG   " == content )
-                   b.IsEnabled = isAAFire;
-               else if ("  Bow MG  " == content)
-                  b.IsEnabled = isBowMgFire;
-               else if ("Coaxial MG" == content)
-                  b.IsEnabled = isCoaxialMgFire;
-               else if ("  Sub MG  " == content)
-                  b.IsEnabled = isSubMgFire;
+               else
+               {
+                  bool isSubMgFire = false;
+                  bool isAAFire = false;
+                  bool isCoaxialMgFire = false;
+                  bool isBowMgFire = false;
+                  foreach (IMapItem crewAction in gi.CrewActions)
+                  {
+                     if (("Loader_FireSubMg" == crewAction.Name) && (false == gi.IsShermanFiredSubMg))  // can only fire MG once per round
+                        isSubMgFire = true;
+                     if (("Loader_FireAaMg" == crewAction.Name) && (false == gi.IsShermanFiredAaMg))
+                        isAAFire = true;
+                     if (("Gunner_FireCoaxialMg" == crewAction.Name) && (false == gi.IsShermanFiredCoaxialMg))
+                        isCoaxialMgFire = true;
+                     if (("Assistant_FireBowMg" == crewAction.Name) && (false == gi.IsShermanFiredBowMg) && (false == gi.Sherman.IsHullDown))
+                        isBowMgFire = true;
+                     if (("Commander_FireSubMg" == crewAction.Name) && (false == gi.IsShermanFiredSubMg))
+                        isSubMgFire = true;
+                     if (("Commander_FireAaMg" == crewAction.Name) && (false == gi.IsShermanFiredAaMg))
+                        isAAFire = true;
+                  }
+                  if ("  AA MG   " == content)
+                     b.IsEnabled = isAAFire;
+                  else if ("  Bow MG  " == content)
+                     b.IsEnabled = isBowMgFire;
+                  else if ("Coaxial MG" == content)
+                     b.IsEnabled = isCoaxialMgFire;
+                  else if ("  Sub MG  " == content)
+                     b.IsEnabled = isSubMgFire;
+               }
                break;
             case "e059":
                string name = b.Name;
@@ -6267,7 +6289,7 @@ namespace Pattons_Best
                            action = GameAction.MovementChooseOption;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
-                        case "Resupply":
+                        case "MovementResupplyCheckRollEnd":  // TextBlock_MouseDown
                            action = GameAction.MovementResupplyCheckRoll;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
@@ -6865,7 +6887,7 @@ namespace Pattons_Best
                   return false;
                }
                break;
-            case "Resupply":
+            case "Resupply":  // Button_ClickShowOther
                action = GameAction.MovementResupplyCheck;
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;

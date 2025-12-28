@@ -371,7 +371,7 @@ namespace Pattons_Best
       }
       public static string GetWeatherSnow(int day, int dieRoll)
       {
-         return "Falling Snow";
+         return "Falling and Deep Snow";
          string month = GetMonth(day);
          if ("Nov" == month)
             --dieRoll;
@@ -4216,34 +4216,32 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Get_FriendlyActionModifier(): stack=null for t=" + mi.TerritoryCurrent.Name);
             return FN_ERROR;
          }
-         //----------------------------------------------------
-         int numSmokeInTargetZone = 0;
-         foreach (IMapItem smoke in stack.MapItems)
-         {
-            if (true == smoke.Name.Contains("Smoke"))
-               numSmokeInTargetZone++;
-         }
-         int modifier = numSmokeInTargetZone * 10;
+         int modifier = 0;
          //----------------------------------------------------
          bool isTargetVehicle = false;
-         bool isTargetInWoods = false;
+         bool isInfantryTarget = false;
+         bool isInfantryTargetInWoods = false;
+         bool isTruck = false;
          int friendlySquadsLost = 0;
          int friendlyTanksLost = 0;
          switch (enemyUnit)
          {
             case "LW":
             case "MG":
-               isTargetInWoods = mi.IsWoods;
+               isInfantryTarget = true;
+               isInfantryTargetInWoods = mi.IsWoods;
                friendlySquadsLost = lastReport.VictoryPtsFriendlySquad;
                break;
             case "ATG":
             case "Pak43":
             case "Pak38":
             case "Pak40":
-               isTargetInWoods = mi.IsWoods;
+               isInfantryTargetInWoods = mi.IsWoods;
                break;
             case "TRUCK":
+               isTruck = true;
                friendlyTanksLost = lastReport.VictoryPtsFriendlyTank;
+               isTargetVehicle = true;
                break;
             case "SPG":
             case "STuGIIIg":
@@ -4265,28 +4263,64 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Get_FriendlyActionModifier(): reached default with enemyUnit=" + enemyUnit);
                return FN_ERROR;
          }
+         Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): ------------------------------ for " + mi.Name);
          //----------------------------------------------------
          if (true == gi.IsFlankingFire)
-            modifier -= 10;
-         //----------------------------------------------------
-         if (true == isTargetVehicle && true == isAirStrike)
-            modifier -= 10;
-         //----------------------------------------------------
-         if (true == isTargetInWoods)
-            modifier -= 3;
-         //----------------------------------------------------
-         if ((true == isAdvancingFire)) // friendly losses and movement sectos do not affect artillery/airstrikes
          {
-            modifier -= 3 * numUsControlledSector;
-            modifier += friendlySquadsLost;
-            modifier += 2 * friendlyTanksLost;
+            Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): -10 flanking fire");
+            modifier -= 10;
+         }
+         //----------------------------------------------------
+         if ( (true == isTargetVehicle) && (true == isAirStrike) )
+         {
+            Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): -10 Air Strike vs Vehicle");
+            modifier -= 10;
+         }
+         //----------------------------------------------------
+         if (true == isAdvancingFire) // friendly losses and friendly sectors do not affect artillery/airstrikes
+         {
+            int minus = 3 * numUsControlledSector;
+            modifier -= minus;
+            Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): -" + minus.ToString() + " controlled sectors");
+            if (true == isInfantryTarget) // only LW and MG targets
+            {
+               modifier += friendlySquadsLost;
+               Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): -" + friendlySquadsLost.ToString() + " lost inf");
+            }
+            if (true == isTargetVehicle)
+            {
+               int minus1 = 2 * friendlyTanksLost;
+               modifier += minus1;
+               Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): -" + minus1.ToString() + " lost tanks");
+            }
+         }
+         //----------------------------------------------------
+         if ((true == isInfantryTargetInWoods) && (true == isArtilleryFire))
+         {
+            Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): -3 artillery vs inf in woods");
+            modifier -= 3;
+         }
+         //----------------------------------------------------
+         foreach (IMapItem smoke in stack.MapItems)
+         {
+            if (true == smoke.Name.Contains("Smoke"))
+            {
+               Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): +10 smoke");
+               modifier += 10;
+            }
          }
          //----------------------------------------------------
          if (true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
+         {
+            Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): +10 fog/falling");
             modifier += 10;
+         }
          //----------------------------------------------------
-         if ((true == isTargetVehicle) && (true == isAdvancingFire || true == isArtilleryFire))
+         if ((true == isTargetVehicle) && (false == isTruck) && (true == isAdvancingFire || true == isArtilleryFire))
+         {
+            Logger.Log(LogEnum.LE_SHOW_FRIENDLY_ACTION_MOD, "Get_FriendlyActionModifier(): +10 non-truck vehicle during adv/artillery fire");
             modifier += 10;
+         }
          //----------------------------------------------------
          return modifier;
       }

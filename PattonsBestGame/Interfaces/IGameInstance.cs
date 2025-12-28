@@ -70,6 +70,8 @@ namespace Pattons_Best
       bool IsHatchesActive { set; get; }
       bool IsRetreatToStartArea { set; get; }
       bool IsShermanAdvancingOnMoveBoard { set; get; }
+      bool IsLoaderSpotThisTurn { set; get; }
+      bool IsCommanderSpotThisTurn { set; get; }
       //------------------------------------------------
       bool IsFallingSnowStopped { set; get; }
       int HoursOfRainThisDay { set; get; }

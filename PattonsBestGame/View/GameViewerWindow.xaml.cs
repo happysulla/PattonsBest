@@ -3163,8 +3163,9 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatsAdds(): Deserialize_GameStatistics(theSingleDayStatistics) returned false");
                return false;
             }
+            Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): Before==>GameEngine.theSingleDayStatistics=" + GameEngine.theSingleDayStatistics.ToString());
             UpdateCanvasShowStatsAdds(gi.Statistics, GameEngine.theSingleDayStatistics);
-            Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): GameEngine.theSingleDayStatistics=" + GameEngine.theSingleDayStatistics.ToString());
+            Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): After==>GameEngine.theSingleDayStatistics=" + GameEngine.theSingleDayStatistics.ToString());
             GameStatistic stat0NumGames = GameEngine.theSingleDayStatistics.Find("NumGames");
             if (1 < stat0NumGames.Value)
             {
@@ -3182,8 +3183,9 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatsAdds(): Deserialize_GameStatistics(theCampaignStatistics) returned false");
                return false;
             }
+            Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): Before==>GameEngine.theCampaignStatistics=" + GameEngine.theCampaignStatistics.ToString());
             UpdateCanvasShowStatsAdds(gi.Statistics, GameEngine.theCampaignStatistics);
-            Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): GameEngine.theCampaignStatistics=" + GameEngine.theCampaignStatistics.ToString());
+            Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): After==>GameEngine.theCampaignStatistics=" + GameEngine.theCampaignStatistics.ToString());
             GameStatistic stat1NumGames = GameEngine.theCampaignStatistics.Find("NumGames");
             if (1 < stat1NumGames.Value)
             {
@@ -3200,8 +3202,9 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Update_CanvasShowStatsAdds(): Deserialize_GameStatistics(theTotalStatistics) returned false");
             return false;
          }
-         Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): GameEngine.theTotalStatistics=" + GameEngine.theTotalStatistics.ToString());
+         Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): Before====>GameEngine.theTotalStatistics=" + GameEngine.theTotalStatistics.ToString());
          UpdateCanvasShowStatsAdds(gi.Statistics, GameEngine.theTotalStatistics);
+         Logger.Log(LogEnum.LE_VIEW_SHOW_STATS, "Update_CanvasShowStatsAdds(): After====>GameEngine.theTotalStatistics=" + GameEngine.theTotalStatistics.ToString());
          GameStatistic stat2NumGames = GameEngine.theTotalStatistics.Find("NumGames");
          if (1 < stat2NumGames.Value)
          {

@@ -2048,7 +2048,7 @@ namespace Pattons_Best
                                        string[] aStringArray1 = advanceFireMarker.Name.Split(new char[] { '_' });
                                        if (aStringArray1.Length < 2)
                                        {
-                                          Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): underscore not found in " + advanceFireMarker.Name + " len=" + aStringArray1.Length);
+                                          Logger.Log(LogEnum.LE_ERROR, "EventViewerEnemyAction.Grid_MouseDown(): underscore not found in " + advanceFireMarker.Name + " len=" + aStringArray1.Length);
                                           return;
                                        }
                                        string mgType = aStringArray1[0];

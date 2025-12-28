@@ -174,34 +174,34 @@ namespace Pattons_Best
       {
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): myGameInstance=null");
             return false;
          }
          Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "SetupBattle(): ++++++++++++++++++++++++++++++ battlestacks=" + myGameInstance.BattleStacks.ToString());
          if (null == myCanvas)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): myCanvas=null");
+            Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): myCanvas=null");
             return false;
          }
          if (null == myScrollViewer)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): myScrollViewer=null");
+            Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): myScrollViewer=null");
             return false;
          }
          if (null == myRulesMgr)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): myRulesMgr=null");
+            Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): myRulesMgr=null");
             return false;
          }
          if (null == myDieRoller)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): myDieRoller=null");
+            Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): myDieRoller=null");
             return false;
          }
          IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): lastReport=null");
             return false;
          }
          //------------------------------------------------------
@@ -219,7 +219,7 @@ namespace Pattons_Best
          //--------------------------------------------------
          if (null == myGameInstance.EnteredArea)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): myGameInstance.EnteredArea=null");
+            Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): myGameInstance.EnteredArea=null");
             return false;
          }
          myAreaType = myGameInstance.EnteredArea.Type;
@@ -232,7 +232,7 @@ namespace Pattons_Best
             ITerritory? t = Territories.theTerritories.Find(sector);
             if (null == t)
             {
-               Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): t=null for s=" + sector);
+               Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): t=null for s=" + sector);
                return false;
             }
             IStack? stack1 = myGameInstance.BattleStacks.Find(t);
@@ -254,8 +254,8 @@ namespace Pattons_Best
          //--------------------------------------------------
          if ( GamePhase.Battle == myGameInstance.GamePhase ) // Battle Phase setup initial forces 
          {
-            Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "SetupBattle(): reset 'unidentified' spotting units");
-            myGameInstance.IdentifiedAtg = ""; // Start_SmokeDepletion()
+            Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Setup_Battle(): reset 'unidentified' spotting units");
+            myGameInstance.IdentifiedAtg = ""; // Setup_Battle()
             myGameInstance.IdentifiedTank = "";
             myGameInstance.IdentifiedSpg = "";
             //--------------------------------------------------
@@ -278,27 +278,28 @@ namespace Pattons_Best
                }
                else
                {
-                  Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): reached default with resistance=" + lastReport.Scenario.ToString());
+                  Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): reached default with resistance=" + lastReport.Scenario.ToString());
                   return false;
                }
-               Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "SetupBattle(): lastReport.Scenario=" + lastReport.Scenario.ToString());
+               Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "Setup_Battle(): lastReport.Scenario=" + lastReport.Scenario.ToString());
             }
             else
             {
-               IMapItems removals = new MapItems();
+               IMapItems moveAreaRemovals = new MapItems();
                IStack? moveAreaStack = myGameInstance.MoveStacks.Find(myGameInstance.EnteredArea);
                if (null == moveAreaStack)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): moveAreaStack=null");
+                  Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): moveAreaStack=null");
                   return false;
                }
-               Logger.Log(LogEnum.LE_SHOW_RETREAT_TO_PREVIOUS_AREA, "SetupBattle(): stack=" + moveAreaStack.MapItems.ToString());
+               //----------------------------------------------
                IMapItem? strengthCounter = null;
                foreach (IMapItem mi1 in moveAreaStack.MapItems)  // determine how many to activiate based on enemy strength in area
                {
                   if (true == mi1.IsEnemyUnit())
                   {
-                     removals.Add(mi1);
+                     Logger.Log(LogEnum.LE_SHOW_RETREAT_TO_PREVIOUS_AREA, "SetupBattle(): Enemy Unit on Move Board with stack=" + moveAreaStack.MapItems.ToString() + " eu=" + mi1.Name);
+                     moveAreaRemovals.Add(mi1);
                      string enemyType = mi1.GetEnemyUnit();
                      mi1.Name = enemyType + Utilities.MapItemNum.ToString(); // need to rename b/c this buttons move from battle board to move board
                      Utilities.MapItemNum++;
@@ -307,7 +308,7 @@ namespace Pattons_Best
                      {
                         myGridRows[startingRow].myDieRollFacing = NO_FACING;
                         myGridRows[startingRow].myFacing = "NA";
-                        Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "SetupBattle(): myGridRows[" + startingRow.ToString() + "].myFacing=" + myGridRows[startingRow].myFacing + " due to not vehicle");
+                        Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "Setup_Battle(): myGridRows[" + startingRow.ToString() + "].myFacing=" + myGridRows[startingRow].myFacing + " due to not vehicle");
                      }
                      else
                      {
@@ -335,7 +336,7 @@ namespace Pattons_Best
                         myGridRows[startingRow].myDieRollSector = dieRoll;
                         if (false == ShowDieResultUpdateSector(startingRow))
                         {
-                           Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): ShowDieResultUpdateSector() returned false");
+                           Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): ShowDieResultUpdateSector() returned false");
                            return false;
                         }
                         dieRoll = Utilities.RandomGenerator.Next(1, 11);
@@ -343,12 +344,12 @@ namespace Pattons_Best
                         myGridRows[startingRow].myRange = TableMgr.GetEnemyRange(myAreaType, activation, dieRoll);
                         if ("ERROR" == myGridRows[startingRow].myRange)
                         {
-                           Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): TableMgr.GetEnemyRange() returned ERROR");
+                           Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): TableMgr.GetEnemyRange() returned ERROR");
                            return false;
                         }
                         if (false == ShowDieResultUpdateRange(startingRow))
                         {
-                           Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): ShowDieResultUpdateRange() returned false");
+                           Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): ShowDieResultUpdateRange() returned false");
                            return false;
                         }
                         dieRoll = Utilities.RandomGenerator.Next(1, 11);
@@ -356,12 +357,12 @@ namespace Pattons_Best
                         myGridRows[startingRow].myTerrain = TableMgr.GetEnemyTerrain(myScenario, myDay, myAreaType, activation, dieRoll);
                         if ("ERROR" == myGridRows[startingRow].myTerrain)
                         {
-                           Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): TableMgr.GetEnemyTerrain() returned ERROR");
+                           Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): TableMgr.GetEnemyTerrain() returned ERROR");
                            return false;
                         }
                         if (false == ShowDieResultUpdateTerrain(startingRow))
                         {
-                           Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): ShowDieResultUpdateTerrain() returned ERROR");
+                           Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): ShowDieResultUpdateTerrain() returned ERROR");
                            return false;
                         }
                         if (true == mi1.IsVehicle)
@@ -371,12 +372,12 @@ namespace Pattons_Best
                            myGridRows[startingRow].myFacing = TableMgr.GetEnemyNewFacing(activation, dieRoll);
                            if ("ERROR" == myGridRows[startingRow].myFacing)
                            {
-                              Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): TableMgr.GetEnemyNewFacing() returned ERROR");
+                              Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): TableMgr.GetEnemyNewFacing() returned ERROR");
                               return false;
                            }
                            if (false == mi1.UpdateMapRotation(myGridRows[startingRow].myFacing))
                            {
-                              Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): UpdateMapRotation() returned false");
+                              Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): UpdateMapRotation() returned false");
                               return false;
                            }
                         }
@@ -389,12 +390,12 @@ namespace Pattons_Best
                   if (true == mi1.Name.Contains("Strength"))
                      strengthCounter = mi1;
                }
-               foreach (IMapItem removal in removals) // remove from movement board
+               foreach (IMapItem removal in moveAreaRemovals) // remove from movement board
                   myGameInstance.MoveStacks.Remove(removal);
                //-------------------------------------------
                if (null == strengthCounter) 
                {
-                  Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): did not find Enemy Strength Counter in the territory=" + myGameInstance.EnteredArea.Name);
+                  Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): did not find Enemy Strength Counter in the territory=" + myGameInstance.EnteredArea.Name);
                   return false;
                }
                if (true == strengthCounter.Name.Contains("Light"))
@@ -414,14 +415,27 @@ namespace Pattons_Best
                }
                else
                {
-                  Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): reached default strengthCounter.Count =" + strengthCounter.Count.ToString() + "strengthCounter=" + strengthCounter.Name);
+                  Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): reached default strengthCounter.Count =" + strengthCounter.Count.ToString() + "strengthCounter=" + strengthCounter.Name);
                   return false;
                }
-               Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "SetupBattle(): strengthCounter=" + strengthCounter.Name + " strengthCounter.Count=" + strengthCounter.Count.ToString() + " myMaxRowCount=" + myMaxRowCount.ToString());
+               Logger.Log(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP, "Setup_Battle(): strengthCounter=" + strengthCounter.Name + " strengthCounter.Count=" + strengthCounter.Count.ToString() + " myMaxRowCount=" + myMaxRowCount.ToString());
             }
          }
          else // Battle Sequence Round Phase adds reinforcements
          {
+            //-----------------------------------------
+            IMapItems removals = new MapItems();
+            foreach (IStack stack in myGameInstance.BattleStacks) // Remove all advance fire markers that are not MG fire
+            {
+               foreach (IMapItem mapItem in stack.MapItems)
+               {
+                  if ((true == mapItem.TerritoryCurrent.Name.Contains("Advance")) && (false == mapItem.TerritoryCurrent.Name.Contains("Mg")) )
+                     removals.Add(mapItem);
+               }
+            }
+            foreach (IMapItem mi in removals)
+               myGameInstance.BattleStacks.Remove(mi);
+            //-----------------------------------------
             if (EnumScenario.Advance == lastReport.Scenario) // activate one additional for Advance and two additional for Battle | Counterattack
             {
                myMaxRowCount = 1;
@@ -439,7 +453,7 @@ namespace Pattons_Best
             myGridRows[i1] = new GridRow();
          if (false == UpdateGrid())
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetupBattle(): UpdateGrid() return false");
+            Logger.Log(LogEnum.LE_ERROR, "Setup_Battle(): UpdateGrid() return false");
             return false;
          }
          myScrollViewer.Content = myGrid;
@@ -493,6 +507,7 @@ namespace Pattons_Best
             foreach (IMapItem mi in removals)
                myGameInstance.BattleStacks.Remove(mi);
             Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "EventViewerBattleSetup.UpdateEndState(): ------------------------------ battlestacks=" + myGameInstance.BattleStacks.ToString());
+            //-----------------------------------------
             if (null == myCallback)
             {
                Logger.Log(LogEnum.LE_ERROR, "UpdateEndState(): myCallback=null");
@@ -1815,7 +1830,7 @@ namespace Pattons_Best
                               //-------------------------------------------
                               ITerritory t = enemyUnit.TerritoryCurrent;
                               char range  = 'O';  // assume off board if not equal to three
-                              char sector = 'O'; // assume off board if not equal to three
+                              char sector = 'O';  // assume off board if not equal to three
                               if (3 == t.Name.Length)
                               {
                                  range  = t.Name[t.Name.Length - 1];
@@ -1846,7 +1861,7 @@ namespace Pattons_Best
                                     string[] aStringArray1 = advanceFireMarker.Name.Split(new char[] { '_' });
                                     if (aStringArray1.Length < 2)
                                     {
-                                       Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): underscore not found in " + advanceFireMarker.Name + " len=" + aStringArray1.Length);
+                                       Logger.Log(LogEnum.LE_ERROR, "EventViewerBattleSetup.Grid_MouseDown(): underscore not found in " + advanceFireMarker.Name + " len=" + aStringArray1.Length);
                                        return;
                                     }
                                     string mgType = aStringArray1[0];

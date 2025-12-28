@@ -7221,14 +7221,14 @@ namespace Pattons_Best
          elem = aXmlDocument.CreateElement("IsShermanFiringAaMg");
          if (null == elem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsShermanFiringAaMg) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(Is_ShermanFiringAaMg) returned null");
             return null;
          }
          elem.SetAttribute("value", gi.IsShermanFiringAaMg.ToString());
          node = root.AppendChild(elem);
          if (null == node)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsShermanFiringAaMg) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(Is_ShermanFiringAaMg) returned null");
             return null;
          }
          //------------------------------------------

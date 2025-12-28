@@ -413,7 +413,7 @@ namespace Pattons_Best
             ++i;
          }
          Logger.Log(LogEnum.LE_ERROR, "GameStatistics.Find(): null for key=" + key + " in " + this.ToString());
-         GameStatistic? stat = new GameStatistic(key);
+         GameStatistic stat = new GameStatistic(key);
          this.myList.Add(stat);
          return stat;
       }
