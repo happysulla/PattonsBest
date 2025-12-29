@@ -946,9 +946,9 @@ namespace Pattons_Best
             case "BattleRoundSequenceShermanFiringMachineGun": return GameAction.BattleRoundSequenceShermanFiringMachineGun;
             case "BattleRoundSequenceFireMachineGunRoll": return GameAction.BattleRoundSequenceFireMachineGunRoll;
             case "BattleRoundSequenceFireMachineGunRollEnd": return GameAction.BattleRoundSequenceFireMachineGunRollEnd;
-            case "BattleRoundSequencePlaceAdvanceFire": return GameAction.BattleRoundSequencePlaceAdvanceFire;
-            case "BattleRoundSequencePlaceAdvanceFireRoll": return GameAction.BattleRoundSequencePlaceAdvanceFireRoll;
-            case "BattleRoundSequencePlaceAdvanceFireRollEnd": return GameAction.BattleRoundSequencePlaceAdvanceFireRollEnd;
+            case "BattleRoundSequenceMgPlaceAdvanceFire": return GameAction.BattleRoundSequenceMgPlaceAdvanceFire;
+            case "BattleRoundSequenceMgAdvanceFireRoll": return GameAction.BattleRoundSequenceMgAdvanceFireRoll;
+            case "BattleRoundSequenceMgAdvanceFireRollEnd": return GameAction.BattleRoundSequenceMgAdvanceFireRollEnd;
             case "BattleRoundSequenceReplacePeriscopes": return GameAction.BattleRoundSequenceReplacePeriscopes;
             case "BattleRoundSequenceRepairMainGunRoll": return GameAction.BattleRoundSequenceRepairMainGunRoll;
             case "BattleRoundSequenceRepairAaMgRoll": return GameAction.BattleRoundSequenceRepairAaMgRoll;

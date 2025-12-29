@@ -35,6 +35,10 @@
          <RowDefinition Height="Auto"></RowDefinition>
          <RowDefinition Height="Auto"></RowDefinition>
          <RowDefinition Height="Auto"></RowDefinition>
+         <RowDefinition Height="Auto"></RowDefinition>
+         <RowDefinition Height="Auto"></RowDefinition>
+         <RowDefinition Height="Auto"></RowDefinition>
+         <RowDefinition Height="Auto"></RowDefinition>
       </Grid.RowDefinitions>
       <StackPanel Grid.Row="0" Grid.ColumnSpan="5" Orientation="Horizontal">
          <TextBlock Name="myTextBlockHeader" Text="r4.64 Artillery Fire" FontWeight="Bold" FontFamily='Georgia' FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>

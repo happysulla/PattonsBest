@@ -5024,9 +5024,9 @@ namespace Pattons_Best
                }
                break;
             case "e054":
-               Logger.Log(LogEnum.LE_SHOW_MG_FIRE, "SetButtonState(): a=" + gi.IsShermanFiringAaMg.ToString() + " c=" + gi.IsShermanFiringAaMg.ToString() + " b=" + gi.IsShermanFiringBowMg.ToString() + " s=" + gi.IsShermanFiringSubMg.ToString());
                if( (true == gi.IsShermanFiringAaMg) || (true == gi.IsShermanFiringCoaxialMg) || (true == gi.IsShermanFiringBowMg) || (true == gi.IsShermanFiringSubMg) )
                {
+                  Logger.Log(LogEnum.LE_SHOW_MG_FIRE, "SetButtonState(): firing a=" + gi.IsShermanFiringAaMg.ToString() + " c=" + gi.IsShermanFiringCoaxialMg.ToString() + " b=" + gi.IsShermanFiringBowMg.ToString() + " s=" + gi.IsShermanFiringSubMg.ToString());
                   b.IsEnabled = false;
                }
                else
@@ -5050,6 +5050,8 @@ namespace Pattons_Best
                      if (("Commander_FireAaMg" == crewAction.Name) && (false == gi.IsShermanFiredAaMg))
                         isAAFire = true;
                   }
+                  Logger.Log(LogEnum.LE_SHOW_MG_FIRE, "SetButtonState(): fired a=" + gi.IsShermanFiredAaMg.ToString() + " c=" + gi.IsShermanFiredCoaxialMg.ToString() + " b=" + gi.IsShermanFiredBowMg.ToString() + " s=" + gi.IsShermanFiredSubMg.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_MG_FIRE, "SetButtonState(): ca    a=" + isAAFire.ToString() + " c=" + isCoaxialMgFire.ToString() + " b=" + isBowMgFire.ToString() + " s=" + isSubMgFire.ToString());
                   if ("  AA MG   " == content)
                      b.IsEnabled = isAAFire;
                   else if ("  Bow MG  " == content)
@@ -6540,7 +6542,7 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue54b":
-                           action = GameAction.BattleRoundSequencePlaceAdvanceFireRollEnd;
+                           action = GameAction.BattleRoundSequenceMgAdvanceFireRollEnd;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "BrokenPeriscope":

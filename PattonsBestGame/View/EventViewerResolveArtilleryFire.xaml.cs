@@ -20,7 +20,7 @@ namespace Pattons_Best
    public partial class EventViewerResolveArtilleryFire : UserControl
    {
       public delegate bool EndResolveArtilleryFireCallback();
-      private const int NUM_OF_ROWS = 20;
+      private const int NUM_OF_ROWS = 30;
       private const int STARTING_ASSIGNED_ROW = 6;
       private const int PREVIOUSLY_KIA = 100;
       public enum E0464Enum
@@ -319,7 +319,7 @@ namespace Pattons_Best
                   {
                      removals.Add(mapItem);
                      if (true == mapItem.IsEnemyUnit())
-                        myGameInstance.ScoreFriendlyVictoryPoint(lastReport, mapItem);
+                        myGameInstance.ScoreFriendlyVictoryPoint(lastReport, mapItem); // EventViewerResolveArtilleryFire.UpdateEndState() 
                   }
                }
             }

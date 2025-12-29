@@ -48,7 +48,7 @@ namespace Pattons_Best
             myMapItemEnemy = enemyUnit;
          }
       };
-      private GridRow[] myGridRows = new GridRow[10];
+      private GridRow[] myGridRows = new GridRow[30];
       //---------------------------------------------------
       private IGameEngine? myGameEngine;
       private IGameInstance? myGameInstance;
@@ -300,7 +300,7 @@ namespace Pattons_Best
                   {
                      removals.Add(mapItem);
                      if (true == mapItem.IsEnemyUnit())
-                        myGameInstance.ScoreFriendlyVictoryPoint(lastReport, mapItem);
+                        myGameInstance.ScoreFriendlyVictoryPoint(lastReport, mapItem); // EventViewerResolveAirStrike.UpdateEndState() 
                   }
                }
             }

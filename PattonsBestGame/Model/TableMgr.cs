@@ -298,7 +298,6 @@ namespace Pattons_Best
       //-------------------------------------------
       public static string GetWeather(int day, int dieRoll)
       {
-         return "Snow";
          string month = GetMonth(day);
          switch (month)
          {
@@ -371,7 +370,6 @@ namespace Pattons_Best
       }
       public static string GetWeatherSnow(int day, int dieRoll)
       {
-         return "Falling and Deep Snow";
          string month = GetMonth(day);
          if ("Nov" == month)
             --dieRoll;

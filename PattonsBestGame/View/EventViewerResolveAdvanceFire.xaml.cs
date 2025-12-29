@@ -50,7 +50,7 @@ namespace Pattons_Best
             myMapItemEnemy = enemyUnit;
          }
       };
-      private GridRow[] myGridRows = new GridRow[10];
+      private GridRow[] myGridRows = new GridRow[30];
       //---------------------------------------------------
       private IGameEngine? myGameEngine;
       private IGameInstance? myGameInstance;
@@ -287,8 +287,8 @@ namespace Pattons_Best
                   if( (true == mapItem.Name.Contains("AdvanceFire")) || (true == mapItem.IsKilled) )
                   {
                      removals.Add(mapItem);
-                     if( true == mapItem.IsEnemyUnit())
-                        myGameInstance.ScoreFriendlyVictoryPoint(lastReport, mapItem);
+                     if( (true == mapItem.IsEnemyUnit()) && (GamePhase.Battle != myGameInstance.GamePhase) ) // do not score FF VP when initial Advancing Fire in Battle Phase
+                        myGameInstance.ScoreFriendlyVictoryPoint(lastReport, mapItem); // EventViewerResolveAdvanceFire.UpdateEndState()
                   }
                }
             }

@@ -4350,18 +4350,18 @@ namespace Pattons_Best
          Polygon? clickedPolygon = sender as Polygon;
          if (null == clickedPolygon)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonPlaceAdvanceFire(): clickedPolygon=null");
+            Logger.Log(LogEnum.LE_ERROR, "MouseDown_PolygonPlaceAdvanceFire(): clickedPolygon=null");
             return;
          }
          myGameInstance.AdvanceFire = Territories.theTerritories.Find(clickedPolygon.Name);
          if (null == myGameInstance.AdvanceFire)
          {
-            Logger.Log(LogEnum.LE_ERROR, "MouseDownPolygonPlaceAdvanceFire(): t=null for " + clickedPolygon.Name.ToString());
+            Logger.Log(LogEnum.LE_ERROR, "MouseDown_PolygonPlaceAdvanceFire(): t=null for " + clickedPolygon.Name.ToString());
             return;
          }
          GameAction outAction = GameAction.Error;
          if(GamePhase.BattleRoundSequence == myGameInstance.GamePhase) 
-            outAction = GameAction.BattleRoundSequencePlaceAdvanceFire;
+            outAction = GameAction.BattleRoundSequenceMgPlaceAdvanceFire;
          else if( (GamePhase.Preparations == myGameInstance.GamePhase) || (GamePhase.Battle == myGameInstance.GamePhase) )
             outAction = GameAction.BattlePlaceAdvanceFire;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
