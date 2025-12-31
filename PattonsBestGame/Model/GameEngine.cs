@@ -56,14 +56,6 @@ namespace Pattons_Best
       public bool CreateUnitTests(IGameInstance gi, DockPanel dp, EventViewer ev, IDieRoller dr, CanvasImageViewer civ)
       {
          //-----------------------------------------------------------------------------
-         IUnitTest ut7 = new GameInstanceUnitTest(dp);
-         if (true == ut7.CtorError)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "CreateUnitTests(): GameInstanceUnitTest() ctor error");
-            return false;
-         }
-         gi.UnitTests.Add(ut7);
-         //-----------------------------------------------------------------------------
          IUnitTest ut1 = new GameViewerCreateUnitTest(dp);
          if (true == ut1.CtorError)
          {
@@ -112,6 +104,13 @@ namespace Pattons_Best
          }
          gi.UnitTests.Add(ut6);
          //-----------------------------------------------------------------------------
+         IUnitTest ut7 = new GameInstanceUnitTest(dp);
+         if (true == ut7.CtorError)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "CreateUnitTests(): GameInstanceUnitTest() ctor error");
+            return false;
+         }
+         gi.UnitTests.Add(ut7);
          return true;
       }
    }

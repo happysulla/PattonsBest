@@ -8380,7 +8380,7 @@
   <Territory value="GunLoadHe">
     <Parent value="Tank" />
     <Type value="14" />
-    <CenterPoint X="0447.00" Y="0252.04" />
+    <CenterPoint X="0442.00" Y="0253.04" />
     <Points count="4">
       <regionPoint X="0423.00" Y="0234.04" />
       <regionPoint X="0461.00" Y="0235.04" />

@@ -2387,9 +2387,14 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run("Select either a blue zone for area fire or a target enclosed by a red box. Only spotted units may be targeted."));
                foreach (IMapItem crewAction in gi.CrewActions)
                {
-                  if (("Commander_MGFire" == crewAction.Name) && (false == gi.IsCommanderDirectingMgFire))
+                  if (("Commander_MGFire" == crewAction.Name) && (false == gi.IsCommanderDirectingMgFire)) // Commander is directing fire
                   {
                      CheckBox cbe054 = new CheckBox() { FontSize = 12, IsEnabled = true, IsChecked = false, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = System.Windows.VerticalAlignment.Center };
+                     if( true == IsOneMgFiring(gi))
+                     {
+                        cbe054.IsChecked = true;
+                        gi.IsCommanderDirectingMgFire = true;
+                     }
                      cbe054.Checked += CheckBoxCmdrFire_Checked;
                      cbe054.Unchecked += CheckBoxCmdrFire_Unchecked;
                      myTextBlock.Inlines.Add(new LineBreak());
@@ -4268,7 +4273,7 @@ namespace Pattons_Best
          string modiferMgFiring = UpdateEventContentMgToKillModifier(gi, mgType);
          if( "ERROR" == modiferMgFiring )
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMgToKill():  UpdateEventContentMgToKillModifier() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMgToKill():  UpdateEvent_ContentMgToKillModifier() returned false");
             return false;
          }
          myTextBlock.Inlines.Add(new Run(modiferMgFiring));
@@ -4882,6 +4887,33 @@ namespace Pattons_Best
          return sbe056.ToString();
       }
       //--------------------------------------------------------------------
+      private bool IsOneMgFiring(IGameInstance gi)
+      {
+         bool isSubMgFire = false;
+         bool isAAFire = false;
+         bool isCoaxialMgFire = false;
+         bool isBowMgFire = false;
+         foreach (IMapItem crewAction in gi.CrewActions)
+         {
+            if (("Loader_FireSubMg" == crewAction.Name) && (false == gi.IsShermanFiredSubMg)) 
+               isSubMgFire = true;
+            if (("Loader_FireAaMg" == crewAction.Name) && (false == gi.IsShermanFiredAaMg))
+               isAAFire = true;
+            if (("Gunner_FireCoaxialMg" == crewAction.Name) && (false == gi.IsShermanFiredCoaxialMg))
+               isCoaxialMgFire = true;
+            if (("Assistant_FireBowMg" == crewAction.Name) && (false == gi.IsShermanFiredBowMg) && (false == gi.Sherman.IsHullDown))
+               isBowMgFire = true;
+         }
+         if ((true == isSubMgFire) && (false == isAAFire) && (false == isCoaxialMgFire) && (false == isBowMgFire))
+            return true;
+         if ((false == isSubMgFire) && (true == isAAFire) && (false == isCoaxialMgFire) && (false == isBowMgFire))
+            return true;
+         if ((false == isSubMgFire) && (false == isAAFire) && (true == isCoaxialMgFire) && (false == isBowMgFire))
+            return true;
+         if ((false == isSubMgFire) && (false == isAAFire) && (false == isCoaxialMgFire) && (true == isBowMgFire))
+            return true;
+         return false;
+      }
       private bool IsOrdersGiven(IGameInstance gi, out bool isOrdersGiven)
       {
          bool isAssistantOrderGiven = false;
@@ -6979,7 +7011,7 @@ namespace Pattons_Best
             return;
          }
          myGameInstance.IsCommanderDirectingMgFire = true;
-         Logger.Log(LogEnum.LE_SHOW_MG_CMDR_DIRECT_FIRE, "CheckBoxCmdFire_Checked(): IsCommanderDirectingMgFire=" + myGameInstance.IsCommanderDirectingMgFire.ToString());
+         Logger.Log(LogEnum.LE_SHOW_MG_CMDR_DIRECT_FIRE, "CheckBoxCmdFire_Checked(): Is_CommanderDirectingMgFire=" + myGameInstance.IsCommanderDirectingMgFire.ToString());
       }
       private void CheckBoxCmdrFire_Unchecked(object sender, RoutedEventArgs e)
       {
@@ -6991,7 +7023,7 @@ namespace Pattons_Best
             return;
          }
          myGameInstance.IsCommanderDirectingMgFire = false; //  EventViewer.CheckBoxCmdrFire_Unchecked()
-         Logger.Log(LogEnum.LE_SHOW_MG_CMDR_DIRECT_FIRE, "CheckBoxCmdrFire_Unchecked(): IsCommanderDirectingMgFire=" + myGameInstance.IsCommanderDirectingMgFire.ToString());
+         Logger.Log(LogEnum.LE_SHOW_MG_CMDR_DIRECT_FIRE, "CheckBoxCmdrFire_Unchecked(): Is_CommanderDirectingMgFire=" + myGameInstance.IsCommanderDirectingMgFire.ToString());
       }
       private void CheckBoxImmobilization_Checked(object sender, RoutedEventArgs e)
       {

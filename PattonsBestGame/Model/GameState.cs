@@ -3101,7 +3101,7 @@ namespace Pattons_Best
          gi.IdentifiedSpg = "";
          //-------------------------------------------------------
          gi.IsCommanderDirectingMgFire = false;       // Setup_NewGame()
-         Logger.Log(LogEnum.LE_SHOW_MG_CMDR_DIRECT_FIRE, "Setup_NewGame():  IsCommanderDirectingMgFire=" + gi.IsCommanderDirectingMgFire.ToString());
+         Logger.Log(LogEnum.LE_SHOW_MG_CMDR_DIRECT_FIRE, "Setup_NewGame():  Is_CommanderDirectingMgFire=" + gi.IsCommanderDirectingMgFire.ToString());
          gi.IsShermanFiringAaMg = false;
          gi.IsShermanFiringBowMg = false;
          gi.IsShermanFiringCoaxialMg = false;
@@ -10228,7 +10228,7 @@ namespace Pattons_Best
          gi.ShermanHits.Clear();
          //-------------------------------------------------------
          gi.IsCommanderDirectingMgFire = false;       // Reset_Round()
-         Logger.Log(LogEnum.LE_SHOW_MG_CMDR_DIRECT_FIRE, "Reset_Round():  IsCommanderDirectingMgFire=" + gi.IsCommanderDirectingMgFire.ToString());
+         Logger.Log(LogEnum.LE_SHOW_MG_CMDR_DIRECT_FIRE, "Reset_Round():  Is_CommanderDirectingMgFire=" + gi.IsCommanderDirectingMgFire.ToString());
          gi.IsShermanFiringAaMg = false;
          gi.IsShermanFiringBowMg = false;
          gi.IsShermanFiringCoaxialMg = false;
@@ -10727,8 +10727,8 @@ namespace Pattons_Best
          gi.IdentifiedTank = "";
          gi.IdentifiedSpg = "";
          //-------------------------------------------------------
-         gi.IsCommanderDirectingMgFire = false;     // EveningDebriefing_ResetDay()
-         Logger.Log(LogEnum.LE_SHOW_MG_CMDR_DIRECT_FIRE, "EveningDebriefing_ResetDay():  IsCommanderDirectingMgFire=" + gi.IsCommanderDirectingMgFire.ToString());
+         gi.IsCommanderDirectingMgFire = false;      // EveningDebriefing_ResetDay()
+         Logger.Log(LogEnum.LE_SHOW_MG_CMDR_DIRECT_FIRE, "EveningDebriefing_ResetDay():  Is_CommanderDirectingMgFire=" + gi.IsCommanderDirectingMgFire.ToString());
          gi.IsShermanFiringAaMg = false;
          gi.IsShermanFiringBowMg = false;
          gi.IsShermanFiringCoaxialMg = false;

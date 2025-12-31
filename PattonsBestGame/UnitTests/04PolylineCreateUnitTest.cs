@@ -61,7 +61,7 @@ namespace Pattons_Best
          //------------------------------------
          if (null == civ)
          {
-            Logger.Log(LogEnum.LE_ERROR, "TerritoryRegionUnitTest(): civ=null");
+            Logger.Log(LogEnum.LE_ERROR, "PolylineCreateUnitTest(): civ=null");
             CtorError = true;
             return;
          }
@@ -93,13 +93,13 @@ namespace Pattons_Best
          //-------------------------------------
          if (null == myCanvasTank)
          {
-            Logger.Log(LogEnum.LE_ERROR, "TerritoryRegionUnitTest(): myCanvasTank=null");
+            Logger.Log(LogEnum.LE_ERROR, "PolylineCreateUnitTest(): myCanvasTank=null");
             CtorError = true;
             return;
          }
          if (null == myCanvasMain)
          {
-            Logger.Log(LogEnum.LE_ERROR, "TerritoryRegionUnitTest(): myCanvasMain=null");
+            Logger.Log(LogEnum.LE_ERROR, "PolylineCreateUnitTest(): myCanvasMain=null");
             CtorError = true;
             return;
          }
@@ -115,9 +115,15 @@ namespace Pattons_Best
             IAfterActionReport? lastReport = gi.Reports.GetLast();
             if (null == lastReport)
             {
-               Logger.Log(LogEnum.LE_ERROR, "TerritoryRegionUnitTest(): lastReport=null");
-               CtorError = true;
-               return;
+               ICombatCalendarEntry? entry = TableMgr.theCombatCalendarEntries[0];
+               if (null == entry)
+               {
+                  Logger.Log(LogEnum.LE_ERROR, "PolylineCreateUnitTest(): entry=null");
+                  CtorError = true;
+                  return;
+               }
+               lastReport = new AfterActionReport(entry); 
+               gi.Reports.Add(lastReport); 
             }
             myCanvasImageViewer.ShowBattleMap(lastReport, myCanvasMain);
          }
