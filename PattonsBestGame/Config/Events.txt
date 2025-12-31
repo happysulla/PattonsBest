@@ -67,8 +67,6 @@ You elected to only fight one day of battle. The game is won or lost based on vi
 <LineBreak/><LineBreak/>
 Click buttons to get day and tank you want. The tank choice is limited by date shown on 
 <InlineUIContainer><Button Content='Replacement' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Table.  Hint: Click the date's minus sign button to rollover and show all possible tanks. 
-<LineBreak/><LineBreak/>
-Click image when ready to begin.
 <LineBreak/><LineBreak/>"
 e006	"<Bold>e006 Combat Calendar Check</Bold> 
 <InlineUIContainer><Button Content='r4.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
@@ -972,6 +970,7 @@ e100a	"<Bold>e100a Tank Retires for Today</Bold>
 <LineBreak/><LineBreak/>
 Due to broken gun or broken gun sight, the tank must be retired for today. <LineBreak/>
 An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+<LineBreak/><LineBreak/>
 Click image to continue to continue to Crew Rating Improvements per 
 <InlineUIContainer><Button Content='r4.91' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>

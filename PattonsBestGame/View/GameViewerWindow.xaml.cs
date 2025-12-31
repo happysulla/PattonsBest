@@ -1349,7 +1349,7 @@ namespace Pattons_Best
          else
             Settings.Default.GameOptions = sOptions;
          //-------------------------------------------
-         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "SaveDefaultsToSettings():\n  feats=" + GameEngine.theInGameFeats.ToString() + "\n Sfeats=" + GameEngine.theStartingFeats.ToString());
+         Logger.Log(LogEnum.LE_VIEW_SHOW_FEATS, "Save_DefaultsToSettings():\n  SAVING feats=" + GameEngine.theInGameFeats.ToString() );
          if (false == SerializeGameFeats(GameEngine.theInGameFeats))
             Logger.Log(LogEnum.LE_ERROR, "Save_DefaultsToSettings(): SerializeGameFeats() returned false");
          //-------------------------------------------
@@ -4216,9 +4216,15 @@ namespace Pattons_Best
          }
          IMapItem? spotter = myGameInstance.BattleStacks.FindMapItem("LoaderSpot");
          if (null == spotter)
-            myGameInstance.BattleStacks.Add(new MapItem("LoaderSpot", 1.0, "c18LoaderSpot", t));
+         {
+            string name = "LoaderSpot" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            myGameInstance.BattleStacks.Add(new MapItem(name, 1.0, "c18LoaderSpot", t));
+         }
          else
+         {
             spotter.TerritoryCurrent = t;
+         }
          GameAction outAction = GameAction.PreparationsLoaderSpotSet;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }
@@ -4238,9 +4244,15 @@ namespace Pattons_Best
          }
          IMapItem? spotter = myGameInstance.BattleStacks.FindMapItem("CommanderSpot");
          if (null == spotter)
-            myGameInstance.BattleStacks.Add(new MapItem("CommanderSpot", 1.0, "c19CommanderSpot", t));
+         {
+            string name = "CommanderSpot" + Utilities.MapItemNum.ToString();
+            Utilities.MapItemNum++;
+            myGameInstance.BattleStacks.Add(new MapItem(name, 1.0, "c19CommanderSpot", t));
+         }
          else
+         {
             spotter.TerritoryCurrent = t;
+         }
          GameAction outAction = GameAction.PreparationsCommanderSpotSet;
          myGameEngine.PerformAction(ref myGameInstance, ref outAction);
       }

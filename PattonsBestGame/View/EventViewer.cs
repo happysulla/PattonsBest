@@ -864,9 +864,11 @@ namespace Pattons_Best
                }
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
-               myTextBlock.Inlines.Add(new Run("                                            "));
+               myTextBlock.Inlines.Add(new Run("                                               "));
                Image imge005a = new Image { Source = MapItem.theMapImages.GetBitmapImage("Continue"), Width = 100, Height = 100, Name = "Continue005a" };
                myTextBlock.Inlines.Add(new InlineUIContainer(imge005a));
+               myTextBlock.Inlines.Add(new LineBreak());
+               myTextBlock.Inlines.Add(new Run("Click image to continue."));
                break;
             case "e006":
                ReplaceText("DATE", report.Day);
@@ -1246,7 +1248,15 @@ namespace Pattons_Best
                }
                break;
             case "e015":
-               IMapItem? loaderSpot = gi.BattleStacks.FindMapItem("LoaderSpot");
+               IMapItem? loaderSpot = null;
+               foreach (IStack stack in gi.BattleStacks)
+               {
+                  foreach(IMapItem mi in stack.MapItems)
+                  {
+                     if (true == mi.Name.Contains("LoaderSpot"))
+                        loaderSpot = mi;
+                  }
+               }
                if (null != loaderSpot)
                {
                   Image imge015 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c18LoaderSpot"), Width = 100, Height = 100, Name = "PreparationsCommanderSpot" };
@@ -1258,10 +1268,18 @@ namespace Pattons_Best
                }
                break;
             case "e016":
-               IMapItem? cmdrSpot = gi.BattleStacks.FindMapItem("CommanderSpot");
+               IMapItem? cmdrSpot = null;
+               foreach (IStack stack in gi.BattleStacks)
+               {
+                  foreach (IMapItem mi in stack.MapItems)
+                  {
+                     if (true == mi.Name.Contains("CommanderSpot"))
+                        cmdrSpot = mi;
+                  }
+               }
                if (null != cmdrSpot)
                {
-                  Image imge016 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c19CommanderSpot"), Width = 100, Height = 100, Name = "PreparationsFinal" };
+                  Image imge016 = new Image { Source = MapItem.theMapImages.GetBitmapImage("c19CommanderSpot"), Width = 100, Height = 100, Name = "CommanderSpotEnd" };
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new Run("                                           "));
@@ -1371,7 +1389,7 @@ namespace Pattons_Best
                      if( 5 < gi.DieResults[key][0])
                      {
                         myTextBlock.Inlines.Add(new Run(" = Continues")); // if rain continues, two hours of rain have occurred which causes mud
-                        if (0 < gi.HoursOfRainThisDay)
+                        if ( (0 < gi.HoursOfRainThisDay) || (true == report.Weather.Contains("Mud")) )
                            imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherMudRain"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
                         else
                            imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherRain"), Width = 400, Height = 225, Name = "MovementRainRollEnd" };
@@ -1379,7 +1397,7 @@ namespace Pattons_Best
                      else
                      {
                         myTextBlock.Inlines.Add(new Run(" = Rain Stops"));
-                        if (1 < gi.HoursOfRainThisDay)
+                        if ( (1 < gi.HoursOfRainThisDay) || (true == report.Weather.Contains("Mud")) )
                            imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherMudOvercast"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
                         else
                            imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercast"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
@@ -1397,7 +1415,7 @@ namespace Pattons_Best
                      if (8 < gi.DieResults[key][0])
                      {
                         myTextBlock.Inlines.Add(new Run(" = Rain Starts"));
-                        if (1 < gi.HoursOfRainThisDay)
+                        if ( (1 < gi.HoursOfRainThisDay) || (true == report.Weather.Contains("Mud")) )
                            imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherMudRain"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
                         else
                            imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherRain"), Width = 400, Height = 225, Name = "MovementRainRollEnd" };
@@ -1405,14 +1423,14 @@ namespace Pattons_Best
                      else 
                      {
                         myTextBlock.Inlines.Add(new Run(" = No Effect"));
-                        if( 1 < gi.HoursOfRainThisDay )
+                        if( (1 < gi.HoursOfRainThisDay ) || (true == report.Weather.Contains("Mud")) )
                            imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherMudOvercast"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
                         else
                            imge022a = new Image { Source = MapItem.theMapImages.GetBitmapImage("WeatherOvercast"), Width = 400, Height = 266, Name = "MovementRainRollEnd" };
                      }
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new Run("                     "));
+                     myTextBlock.Inlines.Add(new Run("                 "));
                      myTextBlock.Inlines.Add(new InlineUIContainer(imge022a));
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
@@ -1621,7 +1639,7 @@ namespace Pattons_Best
                   }
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("                                      "));
+                  myTextBlock.Inlines.Add(new Run("                                          "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge030));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -3776,7 +3794,7 @@ namespace Pattons_Best
          int modifier = TableMgr.GetShermanToKillInfantryModifier(gi, gi.TargetMainGun, hit);
          if (TableMgr.FN_ERROR == modifier)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillInfantry(): GetShermanToKillInfantryModifier() returned error for key=" + key);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentToKillInfantry(): Get_ShermanToKillInfantryModifier() returned error for key=" + key);
             return false;
          }
          if (TableMgr.KIA == modifier)
@@ -4210,24 +4228,25 @@ namespace Pattons_Best
       {
          if (null == myTextBlock)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill(): myTextBlock=null");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMgToKill(): myTextBlock=null");
             return false;
          }
          string key = gi.EventActive;
          //------------------------------------
          if (null == gi.TargetMg)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill(): gi.TargetMg=null for key=" + key);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMgToKill(): gi.TargetMg=null for key=" + key);
             return false;
          }
          //------------------------------------
          IAfterActionReport? report = gi.Reports.GetLast();
          if (null == report)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill():  gi.Reports.GetLast()");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMgToKill():  gi.Reports.GetLast()");
             return false;
          }
          //------------------------------------
+         Logger.Log(LogEnum.LE_SHOW_MG_FIRE, "UpdateEvent_ContentMgToKill(): firing a=" + gi.IsShermanFiringAaMg.ToString() + " c=" + gi.IsShermanFiringCoaxialMg.ToString() + " b=" + gi.IsShermanFiringBowMg.ToString() + " s=" + gi.IsShermanFiringSubMg.ToString());
          string mgType = "None";
          if (true == gi.IsShermanFiringAaMg)
             mgType = "Aa";
@@ -4239,7 +4258,7 @@ namespace Pattons_Best
             mgType = "Sub";
          else
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill(): unknown MG firing");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMgToKill(): unknown MG firing");
             return false;
          }
          //------------------------------------
@@ -4249,7 +4268,7 @@ namespace Pattons_Best
          string modiferMgFiring = UpdateEventContentMgToKillModifier(gi, mgType);
          if( "ERROR" == modiferMgFiring )
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill():  UpdateEventContentMgToKillModifier() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMgToKill():  UpdateEventContentMgToKillModifier() returned false");
             return false;
          }
          myTextBlock.Inlines.Add(new Run(modiferMgFiring));
@@ -4258,7 +4277,7 @@ namespace Pattons_Best
          int toKillNum = TableMgr.GetShermanMgToKillNumber(gi, gi.TargetMg, mgType);
          if (TableMgr.FN_ERROR == toKillNum)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill(): Get_ShermanMgToKillNumber() returned error for key=" + key);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMgToKill(): Get_ShermanMgToKillNumber() returned error for key=" + key);
             return false;
          }
          else if (TableMgr.NO_CHANCE == toKillNum)
@@ -4276,7 +4295,7 @@ namespace Pattons_Best
          int modifier = TableMgr.GetShermanMgToKillModifier(gi, gi.TargetMg, mgType);
          if (TableMgr.FN_ERROR == modifier)
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContentMgToKill(): GetShermanMgToKillModifier() returned error for key=" + key);
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEvent_ContentMgToKill(): GetShermanMgToKillModifier() returned error for key=" + key);
             return false;
          }
          int comboMg = toKillNum - modifier;
@@ -5026,7 +5045,7 @@ namespace Pattons_Best
             case "e054":
                if( (true == gi.IsShermanFiringAaMg) || (true == gi.IsShermanFiringCoaxialMg) || (true == gi.IsShermanFiringBowMg) || (true == gi.IsShermanFiringSubMg) )
                {
-                  Logger.Log(LogEnum.LE_SHOW_MG_FIRE, "SetButtonState(): firing a=" + gi.IsShermanFiringAaMg.ToString() + " c=" + gi.IsShermanFiringCoaxialMg.ToString() + " b=" + gi.IsShermanFiringBowMg.ToString() + " s=" + gi.IsShermanFiringSubMg.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_MG_FIRE, "SetButtonState(): DISABLE: " + Utilities.PrintMgState(gi));
                   b.IsEnabled = false;
                }
                else
@@ -5050,8 +5069,7 @@ namespace Pattons_Best
                      if (("Commander_FireAaMg" == crewAction.Name) && (false == gi.IsShermanFiredAaMg))
                         isAAFire = true;
                   }
-                  Logger.Log(LogEnum.LE_SHOW_MG_FIRE, "SetButtonState(): fired a=" + gi.IsShermanFiredAaMg.ToString() + " c=" + gi.IsShermanFiredCoaxialMg.ToString() + " b=" + gi.IsShermanFiredBowMg.ToString() + " s=" + gi.IsShermanFiredSubMg.ToString());
-                  Logger.Log(LogEnum.LE_SHOW_MG_FIRE, "SetButtonState(): ca    a=" + isAAFire.ToString() + " c=" + isCoaxialMgFire.ToString() + " b=" + isBowMgFire.ToString() + " s=" + isSubMgFire.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_MG_FIRE, "SetButtonState(): BUTTON CHOSE a=" + isAAFire.ToString() + " c=" + isCoaxialMgFire.ToString() + " b=" + isBowMgFire.ToString() + " s=" + isSubMgFire.ToString() + Utilities.PrintMgState(gi));
                   if ("  AA MG   " == content)
                      b.IsEnabled = isAAFire;
                   else if ("  Bow MG  " == content)
@@ -6235,8 +6253,11 @@ namespace Pattons_Best
                            action = GameAction.PreparationsCommanderSpot;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
-                        case "PreparationsFinal":
-                           action = GameAction.PreparationsFinal;
+                        case "CommanderSpotEnd":
+                           if( GamePhase.Preparations == myGameInstance.GamePhase)
+                              action = GameAction.PreparationsFinal;
+                           else
+                              action = GameAction.PreparationsFinal;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
                         case "Continue017": // Preparations Final

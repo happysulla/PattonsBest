@@ -2064,13 +2064,13 @@ namespace Pattons_Best
             }
             if (reader.Name != "IsShermanFiringCoaxialMg")
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsShermanFiringCoaxialMg != (node=" + reader.Name + ")");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsSherman_FiringCoaxialMg != (node=" + reader.Name + ")");
                return null;
             }
             string? sIsShermanFiringCoaxialMg = reader.GetAttribute("value");
             if (null == sIsShermanFiringCoaxialMg)
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsShermanFiringCoaxialMg=null");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXml(): IsSherman_FiringCoaxialMg=null");
                return null;
             }
             gi.IsShermanFiringCoaxialMg = Convert.ToBoolean(sIsShermanFiringCoaxialMg);
@@ -7249,21 +7249,21 @@ namespace Pattons_Best
          elem = aXmlDocument.CreateElement("IsShermanFiringCoaxialMg");
          if (null == elem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsShermanFiringCoaxialMg) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsSherman_FiringCoaxialMg) returned null");
             return null;
          }
          elem.SetAttribute("value", gi.IsShermanFiringCoaxialMg.ToString());
          node = root.AppendChild(elem);
          if (null == node)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsShermanFiringCoaxialMg) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): AppendChild(IsSherman_FiringCoaxialMg) returned null");
             return null;
          }
          //------------------------------------------
          elem = aXmlDocument.CreateElement("IsShermanFiringSubMg");
          if (null == elem)
          {
-            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsShermanFiringSubMg) returned null");
+            Logger.Log(LogEnum.LE_ERROR, "Create_Xml(): CreateElement(IsSherman_FiringSubMg) returned null");
             return null;
          }
          elem.SetAttribute("value", gi.IsShermanFiringSubMg.ToString());

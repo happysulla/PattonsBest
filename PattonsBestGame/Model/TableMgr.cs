@@ -5618,14 +5618,14 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToKillInfantryModifier(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToKillInfantryModifier(): lastReport=null");
             return FN_ERROR;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
          //------------------------------------
          if (("Direct" == hit.myAttackType) && ("He" != hit.myAmmoType))
          {
-            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): Direct fire with AP or HVAP does nothing against infantry targets");
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanToKillInfantryModifier(): Direct fire with AP or HVAP does nothing against infantry targets");
             hit.myIsNoChance = true;
             return NO_CHANCE;
          }
@@ -5638,12 +5638,12 @@ namespace Pattons_Best
                if (false == hit.myIsCriticalHit)
                {
                   toKillModifierNum += 15;
-                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): Building +15 mod=" + toKillModifierNum.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanToKillInfantryModifier(): Building +15 mod=" + toKillModifierNum.ToString());
                }
                else
                {
                   toKillModifierNum -= 15;
-                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): Building -15 mod=" + toKillModifierNum.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanToKillInfantryModifier(): Building -15 mod=" + toKillModifierNum.ToString());
                }
             }
             if (true == enemyUnit.IsWoods)
@@ -5651,12 +5651,12 @@ namespace Pattons_Best
                if (false == hit.myIsCriticalHit)
                {
                   toKillModifierNum += 10;
-                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): Woods +10 mod=" + toKillModifierNum.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanToKillInfantryModifier(): Woods +10 mod=" + toKillModifierNum.ToString());
                }
                else
                {
                   toKillModifierNum -= 10;
-                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): Woods -10 mod=" + toKillModifierNum.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanToKillInfantryModifier(): Woods -10 mod=" + toKillModifierNum.ToString());
                }
             }
             if (true == enemyUnit.IsFortification)
@@ -5664,12 +5664,12 @@ namespace Pattons_Best
                if (false == hit.myIsCriticalHit)
                {
                   toKillModifierNum += 20;
-                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): Fort +20 mod=" + toKillModifierNum.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanToKillInfantryModifier(): Fort +20 mod=" + toKillModifierNum.ToString());
                }
                else
                {
                   toKillModifierNum -= 20;
-                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): Fort -20 mod=" + toKillModifierNum.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanToKillInfantryModifier(): Fort -20 mod=" + toKillModifierNum.ToString());
                }
             }
          }
@@ -5679,25 +5679,25 @@ namespace Pattons_Best
             if (false == hit.myIsCriticalHit)
             {
                toKillModifierNum += 15;
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): ATG +15 mod=" + toKillModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanToKillInfantryModifier(): ATG +15 mod=" + toKillModifierNum.ToString());
             }
             else
             {
-               toKillModifierNum = KIA; // automatically kill ATG on critical hit
-               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): ATG +1000 mod=" + toKillModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanToKillInfantryModifier(): ATG +KIA mod=" + toKillModifierNum.ToString());
+               return KIA;
             }
          }
          //------------------------------------
          if (true == enemyUnit.IsMovingInOpen)
          {
             toKillModifierNum -= 10;
-            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): Moving In Open -10 mod=" + toKillModifierNum.ToString());
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanToKillInfantryModifier(): Moving In Open -10 mod=" + toKillModifierNum.ToString());
          }
          //------------------------------------
          if (true == lastReport.Weather.Contains("Deep Snow") || true == lastReport.Weather.Contains("Mud"))
          {
             toKillModifierNum += 5;
-            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "GetShermanToKillInfantryModifier(): Snow/Mud +5 mod=" + toKillModifierNum.ToString());
+            Logger.Log(LogEnum.LE_SHOW_TO_KILL_MODIFIER, "Get_ShermanToKillInfantryModifier(): Snow/Mud +5 mod=" + toKillModifierNum.ToString());
          }
          return toKillModifierNum;
       }

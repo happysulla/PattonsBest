@@ -157,12 +157,12 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_ENTERED_HEX);
          //SetOn(LogEnum.LE_SHOW_BUTTON_MOVE);
          //SetOn(LogEnum.LE_VIEW_SHOW_OPTIONS);
-         SetOn(LogEnum.LE_VIEW_SHOW_FEATS);
-         //SetOn(LogEnum.LE_VIEW_SHOW_STATS);
+         //SetOn(LogEnum.LE_VIEW_SHOW_FEATS);
+         SetOn(LogEnum.LE_VIEW_SHOW_STATS);
          //SetOn(LogEnum.LE_VIEW_SHOW_SETTINGS);
          //-------------------------------
          //SetOn(LogEnum.LE_SHOW_CREW_NAME);
-        // SetOn(LogEnum.LE_SHOW_CREW_BU);
+         //SetOn(LogEnum.LE_SHOW_CREW_BU);
          //SetOn(LogEnum.LE_SHOW_ACTION_REPORT_NEW);
          //SetOn(LogEnum.LE_SHOW_AUTOSETUP_BATTLEPREP);
          SetOn(LogEnum.LE_SHOW_START_AREA);
@@ -234,7 +234,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_EVENT_VIEWER_ENEMY_ACTION);
          //SetOn(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED);
          //SetOn(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED_BAILOUT);
-         //SetOn(LogEnum.LE_EVENT_VIEWER_SPOTTING);
+         SetOn(LogEnum.LE_EVENT_VIEWER_SPOTTING);
          //SetOn(LogEnum.LE_EVENT_VIEWER_ORDERS);
          return true;
       }

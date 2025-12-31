@@ -113,6 +113,27 @@ namespace Pattons_Best
             return -1000;
          }
       }
+      static public string PrintMgState(IGameInstance gi)
+      {
+         StringBuilder sbmg = new StringBuilder();
+         sbmg.Append("--> FIRING: a=");
+         sbmg.Append(gi.IsShermanFiringAaMg.ToString());
+         sbmg.Append(" c=");
+         sbmg.Append(gi.IsShermanFiringCoaxialMg.ToString());
+         sbmg.Append(" b=");
+         sbmg.Append(gi.IsShermanFiringBowMg.ToString());
+         sbmg.Append(" s=");
+         sbmg.Append(gi.IsShermanFiringSubMg.ToString());
+         sbmg.Append(" --> FIRED: a=");
+         sbmg.Append(gi.IsShermanFiredAaMg.ToString());
+         sbmg.Append(" c=");
+         sbmg.Append(gi.IsShermanFiredCoaxialMg.ToString());
+         sbmg.Append(" b=");
+         sbmg.Append(gi.IsShermanFiredBowMg.ToString());
+         sbmg.Append(" s=");
+         sbmg.Append(gi.IsShermanFiredSubMg.ToString());
+         return sbmg.ToString();
+      }
       //--------------------------------------------
       // Utilities Functions
       public static void InitializeRandomNumGenerators()
