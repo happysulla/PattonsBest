@@ -4982,7 +4982,7 @@ namespace Pattons_Best
          //------------------------------------
          if (3 != enemyUnit.TerritoryCurrent.Name.Length)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
+            Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): 3 != TerritoryCurrent.Name.Length=" + enemyUnit.TerritoryCurrent.Name);
             return FN_ERROR;
          }
          char range = enemyUnit.TerritoryCurrent.Name[2];
@@ -4990,6 +4990,7 @@ namespace Pattons_Best
          int toHitModifierNum = 0;
          bool isCommanderDirectingFire = false;
          bool isShermanMoving = false;
+         bool isLoaderLoading = false; 
          foreach (IMapItem crewAction in gi.CrewActions)
          {
             if ("Commander_MainGunFire" == crewAction.Name)
@@ -5004,24 +5005,32 @@ namespace Pattons_Best
                isShermanMoving = true;
             if ("Driver_PivotTank" == crewAction.Name)
                isShermanMoving = true;
+            if ("Loader_Load" == crewAction.Name)
+               isLoaderLoading = true;
          }
          //------------------------------------
          ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
          if (null == commander)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): commander=null");
+            Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): commander=null");
             return FN_ERROR;
          }
          ICrewMember? gunner = gi.GetCrewMemberByRole("Gunner");
          if (null == gunner)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): gunner=null");
+            Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): gunner=null");
+            return FN_ERROR;
+         }
+         ICrewMember? loader = gi.GetCrewMemberByRole("Loader");
+         if (null == loader)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): loader=null");
             return FN_ERROR;
          }
          //------------------------------------
          if (null == gi.TargetMainGun)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): gi.TargetMainGun=null");
+            Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): gi.TargetMainGun=null");
             return FN_ERROR;
          }
          int numShots = 0;
@@ -5029,59 +5038,59 @@ namespace Pattons_Best
             numShots = gi.TargetMainGun.EnemyAcquiredShots["Sherman"];
          if (0 == numShots)
          {
-            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "GetShermanToHitModifier(): numShots=" + numShots.ToString());
+            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Get_ShermanToHitModifier(): numShots=" + numShots.ToString());
             if ((false == isCommanderDirectingFire) || (true == commander.IsButtonedUp))
             {
-               Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "GetShermanToHitModifier(): numShots=" + numShots.ToString() + "isCommanderDirectingFire=" + isCommanderDirectingFire.ToString() + "commander.IsButtonedUp=" + commander.IsButtonedUp.ToString());
+               Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Get_ShermanToHitModifier(): numShots=" + numShots.ToString() + "isCommanderDirectingFire=" + isCommanderDirectingFire.ToString() + "commander.IsButtonedUp=" + commander.IsButtonedUp.ToString());
                toHitModifierNum += 10;
-               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): first shot at close range +10 mod=" + toHitModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): first shot at close range +10 mod=" + toHitModifierNum.ToString());
             }
          }
          else if (1 == numShots)
          {
-            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "GetShermanToHitModifier(): +1 acq numShots=" + numShots.ToString());
+            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Get_ShermanToHitModifier(): +1 acq numShots=" + numShots.ToString());
             if ('C' == range)
             {
                toHitModifierNum -= 5;
-               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): acq1 at Close range -5 mod=" + toHitModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): acq1 at Close range -5 mod=" + toHitModifierNum.ToString());
             }
             else if ('M' == range)
             {
                toHitModifierNum -= 10;
-               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): acq1 at Medium range -10 mod=" + toHitModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): acq1 at Medium range -10 mod=" + toHitModifierNum.ToString());
             }
             else if ('L' == range)
             {
                toHitModifierNum -= 15;
-               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): acq1 at Long range -15 mod=" + toHitModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): acq1 at Long range -15 mod=" + toHitModifierNum.ToString());
             }
             else
             {
-               Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+               Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): reached default range=" + range);
                return FN_ERROR;
             }
          }
          else if (1 < numShots)
          {
-            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "GetShermanToHitModifier(): +2 acq numShots=" + numShots.ToString());
+            Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Get_ShermanToHitModifier(): +2 acq numShots=" + numShots.ToString());
             if ('C' == range)
             {
                toHitModifierNum -= 10;
-               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): acq2 at Close range -10 mod=" + toHitModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): acq2 at Close range -10 mod=" + toHitModifierNum.ToString());
             }
             else if ('M' == range)
             {
                toHitModifierNum -= 20;
-               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): acq2 at Medium range -20 mod=" + toHitModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): acq2 at Medium range -20 mod=" + toHitModifierNum.ToString());
             }
             else if ('L' == range)
             {
                toHitModifierNum -= 30;
-               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier():  acq2 at Long range -30 mod=" + toHitModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier():  acq2 at Long range -30 mod=" + toHitModifierNum.ToString());
             }
             else
             {
-               Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+               Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): reached default range=" + range);
                return FN_ERROR;
             }
          }
@@ -5091,21 +5100,21 @@ namespace Pattons_Best
             if ('C' == range)
             {
                toHitModifierNum += 20;
-               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): Target.IsMoving close range +20 mod=" + toHitModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): Target.IsMoving close range +20 mod=" + toHitModifierNum.ToString());
             }
             else if ('M' == range)
             {
                toHitModifierNum += 25;
-               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): Target.IsMoving medium rating +25 mod=" + toHitModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): Target.IsMoving medium rating +25 mod=" + toHitModifierNum.ToString());
             }
             else if ('L' == range)
             {
                toHitModifierNum += 25;
-               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): Target.IsMoving Long Range +25 mod=" + toHitModifierNum.ToString());
+               Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): Target.IsMoving Long Range +25 mod=" + toHitModifierNum.ToString());
             }
             else
             {
-               Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+               Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): reached default range=" + range);
                return FN_ERROR;
             }
          }
@@ -5113,10 +5122,15 @@ namespace Pattons_Best
          if (true == isCommanderDirectingFire)
          {
             toHitModifierNum -= commander.Rating;
-            Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): cmdr rating -" + commander.Rating.ToString() + "  mod=" + toHitModifierNum.ToString());
+            Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): cmdr rating -" + commander.Rating.ToString() + "  mod=" + toHitModifierNum.ToString());
          }
          toHitModifierNum -= gunner.Rating;
-         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): gunner rating -" + gunner.Rating.ToString() + "  mod=" + toHitModifierNum.ToString());
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): gunner rating -" + gunner.Rating.ToString() + "  mod=" + toHitModifierNum.ToString());
+         if (true == isLoaderLoading)
+         {
+            toHitModifierNum -= loader.Rating;
+            Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): loader rating -" + commander.Rating.ToString() + "  mod=" + toHitModifierNum.ToString());
+         }
          //------------------------------------
          double t1 = 360 - gi.Sherman.RotationTurret;
          double t2 = gi.ShermanRotationTurretOld;
@@ -5128,20 +5142,20 @@ namespace Pattons_Best
          int numRotations = (int)(totalAngle / 60.0);
          int turretMod = (int)(10.0 * numRotations);
          toHitModifierNum += turretMod;
-         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): tNew=" + t1.ToString() + " tOld=" + t2.ToString() + " #r=" + numRotations.ToString() + " turretMod= +" + turretMod.ToString() + " mod=" + toHitModifierNum.ToString());
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): tNew=" + t1.ToString() + " tOld=" + t2.ToString() + " #r=" + numRotations.ToString() + " turretMod= +" + turretMod.ToString() + " mod=" + toHitModifierNum.ToString());
          //------------------------------------
          if (true == enemyUnit.Name.Contains("Pak43"))
          {
             toHitModifierNum += 10;
-            Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): Pak43 +10 mod=" + toHitModifierNum.ToString());
+            Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): Pak43 +10 mod=" + toHitModifierNum.ToString());
          }
          else if ((true == enemyUnit.Name.Contains("Pak40")) || (true == enemyUnit.Name.Contains("Pak38")))
          {
             toHitModifierNum += 20;
-            Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): Pak38/40 +20 mod=" + toHitModifierNum.ToString());
+            Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): Pak38/40 +20 mod=" + toHitModifierNum.ToString());
          }
          //==================================
-         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): ------------>>>>>>>>>>>gi.ShermanTypeOfFire=" + gi.ShermanTypeOfFire);
+         Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): ------------>>>>>>>>>>>gi.ShermanTypeOfFire=" + gi.ShermanTypeOfFire);
          if ("Direct" == gi.ShermanTypeOfFire) // TableMgr.GetShermanToHitModifier()
          {
             if (true == enemyUnit.IsVehicle)
@@ -5151,21 +5165,21 @@ namespace Pattons_Best
                   if ('C' == range)
                   {
                      toHitModifierNum += 65;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): Is_ShermanDeliberateImmobilization close range +65 mod=" + toHitModifierNum.ToString());
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): Is_ShermanDeliberateImmobilization close range +65 mod=" + toHitModifierNum.ToString());
                   }
                   else if ('M' == range)
                   {
                      toHitModifierNum += 55;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): Is_ShermanDeliberateImmobilization medium rating +55 mod=" + toHitModifierNum.ToString());
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): Is_ShermanDeliberateImmobilization medium rating +55 mod=" + toHitModifierNum.ToString());
                   }
                   else if ('L' == range)
                   {
                      toHitModifierNum += 45;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): Is_ShermanDeliberateImmobilization Long Range +45 mod=" + toHitModifierNum.ToString());
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): Is_ShermanDeliberateImmobilization Long Range +45 mod=" + toHitModifierNum.ToString());
                   }
                   else
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                     Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): reached default range=" + range);
                      return FN_ERROR;
                   }
                }
@@ -5173,7 +5187,7 @@ namespace Pattons_Best
                string enemyUnitType = enemyUnit.GetEnemyUnit();
                if ("ERROR" == enemyUnitType)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): unknown enemyUnit=" + enemyUnit.Name);
+                  Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): unknown enemyUnit=" + enemyUnit.Name);
                   return FN_ERROR;
                }
                switch (enemyUnitType)
@@ -5184,7 +5198,7 @@ namespace Pattons_Best
                   case "JdgPz38t":
                   case "SPW":
                      toHitModifierNum += 10;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): small size +10 mod=" + toHitModifierNum.ToString());
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): small size +10 mod=" + toHitModifierNum.ToString());
                      break;
                   case "PzIV":  // average size
                   case "MARDERII":
@@ -5198,21 +5212,21 @@ namespace Pattons_Best
                      if ('C' == range)
                      {
                         toHitModifierNum -= 5;
-                        Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): large size close range -5 mod=" + toHitModifierNum.ToString());
+                        Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): large size close range -5 mod=" + toHitModifierNum.ToString());
                      }
                      else if ('M' == range)
                      {
                         toHitModifierNum -= 10;
-                        Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): large size medium rating -10 mod=" + toHitModifierNum.ToString());
+                        Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): large size medium rating -10 mod=" + toHitModifierNum.ToString());
                      }
                      else if ('L' == range)
                      {
                         toHitModifierNum -= 15;
-                        Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): large size Long Range -15 mod=" + toHitModifierNum.ToString());
+                        Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): large size Long Range -15 mod=" + toHitModifierNum.ToString());
                      }
                      else
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                        Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): reached default range=" + range);
                         return FN_ERROR;
                      }
                      break;
@@ -5220,33 +5234,33 @@ namespace Pattons_Best
                      if ('C' == range)
                      {
                         toHitModifierNum -= 10;
-                        Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): large size close range -10 mod=" + toHitModifierNum.ToString());
+                        Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): large size close range -10 mod=" + toHitModifierNum.ToString());
                      }
                      else if ('M' == range)
                      {
                         toHitModifierNum -= 20;
-                        Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): large size medium rating -20 mod=" + toHitModifierNum.ToString());
+                        Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): large size medium rating -20 mod=" + toHitModifierNum.ToString());
                      }
                      else if ('L' == range)
                      {
                         toHitModifierNum -= 30;
-                        Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): large size Long Range -30 mod=" + toHitModifierNum.ToString());
+                        Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): large size Long Range -30 mod=" + toHitModifierNum.ToString());
                      }
                      else
                      {
-                        Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                        Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): reached default range=" + range);
                         return FN_ERROR;
                      }
                      break;
                   default:
-                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): Reached Default enemyUnitType=" + enemyUnitType);
+                     Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): Reached Default enemyUnitType=" + enemyUnitType);
                      return FN_ERROR;
                }
                //----------------------------
                if (true == isShermanMoving)
                {
                   toHitModifierNum += 25;
-                  Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): Sherman moving +25 mod=" + toHitModifierNum.ToString());
+                  Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): Sherman moving +25 mod=" + toHitModifierNum.ToString());
                }
                //----------------------------
                if (true == enemyUnit.IsWoods)
@@ -5254,21 +5268,21 @@ namespace Pattons_Best
                   if ('C' == range)
                   {
                      toHitModifierNum += 5;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): woods +5 close range mod=" + toHitModifierNum.ToString());
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): woods +5 close range mod=" + toHitModifierNum.ToString());
                   }
                   else if ('M' == range)
                   {
                      toHitModifierNum += 10;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): woods +10 medium range mod=" + toHitModifierNum.ToString());
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): woods +10 medium range mod=" + toHitModifierNum.ToString());
                   }
                   else if ('L' == range)
                   {
                      toHitModifierNum += 15;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): woods +15 long range mod=" + toHitModifierNum.ToString());
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): woods +15 long range mod=" + toHitModifierNum.ToString());
                   }
                   else
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                     Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): reached default range=" + range);
                      return FN_ERROR;
                   }
                }
@@ -5277,21 +5291,21 @@ namespace Pattons_Best
                   if ('C' == range)
                   {
                      toHitModifierNum += 10;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): building +10 close range mod=" + toHitModifierNum.ToString());
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): building +10 close range mod=" + toHitModifierNum.ToString());
                   }
                   else if ('M' == range)
                   {
                      toHitModifierNum += 15;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): building +15 medium range mod=" + toHitModifierNum.ToString());
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): building +15 medium range mod=" + toHitModifierNum.ToString());
                   }
                   else if ('L' == range)
                   {
                      toHitModifierNum += 25;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): building +25 long range mod=" + toHitModifierNum.ToString());
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): building +25 long range mod=" + toHitModifierNum.ToString());
                   }
                   else
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                     Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): reached default range=" + range);
                      return FN_ERROR;
                   }
                }
@@ -5300,12 +5314,12 @@ namespace Pattons_Best
                   if ('C' == range)
                   {
                      toHitModifierNum += 15;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): fort +15 close range mod=" + toHitModifierNum.ToString());
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): fort +15 close range mod=" + toHitModifierNum.ToString());
                   }
                   else if ('M' == range)
                   {
                      toHitModifierNum += 25;
-                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "GetShermanToHitModifier(): fort +25 medium range mod=" + toHitModifierNum.ToString());
+                     Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): fort +25 medium range mod=" + toHitModifierNum.ToString());
                   }
                   else if ('L' == range)
                   {
@@ -5314,7 +5328,7 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "GetShermanToHitModifier(): reached default range=" + range);
+                     Logger.Log(LogEnum.LE_ERROR, "Get_ShermanToHitModifier(): reached default range=" + range);
                      return FN_ERROR;
                   }
                }

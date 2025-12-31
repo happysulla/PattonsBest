@@ -2389,14 +2389,18 @@ namespace Pattons_Best
                {
                   if (("Commander_MGFire" == crewAction.Name) && (false == gi.IsCommanderDirectingMgFire)) // Commander is directing fire
                   {
-                     CheckBox cbe054 = new CheckBox() { FontSize = 12, IsEnabled = true, IsChecked = false, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = System.Windows.VerticalAlignment.Center };
-                     if( true == IsOneMgFiring(gi))
+                     CheckBox cbe054 = new CheckBox() { FontSize = 12, IsEnabled = false, IsChecked = false, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = System.Windows.VerticalAlignment.Center };
+                     if (true == IsOneMgFiring(gi))
                      {
                         cbe054.IsChecked = true;
                         gi.IsCommanderDirectingMgFire = true;
                      }
-                     cbe054.Checked += CheckBoxCmdrFire_Checked;
-                     cbe054.Unchecked += CheckBoxCmdrFire_Unchecked;
+                     else
+                     {
+                        cbe054.IsEnabled = true;
+                        cbe054.Checked += CheckBoxCmdrFire_Checked;
+                        cbe054.Unchecked += CheckBoxCmdrFire_Unchecked;
+                     }
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new InlineUIContainer(cbe054));
@@ -3435,6 +3439,12 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): gunner=null");
             return "ERROR";
          }
+         ICrewMember? loader = gi.GetCrewMemberByRole("Loader");
+         if (null == loader)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent_GetToHitModifier(): loader=null");
+            return "ERROR";
+         }
          //------------------------------------
          StringBuilder sb51 = new StringBuilder();
          //------------------------------------
@@ -3503,7 +3513,18 @@ namespace Pattons_Best
          sb51.Append(gunner.Rating.ToString());
          sb51.Append(" for gunner rating\n");
          //------------------------------------
-         if(gi.Sherman.RotationTurret != gi.ShermanRotationTurretOld)
+         foreach (IMapItem crewAction in gi.CrewActions)
+         {
+            if ("Loader_Load" == crewAction.Name)
+            {
+               sb51.Append("-");
+               sb51.Append(gunner.Rating.ToString());
+               sb51.Append(" for loader rating\n");
+               break;
+            }
+         }
+         //------------------------------------
+         if (gi.Sherman.RotationTurret != gi.ShermanRotationTurretOld)
          {
             double t1 = 360 - gi.Sherman.RotationTurret;
             double t2 = gi.ShermanRotationTurretOld;
@@ -7003,6 +7024,7 @@ namespace Pattons_Best
       }
       private void CheckBoxCmdrFire_Checked(object sender, RoutedEventArgs e)
       {
+
          CheckBox cb = (CheckBox)sender;
          cb.IsChecked = true;
          if(null == myGameInstance)

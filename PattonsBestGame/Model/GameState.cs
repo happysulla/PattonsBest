@@ -10727,7 +10727,7 @@ namespace Pattons_Best
          gi.IdentifiedTank = "";
          gi.IdentifiedSpg = "";
          //-------------------------------------------------------
-         gi.IsCommanderDirectingMgFire = false;      // EveningDebriefing_ResetDay()
+         gi.IsCommanderDirectingMgFire = false;       // EveningDebriefing_ResetDay()
          Logger.Log(LogEnum.LE_SHOW_MG_CMDR_DIRECT_FIRE, "EveningDebriefing_ResetDay():  Is_CommanderDirectingMgFire=" + gi.IsCommanderDirectingMgFire.ToString());
          gi.IsShermanFiringAaMg = false;
          gi.IsShermanFiringBowMg = false;
