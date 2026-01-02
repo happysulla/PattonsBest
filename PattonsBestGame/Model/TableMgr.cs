@@ -5041,7 +5041,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Get_ShermanToHitModifier(): numShots=" + numShots.ToString());
             if ((false == isCommanderDirectingFire) || (true == commander.IsButtonedUp))
             {
-               Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Get_ShermanToHitModifier(): numShots=" + numShots.ToString() + "isCommanderDirectingFire=" + isCommanderDirectingFire.ToString() + "commander.IsButtonedUp=" + commander.IsButtonedUp.ToString());
+               Logger.Log(LogEnum.LE_SHOW_NUM_SHERMAN_SHOTS, "Get_ShermanToHitModifier(): numShots=" + numShots.ToString() + " isCommanderDirectingFire=" + isCommanderDirectingFire.ToString() + "commander.IsButtonedUp=" + commander.IsButtonedUp.ToString());
                toHitModifierNum += 10;
                Logger.Log(LogEnum.LE_SHOW_TO_HIT_MODIFIER, "Get_ShermanToHitModifier(): first shot at close range +10 mod=" + toHitModifierNum.ToString());
             }
