@@ -33,6 +33,7 @@
                <RadioButton x:Name="myRadioButtonSingleDay" GroupName="GameScenario" Content="Single Day Game" Margin="5,0,5,0"  Padding="4,-4,0,0" Click="StackPanelScenario_Click"/>
                <RadioButton x:Name="myRadioButtonCampaign" GroupName="GameScenario" Content="Campaign Game" Margin="5,0,5,0"  Padding="4,-4,0,0" Click="StackPanelScenario_Click"/>
                <CheckBox x:Name="myCheckBoxEndOnCmdrDeath"  Content="Game Ends On Commander Death" Margin="15,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
+               <CheckBox x:Name="myCheckBoxFuelOption"  Content="Fuel Option per Rule 29.0" Margin="15,0,5,0" Padding="4,-4,0,0" Click="StackPanelGameOtherRules_Click"/>
             </StackPanel>
          </GroupBox>
          <GroupBox x:Name="myGroupBoxTutorialSkip" Grid.Row="2" Grid.Column="0" Header="Skip Tutorial Screens" FontSize="14"  Margin="10,0,10,0">

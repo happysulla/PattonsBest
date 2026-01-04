@@ -34,6 +34,7 @@ namespace Pattons_Best
          myRadioButtonSingleDay.ToolTip = "Game only last one day. You are given the option what tank you want to use.";
          myRadioButtonCampaign.ToolTip = "Game last from June 1944 to April 1945 highlighting the 4th armor movement through Europe.";
          myCheckBoxEndOnCmdrDeath.ToolTip = "Game ends with a loss when commander dies.";
+         myCheckBoxFuelOption.ToolTip = "Rule 29.0: Start with 25 fuel units. Area moves consumes 2 units. Battle board moves consume 1 unit on blue die of 1-3. No movement when Sherman runs out of fuel.";
          //-----------------------------
          myCheckBoxSkipOpening.ToolTip = "Skip opening screen with tank image. Contains button to begin game or read rules.";
          myCheckBoxSkipHistorical.ToolTip = "Skip screen with map of 4th division historical path through France and Germany.";
@@ -420,6 +421,7 @@ namespace Pattons_Best
             case "myCheckBoxEnhancedMgFire": option = myOptions.Find("ShermanEnhanceMgFire"); option.IsEnabled = !option.IsEnabled; break;
             case "myCheckBoxMgSurpressingFire": option = myOptions.Find("ShermanSurpressingMgFire"); option.IsEnabled = !option.IsEnabled; break;
             case "myCheckBoxEndOnCmdrDeath": option = myOptions.Find("GameEndsOnCommanderDeath"); option.IsEnabled = !option.IsEnabled; break;
+            case "myCheckBoxFuelOption": option = myOptions.Find("FuelOption"); option.IsEnabled = !option.IsEnabled; break;
             default: Logger.Log(LogEnum.LE_ERROR, "StackPanelGameOtherRules_Click(): reached default name=" + cb.Name); return;
          }
          if (false == UpdateDisplay(myOptions))

@@ -1702,7 +1702,7 @@ namespace Pattons_Best
                   }
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
-                  Image imge032a = new Image { Width = 150, Height = 150 };
+                  Image imge032a = new Image { Width = 100, Height = 100 };
                   if ( true == isCombat )
                   {
                      imge032a.Name = "MovementBattleStartCounterattack";
@@ -1711,6 +1711,9 @@ namespace Pattons_Best
                   }
                   else
                   {
+                     myTextBlock.Inlines.Add(new Run(" Click image to continue."));
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
                      if (true == gi.IsDaylightLeft(report))
                      {
                         imge032a.Name = "Continue32a";
@@ -1728,7 +1731,7 @@ namespace Pattons_Best
                   myTextBlock.Inlines.Add(new Run(" Click image to continue."));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
-                  myTextBlock.Inlines.Add(new Run("                                         "));
+                  myTextBlock.Inlines.Add(new Run("                                                "));
                   myTextBlock.Inlines.Add(new InlineUIContainer(imge032a));
                }
                break;
@@ -3531,7 +3534,7 @@ namespace Pattons_Best
             if ("Loader_Load" == crewAction.Name)
             {
                sb51.Append("-");
-               sb51.Append(gunner.Rating.ToString());
+               sb51.Append(loader.Rating.ToString());
                sb51.Append(" for loader rating\n");
                break;
             }
