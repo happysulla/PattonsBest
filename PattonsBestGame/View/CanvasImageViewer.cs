@@ -213,9 +213,11 @@ namespace Pattons_Best
             case GameAction.TestingStartPreparations:
             case GameAction.TestingStartBattle:
             case GameAction.TestingStartAmbush:
-            case GameAction.BattleStart:
+            case GameAction.BattleAdvanceFireStart:
+            case GameAction.MovementBattlePhaseStartCounterattack:
+            case GameAction.MovementBattlePhaseStartDueToRetreat:
+            case GameAction.MovementBattlePhaseStartDueToAdvance:
             case GameAction.BattleActivation:
-            case GameAction.MovementBattleActivation:
             case GameAction.BattleRoundSequenceShermanAdvanceOrRetreatEnd:
                myDieRoller.HideDie();
                theMainImage = EnumMainImage.MI_Battle;

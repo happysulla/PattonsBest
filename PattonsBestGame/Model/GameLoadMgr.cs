@@ -864,7 +864,7 @@ namespace Pattons_Best
             case "MovementEnemyCheckCounterattack": return GameAction.MovementEnemyCheckCounterattack;
             case "MovementBattleCheckCounterattackRoll": return GameAction.MovementBattleCheckCounterattackRoll;
             case "MovementCounterattackEllapsedTimeRoll": return GameAction.MovementCounterattackEllapsedTimeRoll;
-            case "MovementBattleActivation": return GameAction.MovementBattleActivation;
+            case "MovementBattlePhaseStartCounterattack": return GameAction.MovementBattlePhaseStartCounterattack;
             case "MovementChooseOption": return GameAction.MovementChooseOption;
             case "MovementArtillerySupportChoice": return GameAction.MovementArtillerySupportChoice;
             case "MovementArtillerySupportCheck": return GameAction.MovementArtillerySupportCheck;
@@ -891,7 +891,7 @@ namespace Pattons_Best
             case "MovementExit": return GameAction.MovementExit;
             case "MovementRetreatStartBattle": return GameAction.MovementRetreatStartBattle;
 
-            case "BattleStart": return GameAction.BattleStart;
+            case "BattleAdvanceFireStart": return GameAction.BattleAdvanceFireStart;
             case "BattleActivation": return GameAction.BattleActivation;
             case "BattlePlaceAdvanceFire": return GameAction.BattlePlaceAdvanceFire;
             case "BattleResolveAdvanceFire": return GameAction.BattleResolveAdvanceFire;

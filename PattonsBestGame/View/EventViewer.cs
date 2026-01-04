@@ -405,7 +405,9 @@ namespace Pattons_Best
                break;
             case GameAction.MorningBriefingAmmoReadyRackLoad:
                break;
-            case GameAction.MovementBattleActivation:
+            case GameAction.MovementBattlePhaseStartCounterattack: // when counterattack roll indicates battle - BattleActivation happens prior to Ambush roll
+            case GameAction.MovementBattlePhaseStartDueToRetreat:
+            case GameAction.MovementBattlePhaseStartDueToAdvance:
             case GameAction.BattleActivation:
                EventViewerBattleSetup battleSetupMgr = new EventViewerBattleSetup(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == battleSetupMgr.CtorError)
@@ -1649,7 +1651,7 @@ namespace Pattons_Best
             case "e032": // This event is only shown if battle check resulted in possible combat for the day
                if (Utilities.NO_RESULT < gi.DieResults[key][0])
                {
-                  Image imge031 = new Image { Width = 150, Height = 150, Name = "BattleStart", Source = MapItem.theMapImages.GetBitmapImage("Combat") };
+                  Image imge031 = new Image { Width = 150, Height = 150, Name = "BattlePhaseStart", Source = MapItem.theMapImages.GetBitmapImage("Combat") };
                   myTextBlock.Inlines.Add(new Run("Combat! Enter Battle Board."));
                   myTextBlock.Inlines.Add(new LineBreak());
                   myTextBlock.Inlines.Add(new LineBreak());
@@ -1703,7 +1705,7 @@ namespace Pattons_Best
                   Image imge032a = new Image { Width = 150, Height = 150 };
                   if ( true == isCombat )
                   {
-                     imge032a.Name = "MovementBattleActivation";
+                     imge032a.Name = "MovementBattleStartCounterattack";
                      myTextBlock.Inlines.Add(new Run("Combat! Enter Battle Board."));
                      imge032a.Source = MapItem.theMapImages.GetBitmapImage("Combat");
                   }
@@ -1717,7 +1719,7 @@ namespace Pattons_Best
                      }
                      else
                      {
-                        Logger.Log(LogEnum.LE_SHOW_TIME, "UpdateEventContent(e032a): sunsetHour=" + report.SunsetHour.ToString() + " min=" + report.SunsetMin.ToString() + " time=" + TableMgr.GetTime(report) + " dayLight?=false");
+                        Logger.Log(LogEnum.LE_SHOW_TIME_GAME, "UpdateEventContent(e032a): sunsetHour=" + report.SunsetHour.ToString() + " min=" + report.SunsetMin.ToString() + " time=" + TableMgr.GetTime(report) + " dayLight?=false");
                         imge032a.Name = "DebriefStart";
                         myTextBlock.Inlines.Add(new Run("Since there is no daylight left, go to Evening Debriefing "));
                         imge032a.Source = MapItem.theMapImages.GetBitmapImage("c28UsControl");
@@ -1737,7 +1739,7 @@ namespace Pattons_Best
                Button b2 = new Button() { FontFamily = myFontFam1, FontSize = 12 };
                if (false == gi.IsDaylightLeft(report))
                {
-                  Logger.Log(LogEnum.LE_SHOW_TIME, "UpdateEventContent(e033): sunsetHour=" + report.SunsetHour.ToString() + " min=" + report.SunsetMin.ToString() + " time=" + TableMgr.GetTime(report) + " dayLight?=false");
+                  Logger.Log(LogEnum.LE_SHOW_TIME_GAME, "UpdateEventContent(e033): sunsetHour=" + report.SunsetHour.ToString() + " min=" + report.SunsetMin.ToString() + " time=" + TableMgr.GetTime(report) + " dayLight?=false");
                   imge033.Name = "DebriefStart";
                   b2.Content = "r4.9";
                   b2.Click += Button_Click;
@@ -2889,55 +2891,54 @@ namespace Pattons_Best
                sbEndWon.Append("'");
                myTextBlock.Inlines.Add(new Run(sbEndWon.ToString()));
                Image? imgEndGameWon = null;
-               switch (Utilities.RandomGenerator.Next(10))
+               int randnum = Utilities.RandomGenerator.Next(10);
+               randnum = 3; // <cgs> TEST
+               switch (randnum)
                {
                   case 0:
-                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Win"), Width = 300, Height = 300 };
-                     myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new Run("                             "));
-                     break;
-                  case 1:
-                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Win1"), Width = 160, Height = 300 };
-                     myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new Run("                                  "));
-                     break;
-                  case 2:
                      imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Muscle"), Width = 300, Height = 300 };
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new Run("                                  "));
                      break;
-                  case 3:
-                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Win2"), Width = 300, Height = 200 };
+                  case 1:
+                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Win"), Width = 300, Height = 300 };
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new Run("                           "));
+                     myTextBlock.Inlines.Add(new Run("                             "));
                      break;
-                  case 4:
-                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Star"), Width = 300, Height = 300 };
-                     myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new Run("                           "));
-                     break;
-                  case 5:
-                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Win3"), Width = 300, Height = 300 };
-                     myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new Run("                           "));
-                     break;
-                  case 6:
+                  case 2:
                      imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Win4"), Width = 300, Height = 300 };
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new Run("                           "));
                      break;
+                  case 3:
+                  case 4:
+                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Win1"), Width = 160, Height = 300 };
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("                                  "));
+                     break;
+                  case 5:
+                  case 6:
+                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Win2"), Width = 300, Height = 200 };
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("                           "));
+                     break;
+                  case 7:
+                  case 8:
+                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Win3"), Width = 300, Height = 300 };
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("                           "));
+                     break;
                   default:
-                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Win"), Width = 300, Height = 300 };
+                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Star"), Width = 300, Height = 300 };
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new Run("                             "));
+                     myTextBlock.Inlines.Add(new Run("                           "));
                      break;
                }
                myTextBlock.Inlines.Add(new InlineUIContainer(imgEndGameWon));
@@ -5427,7 +5428,7 @@ namespace Pattons_Best
                      return false;
                   }
                   if (true == isEnemyInMoveArea)
-                     outAction = GameAction.BattleActivation;  // Continue_AfterBattlePrep() 
+                     outAction = GameAction.MovementBattlePhaseStartDueToAdvance;  // Continue_AfterBattlePrep() CGS_CGS
                }
             }
          }
@@ -5756,7 +5757,7 @@ namespace Pattons_Best
             else if ((true == isAirStrike) && (true == isEnemyUnitAvailableForAirStrike))
                outAction = GameAction.BattleResolveAirStrike;
             else
-               outAction = GameAction.BattleAmbushStart;
+               outAction = GameAction.BattleAmbushStart; // Show_SupportingFireResults()
          }
          else
          {
@@ -6341,7 +6342,7 @@ namespace Pattons_Best
                            }
                            if ("e099a" == myGameInstance.EventDisplayed)
                            {
-                              action = GameAction.BattleActivation;
+                              action = GameAction.MovementBattlePhaseStartDueToRetreat; // Retreat into a battle
                               myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            }
                            break;
@@ -6401,15 +6402,15 @@ namespace Pattons_Best
                            action = GameAction.MovementStartAreaRestart;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            return;
-                        case "BattleStart":
+                        case "BattlePhaseStart":
                            if( true == myGameInstance.IsAdvancingFireChosen) 
-                              action = GameAction.BattleStart;
+                              action = GameAction.BattleAdvanceFireStart;       // TextBlock_MouseDown(): Click "Battle_Start" image - e032 Battle Check Roll - highlights regions to drop in Advance Markers if gi.IsAdvancingFireChosen=true
                            else
-                              action = GameAction.BattleActivation;
+                              action = GameAction.BattleActivation;  // TextBlock_MouseDown(): Click "Battle_Start" image - e032 Battle Check Roll
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
-                        case "MovementBattleActivation":
-                           action = GameAction.MovementBattleActivation;
+                        case "MovementBattleStartCounterattack":
+                           action = GameAction.MovementBattlePhaseStartCounterattack;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue32a":  // Counterattack Check

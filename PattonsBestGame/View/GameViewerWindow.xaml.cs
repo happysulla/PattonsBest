@@ -574,9 +574,9 @@ namespace Pattons_Best
             if ("e034" == gi.EventActive)
             {
                if (0 < gi.AdvancingFireMarkerCount)
-                  nextAction = GameAction.BattleStart;
+                  nextAction = GameAction.BattleAdvanceFireStart;
                else
-                  nextAction = GameAction.BattleActivation; 
+                  nextAction = GameAction.BattleActivation; // UpdateViewForNewGame() - GameAction.UpdateLoadingGame
             }
          }
          else if (GameAction.UpdateNewGame == action)
@@ -2625,7 +2625,7 @@ namespace Pattons_Best
                      return false;
                   }
                   break;
-               case GameAction.BattleStart:
+               case GameAction.BattleAdvanceFireStart:
                   if( true == gi.IsAdvancingFireChosen)
                   {
                      if (false == UpdateCanvasMainAdvancingMarkerFirePlace(gi))

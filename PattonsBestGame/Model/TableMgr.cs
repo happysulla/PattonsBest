@@ -3717,19 +3717,19 @@ namespace Pattons_Best
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c93Pak38", mi.TerritoryCurrent);
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
-                  return appearingMapItem;
+                  break;
                case "Pak40":
                   name = "Pak40" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c94Pak40", mi.TerritoryCurrent);
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
-                  return appearingMapItem;
+                  break;
                case "Pak43":
                   name = "Pak43" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c95Pak43", mi.TerritoryCurrent);
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
-                  return appearingMapItem;
+                  break;
                default:
                   Logger.Log(LogEnum.LE_ERROR, "Get_AppearingUnit(): reached default with gi.IdentifiedAtg =" + gi.IdentifiedAtg);
                   return null;
@@ -3749,13 +3749,13 @@ namespace Pattons_Best
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c79PzIV", mi.TerritoryCurrent);
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
-                  return appearingMapItem;
+                  break;
                case "PzV":
                   name = "PzV" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c80PzV", mi.TerritoryCurrent);
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
-                  return appearingMapItem;
+                  break;
                default:
                   Logger.Log(LogEnum.LE_ERROR, "Get_AppearingUnit(): reached default with gi.IdentifiedTank =" + gi.IdentifiedTank);
                   return null;
@@ -3775,38 +3775,48 @@ namespace Pattons_Best
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c85STuGIIIg", mi.TerritoryCurrent);
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
-                  return appearingMapItem;
+                  break;
                case "MARDERII":
                   name = "MARDERII" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c83MarderII", mi.TerritoryCurrent);
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
-                  return appearingMapItem;
+                  break;
                case "MARDERIII":
                   name = "MARDERIII" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c84MarderIII", mi.TerritoryCurrent);
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
-                  return appearingMapItem;
+                  break;
                case "JdgPzIV":
                   name = "JdgPzIV" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c86JgdPzIV", mi.TerritoryCurrent);
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
-                  return appearingMapItem;
+                  break;
                case "JdgPz38t":
                   name = "JdgPz38t" + Utilities.MapItemNum.ToString();
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c87JgdPz38t", mi.TerritoryCurrent);
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "Get_AppearingUnit(): eu=" + name);
-                  return appearingMapItem;
+                  break;
                default:
                   Logger.Log(LogEnum.LE_ERROR, "Get_AppearingUnit(): reached default with gi.IdentifiedSpg =" + gi.IdentifiedSpg);
                   return null;
             }
          }
-         Logger.Log(LogEnum.LE_ERROR, "Get_AppearingUnit(): reached default mi=" + mi.Name);
-         return null;
+         //--------------------------------------
+         if( null == appearingMapItem )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Get_AppearingUnit(): reached default mi=" + mi.Name);
+            return null;
+         }
+         if (true == gi.Sherman.EnemyAcquiredShots.ContainsKey(mi.Name)) // transfer over the acquisition counter
+         {
+            gi.Sherman.EnemyAcquiredShots[appearingMapItem.Name] = gi.Sherman.EnemyAcquiredShots[mi.Name];
+            gi.Sherman.EnemyAcquiredShots.Remove(mi.Name);
+         }
+         return appearingMapItem;
       }
       public static IMapItem? GetAppearingUnitNew(IGameInstance gi, IMapItem mi, int dieRoll)
       {
@@ -3820,7 +3830,6 @@ namespace Pattons_Best
                appearingMapItem = new MapItem(name, mi.Zoom, "c93Pak38", mi.TerritoryCurrent);
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedAtg = "Pak38"; // Get_AppearingUnitNew()
-               return appearingMapItem;
             }
             else if (dieRoll < 9)
             {
@@ -3829,7 +3838,6 @@ namespace Pattons_Best
                appearingMapItem = new MapItem(name, mi.Zoom, "c94Pak40", mi.TerritoryCurrent);
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedAtg = "Pak40"; // Get_AppearingUnitNew()
-               return appearingMapItem;
             }
             else
             {
@@ -3838,7 +3846,6 @@ namespace Pattons_Best
                appearingMapItem = new MapItem(name, mi.Zoom, "c95Pak43", mi.TerritoryCurrent);
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedAtg = "Pak43"; // Get_AppearingUnitNew()
-               return appearingMapItem;
             }
          }
          else if (true == mi.Name.Contains("TANK"))
@@ -3850,7 +3857,6 @@ namespace Pattons_Best
                appearingMapItem = new MapItem(name, mi.Zoom, "c79PzIV", mi.TerritoryCurrent);
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedTank = "PzIV";
-               return appearingMapItem;
             }
             else if (dieRoll < 10)
             {
@@ -3859,7 +3865,6 @@ namespace Pattons_Best
                appearingMapItem = new MapItem(name, mi.Zoom, "c80PzV", mi.TerritoryCurrent);
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedTank = "PzV";
-               return appearingMapItem;
             }
             else
             {
@@ -3877,7 +3882,6 @@ namespace Pattons_Best
                   appearingMapItem = new MapItem(name, mi.Zoom, "c80PzV", mi.TerritoryCurrent);
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                   gi.IdentifiedTank = "PzV";
-                  return appearingMapItem;
                }
                else if (diceRoll < 95)
                {
@@ -3885,7 +3889,6 @@ namespace Pattons_Best
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c81PzVIe", mi.TerritoryCurrent);
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
-                  return appearingMapItem;
                }
                else
                {
@@ -3893,7 +3896,6 @@ namespace Pattons_Best
                   Utilities.MapItemNum++;
                   appearingMapItem = new MapItem(name, mi.Zoom, "c82PzVIb", mi.TerritoryCurrent);
                   Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
-                  return appearingMapItem;
                }
             }
          }
@@ -3906,7 +3908,6 @@ namespace Pattons_Best
                appearingMapItem = new MapItem(name, mi.Zoom, "c85STuGIIIg", mi.TerritoryCurrent);
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedSpg = "STuGIIIg";
-               return appearingMapItem;
             }
             else if (dieRoll < 5)
             {
@@ -3915,7 +3916,6 @@ namespace Pattons_Best
                appearingMapItem = new MapItem(name, mi.Zoom, "c83MarderII", mi.TerritoryCurrent);
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedSpg = "MARDERII";
-               return appearingMapItem;
             }
             else if (dieRoll < 7)
             {
@@ -3924,7 +3924,6 @@ namespace Pattons_Best
                appearingMapItem = new MapItem(name, mi.Zoom, "c84MarderIII", mi.TerritoryCurrent);
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedSpg = "MARDERIII";
-               return appearingMapItem;
             }
             else if (dieRoll < 9)
             {
@@ -3933,7 +3932,6 @@ namespace Pattons_Best
                appearingMapItem = new MapItem(name, mi.Zoom, "c86JgdPzIV", mi.TerritoryCurrent);
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedSpg = "JdgPzIV";
-               return appearingMapItem;
             }
             else
             {
@@ -3942,11 +3940,20 @@ namespace Pattons_Best
                appearingMapItem = new MapItem(name, mi.Zoom, "c87JgdPz38t", mi.TerritoryCurrent);
                Logger.Log(LogEnum.LE_SHOW_APPEARING_UNITS, "GetAppearingUnitNew(): eu=" + name + " dr=" + dieRoll.ToString());
                gi.IdentifiedSpg = "JdgPz38t";
-               return appearingMapItem;
             }
          }
-         Logger.Log(LogEnum.LE_ERROR, "GetAppearingUnitNew(): reached default mi=" + mi.Name);
-         return null;
+         //--------------------------------------
+         if (null == appearingMapItem)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Get_AppearingUnit(): reached default mi=" + mi.Name);
+            return null;
+         }
+         if (true == gi.Sherman.EnemyAcquiredShots.ContainsKey(mi.Name)) // transfer over the acquisition counter
+         {
+            gi.Sherman.EnemyAcquiredShots[appearingMapItem.Name] = gi.Sherman.EnemyAcquiredShots[mi.Name];
+            gi.Sherman.EnemyAcquiredShots.Remove(mi.Name);
+         }
+         return appearingMapItem;
       }
       //-------------------------------------------
       public static int GetMovingModifier(IGameInstance gi)

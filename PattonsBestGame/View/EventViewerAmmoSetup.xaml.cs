@@ -297,6 +297,7 @@ namespace Pattons_Best
             IMapItem rr4 = new MapItem(name, 0.9, "c12RoundsLeft", t);
             myGameInstance.ReadyRacks.Add(rr4);
          }
+         //=========================================================
          myHeRoundCount = (int)Math.Ceiling((double)myUnassignedCount * 0.6);                   // Assign 60% or rounds to HE
          myUnassignedCount -= myHeRoundCount;
          myApRoundCount = myUnassignedCount; // assign remaining rounds to AP
