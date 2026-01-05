@@ -321,7 +321,7 @@ namespace Pattons_Best
                      rect.Fill = Brushes.Black;
                      Logger.Log(LogEnum.LE_VIEW_TIME_TRACK, "UpdateReportTimeTrackRow(): SSSSSSSSSSSSSSSS min=" + min.ToString());
                   }
-                  else if ( (report.SunsetHour == hour) && (report.SunsetMin < min) )
+                  else if ( (report.SunsetHour == hour) && (report.SunsetMin <= min) )
                   {
                      rect.Fill = Brushes.Black;
                      Logger.Log(LogEnum.LE_VIEW_TIME_TRACK, "UpdateReportTimeTrackRow(): MMMMMMMMMMMMMMMM min=" + min.ToString());
