@@ -275,23 +275,27 @@ namespace Pattons_Best
             if (lastReport.SunsetMin <= lastReport.SunriseMin )
                return 0;
          }
-         else
+         else // lastReport.SunriseHour < lastReport.SunsetHour
          {
             sunrisehour = lastReport.SunriseHour + 1;
          }
-         int sunrsethour = lastReport.SunsetHour;
-         int numMins = (sunrsethour - sunrisehour) * 60;
-         if( 0 < numMins )
+         int sunsethour = lastReport.SunsetHour;
+         int numMins = (sunsethour - sunrisehour) * 60;
+         if ( 0 < numMins )
          {
             numMins += (60 - lastReport.SunriseMin);
             numMins += lastReport.SunsetMin;
          }
-         else
+         else 
          {
             if (lastReport.SunriseHour == lastReport.SunsetHour)
+            {
                numMins += (lastReport.SunsetMin - lastReport.SunriseMin);
+            }
             else
+            {
                numMins += ((60 - lastReport.SunriseMin) + lastReport.SunsetMin);
+            }
          }
          return numMins;
       }

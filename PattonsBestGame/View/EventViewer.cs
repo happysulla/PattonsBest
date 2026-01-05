@@ -2895,7 +2895,7 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new Run(sbEndWon.ToString()));
                Image? imgEndGameWon = null;
                int randnum = Utilities.RandomGenerator.Next(10);
-               randnum = 3; // <cgs> TEST
+               randnum = 5; // <cgs> TEST
                switch (randnum)
                {
                   case 0:
@@ -2918,10 +2918,10 @@ namespace Pattons_Best
                      break;
                   case 3:
                   case 4:
-                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Win1"), Width = 160, Height = 300 };
+                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Win1"), Width = 300, Height = 160 };
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new Run("                                  "));
+                     myTextBlock.Inlines.Add(new Run("                             "));
                      break;
                   case 5:
                   case 6:
@@ -3851,6 +3851,11 @@ namespace Pattons_Best
          }
          else
          {
+            if( true == hit.myIsCriticalHit )
+            {
+               myTextBlock.Inlines.Add(new Run("Critical Hit!!!"));
+               myTextBlock.Inlines.Add(new LineBreak());
+            }
             int combo = toKillNum - modifier;
             StringBuilder sb = new StringBuilder();
             sb.Append("To kill, roll ");

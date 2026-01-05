@@ -309,28 +309,34 @@ namespace Pattons_Best
                   rect.Fill = Brushes.Black;
                   continue;
                }
+               Logger.Log(LogEnum.LE_VIEW_TIME_TRACK, "UpdateReportTimeTrackRow(): --------------------------------------" + sp.Name + " hour=" + hour.ToString() + " min=" + min.ToString());
                if (hour < report.SunriseHour)
-               {
-                  rect.Fill = Brushes.Black;
-               }
-               Logger.Log(LogEnum.LE_VIEW_TIME_TRACK, "UpdateReportTimeTrackRow(): --------------------------------------" + sp.Name + " min=" + min.ToString());
-               if (hour < report.SunriseHour )
                {
                   rect.Fill = Brushes.Black;
                }
                else if (hour == report.SunriseHour)
                {
-                  if( min < report.SunriseMin)
+                  if (min < report.SunriseMin)
                   {
                      rect.Fill = Brushes.Black;
                      Logger.Log(LogEnum.LE_VIEW_TIME_TRACK, "UpdateReportTimeTrackRow(): SSSSSSSSSSSSSSSS min=" + min.ToString());
                   }
+                  else if ( (report.SunsetHour == hour) && (report.SunsetMin < min) )
+                  {
+                     rect.Fill = Brushes.Black;
+                     Logger.Log(LogEnum.LE_VIEW_TIME_TRACK, "UpdateReportTimeTrackRow(): MMMMMMMMMMMMMMMM min=" + min.ToString());
+                  }
+                  else
+                  {
+                     Logger.Log(LogEnum.LE_VIEW_TIME_TRACK, "UpdateReportTimeTrackRow(): (min=" + min.ToString() + ") >= (report.SunriseMin=" + report.SunriseMin.ToString() + ")");
+                  }
                }
                else
                {
-                  if( report.SunsetHour < hour )
+                  if (report.SunsetHour < hour)
                   {
                      rect.Fill = Brushes.Black;
+                     Logger.Log(LogEnum.LE_VIEW_TIME_TRACK, "UpdateReportTimeTrackRow(): GGGGGGGGGGGGGGGGGG min=" + min.ToString());
                   }
                   else if (report.SunsetHour == hour)
                   {
@@ -339,6 +345,10 @@ namespace Pattons_Best
                         rect.Fill = Brushes.Black;
                         Logger.Log(LogEnum.LE_VIEW_TIME_TRACK, "UpdateReportTimeTrackRow(): FFFFFFFFFFFFFFFF min=" + min.ToString());
                      }
+                  }
+                  else
+                  {
+                      Logger.Log(LogEnum.LE_VIEW_TIME_TRACK, "UpdateReportTimeTrackRow(): (hour="+ hour.ToString() + " < (report.SunsetHour min=" + report.SunsetHour.ToString() + ")");
                   }
                }
             }
