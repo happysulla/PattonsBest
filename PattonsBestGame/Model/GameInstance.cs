@@ -486,7 +486,7 @@ namespace Pattons_Best
          IAfterActionReport? report = Reports.GetLast();
          if (null == report)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetCrewMemberByRole(): report=null");
+            Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): report=null");
             return false;
          }
          //--------------------------------------------
@@ -495,7 +495,7 @@ namespace Pattons_Best
             if (true == mi.Name.Contains("Switch"))
             {
                this.CrewActions.Remove(mi);
-               Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "SwitchMembers(): --------------------removing ca=" + mi.Name);
+               Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "Switch_Members(): --------------------removing ca=" + mi.Name);
                break;
             }
          }
@@ -505,11 +505,11 @@ namespace Pattons_Best
             ICrewMember? switchedMember = GetCrewMemberByRole("Assistant"); // assistant is in role of switched member
             if (null == switchedMember)
             {
-               Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): switchedMember=null for role" + this.SwitchedCrewMemberRole);
+               Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): switchedMember=null for role" + this.SwitchedCrewMemberRole);
                return false;
             }
             switchedMember.IsButtonedUp = true;
-            Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "SwitchMembers(): Return Assistant to original position of crew member to " + this.SwitchedCrewMemberRole);
+            Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "Switch_Members(): Return Assistant to original position of crew member to " + this.SwitchedCrewMemberRole);
             foreach (IMapItem mi in this.Hatches)
             {
                if (true == mi.Name.Contains(this.SwitchedCrewMemberRole))
@@ -526,7 +526,7 @@ namespace Pattons_Best
                   report.Driver.Role = "Driver";
                   if (false == SetCrewActionTerritory(report.Driver))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(report.Driver) returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): SetCrewMemberTerritory(report.Driver) returned false");
                      return false;
                   }
                   break;
@@ -536,7 +536,7 @@ namespace Pattons_Best
                   report.Loader.Role = "Loader";
                   if (false == SetCrewActionTerritory(report.Loader))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(report.Loader) returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): SetCrewMemberTerritory(report.Loader) returned false");
                      return false;
                   }
                   break;
@@ -546,7 +546,7 @@ namespace Pattons_Best
                   report.Gunner.Role = "Gunner";
                   if (false == SetCrewActionTerritory(report.Gunner))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(report.Gunner) returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): SetCrewMemberTerritory(report.Gunner) returned false");
                      return false;
                   }
                   break;
@@ -556,19 +556,19 @@ namespace Pattons_Best
                   report.Commander.Role = "Commander";
                   if (false == SetCrewActionTerritory(report.Commander))
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(report.Commander) returned false");
+                     Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): SetCrewMemberTerritory(report.Commander) returned false");
                      return false;
                   }
                   break;
                default:
-                  Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): reached default name=" + switchedMember.Role);
+                  Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): reached default name=" + switchedMember.Role);
                   return false;
             }
             report.Assistant.Rating = this.AssistantOriginalRating;
             report.Assistant.Role = "Assistant";
             if (false == SetCrewActionTerritory(report.Assistant))
             {
-               Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(Assistant) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): SetCrewMemberTerritory(Assistant) returned false");
                return false;
             }
          }
@@ -576,7 +576,7 @@ namespace Pattons_Best
          if ("Assistant" == switchingMemberRole)
             return true;
          //=========================================================
-         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "SwitchMembers(): Switched Assistant with Crew Member=" + switchingMemberRole);
+         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "Switch_Members(): Switched Assistant with Crew Member=" + switchingMemberRole);
          foreach (IMapItem mi in this.Hatches) // Assistant becomes button up
          {
             if (true == mi.Name.Contains("Assistant"))
@@ -593,7 +593,7 @@ namespace Pattons_Best
          ICrewMember? switchingMember = GetCrewMemberByRole(switchingMemberRole); // assistant is in role of switched member
          if (null == switchingMember)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): switchedMember=null for role=" + switchingMemberRole);
+            Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): switchedMember=null for role=" + switchingMemberRole);
             return false;
          }
          this.SwitchedCrewMemberRole = switchingMember.Role;
@@ -604,7 +604,7 @@ namespace Pattons_Best
                report.Driver.Role = "Driver";
                if (false == SetCrewActionTerritory(report.Driver)) // puts assistant in proper spot
                {
-                  Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(Assistant) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): SetCrewMemberTerritory(Assistant) returned false");
                   return false;
                }
                break;
@@ -614,7 +614,7 @@ namespace Pattons_Best
                report.Loader.Role = "Loader";
                if (false == SetCrewActionTerritory(report.Loader)) // puts assistant in proper spot
                {
-                  Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(Assistant) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): SetCrewMemberTerritory(Assistant) returned false");
                   return false;
                }
                break;
@@ -624,7 +624,7 @@ namespace Pattons_Best
                report.Gunner.Role = "Gunner";
                if (false == SetCrewActionTerritory(report.Gunner)) // puts assistant in proper spot
                {
-                  Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(Assistant) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): SetCrewMemberTerritory(Assistant) returned false");
                   return false;
                }
                break;
@@ -634,21 +634,21 @@ namespace Pattons_Best
                report.Commander.Role = "Commander";
                if (false == SetCrewActionTerritory(report.Commander)) // puts assistant in proper spot
                {
-                  Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(Assistant) returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): SetCrewMemberTerritory(Assistant) returned false");
                   return false;
                }
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): reached default name=" + switchingMember.Role);
+               Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): reached default name=" + switchingMember.Role);
                break;
          }
          //-----------------------------------------------------
-         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "SwitchMembers(): SetCrewMemberTerritory for role=" + switchingMember.Role);
+         Logger.Log(LogEnum.LE_SHOW_CREW_SWITCH, "Switch_Members(): SetCrewMemberTerritory for role=" + switchingMember.Role);
          report.Assistant = switchingMember;
          report.Assistant.Role = "Assistant";
          if (false == SetCrewActionTerritory(report.Assistant)) // put SwitchedCrewMemberRole in proper spot
          {
-            Logger.Log(LogEnum.LE_ERROR, "SwitchMembers(): SetCrewMemberTerritory(Assistant) returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Switch_Members(): SetCrewMemberTerritory(Assistant) returned false");
             return false;
          }
          return true;

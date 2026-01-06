@@ -212,7 +212,7 @@ namespace Pattons_Best
          //--------------------------------------------------------
          if (false == gi.SwitchMembers("Assistant")) // return assistant back to original position if moved
          {
-            Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): SwitchMembers() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "Replace_InjuredCrewmen(): Switch_Members() returned false");
             return false;
          }
          //--------------------------------------------------------
@@ -8608,15 +8608,15 @@ namespace Pattons_Best
             bool isAssistantSwitch = false;
             foreach (IMapItem crewAction in gi.CrewActions)
             {
-               if ("Assistant_SwitchLdr" == crewAction.Name)
+               if (true == crewAction.Name.Contains("SwitchLdr"))
                   isLoaderSwitch = true;
-               if ("Assistant_SwitchDvr" == crewAction.Name)
+               if (true == crewAction.Name.Contains("SwitchDvr"))
                   isDriverSwitch = true;
-               if ("Assistant_SwitchGunr" == crewAction.Name)
+               if (true == crewAction.Name.Contains("SwitchGunr"))
                   isGunnerSwitch = true;
-               if ("Assistant_SwitchCmdr" == crewAction.Name)
+               if (true == crewAction.Name.Contains("SwitchCmdr"))
                   isCommanderSwitch = true;
-               if ("Assistant_SwitchAsst" == crewAction.Name)
+               if (true == crewAction.Name.Contains("SwitchAsst"))
                   isAssistantSwitch = true;
             }
             if (true == isLoaderSwitch)
@@ -10553,7 +10553,7 @@ namespace Pattons_Best
                   gi.BattleStacks.Clear();
                   if( false == gi.SwitchMembers("Assistant")) // return assistant back to original position prior to improvement checks
                   {
-                     returnStatus = "SwitchMembers() returned false";
+                     returnStatus = "Switch_Members() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(EveningDebriefingRatingImprovement): " + returnStatus);
                   }
                   lastReport.DayEndedTime = TableMgr.GetTime(lastReport);

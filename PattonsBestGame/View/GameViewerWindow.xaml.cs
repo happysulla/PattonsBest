@@ -676,20 +676,9 @@ namespace Pattons_Best
          bool isLoaderChangingLoad = false;
          bool isTankMoving = false;
          int periscopeRepairCount = 0;
-         bool isAssistantSwitching = false;
          //-------------------------------------------------------
          foreach (IMapItem mi in gi.CrewActions) // This menu is created on each crew action
          {
-            if (true == mi.Name.Contains("Assistant_SwitchLdr"))
-               isAssistantSwitching = true;
-            if (true == mi.Name.Contains("Assistant_SwitchDvr"))
-               isAssistantSwitching = true;
-            if (true == mi.Name.Contains("Assistant_SwitchGunr"))
-               isAssistantSwitching = true;
-            if (true == mi.Name.Contains("Assistant_SwitchCmdr"))
-               isAssistantSwitching = true;
-            if (true == mi.Name.Contains("Assistant_SwitchAsst"))
-               isAssistantSwitching = true;
             if (true == mi.Name.Contains("Commander_FireAaMg"))
                isCommanderFireAaMg = true;
             if (true == mi.Name.Contains("Loader_FireAaMg"))
@@ -772,7 +761,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateContextMenu_CrewAction(): Loader=null");
             return false;
          }
-         if ( (false == loader.IsIncapacitated) && (("Loader" != gi.SwitchedCrewMemberRole) || (false == isAssistantSwitching) )) // CreateContextMenu_CrewAction() - if Loader is not switched with Assistant OR no swithcing done, show all menu options
+         if (false == loader.IsIncapacitated) // CreateContextMenu_CrewAction() 
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Loader_Load";
@@ -856,7 +845,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateContextMenu_CrewAction(): Driver=null");
             return false;
          }
-         if( (false == driver.IsIncapacitated) && (("Driver" != gi.SwitchedCrewMemberRole) || (false == isAssistantSwitching)))  // CreateContextMenu_CrewAction()
+         if(false == driver.IsIncapacitated)  // CreateContextMenu_CrewAction()
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Driver_Stop";
@@ -925,7 +914,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateContextMenu_CrewAction(): Gunner=null");
             return false;
          }
-         if ( (false == gunner.IsIncapacitated) && (("Gunner" != gi.SwitchedCrewMemberRole) || (false == isAssistantSwitching))) // CreateContextMenu_CrewAction()
+         if (false == gunner.IsIncapacitated) // CreateContextMenu_CrewAction()
          {
             if (true == isMainGunFiringAvailable)
             {
@@ -993,7 +982,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "CreateContextMenu_CrewAction(): Commander=null");
             return false;
          }
-         if ( (false == commander.IsIncapacitated) && (("Commander" != gi.SwitchedCrewMemberRole) || (false == isAssistantSwitching)))  // CreateContextMenu_CrewAction()
+         if (false == commander.IsIncapacitated)  // CreateContextMenu_CrewAction()
          {
             if ((true == isCommanderOpenHatch) || (false == gi.IsBrokenPeriscopeCommander) || (true == card.myIsVisionCupola)) // If broken scope and button up, cannot direct
             {
@@ -1106,82 +1095,79 @@ namespace Pattons_Best
             }
          }
          //===========================================================================================================
-         if (false == isAssistantSwitching)   // CreateContextMenu_CrewAction() - only show these options if not already selected a switch operation
+         if (true == string.IsNullOrEmpty(gi.SwitchedCrewMemberRole)) // assistant has not yet switched with anybody if null
          {
-            if (true == string.IsNullOrEmpty(gi.SwitchedCrewMemberRole)) // assistant has not yet switched with anybody if null
-            {
-               if (true == driver.IsIncapacitated)
-               {
-                  menuItem1 = new MenuItem();
-                  menuItem1.Name = "Assistant_SwitchDvr";
-                  menuItem1.Header = "Switch w/ Driver";
-                  menuItem1.Click += MenuItemCrewActionClick;
-                  myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
-               }
-               if (true == loader.IsIncapacitated)
-               {
-                  menuItem1 = new MenuItem();
-                  menuItem1.Name = "Assistant_SwitchLdr";
-                  menuItem1.Header = "Switch w/ Loader";
-                  menuItem1.Click += MenuItemCrewActionClick;
-                  myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
-               }
-               if (true == gunner.IsIncapacitated)
-               {
-                  menuItem1 = new MenuItem();
-                  menuItem1.Name = "Assistant_SwitchGunr";
-                  menuItem1.Header = "Switch w/ Gunner";
-                  menuItem1.Click += MenuItemCrewActionClick;
-                  myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
-               }
-               if (true == commander.IsIncapacitated)
-               {
-                  menuItem1 = new MenuItem();
-                  menuItem1.Name = "Assistant_SwitchCmdr";
-                  menuItem1.Header = "Switch w/ Commander";
-                  menuItem1.Click += MenuItemCrewActionClick;
-                  myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
-               }
-            }
-            else // assistant already switched with somebody - gi.SwitchedCrewMemberRole is where the Assistant current is now
+            if (true == driver.IsIncapacitated)
             {
                menuItem1 = new MenuItem();
-               menuItem1.Name = "Assistant_SwitchAsst";
-               menuItem1.Header = "Return to Assistant";
+               menuItem1.Name = "Assistant_SwitchDvr";
+               menuItem1.Header = "Switch w/ Driver";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+            }
+            if (true == loader.IsIncapacitated)
+            {
+               menuItem1 = new MenuItem();
+               menuItem1.Name = "Assistant_SwitchLdr";
+               menuItem1.Header = "Switch w/ Loader";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+            }
+            if (true == gunner.IsIncapacitated)
+            {
+               menuItem1 = new MenuItem();
+               menuItem1.Name = "Assistant_SwitchGunr";
+               menuItem1.Header = "Switch w/ Gunner";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+            }
+            if (true == commander.IsIncapacitated)
+            {
+               menuItem1 = new MenuItem();
+               menuItem1.Name = "Assistant_SwitchCmdr";
+               menuItem1.Header = "Switch w/ Commander";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+            }
+         }
+         else // assistant already switched with somebody - gi.SwitchedCrewMemberRole is where the Assistant current is now
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = gi.SwitchedCrewMemberRole + "_SwitchAsst";
+            menuItem1.Header = "Return to Assistant";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
+            if (true == driver.IsIncapacitated)
+            {
+               menuItem1 = new MenuItem();
+               menuItem1.Name = gi.SwitchedCrewMemberRole + "_SwitchDvr";
+               menuItem1.Header = "Switch w/ Driver";
                menuItem1.Click += MenuItemCrewActionClick;
                myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
-               if (true == driver.IsIncapacitated)
-               {
-                  menuItem1 = new MenuItem();
-                  menuItem1.Name = "Assistant_SwitchDvr";
-                  menuItem1.Header = "Switch w/ Driver";
-                  menuItem1.Click += MenuItemCrewActionClick;
-                  myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
-               }
-               if (true == loader.IsIncapacitated)
-               {
-                  menuItem1 = new MenuItem();
-                  menuItem1.Name = "Assistant_SwitchLdr";
-                  menuItem1.Header = "Switch w/ Loader";
-                  menuItem1.Click += MenuItemCrewActionClick;
-                  myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
-               }
-               if (true == gunner.IsIncapacitated)
-               {
-                  menuItem1 = new MenuItem();
-                  menuItem1.Name = "Assistant_SwitchGunr";
-                  menuItem1.Header = "Switch w/ Gunner";
-                  menuItem1.Click += MenuItemCrewActionClick;
-                  myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
-               }
-               if (true == commander.IsIncapacitated)
-               {
-                  menuItem1 = new MenuItem();
-                  menuItem1.Name = "Assistant_SwitchCmdr";
-                  menuItem1.Header = "Switch w/ Commander";
-                  menuItem1.Click += MenuItemCrewActionClick;
-                  myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
-               }
+            }
+            if (true == loader.IsIncapacitated)
+            {
+               menuItem1 = new MenuItem();
+               menuItem1.Name = gi.SwitchedCrewMemberRole + "_SwitchLdr";
+               menuItem1.Header = "Switch w/ Loader";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
+            }
+            if (true == gunner.IsIncapacitated)
+            {
+               menuItem1 = new MenuItem();
+               menuItem1.Name = gi.SwitchedCrewMemberRole + "_SwitchGunr";
+               menuItem1.Header = "Switch w/ Gunner";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
+            }
+            if (true == commander.IsIncapacitated)
+            {
+               menuItem1 = new MenuItem();
+               menuItem1.Name = gi.SwitchedCrewMemberRole + "_SwitchCmdr";
+               menuItem1.Header = "Switch w/ Commander";
+               menuItem1.Click += MenuItemCrewActionClick;
+               myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
             }
          }
          return true;
@@ -4731,9 +4717,9 @@ namespace Pattons_Best
          }
          string sCrewMemberRole = aStringArray1[0];
          //--------------------------------------
-         foreach(IMapItem crewAction in myGameInstance.CrewActions) // get rid of existing crew action for this crew member
+         foreach (IMapItem crewAction in myGameInstance.CrewActions) // get rid of existing crew action for this crew member
          {
-            if( (true == crewAction.Name.Contains(sCrewMemberRole)) && (true == crewAction.Name.Contains("_")) )
+            if (true == crewAction.Name.Contains(sCrewMemberRole + "_"))
             {
                myGameInstance.CrewActions.Remove(crewAction); // Remove existing Crew Action
                Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItemCrewActionClick(): -----------------removing ca=" + crewAction.Name);
@@ -4894,18 +4880,38 @@ namespace Pattons_Best
                mi = new MapItem(menuitem.Name, 1.0, "c73ReplacePeriscope", t);
                break;
             case "Assistant_SwitchLdr":
+            case "Gunner_SwitchLdr":
+            case "Commander_SwitchLdr":
+            case "Driver_SwitchLdr":
+            case "Loader_SwitchLdr":
                mi = new MapItem(menuitem.Name, 1.0, "c200LoaderSwitch", t);
                break;
             case "Assistant_SwitchDvr":
+            case "Gunner_SwitchDvr":
+            case "Commander_SwitchDvr":
+            case "Driver_SwitchDvr":
+            case "Loader_SwitchDvr":
                mi = new MapItem(menuitem.Name, 1.0, "c199DriverSwitch", t);
                break;
             case "Assistant_SwitchGunr":
+            case "Gunner_SwitchGunr":
+            case "Commander_SwitchGunr":
+            case "Driver_SwitchGunr":
+            case "Loader_SwitchGunr":
                mi = new MapItem(menuitem.Name, 1.0, "c201GunnerSwitch", t);
                break;
             case "Assistant_SwitchCmdr":
+            case "Gunner_SwitchCmdr":
+            case "Commander_SwitchCmdr":
+            case "Driver_SwitchCmdr":
+            case "Loader_SwitchCmdr":
                mi = new MapItem(menuitem.Name, 1.0, "c202CommanderSwitch", t);
                break;
             case "Assistant_SwitchAsst":
+            case "Gunner_SwitchAsst":
+            case "Commander_SwitchAsst":
+            case "Driver_SwitchAsst":
+            case "Loader_SwitchAsst":
                mi = new MapItem(menuitem.Name, 1.0, "c203AssistantReturn", t);
                break;
             case "Commander_Move":
