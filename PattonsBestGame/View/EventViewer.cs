@@ -208,7 +208,8 @@ namespace Pattons_Best
             case GameAction.EventDebriefDecorationSilverStar:
             case GameAction.EventDebriefDecorationCross:
             case GameAction.EventDebriefDecorationHonor:
-               if ( null != myAfterActionDialog )
+               Option optionSingleDayBatte = gi.Options.Find("SingleDayScenario"); // Only show new dialog if transitioning to new day
+               if ( (null != myAfterActionDialog) && (false == optionSingleDayBatte.IsEnabled) ) 
                {
                   myAfterActionDialog.Close();
                   AfterActionReportUserControl aarUserControl = new AfterActionReportUserControl(gi);
@@ -1711,9 +1712,6 @@ namespace Pattons_Best
                   }
                   else
                   {
-                     myTextBlock.Inlines.Add(new Run(" Click image to continue."));
-                     myTextBlock.Inlines.Add(new LineBreak());
-                     myTextBlock.Inlines.Add(new LineBreak());
                      if (true == gi.IsDaylightLeft(report))
                      {
                         imge032a.Name = "Continue32a";
@@ -4975,7 +4973,7 @@ namespace Pattons_Best
          {
             if (false == gi.IsCrewActionSelectable("Assistant", out isAssistantOrderGiven))
             {
-               Logger.Log(LogEnum.LE_ERROR, "IsOrders_Given(): IsCrewActionSelectable(Assistant) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "IsOrders_Given(): Is_CrewActionSelectable(Assistant) returned false");
                isOrdersGiven = false;
                return false;
             }
@@ -4985,7 +4983,7 @@ namespace Pattons_Best
          {
             if (false == gi.IsCrewActionSelectable("Gunner", out isGunnerOrderGiven))
             {
-               Logger.Log(LogEnum.LE_ERROR, "IsOrders_Given(): IsCrewActionSelectable(Gunner) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "IsOrders_Given(): Is_CrewActionSelectable(Gunner) returned false");
                isOrdersGiven = false;
                return false;
             }
@@ -4995,7 +4993,7 @@ namespace Pattons_Best
          {
             if (false == gi.IsCrewActionSelectable("Commander", out isCommanderOrderGiven))
             {
-               Logger.Log(LogEnum.LE_ERROR, "IsOrders_Given():  IsCrewActionSelectable(Commander) returned false");
+               Logger.Log(LogEnum.LE_ERROR, "IsOrders_Given():  Is_CrewActionSelectable(Commander) returned false");
                isOrdersGiven = false;
                return false;
             }
@@ -5389,6 +5387,16 @@ namespace Pattons_Best
             }
          }
          //-----------------------------------------------------
+         bool isEnemyInMoveArea = false;
+         if( null != gi.EnteredArea )
+         {
+            if (false == gi.IsTaskForceInEnemyArea(out isEnemyInMoveArea))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "Continue_AfterBattlePrep(): IsTaskForceInEnemyArea() returned false");
+               return false;
+            }
+         }
+         //-----------------------------------------------------
          if (EnumScenario.Counterattack == lastReport.Scenario)
          {
             bool isStartAreaReached = false;
@@ -5409,7 +5417,7 @@ namespace Pattons_Best
                outAction = GameAction.MovementStartAreaSet; // Setting the first start area
             }
          }
-         else
+         else // Advance or Battle Scenario
          {
             bool isExitAreaReached = false;
             if (true == isMapExitAreaExist)
@@ -5429,12 +5437,6 @@ namespace Pattons_Best
                outAction = GameAction.MovementEnemyStrengthChoice;  // Continue_AfterBattlePrep(): "Continue 017" - Preparations Final
                if (false == gi.IsShermanAdvancingOnMoveBoard) // If sherman advancing on BattleBoard, there will be enemy units in same area of move board until Sherman moves out
                {
-                  bool isEnemyInMoveArea;
-                  if (false == gi.IsTaskForceInEnemyArea(out isEnemyInMoveArea))
-                  {
-                     Logger.Log(LogEnum.LE_ERROR, "Continue_AfterBattlePrep(): IsTaskForceInEnemyArea() returned false");
-                     return false;
-                  }
                   if (true == isEnemyInMoveArea)
                      outAction = GameAction.MovementBattlePhaseStartDueToAdvance;  // Continue_AfterBattlePrep() CGS_CGS
                }
@@ -6478,17 +6480,12 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue38":
-                           bool isLoaderLoading = true;
+                           bool isLoaderLoading = false;
                            foreach (IMapItem crewAction in myGameInstance.CrewActions)
                            {
                               if (true == crewAction.Name.Contains("Loader_Load"))
                               {
                                  isLoaderLoading = true;
-                                 break;
-                              }
-                              if (true == crewAction.Name.Contains("Loader")) // if loader is doing anything other than loading, do not load gun
-                              {
-                                 isLoaderLoading = false;
                                  break;
                               }
                            }
@@ -6500,7 +6497,7 @@ namespace Pattons_Best
                               if (true == crewAction.Name.Contains("Gunner_RotateFireMainGun"))
                                  isGunnerFiring = true;
                            }
-                           if ( (true == isLoaderLoading) && (true == isGunnerFiring) ) // do not show ammo orders screen if gunneris not firing or loader is not loading
+                           if ( (true == isLoaderLoading) && (true == isGunnerFiring) ) // do not show ammo orders screen if gunner is not firing or loader is not loading
                               action = GameAction.BattleRoundSequenceAmmoOrders;
                            else
                               action = GameAction.BattleRoundSequenceConductCrewAction; // skip ammo orders
@@ -6570,6 +6567,7 @@ namespace Pattons_Best
                         case "Continue50":
                         case "Continue50c":
                         case "Continue50d":
+                        case "Continue50e":
                            action = GameAction.BattleRoundSequenceConductCrewAction;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
@@ -6578,6 +6576,7 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue50b":
+                        case "Continue50f":
                            Logger.Log(LogEnum.LE_SHOW_BATTLE_ROUND_START, "TextBlock_MouseDown(): Out of Main Gun Rounds e=" + myGameInstance.EventActive);
                            action = GameAction.BattleRoundSequenceRoundStart;          // e050b - Out of Main Gun Rounds ==> continue with next round
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
@@ -6944,19 +6943,19 @@ namespace Pattons_Best
                   myAfterActionDialog.Show();
                }
                break;
-            case " Begin Campaign":
+            case " Begin Campaign ":
                myGameInstance.Options.SetValue("SingleDayScenario", false);
                if (false == ShowTutorialScreens())
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowTutorialScreens() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Show_TutorialScreens() returned false");
                   return false;
                }
                break;
-            case " Begin One Day ":
+            case " Begin One Day  ":
                myGameInstance.Options.SetValue("SingleDayScenario", true);
                if (false == ShowTutorialScreens())
                {
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): ShowTutorialScreens() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): Show_TutorialScreens() returned false");
                   return false;
                }
                break;
@@ -6977,7 +6976,7 @@ namespace Pattons_Best
                action = GameAction.BattleRoundSequenceShermanFiringMainGun; // Fire Button
                myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                break;
-            case "   Read Rules  ":
+            case "   Read Rules   ":
                if (false == ShowRule("r1.0"))
                {
                   Logger.Log(LogEnum.LE_ERROR, "Button_ClickShowOther(): ShowRule(r1.1) returned false");
@@ -7101,21 +7100,19 @@ namespace Pattons_Best
          GameAction action = GameAction.SetupShowMapHistorical;
          if (null == myGameInstance)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowTutorialScreens(): myGameInstance=null");
+            Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreens(): myGameInstance=null");
             return false;
          }
          if (null == myGameEngine)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowTutorialScreens(): myGameEngine=null");
+            Logger.Log(LogEnum.LE_ERROR, "Show_TutorialScreens(): myGameEngine=null");
             return false;
          }
          Option option;
          //--------------------------
-         {
-            option = myGameInstance.Options.Find("SkipTutorial1");
-            if (true == option.IsEnabled)
-               action = GameAction.SetupShowMovementBoard;
-         }
+         option = myGameInstance.Options.Find("SkipTutorial1");
+         if (true == option.IsEnabled)
+            action = GameAction.SetupShowMovementBoard;
          if(GameAction.SetupShowMovementBoard == action)
          {
             option = myGameInstance.Options.Find("SkipTutorial2");

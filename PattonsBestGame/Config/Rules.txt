@@ -1215,9 +1215,7 @@ If the Battle Board is cleared of enemy units, the day of combat is finished for
 <LineBreak/><LineBreak/>
 The crew of a disabled tank may abandon the vehicle, but each man must roll once on the 
 <InlineUIContainer><Button Content='Wounds' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> 
-Table while making his escape. 
-<LineBreak/><LineBreak/>
-Go to Evening Debriefing 
+Table while making his escape. Afterwards, go to Evening Debriefing 
 <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>.
 <LineBreak/><LineBreak/>
                                       <InlineUIContainer><Image Name='c106ThrownTrack'  Height='100' Width='100'></Image></InlineUIContainer>"

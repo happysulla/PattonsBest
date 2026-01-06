@@ -101,7 +101,7 @@ namespace Pattons_Best
             mySpanCommanderName.Background = theBrushInActive;
          if (false == gi.SetCrewActionTerritory(commander))
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): SetCrewMemberTerritory() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): Set_CrewActionTerritory() returned false");
             return false;
          }
          //----------------------------------
@@ -120,7 +120,7 @@ namespace Pattons_Best
             mySpanGunnerName.Background = theBrushInActive;
          if (false == gi.SetCrewActionTerritory(gunner))
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): SetCrewMemberTerritory() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): Set_CrewActionTerritory() returned false");
             return false;
          }
          //----------------------------------
@@ -139,7 +139,7 @@ namespace Pattons_Best
             mySpanLoaderName.Background = theBrushInActive;
          if (false == gi.SetCrewActionTerritory(loader))
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): SetCrewMemberTerritory() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): Set_CrewActionTerritory() returned false");
             return false;
          }
          //----------------------------------
@@ -158,7 +158,7 @@ namespace Pattons_Best
             mySpanDriverName.Background = theBrushInActive;
          if (false == gi.SetCrewActionTerritory(driver))
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): SetCrewMemberTerritory() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): Set_CrewActionTerritory() returned false");
             return false;
          }
          //----------------------------------
@@ -177,7 +177,7 @@ namespace Pattons_Best
             mySpanAssistantName.Background = theBrushInActive;
          if (false == gi.SetCrewActionTerritory(assistant))
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): SetCrewMemberTerritory() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReport(): Set_CrewActionTerritory() returned false");
             return false;
          }
          //----------------------------------

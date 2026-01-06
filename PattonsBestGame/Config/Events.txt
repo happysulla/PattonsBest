@@ -9,11 +9,11 @@ You can explore what may happen by showing inactive events. Inactive events have
 <LineBreak/>
 Choose a button to begin:
 <LineBreak/><LineBreak/>
-<InlineUIContainer><Button Name='Read_Rules' Content='   Read Rules  ' FontFamily='Courier New'  FontSize='12'> </Button></InlineUIContainer>
+<InlineUIContainer><Button Name='Read_Rules' Content='   Read Rules   ' FontFamily='Courier New'  FontSize='12'> </Button></InlineUIContainer>
  - Can skip as rules are presented as needed <LineBreak/>
-<InlineUIContainer><Button Name='BeginCampaign' Content=' Begin Campaign' FontFamily='Courier New'  FontSize='12'> </Button></InlineUIContainer>
+<InlineUIContainer><Button Name='BeginCampaign' Content=' Begin Campaign ' FontFamily='Courier New'  FontSize='12'> </Button></InlineUIContainer>
  - Campaign from 07/44 to 04/45 <LineBreak/>
-<InlineUIContainer><Button Name='BeginSingleDay' Content=' Begin One Day ' FontFamily='Courier New'  FontSize='12'> </Button></InlineUIContainer>
+<InlineUIContainer><Button Name='BeginSingleDay' Content=' Begin One Day  ' FontFamily='Courier New'  FontSize='12'> </Button></InlineUIContainer>
  - Choose tank and day of operations<LineBreak/>"
 e001	"<Bold>e001 Fourth Armor Division Campaign</Bold> <InlineUIContainer><Button Content='r1.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>
 <LineBreak/><LineBreak/> <InlineUIContainer><CheckBox Name='SkipTutorial1' IsEnabled='True' Content='Skip in Future' FontFamily='Courier New'  FontSize='12'></CheckBox></InlineUIContainer>
@@ -674,24 +674,30 @@ The selection of Ready Rack Ammo Reload marker over the Ammo Reload marker suppo
 <LineBreak/><LineBreak/>
 The Gun Load marker shows the round in the main gun. The Gun Load marker changes to the Ammo Reload location when the gun is fired. 
 <LineBreak/><LineBreak/>"
-e050a	"<Bold>e050a No Gun Round Loaded</Bold> 
+e050a	"<Bold>e050a End of Round - No Gun Round Loaded</Bold> 
 <InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>
 Since the gun is unloaded at the start of the round, choose one of the highlighted boxes to load the gun.
 <LineBreak/><LineBreak/>"
-e050b	"<Bold>e050b Out of Main Gun Rounds</Bold> 
+e050b	"<Bold>e050b End of Round - Out of Main Gun Rounds</Bold> 
 <InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>
 Main Gun is empty, and there are no rounds to load. Click image to continue.
 <LineBreak/><LineBreak/>
                                             <InlineUIContainer><Image Name='Continue50b' Height='100' Width='100'></Image></InlineUIContainer>"
-e050c	"<Bold>e050c No Gun Rounds to Load</Bold> 
+e050c	"<Bold>e050c End of Round - No Load Action Taken</Bold> 
+<InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
+<LineBreak/><LineBreak/>
+The loader did not perform a Load action this turn. Therefore, unable to load gun with new ammo. Click image to continue.
+<LineBreak/><LineBreak/>
+                                            <InlineUIContainer><Image Name='Continue50f' Height='100' Width='100'></Image></InlineUIContainer>"
+e050d	"<Bold>e050c No Gun Rounds to Load</Bold> 
 <InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>
 Only one gun round exists in the main gun. There is nothing else to load. Click image to continue.
 <LineBreak/><LineBreak/>
                                             <InlineUIContainer><Image Name='Continue50c' Height='100' Width='100'></Image></InlineUIContainer>"
-e050d	"<Bold>e050c No Gun Rounds to Load</Bold> 
+e050e	"<Bold>e050d No Gun Rounds to Load</Bold> 
 <InlineUIContainer><Button Content='r9.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   
 <LineBreak/><LineBreak/>
 The tank is empty of all main gun rounds. Click image to continue.
@@ -968,8 +974,8 @@ Click image to continue to continue to Crew Rating Improvements per
                   <InlineUIContainer><Image Name='Debrief' Height='200' Width='400'></Image></InlineUIContainer>"
 e100a	"<Bold>e100a Tank Retires for Today</Bold> 
 <LineBreak/><LineBreak/>
-Due to broken gun or broken gun sight, the tank must be retired for today. <LineBreak/>
-An evening debriefing is performed per <InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+Due to broken gun or broken gun sight, the tank must be retired for today. An evening debriefing is performed per 
+<InlineUIContainer><Button Content='r4.9' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
 <LineBreak/><LineBreak/>
 Click image to continue to continue to Crew Rating Improvements per 
 <InlineUIContainer><Button Content='r4.91' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>   

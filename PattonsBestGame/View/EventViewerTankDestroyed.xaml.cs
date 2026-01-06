@@ -1136,7 +1136,7 @@ namespace Pattons_Best
                         {
                            StringBuilder sb = new StringBuilder();
                            sb.Append(cm0.Name);
-                           sb.Append(" died quickly as tank exploded on ");
+                           sb.Append(" dying quickly as tank exploded on ");
                            sb.Append(TableMgr.GetDate(myGameInstance.Day));
                            myGameInstance.EndGameReason = sb.ToString();
                         }
@@ -1333,7 +1333,7 @@ namespace Pattons_Best
                            {
                               StringBuilder sb = new StringBuilder();
                               sb.Append(cm10.Name);
-                              sb.Append(" died in horrible fire when tank burned without rescue on ");
+                              sb.Append(" dying in horrible fire when tank burned without rescue on ");
                               sb.Append(TableMgr.GetDate(myGameInstance.Day));
                               myGameInstance.EndGameReason = sb.ToString();
                            }

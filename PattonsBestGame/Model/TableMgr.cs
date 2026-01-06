@@ -3208,7 +3208,7 @@ namespace Pattons_Best
                   else
                   {
                      sb.Append(commander.Name);
-                     sb.Append(" died of wounds received in battle on ");
+                     sb.Append(" dying of wounds received in battle on ");
                      sb.Append(TableMgr.GetDate(gi.Day));
                      gi.EndGameReason = sb.ToString();
                   }
@@ -3289,7 +3289,7 @@ namespace Pattons_Best
                   else
                   {
                      sb.Append(commander.Name);
-                     sb.Append(" died of wounds received in battle on ");
+                     sb.Append(" dying of wounds received in battle on ");
                      sb.Append(TableMgr.GetDate(gi.Day));
                      gi.EndGameReason = sb.ToString();
                   }

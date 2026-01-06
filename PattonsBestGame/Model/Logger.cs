@@ -21,6 +21,7 @@ namespace Pattons_Best
       LE_SHOW_MAIN_CLEAR,
       LE_SHOW_ENTERED_HEX,
       LE_SHOW_BUTTON_MOVE,
+      //-------------
       LE_VIEW_SHOW_OPTIONS,
       LE_VIEW_SHOW_FEATS,
       LE_VIEW_SHOW_STATS,
@@ -29,6 +30,7 @@ namespace Pattons_Best
       LE_SHOW_CREW_NAME,
       LE_SHOW_CREW_BU,
       //-------------
+      LE_SHOW_ROUND_COMBAT,
       LE_SHOW_START_AREA,
       LE_SHOW_ACTION_REPORT_NEW,
       LE_SHOW_AUTOSETUP_BATTLEPREP,
@@ -158,13 +160,16 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_SHOW_MAIN_CLEAR);
          //SetOn(LogEnum.LE_SHOW_ENTERED_HEX);
          //SetOn(LogEnum.LE_SHOW_BUTTON_MOVE);
+         //-------------------------------
          //SetOn(LogEnum.LE_VIEW_SHOW_OPTIONS);
          //SetOn(LogEnum.LE_VIEW_SHOW_FEATS);
          SetOn(LogEnum.LE_VIEW_SHOW_STATS);
          //SetOn(LogEnum.LE_VIEW_SHOW_SETTINGS);
          //-------------------------------
+         SetOn(LogEnum.LE_SHOW_ROUND_COMBAT);
          //SetOn(LogEnum.LE_SHOW_CREW_NAME);
          //SetOn(LogEnum.LE_SHOW_CREW_BU);
+         //-------------------------------
          //SetOn(LogEnum.LE_SHOW_ACTION_REPORT_NEW);
          //SetOn(LogEnum.LE_SHOW_AUTOSETUP_BATTLEPREP);
          SetOn(LogEnum.LE_SHOW_START_AREA);
@@ -230,7 +235,7 @@ namespace Pattons_Best
          //SetOn(LogEnum.LE_VIEW_MIM);
          //SetOn(LogEnum.LE_VIEW_MIM_ADD);
          //SetOn(LogEnum.LE_VIEW_MIM_CLEAR);
-         SetOn(LogEnum.LE_VIEW_TIME_TRACK);
+         //SetOn(LogEnum.LE_VIEW_TIME_TRACK);
          //SetOn(LogEnum.LE_VIEW_CONTROL_NAME);
          //-------------------------------
          //SetOn(LogEnum.LE_EVENT_VIEWER_BATTLE_SETUP);

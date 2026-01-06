@@ -229,14 +229,14 @@ namespace Pattons_Best
          return sb.ToString();
       }
       //---------------------------------------------------------------
-      public bool IsCrewActionSelectable(string crewRole, out bool isGiven)
+      public bool IsCrewActionSelectable(string crewRole, out bool isOrderGivenForRole)
       {
-         isGiven = false;
+         isOrderGivenForRole = false;
          //-----------------------------------------------
          IAfterActionReport? lastReport = this.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsCrewActionSelectable(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Is_CrewActionSelectable(): lastReport=null");
             return false;
          }
          int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
@@ -245,7 +245,7 @@ namespace Pattons_Best
          ICrewMember? crewMember = this.GetCrewMemberByRole(crewRole);
          if (null == crewMember)
          {
-            Logger.Log(LogEnum.LE_ERROR, "IsCrewActionSelectable(): crewMember=null for crewRole=" + crewRole);
+            Logger.Log(LogEnum.LE_ERROR, "Is_CrewActionSelectable(): crewMember=null for crewRole=" + crewRole);
             return false;
          }
          //-----------------------------------------------
@@ -301,13 +301,13 @@ namespace Pattons_Best
          {
             case "Assistant":
                if (true == crewMember.IsIncapacitated)
-                  isGiven = true;
+                  isOrderGivenForRole = true;
                return true;
             case "Gunner":
                bool isFixBrokenGunnerPeriscopeAvailable = ((true == this.IsBrokenPeriscopeGunner) && (0 < diffPeriscopes));
                bool isCoaxialMgFiringAvailable = ((false == this.IsBrokenPeriscopeGunner) || (true == isGunnerOpenHatch));
                if ((false == isMainGunFiringAvailable) && (false == isCoaxialMgFiringAvailable) && (false == isFixBrokenGunnerPeriscopeAvailable) || (true == crewMember.IsIncapacitated))
-                  isGiven = true;
+                  isOrderGivenForRole = true;
                return true;
             case "Commander":
                //-----------------------------------------------
@@ -318,10 +318,10 @@ namespace Pattons_Best
                bool isAntiAircraftMgRepairPossible = ((true == this.IsMalfunctionedMgAntiAircraft) && (false == isLoaderRepairAaMg) && (false == this.IsBrokenMgAntiAircraft));
                bool isSubMgAbleToFire = ((true == isCommanderOpenHatch) && (false == isLoaderFireSubMg));
                if ((false == isMainGunFiringAvailable) && (false == isShermanMoveAvailable) && (false == isFixBrokenCmdrPeriscopeAvailable) && (false == is30CalibreMGFirePossible) && (false == is50CalibreMGFirePossible) && (false == isAntiAircraftMgAbleToFire) && (false == isAntiAircraftMgRepairPossible) && (false == isSubMgAbleToFire) || (true == crewMember.IsIncapacitated))
-                  isGiven = true;
+                  isOrderGivenForRole = true;
                return true;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "IsCrewActionSelectable(): reached default crewRole=" + crewRole);
+               Logger.Log(LogEnum.LE_ERROR, "Is_CrewActionSelectable(): reached default crewRole=" + crewRole);
                return false;
          }
       }
@@ -429,7 +429,7 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = this.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetCrewActionTerritory(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Set_CrewActionTerritory(): lastReport=null");
             return false;
          }
          string tName = cm.Role + "Action";
@@ -437,7 +437,7 @@ namespace Pattons_Best
          ITerritory? t = Territories.theTerritories.Find(tName, tType);
          if (null == t)
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetCrewActionTerritory(): Territories.theTerritories.Find() returned false for tName=" + tName + " type=" + tType);
+            Logger.Log(LogEnum.LE_ERROR, "Set_CrewActionTerritory(): Territories.theTerritories.Find() returned false for tName=" + tName + " type=" + tType);
             return false;
          }
          cm.TerritoryCurrent = t;
@@ -745,7 +745,13 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = this.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Reload_Gun(): lastReport=null");
+            return false;
+         }
+         //----------------------------------
+         if( true == lastReport.Loader.IsIncapacitated )
+         {
+            Logger.Log(LogEnum.LE_ERROR, "Reload_Gun(): Loader is incapacitated - cannot reload gun");
             return false;
          }
          //----------------------------------
@@ -759,7 +765,7 @@ namespace Pattons_Best
             this.GunLoads.Remove(mi);
          //----------------------------------
          string gunLoadType = this.GetGunLoadType();  // This is the ammo that fired
-         Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "ReloadGun(): Gun Loaded with " + gunLoadType);
+         Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "Reload_Gun(): Gun Loaded with " + gunLoadType);
          int ammoCount = 0;
          switch (gunLoadType) // decrease on AAR the type of ammunition used
          {
@@ -769,7 +775,7 @@ namespace Pattons_Best
             case "Hbci": ammoCount = lastReport.MainGunHBCI; break;
             case "Wp":  ammoCount = lastReport.MainGunWP; break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): 1-ReloadGun() reached default gunload=" + gunLoadType);
+               Logger.Log(LogEnum.LE_ERROR, "Reload_Gun(): 1-Reload_Gun() reached default gunload=" + gunLoadType);
                return false;
          }
          //----------------------------------
@@ -777,10 +783,10 @@ namespace Pattons_Best
          int maxReadyRackLoadCount = ammoCount - 1; // this ammo is loaded in the gun - the ready rack must be one less than ammo count
          if (maxReadyRackLoadCount <= readyRackLoadCount) // pull ammo from ready rack if ammo count less to ready rack
          {
-            Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "ReloadGun(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString() + "--> ammoCount=" + maxReadyRackLoadCount.ToString());
+            Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "Reload_Gun(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString() + "--> ammoCount=" + maxReadyRackLoadCount.ToString());
             if (false == this.SetReadyRackReload(gunLoadType, maxReadyRackLoadCount))
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReloadGun(): 2-SetReadyRackReload() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "Reload_Gun(): 2-SetReadyRackReload() returned false");
                return false;
             }
          }
@@ -814,7 +820,7 @@ namespace Pattons_Best
             case "Hbci": --lastReport.MainGunHBCI; break;
             case "Wp": --lastReport.MainGunWP; break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "Fire_AndReloadGun(): 1-ReloadGun() reached default gunload=" + gunLoad );
+               Logger.Log(LogEnum.LE_ERROR, "Fire_AndReloadGun(): 1-reached default gunload=" + gunLoad );
                return false;
          }
          //-----------------------------------------------

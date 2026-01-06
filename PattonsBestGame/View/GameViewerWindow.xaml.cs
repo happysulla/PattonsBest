@@ -304,6 +304,8 @@ namespace Pattons_Best
             case GameAction.UnitTestCleanup:
             case GameAction.ShowCombatCalendarDialog:
             case GameAction.ShowAfterActionReportDialog:
+            case GameAction.ShowMovementDiagramDialog:
+            case GameAction.ShowGameFeatsDialog:
             case GameAction.ShowRuleListingDialog:
             case GameAction.ShowEventListingDialog:
             case GameAction.ShowReportErrorDialog:
@@ -315,50 +317,7 @@ namespace Pattons_Best
             case GameAction.SetupShowAfterActionReport:
             case GameAction.SetupShowCombatCalendarCheck:
             case GameAction.SetupCombatCalendarRoll:
-            case GameAction.EveningDebriefingResetDay:
-            case GameAction.MorningBriefingBegin:
-            case GameAction.MorningBriefingCrewmanHealing:
-            case GameAction.MorningBriefingExistingCrewman:
-            case GameAction.MorningBriefingReturningCrewman:
-            case GameAction.MorningBriefingCalendarRoll:
-            case GameAction.MorningBriefingDayOfRest:
-            case GameAction.MorningBriefingTankReplacementHvssRoll:
-            case GameAction.MorningBriefingTankReplacementRoll:
-            case GameAction.MorningBriefingDecreaseTankNum:
-            case GameAction.MorningBriefingIncreaseTankNum:
-            case GameAction.MorningBriefingTankReplacementEnd:
-            case GameAction.BattleRandomEventRoll:
-            case GameAction.TestingStartMorningBriefing:
-            case GameAction.TestingStartPreparations:
-            case GameAction.TestingStartMovement:
-            case GameAction.TestingStartBattle:
-            case GameAction.TestingStartAmbush:
-            case GameAction.MorningBriefingAmmoReadyRackLoad:
-            case GameAction.PreparationsHatches:
-            case GameAction.PreparationsGunLoad:
-            case GameAction.PreparationsGunLoadSelect:
-            case GameAction.BattleRoundSequenceRoundStart:
-            case GameAction.UpdateTankCard:
-            case GameAction.BattleRoundSequenceShermanToHitRollNothing:
-            case GameAction.BattleRoundSequenceReadyRackHeMinus:
-            case GameAction.BattleRoundSequenceReadyRackApMinus:
-            case GameAction.BattleRoundSequenceReadyRackWpMinus:
-            case GameAction.BattleRoundSequenceReadyRackHbciMinus:
-            case GameAction.BattleRoundSequenceReadyRackHvapMinus:
-            case GameAction.BattleRoundSequenceReadyRackHePlus:
-            case GameAction.BattleRoundSequenceReadyRackApPlus:
-            case GameAction.BattleRoundSequenceReadyRackWpPlus:
-            case GameAction.BattleRoundSequenceReadyRackHbciPlus:
-            case GameAction.BattleRoundSequenceReadyRackHvapPlus:
-            case GameAction.EveningDebriefingStart:
-               break;
-            case GameAction.PreparationsShowFeat:
-            case GameAction.BattleRoundSequenceShowFeat:
-            case GameAction.EveningDebriefingShowFeat:
-            case GameAction.EndGameShowFeats:
-               if (false == UpdateCanvasShowFeats())
-                  Logger.Log(LogEnum.LE_ERROR, "Update_View(): UpdateCanvas_ShowFeats(" + action.ToString() + ") returned error ");
-               break;
+               return; // do not update Tank Card Canvas
             case GameAction.ShowTankForcePath:
                if (null == myMainMenuViewer)
                {
@@ -379,7 +338,7 @@ namespace Pattons_Best
                      if (ui is Polyline polyline) // remove all polylines 
                      {
                         if (false == polyline.Name.Contains("Road"))
-                              elements.Add(ui);
+                           elements.Add(ui);
                      }
                      if (ui is Ellipse ellipse) // remove all ellipse 
                         elements.Add(ui);
@@ -387,14 +346,14 @@ namespace Pattons_Best
                   foreach (UIElement ui1 in elements)
                      myCanvasMain.Children.Remove(ui1);
                }
-               break;
+               return; // do not update Tank Card Canvas
             case GameAction.ShowRoads:
                if (null == myMainMenuViewer)
                {
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): myMainMenuViewer=null");
                   return;
                }
-               if ((true == myMainMenuViewer.IsRoadsShown)  && (EnumMainImage.MI_Move == CanvasImageViewer.theMainImage))
+               if ((true == myMainMenuViewer.IsRoadsShown) && (EnumMainImage.MI_Move == CanvasImageViewer.theMainImage))
                {
                   foreach (KeyValuePair<string, Polyline> kvp in myRoads)
                      myCanvasMain.Children.Add(kvp.Value);
@@ -414,6 +373,50 @@ namespace Pattons_Best
                   foreach (UIElement ui1 in roadElements)
                      myCanvasMain.Children.Remove(ui1);
                }
+               return; // do not update Tank Card Canvas
+            case GameAction.UpdateTankCard:
+            case GameAction.TestingStartMorningBriefing:
+            case GameAction.TestingStartPreparations:
+            case GameAction.TestingStartMovement:
+            case GameAction.TestingStartBattle:
+            case GameAction.TestingStartAmbush:
+            case GameAction.EveningDebriefingResetDay:
+            case GameAction.MorningBriefingBegin:
+            case GameAction.MorningBriefingCrewmanHealing:
+            case GameAction.MorningBriefingExistingCrewman:
+            case GameAction.MorningBriefingReturningCrewman:
+            case GameAction.MorningBriefingCalendarRoll:
+            case GameAction.MorningBriefingDayOfRest:
+            case GameAction.MorningBriefingTankReplacementHvssRoll:
+            case GameAction.MorningBriefingTankReplacementRoll:
+            case GameAction.MorningBriefingDecreaseTankNum:
+            case GameAction.MorningBriefingIncreaseTankNum:
+            case GameAction.MorningBriefingTankReplacementEnd:
+            case GameAction.MorningBriefingAmmoReadyRackLoad:
+            case GameAction.BattleRandomEventRoll:
+            case GameAction.PreparationsHatches:
+            case GameAction.PreparationsGunLoad:
+            case GameAction.PreparationsGunLoadSelect:
+            case GameAction.BattleRoundSequenceRoundStart:
+            case GameAction.BattleRoundSequenceShermanToHitRollNothing:
+            case GameAction.BattleRoundSequenceReadyRackHeMinus:
+            case GameAction.BattleRoundSequenceReadyRackApMinus:
+            case GameAction.BattleRoundSequenceReadyRackWpMinus:
+            case GameAction.BattleRoundSequenceReadyRackHbciMinus:
+            case GameAction.BattleRoundSequenceReadyRackHvapMinus:
+            case GameAction.BattleRoundSequenceReadyRackHePlus:
+            case GameAction.BattleRoundSequenceReadyRackApPlus:
+            case GameAction.BattleRoundSequenceReadyRackWpPlus:
+            case GameAction.BattleRoundSequenceReadyRackHbciPlus:
+            case GameAction.BattleRoundSequenceReadyRackHvapPlus:
+            case GameAction.EveningDebriefingStart:
+               break;
+            case GameAction.PreparationsShowFeat:
+            case GameAction.BattleRoundSequenceShowFeat:
+            case GameAction.EveningDebriefingShowFeat:
+            case GameAction.EndGameShowFeats:
+               if (false == UpdateCanvasShowFeats())
+                  Logger.Log(LogEnum.LE_ERROR, "Update_View(): UpdateCanvas_ShowFeats(" + action.ToString() + ") returned error ");
                break;
             case GameAction.MorningBriefingDeployment:
                if (false == UpdateCanvasMain(gi, action))
@@ -425,7 +428,7 @@ namespace Pattons_Best
                break;
             case GameAction.BattleRoundSequenceCrewOrders:
                if (false == CreateContextMenuCrewAction(myGameInstance))
-                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): CreateContextMenuCrewAction() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "UpdateView(): CreateContextMenu_CrewAction() returned false");
                if (false == UpdateCanvasMain(gi, action)) // update smoke depletion
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): UpdateCanvasMain() returned error ");
                break;
@@ -654,7 +657,7 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenu_CrewAction(): lastReport=null");
             return false;
          }
          int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
@@ -672,11 +675,21 @@ namespace Pattons_Best
          bool isLoaderRepairingGun = false;
          bool isLoaderChangingLoad = false;
          bool isTankMoving = false;
-         int periscopeRepairCount = 0; 
+         int periscopeRepairCount = 0;
+         bool isAssistantSwitching = false;
+         //-------------------------------------------------------
          foreach (IMapItem mi in gi.CrewActions) // This menu is created on each crew action
          {
-            if (true == mi.Name.Contains("Loader_ChangeGunLoad"))
-               isLoaderChangingLoad = true;
+            if (true == mi.Name.Contains("Assistant_SwitchLdr"))
+               isAssistantSwitching = true;
+            if (true == mi.Name.Contains("Assistant_SwitchDvr"))
+               isAssistantSwitching = true;
+            if (true == mi.Name.Contains("Assistant_SwitchGunr"))
+               isAssistantSwitching = true;
+            if (true == mi.Name.Contains("Assistant_SwitchCmdr"))
+               isAssistantSwitching = true;
+            if (true == mi.Name.Contains("Assistant_SwitchAsst"))
+               isAssistantSwitching = true;
             if (true == mi.Name.Contains("Commander_FireAaMg"))
                isCommanderFireAaMg = true;
             if (true == mi.Name.Contains("Loader_FireAaMg"))
@@ -732,7 +745,7 @@ namespace Pattons_Best
          string sector = Territory.GetMainGunSector(gi);
          if( "ERROR" == sector )
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): GetMainGunSector() returned ERROR");
+            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenu_CrewAction(): GetMainGunSector() returned ERROR");
             return false;
          }
          bool isGunnerTrainedInHvss = ( (true == gi.TrainedGunners.Contains(lastReport.Gunner.Name)) && (false == lastReport.Gunner.IsIncapacitated) );
@@ -756,10 +769,10 @@ namespace Pattons_Best
          ICrewMember? loader = gi.GetCrewMemberByRole("Loader");
          if( null == loader )
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): Loader=null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenu_CrewAction(): Loader=null");
             return false;
          }
-         if (false == loader.IsIncapacitated) // CreateContextMenuCrewAction()
+         if ( (false == loader.IsIncapacitated) && (("Loader" != gi.SwitchedCrewMemberRole) || (false == isAssistantSwitching) )) // CreateContextMenu_CrewAction() - if Loader is not switched with Assistant OR no swithcing done, show all menu options
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Loader_Load";
@@ -840,10 +853,10 @@ namespace Pattons_Best
          ICrewMember? driver = gi.GetCrewMemberByRole("Driver");
          if (null == driver)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): Driver=null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenu_CrewAction(): Driver=null");
             return false;
          }
-         if( false == driver.IsIncapacitated) // CreateContextMenuCrewAction()
+         if( (false == driver.IsIncapacitated) && (("Driver" != gi.SwitchedCrewMemberRole) || (false == isAssistantSwitching)))  // CreateContextMenu_CrewAction()
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Driver_Stop";
@@ -909,10 +922,10 @@ namespace Pattons_Best
          ICrewMember? gunner = gi.GetCrewMemberByRole("Gunner");
          if (null == gunner)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): Gunner=null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenu_CrewAction(): Gunner=null");
             return false;
          }
-         if (false == gunner.IsIncapacitated) // CreateContextMenuCrewAction()
+         if ( (false == gunner.IsIncapacitated) && (("Gunner" != gi.SwitchedCrewMemberRole) || (false == isAssistantSwitching))) // CreateContextMenu_CrewAction()
          {
             if (true == isMainGunFiringAvailable)
             {
@@ -977,10 +990,10 @@ namespace Pattons_Best
          ICrewMember? commander = gi.GetCrewMemberByRole("Commander");
          if (null == commander)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): Commander=null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenu_CrewAction(): Commander=null");
             return false;
          }
-         if (false == commander.IsIncapacitated) // CreateContextMenuCrewAction()
+         if ( (false == commander.IsIncapacitated) && (("Commander" != gi.SwitchedCrewMemberRole) || (false == isAssistantSwitching)))  // CreateContextMenu_CrewAction()
          {
             if ((true == isCommanderOpenHatch) || (false == gi.IsBrokenPeriscopeCommander) || (true == card.myIsVisionCupola)) // If broken scope and button up, cannot direct
             {
@@ -1054,10 +1067,10 @@ namespace Pattons_Best
          ICrewMember? assistant = gi.GetCrewMemberByRole("Assistant");
          if (null == assistant)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): Assistant=null");
+            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenu_CrewAction(): Assistant=null");
             return false;
          }
-         if (false == assistant.IsIncapacitated) // CreateContextMenuCrewAction()
+         if (false == assistant.IsIncapacitated) // CreateContextMenu_CrewAction()
          {
             menuItem1 = new MenuItem();
             menuItem1.Name = "Assistant_PassAmmo";
@@ -1093,79 +1106,82 @@ namespace Pattons_Best
             }
          }
          //===========================================================================================================
-         if( true == string.IsNullOrEmpty(gi.SwitchedCrewMemberRole) )
+         if (false == isAssistantSwitching)   // CreateContextMenu_CrewAction() - only show these options if not already selected a switch operation
          {
-            if (true == driver.IsIncapacitated)
+            if (true == string.IsNullOrEmpty(gi.SwitchedCrewMemberRole)) // assistant has not yet switched with anybody if null
             {
-               menuItem1 = new MenuItem();
-               menuItem1.Name = "Assistant_SwitchDvr";
-               menuItem1.Header = "Switch w/ Driver";
-               menuItem1.Click += MenuItemCrewActionClick;
-               myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+               if (true == driver.IsIncapacitated)
+               {
+                  menuItem1 = new MenuItem();
+                  menuItem1.Name = "Assistant_SwitchDvr";
+                  menuItem1.Header = "Switch w/ Driver";
+                  menuItem1.Click += MenuItemCrewActionClick;
+                  myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+               }
+               if (true == loader.IsIncapacitated)
+               {
+                  menuItem1 = new MenuItem();
+                  menuItem1.Name = "Assistant_SwitchLdr";
+                  menuItem1.Header = "Switch w/ Loader";
+                  menuItem1.Click += MenuItemCrewActionClick;
+                  myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+               }
+               if (true == gunner.IsIncapacitated)
+               {
+                  menuItem1 = new MenuItem();
+                  menuItem1.Name = "Assistant_SwitchGunr";
+                  menuItem1.Header = "Switch w/ Gunner";
+                  menuItem1.Click += MenuItemCrewActionClick;
+                  myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+               }
+               if (true == commander.IsIncapacitated)
+               {
+                  menuItem1 = new MenuItem();
+                  menuItem1.Name = "Assistant_SwitchCmdr";
+                  menuItem1.Header = "Switch w/ Commander";
+                  menuItem1.Click += MenuItemCrewActionClick;
+                  myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
+               }
             }
-            if (true == loader.IsIncapacitated)
+            else // assistant already switched with somebody - gi.SwitchedCrewMemberRole is where the Assistant current is now
             {
                menuItem1 = new MenuItem();
-               menuItem1.Name = "Assistant_SwitchLdr";
-               menuItem1.Header = "Switch w/ Loader";
-               menuItem1.Click += MenuItemCrewActionClick;
-               myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
-            }
-            if (true == gunner.IsIncapacitated)
-            {
-               menuItem1 = new MenuItem();
-               menuItem1.Name = "Assistant_SwitchGunr";
-               menuItem1.Header = "Switch w/ Gunner";
-               menuItem1.Click += MenuItemCrewActionClick;
-               myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
-            }
-            if (true == commander.IsIncapacitated)
-            {
-               menuItem1 = new MenuItem();
-               menuItem1.Name = "Assistant_SwitchCmdr";
-               menuItem1.Header = "Switch w/ Commander";
-               menuItem1.Click += MenuItemCrewActionClick;
-               myContextMenuCrewActions["Assistant"].Items.Add(menuItem1);
-            }
-         }
-         else 
-         {
-            menuItem1 = new MenuItem();
-            menuItem1.Name = "Assistant_SwitchAsst";
-            menuItem1.Header = "Return to Assistant";
-            menuItem1.Click += MenuItemCrewActionClick;
-            myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
-            if (true == driver.IsIncapacitated)
-            {
-               menuItem1 = new MenuItem();
-               menuItem1.Name = "Assistant_SwitchDvr";
-               menuItem1.Header = "Switch w/ Driver";
+               menuItem1.Name = "Assistant_SwitchAsst";
+               menuItem1.Header = "Return to Assistant";
                menuItem1.Click += MenuItemCrewActionClick;
                myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
-            }
-            if (true == loader.IsIncapacitated)
-            {
-               menuItem1 = new MenuItem();
-               menuItem1.Name = "Assistant_SwitchLdr";
-               menuItem1.Header = "Switch w/ Loader";
-               menuItem1.Click += MenuItemCrewActionClick;
-               myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
-            }
-            if (true == gunner.IsIncapacitated)
-            {
-               menuItem1 = new MenuItem();
-               menuItem1.Name = "Assistant_SwitchGunr";
-               menuItem1.Header = "Switch w/ Gunner";
-               menuItem1.Click += MenuItemCrewActionClick;
-               myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
-            }
-            if (true == commander.IsIncapacitated)
-            {
-               menuItem1 = new MenuItem();
-               menuItem1.Name = "Assistant_SwitchCmdr";
-               menuItem1.Header = "Switch w/ Commander";
-               menuItem1.Click += MenuItemCrewActionClick;
-               myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
+               if (true == driver.IsIncapacitated)
+               {
+                  menuItem1 = new MenuItem();
+                  menuItem1.Name = "Assistant_SwitchDvr";
+                  menuItem1.Header = "Switch w/ Driver";
+                  menuItem1.Click += MenuItemCrewActionClick;
+                  myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
+               }
+               if (true == loader.IsIncapacitated)
+               {
+                  menuItem1 = new MenuItem();
+                  menuItem1.Name = "Assistant_SwitchLdr";
+                  menuItem1.Header = "Switch w/ Loader";
+                  menuItem1.Click += MenuItemCrewActionClick;
+                  myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
+               }
+               if (true == gunner.IsIncapacitated)
+               {
+                  menuItem1 = new MenuItem();
+                  menuItem1.Name = "Assistant_SwitchGunr";
+                  menuItem1.Header = "Switch w/ Gunner";
+                  menuItem1.Click += MenuItemCrewActionClick;
+                  myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
+               }
+               if (true == commander.IsIncapacitated)
+               {
+                  menuItem1 = new MenuItem();
+                  menuItem1.Name = "Assistant_SwitchCmdr";
+                  menuItem1.Header = "Switch w/ Commander";
+                  menuItem1.Click += MenuItemCrewActionClick;
+                  myContextMenuCrewActions[gi.SwitchedCrewMemberRole].Items.Add(menuItem1);
+               }
             }
          }
          return true;
@@ -4693,7 +4709,7 @@ namespace Pattons_Best
          IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "CreateContextMenuCrewAction(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): lastReport=null");
             return;
          }
          string tType = lastReport.TankCardNum.ToString();
@@ -4749,7 +4765,6 @@ namespace Pattons_Best
             return;
          }
          //--------------------------------------
-         ContextMenu menu = myContextMenuCrewActions[sCrewMemberRole]; 
          switch (menuitem.Name)
          {
             case "Loader_Load":
@@ -4930,6 +4945,7 @@ namespace Pattons_Best
          Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItemCrewActionClick(): adding ca=" + mi.Name);
          //--------------------------------------
          Logger.Log(LogEnum.LE_SHOW_ORDERS_MENU, "MenuItemCrewActionClick(): adding new button=" + menuitem.Name + " for sCrewMemberRole=" + sCrewMemberRole);
+         ContextMenu menu = myContextMenuCrewActions[sCrewMemberRole];
          System.Windows.Controls.Button newButton = new Button { ContextMenu = menu, Name = menuitem.Name, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
          MapItem.SetButtonContent(newButton, mi, true, false); // This sets the image as the button's content
          myTankButtons.Add(newButton);

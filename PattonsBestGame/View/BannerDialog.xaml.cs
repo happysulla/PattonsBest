@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
@@ -91,8 +92,17 @@ namespace Pattons_Best
       }
       private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
       {
-         myIsDragging = true;
+         //var currentMonitor = Screen.FromHandle(new System.Windows.Interop.WindowInteropHelper(this).Handle); // Get the current monitor the main window is on.
+         //var source = PresentationSource.FromVisual(this); // Find out if our WPF app is being scaled by the monitor
+         //double dpiScaling = (source != null && source.CompositionTarget != null ? source.CompositionTarget.TransformFromDevice.M11 : 1);
+         //System.Drawing.Rectangle workArea = currentMonitor.WorkingArea; // Get the available area of the monitor
+         //var workAreaWidth = (int)Math.Floor(workArea.Width * dpiScaling);
+         //var workAreaHeight = (int)Math.Floor(workArea.Height * dpiScaling);
+         //this.Left = (((workAreaWidth - (this.Width * dpiScaling)) / 2) + (workArea.Left * dpiScaling)); // Move the window to the center by setting the top and left coordinates.
+         //this.Top = (((workAreaHeight - (this.Height * dpiScaling)) / 2) + (workArea.Top * dpiScaling));
+         //-------------------------------
          myOffsetInBannerWindow = e.GetPosition(this);
+         myOffsetInBannerWindow = new Point(100, 100);
          myIsDragging = true;
          e.Handled = true;
       }
