@@ -71,7 +71,9 @@ namespace Pattons_Best
          "EnemyRearFacingOnMove",
          "ShermanIncreaseMoveChances",
          "ShermanEnhanceMgFire",
-         "ShermanSurpressingMgFire"
+         "ShermanSurpressingMgFire",
+         "MovingForwardIncreseAdvanceChances"
+
       };
       private readonly ArrayList myList;
       public Options() { myList = new ArrayList(); }

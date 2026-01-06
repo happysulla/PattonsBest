@@ -60,6 +60,7 @@ namespace Pattons_Best
          myCheckBoxRearFacingAfterMoveAway.ToolTip = "Enemy units when retreating have increase chances of rear facing.";
          myCheckBoxIncreasedMove.ToolTip = "Ever consecutive turn the Sherman attempts to move, increase chance it does move.";
          myCheckBoxEnhancedMgFire.ToolTip = "Increase the MG fire effectivity against close and medium range targets.";
+         myCheckBoxIncreaseAdvance.ToolTip = "Moving Forward with Sherman inceases chances of a Friendly Advance in the Random Event Phase.";
          myCheckBoxMgSurpressingFire.ToolTip = "Sherman MG fire on LWs/MGs reduce their fire effectiveness and cause them to not move if called on to move.";
          //-----------------------------
          if (false == UpdateDisplay(myOptions))

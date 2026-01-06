@@ -1591,6 +1591,8 @@ namespace Pattons_Best
                {
                   if (EnumSpottingResult.HIDDEN == mi.Spotting) // Hidden units that move become unspotted
                      mi.Spotting = EnumSpottingResult.UNSPOTTED;
+                  if (EnumSpottingResult.SPOTTED == mi.Spotting) // Spotted units that move become unspotted
+                     mi.Spotting = EnumSpottingResult.UNSPOTTED;
                   mi.IsMoved = true;
                   mi.IsHullDown = false;
                   mi.IsBuilding = false;

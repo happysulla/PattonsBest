@@ -294,6 +294,7 @@ namespace Pattons_Best
       PreparationsRepairBowMgRoll,
       PreparationsRepairBowMgRollEnd,
       PreparationsCrewReplaced,
+      PreparationsReadyRackEnd,
 
       MovementStartAreaSet,
       MovementStartAreaSetRoll,
@@ -430,6 +431,7 @@ namespace Pattons_Best
       BattleRoundSequenceLoadMainGunEnd,
 
       BattleRoundSequenceShermanKilled,
+      BattleRoundSequenceShermanBail,
       BattleRoundSequenceEnemyArtilleryRoll,
       BattleRoundSequenceMinefieldRoll,
       BattleRoundSequenceMinefieldDisableRoll,

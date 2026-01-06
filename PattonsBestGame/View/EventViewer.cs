@@ -491,6 +491,7 @@ namespace Pattons_Best
                break;
             case GameAction.BattleShermanKilled:
             case GameAction.BattleRoundSequenceShermanKilled:
+            case GameAction.BattleRoundSequenceShermanBail:
                EventViewerTankDestroyed tankDestroyed = new EventViewerTankDestroyed(myGameEngine, myGameInstance, myCanvasMain, myScrollViewerTextBlock, myRulesMgr, myDieRoller);
                if (true == tankDestroyed.CtorError)
                   Logger.Log(LogEnum.LE_ERROR, "UpdateView(): tankDestroyed.CtorError=true");
@@ -2893,7 +2894,7 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new Run(sbEndWon.ToString()));
                Image? imgEndGameWon = null;
                int randnum = Utilities.RandomGenerator.Next(10);
-               randnum = 5; // <cgs> TEST
+               randnum = 7; // <cgs> TEST
                switch (randnum)
                {
                   case 0:
@@ -2929,8 +2930,13 @@ namespace Pattons_Best
                      myTextBlock.Inlines.Add(new Run("                           "));
                      break;
                   case 7:
-                  case 8:
                      imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Win3"), Width = 300, Height = 300 };
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new LineBreak());
+                     myTextBlock.Inlines.Add(new Run("                           "));
+                     break;
+                  case 8:
+                     imgEndGameWon = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Win5"), Width = 300, Height = 300 };
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new LineBreak());
                      myTextBlock.Inlines.Add(new Run("                           "));
@@ -2957,7 +2963,9 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new LineBreak());
                myTextBlock.Inlines.Add(new LineBreak());
                Image? imgEndGameLost = null;
-               switch (Utilities.RandomGenerator.Next(11))
+               int randnumLost = Utilities.RandomGenerator.Next(9);
+               randnumLost = 5; // <cgs> TEST
+               switch (randnumLost)
                {
                   case 0:
                      imgEndGameLost = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Deny"), Width = 300, Height = 300 };
@@ -2977,6 +2985,14 @@ namespace Pattons_Best
                      break;
                   case 4:
                      imgEndGameLost = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Skulls"), Width = 300, Height = 300 };
+                     myTextBlock.Inlines.Add(new Run("                                  "));
+                     break;
+                  case 5:
+                     imgEndGameLost = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Loser1"), Width = 260, Height = 300 };
+                     myTextBlock.Inlines.Add(new Run("                                         "));
+                     break;
+                  case 6:
+                     imgEndGameLost = new Image { Name = "EndGameShowStats", Source = MapItem.theMapImages.GetBitmapImage("Loser2"), Width = 300, Height = 230 };
                      myTextBlock.Inlines.Add(new Run("                                  "));
                      break;
                   default:
@@ -5104,11 +5120,20 @@ namespace Pattons_Best
                      return false;
                   }
                }
-               break;
+               else if ("Resupply" == content)
+               {
+                  int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
+                  if( (totalAmmo < card.myNumMainGunRound) || (lastReport.Ammo30CalibreMG < 30) )
+                     b.IsEnabled = true;
+                  else
+                     b.IsEnabled = false;
+               }
+                  break;
             case "e032a":
                if ("Resupply" == content) 
                {
-                  if( Utilities.NO_RESULT == gi.DieResults[key][0])
+                  int totalAmmo = lastReport.MainGunHE + lastReport.MainGunAP + lastReport.MainGunWP + lastReport.MainGunHBCI + lastReport.MainGunHVAP;
+                  if ( (Utilities.NO_RESULT == gi.DieResults[key][0]) && ((totalAmmo < card.myNumMainGunRound) || (lastReport.Ammo30CalibreMG < 30)))
                      b.IsEnabled = true;
                   else
                      b.IsEnabled = false;
@@ -6668,7 +6693,10 @@ namespace Pattons_Best
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "c60LRestockReadyRack":
-                           action = GameAction.BattleRoundSequenceReadyRackEnd;
+                           if (GamePhase.Preparations == myGameInstance.GamePhase)
+                              action = GameAction.PreparationsReadyRackEnd;
+                           else
+                              action = GameAction.BattleRoundSequenceReadyRackEnd;
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue60":

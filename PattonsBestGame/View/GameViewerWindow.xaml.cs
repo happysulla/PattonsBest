@@ -20,6 +20,7 @@ using System.Windows.Shapes;
 using System.Xml;
 using WpfAnimatedGif;
 using static System.Windows.Forms.AxHost;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Button = System.Windows.Controls.Button;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Point = System.Windows.Point;
@@ -1051,6 +1052,14 @@ namespace Pattons_Best
                menuItem1.Click += MenuItemCrewActionClick;
                myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
             }
+         }
+         if( (true == gi.Sherman.IsThrownTrack) || (true == gi.Sherman.IsAssistanceNeeded) )
+         {
+            menuItem1 = new MenuItem();
+            menuItem1.Name = "Commander_Bail";
+            menuItem1.Header = "Crew Bail";
+            menuItem1.Click += MenuItemCrewActionClick;
+            myContextMenuCrewActions["Commander"].Items.Add(menuItem1);
          }
          //===========================================================================================================
          ICrewMember? assistant = gi.GetCrewMemberByRole("Assistant");
@@ -4719,7 +4728,7 @@ namespace Pattons_Best
          //--------------------------------------
          foreach (IMapItem crewAction in myGameInstance.CrewActions) // get rid of existing crew action for this crew member
          {
-            if (true == crewAction.Name.Contains(sCrewMemberRole + "_"))
+            if ((true == crewAction.Name.Contains(sCrewMemberRole + "_")) || (true == crewAction.Name.Contains("Bail")))
             {
                myGameInstance.CrewActions.Remove(crewAction); // Remove existing Crew Action
                Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItemCrewActionClick(): -----------------removing ca=" + crewAction.Name);
@@ -4729,10 +4738,8 @@ namespace Pattons_Best
                   {
                      myTankButtons.Remove(oldButton);
                      myCanvasTank.Children.Remove(oldButton);
-                     break;
                   }
                }
-               break;
             }
          }
          //--------------------------------------
@@ -4938,6 +4945,10 @@ namespace Pattons_Best
             case "Commander_ThrowGrenade":
                mi = new MapItem(menuitem.Name, 1.0, "c70ThrowSmokeGrenade", t);
                break;
+            case "Commander_Bail":
+               mi = new MapItem(menuitem.Name, 1.0, "c204Bail", t);
+               MenuItemCrewActionClickBail();  
+               break;
             default:
                Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): reached default name=" + menuitem.Name);
                return;
@@ -5065,6 +5076,38 @@ namespace Pattons_Best
                   return;
                }
             }
+         }
+      }
+      private void MenuItemCrewActionClickBail()
+      {
+         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClickBail(): lastReport=null");
+            return;
+         }
+         string tType = lastReport.TankCardNum.ToString();
+         //-----------------------------------------
+         string[] crewmembers = new string[4] { "Gunner", "Loader", "Driver", "Assistant" }; // switch incapacitated members with new crew members
+         foreach (string crewmember in crewmembers)
+         {
+            string tName = crewmember + "Action";
+            ITerritory? t = Territories.theTerritories.Find(tName, tType);
+            if (null == t)
+            {
+               Logger.Log(LogEnum.LE_ERROR, "MenuItemCrewActionClick(): t=null for " + tName + " tType=" + tType);
+               return;
+            }
+            IMapItem mi = new MapItem(crewmember + "_Bail", 1.0, "c204Bail", t);
+            myGameInstance.CrewActions.Add(mi);
+            System.Windows.Controls.Button newButton = new Button { Name = mi.Name, Width = mi.Zoom * Utilities.theMapItemSize, Height = mi.Zoom * Utilities.theMapItemSize, BorderThickness = new Thickness(0), Background = new SolidColorBrush(Colors.Transparent), Foreground = new SolidColorBrush(Colors.Transparent) };
+            MapItem.SetButtonContent(newButton, mi, true, false); // This sets the image as the button's content
+            myTankButtons.Add(newButton);
+            myCanvasTank.Children.Add(newButton);
+            Canvas.SetLeft(newButton, mi.Location.X);
+            Canvas.SetTop(newButton, mi.Location.Y);
+            Canvas.SetZIndex(newButton, 900);
+            Logger.Log(LogEnum.LE_SHOW_MAPITEM_CREWACTION, "MenuItemCrewActionClickBail(): adding new button=" + mi.Name + " for crewmember=" + crewmember); // LE_SHOW_ORDERS_MENU
          }
       }
       private void MenuItemAmmoReloadClick(object sender, RoutedEventArgs e)
