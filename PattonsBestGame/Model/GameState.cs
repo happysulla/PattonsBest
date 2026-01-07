@@ -24,6 +24,7 @@ using System.Xml.Linq;
 using Windows.ApplicationModel.Appointments.DataProvider;
 using static Pattons_Best.EventViewerAmmoSetup;
 using static System.Windows.Forms.AxHost;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Pattons_Best
 {
@@ -562,8 +563,8 @@ namespace Pattons_Best
             sb.Append(", you are the Lead Tank!");
             report.Notes.Add(sb.ToString());  // Set_Deployment(): gi.IsLeadTank
          }
-         gi.Sherman.IsThrownTrack = true; // <cgs> TEST
-         gi.Sherman.IsMoving = false; // <cgs> TEST
+         //gi.Sherman.IsThrownTrack = true; // <CGS> TEST
+         //gi.Sherman.IsMoving = false; // <CGS> TEST
          return true;
       }
       protected bool SetUsControlOnBattleMap(IGameInstance gi)
@@ -1807,6 +1808,55 @@ namespace Pattons_Best
          gi.MapItemMoves.Insert(0, mim); // add at front
          return true;
       }
+      protected bool UpdateReadyRackMinus(IGameInstance gi, string ammoType)
+      {
+         int readyRackLoadCount = gi.GetReadyRackReload(ammoType);
+         if (0 == readyRackLoadCount)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack_Minus(): Invalid state - readyRackLoadCount=0 for " + ammoType);
+            return false;
+         }
+         readyRackLoadCount--;
+         Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "UpdateReadyRack_Minus(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString());
+         if (false == gi.SetReadyRackReload(ammoType, readyRackLoadCount))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack_Minus(): SetReadyRackReload() returned false");
+            return false;
+         }
+         return true;
+      }
+      protected bool UpdateReadyRackPlus(IGameInstance gi, string ammoType, int ammoAvailable)
+      {
+         IAfterActionReport? lastReport = gi.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack_Plus(): lastReport=null");
+            return false;
+         }
+         TankCard card = new TankCard(lastReport.TankCardNum);
+         //---------------------------------------------------
+         int readyRackLoadCount = gi.GetReadyRackReload(ammoType);
+         ammoAvailable -= readyRackLoadCount;
+         string gunLoadType = gi.GetGunLoadType();
+         if (ammoType == gunLoadType) // subtract one if a round is int the gun tube
+            ammoAvailable--;
+         if ((ammoAvailable < 1) || (card.myMaxReadyRackCount <= gi.GetReadyRackTotalLoad()))
+         {
+            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack_Plus(): Invalid state - maxReload reached for " + ammoType + " ammo=" + ammoAvailable.ToString());
+            return false;
+         }
+         else
+         {
+            readyRackLoadCount++;
+            Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "UpdateReadyRack_Plus(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString() + "--> ammoCount=" + ammoAvailable.ToString());
+            if (false == gi.SetReadyRackReload(ammoType, readyRackLoadCount))
+            {
+               Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack_Plus(): SetReadyRack_Reload() returned false");
+               return false;
+            }
+         }
+         return true;
+      }
    }
    //-----------------------------------------------------
    class GameStateSetup : GameState
@@ -2406,8 +2456,8 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipPreparations(): Set_Deployment() returned false");
             return false;
          }
-         //gi.Sherman.IsHullDown = false;  // <CGS> TEST
-         //gi.Sherman.IsMoving = true;     // <CGS> TEST
+         //gi.Sherman.IsHullDown = false;  // <CGS> TEST - PerformAutoSetupSkipPreparations()  
+         //gi.Sherman.IsMoving = true;     // <CGS> TEST - PerformAutoSetupSkipPreparations()  
          //------------------------------------
          ICrewMember? cm = gi.GetCrewMemberByRole("Commander");
          if (null == cm)
@@ -2862,10 +2912,7 @@ namespace Pattons_Best
          //lastReport.Commander.WoundDaysUntilReturn = 0;    // <CGS> TEST - wounded crewmen
          //gi.SetIncapacitated(lastReport.Commander);        // <CGS> TEST - wounded crewmen
          //--------------------------------
-         //lastReport.Loader.SetBloodSpots(10);           // <CGS> TEST - wounded crewmen
-         //lastReport.Loader.Wound = "Light Wound";       // <CGS> TEST - wounded crewmen
-         //lastReport.Loader.WoundDaysUntilReturn = 0;    // <CGS> TEST - wounded crewmen
-         //gi.SetIncapacitated(lastReport.Loader);        // <CGS> TEST - wounded crewmen
+         //TableMgr.SetWounds(gi, lastReport.Loader, 92, 0);
          //--------------------------------
          //gi.IsAdvancingFireChosen = false; // <CGS> TEST
          //--------------------------------
@@ -3753,6 +3800,7 @@ namespace Pattons_Best
                      returnStatus = "Healed_CrewmanDayDecrease() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateEveningDebriefing.PerformAction(Morning_BriefingCalendarRoll): " + returnStatus);
                   }
+                  //dieRoll = 0; // <CGS> TEST - NO COMBAT - move to battle board
                   //dieRoll = 6; // <CGS> TEST - NO COMBAT - stay on move board
                   gi.DieResults[key][0] = dieRoll; // clicking on image either restarts next day or continues with MorningBriefingBegin
                   break;
@@ -3786,8 +3834,8 @@ namespace Pattons_Best
                   SetCommand(gi, action, GameAction.MorningBriefingTimeCheckRoll, "e010");
                   break;
                case GameAction.MorningBriefingTimeCheckRoll:
-                  //dieRoll = 1; // <CGS> TEST 
-                  //dieRoll = 16; // <CGS> TEST - advance time to near end of day
+                  //dieRoll = 1; // <CGS> TEST - MorningBriefingTimeCheckRoll - do not advance time by much
+                  //dieRoll = 16; // <CGS> TEST - MorningBriefingTimeCheckRoll - advance time to near end of day
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (false == TableMgr.InitializeTimeTrackForNewDay(gi)) // GameStateMorningBriefing.PerformAction(MorningBriefingTimeCheckRoll)
@@ -4409,6 +4457,76 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsRepairBowMgRollEnd): " + returnStatus);
                   }
                   break;
+               case GameAction.BattleRoundSequenceReadyRackHeMinus:
+                  if (false == UpdateReadyRackMinus(gi, "He"))
+                  {
+                     returnStatus = "UpdateReadyRackMinus() returned false for He";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceReadyRackApMinus:
+                  if (false == UpdateReadyRackMinus(gi, "Ap"))
+                  {
+                     returnStatus = "UpdateReadyRackMinus() returned false for Ap";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceReadyRackWpMinus:
+                  if (false == UpdateReadyRackMinus(gi, "Wp"))
+                  {
+                     returnStatus = "UpdateReadyRackMinus() returned false for Wp";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceReadyRackHbciMinus:
+                  if (false == UpdateReadyRackMinus(gi, "Hbci"))
+                  {
+                     returnStatus = "UpdateReadyRackMinus() returned false for Hbci";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceReadyRackHvapMinus:
+                  if (false == UpdateReadyRackMinus(gi, "Hvap"))
+                  {
+                     returnStatus = "UpdateReadyRackMinus() returned false for Hvap";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceReadyRackHePlus:
+                  if (false == UpdateReadyRackPlus(gi, "He", lastReport.MainGunHE))
+                  {
+                     returnStatus = "UpdateReadyRackPlus() returned false for He";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceReadyRackApPlus:
+                  if (false == UpdateReadyRackPlus(gi, "Ap", lastReport.MainGunAP))
+                  {
+                     returnStatus = "UpdateReadyRackPlus() returned false for Ap";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceReadyRackWpPlus:
+                  if (false == UpdateReadyRackPlus(gi, "Wp", lastReport.MainGunWP))
+                  {
+                     returnStatus = "UpdateReadyRackPlus() returned false for Wp";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceReadyRackHbciPlus:
+                  if (false == UpdateReadyRackPlus(gi, "Hbci", lastReport.MainGunHBCI))
+                  {
+                     returnStatus = "UpdateReadyRackPlus() returned false for Hbci";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
+                  }
+                  break;
+               case GameAction.BattleRoundSequenceReadyRackHvapPlus:
+                  if (false == UpdateReadyRackPlus(gi, "Hvap", lastReport.MainGunHVAP))
+                  {
+                     returnStatus = "UpdateReadyRackPlus() returned false for Hvap";
+                     Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(): " + returnStatus);
+                  }
+                  break;
                case GameAction.PreparationsReadyRackEnd:
                   if (EnumScenario.Counterattack == lastReport.Scenario)
                   {
@@ -4594,8 +4712,6 @@ namespace Pattons_Best
                      returnStatus = "SaveBattlePreparationsSetup() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattlePrep.PerformAction(PreparationsFinal): " + returnStatus);
                   }
-                  gi.Sherman.IsThrownTrack = true; // <cgs> TEST
-                  gi.Sherman.IsMoving = false; // <cgs> TEST
                   break;
                default:
                   returnStatus = "reached default for action=" + action.ToString();
@@ -6110,6 +6226,7 @@ namespace Pattons_Best
                   if (true == lastReport.Weather.Contains("Rain") || true == lastReport.Weather.Contains("Fog") || true == lastReport.Weather.Contains("Falling"))
                      dieRoll--;
                   //dieRoll = 1; // <CGS> TEST - KillYourTank -  AMBUSH!!!!!
+                  //dieRoll = 10; // <CGS> TEST - KillYourTank -  NO AMBUSH!!!!!
                   gi.DieResults[key][0] = dieRoll;
                   gi.DieRollAction = GameAction.DieRollActionNone;
                   if (dieRoll < 8)
@@ -6750,7 +6867,7 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequencePanzerfaustSectorRoll:
                   if (Utilities.NO_RESULT == gi.DieResults[key][0])
                   {
-                     //dieRoll = 6; // <CGS> Panzerfaust attack sector
+                     //dieRoll = 6; // <CGS> TEST - Panzerfaust attack sector
                      gi.DieResults[key][0] = dieRoll;
                      gi.DieRollAction = GameAction.DieRollActionNone;
                   }
@@ -10225,55 +10342,6 @@ namespace Pattons_Best
          {
             Logger.Log(LogEnum.LE_ERROR, "FireMortarIntoTurretFront(): Conduct_CrewAction() returned false");
             return false;
-         }
-         return true;
-      }
-      private bool UpdateReadyRackMinus(IGameInstance gi, string ammoType)
-      {
-         int readyRackLoadCount = gi.GetReadyRackReload(ammoType);
-         if (0 == readyRackLoadCount)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack_Minus(): Invalid state - readyRackLoadCount=0 for " + ammoType);
-            return false;
-         }
-         readyRackLoadCount--;
-         Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "UpdateReadyRack_Minus(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString());
-         if (false == gi.SetReadyRackReload(ammoType, readyRackLoadCount))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack_Minus(): SetReadyRackReload() returned false");
-            return false;
-         }
-         return true;
-      }
-      private bool UpdateReadyRackPlus(IGameInstance gi, string ammoType, int ammoAvailable)
-      {
-         IAfterActionReport? lastReport = gi.Reports.GetLast();
-         if (null == lastReport)
-         {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack_Plus(): lastReport=null");
-            return false;
-         }
-         TankCard card = new TankCard(lastReport.TankCardNum);
-         //---------------------------------------------------
-         int readyRackLoadCount = gi.GetReadyRackReload(ammoType);
-         ammoAvailable -= readyRackLoadCount;
-         string gunLoadType = gi.GetGunLoadType();
-         if (ammoType == gunLoadType) // subtract one if a round is int the gun tube
-            ammoAvailable--;
-         if ((ammoAvailable < 1) || (card.myMaxReadyRackCount <= gi.GetReadyRackTotalLoad()))
-         {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack_Plus(): Invalid state - maxReload reached for " + ammoType + " ammo=" + ammoAvailable.ToString());
-            return false;
-         }
-         else
-         {
-            readyRackLoadCount++;
-            Logger.Log(LogEnum.LE_SHOW_GUN_RELOAD, "UpdateReadyRack_Plus(): Setting readyRackLoadCount=" + readyRackLoadCount.ToString() + "--> ammoCount=" + ammoAvailable.ToString());
-            if (false == gi.SetReadyRackReload(ammoType, readyRackLoadCount))
-            {
-               Logger.Log(LogEnum.LE_ERROR, "UpdateReadyRack_Plus(): SetReadyRack_Reload() returned false");
-               return false;
-            }
          }
          return true;
       }

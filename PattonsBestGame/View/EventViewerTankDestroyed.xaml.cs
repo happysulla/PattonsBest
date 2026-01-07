@@ -67,18 +67,18 @@ namespace Pattons_Best
          //---------------------------------------------------
          public int myWoundModifier = 0;
          public int myDieRollWound = Utilities.NO_RESULT;
-         public string myWoundResult = "Uninit";
-         public string myWoundEffect = "Uninit";
+         public string myWoundResult = "Uninit1";
+         public string myWoundEffect = "Uninit2";
          //------------------------------------
-         public string myBailoutEffect = "Uninit";
+         public string myBailoutEffect = "None";
          public int myBailOutModifier = 0;
          public int myDieRollBailout = Utilities.NO_RESULT;
-         public string myBailOutResult = "Uninit";
+         public string myBailOutResult = "Uninit4";
          //------------------------------------
          public int myBailoutWoundModifier = 0;
          public int myDieRollBailoutWound = Utilities.NO_RESULT;
-         public string myBailoutWoundResult = "Uninit";
-         public string myBailoutWoundEffect = "Uninit";
+         public string myBailoutWoundResult = "Uninit5";
+         public string myBailoutWoundEffect = "Uninit6";
          //---------------------------------------------------
          public GridRowWound(ICrewMember cm)
          {
@@ -180,12 +180,19 @@ namespace Pattons_Best
       }
       public bool ResolveTankDestroyed(EndResolveTankDestroyedCallback callback)
       {
+         Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "ResolveTankDestroyed(): ++++++++++++++++++++++++++++++ battlestacks=" + myGameInstance.BattleStacks.ToString());
          if (null == myGameInstance)
          {
             Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): myGameInstance=null");
             return false;
          }
-         Logger.Log(LogEnum.LE_SHOW_STACK_VIEW, "ResolveTankDestroyed(): ++++++++++++++++++++++++++++++ battlestacks=" + myGameInstance.BattleStacks.ToString());
+         IAfterActionReport? lastReport = myGameInstance.Reports.GetLast();
+         if (null == lastReport)
+         {
+            Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): lastReport=null");
+            return false;
+         }
+         TankCard card = new TankCard(lastReport.TankCardNum);
          if (null == myCanvas)
          {
             Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): myCanvas=null");
@@ -247,15 +254,30 @@ namespace Pattons_Best
                Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): GetWoundsModifier() return false for myWoundModifier");
                return false;
             }
+            //-------------------------------------------------------
             myGridRowWounds[i].myBailoutWoundModifier = TableMgr.GetWoundsModifier(myGameInstance, cm, !death.myIsCrewBail, true, false);
             if (TableMgr.FN_ERROR == myGridRowWounds[i].myBailoutWoundModifier)
             {
                Logger.Log(LogEnum.LE_ERROR, "ResolveTankDestroyed(): GetWoundsModifier() return false for myBailoutWoundModifier");
                return false;
             }
+            if (("Loader" == cm.Role) && (false == card.myIsLoaderHatch))
+               myGridRowWounds[i].myBailOutModifier += 1;
+            //-------------------------------------------------------
             if (true == cm.IsKilled)
             {
                myGridRowWounds[i].myDieRollWound = KIA_CREWMAN;
+            }
+            else if (true == cm.IsIncapacitated) // if start already incapacitated, do not allow bailout
+            {
+               Logger.Log(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED_BAILOUT, "ResolveTankDestroyed(): cm=" + cm.Role + " unable to bail- wounds - added i=" + myMaxRowCountRescue.ToString());
+               if (false == cm.IsKilled)
+               {
+                  myGridRowRescues[myMaxRowCountRescue] = new GridRowRescue(cm);
+                  myMaxRowCountRescue++;
+               }
+               myGridRowWounds[i].myDieRollBailout = NO_BAILOUT;
+               myGridRowWounds[i].myDieRollBailoutWound = NO_BAILOUT;
             }
             else
             {
@@ -266,9 +288,21 @@ namespace Pattons_Best
          }
          myMaxRowCountWound = i;
          //--------------------------------------------------
-         myState = E0481Enum.WOUNDS_ROLL;
-         if (false == death.myIsCrewBail)
+         if (true == death.myIsCrewBail)
          {
+            Logger.Log(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED, "ResolveTankDestroyed(): initial start - myState=" + myState.ToString() + "-->BAILOUT_ROLL");
+            myState = E0481Enum.BAILOUT_ROLL;
+            myTextBlockHeader.Text = "r4.74 Crew Voluntary Bailing";
+            myButtonRule.Content = "r11.11";
+            myTextBlock0.Text = "Crewman";
+            myTextBlock1.Text = "Bailout Effect";
+            myTextBlock2.Text = "Modifier";
+            myTextBlock3.Text = "Roll + Modifier";
+            myTextBlock4.Text = "Bailout Result";
+         }
+         else
+         {
+            Logger.Log(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED, "ResolveTankDestroyed(): initial start  - myState=" + myState.ToString() + "-->TANK_EXPLOSION_ROLL");
             myState = E0481Enum.TANK_EXPLOSION_ROLL;
             myGridRowExplodes[0] = new GridRowExplode(myGameInstance.Sherman);
             myGridRowExplodes[0].myExplosionModifier = TableMgr.GetExplosionModifier(myGameInstance, death.myEnemyUnit, death.myHitLocation);
@@ -1168,10 +1202,10 @@ namespace Pattons_Best
             case E0481Enum.WOUNDS_ROLL:
                ICrewMember cm = myGridRowWounds[i].myCrewMember;
                myGridRowWounds[i].myDieRollWound = dieRoll;
-               myGridRowWounds[i].myWoundResult = TableMgr.SetWounds(myGameInstance, cm, dieRoll, myGridRowWounds[i].myWoundModifier);
+               myGridRowWounds[i].myWoundResult = TableMgr.SetWounds(myGameInstance, cm, dieRoll, myGridRowWounds[i].myWoundModifier); // wound roll on tank kill
                if ("ERROR" == myGridRowWounds[i].myWoundResult)
                {
-                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.SetWounds() returned ERROR");
+                  Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.Set_Wounds() returned ERROR");
                   return;
                }
                //--------------------------------------
@@ -1260,7 +1294,7 @@ namespace Pattons_Best
             case E0481Enum.BAILOUT_WOUNDS_ROLL:
                ICrewMember cm1 = myGridRowWounds[i].myCrewMember;
                myGridRowWounds[i].myDieRollBailoutWound = dieRoll;
-               myGridRowWounds[i].myBailoutWoundResult = TableMgr.SetWounds(myGameInstance, cm1, dieRoll, myGridRowWounds[i].myBailoutWoundModifier);
+               myGridRowWounds[i].myBailoutWoundResult = TableMgr.SetWounds(myGameInstance, cm1, dieRoll, myGridRowWounds[i].myBailoutWoundModifier); // bailout wound effects
                myGridRowWounds[i].myBailoutWoundEffect = TableMgr.SetWoundEffect(myGameInstance, cm1, dieRoll, myGridRowWounds[i].myBailoutWoundModifier);
                if (false == myGridRowWounds[i].myBailoutWoundResult.Contains("Near Miss"))
                {
@@ -1279,10 +1313,7 @@ namespace Pattons_Best
                   lastReport.Notes.Add(sb1.ToString()); // ShowDieResults(): BAILOUT_WOUNDS_ROLL
                }
                //--------------------------------------
-               if( true == myGameInstance.Death.myIsCrewBail )
-                  myState = E0481Enum.END;
-               else
-                  myState = E0481Enum.BAILOUT_WOUNDS_ROLL_SHOW;
+               myState = E0481Enum.BAILOUT_WOUNDS_ROLL_SHOW;
                for (int k = 0; k < myMaxRowCountWound; k++)
                {
                   if (Utilities.NO_RESULT == myGridRowWounds[k].myDieRollBailoutWound)
@@ -1301,7 +1332,7 @@ namespace Pattons_Best
                }
                myGridRowRescues[i].myDieRollRescue = dieRoll;
                int combo = dieRoll + myGridRowRescues[i].myRescueWoundModifier;
-               myGridRowRescues[i].myRescueWoundResult = TableMgr.SetWounds(myGameInstance, rescuer, dieRoll, myGridRowRescues[i].myRescueWoundModifier);
+               myGridRowRescues[i].myRescueWoundResult = TableMgr.SetWounds(myGameInstance, rescuer, dieRoll, myGridRowRescues[i].myRescueWoundModifier); // bailout rescue attempt
                myGridRowRescues[i].myRescueWoundEffect = TableMgr.SetWoundEffect(myGameInstance, rescuer, dieRoll, myGridRowRescues[i].myRescueWoundModifier);
                if (false == myGridRowRescues[i].myRescueWoundResult.Contains("Near Miss"))
                {
@@ -1592,8 +1623,21 @@ namespace Pattons_Best
                                  }
                                  if (0 == myAssignables.Count)
                                  {
-                                    Logger.Log(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED, "Grid_MouseDown(): myAssignables.Count=0 myState=" + myState.ToString() + "-->BREW_UP_ROLL");
-                                    myState = E0481Enum.BREW_UP_ROLL;
+                                    if (null == myGameInstance.Death)
+                                    {
+                                       Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): myGameInstance.Death=null");
+                                       return;
+                                    }
+                                    if (true == myGameInstance.Death.myIsCrewBail)
+                                    {
+                                       Logger.Log(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED, "Grid_MouseDown(): myAssignables.Count=0 myState=" + myState.ToString() + "-->END");
+                                       myState = E0481Enum.END;
+                                    }
+                                    else
+                                    {
+                                       Logger.Log(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED, "Grid_MouseDown(): myAssignables.Count=0 myState=" + myState.ToString() + "-->BREW_UP_ROLL");
+                                       myState = E0481Enum.BREW_UP_ROLL;
+                                    }
                                     myTextBlockHeader.Text = "r4.81.4e Brew Up";
                                     myButtonRule.Content = "r19.15";
                                     for (int k1 = 0; k1 < myMaxRowCountRescue; ++k1)
@@ -1614,8 +1658,21 @@ namespace Pattons_Best
                               }
                               else
                               {
-                                 Logger.Log(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED, "Grid_MouseDown(): myState=" + myState.ToString() + "-->BREW_UP_ROLL");
-                                 myState = E0481Enum.BREW_UP_ROLL;
+                                 if (null == myGameInstance.Death)
+                                 {
+                                    Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): myGameInstance.Death=null");
+                                    return;
+                                 }
+                                 if (true == myGameInstance.Death.myIsCrewBail)
+                                 {
+                                    Logger.Log(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED, "Grid_MouseDown(): myState=" + myState.ToString() + "-->END");
+                                    myState = E0481Enum.END;
+                                 }
+                                 else
+                                 {
+                                    Logger.Log(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED, "Grid_MouseDown(): myState=" + myState.ToString() + "-->BREW_UP_ROLL");
+                                    myState = E0481Enum.BREW_UP_ROLL;
+                                 }     
                                  myTextBlockHeader.Text = "r4.81.4e Brew Up";
                                  myButtonRule.Content = "r19.15";
                                  for (int k1 = 0; k1 < myMaxRowCountRescue; ++k1)
@@ -1640,8 +1697,21 @@ namespace Pattons_Best
                               }
                               if ((0 == myAssignables.Count) || (false == isNeedRescuing))
                               {
-                                 Logger.Log(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED, "Grid_MouseDown(): myAssignables.Count=" + myAssignables.Count.ToString() + " isNeedRescuing=" + isNeedRescuing.ToString() + " myState =" + myState.ToString() + "-->BREW_UP_ROLL");
-                                 myState = E0481Enum.BREW_UP_ROLL;
+                                 if( null == myGameInstance.Death)
+                                 {
+                                    Logger.Log(LogEnum.LE_ERROR, "Grid_MouseDown(): myGameInstance.Death=null");
+                                    return;
+                                 }
+                                 if (true == myGameInstance.Death.myIsCrewBail)
+                                 {
+                                    Logger.Log(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED, "Grid_MouseDown(): myAssignables.Count=" + myAssignables.Count.ToString() + " isNeedRescuing=" + isNeedRescuing.ToString() + " myState =" + myState.ToString() + "-->END");
+                                    myState = E0481Enum.END;
+                                 }
+                                 else
+                                 {
+                                    Logger.Log(LogEnum.LE_EVENT_VIEWER_TANK_DESTROYED, "Grid_MouseDown(): myAssignables.Count=" + myAssignables.Count.ToString() + " isNeedRescuing=" + isNeedRescuing.ToString() + " myState =" + myState.ToString() + "-->BREW_UP_ROLL");
+                                    myState = E0481Enum.BREW_UP_ROLL;
+                                 }
                                  myTextBlockHeader.Text = "r4.81.4e Brew Up";
                                  myButtonRule.Content = "r19.15";
                                  for (int k1 = 0; k1 < myMaxRowCountRescue; ++k1)

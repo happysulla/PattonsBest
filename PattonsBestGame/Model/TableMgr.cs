@@ -3195,7 +3195,7 @@ namespace Pattons_Best
             cm.IsKilled = true;
             if ("Commander" == cm.Role)
             {
-               gi.IsCommanderKilled = true; // SetWounds()
+               gi.IsCommanderKilled = true; // Set_Wounds()
                Option option = gi.Options.Find("GameEndsOnCommanderDeath");
                if (true == option.IsEnabled) // End game when commander is kill if this option is enabled
                {
@@ -3203,7 +3203,7 @@ namespace Pattons_Best
                   ICrewMember? commander = gi.GetCrewMemberByRole(cm.Role);
                   if(null == commander)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "SetWounds(): GetCrewMemberByRole() returned null for commander");
+                     Logger.Log(LogEnum.LE_ERROR, "Set_Wounds(): GetCrewMemberByRole() returned null for commander");
                   }
                   else
                   {
@@ -3276,7 +3276,7 @@ namespace Pattons_Best
             cm.Wound = "Killed";
             if ("Commander" == cm.Role)
             {
-               gi.IsCommanderKilled = true; // SetWounds()
+               gi.IsCommanderKilled = true; // Set_Wounds()
                Option option = gi.Options.Find("GameEndsOnCommanderDeath");
                if (true == option.IsEnabled) // End game when commander is kill if this option is enabled
                {
@@ -3284,7 +3284,7 @@ namespace Pattons_Best
                   ICrewMember? commander = gi.GetCrewMemberByRole(cm.Role);
                   if (null == commander)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "SetWounds(): GetCrewMemberByRole() returned null for commander");
+                     Logger.Log(LogEnum.LE_ERROR, "Set_Wounds(): GetCrewMemberByRole() returned null for commander");
                   }
                   else
                   {

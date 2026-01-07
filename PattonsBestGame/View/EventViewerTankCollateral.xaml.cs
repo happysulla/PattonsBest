@@ -578,7 +578,7 @@ namespace Pattons_Best
                }
                myGridRows[i].myDieRollWound = dieRoll;
                ICrewMember cm = myGridRows[i].myCrewMember;
-               myWoundsResults = TableMgr.SetWounds(myGameInstance, cm, dieRoll, myGridRows[i].myWoundsModifier);
+               myWoundsResults = TableMgr.SetWounds(myGameInstance, cm, dieRoll, myGridRows[i].myWoundsModifier);  // Assistant Possibly Wounded from Minefield Attack
                if ("ERROR" == myWoundsResults)
                {
                   Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetWounds() returned ERROR");

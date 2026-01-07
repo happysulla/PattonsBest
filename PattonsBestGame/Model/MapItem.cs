@@ -942,7 +942,7 @@ namespace Pattons_Best
       public int Rating { get; set; } = 0;
       public bool IsButtonedUp { get; set; } = true;
       public string Wound { get; set; } = "None";
-      public int WoundDaysUntilReturn { get; set; } = 0;
+      public int WoundDaysUntilReturn { get; set; } = 0; 
       //-------------------------------------------------
       public CrewMember() : base() // used in GameLoadMgr.ReadXml()
       {

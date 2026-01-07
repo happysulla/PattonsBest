@@ -1964,7 +1964,7 @@ namespace Pattons_Best
                {
                   int combo = gi.DieResults[key][0] + modifiere043c;
                   driver.Zoom = 2.0;
-                  string result = TableMgr.SetWounds(gi, driver, gi.DieResults[key][0], modifiere043c);
+                  string result = TableMgr.SetWounds(gi, driver, gi.DieResults[key][0], modifiere043c); // Driver Possibly Wounded from Minefield Attack
                   if ("ERROR" == result)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): driver GetWounds() returned error for key=" + key);
@@ -2014,7 +2014,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): TableMgr.GetWoundsModifier() returned error for assistant");
                      return false;
                   }
-                  string result = TableMgr.SetWounds(gi, assistant, gi.DieResults[key][0], modifier);
+                  string result = TableMgr.SetWounds(gi, assistant, gi.DieResults[key][0], modifier); //  Assistant Possibly Wounded from Minefield Attack
                   if ("ERROR" == result)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "UpdateEventContent(): driver GetWounds() returned error for key=" + key);
@@ -2894,7 +2894,7 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new Run(sbEndWon.ToString()));
                Image? imgEndGameWon = null;
                int randnum = Utilities.RandomGenerator.Next(10);
-               randnum = 7; // <cgs> TEST
+               //randnum = 8; // <cgs> TEST
                switch (randnum)
                {
                   case 0:
@@ -2964,7 +2964,7 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new LineBreak());
                Image? imgEndGameLost = null;
                int randnumLost = Utilities.RandomGenerator.Next(9);
-               randnumLost = 5; // <cgs> TEST
+               //randnumLost = 6; // <cgs> TEST
                switch (randnumLost)
                {
                   case 0:
@@ -7175,7 +7175,7 @@ namespace Pattons_Best
          //action = GameAction.TestingStartPreparations;     // <CGS> TEST - skip morning briefing and crew/ammo setup
          //action = GameAction.TestingStartMovement;         // <CGS> TEST - start with movement - skip battle prep phase
          //action = GameAction.TestingStartBattle;           // <CGS> TEST - skip the movement portion - begin with battle setup
-         //action = GameAction.TestingStartAmbush;           // <CGS> TEST - skip battle setup
+         //action = GameAction.TestingStartAmbush;           // <cgs> TEST - skip battle setup
          myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
          return true;
       }

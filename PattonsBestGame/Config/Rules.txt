@@ -407,7 +407,10 @@ b.) Attempt to repair guns that have malfunctioned by consulting the
 c.) Fire 2"" smoke mortar. Place Smoke marker in target zone and mark off one smoke bomb from the After Action Report per 
 <InlineUIContainer><Button Content='r18.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. <LineBreak/><LineBreak/>
 d.) Throw smoke grenade. Place smoke marker on your tank and mark off one smoke grenade from the After Action Report per 
-<InlineUIContainer><Button Content='r18.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. "
+<InlineUIContainer><Button Content='r18.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. 
+<LineBreak/><LineBreak/>
+Note: If tank is disabled due to thrown track or stuck in bog, Commander may elect to bail out of tank per 
+<InlineUIContainer><Button Content='r11.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. "
 r4.75	"<Bold>r4.75  Enemy Actions Phase</Bold>
 <LineBreak/><LineBreak/>
 Roll on the respective table for each enemy unit on the Battle Board:
