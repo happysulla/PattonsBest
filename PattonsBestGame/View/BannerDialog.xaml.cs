@@ -102,7 +102,6 @@ namespace Pattons_Best
          //this.Top = (((workAreaHeight - (this.Height * dpiScaling)) / 2) + (workArea.Top * dpiScaling));
          //-------------------------------
          myOffsetInBannerWindow = e.GetPosition(this);
-         myOffsetInBannerWindow = new Point(100, 100);
          myIsDragging = true;
          e.Handled = true;
       }
@@ -114,8 +113,9 @@ namespace Pattons_Best
             return;
          }
          System.Windows.Point newPoint1 = this.PointToScreen(e.GetPosition(this));
-         this.Left = newPoint1.X - myOffsetInBannerWindow.X;
-         this.Top = newPoint1.Y - myOffsetInBannerWindow.Y;
+         System.Windows.Media.Matrix currentMatrix = ScreenExtensions.GetMatrixFromVisual(this);
+         this.Left = (newPoint1.X - myOffsetInBannerWindow.X) / currentMatrix.M11;
+         this.Top = (newPoint1.Y - myOffsetInBannerWindow.Y) / currentMatrix.M22;
          e.Handled = true;
       }
       private void Window_MouseUp(object sender, MouseButtonEventArgs e)
@@ -131,6 +131,11 @@ namespace Pattons_Best
          theIsCheckBoxChecked = !theIsCheckBoxChecked;
          myIsReopen = true;
          Close();
+      }
+
+      private void myBannerDialog_LostFocus(object sender, RoutedEventArgs e)
+      {
+         myIsDragging = false;
       }
    }
 }

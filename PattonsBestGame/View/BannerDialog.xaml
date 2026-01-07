@@ -19,7 +19,7 @@
         MouseMove="Window_MouseMove" 
         MouseUp="Window_MouseUp" 
         MouseLeftButtonDown="Window_MouseLeftButtonDown" 
-        ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" WindowStyle="None" SizeToContent="Manual" AllowsTransparency="True" Foreground="Black">
+        ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" WindowStyle="None" SizeToContent="Manual" AllowsTransparency="True" Foreground="Black" LostFocus="myBannerDialog_LostFocus">
    <DockPanel Name="myDockPanel" MinWidth="612" MaxWidth="612" MinHeight="790" MaxHeight="790" Margin="15,0,0,0" >
          <DockPanel Name="myStackPanel" DockPanel.Dock="Top" IsEnabled="True" Background="{x:Null}">
          <CheckBox x:Name="myCheckBoxFont" Content="Use More Readable Font?" VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="myCheckBoxFont_Clicked" FontFamily="Modern No. 20"/>

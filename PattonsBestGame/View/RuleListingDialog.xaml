@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Pattons_Best"
         mc:Ignorable="d"
+        Topmost="True"         
         Name ="myDialogRuleListing"
         Title="Rule Listing" Height="900" Width="450" MinWidth="450" MaxWidth="500" WindowStartupLocation="CenterScreen"
         Closed="Window_Closed">

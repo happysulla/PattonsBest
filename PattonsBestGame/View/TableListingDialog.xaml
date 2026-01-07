@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Pattons_Best"
         Name ="myDialogTableListing"
+        Topmost="True"         
         Title="Table Listing" Height="600" Width="700" MinHeight="500" MaxHeight="1200" MinWidth="450" MaxWidth="1200" WindowStartupLocation="CenterScreen"
         Closed="Window_Closed">
    <ScrollViewer Name="myScrollViewer" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0">

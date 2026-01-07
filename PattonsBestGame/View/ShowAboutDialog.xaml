@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Pattons_Best"
         mc:Ignorable="d"
+        Topmost="True" 
         Name="myAboutDialog"
-        Title="About Patton's Best" MinHeight="400" MinWidth="400" MaxHeight="800" MaxWidth="800" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" ResizeMode="NoResize" Topmost="True"
+        Title="About Patton's Best" MinHeight="400" MinWidth="400" MaxHeight="800" MaxWidth="800" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" ResizeMode="NoResize" 
         Closed="Window_Closed">
     <Grid>
       <Grid.RowDefinitions>
@@ -41,7 +42,7 @@
          (born July 1948 in Fremont, Michigan) is an American game designer 
          and writer who is most famously known as the computer game designer who helped design games such as Sid Meier&apos;s Civilization, 
          Railroad Tycoon, and Age of Empires. In 1980, he and several of his friends at the University of Virginia formed the game 
-         company Iron Crown Enterprises. Strategy and Tactics Magazine published his first game in the early 1980s. In 1981, he briefly
+         company called Iron Crown Enterprises. Strategy and Tactics Magazine published his first game in the early 1980s. In 1981, he briefly
          worked for Simulations Publications, Inc. (SPI). He then worked for The Avalon Hill Game Co, contributing to such classic games 
          as 1830: Railways and Robber Barons and Titan. 
       </TextBlock>

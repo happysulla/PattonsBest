@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Pattons_Best"
         mc:Ignorable="d"
+        Topmost="True" 
         Title="Options Dialog" FontSize="20" Height="440" Width="1150" WindowStartupLocation="CenterScreen">
    <ScrollViewer Name="myScrollViewerInside" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0">
       <Grid x:Name="myGrid">

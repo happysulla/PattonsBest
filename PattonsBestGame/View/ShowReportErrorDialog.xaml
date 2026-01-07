@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Pattons_Best"
-        mc:Ignorable="d"
+        mc:Ignorable="d"     
         Name="myReportErrorDialog"
-        Title="Reporting Errors" MinHeight="300" MinWidth="300" MaxHeight="400" MaxWidth="400" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" ResizeMode="NoResize" Topmost="True"
+        Topmost="True" 
+        Title="Reporting Errors" MinHeight="300" MinWidth="300" MaxHeight="400" MaxWidth="400" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" ResizeMode="NoResize" 
         Closed="Window_Closed">
    <Grid>
       <Grid.RowDefinitions>

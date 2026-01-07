@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Pattons_Best"
         mc:Ignorable="d"
+        Topmost="True" 
         Title="Show Game Feats" Height="950" Width="700" WindowStartupLocation="CenterScreen">
    <ScrollViewer Name="myScollViewer" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" Padding="10">
       <Grid x:Name="myGrid">
