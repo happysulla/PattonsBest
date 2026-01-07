@@ -666,7 +666,7 @@ r6.0	"<Bold>r6.0 How to Win</Bold>
 <LineBreak/><LineBreak/>
 In order to win an engagement or scenario, both you and your tank must survive. If you are killed or wounded sufficently to miss combat for any time, or if you tank is knocked out, you lose. 
 <LineBreak/><LineBreak/>
-If both you and your tank survive, winning depends on your score of victory points. Vicotry in the campaign game is a special case.
+If both you and your tank survive, winning depends on your score of victory points. Victory in the campaign game is a special case.
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r6.1' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Victory Points<LineBreak/>
 <InlineUIContainer><Button Content='r6.2' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Victory<LineBreak/>
@@ -731,13 +731,19 @@ r8.0	"<Bold>r8.0 Crew Actions</Bold>
 <InlineUIContainer><Button Content='r8.3' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Loader (L)<LineBreak/>
 <InlineUIContainer><Button Content='r8.4' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Driver (D)<LineBreak/>
 <InlineUIContainer><Button Content='r8.5' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Assistant Driver (A)<LineBreak/>
-<InlineUIContainer><Button Content='r8.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Non-Specific Crew Actions"
+<InlineUIContainer><Button Content='r8.6' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Non-Specific Crew Actions
+<LineBreak/><LineBreak/>
+Note: If tank is disabled due to thrown track or stuck in bog, Commander may elect to bail out of tank per 
+<InlineUIContainer><Button Content='r11.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. "
 r8.1	"<Bold>r8.1 Commander (C)</Bold> 
 <LineBreak/><LineBreak/>
 <InlineUIContainer><Button Content='r8.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Direct Movement<LineBreak/>
 <InlineUIContainer><Button Content='r8.12' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Direct Fire
 <LineBreak/><LineBreak/>
-                                      <InlineUIContainer><Image Name='c07Commander'  Height='100' Width='100'></Image></InlineUIContainer>"
+                                      <InlineUIContainer><Image Name='c07Commander'  Height='100' Width='100'></Image></InlineUIContainer>
+<LineBreak/><LineBreak/>
+Note: If tank is disabled due to thrown track or stuck in bog, Commander may elect to bail out of tank per 
+<InlineUIContainer><Button Content='r11.11' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>. "
 r8.11 	"<Bold>r8.11 Direct Movement</Bold> 
 <LineBreak/><LineBreak/>
 Direct the movement of the tank. This will reduce the chance of an accident per the 
@@ -806,7 +812,10 @@ r8.3	"<Bold>r8.3 Loader (L)</Bold>
 <InlineUIContainer><Button Content='r8.35' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Change Gun Load<LineBreak/>
 <InlineUIContainer><Button Content='r8.36' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer> Restock Ready Rack
 <LineBreak/><LineBreak/>
-                                      <InlineUIContainer><Image Name='c09Loader'  Height='100' Width='100'></Image></InlineUIContainer>"
+                                      <InlineUIContainer><Image Name='c09Loader'  Height='100' Width='100'></Image></InlineUIContainer>
+<LineBreak/><LineBreak/>
+Note: The Load action allows loader to perform spotting unless the main gun is fired per 
+<InlineUIContainer><Button Content='r8.31' FontFamily='Courier New'  FontSize='12'></Button></InlineUIContainer>."
 r8.31	"<Bold>r8.31 Load</Bold> 
 <LineBreak/><LineBreak/>
 If no marker is placed in the loader&apos;s box, he will automatically reload the main gun if it is fired. Subtract the loader&apos;s rating from the To Hit roll for the main gun. May spot normally unless the main gun is being fired. If the main gun is being fired, the loader may not spot.
