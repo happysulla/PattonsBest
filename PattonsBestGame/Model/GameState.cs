@@ -11174,7 +11174,7 @@ namespace Pattons_Best
          Option optionSingleDayGame= gi.Options.Find("SingleDayScenario");
          Logger.Log(LogEnum.LE_GAME_END_CHECK, "Perform_EndCheck(): ae=" + gi.EventActive + " action=" + action.ToString() + " day=" + gi.Day.ToString() + " entrydate=" + lastReport.Day + " o?=" + optionCommanderDeath.IsEnabled.ToString() + " k?=" + gi.IsCommanderKilled.ToString());
          //----------------------------------------------------------
-         if ( null != gi.Death) 
+         if ( null != gi.Death ) 
          {
             Logger.Log(LogEnum.LE_GAME_END_CHECK, "Perform_EndCheck():  gi.Death=" + gi.Death.ToString());
             if ((true == gi.Death.myIsExplosion) && (true == optionCommanderDeath.IsEnabled))
@@ -11187,18 +11187,36 @@ namespace Pattons_Best
                action = GameAction.EndGameLost;
                SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
             }
+            else if (true == optionSingleDayGame.IsEnabled)
+            {
+               Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck():!!!!!Game Ends!!!!! Lost Tank");
+               gi.GamePhase = GamePhase.EndGame;
+               action = GameAction.EndGameLost;
+               SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
+            }
          }
          //----------------------------------------------------------
-         else if ( (true == gi.IsCommanderKilled) && (true == optionCommanderDeath.IsEnabled) )
+         else if ( ((true == gi.IsCommanderKilled) || (0 < lastReport.Commander.WoundDaysUntilReturn)) && (true == optionSingleDayGame.IsEnabled))
          {
-            Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Game Ends!!!!! gi.IsCommanderKilled=true -- " + lastReport.Commander.Name + " is killed.");
-            GameEngine.theInGameFeats.AddOne("EndGameCmdrKilled");
+            Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Single Day Game Ends!!!!! gi.IsCommanderKilled=" + gi.IsCommanderKilled.ToString() + " or wound days=" + lastReport.Commander.WoundDaysUntilReturn.ToString());
+            if (true == gi.IsCommanderKilled)
+               GameEngine.theInGameFeats.AddOne("EndGameCmdrKilled");
             gi.GamePhase = GamePhase.EndGame;
             action = GameAction.EndGameLost;
             SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
          }
          //----------------------------------------------------------
-         else if ((189 < gi.Day) || (true == optionSingleDayGame.IsEnabled)) // ends on day 190
+         else if ( ((true == gi.IsCommanderKilled) || ( TableMgr.MIA == lastReport.Commander.WoundDaysUntilReturn) ) && (true == optionCommanderDeath.IsEnabled) )
+         {
+            Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Campaign Game Ends!!!!! gi.IsCommanderKilled=" + gi.IsCommanderKilled.ToString() + " or wound days=" + lastReport.Commander.WoundDaysUntilReturn.ToString());
+            if (true == gi.IsCommanderKilled)
+               GameEngine.theInGameFeats.AddOne("EndGameCmdrKilled");
+            gi.GamePhase = GamePhase.EndGame;
+            action = GameAction.EndGameLost;
+            SetCommand(gi, action, GameAction.DieRollActionNone, "e502");
+         }
+         //----------------------------------------------------------
+         else if ((189 < gi.Day) || (true == optionSingleDayGame.IsEnabled)) // ends on day 190 -- or if this is a single day game
          {
             Logger.Log(LogEnum.LE_GAME_END, "Perform_EndCheck(): !!!!!Game Ends!!!!! optionSingleDay=" + optionSingleDayGame.IsEnabled.ToString() + " or 191 < (day=" + gi.Day.ToString() + ") (VP=" + gi.VictoryPtsTotalCampaign.ToString() + ")");
             int crewRating = lastReport.Commander.Rating + lastReport.Gunner.Rating + lastReport.Loader.Rating + lastReport.Driver.Rating + lastReport.Assistant.Rating;
