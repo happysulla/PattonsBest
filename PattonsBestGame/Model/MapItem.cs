@@ -225,7 +225,7 @@ namespace Pattons_Best
          this.Location.Y = mi.Location.Y;
          this.RotationOffsetHull = mi.RotationOffsetHull;
          this.RotationHull = mi.RotationHull;
-         this.RotationOffsetTurret = mi.RotationOffsetTurret;
+         this.RotationOffsetTurret = mi.RotationOffsetTurret; // Copy()
          this.RotationTurret = mi.RotationTurret;
          //--------------------------------------
          this.TerritoryCurrent = mi.TerritoryCurrent;
@@ -266,7 +266,7 @@ namespace Pattons_Best
          this.Location.Y = mi.Location.Y;
          this.RotationOffsetHull = mi.RotationOffsetHull;
          this.RotationHull = mi.RotationHull;
-         this.RotationOffsetTurret = mi.RotationOffsetTurret;
+         this.RotationOffsetTurret = mi.RotationOffsetTurret; // Sync()
          this.RotationTurret = mi.RotationTurret;
          //--------------------------------------
          this.IsMoving = mi.IsMoving;
@@ -393,7 +393,7 @@ namespace Pattons_Best
          string enemyUnit = GetEnemyUnit();
          if( "ERROR" == enemyUnit )
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetMapItemRotation(): reached default with enemyUnit=" + this.Name);
+            Logger.Log(LogEnum.LE_ERROR, "Set_MapItemRotation(): reached default with enemyUnit=" + this.Name);
             return false;
          }
          switch (enemyUnit)
@@ -436,11 +436,11 @@ namespace Pattons_Best
          }
          else  //------------
          {
-            Logger.Log(LogEnum.LE_ERROR, "SetMapItemRotation(): reached default with rotation=" + rotation.ToString() + " mi=" + this.Name + " t=" + this.TerritoryCurrent.Name);
+            Logger.Log(LogEnum.LE_ERROR, "Set_MapItemRotation(): reached default with rotation=" + rotation.ToString() + " mi=" + this.Name + " t=" + this.TerritoryCurrent.Name);
             return false;
          }
          this.RotationOffsetHull = rotation - this.RotationHull;
-         Logger.Log(LogEnum.LE_SHOW_ROTATION, "SetMapItemRotation(): xDiff=" + xDiff.ToString("F2") + " yDiff=" + yDiff.ToString("F2") + " r=" + this.RotationHull.ToString("F2") + " t=" + this.TerritoryCurrent.Name + " X=" + this.Location.X + " Y=" + this.Location.Y);
+         Logger.Log(LogEnum.LE_SHOW_ROTATION, "Set_MapItemRotation(): xDiff=" + xDiff.ToString("F2") + " yDiff=" + yDiff.ToString("F2") + " r=" + this.RotationHull.ToString("F2") + " t=" + this.TerritoryCurrent.Name + " X=" + this.Location.X + " Y=" + this.Location.Y);
          return true;
       }
       public bool SetMapItemRotationTurret(IMapItem target)
@@ -496,8 +496,8 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_ERROR, "Set_MapItemRotationTurret(): xDiff=" + xDiff.ToString("F2") + " yDiff=" + yDiff.ToString("F2") + " (rotation=" + rotation.ToString("F2") + ")->(rotdelta=" + rotationDelta.ToString("F2") + ")=(rotOrig=" + rotationOriginal.ToString("F2") + ")-(rh=" + this.RotationHull.ToString("F2") + ")-(ro=" + this.RotationOffsetHull.ToString("F2") + ") for mi=" + this.Name + " in " + this.TerritoryCurrent.Name + " X=" + this.Location.X + " Y=" + this.Location.Y);
             return false;
          }
-         this.RotationOffsetTurret = rotation - this.RotationTurret;
-         Logger.Log(LogEnum.LE_SHOW_ROTATION, "SetMapItemRotationTurret(): xDiff=" + xDiff.ToString("F2") + " yDiff=" + yDiff.ToString("F2") + " r=" + this.RotationHull.ToString("F2") + " t=" + this.TerritoryCurrent.Name + " X=" + this.Location.X + " Y=" + this.Location.Y);
+         this.RotationOffsetTurret = rotation - this.RotationTurret; // Set_MapItemRotationTurret()
+         Logger.Log(LogEnum.LE_SHOW_ROTATION, "Set_MapItemRotationTurret(): xDiff=" + xDiff.ToString("F2") + " yDiff=" + yDiff.ToString("F2") + " r=" + this.RotationHull.ToString("F2") + " t=" + this.TerritoryCurrent.Name + " X=" + this.Location.X + " Y=" + this.Location.Y);
          return true;
       }
       public bool UpdateMapRotation(string facing)
@@ -527,7 +527,7 @@ namespace Pattons_Best
          }
          else 
          {
-            Logger.Log(LogEnum.LE_ERROR, "UpdateMapRotation(): reached default with facing=" + facing);
+            Logger.Log(LogEnum.LE_ERROR, "Set_MapItemRotation(): reached default with facing=" + facing);
             return false;
          }
          return true;
@@ -601,7 +601,7 @@ namespace Pattons_Best
                {
                   RotateTransform rotateTransform = new RotateTransform();
                   imgTurret.RenderTransformOrigin = new Point(0.5, 0.5);
-                  rotateTransform.Angle = mi.RotationTurret + mi.RotationOffsetTurret;
+                  rotateTransform.Angle = mi.RotationTurret + mi.RotationOffsetTurret; // SetButtonContent()
                   imgTurret.RenderTransform = rotateTransform;
                   g.Children.Add(imgTurret);
                   Canvas.SetLeft(imgTurret, 0);

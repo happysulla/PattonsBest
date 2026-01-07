@@ -1664,7 +1664,7 @@ namespace Pattons_Best
             myGameInstance.BattleStacks.Add(mi);
             if (false == mi.SetMapItemRotation(myGameInstance.Sherman))
             {
-               Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): SetMapItemRotation() returned false");
+               Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateSector(): Set_MapItemRotation() returned false");
                return false;
             }
          }
@@ -1704,7 +1704,7 @@ namespace Pattons_Best
          mi.Location = mp;
          if (false == mi.SetMapItemRotation(myGameInstance.Sherman))
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateRange(): SetMapItemRotation() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateRange(): Set_MapItemRotation() returned false");
             return false;
          }
          return true;

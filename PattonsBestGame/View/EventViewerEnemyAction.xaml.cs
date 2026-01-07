@@ -1562,7 +1562,7 @@ namespace Pattons_Best
                      {
                         if (false == mi.SetMapItemRotationTurret(myGameInstance.Sherman))
                         {
-                           Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): SetMapItemRotationTurret() returned false for mi=" + mi.Name + " i=" + i.ToString());
+                           Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): Set_MapItemRotationTurret() returned false for mi=" + mi.Name + " i=" + i.ToString());
                            return;
                         }
                      }
@@ -1639,7 +1639,7 @@ namespace Pattons_Best
                if ( 2 == myRollResultColNum )
                {
                   myGridRows[i].myDieRollFacing = dieRoll;
-                  myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(enemyUnit, dieRoll);
+                  myGridRows[i].myFacing = TableMgr.GetEnemyNewFacing(enemyUnit, dieRoll); 
                   if ("ERROR" == myGridRows[i].myFacing)
                   {
                      Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyNewFacing() returned ERROR");
@@ -1799,7 +1799,7 @@ namespace Pattons_Best
                   myGridRows[i].myToKillNumberYourTank = (int)TableMgr.GetEnemyToKillNumberYourTank(myGameInstance, myGridRows[i].myMapItem, myGridRows[i].myFacing, myGridRows[i].myRange, myGridRows[i].myHitLocationYourTank);
                   if (TableMgr.FN_ERROR == myGridRows[i].myToKillNumberYourTank)
                   {
-                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.GetEnemyToKillNumberYourTank() returned error=" + myGridRows[i].myToKillNumberYourTank.ToString());
+                     Logger.Log(LogEnum.LE_ERROR, "ShowDieResults(): TableMgr.Get_EnemyToKillNumberYourTank() returned error=" + myGridRows[i].myToKillNumberYourTank.ToString());
                      return;
                   }
                   if ( "Miss" == myGridRows[i].myHitLocationYourTank )
@@ -1884,7 +1884,7 @@ namespace Pattons_Best
          }
          if (false == mi.SetMapItemRotation(myGameInstance.Sherman))
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): SetMapItemRotation() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): Set_MapItemRotation() returned false");
             return false;
          }
          if (false == mi.UpdateMapRotation(myGridRows[i].myFacing))

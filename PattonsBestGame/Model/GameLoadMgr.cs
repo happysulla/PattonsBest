@@ -3371,12 +3371,12 @@ namespace Pattons_Best
             reader.Read();
             if (false == reader.IsStartElement())
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): reader.IsStartElement(RotationOffsetTurret) = false");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): reader.IsStartElement(RotationOffset_Turret) = false");
                return false;
             }
             if (reader.Name != "RotationOffsetTurret")
             {
-               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): RotationOffsetTurret != (node=" + reader.Name + ")");
+               Logger.Log(LogEnum.LE_ERROR, "ReadXmlListingMapItems(): RotationOffset_Turret != (node=" + reader.Name + ")");
                return false;
             }
             string? sRotationOffsetTurret = reader.GetAttribute("value");

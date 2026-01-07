@@ -531,7 +531,7 @@ namespace Pattons_Best
          }
          if( false == mi.SetMapItemRotation(myGameInstance.Sherman))
          {
-            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): SetMapItemRotation() returned false");
+            Logger.Log(LogEnum.LE_ERROR, "ShowDieResultUpdateFacing(): Set_MapItemRotation() returned false");
             return false;
          }
          if (false == mi.UpdateMapRotation(myGridRows[i].myFacingNew))

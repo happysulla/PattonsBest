@@ -236,6 +236,7 @@ namespace Pattons_Best
                if ((GamePhase.EveningDebriefing == gi.GamePhase) && (0 == cm.WoundDaysUntilReturn)) // crewmen are not replaced if light wound and evening debrief
                {
                   cm.IsIncapacitated = false;
+                  cm.IsUnconscious = false;
                   continue;
                }
                isCrewmanReplaced = true;  // inform calling routine that crewman replaced
@@ -2829,7 +2830,7 @@ namespace Pattons_Best
             {
                if (false == mi.SetMapItemRotation(gi.Sherman))
                {
-                  Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): SetMapItemRotation() returned false");
+                  Logger.Log(LogEnum.LE_ERROR, "PerformAutoSetupSkipBattleSetup(): Set_MapItemRotation() returned false");
                   return false;
                }
                die1 = Utilities.RandomGenerator.Next(1, 11);
@@ -7124,8 +7125,29 @@ namespace Pattons_Best
                case GameAction.BattleRoundSequenceHarrassingFire:
                   break;
                case GameAction.BattleRoundSequenceConductCrewAction:
+                  string[] crewmembers = new string[5] { "Driver", "Assistant", "Commander", "Loader", "Gunner" };
+                  foreach (string crewmember in crewmembers)
+                  {
+                     ICrewMember? cm = gi.GetCrewMemberByRole(crewmember);
+                     if (null == cm)
+                     {
+                        returnStatus = "gi.GetCrewMemberByRole() returned null";
+                        Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ConductCrewAction): gi.GetCrewMemberByRole() returned null" + returnStatus);
+                     }
+                     else if(true == cm.IsUnconscious) // unconscious men may become conscious at beginning of each Crew Action Phase
+                     {
+                        int dr = Utilities.RandomGenerator.Next(1, 11);
+                        if( dr < 6 )
+                        {
+                           cm.IsUnconscious = false;
+                           cm.IsIncapacitated = false;
+                           cm.SetBloodSpots(0);
+                        }
+                     }
+                  }
+                  //-----------------------------------------------
                   gi.CrewActionPhase = CrewActionPhase.Movement;
-                  if (false == ConductCrewAction(gi, ref action))
+                  if (false == ConductCrewAction(gi, ref action)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ConductCrewAction)
                   {
                      returnStatus = "Conduct_CrewAction() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ConductCrewAction): " + returnStatus);
@@ -7147,7 +7169,7 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleRoundSequenceMovementPivotEnd:
                   gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
-                  if (false == ConductCrewAction(gi, ref action))
+                  if (false == ConductCrewAction(gi, ref action)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMovementPivotEnd)
                   {
                      returnStatus = "Conduct_CrewAction() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceMovementPivotEnd): " + returnStatus);
@@ -7201,7 +7223,7 @@ namespace Pattons_Best
                            }
                            //---------------------------------------------------
                            gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
-                           if (false == ConductCrewAction(gi, ref action))
+                           if (false == ConductCrewAction(gi, ref action)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceBoggedDownRoll)
                            {
                               returnStatus = "Conduct_CrewAction() returned false";
                               Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceBoggedDownRoll): " + returnStatus);
@@ -7212,7 +7234,7 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleRoundSequenceChangeFacingEnd:
                   gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
-                  if (false == ConductCrewAction(gi, ref action))
+                  if (false == ConductCrewAction(gi, ref action)) // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceChangeFacingEnd)
                   {
                      returnStatus = "Conduct_CrewAction() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceChangeFacingEnd): " + returnStatus);
@@ -7220,7 +7242,7 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleRoundSequenceTurretEnd:
                   gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
-                  if (false == ConductCrewAction(gi, ref action))
+                  if (false == ConductCrewAction(gi, ref action))  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceTurretEnd)
                   {
                      returnStatus = "Conduct_CrewAction() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceTurretEnd): " + returnStatus);
@@ -7256,7 +7278,7 @@ namespace Pattons_Best
                   else
                   {
                      gi.CrewActionPhase = CrewActionPhase.TankMgFire;
-                     if (false == ConductCrewAction(gi, ref action))
+                     if (false == ConductCrewAction(gi, ref action))  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanFiringMainGunEnd)
                      {
                         returnStatus = "Conduct_CrewAction() returned false";
                         Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_ShermanFiringMainGunEnd): " + returnStatus);
@@ -7265,7 +7287,7 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleRoundSequenceShermanFiringMainGunNot:
                   gi.CrewActionPhase = CrewActionPhase.TankMgFire;
-                  if (false == ConductCrewAction(gi, ref action))
+                  if (false == ConductCrewAction(gi, ref action))  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceSherman_FiringMainGunEnd)
                   {
                      returnStatus = "Conduct_CrewAction() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceSherman_FiringMainGunEnd): " + returnStatus);
@@ -7334,7 +7356,7 @@ namespace Pattons_Best
                      else
                      {
                         gi.CrewActionPhase = CrewActionPhase.TankMgFire;
-                        if (false == ConductCrewAction(gi, ref action))
+                        if (false == ConductCrewAction(gi, ref action))  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanToHitRollNothing)
                         {
                            returnStatus = "Conduct_CrewAction() returned false";
                            Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanToHitRollNothing): " + returnStatus);
@@ -7556,7 +7578,7 @@ namespace Pattons_Best
                   Logger.Log(LogEnum.LE_SHOW_MG_FIRE, "PerformAction(BattleRoundSequence_FireMachineGunRollEnd): " + Utilities.PrintMgState(gi));
                   //----------------------------------------------
                   gi.CrewActionPhase = CrewActionPhase.TankMgFire;
-                  if (false == ConductCrewAction(gi, ref action))
+                  if (false == ConductCrewAction(gi, ref action))  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_FireMachineGunRollEnd)
                   {
                      returnStatus = "Conduct_CrewAction() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_FireMachineGunRollEnd): " + returnStatus);
@@ -7567,7 +7589,7 @@ namespace Pattons_Best
                   gi.Targets.Clear();  // BattleRoundSequenceFireMgSkip
                   gi.AreaTargets.Clear();
                   gi.CrewActionPhase = CrewActionPhase.ReplacePeriscope;
-                  if (false == ConductCrewAction(gi, ref action))
+                  if (false == ConductCrewAction(gi, ref action))  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceFireMgSkip)
                   {
                      returnStatus = "Conduct_CrewAction() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceFireMgSkip): " + returnStatus);
@@ -7676,7 +7698,7 @@ namespace Pattons_Best
                   //----------------------------------------
                   gi.DieResults[key][0] = Utilities.NO_RESULT;
                   gi.CrewActionPhase = CrewActionPhase.TankMgFire;
-                  if (false == ConductCrewAction(gi, ref action))
+                  if (false == ConductCrewAction(gi, ref action))  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_MgAdvanceFireRollEnd)
                   {
                      returnStatus = "Conduct_CrewAction() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequence_MgAdvanceFireRollEnd): " + returnStatus);
@@ -7769,7 +7791,7 @@ namespace Pattons_Best
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceReplacePeriscopes): " + returnStatus);
                   }
                   gi.CrewActionPhase = CrewActionPhase.RepairGun;
-                  if (false == ConductCrewAction(gi, ref action))
+                  if (false == ConductCrewAction(gi, ref action))  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceReplacePeriscopes)
                   {
                      returnStatus = "Conduct_CrewAction() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceReplacePeriscopes): " + returnStatus);
@@ -7793,7 +7815,7 @@ namespace Pattons_Best
                   gi.BattleStacks.Add(smokeGrenade);
                   //--------------------------------------------------
                   gi.CrewActionPhase = CrewActionPhase.RestockReadyRack;
-                  if (false == ConductCrewAction(gi, ref action))
+                  if (false == ConductCrewAction(gi, ref action))  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanThrowGrenade)
                   {
                      returnStatus = "Conduct_CrewAction() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceShermanThrowGrenade): " + returnStatus);
@@ -7871,7 +7893,7 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleRoundSequenceReadyRackEnd: 
                   gi.CrewActionPhase = CrewActionPhase.CrewSwitch;
-                  if (false == ConductCrewAction(gi, ref action))
+                  if (false == ConductCrewAction(gi, ref action))  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceReadyRackEnd)
                   {
                      returnStatus = "Conduct_CrewAction() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceReadyRackEnd): " + returnStatus);
@@ -7879,7 +7901,7 @@ namespace Pattons_Best
                   break;
                case GameAction.BattleRoundSequenceCrewSwitchEnd:  
                   gi.CrewActionPhase = CrewActionPhase.None;
-                  if (false == ConductCrewAction(gi, ref action))
+                  if (false == ConductCrewAction(gi, ref action))  // GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceCrewSwitchEnd)
                   {
                      returnStatus = "Conduct_CrewAction() returned false";
                      Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(BattleRoundSequenceCrewSwitchEnd): " + returnStatus);
@@ -9255,9 +9277,9 @@ namespace Pattons_Best
          }
          //------------------------------------------------
          gi.CrewActionPhase = CrewActionPhase.TankMainGunFire;
-         if (false == ConductCrewAction(gi, ref outAction))
+         if (false == ConductCrewAction(gi, ref outAction))  // nemiesFacingCheck()
          {
-            Logger.Log(LogEnum.LE_ERROR, "GameStateBattleRoundSequence.PerformAction(): Conduct_CrewAction() return false");
+            Logger.Log(LogEnum.LE_ERROR, "EnemiesFacingCheck(): Conduct_CrewAction() return false");
             return false;
          }
          return true;
@@ -9417,7 +9439,7 @@ namespace Pattons_Best
             if (0 == gi.ShermanHits.Count)
             {
                gi.CrewActionPhase = CrewActionPhase.TankMgFire;
-               if (false == ConductCrewAction(gi, ref outAction))
+               if (false == ConductCrewAction(gi, ref outAction))  // Fire_MainGunAtEnemyUnits() - ShermanHits=0
                {
                   Logger.Log(LogEnum.LE_ERROR, "Fire_MainGunAtEnemyUnits(): Conduct_CrewAction() returned error");
                   return false;
@@ -9976,7 +9998,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_TO_KILL_ATTACK, "ResolveToKillEnemyUnitCleanup(): Conduct_CrewAction(TankMgFire)");
             gi.ShermanHits.Clear();
             gi.CrewActionPhase = CrewActionPhase.TankMgFire;
-            if (false == ConductCrewAction(gi, ref outAction))
+            if (false == ConductCrewAction(gi, ref outAction))  // ResolveToKillEnemyUnitCleanup()
             {
                Logger.Log(LogEnum.LE_ERROR, "ResolveToKillEnemyUnitCleanup(): Conduct_CrewAction() returned false");
                return false;
@@ -10155,7 +10177,7 @@ namespace Pattons_Best
             Logger.Log(LogEnum.LE_SHOW_MAIN_GUN_BREAK, "Repair_MainGunAttempt(): Main Gun Broken with combo=" + combo.ToString());
          }
          gi.CrewActionPhase = CrewActionPhase.RepairGun;
-         if (false == ConductCrewAction(gi, ref outAction))
+         if (false == ConductCrewAction(gi, ref outAction))  // Repair_MainGunAttempt()
          {
             Logger.Log(LogEnum.LE_ERROR, "Repair_MainGunAttempt(): Conduct_CrewAction() returned false");
             return false;
@@ -10212,7 +10234,7 @@ namespace Pattons_Best
          }
          //-------------------------------------------------------
          gi.CrewActionPhase = CrewActionPhase.RepairGun;
-         if (false == ConductCrewAction(gi, ref outAction))
+         if (false == ConductCrewAction(gi, ref outAction))  // RepairAntiAircraftMgAttempt()
          {
             Logger.Log(LogEnum.LE_ERROR, "RepairAntiAircraftMgAttempt(): Conduct_CrewAction() returned false");
             return false;
@@ -10245,7 +10267,7 @@ namespace Pattons_Best
          }
          //-------------------------------------------------------
          gi.CrewActionPhase = CrewActionPhase.RepairGun;
-         if (false == ConductCrewAction(gi, ref outAction))
+         if (false == ConductCrewAction(gi, ref outAction))  // RepairBowMgAttempt()
          {
             Logger.Log(LogEnum.LE_ERROR, "RepairBowMgAttempt(): Conduct_CrewAction() returned false");
             return false;
@@ -10278,7 +10300,7 @@ namespace Pattons_Best
          }
          //-------------------------------------------------------
          gi.CrewActionPhase = CrewActionPhase.RepairGun;
-         if (false == ConductCrewAction(gi, ref outAction))
+         if (false == ConductCrewAction(gi, ref outAction))  // RepairBowCoaxialAttempt()
          {
             Logger.Log(LogEnum.LE_ERROR, "RepairBowCoaxialAttempt(): Conduct_CrewAction() returned false");
             return false;
@@ -10338,7 +10360,7 @@ namespace Pattons_Best
          GameEngine.theInGameFeats.AddOne("FireMortar");
          //--------------------------------------------------
          gi.CrewActionPhase = CrewActionPhase.ThrowGrenades;
-         if (false == ConductCrewAction(gi, ref outAction))
+         if (false == ConductCrewAction(gi, ref outAction))  // FireMortarIntoTurretFront()
          {
             Logger.Log(LogEnum.LE_ERROR, "FireMortarIntoTurretFront(): Conduct_CrewAction() returned false");
             return false;

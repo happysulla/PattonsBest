@@ -2852,7 +2852,7 @@ namespace Pattons_Best
          string enemyUnit = mi.GetEnemyUnit();
          if ("ERROR" == enemyUnit)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberYourTank(): unknown enemyUnit=" + mi.Name);
+            Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberYourTank(): unknown enemyUnit=" + mi.Name);
             return FN_ERROR;
          }
          //----------------------------------------------------
@@ -2885,14 +2885,14 @@ namespace Pattons_Best
                gun = "88LL";
                break;
             default:
-               Logger.Log(LogEnum.LE_ERROR, "GetEnemyToHitNumberYourTank(): Reached Default enemyUnit=" + enemyUnit);
+               Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberYourTank(): Reached Default enemyUnit=" + enemyUnit);
                return FN_ERROR;
          }
          //----------------------------------------------------
          IAfterActionReport? lastReport = gi.Reports.GetLast();
          if (null == lastReport)
          {
-            Logger.Log(LogEnum.LE_ERROR, "GetEnemyToKillNumberYourTank(): lastReport=null");
+            Logger.Log(LogEnum.LE_ERROR, "Get_EnemyToKillNumberYourTank(): lastReport=null");
             return FN_ERROR;
          }
          TankCard card = new TankCard(lastReport.TankCardNum);
@@ -2916,7 +2916,11 @@ namespace Pattons_Best
          //----------------------------------------------------
          int locationNum = 0;
          if ("Turret" == hitLocation)
+         {
             locationNum = 1;
+            if (0.0 != mi.RotationOffsetTurret) // if tank turret is facing any other direction than 0, it is assumed to be pointing at your Sherman with a front facing
+               facingNum = 0;
+         }
          //----------------------------------------------------
          int[,,,] table = theApToKills[gun];
          toKillNum = table[armorclass, facingNum, rangeNum, locationNum];

@@ -2894,7 +2894,7 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new Run(sbEndWon.ToString()));
                Image? imgEndGameWon = null;
                int randnum = Utilities.RandomGenerator.Next(10);
-               //randnum = 8; // <cgs> TEST
+               randnum = 8; // <cgs> TEST
                switch (randnum)
                {
                   case 0:
@@ -2964,7 +2964,7 @@ namespace Pattons_Best
                myTextBlock.Inlines.Add(new LineBreak());
                Image? imgEndGameLost = null;
                int randnumLost = Utilities.RandomGenerator.Next(9);
-               //randnumLost = 6; // <cgs> TEST
+               randnumLost = 6; // <cgs> TEST
                switch (randnumLost)
                {
                   case 0:
@@ -6593,7 +6593,7 @@ namespace Pattons_Best
                         case "Continue50c":
                         case "Continue50d":
                         case "Continue50e":
-                           action = GameAction.BattleRoundSequenceConductCrewAction;
+                           action = GameAction.BattleRoundSequenceConductCrewAction;  // Continue50 - Ammo Reload Order
                            myGameEngine.PerformAction(ref myGameInstance, ref action, 0);
                            break;
                         case "Continue50a":
